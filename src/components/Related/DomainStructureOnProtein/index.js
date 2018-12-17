@@ -96,8 +96,8 @@ const mergeData = (interpro, structures, structureInfo) => {
     out.structures = structures
       .map(({ ...obj }) => ({
         label: `${obj.accession}: ${obj.chain}`,
-        coordinates: toArrayStructure(obj.protein_structure_locations),
-        locations: obj.protein_structure_locations,
+        coordinates: toArrayStructure(obj.structure_protein_locations),
+        locations: obj.structure_protein_locations,
         link: `/structure/${obj.source_database}/${obj.accession}`,
         ...obj,
       }))
@@ -134,7 +134,13 @@ class _StructureOnProtein extends PureComponent {
         dataStructureInfo.payload,
       ),
     ).map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
-    return <ProtVista protein={protein} data={mergedData} />;
+    return (
+      <ProtVista
+        protein={protein}
+        data={mergedData}
+        title="Structures on protein"
+      />
+    );
   }
 }
 

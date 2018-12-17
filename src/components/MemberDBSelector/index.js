@@ -38,11 +38,11 @@ const MIN_DELAY = 400;
 const getStaticCountFor = (db, counts) => {
   return counts[db] || 0;
 };
+
+// eslint-disable-next-line
 const getCountFor = (
   db,
-  dataDBCount,
-  dataAllCount,
-  dataSubPageCount,
+  { dataDBCount, dataAllCount, dataSubPageCount },
   main,
   sub,
   hasMoreThanOneFilter,
@@ -138,6 +138,7 @@ class _MemberDBSelector extends PureComponent {
     isSelected: T.func,
     onChange: T.func,
     hideCounters: T.bool,
+    dbCounters: T.object,
   };
 
   constructor(props) {
@@ -187,11 +188,15 @@ class _MemberDBSelector extends PureComponent {
         db: value,
       };
     }
-    const { page, ...search } = this.props.customLocation.search;
+    if (description.main.key === 'protein') {
+      description.protein.db = 'uniprot';
+    }
+    if (description.taxonomy.isFilter) description.taxonomy.isFilter = false;
+    // const { page, ...search } = this.props.customLocation.search;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       description,
-      search,
+      search: {},
     });
     // this._handleExit(DELAY);
     /* TODO: if we decide to not close after click on database, remove this, and
@@ -292,9 +297,7 @@ class _MemberDBSelector extends PureComponent {
                 ? getStaticCountFor(db.canonical, dbCounters)
                 : getCountFor(
                     db.canonical,
-                    dataDBCount,
-                    dataAllCount,
-                    dataSubPageCount,
+                    { dataDBCount, dataAllCount, dataSubPageCount },
                     main,
                     sub,
                     hasMoreThanOneFilter,

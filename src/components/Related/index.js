@@ -271,35 +271,32 @@ export class _RelatedAdvanced extends PureComponent {
         dataBase.payload.databases) ||
       {};
     return (
-      <div>
+      <div className={f('row', 'column')}>
         {mainType === 'protein' && focusType === 'structure' ? (
           <StructureOnProtein structures={secondaryData} protein={mainData} />
         ) : null}
         {mainType === 'structure' && focusType === 'entry' ? (
           <EntriesOnStructure entries={secondaryData} />
         ) : null}
-        <div className={f('row', 'columns')}>
-          {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
-          <p>
-            This {mainType} matches
-            {secondaryData.length > 1
-              ? ` these ${toPlural(focusType)}:`
-              : ` this ${focusType}:`}
-          </p>
-          <InfoFilters
-            filters={otherFilters}
-            focusType={focusType}
-            databases={databases}
-          />
-        </div>
-        {focusType === 'protein' &&
-          secondaryData.length > 1 && (
-            <div className={f('row', 'columns')}>
-              <FiltersPanel>
-                <CurationFilter label="UniProt Curation" />
-              </FiltersPanel>
-            </div>
-          )}
+
+        {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
+        <p>
+          This {mainType} matches
+          {secondaryData.length > 1
+            ? ` these ${toPlural(focusType)}:`
+            : ` this ${focusType}:`}
+        </p>
+        <InfoFilters
+          filters={otherFilters}
+          focusType={focusType}
+          databases={databases}
+        />
+
+        {focusType === 'protein' && secondaryData.length > 1 && (
+          <FiltersPanel>
+            <CurationFilter label="UniProt Curation" />
+          </FiltersPanel>
+        )}
         <Matches
           {...this.props}
           actualSize={actualSize}
@@ -349,7 +346,8 @@ const RelatedAdvancedQuery = loadData({
   loadData({
     getUrl: getReversedUrl,
     mapStateToProps: mapStateToPropsAdvancedQuery,
-  })(({ data: { payload, loading }, secondaryData, ...props }) => {
+  })(({ data, secondaryData, ...props }) => {
+    const { payload, loading } = data;
     if (loading) return <Loading />;
     const _secondaryData =
       payload && payload.results
@@ -362,8 +360,8 @@ const RelatedAdvancedQuery = loadData({
             obj.entry_protein_locations = x[plural][0].entry_protein_locations;
             obj.protein_length = x[plural][0].protein_length;
             obj.protein = x[plural][0].protein;
-            obj.protein_structure_locations =
-              x[plural][0].protein_structure_locations;
+            obj.structure_protein_locations =
+              x[plural][0].structure_protein_locations;
             if (x[plural][0].chain) {
               obj.chain = x[plural][0].chain;
             }
@@ -392,7 +390,7 @@ class Related extends PureComponent {
     if (data.loading) return <Loading />;
     const {
       metadata: mainData,
-      [toPlural(focusType)]: secondaryData,
+      [`${focusType}_subset`]: secondaryData,
     } = data.payload;
     if (!secondaryData) return <Loading />;
     const RelatedComponent = Array.isArray(secondaryData)

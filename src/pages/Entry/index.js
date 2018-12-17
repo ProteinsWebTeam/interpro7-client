@@ -220,12 +220,11 @@ class DescriptionEntries extends PureComponent {
   static propTypes = {
     description: T.arrayOf(T.string),
     literature: T.object,
-    db: T.string.isRequired,
     accession: T.string.isRequired,
   };
 
   render() {
-    const { description, literature, db, accession } = this.props;
+    const { description, literature, accession } = this.props;
 
     if (!(description && description.length)) return null;
 
@@ -400,7 +399,7 @@ class List extends PureComponent {
       ),
     ).as('interpro-type');
   }
-
+  // eslint-disable-next-line
   render() {
     const {
       data,
@@ -439,17 +438,15 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr className={f('margin-bottom-none')} />
-          {databases &&
-            db &&
-            databases[db.toUpperCase()] && (
-              <SchemaOrgData
-                data={{
-                  data: { db: databases[db.toUpperCase()] },
-                  location: window.location,
-                }}
-                processData={schemaProcessDataTable}
-              />
-            )}
+          {databases && db && databases[db.toUpperCase()] && (
+            <SchemaOrgData
+              data={{
+                data: { db: databases[db.toUpperCase()] },
+                location: window.location,
+              }}
+              processData={schemaProcessDataTable}
+            />
+          )}
           <Table
             dataTable={_payload.results}
             contentType="entry"
@@ -465,7 +462,12 @@ class List extends PureComponent {
             <Exporter>
               <ul>
                 <li>
-                  <Link href={data.url} download="entries.json">
+                  <Link
+                    href={`${data.url}${
+                      urlHasParameter ? '&' : '?'
+                    }format=json`}
+                    download="entries.json"
+                  >
                     JSON
                   </Link>
                 </li>

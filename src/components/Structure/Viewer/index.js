@@ -11,6 +11,8 @@ import { EntryColorMode, hexToRgb, getTrackColor } from 'utils/entry-color';
 
 import ProtVistaForStructure from './ProtVistaForStructures';
 
+import getMapper from './proteinToStructureMapper';
+
 import { foundationPartial } from 'styles/foundation';
 
 import 'litemol/dist/css/LiteMol-plugin-light.css';
@@ -144,7 +146,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
           {
             selectedEntryToKeep:
               type === 'chain'
-                ? null
+                ? {
+                    accession: pdbid,
+                    db: 'pdb',
+                    chain: accession,
+                  }
                 : {
                     accession: accession,
                     db,
@@ -162,7 +168,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
           feature: { accession, source_database: db, type, chain },
         },
       }) => {
-        if (type !== 'chain') this.showEntryInStructure(db, accession, chain);
+        if (type === 'chain')
+          this.showEntryInStructure('pdb', pdbid, accession);
+        else this.showEntryInStructure(db, accession, chain);
       },
     );
     this._protvista.current.addEventListener('entrymouseout', () => {
@@ -203,8 +211,41 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
+  _getChainMap(chain, locations, p2s) {
+    const chainMap = [];
+    for (const location of locations) {
+      for (const { start, end } of location.fragments) {
+        chainMap.push({
+          struct_asym_id: chain,
+          start_residue_number: p2s(start),
+          end_residue_number: p2s(end),
+          accession: chain,
+          source_database: 'pdb',
+        });
+      }
+    }
+    return chainMap;
+  }
+
+  _mapLocations(map, { chain, locations, entry, db, match }, p2s) {
+    if (!map[chain]) map[chain] = [];
+    for (const location of locations) {
+      for (const fragment of location.fragments) {
+        map[chain].push({
+          struct_asym_id: chain,
+          start_residue_number: p2s(fragment.start),
+          end_residue_number: p2s(fragment.end),
+          accession: entry,
+          source_database: db,
+          parent: match.metadata.integrated
+            ? { accession: match.metadata.integrated }
+            : null,
+        });
+      }
+    }
+  }
   createEntryMap() {
-    const memberDBMap = {};
+    const memberDBMap = { pdb: {} };
 
     if (this.props.matches) {
       // create matches in structure hierarchy
@@ -216,22 +257,31 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
         for (const structure of match.structures) {
           const chain = structure.chain;
-          if (!memberDBMap[db][entry][chain])
-            memberDBMap[db][entry][chain] = [];
-          for (const location of structure.entry_protein_locations) {
-            for (const fragment of location.fragments) {
-              memberDBMap[db][entry][chain].push({
-                struct_asym_id: chain,
-                start_residue_number: fragment.start,
-                end_residue_number: fragment.end,
-                accession: entry,
-                source_database: db,
-                parent: match.metadata.integrated
-                  ? { accession: match.metadata.integrated }
-                  : null,
-              });
-            }
+          if (!memberDBMap.pdb[structure.accession])
+            memberDBMap.pdb[structure.accession] = {};
+          const p2s = getMapper(structure.protein_structure_mapping[chain]);
+          // const {
+          //   start,
+          //   end,
+          // } = structure.structure_protein_locations[0].fragments[0];
+          if (!memberDBMap.pdb[structure.accession][chain]) {
+            memberDBMap.pdb[structure.accession][chain] = this._getChainMap(
+              chain,
+              structure.structure_protein_locations,
+              p2s,
+            );
           }
+          this._mapLocations(
+            memberDBMap[db][entry],
+            {
+              chain,
+              locations: structure.entry_protein_locations,
+              entry,
+              db,
+              match,
+            },
+            p2s,
+          );
         }
       }
     }

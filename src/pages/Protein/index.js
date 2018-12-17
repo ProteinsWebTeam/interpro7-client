@@ -146,21 +146,19 @@ class SummaryCounterProteins extends PureComponent {
 
 const ProteinCard = ({ data, search, entryDB }) => (
   <>
-    {data.metadata.source_database === 'reviewed' ? (
-      <>
-        <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-          <h4>
-            <span
-              className={f('icon', 'icon-common')}
-              data-icon="&#xf00c;"
-              aria-label="reviewed"
-            />
-          </h4>
-        </Tooltip>
-      </>
-    ) : null}
     <div className={f('card-header')}>
       <div className={f('card-title')}>
+        {data.metadata.source_database === 'reviewed' ? (
+          <>
+            <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+              <span
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf00c;"
+                aria-label="reviewed"
+              />
+            </Tooltip>
+          </>
+        ) : null}
         <h6>
           <Link
             to={{
@@ -182,7 +180,7 @@ const ProteinCard = ({ data, search, entryDB }) => (
       </div>
     </div>
 
-    <div className={f('card-subheader')} />
+    <div className={f('card-subheader')}>{data.metadata.length} AA</div>
 
     {data.extra_fields ? (
       <SummaryCounterProteins
@@ -272,17 +270,15 @@ class List extends PureComponent {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <ProteinListFilters />
           <hr className={f('margin-bottom-none')} />
-          {databases &&
-            db &&
-            databases[db.toLowerCase()] && (
-              <SchemaOrgData
-                data={{
-                  data: { db: databases[db.toLowerCase()] },
-                  location: window.location,
-                }}
-                processData={schemaProcessDataTable}
-              />
-            )}
+          {databases && db && databases[db.toLowerCase()] && (
+            <SchemaOrgData
+              data={{
+                data: { db: databases[db.toLowerCase()] },
+                location: window.location,
+              }}
+              processData={schemaProcessDataTable}
+            />
+          )}
           <Table
             dataTable={_payload.results}
             contentType="protein"
@@ -297,7 +293,10 @@ class List extends PureComponent {
             <Exporter>
               <ul>
                 <li>
-                  <Link href={url} download="proteins.json">
+                  <Link
+                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
+                    download="proteins.json"
+                  >
                     JSON
                   </Link>
                 </li>

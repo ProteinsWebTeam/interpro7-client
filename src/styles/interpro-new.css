@@ -387,6 +387,7 @@ table.light.table-sum {
 
     &:first-of-type {
       width: 20%;
+      vertical-align: top;
       font-size: 110%;
       font-weight: 600;
     }
@@ -523,15 +524,15 @@ h3.light {
 /*simulation H5 but needs to stay span in order to show ext icon on the same line*/
 .h5 {
   font-family: var(--fonts-system);
-  color: #222;
   font-weight: 400;
-  border-bottom: 2px white solid;
-  padding-bottom: 2px;
-}
+  color: var(--colors-nearly-black);
+  border-bottom: 2px transparent solid;
+  transition: border var(--timing-fast) ease-in-out;
+  padding-bottom: 2px; /* add little extra space between title and link underline */
 
-a .h5:hover {
-  border-bottom: 2px #4e4e4e solid;
-  padding-bottom: 2px;
+  &:hover {
+    border-bottom: 2px var(--colors-dark) solid;
+  }
 }
 
 h5 small,
@@ -747,6 +748,14 @@ hr {
 .card-image {
   width: 100%;
   background-color: var(--colors-submain);
+  /*background-image: linear-gradient(
+    to right,
+    rgba(23, 121, 186, 0.5)
+  ),
+  url(images/backgrounds/bgd-banner-01.svg);*/
+  background-repeat: no-repeat, repeat;
+  background-position: 0, 100% 0%;
+  background-size: 100%, 2030px;
   height: 160px;
   position: relative;
   opacity: 0.8;
@@ -823,21 +832,19 @@ hr {
       #b8c1c9 100%
     );
 }
-
 .image-blog-type {
   background: #fff url('../images/cover/blog/blog_type.png') no-repeat 50% 56%;
   background-size: 36%;
 }
-
 .image-focus-ape {
   background: url('../images/cover/focus/focus_ape.png') no-repeat 50% 16%;
   background-size: 100%;
 }
-
 .image-tool-ipscan {
   background: #fff url('../images/cover/tool/tool_interproscan.svg') no-repeat
     50% 26%;
   background-size: contain;
+
   background-color: #0d68a6;
 }
 .image-tool-api {
@@ -849,7 +856,6 @@ hr {
     14%;
   background-size: 268%;
 }
-
 .image-tool-litemol {
   background: #fff url('../images/cover/tool/tool_litemol.png') no-repeat 50%
     14%;
@@ -869,11 +875,10 @@ hr {
 .card-title {
   & h4 {
     font-size: 120%;
-    font-weight: 600;
-    /*  display: inline;*/ /* to make title underline work on title when single link */
+    font-weight: 600; /* display: inline; */
+    /* to make title underline work on title when single link */
   }
 }
-
 .main .card-title a {
   color: var(--colors-nearly-black);
   border-bottom: 2px transparent solid;
@@ -895,24 +900,26 @@ hr {
     margin-right: 0.5rem;
   }
 }
+/*help - publication*/
+.card-info-source {
+  margin-top: 1rem;
+}
+
 .card-description {
   color: var(--colors-graydark);
   font-family: var(--fonts-system);
   font-weight: 400;
   max-height: 9rem;
   overflow: hidden;
-  height: 6em; /*better for alignment description + counter*/
+  height: 6em; /* better for alignment description + counter */
 }
-
 .card-description img {
-  display: none; /*remove all images that would be shown in the summary e.g. blog iceberg article*/
+  display: none; /* remove all images that would be shown in the summary e.g. blog iceberg article */
 }
-
 .flex-card .blog {
   border-width: 2px;
   opacity: 0.5;
 }
-
 .card-more {
   opacity: 0.5;
   align-self: flex-end;
@@ -923,22 +930,22 @@ hr {
   font-weight: 900;
   color: var(--colors-gray);
   position: relative;
-  min-width: 182px; /* for small screens */
+  min-width: 182px;
+  /* for small screens */
   border: 2px solid var(--colors-gray);
   background-color: transparent;
-  padding: 0.85em 1em; /* different unit to be consistent with button class */
+  padding: 0.85em 1em;
+  /* different unit to be consistent with button class */
   margin: 0 0 1rem 0;
   font-size: 0.9rem;
   cursor: pointer;
   text-align: center;
   line-height: 1;
   vertical-align: middle;
-
   &:hover {
     color: var(--colors-dark);
   }
 }
-
 .icon.button-more {
   font-weight: 600; /* bold on just text */
   &::after,
@@ -946,7 +953,6 @@ hr {
     font-weight: 300; /* keep the icon unbold */
   }
 }
-
 .button-nu {
   min-width: 25px;
   margin-right: 1rem;
@@ -954,7 +960,6 @@ hr {
   color: var(--colors-gray);
   font-size: 160%;
 }
-
 /* to add class icon-right in EBI ebi-utility-styles (define position icon) */
 .icon-common.icon-right:before {
   content: '';
@@ -972,7 +977,6 @@ hr {
 /* /CARDS */
 /* TABS */
 /* Tabs style main - homepage */
-
 .tabs.main-style {
   border-bottom: 1px solid #e6e6e6;
   border-right-width: 0;
@@ -1090,13 +1094,12 @@ details.accordion-style > summary {
   position: relative; /* for animation */
   list-style: none; /* keep to remove default icon for Firefox */
   &:hover {
-    /* background-color: var(--colors-accordion); */
     background-color: var(--colors-unknown-sub);
     color: var(--colors-graydark);
-    transition: all var(--timing-medclose) ease-out;
+    transition: all var(--timing-fast) ease-out;
     &::after {
       background: var(--colors-unknown-sub);
-      transition: background-color var(--timing-medclose) ease-out;
+      transition: background-color var(--timing-fast) ease-out;
     }
   }
   &::before {
@@ -1114,8 +1117,7 @@ details.accordion-style > summary {
   /* font-family: 'EBI-Common'; */
   /* position: absolute; */
   /* font-size: 120%; */
-  /* top: 20%; */ /* right: .5rem; */
-  /* } */
+  /* top: 20%; */ /* right: .5rem; */ /* } */
   &::-webkit-details-marker {
     display: none;
   }
@@ -1129,7 +1131,7 @@ details.accordion-style > summary::after {
   right: 20px;
   top: 50%;
 }
-details.accordion-style:last-child {
+details.accordion-style:last-of-type {
   border-bottom: 1px solid var(--colors-very-white);
 }
 .accordion-info {
@@ -1145,7 +1147,7 @@ details.accordion-style[open] > summary {
   color: white;
 }
 details.accordion-style[open] summary ~ * {
-  animation: sweep var(--timing-fast) ease-out;
+  animation: sweep var(--timing-really-fast) ease-out;
 }
 /* /alt color for testing */
 details.accordion-style[open] summary {
@@ -1159,13 +1161,32 @@ details.accordion-style[open] summary {
     transform: translateY(-50%) rotate(45deg);
   }
 }
-
 /* using icon
 details.accordion-style[open] summary:after {
 content: '';
-}*/
-
+} */
 /* ** END ACCORDION MENU *** */
+/*ALT ACCORDION*/
+details.option-style > summary {
+  color: var(--colors-graydark);
+  border: 0px solid var(--colors-very-white);
+  border-bottom-width: 0;
+  padding: 1rem;
+  cursor: pointer;
+  outline: 0;
+  z-index: 1;
+  position: relative; /*for animation*/
+  list-style: none; /*to keep for Firefox*/
+  transition: all var(--timing-medclose) ease-out;
+  /*remove default icon (Edge + Chrome + Opera_*/
+  &:hover {
+    background-color: var(--colors-unknown-sub);
+    color: var(--colors-dark);
+    transition: all var(--timing-medclose) ease-out;
+  }
+}
+
+/*END ALT*/
 /* footer */
 .local_footer {
   padding: 1rem 0;
@@ -1263,7 +1284,6 @@ content: '';
   font-family: EBI-Common;
   content: '';
 }
-
 /* camera icon */
 .lm-plugin span.lm-icon-screenshot:before {
   font-family: EBI-Common;
@@ -1275,12 +1295,12 @@ content: '';
   font-family: EBI-Common;
   content: 'F';
 }
+
 /* refresh icon */
 .lm-plugin span.lm-icon-reset-scene:before {
   font-family: EBI-Common;
   content: '';
 }
-
 /* / icons LiteMole by EBI icons */
 /* change color font in control panel */
 .lm-plugin
@@ -1333,6 +1353,19 @@ content: '';
   stroke: var(--colors-markchart);
 }
 /* END custom CLAN-VIEWER node module */
+
+/*Temp solution while finding a customized show more */
+.card-info-author .button.hollow.secondary {
+  border-color: transparent;
+  padding: 0.4rem 0;
+}
+.card-info-author .button.hollow.secondary i {
+  display: none;
+}
+.card-info-author .margin-bottom-large {
+  margin: 0;
+}
+
 /* ***************************** END OTHERS ******************************** */
 /* RESPONSIVE DESIGN */
 /* Medium only */

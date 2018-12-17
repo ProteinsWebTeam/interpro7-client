@@ -4,7 +4,7 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
-import ProteomeListFilters from 'components/Proteome/ProteomeListFilters';
+// import ProteomeListFilters from 'components/Proteome/ProteomeListFilters';
 
 import Table, {
   Column,
@@ -197,10 +197,9 @@ const ProteomeCard = ({ data, search, entryDB }) => (
             },
           }}
         >
-          {data.metadata &&
-            data.metadata.lineage && (
-              <SpeciesIcon lineage={data.metadata.lineage} />
-            )}
+          {data.metadata && data.metadata.lineage && (
+            <SpeciesIcon lineage={data.metadata.lineage} />
+          )}
         </Link>
       </div>
       <div className={f('card-title')}>
@@ -233,7 +232,6 @@ const ProteomeCard = ({ data, search, entryDB }) => (
 
     <div className={f('card-footer')}>
       <div>
-        ID:{' '}
         <HighlightedText
           text={(data.metadata.accession || '').toUpperCase()}
           textToHighlight={search}
@@ -304,7 +302,8 @@ class List extends PureComponent {
           className="pp-left-side-db-selector"
         />
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          <ProteomeListFilters />
+          {/* TODO: Re-enable if we include non-reference proteomes in our DB*/}
+          {/* <ProteomeListFilters /> */}
           <hr className={f('margin-bottom-none')} />
           {databases && (
             <SchemaOrgData
@@ -329,7 +328,10 @@ class List extends PureComponent {
             <Exporter>
               <ul>
                 <li>
-                  <Link href={url} download="proteome.json">
+                  <Link
+                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
+                    download="proteome.json"
+                  >
                     JSON
                   </Link>
                 </li>
