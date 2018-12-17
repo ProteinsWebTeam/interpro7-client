@@ -6,12 +6,12 @@ import Species from 'components/Protein/Species';
 import { ProteomeLink } from 'components/ExtLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import global from 'styles/global.css';
-import ebiStyles from 'ebi-framework/css/ebi-global.css';
-import memberSelectorStyle from 'components/Table/TotalNb/style.css';
 import { foundationPartial } from 'styles/foundation';
 
-const f = foundationPartial(ebiStyles, global, memberSelectorStyle);
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
+import memberSelectorStyle from 'components/Table/TotalNb/style.css';
+
+const f = foundationPartial(ebiStyles, memberSelectorStyle);
 
 class SummaryProteome extends PureComponent /*:: <Props> */ {
   static propTypes = {

@@ -73,7 +73,12 @@ class SummaryCounterSet extends PureComponent {
             }}
             disabled={!entries}
           >
-            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+            <div className={f('icon-wrapper')}>
+              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+              {entries !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{entries}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
@@ -101,7 +106,12 @@ class SummaryCounterSet extends PureComponent {
             }}
             disabled={!proteins}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x50;"
+            >
+              {proteins !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {' '}
@@ -130,7 +140,12 @@ class SummaryCounterSet extends PureComponent {
             }}
             disabled={!structures}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x73;"
+            >
+              {structures !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{structures}</NumberComponent>{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
@@ -155,7 +170,9 @@ class SummaryCounterSet extends PureComponent {
             }}
             disabled={!taxa}
           >
-            <div className={f('icon', 'icon-count-species')} />{' '}
+            <div className={f('icon', 'icon-count-species', 'icon-wrapper')}>
+              {taxa !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{taxa}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
@@ -181,7 +198,16 @@ class SummaryCounterSet extends PureComponent {
             }}
             disabled={!proteomes}
           >
-            <div className={f('icon', 'icon-common', 'icon-count-proteome')} />
+            <div
+              className={f(
+                'icon',
+                'icon-common',
+                'icon-count-proteome',
+                'icon-wrapper',
+              )}
+            >
+              {proteomes !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteomes}</NumberComponent>{' '}
             <span className={f('label-number')}>proteomes</span>
           </Link>

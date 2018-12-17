@@ -129,8 +129,12 @@ class SummaryCounterStructures extends PureComponent {
               },
             }}
           >
-            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-
+            <div className={f('icon-wrapper')}>
+              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+              {entries !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{entries}</NumberComponent>
 
             <span className={f('label-number')}>
@@ -158,7 +162,12 @@ class SummaryCounterStructures extends PureComponent {
               },
             }}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x50;"
+            >
+              {proteins !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
@@ -174,7 +183,10 @@ class SummaryCounterStructures extends PureComponent {
           style={{ display: 'flex' }}
         >
           <div className={f('container')}>
-            <div className={f('icon', 'icon-count-species')} />{' '}
+            <div className={f('icon', 'icon-count-species', 'icon-wrapper')}>
+              {taxa !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
+
             <NumberComponent abbr>{taxa}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
@@ -273,17 +285,7 @@ class StructureCard extends PureComponent {
     return (
       <>
         <div className={f('card-header')}>
-          <Link
-            to={{
-              description: {
-                main: { key: 'structure' },
-                structure: {
-                  db: data.metadata.source_database,
-                  accession: data.metadata.accession,
-                },
-              },
-            }}
-          >
+          <div className={f('card-image')}>
             <Tooltip
               title={`3D visualisation for ${
                 data.metadata.accession
@@ -296,13 +298,27 @@ class StructureCard extends PureComponent {
                 alt={`structure with accession ${data.metadata.accession}`}
               />
             </Tooltip>
+          </div>
+          <div className={f('card-title', 'font-sm')}>
             <h6>
-              <HighlightedText
-                text={data.metadata.name}
-                textToHighlight={search}
-              />
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'structure' },
+                    structure: {
+                      db: data.metadata.source_database,
+                      accession: data.metadata.accession,
+                    },
+                  },
+                }}
+              >
+                <HighlightedText
+                  text={data.metadata.name}
+                  textToHighlight={search}
+                />
+              </Link>
             </h6>
-          </Link>
+          </div>
 
           <div className={f('card-subheader')}>
             {// INFO RESOLUTION BL - browse structures - Xray
