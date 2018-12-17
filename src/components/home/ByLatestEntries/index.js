@@ -242,7 +242,7 @@ class LatestEntry extends PureComponent {
                       className={f('icon', 'icon-conceptual', 'icon-wrapper')}
                       data-icon="s"
                     >
-                      {c.S && <div className={f('icon-over-anim')} />}
+                      {c.S !== 0 && <div className={f('icon-over-anim')} />}
                     </div>
                     <NumberComponent abbr noTitle>
                       {c.S}
