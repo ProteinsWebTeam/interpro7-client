@@ -312,7 +312,7 @@ class _MemberDBSelector extends PureComponent {
                   style={{ color: config.colors.get(db.canonical) }}
                   data-testid={
                     'memberdb-filter-' +
-                    db.canonical.toLowerCase().replace(/s/, '_')
+                    db.canonical.toLowerCase().replace(/\s+/, '_')
                   }
                 >
                   <input
