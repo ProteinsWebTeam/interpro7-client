@@ -20,11 +20,10 @@ import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
-import global from 'styles/global.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import memberSelectorStyle from 'components/Table/TotalNb/style.css';
 
-const f = foundationPartial(ebiStyles, global, memberSelectorStyle);
+const f = foundationPartial(ebiStyles, memberSelectorStyle);
 
 export const parentRelationship = ({ taxId, name = null }) => ({
   '@id': '@additionalProperty',
