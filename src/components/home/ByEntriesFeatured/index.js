@@ -12,12 +12,11 @@ import loadData from 'higherOrder/loadData';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import global from 'styles/global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import local from '../ByLatestEntries/styles.css';
 
-const f = foundationPartial(global, fonts, ipro, theme, local);
+const f = foundationPartial(fonts, ipro, theme, local);
 
 class ByEntriesFeatured extends PureComponent {
   static propTypes = {

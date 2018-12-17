@@ -90,7 +90,12 @@ class SummaryCounterEntries extends PureComponent {
             }}
             className={f(proteins ? null : 'ico-disabled')}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x50;"
+            >
+              {proteins !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
@@ -118,7 +123,11 @@ class SummaryCounterEntries extends PureComponent {
             }}
             className={f(domainArchitectures ? null : 'ico-disabled')}
           >
-            <div className={f('icon', 'icon-count-ida')} />{' '}
+            <div className={f('icon', 'icon-count-ida', 'icon-wrapper')}>
+              {domainArchitectures !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{domainArchitectures}</NumberComponent>
             <span className={f('label-number')}>domain architectures</span>
           </Link>
@@ -144,7 +153,9 @@ class SummaryCounterEntries extends PureComponent {
             }}
             className={f(taxa ? null : 'ico-disabled')}
           >
-            <div className={f('icon', 'icon-count-species')} />{' '}
+            <div className={f('icon', 'icon-count-species', 'icon-wrapper')}>
+              {taxa !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{taxa}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
@@ -172,7 +183,12 @@ class SummaryCounterEntries extends PureComponent {
             }}
             className={f(structures ? null : 'ico-disabled')}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="s"
+            >
+              {structures !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{structures}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
@@ -181,7 +197,9 @@ class SummaryCounterEntries extends PureComponent {
         </Tooltip>
 
         {// show sets counter + icon only when available
-        entryDB.toLowerCase() === 'cdd' || entryDB.toLowerCase() === 'pfam' ? (
+        entryDB.toLowerCase() === 'cdd' ||
+        entryDB.toLowerCase() === 'pfam' ||
+        entryDB.toLowerCase() === 'pirsf' ? (
           <Tooltip
             title={`${sets} ${toPlural('set', sets)} matching ${metadata.name}`}
             className={f('count-sets')}
@@ -200,7 +218,9 @@ class SummaryCounterEntries extends PureComponent {
               }}
               className={f(sets ? null : 'ico-disabled')}
             >
-              <div className={f('icon', 'icon-count-set')} />{' '}
+              <div className={f('icon', 'icon-count-set', 'icon-wrapper')}>
+                {sets !== 0 && <div className={f('icon-over-anim')} />}
+              </div>
               <NumberComponent abbr>{sets}</NumberComponent>
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
@@ -263,36 +283,24 @@ class EntryCard extends PureComponent {
       <>
         <div className={f('card-header')}>
           <div className={f('card-image')}>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: {
-                    db: data.metadata.source_database,
-                    accession: data.metadata.accession,
-                  },
-                },
-              }}
-            >
-              {entryDB.toLowerCase() === 'interpro' ? (
-                <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
-                  <interpro-type
-                    dimension="2em"
-                    type={data.metadata.type.replace('_', ' ')}
-                    aria-label="Entry type"
-                  />
-                </Tooltip>
-              ) : (
-                <Tooltip title={`${entryDB} database`}>
-                  <MemberSymbol
-                    size="2em"
-                    type={entryDB}
-                    aria-label="Database type"
-                    className={f('md-small')}
-                  />
-                </Tooltip>
-              )}
-            </Link>
+            {entryDB.toLowerCase() === 'interpro' ? (
+              <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
+                <interpro-type
+                  dimension="2em"
+                  type={data.metadata.type.replace('_', ' ')}
+                  aria-label="Entry type"
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip title={`${entryDB} database`}>
+                <MemberSymbol
+                  size="2em"
+                  type={entryDB}
+                  aria-label="Database type"
+                  className={f('md-small')}
+                />
+              </Tooltip>
+            )}
           </div>
           <div className={f('card-title')}>
             <h6>
