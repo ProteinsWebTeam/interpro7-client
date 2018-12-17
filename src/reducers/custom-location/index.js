@@ -18,7 +18,12 @@ import state from './state';
 |}; */
 /*:: import type { State } from 'reducers'; */
 
-export default combineReducers({ description, search, hash, state });
+export default (combineReducers({
+  description,
+  search,
+  hash,
+  state,
+}) /*: (CustomLocation | void, any) => CustomLocation */);
 
 export const customLocationSelector = (state /*: State */) =>
   state.customLocation;

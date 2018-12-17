@@ -6,7 +6,7 @@ import location from './location-middleware';
 import status from './status-middleware';
 import download from './download-middleware';
 
-export default (history /*: History */) => {
+export default (history /*: History */) /*: (any) => any */ => {
   const middlewares = [jobs, location(history), status, download];
 
   return compose(
