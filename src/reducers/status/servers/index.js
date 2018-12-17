@@ -18,7 +18,10 @@ export const serverStatusesSelector = (state /*: State */) =>
   state.status.servers;
 
 const serverStatusSelectorFor = server =>
-  createSelector(serverStatusesSelector, servers => servers[server]);
+  createSelector(
+    serverStatusesSelector,
+    servers => servers[server],
+  );
 
 export const apiServerStatus = serverStatusSelectorFor('api');
 export const ebiServerStatus = serverStatusSelectorFor('ebi');
