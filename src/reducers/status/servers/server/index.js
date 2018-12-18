@@ -9,6 +9,7 @@ import { SERVER_STATUS } from 'actions/types';
 /*:: import type { State } from 'reducers'; */
 /*:: import type { Action } from 'actions'; */
 
+// eslint-disable-next-line no-extra-parens
 export default (server /*: Server */) => ((
   state = { status: null, lastCheck: null },
   action,
