@@ -110,11 +110,9 @@ const SidePanel = ({ metadata, dbInfo }) => (
             <Link
               className={f('ext')}
               target="_blank"
-              href={getUrlFor(metadata.source_database)(
-                metadata.accession.toUpperCase(),
-              )}
+              href={getUrlFor(metadata.source_database)(metadata.accession)}
             >
-              View {metadata.accession.toUpperCase()} in{' '}
+              View {metadata.accession} in{' '}
               {(dbInfo && dbInfo.name) || metadata.source_database}
             </Link>
           </li>
@@ -215,7 +213,7 @@ const OverlappingEntries = ({ metadata, overlaps }) => (
         >
           {ov.name}
         </Link>{' '}
-        <small>({ov.accession.toUpperCase()})</small>
+        <small>({ov.accession})</small>
       </div>
     ))}
     {Object.keys(metadata.overlaps_with).length >

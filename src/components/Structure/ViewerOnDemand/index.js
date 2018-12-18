@@ -71,7 +71,7 @@ export class ViewerOnDemand extends PureComponent /*:: <Props, State> */ {
           <div className={styles.background}>
             <LazyImage
               src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${id}/traces.jpg`}
-              alt={`structure with accession ${id.toUpperCase()}`}
+              alt={`structure with accession ${id}`}
             />
           </div>
           <div className={styles.text}>

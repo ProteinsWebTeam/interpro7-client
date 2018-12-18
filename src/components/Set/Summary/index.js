@@ -175,8 +175,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                         target="_blank"
                         pattern={currentSet.url_template}
                       >
-                        View {metadata.accession.toUpperCase()} in{' '}
-                        {currentSet.name}
+                        View {metadata.accession} in {currentSet.name}
                       </BaseLink>
                     </li>
                   </ul>
