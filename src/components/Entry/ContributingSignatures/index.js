@@ -76,11 +76,7 @@ const ContributingSignatures = ({ contr, data } /*: {contr: Object} */) => {
                       processData={schemaProcessData}
                     />
                     {index ? ', ' : ''}
-                    <SignatureLink
-                      db={db}
-                      accession={accession.toUpperCase()}
-                      label={name}
-                    />
+                    <SignatureLink db={db} accession={accession} label={name} />
                   </React.Fragment>
                 ))}
               </div>
