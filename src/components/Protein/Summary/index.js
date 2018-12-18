@@ -105,7 +105,7 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                             },
                           }}
                         >
-                          {metadata.proteome.toUpperCase()}
+                          {metadata.proteome}
                         </Link>
                       </td>
                     </tr>
@@ -140,7 +140,7 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                 <ul className={f('no-bullet')}>
                   <li>
                     <UniProtLink id={metadata.accession} className={f('ext')}>
-                      View {metadata.accession.toUpperCase()} in UniProtKB
+                      View {metadata.accession} in UniProtKB
                     </UniProtLink>
                   </li>
                 </ul>
