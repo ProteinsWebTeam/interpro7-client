@@ -1937,7 +1937,7 @@ const hmmLogo = function(logoElement, options = {}) {
 
   if (options.column_info) {
     // eslint-disable-next-line max-statements
-    logoGraphic.addEventListener('click', function(e) {
+    logoGraphic.addEventListener('click', e => {
       const infoTab = document.createElement('table');
       infoTab.classList.add(styles.logo_col_info);
       infoTab.classList.add(styles.logo_col_hmm);
