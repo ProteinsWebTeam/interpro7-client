@@ -49,7 +49,7 @@ class EntriesOnProtein extends ProtVistaMatches {
     }));
 
     this.web_tracks[entry.accession].data = tmp;
-    // TODO: Re-enable the sequence component once its performance gets improved
+
     if (!this.web_protein.data)
       this.web_protein.data =
         protein.sequence || '\u00A0'.repeat(protein.length);

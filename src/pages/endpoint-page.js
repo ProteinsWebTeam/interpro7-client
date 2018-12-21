@@ -284,6 +284,7 @@ class EndPointPage extends PureComponent {
 export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
   loadData((...args) =>
     getUrlForApi(...args)
+      .replace('/alignments', '/')
       .replace('/logo', '/')
       .replace('/domain_architecture', '/')
       .replace('/sequence', '/'),
