@@ -12,7 +12,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 const iconStyle = foundationPartial(fonts);
 
 const EBIMenu = (
-  { className, children } /*: {className?: string, children?: any} */
+  { className, children } /*: {className?: string, children?: any} */,
 ) => (
   <ul className={className}>
     {children}

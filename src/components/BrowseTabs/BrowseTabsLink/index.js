@@ -98,12 +98,11 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
       >
         {name}
         {value !== null && ' '}
-        {value !== null &&
-          !isNaN(value) && (
-            <NumberComponent label loading={loading} abbr>
-              {value}
-            </NumberComponent>
-          )}
+        {value !== null && !isNaN(value) && (
+          <NumberComponent label loading={loading} abbr>
+            {value}
+          </NumberComponent>
+        )}
       </Link>
     );
   }
