@@ -6,6 +6,9 @@ import { createSelector } from 'reselect';
 import config from 'config';
 import LiteMol from 'litemol';
 import CustomTheme from './CustomTheme';
+
+import { Stage, ColormakerRegistry, Preferences } from 'ngl';
+
 import EntrySelection from './EntrySelection';
 import { EntryColorMode, hexToRgb, getTrackColor } from 'utils/entry-color';
 
@@ -61,7 +64,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       isStuck: false,
     };
 
-    this.plugin = null;
+    //MAQ this.plugin = null;
 
     this._ref = React.createRef();
     this._placeholder = React.createRef();
@@ -70,7 +73,51 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     const pdbid = this.props.id;
+    const stage = new Stage(this._ref.current);
 
+    stage
+      .loadFile(`https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`)
+      .then(component => {
+        /*
+      const schemeId = ColormakerRegistry.addSelectionScheme([
+        [
+          "residueIndex",
+          "1-100",
+          "green"
+        ]
+      ]);
+
+      component.addRepresentation("cartoon", {color: schemeId});
+      */
+        component.addRepresentation('cartoon');
+        component.autoView();
+      });
+
+    //example onclick
+    stage.signals.clicked.add(picked => {
+      if (picked) {
+        const residue = picked.atom;
+        const index = residue.residueIndex;
+        const name = residue.resname;
+        console.log(`clicked: ${index} ${name}`);
+      } else {
+        console.log(`clicked: nothing`);
+      }
+    });
+
+    stage.signals.hovered.add(picked => {
+      if (picked) {
+        const residue = picked.atom;
+        const index = residue.residueIndex;
+        const name = residue.resname;
+        console.log(`mouseover: ${index} ${name}`);
+      } else {
+        console.log('mouseover: nothing');
+      }
+    });
+    //stage.setSpin(true);
+    //stage.handleResize();
+    /*MAQ
     this.plugin = LiteMol.Plugin.create({
       target: this._ref.current,
       viewportBackground: '#fff',
@@ -130,6 +177,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         this.setState({ selectedEntry: '' });
       });
     });
+    */
     const threshold = 0.4;
     this.observer = new IntersectionObserver(entries => {
       this.setState({ isStuck: entries[0].intersectionRatio < threshold });
@@ -180,7 +228,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   componentDidUpdate(_, prevState) {
     if (prevState.isStuck !== this.state.isStuck) {
-      this.plugin.instance.context.scene.scene.handleResize();
+      //MAQ this.plugin.instance.context.scene.scene.handleResize();
     }
   }
 
@@ -188,6 +236,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.observer.disconnect();
   }
 
+  /* MAQ
   updateTheme(entries) {
     if (this.plugin) {
       const context = this.plugin.context;
@@ -210,6 +259,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     }
   }
+  */
 
   _getChainMap(chain, locations, p2s) {
     const chainMap = [];
@@ -290,7 +340,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   showEntryInStructure = (memberDB, entry, chain) => {
     const keep = this.state.selectedEntryToKeep;
-    this.updateTheme([]);
+    //MAQ this.updateTheme([]);
     const db = memberDB || (keep && keep.db);
     const acc = entry || (keep && keep.accession);
     const ch = chain || (keep && keep.chain);
@@ -305,7 +355,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         hit =>
           (hit.color = hexToRgb(getTrackColor(hit, this.props.colorDomainsBy))),
       );
-      this.updateTheme(hits);
+      //MAQ this.updateTheme(hits);
     }
     this.setState({ selectedEntry: acc || '' });
   };
@@ -322,8 +372,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
             <div
               ref={this._ref}
               style={{
-                width: '100%',
-                height: '100%',
+                width: '1000px',
+                height: '1000px',
                 // don't think that is needed anymore?
                 // display: 'flex',
                 // alignItems: 'center',
