@@ -45,6 +45,7 @@ const SignatureLink = React.memo(({ accession, db, label }) => (
     </small>
   </Link>
 ));
+SignatureLink.displayName = 'SignatureLink';
 SignatureLink.propTypes = {
   accession: T.string.isRequired,
   db: T.string.isRequired,

@@ -86,6 +86,7 @@ class IPScanResult extends PureComponent {
     }),
     matched: T.string.isRequired,
     entryDB: T.string,
+    localID: T.string,
   };
 
   constructor(props) {

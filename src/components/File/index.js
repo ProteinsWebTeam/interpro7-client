@@ -129,6 +129,7 @@ class File extends PureComponent {
   static propTypes = {
     api: T.object.isRequired,
     entryDescription: T.object.isRequired,
+    customLocationDescription: T.object,
     downloadURL: T.func.isRequired,
     fileType: T.oneOf(['accession', 'fasta']),
     count: T.number,

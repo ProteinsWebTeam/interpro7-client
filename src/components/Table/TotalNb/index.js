@@ -129,6 +129,8 @@ TotalNb.propTypes = {
   className: T.string,
   description: T.object,
   contentType: T.string,
+  databases: T.object,
+  dbCounters: T.object,
 };
 
 const mapStateToProps = createSelector(
