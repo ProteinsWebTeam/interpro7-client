@@ -29,6 +29,7 @@ const loadProtVistaWebComponents = () => {
 class ProtVistaMatches extends PureComponent {
   static propTypes = {
     matches: T.array.isRequired,
+    data: T.array,
     options: T.object,
   };
 
