@@ -441,5 +441,8 @@ const OptMemberDBSelector = props =>
   ) : (
     <FullyLoadedMemberDBSelector {...props} />
   );
+OptMemberDBSelector.propTypes = {
+  dbCounters: T.object,
+};
 
 export default OptMemberDBSelector;
