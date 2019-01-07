@@ -212,6 +212,11 @@ class Description extends PureComponent /*:: <Props> */ {
 }
 
 export class DescriptionReadMore extends PureComponent {
+  static propTypes = {
+    text: T.string,
+    minNumberOfCharToShow: T.number,
+    patternToRemove: T.string,
+  };
   constructor(props) {
     super(props);
     this.state = { showMore: false };
