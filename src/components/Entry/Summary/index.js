@@ -144,7 +144,7 @@ SidePanel.propTypes = {
 
 const OtherSections = ({ metadata, citations: { included, extra } }) => (
   <>
-    {!Object.keys(metadata.go_terms).length ||
+    {!Object.keys(metadata.go_terms || []).length ||
     metadata.source_database.toLowerCase() !== 'interpro' ? null : (
       <GoTerms
         terms={metadata.go_terms}
