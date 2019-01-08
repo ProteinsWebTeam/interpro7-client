@@ -28,7 +28,7 @@
       rgba(45, 174, 193, 0.5),
       rgba(0, 85, 158, 0.9)
     ),
-    url(images/backgrounds/bgd-banner-01.svg);
+    url(~images/backgrounds/bgd-banner-01.svg);
   background-repeat: no-repeat, repeat;
   background-position: 0, 100% 0%;
   background-size: 100%, 2030px;
@@ -42,7 +42,7 @@
     rgba(45, 174, 193, 0.5),
     rgba(52, 123, 148, 0.9)
   ),
-  url(images/backgrounds/banner-sqc-comparison.jpg);
+  url(~images/backgrounds/banner-sqc-comparison.jpg);
   background-repeat: no-repeat, repeat;
   background-position: left, top right;
   background-size: 100%, 50%;
@@ -54,7 +54,7 @@
       rgba(249, 255, 182, 0.53),
       rgb(43, 111, 128)
     ),
-    url(images/backgrounds/bgd-banner-01.svg);
+    url(~images/backgrounds/bgd-banner-01.svg);
 }
 
 /* to have same size as global  header*/

@@ -33,13 +33,12 @@ const getCompressionPlugin = (() => {
   };
 })();
 
-const cssSettings = mode => ({
+const cssSettings = {
   modules: true,
   importLoaders: 1,
   sourceMap: true,
-  minimize: mode === 'production',
   localIdentName: '[folder]_[name]__[local]___[hash:2]',
-});
+};
 
 const publicPath = websiteURL.pathname || '/interpro/';
 
@@ -191,7 +190,7 @@ const getConfigFor = (env, mode, module = false) => {
             },
             {
               loader: 'css-loader',
-              options: Object.assign({}, cssSettings(mode), {
+              options: Object.assign({}, cssSettings, {
                 localIdentName: '[local]',
               }),
             },
@@ -218,7 +217,7 @@ const getConfigFor = (env, mode, module = false) => {
             },
             {
               loader: 'css-loader',
-              options: cssSettings(mode),
+              options: cssSettings,
             },
             {
               loader: 'postcss-loader',
@@ -244,7 +243,7 @@ const getConfigFor = (env, mode, module = false) => {
             },
             {
               loader: 'css-loader',
-              options: Object.assign({}, cssSettings(mode), {
+              options: Object.assign({}, cssSettings, {
                 localIdentName: '[local]',
               }),
             },
