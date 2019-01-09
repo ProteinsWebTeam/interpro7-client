@@ -3,6 +3,8 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+
 import config from 'config';
 import LiteMol from 'litemol';
 import CustomTheme from './CustomTheme';
@@ -65,6 +67,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     };
 
     //MAQ this.plugin = null;
+    this.stage = null;
 
     this._ref = React.createRef();
     this._placeholder = React.createRef();
@@ -73,28 +76,18 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     const pdbid = this.props.id;
-    const stage = new Stage(this._ref.current);
+    this.stage = new Stage(this._ref.current);
+    this.stage.setParameters({ backgroundColor: 'white' });
 
-    stage
+    this.stage
       .loadFile(`https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`)
       .then(component => {
-        /*
-      const schemeId = ColormakerRegistry.addSelectionScheme([
-        [
-          "residueIndex",
-          "1-100",
-          "green"
-        ]
-      ]);
-
-      component.addRepresentation("cartoon", {color: schemeId});
-      */
         component.addRepresentation('cartoon');
         component.autoView();
       });
 
     //example onclick
-    stage.signals.clicked.add(picked => {
+    this.stage.signals.clicked.add(picked => {
       if (picked) {
         const residue = picked.atom;
         const index = residue.residueIndex;
@@ -105,7 +98,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     });
 
-    stage.signals.hovered.add(picked => {
+    this.stage.signals.hovered.add(picked => {
       if (picked) {
         const residue = picked.atom;
         const index = residue.residueIndex;
@@ -115,8 +108,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
         console.log('mouseover: nothing');
       }
     });
-    //stage.setSpin(true);
-    //stage.handleResize();
+    this.stage.setSpin(true);
+    this.stage.handleResize();
     /*MAQ
     this.plugin = LiteMol.Plugin.create({
       target: this._ref.current,
@@ -180,7 +173,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
     */
     const threshold = 0.4;
     this.observer = new IntersectionObserver(entries => {
-      this.setState({ isStuck: entries[0].intersectionRatio < threshold });
+      console.log(this._placeholder.current.getBoundingClientRect().y);
+      this.setState({
+        isStuck:
+          this._placeholder.current.getBoundingClientRect().y < 0 &&
+          entries[0].intersectionRatio < threshold,
+      });
     }, optionsForObserver);
     this.observer.observe(this._placeholder.current);
     this._protvista.current.addEventListener(
@@ -227,6 +225,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   componentDidUpdate(_, prevState) {
+    this.stage.handleResize();
     if (prevState.isStuck !== this.state.isStuck) {
       //MAQ this.plugin.instance.context.scene.scene.handleResize();
     }
@@ -369,18 +368,42 @@ class StructureView extends PureComponent /*:: <Props> */ {
               'is-stuck': this.state.isStuck,
             })}
           >
-            <div
-              ref={this._ref}
-              style={{
-                width: '1000px',
-                height: '1000px',
-                // don't think that is needed anymore?
-                // display: 'flex',
-                // alignItems: 'center',
-                // justifyContent: 'center',
-                position: 'relative',
+            <ResizeObserverComponent
+              element="div"
+              updateCallback={() => this.stage.handleResize()}
+              measurements={['width', 'height']}
+            >
+              {({ width, height }) => {
+                console.log(`ResizeObserver: ${height} ${width}`);
+                if (!width) {
+                  width = 'auto';
+                }
+                if (!height) {
+                  height = '500px';
+                }
+                if (this.stage) {
+                  this.stage.handleResize();
+                }
+                return (
+                  <div
+                    ref={this._ref}
+                    style={{
+                      width: width,
+                      height: height,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  />
+                );
               }}
-            />
+            </ResizeObserverComponent>
+          </div>
+          <div
+            style={{
+              width: 'auto',
+              height: 'auto',
+            }}
+          >
             {this.props.matches ? (
               <EntrySelection
                 entryMap={this.state.entryMap}
