@@ -29,6 +29,7 @@ class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
     element: T.string,
     children: T.func.isRequired,
     measurements: T.oneOfType([T.arrayOf(T.string).isRequired, T.string]),
+    updateCallback: T.func,
   };
 
   constructor(props /*: Props */) {
@@ -48,6 +49,9 @@ class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
 
   componentWillUnmount() {
     this._resizeObserver.unobserve(this._ref.current);
+  }
+  componentDidUpdate() {
+    if (this.props.updateCallback) this.props.updateCallback();
   }
 
   _handleResizeEvent(resizeObserverEntries) {
@@ -70,7 +74,13 @@ class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
   }
 
   render() {
-    const { children, element, measurements, ...props } = this.props;
+    const {
+      children,
+      element,
+      measurements: __,
+      updateCallback: _,
+      ...props
+    } = this.props;
     const Element = element || 'span';
     return (
       // $FlowIgnore
