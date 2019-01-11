@@ -856,9 +856,8 @@ hr {
     14%;
   background-size: 268%;
 }
-.image-tool-litemol {
-  background: #fff url('../images/cover/tool/tool_litemol.png') no-repeat 50%
-    14%;
+.image-tool-ngl {
+  background: #fff url('../images/cover/tool/tool_ngl.png') no-repeat 50% 14%;
   background-size: 210%;
 }
 
