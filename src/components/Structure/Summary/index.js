@@ -22,6 +22,8 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import { formatExperimentType } from 'components/Structure/utils';
+
 const f = foundationPartial(ebiStyles);
 
 const webComponents = [];
@@ -107,7 +109,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                             },
                           }}
                         >
-                          {metadata.experiment_type}
+                          {formatExperimentType(metadata.experiment_type)}
                         </Link>
                       </td>
                     </tr>
