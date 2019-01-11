@@ -267,11 +267,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
         if (components) {
           components.forEach(component => {
             hits.forEach(hit => {
+              //console.log(`${hit.accession}: ${hit.start_residue_number}-${hit.end_residue_number}:${hit.struct_asym_id}`);
               const theme = ColormakerRegistry.addSelectionScheme(
                 [
                   [
                     hit.color,
-                    `${hit.start_residue_number}-${hit.end_residue_number}`,
+                    `${hit.start_residue_number}-${hit.end_residue_number}:${
+                      hit.struct_asym_id
+                    }`,
                   ],
                 ],
                 hit.acc,
