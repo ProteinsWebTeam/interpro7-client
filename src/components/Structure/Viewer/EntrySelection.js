@@ -33,7 +33,7 @@ class EntrySelection extends PureComponent {
       const optGroup = selectedOption.parentNode;
       memberDB = optGroup.label;
     }
-    // update LiteMol
+    // update structure viewer
     this.props.updateStructure(memberDB, entry);
   };
 

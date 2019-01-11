@@ -6,8 +6,6 @@ import { createSelector } from 'reselect';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import config from 'config';
-import LiteMol from 'litemol';
-import CustomTheme from './CustomTheme';
 
 import { Stage, ColormakerRegistry, Preferences } from 'ngl';
 
@@ -66,8 +64,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
       isStuck: false,
     };
 
-    //MAQ this.plugin = null;
     this.stage = null;
+    this.name = `${this.props.id}_updated.cif`;
 
     this._ref = React.createRef();
     this._placeholder = React.createRef();
@@ -80,10 +78,18 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.stage.setParameters({ backgroundColor: 'white' });
 
     this.stage
-      .loadFile(`https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`)
+      .loadFile(`https://www.ebi.ac.uk/pdbe/static/entry/${this.name}`)
       .then(component => {
-        component.addRepresentation('cartoon');
+        component.addRepresentation('cartoon', { colorScheme: 'chainname' });
         component.autoView();
+      })
+      .then(component => {
+        //this.stage.setSpin(true);
+        this.stage.handleResize();
+        if (this.props.matches) {
+          const entryMap = this.createEntryMap();
+          this.setState({ entryMap });
+        }
       });
 
     //example onclick
@@ -108,72 +114,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
         console.log('mouseover: nothing');
       }
     });
-    this.stage.setSpin(true);
-    this.stage.handleResize();
-    /*MAQ
-    this.plugin = LiteMol.Plugin.create({
-      target: this._ref.current,
-      viewportBackground: '#fff',
-      layoutState: {
-        hideControls: true,
-        isExpanded: false,
-      },
-    });
-    const context = this.plugin.context;
-    const action = LiteMol.Bootstrap.Tree.Transform.build();
-    action
-      .add(
-        context.tree.root,
-        LiteMol.Bootstrap.Entity.Transformer.Data.Download,
-        {
-          url: `https://www.ebi.ac.uk/pdbe/static/entry/${pdbid}_updated.cif`,
-          type: 'String',
-          id: pdbid,
-        },
-      )
-      .then(
-        LiteMol.Bootstrap.Entity.Transformer.Data.ParseCif,
-        { id: pdbid },
-        { isBinding: true, ref: 'parse' },
-      )
-      .then(
-        LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateFromMmCif,
-        { blockIndex: 0 },
-        { isBinding: true },
-      )
-      .then(
-        LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateModel,
-        { modelIndex: 0 },
-        { isBinding: false, ref: 'model' },
-      )
-      .then(
-        LiteMol.Bootstrap.Entity.Transformer.Molecule.CreateMacromoleculeVisual,
-        {
-          polymer: true,
-          polymerRef: 'polymer-visual',
-          het: false,
-          water: false,
-        },
-      );
 
-    this.plugin.applyTransform(action).then(() => {
-      if (this.props.matches) {
-        const entryMap = this.createEntryMap();
-        this.setState({ entryMap });
-      }
-      // override the default litemol colour with the custom theme
-      this.updateTheme([]);
-      // detect any changes to the tree from within LiteMol and reset select control
-      LiteMol.Bootstrap.Event.Tree.TransformFinished.getStream(
-        context,
-      ).subscribe(() => {
-        this.setState({ selectedEntry: '' });
-      });
-    });
-    */
     const threshold = 0.4;
     this.observer = new IntersectionObserver(entries => {
-      console.log(this._placeholder.current.getBoundingClientRect().y);
       this.setState({
         isStuck:
           this._placeholder.current.getBoundingClientRect().y < 0 &&
@@ -224,41 +167,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
     });
   }
 
-  componentDidUpdate(_, prevState) {
-    this.stage.handleResize();
-    if (prevState.isStuck !== this.state.isStuck) {
-      //MAQ this.plugin.instance.context.scene.scene.handleResize();
-    }
-  }
-
   componentWillUnmount() {
     this.observer.disconnect();
   }
-
-  /* MAQ
-  updateTheme(entries) {
-    if (this.plugin) {
-      const context = this.plugin.context;
-      const model = context.select('model')[0];
-      if (this.props.matches) {
-        const customTheme = new CustomTheme(
-          LiteMol.Core,
-          LiteMol.Visualization,
-          LiteMol.Bootstrap,
-          LiteMol.Core.Structure.Query,
-        );
-        const base = hexToRgb(config.colors.get('fallback'));
-        const color = {
-          base: base,
-          entries: entries,
-        };
-
-        const theme = customTheme.createTheme(model.props.model, color);
-        customTheme.applyTheme(this.plugin, 'polymer-visual', theme);
-      }
-    }
-  }
-  */
 
   _getChainMap(chain, locations, p2s) {
     const chainMap = [];
@@ -282,8 +193,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
       for (const fragment of location.fragments) {
         map[chain].push({
           struct_asym_id: chain,
-          start_residue_number: p2s(fragment.start),
-          end_residue_number: p2s(fragment.end),
+          start_residue_number: Math.round(p2s(fragment.start)),
+          end_residue_number: Math.round(p2s(fragment.end)),
           accession: entry,
           source_database: db,
           parent: match.metadata.integrated
@@ -339,7 +250,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   showEntryInStructure = (memberDB, entry, chain) => {
     const keep = this.state.selectedEntryToKeep;
-    //MAQ this.updateTheme([]);
     const db = memberDB || (keep && keep.db);
     const acc = entry || (keep && keep.accession);
     const ch = chain || (keep && keep.chain);
@@ -351,10 +261,35 @@ class StructureView extends PureComponent /*:: <Props> */ {
             [],
           );
       hits.forEach(
-        hit =>
-          (hit.color = hexToRgb(getTrackColor(hit, this.props.colorDomainsBy))),
+        hit => (hit.color = getTrackColor(hit, this.props.colorDomainsBy)),
       );
-      //MAQ this.updateTheme(hits);
+      if (this.stage) {
+        const components = this.stage.getComponentsByName(this.name);
+        if (components) {
+          components.forEach(component => {
+            hits.forEach(hit => {
+              const theme = ColormakerRegistry.addSelectionScheme(
+                [
+                  [
+                    hit.color,
+                    `${hit.start_residue_number}-${hit.end_residue_number}`,
+                  ],
+                ],
+                hit.acc,
+              );
+              component.addRepresentation('cartoon', { color: theme });
+            });
+          });
+        }
+      }
+    } else {
+      //rest view when no entry selected
+      const components = this.stage.getComponentsByName(this.name);
+      if (components) {
+        components.forEach(component => {
+          component.addRepresentation('cartoon', { colorScheme: 'chainname' });
+        });
+      }
     }
     this.setState({ selectedEntry: acc || '' });
   };
@@ -374,12 +309,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
               measurements={['width', 'height']}
             >
               {({ width, height }) => {
-                console.log(`ResizeObserver: ${height} ${width}`);
                 if (!width) {
                   width = 'auto';
                 }
                 if (!height) {
-                  height = '500px';
+                  height = '400px';
                 }
                 if (this.stage) {
                   this.stage.handleResize();
