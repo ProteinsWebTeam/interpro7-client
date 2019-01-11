@@ -94,6 +94,7 @@
     "history": "4.7.2",
     "idb": "2.1.3",
     "interpro-components": "^0.8.0",
+    "intersection-observer": "0.5.1",
     "isomorphic-fetch": "2.2.1",
     "litemol": "github:dsehnal/LiteMol#85ec87c2698b6abeca8a18cf150f0341b8f2c6ea",
     "lodash-es": "4.17.11",
