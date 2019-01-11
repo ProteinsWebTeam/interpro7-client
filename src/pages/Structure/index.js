@@ -42,6 +42,7 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import pageStyle from '../style.css';
+import { formatExperimentType } from 'components/Structure/utils';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts);
 
@@ -514,6 +515,7 @@ const List = ({
             dataKey="experiment_type"
             headerClassName={f('table-center')}
             cellClassName={f('table-center')}
+            renderer={type => formatExperimentType(type)}
           >
             Experiment type
           </Column>
