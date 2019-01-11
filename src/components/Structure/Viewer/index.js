@@ -18,7 +18,6 @@ import getMapper from './proteinToStructureMapper';
 
 import { foundationPartial } from 'styles/foundation';
 
-import 'litemol/dist/css/LiteMol-plugin-light.css';
 import style from './style.css';
 
 const f = foundationPartial(style);
