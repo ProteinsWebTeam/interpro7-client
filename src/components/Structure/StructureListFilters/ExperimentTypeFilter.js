@@ -14,6 +14,7 @@ import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
+import { formatExperimentType } from 'components/Structure/utils';
 
 const f = foundationPartial(style);
 
@@ -67,7 +68,7 @@ class ExperimentTypeFilter extends PureComponent {
                 }
                 style={{ margin: '0.25em' }}
               />
-              <span>{type}</span>
+              <span>{formatExperimentType(type)}</span>
               {typeof count === 'undefined' || isNaN(count) ? null : (
                 <NumberComponent
                   label
