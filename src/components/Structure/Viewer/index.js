@@ -252,9 +252,30 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   showEntryInStructure = (memberDB, entry, chain) => {
     const keep = this.state.selectedEntryToKeep;
-    const db = memberDB || (keep && keep.db);
-    const acc = entry || (keep && keep.accession);
-    const ch = chain || (keep && keep.chain);
+    let db;
+    let acc;
+    let ch;
+    /*
+    console.log(`Got: ${memberDB} ${entry} ${chain}`);
+    if (keep) {
+      console.log(`Had: ${keep.db} ${keep.accession} ${keep.chain}`);
+    }
+    */
+    if (memberDB != null && entry != null) {
+      db = memberDB;
+      acc = entry;
+      ch = chain;
+    } else if (
+      keep &&
+      keep.db != null &&
+      keep.accession != null &&
+      keep.chain != null
+    ) {
+      db = keep.db;
+      acc = keep.accession;
+      ch = keep.chain;
+    }
+
     if (db && acc) {
       const hits = ch
         ? this.state.entryMap[db][acc][ch]
@@ -269,25 +290,25 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const components = this.stage.getComponentsByName(this.name);
         if (components) {
           components.forEach(component => {
-            hits.forEach(hit => {
+            const selections = [];
+            hits.forEach((hit, i) => {
               console.log(
                 `Highlighting: ${hit.accession}: ${hit.start_residue_number}-${
                   hit.end_residue_number
                 }:${hit.struct_asym_id}`,
               );
-              const theme = ColormakerRegistry.addSelectionScheme(
-                [
-                  [
-                    hit.color,
-                    `${hit.start_residue_number}-${hit.end_residue_number}:${
-                      hit.struct_asym_id
-                    }`,
-                  ],
-                ],
-                hit.acc,
-              );
-              component.addRepresentation('cartoon', { color: theme });
+              selections.push([
+                hit.color,
+                `${hit.start_residue_number}-${hit.end_residue_number}:${
+                  hit.struct_asym_id
+                }`,
+              ]);
             });
+            const theme = ColormakerRegistry.addSelectionScheme(
+              selections,
+              acc,
+            );
+            component.addRepresentation('cartoon', { color: theme });
           });
         }
       }
