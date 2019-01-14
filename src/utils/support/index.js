@@ -20,3 +20,5 @@ export const detailsTag = (window => {
 })(window);
 
 export const inert = !window || 'inert' in HTMLElement.prototype;
+
+export const intersectionObserver = !window || 'IntersectionObserver' in window;

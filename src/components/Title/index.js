@@ -201,9 +201,9 @@ class Title extends PureComponent /*:: <Props> */ {
             <>
               <EntryIcon metadata={metadata} />
               <Helmet
-                titleTemplate={`${
-                  metadata.name.name
-                } ${metadata.accession.toUpperCase()} - Entry - InterPro`}
+                titleTemplate={`${metadata.name.name} ${
+                  metadata.accession
+                } - Entry - InterPro`}
               >
                 <title>InterPro</title>
               </Helmet>
@@ -221,9 +221,7 @@ class Title extends PureComponent /*:: <Props> */ {
           )}
         {metadata && (
           <Helmet
-            titleTemplate={`${
-              metadata.name.name
-            } (${metadata.accession.toUpperCase()}) - ${
+            titleTemplate={`${metadata.name.name} (${metadata.accession}) - ${
               isEntry ? dbLabel : ' '
             } ${mainType} - InterPro`}
           >

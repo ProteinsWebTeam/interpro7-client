@@ -456,7 +456,7 @@ class List extends PureComponent {
                     processData={schemaProcessDataTableRow}
                   />
                   <HighlightedText
-                    text={accession.toUpperCase()}
+                    text={accession}
                     textToHighlight={search.search}
                   />
                 </Link>

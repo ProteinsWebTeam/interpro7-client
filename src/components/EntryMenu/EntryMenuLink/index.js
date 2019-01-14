@@ -21,7 +21,7 @@ const singleEntityNames = new Map(
   Array.from(singleEntity).map(e => [e[1].name, e[0]]),
 );
 
-const whitelist = new Set(['Overview', 'Sequence']);
+const whitelist = new Set(['Overview', 'Sequence', 'Alignments']);
 
 /*:: type Props = {
   to: Object | function,

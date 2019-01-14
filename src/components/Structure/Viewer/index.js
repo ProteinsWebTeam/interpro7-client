@@ -12,6 +12,8 @@ import { Stage, ColormakerRegistry, Preferences } from 'ngl';
 import EntrySelection from './EntrySelection';
 import { EntryColorMode, hexToRgb, getTrackColor } from 'utils/entry-color';
 
+import { intersectionObserver as intersectionObserverPolyfill } from 'utils/polyfills';
+
 import ProtVistaForStructure from './ProtVistaForStructures';
 
 import getMapper from './proteinToStructureMapper';
@@ -71,7 +73,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this._protvista = React.createRef();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    await intersectionObserverPolyfill();
     const pdbid = this.props.id;
     this.stage = new Stage(this._ref.current);
     this.stage.setParameters({ backgroundColor: 'white' });

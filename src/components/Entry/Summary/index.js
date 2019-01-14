@@ -110,11 +110,9 @@ const SidePanel = ({ metadata, dbInfo }) => (
             <Link
               className={f('ext')}
               target="_blank"
-              href={getUrlFor(metadata.source_database)(
-                metadata.accession.toUpperCase(),
-              )}
+              href={getUrlFor(metadata.source_database)(metadata.accession)}
             >
-              View {metadata.accession.toUpperCase()} in{' '}
+              View {metadata.accession} in{' '}
               {(dbInfo && dbInfo.name) || metadata.source_database}
             </Link>
           </li>
@@ -146,15 +144,15 @@ SidePanel.propTypes = {
 
 const OtherSections = ({ metadata, citations: { included, extra } }) => (
   <>
-    {!Object.keys(metadata.go_terms).length ||
+    {!Object.keys(metadata.go_terms || []).length ||
     metadata.source_database.toLowerCase() !== 'interpro' ? null : (
       <GoTerms
-        terms={metadata.go_terms}
+        terms={metadata.go_terms || []}
         type="entry"
         db={metadata.source_database}
       />
     )}
-    {Object.keys(metadata.literature).length ? (
+    {Object.keys(metadata.literature || []).length ? (
       <section id="references">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}>
@@ -215,10 +213,10 @@ const OverlappingEntries = ({ metadata, overlaps }) => (
         >
           {ov.name}
         </Link>{' '}
-        <small>({ov.accession.toUpperCase()})</small>
+        <small>({ov.accession})</small>
       </div>
     ))}
-    {Object.keys(metadata.overlaps_with).length >
+    {Object.keys(metadata.overlaps_with || []).length >
       MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
       <button
         className={f('button', 'hollow', 'secondary', 'margin-bottom-none')}
@@ -299,7 +297,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     const citations = description2IDs(metadata.description);
     const desc = metadata.description.reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
-      Object.entries(metadata.literature),
+      Object.entries(metadata.literature || {}),
       ([id]) => citations.includes(id),
     );
     included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));

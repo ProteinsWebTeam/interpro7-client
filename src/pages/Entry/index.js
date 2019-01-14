@@ -316,7 +316,7 @@ class EntryCard extends PureComponent {
                 }}
               >
                 <HighlightedText
-                  text={data.metadata.name}
+                  text={data.metadata.name || ''}
                   textToHighlight={search}
                 />
               </Link>
@@ -362,7 +362,7 @@ class EntryCard extends PureComponent {
                       },
                     }}
                   >
-                    {data.metadata.integrated.toUpperCase()}
+                    {data.metadata.integrated}
                   </Link>
                 </div>
               ) : (
@@ -372,7 +372,7 @@ class EntryCard extends PureComponent {
           )}
           <div>
             <HighlightedText
-              text={(data.metadata.accession || '').toUpperCase()}
+              text={data.metadata.accession || ''}
               textToHighlight={search}
             />
           </div>
@@ -541,7 +541,7 @@ class List extends PureComponent {
                   />
                   <span className={f('acc-row')}>
                     <HighlightedText
-                      text={accession.toUpperCase()}
+                      text={accession || ''}
                       textToHighlight={search.search}
                     />
                   </span>
@@ -655,7 +655,7 @@ class List extends PureComponent {
                                 },
                               }}
                             >
-                              {accession.toUpperCase()}
+                              {accession}
                             </Link>
                           </Tooltip>
                         )),
@@ -679,9 +679,7 @@ class List extends PureComponent {
                         search: {},
                       }}
                     >
-                      <Tooltip title={`${accession}`}>
-                        {accession.toUpperCase()}
-                      </Tooltip>
+                      <Tooltip title={`${accession}`}>{accession}</Tooltip>
                     </Link>
                   ) : (
                     ''
