@@ -22,6 +22,8 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import { formatExperimentType } from 'components/Structure/utils';
+
 const f = foundationPartial(ebiStyles);
 
 const webComponents = [];
@@ -107,7 +109,7 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                             },
                           }}
                         >
-                          {metadata.experiment_type}
+                          {formatExperimentType(metadata.experiment_type)}
                         </Link>
                       </td>
                     </tr>
@@ -140,8 +142,11 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                 <h5>External Links</h5>
                 <ul className={f('no-bullet')}>
                   <li>
-                    <PDBeLink id={metadata.accession} className={f('ext')}>
-                      View {metadata.accession.toUpperCase()} in PDBe
+                    <PDBeLink
+                      id={metadata.accession || ''}
+                      className={f('ext')}
+                    >
+                      View {metadata.accession} in PDBe
                     </PDBeLink>
                     {
                       // remove the PDB viewer as we already show info on page (duplication)

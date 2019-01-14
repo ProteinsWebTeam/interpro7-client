@@ -65,7 +65,13 @@ const _IPScanResultSafeGuardIfNotRehydratedYet = ({ jobs, ...props }) => {
   if (!jobs) return <Loading />;
   return <IPScanResult {...props} />;
 };
-const jobSelector = createSelector(state => state.jobs, jobs => ({ jobs }));
+_IPScanResultSafeGuardIfNotRehydratedYet.propTypes = {
+  jobs: T.object,
+};
+const jobSelector = createSelector(
+  state => state.jobs,
+  jobs => ({ jobs }),
+);
 const IPScanResultSafeGuardIfNotRehydratedYet = connect(jobSelector)(
   _IPScanResultSafeGuardIfNotRehydratedYet,
 );

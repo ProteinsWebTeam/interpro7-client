@@ -97,8 +97,7 @@ const EntriesOnStructure = ({ entries }) => (
       return (
         <div key={i} className={f('columns')}>
           <h4>
-            Chain {e.chain}{' '}
-            <small>({(e.protein.accession || '').toUpperCase()})</small>
+            Chain {e.chain} <small>({e.protein.accession})</small>
           </h4>
           <ProtVistaPlusProtein
             tracks={Object.entries(e.data).sort(([a], [b]) => (a > b ? 1 : 0))}
