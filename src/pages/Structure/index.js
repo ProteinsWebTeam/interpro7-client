@@ -42,6 +42,7 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import pageStyle from '../style.css';
+import { formatExperimentType } from 'components/Structure/utils';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts);
 
@@ -352,7 +353,7 @@ class StructureCard extends PureComponent {
 
           <div>
             <HighlightedText
-              text={(data.metadata.accession || '').toUpperCase()}
+              text={data.metadata.accession || ''}
               textToHighlight={search}
             />
           </div>
@@ -477,7 +478,7 @@ const List = ({
                   processData={schemaProcessDataTableRow}
                 />
                 <HighlightedText
-                  text={accession.toUpperCase()}
+                  text={accession || ''}
                   textToHighlight={search.search}
                 />
               </Link>
@@ -514,6 +515,7 @@ const List = ({
             dataKey="experiment_type"
             headerClassName={f('table-center')}
             cellClassName={f('table-center')}
+            renderer={type => formatExperimentType(type)}
           >
             Experiment type
           </Column>
@@ -539,7 +541,7 @@ const List = ({
               <PDBeLink id={accession}>
                 <LazyImage
                   src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
-                  alt={`structure with accession ${accession.toUpperCase()}`}
+                  alt={`structure with accession ${accession}`}
                   style={{ maxWidth: '33%' }}
                 />
               </PDBeLink>

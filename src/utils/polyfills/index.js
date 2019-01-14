@@ -4,6 +4,7 @@ import {
   webComponents as supportsWebComponents,
   detailsTag as supportsDetailsTag,
   inert as supportsInert,
+  intersectionObserver as supprtsIntersectionObserver,
 } from 'utils/support';
 
 const responses /*: Map<string, Promise<boolean>> */ = new Map();
@@ -39,8 +40,8 @@ const loadPolyfillIfNeeded = (
 // prettier-ignore
 export const webComponents = ()/*: Promise<boolean> */ => {
   return loadPolyfillIfNeeded(
-    () =>
-      import(/* webpackChunkName: "webcomponents-polyfill" */'@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce'),
+    async () =>
+      await import(/* webpackChunkName: "webcomponents-polyfill" */'@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce'),
     'webComponents',
     supportsWebComponents,
   ) || Promise.resolve(true);
@@ -49,10 +50,22 @@ export const webComponents = ()/*: Promise<boolean> */ => {
 export const detailsTag = () /*: Promise<boolean> */ => {
   return (
     loadPolyfillIfNeeded(
-      () =>
-        import(/* webpackChunkName: "detailstags-polyfill" */ 'details-element-polyfill'),
+      async () =>
+        await import(/* webpackChunkName: "detailstags-polyfill" */ 'details-element-polyfill'),
       'detailsTag',
       supportsDetailsTag,
+    ) || Promise.resolve(true)
+  );
+};
+
+export const intersectionObserver = () /*: Promise<boolean> */ => {
+  return (
+    loadPolyfillIfNeeded(
+      async () => {
+        await import(/* webpackChunkName: "intersection-observer" */ 'intersection-observer');
+      },
+      'intersectionObserver',
+      supprtsIntersectionObserver,
     ) || Promise.resolve(true)
   );
 };

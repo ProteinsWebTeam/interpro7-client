@@ -104,6 +104,18 @@ const StatusTooltip = React.memo(({ status }) => (
     )}
   </Tooltip>
 ));
+StatusTooltip.displayName = 'StatusTooltip';
+StatusTooltip.propTypes = {
+  status: T.oneOf([
+    'running',
+    'created',
+    'submitted',
+    'not found',
+    'failure',
+    'error',
+    'finished',
+  ]),
+};
 
 const mergeData = (matches, sequenceLength) => {
   const mergedData = { unintegrated: {}, predictions: [] };

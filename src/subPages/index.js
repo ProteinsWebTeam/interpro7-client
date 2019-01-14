@@ -26,6 +26,10 @@ const HMMModel = loadable({
   loader: () =>
     import(/* webpackChunkName: "hmm-model-subpage" */ './HMMModel'),
 });
+const SetAlignments = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "set-alignments-subpage" */ './SetAlignments'),
+});
 
 const defaultMapStateToProps = createSelector(
   state => state.settings.api,
@@ -100,6 +104,7 @@ const subPages = new Map([
   ['set', loadData(defaultMapStateToProps)(List)],
   ['sequence', Sequence],
   ['domain_architecture', DomainArchitecture],
+  ['alignments', SetAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
 ]);

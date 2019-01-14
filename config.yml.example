@@ -49,6 +49,7 @@ pages:
       - structure
       - taxonomy
       - proteome
+      - alignments
   result:
 pagination:
   pageSize: 20

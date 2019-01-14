@@ -77,6 +77,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
       nodes: [],
       relationships: [],
     };
+    this._vis.clear();
     this._vis.paint(data, false);
     this._ref.current.addEventListener('click', this._handleClick);
   }
@@ -84,6 +85,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
   componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.data) {
       const data = this.props.data.metadata.relationships;
+      this._vis.clear();
       this._vis.paint(data, false);
     }
   }
@@ -93,10 +95,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
       this._ref.current.removeEventListener('click', this._handleClick);
     }
     // TODO: Update clanviewer to clean SVG
-    this._vis._ro.disconnect();
-    this._vis.tick = null;
-    this._vis = null;
-    this._ref = null;
+    this._vis.clear();
   }
 
   _handleClick = event => {
@@ -175,8 +174,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                         target="_blank"
                         pattern={currentSet.url_template}
                       >
-                        View {metadata.accession.toUpperCase()} in{' '}
-                        {currentSet.name}
+                        View {metadata.accession} in {currentSet.name}
                       </BaseLink>
                     </li>
                   </ul>

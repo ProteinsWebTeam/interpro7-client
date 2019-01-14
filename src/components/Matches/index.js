@@ -279,10 +279,7 @@ const Matches = (
               }}
             >
               <span className={f('acc-row')}>
-                <HighlightedText
-                  text={acc.toUpperCase()}
-                  textToHighlight={search.search}
-                />
+                <HighlightedText text={acc} textToHighlight={search.search} />
               </span>
             </Link>{' '}
             {primary === 'protein' && sourceDatabase === 'reviewed' ? (
@@ -387,7 +384,7 @@ const Matches = (
         <PDBeLink id={accession}>
           <LazyImage
             src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
-            alt={`structure with accession ${accession.toUpperCase()}`}
+            alt={`structure with accession ${accession}`}
             style={{ maxWidth: '33%' }}
           />
         </PDBeLink>

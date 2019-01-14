@@ -213,7 +213,7 @@ const ProteinCard = ({ data, search, entryDB }) => (
       </Tooltip>
       <div>
         <HighlightedText
-          text={(data.metadata.accession || '').toUpperCase()}
+          text={data.metadata.accession || ''}
           textToHighlight={search}
         />
       </div>
@@ -363,7 +363,7 @@ class List extends PureComponent {
                     className={f('acc-row')}
                   >
                     <HighlightedText
-                      text={accession.toUpperCase()}
+                      text={accession || ''}
                       textToHighlight={search.search}
                     />
                   </Link>
