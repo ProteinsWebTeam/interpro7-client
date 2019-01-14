@@ -97,9 +97,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const residue = picked.atom;
         const index = residue.residueIndex;
         const name = residue.resname;
-        console.log(`clicked: ${index} ${name}`);
+        //console.log(`clicked: ${index} ${name}`);
       } else {
-        console.log(`clicked: nothing`);
+        //console.log(`clicked: nothing`);
       }
     });
 
@@ -108,9 +108,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const residue = picked.atom;
         const index = residue.residueIndex;
         const name = residue.resname;
-        console.log(`mouseover: ${index} ${name}`);
+        //console.log(`mouseover: ${index} ${name}`);
       } else {
-        console.log('mouseover: nothing');
+        //console.log('mouseover: nothing');
       }
     });
 
@@ -267,7 +267,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
         if (components) {
           components.forEach(component => {
             hits.forEach(hit => {
-              //console.log(`${hit.accession}: ${hit.start_residue_number}-${hit.end_residue_number}:${hit.struct_asym_id}`);
+              console.log(
+                `Highlighting: ${hit.accession}: ${hit.start_residue_number}-${
+                  hit.end_residue_number
+                }:${hit.struct_asym_id}`,
+              );
               const theme = ColormakerRegistry.addSelectionScheme(
                 [
                   [
