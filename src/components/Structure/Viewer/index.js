@@ -77,7 +77,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     await intersectionObserverPolyfill();
     const pdbid = this.props.id;
     this.stage = new Stage(this._ref.current);
-    this.stage.setParameters({ backgroundColor: 'white' });
+    this.stage.setParameters({ backgroundColor: 0xfcfcfc });
 
     this.stage
       .loadFile(`https://www.ebi.ac.uk/pdbe/static/entry/${this.name}`)
@@ -306,7 +306,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
   render() {
     return (
       <>
-        <div className={f('structure-placeholder')} ref={this._placeholder}>
+        <div ref={this._placeholder}>
           <div
             className={f('structure-viewer', {
               'is-stuck': this.state.isStuck,
