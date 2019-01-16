@@ -253,6 +253,19 @@ OverlappingEntries.propTypes = {
   overlaps: T.arrayOf(T.object),
 };
 
+const Hierarchy = (hierarchy, type, accession) =>
+  hierarchy &&
+  Object.keys(hierarchy).length &&
+  hierarchy.children &&
+  hierarchy.children.length ? (
+    <div className={f('margin-bottom-large')}>
+      <h4 className={f('first-letter-cap')}>
+        {type.replace('_', ' ').toLowerCase()} relationships
+      </h4>
+      <InterProHierarchy accession={accession} hierarchy={hierarchy} />
+    </div>
+  ) : null;
+
 /* :: type Props = {
     data: {
       metadata: {
@@ -332,21 +345,11 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               {overlaps && Object.keys(overlaps).length ? (
                 <OverlappingEntries metadata={metadata} overlaps={overlaps} />
               ) : null}
-              {metadata.hierarchy &&
-              Object.keys(metadata.hierarchy).length &&
-              metadata.hierarchy.children &&
-              metadata.hierarchy.children.length ? (
-                <div className={f('margin-bottom-large')}>
-                  <h4 className={f('first-letter-cap')}>
-                    {metadata.type.replace('_', ' ').toLowerCase()}{' '}
-                    relationships
-                  </h4>
-                  <InterProHierarchy
-                    accession={metadata.accession}
-                    hierarchy={metadata.hierarchy}
-                  />
-                </div>
-              ) : null}
+              <Hierarchy
+                hierarchy={metadata.hierarchy}
+                accession={metadata.accession}
+                type={metadata.type}
+              />
 
               {// doesn't work for some HAMAP as they have enpty <P> tag
               Object.keys(metadata.description).length ? (
