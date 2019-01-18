@@ -224,8 +224,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
           const chain = structure.chain;
           const protein = structure.protein;
           const p2s = getMapper(structure.protein_structure_mapping[chain]);
-          //MAQ
-          console.log(`MAP ${db}:${entry} ${chain} ${protein}`);
           if (!memberDBMap[db][entry][chain])
             memberDBMap[db][entry][chain] = {};
           if (!memberDBMap[db][entry][chain][protein])
@@ -269,12 +267,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
     let acc;
     let ch;
     let prot;
-
-    //MAQ
-    console.log(`Got: ${memberDB} ${entry} ${chain} ${protein}`);
-    if (keep) {
-      console.log(`Had: ${keep.db} ${keep.accession} ${keep.chain}`);
-    }
 
     //reset keep when 'no entry' is selected via selection input
     if (entry === NO_SELECTION && keep) {
@@ -325,13 +317,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
           components.forEach(component => {
             const selections = [];
             hits.forEach((hit, i) => {
-              //MAQ
-              console.log(
-                `Highlighting: ${hit.accession}: ${hit.start_residue_number}-${
-                  hit.end_residue_number
-                }:${hit.struct_asym_id}`,
-              );
-
               selections.push([
                 hit.color,
                 `${hit.start_residue_number}-${hit.end_residue_number}:${
