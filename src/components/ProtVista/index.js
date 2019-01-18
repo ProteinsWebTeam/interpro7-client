@@ -154,6 +154,7 @@ class ProtVista extends Component {
           type: d.type || 'entry',
           residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
           chain: d.chain,
+          protein: d.protein,
         }));
         const children = d.children
           ? d.children.map(child => ({
