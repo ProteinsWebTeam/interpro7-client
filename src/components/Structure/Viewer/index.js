@@ -10,6 +10,7 @@ import config from 'config';
 import { Stage, ColormakerRegistry, Preferences } from 'ngl';
 
 import EntrySelection from './EntrySelection';
+import { NO_SELECTION } from './EntrySelection';
 import { EntryColorMode, hexToRgb, getTrackColor } from 'utils/entry-color';
 
 import { intersectionObserver as intersectionObserverPolyfill } from 'utils/polyfills';
@@ -130,7 +131,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       'entryclick',
       ({
         detail: {
-          feature: { accession, source_database: db, type, chain },
+          feature: { accession, source_database: db, type, chain, protein },
         },
       }) => {
         this.setState(
@@ -141,11 +142,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
                     accession: pdbid,
                     db: 'pdb',
                     chain: accession,
+                    protein,
                   }
                 : {
                     accession: accession,
                     db,
                     chain,
+                    protein,
                   },
           },
           this.showEntryInStructure,
@@ -156,12 +159,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
       'entrymouseover',
       ({
         detail: {
-          feature: { accession, source_database: db, type, chain },
+          feature: { accession, source_database: db, type, chain, protein },
         },
       }) => {
         if (type === 'chain')
-          this.showEntryInStructure('pdb', pdbid, accession);
-        else this.showEntryInStructure(db, accession, chain);
+          this.showEntryInStructure('pdb', pdbid, accession, protein);
+        else this.showEntryInStructure(db, accession, chain, protein);
       },
     );
     this._protvista.current.addEventListener('entrymouseout', () => {
@@ -189,11 +192,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return chainMap;
   }
 
-  _mapLocations(map, { chain, locations, entry, db, match }, p2s) {
-    if (!map[chain]) map[chain] = [];
+  _mapLocations(map, { chain, protein, locations, entry, db, match }, p2s) {
     for (const location of locations) {
       for (const fragment of location.fragments) {
-        map[chain].push({
+        map[chain][protein].push({
           struct_asym_id: chain,
           start_residue_number: Math.round(p2s(fragment.start)),
           end_residue_number: Math.round(p2s(fragment.end)),
@@ -206,6 +208,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     }
   }
+
   createEntryMap() {
     const memberDBMap = { pdb: {} };
 
@@ -219,24 +222,19 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
         for (const structure of match.structures) {
           const chain = structure.chain;
-          if (!memberDBMap.pdb[structure.accession])
-            memberDBMap.pdb[structure.accession] = {};
+          const protein = structure.protein;
           const p2s = getMapper(structure.protein_structure_mapping[chain]);
-          // const {
-          //   start,
-          //   end,
-          // } = structure.structure_protein_locations[0].fragments[0];
-          if (!memberDBMap.pdb[structure.accession][chain]) {
-            memberDBMap.pdb[structure.accession][chain] = this._getChainMap(
-              chain,
-              structure.structure_protein_locations,
-              p2s,
-            );
-          }
+          //MAQ
+          console.log(`MAP ${db}:${entry} ${chain} ${protein}`);
+          if (!memberDBMap[db][entry][chain])
+            memberDBMap[db][entry][chain] = {};
+          if (!memberDBMap[db][entry][chain][protein])
+            memberDBMap[db][entry][chain][protein] = [];
           this._mapLocations(
             memberDBMap[db][entry],
             {
               chain,
+              protein,
               locations: structure.entry_protein_locations,
               entry,
               db,
@@ -244,45 +242,80 @@ class StructureView extends PureComponent /*:: <Props> */ {
             },
             p2s,
           );
+          //create PDB chain mapping
+          if (!memberDBMap.pdb[structure.accession])
+            memberDBMap.pdb[structure.accession] = {};
+          if (!memberDBMap.pdb[structure.accession][chain]) {
+            memberDBMap.pdb[structure.accession][chain] = {};
+          }
+          if (!memberDBMap.pdb[structure.accession][chain][structure.protein]) {
+            memberDBMap.pdb[structure.accession][chain][
+              structure.protein
+            ] = this._getChainMap(
+              chain,
+              structure.structure_protein_locations,
+              p2s,
+            );
+          }
         }
       }
     }
     return memberDBMap;
   }
 
-  showEntryInStructure = (memberDB, entry, chain) => {
+  showEntryInStructure = (memberDB, entry, chain, protein) => {
     const keep = this.state.selectedEntryToKeep;
     let db;
     let acc;
     let ch;
-    /*
-    console.log(`Got: ${memberDB} ${entry} ${chain}`);
+    let prot;
+
+    //MAQ
+    console.log(`Got: ${memberDB} ${entry} ${chain} ${protein}`);
     if (keep) {
       console.log(`Had: ${keep.db} ${keep.accession} ${keep.chain}`);
     }
-    */
-    if (memberDB != null && entry != null) {
+
+    //reset keep when 'no entry' is selected via selection input
+    if (entry === NO_SELECTION && keep) {
+      keep.db = null;
+      keep.accession = null;
+      keep.chain = null;
+      keep.protein = null;
+    } else if (memberDB != null && entry != null) {
       db = memberDB;
       acc = entry;
       ch = chain;
+      prot = protein;
     } else if (
       keep &&
       keep.db != null &&
       keep.accession != null &&
-      keep.chain != null
+      keep.chain != null &&
+      keep.protein != null
     ) {
       db = keep.db;
       acc = keep.accession;
       ch = keep.chain;
+      prot = keep.protein;
     }
 
     if (db && acc) {
-      const hits = ch
-        ? this.state.entryMap[db][acc][ch]
-        : Object.values(this.state.entryMap[db][acc]).reduce(
-            (agg, v) => agg.concat(v),
-            [],
-          );
+      let hits = [];
+      if (ch && prot) {
+        hits = hits.concat(this.state.entryMap[db][acc][ch][prot]);
+      } else if (ch) {
+        Object.keys(this.state.entryMap[db][acc][ch]).forEach(p => {
+          hits = hits.concat(this.state.entryMap[db][acc][ch][p]);
+        });
+      } else {
+        Object.keys(this.state.entryMap[db][acc]).forEach(c => {
+          Object.keys(this.state.entryMap[db][acc][c]).forEach(p => {
+            hits = hits.concat(this.state.entryMap[db][acc][c][p]);
+          });
+        });
+      }
+
       hits.forEach(
         hit => (hit.color = getTrackColor(hit, this.props.colorDomainsBy)),
       );
@@ -292,11 +325,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
           components.forEach(component => {
             const selections = [];
             hits.forEach((hit, i) => {
+              //MAQ
               console.log(
                 `Highlighting: ${hit.accession}: ${hit.start_residue_number}-${
                   hit.end_residue_number
                 }:${hit.struct_asym_id}`,
               );
+
               selections.push([
                 hit.color,
                 `${hit.start_residue_number}-${hit.end_residue_number}:${

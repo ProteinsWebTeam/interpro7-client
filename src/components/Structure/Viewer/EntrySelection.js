@@ -5,6 +5,7 @@ import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
 
 const f = foundationPartial(style);
+export const NO_SELECTION = 'NO_SELECTION';
 
 class EntrySelection extends PureComponent {
   static propTypes = {
@@ -40,7 +41,7 @@ class EntrySelection extends PureComponent {
   render() {
     const selectionGroups = [];
     selectionGroups.push(
-      <option key="None" value="">
+      <option key="{NO_SELECTION}" value={NO_SELECTION}>
         Select Entry
       </option>,
     );
