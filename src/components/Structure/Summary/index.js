@@ -198,7 +198,7 @@ const getURLForMatches = createSelector(
         structure: { isFilter: true, db: 'pdb', accession },
         entry: { db: 'all' },
       })}`,
-      query: { page_size: 100 },
+      query: { page_size: 200 },
     }),
 );
 
