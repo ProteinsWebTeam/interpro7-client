@@ -40,7 +40,10 @@ export const processData = createSelector(
       entry => entry.source_database.toLowerCase() === 'interpro',
     );
     const interproMap = new Map(
-      interpro.map(ipro => [`${ipro.accession}-${ipro.chain}`, ipro]),
+      interpro.map(ipro => [
+        `${ipro.accession}-${ipro.chain}-${ipro.protein}`,
+        ipro,
+      ]),
     );
     const integrated = results.filter(entry => entry.integrated);
     const unintegrated = results.filter(
@@ -54,10 +57,14 @@ export const processData = createSelector(
       ),
     );
     integrated.forEach(entry => {
-      const ipro = interproMap.get(`${entry.integrated}-${entry.chain}`) || {};
+      const ipro =
+        interproMap.get(
+          `${entry.integrated}-${entry.chain}-${entry.protein}`,
+        ) || {};
       if (!ipro.children) ipro.children = [];
       if (ipro.children.indexOf(entry) === -1) ipro.children.push(entry);
     });
+    integrated.sort((a, b) => a.chain.localeCompare(b.chain));
     return {
       interpro,
       unintegrated,
