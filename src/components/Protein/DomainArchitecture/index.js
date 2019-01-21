@@ -16,23 +16,10 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
+import { requestFullScreen } from '../../../utils/fullscreen';
 
 const f = foundationPartial(local, theme, ipro, fonts);
 
-const requestFullScreen = element => {
-  if ('requestFullscreen' in element) {
-    element.requestFullscreen();
-  }
-  if ('webkitRequestFullscreen' in element) {
-    element.webkitRequestFullscreen();
-  }
-  if ('mozRequestFullScreen' in element) {
-    element.mozRequestFullScreen();
-  }
-  if ('msRequestFullscreen' in element) {
-    element.msRequestFullscreen();
-  }
-};
 const areMergedDataTheSame = (prev, next) => {
   if (Object.keys(prev).length !== Object.keys(next).length) return false;
   for (const [key, value] of Object.entries(prev)) {
