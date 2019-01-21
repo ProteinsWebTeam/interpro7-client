@@ -21,6 +21,8 @@ import getMapper from './proteinToStructureMapper';
 
 import { foundationPartial } from 'styles/foundation';
 
+import { requestFullScreen } from '../../../utils/fullscreen';
+
 import style from './style.css';
 
 const f = foundationPartial(style);
@@ -72,6 +74,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this._ref = React.createRef();
     this._placeholder = React.createRef();
     this._protvista = React.createRef();
+    this._splitview = React.createRef();
   }
 
   async componentDidMount() {
@@ -127,34 +130,36 @@ class StructureView extends PureComponent /*:: <Props> */ {
       });
     }, optionsForObserver);
     this.observer.observe(this._placeholder.current);
-    this._protvista.current.addEventListener(
-      'entryclick',
-      ({
+    this._protvista.current.addEventListener('entryclick', e => {
+      const {
         detail: {
-          feature: { accession, source_database: db, type, chain, protein },
+          feature: { accession, source_database: db, type, chain },
         },
-      }) => {
-        this.setState(
-          {
-            selectedEntryToKeep:
-              type === 'chain'
-                ? {
-                    accession: pdbid,
-                    db: 'pdb',
-                    chain: accession,
-                    protein,
-                  }
-                : {
-                    accession: accession,
-                    db,
-                    chain,
-                    protein,
-                  },
-          },
-          this.showEntryInStructure,
-        );
-      },
-    );
+      } = e;
+
+      let protein = e.detail.feature.protein;
+      //bit of a hack to handle missing data in some entries
+      if (!protein && 'parent' in e.detail.feature) {
+        protein = e.detail.feature.parent.protein;
+      }
+      this.setState({
+        selectedEntryToKeep:
+          type === 'chain'
+            ? {
+                accession: pdbid,
+                db: 'pdb',
+                chain: accession,
+                protein,
+              }
+            : {
+                accession: accession,
+                db,
+                chain,
+                protein,
+              },
+      });
+      this.showEntryInStructure;
+    });
     this._protvista.current.addEventListener(
       'entrymouseover',
       ({
@@ -175,6 +180,28 @@ class StructureView extends PureComponent /*:: <Props> */ {
   componentWillUnmount() {
     this.observer.disconnect();
   }
+
+  _toggleStructureFullScreen = e => {
+    console.log('Toggle fullscreen');
+    if (this.stage) {
+      this.stage.toggleFullscreen();
+    }
+  };
+
+  _toggleSplitView = e => {
+    console.log('Toggle split view');
+    const element = this._splitview.current;
+    element.style.display = 'flex';
+    requestFullScreen(element);
+  };
+
+  _toggleStructureSpin = e => {
+    console.log('Toggle spin');
+    if (this.stage) {
+      this.spin = this.spin ? false : true;
+      this.stage.setSpin(this.spin);
+    }
+  };
 
   _getChainMap(chain, locations, p2s) {
     const chainMap = [];
@@ -347,58 +374,83 @@ class StructureView extends PureComponent /*:: <Props> */ {
   render() {
     return (
       <>
-        <div ref={this._placeholder}>
+        <div ref={this._splitview}>
           <div
-            className={f('structure-viewer', {
-              'is-stuck': this.state.isStuck,
-            })}
-          >
-            <ResizeObserverComponent
-              element="div"
-              updateCallback={() => this.stage.handleResize()}
-              measurements={['width', 'height']}
-            >
-              {({ width, height }) => {
-                if (!width) {
-                  width = 'auto';
-                }
-                if (!height) {
-                  height = '400px';
-                }
-                if (this.stage) {
-                  this.stage.handleResize();
-                }
-                return (
-                  <div
-                    ref={this._ref}
-                    style={{
-                      width: width,
-                      height: height,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  />
-                );
-              }}
-            </ResizeObserverComponent>
-          </div>
-          <div
+            ref={this._placeholder}
             style={{
-              width: 'auto',
-              height: 'auto',
+              borderStyle: 'solid',
+              borderColor: 'red',
             }}
           >
-            {this.props.matches ? (
-              <EntrySelection
-                entryMap={this.state.entryMap}
-                updateStructure={this.showEntryInStructure}
-                selectedEntry={this.state.selectedEntry}
-              />
-            ) : null}
+            <div
+              className={f('structure-viewer', {
+                'is-stuck': this.state.isStuck,
+              })}
+            >
+              <ResizeObserverComponent
+                element="div"
+                updateCallback={() => this.stage.handleResize()}
+                measurements={['width', 'height']}
+              >
+                {({ width, height }) => {
+                  if (!width) {
+                    width = 'auto';
+                  }
+                  if (!height) {
+                    height = '400px';
+                  }
+                  if (this.stage) {
+                    this.stage.handleResize();
+                  }
+                  return (
+                    <div
+                      ref={this._ref}
+                      style={{
+                        width: width,
+                        height: height,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    />
+                  );
+                }}
+              </ResizeObserverComponent>
+              <div
+                style={{
+                  width: 'auto',
+                  height: 'auto',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  borderStyle: 'dashed',
+                  borderColor: 'blue',
+                }}
+              >
+                {this.props.matches ? (
+                  <EntrySelection
+                    entryMap={this.state.entryMap}
+                    updateStructure={this.showEntryInStructure}
+                    selectedEntry={this.state.selectedEntry}
+                  />
+                ) : null}
+                <div>
+                  <span onClick={this._toggleStructureSpin}>spin</span>
+                  <span ref={this._splitview} onClick={this._toggleSplitView}>
+                    side
+                  </span>
+                  <span onClick={this._toggleStructureFullScreen}>full</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div ref={this._protvista}>
-          <ProtVistaForStructure />
+          <div
+            ref={this._protvista}
+            style={{
+              borderStyle: 'solid',
+              borderColor: 'green',
+            }}
+          >
+            <ProtVistaForStructure />
+          </div>
         </div>
       </>
     );
