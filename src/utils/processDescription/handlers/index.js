@@ -549,7 +549,7 @@ export const searchTypeHandler /*: Handler */ = handlerConstructor({
     value: ['search', 'type'],
   },
   regexp: {
-    value: /^(text|sequence)$/i,
+    value: /^(text|sequence|ida)$/i,
   },
 });
 
