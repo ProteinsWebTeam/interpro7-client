@@ -1,0 +1,42 @@
+.ida-workspace {
+  min-height: 200px;
+  background: #f8f8f8;
+
+  @nest & div.panels {
+    display: flex;
+    @nest & div.ida-panel {
+      width: 75%;
+    }
+  }
+}
+
+.ida-controls {
+  padding: 1em;
+  min-height: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ida-button {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.ida-button:hover {
+  opacity: 0.8;
+}
+
+ul.ida-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  overflow: scroll;
+  flex-direction: column;
+}
+
+ul.ordered {
+  flex-direction: row;
+}
