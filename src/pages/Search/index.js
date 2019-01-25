@@ -33,6 +33,10 @@ const IDASearch = loadable({
   loader: () =>
     import(/* webpackChunkName: "ida-search" */ 'components/SearchByIDA'),
 });
+const IDAResults = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ida-results" */ 'components/Entry/DomainArchitectures/IDAResults'),
+});
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
@@ -58,6 +62,7 @@ const WrappedIPScanSearch = () => (
 const WrappedIDASearch = () => (
   <Wrapper>
     <IDASearch />
+    <IDAResults />
   </Wrapper>
 );
 
