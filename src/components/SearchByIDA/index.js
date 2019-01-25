@@ -69,6 +69,9 @@ PanelIDA.propTypes = {
   isOrdered: T.bool,
   removeEntryHandler: T.func,
   removeIgnoreHandler: T.func,
+  changeEntryHandler: T.func,
+  changeIgnoreHandler: T.func,
+  goToCustomLocation: T.func,
 };
 
 class SearchByIDA extends PureComponent {
