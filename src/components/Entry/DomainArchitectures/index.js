@@ -147,7 +147,7 @@ class IDAProtVista extends ProtVistaMatches {
   }
 }
 
-class DomainArchitectures extends PureComponent {
+class _DomainArchitecturesWithData extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
     mainAccession: T.string,
@@ -161,6 +161,7 @@ class DomainArchitectures extends PureComponent {
       search,
     } = this.props;
     if (loading) return <Loading />;
+    if (!payload.results) return null;
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
@@ -261,6 +262,7 @@ const mapStateToProps = createSelector(
   (mainAccession, search) => ({ mainAccession, search }),
 );
 
+export const DomainArchitecturesWithData = _DomainArchitecturesWithData;
 export default loadData({ getUrl: getUrlFor, mapStateToProps })(
-  DomainArchitectures,
+  DomainArchitecturesWithData,
 );

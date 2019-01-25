@@ -1,14 +1,21 @@
-// @flow
+// TODO: Activate Flow
+
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+import { connect } from 'react-redux';
+import { goToCustomLocation } from 'actions/creators';
+
 import DomainButton from './DomainButton';
+import IdaEntry from './IdaEntry';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
 import local from './style.css';
+import { createSelector } from 'reselect';
+import { customLocationSelector } from 'reducers/custom-location';
 
 const f = foundationPartial(interproTheme, ipro, local);
 
@@ -17,6 +24,8 @@ const PanelIDA = ({
   ignoreList,
   isOrdered,
   removeEntryHandler,
+  changeEntryHandler,
+  changeIgnoreHandler,
   removeIgnoreHandler,
 }) => (
   <div className={f('panels')}>
@@ -26,8 +35,12 @@ const PanelIDA = ({
         {entryList &&
           entryList.map((e, i) => (
             <li key={i}>
-              {e}
-              <button onClick={() => removeEntryHandler(i)}> X </button>
+              <IdaEntry
+                entry={e}
+                active={true}
+                removeEntryHandler={() => removeEntryHandler(i)}
+                changeEntryHandler={name => changeEntryHandler(i, name)}
+              />
             </li>
           ))}
       </ul>
@@ -38,8 +51,12 @@ const PanelIDA = ({
         {ignoreList &&
           ignoreList.map((e, i) => (
             <li key={i}>
-              {e}
-              <button onClick={() => removeIgnoreHandler(i)}> X </button>
+              <IdaEntry
+                entry={e}
+                active={true}
+                removeEntryHandler={() => removeIgnoreHandler(i)}
+                changeEntryHandler={name => changeIgnoreHandler(i, name)}
+              />
             </li>
           ))}
       </ul>
@@ -63,6 +80,20 @@ class SearchByIDA extends PureComponent {
       ignore: [],
     };
   }
+  _handleSubmit = () => {
+    const { entries, order, ignore } = this.state;
+    const search = {
+      ida_search: entries.join(','),
+      // ida_ignore: ignore.join(','),
+    };
+    if (order) search.ordered = true;
+    if (ignore && ignore.length) search.ida_ignore = ignore.join(',');
+
+    this.props.goToCustomLocation({
+      ...this.props.customLocation,
+      search,
+    });
+  };
   render() {
     const { entries, order, ignore } = this.state;
     return (
@@ -98,6 +129,20 @@ class SearchByIDA extends PureComponent {
                         ignore: ignore.slice(0, n).concat(ignore.slice(n + 1)),
                       })
                     }
+                    changeEntryHandler={(n, name) => {
+                      const tmp = [...entries];
+                      tmp[n] = name;
+                      this.setState({
+                        entries: tmp,
+                      });
+                    }}
+                    changeIgnoreHandler={(n, name) => {
+                      const tmp = [...ignore];
+                      tmp[n] = name;
+                      this.setState({
+                        ignore: tmp,
+                      });
+                    }}
                   />
                 </div>
                 <div className={f('ida-controls')}>
@@ -106,16 +151,14 @@ class SearchByIDA extends PureComponent {
                     fill="#75bf40"
                     stroke="#75bf40"
                     onClick={() =>
-                      this.setState({ entries: entries.concat('?') })
+                      this.setState({ entries: entries.concat('') })
                     }
                   />
                   <DomainButton
                     label="✖️️"
                     fill="#bf4540"
                     stroke="#bf4540"
-                    onClick={() =>
-                      this.setState({ ignore: ignore.concat('?') })
-                    }
+                    onClick={() => this.setState({ ignore: ignore.concat('') })}
                   />
                   <label htmlFor="ordered">
                     <input
@@ -130,7 +173,8 @@ class SearchByIDA extends PureComponent {
                   </label>
                   <button
                     className={f('button')}
-                    disabled={entries.length === 0 || entries.indexOf('?') >= 0}
+                    disabled={entries.length === 0 || entries.indexOf('') >= 0}
+                    onClick={this._handleSubmit}
                   >
                     Search
                   </button>
@@ -143,5 +187,12 @@ class SearchByIDA extends PureComponent {
     );
   }
 }
+const mapStateToProps = createSelector(
+  customLocationSelector,
+  customLocation => ({ customLocation }),
+);
 
-export default SearchByIDA;
+export default connect(
+  mapStateToProps,
+  { goToCustomLocation },
+)(SearchByIDA);
