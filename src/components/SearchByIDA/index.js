@@ -47,7 +47,7 @@ const PanelIDA = ({
     </div>
     <div>
       <header>Ignore</header>
-      <ul className={f('ida-list')}>
+      <ul className={f('ida-list', 'ignore')}>
         {ignoreList &&
           ignoreList.map((e, i) => (
             <li key={i}>
