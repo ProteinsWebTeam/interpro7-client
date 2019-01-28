@@ -5,6 +5,8 @@ import T from 'prop-types';
 
 import { connect } from 'react-redux';
 import { goToCustomLocation } from 'actions/creators';
+import { createSelector } from 'reselect';
+import { customLocationSelector } from 'reducers/custom-location';
 
 import DomainButton from './DomainButton';
 import IdaEntry from './IdaEntry';
@@ -14,8 +16,6 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
 import local from './style.css';
-import { createSelector } from 'reselect';
-import { customLocationSelector } from 'reducers/custom-location';
 
 const f = foundationPartial(interproTheme, ipro, local);
 
@@ -75,6 +75,13 @@ PanelIDA.propTypes = {
 };
 
 class SearchByIDA extends PureComponent {
+  static propTypes = {
+    customLocation: T.shape({
+      description: T.object.isRequired,
+      search: T.object.isRequired,
+    }).isRequired,
+    goToCustomLocation: T.func.isRequired,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -82,6 +89,28 @@ class SearchByIDA extends PureComponent {
       entries: [],
       ignore: [],
     };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (
+      nextProps.customLocation.search &&
+      nextProps.customLocation.search.ida_search &&
+      !prevState.URLLoaded
+    ) {
+      const {
+        ida_search: searchFromURL,
+        ordered,
+        ida_ignore: ignoreFromURL,
+      } = nextProps.customLocation.search;
+      const newState = {
+        entries: searchFromURL.split(','),
+        URLLoaded: true,
+        order: !!ordered,
+      };
+      if (ignoreFromURL) newState.ignore = ignoreFromURL.split(',');
+      return newState;
+    }
+    return null;
   }
   _handleSubmit = () => {
     const { entries, order, ignore } = this.state;
