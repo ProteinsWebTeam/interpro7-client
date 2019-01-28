@@ -78,8 +78,11 @@ class IdaEntry extends PureComponent {
             accession.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
             name.toLowerCase().indexOf(value.toLowerCase()) !== -1
           }
+          renderInput={props => (
+            <input {...props} placeholder={'Search entry'} />
+          )}
         />
-        <button onClick={removeEntryHandler}> X </button>
+        <button onClick={removeEntryHandler}>✖</button>
       </div>
     );
   }
