@@ -35,14 +35,58 @@ ul.ida-list {
   flex-wrap: nowrap;
   overflow: scroll;
   flex-direction: column;
+  align-items: center;
+  height: 100%;
+  @nest & li {
+    margin-bottom: 5px;
+    position: relative;
+  }
 }
 
 ul.ordered {
   flex-direction: row;
+  background-image: linear-gradient(
+    rgba(255, 0, 0, 0) 46%,
+    #75bf40 47%,
+    #75bf40 53%,
+    rgba(255, 0, 0, 0) 54%
+  );
 }
 
 .ida-entry {
   padding: 0 1em 0 1em;
   margin: 0 1em 0 1em;
-  background: red;
+  background: #75bf40;
+  //border: black solid 2px;
+  border-radius: 1em;
+
+  @nest & button {
+    position: absolute;
+    background: transparent;
+    font-size: 0.8em;
+    right: 0.4em;
+    top: -0.3em;
+    //border-radius: 0.8em;
+    //border: black solid 1px;
+    width: 1em;
+  }
+  @nest & button:hover {
+    font-weight: bold;
+  }
+  @nest & input {
+    background: rgba(255, 255, 255, 0);
+    border: none;
+    color: #ffffff;
+    transition: color 0.5s ease-in-out;
+  }
+  @nest & input:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  @nest & input:focus {
+    background: rgba(255, 255, 255, 0.4);
+    color: #444444;
+  }
+}
+.ignore .ida-entry {
+  background: #bf4540;
 }
