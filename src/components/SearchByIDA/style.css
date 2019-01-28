@@ -40,3 +40,9 @@ ul.ida-list {
 ul.ordered {
   flex-direction: row;
 }
+
+.ida-entry {
+  padding: 0 1em 0 1em;
+  margin: 0 1em 0 1em;
+  background: red;
+}
