@@ -28,10 +28,19 @@
   display: block;
   -webkit-box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.3);
-  width: 30%;
+  width: 40%;
   height: 30vh;
 
   & .structure-viewer-select {
     left: 1rem;
   }
+}
+
+.structure-icon {
+  font-size: 2em;
+  margin: 4px;
+}
+
+.is-stuck .structure-icon {
+  font-size: 1em;
 }
