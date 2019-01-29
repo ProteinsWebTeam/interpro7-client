@@ -1,11 +1,27 @@
+@import '../../styles/fonts.css';
+@import '../../styles/colors.css';
+
 .ida-workspace {
   min-height: 200px;
-  background: #f8f8f8;
+  background: var(--colors-almost-white);
 
   @nest & div.panels {
     display: flex;
+    min-height: 200px;
     @nest & div.ida-panel {
       width: 75%;
+    }
+    @nest & div.ida-ignore {
+      width: 25%;
+    }
+    @nest & header {
+      font: var(--fonts-system);
+      font-weight: bold;
+      font-size: 0.9em;
+      padding: 0.1em 0.1em 0.1em 1em;
+      background-color: var(--colors-ulightgray);
+      margin-bottom: 1em;
+      width: 100%;
     }
   }
 }
@@ -29,15 +45,16 @@
 ul.ida-list {
   list-style-type: none;
   margin: 0;
-  padding: 0;
   display: flex;
-  justify-content: center;
   flex-wrap: nowrap;
-  overflow: scroll;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  overflow: scroll;
+  height: 85%;
+  padding: 0.2em 0 0;
+
   @nest & li {
+    min-width: available;
     margin-bottom: 5px;
     position: relative;
   }
@@ -46,10 +63,10 @@ ul.ida-list {
 ul.ordered {
   flex-direction: row;
   background-image: linear-gradient(
-    rgba(255, 0, 0, 0) 46%,
-    #75bf40 47%,
-    #75bf40 53%,
-    rgba(255, 0, 0, 0) 54%
+    rgba(255, 0, 0, 0) 48%,
+    #75bf40 49%,
+    #75bf40 50%,
+    rgba(255, 0, 0, 0) 51%
   );
 }
 
@@ -89,4 +106,11 @@ ul.ordered {
 }
 .ignore .ida-entry {
   background: #bf4540;
+}
+
+.ida-ignore {
+  border-left: 0.5em solid var(--colors-very-white);
+  @nest & ul.ida-list {
+    justify-content: flex-start;
+  }
 }

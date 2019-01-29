@@ -31,6 +31,12 @@ const getUrlForAutocomplete = ({ protocol, hostname, port, root }, search) => {
 };
 
 class IdaEntry extends PureComponent {
+  static propTypes = {
+    entry: T.string,
+    changeEntryHandler: T.func,
+    removeEntryHandler: T.func,
+    api: T.object,
+  };
   state = {
     options: {},
   };
@@ -48,12 +54,7 @@ class IdaEntry extends PureComponent {
     );
   };
   render() {
-    const {
-      entry,
-      active,
-      changeEntryHandler,
-      removeEntryHandler,
-    } = this.props;
+    const { entry, changeEntryHandler, removeEntryHandler } = this.props;
     return (
       <div className={f('ida-entry')}>
         <Autocomplete
