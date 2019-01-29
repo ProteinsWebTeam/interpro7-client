@@ -17,15 +17,23 @@ import { intersectionObserver as intersectionObserverPolyfill } from 'utils/poly
 
 import ProtVistaForStructure from './ProtVistaForStructures';
 
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
 import getMapper from './proteinToStructureMapper';
+
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import { foundationPartial } from 'styles/foundation';
 
-import { requestFullScreen } from '../../../utils/fullscreen';
+import {
+  requestFullScreen,
+  exitFullScreen,
+  onFullScreenChange,
+} from '../../../utils/fullscreen';
 
 import style from './style.css';
 
-const f = foundationPartial(style);
+const f = foundationPartial(style, fonts);
 
 /*:: type Props = {
   id: string|number,
@@ -66,6 +74,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
       selectedEntry: '',
       selectedEntryToKeep: null,
       isStuck: false,
+      isSpinning: false,
+      isStructureFullScreen: false,
+      isSplitScreen: false,
     };
 
     this.stage = null;
@@ -75,10 +86,35 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this._placeholder = React.createRef();
     this._protvista = React.createRef();
     this._splitview = React.createRef();
+    this.splitViewStyle = {};
   }
 
   async componentDidMount() {
     await intersectionObserverPolyfill();
+
+    const element = this._splitview.current;
+    onFullScreenChange(element, e => {
+      console.log(`onFullScreenChange`);
+      const protvistaElement = this._protvista.current;
+      const viewerElement = this._placeholder.current;
+      const isSplitScreen = !this.state.isSplitScreen;
+      if (isSplitScreen) {
+        console.log(`splitting`);
+        this.splitViewStyle.display = element.style.display;
+        this.splitViewStyle.backgroundColor = element.style.backgroundColor;
+        this.splitViewStyle.protvistaOverflow = protvistaElement.style.overflow;
+        element.style.display = 'flex';
+        element.style.backgroundColor = '#FFFFFF';
+        protvistaElement.style.overflow = 'scroll';
+      } else {
+        console.log(`resetting`);
+        element.style.display = this.splitViewStyle.display;
+        element.style.backgroundColor = this.splitViewStyle.backgroundColor;
+        protvistaElement.style.overflow = this.splitViewStyle.protvistaOverflow;
+      }
+      this.setState({ isSplitScreen });
+    });
+
     const pdbid = this.props.id;
     this.stage = new Stage(this._ref.current);
     this.stage.setParameters({ backgroundColor: 0xfcfcfc });
@@ -186,20 +222,29 @@ class StructureView extends PureComponent /*:: <Props> */ {
     if (this.stage) {
       this.stage.toggleFullscreen();
     }
+    const isStructureFullScreen = !this.state.isStructureFullScreen;
+    this.setState({ isStructureFullScreen });
   };
 
   _toggleSplitView = e => {
     console.log('Toggle split view');
-    const element = this._splitview.current;
-    element.style.display = 'flex';
-    requestFullScreen(element);
+    if (this.stage) {
+      const element = this._splitview.current;
+      const isSplitScreen = this.state.isSplitScreen;
+      if (isSplitScreen) {
+        exitFullScreen(element);
+      } else {
+        requestFullScreen(element);
+      }
+    }
   };
 
   _toggleStructureSpin = e => {
     console.log('Toggle spin');
     if (this.stage) {
-      this.spin = this.spin ? false : true;
-      this.stage.setSpin(this.spin);
+      const isSpinning = !this.state.isSpinning;
+      this.stage.setSpin(isSpinning);
+      this.setState({ isSpinning });
     }
   };
 
@@ -386,6 +431,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
               className={f('structure-viewer', {
                 'is-stuck': this.state.isStuck,
               })}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                borderStyle: 'dotted',
+                borderColor: 'black',
+                borderWidth: '20px',
+                height: 'auto',
+              }}
             >
               <ResizeObserverComponent
                 element="div"
@@ -397,7 +450,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
                     width = 'auto';
                   }
                   if (!height) {
-                    height = '400px';
+                    height = '450px';
                   }
                   if (this.stage) {
                     this.stage.handleResize();
@@ -419,7 +472,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 style={{
                   width: 'auto',
                   height: 'auto',
-                  display: 'flex',
+                  display: 'inline-flex',
                   justifyContent: 'space-between',
                   borderStyle: 'dashed',
                   borderColor: 'blue',
@@ -433,11 +486,45 @@ class StructureView extends PureComponent /*:: <Props> */ {
                   />
                 ) : null}
                 <div>
-                  <span onClick={this._toggleStructureSpin}>spin</span>
-                  <span ref={this._splitview} onClick={this._toggleSplitView}>
-                    side
-                  </span>
-                  <span onClick={this._toggleStructureFullScreen}>full</span>
+                  <button
+                    className={f('structure-icon', 'icon', 'icon-common')}
+                    onClick={this._toggleStructureSpin}
+                    data-icon={this.state.isSpinning ? '\uF04D' : 'v'}
+                    title={
+                      this.state.isSpinning ? 'Stop spinning' : 'Spin structure'
+                    }
+                    style={{ margin: '5px', fontSize: '2em' }}
+                  />
+
+                  {this.state.isStructureFullScreen ||
+                  this.state.isSplitScreen ? (
+                    <button
+                      ref={this._splitview}
+                      onClick={this._toggleSplitView}
+                      data-icon="G"
+                      title="Split screen view"
+                      className={f('structure-icon', 'icon', 'icon-common')}
+                      style={{ margin: '5px', fontSize: '2em' }}
+                    />
+                  ) : (
+                    <button
+                      ref={this._splitview}
+                      onClick={this._toggleSplitView}
+                      data-icon="O"
+                      title="Exit Split screen"
+                      className={f('structure-icon', 'icon', 'icon-common')}
+                      style={{ margin: '5px', fontSize: '2em' }}
+                    />
+                  )}
+                  {this.state.isSplitScreen ? null : (
+                    <button
+                      data-icon="F"
+                      title="Full screen"
+                      onClick={this._toggleStructureFullScreen}
+                      className={f('structure-icon', 'icon', 'icon-common')}
+                      style={{ margin: '5px', fontSize: '2em' }}
+                    />
+                  )}
                 </div>
               </div>
             </div>
