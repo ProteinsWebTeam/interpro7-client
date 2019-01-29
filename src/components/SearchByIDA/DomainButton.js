@@ -1,3 +1,4 @@
+// @flow
 import T from 'prop-types';
 import React from 'react';
 
@@ -10,15 +11,27 @@ const f = foundationPartial(local);
 const DEFAULT_DOMAIN_WIDTH = 30;
 const DEFAULT_DOMAIN_HEIGHT = 18;
 const DEFAULT_LINE_WIDTH = 7;
-const DomainButton = ({
-  label,
-  fill = '#aaa',
-  stroke = '#333',
-  width = DEFAULT_DOMAIN_WIDTH,
-  height = DEFAULT_DOMAIN_HEIGHT,
-  lineW = DEFAULT_LINE_WIDTH,
-  onClick,
-}) => {
+/*:: type Props = {
+  label: string,
+  fill?: string,
+  stroke?: string,
+  width?: number,
+  height?: number,
+  lineW?: number,
+  onClick: function,
+}; */
+
+const DomainButton = (
+  {
+    label,
+    fill = '#aaa',
+    stroke = '#333',
+    width = DEFAULT_DOMAIN_WIDTH,
+    height = DEFAULT_DOMAIN_HEIGHT,
+    lineW = DEFAULT_LINE_WIDTH,
+    onClick,
+  } /*: Props */,
+) => {
   const midY = height / 2;
   return (
     <button onClick={onClick}>
