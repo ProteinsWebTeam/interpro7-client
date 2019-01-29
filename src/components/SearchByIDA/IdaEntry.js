@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -30,7 +31,25 @@ const getUrlForAutocomplete = ({ protocol, hostname, port, root }, search) => {
   });
 };
 
-class IdaEntry extends PureComponent {
+/*:: type Props = {
+  entry: string,
+  changeEntryHandler: function,
+  removeEntryHandler: function,
+  api: {
+    protocol: string,
+    hostname: string,
+    port: number,
+    root: string,
+  },
+}; */
+/*:: type State = {
+  options: {},
+}; */
+/*:: type DataType = {
+  ok: bool,
+  payload: Object,
+}; */
+class IdaEntry extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     entry: T.string,
     changeEntryHandler: T.func,
@@ -42,16 +61,16 @@ class IdaEntry extends PureComponent {
   };
   _handleOnChenge = (evt, value) => {
     this.props.changeEntryHandler(value);
-    fetchFun(getUrlForAutocomplete(this.props.api, evt.target.value)).then(
-      data => {
-        if (!data || !data.ok) return;
-        const options = { ...this.state.options };
-        for (const e of data.payload.results) {
-          options[e.metadata.accession] = e.metadata;
-        }
-        this.setState({ options });
-      },
-    );
+    fetchFun(getUrlForAutocomplete(this.props.api, evt.target.value)).then((
+      data /*: DataType */,
+    ) => {
+      if (!data || !data.ok) return;
+      const options = { ...this.state.options };
+      for (const e of data.payload.results) {
+        options[e.metadata.accession] = e.metadata;
+      }
+      this.setState({ options });
+    });
   };
   render() {
     const { entry, changeEntryHandler, removeEntryHandler } = this.props;
