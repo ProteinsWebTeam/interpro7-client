@@ -87,6 +87,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this._protvista = React.createRef();
     this._splitview = React.createRef();
     this._viewerControls = React.createRef();
+    this._viewer = React.createRef();
     this.splitViewStyle = {};
   }
 
@@ -96,6 +97,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     const element = this._splitview.current;
     onFullScreenChange(element, e => {
       const protvistaElement = this._protvista.current;
+      const viewerContainerElement = this._viewer.current;
       const viewerElement = this._ref.current;
       const viewerControls = this._viewerControls.current;
       const isSplitScreen = !this.state.isSplitScreen;
@@ -106,6 +108,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
         this.splitViewStyle.protvistaWidth = protvistaElement.style.width;
         this.splitViewStyle.viewControlsHeight = viewerControls.style.height;
         this.splitViewStyle.viewElementHeight = viewerElement.style.height;
+        this.splitViewStyle.viewElementWidth =
+          viewerContainerElement.style.width;
 
         element.style.display = 'flex';
         element.style.backgroundColor = '#FFFFFF';
@@ -113,12 +117,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
         protvistaElement.style.width = '50vw';
         viewerControls.style.height = '5vh';
         viewerElement.style.height = '95vh';
+        viewerContainerElement.style.width = '50vw';
       } else {
         element.style.display = this.splitViewStyle.display;
         element.style.backgroundColor = this.splitViewStyle.backgroundColor;
         protvistaElement.style.overflow = this.splitViewStyle.protvistaOverflow;
         viewerControls.style.height = this.splitViewStyle.viewControlsHeight;
         viewerElement.style.height = this.splitViewStyle.viewElementHeight;
+        viewerContainerElement.style.width = this.splitViewStyle.viewElementWidth;
         protvistaElement.style.width = this.splitViewStyle.protvistaWidth;
       }
       this.setState({ isSplitScreen });
@@ -173,6 +179,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
           this._placeholder.current.getBoundingClientRect().y < 0 &&
           entries[0].intersectionRatio < threshold,
       });
+      if (this.stage) {
+        this.stage.handleResize();
+      }
     }, optionsForObserver);
     this.observer.observe(this._placeholder.current);
     this._protvista.current.addEventListener('entryclick', e => {
@@ -436,6 +445,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 flexDirection: 'column',
                 height: 'auto',
               }}
+              ref={this._viewer}
             >
               <ResizeObserverComponent
                 element="div"
