@@ -165,6 +165,13 @@ class _DomainArchitecturesWithData extends PureComponent {
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
+          {payload.count === 0 ? (
+            <div className={f('callout', 'info', 'withicon')}>
+              There are not Domain architectures for the current selection.
+            </div>
+          ) : (
+            <h4>{payload.count} domain architectures found.</h4>
+          )}
           {(payload.results || []).map(obj => {
             const idaObj = ida2json(obj.ida);
             return (

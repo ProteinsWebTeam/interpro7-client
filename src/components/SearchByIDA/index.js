@@ -1,5 +1,4 @@
-// TODO: Activate Flow
-
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -16,6 +15,8 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
 import local from './style.css';
+
+/*:: import type { CustomLocation } from 'actions/creators'; */
 
 const f = foundationPartial(interproTheme, ipro, local);
 
@@ -45,7 +46,7 @@ const PanelIDA = ({
           ))}
       </ul>
     </div>
-    <div>
+    <div className={f('ida-ignore')}>
       <header>Ignore</header>
       <ul className={f('ida-list', 'ignore')}>
         {ignoreList &&
@@ -74,7 +75,17 @@ PanelIDA.propTypes = {
   goToCustomLocation: T.func,
 };
 
-class SearchByIDA extends PureComponent {
+/*:: type Props = {
+  customLocation: CustomLocation,
+  goToCustomLocation: goToCustomLocation,
+}; */
+
+/*:: type SearchProps = {
+  ida_search?: string,
+  ida_ignore?: string,
+  ordered?: boolean,
+}; */
+class SearchByIDA extends PureComponent /*:: <Props> */ {
   static propTypes = {
     customLocation: T.shape({
       description: T.object.isRequired,
@@ -82,41 +93,9 @@ class SearchByIDA extends PureComponent {
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
   };
-  constructor(props) {
-    super(props);
-    this.state = {
-      order: true,
-      entries: [],
-      ignore: [],
-    };
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (
-      nextProps.customLocation.search &&
-      nextProps.customLocation.search.ida_search &&
-      !prevState.URLLoaded
-    ) {
-      const {
-        ida_search: searchFromURL,
-        ordered,
-        ida_ignore: ignoreFromURL,
-      } = nextProps.customLocation.search;
-      const newState = {
-        entries: searchFromURL.split(','),
-        URLLoaded: true,
-        order: !!ordered,
-      };
-      if (ignoreFromURL) newState.ignore = ignoreFromURL.split(',');
-      return newState;
-    }
-    return null;
-  }
-  _handleSubmit = () => {
-    const { entries, order, ignore } = this.state;
-    const search = {
+  _handleSubmit = ({ entries, order, ignore }) => {
+    const search /*: SearchProps */ = {
       ida_search: entries.join(','),
-      // ida_ignore: ignore.join(','),
     };
     if (order) search.ordered = true;
     if (ignore && ignore.length) search.ida_ignore = ignore.join(',');
@@ -127,7 +106,18 @@ class SearchByIDA extends PureComponent {
     });
   };
   render() {
-    const { entries, order, ignore } = this.state;
+    const {
+      ida_search: searchFromURL,
+      ordered,
+      ida_ignore: ignoreFromURL,
+    } = this.props.customLocation.search;
+    const entries = searchFromURL ? searchFromURL.split(',') : [];
+    if (searchFromURL !== undefined && searchFromURL.trim() === '')
+      entries.push('');
+    const order = !!ordered;
+    const ignore = ignoreFromURL ? ignoreFromURL.split(',') : [];
+    if (ignoreFromURL !== undefined && ignoreFromURL.trim() === '')
+      ignore.push('');
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns', 'margin-bottom-medium')}>
@@ -150,29 +140,37 @@ class SearchByIDA extends PureComponent {
                     ignoreList={ignore}
                     isOrdered={order}
                     removeEntryHandler={n =>
-                      this.setState({
+                      this._handleSubmit({
                         entries: entries
                           .slice(0, n)
                           .concat(entries.slice(n + 1)),
+                        order,
+                        ignore,
                       })
                     }
                     removeIgnoreHandler={n =>
-                      this.setState({
+                      this._handleSubmit({
                         ignore: ignore.slice(0, n).concat(ignore.slice(n + 1)),
+                        entries,
+                        order,
                       })
                     }
                     changeEntryHandler={(n, name) => {
                       const tmp = [...entries];
                       tmp[n] = name;
-                      this.setState({
+                      this._handleSubmit({
                         entries: tmp,
+                        ignore,
+                        order,
                       });
                     }}
                     changeIgnoreHandler={(n, name) => {
                       const tmp = [...ignore];
                       tmp[n] = name;
-                      this.setState({
+                      this._handleSubmit({
                         ignore: tmp,
+                        entries,
+                        order,
                       });
                     }}
                   />
@@ -183,14 +181,24 @@ class SearchByIDA extends PureComponent {
                     fill="#75bf40"
                     stroke="#75bf40"
                     onClick={() =>
-                      this.setState({ entries: entries.concat('') })
+                      this._handleSubmit({
+                        entries: entries.concat(''),
+                        ignore,
+                        order,
+                      })
                     }
                   />
                   <DomainButton
                     label="✖️️"
                     fill="#bf4540"
                     stroke="#bf4540"
-                    onClick={() => this.setState({ ignore: ignore.concat('') })}
+                    onClick={() =>
+                      this._handleSubmit({
+                        ignore: ignore.concat(''),
+                        entries,
+                        order,
+                      })
+                    }
                   />
                   <label htmlFor="ordered">
                     <input
@@ -198,18 +206,15 @@ class SearchByIDA extends PureComponent {
                       id="ordered"
                       checked={order}
                       onChange={event =>
-                        this.setState({ order: event.target.checked })
+                        this._handleSubmit({
+                          order: event.target.checked,
+                          entries,
+                          ignore,
+                        })
                       }
                     />{' '}
                     Order sensitivity
                   </label>
-                  <button
-                    className={f('button')}
-                    disabled={entries.length === 0 || entries.indexOf('') >= 0}
-                    onClick={this._handleSubmit}
-                  >
-                    Search
-                  </button>
                 </div>
               </div>
             </div>
