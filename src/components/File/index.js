@@ -98,7 +98,6 @@ class Button extends PureComponent {
             href={blobURL || url}
             disabled={downloading || count > HARD_LIMIT}
             className={f('link', { downloading, failed })}
-            target="_blank"
             onClick={downloading || successful ? undefined : handleClick}
             data-url={url}
             data-type={fileType}
