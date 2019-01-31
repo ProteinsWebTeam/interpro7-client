@@ -1,5 +1,4 @@
 export const requestFullScreen = element => {
-  console.log(`requestFullScreen`);
   if ('requestFullscreen' in element) {
     element.requestFullscreen();
   } else if ('webkitRequestFullscreen' in element) {
@@ -12,7 +11,6 @@ export const requestFullScreen = element => {
 };
 
 export const exitFullScreen = element => {
-  console.log(`exitFullScreen`);
   if ('exitFullscreen' in document) {
     document.exitFullscreen();
   } else if ('webkitExitFullscreen' in document) {
@@ -25,7 +23,6 @@ export const exitFullScreen = element => {
 };
 
 export const onFullScreenChange = (element, callback) => {
-  console.log(`onFullScreenChange`);
   if ('onfullscreenchange' in element) {
     element.onfullscreenchange = callback;
   } else if ('onwebkitfullscreenchange' in element) {
