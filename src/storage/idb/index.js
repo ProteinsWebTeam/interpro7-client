@@ -1,5 +1,5 @@
 // @flow
-import idb from 'idb';
+import { openDb } from 'idb';
 /*:: import type { DB } from 'idb'; */
 
 let initialized = false;
@@ -10,7 +10,7 @@ export const IPScanJobsMeta = 'IPScan-jobs-meta';
 export const IPScanJobsData = 'IPScan-jobs-data';
 
 const init = () => {
-  dbPromise = idb.open('InterPro', 1, upgradeDb => {
+  dbPromise = openDb('InterPro', 1, upgradeDb => {
     // do not put 'break;', keep fall-through,
     // it is to apply all the updates, one after the other
     // eslint-disable-next-line default-case
