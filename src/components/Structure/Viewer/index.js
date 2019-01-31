@@ -53,7 +53,7 @@ const optionsForObserver = {
 };
 
 class StructureView extends PureComponent /*:: <Props> */ {
-  /*:: _structureviewerelement: { current: ?HTMLElement }; */
+  /*:: _structurevViewer: { current: ?HTMLElement }; */
 
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
@@ -79,25 +79,24 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.stage = null;
     this.name = `${this.props.id}_updated.cif`;
 
-    this._splitview = React.createRef();
-    this._structureviewerelement = React.createRef();
-    this._poppablestructureview = React.createRef();
+    this._structurevViewer = React.createRef();
+    this._structureSection = React.createRef();
     this._protvista = React.createRef();
-    this._structureviewercontrols = React.createRef();
-    this._structureviewer = React.createRef();
-    this._initialstructureviewer = React.createRef();
+    this._splitView = React.createRef();
+    this._viewerControls = React.createRef();
+    this._poppableViewer = React.createRef();
     this.splitViewStyle = {};
   }
 
   async componentDidMount() {
     await intersectionObserverPolyfill();
 
-    const element = this._splitview.current;
+    const element = this._splitView.current;
     onFullScreenChange(element, e => {
       const protvistaElement = this._protvista.current;
-      const viewerContainerElement = this._structureviewer.current;
-      const viewerElement = this._structureviewerelement.current;
-      const viewerControls = this._structureviewercontrols.current;
+      const viewerContainerElement = this._poppableViewer.current;
+      const viewerElement = this._structurevViewer.current;
+      const viewerControls = this._viewerControls.current;
       const isSplitScreen = !this.state.isSplitScreen;
       if (isSplitScreen) {
         this.splitViewStyle.display = element.style.display;
@@ -106,11 +105,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
         this.splitViewStyle.protvistaWidth = protvistaElement.style.width;
         this.splitViewStyle.viewControlsHeight = viewerControls.style.height;
         this.splitViewStyle.viewElementHeight = viewerElement.style.height;
-        this.splitViewStyle.viewElementWidth = viewerElement.style.width;
-        this.splitViewStyle.viewElementContainerWidth =
+        this.splitViewStyle.viewElementWidth =
           viewerContainerElement.style.width;
-        this.splitViewStyle.viewElementContainerHeight =
-          viewerContainerElement.style.height;
 
         element.style.display = 'flex';
         element.style.backgroundColor = '#FFFFFF';
@@ -118,26 +114,21 @@ class StructureView extends PureComponent /*:: <Props> */ {
         protvistaElement.style.width = '50vw';
         viewerControls.style.height = '5vh';
         viewerElement.style.height = '95vh';
-        viewerElement.style.width = '50vw';
         viewerContainerElement.style.width = '50vw';
-        viewerContainerElement.style.height = '95vh';
       } else {
         element.style.display = this.splitViewStyle.display;
         element.style.backgroundColor = this.splitViewStyle.backgroundColor;
         protvistaElement.style.overflow = this.splitViewStyle.protvistaOverflow;
         viewerControls.style.height = this.splitViewStyle.viewControlsHeight;
         viewerElement.style.height = this.splitViewStyle.viewElementHeight;
-        viewerElement.style.width = this.splitViewStyle.viewElementWidth;
-        viewerContainerElement.style.width = this.splitViewStyle.viewElementContainerWidth;
-        viewerContainerElement.style.height = this.splitViewStyle.viewElementContainerHeight;
-
+        viewerContainerElement.style.width = this.splitViewStyle.viewElementWidth;
         protvistaElement.style.width = this.splitViewStyle.protvistaWidth;
       }
       this.setState({ isSplitScreen });
     });
 
     const pdbid = this.props.id;
-    this.stage = new Stage(this._structureviewerelement.current);
+    this.stage = new Stage(this._structurevViewer.current);
     this.stage.setParameters({ backgroundColor: 0xfcfcfc });
 
     this.stage
@@ -147,7 +138,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
         component.autoView();
       })
       .then(component => {
-        //this.stage.setSpin(true);
         this.stage.handleResize();
         if (this.props.matches) {
           const entryMap = this.createEntryMap();
@@ -182,14 +172,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.observer = new IntersectionObserver(entries => {
       this.setState({
         isStuck:
-          this._poppablestructureview.current.getBoundingClientRect().y < 0 &&
+          this._structureSection.current.getBoundingClientRect().y < 0 &&
           entries[0].intersectionRatio < threshold,
       });
-      if (this.stage) {
+      if (this.stage && this.state.isStuck) {
         this.stage.handleResize();
       }
     }, optionsForObserver);
-    this.observer.observe(this._initialstructureviewer.current);
+    this.observer.observe(this._structureSection.current);
     this._protvista.current.addEventListener('entryclick', e => {
       const {
         detail: {
@@ -242,8 +232,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   _toggleStructureFullScreen = e => {
+    const section = this._structureSection.current;
+    section.scrollIntoView(false);
     if (this.stage) {
       this.stage.toggleFullscreen();
+      this.stage.handleResize();
     }
     const isStructureFullScreen = !this.state.isStructureFullScreen;
     this.setState({ isStructureFullScreen });
@@ -251,15 +244,16 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   _toggleSplitView = e => {
     if (this.stage) {
-      const element = this._splitview.current;
-      const initialview = this._initialstructureviewer.current;
+      const element = this._splitView.current;
       const isSplitScreen = this.state.isSplitScreen;
       if (isSplitScreen) {
         exitFullScreen(element);
       } else {
-        //initialview.scrollIntoView(true);
+        const section = this._structureSection.current;
+        section.scrollIntoView(false);
         requestFullScreen(element);
       }
+      this.stage.handleResize();
     }
   };
 
@@ -441,106 +435,98 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   render() {
     return (
-      <div>
-        <div ref={this._splitview}>
-          <div
-            className={f('structure-viewer', {
-              'is-stuck': this.state.isStuck,
-            })}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              height: 'auto',
-            }}
-            ref={this._structureviewer}
-          >
-            <ResizeObserverComponent
-              element="div"
-              updateCallback={() => this.stage.handleResize()}
-              measurements={['width', 'height']}
-            >
-              {({ width, height }) => {
-                if (!width) {
-                  width = 'auto';
-                }
-                if (!height) {
-                  height = '450px';
-                }
-                if (this.stage) {
-                  this.stage.handleResize();
-                }
-                return (
-                  <div
-                    ref={this._initialstructureviewer}
-                    style={{
-                      width: 'auto',
-                      height: '450px',
-                    }}
-                  >
-                    <div ref={this._poppablestructureview}>
-                      <div
-                        ref={this._structureviewerelement}
-                        style={{
-                          width: width,
-                          height: height,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              }}
-            </ResizeObserverComponent>
+      <>
+        <div ref={this._splitView}>
+          <div ref={this._structureSection}>
             <div
+              className={f('structure-viewer', {
+                'is-stuck': this.state.isStuck,
+              })}
               style={{
-                width: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
                 height: 'auto',
-                display: 'inline-flex',
-                justifyContent: 'space-between',
               }}
+              ref={this._poppableViewer}
             >
-              {this.props.matches ? (
-                <EntrySelection
-                  entryMap={this.state.entryMap}
-                  updateStructure={this.showEntryInStructure}
-                  selectedEntry={this.state.selectedEntry}
-                />
-              ) : null}
-              <div ref={this._structureviewercontrols}>
-                <button
-                  className={f('structure-icon', 'icon', 'icon-common')}
-                  onClick={this._toggleStructureSpin}
-                  data-icon={this.state.isSpinning ? '\uF04D' : 'v'}
-                  title={
-                    this.state.isSpinning ? 'Stop spinning' : 'Spin structure'
+              <ResizeObserverComponent
+                element="div"
+                updateCallback={() => this.stage.handleResize()}
+                measurements={['width', 'height']}
+              >
+                {({ width, height }) => {
+                  if (!width) {
+                    width = 'auto';
                   }
-                />
+                  if (!height) {
+                    height = '450px';
+                  }
+                  if (this.stage) {
+                    this.stage.handleResize();
+                  }
+                  return (
+                    <div
+                      ref={this._structurevViewer}
+                      style={{
+                        width: width,
+                        height: height,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    />
+                  );
+                }}
+              </ResizeObserverComponent>
+              <div
+                style={{
+                  width: 'auto',
+                  height: 'auto',
+                  display: 'inline-flex',
+                  justifyContent: 'space-between',
+                }}
+              >
+                {this.props.matches ? (
+                  <EntrySelection
+                    entryMap={this.state.entryMap}
+                    updateStructure={this.showEntryInStructure}
+                    selectedEntry={this.state.selectedEntry}
+                  />
+                ) : null}
+                <div ref={this._viewerControls}>
+                  <button
+                    className={f('structure-icon', 'icon', 'icon-common')}
+                    onClick={this._toggleStructureSpin}
+                    data-icon={this.state.isSpinning ? '\uF04D' : 'v'}
+                    title={
+                      this.state.isSpinning ? 'Stop spinning' : 'Spin structure'
+                    }
+                  />
 
-                {this.state.isStructureFullScreen ||
-                this.state.isSplitScreen ? (
-                  <button
-                    onClick={this._toggleSplitView}
-                    data-icon="G"
-                    title="Exit full screen"
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                  />
-                ) : (
-                  <button
-                    onClick={this._toggleSplitView}
-                    data-icon="O"
-                    title="Split full screen"
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                  />
-                )}
-                {this.state.isSplitScreen ? null : (
-                  <button
-                    data-icon="F"
-                    title="Full screen"
-                    onClick={this._toggleStructureFullScreen}
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                  />
-                )}
+                  {this.state.isStructureFullScreen ||
+                  this.state.isSplitScreen ? (
+                    <button
+                      onClick={this._toggleSplitView}
+                      data-icon="G"
+                      title="Exit full screen"
+                      className={f('structure-icon', 'icon', 'icon-common')}
+                    />
+                  ) : (
+                    <button
+                      onClick={this._toggleSplitView}
+                      data-icon="O"
+                      title="Split full screen"
+                      className={f('structure-icon', 'icon', 'icon-common')}
+                    />
+                  )}
+                  {this.state.isSplitScreen ? null : (
+                    <button
+                      data-icon="F"
+                      title="Full screen"
+                      onClick={this._toggleStructureFullScreen}
+                      className={f('structure-icon', 'icon', 'icon-common')}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -548,7 +534,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
             <ProtVistaForStructure />
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
