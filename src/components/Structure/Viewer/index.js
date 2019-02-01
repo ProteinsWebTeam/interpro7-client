@@ -265,6 +265,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   };
 
+  _resetStructureView = e => {
+    if (this.stage) {
+      this.stage.autoView();
+    }
+  };
+
   _getChainMap(chain, locations, p2s) {
     const chainMap = [];
     for (const location of locations) {
@@ -451,7 +457,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
             >
               <ResizeObserverComponent
                 element="div"
-                updateCallback={() => this.stage.handleResize()}
+                updateCallback={() => {
+                  if (this.stage) this.stage.handleResize();
+                }}
                 measurements={['width', 'height']}
               >
                 {({ width, height }) => {
@@ -496,12 +504,17 @@ class StructureView extends PureComponent /*:: <Props> */ {
                   <button
                     className={f('structure-icon', 'icon', 'icon-common')}
                     onClick={this._toggleStructureSpin}
-                    data-icon={this.state.isSpinning ? '\uF04D' : 'v'}
+                    data-icon={this.state.isSpinning ? '' : 'v'}
                     title={
                       this.state.isSpinning ? 'Stop spinning' : 'Spin structure'
                     }
                   />
-
+                  <button
+                    className={f('structure-icon', 'icon', 'icon-common')}
+                    onClick={this._resetStructureView}
+                    data-icon="}"
+                    title="Reset image"
+                  />
                   {this.state.isStructureFullScreen ||
                   this.state.isSplitScreen ? (
                     <button
