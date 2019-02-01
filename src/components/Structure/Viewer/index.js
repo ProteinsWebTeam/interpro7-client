@@ -463,14 +463,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 measurements={['width', 'height']}
               >
                 {({ width, height }) => {
-                  if (!width) {
-                    width = 'auto';
-                  }
+                  //override supplied width value as this causes a bug
+                  //in Firefox and Safari
+                  width = 'auto';
                   if (!height) {
                     height = '450px';
-                  }
-                  if (this.stage) {
-                    this.stage.handleResize();
                   }
                   return (
                     <div
