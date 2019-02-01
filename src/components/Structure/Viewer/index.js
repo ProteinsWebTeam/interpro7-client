@@ -94,34 +94,33 @@ class StructureView extends PureComponent /*:: <Props> */ {
     const element = this._splitView.current;
     onFullScreenChange(element, e => {
       const protvistaElement = this._protvista.current;
-      const viewerContainerElement = this._poppableViewer.current;
-      const viewerElement = this._structurevViewer.current;
-      const viewerControls = this._viewerControls.current;
+      const structureContainer = this._structureSection.current;
+      const structureViewer = this._structurevViewer.current;
+      const structureControls = this._viewerControls.current;
       const isSplitScreen = !this.state.isSplitScreen;
       if (isSplitScreen) {
         this.splitViewStyle.display = element.style.display;
         this.splitViewStyle.backgroundColor = element.style.backgroundColor;
         this.splitViewStyle.protvistaOverflow = protvistaElement.style.overflow;
         this.splitViewStyle.protvistaWidth = protvistaElement.style.width;
-        this.splitViewStyle.viewControlsHeight = viewerControls.style.height;
-        this.splitViewStyle.viewElementHeight = viewerElement.style.height;
-        this.splitViewStyle.viewElementWidth =
-          viewerContainerElement.style.width;
+        this.splitViewStyle.viewControlsHeight = structureControls.style.height;
+        this.splitViewStyle.viewElementHeight = structureViewer.style.height;
+        this.splitViewStyle.viewElementWidth = structureContainer.style.width;
 
         element.style.display = 'flex';
         element.style.backgroundColor = '#FFFFFF';
         protvistaElement.style.overflow = 'scroll';
         protvistaElement.style.width = '50vw';
-        viewerControls.style.height = '5vh';
-        viewerElement.style.height = '95vh';
-        viewerContainerElement.style.width = '50vw';
+        structureControls.style.height = '5vh';
+        structureViewer.style.height = '95vh';
+        structureContainer.style.width = '50vw';
       } else {
         element.style.display = this.splitViewStyle.display;
         element.style.backgroundColor = this.splitViewStyle.backgroundColor;
         protvistaElement.style.overflow = this.splitViewStyle.protvistaOverflow;
-        viewerControls.style.height = this.splitViewStyle.viewControlsHeight;
-        viewerElement.style.height = this.splitViewStyle.viewElementHeight;
-        viewerContainerElement.style.width = this.splitViewStyle.viewElementWidth;
+        structureControls.style.height = this.splitViewStyle.viewControlsHeight;
+        structureViewer.style.height = this.splitViewStyle.viewElementHeight;
+        structureContainer.style.width = this.splitViewStyle.viewElementWidth;
         protvistaElement.style.width = this.splitViewStyle.protvistaWidth;
       }
       this.setState({ isSplitScreen });
@@ -252,6 +251,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const section = this._structureSection.current;
         section.scrollIntoView(false);
         requestFullScreen(element);
+        //setTimeout(() => {requestFullScreen(element);}, 500);
       }
       this.stage.handleResize();
     }
