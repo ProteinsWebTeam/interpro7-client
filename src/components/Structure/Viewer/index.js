@@ -497,7 +497,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
                     selectedEntry={this.state.selectedEntry}
                   />
                 ) : null}
-                <div ref={this._viewerControls}>
+                <div
+                  ref={this._viewerControls}
+                  style={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'visible',
+                  }}
+                >
                   <button
                     className={f('structure-icon', 'icon', 'icon-common')}
                     onClick={this._toggleStructureSpin}
