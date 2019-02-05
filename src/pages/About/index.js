@@ -23,6 +23,10 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
+const AboutInterPro = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-interpro" */ 'components/About/InterPro'),
+});
 const Consortium = loadable({
   loader: () =>
     import(/* webpackChunkName: "about-consortium" */ 'components/About/Consortium'),
@@ -44,6 +48,7 @@ const Privacy = loadable({
 });
 
 const routes = new Map([
+  ['interpro', AboutInterPro],
   ['consortium', Consortium],
   ['citation', Citation],
   ['funding', Funding],
@@ -56,7 +61,7 @@ const locationSelector = createSelector(
 );
 
 const RedirectToDefault = () => (
-  <Redirect to={{ description: { other: ['about', 'consortium'] } }} />
+  <Redirect to={{ description: { other: ['about', 'interpro'] } }} />
 );
 
 class About extends PureComponent /*:: <{}> */ {
@@ -69,6 +74,18 @@ class About extends PureComponent /*:: <{}> */ {
         />
         <div className={f('columns', 'margin-bottom-large')}>
           <ul className={f('tabs', 'menu-style')}>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={Consortium.preload}
+              onFocus={Consortium.preload}
+            >
+              <Link
+                to={{ description: { other: ['about', 'interpro'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                InterPro
+              </Link>
+            </li>
             <li
               className={f('tabs-title')}
               onMouseOver={Consortium.preload}
