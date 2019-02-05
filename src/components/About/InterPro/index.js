@@ -26,7 +26,7 @@ const AboutInterPro = () => (
       <h4>What is InterProScan?</h4>
       <p>
         InterProScan is the software package that allows sequences to be scanned
-        against InterPro's signatures (more information about{' '}
+        against InterPro&#39;s signatures (more information about{' '}
         <Link
           href="//github.com/ebi-pf-team/interproscan/wiki"
           className={f('ext')}
