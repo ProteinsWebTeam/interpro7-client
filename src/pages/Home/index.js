@@ -7,6 +7,7 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
+import CurrentVersion from 'components/home/CurrentVersion';
 
 // Functions
 import { schedule } from 'timing-functions/src';
@@ -441,6 +442,7 @@ class Home extends PureComponent {
             <div className={f('intro-wrapper')}>
               <div className={f('intro-fig')}>
                 <InterProGraphicAnim />
+                <CurrentVersion />
               </div>
               <div className={f('intro-content')}>
                 <h3>Classification of protein families</h3>
