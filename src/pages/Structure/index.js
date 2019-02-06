@@ -6,7 +6,6 @@ import { format } from 'url';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import { PDBeLink } from 'components/ExtLink';
 import LazyImage from 'components/LazyImage';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import StructureListFilters from 'components/Structure/StructureListFilters';
@@ -538,13 +537,25 @@ const List = ({
             cellClassName={f('table-center')}
             defaultKey="structureAccession"
             renderer={(accession /*: string */) => (
-              <PDBeLink id={accession}>
+              <Link
+                to={customLocation => ({
+                  ...customLocation,
+                  description: {
+                    main: { key: 'structure' },
+                    structure: {
+                      db: customLocation.description.structure.db,
+                      accession,
+                    },
+                  },
+                  search: {},
+                })}
+              >
                 <LazyImage
                   src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
                   alt={`structure with accession ${accession}`}
                   style={{ maxWidth: '33%' }}
                 />
-              </PDBeLink>
+              </Link>
             )}
           >
             Structure
