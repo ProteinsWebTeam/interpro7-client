@@ -5,19 +5,17 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
-import config from 'config';
-
-import { Stage, ColormakerRegistry, Preferences } from 'ngl';
+import { Stage, ColormakerRegistry } from 'ngl';
 
 import EntrySelection from './EntrySelection';
 import { NO_SELECTION } from './EntrySelection';
-import { EntryColorMode, hexToRgb, getTrackColor } from 'utils/entry-color';
+import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 
 import { intersectionObserver as intersectionObserverPolyfill } from 'utils/polyfills';
 
 import ProtVistaForStructure from './ProtVistaForStructures';
 
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import getMapper from './proteinToStructureMapper';
 
@@ -92,7 +90,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     await intersectionObserverPolyfill();
 
     const element = this._splitView.current;
-    onFullScreenChange(element, e => {
+    onFullScreenChange(element, () => {
       const protvistaElement = this._protvista.current;
       const structureContainer = this._structureSection.current;
       const structureViewer = this._structurevViewer.current;
@@ -136,7 +134,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         component.addRepresentation('cartoon', { colorScheme: 'chainname' });
         component.autoView();
       })
-      .then(component => {
+      .then(() => {
         this.stage.handleResize();
         if (this.props.matches) {
           const entryMap = this.createEntryMap();
@@ -144,26 +142,27 @@ class StructureView extends PureComponent /*:: <Props> */ {
         }
       });
 
-    //example onclick
+    // TODO connect onclick to protvista
     this.stage.signals.clicked.add(picked => {
       if (picked) {
-        const residue = picked.atom;
-        const index = residue.residueIndex;
-        const name = residue.resname;
-        //console.log(`clicked: ${index} ${name}`);
+        // const residue = picked.atom;
+        // const index = residue.residueIndex;
+        // const name = residue.resname;
+        // console.log(`clicked: ${index} ${name}`);
       } else {
-        //console.log(`clicked: nothing`);
+        // console.log(`clicked: nothing`);
       }
     });
 
+    // TODO connect hover to protvista
     this.stage.signals.hovered.add(picked => {
       if (picked) {
-        const residue = picked.atom;
-        const index = residue.residueIndex;
-        const name = residue.resname;
-        //console.log(`mouseover: ${index} ${name}`);
+        // const residue = picked.atom;
+        // const index = residue.residueIndex;
+        // const name = residue.resname;
+        // console.log(`mouseover: ${index} ${name}`);
       } else {
-        //console.log('mouseover: nothing');
+        // console.log('mouseover: nothing');
       }
     });
 
@@ -187,7 +186,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       } = e;
 
       let protein = e.detail.feature.protein;
-      //bit of a hack to handle missing data in some entries
+      // bit of a hack to handle missing data in some entries
       if (!protein && 'parent' in e.detail.feature) {
         protein = e.detail.feature.parent.protein;
       }
@@ -230,7 +229,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.observer.disconnect();
   }
 
-  _toggleStructureFullScreen = e => {
+  _toggleStructureFullScreen = () => {
     const section = this._structureSection.current;
     section.scrollIntoView(false);
     if (this.stage) {
@@ -241,7 +240,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.setState({ isStructureFullScreen });
   };
 
-  _toggleSplitView = e => {
+  _toggleSplitView = () => {
     if (this.stage) {
       const element = this._splitView.current;
       const isSplitScreen = this.state.isSplitScreen;
@@ -251,13 +250,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const section = this._structureSection.current;
         section.scrollIntoView(false);
         requestFullScreen(element);
-        //setTimeout(() => {requestFullScreen(element);}, 500);
       }
       this.stage.handleResize();
     }
   };
 
-  _toggleStructureSpin = e => {
+  _toggleStructureSpin = () => {
     if (this.stage) {
       const isSpinning = !this.state.isSpinning;
       this.stage.setSpin(isSpinning);
@@ -265,7 +263,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   };
 
-  _resetStructureView = e => {
+  _resetStructureView = () => {
     if (this.stage) {
       this.stage.autoView();
     }
@@ -304,6 +302,40 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
+  _collateHits(database, accession, chain, protein) {
+    let hits = [];
+    if (database && accession) {
+      if (chain && protein) {
+        hits = hits.concat(
+          this.state.entryMap[database][accession][chain][protein],
+        );
+      } else if (chain) {
+        Object.keys(this.state.entryMap[database][accession][chain]).forEach(
+          p => {
+            hits = hits.concat(
+              this.state.entryMap[database][accession][chain][p],
+            );
+          },
+        );
+      } else {
+        Object.keys(this.state.entryMap[database][accession]).forEach(c => {
+          Object.keys(this.state.entryMap[database][accession][c]).forEach(
+            p => {
+              hits = hits.concat(
+                this.state.entryMap[database][accession][c][p],
+              );
+            },
+          );
+        });
+      }
+    }
+
+    hits.forEach(
+      hit => (hit.color = getTrackColor(hit, this.props.colorDomainsBy)),
+    );
+    return hits;
+  }
+
   createEntryMap() {
     const memberDBMap = { pdb: {} };
 
@@ -335,7 +367,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
             },
             p2s,
           );
-          //create PDB chain mapping
+          // create PDB chain mapping
           if (!memberDBMap.pdb[structure.accession])
             memberDBMap.pdb[structure.accession] = {};
           if (!memberDBMap.pdb[structure.accession][chain]) {
@@ -363,23 +395,23 @@ class StructureView extends PureComponent /*:: <Props> */ {
     let ch;
     let prot;
 
-    //reset keep when 'no entry' is selected via selection input
+    // reset keep when 'no entry' is selected via selection input
     if (entry === NO_SELECTION && keep) {
       keep.db = null;
       keep.accession = null;
       keep.chain = null;
       keep.protein = null;
-    } else if (memberDB != null && entry != null) {
+    } else if (memberDB !== undefined && entry !== undefined) {
       db = memberDB;
       acc = entry;
       ch = chain;
       prot = protein;
     } else if (
       keep &&
-      keep.db != null &&
-      keep.accession != null &&
-      keep.chain != null &&
-      keep.protein != null
+      keep.db !== null &&
+      keep.accession !== null &&
+      keep.chain !== null &&
+      keep.protein !== null
     ) {
       db = keep.db;
       acc = keep.accession;
@@ -387,31 +419,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
       prot = keep.protein;
     }
 
-    if (db && acc) {
-      let hits = [];
-      if (ch && prot) {
-        hits = hits.concat(this.state.entryMap[db][acc][ch][prot]);
-      } else if (ch) {
-        Object.keys(this.state.entryMap[db][acc][ch]).forEach(p => {
-          hits = hits.concat(this.state.entryMap[db][acc][ch][p]);
-        });
-      } else {
-        Object.keys(this.state.entryMap[db][acc]).forEach(c => {
-          Object.keys(this.state.entryMap[db][acc][c]).forEach(p => {
-            hits = hits.concat(this.state.entryMap[db][acc][c][p]);
-          });
-        });
-      }
-
-      hits.forEach(
-        hit => (hit.color = getTrackColor(hit, this.props.colorDomainsBy)),
-      );
+    const hits = this._collateHits(db, acc, ch, prot);
+    if (hits.length > 0) {
       if (this.stage) {
         const components = this.stage.getComponentsByName(this.name);
         if (components) {
           components.forEach(component => {
             const selections = [];
-            hits.forEach((hit, i) => {
+            hits.forEach(hit => {
               selections.push([
                 hit.color,
                 `${hit.start_residue_number}-${hit.end_residue_number}:${
@@ -428,7 +443,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         }
       }
     } else {
-      //rest view when no entry selected
+      // default view when no entry selected
       const components = this.stage.getComponentsByName(this.name);
       if (components) {
         components.forEach(component => {
@@ -462,10 +477,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 }}
                 measurements={['width', 'height']}
               >
-                {({ width, height }) => {
-                  //override supplied width value as this causes a bug
-                  //in Firefox and Safari
-                  width = 'auto';
+                {({ _w, h }) => {
+                  // override supplied width value as this causes a bug
+                  // in Firefox and Safari
+                  const width = 'auto';
+                  let height = h;
                   if (!height) {
                     height = '450px';
                   }

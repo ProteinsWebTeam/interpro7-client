@@ -17,6 +17,7 @@ import ResizeObserver from './ResizeObserver';
   element: ?string,
   children: State => Node,
   measurements: Measurement | Array<Measurement>,
+  updateCallback: ?function,
 }; */
 
 class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
@@ -47,11 +48,12 @@ class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
     this._resizeObserver.observe(this._ref.current);
   }
 
-  componentWillUnmount() {
-    this._resizeObserver.unobserve(this._ref.current);
-  }
   componentDidUpdate() {
     if (this.props.updateCallback) this.props.updateCallback();
+  }
+
+  componentWillUnmount() {
+    this._resizeObserver.unobserve(this._ref.current);
   }
 
   _handleResizeEvent(resizeObserverEntries) {

@@ -10,7 +10,7 @@ export const requestFullScreen = element => {
   }
 };
 
-export const exitFullScreen = element => {
+export const exitFullScreen = () => {
   if ('exitFullscreen' in document) {
     document.exitFullscreen();
   } else if ('webkitExitFullscreen' in document) {
