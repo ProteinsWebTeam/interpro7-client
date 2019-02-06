@@ -28,7 +28,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, theme, ipro, local);
 const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
 
 const description2IDs = description =>
-  description.reduce(
+  (description || []).reduce(
     (acc, part) => [
       ...acc,
       ...(part.match(/"(PUB\d+)"/gi) || []).map(t =>
@@ -253,6 +253,19 @@ OverlappingEntries.propTypes = {
   overlaps: T.arrayOf(T.object),
 };
 
+const Hierarchy = (hierarchy, type, accession) =>
+  hierarchy &&
+  Object.keys(hierarchy).length &&
+  hierarchy.children &&
+  hierarchy.children.length ? (
+    <div className={f('margin-bottom-large')}>
+      <h4 className={f('first-letter-cap')}>
+        {type.replace('_', ' ').toLowerCase()} relationships
+      </h4>
+      <InterProHierarchy accession={accession} hierarchy={hierarchy} />
+    </div>
+  ) : null;
+
 /* :: type Props = {
     data: {
       metadata: {
@@ -295,7 +308,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
     const citations = description2IDs(metadata.description);
-    const desc = metadata.description.reduce((e, acc) => e + acc, '');
+    const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
       Object.entries(metadata.literature || {}),
       ([id]) => citations.includes(id),
@@ -332,24 +345,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               {overlaps && Object.keys(overlaps).length ? (
                 <OverlappingEntries metadata={metadata} overlaps={overlaps} />
               ) : null}
-              {metadata.hierarchy &&
-              Object.keys(metadata.hierarchy).length &&
-              metadata.hierarchy.children &&
-              metadata.hierarchy.children.length ? (
-                <div className={f('margin-bottom-large')}>
-                  <h4 className={f('first-letter-cap')}>
-                    {metadata.type.replace('_', ' ').toLowerCase()}{' '}
-                    relationships
-                  </h4>
-                  <InterProHierarchy
-                    accession={metadata.accession}
-                    hierarchy={metadata.hierarchy}
-                  />
-                </div>
-              ) : null}
+              <Hierarchy
+                hierarchy={metadata.hierarchy}
+                accession={metadata.accession}
+                type={metadata.type}
+              />
 
               {// doesn't work for some HAMAP as they have enpty <P> tag
-              Object.keys(metadata.description).length ? (
+              Object.keys(metadata.description || []).length ? (
                 <>
                   <h4>Description</h4>
                   <Description

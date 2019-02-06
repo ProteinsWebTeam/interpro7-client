@@ -29,6 +29,14 @@ const IPScanSearch = loadable({
   loader: () =>
     import(/* webpackChunkName: "ipscan-search" */ 'components/IPScan/Search'),
 });
+const IDASearch = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ida-search" */ 'components/SearchByIDA'),
+});
+const IDAResults = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ida-results" */ 'components/Entry/DomainArchitectures/IDAResults'),
+});
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
@@ -51,9 +59,17 @@ const WrappedIPScanSearch = () => (
   </Wrapper>
 );
 
+const WrappedIDASearch = () => (
+  <Wrapper>
+    <IDASearch />
+    <IDAResults />
+  </Wrapper>
+);
+
 const routes = new Map([
   ['text', TextSearchAndResults],
   ['sequence', WrappedIPScanSearch],
+  ['ida', WrappedIDASearch],
 ]);
 
 const RedirectToDefault = ({
@@ -147,6 +163,23 @@ class Wrapper extends PureComponent {
                 }) => type === 'text' && f('is-active', 'is-active-tab')}
               >
                 by text
+              </Link>
+            </li>
+            <li
+              className={f('tabs-title')}
+              // onMouseOver={WrappedIPScanSearch.preload}
+              // onFocus={WrappedIPScanSearch.preload}
+            >
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'search' },
+                    search: { type: 'ida' },
+                  },
+                }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                by domain architecture
               </Link>
             </li>
           </ul>
