@@ -1,0 +1,13 @@
+.version-block {
+  display: flex;
+  justify-content: space-between;
+  @nest & .version-info {
+    font-size: 0.8em;
+    @nest & header {
+      font-weight: bold;
+    }
+    @nest & .version-date {
+      margin-top: -0.5em;
+    }
+  }
+}
