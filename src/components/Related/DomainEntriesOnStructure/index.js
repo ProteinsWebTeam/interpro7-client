@@ -112,7 +112,9 @@ const EntriesOnStructure = ({ entries }) => (
             Chain {e.chain} <small>({e.protein.accession})</small>
           </h4>
           <ProtVistaPlusProtein
-            tracks={Object.entries(e.data).sort(([a], [b]) => (a > b ? 1 : 0))}
+            tracks={Object.entries(e.data).sort(([a], [b]) =>
+              b.localeCompare(a),
+            )}
           />
         </div>
       );
