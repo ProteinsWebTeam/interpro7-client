@@ -2,7 +2,6 @@ import React from 'react';
 import T from 'prop-types';
 import { foundationPartial } from 'styles/foundation';
 
-import Link from 'components/generic/Link';
 import style from './style.css';
 import ipro from 'styles/interpro-new.css';
 
@@ -39,6 +38,9 @@ const InfoBanner = ({ topic }) => {
       </div>
     </div>
   );
+};
+InfoBanner.propTypes = {
+  topic: T.string,
 };
 
 export default React.memo(InfoBanner);
