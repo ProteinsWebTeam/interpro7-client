@@ -1,0 +1,11 @@
+.help-banner {
+  max-width: 300px;
+  margin-top: 0;
+  & .card-image {
+    height: 60px;
+  }
+  & .card-description {
+    height: auto;
+    max-height: 11rem;
+  }
+}

@@ -1,0 +1,9 @@
+.help-banner {
+  max-width: 300px;
+  padding: 1em;
+  & header {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+}
