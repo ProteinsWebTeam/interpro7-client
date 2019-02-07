@@ -1,0 +1,11 @@
+.tabs-panel-content {
+  display: flex;
+  flex-wrap: wrap;
+  & .show-help {
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(0deg);
+  }
+  & .show-help.expanded {
+    transform: rotate(180deg);
+  }
+}

@@ -72,7 +72,12 @@ class SearchByText extends PureComponent /*:: <Props> */ {
               </div>
 
               <div className={f('row')}>
-                <div className={f('medium-8', 'columns', 'neutral')}>
+                <div
+                  className={f('medium-8', 'columns', 'neutral')}
+                  style={{
+                    float: 'none', // overwriting this to make the whole block play nice in flex
+                  }}
+                >
                   <span>
                     {' '}
                     e.g.

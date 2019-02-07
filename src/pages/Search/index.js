@@ -6,6 +6,7 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
+import HelpBanner from 'components/Help/HelpBanner';
 
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataWebPage } from 'schema_org/processors';
@@ -14,8 +15,11 @@ import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
+import style from './style.css';
+import InfoBanner from 'components/Help/InfoBanner';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ebiGlobalStyles, ipro);
+const f = foundationPartial(ebiGlobalStyles, ipro, style, fonts);
 
 const SearchByText = loadable({
   loader: () =>
@@ -43,7 +47,7 @@ const SchemaOrgData = loadable({
 });
 
 const TextSearchAndResults = () => (
-  <Wrapper>
+  <Wrapper topic="TextSearch">
     <SearchByText />
     <SearchResults />
   </Wrapper>
@@ -54,13 +58,13 @@ TextSearchAndResults.preload = () => {
 };
 
 const WrappedIPScanSearch = () => (
-  <Wrapper>
+  <Wrapper topic="InterProScan">
     <IPScanSearch />
   </Wrapper>
 );
 
 const WrappedIDASearch = () => (
-  <Wrapper>
+  <Wrapper topic="IDA">
     <IDASearch />
     <IDAResults />
   </Wrapper>
@@ -110,8 +114,16 @@ RedirectToDefault.propTypes = {
 
 class Wrapper extends PureComponent {
   static propTypes = {
+    topic: T.string,
     children: T.node.isRequired,
   };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showHelp: true,
+    };
+  }
+  toggleShowHelp = () => this.setState({ showHelp: !this.state.showHelp });
 
   render() {
     return (
@@ -185,7 +197,36 @@ class Wrapper extends PureComponent {
           </ul>
           <div className={f('tabs', 'tabs-content')}>
             <div className={f('tabs-panel', 'is-active')}>
-              <ErrorBoundary>{this.props.children}</ErrorBoundary>
+              <ErrorBoundary>
+                <div className={f('tabs-panel-content')}>
+                  <div style={{ flexGrow: 2 }}>
+                    {Array.isArray(this.props.children)
+                      ? this.props.children[0]
+                      : this.props.children}
+                  </div>
+                  <div>
+                    <button
+                      onClick={this.toggleShowHelp}
+                      className={f('hollow')}
+                    >
+                      <span
+                        className={f('icon', 'icon-common', 'show-help', {
+                          expanded: this.state.showHelp,
+                        })}
+                        data-icon="&#xf137;"
+                      />
+                    </button>
+                  </div>
+                  {this.state.showHelp && (
+                    <div>
+                      <InfoBanner topic={this.props.topic} />
+                      <HelpBanner topic={this.props.topic} />
+                    </div>
+                  )}
+                </div>
+                {Array.isArray(this.props.children) &&
+                  this.props.children.slice(1)}
+              </ErrorBoundary>
             </div>
           </div>
         </div>
