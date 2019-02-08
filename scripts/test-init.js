@@ -1,4 +1,3 @@
-// @flow
 import puppeteer from 'puppeteer';
 
 import server from './serve';
