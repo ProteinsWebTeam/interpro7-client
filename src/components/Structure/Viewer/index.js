@@ -89,7 +89,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this._poppableViewer = React.createRef();
     this.splitViewStyle = {};
   }
-
   async componentDidMount() {
     await intersectionObserverPolyfill();
 
@@ -100,48 +99,18 @@ class StructureView extends PureComponent /*:: <Props> */ {
         isStructureFullScreen: prevFull,
       } = this.state;
       const willBeFull = !(prevSplit || prevFull);
-      if (!willBeFull) {
-        this.setState({ isSplitScreen: false, isStructureFullScreen: false });
-      } else {
+      if (willBeFull) {
         if (fullScreenRequester === SPLIT_REQUESTER) {
           this.setState({ isSplitScreen: true });
         }
         if (fullScreenRequester === FULL_REQUESTER) {
           this.setState({ isStructureFullScreen: true });
         }
+      } else {
+        this.setState({ isSplitScreen: false, isStructureFullScreen: false });
       }
       fullScreenRequester = null;
-
-      const protvistaElement = this._protvista.current;
-      const structureContainer = this._structureSection.current;
-      const structureViewer = this._structurevViewer.current;
-      const structureControls = this._viewerControls.current;
-      // const isSplitScreen = !this.state.isSplitScreen;
-      if (willBeFull && !prevSplit) {
-        this.splitViewStyle.display = element.style.display;
-        this.splitViewStyle.backgroundColor = element.style.backgroundColor;
-        this.splitViewStyle.protvistaOverflow = protvistaElement.style.overflow;
-        this.splitViewStyle.protvistaWidth = protvistaElement.style.width;
-        this.splitViewStyle.viewControlsHeight = structureControls.style.height;
-        this.splitViewStyle.viewElementHeight = structureViewer.style.height;
-        this.splitViewStyle.viewElementWidth = structureContainer.style.width;
-
-        element.style.display = 'flex';
-        element.style.backgroundColor = '#FFFFFF';
-        protvistaElement.style.overflow = 'scroll';
-        protvistaElement.style.width = '50vw';
-        structureControls.style.height = '5vh';
-        structureViewer.style.height = '95vh';
-        structureContainer.style.width = '50vw';
-      } else {
-        element.style.display = this.splitViewStyle.display;
-        element.style.backgroundColor = this.splitViewStyle.backgroundColor;
-        protvistaElement.style.overflow = this.splitViewStyle.protvistaOverflow;
-        structureControls.style.height = this.splitViewStyle.viewControlsHeight;
-        structureViewer.style.height = this.splitViewStyle.viewElementHeight;
-        structureContainer.style.width = this.splitViewStyle.viewElementWidth;
-        protvistaElement.style.width = this.splitViewStyle.protvistaWidth;
-      }
+      this._toggleSplit(willBeFull && !prevSplit, element);
     });
 
     const pdbid = this.props.id;
@@ -248,6 +217,39 @@ class StructureView extends PureComponent /*:: <Props> */ {
   componentWillUnmount() {
     this.observer.disconnect();
   }
+
+  _toggleSplit = (isSplit, element) => {
+    const protvistaElement = this._protvista.current;
+    const structureContainer = this._structureSection.current;
+    const structureViewer = this._structurevViewer.current;
+    const structureControls = this._viewerControls.current;
+    // const isSplitScreen = !this.state.isSplitScreen;
+    if (isSplit) {
+      this.splitViewStyle.display = element.style.display;
+      this.splitViewStyle.backgroundColor = element.style.backgroundColor;
+      this.splitViewStyle.protvistaOverflow = protvistaElement.style.overflow;
+      this.splitViewStyle.protvistaWidth = protvistaElement.style.width;
+      this.splitViewStyle.viewControlsHeight = structureControls.style.height;
+      this.splitViewStyle.viewElementHeight = structureViewer.style.height;
+      this.splitViewStyle.viewElementWidth = structureContainer.style.width;
+
+      element.style.display = 'flex';
+      element.style.backgroundColor = '#FFFFFF';
+      protvistaElement.style.overflow = 'scroll';
+      protvistaElement.style.width = '50vw';
+      structureControls.style.height = '5vh';
+      structureViewer.style.height = '95vh';
+      structureContainer.style.width = '50vw';
+    } else {
+      element.style.display = this.splitViewStyle.display;
+      element.style.backgroundColor = this.splitViewStyle.backgroundColor;
+      protvistaElement.style.overflow = this.splitViewStyle.protvistaOverflow;
+      structureControls.style.height = this.splitViewStyle.viewControlsHeight;
+      structureViewer.style.height = this.splitViewStyle.viewElementHeight;
+      structureContainer.style.width = this.splitViewStyle.viewElementWidth;
+      protvistaElement.style.width = this.splitViewStyle.protvistaWidth;
+    }
+  };
 
   _toggleStructureFullScreen = () => {
     const section = this._structureSection.current;
