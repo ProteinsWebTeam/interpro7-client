@@ -49,7 +49,10 @@ const optionsForObserver = {
     n => (n + 1) / NUMBER_OF_CHECKS,
   ),
 };
+const SPLIT_REQUESTER = 1;
+const FULL_REQUESTER = 2;
 
+let fullScreenRequester = null;
 class StructureView extends PureComponent /*:: <Props> */ {
   /*:: _structurevViewer: { current: ?HTMLElement }; */
 
@@ -72,6 +75,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       isSpinning: false,
       isStructureFullScreen: false,
       isSplitScreen: false,
+      isMinimized: false,
     };
 
     this.stage = null;
@@ -91,12 +95,29 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
     const element = this._splitView.current;
     onFullScreenChange(element, () => {
+      const {
+        isSplitScreen: prevSplit,
+        isStructureFullScreen: prevFull,
+      } = this.state;
+      const willBeFull = !(prevSplit || prevFull);
+      if (!willBeFull) {
+        this.setState({ isSplitScreen: false, isStructureFullScreen: false });
+      } else {
+        if (fullScreenRequester === SPLIT_REQUESTER) {
+          this.setState({ isSplitScreen: true });
+        }
+        if (fullScreenRequester === FULL_REQUESTER) {
+          this.setState({ isStructureFullScreen: true });
+        }
+      }
+      fullScreenRequester = null;
+
       const protvistaElement = this._protvista.current;
       const structureContainer = this._structureSection.current;
       const structureViewer = this._structurevViewer.current;
       const structureControls = this._viewerControls.current;
-      const isSplitScreen = !this.state.isSplitScreen;
-      if (isSplitScreen) {
+      // const isSplitScreen = !this.state.isSplitScreen;
+      if (willBeFull && !prevSplit) {
         this.splitViewStyle.display = element.style.display;
         this.splitViewStyle.backgroundColor = element.style.backgroundColor;
         this.splitViewStyle.protvistaOverflow = protvistaElement.style.overflow;
@@ -121,7 +142,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
         structureContainer.style.width = this.splitViewStyle.viewElementWidth;
         protvistaElement.style.width = this.splitViewStyle.protvistaWidth;
       }
-      this.setState({ isSplitScreen });
     });
 
     const pdbid = this.props.id;
@@ -232,18 +252,19 @@ class StructureView extends PureComponent /*:: <Props> */ {
   _toggleStructureFullScreen = () => {
     const section = this._structureSection.current;
     section.scrollIntoView(false);
+    fullScreenRequester = FULL_REQUESTER;
     if (this.stage) {
       this.stage.toggleFullscreen();
       this.stage.handleResize();
     }
-    const isStructureFullScreen = !this.state.isStructureFullScreen;
-    this.setState({ isStructureFullScreen });
+    // const isStructureFullScreen = !this.state.isStructureFullScreen;
   };
 
   _toggleSplitView = () => {
     if (this.stage) {
       const element = this._splitView.current;
       const isSplitScreen = this.state.isSplitScreen;
+      fullScreenRequester = SPLIT_REQUESTER;
       if (isSplitScreen) {
         exitFullScreen(element);
       } else {
@@ -454,14 +475,26 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.setState({ selectedEntry: acc || '' });
   };
 
+  _toggleMinimize = () =>
+    this.setState({ isMinimized: !this.state.isMinimized });
+
   render() {
+    const {
+      isStuck,
+      entryMap,
+      selectedEntry,
+      isSpinning,
+      isSplitScreen,
+      isMinimized,
+    } = this.state;
     return (
       <>
         <div ref={this._splitView}>
           <div ref={this._structureSection}>
             <div
               className={f('structure-viewer', {
-                'is-stuck': this.state.isStuck,
+                'is-stuck': isStuck,
+                'is-minimized': isMinimized,
               })}
               style={{
                 display: 'flex',
@@ -493,6 +526,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
                         height: height,
                         alignItems: 'center',
                         justifyContent: 'center',
+                        display: isMinimized && isStuck ? 'none' : 'block',
                       }}
                     />
                   );
@@ -508,9 +542,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
               >
                 {this.props.matches ? (
                   <EntrySelection
-                    entryMap={this.state.entryMap}
+                    entryMap={entryMap}
                     updateStructure={this.showEntryInStructure}
-                    selectedEntry={this.state.selectedEntry}
+                    selectedEntry={selectedEntry}
                   />
                 ) : null}
                 <div
@@ -518,15 +552,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
                   style={{
                     whiteSpace: 'nowrap',
                     overflow: 'visible',
+                    background: 'white',
                   }}
                 >
                   <button
                     className={f('structure-icon', 'icon', 'icon-common')}
                     onClick={this._toggleStructureSpin}
-                    data-icon={this.state.isSpinning ? '' : 'v'}
-                    title={
-                      this.state.isSpinning ? 'Stop spinning' : 'Spin structure'
-                    }
+                    data-icon={isSpinning ? '' : 'v'}
+                    title={isSpinning ? 'Stop spinning' : 'Spin structure'}
                   />
                   <button
                     className={f('structure-icon', 'icon', 'icon-common')}
@@ -534,27 +567,28 @@ class StructureView extends PureComponent /*:: <Props> */ {
                     data-icon="}"
                     title="Reset image"
                   />
-                  {this.state.isStructureFullScreen ||
-                  this.state.isSplitScreen ? (
+                  <button
+                    onClick={this._toggleSplitView}
+                    data-icon={isSplitScreen ? 'G' : '\uF0DB'}
+                    title={
+                      isSplitScreen ? 'Exit full screen' : 'Split full screen'
+                    }
+                    className={f('structure-icon', 'icon', 'icon-common')}
+                  />
+
+                  {isSplitScreen ? null : (
                     <button
-                      onClick={this._toggleSplitView}
-                      data-icon="G"
-                      title="Exit full screen"
-                      className={f('structure-icon', 'icon', 'icon-common')}
-                    />
-                  ) : (
-                    <button
-                      onClick={this._toggleSplitView}
-                      data-icon="O"
-                      title="Split full screen"
+                      data-icon="F"
+                      title={'Full screen'}
+                      onClick={this._toggleStructureFullScreen}
                       className={f('structure-icon', 'icon', 'icon-common')}
                     />
                   )}
-                  {this.state.isSplitScreen ? null : (
+                  {isStuck && (
                     <button
-                      data-icon="F"
-                      title="Full screen"
-                      onClick={this._toggleStructureFullScreen}
+                      data-icon={isMinimized ? '\uF2D0' : '\uF2D1'}
+                      title={'Minimize'}
+                      onClick={this._toggleMinimize}
                       className={f('structure-icon', 'icon', 'icon-common')}
                     />
                   )}

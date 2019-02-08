@@ -10,7 +10,7 @@
 .structure-viewer-select {
   max-width: 400px;
   bottom: 0.5rem;
-  fontsize: 90%;
+  font-size: 90%;
   left: 0;
   margin: 0;
 }
@@ -35,7 +35,8 @@
     left: 1rem;
   }
 }
-
+.structure-viewer.is-stuck.is-minimized {
+}
 .structure-icon {
   font-size: 1.5em;
   margin: 4px;
