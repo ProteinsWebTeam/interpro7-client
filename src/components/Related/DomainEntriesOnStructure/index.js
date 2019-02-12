@@ -61,9 +61,11 @@ const mergeData = secondaryData => {
   }
 
   const entries = [];
-  const chains = Object.keys(out).sort((a, b) => a.localeCompare(b));
+  const chains = Object.keys(out).sort((a, b) => (a ? a.localeCompare(b) : -1));
   for (const chain of chains) {
-    const proteins = Object.keys(out[chain]).sort((a, b) => a.localeCompare(b));
+    const proteins = Object.keys(out[chain]).sort((a, b) =>
+      a ? a.localeCompare(b) : -1,
+    );
     for (const protein of proteins) {
       entries.push(out[chain][protein]);
     }
@@ -113,7 +115,7 @@ const EntriesOnStructure = ({ entries }) => (
           </h4>
           <ProtVistaPlusProtein
             tracks={Object.entries(e.data).sort(([a], [b]) =>
-              b.localeCompare(a),
+              b ? b.localeCompare(a) : -1,
             )}
           />
         </div>

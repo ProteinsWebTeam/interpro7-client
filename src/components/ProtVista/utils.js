@@ -64,7 +64,7 @@ export const processData = createSelector(
       if (!ipro.children) ipro.children = [];
       if (ipro.children.indexOf(entry) === -1) ipro.children.push(entry);
     });
-    integrated.sort((a, b) => a.chain.localeCompare(b.chain));
+    integrated.sort((a, b) => (a.chain ? a.chain.localeCompare(b.chain) : -1));
     return {
       interpro,
       unintegrated,
