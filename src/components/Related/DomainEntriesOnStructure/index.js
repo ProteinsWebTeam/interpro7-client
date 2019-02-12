@@ -22,7 +22,10 @@ const mergeData = secondaryData => {
   const out = {};
   for (const entry of secondaryData) {
     if (!(entry.chain in out)) {
-      out[entry.chain] = {
+      out[entry.chain] = {};
+    }
+    if (!(entry.protein in out[entry.chain])) {
+      out[entry.chain][entry.protein] = {
         protein: {
           accession: entry.protein,
           length: entry.protein_length,
@@ -37,13 +40,14 @@ const mergeData = secondaryData => {
               label: `Chain ${entry.chain}`,
               source_database: 'pdb',
               type: 'chain',
+              protein: entry.protein,
             },
           ],
         },
         chain: entry.chain,
       };
     }
-    out[entry.chain].data.Entries.push({
+    out[entry.chain][entry.protein].data.Entries.push({
       accession: entry.accession,
       source_database: entry.source_database,
       coordinates: toArrayStructure(entry.entry_protein_locations),
@@ -51,12 +55,20 @@ const mergeData = secondaryData => {
       link: `/entry/${entry.source_database}/${entry.accession}`,
       children: entry.children,
       chain: entry.chain,
+      protein: entry.protein,
       type: entry.type || entry.entry_type,
     });
   }
-  return Object.keys(out)
-    .sort((a, b) => a > b)
-    .map(k => out[k]);
+
+  const entries = [];
+  const chains = Object.keys(out).sort((a, b) => a.localeCompare(b));
+  for (const chain of chains) {
+    const proteins = Object.keys(out[chain]).sort((a, b) => a.localeCompare(b));
+    for (const protein of proteins) {
+      entries.push(out[chain][protein]);
+    }
+  }
+  return entries;
 };
 
 const ProtVistaLoaded = ({ dataprotein, tracks }) => {
@@ -100,7 +112,9 @@ const EntriesOnStructure = ({ entries }) => (
             Chain {e.chain} <small>({e.protein.accession})</small>
           </h4>
           <ProtVistaPlusProtein
-            tracks={Object.entries(e.data).sort(([a], [b]) => (a > b ? 1 : 0))}
+            tracks={Object.entries(e.data).sort(([a], [b]) =>
+              b.localeCompare(a),
+            )}
           />
         </div>
       );
