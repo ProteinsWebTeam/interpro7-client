@@ -46,9 +46,14 @@ const Privacy = loadable({
   loader: () =>
     import(/* webpackChunkName: "about-funding" */ 'components/About/Privacy'),
 });
+const InterProScan = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-interproscan" */ 'components/About/InterProScan'),
+});
 
 const routes = new Map([
   ['interpro', AboutInterPro],
+  ['interproscan', InterProScan],
   ['consortium', Consortium],
   ['citation', Citation],
   ['funding', Funding],
@@ -76,14 +81,26 @@ class About extends PureComponent /*:: <{}> */ {
           <ul className={f('tabs', 'menu-style')}>
             <li
               className={f('tabs-title')}
-              onMouseOver={Consortium.preload}
-              onFocus={Consortium.preload}
+              onMouseOver={AboutInterPro.preload}
+              onFocus={AboutInterPro.preload}
             >
               <Link
                 to={{ description: { other: ['about', 'interpro'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 InterPro
+              </Link>
+            </li>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={InterProScan.preload}
+              onFocus={InterProScan.preload}
+            >
+              <Link
+                to={{ description: { other: ['about', 'interproscan'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                InterProScan
               </Link>
             </li>
             <li
