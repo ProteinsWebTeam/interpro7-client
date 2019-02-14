@@ -120,7 +120,7 @@ class Wrapper extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      showHelp: true,
+      showHelp: false,
     };
   }
   toggleShowHelp = () => this.setState({ showHelp: !this.state.showHelp });
@@ -199,7 +199,7 @@ class Wrapper extends PureComponent {
             <div className={f('tabs-panel', 'is-active')}>
               <ErrorBoundary>
                 <div className={f('tabs-panel-content')}>
-                  <div style={{ flexGrow: 2 }}>
+                  <div className={f('search-form')}>
                     {Array.isArray(this.props.children)
                       ? this.props.children[0]
                       : this.props.children}
@@ -217,12 +217,16 @@ class Wrapper extends PureComponent {
                       />
                     </button>
                   </div>
-                  {this.state.showHelp && (
-                    <div>
-                      <InfoBanner topic={this.props.topic} />
-                      <HelpBanner topic={this.props.topic} />
-                    </div>
-                  )}
+                  <div
+                    className={f('help-col', { removed: !this.state.showHelp })}
+                  >
+                    {
+                      <>
+                        <InfoBanner topic={this.props.topic} />
+                        <HelpBanner topic={this.props.topic} />
+                      </>
+                    }
+                  </div>
                 </div>
                 {Array.isArray(this.props.children) &&
                   this.props.children.slice(1)}

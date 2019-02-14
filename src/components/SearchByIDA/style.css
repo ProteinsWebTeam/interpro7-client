@@ -1,5 +1,9 @@
 @import '../../styles/fonts.css';
 @import '../../styles/colors.css';
+:root {
+  --entry-width: 180px;
+  --entry-padding: 1em;
+}
 
 .ida-workspace {
   min-height: 200px;
@@ -9,9 +13,11 @@
     display: flex;
     min-height: 200px;
     @nest & div.ida-panel {
+      min-width: calc(var(--entry-width) + var(--entry-padding) * 4);
       width: 75%;
     }
     @nest & div.ida-ignore {
+      min-width: calc(var(--entry-width) + var(--entry-padding) * 4);
       width: 25%;
     }
     @nest & header {
@@ -71,11 +77,11 @@ ul.ordered {
 }
 
 .ida-entry {
-  padding: 0 1em 0 1em;
-  margin: 0 1em 0 1em;
+  padding: 0 var(--entry-padding) 0 var(--entry-padding);
+  margin: 0 var(--entry-padding) 0 var(--entry-padding);
   background: #75bf40;
   //border: black solid 2px;
-  border-radius: 1em;
+  border-radius: var(--entry-padding);
 
   @nest & button {
     position: absolute;
@@ -91,7 +97,8 @@ ul.ordered {
     font-weight: bold;
   }
   @nest & input {
-    background: rgba(255, 255, 255, 0);
+    width: var(--entry-width);
+    background: transparent;
     border: none;
     color: #ffffff;
     transition: color 0.5s ease-in-out;
