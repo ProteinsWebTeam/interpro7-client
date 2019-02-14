@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 
@@ -62,6 +62,9 @@ const WrappedIPScanSearch = () => (
     <IPScanSearch />
   </Wrapper>
 );
+WrappedIPScanSearch.preload = () => {
+  IPScanSearch.preload();
+};
 
 const WrappedIDASearch = () => (
   <Wrapper topic="IDA">
@@ -112,132 +115,116 @@ RedirectToDefault.propTypes = {
   }).isRequired,
 };
 
-class Wrapper extends PureComponent {
-  static propTypes = {
-    topic: T.string,
-    children: T.node.isRequired,
-  };
-  constructor(props) {
-    super(props);
-    this.state = {
-      showHelp: false,
-    };
-  }
-  toggleShowHelp = () => this.setState({ showHelp: !this.state.showHelp });
-
-  render() {
-    return (
-      <div className={f('row')}>
-        <SchemaOrgData
-          data={{
-            name: 'InterPro Search Page',
-            description: 'Search InterPro data and website',
-            location: window.location,
-          }}
-          processData={schemaProcessDataWebPage}
-        />
-        <div className={f('columns', 'margin-bottom-large')}>
-          <h3>Search InterPro</h3>
-          <ul className={f('tabs', 'main-style', 'margin-top-large')}>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={WrappedIPScanSearch.preload}
-              onFocus={WrappedIPScanSearch.preload}
+const Wrapper = ({ topic, children }) => {
+  const [showHelp, setShowHelp] = useState(false);
+  const toggleShowHelp = () => setShowHelp(!showHelp);
+  return (
+    <div className={f('row')}>
+      <SchemaOrgData
+        data={{
+          name: 'InterPro Search Page',
+          description: 'Search InterPro data and website',
+          location: window.location,
+        }}
+        processData={schemaProcessDataWebPage}
+      />
+      <div className={f('columns', 'margin-bottom-large')}>
+        <h3>Search InterPro</h3>
+        <ul className={f('tabs', 'main-style', 'margin-top-large')}>
+          <li
+            className={f('tabs-title')}
+            onMouseOver={WrappedIPScanSearch.preload}
+            onFocus={WrappedIPScanSearch.preload}
+          >
+            <Link
+              to={{
+                description: {
+                  main: { key: 'search' },
+                  search: { type: 'sequence' },
+                },
+              }}
+              activeClass={f('is-active', 'is-active-tab')}
             >
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'search' },
-                    search: { type: 'sequence' },
-                  },
-                }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                by sequence
-              </Link>
-            </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={TextSearchAndResults.preload}
-              onFocus={TextSearchAndResults.preload}
+              by sequence
+            </Link>
+          </li>
+          <li
+            className={f('tabs-title')}
+            onMouseOver={TextSearchAndResults.preload}
+            onFocus={TextSearchAndResults.preload}
+          >
+            <Link
+              to={{
+                description: {
+                  main: { key: 'search' },
+                  search: { type: 'text' },
+                },
+              }}
+              activeClass={({
+                description: {
+                  search: { type },
+                },
+              }) => type === 'text' && f('is-active', 'is-active-tab')}
             >
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'search' },
-                    search: { type: 'text' },
-                  },
-                }}
-                activeClass={({
-                  description: {
-                    search: { type },
-                  },
-                }) => type === 'text' && f('is-active', 'is-active-tab')}
-              >
-                by text
-              </Link>
-            </li>
-            <li
-              className={f('tabs-title')}
-              // onMouseOver={WrappedIPScanSearch.preload}
-              // onFocus={WrappedIPScanSearch.preload}
+              by text
+            </Link>
+          </li>
+          <li
+            className={f('tabs-title')}
+            onMouseOver={WrappedIPScanSearch.preload}
+            onFocus={WrappedIPScanSearch.preload}
+          >
+            <Link
+              to={{
+                description: {
+                  main: { key: 'search' },
+                  search: { type: 'ida' },
+                },
+              }}
+              activeClass={f('is-active', 'is-active-tab')}
             >
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'search' },
-                    search: { type: 'ida' },
-                  },
-                }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                by domain architecture
-              </Link>
-            </li>
-          </ul>
-          <div className={f('tabs', 'tabs-content')}>
-            <div className={f('tabs-panel', 'is-active')}>
-              <ErrorBoundary>
-                <div className={f('tabs-panel-content')}>
-                  <div className={f('search-form')}>
-                    {Array.isArray(this.props.children)
-                      ? this.props.children[0]
-                      : this.props.children}
-                  </div>
-                  <div>
-                    <button
-                      onClick={this.toggleShowHelp}
-                      className={f('hollow')}
-                    >
-                      <span
-                        className={f('icon', 'icon-common', 'show-help', {
-                          expanded: this.state.showHelp,
-                        })}
-                        data-icon="&#xf137;"
-                      />
-                    </button>
-                  </div>
-                  <div
-                    className={f('help-col', { removed: !this.state.showHelp })}
-                  >
-                    {
-                      <>
-                        <InfoBanner topic={this.props.topic} />
-                        <HelpBanner topic={this.props.topic} />
-                      </>
-                    }
-                  </div>
+              by domain architecture
+            </Link>
+          </li>
+        </ul>
+        <div className={f('tabs', 'tabs-content')}>
+          <div className={f('tabs-panel', 'is-active')}>
+            <ErrorBoundary>
+              <div className={f('tabs-panel-content')}>
+                <div className={f('search-form')}>
+                  {Array.isArray(children) ? children[0] : children}
                 </div>
-                {Array.isArray(this.props.children) &&
-                  this.props.children.slice(1)}
-              </ErrorBoundary>
-            </div>
+                <div>
+                  <button onClick={toggleShowHelp} className={f('hollow')}>
+                    <span
+                      className={f('icon', 'icon-common', 'show-help', {
+                        expanded: showHelp,
+                      })}
+                      data-icon="&#xf137;"
+                    />
+                  </button>
+                </div>
+                <div className={f('help-col', { removed: !showHelp })}>
+                  {
+                    <>
+                      <InfoBanner topic={topic} />
+                      <HelpBanner topic={topic} />
+                    </>
+                  }
+                </div>
+              </div>
+              {Array.isArray(children) && children.slice(1)}
+            </ErrorBoundary>
           </div>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+Wrapper.propTypes = {
+  topic: T.string,
+  children: T.node.isRequired,
+};
 
 const locationSelector = createSelector(
   customLocation => customLocation.description.search.type,
