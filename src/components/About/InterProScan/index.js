@@ -28,7 +28,9 @@ const parseBody = text =>
     }, {});
 
 const InterProScan = (
-  { loading, payload } /*: {loading: boolean, payload: ?Object}*/,
+  {
+    data: { loading, payload },
+  } /*: {data: {loading: boolean, payload: ?Object}}*/,
 ) => {
   if (loading || !payload) return <Loading />;
   const { tag_name: version, body } = payload;
@@ -257,11 +259,13 @@ const InterProScan = (
   );
 };
 InterProScan.propTypes = {
-  loading: T.bool,
-  payload: T.shape({
-    version: T.string,
-    body: T.string,
-  }),
+  data: {
+    loading: T.bool,
+    payload: T.shape({
+      version: T.string,
+      body: T.string,
+    }),
+  },
 };
 
 export default loadData(getUrlForRelease('IPScan'))(InterProScan);
