@@ -167,6 +167,13 @@ const loadData = params => {
           [`data${propNamespace}`]: this.state.staleData || this.state.data,
           [`isStale${propNamespace}`]: this.state.staleData !== this.state.data,
         };
+        // The correction below is needed for MS Edge
+        if (
+          this.state.data &&
+          !this.state.data.loading &&
+          this.state.data.url === this.state.url
+        )
+          passedProps[`isStale${propNamespace}`] = false;
         return (
           <UnconnectedErrorBoundary customLocation={appState.customLocation}>
             <Wrapped
