@@ -67,7 +67,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     super(props);
 
     this._currentTransformTranslateX = 0;
-    this._currentTransformScaleX = 0;
+    this._currentTransformScaleX = 1;
     this._ref = React.createRef();
   }
 
@@ -90,7 +90,6 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     );
     if (!newTarget) return;
     const fakeBorder = this._ref.current.firstElementChild;
-    if (!fakeBorder.animate) return;
 
     const containerBoundingRect = this._ref.current.getBoundingClientRect();
     const boundingRect = newTarget.getBoundingClientRect();
@@ -105,6 +104,10 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     let nextScaleX = boundingRect.width / countainerWidth;
     if (Number.isNaN(nextScaleX)) nextScaleX = this._currentTransformScaleX;
     const nextTransform = `translateX(${nextTranslateX}px) scaleX(${nextScaleX})`;
+    if (!fakeBorder.animate) {
+      fakeBorder.style.transform = nextTransform;
+      return;
+    }
     // middle transform
     let middleTranslateX = this._currentTransformTranslateX;
     let middleScaleX = this._currentTransformScaleX;

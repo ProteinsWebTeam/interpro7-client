@@ -851,14 +851,25 @@ hr {
   background: #fff url('../images/cover/tool/tool_api.png') no-repeat 50% 76%;
   background-size: 56%;
 }
+.image-tool-ida {
+  background: #fff url('../images/cover/tool/tool_ida_100.png') no-repeat 50%
+    76%;
+  background-size: contain;
+  background-color: #0d68a6;
+}
+.image-tool-textsearch {
+  background: #fff url('../images/cover/tool/tool_textsearch.svg') no-repeat 50%
+    76%;
+  background-size: 30%;
+  background-color: #0d68a6;
+}
 .image-tool-protvista {
   background: #fff url('../images/cover/tool/tool_protvista.png') no-repeat 40%
     14%;
   background-size: 268%;
 }
-.image-tool-litemol {
-  background: #fff url('../images/cover/tool/tool_litemol.png') no-repeat 50%
-    14%;
+.image-tool-ngl {
+  background: #fff url('../images/cover/tool/tool_ngl.png') no-repeat 50% 14%;
   background-size: 210%;
 }
 

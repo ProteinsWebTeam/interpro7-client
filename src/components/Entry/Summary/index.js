@@ -28,7 +28,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, theme, ipro, local);
 const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
 
 const description2IDs = description =>
-  description.reduce(
+  (description || []).reduce(
     (acc, part) => [
       ...acc,
       ...(part.match(/"(PUB\d+)"/gi) || []).map(t =>
@@ -308,7 +308,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
     const citations = description2IDs(metadata.description);
-    const desc = metadata.description.reduce((e, acc) => e + acc, '');
+    const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
       Object.entries(metadata.literature || {}),
       ([id]) => citations.includes(id),
@@ -352,7 +352,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               />
 
               {// doesn't work for some HAMAP as they have enpty <P> tag
-              Object.keys(metadata.description).length ? (
+              Object.keys(metadata.description || []).length ? (
                 <>
                   <h4>Description</h4>
                   <Description

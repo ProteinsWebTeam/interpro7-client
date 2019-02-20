@@ -3,6 +3,8 @@ import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import config from 'config';
+
 const MULTIPLE_SLASHES = /([^:])\/{2,}/g;
 
 export const cleanUpMultipleSlashes = (str = '') =>
@@ -20,6 +22,13 @@ export const getUrlForMeta = createSelector(
       }),
     ),
 );
+
+export const getUrlForRelease = repoKey =>
+  createSelector(
+    () => config.github[repoKey],
+    ({ owner, repo }) =>
+      `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
+  );
 
 export const getUrl = createSelector(
   // this one is just to memoize it
