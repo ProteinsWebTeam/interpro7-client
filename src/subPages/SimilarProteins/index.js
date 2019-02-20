@@ -7,23 +7,70 @@ import { createSelector } from 'reselect';
 import { searchSelector } from 'reducers/custom-location/search';
 import { descriptionSelector } from 'reducers/custom-location/description';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import Table, { Column, PageSizeSelector } from 'components/Table';
+import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
 // import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import File from 'components/File';
+import { format } from 'url';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(fonts);
 
+const getAPIURLForSimilarProteins = ({ protocol, hostname, port, root }, ida) =>
+  format({
+    protocol,
+    hostname,
+    port,
+    pathname:
+      root +
+      descriptionToPath({
+        main: { key: 'protein' },
+        protein: { db: 'uniprot' },
+      }),
+    query: { ida },
+  });
+
+const AllProteinDownload = ({ description, count, ida }) => (
+  <File
+    fileType="fasta"
+    name={`protein-similar-to-${
+      description[description.main.key].accession
+    }.fasta`}
+    count={count}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+    }}
+    search={{ ida }}
+  />
+);
+AllProteinDownload.propTypes = {
+  description: T.object,
+  count: T.number,
+  ida: T.string,
+};
+
 const SimilarProteins = (
   {
-    data: { loading, payload, isStale },
+    data: {
+      loading: loadingData,
+      payload: {
+        metadata: { ida_accession: ida },
+      },
+    },
+    dataIDA: { loading, payload, isStale },
     search,
     state,
   } /*: {
 data: {
+  loading: boolean,
+  payload: Object,
+},
+dataIDA: {
   loading: boolean,
   isStale: boolean,
   payload: Object,
@@ -32,7 +79,7 @@ search: Object,
 state: Object,
 }*/,
 ) => {
-  if (loading || !payload) return <Loading />;
+  if (loading || loadingData || !payload) return <Loading />;
   return (
     <div className={f('row', 'column')}>
       <p>Similar Proteins</p>
@@ -44,6 +91,29 @@ state: Object,
         notFound={payload.results.length === 0}
       >
         <PageSizeSelector />
+        <Exporter>
+          <ul>
+            <li style={{ display: 'flex', alignItems: 'center' }}>
+              <div>
+                <AllProteinDownload
+                  description={state.customLocation.description}
+                  ida={ida}
+                  count={payload.count}
+                />
+              </div>
+              <div>FASTA</div>
+            </li>
+            <li>
+              <Link
+                target="_blank"
+                href={getAPIURLForSimilarProteins(state.settings.api, ida)}
+              >
+                Open in API web view
+              </Link>
+            </li>
+          </ul>
+        </Exporter>
+
         <Column
           dataKey="accession"
           renderer={(acc, { source_database: sourceDatabase }) => (
@@ -120,6 +190,14 @@ state: Object,
 };
 SimilarProteins.propTypes = {
   data: T.shape({
+    loading: T.bool,
+    payload: T.shape({
+      metadata: T.shape({
+        is_accession: T.string,
+      }),
+    }),
+  }).isRequired,
+  dataIDA: T.shape({
     loading: T.bool,
     payload: T.object,
   }).isRequired,

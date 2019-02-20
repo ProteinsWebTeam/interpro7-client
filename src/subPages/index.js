@@ -131,7 +131,10 @@ const subPages = new Map([
   ['proteome', loadData()(Proteome)],
   [
     'similar_proteins',
-    loadData(mapStateToPropsForSimilarProteins)(SimilarProteins),
+    loadData({
+      getUrl: mapStateToPropsForSimilarProteins,
+      propNamespace: 'IDA',
+    })(SimilarProteins),
   ],
 ]);
 
