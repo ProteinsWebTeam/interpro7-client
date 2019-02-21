@@ -17,9 +17,58 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import File from 'components/File';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import loadData from 'higherOrder/loadData';
+import {
+  IDAProtVista,
+  TextIDA,
+  ida2json,
+} from 'components/Entry/DomainArchitectures';
 
 const f = foundationPartial(fonts);
+const FAKE_PROTEIN_LENGTH = 1000;
 
+const SimilarProteinsHeaderWithData = ({
+  accession,
+  data: { payload, loading },
+}) => {
+  if (loading || !payload) return <Loading />;
+  const idaObj = ida2json(payload.ida);
+  return (
+    <div>
+      <header>
+        All the proteins in this page share the domain architecture below with
+        the protein with accession <b>{accession}</b>.
+      </header>
+      <TextIDA accessions={idaObj.accessions} />
+      <IDAProtVista matches={idaObj.domains} length={FAKE_PROTEIN_LENGTH} />
+      <br />
+    </div>
+  );
+};
+
+const getUrlForIDA = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    // omit from search
+    const { type, search: _, ..._search } = search;
+    // add to search
+    _search.ida = '';
+    // build URL
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname:
+        root + descriptionToPath(description).replace('/similar_proteins', ''),
+      query: _search,
+    });
+  },
+);
+const SimilarProteinsHeader = loadData(getUrlForIDA)(
+  SimilarProteinsHeaderWithData,
+);
 const getAPIURLForSimilarProteins = ({ protocol, hostname, port, root }, ida) =>
   format({
     protocol,
@@ -82,7 +131,9 @@ state: Object,
   if (loading || loadingData || !payload) return <Loading />;
   return (
     <div className={f('row', 'column')}>
-      <p>Similar Proteins</p>
+      <SimilarProteinsHeader
+        accession={state.customLocation.description.protein.accession}
+      />
       <Table
         dataTable={payload.results}
         actualSize={payload.count}
