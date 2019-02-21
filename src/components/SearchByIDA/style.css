@@ -15,6 +15,12 @@
     @nest & div.ida-panel {
       min-width: calc(var(--entry-width) + var(--entry-padding) * 4);
       width: 75%;
+      & > div {
+        height: 85%;
+        padding: 0.2em 0 0;
+        overflow: scroll;
+        max-width: calc(100vh - var(--entry-width) + var(--entry-padding) * 4);
+      }
     }
     @nest & div.ida-ignore {
       min-width: calc(var(--entry-width) + var(--entry-padding) * 4);
@@ -55,9 +61,6 @@ ul.ida-list {
   flex-wrap: nowrap;
   flex-direction: column;
   align-items: center;
-  overflow: scroll;
-  height: 85%;
-  padding: 0.2em 0 0;
 
   @nest & li {
     min-width: available;
