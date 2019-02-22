@@ -14,59 +14,89 @@ exports[`<Documentation /> should render 1`] = `
         <div
           className="flex-box"
         >
+          <InterProLogo />
+           
+          <h5>
+            Interpro
+          </h5>
+          <li>
+            <ul>
+              <li>
+                <Connect(Link)
+                  to={
+                    Object {
+                      "description": Object {
+                        "other": Array [
+                          "about",
+                          "interpro",
+                        ],
+                      },
+                    }
+                  }
+                >
+                  About InterPro
+                </Connect(Link)>
+              </li>
+              <li>
+                <Connect(Link)
+                  to={
+                    Object {
+                      "description": Object {
+                        "other": Array [
+                          "release_notes",
+                        ],
+                      },
+                    }
+                  }
+                >
+                  Release Notes
+                </Connect(Link)>
+              </li>
+              <li>
+                <Connect(Link)
+                  to={
+                    Object {
+                      "description": Object {
+                        "other": Array [
+                          "help",
+                          "faqs",
+                        ],
+                      },
+                    }
+                  }
+                >
+                  Frequently Asked Questions (FAQs)
+                </Connect(Link)>
+              </li>
+            </ul>
+          </li>
+        </div>
+        <div
+          className="flex-box"
+        >
           <span
             className="icon icon-common xl"
-            data-icon=""
+            data-icon=""
           />
+           
           <h5>
-            Technical specs
+            InterProScan
           </h5>
           <ul>
-            <li>
-              <Connect(Link)
-                className="ext"
-                href="https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
-                target="_blank"
-              >
-                General API documentation
-              </Connect(Link)>
-            </li>
-            <li>
-              <Connect(Link)
-                href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/"
-              >
-                Swagger API documentation
-              </Connect(Link)>
-            </li>
-            <li>
-              <Connect(Link)
-                href="/interpro/result/download/#/entry/"
-              >
-                Code snippet generator
-              </Connect(Link)>
-            </li>
-            <li>
-              <Connect(Link)
-                className="ext"
-                href="//www.ebi.ac.uk/Tools/webservices/"
-                target="_blank"
-              >
-                Web services
-              </Connect(Link)>
-            </li>
             <li>
               <Connect(Link)
                 to={
                   Object {
                     "description": Object {
                       "other": Array [
-                        "release_notes",
+                        "about",
+                        "interproscan",
                       ],
                     },
                   }
                 }
               >
-                Release notes
+                About InterProScan
               </Connect(Link)>
             </li>
             <li>
@@ -81,6 +111,68 @@ exports[`<Documentation /> should render 1`] = `
                 />
                  
                 InterProScan Wiki
+              </Connect(Link)>
+            </li>
+          </ul>
+        </div>
+        <div
+          className="flex-box"
+        >
+          <span
+            className="icon icon-common xl"
+            data-icon=""
+          />
+          <h5>
+            Technical specs
+          </h5>
+          <ul>
+            <li>
+              <Connect(Link)
+                className="ext"
+                href="https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
+                target="_blank"
+              >
+                <span
+                  className="icon icon-common"
+                  data-icon=""
+                />
+                 
+                General API documentation
+              </Connect(Link)>
+            </li>
+            <li>
+              <Connect(Link)
+                href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/"
+              >
+                Swagger API documentation
+              </Connect(Link)>
+            </li>
+            <li>
+              <Connect(Link)
+                to={
+                  Object {
+                    "description": Object {
+                      "main": Object {
+                        "key": "result",
+                      },
+                      "result": Object {
+                        "type": "download",
+                      },
+                    },
+                    "hash": "/",
+                  }
+                }
+              >
+                Code snippet generator
+              </Connect(Link)>
+            </li>
+            <li>
+              <Connect(Link)
+                className="ext"
+                href="//www.ebi.ac.uk/Tools/webservices/"
+                target="_blank"
+              >
+                Web services
               </Connect(Link)>
             </li>
             <li>
@@ -106,28 +198,33 @@ exports[`<Documentation /> should render 1`] = `
         <div
           className="flex-box"
         >
-          <Connect(Link)
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "help",
-                    "documentation",
-                    "publication",
-                  ],
-                },
-              }
-            }
-          >
-            <span
-              className="icon icon-common xl"
-              data-icon=""
-            />
-             
-            <h5>
-              Publications
-            </h5>
-          </Connect(Link)>
+          <span
+            className="icon icon-common xl"
+            data-icon=""
+          />
+           
+          <h5>
+            Publications
+          </h5>
+          <ul>
+            <li>
+              <Connect(Link)
+                to={
+                  Object {
+                    "description": Object {
+                      "other": Array [
+                        "help",
+                        "documentation",
+                        "publication",
+                      ],
+                    },
+                  }
+                }
+              >
+                List of InterPro publications
+              </Connect(Link)>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
