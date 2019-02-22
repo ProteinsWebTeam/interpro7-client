@@ -10,6 +10,7 @@ before_script:
   - sudo mkswap /swapfile
   - sudo swapon /swapfile
   - free -m
+  - npm i -g npm@6.7.0
 script:
   - npm run deploy:production
   - npm run report
