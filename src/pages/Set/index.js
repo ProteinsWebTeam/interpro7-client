@@ -369,7 +369,7 @@ class List extends PureComponent {
                 <SetCard data={data} search={search.search} entryDB={dbE} />
               )}
             </Card>
-            <SearchBox>Search entry sets</SearchBox>
+            <SearchBox loading={isStale}>Search entry sets</SearchBox>
             <Column
               dataKey="accession"
               // eslint-disable-next-line camelcase

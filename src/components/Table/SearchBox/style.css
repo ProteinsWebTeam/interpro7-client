@@ -1,3 +1,5 @@
+@import '../../../styles/colors.css';
+
 .table-filter {
   line-height: 0;
   position: relative;
@@ -5,7 +7,35 @@
 
 .filter-box {
   display: inline-block;
+  padding-bottom: 2px;
 }
+.filter-box.loading {
+  background-size: 100% 2px;
+  background: linear-gradient(
+      90deg,
+      transparent 20%,
+      var(--colors-tag) 30%,
+      var(--colors-tag) 70%,
+      transparent 80%
+    )
+    25% 100%;
+  animation: border-dance 1s infinite linear;
+}
+@keyframes border-dance {
+  0% {
+    background-size: 75% 2px;
+    background-position: 40% 100%;
+  }
+  50% {
+    background-size: 100% 2px;
+    background-position: 25% 100%;
+  }
+  100% {
+    background-size: 75% 2px;
+    background-position: 40% 100%;
+  }
+}
+
 .filter-box ::-webkit-input-placeholder {
   color: #aeaeae;
 }

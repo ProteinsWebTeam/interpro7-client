@@ -363,7 +363,7 @@ class List extends PureComponent {
                 />
               )}
             </Card>
-            <SearchBox>Search organism</SearchBox>
+            <SearchBox loading={isStale}>Search organism</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

@@ -500,7 +500,7 @@ class List extends PureComponent {
                 <EntryCard data={data} search={search.search} entryDB={db} />
               )}
             </Card>
-            <SearchBox>Search entries</SearchBox>
+            <SearchBox loading={isStale}>Search entries</SearchBox>
             {db === 'InterPro' && (
               <Column
                 dataKey="type"
