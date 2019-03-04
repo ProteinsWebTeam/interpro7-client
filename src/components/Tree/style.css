@@ -1,4 +1,5 @@
 @import '../../styles/timing.css';
+@import '../../styles/colors.css';
 
 .toggle {
   position: absolute;
@@ -22,5 +23,16 @@
 
   &:not(.in-path) {
     opacity: 0.5;
+  }
+  & circle {
+    fill: var(--colors-lightgray);
+    cursor: crosshair;
+  }
+  &:hover circle {
+    fill: var(--colors-gray);
+  }
+  & text:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
 }

@@ -14,6 +14,7 @@ import fisheyeOn from 'EBI-Icon-fonts/source/common/font-awesome/solid/bullseye.
   data?: Object,
   focused?: string,
   changeFocus?: string => any,
+  labelClick?: string => any,
   hideToggle?: boolean,
   initialFisheye?: boolean,
 }; */
@@ -31,6 +32,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     data: T.object,
     focused: T.string,
     changeFocus: T.func,
+    labelClick: T.func,
     hideToggle: T.bool,
     initialFisheye: T.bool,
   };
@@ -47,6 +49,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     this._vis = new TaxonomyVisualisation(undefined, {
       initialMaxNodes: +Infinity,
       fisheye,
+      fixedNodeSize: 5,
       classnames: {
         inPath: styles['in-path'],
         node: styles.node,
@@ -54,6 +57,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     });
 
     this._vis.addEventListener('focus', this._handleFocus);
+    this._vis.addEventListener('click', this._handleLabelClick);
     this._loadingVis = false;
     this._ref = React.createRef();
 
@@ -87,6 +91,13 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
 
   _handleFocus = ({ detail: { id } }) => {
     if (!this._loadingVis && this.props.changeFocus) this.props.changeFocus(id);
+  };
+  _handleLabelClick = evt => {
+    const {
+      detail: { id },
+    } = evt;
+    if (!this._loadingVis && this.props.labelClick) this.props.labelClick(id);
+    else this._handleFocus(evt);
   };
 
   _populateData = (data, focused) => {
