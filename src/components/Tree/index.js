@@ -4,6 +4,7 @@ import T from 'prop-types';
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import styles from './style.css';
 
@@ -108,18 +109,27 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
   render() {
     return (
       <>
-        {this.props.hideToggle ? null : (
-          <span className={styles.toggle}>
-            <Tooltip title="toggle fisheye view">
-              <button onClick={this._handleClick}>
-                <img
-                  src={this.state.fisheye ? fisheyeOff : fisheyeOn}
-                  alt="toggle-fisheye"
-                />
-              </button>
-            </Tooltip>
+        <div className={styles.buttons}>
+          <span className={styles.fullscreen}>
+            <FullScreenButton
+              element={this._ref.current}
+              tooltip="View the taxonomy tree in full screen mode"
+            />
           </span>
-        )}
+          {this.props.hideToggle ? null : (
+            <span>
+              <Tooltip title="toggle fisheye view">
+                <button onClick={this._handleClick}>
+                  <img
+                    src={this.state.fisheye ? fisheyeOff : fisheyeOn}
+                    alt="toggle-fisheye"
+                  />
+                </button>
+              </Tooltip>
+            </span>
+          )}
+        </div>
+
         <div
           style={{
             width: '100%',
