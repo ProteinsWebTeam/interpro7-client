@@ -115,7 +115,12 @@ class SummaryCounterProteome extends PureComponent {
             }}
             disabled={!entries}
           >
-            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+            <div className={f('icon-wrapper')}>
+              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+              {entries !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{entries}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
@@ -143,7 +148,12 @@ class SummaryCounterProteome extends PureComponent {
             }}
             disabled={!proteins}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x50;"
+            >
+              {proteins !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {' '}
@@ -172,7 +182,12 @@ class SummaryCounterProteome extends PureComponent {
             }}
             disabled={!structures}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x73;"
+            >
+              {structures !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{structures}</NumberComponent>{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
@@ -186,21 +201,9 @@ const ProteomeCard = ({ data, search, entryDB }) => (
   <>
     <div className={f('card-header')}>
       <div className={f('card-image')}>
-        <Link
-          to={{
-            description: {
-              main: { key: 'proteome' },
-              proteome: {
-                db: data.metadata.source_database,
-                accession: `${data.metadata.accession}`,
-              },
-            },
-          }}
-        >
-          {data.metadata && data.metadata.lineage && (
-            <SpeciesIcon lineage={data.metadata.lineage} />
-          )}
-        </Link>
+        {data.metadata && data.metadata.lineage && (
+          <SpeciesIcon lineage={data.metadata.lineage} />
+        )}
       </div>
       <div className={f('card-title')}>
         <h6>
@@ -233,7 +236,7 @@ const ProteomeCard = ({ data, search, entryDB }) => (
     <div className={f('card-footer')}>
       <div>
         <HighlightedText
-          text={(data.metadata.accession || '').toUpperCase()}
+          text={data.metadata.accession || ''}
           textToHighlight={search}
         />
       </div>
@@ -360,7 +363,7 @@ class List extends PureComponent {
                 />
               )}
             </Card>
-            <SearchBox>Search organism</SearchBox>
+            <SearchBox loading={isStale}>Search organism</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
@@ -383,7 +386,7 @@ class List extends PureComponent {
                     processData={schemaProcessDataTableRow}
                   />
                   <HighlightedText
-                    text={accession.toUpperCase()}
+                    text={accession}
                     textToHighlight={search.search}
                   />
                 </Link>

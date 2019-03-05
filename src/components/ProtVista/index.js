@@ -28,24 +28,9 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import { requestFullScreen } from '../../utils/fullscreen';
 
 const f = foundationPartial(ipro, local, fonts);
-
-const requestFullScreen = element => {
-  if (!element) return;
-  if ('requestFullscreen' in element) {
-    element.requestFullscreen();
-  }
-  if ('webkitRequestFullscreen' in element) {
-    element.webkitRequestFullscreen();
-  }
-  if ('mozRequestFullScreen' in element) {
-    element.mozRequestFullScreen();
-  }
-  if ('msRequestFullscreen' in element) {
-    element.msRequestFullscreen();
-  }
-};
 
 const webComponents = [];
 
@@ -154,6 +139,7 @@ class ProtVista extends Component {
           type: d.type || 'entry',
           residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
           chain: d.chain,
+          protein: d.protein,
         }));
         const children = d.children
           ? d.children.map(child => ({

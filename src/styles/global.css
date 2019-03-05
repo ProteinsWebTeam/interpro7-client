@@ -1,3 +1,4 @@
+/*smoothly animate scroll position used on entry overview - not supported on IE and Edge*/
 html {
   scroll-behavior: smooth;
 }

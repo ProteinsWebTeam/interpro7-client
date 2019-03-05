@@ -7,6 +7,7 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
+import CurrentVersion from 'components/home/CurrentVersion';
 
 // Functions
 import { schedule } from 'timing-functions/src';
@@ -441,6 +442,7 @@ class Home extends PureComponent {
             <div className={f('intro-wrapper')}>
               <div className={f('intro-fig')} data-testid="intro-fig">
                 <InterProGraphicAnim />
+                <CurrentVersion />
               </div>
               <div className={f('intro-content')} data-testid="intro-content">
                 <h3>Classification of protein families</h3>
@@ -574,30 +576,25 @@ class Home extends PureComponent {
                 // LiteMol
               }
               <div className={f('flex-card')}>
-                <div className={f('card-image', 'image-tool-litemol')}>
+                <div className={f('card-image', 'image-tool-ngl')}>
                   <div className={f('card-tag', 'tag-tool')}>Library</div>
                 </div>
 
                 <div className={f('card-content')}>
                   <div className={f('card-title')}>
                     <h4>
-                      <Link
-                        href="//webchemdev.ncbr.muni.cz/Litemol/"
-                        target="_blank"
-                      >
-                        LiteMol structure viewer
-                      </Link>
+                      <Link href="//nglviewer.org" target="_blank" />
                     </h4>
                   </div>
                   <div className={f('card-description')}>
-                    Visualise protein structures using LiteMol, a powerful and
-                    blazing-fast tool for handling 3D macromolecular data in the
-                    browser.
+                    NGL Viewer is a collection of tools for web-based molecular
+                    graphics. WebGL is employed to display molecules like
+                    proteins and DNA/RNA with a variety of representations.
                   </div>
                 </div>
 
                 <div className={f('card-more')}>
-                  <Link href="//github.com/dsehnal/litemol" target="_blank">
+                  <Link href="//github.com/arose/ngl" target="_blank">
                     <div
                       className={f(
                         'icon',
@@ -613,10 +610,7 @@ class Home extends PureComponent {
                     </div>
                   </Link>
 
-                  <Link
-                    href="//webchemdev.ncbr.muni.cz/Litemol/"
-                    target="_blank"
-                  >
+                  <Link href="//nglviewer.org/" target="_blank">
                     <div
                       className={f(
                         'button-more',

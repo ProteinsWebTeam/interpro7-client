@@ -98,7 +98,6 @@ class Button extends PureComponent {
             href={blobURL || url}
             disabled={downloading || count > HARD_LIMIT}
             className={f('link', { downloading, failed })}
-            target="_blank"
             onClick={downloading || successful ? undefined : handleClick}
             data-url={url}
             data-type={fileType}
@@ -129,6 +128,7 @@ class File extends PureComponent {
   static propTypes = {
     api: T.object.isRequired,
     entryDescription: T.object.isRequired,
+    customLocationDescription: T.object,
     downloadURL: T.func.isRequired,
     fileType: T.oneOf(['accession', 'fasta']),
     count: T.number,

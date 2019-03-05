@@ -15,6 +15,10 @@ import stuck from './stuck';
 |}; */
 /*:: import type { State } from 'reducers'; */
 
-export default combineReducers({ emblMapNav, sideNav, stuck });
+export default (combineReducers({
+  emblMapNav,
+  sideNav,
+  stuck,
+}) /*: (UI | void, any) => UI */);
 
 export const uiSelector = (state /*: State */) => state.ui;

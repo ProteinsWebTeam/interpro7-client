@@ -158,7 +158,12 @@ class SummaryCounterOrg extends PureComponent {
             }}
             disabled={!entries}
           >
-            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+            <div className={f('icon-wrapper')}>
+              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+              {entries !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{entries}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('entry', entries)}
@@ -186,7 +191,12 @@ class SummaryCounterOrg extends PureComponent {
             }}
             disabled={!proteins}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x50;"
+            >
+              {proteins !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {' '}
@@ -215,7 +225,12 @@ class SummaryCounterOrg extends PureComponent {
             }}
             disabled={!structures}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x73;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x73;"
+            >
+              {structures !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{structures}</NumberComponent>{' '}
             <span className={f('label-number')}>structures</span>
           </Link>
@@ -239,7 +254,16 @@ class SummaryCounterOrg extends PureComponent {
             }}
             disabled={!proteomes}
           >
-            <div className={f('icon', 'icon-common', 'icon-count-proteome')} />
+            <div
+              className={f(
+                'icon',
+                'icon-common',
+                'icon-count-proteome',
+                'icon-wrapper',
+              )}
+            >
+              {proteomes !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteomes}</NumberComponent>{' '}
             <span className={f('label-number')}>proteomes</span>
           </Link>
@@ -265,21 +289,9 @@ const TaxonomyCard = ({ data, search, entryDB }) => (
   <>
     <div className={f('card-header')}>
       <div className={f('card-image')}>
-        <Link
-          to={{
-            description: {
-              main: { key: 'taxonomy' },
-              taxonomy: {
-                db: data.metadata.source_database,
-                accession: `${data.metadata.accession}`,
-              },
-            },
-          }}
-        >
-          {data.extra_fields && data.extra_fields.lineage && (
-            <SpeciesIcon lineage={data.extra_fields.lineage} />
-          )}
-        </Link>
+        {data.extra_fields && data.extra_fields.lineage && (
+          <SpeciesIcon lineage={data.extra_fields.lineage} />
+        )}
       </div>
       <div className={f('card-title')}>
         <h6>
@@ -421,7 +433,7 @@ class List extends PureComponent {
                 />
               )}
             </Card>
-            <SearchBox>Search taxonomy</SearchBox>
+            <SearchBox loading={isStale}>Search taxonomy</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
@@ -444,7 +456,7 @@ class List extends PureComponent {
                     processData={schemaProcessDataTableRow}
                   />
                   <HighlightedText
-                    text={accession.toUpperCase()}
+                    text={accession}
                     textToHighlight={search.search}
                   />
                 </Link>

@@ -1,0 +1,43 @@
+@import '../../../styles/colors.css';
+@import '../../../styles/fonts.css';
+
+.banner {
+  display: flex;
+  margin-bottom: 2em;
+  padding: 1em;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 85, 158, 0.9),
+    rgba(45, 174, 193, 0.5),
+    rgba(0, 85, 158, 0.6)
+  );
+  color: var(--colors-dark);
+
+  & .image-tool-ipscan {
+    min-width: 25%;
+    height: 8em;
+    margin-right: 1em;
+    background-color: transparent;
+  }
+}
+
+.download {
+  text-align: center;
+  & .metadata {
+    font-family: var(--fonts-system);
+    font-size: 0.8em;
+  }
+  & a {
+    margin-bottom: 0.2em;
+  }
+}
+.cols {
+  display: flex;
+  justify-content: space-between;
+  & div {
+    padding: 0.5em;
+    & header {
+      font-weight: bold;
+    }
+  }
+}

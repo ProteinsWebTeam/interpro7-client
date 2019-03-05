@@ -3,21 +3,14 @@
   width: 100%;
 }
 
-.structure-placeholder {
-  width: 100%;
-  height: 50vh;
-}
 .structure-viewer {
-  width: 100%;
-  height: 50vh;
   position: relative;
 }
 
 .structure-viewer-select {
   max-width: 400px;
-  position: absolute;
   bottom: 0.5rem;
-  fontsize: 90%;
+  font-size: 90%;
   left: 0;
   margin: 0;
 }
@@ -35,10 +28,20 @@
   display: block;
   -webkit-box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.3);
-  width: 30%;
+  width: 40%;
   height: 30vh;
 
   & .structure-viewer-select {
     left: 1rem;
   }
+}
+.structure-viewer.is-stuck.is-minimized {
+}
+.structure-icon {
+  font-size: 1.5em;
+  margin: 4px;
+}
+
+.is-stuck .structure-icon {
+  font-size: 1em;
 }

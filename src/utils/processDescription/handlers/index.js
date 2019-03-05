@@ -12,11 +12,12 @@ import { get, set } from 'lodash-es';
   'result'
 ); */
 
-/*:: export type Description = {|
-  main: {|
+/*:: export type DescriptionMain = {|
     key: ?PossibleMain,
     numberOfFilters: number,
-  |},
+|} */
+/*:: export type Description = {|
+  main: DescriptionMain,
   entry: {|
     isFilter: ?boolean,
     integration: ?string,
@@ -164,12 +165,12 @@ const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
 export const setDBs /*: Set<Object> */ = new Set([
   {
     name: 'pfam',
-    re: /^cl[0-9]{4}$/,
+    re: /^[Cc][lL][0-9]{4}$/,
     url_template: 'http://pfam.xfam.org/clan/{id}',
   },
   {
     name: 'cdd',
-    re: /^cl[0-9]{5}$/,
+    re: /^[Cc][lL][0-9]{5}$/,
     url_template:
       'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={id}',
   },
@@ -548,7 +549,7 @@ export const searchTypeHandler /*: Handler */ = handlerConstructor({
     value: ['search', 'type'],
   },
   regexp: {
-    value: /^(text|sequence)$/i,
+    value: /^(text|sequence|ida)$/i,
   },
 });
 

@@ -368,6 +368,24 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
       name: 'Signature',
     },
   ],
+  [
+    'alignments',
+    {
+      to(customLocation) {
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key: 'set' },
+            set: {
+              ...customLocation.description.set,
+              detail: 'alignments',
+            },
+          },
+        };
+      },
+      name: 'Alignments',
+    },
+  ],
   // [
   //   'proteome',
   //   {

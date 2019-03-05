@@ -51,10 +51,10 @@ export const findStart = (centerOfHighlight /*: number */) => (
 
 export const location2html = (
   locations /*: Array<Object> */,
-  accession /*: String */,
+  accession /*: string */,
 ) => {
   let text = '';
-  if (accession) text = `<b>${(accession || '').toUpperCase()}</b><br/>`;
+  if (accession) text = `<b>${accession}</b><br/>`;
   text += `${locations
     .map(
       loc =>

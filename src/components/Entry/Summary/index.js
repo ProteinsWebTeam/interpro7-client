@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
 import { partition } from 'lodash-es';
 
@@ -28,7 +28,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, theme, ipro, local);
 const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
 
 const description2IDs = description =>
-  description.reduce(
+  (description || []).reduce(
     (acc, part) => [
       ...acc,
       ...(part.match(/"(PUB\d+)"/gi) || []).map(t =>
@@ -110,11 +110,9 @@ const SidePanel = ({ metadata, dbInfo }) => (
             <Link
               className={f('ext')}
               target="_blank"
-              href={getUrlFor(metadata.source_database)(
-                metadata.accession.toUpperCase(),
-              )}
+              href={getUrlFor(metadata.source_database)(metadata.accession)}
             >
-              View {metadata.accession.toUpperCase()} in{' '}
+              View {metadata.accession} in{' '}
               {(dbInfo && dbInfo.name) || metadata.source_database}
             </Link>
           </li>
@@ -146,15 +144,15 @@ SidePanel.propTypes = {
 
 const OtherSections = ({ metadata, citations: { included, extra } }) => (
   <>
-    {!Object.keys(metadata.go_terms).length ||
+    {!Object.keys(metadata.go_terms || []).length ||
     metadata.source_database.toLowerCase() !== 'interpro' ? null : (
       <GoTerms
-        terms={metadata.go_terms}
+        terms={metadata.go_terms || []}
         type="entry"
         db={metadata.source_database}
       />
     )}
-    {Object.keys(metadata.literature).length ? (
+    {Object.keys(metadata.literature || []).length ? (
       <section id="references">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}>
@@ -185,75 +183,98 @@ OtherSections.propTypes = {
   }),
 };
 
-const OverlappingEntries = ({ metadata, overlaps }) => (
-  <div className={f('margin-bottom-large')}>
-    <h4>
-      {metadata.type === 'homologous_superfamily'
-        ? 'Overlapping entries'
-        : 'Overlapping homologous superfamilies'}
-      <Tooltip title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75.">
-        &nbsp;
-        <span
-          className={f('small', 'icon', 'icon-common', 'font-s')}
-          data-icon="&#xf129;"
-        />
-      </Tooltip>
-    </h4>
-    {overlaps.map(ov => (
-      <div key={ov.accession} className={f('list-items')}>
-        <interpro-type type={ov.type.replace('_', ' ')} dimension="1.2em" />
-        <Link
-          to={{
-            description: {
-              main: { key: 'entry' },
-              entry: {
-                db: 'InterPro',
-                accession: ov.accession,
+const OverlappingEntries = ({ metadata, overlaps }) => {
+  const [showAllOverlappingEntries, setShowAllOverlappingEntries] = useState(
+    false,
+  );
+  let _overlaps = overlaps;
+  if (!showAllOverlappingEntries)
+    _overlaps = metadata.overlaps_with.slice(
+      0,
+      MAX_NUMBER_OF_OVERLAPPING_ENTRIES,
+    );
+
+  return (
+    <div className={f('margin-bottom-large')}>
+      <h4>
+        {metadata.type === 'homologous_superfamily'
+          ? 'Overlapping entries'
+          : 'Overlapping homologous superfamilies'}
+        <Tooltip title="The relationship between homologous superfamilies and other InterPro entries is calculated by analysing the overlap between matched sequence sets. An InterPro entry is considered related to a homologous superfamily if its sequence matches overlap (i.e., the match positions fall within the homologous superfamily boundaries) and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75.">
+          &nbsp;
+          <span
+            className={f('small', 'icon', 'icon-common', 'font-s')}
+            data-icon="&#xf129;"
+          />
+        </Tooltip>
+      </h4>
+      {_overlaps.map(ov => (
+        <div key={ov.accession} className={f('list-items')}>
+          <interpro-type type={ov.type.replace('_', ' ')} dimension="1.2em" />
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: 'InterPro',
+                  accession: ov.accession,
+                },
               },
-            },
-          }}
+            }}
+          >
+            {ov.name}
+          </Link>{' '}
+          <small>({ov.accession})</small>
+        </div>
+      ))}
+      {Object.keys(metadata.overlaps_with || []).length >
+        MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
+        <button
+          className={f('button', 'hollow', 'secondary', 'margin-bottom-none')}
+          onClick={() =>
+            setShowAllOverlappingEntries(!showAllOverlappingEntries)
+          }
         >
-          {ov.name}
-        </Link>{' '}
-        <small>({ov.accession.toUpperCase()})</small>
-      </div>
-    ))}
-    {Object.keys(metadata.overlaps_with).length >
-      MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
-      <button
-        className={f('button', 'hollow', 'secondary', 'margin-bottom-none')}
-        onClick={() =>
-          this.setState({
-            showAllOverlappingEntries: !this.state.showAllOverlappingEntries,
-          })
-        }
-      >
-        Show{' '}
-        {this.state.showAllOverlappingEntries ? (
-          <span>
-            Less{' '}
-            <i
-              className={f('icon', 'icon-common', 'font-sm')}
-              data-icon="&#xf102;"
-            />
-          </span>
-        ) : (
-          <span>
-            More{' '}
-            <i
-              className={f('icon', 'icon-common', 'font-sm')}
-              data-icon="&#xf103;"
-            />
-          </span>
-        )}
-      </button>
-    )}
-  </div>
-);
+          Show{' '}
+          {showAllOverlappingEntries ? (
+            <span>
+              Less{' '}
+              <i
+                className={f('icon', 'icon-common', 'font-sm')}
+                data-icon="&#xf102;"
+              />
+            </span>
+          ) : (
+            <span>
+              More{' '}
+              <i
+                className={f('icon', 'icon-common', 'font-sm')}
+                data-icon="&#xf103;"
+              />
+            </span>
+          )}
+        </button>
+      )}
+    </div>
+  );
+};
 OverlappingEntries.propTypes = {
   metadata: T.object.isRequired,
   overlaps: T.arrayOf(T.object),
 };
+
+const Hierarchy = (hierarchy, type, accession) =>
+  hierarchy &&
+  Object.keys(hierarchy).length &&
+  hierarchy.children &&
+  hierarchy.children.length ? (
+    <div className={f('margin-bottom-large')}>
+      <h4 className={f('first-letter-cap')}>
+        {type.replace('_', ' ').toLowerCase()} relationships
+      </h4>
+      <InterProHierarchy accession={accession} hierarchy={hierarchy} />
+    </div>
+  ) : null;
 
 /* :: type Props = {
     data: {
@@ -286,10 +307,6 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     dbInfo: T.object.isRequired,
     loading: T.bool.isRequired,
   };
-  constructor(props) {
-    super(props);
-    this.state = { showAllOverlappingEntries: false };
-  }
   render() {
     const {
       data: { metadata },
@@ -297,24 +314,19 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
     const citations = description2IDs(metadata.description);
-    const desc = metadata.description.reduce((e, acc) => e + acc, '');
+    const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
     const [included, extra] = partition(
-      Object.entries(metadata.literature),
+      Object.entries(metadata.literature || {}),
       ([id]) => citations.includes(id),
     );
     included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
-    let overlaps = metadata.overlaps_with;
+    const overlaps = metadata.overlaps_with;
     if (metadata.overlaps_with) {
       metadata.overlaps_with.sort((a, b) => {
         if (a.type > b.type) return 1;
         if (a.type < b.type) return -1;
         return a.accession > b.accession ? 1 : -1;
       });
-      if (!this.state.showAllOverlappingEntries)
-        overlaps = metadata.overlaps_with.slice(
-          0,
-          MAX_NUMBER_OF_OVERLAPPING_ENTRIES,
-        );
     }
     return (
       <div className={f('sections')}>
@@ -334,24 +346,14 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               {overlaps && Object.keys(overlaps).length ? (
                 <OverlappingEntries metadata={metadata} overlaps={overlaps} />
               ) : null}
-              {metadata.hierarchy &&
-              Object.keys(metadata.hierarchy).length &&
-              metadata.hierarchy.children &&
-              metadata.hierarchy.children.length ? (
-                <div className={f('margin-bottom-large')}>
-                  <h4 className={f('first-letter-cap')}>
-                    {metadata.type.replace('_', ' ').toLowerCase()}{' '}
-                    relationships
-                  </h4>
-                  <InterProHierarchy
-                    accession={metadata.accession}
-                    hierarchy={metadata.hierarchy}
-                  />
-                </div>
-              ) : null}
+              <Hierarchy
+                hierarchy={metadata.hierarchy}
+                accession={metadata.accession}
+                type={metadata.type}
+              />
 
               {// doesn't work for some HAMAP as they have enpty <P> tag
-              Object.keys(metadata.description).length ? (
+              Object.keys(metadata.description || []).length ? (
                 <>
                   <h4>Description</h4>
                   <Description

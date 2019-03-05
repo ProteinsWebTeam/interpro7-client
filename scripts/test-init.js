@@ -1,4 +1,3 @@
-// @flow
 import puppeteer from 'puppeteer';
 import { sleep } from 'timing-functions';
 import server from './serve';

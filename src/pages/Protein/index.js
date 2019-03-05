@@ -74,8 +74,12 @@ class SummaryCounterProteins extends PureComponent {
               },
             }}
           >
-            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-
+            <div className={f('icon-wrapper')}>
+              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+              {entries !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{entries}</NumberComponent>
 
             <span className={f('label-number')}>
@@ -104,7 +108,12 @@ class SummaryCounterProteins extends PureComponent {
             }}
             disabled={!structures}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="s"
+            >
+              {structures !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{structures}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
@@ -133,7 +142,9 @@ class SummaryCounterProteins extends PureComponent {
               }}
               disabled={!sets}
             >
-              <div className={f('icon', 'icon-count-set')} />{' '}
+              <div className={f('icon', 'icon-count-set', 'icon-wrapper')}>
+                {sets !== 0 && <div className={f('icon-over-anim')} />}
+              </div>
               <NumberComponent abbr>{sets}</NumberComponent>
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
@@ -202,7 +213,7 @@ const ProteinCard = ({ data, search, entryDB }) => (
       </Tooltip>
       <div>
         <HighlightedText
-          text={(data.metadata.accession || '').toUpperCase()}
+          text={data.metadata.accession || ''}
           textToHighlight={search}
         />
       </div>
@@ -325,7 +336,7 @@ class List extends PureComponent {
               )}
             </Card>
             <PageSizeSelector />
-            <SearchBox>Search proteins</SearchBox>
+            <SearchBox loading={isStale}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
@@ -352,7 +363,7 @@ class List extends PureComponent {
                     className={f('acc-row')}
                   >
                     <HighlightedText
-                      text={accession.toUpperCase()}
+                      text={accession || ''}
                       textToHighlight={search.search}
                     />
                   </Link>

@@ -22,6 +22,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { formatISODate } from 'utils/date';
+import VersionBadge from 'components/VersionBadge';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, local, ipro);
 
@@ -42,6 +43,10 @@ const ReleaseNotesSelectorWithData = ({
             }}
             disabled={version === current}
           >
+            <VersionBadge
+              version={version}
+              side={version === current ? 30 : 20}
+            />
             InterPro {version}{' '}
             <small>
               • <time dateTime={date}>{formatISODate(date)}</time>
@@ -206,18 +211,17 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
                 </NumberComponent>{' '}
                 InterPro entries.
               </li>
-              {updates &&
-                !!updates.length && (
-                  <li>
-                    An update to{' '}
-                    {updates.map(({ name, recently_integrated: r }) => (
-                      <span key={name}>
-                        {name} ({r.length})
-                      </span>
-                    ))}
-                    .
-                  </li>
-                )}
+              {updates && !!updates.length && (
+                <li>
+                  An update to{' '}
+                  {updates.map(({ name, recently_integrated: r }) => (
+                    <span key={name}>
+                      {name} ({r.length})
+                    </span>
+                  ))}
+                  .
+                </li>
+              )}
               <li>
                 Integration of{' '}
                 <NumberComponent noTitle noAnimation>
