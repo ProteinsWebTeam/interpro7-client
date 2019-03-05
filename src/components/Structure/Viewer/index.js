@@ -14,6 +14,7 @@ import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 import { intersectionObserver as intersectionObserverPolyfill } from 'utils/polyfills';
 
 import ProtVistaForStructure from './ProtVistaForStructures';
+import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 // import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -569,21 +570,20 @@ class StructureView extends PureComponent /*:: <Props> */ {
                     data-icon="}"
                     title="Reset image"
                   />
-                  <button
-                    onClick={this._toggleSplitView}
-                    data-icon={isSplitScreen ? 'G' : '\uF0DB'}
-                    title={
+                  <FullScreenButton
+                    handleFullScreen={this._toggleSplitView}
+                    className={f('structure-icon', 'icon', 'icon-common')}
+                    tooltip={
                       isSplitScreen ? 'Exit full screen' : 'Split full screen'
                     }
-                    className={f('structure-icon', 'icon', 'icon-common')}
+                    dataIcon={isSplitScreen ? 'G' : '\uF0DB'}
                   />
 
                   {isSplitScreen ? null : (
-                    <button
-                      data-icon="F"
-                      title={'Full screen'}
-                      onClick={this._toggleStructureFullScreen}
+                    <FullScreenButton
                       className={f('structure-icon', 'icon', 'icon-common')}
+                      handleFullScreen={this._toggleStructureFullScreen}
+                      tooltip="View the structure in full screen mode"
                     />
                   )}
                   {isStuck && (
