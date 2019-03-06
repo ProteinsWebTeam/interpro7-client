@@ -55,6 +55,8 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
         inPath: styles['in-path'],
         node: styles.node,
       },
+      enableZooming: true,
+      // shouldCorrectNodesOutside: true,
     });
 
     this._vis.addEventListener('focus', this._handleFocus);
