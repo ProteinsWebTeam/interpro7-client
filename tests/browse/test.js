@@ -29,6 +29,7 @@ describe('tests', () => {
       );
       expect(selection).not.toBeNull();
     }
+    console.log('Browse general: Expected tabs passed');
   });
 
   test('click-browse-page-entry-tab', async () => {
@@ -42,6 +43,7 @@ describe('tests', () => {
     ]);
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(expect.stringMatching(/interpro\/entry/));
+    console.log('Browse General: Entry tab passed');
   });
 
   test('click-browse-page-entry-interpro-filter', async () => {
@@ -57,6 +59,7 @@ describe('tests', () => {
     const url = await page.evaluate(() => window.location.href);
     const urlMatch = new RegExp(`interpro\/entry\/${interprodb}`, 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
+    console.log('Browse Entry: InterPro DB filter passed');
   });
 
   test('click-browse-page-entry-member-db-filters', async () => {
@@ -75,6 +78,7 @@ describe('tests', () => {
       const urlMatch = new RegExp(`interpro\/entry\/${memberdb}`, 'i');
       expect(url).toEqual(expect.stringMatching(urlMatch));
     }
+    console.log('Browse Entry: Member DB filters passed');
   });
 
   test('click-browse-page-entry-interpro-page-elements', async () => {
@@ -114,6 +118,7 @@ describe('tests', () => {
     //the default view is tabular
     const data_table = await page.waitForSelector('[data-testid="data-table"]');
     expect(data_table).not.toBeNull();
+    console.log('Browse Entry: InterPro DB page elements passed');
   });
 
   test('click-browse-page-entry-member-db-page-elements', async () => {
@@ -157,6 +162,7 @@ describe('tests', () => {
         '[data-testid="data-table"]'
       );
     }
+    console.log('Browse Entry: Member DB page elements passed');
   });
 
   test('click-browse-page-protein-tab', async () => {
@@ -170,19 +176,21 @@ describe('tests', () => {
     ]);
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(expect.stringMatching(/interpro\/protein/));
+    console.log('Browse General: Protein tab passed');
   });
 
   test('click-browse-page-protein-all-proteins-filter', async () => {
     //initial navigation to protein browse page
     const browseURL = `${homepage_url}protein/UniProt/entry/InterPro`;
-    const all_proteins = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
+    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
     await Promise.all([
       page.waitForNavigation(),
-      page.click(`[data-testid="memberdb-filter-${all_proteins}"]`),
+      page.click(`[data-testid="memberdb-filter-${all_items}"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
     const urlMatch = new RegExp(`interpro\/protein\/UniProt`, 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
+    console.log('Browse Protein: All proteins DB filter passed');
   });
 
   test('click-browse-page-protein-database-filters', async () => {
@@ -206,15 +214,16 @@ describe('tests', () => {
       );
       expect(url).toEqual(expect.stringMatching(urlMatch));
     }
+    console.log('Browse Protein: InterPro/Member DB filter passed');
   });
 
   test('click-browse-page-protein-all-proteins-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}protein/UniProt/entry/InterPro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-    const all_proteins = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
+    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
     await Promise.all([
-      page.click(`[data-testid="memberdb-filter-${all_proteins}"]`, {
+      page.click(`[data-testid="memberdb-filter-${all_itemss}"]`, {
         waitUntil: 'networkidle0',
       }),
     ]);
@@ -246,9 +255,14 @@ describe('tests', () => {
       '[data-testid="view-grid-button"]'
     );
     expect(grid_selector).not.toBeNull();
+    const tree_selector = await page.waitForSelector(
+      '[data-testid="view-tree-button"]'
+    );
+    expect(tree_selector).toBeNull();
     //the default view is tabular
     const data_table = await page.waitForSelector('[data-testid="data-table"]');
     expect(data_table).not.toBeNull();
+    console.log('Browse Protein: All proteins DB page elements passed');
   });
 
   test('click-browse-page-protein-databases-page-elements', async () => {
@@ -289,12 +303,19 @@ describe('tests', () => {
         '[data-testid="view-grid-button"]'
       );
       expect(grid_selector).not.toBeNull();
+      const tree_selector = await page.waitForSelector(
+        '[data-testid="view-tree-button"]'
+      );
+      expect(tree_selector).toBeNull();
       //the default view is tabular
       const data_table = await page.waitForSelector(
         '[data-testid="data-table"]'
       );
       expect(data_table).not.toBeNull();
     }
+    console.log(
+      'Browse Protein: All proteins InterPro/Member DB page elements passed'
+    );
   });
 
   test('click-browse-page-structure-tab', async () => {
@@ -308,19 +329,21 @@ describe('tests', () => {
     ]);
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(expect.stringMatching(/interpro\/structure/));
+    console.log('Browse General: Structure tab passed');
   });
 
   test('click-browse-page-structure-all-structures-filter', async () => {
-    //initial navigation to protein browse page
+    //initial navigation to structure browse page
     const browseURL = `${homepage_url}structure/PDB/entry/InterPro`;
-    const all_structures = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
+    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
     await Promise.all([
       page.waitForNavigation(),
-      page.click(`[data-testid="memberdb-filter-${all_structures}"]`),
+      page.click(`[data-testid="memberdb-filter-${all_items}"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
     const urlMatch = new RegExp(`interpro\/structure\/PDB`, 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
+    console.log('Browse Structure: All structure DB filter passed');
   });
 
   test('click-browse-page-structure-database-filters', async () => {
@@ -344,49 +367,18 @@ describe('tests', () => {
       );
       expect(url).toEqual(expect.stringMatching(urlMatch));
     }
+    console.log('Browse Structure: InterPro/Member DB filter passed');
   });
 
-  test('click-browse-page-structure-all-structures-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB/entry/InterPro`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-    const all_structures = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
-    await Promise.all([
-      page.waitForNavigation(),
-      page.click(`[data-testid="memberdb-filter-${all_structures}"]`),
-    ]);
-    const selection = await page.waitForSelector(
-      '[data-testid="filters-panel"]'
-    );
-    expect(selection).not.toBeNull();
-    const experiment_type = await page.waitForSelector(
-      '[data-testid="filterby-experiment_type"]'
-    );
-    expect(experiment_type).not.toBeNull();
-    const resolution = await page.waitForSelector(
-      '[data-testid="filterby-resolution_(å)"]'
-    );
-    expect(resolution).not.toBeNull();
-    const table_selector = await page.waitForSelector(
-      '[data-testid="view-table-button"]'
-    );
-    expect(table_selector).not.toBeNull();
-    const grid_selector = await page.waitForSelector(
-      '[data-testid="view-grid-button"]'
-    );
-    expect(grid_selector).not.toBeNull();
-    //the default view is tabular
-    const data_table = await page.waitForSelector('[data-testid="data-table"]');
-    expect(data_table).not.toBeNull();
-  });
-
-  test('click-browse-page-structure-database-filter-page-elements', async () => {
+  test('click-browse-page-structure-all-database-filter-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
+    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
     const databases = config.general.member_databases;
     databases.push(config.general.interpro);
+    databases.push(all_items); //the same filters are used for all db filter selections
     for (const db of databases) {
       //click member db filter
       await Promise.all([
@@ -414,12 +406,17 @@ describe('tests', () => {
         '[data-testid="view-grid-button"]'
       );
       expect(grid_selector).not.toBeNull();
+      const tree_selector = await page.waitForSelector(
+        '[data-testid="view-tree-button"]'
+      );
+      expect(tree_selector).toBeNull();
       //the default view is tabular
       const data_table = await page.waitForSelector(
         '[data-testid="data-table"]'
       );
       expect(data_table).not.toBeNull();
     }
+    console.log('Browse Structure: All/InterPro/Member DB page elements');
   });
 
   test('click-browse-page-taxonomy-tab', async () => {
@@ -433,6 +430,89 @@ describe('tests', () => {
     ]);
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(expect.stringMatching(/interpro\/taxonomy/));
+    console.log('Browse General: Taxonomy tab passed');
+    d;
+  });
+
+  test('click-browse-page-taxonomy-all-taxonomy-filter', async () => {
+    //initial navigation to taxonomy browse page
+    const browseURL = `${homepage_url}taxonomy/uniprot/entry/InterPro`;
+    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click(`[data-testid="memberdb-filter-${all_items}"]`),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    const urlMatch = new RegExp(`interpro\/taxonomy\/uniprot`, 'i');
+    expect(url).toEqual(expect.stringMatching(urlMatch));
+    console.log('Browse Taxonomy: All taxonomy DB filter passed');
+  });
+
+  test('click-browse-page-taxonomy-database-filters', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    const databases = config.general.member_databases;
+    databases.push(config.general.interpro);
+    for (const db of databases) {
+      //click member db filter
+      await Promise.all([
+        page.click(`[data-testid="memberdb-filter-${db}"]`, {
+          waitUntil: 'networkidle0',
+        }),
+      ]);
+      const url = await page.evaluate(() => window.location.href);
+      const urlMatch = new RegExp(
+        `interpro\/taxonomy\/uniprot\/entry\/${db}`,
+        'i'
+      );
+      expect(url).toEqual(expect.stringMatching(urlMatch));
+    }
+    console.log('Browse Taxonomy: All member DB filter passed');
+  });
+
+  test('click-browse-page-taxonomy-all-database-filter-page-elements', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
+    const databases = config.general.member_databases;
+    databases.push(config.general.interpro);
+    databases.push(all_items); //the same filters are used for all db filter selections
+    for (const db of databases) {
+      //click member db filter
+      await Promise.all([
+        page.click(`[data-testid="memberdb-filter-${db}"]`, {
+          waitUntil: 'networkidle0',
+        }),
+      ]);
+      const selection = await page.waitForSelector(
+        '[data-testid="filters-panel"]'
+      );
+      expect(selection).toBeNull();
+      const table_selector = await page.waitForSelector(
+        '[data-testid="view-table-button"]'
+      );
+      expect(table_selector).not.toBeNull();
+      const grid_selector = await page.waitForSelector(
+        '[data-testid="view-grid-button"]'
+      );
+      expect(grid_selector).not.toBeNull();
+      const tree_selector = await page.waitForSelector(
+        '[data-testid="view-tree-button"]'
+      );
+      expect(tree_selector).not.toBeNull();
+      //the default view is tabular
+      const data_table = await page.waitForSelector(
+        '[data-testid="data-table"]'
+      );
+      expect(data_table).not.toBeNull();
+    }
+    console.log(
+      'Browse Taxonomy: All/InterPro/Member DB taxonomy page elements passed'
+    );
   });
 
   test('click-browse-page-proteome-tab', async () => {
@@ -446,6 +526,88 @@ describe('tests', () => {
     ]);
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(expect.stringMatching(/interpro\/proteome/));
+    console.log('Browse General: Proteome tab passed');
+  });
+
+  test('click-browse-page-proteome-all-proteome-filter', async () => {
+    //initial navigation to proteome browse page
+    const browseURL = `${homepage_url}proteome/uniprot/entry/InterPro`;
+    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
+    await Promise.all([
+      page.waitForNavigation(),
+      page.click(`[data-testid="memberdb-filter-${all_items}"]`),
+    ]);
+    const url = await page.evaluate(() => window.location.href);
+    const urlMatch = new RegExp(`interpro\/proteome\/uniprot`, 'i');
+    expect(url).toEqual(expect.stringMatching(urlMatch));
+    console.log('Browse proteome: All proteome DB filter passed');
+  });
+
+  test('click-browse-page-proteome-database-filters', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}proteome/uniprot`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    const databases = config.general.member_databases;
+    databases.push(config.general.interpro);
+    for (const db of databases) {
+      //click member db filter
+      await Promise.all([
+        page.click(`[data-testid="memberdb-filter-${db}"]`, {
+          waitUntil: 'networkidle0',
+        }),
+      ]);
+      const url = await page.evaluate(() => window.location.href);
+      const urlMatch = new RegExp(
+        `interpro\/proteome\/uniprot\/entry\/${db}`,
+        'i'
+      );
+      expect(url).toEqual(expect.stringMatching(urlMatch));
+    }
+    console.log('Browse proteome: All member DB filter passed');
+  });
+
+  test('click-browse-page-proteome-all-database-filter-page-elements', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}proteome/uniprot`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
+    const databases = config.general.member_databases;
+    databases.push(config.general.interpro);
+    databases.push(all_items); //the same filters are used for all db filter selections
+    for (const db of databases) {
+      //click member db filter
+      await Promise.all([
+        page.click(`[data-testid="memberdb-filter-${db}"]`, {
+          waitUntil: 'networkidle0',
+        }),
+      ]);
+      const selection = await page.waitForSelector(
+        '[data-testid="filters-panel"]'
+      );
+      expect(selection).toBeNull();
+      const table_selector = await page.waitForSelector(
+        '[data-testid="view-table-button"]'
+      );
+      expect(table_selector).not.toBeNull();
+      const grid_selector = await page.waitForSelector(
+        '[data-testid="view-grid-button"]'
+      );
+      expect(grid_selector).not.toBeNull();
+      const tree_selector = await page.waitForSelector(
+        '[data-testid="view-tree-button"]'
+      );
+      expect(tree_selector).not.toBeNull();
+      //the default view is tabular
+      const data_table = await page.waitForSelector(
+        '[data-testid="data-table"]'
+      );
+      expect(data_table).not.toBeNull();
+    }
+    console.log(
+      'Browse Proteome: All/InterPro/Member DB proteome page elements passed'
+    );
   });
 
   test('click-browse-page-set-tab', async () => {
@@ -459,5 +621,6 @@ describe('tests', () => {
     ]);
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(expect.stringMatching(/interpro\/set/));
+    console.log('Browse General: Set tab passed');
   });
 });
