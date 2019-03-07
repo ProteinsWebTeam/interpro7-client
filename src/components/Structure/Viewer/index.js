@@ -493,17 +493,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return (
       <>
         <div ref={this._splitView}>
-          <div ref={this._structureSection}>
+          <div ref={this._structureSection} className={f('structure-wrapper')}>
             <div
               className={f('structure-viewer', {
                 'is-stuck': isStuck,
                 'is-minimized': isMinimized,
               })}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                height: 'auto',
-              }}
               ref={this._poppableViewer}
             >
               <ResizeObserverComponent
@@ -512,37 +507,18 @@ class StructureView extends PureComponent /*:: <Props> */ {
                   if (this.stage) this.stage.handleResize();
                 }}
                 measurements={['width', 'height']}
+                className={f('viewer-resizer')}
               >
-                {({ _w, h }) => {
-                  // override supplied width value as this causes a bug
-                  // in Firefox and Safari
-                  const width = 'auto';
-                  let height = h;
-                  if (!height) {
-                    height = '450px';
-                  }
+                {() => {
                   return (
                     <div
                       ref={this._structurevViewer}
-                      style={{
-                        width: width,
-                        height: height,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        display: isMinimized && isStuck ? 'none' : 'block',
-                      }}
+                      className={f('structure-viewer-ref')}
                     />
                   );
                 }}
               </ResizeObserverComponent>
-              <div
-                style={{
-                  width: 'auto',
-                  height: 'auto',
-                  display: 'inline-flex',
-                  justifyContent: 'space-between',
-                }}
-              >
+              <div className={f('viewer-control-bar')}>
                 {this.props.matches ? (
                   <EntrySelection
                     entryMap={entryMap}
@@ -552,11 +528,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 ) : null}
                 <div
                   ref={this._viewerControls}
-                  style={{
-                    whiteSpace: 'nowrap',
-                    overflow: 'visible',
-                    background: 'white',
-                  }}
+                  className={f('viewer-controls')}
                 >
                   <button
                     className={f('structure-icon', 'icon', 'icon-common')}
