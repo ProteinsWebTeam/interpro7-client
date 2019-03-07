@@ -4,10 +4,12 @@ import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
+import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 const f = foundationPartial(ebiGlobalStyles);
 
 const ProtVista = loadable({
@@ -73,6 +75,29 @@ const mergeData = secondaryData => {
   return entries;
 };
 
+const GoToProtVistaMenu = ({ entries }) => (
+  <div className={f('row')}>
+    <div className={f('column')}>
+      <DropDownButton label="Jump To" icon="&#xf124;">
+        <ul>
+          {entries.map((e, i) => (
+            <li key={i}>
+              <Link
+                to={customLocation => ({
+                  ...customLocation,
+                  hash: `protvista-${e.chain}-${e.protein.accession}`,
+                })}
+              >
+                Chain {e.chain} ({e.protein.accession})
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </DropDownButton>
+    </div>
+  </div>
+);
+
 const ProtVistaLoaded = ({ dataprotein, tracks }) => {
   if (dataprotein.loading) return <div>loading</div>;
   return <ProtVista protein={dataprotein.payload.metadata} data={tracks} />;
@@ -99,34 +124,43 @@ const includeProtein = accession =>
 
 const protvistaPerChainProtein = {};
 
-const EntriesOnStructure = ({ entries }) => (
-  <div className={f('row')}>
-    {mergeData(entries).map((e, i) => {
-      if (!protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`])
-        protvistaPerChainProtein[
-          `${e.chain}-${e.protein.accession}`
-        ] = includeProtein(e.protein.accession);
-      const ProtVistaPlusProtein =
-        protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`];
-      return (
-        <div key={i} className={f('columns')}>
-          <h4>
-            Chain {e.chain} <small>({e.protein.accession})</small>
-          </h4>
-          <ProtVistaPlusProtein
-            tracks={Object.entries(e.data).sort(([a], [b]) => {
-              if (a && a.toLowerCase() === 'chain') return -1;
-              if (b && b.toLowerCase() === 'chain') return 1;
-              return b ? b.localeCompare(a) : -1;
-            })}
-          />
-        </div>
-      );
-    })}
-  </div>
-);
+const EntriesOnStructure = ({ entries, showChainMenu = false }) => {
+  const merged = mergeData(entries);
+  return (
+    <>
+      {showChainMenu && merged.length > 1 && (
+        <GoToProtVistaMenu entries={merged} />
+      )}
+      <div className={f('row')}>
+        {merged.map((e, i) => {
+          if (!protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`])
+            protvistaPerChainProtein[
+              `${e.chain}-${e.protein.accession}`
+            ] = includeProtein(e.protein.accession);
+          const ProtVistaPlusProtein =
+            protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`];
+          return (
+            <div key={i} className={f('columns')}>
+              <h4 id={`protvista-${e.chain}-${e.protein.accession}`}>
+                Chain {e.chain} <small>({e.protein.accession})</small>
+              </h4>
+              <ProtVistaPlusProtein
+                tracks={Object.entries(e.data).sort(([a], [b]) => {
+                  if (a && a.toLowerCase() === 'chain') return -1;
+                  if (b && b.toLowerCase() === 'chain') return 1;
+                  return b ? b.localeCompare(a) : -1;
+                })}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+};
 EntriesOnStructure.propTypes = {
   entries: T.array.isRequired,
+  showChainMenu: T.bool,
 };
 
 export default EntriesOnStructure;
