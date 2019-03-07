@@ -114,9 +114,11 @@ const EntriesOnStructure = ({ entries }) => (
             Chain {e.chain} <small>({e.protein.accession})</small>
           </h4>
           <ProtVistaPlusProtein
-            tracks={Object.entries(e.data).sort(([a], [b]) =>
-              b ? b.localeCompare(a) : -1,
-            )}
+            tracks={Object.entries(e.data).sort(([a], [b]) => {
+              if (a && a.toLowerCase() === 'chain') return -1;
+              if (b && b.toLowerCase() === 'chain') return 1;
+              return b ? b.localeCompare(a) : -1;
+            })}
           />
         </div>
       );
