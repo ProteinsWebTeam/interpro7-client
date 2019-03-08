@@ -5,12 +5,14 @@ import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
-const f = foundationPartial(ebiGlobalStyles);
+const f = foundationPartial(ebiGlobalStyles, fonts);
 
 const ProtVista = loadable({
   loader: () =>
@@ -97,6 +99,9 @@ const GoToProtVistaMenu = ({ entries }) => (
     </div>
   </div>
 );
+GoToProtVistaMenu.propTypes = {
+  entries: T.arrayOf(T.object).isRequired,
+};
 
 const ProtVistaLoaded = ({ dataprotein, tracks }) => {
   if (dataprotein.loading) return <div>loading</div>;
@@ -122,10 +127,21 @@ const includeProtein = accession =>
     propNamespace: 'protein',
   })(ProtVistaLoaded);
 
+const tagChimericStructures = data => {
+  const proteinsPerChain = {};
+  for (const e of data) {
+    if (!(e.chain in proteinsPerChain)) proteinsPerChain[e.chain] = [];
+    proteinsPerChain[e.chain].push(e.protein.accession);
+  }
+  for (const e of data) {
+    if (proteinsPerChain[e.chain].length > 1) e.isChimeric = true;
+  }
+};
 const protvistaPerChainProtein = {};
 
 const EntriesOnStructure = ({ entries, showChainMenu = false }) => {
   const merged = mergeData(entries);
+  tagChimericStructures(merged);
   return (
     <>
       {showChainMenu && merged.length > 1 && (
@@ -142,7 +158,36 @@ const EntriesOnStructure = ({ entries, showChainMenu = false }) => {
           return (
             <div key={i} className={f('columns')}>
               <h4 id={`protvista-${e.chain}-${e.protein.accession}`}>
-                Chain {e.chain} <small>({e.protein.accession})</small>
+                Chain {e.chain}{' '}
+                <small>
+                  (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'protein' },
+                        protein: {
+                          db: 'uniprot',
+                          accession: e.protein.accession,
+                        },
+                      },
+                    }}
+                  >
+                    {(e.protein.accession || '').toUpperCase()}
+                  </Link>
+                  )
+                </small>
+                {e.isChimeric && (
+                  <Tooltip title="This chain maps to a Chimeric protein consisting of two or more proteins">
+                    <div className={f('tag')}>
+                      <span
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="&#xf129;"
+                        aria-label="This chain maps to a Chimeric protein consisting of two or more proteins"
+                      />{' '}
+                      Chimeric
+                    </div>
+                  </Tooltip>
+                )}
               </h4>
               <ProtVistaPlusProtein
                 tracks={Object.entries(e.data).sort(([a], [b]) => {
