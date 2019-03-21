@@ -70,6 +70,7 @@ class ProtVista extends Component {
     colorDomainsBy: T.string,
     changeSettingsRaw: T.func,
     title: T.string,
+    fixedHighlight: T.string,
   };
 
   constructor(props) {
@@ -126,6 +127,7 @@ class ProtVista extends Component {
       ['se', 'discontinuos'],
       ['es', 'discontinuos'],
     ]);
+
     for (const type of data) {
       for (const d of type[1]) {
         const tmp = (d.entry_protein_locations || d.locations).map(loc => ({
@@ -169,6 +171,10 @@ class ProtVista extends Component {
           : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
+        if (this.props.fixedHighlight)
+          this.web_tracks[
+            d.accession
+          ].fixedHighlight = this.props.fixedHighlight;
         this._setResiduesInState(children, d.accession);
         if (isNewElement) {
           this.web_tracks[d.accession].addEventListener('entryclick', e => {

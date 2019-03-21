@@ -103,9 +103,15 @@ GoToProtVistaMenu.propTypes = {
   entries: T.arrayOf(T.object).isRequired,
 };
 
-const ProtVistaLoaded = ({ dataprotein, tracks }) => {
+const ProtVistaLoaded = ({ dataprotein, tracks, fixedHighlight }) => {
   if (dataprotein.loading) return <div>loading</div>;
-  return <ProtVista protein={dataprotein.payload.metadata} data={tracks} />;
+  return (
+    <ProtVista
+      protein={dataprotein.payload.metadata}
+      data={tracks}
+      fixedHighlight={fixedHighlight}
+    />
+  );
 };
 ProtVistaLoaded.propTypes = {
   dataprotein: T.shape({
@@ -115,6 +121,7 @@ ProtVistaLoaded.propTypes = {
     }),
   }).isRequired,
   tracks: T.oneOfType([T.object, T.array]),
+  fixedHighlight: T.string,
 };
 
 const includeProtein = accession =>
@@ -195,6 +202,15 @@ const EntriesOnStructure = ({ entries, showChainMenu = false }) => {
                   if (b && b.toLowerCase() === 'chain') return 1;
                   return b ? b.localeCompare(a) : -1;
                 })}
+                fixedHighlight={
+                  e.data.Chain &&
+                  e.data.Chain.length &&
+                  e.data.Chain[0].locations
+                    .map(l =>
+                      l.fragments.map(f => `${f.start}:${f.end}`).join(','),
+                    )
+                    .join(',')
+                }
               />
             </div>
           );
