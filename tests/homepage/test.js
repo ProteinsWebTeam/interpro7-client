@@ -1,20 +1,9 @@
 import testInit from '../../scripts/test-init';
 import { sleep } from 'timing-functions';
 import config from '../test_config';
+import { checkForElement } from '../utils';
 
 jest.setTimeout(config.two_minutes);
-
-const checkForElement = async (page, selector) => {
-  let status = '';
-  try {
-    const selection = await page.waitForSelector(selector, {
-      timeout: config.fast_timeout,
-    });
-  } catch (e) {
-    status = e.toString();
-  }
-  return status;
-};
 
 const gotoURL = async (page, url) => {
   await Promise.all([

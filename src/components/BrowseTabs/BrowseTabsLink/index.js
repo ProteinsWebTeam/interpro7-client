@@ -95,7 +95,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
         className={f('browse-tabs-link', { ['is-signature']: isSignature })}
         activeClass={f('is-active', 'is-active-tab')}
         // disabled={!isFirstLevel && !isNaN(value) && !value}
-        data-testid={'browse-tab-' + name.toLowerCase().replace(' ', '_')}
+        data-testid={'browse-tab-' + name.toLowerCase().replace(/\s+/g, '_')}
       >
         {name}
         {value !== null && ' '}

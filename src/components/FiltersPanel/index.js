@@ -17,7 +17,7 @@ const f = foundationPartial(style);
 const FilterPanel = ({ label, collapsed, toggle, children }) => (
   <div
     className={f('columns', 'small-12', 'medium-4', 'large-4', 'end')}
-    data-testid={'filterby-' + label.toLowerCase().replace(' ', '_')}
+    data-testid={'filterby-' + label.toLowerCase().replace(/\s+/g, '_')}
   >
     {label && (
       <button className={f('toggle')} onClick={toggle}>
