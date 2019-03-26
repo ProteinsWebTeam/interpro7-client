@@ -1,5 +1,4 @@
 import testInit from '../../scripts/test-init';
-import { sleep } from 'timing-functions';
 import config from '../test_config';
 import { checkForElement } from '../utils';
 
@@ -17,39 +16,44 @@ describe('tests', () => {
 
   afterAll(testSetup.cleanup);
 
+  const InterProExpectedElements = [
+    '[data-testid="filters-panel"]',
+    '[data-testid="filterby-interpro_type"]',
+    '[data-testid="filterby-integrated_database"]',
+    '[data-testid="filterby-go_terms"]',
+    '[data-testid="view-table-button"]',
+    '[data-testid="view-grid-button"]',
+    '[data-testid="data-table"]',
+  ];
+
+  const InterProNotExpectedElements = [
+    '[data-testid="view-tree-button"]',
+    '[data-testid="filterby-member_database_type"]',
+    '[data-testid="filterby-interpro_state"]',
+  ];
+
   const MemberDBExpectedElements = [
     '[data-testid="filters-panel"]',
-    '[data-testid="filterby-uniprot_curation"]',
-    '[data-testid="filterby-taxonomy"]',
-    '[data-testid="filterby-protein_size"]',
+    '[data-testid="filterby-member_database_type"]',
+    '[data-testid="filterby-interpro_state"]',
     '[data-testid="view-table-button"]',
     '[data-testid="view-grid-button"]',
     '[data-testid="data-table"]',
   ];
 
   const MemberDBNotExpectedElements = [
-    '[data-testid="filterby-matching_entries"]',
     '[data-testid="view-tree-button"]',
+    '[data-testid="filterby-interpro_type"]',
+    '[data-testid="filterby-integrated_database"]',
+    '[data-testid="filterby-go_terms"]',
   ];
-
-  const AllProteinsExpectedElements = [
-    '[data-testid="filters-panel"]',
-    '[data-testid="filterby-matching_entries"]',
-    '[data-testid="filterby-uniprot_curation"]',
-    '[data-testid="filterby-taxonomy"]',
-    '[data-testid="filterby-protein_size"]',
-    '[data-testid="view-table-button"]',
-    '[data-testid="view-grid-button"]',
-    '[data-testid="data-table"]',
-  ];
-
-  const AllProteinsNotExpectedElements = ['[data-testid="view-tree-button"]'];
 
   const pageElementTests = async (
     clickFilter,
     expectedElements,
     notExpectedElements
   ) => {
+    console.log(`clicking ${clickFilter}`);
     await Promise.all([
       page.click(`[data-testid="memberdb-filter-${clickFilter}"]`, {
         waitUntil: 'networkidle0',
@@ -57,83 +61,82 @@ describe('tests', () => {
     ]);
 
     for (const selector of expectedElements) {
+      console.log(`Looking for ${selector}`);
       const selection = await page.waitForSelector(selector);
       expect(selection).not.toBeNull();
     }
     for (const selector of notExpectedElements) {
+      console.log(`Looking for absence of ${selector}`);
       const selection = await checkForElement(page, selector);
       expect(selection).toMatch('TimeoutError');
     }
+    console.log(`completed ${clickFilter}`);
   };
 
-  test('click-browse-page-protein-tab', async () => {
+  test('click-browse-page-entry-tab', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    const browseURL = `${homepage_url}structure/pdb`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     //click entry tab
     await Promise.all([
       page.waitForNavigation(),
-      page.click('[data-testid="browse-tab-protein"]'),
+      page.click('[data-testid="browse-tab-entry"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/protein/));
+    expect(url).toEqual(expect.stringMatching(/interpro\/entry/));
   });
 
-  test('click-browse-page-protein-all-proteins-filter', async () => {
-    //initial navigation to protein browse page
-    const browseURL = `${homepage_url}protein/UniProt/entry/InterPro`;
+  test('click-browse-page-entry-interpro-filter', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
+    const interprodb = config.general.interpro;
     await Promise.all([
-      page.waitForNavigation(),
-      page.click(`[data-testid="memberdb-filter-${all_items}"]`),
+      page.click(`[data-testid="memberdb-filter-${interprodb}"]`, {
+        waitUntil: 'networkidle0',
+      }),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/protein\/UniProt`, 'i');
+    const urlMatch = new RegExp(`interpro\/entry\/${interprodb}`, 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
-  test('click-browse-page-protein-database-filters', async () => {
+  test('click-browse-page-entry-member-db-filters', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    const databases = config.general.member_databases;
-    databases.push(config.general.interpro);
-    for (const db of databases) {
+    for (const memberdb of config.general.member_databases) {
       //click member db filter
       await Promise.all([
-        page.click(`[data-testid="memberdb-filter-${db}"]`, {
+        page.click(`[data-testid="memberdb-filter-${memberdb}"]`, {
           waitUntil: 'networkidle0',
         }),
       ]);
       const url = await page.evaluate(() => window.location.href);
-      const urlMatch = new RegExp(
-        `interpro\/protein\/UniProt\/entry\/${db}`,
-        'i'
-      );
+      const urlMatch = new RegExp(`interpro\/entry\/${memberdb}`, 'i');
       expect(url).toEqual(expect.stringMatching(urlMatch));
     }
   });
 
-  test('click-browse-page-protein-all-proteins-page-elements', async () => {
+  test('click-browse-page-entry-interpro-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt/entry/InterPro`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteins'
+    const interprodb = config.general.interpro;
     await pageElementTests(
-      all_items,
-      AllProteinsExpectedElements,
-      AllProteinsNotExpectedElements
+      interprodb,
+      InterProExpectedElements,
+      InterProNotExpectedElements
     );
   });
 
-  test('click-browse-page-protein-cathgene3d-page-elements', async () => {
+  test('click-browse-page-entry-cathgene3d-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cathgene3d';
@@ -144,9 +147,9 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-cdd-page-elements', async () => {
+  test('click-browse-page-entry-cdd-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cdd';
@@ -157,9 +160,9 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-hamap-page-elements', async () => {
+  test('click-browse-page-entry-hamap-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'hamap';
@@ -170,9 +173,9 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-panther-page-elements', async () => {
+  test('click-browse-page-entry-panther-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'panther';
@@ -183,9 +186,22 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-pfam-page-elements', async () => {
+  test('click-browse-page-entry-panther-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    const db = 'panther';
+    await pageElementTests(
+      db,
+      MemberDBExpectedElements,
+      MemberDBNotExpectedElements
+    );
+  });
+
+  test('click-browse-page-entry-pfam-page-elements', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'pfam';
@@ -196,10 +212,11 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-pirsf-page-elements', async () => {
+  test('click-browse-page-entry-pirsf-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
     const db = 'pirsf';
     await pageElementTests(
       db,
@@ -208,9 +225,9 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-prints-page-elements', async () => {
+  test('click-browse-page-entry-prints-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prints';
@@ -221,10 +238,11 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-prodom-page-elements', async () => {
+  test('click-browse-page-entry-prodom-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
     const db = 'prodom';
     await pageElementTests(
       db,
@@ -233,10 +251,11 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-profile-page-elements', async () => {
+  test('click-browse-page-entry-profile-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
     const db = 'profile';
     await pageElementTests(
       db,
@@ -245,10 +264,11 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-prosite-page-elements', async () => {
+  test('click-browse-page-entry-prosite-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
     const db = 'prosite';
     await pageElementTests(
       db,
@@ -257,10 +277,11 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-sfld-page-elements', async () => {
+  test('click-browse-page-entry-sfld-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
     const db = 'sfld';
     await pageElementTests(
       db,
@@ -269,10 +290,11 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-smart-page-elements', async () => {
+  test('click-browse-page-smart-prints-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
     const db = 'smart';
     await pageElementTests(
       db,
@@ -281,10 +303,11 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-ssf-page-elements', async () => {
+  test('click-browse-page-entry-ssf-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
     const db = 'ssf';
     await pageElementTests(
       db,
@@ -293,10 +316,11 @@ describe('tests', () => {
     );
   });
 
-  test('click-browse-page-protein-tigrfams-page-elements', async () => {
+  test('click-browse-page-entry-tigrfams-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}protein/UniProt`;
+    const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
     const db = 'tigrfams';
     await pageElementTests(
       db,
