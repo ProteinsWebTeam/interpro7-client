@@ -28,6 +28,10 @@ export const RESOLUTION = {
     width: 2560,
     height: 1440,
   },
+  FourK: {
+    width: 3840,
+    height: 2160,
+  },
   HD720Portait: {
     height: 1280,
     width: 720,
@@ -38,13 +42,16 @@ export const RESOLUTION = {
   },
   QHDPortait: {
     height: 2560,
-    widths: 1440,
+    width: 1440,
+  },
+  FourKPortrait: {
+    height: 3840,
+    width: 2160,
   },
 };
 
 export const config = {
-  //headless: true,
-  headless: false,
+  headless: true,
   slowMo: 250,
   args: [
     '--disable-dev-shm-usage',
@@ -76,6 +83,7 @@ export default (resolutionCode /*: string */ = 'HD1080') =>
         page.setViewport({
           width: resolution.width,
           height: resolution.height,
+          deviceSaleFactor: 4,
         });
         await page.goto(app(port));
         return page;
