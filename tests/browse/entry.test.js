@@ -53,7 +53,6 @@ describe('tests', () => {
     expectedElements,
     notExpectedElements
   ) => {
-    console.log(`clicking ${clickFilter}`);
     await Promise.all([
       page.click(`[data-testid="memberdb-filter-${clickFilter}"]`, {
         waitUntil: 'networkidle0',
@@ -61,16 +60,13 @@ describe('tests', () => {
     ]);
 
     for (const selector of expectedElements) {
-      console.log(`Looking for ${selector}`);
       const selection = await page.waitForSelector(selector);
       expect(selection).not.toBeNull();
     }
     for (const selector of notExpectedElements) {
-      console.log(`Looking for absence of ${selector}`);
       const selection = await checkForElement(page, selector);
       expect(selection).toMatch('TimeoutError');
     }
-    console.log(`completed ${clickFilter}`);
   };
 
   test('click-browse-page-entry-tab', async () => {
