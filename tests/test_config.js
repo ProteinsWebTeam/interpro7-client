@@ -1,5 +1,6 @@
 export default {
   two_minutes: 120000,
+  five_minutes: 300000,
   fast_timeout: 100,
   general: {
     interpro: 'interpro',

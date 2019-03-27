@@ -6,7 +6,7 @@ import { checkForElement } from '../utils';
 jest.setTimeout(config.two_minutes);
 
 describe('tests', () => {
-  const testSetup = testInit('QHD');
+  const testSetup = testInit('HD1080Portait');
   let page;
   let homepage_url;
 
@@ -18,15 +18,13 @@ describe('tests', () => {
   afterAll(testSetup.cleanup);
 
   const ExpectedElements = [
-    '[data-testid="filters-panel"]',
-    '[data-testid="filterby-experiment_type"]',
-    '[data-testid="filterby-resolution_(å)"]',
     '[data-testid="view-table-button"]',
     '[data-testid="view-grid-button"]',
+    '[data-testid="view-tree-button"]',
     '[data-testid="data-table"]',
   ];
 
-  const NotExpectedElements = ['[data-testid="view-tree-button"]'];
+  const NotExpectedElements = ['[data-testid="filters-panel"]'];
 
   const pageElementTests = async (
     clickFilter,
@@ -49,7 +47,7 @@ describe('tests', () => {
     }
   };
 
-  test('click-browse-page-structure-tab', async () => {
+  test('click-browse-page-taxonomy-tab', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -57,30 +55,30 @@ describe('tests', () => {
     //click entry tab
     await Promise.all([
       page.waitForNavigation(),
-      page.click('[data-testid="browse-tab-structure"]'),
+      page.click('[data-testid="browse-tab-taxonomy"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/structure/));
+    expect(url).toEqual(expect.stringMatching(/interpro\/taxonomy/));
   });
 
-  test('click-browse-page-structure-all-structures-filter', async () => {
-    //initial navigation to structure browse page
-    const browseURL = `${homepage_url}structure/PDB/entry/InterPro`;
+  test('click-browse-page-taxonomy-all-taxonomy-filter', async () => {
+    //initial navigation to taxonomy browse page
+    const browseURL = `${homepage_url}taxonomy/uniprot/entry/InterPro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all structures'
+    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all taxonomies'
     await Promise.all([
       page.waitForNavigation(),
       page.click(`[data-testid="memberdb-filter-${all_items}"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/structure\/PDB`, 'i');
+    const urlMatch = new RegExp(`interpro\/taxonomy\/uniprot`, 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
-  test('click-browse-page-structure-database-filters', async () => {
+  test('click-browse-page-taxonomy-database-filters', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const databases = config.general.member_databases;
@@ -94,151 +92,151 @@ describe('tests', () => {
       ]);
       const url = await page.evaluate(() => window.location.href);
       const urlMatch = new RegExp(
-        `interpro\/structure\/PDB\/entry\/${db}`,
+        `interpro\/taxonomy\/uniprot\/entry\/${db}`,
         'i'
       );
       expect(url).toEqual(expect.stringMatching(urlMatch));
     }
   });
 
-  test('click-browse-page-structure-all-page-elements', async () => {
+  test('click-browse-page-taxonomy-all-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'all';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-interpro-page-elements', async () => {
+  test('click-browse-page-taxonomy-interpro-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    const db = config.general.interpro;
+    const db = 'interpro';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-cathgene3d-page-elements', async () => {
+  test('click-browse-page-taxonomy-cathgene3d-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cathgene3d';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-cdd-page-elements', async () => {
+  test('click-browse-page-taxonomy-cdd-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cdd';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-hamap-page-elements', async () => {
+  test('click-browse-page-taxonomy-hamap-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'hamap';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-panther-page-elements', async () => {
+  test('click-browse-page-taxonomy-panther-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'panther';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-pfam-page-elements', async () => {
+  test('click-browse-page-taxonomy-pfam-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'pfam';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-pirsf-page-elements', async () => {
+  test('click-browse-page-taxonomy-pirsf-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'pirsf';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-prints-page-elements', async () => {
+  test('click-browse-page-taxonomy-prints-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prints';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-prodom-page-elements', async () => {
+  test('click-browse-page-taxonomy-prodom-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prodom';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-profile-page-elements', async () => {
+  test('click-browse-page-taxonomy-profile-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'profile';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-prosite-page-elements', async () => {
+  test('click-browse-page-taxonomy-prosite-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prosite';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-sfld-page-elements', async () => {
+  test('click-browse-page-taxonomy-sfld-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'sfld';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-smart-page-elements', async () => {
+  test('click-browse-page-taxonomy-smart-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'smart';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-ssf-page-elements', async () => {
+  test('click-browse-page-taxonomy-ssf-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'ssf';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-structure-tigrfams-page-elements', async () => {
+  test('click-browse-page-taxonomy-tigrfams-page-elements', async () => {
     //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/PDB`;
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'tigrfams';

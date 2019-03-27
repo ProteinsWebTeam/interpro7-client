@@ -51,7 +51,7 @@ export const RESOLUTION = {
 };
 
 export const config = {
-  headless: false,
+  headless: true,
   slowMo: 250,
   args: [
     '--disable-dev-shm-usage',
