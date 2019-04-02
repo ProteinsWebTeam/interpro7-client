@@ -6,7 +6,7 @@ import { checkForElement } from '../utils';
 jest.setTimeout(config.two_minutes);
 
 describe('tests', () => {
-  const testSetup = testInit('HD1080Portait');
+  const testSetup = testInit('QHD');
   let page;
   let homepage_url;
 
@@ -241,5 +241,41 @@ describe('tests', () => {
 
     const db = 'tigrfams';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
+  });
+
+  test('click-browse-page-taxonomy-grid', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    await Promise.all([
+      page.click(`[data-testid="view-grid-button"]`, {
+        waitUntil: 'networkidle0',
+      }),
+    ]);
+    const selection = await page.waitForSelector(`[data-testid="data-grid"]`);
+    expect(selection).not.toBeNull();
+
+    const url = await page.evaluate(() => window.location.href);
+    const urlMatch = new RegExp(`interpro\/taxonomy\/uniprot\/\#grid`, 'i');
+    expect(url).toEqual(expect.stringMatching(urlMatch));
+  });
+
+  test.only('click-browse-page-taxonomy-tree', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}taxonomy/uniprot`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    await Promise.all([
+      page.click(`[data-testid="view-tree-button"]`, {
+        waitUntil: 'networkidle0',
+      }),
+    ]);
+    const selection = await page.waitForSelector(`[data-testid="data-tree"]`);
+    expect(selection).not.toBeNull();
+
+    const url = await page.evaluate(() => window.location.href);
+    const urlMatch = new RegExp(`interpro\/taxonomy\/uniprot\/\#tree`, 'i');
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 });

@@ -100,7 +100,7 @@ describe('tests', () => {
     }
   });
 
-  test('click-browse-page-taxonomy-all-page-elements', async () => {
+  test('click-browse-page-proteome-all-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -109,7 +109,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-interpro-page-elements', async () => {
+  test('click-browse-page-proteome-interpro-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -118,7 +118,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-cathgene3d-page-elements', async () => {
+  test('click-browse-page-proteome-cathgene3d-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -127,7 +127,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-cdd-page-elements', async () => {
+  test('click-browse-page-proteome-cdd-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -136,7 +136,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-hamap-page-elements', async () => {
+  test('click-browse-page-proteome-hamap-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -145,7 +145,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-panther-page-elements', async () => {
+  test('click-browse-page-proteome-panther-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -154,7 +154,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-pfam-page-elements', async () => {
+  test('click-browse-page-proteome-pfam-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -163,7 +163,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-pirsf-page-elements', async () => {
+  test('click-browse-page-proteome-pirsf-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -172,7 +172,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-prints-page-elements', async () => {
+  test('click-browse-page-proteome-prints-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -181,7 +181,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-prodom-page-elements', async () => {
+  test('click-browse-page-proteome-prodom-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -190,7 +190,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-profile-page-elements', async () => {
+  test('click-browse-page-proteome-profile-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -199,7 +199,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-prosite-page-elements', async () => {
+  test('click-browse-page-proteome-prosite-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -208,7 +208,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-sfld-page-elements', async () => {
+  test('click-browse-page-proteome-sfld-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -217,7 +217,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-smart-page-elements', async () => {
+  test('click-browse-page-proteome-smart-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -226,7 +226,7 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-ssf-page-elements', async () => {
+  test('click-browse-page-proteome-ssf-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
@@ -235,12 +235,30 @@ describe('tests', () => {
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
-  test('click-browse-page-taxonomy-tigrfams-page-elements', async () => {
+  test('click-browse-page-proteome-tigrfams-page-elements', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'tigrfams';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
+  });
+
+  test('click-browse-page-proteome-grid', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}proteome/uniprot`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    await Promise.all([
+      page.click(`[data-testid="view-grid-button"]`, {
+        waitUntil: 'networkidle0',
+      }),
+    ]);
+    const selection = await page.waitForSelector(`[data-testid="data-grid"]`);
+    expect(selection).not.toBeNull();
+
+    const url = await page.evaluate(() => window.location.href);
+    const urlMatch = new RegExp(`interpro\/proteome\/uniprot\/\#grid`, 'i');
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 });

@@ -242,4 +242,22 @@ describe('tests', () => {
     const db = 'tigrfams';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
+
+  test('click-browse-page-set-grid', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}set/all`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    await Promise.all([
+      page.click(`[data-testid="view-grid-button"]`, {
+        waitUntil: 'networkidle0',
+      }),
+    ]);
+    const selection = await page.waitForSelector(`[data-testid="data-grid"]`);
+    expect(selection).not.toBeNull();
+
+    const url = await page.evaluate(() => window.location.href);
+    const urlMatch = new RegExp(`interpro\/set\/all\/\#grid`, 'i');
+    expect(url).toEqual(expect.stringMatching(urlMatch));
+  });
 });

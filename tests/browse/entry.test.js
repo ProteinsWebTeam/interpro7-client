@@ -324,4 +324,22 @@ describe('tests', () => {
       MemberDBNotExpectedElements
     );
   });
+
+  test('click-browse-page-entry-grid', async () => {
+    //initial navigation to browse page
+    const browseURL = `${homepage_url}entry/interpro`;
+    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+    await Promise.all([
+      page.click(`[data-testid="view-grid-button"]`, {
+        waitUntil: 'networkidle0',
+      }),
+    ]);
+    const selection = await page.waitForSelector(`[data-testid="data-grid"]`);
+    expect(selection).not.toBeNull();
+
+    const url = await page.evaluate(() => window.location.href);
+    const urlMatch = new RegExp(`interpro\/entry\/interpro\/\#grid`, 'i');
+    expect(url).toEqual(expect.stringMatching(urlMatch));
+  });
 });
