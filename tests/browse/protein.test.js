@@ -41,6 +41,7 @@ describe('tests', () => {
     '[data-testid="view-table-button"]',
     '[data-testid="view-grid-button"]',
     '[data-testid="data-table"]',
+    '[data-testid="table-entity"]',
   ];
 
   const AllProteinsNotExpectedElements = ['[data-testid="view-tree-button"]'];
@@ -317,6 +318,9 @@ describe('tests', () => {
     ]);
     const selection = await page.waitForSelector(`[data-testid="data-grid"]`);
     expect(selection).not.toBeNull();
+
+    const item = await page.waitForSelector(`[data-testid="grid-entity"]`);
+    expect(item).not.toBeNull();
 
     const url = await page.evaluate(() => window.location.href);
     const urlMatch = new RegExp(`interpro\/protein\/uniprot\/\#grid`, 'i');
