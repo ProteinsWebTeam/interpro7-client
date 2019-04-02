@@ -20,7 +20,10 @@ const ProtVistaForStructure = ({ data }) => {
   });
   return (
     <div>
-      <EntriesOnStructure entries={interpro.concat(unintegrated)} />
+      <EntriesOnStructure
+        entries={interpro.concat(unintegrated)}
+        showChainMenu={true}
+      />
     </div>
   );
 };
