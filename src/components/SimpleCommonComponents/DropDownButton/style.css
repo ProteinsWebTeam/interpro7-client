@@ -1,0 +1,62 @@
+@import '../../../styles/timing.css';
+@import '../../../styles/colors.css';
+
+.dropdown-container {
+  display: flex;
+  margin: 0.5rem 0 0 0;
+  position: relative;
+
+  & .dropdown-content {
+    position: absolute;
+    top: 100%;
+    width: initial;
+    padding: 1rem 0.5rem;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--timing-really-fast) ease-in-out;
+    visibility: visible;
+    display: block;
+  }
+  & .left {
+    right: 30px; /*temp value while popup positioning is working better*/
+    min-width: 180%; /*temp value*/
+  }
+
+  & .dropdown-pane {
+    z-index: 2; /* so sticky header stay on top*/
+    & ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      & li a {
+        display: block;
+        padding: 0.3rem 1rem;
+      }
+      & li a:hover {
+        background-color: #1878ba;
+        color: white;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  .dropdown-container .dropdown-content {
+    width: 212px; /*temp value*/
+  }
+  .dropdown-container .dropdown-content.left {
+    right: 1px;
+  }
+}
+
+@media screen and (max-width: 39.9375em) {
+  .dropdown-container .dropdown::after {
+    border: none; /*remove select arrow for small screens*/
+  }
+  .dropdown-container .dropdown-content {
+    width: 182px; /*temp value*/
+  }
+  .dropdown-container .dropdown-content.left {
+    right: 1px;
+  }
+}

@@ -3,6 +3,9 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import { goToCustomLocation } from 'actions/creators';
+import { connect } from 'react-redux';
+
 import Link from 'components/generic/Link';
 import Tree from 'components/Tree';
 
@@ -106,6 +109,7 @@ class TreeView extends Component {
     customLocation: T.shape({
       description: T.object,
     }).isRequired,
+    goToCustomLocation: T.func.isRequired,
   };
 
   constructor(props) {
@@ -172,6 +176,17 @@ class TreeView extends Component {
   _handleNewFocus = taxID => {
     if (taxID) this.setState({ focused: taxID });
   };
+  _handleLabelClick = taxID => {
+    this.props.goToCustomLocation({
+      description: {
+        main: { key: 'taxonomy' },
+        taxonomy: {
+          db: 'UniProt',
+          accession: taxID,
+        },
+      },
+    });
+  };
 
   render() {
     const { focused, data } = this.state;
@@ -201,10 +216,14 @@ class TreeView extends Component {
           focused={focused}
           changeFocus={this._handleNewFocus}
           data-testid="data-tree"
+          labelClick={this._handleLabelClick}
         />
       </>
     );
   }
 }
 
-export default TreeView;
+export default connect(
+  null,
+  { goToCustomLocation },
+)(TreeView);

@@ -19,6 +19,7 @@ import ProtVistaInterProTrack from 'protvista-interpro-track';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
+import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PopperJS from 'popper.js';
 
 import loadWebComponent from 'utils/load-web-component';
@@ -26,11 +27,9 @@ import loadWebComponent from 'utils/load-web-component';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
-import { requestFullScreen } from '../../utils/fullscreen';
 
-const f = foundationPartial(ipro, local, fonts);
+const f = foundationPartial(ipro, local);
 
 const webComponents = [];
 
@@ -71,6 +70,7 @@ class ProtVista extends Component {
     colorDomainsBy: T.string,
     changeSettingsRaw: T.func,
     title: T.string,
+    fixedHighlight: T.string,
   };
 
   constructor(props) {
@@ -127,6 +127,7 @@ class ProtVista extends Component {
       ['se', 'discontinuos'],
       ['es', 'discontinuos'],
     ]);
+
     for (const type of data) {
       for (const d of type[1]) {
         const tmp = (d.entry_protein_locations || d.locations).map(loc => ({
@@ -170,6 +171,10 @@ class ProtVista extends Component {
           : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
+        if (this.props.fixedHighlight)
+          this.web_tracks[
+            d.accession
+          ].fixedHighlight = this.props.fixedHighlight;
         this._setResiduesInState(children, d.accession);
         if (isNewElement) {
           this.web_tracks[d.accession].addEventListener('entryclick', e => {
@@ -314,8 +319,6 @@ class ProtVista extends Component {
     }
   };
 
-  handleFullScreen = () => requestFullScreen(this._mainRef.current);
-
   changeColor = ({ target: { value: colorMode } }) => {
     for (const track of Object.values(this.web_tracks)) {
       for (const d of [...track._data, ...(track._contributors || [])]) {
@@ -444,14 +447,10 @@ class ProtVista extends Component {
           <div
             className={f('option-fullscreen', 'font-l', 'margin-right-large')}
           >
-            <Tooltip title="View the domain viewer in full screen mode">
-              <button
-                onClick={this.handleFullScreen}
-                data-icon="F"
-                title="Full screen"
-                className={f('margin-bottom-none', 'icon', 'icon-common')}
-              />
-            </Tooltip>
+            <FullScreenButton
+              element={this._mainRef.current}
+              tooltip="View the domain viewer in full screen mode"
+            />
           </div>
         </div>
       </div>
