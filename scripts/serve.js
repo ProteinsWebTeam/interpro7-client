@@ -17,7 +17,8 @@ app.use(
 );
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve('.', 'dist', 'index.html'));
+  const requestPath = path.resolve('.', 'dist', 'index.html');
+  res.sendFile(requestPath);
 });
 
 const startServerOn = (port /*: number */) =>

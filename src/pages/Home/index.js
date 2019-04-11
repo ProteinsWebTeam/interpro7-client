@@ -440,11 +440,11 @@ class Home extends PureComponent {
             />
             <SchemaOrgDataWithData />
             <div className={f('intro-wrapper')}>
-              <div className={f('intro-fig')}>
+              <div className={f('intro-fig')} data-testid="intro-fig">
                 <InterProGraphicAnim />
                 <CurrentVersion />
               </div>
-              <div className={f('intro-content')}>
+              <div className={f('intro-content')} data-testid="intro-content">
                 <h3>Classification of protein families</h3>
                 <Description textBlocks={[description]} />
               </div>
@@ -482,13 +482,16 @@ class Home extends PureComponent {
           <div className={f('columns')}>
             <div className={f('callout-box', 'pp-browse-by')}>
               <Tabs>
-                <div title="Member Database">
+                <div
+                  title="Member Database"
+                  data-testid="home-member-database-button"
+                >
                   <ByMemberDatabase />
                 </div>
-                <div title="Entry type">
+                <div title="Entry type" data-testid="home-entry-type-button">
                   <ByEntryType />
                 </div>
-                <div title="Species">
+                <div title="Species" data-testid="home-species-button">
                   <BySpecies />
                 </div>
               </Tabs>

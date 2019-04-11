@@ -36,7 +36,10 @@ class TableView extends PureComponent {
       rowKey,
     } = this.props;
     return (
-      <table className={f('table', 'light', 'nolink', 'sorting')}>
+      <table
+        className={f('table', 'light', 'nolink', 'sorting')}
+        data-testid="data-table"
+      >
         <Header columns={columns} notFound={notFound} />
         <Body
           rows={dataTable || []}

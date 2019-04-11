@@ -215,6 +215,7 @@ class TreeView extends Component {
           data={data}
           focused={focused}
           changeFocus={this._handleNewFocus}
+          data-testid="data-tree"
           labelClick={this._handleLabelClick}
         />
       </>

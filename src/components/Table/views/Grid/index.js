@@ -27,6 +27,7 @@ class GridView extends PureComponent {
             <div
               key={data.metadata.accession || i}
               className={local['grid-card']}
+              data-testid="data-grid"
             >
               <ErrorBoundary>{renderer(data)}</ErrorBoundary>
             </div>
