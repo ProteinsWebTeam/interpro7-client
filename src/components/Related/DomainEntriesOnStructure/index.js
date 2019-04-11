@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 
@@ -103,14 +103,48 @@ GoToProtVistaMenu.propTypes = {
   entries: T.arrayOf(T.object).isRequired,
 };
 
-const ProtVistaLoaded = ({ dataprotein, tracks, fixedHighlight }) => {
-  if (dataprotein.loading) return <div>loading</div>;
+const ProtVistaLoaded = ({ dataprotein, tracks, chain, fixedHighlight }) => {
+  const protvistaEl = useRef(null);
+  useEffect(() => {
+    if (!protvistaEl.current || !protvistaEl.current.addEventListener) return;
+    const handleMouseover = event => {
+      const {
+        detail: { type, highlight },
+      } = event;
+      if (type === 'sequence') {
+        protvistaEl.current.dispatchEvent(
+          new CustomEvent('change', {
+            detail: {
+              highlight,
+              type: 'sequence-chain',
+              chain,
+              protein: dataprotein.payload.metadata.accession,
+            },
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
+      }
+    };
+    protvistaEl.current.addEventListener('change', handleMouseover);
+
+    return () => {
+      protvistaEl.current.removeEventListener('change', handleMouseover);
+    };
+  });
+
   return (
-    <ProtVista
-      protein={dataprotein.payload.metadata}
-      data={tracks}
-      fixedHighlight={fixedHighlight}
-    />
+    <div ref={protvistaEl}>
+      {dataprotein.loading ? (
+        <div>loading</div>
+      ) : (
+        <ProtVista
+          protein={dataprotein.payload.metadata}
+          data={tracks}
+          fixedHighlight={fixedHighlight}
+        />
+      )}
+    </div>
   );
 };
 ProtVistaLoaded.propTypes = {
@@ -202,6 +236,7 @@ const EntriesOnStructure = ({ entries, showChainMenu = false }) => {
                   if (b && b.toLowerCase() === 'chain') return 1;
                   return b ? b.localeCompare(a) : -1;
                 })}
+                chain={e.chain}
                 fixedHighlight={
                   e.data.Chain &&
                   e.data.Chain.length &&
