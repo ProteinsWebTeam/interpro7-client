@@ -91,7 +91,7 @@ class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                       entry: { db: canonical },
                     },
                   }}
-                  data-testid={'member-database-' + canonical}
+                  data-testid={`member-database-${canonical}`}
                 >
                   <MemberSymbol type={canonical} />
 

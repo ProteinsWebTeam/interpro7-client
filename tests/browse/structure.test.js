@@ -50,11 +50,11 @@ describe('tests', () => {
   };
 
   test('click-browse-page-structure-tab', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    //click entry tab
+    // click entry tab
     await Promise.all([
       page.waitForNavigation(),
       page.click('[data-testid="browse-tab-structure"]'),
@@ -64,7 +64,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-all-structures-filter', async () => {
-    //initial navigation to structure browse page
+    // initial navigation to structure browse page
     const browseURL = `${homepage_url}structure/PDB/entry/InterPro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -74,19 +74,19 @@ describe('tests', () => {
       page.click(`[data-testid="memberdb-filter-${all_items}"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/structure\/PDB`, 'i');
+    const urlMatch = new RegExp('interpro/structure/PDB', 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-page-structure-database-filters', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const databases = config.general.member_databases;
     databases.push(config.general.interpro);
     for (const db of databases) {
-      //click member db filter
+      // click member db filter
       await Promise.all([
         page.click(`[data-testid="memberdb-filter-${db}"]`, {
           waitUntil: 'networkidle0',
@@ -102,7 +102,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-all-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -111,7 +111,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-interpro-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -120,7 +120,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-cathgene3d-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -129,7 +129,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-cdd-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -138,7 +138,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-hamap-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -147,7 +147,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-panther-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -156,7 +156,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-pfam-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -165,7 +165,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-pirsf-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -174,7 +174,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-prints-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -183,7 +183,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-prodom-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -192,7 +192,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-profile-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -201,7 +201,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-prosite-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -210,7 +210,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-sfld-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -219,7 +219,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-smart-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -228,7 +228,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-ssf-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -237,7 +237,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-tigrfams-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -246,20 +246,20 @@ describe('tests', () => {
   });
 
   test('click-browse-page-structure-grid', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}structure/pdb`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([
-      page.click(`[data-testid="view-grid-button"]`, {
+      page.click('[data-testid="view-grid-button"]', {
         waitUntil: 'networkidle0',
       }),
     ]);
-    const selection = await page.waitForSelector(`[data-testid="data-grid"]`);
+    const selection = await page.waitForSelector('[data-testid="data-grid"]');
     expect(selection).not.toBeNull();
 
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/structure\/pdb\/\#grid`, 'i');
+    const urlMatch = new RegExp('interpro/structure/pdb/#grid', 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 });

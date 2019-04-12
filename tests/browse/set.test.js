@@ -50,10 +50,10 @@ describe('tests', () => {
   };
 
   test('click-browse-page-set-tab', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-    //click entry tab
+    // click entry tab
     await Promise.all([
       page.waitForNavigation(),
       page.click('[data-testid="browse-tab-set"]'),
@@ -79,15 +79,15 @@ describe('tests', () => {
   });
   */
   test('click-browse-page-set-database-filters', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    //const databases = config.general.member_databases;
-    //databases.push(config.general.interpro);
+    // const databases = config.general.member_databases;
+    // databases.push(config.general.interpro);
     const databases = ['cdd', 'pfam', 'pirsf'];
     for (const db of databases) {
-      //click member db filter
+      // click member db filter
       await Promise.all([
         page.click(`[data-testid="memberdb-filter-${db}"]`, {
           waitUntil: 'networkidle0',
@@ -100,7 +100,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-all-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -109,7 +109,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-interpro-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -118,7 +118,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-cathgene3d-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -127,7 +127,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-cdd-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -136,7 +136,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-hamap-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -145,7 +145,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-panther-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -154,7 +154,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-pfam-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -163,7 +163,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-pirsf-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -172,7 +172,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-prints-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -181,7 +181,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-prodom-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -190,7 +190,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-profile-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -199,7 +199,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-prosite-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -208,7 +208,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-sfld-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -217,7 +217,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-smart-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -226,7 +226,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-ssf-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -235,7 +235,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-tigrfams-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -244,20 +244,20 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-grid', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([
-      page.click(`[data-testid="view-grid-button"]`, {
+      page.click('[data-testid="view-grid-button"]', {
         waitUntil: 'networkidle0',
       }),
     ]);
-    const selection = await page.waitForSelector(`[data-testid="data-grid"]`);
+    const selection = await page.waitForSelector('[data-testid="data-grid"]');
     expect(selection).not.toBeNull();
 
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/set\/all\/\#grid`, 'i');
+    const urlMatch = new RegExp('interpro/set/all/#grid', 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 });

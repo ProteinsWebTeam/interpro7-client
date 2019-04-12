@@ -49,8 +49,8 @@ describe('tests', () => {
   });
 
   test('home-by-entry-type-box', async () => {
-    //entry type is not displayed by default
-    let status = await checkForElement(
+    // entry type is not displayed by default
+    const status = await checkForElement(
       page,
       '[data-testid="by-entry-type-box"]'
     );
@@ -69,8 +69,11 @@ describe('tests', () => {
   });
 
   test('home-by-species-box', async () => {
-    //species box is not displayed by default
-    let status = await checkForElement(page, '[data-testid="by-species-box"]');
+    // species box is not displayed by default
+    const status = await checkForElement(
+      page,
+      '[data-testid="by-species-box"]'
+    );
     expect(status).toMatch('TimeoutError');
   });
 

@@ -50,10 +50,10 @@ describe('tests', () => {
   };
 
   test('click-browse-page-proteome-tab', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-    //click entry tab
+    // click entry tab
     await Promise.all([
       page.waitForNavigation(),
       page.click('[data-testid="browse-tab-proteome"]'),
@@ -63,7 +63,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-all-proteome-filter', async () => {
-    //initial navigation to proteome browse page
+    // initial navigation to proteome browse page
     const browseURL = `${homepage_url}proteome/uniprot/entry/InterPro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -73,19 +73,19 @@ describe('tests', () => {
       page.click(`[data-testid="memberdb-filter-${all_items}"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/proteome\/uniprot`, 'i');
+    const urlMatch = new RegExp('interpro/proteome/uniprot', 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-page-proteome-database-filters', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const databases = config.general.member_databases;
     databases.push(config.general.interpro);
     for (const db of databases) {
-      //click member db filter
+      // click member db filter
       await Promise.all([
         page.click(`[data-testid="memberdb-filter-${db}"]`, {
           waitUntil: 'networkidle0',
@@ -101,7 +101,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-all-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -110,7 +110,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-interpro-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -119,7 +119,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-cathgene3d-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -128,7 +128,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-cdd-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -137,7 +137,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-hamap-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -146,7 +146,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-panther-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -155,7 +155,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-pfam-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -164,7 +164,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-pirsf-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -173,7 +173,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-prints-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -182,7 +182,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-prodom-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -191,7 +191,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-profile-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -200,7 +200,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-prosite-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -209,7 +209,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-sfld-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -218,7 +218,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-smart-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -227,7 +227,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-ssf-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -236,7 +236,7 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-tigrfams-page-elements', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
@@ -245,20 +245,20 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-grid', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([
-      page.click(`[data-testid="view-grid-button"]`, {
+      page.click('[data-testid="view-grid-button"]', {
         waitUntil: 'networkidle0',
       }),
     ]);
-    const selection = await page.waitForSelector(`[data-testid="data-grid"]`);
+    const selection = await page.waitForSelector('[data-testid="data-grid"]');
     expect(selection).not.toBeNull();
 
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/proteome\/uniprot\/\#grid`, 'i');
+    const urlMatch = new RegExp('interpro/proteome/uniprot/#grid', 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 });

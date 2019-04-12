@@ -17,11 +17,11 @@ describe('tests', () => {
   afterAll(testSetup.cleanup);
 
   test('browse-page-tabs', async () => {
-    //initial navigation to browse page
+    // initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    //check presence of browse type buttons
+    // check presence of browse type buttons
     for (const type of config.browse.browse_types) {
       const selection = await page.waitForSelector(
         `[data-testid="browse-tab-${type}"]`,

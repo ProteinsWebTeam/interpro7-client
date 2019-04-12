@@ -49,7 +49,7 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
               },
             },
           }}
-          data-testid={'species-' + species.tax_id}
+          data-testid={`species-${species.tax_id}`}
         >
           <span
             style={{ color: species.color }}

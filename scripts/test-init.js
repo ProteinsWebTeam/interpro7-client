@@ -89,7 +89,7 @@ export default (resolutionCode /*: string */ = 'HD1080') =>
         return page;
       },
       async cleanup() {
-        //await sleep(1000000);
+        // await sleep(1000000);
         try {
           if (browser) browser.close();
         } catch (_) {
