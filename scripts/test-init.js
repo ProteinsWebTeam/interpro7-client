@@ -1,5 +1,4 @@
 import puppeteer from 'puppeteer';
-import { sleep } from 'timing-functions';
 import server from './serve';
 export const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
 
@@ -52,7 +51,6 @@ export const RESOLUTION = {
 
 export const config = {
   headless: true,
-  //headless: false,
   slowMo: 250,
   args: [
     '--disable-dev-shm-usage',
@@ -90,7 +88,6 @@ export default (resolutionCode /*: string */ = 'HD1080') =>
         return page;
       },
       async cleanup() {
-        //await sleep(1000000);
         try {
           if (browser) browser.close();
         } catch (_) {

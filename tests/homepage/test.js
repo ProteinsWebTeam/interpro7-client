@@ -15,11 +15,11 @@ const gotoURL = async (page, url) => {
 describe('tests', () => {
   const testSetup = testInit('HD1080Portait');
   let page;
-  let homepage_url;
+  let homepageURL;
 
   beforeAll(async () => {
     page = await testSetup.setup();
-    homepage_url = await page.evaluate(() => window.location.href);
+    homepageURL = await page.evaluate(() => window.location.href);
   });
 
   afterAll(testSetup.cleanup);
@@ -101,7 +101,7 @@ describe('tests', () => {
 
   test('home-click-by-member-database-icon', async () => {
     for (const member_database of config.general.member_databases) {
-      await gotoURL(page, homepage_url);
+      await gotoURL(page, homepageURL);
       await Promise.all([
         page.waitForNavigation(),
         page.click(`[data-testid="member-database-${member_database}"]`),
@@ -113,7 +113,7 @@ describe('tests', () => {
 
   test('home-click-by-entry-type-icon', async () => {
     for (const entry_type of config.general.entry_types) {
-      await gotoURL(page, homepage_url);
+      await gotoURL(page, homepageURL);
       await page.focus('[data-testid="home-entry-type-button"]');
       await page.click('[data-testid="home-entry-type-button"]');
       await Promise.all([
@@ -129,7 +129,7 @@ describe('tests', () => {
 
   test('home-click-by-species-icon', async () => {
     for (const taxid of config.homepage.species) {
-      await gotoURL(page, homepage_url);
+      await gotoURL(page, homepageURL);
       await page.focus('[data-testid="home-species-button"]');
       await page.click('[data-testid="home-species-button"]');
       await Promise.all([
@@ -148,7 +148,7 @@ describe('tests', () => {
     await page.type('input[type="text"]', '1');
     await sleep(1500); // eslint-disable-line no-magic-numbers
      */
-    await gotoURL(page, homepage_url);
+    await gotoURL(page, homepageURL);
     await Promise.all([
       page.waitForNavigation(),
       page.type('input[type="text"]', '1'),

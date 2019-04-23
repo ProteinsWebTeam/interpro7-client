@@ -8,11 +8,11 @@ jest.setTimeout(config.two_minutes);
 describe('tests', () => {
   const testSetup = testInit('HD1080Portait');
   let page;
-  let homepage_url;
+  let homepageURL;
 
   beforeAll(async () => {
     page = await testSetup.setup();
-    homepage_url = await page.evaluate(() => window.location.href);
+    homepageURL = await page.evaluate(() => window.location.href);
   });
 
   afterAll(testSetup.cleanup);
@@ -53,11 +53,11 @@ describe('tests', () => {
   };
 
   test('click-browse-page-proteome-tab', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    //click entry tab
+    // click entry tab
     await Promise.all([
       page.waitForSelector('[data-testid="browse-tab-proteome"]', {
         timeout: 0,
@@ -69,16 +69,16 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-all-proteome-filter', async () => {
-    //initial navigation to proteome browse page
-    const browseURL = `${homepage_url}proteome/uniprot/entry/InterPro`;
+    // initial navigation to proteome browse page
+    const browseURL = `${homepageURL}proteome/uniprot/entry/InterPro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all proteomes'
+    const allItems = 'all'; // 'all' is used as the memberdb name to represent 'all proteomes'
     await Promise.all([
-      page.waitForSelector(`[data-testid="memberdb-filter-${all_items}"]`, {
+      page.waitForSelector(`[data-testid="memberdb-filter-${allItems}"]`, {
         timeout: 0,
       }),
-      page.click(`[data-testid="memberdb-filter-${all_items}"]`),
+      page.click(`[data-testid="memberdb-filter-${allItems}"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
     const urlMatch = new RegExp(`interpro\/proteome\/uniprot`, 'i');
@@ -86,14 +86,14 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-database-filters', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const databases = config.general.member_databases;
     databases.push(config.general.interpro);
     for (const db of databases) {
-      //click member db filter
+      // click member db filter
       await Promise.all([
         page.waitForSelector(`[data-testid="memberdb-filter-${db}"]`, {
           timeout: 0,
@@ -112,8 +112,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-all-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'all';
@@ -121,8 +121,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-interpro-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'interpro';
@@ -130,8 +130,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-cathgene3d-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cathgene3d';
@@ -139,8 +139,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-cdd-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cdd';
@@ -148,8 +148,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-hamap-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'hamap';
@@ -157,8 +157,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-panther-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'panther';
@@ -166,8 +166,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-pfam-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'pfam';
@@ -175,8 +175,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-pirsf-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'pirsf';
@@ -184,8 +184,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-prints-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prints';
@@ -193,8 +193,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-prodom-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prodom';
@@ -202,8 +202,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-profile-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'profile';
@@ -211,8 +211,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-prosite-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prosite';
@@ -220,8 +220,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-sfld-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'sfld';
@@ -229,8 +229,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-smart-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'smart';
@@ -238,8 +238,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-ssf-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'ssf';
@@ -247,8 +247,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-tigrfams-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'tigrfams';
@@ -256,8 +256,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-proteome-grid', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}proteome/uniprot`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}proteome/uniprot`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([

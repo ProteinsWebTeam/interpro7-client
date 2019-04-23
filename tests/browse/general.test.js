@@ -7,18 +7,18 @@ jest.setTimeout(config.two_minutes);
 describe('tests', () => {
   const testSetup = testInit('HD1080Portait');
   let page;
-  let homepage_url;
+  let homepageURL;
 
   beforeAll(async () => {
     page = await testSetup.setup();
-    homepage_url = await page.evaluate(() => window.location.href);
+    homepageURL = await page.evaluate(() => window.location.href);
   });
 
   afterAll(testSetup.cleanup);
 
   test('browse-page-tabs', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     //check presence of browse type buttons

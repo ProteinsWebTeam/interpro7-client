@@ -8,11 +8,11 @@ jest.setTimeout(config.two_minutes);
 describe('tests', () => {
   const testSetup = testInit('HD1080Portait');
   let page;
-  let homepage_url;
+  let homepageURL;
 
   beforeAll(async () => {
     page = await testSetup.setup();
-    homepage_url = await page.evaluate(() => window.location.href);
+    homepageURL = await page.evaluate(() => window.location.href);
   });
 
   afterAll(testSetup.cleanup);
@@ -53,11 +53,11 @@ describe('tests', () => {
   };
 
   test('click-browse-page-set-tab', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    //click entry tab
+    // click entry tab
     await Promise.all([
       page.waitForSelector('[data-testid="browse-tab-set"]', { timeout: 0 }),
       page.click('[data-testid="browse-tab-set"]'),
@@ -67,11 +67,11 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-all-set-filter', async () => {
-    //initial navigation to set browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to set browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all sets'
+    const allItems = 'all'; // 'all' is used as the memberdb name to represent 'all sets'
     await Promise.all([
       page.waitForSelector(`[data-testid="memberdb-filter-all"]`, {
         timeout: 0,
@@ -84,15 +84,15 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-database-filters', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     //const databases = config.general.member_databases;
     //databases.push(config.general.interpro);
     const databases = ['cdd', 'pfam', 'pirsf'];
     for (const db of databases) {
-      //click member db filter
+      // click member db filter
       await Promise.all([
         page.waitForSelector(`[data-testid="memberdb-filter-${db}"]`, {
           timeout: 0,
@@ -108,8 +108,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-all-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'all';
@@ -117,8 +117,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-interpro-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'interpro';
@@ -126,8 +126,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-cathgene3d-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cathgene3d';
@@ -135,8 +135,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-cdd-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cdd';
@@ -144,8 +144,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-hamap-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'hamap';
@@ -153,8 +153,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-panther-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'panther';
@@ -162,8 +162,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-pfam-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'pfam';
@@ -171,8 +171,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-pirsf-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'pirsf';
@@ -180,8 +180,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-prints-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prints';
@@ -189,8 +189,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-prodom-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prodom';
@@ -198,8 +198,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-profile-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'profile';
@@ -207,8 +207,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-prosite-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prosite';
@@ -216,8 +216,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-sfld-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'sfld';
@@ -225,8 +225,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-smart-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'smart';
@@ -234,8 +234,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-ssf-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'ssf';
@@ -243,8 +243,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-tigrfams-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'tigrfams';
@@ -252,8 +252,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-set-grid', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}set/all`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}set/all`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([

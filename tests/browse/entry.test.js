@@ -7,11 +7,11 @@ jest.setTimeout(config.two_minutes);
 describe('tests', () => {
   const testSetup = testInit('QHD');
   let page;
-  let homepage_url;
+  let homepageURL;
 
   beforeAll(async () => {
     page = await testSetup.setup();
-    homepage_url = await page.evaluate(() => window.location.href);
+    homepageURL = await page.evaluate(() => window.location.href);
   });
 
   afterAll(testSetup.cleanup);
@@ -74,11 +74,11 @@ describe('tests', () => {
   };
 
   test('click-browse-page-entry-tab', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}structure/pdb`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}structure/pdb`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    //click entry tab
+    // click entry tab
     await Promise.all([
       page.waitForSelector('[data-testid="browse-tab-entry"]', { timeout: 0 }),
       page.click('[data-testid="browse-tab-entry"]'),
@@ -88,8 +88,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-interpro-filter', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const interprodb = config.general.interpro;
@@ -107,12 +107,12 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-member-db-filters', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     for (const memberdb of config.general.member_databases) {
-      //click member db filter
+      // click member db filter
       await Promise.all([
         page.waitForSelector(`[data-testid="memberdb-filter-${memberdb}"]`, {
           timeout: 0,
@@ -128,8 +128,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-interpro-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const interprodb = config.general.interpro;
@@ -141,8 +141,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-cathgene3d-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cathgene3d';
@@ -154,8 +154,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-cdd-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'cdd';
@@ -167,8 +167,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-hamap-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'hamap';
@@ -180,8 +180,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-panther-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'panther';
@@ -193,8 +193,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-panther-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'panther';
@@ -206,8 +206,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-pfam-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'pfam';
@@ -219,8 +219,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-pirsf-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'pirsf';
@@ -232,8 +232,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-prints-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prints';
@@ -245,8 +245,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-prodom-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prodom';
@@ -258,8 +258,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-profile-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'profile';
@@ -271,8 +271,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-prosite-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'prosite';
@@ -284,8 +284,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-sfld-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'sfld';
@@ -297,8 +297,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-smart-prints-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'smart';
@@ -310,8 +310,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-ssf-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'ssf';
@@ -323,8 +323,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-tigrfams-page-elements', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'tigrfams';
@@ -336,8 +336,8 @@ describe('tests', () => {
   });
 
   test('click-browse-page-entry-grid', async () => {
-    //initial navigation to browse page
-    const browseURL = `${homepage_url}entry/interpro`;
+    // initial navigation to browse page
+    const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([
