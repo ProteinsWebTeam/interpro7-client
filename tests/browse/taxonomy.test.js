@@ -32,6 +32,9 @@ describe('tests', () => {
     notExpectedElements
   ) => {
     await Promise.all([
+      page.waitForSelector(`[data-testid="memberdb-filter-${clickFilter}"]`, {
+        timeout: 0,
+      }),
       page.click(`[data-testid="memberdb-filter-${clickFilter}"]`, {
         waitUntil: 'networkidle0',
       }),
@@ -54,7 +57,9 @@ describe('tests', () => {
 
     //click entry tab
     await Promise.all([
-      page.waitForNavigation(),
+      page.waitForSelector('[data-testid="browse-tab-taxonomy"]', {
+        timeout: 0,
+      }),
       page.click('[data-testid="browse-tab-taxonomy"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
@@ -68,7 +73,9 @@ describe('tests', () => {
 
     const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all taxonomies'
     await Promise.all([
-      page.waitForNavigation(),
+      page.waitForSelector(`[data-testid="memberdb-filter-${all_items}"]`, {
+        timeout: 0,
+      }),
       page.click(`[data-testid="memberdb-filter-${all_items}"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
@@ -86,6 +93,9 @@ describe('tests', () => {
     for (const db of databases) {
       //click member db filter
       await Promise.all([
+        page.waitForSelector(`[data-testid="memberdb-filter-${db}"]`, {
+          timeout: 0,
+        }),
         page.click(`[data-testid="memberdb-filter-${db}"]`, {
           waitUntil: 'networkidle0',
         }),
@@ -249,6 +259,7 @@ describe('tests', () => {
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([
+      page.waitForSelector(`[data-testid="view-grid-button"]`, { timeout: 0 }),
       page.click(`[data-testid="view-grid-button"]`, {
         waitUntil: 'networkidle0',
       }),
@@ -270,6 +281,7 @@ describe('tests', () => {
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([
+      page.waitForSelector(`[data-testid="view-tree-button"]`, { timeout: 0 }),
       page.click(`[data-testid="view-tree-button"]`, {
         waitUntil: 'networkidle0',
       }),

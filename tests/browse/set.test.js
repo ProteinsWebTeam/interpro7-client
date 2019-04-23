@@ -34,6 +34,9 @@ describe('tests', () => {
     notExpectedElements
   ) => {
     await Promise.all([
+      page.waitForSelector(`[data-testid="memberdb-filter-${clickFilter}"]`, {
+        timeout: 0,
+      }),
       page.click(`[data-testid="memberdb-filter-${clickFilter}"]`, {
         waitUntil: 'networkidle0',
       }),
@@ -53,16 +56,16 @@ describe('tests', () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
     //click entry tab
     await Promise.all([
-      page.waitForNavigation(),
+      page.waitForSelector('[data-testid="browse-tab-set"]', { timeout: 0 }),
       page.click('[data-testid="browse-tab-set"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(expect.stringMatching(/interpro\/set/));
   });
 
-  /*
   test('click-browse-page-set-all-set-filter', async () => {
     //initial navigation to set browse page
     const browseURL = `${homepage_url}set/all`;
@@ -70,14 +73,16 @@ describe('tests', () => {
 
     const all_items = 'all'; // 'all' is used as the memberdb name to represent 'all sets'
     await Promise.all([
-      page.waitForNavigation(),
+      page.waitForSelector(`[data-testid="memberdb-filter-all"]`, {
+        timeout: 0,
+      }),
       page.click(`[data-testid="memberdb-filter-all"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
     const urlMatch = new RegExp(`interpro\/set\/all`, 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
-  */
+
   test('click-browse-page-set-database-filters', async () => {
     //initial navigation to browse page
     const browseURL = `${homepage_url}set/all`;
@@ -89,6 +94,9 @@ describe('tests', () => {
     for (const db of databases) {
       //click member db filter
       await Promise.all([
+        page.waitForSelector(`[data-testid="memberdb-filter-${db}"]`, {
+          timeout: 0,
+        }),
         page.click(`[data-testid="memberdb-filter-${db}"]`, {
           waitUntil: 'networkidle0',
         }),

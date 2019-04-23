@@ -55,6 +55,9 @@ describe('tests', () => {
     notExpectedElements
   ) => {
     await Promise.all([
+      page.waitForSelector(`[data-testid="memberdb-filter-${clickFilter}"]`, {
+        timeout: 0,
+      }),
       page.click(`[data-testid="memberdb-filter-${clickFilter}"]`, {
         waitUntil: 'networkidle0',
       }),
@@ -77,7 +80,7 @@ describe('tests', () => {
 
     //click entry tab
     await Promise.all([
-      page.waitForNavigation(),
+      page.waitForSelector('[data-testid="browse-tab-entry"]', { timeout: 0 }),
       page.click('[data-testid="browse-tab-entry"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
@@ -91,6 +94,9 @@ describe('tests', () => {
 
     const interprodb = config.general.interpro;
     await Promise.all([
+      page.waitForSelector(`[data-testid="memberdb-filter-${interprodb}"]`, {
+        timeout: 0,
+      }),
       page.click(`[data-testid="memberdb-filter-${interprodb}"]`, {
         waitUntil: 'networkidle0',
       }),
@@ -108,6 +114,9 @@ describe('tests', () => {
     for (const memberdb of config.general.member_databases) {
       //click member db filter
       await Promise.all([
+        page.waitForSelector(`[data-testid="memberdb-filter-${memberdb}"]`, {
+          timeout: 0,
+        }),
         page.click(`[data-testid="memberdb-filter-${memberdb}"]`, {
           waitUntil: 'networkidle0',
         }),
@@ -332,6 +341,7 @@ describe('tests', () => {
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([
+      page.waitForSelector(`[data-testid="view-grid-button"]`, { timeout: 0 }),
       page.click(`[data-testid="view-grid-button"]`, {
         waitUntil: 'networkidle0',
       }),
