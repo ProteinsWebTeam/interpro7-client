@@ -484,7 +484,7 @@ class ProtVista extends Component {
 
         <div className={f('protvista')}>
           <protvista-manager
-            attributes="length displaystart displayend highlightstart highlightend"
+            attributes="length displaystart displayend highlight"
             id="pv-manager"
           >
             <div className={f('track-container')}>
