@@ -22,6 +22,9 @@ describe('tests', () => {
     notExpectedElements
   ) => {
     await Promise.all([
+      page.waitForSelector(`[data-testid="memberdb-filter-${clickFilter}"]`, {
+        timeout: 0,
+      }),
       page.click(`[data-testid="memberdb-filter-${clickFilter}"]`, {
         waitUntil: 'networkidle0',
       }),
@@ -44,7 +47,9 @@ describe('tests', () => {
 
     // click first entry row
     await Promise.all([
-      page.waitForNavigation(),
+      page.waitForSelector('[data-testid="table-entity"] a', {
+        timeout: 0,
+      }),
       page.click('[data-testid="table-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
