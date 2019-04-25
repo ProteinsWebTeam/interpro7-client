@@ -4,7 +4,7 @@ export default {
   fast_timeout: 100,
   general: {
     interpro: 'interpro',
-    member_databases: [
+    entryType: [
       'cathgene3d',
       'cdd',
       'hamap',
@@ -20,7 +20,7 @@ export default {
       'ssf',
       'tigrfams',
     ],
-    entry_types: [
+    entryTypes: [
       'domain',
       'family',
       'homologous_superfamily',
@@ -31,6 +31,7 @@ export default {
       'ptm',
     ],
   },
+  /* eslint-disable no-magic-numbers */
   homepage: {
     species: [
       559292,
@@ -47,8 +48,9 @@ export default {
       7955,
     ],
   },
+  /* eslint-enable */
   browse: {
-    browse_types: [
+    browseTypes: [
       'entry',
       'protein',
       'structure',

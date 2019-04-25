@@ -1,5 +1,4 @@
 import testInit from '../../scripts/test-init';
-import { sleep } from 'timing-functions';
 import config from '../test_config';
 import { checkForElement } from '../utils';
 
@@ -49,8 +48,8 @@ describe('tests', () => {
   });
 
   test('home-by-entry-type-box', async () => {
-    //entry type is not displayed by default
-    let status = await checkForElement(
+    // entry type is not displayed by default
+    const status = await checkForElement(
       page,
       '[data-testid="by-entry-type-box"]'
     );
@@ -69,8 +68,11 @@ describe('tests', () => {
   });
 
   test('home-by-species-box', async () => {
-    //species box is not displayed by default
-    let status = await checkForElement(page, '[data-testid="by-species-box"]');
+    // species box is not displayed by default
+    const status = await checkForElement(
+      page,
+      '[data-testid="by-species-box"]'
+    );
     expect(status).toMatch('TimeoutError');
   });
 
@@ -100,29 +102,29 @@ describe('tests', () => {
   });
 
   test('home-click-by-member-database-icon', async () => {
-    for (const member_database of config.general.member_databases) {
+    for (const memberDatabase of config.general.entryType) {
       await gotoURL(page, homepageURL);
       await Promise.all([
         page.waitForNavigation(),
-        page.click(`[data-testid="member-database-${member_database}"]`),
+        page.click(`[data-testid="member-database-${memberDatabase}"]`),
       ]);
       const url = await page.evaluate(() => window.location.href);
-      expect(url).toEqual(expect.stringContaining(`/entry/${member_database}`));
+      expect(url).toEqual(expect.stringContaining(`/entry/${memberDatabase}`));
     }
   });
 
   test('home-click-by-entry-type-icon', async () => {
-    for (const entry_type of config.general.entry_types) {
+    for (const entryType of config.general.entryTypes) {
       await gotoURL(page, homepageURL);
       await page.focus('[data-testid="home-entry-type-button"]');
       await page.click('[data-testid="home-entry-type-button"]');
       await Promise.all([
         page.waitForNavigation(),
-        page.click(`[data-testid="entry-${entry_type}"]`),
+        page.click(`[data-testid="entry-${entryType}"]`),
       ]);
       const url = await page.evaluate(() => window.location.href);
       expect(url).toEqual(
-        expect.stringContaining(`/entry/InterPro/?type=${entry_type}`)
+        expect.stringContaining(`/entry/InterPro/?type=${entryType}`)
       );
     }
   });

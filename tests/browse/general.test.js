@@ -1,5 +1,4 @@
 import testInit from '../../scripts/test-init';
-import { sleep } from 'timing-functions';
 import config from '../test_config';
 
 jest.setTimeout(config.two_minutes);
@@ -21,14 +20,13 @@ describe('tests', () => {
     const browseURL = `${homepageURL}entry/interpro`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    //check presence of browse type buttons
-    for (const type of config.browse.browse_types) {
+    // check presence of browse type buttons
+    for (const type of config.browse.browseTypes) {
       const selection = await page.waitForSelector(
         `[data-testid="browse-tab-${type}"]`,
         { timeout: 3000 }
       );
       expect(selection).not.toBeNull();
     }
-    console.log('Browse general: Expected tabs passed');
   });
 });

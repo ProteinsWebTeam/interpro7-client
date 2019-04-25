@@ -1,5 +1,4 @@
-import testInit from '../../scripts/test-init';
-import { sleep } from 'timing-functions';
+import testInit, { memberDatabases } from '../../scripts/test-init';
 import config from '../test_config';
 import { checkForElement } from '../utils';
 
@@ -81,7 +80,7 @@ describe('tests', () => {
       page.click(`[data-testid="memberdb-filter-${allItems}"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/structure\/PDB`, 'i');
+    const urlMatch = new RegExp('interpro/structure/PDB', 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
@@ -90,7 +89,7 @@ describe('tests', () => {
     const browseURL = `${homepageURL}structure/PDB`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
-    const databases = config.general.member_databases;
+    const databases = [...memberDatabases];
     databases.push(config.general.interpro);
     for (const db of databases) {
       // click member db filter
@@ -261,19 +260,19 @@ describe('tests', () => {
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await Promise.all([
-      page.waitForSelector(`[data-testid="view-grid-button"]`, { timeout: 0 }),
-      page.click(`[data-testid="view-grid-button"]`, {
+      page.waitForSelector('[data-testid="view-grid-button"]', { timeout: 0 }),
+      page.click('[data-testid="view-grid-button"]', {
         waitUntil: 'networkidle0',
       }),
     ]);
-    const selection = await page.waitForSelector(`[data-testid="data-grid"]`);
+    const selection = await page.waitForSelector('[data-testid="data-grid"]');
     expect(selection).not.toBeNull();
 
-    const item = await page.waitForSelector(`[data-testid="grid-entity"]`);
+    const item = await page.waitForSelector('[data-testid="grid-entity"]');
     expect(item).not.toBeNull();
 
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/structure\/pdb\/\#grid`, 'i');
+    const urlMatch = new RegExp('interpro/structure/pdb/#grid', 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 });

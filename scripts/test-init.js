@@ -49,6 +49,23 @@ export const RESOLUTION = {
   },
 };
 
+export const memberDatabases = [
+  'cathgene3d',
+  'cdd',
+  'hamap',
+  'panther',
+  'pfam',
+  'pirsf',
+  'prints',
+  'prodom',
+  'profile',
+  'prosite',
+  'sfld',
+  'smart',
+  'ssf',
+  'tigrfams',
+];
+
 export const config = {
   headless: true,
   slowMo: 250,
