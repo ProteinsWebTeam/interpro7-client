@@ -123,10 +123,10 @@ class ProtVista extends Component {
 
   updateTracksWithData(data) {
     const b2sh = new Map([
-      ['s', 'discontinuosStart'],
-      ['e', 'discontinuosEnd'],
-      ['se', 'discontinuos'],
-      ['es', 'discontinuos'],
+      ['N_TERMINAL_DISC', 'discontinuosStart'],
+      ['C_TERMINAL_DISC', 'discontinuosEnd'],
+      ['CN_TERMINAL_DISC', 'discontinuos'],
+      ['NC_TERMINAL_DISC', 'discontinuos'],
     ]);
 
     for (const type of data) {
@@ -157,7 +157,7 @@ class ProtVista extends Component {
                 loc => ({
                   ...loc,
                   fragments: loc.fragments.map(f => ({
-                    shape: b2sh.get(f.bounds),
+                    shape: b2sh.get(f['dc-status']),
                     ...f,
                   })),
                 }),
