@@ -32,7 +32,7 @@
     "clean:report": "rimraf reports && mkdirp reports",
     "bundle": "webpack --progress",
     "predeploy": "npm-run-all test clean",
-    "postdeploy": "npm run test:functional",
+    "COMMENTED:postdeploy": "npm run test:functional",
     "deploy": "npm run bundle",
     "deploy:dev": "npm run deploy -- -- --mode=development",
     "deploy:staging": "npm run deploy -- -- --env.staging",
