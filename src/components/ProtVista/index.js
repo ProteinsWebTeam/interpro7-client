@@ -90,6 +90,7 @@ class ProtVista extends Component {
     this._popperRef = React.createRef();
     this._popperContentRef = React.createRef();
     this._webProteinRef = React.createRef();
+    this._isPopperTop = true;
   }
 
   async componentDidMount() {
@@ -191,10 +192,14 @@ class ProtVista extends Component {
             this._popperContentRef.current.appendChild(
               this.getElementFromEntry(e.detail),
             );
+            this._isPopperTop = !this._isPopperTop;
             this.popper = new PopperJS(
               e.detail.target,
               this._popperRef.current,
-              { placement: 'top', applyStyle: { enabled: false } },
+              {
+                placement: this._isPopperTop ? 'top' : 'bottom',
+                applyStyle: { enabled: false },
+              },
             );
           });
         }
@@ -479,7 +484,7 @@ class ProtVista extends Component {
 
         <div className={f('protvista')}>
           <protvista-manager
-            attributes="length displaystart displayend highlightstart highlightend"
+            attributes="length displaystart displayend highlight"
             id="pv-manager"
           >
             <div className={f('track-container')}>

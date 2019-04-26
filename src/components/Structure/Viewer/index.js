@@ -16,8 +16,6 @@ import { intersectionObserver as intersectionObserverPolyfill } from 'utils/poly
 import ProtVistaForStructure from './ProtVistaForStructures';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
-// import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-
 import getMapper from './proteinToStructureMapper';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -80,6 +78,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
     };
 
     this.stage = null;
+
+    this._protein2structureMappers = {};
     this.name = `${this.props.id}_updated.cif`;
 
     this._structurevViewer = React.createRef();
@@ -138,7 +138,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
         // const residue = picked.atom;
         // const index = residue.residueIndex;
         // const name = residue.resname;
-        // console.log(`clicked: ${index} ${name}`);
+        // const chain = residue.chainid;
+        // console.log(`clicked: ${index} ${name} ${chain}`, picked);
       } else {
         // console.log(`clicked: nothing`);
       }
@@ -208,6 +209,24 @@ class StructureView extends PureComponent /*:: <Props> */ {
         if (type === 'chain')
           this.showEntryInStructure('pdb', pdbid, accession, protein);
         else this.showEntryInStructure(db, accession, chain, protein);
+      },
+    );
+    this._protvista.current.addEventListener(
+      'change',
+      ({ detail: { type, highlight, chain, protein } }) => {
+        if (type === 'sequence-chain') {
+          if (highlight) {
+            const [start, stop] = highlight.split(':');
+            const p2s = this._protein2structureMappers[
+              `${protein}->${chain}`.toUpperCase()
+            ];
+            this.showRegionInStructure(
+              chain,
+              Math.round(p2s(start)),
+              Math.round(p2s(stop)),
+            );
+          } else this.showRegionInStructure();
+        }
       },
     );
     this._protvista.current.addEventListener('entrymouseout', () => {
@@ -375,6 +394,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
           const chain = structure.chain;
           const protein = structure.protein;
           const p2s = getMapper(structure.protein_structure_mapping[chain]);
+          this._protein2structureMappers[
+            `${protein}->${chain}`.toUpperCase()
+          ] = p2s;
           if (!memberDBMap[db][entry][chain])
             memberDBMap[db][entry][chain] = {};
           if (!memberDBMap[db][entry][chain][protein])
@@ -481,6 +503,25 @@ class StructureView extends PureComponent /*:: <Props> */ {
   _toggleMinimize = () =>
     this.setState({ isMinimized: !this.state.isMinimized });
 
+  showRegionInStructure(chain, start, stop) {
+    const components = this.stage.getComponentsByName(this.name);
+    if (components) {
+      components.forEach(component => {
+        if (chain && start && stop) {
+          const selection = `${start}-${stop}:${chain}`;
+          const theme = ColormakerRegistry.addSelectionScheme(
+            [['red', selection]],
+            selection,
+          );
+          component.addRepresentation('cartoon', { color: theme });
+        } else {
+          component.addRepresentation('cartoon', {
+            colorScheme: 'chainname',
+          });
+        }
+      });
+    }
+  }
   render() {
     const {
       isStuck,

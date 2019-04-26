@@ -193,10 +193,29 @@
 }
 
 .track-component path:global(.child-fragment) {
-  stroke-width: 0;
+  stroke-width: 1px;
   opacity: 0.5;
   cursor: pointer;
 }
+g:global(.child-location-group.clg-0) path {
+  stroke: #aed0e4;
+}
+g:global(.child-location-group.clg-1) path {
+  stroke: #1ba3b6;
+}
+g:global(.child-location-group.clg-2) path {
+  stroke: #d0aee4;
+}
+g:global(.child-location-group.clg-3) path {
+  stroke: #a31bb6;
+}
+g:global(.child-location-group.clg-4) path {
+  stroke: #e4d0ae;
+}
+g:global(.child-location-group.clg-5) path {
+  stroke: #b6a31b;
+}
+
 .track-component path:global(.child-fragment):hover {
   opacity: 0.7;
 }
