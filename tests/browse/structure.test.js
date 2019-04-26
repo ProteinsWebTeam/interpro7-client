@@ -84,31 +84,40 @@ describe('tests', () => {
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
-  test('click-browse-page-structure-database-filters', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const databases = [...memberDatabases];
-    databases.push(config.general.interpro);
-    for (const db of databases) {
+  // loop over all member databases
+  /* eslint-disable no-loop-func */
+  const databases = [...memberDatabases];
+  databases.push(config.general.interpro);
+  for (const memberdb of databases) {
+    test(`click-browse-page-entry-${memberdb}-filters`, async () => {
+      const browseURL = `${homepageURL}structure/PDB`;
+      await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
       // click member db filter
       await Promise.all([
-        page.waitForSelector(`[data-testid="memberdb-filter-${db}"]`, {
+        page.waitForSelector(`[data-testid="memberdb-filter-${memberdb}"]`, {
           timeout: 0,
         }),
-        page.click(`[data-testid="memberdb-filter-${db}"]`, {
+        page.click(`[data-testid="memberdb-filter-${memberdb}"]`, {
           waitUntil: 'networkidle0',
         }),
       ]);
       const url = await page.evaluate(() => window.location.href);
       const urlMatch = new RegExp(
-        `interpro\/structure\/PDB\/entry\/${db}`,
+        `interpro\/structure\/PDB\/entry\/${memberdb}`,
         'i'
       );
       expect(url).toEqual(expect.stringMatching(urlMatch));
-    }
-  });
+    });
+
+    test(`click-browse-page-entry-${memberdb}-page-elements`, async () => {
+      // initial navigation to browse page
+      const browseURL = `${homepageURL}structure/PDB`;
+      await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
+
+      await pageElementTests(memberdb, ExpectedElements, NotExpectedElements);
+    });
+  }
+  /* eslint-enable */
 
   test('click-browse-page-structure-all-page-elements', async () => {
     // initial navigation to browse page
@@ -116,141 +125,6 @@ describe('tests', () => {
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     const db = 'all';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-interpro-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = config.general.interpro;
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-cathgene3d-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'cathgene3d';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-cdd-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'cdd';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-hamap-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'hamap';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-panther-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'panther';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-pfam-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'pfam';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-pirsf-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'pirsf';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-prints-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'prints';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-prodom-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'prodom';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-profile-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'profile';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-prosite-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'prosite';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-sfld-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'sfld';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-smart-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'smart';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-ssf-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'ssf';
-    await pageElementTests(db, ExpectedElements, NotExpectedElements);
-  });
-
-  test('click-browse-page-structure-tigrfams-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/PDB`;
-    await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    const db = 'tigrfams';
     await pageElementTests(db, ExpectedElements, NotExpectedElements);
   });
 
