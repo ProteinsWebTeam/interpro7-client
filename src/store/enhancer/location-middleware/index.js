@@ -1,7 +1,7 @@
 // @flow
 /* global ga: false */
 /*:: import type { Middleware } from 'redux'; */
-/*:: import type history from 'history/createBrowserHistory'; */
+/*:: import type history from 'history'; */
 /*:: declare var ga: (...args: Array<string>) => void; */
 import { format } from 'url';
 import { sleep } from 'timing-functions/src';
