@@ -1,5 +1,4 @@
 import testInit from '../../scripts/test-init';
-import { sleep } from 'timing-functions';
 import config from '../test_config';
 import { checkForElement } from '../utils';
 
@@ -15,11 +14,11 @@ const gotoURL = async (page, url) => {
 describe('tests', () => {
   const testSetup = testInit('HD1080Portait');
   let page;
-  let homepage_url;
+  let homepageURL;
 
   beforeAll(async () => {
     page = await testSetup.setup();
-    homepage_url = await page.evaluate(() => window.location.href);
+    homepageURL = await page.evaluate(() => window.location.href);
   });
 
   afterAll(testSetup.cleanup);
@@ -103,36 +102,36 @@ describe('tests', () => {
   });
 
   test('home-click-by-member-database-icon', async () => {
-    for (const member_database of config.general.member_databases) {
-      await gotoURL(page, homepage_url);
+    for (const memberDatabase of config.general.entryType) {
+      await gotoURL(page, homepageURL);
       await Promise.all([
         page.waitForNavigation(),
-        page.click(`[data-testid="member-database-${member_database}"]`),
+        page.click(`[data-testid="member-database-${memberDatabase}"]`),
       ]);
       const url = await page.evaluate(() => window.location.href);
-      expect(url).toEqual(expect.stringContaining(`/entry/${member_database}`));
+      expect(url).toEqual(expect.stringContaining(`/entry/${memberDatabase}`));
     }
   });
 
   test('home-click-by-entry-type-icon', async () => {
-    for (const entry_type of config.general.entry_types) {
-      await gotoURL(page, homepage_url);
+    for (const entryType of config.general.entryTypes) {
+      await gotoURL(page, homepageURL);
       await page.focus('[data-testid="home-entry-type-button"]');
       await page.click('[data-testid="home-entry-type-button"]');
       await Promise.all([
         page.waitForNavigation(),
-        page.click(`[data-testid="entry-${entry_type}"]`),
+        page.click(`[data-testid="entry-${entryType}"]`),
       ]);
       const url = await page.evaluate(() => window.location.href);
       expect(url).toEqual(
-        expect.stringContaining(`/entry/InterPro/?type=${entry_type}`)
+        expect.stringContaining(`/entry/InterPro/?type=${entryType}`)
       );
     }
   });
 
   test('home-click-by-species-icon', async () => {
     for (const taxid of config.homepage.species) {
-      await gotoURL(page, homepage_url);
+      await gotoURL(page, homepageURL);
       await page.focus('[data-testid="home-species-button"]');
       await page.click('[data-testid="home-species-button"]');
       await Promise.all([
@@ -151,7 +150,7 @@ describe('tests', () => {
     await page.type('input[type="text"]', '1');
     await sleep(1500); // eslint-disable-line no-magic-numbers
      */
-    await gotoURL(page, homepage_url);
+    await gotoURL(page, homepageURL);
     await Promise.all([
       page.waitForNavigation(),
       page.type('input[type="text"]', '1'),

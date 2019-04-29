@@ -1,36 +1,15 @@
 import testInit from '../../scripts/test-init';
-import { sleep } from 'timing-functions';
 import config from '../test_config';
 
 jest.setTimeout(config.two_minutes);
 
-const checkForElement = async (page, selector) => {
-  let status = '';
-  try {
-    const selection = await page.waitForSelector(selector, {
-      timeout: config.fast_timeout,
-    });
-  } catch (e) {
-    status = e.toString();
-  }
-  return status;
-};
-
-const gotoURL = async (page, url) => {
-  await Promise.all([
-    page.waitForNavigation(),
-    page.goto(url, { waitUntil: 'networkidle0' }),
-  ]);
-};
-
 describe('tests', () => {
   const testSetup = testInit('HD1080Portait');
   let page;
-  let homepage_url;
 
   beforeAll(async () => {
     page = await testSetup.setup();
-    homepage_url = await page.evaluate(() => window.location.href);
+    await page.evaluate(() => window.location.href);
   });
 
   afterAll(testSetup.cleanup);

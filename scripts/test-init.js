@@ -1,5 +1,4 @@
 import puppeteer from 'puppeteer';
-import { sleep } from 'timing-functions';
 import server from './serve';
 export const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
 
@@ -50,6 +49,23 @@ export const RESOLUTION = {
   },
 };
 
+export const memberDatabases = [
+  'cathgene3d',
+  'cdd',
+  'hamap',
+  'panther',
+  'pfam',
+  'pirsf',
+  'prints',
+  'prodom',
+  'profile',
+  'prosite',
+  'sfld',
+  'smart',
+  'ssf',
+  'tigrfams',
+];
+
 export const config = {
   headless: true,
   slowMo: 250,
@@ -89,7 +105,6 @@ export default (resolutionCode /*: string */ = 'HD1080') =>
         return page;
       },
       async cleanup() {
-        // await sleep(1000000);
         try {
           if (browser) browser.close();
         } catch (_) {
