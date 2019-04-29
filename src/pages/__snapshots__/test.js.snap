@@ -4,15 +4,23 @@ exports[`<Pages /> should render 1`] = `
 <div
   className="main stuck"
 >
-  <Connect(UnconnectedErrorBoundary)>
+  <Memo(ConnectFunction)>
     <div
       className="row"
     >
       <div
         className="large-12 columns"
       >
-        <Connect(_Switch)
-          catchAll={[Function]}
+        <Memo(ConnectFunction)
+          catchAll={
+            Object {
+              "$$typeof": Symbol(react.memo),
+              "WrappedComponent": [Function],
+              "compare": null,
+              "displayName": "Connect(loadData(BrowseTabsWithoutData))",
+              "type": [Function],
+            }
+          }
           childRoutes={
             Map {
               /\\^search\\|result\\$/ => [Function],
@@ -23,9 +31,9 @@ exports[`<Pages /> should render 1`] = `
         />
       </div>
     </div>
-  </Connect(UnconnectedErrorBoundary)>
-  <Connect(UnconnectedErrorBoundary)>
-    <Connect(_Switch)
+  </Memo(ConnectFunction)>
+  <Memo(ConnectFunction)>
+    <Memo(ConnectFunction)
       catchAll={[Function]}
       childRoutes={
         Map {
@@ -42,6 +50,6 @@ exports[`<Pages /> should render 1`] = `
       indexRoute={[Function]}
       locationSelector={[Function]}
     />
-  </Connect(UnconnectedErrorBoundary)>
+  </Memo(ConnectFunction)>
 </div>
 `;

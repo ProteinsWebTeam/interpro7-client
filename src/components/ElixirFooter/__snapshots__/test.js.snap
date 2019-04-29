@@ -10,7 +10,7 @@ exports[`<ElixirFooter /> should render 1`] = `
     <div
       className="columns"
     >
-      <Connect(Link)
+      <Memo(ConnectFunction)
         href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi"
         target="_blank"
       >
@@ -38,7 +38,7 @@ exports[`<ElixirFooter /> should render 1`] = `
             Learn more ›
           </span>
         </small>
-      </Connect(Link)>
+      </Memo(ConnectFunction)>
     </div>
   </div>
 </div>

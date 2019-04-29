@@ -1,4 +1,4 @@
-import createHistory from 'history/createMemoryHistory';
+import { createBrowserHistory as createHistory } from 'history';
 
 import getInitialState from '.';
 
@@ -6,7 +6,7 @@ describe('getInitialState', () => {
   let history;
 
   beforeEach(() => {
-    history = createHistory({ basename: 'somebasename' });
+    history = createHistory({ basename: '/interpro/' });
   });
 
   test('home', () => {

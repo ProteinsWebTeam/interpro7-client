@@ -11,7 +11,7 @@ exports[`<Title /> loading, stuck, offline 1`] = `
     <div
       className="logo-flex"
     >
-      <Connect(Link)
+      <Memo(ConnectFunction)
         title="Back to InterPro homepage"
         to={
           Object {
@@ -32,7 +32,7 @@ exports[`<Title /> loading, stuck, offline 1`] = `
         >
           InterPro
         </div>
-      </Connect(Link)>
+      </Memo(ConnectFunction)>
     </div>
   </h1>
   <h4
@@ -54,7 +54,7 @@ exports[`<Title /> loading, stuck, online 1`] = `
     <div
       className="logo-flex"
     >
-      <Connect(Link)
+      <Memo(ConnectFunction)
         title="Back to InterPro homepage"
         to={
           Object {
@@ -74,7 +74,7 @@ exports[`<Title /> loading, stuck, online 1`] = `
         >
           InterPro
         </div>
-      </Connect(Link)>
+      </Memo(ConnectFunction)>
     </div>
   </h1>
   <h4
@@ -96,7 +96,7 @@ exports[`<Title /> not loading, unstuck, offline 1`] = `
     <div
       className="logo-flex"
     >
-      <Connect(Link)
+      <Memo(ConnectFunction)
         title="Back to InterPro homepage"
         to={
           Object {
@@ -117,7 +117,7 @@ exports[`<Title /> not loading, unstuck, offline 1`] = `
         >
           InterPro
         </div>
-      </Connect(Link)>
+      </Memo(ConnectFunction)>
     </div>
   </h1>
   <h4
@@ -139,7 +139,7 @@ exports[`<Title /> not loading, unstuck, online 1`] = `
     <div
       className="logo-flex"
     >
-      <Connect(Link)
+      <Memo(ConnectFunction)
         title="Back to InterPro homepage"
         to={
           Object {
@@ -159,7 +159,7 @@ exports[`<Title /> not loading, unstuck, online 1`] = `
         >
           InterPro
         </div>
-      </Connect(Link)>
+      </Memo(ConnectFunction)>
     </div>
   </h1>
   <h4

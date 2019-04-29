@@ -24,7 +24,7 @@ exports[`<ErrorMessage /> should render error message 1`] = `
     <p>
       If this keeps happening, you might want to get in touch with us through our contact form.
     </p>
-    <Connect(Link)
+    <Memo(ConnectFunction)
       className="button"
       href="https://www.ebi.ac.uk/support/interpro"
       target="_blank"
@@ -37,7 +37,7 @@ exports[`<ErrorMessage /> should render error message 1`] = `
         ✉
       </span>
       ️ Contact form
-    </Connect(Link)>
+    </Memo(ConnectFunction)>
   </div>
 </div>
 `;
