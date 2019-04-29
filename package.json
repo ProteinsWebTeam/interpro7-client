@@ -92,7 +92,7 @@
     "foundation-sites": "6.5.3",
     "gsap": "2.1.2",
     "history": "4.9.0",
-    "idb": "3.0.2",
+    "idb": "4.0.3",
     "interpro-components": "^0.8.0",
     "intersection-observer": "0.6.0",
     "isomorphic-fetch": "2.2.1",
