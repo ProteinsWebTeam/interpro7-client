@@ -131,6 +131,7 @@ const getConfigFor = (env, mode, module = false) => {
                       modules: false,
                       loose: true,
                       useBuiltIns: 'usage',
+                      corejs: 3,
                       targets: module
                         ? { esmodules: true }
                         : { browsers: '> 0.25%' },

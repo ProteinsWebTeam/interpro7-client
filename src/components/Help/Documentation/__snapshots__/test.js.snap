@@ -22,7 +22,7 @@ exports[`<Documentation /> should render 1`] = `
           <li>
             <ul>
               <li>
-                <Connect(Link)
+                <Memo(ConnectFunction)
                   to={
                     Object {
                       "description": Object {
@@ -35,10 +35,10 @@ exports[`<Documentation /> should render 1`] = `
                   }
                 >
                   About InterPro
-                </Connect(Link)>
+                </Memo(ConnectFunction)>
               </li>
               <li>
-                <Connect(Link)
+                <Memo(ConnectFunction)
                   to={
                     Object {
                       "description": Object {
@@ -50,10 +50,10 @@ exports[`<Documentation /> should render 1`] = `
                   }
                 >
                   Release Notes
-                </Connect(Link)>
+                </Memo(ConnectFunction)>
               </li>
               <li>
-                <Connect(Link)
+                <Memo(ConnectFunction)
                   to={
                     Object {
                       "description": Object {
@@ -66,7 +66,7 @@ exports[`<Documentation /> should render 1`] = `
                   }
                 >
                   Frequently Asked Questions (FAQs)
-                </Connect(Link)>
+                </Memo(ConnectFunction)>
               </li>
             </ul>
           </li>
@@ -84,7 +84,7 @@ exports[`<Documentation /> should render 1`] = `
           </h5>
           <ul>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 to={
                   Object {
                     "description": Object {
@@ -97,10 +97,10 @@ exports[`<Documentation /> should render 1`] = `
                 }
               >
                 About InterProScan
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 className="ext"
                 href="//github.com/ebi-pf-team/interproscan/wiki"
                 target="_blank"
@@ -111,7 +111,7 @@ exports[`<Documentation /> should render 1`] = `
                 />
                  
                 InterProScan Wiki
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
           </ul>
         </div>
@@ -127,7 +127,7 @@ exports[`<Documentation /> should render 1`] = `
           </h5>
           <ul>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 className="ext"
                 href="https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
                 target="_blank"
@@ -138,17 +138,17 @@ exports[`<Documentation /> should render 1`] = `
                 />
                  
                 General API documentation
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/"
               >
                 Swagger API documentation
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 to={
                   Object {
                     "description": Object {
@@ -164,34 +164,34 @@ exports[`<Documentation /> should render 1`] = `
                 }
               >
                 Code snippet generator
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 className="ext"
                 href="//www.ebi.ac.uk/Tools/webservices/"
                 target="_blank"
               >
                 Web services
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 className="ext"
                 href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
                 target="_blank"
               >
                 Privacy and security
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 className="ext"
                 href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
                 target="_blank"
               >
                 Search documentation (EBI)
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
           </ul>
         </div>
@@ -208,7 +208,7 @@ exports[`<Documentation /> should render 1`] = `
           </h5>
           <ul>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 to={
                   Object {
                     "description": Object {
@@ -222,7 +222,7 @@ exports[`<Documentation /> should render 1`] = `
                 }
               >
                 List of InterPro publications
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
           </ul>
         </div>
@@ -241,7 +241,7 @@ exports[`<Documentation /> should render 1`] = `
         </h3>
         <ul>
           <li>
-            <Connect(Link)
+            <Memo(ConnectFunction)
               href="//www.ebi.ac.uk/support/interpro"
               target="_blank"
               withReferrer={true}
@@ -252,7 +252,7 @@ exports[`<Documentation /> should render 1`] = `
               />
                
               Submit a ticket
-            </Connect(Link)>
+            </Memo(ConnectFunction)>
           </li>
         </ul>
       </div>

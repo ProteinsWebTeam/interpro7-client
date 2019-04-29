@@ -12,6 +12,7 @@ module.exports = {
           {
             useBuiltIns: 'usage',
             targets: { node: '8' },
+            corejs: 3,
           },
         ],
         '@babel/react',

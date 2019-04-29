@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import { Provider } from 'react-redux';
 
-import createHistory from 'history/es/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 
 import Root from 'Root';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -10,13 +10,17 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import config, { PROD, STAGING } from 'config';
 import createStore from 'store';
 
-const history = createHistory({ basename: config.root.website.pathname });
+const history = createBrowserHistory({
+  basename: config.root.website.pathname,
+});
 const store = createStore(history);
 
 class App extends PureComponent /*:: <{||}> */ {
   async componentDidMount() {
     if (PROD || STAGING) {
-      const module = await import(/* webpackChunkName: "offline" */ './offline');
+      const module = await import(
+        /* webpackChunkName: "offline" */ './offline'
+      );
       module.default(store);
     }
   }

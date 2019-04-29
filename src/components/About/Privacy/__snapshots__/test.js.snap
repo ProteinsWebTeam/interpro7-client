@@ -8,23 +8,23 @@ exports[`<Privacy /> should render 1`] = `
   <p>
     We have updated our privacy policy to comply with the changes brought by the European Union data protection law (GDPR). You can find more information on the
      
-    <Connect(Link)
+    <Memo(ConnectFunction)
       className="ext"
       href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
       target="_blank"
     >
       Privacy Notice for EMBL-EBI Public Website
-    </Connect(Link)>
+    </Memo(ConnectFunction)>
     . If you have any questions about this privacy policy, please
      
-    <Connect(Link)
+    <Memo(ConnectFunction)
       className="ext"
       href="//www.ebi.ac.uk/support/interpro"
       target="_blank"
       withReferrer={true}
     >
       contact us via EBI support
-    </Connect(Link)>
+    </Memo(ConnectFunction)>
     .
      
   </p>
