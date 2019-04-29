@@ -177,133 +177,567 @@ exports[`<HamburgerBtn /> open, svg, unstuck 1`] = `
 `;
 
 exports[`<Header /> stuck, not signature 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="masthead"
+  id="masthead"
+  style={
+    Object {
+      "position": "fixed",
+      "top": "-40px",
+    }
+  }
+>
+  <div
+    className="masthead-inner row"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction) />
+    <Memo(ConnectFunction)
+      stuck={true}
+    />
+    <ResizeObserverComponent
+      element="nav"
+      measurements="width"
+    >
+      [Function]
+    </ResizeObserverComponent>
+  </div>
+</div>
 `;
 
 exports[`<Header /> stuck, signature 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="masthead sign"
+  id="masthead"
+  style={
+    Object {
+      "position": "fixed",
+      "top": "-40px",
+    }
+  }
+>
+  <div
+    className="masthead-inner row"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction) />
+    <Memo(ConnectFunction)
+      stuck={true}
+    />
+    <ResizeObserverComponent
+      element="nav"
+      measurements="width"
+    >
+      [Function]
+    </ResizeObserverComponent>
+  </div>
+</div>
 `;
 
 exports[`<Header /> unstuck, not signature 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="masthead"
+  id="masthead"
+  style={
+    Object {
+      "top": "-40px",
+    }
+  }
+>
+  <div
+    className="masthead-inner row"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction) />
+    <Memo(ConnectFunction)
+      stuck={false}
+    />
+    <ResizeObserverComponent
+      element="nav"
+      measurements="width"
+    >
+      [Function]
+    </ResizeObserverComponent>
+  </div>
+</div>
 `;
 
 exports[`<Header /> unstuck, signature 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="masthead sign"
+  id="masthead"
+  style={
+    Object {
+      "top": "-40px",
+    }
+  }
+>
+  <div
+    className="masthead-inner row"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction) />
+    <Memo(ConnectFunction)
+      stuck={false}
+    />
+    <ResizeObserverComponent
+      element="nav"
+      measurements="width"
+    >
+      [Function]
+    </ResizeObserverComponent>
+  </div>
+</div>
 `;
 
 exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="columns small-6 medium-4 lowGraphics"
+>
+  <div
+    className="side-icons movedAway"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction)
+      aria-label="Show the InterPro Menu"
+      stuck={true}
+      svg={true}
+    />
+    <label
+      className="side-search stuck"
+    >
+      <Memo(ConnectFunction)
+        name="search"
+      />
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "text",
+              },
+            },
+          }
+        }
+      >
+        <div
+          aria-label="Search InterPro"
+        >
+          <svg
+            className="icon icon--search"
+            height="2.2em"
+            viewBox="0 0 480 480"
+            width="2.2em"
+          >
+            <path
+              d="M0,10 m250,250 a110,110 0 1,0-1,0 l0,140"
+              fill="none"
+              stroke="white"
+              strokeLinecap="round"
+              strokeWidth="50"
+              transform="rotate(-45, 328, 222)"
+            />
+          </svg>
+        </div>
+      </Memo(ConnectFunction)>
+    </label>
+  </div>
+</div>
 `;
 
 exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="columns small-6 medium-4"
+>
+  <div
+    className="side-icons movedAway"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction)
+      aria-label="Show the InterPro Menu"
+      stuck={true}
+      svg={true}
+    />
+    <label
+      className="side-search stuck"
+    >
+      <Memo(ConnectFunction)
+        name="search"
+      />
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "text",
+              },
+            },
+          }
+        }
+      >
+        <div
+          aria-label="Search InterPro"
+        >
+          <svg
+            className="icon icon--search"
+            height="2.2em"
+            viewBox="0 0 480 480"
+            width="2.2em"
+          >
+            <path
+              d="M0,10 m250,250 a110,110 0 1,0-1,0 l0,140"
+              fill="none"
+              stroke="white"
+              strokeLinecap="round"
+              strokeWidth="50"
+              transform="rotate(-45, 328, 222)"
+            />
+          </svg>
+        </div>
+      </Memo(ConnectFunction)>
+    </label>
+  </div>
+</div>
 `;
 
 exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="columns small-6 medium-4 lowGraphics"
+>
+  <div
+    className="side-icons movedAway"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction)
+      aria-label="Show the InterPro Menu"
+      stuck={false}
+      svg={true}
+    />
+    <label
+      className="side-search"
+    >
+      <Memo(ConnectFunction)
+        name="search"
+      />
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "text",
+              },
+            },
+          }
+        }
+      >
+        <div
+          aria-label="Search InterPro"
+        >
+          <svg
+            className="icon icon--search"
+            height="2.2em"
+            viewBox="0 0 480 480"
+            width="2.2em"
+          >
+            <path
+              d="M0,10 m250,250 a110,110 0 1,0-1,0 l0,140"
+              fill="none"
+              stroke="white"
+              strokeLinecap="round"
+              strokeWidth="50"
+              transform="rotate(-45, 328, 222)"
+            />
+          </svg>
+        </div>
+      </Memo(ConnectFunction)>
+    </label>
+  </div>
+</div>
 `;
 
 exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="columns small-6 medium-4"
+>
+  <div
+    className="side-icons movedAway"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction)
+      aria-label="Show the InterPro Menu"
+      stuck={false}
+      svg={true}
+    />
+    <label
+      className="side-search"
+    >
+      <Memo(ConnectFunction)
+        name="search"
+      />
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "text",
+              },
+            },
+          }
+        }
+      >
+        <div
+          aria-label="Search InterPro"
+        >
+          <svg
+            className="icon icon--search"
+            height="2.2em"
+            viewBox="0 0 480 480"
+            width="2.2em"
+          >
+            <path
+              d="M0,10 m250,250 a110,110 0 1,0-1,0 l0,140"
+              fill="none"
+              stroke="white"
+              strokeLinecap="round"
+              strokeWidth="50"
+              transform="rotate(-45, 328, 222)"
+            />
+          </svg>
+        </div>
+      </Memo(ConnectFunction)>
+    </label>
+  </div>
+</div>
 `;
 
 exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="columns small-6 medium-4 lowGraphics"
+>
+  <div
+    className="side-icons"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction)
+      aria-label="Show the InterPro Menu"
+      stuck={true}
+      svg={true}
+    />
+    <label
+      className="side-search stuck"
+    >
+      <Memo(ConnectFunction)
+        name="search"
+      />
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "text",
+              },
+            },
+          }
+        }
+      >
+        <div
+          aria-label="Search InterPro"
+        >
+          <svg
+            className="icon icon--search"
+            height="2.2em"
+            viewBox="0 0 480 480"
+            width="2.2em"
+          >
+            <path
+              d="M0,10 m250,250 a110,110 0 1,0-1,0 l0,140"
+              fill="none"
+              stroke="white"
+              strokeLinecap="round"
+              strokeWidth="50"
+              transform="rotate(-45, 328, 222)"
+            />
+          </svg>
+        </div>
+      </Memo(ConnectFunction)>
+    </label>
+  </div>
+</div>
 `;
 
 exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="columns small-6 medium-4"
+>
+  <div
+    className="side-icons"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction)
+      aria-label="Show the InterPro Menu"
+      stuck={true}
+      svg={true}
+    />
+    <label
+      className="side-search stuck"
+    >
+      <Memo(ConnectFunction)
+        name="search"
+      />
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "text",
+              },
+            },
+          }
+        }
+      >
+        <div
+          aria-label="Search InterPro"
+        >
+          <svg
+            className="icon icon--search"
+            height="2.2em"
+            viewBox="0 0 480 480"
+            width="2.2em"
+          >
+            <path
+              d="M0,10 m250,250 a110,110 0 1,0-1,0 l0,140"
+              fill="none"
+              stroke="white"
+              strokeLinecap="round"
+              strokeWidth="50"
+              transform="rotate(-45, 328, 222)"
+            />
+          </svg>
+        </div>
+      </Memo(ConnectFunction)>
+    </label>
+  </div>
+</div>
 `;
 
 exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="columns small-6 medium-4 lowGraphics"
+>
+  <div
+    className="side-icons"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction)
+      aria-label="Show the InterPro Menu"
+      stuck={false}
+      svg={true}
+    />
+    <label
+      className="side-search"
+    >
+      <Memo(ConnectFunction)
+        name="search"
+      />
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "text",
+              },
+            },
+          }
+        }
+      >
+        <div
+          aria-label="Search InterPro"
+        >
+          <svg
+            className="icon icon--search"
+            height="2.2em"
+            viewBox="0 0 480 480"
+            width="2.2em"
+          >
+            <path
+              d="M0,10 m250,250 a110,110 0 1,0-1,0 l0,140"
+              fill="none"
+              stroke="white"
+              strokeLinecap="round"
+              strokeWidth="50"
+              transform="rotate(-45, 328, 222)"
+            />
+          </svg>
+        </div>
+      </Memo(ConnectFunction)>
+    </label>
+  </div>
+</div>
 `;
 
 exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
-<span>
-  <button
-    aria-label="Show the InterPro Menu"
-    className="top_level_hamburger"
+<div
+  className="columns small-6 medium-4"
+>
+  <div
+    className="side-icons"
   >
-    ☰
-  </button>
-</span>
+    <Memo(ConnectFunction)
+      aria-label="Show the InterPro Menu"
+      stuck={false}
+      svg={true}
+    />
+    <label
+      className="side-search"
+    >
+      <Memo(ConnectFunction)
+        name="search"
+      />
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "text",
+              },
+            },
+          }
+        }
+      >
+        <div
+          aria-label="Search InterPro"
+        >
+          <svg
+            className="icon icon--search"
+            height="2.2em"
+            viewBox="0 0 480 480"
+            width="2.2em"
+          >
+            <path
+              d="M0,10 m250,250 a110,110 0 1,0-1,0 l0,140"
+              fill="none"
+              stroke="white"
+              strokeLinecap="round"
+              strokeWidth="50"
+              transform="rotate(-45, 328, 222)"
+            />
+          </svg>
+        </div>
+      </Memo(ConnectFunction)>
+    </label>
+  </div>
+</div>
 `;

@@ -11,7 +11,7 @@ export const IPScanJobsData = 'IPScan-jobs-data';
 
 const init = () => {
   dbPromise = openDB('InterPro', 1, {
-    upgrade(db, oldVersion, newVersion, transaction) {
+    upgrade(db, oldVersion) {
       // do not put 'break;', keep fall-through,
       // it is to apply all the updates, one after the other
       // eslint-disable-next-line default-case

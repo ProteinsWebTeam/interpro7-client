@@ -155,6 +155,7 @@ ProtVistaLoaded.propTypes = {
     }),
   }).isRequired,
   tracks: T.oneOfType([T.object, T.array]),
+  chain: T.string,
   fixedHighlight: T.string,
 };
 

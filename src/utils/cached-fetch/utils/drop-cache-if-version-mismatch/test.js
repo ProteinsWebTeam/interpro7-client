@@ -1,22 +1,5 @@
 import dropCacheIfVersionMismatch, { VersionHeader } from '.';
 
-class SessionStorageMock {
-  constructor() {
-    this.clear();
-  }
-  clear() {
-    this.storage = {};
-  }
-  get length() {
-    return Object.keys(this.storage).length;
-  }
-  get(key) {
-    return this.storage[key];
-  }
-  set(key, value) {
-    this.storage[key] = value;
-  }
-}
 describe.skip('dropCacheIfVersionMismatch', () => {
   // beforeAll(() => {
   //   // Mock sessionStorage
