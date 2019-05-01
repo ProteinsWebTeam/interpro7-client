@@ -13,6 +13,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaSequence from 'protvista-sequence';
+import ProtVistaColouredSequence from 'protvista-coloured-sequence';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 
@@ -41,6 +42,12 @@ const loadProtVistaWebComponents = () => {
 
     webComponents.push(
       loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
+    );
+
+    webComponents.push(
+      loadWebComponent(() => ProtVistaColouredSequence).as(
+        'protvista-coloured-sequence',
+      ),
     );
 
     webComponents.push(
@@ -90,6 +97,7 @@ class ProtVista extends Component {
     this._popperRef = React.createRef();
     this._popperContentRef = React.createRef();
     this._webProteinRef = React.createRef();
+    this._hydroRef = React.createRef();
     this._isPopperTop = true;
   }
 
@@ -97,7 +105,40 @@ class ProtVista extends Component {
     await loadProtVistaWebComponents();
     const { data, protein } = this.props;
     this._webProteinRef.current.data = protein;
+    this._hydroRef.current.data = protein;
     this.updateTracksWithData(data);
+    this._hydroRef.current.addEventListener(
+      'change',
+      ({ detail: { metadata }, target }) => {
+        if (metadata) {
+          this._popperRef.current.classList.remove(f('hide'));
+          removeAllChildrenFromNode(this._popperContentRef.current);
+          const range = document.createRange();
+          range.selectNode(document.getElementsByTagName('div').item(0));
+          const element = range.createContextualFragment(`
+        <section>
+          <h6>Residue ${metadata.position}: ${metadata.residue}</h6>
+          <div>
+            <b>Value:</b> ${metadata.value}<br/>
+            <b>Scale:</b> [-2 to 2]<br/>
+          </div>
+        </section>
+        `);
+          this._popperContentRef.current.appendChild(element);
+          this._isPopperTop = !this._isPopperTop;
+          const rect = this._hydroRef.current.querySelector(
+            `.base_bg[data-pos="${metadata.position}"]`,
+          );
+          this.popper = new PopperJS(rect, this._popperRef.current, {
+            placement: this._isPopperTop ? 'top' : 'bottom',
+            applyStyle: { enabled: false },
+          });
+        } else if (this.popper) {
+          this.popper.destroy();
+          this._popperRef.current.classList.add(f('hide'));
+        }
+      },
+    );
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -504,6 +545,14 @@ class ProtVista extends Component {
                     length={length}
                     displaystart="1"
                     displayend={length}
+                  />
+                  <protvista-coloured-sequence
+                    ref={this._hydroRef}
+                    length={length}
+                    displaystart="1"
+                    displayend={length}
+                    scale="hydrophobicity-scale"
+                    height="10px"
                   />
                 </div>
               </div>
