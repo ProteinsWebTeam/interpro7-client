@@ -85,23 +85,19 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     this._ref.current.addEventListener('click', this._handleClick);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.data) this.loaded = false;
-    if (this.state.showClanViewer && !this.loaded) {
+    if (
+      (this.state.showClanViewer ||
+        this.props.data.metadata.relationships.nodes.length <=
+          MAX_NUMBER_OF_NODES) &&
+      !this.loaded
+    ) {
       const data = this.props.data.metadata.relationships;
       this._vis.clear();
       this._vis.paint(data, false);
       this.loaded = true;
     }
-    if (
-      !this.state.showClanViewer &&
-      this.props.data &&
-      this.props.data.metadata &&
-      this.props.data.metadata.relationships &&
-      this.props.data.metadata.relationships.nodes &&
-      this.props.data.metadata.relationships.nodes.length <= MAX_NUMBER_OF_NODES
-    )
-      this.setState({ showClanViewer: true });
   }
 
   componentWillUnmount() {
