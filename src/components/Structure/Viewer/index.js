@@ -174,12 +174,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
       ({ detail: { eventtype, highlight, feature, chain, protein } }) => {
         const {
           accession,
-          source_database,
+          source_database: sourceDB,
           type,
           chain: chainF,
           protein: proteinF,
           parent,
         } = (feature || {}).feature || {};
+        let proteinD = proteinF;
 
         switch (eventtype) {
           case 'sequence-chain':
@@ -196,10 +197,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
             } else this.showRegionInStructure();
             break;
           case 'click':
-            let proteinD = proteinF;
             // bit of a hack to handle missing data in some entries
             if (!proteinD && parent) {
-              protein = parent.protein;
+              proteinD = parent.protein;
             }
             this.setState({
               selectedEntryToKeep:
@@ -212,7 +212,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
                     }
                   : {
                       accession: accession,
-                      db: source_database,
+                      db: sourceDB,
                       chain: chainF,
                       protein: proteinD,
                     },
@@ -222,15 +222,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
             if (type === 'chain')
               this.showEntryInStructure('pdb', pdbid, accession, protein);
             else
-              this.showEntryInStructure(
-                source_database,
-                accession,
-                chainF,
-                proteinF,
-              );
+              this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
             break;
           case 'mouseout':
             this.showEntryInStructure();
+            break;
+          default:
             break;
         }
       },

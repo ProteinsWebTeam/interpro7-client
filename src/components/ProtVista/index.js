@@ -107,7 +107,7 @@ class ProtVista extends Component {
     this._webProteinRef.current.data = protein;
     this._hydroRef.current.data = protein;
     this.updateTracksWithData(data);
-    this._hydroRef.current.addEventListener('change', ({ detail, target }) => {
+    this._hydroRef.current.addEventListener('change', ({ detail }) => {
       if (detail.feature) {
         this._popperRef.current.classList.remove(f('hide'));
         removeAllChildrenFromNode(this._popperContentRef.current);
@@ -218,7 +218,7 @@ class ProtVista extends Component {
         if (isNewElement) {
           this.web_tracks[d.accession].addEventListener(
             'change',
-            ({ detail, target }) => {
+            ({ detail }) => {
               if (detail) {
                 switch (detail.eventtype) {
                   case 'click':
@@ -244,6 +244,8 @@ class ProtVista extends Component {
                         applyStyle: { enabled: false },
                       },
                     );
+                    break;
+                  default:
                     break;
                 }
               }
