@@ -109,14 +109,14 @@ const ProtVistaLoaded = ({ dataprotein, tracks, chain, fixedHighlight }) => {
     if (!protvistaEl.current || !protvistaEl.current.addEventListener) return;
     const handleMouseover = event => {
       const {
-        detail: { type, highlight },
+        detail: { eventtype, highlight },
       } = event;
-      if (type === 'sequence') {
+      if (eventtype === 'mouseover') {
         protvistaEl.current.dispatchEvent(
           new CustomEvent('change', {
             detail: {
               highlight,
-              type: 'sequence-chain',
+              eventtype: 'sequence-chain',
               chain,
               protein: dataprotein.payload.metadata.accession,
             },

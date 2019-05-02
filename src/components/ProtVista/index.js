@@ -107,38 +107,35 @@ class ProtVista extends Component {
     this._webProteinRef.current.data = protein;
     this._hydroRef.current.data = protein;
     this.updateTracksWithData(data);
-    this._hydroRef.current.addEventListener(
-      'change',
-      ({ detail: { metadata }, target }) => {
-        if (metadata) {
-          this._popperRef.current.classList.remove(f('hide'));
-          removeAllChildrenFromNode(this._popperContentRef.current);
-          const range = document.createRange();
-          range.selectNode(document.getElementsByTagName('div').item(0));
-          const element = range.createContextualFragment(`
+    this._hydroRef.current.addEventListener('change', ({ detail, target }) => {
+      if (detail.feature) {
+        this._popperRef.current.classList.remove(f('hide'));
+        removeAllChildrenFromNode(this._popperContentRef.current);
+        const range = document.createRange();
+        range.selectNode(document.getElementsByTagName('div').item(0));
+        const element = range.createContextualFragment(`
         <section>
-          <h6>Residue ${metadata.position}: ${metadata.residue}</h6>
+          <h6>Residue ${detail.feature.start}: ${detail.feature.aa}</h6>
           <div>
-            <b>Value:</b> ${metadata.value}<br/>
+            <b>Value:</b> ${detail.feature.value}<br/>
             <b>Scale:</b> [-2 to 2]<br/>
           </div>
         </section>
         `);
-          this._popperContentRef.current.appendChild(element);
-          this._isPopperTop = !this._isPopperTop;
-          const rect = this._hydroRef.current.querySelector(
-            `.base_bg[data-pos="${metadata.position}"]`,
-          );
-          this.popper = new PopperJS(rect, this._popperRef.current, {
-            placement: this._isPopperTop ? 'top' : 'bottom',
-            applyStyle: { enabled: false },
-          });
-        } else if (this.popper) {
-          this.popper.destroy();
-          this._popperRef.current.classList.add(f('hide'));
-        }
-      },
-    );
+        this._popperContentRef.current.appendChild(element);
+        this._isPopperTop = !this._isPopperTop;
+        const rect = this._hydroRef.current.querySelector(
+          `.base_bg[data-pos="${detail.feature.start}"]`,
+        );
+        this.popper = new PopperJS(rect, this._popperRef.current, {
+          placement: this._isPopperTop ? 'top' : 'bottom',
+          applyStyle: { enabled: false },
+        });
+      } else if (this.popper) {
+        this.popper.destroy();
+        this._popperRef.current.classList.add(f('hide'));
+      }
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -219,30 +216,39 @@ class ProtVista extends Component {
           ].fixedHighlight = this.props.fixedHighlight;
         this._setResiduesInState(children, d.accession);
         if (isNewElement) {
-          this.web_tracks[d.accession].addEventListener('entryclick', e => {
-            this.handleCollapseLabels(e.detail.feature.accession);
-          });
-          this.web_tracks[d.accession].addEventListener('entrymouseout', () => {
-            removeAllChildrenFromNode(this._popperContentRef.current);
-            this.popper.destroy();
-            this._popperRef.current.classList.add(f('hide'));
-          });
-          this.web_tracks[d.accession].addEventListener('entrymouseover', e => {
-            this._popperRef.current.classList.remove(f('hide'));
-            removeAllChildrenFromNode(this._popperContentRef.current);
-            this._popperContentRef.current.appendChild(
-              this.getElementFromEntry(e.detail),
-            );
-            this._isPopperTop = !this._isPopperTop;
-            this.popper = new PopperJS(
-              e.detail.target,
-              this._popperRef.current,
-              {
-                placement: this._isPopperTop ? 'top' : 'bottom',
-                applyStyle: { enabled: false },
-              },
-            );
-          });
+          this.web_tracks[d.accession].addEventListener(
+            'change',
+            ({ detail, target }) => {
+              if (detail) {
+                switch (detail.eventtype) {
+                  case 'click':
+                    this.handleCollapseLabels(detail.feature.feature.accession);
+                    break;
+                  case 'mouseout':
+                    removeAllChildrenFromNode(this._popperContentRef.current);
+                    this.popper.destroy();
+                    this._popperRef.current.classList.add(f('hide'));
+                    break;
+                  case 'mouseover':
+                    this._popperRef.current.classList.remove(f('hide'));
+                    removeAllChildrenFromNode(this._popperContentRef.current);
+                    this._popperContentRef.current.appendChild(
+                      this.getElementFromEntry(detail.feature),
+                    );
+                    this._isPopperTop = !this._isPopperTop;
+                    this.popper = new PopperJS(
+                      detail.target,
+                      this._popperRef.current,
+                      {
+                        placement: this._isPopperTop ? 'top' : 'bottom',
+                        applyStyle: { enabled: false },
+                      },
+                    );
+                    break;
+                }
+              }
+            },
+          );
         }
         this.setObjectValueInState(
           'expandedTrack',
@@ -545,6 +551,7 @@ class ProtVista extends Component {
                     length={length}
                     displaystart="1"
                     displayend={length}
+                    highlight-event="onmouseover"
                   />
                   <protvista-coloured-sequence
                     ref={this._hydroRef}
@@ -553,6 +560,7 @@ class ProtVista extends Component {
                     displayend={length}
                     scale="hydrophobicity-scale"
                     height="10px"
+                    highlight-event="onmouseover"
                   />
                 </div>
               </div>
@@ -604,6 +612,7 @@ class ProtVista extends Component {
                                     (this.web_tracks[entry.accession] = e)
                                   }
                                   shape="roundRectangle"
+                                  highlight-event="onmouseover"
                                   expanded
                                 />
                               </div>
