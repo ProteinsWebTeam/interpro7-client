@@ -194,6 +194,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 Math.round(p2s(start)),
                 Math.round(p2s(stop)),
               );
+              this.handlingSequenceHighlight = true;
             } else this.showRegionInStructure();
             break;
           case 'click':
@@ -219,6 +220,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
             });
             break;
           case 'mouseover':
+            if (this.handlingSequenceHighlight) {
+              this.handlingSequenceHighlight = false;
+              return;
+            }
             if (type === 'chain')
               this.showEntryInStructure('pdb', pdbid, accession, protein);
             else
