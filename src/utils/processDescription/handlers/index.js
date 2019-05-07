@@ -180,10 +180,10 @@ export const setDBs /*: Set<Object> */ = new Set([
     url_template: 'https://pir.georgetown.edu/cgi-bin/pf_sf_tree.pl?id={id}',
   },
   {
-    name: 'kegg', // NOTE: Only for fixtures support
-    re: /^kegg[0-9]{2}$/,
+    name: 'panther',
+    re: /^PTHR[0-9]{5}(:SF[0-9]{1,3})?$/i,
     url_template:
-      'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={id}',
+      'http://www.pantherdb.org/panther/family.do?clsAccession={id}',
   },
 ]);
 
