@@ -14,8 +14,7 @@ import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 import { intersectionObserver as intersectionObserverPolyfill } from 'utils/polyfills';
 
 import ProtVistaForStructure from './ProtVistaForStructures';
-
-// import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import getMapper from './proteinToStructureMapper';
 
@@ -79,6 +78,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
     };
 
     this.stage = null;
+
+    this._protein2structureMappers = {};
     this.name = `${this.props.id}_updated.cif`;
 
     this._structurevViewer = React.createRef();
@@ -137,7 +138,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
         // const residue = picked.atom;
         // const index = residue.residueIndex;
         // const name = residue.resname;
-        // console.log(`clicked: ${index} ${name}`);
+        // const chain = residue.chainid;
+        // console.log(`clicked: ${index} ${name} ${chain}`, picked);
       } else {
         // console.log(`clicked: nothing`);
       }
@@ -167,51 +169,74 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     }, optionsForObserver);
     this.observer.observe(this._structureSection.current);
-    this._protvista.current.addEventListener('entryclick', e => {
-      const {
-        detail: {
-          feature: { accession, source_database: db, type, chain },
-        },
-      } = e;
-
-      let protein = e.detail.feature.protein;
-      // bit of a hack to handle missing data in some entries
-      if (!protein && 'parent' in e.detail.feature) {
-        protein = e.detail.feature.parent.protein;
-      }
-      this.setState({
-        selectedEntryToKeep:
-          type === 'chain'
-            ? {
-                accession: pdbid,
-                db: 'pdb',
-                chain: accession,
-                protein,
-              }
-            : {
-                accession: accession,
-                db,
-                chain,
-                protein,
-              },
-      });
-      this.showEntryInStructure;
-    });
     this._protvista.current.addEventListener(
-      'entrymouseover',
-      ({
-        detail: {
-          feature: { accession, source_database: db, type, chain, protein },
-        },
-      }) => {
-        if (type === 'chain')
-          this.showEntryInStructure('pdb', pdbid, accession, protein);
-        else this.showEntryInStructure(db, accession, chain, protein);
+      'change',
+      ({ detail: { eventtype, highlight, feature, chain, protein } }) => {
+        const {
+          accession,
+          source_database: sourceDB,
+          type,
+          chain: chainF,
+          protein: proteinF,
+          parent,
+        } = (feature || {}).feature || {};
+        let proteinD = proteinF;
+
+        switch (eventtype) {
+          case 'sequence-chain':
+            if (highlight) {
+              const [start, stop] = highlight.split(':');
+              const p2s = this._protein2structureMappers[
+                `${protein}->${chain}`.toUpperCase()
+              ];
+              this.showRegionInStructure(
+                chain,
+                Math.round(p2s(start)),
+                Math.round(p2s(stop)),
+              );
+              this.handlingSequenceHighlight = true;
+            } else this.showRegionInStructure();
+            break;
+          case 'click':
+            // bit of a hack to handle missing data in some entries
+            if (!proteinD && parent) {
+              proteinD = parent.protein;
+            }
+            this.setState({
+              selectedEntryToKeep:
+                type === 'chain'
+                  ? {
+                      accession: pdbid,
+                      db: 'pdb',
+                      chain: accession,
+                      protein: proteinD,
+                    }
+                  : {
+                      accession: accession,
+                      db: sourceDB,
+                      chain: chainF,
+                      protein: proteinD,
+                    },
+            });
+            break;
+          case 'mouseover':
+            if (this.handlingSequenceHighlight) {
+              this.handlingSequenceHighlight = false;
+              return;
+            }
+            if (type === 'chain')
+              this.showEntryInStructure('pdb', pdbid, accession, protein);
+            else
+              this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
+            break;
+          case 'mouseout':
+            this.showEntryInStructure();
+            break;
+          default:
+            break;
+        }
       },
     );
-    this._protvista.current.addEventListener('entrymouseout', () => {
-      this.showEntryInStructure();
-    });
   }
 
   componentWillUnmount() {
@@ -374,6 +399,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
           const chain = structure.chain;
           const protein = structure.protein;
           const p2s = getMapper(structure.protein_structure_mapping[chain]);
+          this._protein2structureMappers[
+            `${protein}->${chain}`.toUpperCase()
+          ] = p2s;
           if (!memberDBMap[db][entry][chain])
             memberDBMap[db][entry][chain] = {};
           if (!memberDBMap[db][entry][chain][protein])
@@ -480,6 +508,25 @@ class StructureView extends PureComponent /*:: <Props> */ {
   _toggleMinimize = () =>
     this.setState({ isMinimized: !this.state.isMinimized });
 
+  showRegionInStructure(chain, start, stop) {
+    const components = this.stage.getComponentsByName(this.name);
+    if (components) {
+      components.forEach(component => {
+        if (chain && start && stop) {
+          const selection = `${start}-${stop}:${chain}`;
+          const theme = ColormakerRegistry.addSelectionScheme(
+            [['red', selection]],
+            selection,
+          );
+          component.addRepresentation('cartoon', { color: theme });
+        } else {
+          component.addRepresentation('cartoon', {
+            colorScheme: 'chainname',
+          });
+        }
+      });
+    }
+  }
   render() {
     const {
       isStuck,
@@ -492,17 +539,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return (
       <>
         <div ref={this._splitView}>
-          <div ref={this._structureSection}>
+          <div ref={this._structureSection} className={f('structure-wrapper')}>
             <div
               className={f('structure-viewer', {
                 'is-stuck': isStuck,
                 'is-minimized': isMinimized,
               })}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                height: 'auto',
-              }}
               ref={this._poppableViewer}
             >
               <ResizeObserverComponent
@@ -511,37 +553,18 @@ class StructureView extends PureComponent /*:: <Props> */ {
                   if (this.stage) this.stage.handleResize();
                 }}
                 measurements={['width', 'height']}
+                className={f('viewer-resizer')}
               >
-                {({ _w, h }) => {
-                  // override supplied width value as this causes a bug
-                  // in Firefox and Safari
-                  const width = 'auto';
-                  let height = h;
-                  if (!height) {
-                    height = '450px';
-                  }
+                {() => {
                   return (
                     <div
                       ref={this._structurevViewer}
-                      style={{
-                        width: width,
-                        height: height,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        display: isMinimized && isStuck ? 'none' : 'block',
-                      }}
+                      className={f('structure-viewer-ref')}
                     />
                   );
                 }}
               </ResizeObserverComponent>
-              <div
-                style={{
-                  width: 'auto',
-                  height: 'auto',
-                  display: 'inline-flex',
-                  justifyContent: 'space-between',
-                }}
-              >
+              <div className={f('viewer-control-bar')}>
                 {this.props.matches ? (
                   <EntrySelection
                     entryMap={entryMap}
@@ -551,11 +574,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 ) : null}
                 <div
                   ref={this._viewerControls}
-                  style={{
-                    whiteSpace: 'nowrap',
-                    overflow: 'visible',
-                    background: 'white',
-                  }}
+                  className={f('viewer-controls')}
                 >
                   <button
                     className={f('structure-icon', 'icon', 'icon-common')}
@@ -569,21 +588,20 @@ class StructureView extends PureComponent /*:: <Props> */ {
                     data-icon="}"
                     title="Reset image"
                   />
-                  <button
-                    onClick={this._toggleSplitView}
-                    data-icon={isSplitScreen ? 'G' : '\uF0DB'}
-                    title={
+                  <FullScreenButton
+                    handleFullScreen={this._toggleSplitView}
+                    className={f('structure-icon', 'icon', 'icon-common')}
+                    tooltip={
                       isSplitScreen ? 'Exit full screen' : 'Split full screen'
                     }
-                    className={f('structure-icon', 'icon', 'icon-common')}
+                    dataIcon={isSplitScreen ? 'G' : '\uF0DB'}
                   />
 
                   {isSplitScreen ? null : (
-                    <button
-                      data-icon="F"
-                      title={'Full screen'}
-                      onClick={this._toggleStructureFullScreen}
+                    <FullScreenButton
                       className={f('structure-icon', 'icon', 'icon-common')}
+                      handleFullScreen={this._toggleStructureFullScreen}
+                      tooltip="View the structure in full screen mode"
                     />
                   )}
                   {isStuck && (

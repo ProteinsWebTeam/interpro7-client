@@ -1,15 +1,15 @@
 import dropCacheIfVersionMismatch, { VersionHeader } from '.';
 
 describe.skip('dropCacheIfVersionMismatch', () => {
-  beforeAll(() => {
-    // Mock sessionStorage
-    window.sessionStorage = new Map();
-    Object.defineProperty(window.sessionStorage, 'length', {
-      get: () => window.sessionStorage.size,
-    });
-
-    window.sessionStorage.set('key', 'value');
-  });
+  // beforeAll(() => {
+  //   // Mock sessionStorage
+  //   window.sessionStorage = new SessionStorageMock();
+  //   // Object.defineProperty(window.sessionStorage, 'length', {
+  //   //   get: () => window.sessionStorage.size,
+  //   // });
+  //
+  //   window.sessionStorage.set('key', 'value');
+  // });
 
   test('first runs, no version', () => {
     expect(dropCacheIfVersionMismatch(new Map())).toBeFalsy();

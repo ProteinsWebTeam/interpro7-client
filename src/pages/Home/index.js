@@ -50,16 +50,22 @@ const SearchByText = loadable({
 });
 const IPScanSearch = loadable({
   loader: () =>
-    import(/* webpackChunkName: "ipscan-search", webpackPreload: true */ 'components/IPScan/Search'),
+    import(
+      /* webpackChunkName: "ipscan-search", webpackPreload: true */ 'components/IPScan/Search'
+    ),
 });
 // Browse by X box
 const ByMemberDatabase = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-member-database", webpackPreload: true */ 'components/home/ByMemberDatabase'),
+    import(
+      /* webpackChunkName: "by-member-database", webpackPreload: true */ 'components/home/ByMemberDatabase'
+    ),
 });
 const ByEntryType = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType'),
+    import(
+      /* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType'
+    ),
 });
 const BySpecies = loadable({
   loader: () =>
@@ -67,11 +73,15 @@ const BySpecies = loadable({
 });
 const ByLatestEntries = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-latest-entries", webpackPreload: true */ 'components/home/ByLatestEntries'),
+    import(
+      /* webpackChunkName: "by-latest-entries", webpackPreload: true */ 'components/home/ByLatestEntries'
+    ),
 });
 const BlogEntries = loadable({
   loader: () =>
-    import(/* webpackChunkName: "blog-entries", webpackPreload: true */ 'components/home/BlogEntries'),
+    import(
+      /* webpackChunkName: "blog-entries", webpackPreload: true */ 'components/home/BlogEntries'
+    ),
 });
 
 const Twitter = loadable({
@@ -440,11 +450,11 @@ class Home extends PureComponent {
             />
             <SchemaOrgDataWithData />
             <div className={f('intro-wrapper')}>
-              <div className={f('intro-fig')}>
+              <div className={f('intro-fig')} data-testid="intro-fig">
                 <InterProGraphicAnim />
                 <CurrentVersion />
               </div>
-              <div className={f('intro-content')}>
+              <div className={f('intro-content')} data-testid="intro-content">
                 <h3>Classification of protein families</h3>
                 <Description textBlocks={[description]} />
               </div>
@@ -482,13 +492,16 @@ class Home extends PureComponent {
           <div className={f('columns')}>
             <div className={f('callout-box', 'pp-browse-by')}>
               <Tabs>
-                <div title="Member Database">
+                <div
+                  title="Member Database"
+                  data-testid="home-member-database-button"
+                >
                   <ByMemberDatabase />
                 </div>
-                <div title="Entry type">
+                <div title="Entry type" data-testid="home-entry-type-button">
                   <ByEntryType />
                 </div>
-                <div title="Species">
+                <div title="Species" data-testid="home-species-button">
                   <BySpecies />
                 </div>
               </Tabs>

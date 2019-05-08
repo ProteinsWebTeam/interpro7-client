@@ -53,6 +53,7 @@ const EntryIcon = ({ metadata }) => (
       type={metadata.type.replace('_', ' ')}
       dimension="4em"
       aria-label="Entry type"
+      data-testid="entry-type-icon"
     >
       {
         // IE11 fallback for icons
@@ -94,7 +95,7 @@ EntryIcon.propTypes = {
 const TitleTag = ({ metadata, mainType, dbLabel }) => {
   const isEntry = mainType === 'entry';
   return (
-    <div className={f('title-tag')}>
+    <div className={f('title-tag')} data-testid="entry-title">
       {metadata && metadata.source_database && (
         <div
           className={f('tag', {
@@ -129,7 +130,7 @@ TitleTag.propTypes = {
 const AccessionTag = ({ metadata, mainType }) => {
   const isEntry = mainType === 'entry';
   return (
-    <div className={f('title-id')}>
+    <div className={f('title-id')} data-testid="entry-accession">
       {// Red, Green for domains,  Purple for sites, and Blue for Homologous accession: for InterPro page only
       isEntry &&
         metadata.type &&
@@ -177,9 +178,9 @@ class Title extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     loadWebComponent(() =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      ).then(m => m.InterproType),
     ).as('interpro-type');
   }
 
@@ -193,7 +194,7 @@ class Title extends PureComponent /*:: <Props> */ {
         : metadata.source_database;
 
     return (
-      <div className={f('title')}>
+      <div className={f('title')} data-testid="entry-titlebar">
         {isEntry &&
           metadata.type &&
           metadata.source_database &&

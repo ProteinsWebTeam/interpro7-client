@@ -37,7 +37,7 @@ class _Switch extends PureComponent /*:: <Props> */ {
     indexRoute: T.func.isRequired,
     locationSelector: T.func.isRequired,
     childRoutes: T.instanceOf(Map),
-    catchAll: T.func,
+    catchAll: T.oneOfType([T.func, T.object]),
     customLocation: T.object.isRequired,
   };
 

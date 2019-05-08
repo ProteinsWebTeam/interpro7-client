@@ -231,7 +231,7 @@ const Matches = (
     dbCounters={dbCounters}
   >
     <PageSizeSelector />
-    <SearchBox />
+    <SearchBox loading={isStale} />
     {description.main.key !== 'result' && (
       <Exporter>
         <ul>

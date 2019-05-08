@@ -14,16 +14,17 @@
 .flex-container {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   padding: 1rem;
 }
 
 .flex-box {
   text-align: center;
   padding: 2rem;
-  flex: 1 0 50%;
+  flex: 1 0 48%;
   border: 1px solid var(--colors-vlightgray);
   border-radius: 4px;
+  margin: 0.2em;
 
   & ul {
     list-style-type: none;

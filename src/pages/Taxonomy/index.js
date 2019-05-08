@@ -74,7 +74,9 @@ const ProteinFastasRenderer = entryDB => (taxId, _row, extra) => (
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "taxonomy-summary" */ 'components/Taxonomy/Summary'),
+    import(
+      /* webpackChunkName: "taxonomy-summary" */ 'components/Taxonomy/Summary'
+    ),
 });
 
 const SchemaOrgData = loadable({
@@ -433,7 +435,7 @@ class List extends PureComponent {
                 />
               )}
             </Card>
-            <SearchBox>Search taxonomy</SearchBox>
+            <SearchBox loading={isStale}>Search taxonomy</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

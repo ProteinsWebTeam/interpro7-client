@@ -310,6 +310,9 @@ class _MemberDBSelector extends PureComponent {
                   key={db.canonical}
                   className={f('db-choice', { disabled, checked })}
                   style={{ color: config.colors.get(db.canonical) }}
+                  data-testid={`memberdb-filter-${db.canonical
+                    .toLowerCase()
+                    .replace(/\s+/, '_')}`}
                 >
                   <input
                     type="radio"

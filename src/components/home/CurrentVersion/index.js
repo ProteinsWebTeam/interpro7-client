@@ -18,8 +18,9 @@ const CurrentVersion = ({ data }) => {
   if (!data) return <Loading />;
   const { headers, loading, payload } = data;
   if (loading || !headers || !payload) return <Loading />;
-  const headersMap = new Map(headers);
-  const current = headersMap.get('interpro-version');
+  const current = Object.entries(payload).sort(([_, dateA], [__, dateB]) =>
+    new Date(dateA).getTime() > new Date(dateB).getTime() ? -1 : 1,
+  )[0][0];
   if (!current || !payload[current]) return null;
   const dateObj = new Date(payload[current]);
   return (

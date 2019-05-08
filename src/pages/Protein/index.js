@@ -336,7 +336,7 @@ class List extends PureComponent {
               )}
             </Card>
             <PageSizeSelector />
-            <SearchBox>Search proteins</SearchBox>
+            <SearchBox loading={isStale}>Search proteins</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
@@ -454,7 +454,9 @@ class List extends PureComponent {
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'),
+    import(
+      /* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'
+    ),
 });
 
 const SchemaOrgData = loadable({

@@ -77,7 +77,9 @@ const SchemaOrgData = loadable({
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "proteome-summary" */ 'components/Proteome/Summary'),
+    import(
+      /* webpackChunkName: "proteome-summary" */ 'components/Proteome/Summary'
+    ),
 });
 
 class SummaryCounterProteome extends PureComponent {
@@ -363,7 +365,7 @@ class List extends PureComponent {
                 />
               )}
             </Card>
-            <SearchBox>Search organism</SearchBox>
+            <SearchBox loading={isStale}>Search organism</SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

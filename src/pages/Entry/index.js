@@ -402,9 +402,9 @@ class List extends PureComponent {
 
   componentDidMount() {
     loadWebComponent(() =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      ).then(m => m.InterproType),
     ).as('interpro-type');
   }
   // eslint-disable-next-line
@@ -500,7 +500,7 @@ class List extends PureComponent {
                 <EntryCard data={data} search={search.search} entryDB={db} />
               )}
             </Card>
-            <SearchBox>Search entries</SearchBox>
+            <SearchBox loading={isStale}>Search entries</SearchBox>
             {db === 'InterPro' && (
               <Column
                 dataKey="type"

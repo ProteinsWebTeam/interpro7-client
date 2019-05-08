@@ -20,6 +20,7 @@ const DEBOUNCE_RATE = 500; // In ms
 /*:: type Props = {
   customLocation: CustomLocation,
   goToCustomLocation: goToCustomLocation,
+  loading?: ?boolean,
   children?: ?string,
 }; */
 /*:: type State = {|
@@ -31,6 +32,7 @@ class SearchBox extends PureComponent /*:: <Props, State> */ {
     customLocation: T.object.isRequired,
     goToCustomLocation: T.func.isRequired,
     children: T.string,
+    loading: T.bool,
   };
 
   constructor(props) {
@@ -62,7 +64,7 @@ class SearchBox extends PureComponent /*:: <Props, State> */ {
   render() {
     return (
       <div className={f('table-filter')}>
-        <div className={f('filter-box')}>
+        <div className={f('filter-box', { loading: this.props.loading })}>
           <input
             id="table-filter-text"
             type="text"

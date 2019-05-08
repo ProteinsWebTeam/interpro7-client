@@ -45,6 +45,13 @@ const SimilarProteinsHeaderWithData = ({
     </div>
   );
 };
+SimilarProteinsHeaderWithData.propTypes = {
+  accession: T.string,
+  data: T.shape({
+    loading: T.bool,
+    payload: T.object,
+  }),
+};
 
 const getUrlForIDA = createSelector(
   state => state.settings.api,

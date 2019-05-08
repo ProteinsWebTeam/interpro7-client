@@ -32,19 +32,21 @@ const PanelIDA = ({
   <div className={f('panels')}>
     <div className={f('ida-panel')}>
       <header>IDA</header>
-      <ul className={f('ida-list', { ordered: isOrdered })}>
-        {entryList &&
-          entryList.map((e, i) => (
-            <li key={i}>
-              <IdaEntry
-                entry={e}
-                active={true}
-                removeEntryHandler={() => removeEntryHandler(i)}
-                changeEntryHandler={name => changeEntryHandler(i, name)}
-              />
-            </li>
-          ))}
-      </ul>
+      <div>
+        <ul className={f('ida-list', { ordered: isOrdered })}>
+          {entryList &&
+            entryList.map((e, i) => (
+              <li key={i}>
+                <IdaEntry
+                  entry={e}
+                  active={true}
+                  removeEntryHandler={() => removeEntryHandler(i)}
+                  changeEntryHandler={name => changeEntryHandler(i, name)}
+                />
+              </li>
+            ))}
+        </ul>
+      </div>
     </div>
     <div className={f('ida-ignore')}>
       <header>Ignore</header>

@@ -41,9 +41,9 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     loadWebComponent(() =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      ).then(m => m.InterproType),
     ).as('interpro-type');
   }
 
@@ -56,7 +56,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
         return out;
       }, {});
     return (
-      <div className={f('entry-type')}>
+      <div className={f('entry-type')} data-testid="by-entry-type-box">
         <AnimatedEntry className={f('row')} element="div">
           {entryType.map(({ type, description }) => (
             <Link
@@ -75,6 +75,7 @@ class ByEntryType extends PureComponent /*:: <Props> */ {
                 search: { type: type.toLowerCase().replace(' ', '_') },
               }}
               key={type}
+              data-testid={`entry-${type.toLowerCase().replace(/\s+/g, '_')}`}
             >
               <Tooltip title={description}>
                 <interpro-type

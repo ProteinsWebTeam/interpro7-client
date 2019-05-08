@@ -13,12 +13,14 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaSequence from 'protvista-sequence';
+import ProtVistaColouredSequence from 'protvista-coloured-sequence';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
+import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PopperJS from 'popper.js';
 
 import loadWebComponent from 'utils/load-web-component';
@@ -26,11 +28,9 @@ import loadWebComponent from 'utils/load-web-component';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
-import { requestFullScreen } from '../../utils/fullscreen';
 
-const f = foundationPartial(ipro, local, fonts);
+const f = foundationPartial(ipro, local);
 
 const webComponents = [];
 
@@ -42,6 +42,12 @@ const loadProtVistaWebComponents = () => {
 
     webComponents.push(
       loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
+    );
+
+    webComponents.push(
+      loadWebComponent(() => ProtVistaColouredSequence).as(
+        'protvista-coloured-sequence',
+      ),
     );
 
     webComponents.push(
@@ -71,6 +77,7 @@ class ProtVista extends Component {
     colorDomainsBy: T.string,
     changeSettingsRaw: T.func,
     title: T.string,
+    fixedHighlight: T.string,
   };
 
   constructor(props) {
@@ -90,13 +97,45 @@ class ProtVista extends Component {
     this._popperRef = React.createRef();
     this._popperContentRef = React.createRef();
     this._webProteinRef = React.createRef();
+    this._hydroRef = React.createRef();
+    this._isPopperTop = true;
   }
 
   async componentDidMount() {
     await loadProtVistaWebComponents();
     const { data, protein } = this.props;
     this._webProteinRef.current.data = protein;
+    this._hydroRef.current.data = protein;
     this.updateTracksWithData(data);
+    this._hydroRef.current.addEventListener('change', ({ detail }) => {
+      if (detail.feature) {
+        this._popperRef.current.classList.remove(f('hide'));
+        removeAllChildrenFromNode(this._popperContentRef.current);
+        const range = document.createRange();
+        range.selectNode(document.getElementsByTagName('div').item(0));
+        const element = range.createContextualFragment(`
+        <section>
+          <h6>Residue ${detail.feature.start}: ${detail.feature.aa}</h6>
+          <div>
+            <b>Value:</b> ${detail.feature.value}<br/>
+            <b>Scale:</b> [-2 to 2]<br/>
+          </div>
+        </section>
+        `);
+        this._popperContentRef.current.appendChild(element);
+        this._isPopperTop = !this._isPopperTop;
+        const rect = this._hydroRef.current.querySelector(
+          `.base_bg[data-pos="${detail.feature.start}"]`,
+        );
+        this.popper = new PopperJS(rect, this._popperRef.current, {
+          placement: this._isPopperTop ? 'top' : 'bottom',
+          applyStyle: { enabled: false },
+        });
+      } else if (this.popper) {
+        this.popper.destroy();
+        this._popperRef.current.classList.add(f('hide'));
+      }
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -122,11 +161,12 @@ class ProtVista extends Component {
 
   updateTracksWithData(data) {
     const b2sh = new Map([
-      ['s', 'discontinuosStart'],
-      ['e', 'discontinuosEnd'],
-      ['se', 'discontinuos'],
-      ['es', 'discontinuos'],
+      ['N_TERMINAL_DISC', 'discontinuosStart'],
+      ['C_TERMINAL_DISC', 'discontinuosEnd'],
+      ['CN_TERMINAL_DISC', 'discontinuos'],
+      ['NC_TERMINAL_DISC', 'discontinuos'],
     ]);
+
     for (const type of data) {
       for (const d of type[1]) {
         const tmp = (d.entry_protein_locations || d.locations).map(loc => ({
@@ -155,7 +195,7 @@ class ProtVista extends Component {
                 loc => ({
                   ...loc,
                   fragments: loc.fragments.map(f => ({
-                    shape: b2sh.get(f.bounds),
+                    shape: b2sh.get(f['dc-status']),
                     ...f,
                   })),
                 }),
@@ -170,28 +210,47 @@ class ProtVista extends Component {
           : null;
         const isNewElement = !this.web_tracks[d.accession]._data;
         this.web_tracks[d.accession].data = tmp;
+        if (this.props.fixedHighlight)
+          this.web_tracks[
+            d.accession
+          ].fixedHighlight = this.props.fixedHighlight;
         this._setResiduesInState(children, d.accession);
         if (isNewElement) {
-          this.web_tracks[d.accession].addEventListener('entryclick', e => {
-            this.handleCollapseLabels(e.detail.feature.accession);
-          });
-          this.web_tracks[d.accession].addEventListener('entrymouseout', () => {
-            removeAllChildrenFromNode(this._popperContentRef.current);
-            this.popper.destroy();
-            this._popperRef.current.classList.add(f('hide'));
-          });
-          this.web_tracks[d.accession].addEventListener('entrymouseover', e => {
-            this._popperRef.current.classList.remove(f('hide'));
-            removeAllChildrenFromNode(this._popperContentRef.current);
-            this._popperContentRef.current.appendChild(
-              this.getElementFromEntry(e.detail),
-            );
-            this.popper = new PopperJS(
-              e.detail.target,
-              this._popperRef.current,
-              { placement: 'top', applyStyle: { enabled: false } },
-            );
-          });
+          this.web_tracks[d.accession].addEventListener(
+            'change',
+            ({ detail }) => {
+              if (detail) {
+                switch (detail.eventtype) {
+                  case 'click':
+                    this.handleCollapseLabels(detail.feature.feature.accession);
+                    break;
+                  case 'mouseout':
+                    removeAllChildrenFromNode(this._popperContentRef.current);
+                    this.popper.destroy();
+                    this._popperRef.current.classList.add(f('hide'));
+                    break;
+                  case 'mouseover':
+                    this._popperRef.current.classList.remove(f('hide'));
+                    removeAllChildrenFromNode(this._popperContentRef.current);
+                    this._popperContentRef.current.appendChild(
+                      this.getElementFromEntry(detail.feature),
+                    );
+                    this._isPopperTop = !this._isPopperTop;
+                    this.popper = new PopperJS(
+                      detail.target,
+                      this._popperRef.current,
+                      {
+                        placement: this._isPopperTop ? 'top' : 'bottom',
+                        applyStyle: { enabled: false },
+                      },
+                    );
+                    break;
+                  default:
+                    break;
+                }
+              }
+            },
+          );
         }
         this.setObjectValueInState(
           'expandedTrack',
@@ -313,8 +372,6 @@ class ProtVista extends Component {
       );
     }
   };
-
-  handleFullScreen = () => requestFullScreen(this._mainRef.current);
 
   changeColor = ({ target: { value: colorMode } }) => {
     for (const track of Object.values(this.web_tracks)) {
@@ -444,14 +501,10 @@ class ProtVista extends Component {
           <div
             className={f('option-fullscreen', 'font-l', 'margin-right-large')}
           >
-            <Tooltip title="View the domain viewer in full screen mode">
-              <button
-                onClick={this.handleFullScreen}
-                data-icon="F"
-                title="Full screen"
-                className={f('margin-bottom-none', 'icon', 'icon-common')}
-              />
-            </Tooltip>
+            <FullScreenButton
+              element={this._mainRef.current}
+              tooltip="View the domain viewer in full screen mode"
+            />
           </div>
         </div>
       </div>
@@ -480,7 +533,7 @@ class ProtVista extends Component {
 
         <div className={f('protvista')}>
           <protvista-manager
-            attributes="length displaystart displayend highlightstart highlightend"
+            attributes="length displaystart displayend highlight"
             id="pv-manager"
           >
             <div className={f('track-container')}>
@@ -500,6 +553,16 @@ class ProtVista extends Component {
                     length={length}
                     displaystart="1"
                     displayend={length}
+                    highlight-event="onmouseover"
+                  />
+                  <protvista-coloured-sequence
+                    ref={this._hydroRef}
+                    length={length}
+                    displaystart="1"
+                    displayend={length}
+                    scale="hydrophobicity-scale"
+                    height="10px"
+                    highlight-event="onmouseover"
                   />
                 </div>
               </div>
@@ -551,6 +614,7 @@ class ProtVista extends Component {
                                     (this.web_tracks[entry.accession] = e)
                                   }
                                   shape="roundRectangle"
+                                  highlight-event="onmouseover"
                                   expanded
                                 />
                               </div>

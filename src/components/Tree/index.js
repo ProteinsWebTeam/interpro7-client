@@ -4,6 +4,7 @@ import T from 'prop-types';
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import styles from './style.css';
 
@@ -14,6 +15,7 @@ import fisheyeOn from 'EBI-Icon-fonts/source/common/font-awesome/solid/bullseye.
   data?: Object,
   focused?: string,
   changeFocus?: string => any,
+  labelClick?: string => any,
   hideToggle?: boolean,
   initialFisheye?: boolean,
 }; */
@@ -31,6 +33,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     data: T.object,
     focused: T.string,
     changeFocus: T.func,
+    labelClick: T.func,
     hideToggle: T.bool,
     initialFisheye: T.bool,
   };
@@ -47,13 +50,17 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     this._vis = new TaxonomyVisualisation(undefined, {
       initialMaxNodes: +Infinity,
       fisheye,
+      fixedNodeSize: 5,
       classnames: {
         inPath: styles['in-path'],
         node: styles.node,
       },
+      enableZooming: true,
+      // shouldCorrectNodesOutside: true,
     });
 
     this._vis.addEventListener('focus', this._handleFocus);
+    this._vis.addEventListener('click', this._handleLabelClick);
     this._loadingVis = false;
     this._ref = React.createRef();
 
@@ -88,6 +95,13 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
   _handleFocus = ({ detail: { id } }) => {
     if (!this._loadingVis && this.props.changeFocus) this.props.changeFocus(id);
   };
+  _handleLabelClick = evt => {
+    const {
+      detail: { id },
+    } = evt;
+    if (!this._loadingVis && this.props.labelClick) this.props.labelClick(id);
+    else this._handleFocus(evt);
+  };
 
   _populateData = (data, focused) => {
     this._vis.data = data;
@@ -97,18 +111,27 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
   render() {
     return (
       <>
-        {this.props.hideToggle ? null : (
-          <span className={styles.toggle}>
-            <Tooltip title="toggle fisheye view">
-              <button onClick={this._handleClick}>
-                <img
-                  src={this.state.fisheye ? fisheyeOff : fisheyeOn}
-                  alt="toggle-fisheye"
-                />
-              </button>
-            </Tooltip>
+        <div className={styles.buttons}>
+          <span className={styles.fullscreen}>
+            <FullScreenButton
+              element={this._ref.current}
+              tooltip="View the taxonomy tree in full screen mode"
+            />
           </span>
-        )}
+          {this.props.hideToggle ? null : (
+            <span>
+              <Tooltip title="toggle fisheye view">
+                <button onClick={this._handleClick}>
+                  <img
+                    src={this.state.fisheye ? fisheyeOff : fisheyeOn}
+                    alt="toggle-fisheye"
+                  />
+                </button>
+              </Tooltip>
+            </span>
+          )}
+        </div>
+
         <div
           style={{
             width: '100%',
@@ -118,6 +141,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
             alignItems: 'stretch',
             justifyContent: 'center',
           }}
+          data-testid="data-tree"
         >
           <svg
             className={styles.container}

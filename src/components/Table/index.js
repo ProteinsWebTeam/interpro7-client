@@ -166,6 +166,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       aria-label="view your results as a table"
                       onMouseOver={TableView.preload}
                       onFocus={TableView.preload}
+                      data-testid="view-table-button"
                     />
                   </Tooltip>
                   {card && (
@@ -181,6 +182,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                           aria-label="view your results in a grid"
                           onMouseOver={GridView.preload}
                           onFocus={GridView.preload}
+                          data-testid="view-grid-button"
                         />
                       </Tooltip>
                     </div>
@@ -197,6 +199,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                         aria-label="view your results as a tree"
                         onMouseOver={TreeView.preload}
                         onFocus={TreeView.preload}
+                        data-testid="view-tree-button"
                       />
                     </Tooltip>
                   )}

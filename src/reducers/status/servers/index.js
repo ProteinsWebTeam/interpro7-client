@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 
 import server from './server';
 
-/*:: import type ServerStatus from './server'; */
+/*:: import type {ServerStatus} from './server'; */
 /*:: export type ServerStatuses = {[string]: ServerStatus}; */
 /*:: import type { State } from 'reducers'; */
 
@@ -22,14 +22,8 @@ const serverStatusSelectorFor = server =>
   (createSelector(
     serverStatusesSelector,
     servers => servers[server],
-  ) /*: (State, any) => ServerStatus */);
+  ) /*: (State) => ServerStatus */);
 
-export const apiServerStatus = (serverStatusSelectorFor(
-  'api',
-) /*: ServerStatus*/);
-export const ebiServerStatus = (serverStatusSelectorFor(
-  'ebi',
-) /*: ServerStatus*/);
-export const ipScanServerStatus = (serverStatusSelectorFor(
-  'ipScan',
-) /*: ServerStatus*/);
+export const apiServerStatus = serverStatusSelectorFor('api');
+export const ebiServerStatus = serverStatusSelectorFor('ebi');
+export const ipScanServerStatus = serverStatusSelectorFor('ipScan');

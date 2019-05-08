@@ -22,11 +22,16 @@ class GridView extends PureComponent {
     const renderer = card || (() => null);
     if (card) {
       return (
-        <AnimatedEntry className={local['card-wrapper']} element="div">
+        <AnimatedEntry
+          className={local['card-wrapper']}
+          element="div"
+          data-testid="data-grid"
+        >
           {dataTable.map((data, i) => (
             <div
               key={data.metadata.accession || i}
               className={local['grid-card']}
+              data-testid="grid-entity"
             >
               <ErrorBoundary>{renderer(data)}</ErrorBoundary>
             </div>

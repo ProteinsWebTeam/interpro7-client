@@ -47,7 +47,9 @@ const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts);
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'),
+    import(
+      /* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'
+    ),
 });
 
 const SchemaOrgData = loadable({
@@ -450,7 +452,7 @@ const List = ({
               />
             )}
           </Card>
-          <SearchBox>Search structures</SearchBox>
+          <SearchBox loading={isStale}>Search structures</SearchBox>
           <Column
             dataKey="accession"
             headerClassName={f('table-center')}

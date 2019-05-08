@@ -33,7 +33,14 @@ export default class Tabs extends PureComponent {
               className={f('tabs-title', { 'is-active': activeTab === i })}
               key={i}
             >
-              <button onClick={this._handleChangeTab(i)}>
+              <button
+                onClick={this._handleChangeTab(i)}
+                data-testid={
+                  'data-testid' in child.props
+                    ? child.props['data-testid']
+                    : null
+                }
+              >
                 {child.props.title}
               </button>
             </li>

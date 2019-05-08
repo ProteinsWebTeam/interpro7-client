@@ -15,12 +15,14 @@ import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
 import protvista from 'components/ProtVista/style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
 // import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
 
-const f = foundationPartial(protvista);
+const f = foundationPartial(protvista, fonts);
 
+const MAX_NUMBER_ENTRIES = 20;
 class AlignmentProtvista extends ProtVistaMatches {
   async updateTracksWithData({ matches, length }) {
     this._webProteinRef.data = '\u00A0'.repeat(length);
@@ -114,7 +116,7 @@ class SetAlignmentsSubPage extends PureComponent /*:: <Props> */ {
           />
           <Column
             dataKey="alignedTo"
-            renderer={(alignedTo, { accession }) => {
+            renderer={(alignedTo, { accession, alignments_count: count }) => {
               const length = Math.max(
                 ...Object.values(alignedTo).map(e => e.length),
               );
@@ -127,7 +129,20 @@ class SetAlignmentsSubPage extends PureComponent /*:: <Props> */ {
                   length={length}
                 />
               ) : (
-                <span>{Object.keys(alignedTo).join(', ')}</span>
+                <>
+                  <span>{Object.keys(alignedTo).join(', ')} </span>
+                  {count > MAX_NUMBER_ENTRIES && (
+                    <Tooltip
+                      title={`Only displaying the ${MAX_NUMBER_ENTRIES} most relevant aligned entries out of <b>${count}</b>`}
+                    >
+                      {' '}
+                      <span
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="&#xf129;"
+                      />
+                    </Tooltip>
+                  )}
+                </>
               );
             }}
           >
