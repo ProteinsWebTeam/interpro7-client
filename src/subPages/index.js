@@ -19,7 +19,9 @@ const Sequence = loadable({
 
 const DomainArchitecture = loadable({
   loader: () =>
-    import(/* webpackChunkName: "domain-architecture-subpage" */ './DomainArchitecture'),
+    import(
+      /* webpackChunkName: "domain-architecture-subpage" */ './DomainArchitecture'
+    ),
 });
 
 const HMMModel = loadable({
@@ -32,7 +34,9 @@ const SetAlignments = loadable({
 });
 const SimilarProteins = loadable({
   loader: () =>
-    import(/* webpackChunkName: "similar-proteins-subpage" */ './SimilarProteins'),
+    import(
+      /* webpackChunkName: "similar-proteins-subpage" */ './SimilarProteins'
+    ),
 });
 
 const defaultMapStateToProps = createSelector(
