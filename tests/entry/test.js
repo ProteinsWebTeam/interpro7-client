@@ -15,6 +15,15 @@ describe('tests', () => {
     '[data-testid="entry-titlebar"] [data-testid="entry-accession"]',
     '[data-testid="entry-titlebar"] [data-testid="entry-title"]',
     '[data-testid="entry-member-db-icon"]',
+    '[data-testid="entry-entrymenu"]',
+    '[data-testid="entry-entrymenu"] [data-testid="entrymenu-overview"]',
+    '[data-testid="entry-entrymenu"] [data-testid="entrymenu-proteins"]',
+    '[data-testid="entry-entrymenu"] [data-testid="entrymenu-domain_architectures"]',
+    '[data-testid="entry-entrymenu"] [data-testid="entrymenu-structures"]',
+    '[data-testid="entry-shortname"]',
+    '[data-testid="description"]',
+    '[data-testid="entry-references"]',
+    '[data-testid="entry-crossreferences"]',
   ];
 
   const notExpectedElements = [

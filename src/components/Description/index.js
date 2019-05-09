@@ -196,7 +196,7 @@ class Description extends PureComponent /*:: <Props> */ {
       return acc;
     }, []);
     return (
-      <div className={f('margin-bottom-large')}>
+      <div className={f('margin-bottom-large')} data-testid="description">
         {paragraphs.map((p, i) => (
           <ParagraphWithCites
             key={i}

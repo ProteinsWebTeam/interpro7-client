@@ -126,7 +126,10 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       ['Sequence', { icon: '\uF120', class: 'icon-common' }],
     ]);
     return (
-      <li className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}>
+      <li
+        className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}
+        data-testid={`entrymenu-${name.toLowerCase().replace(/\s+/g, '_')}`}
+      >
         <Link
           to={to}
           exact={exact}

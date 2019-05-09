@@ -153,7 +153,7 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
       />
     )}
     {Object.keys(metadata.literature || []).length ? (
-      <section id="references">
+      <section id="references" data-testid="entry-references">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}>
             <h4>References</h4>
@@ -164,7 +164,7 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
     ) : null}
 
     {Object.keys(metadata.cross_references || {}).length ? (
-      <section id="cross_references">
+      <section id="cross_references" data-testid="entry-crossreferences">
         <div className={f('row')}>
           <div className={f('large-12', 'columns')}>
             <h4>Cross References</h4>
@@ -338,7 +338,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 metadata.source_database.toLowerCase() === 'interpro' &&
                 metadata.name.short &&
                 metadata.accession !== metadata.name.short && (
-                  <p>
+                  <p data-testid="entry-shortname">
                     Short name:&nbsp;
                     <i className={f('shortname')}>{metadata.name.short}</i>
                   </p>
