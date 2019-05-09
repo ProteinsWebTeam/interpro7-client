@@ -175,6 +175,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
         ref={this._ref}
       >
         <span
+          data-testid="entry-menu"
           className={f(
             'fake-border',
             payload.metadata.source_database.toLowerCase() === 'interpro'

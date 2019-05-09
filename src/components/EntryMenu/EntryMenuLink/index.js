@@ -143,6 +143,9 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
                 'margin-right-medium',
               )}
               aria-label={`icon ${name}`}
+              data-testid={`entry-menu-${name
+                .toLowerCase()
+                .replace(/\s+/g, '_')}`}
             />
             {name}
           </span>

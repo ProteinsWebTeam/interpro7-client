@@ -15,6 +15,12 @@ describe('tests', () => {
     '[data-testid="entry-titlebar"] [data-testid="entry-accession"]',
     '[data-testid="entry-titlebar"] [data-testid="entry-title"]',
     '[data-testid="entry-member-db-icon"]',
+    '[data-testid="entry-menu"]',
+    '[data-testid="entry-menu-overview"]',
+    '[data-testid="entry-menu-proteins"]',
+    '[data-testid="entry-menu-domain_architectures"]',
+    '[data-testid="entry-menu-structures"]',
+    '[data-testid="entry-short-name"]',
   ];
 
   const notExpectedElements = [
@@ -76,17 +82,9 @@ describe('tests', () => {
   });
 
   test('click-browse-entry-page-elements', async () => {
-    // initial navigation to browse page
-    const browseURL = `${homepageURL}entry/interpro/#table`;
+    // initial navigation to IPR000001 page
+    const browseURL = `${homepageURL}entry/interpro/IPR000001`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
-
-    // click first entry row
-    await Promise.all([
-      page.waitForSelector('[data-testid="table-entity"] a', {
-        timeout: 0,
-      }),
-      page.click('[data-testid="table-entity"] a'),
-    ]);
     await pageElementTests(expectedElements, notExpectedElements);
   });
 });

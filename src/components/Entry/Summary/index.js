@@ -338,7 +338,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 metadata.source_database.toLowerCase() === 'interpro' &&
                 metadata.name.short &&
                 metadata.accession !== metadata.name.short && (
-                  <p>
+                  <p data-testid="entry-short-name">
                     Short name:&nbsp;
                     <i className={f('shortname')}>{metadata.name.short}</i>
                   </p>
