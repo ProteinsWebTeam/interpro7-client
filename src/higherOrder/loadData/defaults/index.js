@@ -140,7 +140,13 @@ export const getReversedUrl = createSelector(
   },
 );
 
-export const getUrlForApi = getUrl('api');
+export const getUrlForApi = (...parameters) =>
+  getUrl('api')(...parameters)
+    .replace('/alignments', '/')
+    .replace('/logo', '/')
+    .replace('/domain_architecture', '/')
+    .replace('/sequence', '/')
+    .replace('/similar_proteins', '/');
 
 export const STATUS_OK = 200;
 export const STATUS_NO_CONTENT = 204;

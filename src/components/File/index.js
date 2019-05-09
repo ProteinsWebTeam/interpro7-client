@@ -134,6 +134,7 @@ class File extends PureComponent {
     count: T.number,
     subset: T.bool,
     name: T.string,
+    search: T.object,
   };
 
   constructor(props) {
@@ -152,6 +153,7 @@ class File extends PureComponent {
     const url = format({
       ...nextProps.api,
       pathname: nextProps.api.root + subpath,
+      query: nextProps.search,
     });
     if (
       prevState.url === url &&

@@ -350,6 +350,26 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
+    'similar_proteins',
+    {
+      to(customLocation) {
+        const { key } = customLocation.description.main;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'similar_proteins',
+            },
+          },
+        };
+      },
+      name: 'Similar Proteins',
+      counter: 'similar_proteins',
+    },
+  ],
+  [
     'logo',
     {
       to(customLocation) {

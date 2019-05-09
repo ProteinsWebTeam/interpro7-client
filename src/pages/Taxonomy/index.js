@@ -74,7 +74,9 @@ const ProteinFastasRenderer = entryDB => (taxId, _row, extra) => (
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "taxonomy-summary" */ 'components/Taxonomy/Summary'),
+    import(
+      /* webpackChunkName: "taxonomy-summary" */ 'components/Taxonomy/Summary'
+    ),
 });
 
 const SchemaOrgData = loadable({
