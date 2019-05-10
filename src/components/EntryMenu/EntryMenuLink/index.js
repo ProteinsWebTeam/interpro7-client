@@ -128,7 +128,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     return (
       <li
         className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}
-        data-testid={`entrymenu-${name.toLowerCase().replace(/\s+/g, '_')}`}
+        data-testid={`menu-${name.toLowerCase().replace(/\s+/g, '_')}`}
       >
         <Link
           to={to}

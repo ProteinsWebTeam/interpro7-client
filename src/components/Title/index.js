@@ -95,7 +95,7 @@ EntryIcon.propTypes = {
 const TitleTag = ({ metadata, mainType, dbLabel }) => {
   const isEntry = mainType === 'entry';
   return (
-    <div className={f('title-tag')} data-testid="entry-title">
+    <div className={f('title-tag')} data-testid="title">
       {metadata && metadata.source_database && (
         <div
           className={f('tag', {
@@ -130,7 +130,7 @@ TitleTag.propTypes = {
 const AccessionTag = ({ metadata, mainType }) => {
   const isEntry = mainType === 'entry';
   return (
-    <div className={f('title-id')} data-testid="entry-accession">
+    <div className={f('title-id')} data-testid="accession">
       {// Red, Green for domains,  Purple for sites, and Blue for Homologous accession: for InterPro page only
       isEntry &&
         metadata.type &&
@@ -194,7 +194,7 @@ class Title extends PureComponent /*:: <Props> */ {
         : metadata.source_database;
 
     return (
-      <div className={f('title')} data-testid="entry-titlebar">
+      <div className={f('title')} data-testid="titlebar">
         {isEntry &&
           metadata.type &&
           metadata.source_database &&
