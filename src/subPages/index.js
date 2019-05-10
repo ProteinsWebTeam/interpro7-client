@@ -19,7 +19,9 @@ const Sequence = loadable({
 
 const DomainArchitecture = loadable({
   loader: () =>
-    import(/* webpackChunkName: "domain-architecture-subpage" */ './DomainArchitecture'),
+    import(
+      /* webpackChunkName: "domain-architecture-subpage" */ './DomainArchitecture'
+    ),
 });
 
 const HMMModel = loadable({
@@ -29,6 +31,12 @@ const HMMModel = loadable({
 const SetAlignments = loadable({
   loader: () =>
     import(/* webpackChunkName: "set-alignments-subpage" */ './SetAlignments'),
+});
+const SimilarProteins = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "similar-proteins-subpage" */ './SimilarProteins'
+    ),
 });
 
 const defaultMapStateToProps = createSelector(
@@ -42,22 +50,11 @@ const defaultMapStateToProps = createSelector(
     description,
     _search,
   ) => {
-    // const search = _search || {};
     const search =
       description.main.key && description[description.main.key].accession
         ? {}
         : _search || {};
     search.page_size = search.page_size || settingsPageSize;
-    // TODO: We were doing a copy of selected field here, but seems that we can use the original
-    // TODO: Delete the commented lines if nothing breaks (31/10/2017)
-    // const description = {
-    //   mainType: _description.mainType,
-    //   mainDB: _description.mainDB,
-    //   mainAccession: _description.mainAccession,
-    //   focusType: _description.focusType,
-    //   focusDB: _description.focusDB,
-    //   focusAccession: _description.focusAccession,
-    // };
     return format({
       protocol,
       hostname,
@@ -95,6 +92,35 @@ const mapStateToPropsForHMMModel = createSelector(
     });
   },
 );
+const mapStateToPropsForSimilarProteins = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.search,
+  (_, props) => props.data,
+  ({ protocol, hostname, port, root }, search, data) => {
+    // omit elements from search
+    const { type, search: _, ...restOfSearch } = search;
+    // modify search
+    restOfSearch.ida =
+      data &&
+      data.payload &&
+      data.payload &&
+      data.payload.metadata &&
+      data.payload.metadata.ida_accession;
+
+    const description = {
+      main: { key: 'protein' },
+      protein: { db: 'uniprot' },
+    };
+    // build URL
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(description),
+      query: restOfSearch,
+    });
+  },
+);
 
 const subPages = new Map([
   ['entry', loadData(defaultMapStateToProps)(List)],
@@ -107,6 +133,13 @@ const subPages = new Map([
   ['alignments', SetAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
+  [
+    'similar_proteins',
+    loadData({
+      getUrl: mapStateToPropsForSimilarProteins,
+      propNamespace: 'IDA',
+    })(SimilarProteins),
+  ],
 ]);
 
 export default subPages;

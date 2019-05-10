@@ -34,6 +34,7 @@ pages:
       - entry
       - structure
       - sequence
+      - similar_proteins
   structure:
     subPages:
       - entry

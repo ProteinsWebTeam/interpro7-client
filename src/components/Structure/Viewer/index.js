@@ -169,69 +169,74 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     }, optionsForObserver);
     this.observer.observe(this._structureSection.current);
-    this._protvista.current.addEventListener('entryclick', e => {
-      const {
-        detail: {
-          feature: { accession, source_database: db, type, chain },
-        },
-      } = e;
-
-      let protein = e.detail.feature.protein;
-      // bit of a hack to handle missing data in some entries
-      if (!protein && 'parent' in e.detail.feature) {
-        protein = e.detail.feature.parent.protein;
-      }
-      this.setState({
-        selectedEntryToKeep:
-          type === 'chain'
-            ? {
-                accession: pdbid,
-                db: 'pdb',
-                chain: accession,
-                protein,
-              }
-            : {
-                accession: accession,
-                db,
-                chain,
-                protein,
-              },
-      });
-      this.showEntryInStructure;
-    });
-    this._protvista.current.addEventListener(
-      'entrymouseover',
-      ({
-        detail: {
-          feature: { accession, source_database: db, type, chain, protein },
-        },
-      }) => {
-        if (type === 'chain')
-          this.showEntryInStructure('pdb', pdbid, accession, protein);
-        else this.showEntryInStructure(db, accession, chain, protein);
-      },
-    );
     this._protvista.current.addEventListener(
       'change',
-      ({ detail: { type, highlight, chain, protein } }) => {
-        if (type === 'sequence-chain') {
-          if (highlight) {
-            const [start, stop] = highlight.split(':');
-            const p2s = this._protein2structureMappers[
-              `${protein}->${chain}`.toUpperCase()
-            ];
-            this.showRegionInStructure(
-              chain,
-              Math.round(p2s(start)),
-              Math.round(p2s(stop)),
-            );
-          } else this.showRegionInStructure();
+      ({ detail: { eventtype, highlight, feature, chain, protein } }) => {
+        const {
+          accession,
+          source_database: sourceDB,
+          type,
+          chain: chainF,
+          protein: proteinF,
+          parent,
+        } = (feature || {}).feature || {};
+        let proteinD = proteinF;
+
+        switch (eventtype) {
+          case 'sequence-chain':
+            if (highlight) {
+              const [start, stop] = highlight.split(':');
+              const p2s = this._protein2structureMappers[
+                `${protein}->${chain}`.toUpperCase()
+              ];
+              this.showRegionInStructure(
+                chain,
+                Math.round(p2s(start)),
+                Math.round(p2s(stop)),
+              );
+              this.handlingSequenceHighlight = true;
+            } else this.showRegionInStructure();
+            break;
+          case 'click':
+            // bit of a hack to handle missing data in some entries
+            if (!proteinD && parent) {
+              proteinD = parent.protein;
+            }
+            this.setState({
+              selectedEntryToKeep:
+                type === 'chain'
+                  ? {
+                      accession: pdbid,
+                      db: 'pdb',
+                      chain: accession,
+                      protein: proteinD,
+                    }
+                  : {
+                      accession: accession,
+                      db: sourceDB,
+                      chain: chainF,
+                      protein: proteinD,
+                    },
+            });
+            break;
+          case 'mouseover':
+            if (this.handlingSequenceHighlight) {
+              this.handlingSequenceHighlight = false;
+              return;
+            }
+            if (type === 'chain')
+              this.showEntryInStructure('pdb', pdbid, accession, protein);
+            else
+              this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
+            break;
+          case 'mouseout':
+            this.showEntryInStructure();
+            break;
+          default:
+            break;
         }
       },
     );
-    this._protvista.current.addEventListener('entrymouseout', () => {
-      this.showEntryInStructure();
-    });
   }
 
   componentWillUnmount() {

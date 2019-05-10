@@ -77,7 +77,9 @@ const SchemaOrgData = loadable({
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "proteome-summary" */ 'components/Proteome/Summary'),
+    import(
+      /* webpackChunkName: "proteome-summary" */ 'components/Proteome/Summary'
+    ),
 });
 
 class SummaryCounterProteome extends PureComponent {

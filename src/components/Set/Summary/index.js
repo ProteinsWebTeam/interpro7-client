@@ -8,6 +8,7 @@ import { goToCustomLocation } from 'actions/creators';
 import Accession from 'components/Accession';
 import Description from 'components/Description';
 import { BaseLink } from 'components/ExtLink';
+import { setDBs } from 'utils/processDescription/handlers';
 
 import ClanViewer from 'clanviewer';
 import 'clanviewer/css/clanviewer.css';
@@ -25,8 +26,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
   data: {
     metadata: Object,
   },
-  db: string,
-  currentSet: Object
+  db: string
 }; */
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -57,7 +57,6 @@ class SummarySet extends PureComponent /*:: <Props> */ {
       metadata: T.object,
     }).isRequired,
     db: T.string.isRequired,
-    currentSet: T.object,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.object.isRequired,
     loading: T.bool.isRequired,
@@ -129,7 +128,15 @@ class SummarySet extends PureComponent /*:: <Props> */ {
             id: '',
           }
         : this.props.data.metadata;
-    const { currentSet } = this.props;
+    // const { currentSet } = this.props;
+    let currentSet = null;
+    if (metadata.source_database) {
+      for (const db of setDBs) {
+        if (db.name === metadata.source_database) currentSet = db;
+      }
+    }
+
+    // const currentSet = setDBs
     return (
       <div className={f('sections')}>
         <section>

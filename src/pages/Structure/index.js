@@ -47,7 +47,9 @@ const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts);
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'),
+    import(
+      /* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'
+    ),
 });
 
 const SchemaOrgData = loadable({
