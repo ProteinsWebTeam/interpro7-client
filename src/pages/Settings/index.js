@@ -31,7 +31,9 @@ const f = foundationPartial(ebiGlobalStyles, theme, local);
 // Generate async components
 const Advanced = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-advanced" */ 'components/Settings/Advanced'),
+    import(
+      /* webpackChunkName: "about-advanced" */ 'components/Settings/Advanced'
+    ),
 });
 
 const NavigationSettings = ({ navigation: { pageSize } }) => (
@@ -208,6 +210,17 @@ const CacheSettings = ({ cache: { enabled } }) => (
               Off
             </span>
           </label>
+        </div>
+        <div>
+          <button
+            type="button"
+            className={f('button')}
+            onClick={() => {
+              window.sessionStorage.clear();
+            }}
+          >
+            Clear Local Cache
+          </button>
         </div>
       </div>
     </div>
