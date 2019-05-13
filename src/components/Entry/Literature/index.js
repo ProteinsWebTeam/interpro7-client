@@ -56,20 +56,19 @@ const LiteratureItem = (
         }}
         processData={schemaProcessCitations}
       />
-      {included &&
-        typeof i !== 'undefined' && (
-          <Link
-            id={pubID}
-            className={f('index')}
-            to={customLocation => ({
-              ...customLocation,
-              hash: `description-${i}`,
-            })}
-            aria-label="jump up"
-          >
-            {i}.^
-          </Link>
-        )}
+      {included && typeof i !== 'undefined' && (
+        <Link
+          id={pubID}
+          className={f('index')}
+          to={customLocation => ({
+            ...customLocation,
+            hash: `description-${i}`,
+          })}
+          aria-label="jump up"
+        >
+          {i}.^
+        </Link>
+      )}
       <span className={f('title')}>{r.title} </span>
       <span className={f('authors')}>{r.authors.join(', ')} </span>{' '}
       {r.ISO_journal && <span className={f('journal')}>{r.ISO_journal} </span>}
@@ -159,6 +158,9 @@ Literature.propTypes = {
   target: T.string.isRequired,
 };
 
-const mapStateToProps = createSelector(hashSelector, target => ({ target }));
+const mapStateToProps = createSelector(
+  hashSelector,
+  target => ({ target }),
+);
 
 export default connect(mapStateToProps)(Literature);

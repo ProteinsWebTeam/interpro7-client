@@ -32,6 +32,11 @@ import style from '../style.css';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
+// images
+import embl from '../../images/thirdparty/funding/logo_embl.png';
+import wellcome from '../../images/thirdparty/funding/logo_wellcome.jpg';
+import bbsrc from '../../images/thirdparty/funding/logo_bbsrc.png';
+
 // Bind css with style object
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
@@ -89,6 +94,13 @@ const Twitter = loadable({
     await schedule(MAX_DELAY_FOR_TWITTER);
     return import(/* webpackChunkName: "twitter" */ 'components/Twitter');
   },
+});
+
+const ElixirFooter = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "blog-entries", webpackPreload: true */ 'components/ElixirFooter'
+    ),
 });
 
 class InterProGraphicAnim extends PureComponent {
@@ -953,6 +965,17 @@ class Home extends PureComponent {
         <ErrorBoundary>
           <Twitter />
         </ErrorBoundary>
+        <div className={f('row')}>
+          <span className={f('elixir-title')}>This service funded by</span>
+          <img src={embl} className={f('image-funding')} alt="EMBL logo" />
+          <img
+            src={wellcome}
+            className={f('image-funding')}
+            alt="Wellcome Trust logo"
+          />
+          <img src={bbsrc} className={f('image-funding')} alt="BBSRC logo" />
+        </div>
+        <ElixirFooter />
       </>
     );
   }

@@ -11,24 +11,23 @@ describe('tests', () => {
 
   const expectedElements = [
     '[data-testid="titlebar"]',
-    '[data-testid="titlebar"] [data-testid="entry-type-icon"]',
     '[data-testid="titlebar"] [data-testid="accession"]',
     '[data-testid="titlebar"] [data-testid="title"]',
-    '[data-testid="entry-member-db-icon"]',
     '[data-testid="menu"]',
     '[data-testid="menu"] [data-testid="menu-overview"]',
-    '[data-testid="menu"] [data-testid="menu-proteins"]',
-    '[data-testid="menu"] [data-testid="menu-domain_architectures"]',
+    '[data-testid="menu"] [data-testid="menu-entries"]',
     '[data-testid="menu"] [data-testid="menu-structures"]',
-    '[data-testid="entry-shortname"]',
+    '[data-testid="menu"] [data-testid="menu-sequence"]',
+    '[data-testid="protein-shortname"]',
+    '[data-testid="protein-length"]',
+    '[data-testid="protein-species"]',
+    '[data-testid="protein-proteome"]',
+    '[data-testid="protein-function"]',
+    '[data-testid="protein-external-links"]',
     '[data-testid="description"]',
-    '[data-testid="entry-references"]',
-    '[data-testid="entry-crossreferences"]',
   ];
 
-  const notExpectedElements = [
-    '[data-testid="titlebar"] [data-testid="entry-member-db-icon"]',
-  ];
+  const notExpectedElements = [];
 
   beforeAll(async () => {
     page = await testSetup.setup();
@@ -48,9 +47,9 @@ describe('tests', () => {
     }
   };
 
-  test('click-browse-entry-row', async () => {
+  test('click-browse-protein-row', async () => {
     // initial navigation to browse page
-    const browseURL = `${homepageURL}entry/interpro/#table`;
+    const browseURL = `${homepageURL}protein/uniprot/#table`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     // click first entry row
@@ -61,14 +60,12 @@ describe('tests', () => {
       page.click('[data-testid="table-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/entry\/interpro\/IPR/i)
-    );
+    expect(url).toEqual(expect.stringMatching(/interpro\/protein\/uniprot\//i));
   });
 
-  test('click-browse-entry-grid-item', async () => {
+  test('click-browse-protein-grid-item', async () => {
     // initial navigation to browse page
-    const browseURL = `${homepageURL}entry/interpro/#grid`;
+    const browseURL = `${homepageURL}protein/uniprot/#grid`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     // click first entry row
@@ -79,14 +76,12 @@ describe('tests', () => {
       page.click('[data-testid="grid-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/entry\/interpro\/IPR/i)
-    );
+    expect(url).toEqual(expect.stringMatching(/protein\/.*?reviewed\//i));
   });
 
-  test('click-browse-entry-page-elements', async () => {
+  test('click-browse-protein-page-elements', async () => {
     // initial navigation to browse page
-    const browseURL = `${homepageURL}entry/InterPro/IPR000001/`;
+    const browseURL = `${homepageURL}protein/reviewed/P15498`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await pageElementTests(expectedElements, notExpectedElements);

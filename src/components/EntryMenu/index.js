@@ -173,8 +173,10 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       <ul
         className={f('tabs', className, { sign: isSignature })}
         ref={this._ref}
+        data-testid="menu"
       >
         <span
+          data-testid="entry-menu"
           className={f(
             'fake-border',
             payload.metadata.source_database.toLowerCase() === 'interpro'

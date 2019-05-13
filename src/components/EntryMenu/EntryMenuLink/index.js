@@ -126,7 +126,10 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       ['Sequence', { icon: '\uF120', class: 'icon-common' }],
     ]);
     return (
-      <li className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}>
+      <li
+        className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}
+        data-testid={`menu-${name.toLowerCase().replace(/\s+/g, '_')}`}
+      >
         <Link
           to={to}
           exact={exact}
@@ -143,6 +146,9 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
                 'margin-right-medium',
               )}
               aria-label={`icon ${name}`}
+              data-testid={`entry-menu-${name
+                .toLowerCase()
+                .replace(/\s+/g, '_')}`}
             />
             {name}
           </span>

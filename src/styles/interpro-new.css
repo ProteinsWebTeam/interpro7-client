@@ -1394,3 +1394,25 @@ details.option-style > summary {
     opacity: 0;
   }
 }
+
+.image-funding {
+  padding: 1em;
+}
+
+.image-funding-embl {
+  background: #fff url('../images/thirdparty/funding/logo_embl.png') no-repeat
+    50% 14%;
+  background-size: 30%;
+}
+
+.image-funding-wellcome-trust {
+  background: #fff url('../images/thirdparty/funding/logo_wellcome.jpg')
+    no-repeat 50% 14%;
+  background-size: 30%;
+}
+
+.image-funding-bbsrc {
+  background: #fff url('../images/thirdparty/funding/logo_bbsrc.png') no-repeat
+    50% 14%;
+  background-size: 30%;
+}

@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`External links <GoTerms /> entry: interpro should render GOTerms component with empty subset 1`] = `
-<section>
+<section
+  data-testid="go-terms"
+>
   <div
     className="row"
   >
@@ -32,7 +34,9 @@ exports[`External links <GoTerms /> entry: interpro should render GOTerms compon
 `;
 
 exports[`External links <GoTerms /> entry: interpro should render GoTerms component 1`] = `
-<section>
+<section
+  data-testid="go-terms"
+>
   <div
     className="row"
   >
@@ -170,7 +174,9 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
 `;
 
 exports[`External links <GoTerms /> entry: interpro should render GoTerms component 2`] = `
-<section>
+<section
+  data-testid="go-terms"
+>
   <div
     className="row"
   >
@@ -278,7 +284,9 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
 `;
 
 exports[`External links <GoTerms /> entry: pfam should render GOTerms component with empty subset 1`] = `
-<section>
+<section
+  data-testid="go-terms"
+>
   <div
     className="row"
   >
@@ -309,7 +317,9 @@ exports[`External links <GoTerms /> entry: pfam should render GOTerms component 
 `;
 
 exports[`External links <GoTerms /> entry: pfam should render GoTerms component 1`] = `
-<section>
+<section
+  data-testid="go-terms"
+>
   <div
     className="row"
   >
@@ -447,7 +457,9 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
 `;
 
 exports[`External links <GoTerms /> entry: pfam should render GoTerms component 2`] = `
-<section>
+<section
+  data-testid="go-terms"
+>
   <div
     className="row"
   >
@@ -555,7 +567,9 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
 `;
 
 exports[`External links <GoTerms /> protein: reviewed should render GOTerms component with empty subset 1`] = `
-<section>
+<section
+  data-testid="go-terms"
+>
   <div
     className="row"
   >
@@ -586,7 +600,9 @@ exports[`External links <GoTerms /> protein: reviewed should render GOTerms comp
 `;
 
 exports[`External links <GoTerms /> protein: reviewed should render GoTerms component 1`] = `
-<section>
+<section
+  data-testid="go-terms"
+>
   <div
     className="row"
   >
@@ -724,7 +740,9 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
 `;
 
 exports[`External links <GoTerms /> protein: reviewed should render GoTerms component 2`] = `
-<section>
+<section
+  data-testid="go-terms"
+>
   <div
     className="row"
   >
