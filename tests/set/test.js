@@ -17,15 +17,11 @@ describe('tests', () => {
     '[data-testid="menu"] [data-testid="menu-overview"]',
     '[data-testid="menu"] [data-testid="menu-entries"]',
     '[data-testid="menu"] [data-testid="menu-proteins"]',
-    '[data-testid="structure-accession"]',
-    '[data-testid="structure-experiment-type"]',
-    '[data-testid="structure-resolution"]',
-    '[data-testid="structure-chains"]',
-    '[data-testid="structure-released"]',
-    '[data-testid="structure-external-links"]',
-    '[data-testid="structure-3d-viewer"]',
-    '[data-testid="structure-protvista"]',
-    '[data-testid="structure-entry-select"]',
+    '[data-testid="menu"] [data-testid="menu-structures"]',
+    '[data-testid="set-accession"]',
+    '[data-testid="set-type"]',
+    '[data-testid="set-memberdb"]',
+    '[data-testid="set-external-links"]',
   ];
 
   const notExpectedElements = [];
@@ -48,9 +44,9 @@ describe('tests', () => {
     }
   };
 
-  test('click-browse-structure-row', async () => {
+  test('click-browse-set-row', async () => {
     // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/pdb/#table`;
+    const browseURL = `${homepageURL}set/pfam/#table`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     // click first entry row
@@ -62,13 +58,13 @@ describe('tests', () => {
     ]);
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(
-      expect.stringMatching(/interpro\/structure\/pdb\/[^\s]{4}/i)
+      expect.stringMatching(/interpro\/set\/pfam\/CL\d{4}\//i)
     );
   });
 
-  test('click-browse-structure-grid-item', async () => {
+  test('click-browse-set-grid-item', async () => {
     // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/pdb/#grid`;
+    const browseURL = `${homepageURL}set/pfam/#grid`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     // click first entry row
@@ -80,13 +76,13 @@ describe('tests', () => {
     ]);
     const url = await page.evaluate(() => window.location.href);
     expect(url).toEqual(
-      expect.stringMatching(/interpro\/structure\/pdb\/[^\s]{4}/i)
+      expect.stringMatching(/interpro\/set\/pfam\/CL\d{4}\//i)
     );
   });
 
-  test('click-browse-structure-page-elements', async () => {
+  test('click-browse-set-page-elements', async () => {
     // initial navigation to browse page
-    const browseURL = `${homepageURL}structure/pdb/101m`;
+    const browseURL = `${homepageURL}set/pfam/CL0001`;
     await Promise.all([page.waitForNavigation(), page.goto(browseURL)]);
 
     await pageElementTests(expectedElements, notExpectedElements);
