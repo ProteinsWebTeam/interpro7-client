@@ -31,8 +31,8 @@ export default (headers /*: Headers */) => {
     dropEverything = true;
   }
   if (dropEverything) {
-    sessionStorage.setItem(key, versionFromResponse);
     window.sessionStorage.clear();
+    window.sessionStorage.setItem(key, versionFromResponse);
     return true;
   }
 };
