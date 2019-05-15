@@ -19,7 +19,7 @@ How to install
 
 -   `npm i` (or `npm install`) to install all dependencies
 
--   Create configuration file `config.yml` at the root of the project
+-   Create a configuration file `config.yml` at the root of the project
     (see `config.yml.example` for an example)
 
 Development
@@ -29,6 +29,11 @@ Development
     and to start the dev server
 
 -   Access the website at the address defined in your configuration
+
+Tests
+-----
+
+- `npm run test` will run all the tests in the project
 
 Other
 -----
