@@ -35,3 +35,11 @@ Other
 
 You can check the list of possible commands by running `npm run`,
 and run them as stand-alone commands
+
+Project structure
+-----
+
+-   `scripts` The scripts executed when various `npm run` options selected
+-   `src`  The source code for the website
+-   `tests` Functional tests for the website
+
