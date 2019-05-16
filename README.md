@@ -6,7 +6,6 @@ New InterPro Web-Client
 
 Requirements
 ------------
-
 -   Node version 6+
     (if not in your system, or lower version,
     see [nvm](https://github.com/creationix/nvm),
@@ -14,7 +13,6 @@ Requirements
 
 How to install
 --------------
-
 -   Clone from this repo
 
 -   `npm i` (or `npm install`) to install all dependencies
@@ -24,7 +22,6 @@ How to install
 
 Development
 -----------
-
 -   `npm run start` to start the tests (that will re-run on file change)
     and to start the dev server
 
@@ -32,14 +29,12 @@ Development
 
 Other
 -----
-
 You can check the list of possible commands by running `npm run`,
 and run them as stand-alone commands
 
 
 # Project structure
 -----
-
 -   `scripts` The scripts executed when various `npm run` options selected
 -   `src`  The source code for the website
 -   `tests` Functional tests for the website
