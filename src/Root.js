@@ -54,6 +54,16 @@ const EMBLDropdownAsync = loadable({
   loading: NullComponent,
 });
 
+const ElixirFooterAsync = loadable({
+  loader: () =>
+    schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
+      import(
+        /* webpackChunkName: "elixir-footer", webpackPreload: true */ 'components/ElixirFooter'
+      ),
+    ),
+  loading: NullComponent,
+});
+
 const EBIFooterAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
@@ -109,6 +119,7 @@ const Root = () => (
     <Sentinel top={STICKY_MENU_OFFSET} />
     <Pages top={STICKY_MENU_OFFSET} />
     <footer>
+      <ElixirFooterAsync />
       <EBIFooterAsync />
     </footer>
     <ErrorBoundary renderOnError={renderNull}>
