@@ -435,8 +435,8 @@ class List extends PureComponent {
                     className={f('no-decoration')}
                     to={{
                       description: {
-                        main: { key: 'taxonomy' },
-                        taxonomy: {
+                        main: { key: 'proteome' },
+                        proteome: {
                           db: 'uniprot',
                           accession: `${accession}`,
                         },
