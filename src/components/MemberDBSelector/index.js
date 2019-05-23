@@ -20,6 +20,8 @@ import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 
+import { NOT_MEMBER_DBS } from 'menuConfig';
+
 import styles from './style.css';
 
 const f = foundationPartial(styles);
@@ -169,7 +171,7 @@ class _MemberDBSelector extends PureComponent {
         if (
           db.type === 'entry' &&
           db.canonical !== 'interpro' &&
-          db.canonical !== 'mobidblt'
+          !NOT_MEMBER_DBS.has(db.canonical)
         ) {
           this._dbs.set(db.canonical, db);
         }
