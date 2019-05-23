@@ -546,6 +546,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 'is-minimized': isMinimized,
               })}
               ref={this._poppableViewer}
+              data-testid="structure-3d-viewer"
             >
               <ResizeObserverComponent
                 element="div"
@@ -616,7 +617,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
               </div>
             </div>
           </div>
-          <div ref={this._protvista}>
+          <div ref={this._protvista} data-testid="structure-protvista">
             <ProtVistaForStructure />
           </div>
         </div>

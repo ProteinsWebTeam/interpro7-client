@@ -96,13 +96,6 @@ const Twitter = loadable({
   },
 });
 
-const ElixirFooter = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "blog-entries", webpackPreload: true */ 'components/ElixirFooter'
-    ),
-});
-
 class InterProGraphicAnim extends PureComponent {
   // componentDidMount() {
   //   this._tl = new Timeline();
@@ -975,7 +968,6 @@ class Home extends PureComponent {
           />
           <img src={bbsrc} className={f('image-funding')} alt="BBSRC logo" />
         </div>
-        <ElixirFooter />
       </>
     );
   }

@@ -32,7 +32,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             <tbody>
               <tr>
                 <td>Proteome ID</td>
-                <td>
+                <td data-testid="proteome-accession">
                   <Accession
                     accession={metadata.proteomeAccession || metadata.accession}
                     title="Proteome ID"
@@ -47,7 +47,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
               )}
               <tr>
                 <td>Species</td>
-                <td>
+                <td data-testid="proteome-species">
                   <Species
                     fullName={metadata.name.name}
                     taxID={metadata.taxonomy}
@@ -56,7 +56,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
               </tr>
               <tr>
                 <td>Proteome type</td>
-                <td>
+                <td data-testid="proteome-type">
                   {metadata.is_reference ? 'Reference' : 'Non-reference'}{' '}
                   proteome
                 </td>
@@ -68,7 +68,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
           <div className={f('panel')}>
             <h5>External Links</h5>
             <ul className={f('no-bullet')}>
-              <li>
+              <li data-testid="proteome-external-links">
                 <ProteomeLink id={metadata.accession} className={f('ext')}>
                   View {metadata.accession} in UniProt
                 </ProteomeLink>
