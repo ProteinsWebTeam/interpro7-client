@@ -405,55 +405,6 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr
-        id="prodom"
-      >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="prodom"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://prodom.prabi.fr/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              ProDom
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          2006.1
-        </td>
-        <td>
-          <p>
-            PRODOM protein domain database consists of an automatic compilation of homologous domains. Current versions of ProDom are built using a novel procedure based on recursive PSI-BLAST searches. ProDom is based at PRABI Villeurbanne, France.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2009-04-23T12:05:33.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
         id="profile"
       >
         <td
