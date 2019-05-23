@@ -9,4 +9,5 @@ export default combineReducers({
   ebi: category('ebi'),
   api: category('api'),
   ipScan: category('ipScan'),
+  genome3d: category('genome3d'),
 });
