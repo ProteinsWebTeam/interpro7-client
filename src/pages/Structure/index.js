@@ -416,6 +416,7 @@ const List = ({
           query={search}
           notFound={notFound}
           withGrid={!!includeGrid}
+          databases={databases}
         >
           <Exporter>
             <ul>

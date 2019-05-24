@@ -300,6 +300,7 @@ class List extends PureComponent {
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
+            databases={databases}
           >
             <Exporter>
               <ul>
