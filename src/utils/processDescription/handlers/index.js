@@ -150,7 +150,6 @@ const memberDB = new Set([
   { name: 'pfam', re: /^PF[0-9]{5}$/i },
   { name: 'pirsf', re: /^PIRSF[0-9]{6}$/i },
   { name: 'prints', re: /^PR[0-9]{5}$/i },
-  { name: 'prodom', re: /^PD[A-Z0-9]{6}$/i },
   { name: 'prosite', re: /^PS[0-9]{5}$/i },
   { name: 'patterns', re: /^PS[0-9]{5}$/i },
   { name: 'profile', re: /^PS[0-9]{5}$/i },

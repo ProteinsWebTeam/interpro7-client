@@ -57,7 +57,6 @@ export const memberDatabases = [
   'pfam',
   'pirsf',
   'prints',
-  'prodom',
   'profile',
   'prosite',
   'sfld',

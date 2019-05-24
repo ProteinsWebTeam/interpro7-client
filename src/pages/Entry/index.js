@@ -466,6 +466,7 @@ class List extends PureComponent {
             query={search}
             notFound={notFound}
             withGrid={!!includeGrid}
+            databases={databases}
           >
             <Exporter>
               <ul>

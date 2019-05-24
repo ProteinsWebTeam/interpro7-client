@@ -37,7 +37,6 @@ const lut = new Map([
   ['pfam', 'https://pfam.xfam.org/'],
   ['pirsf', 'https://pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml'],
   ['prints', 'http://130.88.97.239/PRINTS/'],
-  ['prodom', 'http://prodom.prabi.fr/'],
   ['profile', 'https://prosite.expasy.org/'],
   ['prosite', 'https://prosite.expasy.org/'],
   ['sfld', 'http://sfld.rbvi.ucsf.edu/django/'],
@@ -117,18 +116,17 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                           <TimeAgo date={date} noUpdate />
                         </small>
                       ) : null}
-                      {databases &&
-                        databases[db.type.toUpperCase()] && (
-                          <SchemaOrgData
-                            data={{
-                              name: db.name,
-                              version: db.version,
-                              releaseDate: db.releaseDate,
-                              location: window.location,
-                            }}
-                            processData={schemaProcessDataForDB}
-                          />
-                        )}
+                      {databases && databases[db.type.toUpperCase()] && (
+                        <SchemaOrgData
+                          data={{
+                            name: db.name,
+                            version: db.version,
+                            releaseDate: db.releaseDate,
+                            location: window.location,
+                          }}
+                          processData={schemaProcessDataForDB}
+                        />
+                      )}
                     </td>
                   </tr>
                 );
