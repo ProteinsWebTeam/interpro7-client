@@ -129,6 +129,11 @@ export const UniProtLink = patternLinkWrapper(
 );
 UniProtLink.displayName = 'UniProtLink';
 
+export const Genome3dLink = patternLinkWrapper(
+  'http://www.genome3d.eu/uniprot/id/{id}/annotations',
+);
+Genome3dLink.displayName = 'Genome3DLink';
+
 const ExtLink = ({ id, children, ...props }) => {
   switch (true) {
     case id.startsWith('PUB'):
