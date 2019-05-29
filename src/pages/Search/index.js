@@ -19,8 +19,8 @@ import style from './style.css';
 import InfoBanner from 'components/Help/InfoBanner';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-// import loadData from 'higherOrder/loadData';
-// import { format } from 'url';
+import loadData from 'higherOrder/loadData';
+import { format } from 'url';
 
 const f = foundationPartial(ebiGlobalStyles, ipro, style, fonts);
 
@@ -223,7 +223,7 @@ const Wrapper = ({ topic, children }) => {
           </div>
         </div>
       </div>
-      {/*<TimeOut />*/}
+      <TimeOut />
     </div>
   );
 };
@@ -233,24 +233,24 @@ Wrapper.propTypes = {
 };
 
 // TODO: Delete once the timeout issue is solved
-// const _TimedOut = data => {
-//   console.log(data);
-//   if (data && data.data && data.data.status === 408) return <div>TimeOut</div>;
-//   return <div>Done?</div>;
-// };
-//
-// const mapStateToUrl = createSelector(
-//   state => state.settings.api,
-//   ({ protocol, hostname, port, root }) =>
-//     format({
-//       protocol,
-//       hostname,
-//       port,
-//       pathname: `${root}/utils/test/timeout`,
-//     }),
-// );
-//
-// const TimeOut = loadData(mapStateToUrl)(React.memo(_TimedOut));
+const _TimedOut = data => {
+  console.log(data);
+  if (data && data.data && data.data.status === 408) return <div>.</div>;
+  return <div>?</div>;
+};
+
+const mapStateToUrl = createSelector(
+  state => state.settings.api,
+  ({ protocol, hostname, port, root }) =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}/utils/test/timeout`,
+    }),
+);
+
+const TimeOut = loadData(mapStateToUrl)(React.memo(_TimedOut));
 
 const locationSelector = createSelector(
   customLocation => customLocation.description.search.type,
