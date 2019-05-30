@@ -147,8 +147,8 @@ const ProtVistaLoaded = ({
       .map(d => d.annotations)
       .flat(1)
       .filter(
-        ({ uniprot_acc }) =>
-          uniprot_acc === dataprotein.payload.metadata.accession,
+        ({ uniprot_acc: protein }) =>
+          protein === dataprotein.payload.metadata.accession,
       );
     const domainsObj = {};
     for (const d of domains) {
@@ -195,6 +195,12 @@ ProtVistaLoaded.propTypes = {
       metadata: T.object.isRequired,
     }),
   }).isRequired,
+  dataGenome3d: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.shape({
+      metadata: T.object.isRequired,
+    }),
+  }).isRequired,
   tracks: T.oneOfType([T.object, T.array]),
   chain: T.string,
   fixedHighlight: T.string,
@@ -209,6 +215,7 @@ const getGenome3dURL = createSelector(
       hostname,
       port,
       pathname: `${root}classification/11/pdb/${accession}`,
+      // TODO: Replace 11 for latest once included in the genome3d api
     });
   },
 );
