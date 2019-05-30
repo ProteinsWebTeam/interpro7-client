@@ -1,4 +1,7 @@
+// @flow
 import React from 'react';
+import T from 'prop-types';
+
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
@@ -12,7 +15,11 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
-const DownloadTable = ({ data: { loading, payload } }) => {
+const DownloadTable = (
+  {
+    data: { loading, payload },
+  } /*: {data: {loading: boolean, payload: ?Object}}*/,
+) => {
   if (loading || !payload) return <Loading />;
   const { tag_name: version } = payload;
   const [_, dataVersion] = version.split('-');
@@ -20,7 +27,6 @@ const DownloadTable = ({ data: { loading, payload } }) => {
   return (
     <table className={f('classic')}>
       <thead>
-        {' '}
         <tr>
           <th className={f('min-width-sm')}>Name</th>
           <th>Description</th>
@@ -64,6 +70,15 @@ const DownloadTable = ({ data: { loading, payload } }) => {
       </tbody>
     </table>
   );
+};
+DownloadTable.propTypes = {
+  data: T.shape({
+    loading: T.bool,
+    payload: T.shape({
+      version: T.string,
+      body: T.string,
+    }),
+  }),
 };
 
 export default loadData(getUrlForRelease('IPScan'))(DownloadTable);

@@ -48,7 +48,6 @@ class Download extends PureComponent /*:: <{}> */ {
             <h4>InterPro</h4>
             <table className={f('classic')}>
               <thead>
-                {' '}
                 <tr>
                   <th className={f('min-width-sm')}>Name</th>
                   <th>Description</th>
