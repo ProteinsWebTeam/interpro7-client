@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { noop } from 'lodash-es';
 
 import { toPlural } from 'utils/pages';
-
+import NumberComComponent from 'components/NumberComponent';
 import styles from './style.css';
 
 class Highlight extends PureComponent {
@@ -46,7 +46,7 @@ class Highlight extends PureComponent {
   }
 }
 
-const getMainFragment = description => {
+const getMainFragment = (description, count) => {
   const main = description.main.key;
   const { db, integration, accession } = description[main];
   if (accession) {
@@ -61,7 +61,8 @@ const getMainFragment = description => {
   if (db && integration) {
     return (
       <>
-        <Highlight>a list</Highlight> of{' '}
+        <Highlight>a list</Highlight> of approximately{' '}
+        <NumberComComponent abbr>{count}</NumberComComponent>{' '}
         {integration !== 'all' && (
           <>
             <Highlight>{integration}</Highlight>{' '}
@@ -74,7 +75,8 @@ const getMainFragment = description => {
   if (db || integration) {
     return (
       <>
-        <Highlight>a list</Highlight> of{' '}
+        <Highlight>a list</Highlight> of approximately{' '}
+        <NumberComComponent abbr>{count}</NumberComComponent>{' '}
         <Highlight>{db || integration}</Highlight>{' '}
         <Highlight>{toPlural(main)}</Highlight>
       </>
@@ -82,8 +84,8 @@ const getMainFragment = description => {
   }
   return (
     <>
-      <Highlight>a list of counts</Highlight> centered on{' '}
-      <Highlight>{toPlural(main)}</Highlight>
+      <Highlight>a list of counts</Highlight> of{' '}
+      <Highlight>{toPlural(main)}</Highlight> from each data source in InterPro
     </>
   );
 };
@@ -114,7 +116,7 @@ const getFilterFragment = (type, { db, integration, accession }) => {
   if (db || (integration && integration !== 'all')) {
     return (
       <>
-        any of the <Highlight>{db || integration}</Highlight>{' '}
+        any <Highlight>{db || integration}</Highlight>{' '}
         <Highlight>{toPlural(type)}</Highlight>
       </>
     );
@@ -141,13 +143,23 @@ const getFilters = description =>
 
 export default class TextExplanation extends PureComponent {
   static propTypes = {
-    fileType: T.string.isRequired,
+    fileType: T.string,
     description: T.object.isRequired,
     subset: T.bool.isRequired,
+    isStale: T.bool.isRequired,
+    count: T.number.isRequired,
+    noData: T.bool.isRequired,
   };
 
   render() {
-    const { fileType, description, subset } = this.props;
+    const {
+      fileType,
+      description,
+      subset,
+      isStale,
+      count,
+      noData,
+    } = this.props;
 
     const filters = getFilters(description);
     let filterText = '';
@@ -157,37 +169,43 @@ export default class TextExplanation extends PureComponent {
 
     const main = description.main.key;
 
-    return (
-      <section>
-        <h6>Explanation</h6>
-        <p>
-          This{' '}
-          <select
-            name="fileType"
-            value={fileType || 'accession'}
-            className={styles.select}
-            aria-label="Download type"
-            onChange={noop}
-            onBlur={noop}
-          >
-            <option
-              value="accession"
-              disabled={!description[main].db || description[main].accession}
+    let explanation;
+    if (isStale) {
+      explanation = <p>Preparing data...</p>;
+    } else {
+      if (noData) {
+        explanation = <p>No data matches the selected set of filters</p>;
+      } else {
+        explanation = (
+          <p>
+            This{' '}
+            <select
+              name="fileType"
+              value={fileType || 'accession'}
+              className={styles.select}
+              aria-label="Download type"
+              onChange={noop}
+              onBlur={noop}
             >
-              Accession
-            </option>
-            <option value="fasta" disabled={main !== 'protein'}>
-              FASTA
-            </option>
-            <option value="json">JSON</option>
-            <option value="ndjson">Newline-delimited JSON</option>
-            {/* <option value="tsv">TSV</option> */}
-            {/* <option value="xml">XML</option> */}
-          </select>{' '}
-          file will contain {getMainFragment(description)}
-          {filterText}.
-        </p>
-        {fileType === 'fasta' &&
+              <option
+                value="accession"
+                disabled={!description[main].db || description[main].accession}
+              >
+                Text
+              </option>
+              <option value="fasta" disabled={main !== 'protein'}>
+                FASTA
+              </option>
+              <option value="json">JSON</option>
+              {/* <option value="ndjson">Newline-delimited JSON</option> */}
+              {/* <option value="tsv">TSV</option> */}
+              {/* <option value="xml">XML</option> */}
+            </select>{' '}
+            file will contain {getMainFragment(description, count)}
+            {filterText}.
+          </p>
+        );
+        fileType === 'fasta' &&
           description.entry.isFilter &&
           description.entry.accession && (
             <label>
@@ -201,7 +219,13 @@ export default class TextExplanation extends PureComponent {
               I&apos;m only interested in the part(s) of the sequence matching
               (1 subsequence with all the fragments for every match)
             </label>
-          )}
+          );
+      }
+    }
+    return (
+      <section>
+        <h6>Explanation</h6>
+        {explanation}
       </section>
     );
   }
