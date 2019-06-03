@@ -104,6 +104,9 @@ const getFirstPage = (url, fileType) => {
       .filter(Boolean)
       .join(',');
   }
+  location.href = null;
+  location.path = null;
+  location.search = null;
   location.query.page = 1;
   location.query.page_size = MAX_PAGE_SIZE;
   return location;

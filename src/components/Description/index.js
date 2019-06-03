@@ -196,7 +196,7 @@ class Description extends PureComponent /*:: <Props> */ {
       return acc;
     }, []);
     return (
-      <div className={f('margin-bottom-large')}>
+      <div className={f('margin-bottom-large')} data-testid="description">
         {paragraphs.map((p, i) => (
           <ParagraphWithCites
             key={i}
@@ -212,6 +212,11 @@ class Description extends PureComponent /*:: <Props> */ {
 }
 
 export class DescriptionReadMore extends PureComponent {
+  static propTypes = {
+    text: T.string,
+    minNumberOfCharToShow: T.number,
+    patternToRemove: T.string,
+  };
   constructor(props) {
     super(props);
     this.state = { showMore: false };

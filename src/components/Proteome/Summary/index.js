@@ -6,12 +6,12 @@ import Species from 'components/Protein/Species';
 import { ProteomeLink } from 'components/ExtLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import global from 'styles/global.css';
-import ebiStyles from 'ebi-framework/css/ebi-global.css';
-import memberSelectorStyle from 'components/Table/TotalNb/style.css';
 import { foundationPartial } from 'styles/foundation';
 
-const f = foundationPartial(ebiStyles, global, memberSelectorStyle);
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
+import memberSelectorStyle from 'components/Table/TotalNb/style.css';
+
+const f = foundationPartial(ebiStyles, memberSelectorStyle);
 
 class SummaryProteome extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -32,7 +32,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             <tbody>
               <tr>
                 <td>Proteome ID</td>
-                <td>
+                <td data-testid="proteome-accession">
                   <Accession
                     accession={metadata.proteomeAccession || metadata.accession}
                     title="Proteome ID"
@@ -47,7 +47,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
               )}
               <tr>
                 <td>Species</td>
-                <td>
+                <td data-testid="proteome-species">
                   <Species
                     fullName={metadata.name.name}
                     taxID={metadata.taxonomy}
@@ -56,7 +56,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
               </tr>
               <tr>
                 <td>Proteome type</td>
-                <td>
+                <td data-testid="proteome-type">
                   {metadata.is_reference ? 'Reference' : 'Non-reference'}{' '}
                   proteome
                 </td>
@@ -68,9 +68,9 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
           <div className={f('panel')}>
             <h5>External Links</h5>
             <ul className={f('no-bullet')}>
-              <li>
+              <li data-testid="proteome-external-links">
                 <ProteomeLink id={metadata.accession} className={f('ext')}>
-                  View {metadata.accession.toUpperCase()} in UniProt
+                  View {metadata.accession} in UniProt
                 </ProteomeLink>
               </li>
             </ul>

@@ -52,6 +52,7 @@ class Row extends PureComponent {
                 key={defaultKey || dataKey}
                 style={cellStyle}
                 className={cellClassName}
+                data-testid="table-entity"
               >
                 {renderer(lodashGet(row, dataKey, '∅'), row, extra)}
               </td>

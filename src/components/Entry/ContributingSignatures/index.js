@@ -45,6 +45,7 @@ const SignatureLink = React.memo(({ accession, db, label }) => (
     </small>
   </Link>
 ));
+SignatureLink.displayName = 'SignatureLink';
 SignatureLink.propTypes = {
   accession: T.string.isRequired,
   db: T.string.isRequired,
@@ -76,11 +77,7 @@ const ContributingSignatures = ({ contr, data } /*: {contr: Object} */) => {
                       processData={schemaProcessData}
                     />
                     {index ? ', ' : ''}
-                    <SignatureLink
-                      db={db}
-                      accession={accession.toUpperCase()}
-                      label={name}
-                    />
+                    <SignatureLink db={db} accession={accession} label={name} />
                   </React.Fragment>
                 ))}
               </div>

@@ -20,6 +20,8 @@ import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 
+import { NOT_MEMBER_DBS } from 'menuConfig';
+
 import styles from './style.css';
 
 const f = foundationPartial(styles);
@@ -169,7 +171,7 @@ class _MemberDBSelector extends PureComponent {
         if (
           db.type === 'entry' &&
           db.canonical !== 'interpro' &&
-          db.canonical !== 'mobidblt'
+          !NOT_MEMBER_DBS.has(db.canonical)
         ) {
           this._dbs.set(db.canonical, db);
         }
@@ -310,6 +312,9 @@ class _MemberDBSelector extends PureComponent {
                   key={db.canonical}
                   className={f('db-choice', { disabled, checked })}
                   style={{ color: config.colors.get(db.canonical) }}
+                  data-testid={`memberdb-filter-${db.canonical
+                    .toLowerCase()
+                    .replace(/\s+/, '_')}`}
                 >
                   <input
                     type="radio"
@@ -441,5 +446,8 @@ const OptMemberDBSelector = props =>
   ) : (
     <FullyLoadedMemberDBSelector {...props} />
   );
+OptMemberDBSelector.propTypes = {
+  dbCounters: T.object,
+};
 
 export default OptMemberDBSelector;

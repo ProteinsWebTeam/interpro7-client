@@ -7,6 +7,7 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
+import CurrentVersion from 'components/home/CurrentVersion';
 
 // Functions
 import { schedule } from 'timing-functions/src';
@@ -31,6 +32,11 @@ import style from '../style.css';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
+// images
+import embl from '../../images/thirdparty/funding/logo_embl.png';
+import wellcome from '../../images/thirdparty/funding/logo_wellcome.jpg';
+import bbsrc from '../../images/thirdparty/funding/logo_bbsrc.png';
+
 // Bind css with style object
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
 
@@ -49,16 +55,22 @@ const SearchByText = loadable({
 });
 const IPScanSearch = loadable({
   loader: () =>
-    import(/* webpackChunkName: "ipscan-search", webpackPreload: true */ 'components/IPScan/Search'),
+    import(
+      /* webpackChunkName: "ipscan-search", webpackPreload: true */ 'components/IPScan/Search'
+    ),
 });
 // Browse by X box
 const ByMemberDatabase = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-member-database", webpackPreload: true */ 'components/home/ByMemberDatabase'),
+    import(
+      /* webpackChunkName: "by-member-database", webpackPreload: true */ 'components/home/ByMemberDatabase'
+    ),
 });
 const ByEntryType = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType'),
+    import(
+      /* webpackChunkName: "by-entry-type" */ 'components/home/ByEntryType'
+    ),
 });
 const BySpecies = loadable({
   loader: () =>
@@ -66,11 +78,15 @@ const BySpecies = loadable({
 });
 const ByLatestEntries = loadable({
   loader: () =>
-    import(/* webpackChunkName: "by-latest-entries", webpackPreload: true */ 'components/home/ByLatestEntries'),
+    import(
+      /* webpackChunkName: "by-latest-entries", webpackPreload: true */ 'components/home/ByLatestEntries'
+    ),
 });
 const BlogEntries = loadable({
   loader: () =>
-    import(/* webpackChunkName: "blog-entries", webpackPreload: true */ 'components/home/BlogEntries'),
+    import(
+      /* webpackChunkName: "blog-entries", webpackPreload: true */ 'components/home/BlogEntries'
+    ),
 });
 
 const Twitter = loadable({
@@ -439,10 +455,11 @@ class Home extends PureComponent {
             />
             <SchemaOrgDataWithData />
             <div className={f('intro-wrapper')}>
-              <div className={f('intro-fig')}>
+              <div className={f('intro-fig')} data-testid="intro-fig">
                 <InterProGraphicAnim />
+                <CurrentVersion />
               </div>
-              <div className={f('intro-content')}>
+              <div className={f('intro-content')} data-testid="intro-content">
                 <h3>Classification of protein families</h3>
                 <Description textBlocks={[description]} />
               </div>
@@ -480,13 +497,16 @@ class Home extends PureComponent {
           <div className={f('columns')}>
             <div className={f('callout-box', 'pp-browse-by')}>
               <Tabs>
-                <div title="Member Database">
+                <div
+                  title="Member Database"
+                  data-testid="home-member-database-button"
+                >
                   <ByMemberDatabase />
                 </div>
-                <div title="Entry type">
+                <div title="Entry type" data-testid="home-entry-type-button">
                   <ByEntryType />
                 </div>
-                <div title="Species">
+                <div title="Species" data-testid="home-species-button">
                   <BySpecies />
                 </div>
               </Tabs>
@@ -571,30 +591,25 @@ class Home extends PureComponent {
                 // LiteMol
               }
               <div className={f('flex-card')}>
-                <div className={f('card-image', 'image-tool-litemol')}>
+                <div className={f('card-image', 'image-tool-ngl')}>
                   <div className={f('card-tag', 'tag-tool')}>Library</div>
                 </div>
 
                 <div className={f('card-content')}>
                   <div className={f('card-title')}>
                     <h4>
-                      <Link
-                        href="//webchemdev.ncbr.muni.cz/Litemol/"
-                        target="_blank"
-                      >
-                        LiteMol structure viewer
-                      </Link>
+                      <Link href="//nglviewer.org" target="_blank" />
                     </h4>
                   </div>
                   <div className={f('card-description')}>
-                    Visualise protein structures using LiteMol, a powerful and
-                    blazing-fast tool for handling 3D macromolecular data in the
-                    browser.
+                    NGL Viewer is a collection of tools for web-based molecular
+                    graphics. WebGL is employed to display molecules like
+                    proteins and DNA/RNA with a variety of representations.
                   </div>
                 </div>
 
                 <div className={f('card-more')}>
-                  <Link href="//github.com/dsehnal/litemol" target="_blank">
+                  <Link href="//github.com/arose/ngl" target="_blank">
                     <div
                       className={f(
                         'icon',
@@ -610,10 +625,7 @@ class Home extends PureComponent {
                     </div>
                   </Link>
 
-                  <Link
-                    href="//webchemdev.ncbr.muni.cz/Litemol/"
-                    target="_blank"
-                  >
+                  <Link href="//nglviewer.org/" target="_blank">
                     <div
                       className={f(
                         'button-more',
@@ -946,6 +958,16 @@ class Home extends PureComponent {
         <ErrorBoundary>
           <Twitter />
         </ErrorBoundary>
+        <div className={f('row')}>
+          <span className={f('elixir-title')}>This service funded by</span>
+          <img src={embl} className={f('image-funding')} alt="EMBL logo" />
+          <img
+            src={wellcome}
+            className={f('image-funding')}
+            alt="Wellcome Trust logo"
+          />
+          <img src={bbsrc} className={f('image-funding')} alt="BBSRC logo" />
+        </div>
       </>
     );
   }

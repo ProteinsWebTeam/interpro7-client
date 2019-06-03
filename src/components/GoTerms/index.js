@@ -73,7 +73,7 @@ const GoTerms = (
   const goTermEntries = Object.entries(_terms);
   const none = goTermEntries.every(([, category]) => !category.length);
   return (
-    <section>
+    <section data-testid="go-terms">
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <Tooltip title={title}>

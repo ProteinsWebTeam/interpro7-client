@@ -350,6 +350,26 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
+    'similar_proteins',
+    {
+      to(customLocation) {
+        const { key } = customLocation.description.main;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'similar_proteins',
+            },
+          },
+        };
+      },
+      name: 'Similar Proteins',
+      counter: 'similar_proteins',
+    },
+  ],
+  [
     'logo',
     {
       to(customLocation) {
@@ -366,6 +386,24 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'Signature',
+    },
+  ],
+  [
+    'alignments',
+    {
+      to(customLocation) {
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key: 'set' },
+            set: {
+              ...customLocation.description.set,
+              detail: 'alignments',
+            },
+          },
+        };
+      },
+      name: 'Alignments',
     },
   ],
   // [
@@ -495,6 +533,7 @@ export const InterPro /*: Array<Object> */ = [
 ];
 
 const _NOT_MEMBER_DBS = [
+  'PRODOM',
   'COILS',
   'SCOP',
   'MOBIDB',

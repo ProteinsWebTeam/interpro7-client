@@ -1,5 +1,5 @@
 // @flow
-import idb from 'idb';
+import { openDB } from 'idb';
 /*:: import type { DB } from 'idb'; */
 
 let initialized = false;
@@ -10,15 +10,17 @@ export const IPScanJobsMeta = 'IPScan-jobs-meta';
 export const IPScanJobsData = 'IPScan-jobs-data';
 
 const init = () => {
-  dbPromise = idb.open('InterPro', 1, upgradeDb => {
-    // do not put 'break;', keep fall-through,
-    // it is to apply all the updates, one after the other
-    // eslint-disable-next-line default-case
-    switch (upgradeDb.oldVersion) {
-      case 0:
-        upgradeDb.createObjectStore(IPScanJobsMeta, { autoIncrement: true });
-        upgradeDb.createObjectStore(IPScanJobsData, { autoIncrement: true });
-    }
+  dbPromise = openDB('InterPro', 1, {
+    upgrade(db, oldVersion) {
+      // do not put 'break;', keep fall-through,
+      // it is to apply all the updates, one after the other
+      // eslint-disable-next-line default-case
+      switch (oldVersion) {
+        case 0:
+          db.createObjectStore(IPScanJobsMeta, { autoIncrement: true });
+          db.createObjectStore(IPScanJobsData, { autoIncrement: true });
+      }
+    },
   });
   tableAccesses = new Map();
   initialized = true;
@@ -71,15 +73,14 @@ class TableAccess {
 
     const values = [];
     const keys = [];
-    (objectStore.iterateKeyCursor || objectStore.iterateCursor).call(
-      objectStore,
-      cursor => {
-        if (!cursor) return;
-        values.push(objectStore.get(cursor.key));
-        keys.push(cursor.key);
-        cursor.continue();
-      },
-    );
+
+    let cursor = await tr.store.openCursor();
+
+    while (cursor) {
+      values.push(objectStore.get(cursor.key));
+      keys.push(cursor.key);
+      cursor = await cursor.continue();
+    }
 
     await tr.complete;
     const output = {};

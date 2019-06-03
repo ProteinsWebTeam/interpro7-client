@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';
+import DownloadTable from 'components/IPScan/DownloadTable';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -17,55 +18,8 @@ class Download extends PureComponent /*:: <{}> */ {
         <div className={f('columns')}>
           <section>
             <h3>Download</h3>
-
+            <DownloadTable />
             <h4>InterProScan</h4>
-            <table className={f('classic')}>
-              <thead>
-                {' '}
-                <tr>
-                  <th className={f('min-width-sm')}>Name</th>
-                  <th>Description</th>
-                  <th>Data</th>
-                  <th className={f('xs-hide')}>File name</th>
-                  <th className={f('xs-hide')}>Format</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <Link
-                      href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.31-70.0/interproscan-5.31-70.0-64-bit.tar.gz"
-                      target="_blank"
-                    >
-                      InterProScan 5.31-70.0
-                    </Link>
-                  </td>
-                  <td>
-                    Download and install the latest version of InterProScan
-                    (64-bit Linux)
-                  </td>
-                  <td>v70.0</td>
-                  <td className={f('xs-hide')}>
-                    interproscan-5.31-70.0-64-bit.tar.gz
-                  </td>
-                  <td className={f('xs-hide')}>gzipped</td>
-                  <td>
-                    <Link
-                      href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.31-70.0/interproscan-5.31-70.0-64-bit.tar.gz"
-                      target="_blank"
-                    >
-                      {' '}
-                      <span
-                        className={f('icon', 'icon-common', 'font-l')}
-                        data-icon="&#x3d;"
-                      />{' '}
-                      64-bit
-                    </Link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
 
             <p className={f('small', 'margin-top-small')}>
               To ensure you have the latest data and software enhancements we
@@ -94,7 +48,6 @@ class Download extends PureComponent /*:: <{}> */ {
             <h4>InterPro</h4>
             <table className={f('classic')}>
               <thead>
-                {' '}
                 <tr>
                   <th className={f('min-width-sm')}>Name</th>
                   <th>Description</th>

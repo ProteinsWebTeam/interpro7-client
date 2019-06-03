@@ -4,6 +4,18 @@ root:
   API: https://wwwdev.ebi.ac.uk/interpro7/api/
   EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
   IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
+
+github:
+  InterProClient:
+    owner: ProteinsWebTeam
+    repo: interpro7-client
+  InterProAPI:
+    owner: ProteinsWebTeam
+    repo: interpro7-api
+  IPScan:
+    owner: ebi-pf-team
+    repo: interproscan
+
 IPScan:
   contactEmail: example@example.com
 pages:
@@ -22,6 +34,7 @@ pages:
       - entry
       - structure
       - sequence
+      - similar_proteins
   structure:
     subPages:
       - entry
@@ -49,6 +62,7 @@ pages:
       - structure
       - taxonomy
       - proteome
+      - alignments
   result:
 pagination:
   pageSize: 20

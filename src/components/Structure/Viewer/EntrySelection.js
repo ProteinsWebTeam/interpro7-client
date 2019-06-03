@@ -5,6 +5,7 @@ import { foundationPartial } from 'styles/foundation';
 import style from './style.css';
 
 const f = foundationPartial(style);
+export const NO_SELECTION = 'NO_SELECTION';
 
 class EntrySelection extends PureComponent {
   static propTypes = {
@@ -33,14 +34,14 @@ class EntrySelection extends PureComponent {
       const optGroup = selectedOption.parentNode;
       memberDB = optGroup.label;
     }
-    // update LiteMol
+    // update structure viewer
     this.props.updateStructure(memberDB, entry);
   };
 
   render() {
     const selectionGroups = [];
     selectionGroups.push(
-      <option key="None" value="">
+      <option key="{NO_SELECTION}" value={NO_SELECTION}>
         Select Entry
       </option>,
     );
@@ -67,6 +68,7 @@ class EntrySelection extends PureComponent {
         onChange={this.onSelectionChange}
         onBlur={this.onSelectionChange}
         value={this.props.selectedEntry}
+        data-testid="structure-entry-select"
       >
         {selectionGroups}
       </select>

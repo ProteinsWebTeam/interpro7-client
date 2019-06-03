@@ -90,7 +90,12 @@ class SummaryCounterEntries extends PureComponent {
             }}
             className={f(proteins ? null : 'ico-disabled')}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x50;"
+            >
+              {proteins !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
@@ -118,7 +123,11 @@ class SummaryCounterEntries extends PureComponent {
             }}
             className={f(domainArchitectures ? null : 'ico-disabled')}
           >
-            <div className={f('icon', 'icon-count-ida')} />{' '}
+            <div className={f('icon', 'icon-count-ida', 'icon-wrapper')}>
+              {domainArchitectures !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{domainArchitectures}</NumberComponent>
             <span className={f('label-number')}>domain architectures</span>
           </Link>
@@ -144,7 +153,9 @@ class SummaryCounterEntries extends PureComponent {
             }}
             className={f(taxa ? null : 'ico-disabled')}
           >
-            <div className={f('icon', 'icon-count-species')} />{' '}
+            <div className={f('icon', 'icon-count-species', 'icon-wrapper')}>
+              {taxa !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{taxa}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
@@ -172,7 +183,12 @@ class SummaryCounterEntries extends PureComponent {
             }}
             className={f(structures ? null : 'ico-disabled')}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="s" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="s"
+            >
+              {structures !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{structures}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('structure', structures)}
@@ -181,7 +197,9 @@ class SummaryCounterEntries extends PureComponent {
         </Tooltip>
 
         {// show sets counter + icon only when available
-        entryDB.toLowerCase() === 'cdd' || entryDB.toLowerCase() === 'pfam' ? (
+        entryDB.toLowerCase() === 'cdd' ||
+        entryDB.toLowerCase() === 'pfam' ||
+        entryDB.toLowerCase() === 'pirsf' ? (
           <Tooltip
             title={`${sets} ${toPlural('set', sets)} matching ${metadata.name}`}
             className={f('count-sets')}
@@ -200,7 +218,9 @@ class SummaryCounterEntries extends PureComponent {
               }}
               className={f(sets ? null : 'ico-disabled')}
             >
-              <div className={f('icon', 'icon-count-set')} />{' '}
+              <div className={f('icon', 'icon-count-set', 'icon-wrapper')}>
+                {sets !== 0 && <div className={f('icon-over-anim')} />}
+              </div>
               <NumberComponent abbr>{sets}</NumberComponent>
               <span className={f('label-number')}>{toPlural('set', sets)}</span>
             </Link>
@@ -231,7 +251,7 @@ class DescriptionEntries extends PureComponent {
     const desc = description[0];
 
     const citations = description2IDs(desc);
-    const included = Object.entries(literature)
+    const included = Object.entries(literature || {})
       .filter(([id]) => citations.includes(id))
       .sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
 
@@ -263,36 +283,24 @@ class EntryCard extends PureComponent {
       <>
         <div className={f('card-header')}>
           <div className={f('card-image')}>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: {
-                    db: data.metadata.source_database,
-                    accession: data.metadata.accession,
-                  },
-                },
-              }}
-            >
-              {entryDB.toLowerCase() === 'interpro' ? (
-                <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
-                  <interpro-type
-                    dimension="2em"
-                    type={data.metadata.type.replace('_', ' ')}
-                    aria-label="Entry type"
-                  />
-                </Tooltip>
-              ) : (
-                <Tooltip title={`${entryDB} database`}>
-                  <MemberSymbol
-                    size="2em"
-                    type={entryDB}
-                    aria-label="Database type"
-                    className={f('md-small')}
-                  />
-                </Tooltip>
-              )}
-            </Link>
+            {entryDB.toLowerCase() === 'interpro' ? (
+              <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
+                <interpro-type
+                  dimension="2em"
+                  type={data.metadata.type.replace('_', ' ')}
+                  aria-label="Entry type"
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip title={`${entryDB} database`}>
+                <MemberSymbol
+                  size="2em"
+                  type={entryDB}
+                  aria-label="Database type"
+                  className={f('md-small')}
+                />
+              </Tooltip>
+            )}
           </div>
           <div className={f('card-title')}>
             <h6>
@@ -308,7 +316,7 @@ class EntryCard extends PureComponent {
                 }}
               >
                 <HighlightedText
-                  text={data.metadata.name}
+                  text={data.metadata.name || ''}
                   textToHighlight={search}
                 />
               </Link>
@@ -354,7 +362,7 @@ class EntryCard extends PureComponent {
                       },
                     }}
                   >
-                    {data.metadata.integrated.toUpperCase()}
+                    {data.metadata.integrated}
                   </Link>
                 </div>
               ) : (
@@ -364,7 +372,7 @@ class EntryCard extends PureComponent {
           )}
           <div>
             <HighlightedText
-              text={(data.metadata.accession || '').toUpperCase()}
+              text={data.metadata.accession || ''}
               textToHighlight={search}
             />
           </div>
@@ -394,9 +402,9 @@ class List extends PureComponent {
 
   componentDidMount() {
     loadWebComponent(() =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      ).then(m => m.InterproType),
     ).as('interpro-type');
   }
   // eslint-disable-next-line
@@ -458,6 +466,7 @@ class List extends PureComponent {
             query={search}
             notFound={notFound}
             withGrid={!!includeGrid}
+            databases={databases}
           >
             <Exporter>
               <ul>
@@ -492,7 +501,7 @@ class List extends PureComponent {
                 <EntryCard data={data} search={search.search} entryDB={db} />
               )}
             </Card>
-            <SearchBox>Search entries</SearchBox>
+            <SearchBox loading={isStale}>Search entries</SearchBox>
             {db === 'InterPro' && (
               <Column
                 dataKey="type"
@@ -533,7 +542,7 @@ class List extends PureComponent {
                   />
                   <span className={f('acc-row')}>
                     <HighlightedText
-                      text={accession.toUpperCase()}
+                      text={accession || ''}
                       textToHighlight={search.search}
                     />
                   </span>
@@ -647,7 +656,7 @@ class List extends PureComponent {
                                 },
                               }}
                             >
-                              {accession.toUpperCase()}
+                              {accession}
                             </Link>
                           </Tooltip>
                         )),
@@ -671,9 +680,7 @@ class List extends PureComponent {
                         search: {},
                       }}
                     >
-                      <Tooltip title={`${accession}`}>
-                        {accession.toUpperCase()}
-                      </Tooltip>
+                      <Tooltip title={`${accession}`}>{accession}</Tooltip>
                     </Link>
                   ) : (
                     ''

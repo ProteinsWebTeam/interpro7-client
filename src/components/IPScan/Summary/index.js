@@ -104,6 +104,18 @@ const StatusTooltip = React.memo(({ status }) => (
     )}
   </Tooltip>
 ));
+StatusTooltip.displayName = 'StatusTooltip';
+StatusTooltip.propTypes = {
+  status: T.oneOf([
+    'running',
+    'created',
+    'submitted',
+    'not found',
+    'failure',
+    'error',
+    'finished',
+  ]),
+};
 
 const mergeData = (matches, sequenceLength) => {
   const mergedData = { unintegrated: {}, predictions: [] };
@@ -126,6 +138,20 @@ const mergeData = (matches, sequenceLength) => {
       })),
       score: match.score,
     };
+    const residues = match.locations
+      .map(({ sites }) =>
+        sites
+          ? {
+              accession: match.signature.accession,
+              locations: sites.map(site => ({
+                description: site.description,
+                fragments: site.siteLocations,
+              })),
+            }
+          : null,
+      )
+      .filter(Boolean);
+    if (residues.length > 0) processedMatch.residues = residues;
 
     if (NOT_MEMBER_DBS.has(library)) {
       processedMatch.accession += ` (${mergedData.predictions.length + 1})`;

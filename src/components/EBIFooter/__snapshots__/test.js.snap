@@ -12,14 +12,14 @@ exports[`<EBIFooter /> should render 1`] = `
     <div
       className="columns small-6 medium-2"
     >
-      <Connect(Link)
+      <Memo(ConnectFunction)
         href="//www.ebi.ac.uk"
         title="EMBL-EBI"
       >
         <span
           className="ebi-logo"
         />
-      </Connect(Link)>
+      </Memo(ConnectFunction)>
       <ul />
     </div>
     <div
@@ -28,38 +28,38 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="services"
       >
-        <Connect(Link)
+        <Memo(ConnectFunction)
           className="services-color"
           href="//www.ebi.ac.uk/services"
         >
           Services
-        </Connect(Link)>
+        </Memo(ConnectFunction)>
       </h5>
       <ul>
         <li
           className="first"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/services"
           >
             By topic
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/services/all"
           >
             By name (A-Z)
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li
           className="last"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/support"
           >
             Help & Support
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
       </ul>
     </div>
@@ -69,42 +69,42 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="research"
       >
-        <Connect(Link)
+        <Memo(ConnectFunction)
           className="research-color"
           href="//www.ebi.ac.uk/research"
         >
           Research
-        </Connect(Link)>
+        </Memo(ConnectFunction)>
       </h5>
       <ul>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/research/publications"
           >
             Publications
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/research/groups"
           >
             Research groups
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li
           className="last"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/research/postdocs"
           >
             Postdocs
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
            & 
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/research/eipp"
           >
             PhDs
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
       </ul>
     </div>
@@ -114,43 +114,43 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="training"
       >
-        <Connect(Link)
+        <Memo(ConnectFunction)
           className="training-color"
           href="//www.ebi.ac.uk/training"
         >
           Training
-        </Connect(Link)>
+        </Memo(ConnectFunction)>
       </h5>
       <ul>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/training/handson"
           >
             Train at EBI
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/training/roadshow"
           >
             Train outside EBI
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/training/online"
           >
             Train online
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li
           className="last"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/training/contact-us"
           >
             Contact organisers
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
       </ul>
     </div>
@@ -160,30 +160,30 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="industry"
       >
-        <Connect(Link)
+        <Memo(ConnectFunction)
           className="industry-color"
           href="//www.ebi.ac.uk/industry"
         >
           Industry
-        </Connect(Link)>
+        </Memo(ConnectFunction)>
       </h5>
       <ul>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/industry/private"
           >
             Members Area
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/industry/workshops"
           >
             Workshops
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/industry/sme-forum"
           >
             <abbr
@@ -192,16 +192,16 @@ exports[`<EBIFooter /> should render 1`] = `
               SME
             </abbr>
              Forum
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li
           className="last"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/industry/contact"
           >
             Contact Industry programme
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
       </ul>
     </div>
@@ -211,49 +211,49 @@ exports[`<EBIFooter /> should render 1`] = `
       <h5
         className="about"
       >
-        <Connect(Link)
+        <Memo(ConnectFunction)
           className="ebi-color"
           href="//www.ebi.ac.uk/about"
         >
           About EMBL-EBI
-        </Connect(Link)>
+        </Memo(ConnectFunction)>
       </h5>
       <ul>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/about/contact"
           >
             Contact us
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/about/events"
           >
             Events
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/about/jobs"
             title="Jobs, postdocs, PhDs…"
           >
             Jobs
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/about/news"
           >
             News
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
         <li>
-          <Connect(Link)
+          <Memo(ConnectFunction)
             href="//www.ebi.ac.uk/about/people"
           >
             People & groups
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </li>
       </ul>
     </div>
@@ -274,26 +274,26 @@ exports[`<EBIFooter /> should render 1`] = `
         className="legal"
       >
         Copyright © EMBL-EBI 2017 | EMBL-EBI is 
-        <Connect(Link)
+        <Memo(ConnectFunction)
           href="//www.embl.org/"
           rel="noopener"
         >
           part of the European Molecular Biology Laboratory
-        </Connect(Link)>
+        </Memo(ConnectFunction)>
          
         |
          
-        <Connect(Link)
+        <Memo(ConnectFunction)
           href="//www.ebi.ac.uk/about/terms-of-use"
         >
           Terms of use
-        </Connect(Link)>
-        <Connect(Link)
+        </Memo(ConnectFunction)>
+        <Memo(ConnectFunction)
           className="readmore float-right"
           href="http://intranet.ebi.ac.uk"
         >
           Intranet
-        </Connect(Link)>
+        </Memo(ConnectFunction)>
       </p>
     </div>
   </section>

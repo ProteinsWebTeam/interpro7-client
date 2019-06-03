@@ -9,7 +9,7 @@ import 'styles/foundation';
 import 'ebi-framework/css/ebi-global.css';
 import 'styles/global.css';
 // import 'styles/theme-interpro.css';
-import 'react-tippy/dist/tippy.css';
+// import 'react-tippy/dist/tippy.css';
 import 'styles/interpro-new.css';
 
 import loadable from 'higherOrder/loadable';
@@ -57,7 +57,9 @@ const EMBLDropdownAsync = loadable({
 const ElixirFooterAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "elixir-footer", webpackPreload: true */ 'components/ElixirFooter'),
+      import(
+        /* webpackChunkName: "elixir-footer", webpackPreload: true */ 'components/ElixirFooter'
+      ),
     ),
   loading: NullComponent,
 });
@@ -65,7 +67,9 @@ const ElixirFooterAsync = loadable({
 const EBIFooterAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "ebi-footer", webpackPreload: true */ 'components/EBIFooter'),
+      import(
+        /* webpackChunkName: "ebi-footer", webpackPreload: true */ 'components/EBIFooter'
+      ),
     ),
   loading: NullComponent,
 });
@@ -73,7 +77,9 @@ const EBIFooterAsync = loadable({
 const ToastDisplayAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(() =>
-      import(/* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay'),
+      import(
+        /* webpackChunkName: "toast-display" */ 'components/Toast/ToastDisplay'
+      ),
     ),
   loading: NullComponent,
 });
@@ -88,7 +94,9 @@ const CookieFooterAsync = loadable({
         )
           return;
       } catch {
-        return import(/* webpackChunkName: "cookie-banner" */ 'components/CookieBanner');
+        return import(
+          /* webpackChunkName: "cookie-banner" */ 'components/CookieBanner'
+        );
       }
     }),
   loading: NullComponent,

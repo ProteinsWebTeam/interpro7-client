@@ -14,63 +14,93 @@ exports[`<Documentation /> should render 1`] = `
         <div
           className="flex-box"
         >
+          <InterProLogo />
+           
+          <h5>
+            Interpro
+          </h5>
+          <li>
+            <ul>
+              <li>
+                <Memo(ConnectFunction)
+                  to={
+                    Object {
+                      "description": Object {
+                        "other": Array [
+                          "about",
+                          "interpro",
+                        ],
+                      },
+                    }
+                  }
+                >
+                  About InterPro
+                </Memo(ConnectFunction)>
+              </li>
+              <li>
+                <Memo(ConnectFunction)
+                  to={
+                    Object {
+                      "description": Object {
+                        "other": Array [
+                          "release_notes",
+                        ],
+                      },
+                    }
+                  }
+                >
+                  Release Notes
+                </Memo(ConnectFunction)>
+              </li>
+              <li>
+                <Memo(ConnectFunction)
+                  to={
+                    Object {
+                      "description": Object {
+                        "other": Array [
+                          "help",
+                          "faqs",
+                        ],
+                      },
+                    }
+                  }
+                >
+                  Frequently Asked Questions (FAQs)
+                </Memo(ConnectFunction)>
+              </li>
+            </ul>
+          </li>
+        </div>
+        <div
+          className="flex-box"
+        >
           <span
             className="icon icon-common xl"
-            data-icon=""
+            data-icon=""
           />
+           
           <h5>
-            Technical specs
+            InterProScan
           </h5>
           <ul>
             <li>
-              <Connect(Link)
-                className="ext"
-                href="https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
-                target="_blank"
-              >
-                General API documentation
-              </Connect(Link)>
-            </li>
-            <li>
-              <Connect(Link)
-                href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/"
-              >
-                Swagger API documentation
-              </Connect(Link)>
-            </li>
-            <li>
-              <Connect(Link)
-                href="/interpro/result/download/#/entry/"
-              >
-                Code snippet generator
-              </Connect(Link)>
-            </li>
-            <li>
-              <Connect(Link)
-                className="ext"
-                href="//www.ebi.ac.uk/Tools/webservices/"
-                target="_blank"
-              >
-                Web services
-              </Connect(Link)>
-            </li>
-            <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 to={
                   Object {
                     "description": Object {
                       "other": Array [
-                        "release_notes",
+                        "about",
+                        "interproscan",
                       ],
                     },
                   }
                 }
               >
-                Release notes
-              </Connect(Link)>
+                About InterProScan
+              </Memo(ConnectFunction)>
             </li>
             <li>
-              <Connect(Link)
+              <Memo(ConnectFunction)
                 className="ext"
                 href="//github.com/ebi-pf-team/interproscan/wiki"
                 target="_blank"
@@ -81,53 +111,120 @@ exports[`<Documentation /> should render 1`] = `
                 />
                  
                 InterProScan Wiki
-              </Connect(Link)>
-            </li>
-            <li>
-              <Connect(Link)
-                className="ext"
-                href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
-                target="_blank"
-              >
-                Privacy and security
-              </Connect(Link)>
-            </li>
-            <li>
-              <Connect(Link)
-                className="ext"
-                href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
-                target="_blank"
-              >
-                Search documentation (EBI)
-              </Connect(Link)>
+              </Memo(ConnectFunction)>
             </li>
           </ul>
         </div>
         <div
           className="flex-box"
         >
-          <Connect(Link)
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "help",
-                    "documentation",
-                    "publication",
-                  ],
-                },
-              }
-            }
-          >
-            <span
-              className="icon icon-common xl"
-              data-icon=""
-            />
-             
-            <h5>
-              Publications
-            </h5>
-          </Connect(Link)>
+          <span
+            className="icon icon-common xl"
+            data-icon=""
+          />
+          <h5>
+            Technical specs
+          </h5>
+          <ul>
+            <li>
+              <Memo(ConnectFunction)
+                className="ext"
+                href="https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
+                target="_blank"
+              >
+                <span
+                  className="icon icon-common"
+                  data-icon=""
+                />
+                 
+                General API documentation
+              </Memo(ConnectFunction)>
+            </li>
+            <li>
+              <Memo(ConnectFunction)
+                href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/"
+              >
+                Swagger API documentation
+              </Memo(ConnectFunction)>
+            </li>
+            <li>
+              <Memo(ConnectFunction)
+                to={
+                  Object {
+                    "description": Object {
+                      "main": Object {
+                        "key": "result",
+                      },
+                      "result": Object {
+                        "type": "download",
+                      },
+                    },
+                    "hash": "/",
+                  }
+                }
+              >
+                Code snippet generator
+              </Memo(ConnectFunction)>
+            </li>
+            <li>
+              <Memo(ConnectFunction)
+                className="ext"
+                href="//www.ebi.ac.uk/Tools/webservices/"
+                target="_blank"
+              >
+                Web services
+              </Memo(ConnectFunction)>
+            </li>
+            <li>
+              <Memo(ConnectFunction)
+                className="ext"
+                href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
+                target="_blank"
+              >
+                Privacy and security
+              </Memo(ConnectFunction)>
+            </li>
+            <li>
+              <Memo(ConnectFunction)
+                className="ext"
+                href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
+                target="_blank"
+              >
+                Search documentation (EBI)
+              </Memo(ConnectFunction)>
+            </li>
+          </ul>
+        </div>
+        <div
+          className="flex-box"
+        >
+          <span
+            className="icon icon-common xl"
+            data-icon=""
+          />
+           
+          <h5>
+            Publications
+          </h5>
+          <ul>
+            <li>
+              <Memo(ConnectFunction)
+                to={
+                  Object {
+                    "description": Object {
+                      "other": Array [
+                        "help",
+                        "documentation",
+                        "publication",
+                      ],
+                    },
+                  }
+                }
+              >
+                List of InterPro publications
+              </Memo(ConnectFunction)>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -144,7 +241,7 @@ exports[`<Documentation /> should render 1`] = `
         </h3>
         <ul>
           <li>
-            <Connect(Link)
+            <Memo(ConnectFunction)
               href="//www.ebi.ac.uk/support/interpro"
               target="_blank"
               withReferrer={true}
@@ -155,7 +252,7 @@ exports[`<Documentation /> should render 1`] = `
               />
                
               Submit a ticket
-            </Connect(Link)>
+            </Memo(ConnectFunction)>
           </li>
         </ul>
       </div>

@@ -1,19 +1,29 @@
 @import '../../styles/timing.css';
+@import '../../styles/colors.css';
 
-.toggle {
+.buttons {
   position: absolute;
   margin: 1ch;
-  opacity: 0.1;
   transition: opacity ease-in-out var(--timing-fast);
 
   & img {
     width: 1.5em;
   }
-}
-
-.toggle:hover,
-.toggle:focus {
-  opacity: 0.5;
+  & > span {
+    opacity: 0.2;
+    padding-right: 0.5em;
+    & button {
+      vertical-align: text-bottom;
+    }
+  }
+  & > span:hover,
+  & > span:focus {
+    opacity: 0.5;
+  }
+  & > span.fullscreen button {
+    font-size: 1.6em;
+    font-weight: bolder;
+  }
 }
 
 .container .node {
@@ -22,5 +32,16 @@
 
   &:not(.in-path) {
     opacity: 0.5;
+  }
+  & circle {
+    fill: var(--colors-lightgray);
+    cursor: crosshair;
+  }
+  &:hover circle {
+    fill: var(--colors-gray);
+  }
+  & text:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
 }

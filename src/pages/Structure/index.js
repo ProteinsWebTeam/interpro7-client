@@ -6,7 +6,6 @@ import { format } from 'url';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import { PDBeLink } from 'components/ExtLink';
 import LazyImage from 'components/LazyImage';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import StructureListFilters from 'components/Structure/StructureListFilters';
@@ -42,12 +41,15 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import pageStyle from '../style.css';
+import { formatExperimentType } from 'components/Structure/utils';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts);
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'),
+    import(
+      /* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'
+    ),
 });
 
 const SchemaOrgData = loadable({
@@ -129,8 +131,12 @@ class SummaryCounterStructures extends PureComponent {
               },
             }}
           >
-            <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-
+            <div className={f('icon-wrapper')}>
+              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
+              {entries !== 0 && (
+                <div className={f('icon-over-anim', 'mod-img-pos')} />
+              )}
+            </div>
             <NumberComponent abbr>{entries}</NumberComponent>
 
             <span className={f('label-number')}>
@@ -158,7 +164,12 @@ class SummaryCounterStructures extends PureComponent {
               },
             }}
           >
-            <div className={f('icon', 'icon-conceptual')} data-icon="&#x50;" />{' '}
+            <div
+              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+              data-icon="&#x50;"
+            >
+              {proteins !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
             <NumberComponent abbr>{proteins}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('protein', proteins)}
@@ -174,7 +185,10 @@ class SummaryCounterStructures extends PureComponent {
           style={{ display: 'flex' }}
         >
           <div className={f('container')}>
-            <div className={f('icon', 'icon-count-species')} />{' '}
+            <div className={f('icon', 'icon-count-species', 'icon-wrapper')}>
+              {taxa !== 0 && <div className={f('icon-over-anim')} />}
+            </div>
+
             <NumberComponent abbr>{taxa}</NumberComponent>
             <span className={f('label-number')}>
               {toPlural('taxonomy', taxa)}
@@ -273,17 +287,7 @@ class StructureCard extends PureComponent {
     return (
       <>
         <div className={f('card-header')}>
-          <Link
-            to={{
-              description: {
-                main: { key: 'structure' },
-                structure: {
-                  db: data.metadata.source_database,
-                  accession: data.metadata.accession,
-                },
-              },
-            }}
-          >
+          <div className={f('card-image')}>
             <Tooltip
               title={`3D visualisation for ${
                 data.metadata.accession
@@ -296,13 +300,27 @@ class StructureCard extends PureComponent {
                 alt={`structure with accession ${data.metadata.accession}`}
               />
             </Tooltip>
+          </div>
+          <div className={f('card-title', 'font-sm')}>
             <h6>
-              <HighlightedText
-                text={data.metadata.name}
-                textToHighlight={search}
-              />
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'structure' },
+                    structure: {
+                      db: data.metadata.source_database,
+                      accession: data.metadata.accession,
+                    },
+                  },
+                }}
+              >
+                <HighlightedText
+                  text={data.metadata.name}
+                  textToHighlight={search}
+                />
+              </Link>
             </h6>
-          </Link>
+          </div>
 
           <div className={f('card-subheader')}>
             {// INFO RESOLUTION BL - browse structures - Xray
@@ -336,7 +354,7 @@ class StructureCard extends PureComponent {
 
           <div>
             <HighlightedText
-              text={(data.metadata.accession || '').toUpperCase()}
+              text={data.metadata.accession || ''}
               textToHighlight={search}
             />
           </div>
@@ -398,6 +416,7 @@ const List = ({
           query={search}
           notFound={notFound}
           withGrid={!!includeGrid}
+          databases={databases}
         >
           <Exporter>
             <ul>
@@ -434,7 +453,7 @@ const List = ({
               />
             )}
           </Card>
-          <SearchBox>Search structures</SearchBox>
+          <SearchBox loading={isStale}>Search structures</SearchBox>
           <Column
             dataKey="accession"
             headerClassName={f('table-center')}
@@ -461,7 +480,7 @@ const List = ({
                   processData={schemaProcessDataTableRow}
                 />
                 <HighlightedText
-                  text={accession.toUpperCase()}
+                  text={accession || ''}
                   textToHighlight={search.search}
                 />
               </Link>
@@ -498,6 +517,7 @@ const List = ({
             dataKey="experiment_type"
             headerClassName={f('table-center')}
             cellClassName={f('table-center')}
+            renderer={type => formatExperimentType(type)}
           >
             Experiment type
           </Column>
@@ -520,13 +540,25 @@ const List = ({
             cellClassName={f('table-center')}
             defaultKey="structureAccession"
             renderer={(accession /*: string */) => (
-              <PDBeLink id={accession}>
+              <Link
+                to={customLocation => ({
+                  ...customLocation,
+                  description: {
+                    main: { key: 'structure' },
+                    structure: {
+                      db: customLocation.description.structure.db,
+                      accession,
+                    },
+                  },
+                  search: {},
+                })}
+              >
                 <LazyImage
                   src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
-                  alt={`structure with accession ${accession.toUpperCase()}`}
+                  alt={`structure with accession ${accession}`}
                   style={{ maxWidth: '33%' }}
                 />
-              </PDBeLink>
+              </Link>
             )}
           >
             Structure

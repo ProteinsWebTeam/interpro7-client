@@ -95,15 +95,15 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
         className={f('browse-tabs-link', { ['is-signature']: isSignature })}
         activeClass={f('is-active', 'is-active-tab')}
         // disabled={!isFirstLevel && !isNaN(value) && !value}
+        data-testid={`browse-tab-${name.toLowerCase().replace(/\s+/g, '_')}`}
       >
         {name}
         {value !== null && ' '}
-        {value !== null &&
-          !isNaN(value) && (
-            <NumberComponent label loading={loading} abbr>
-              {value}
-            </NumberComponent>
-          )}
+        {value !== null && !isNaN(value) && (
+          <NumberComponent label loading={loading} abbr>
+            {value}
+          </NumberComponent>
+        )}
       </Link>
     );
   }

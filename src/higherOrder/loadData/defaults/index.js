@@ -3,6 +3,8 @@ import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import config from 'config';
+
 const MULTIPLE_SLASHES = /([^:])\/{2,}/g;
 
 export const cleanUpMultipleSlashes = (str = '') =>
@@ -20,6 +22,13 @@ export const getUrlForMeta = createSelector(
       }),
     ),
 );
+
+export const getUrlForRelease = repoKey =>
+  createSelector(
+    () => config.github[repoKey],
+    ({ owner, repo }) =>
+      `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
+  );
 
 export const getUrl = createSelector(
   // this one is just to memoize it
@@ -131,7 +140,13 @@ export const getReversedUrl = createSelector(
   },
 );
 
-export const getUrlForApi = getUrl('api');
+export const getUrlForApi = (...parameters) =>
+  getUrl('api')(...parameters)
+    .replace('/alignments', '/')
+    .replace('/logo', '/')
+    .replace('/domain_architecture', '/')
+    .replace('/sequence', '/')
+    .replace('/similar_proteins', '/');
 
 export const STATUS_OK = 200;
 export const STATUS_NO_CONTENT = 204;

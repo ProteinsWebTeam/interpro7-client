@@ -26,7 +26,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="http://www.cathdb.info/"
@@ -37,7 +37,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               CATH-Gene3D
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -75,7 +75,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="https://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml"
@@ -86,7 +86,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               CDD
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -124,7 +124,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="https://hamap.expasy.org/"
@@ -135,7 +135,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               HAMAP
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -173,7 +173,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="http://mobidb.bio.unipd.it/"
@@ -184,7 +184,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               MobiDB Lite
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -222,7 +222,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="http://www.pantherdb.org/"
@@ -233,7 +233,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               PANTHER
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -271,7 +271,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="https://pfam.xfam.org/"
@@ -282,7 +282,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               Pfam
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -320,7 +320,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="https://pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml"
@@ -331,7 +331,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               PIRSF
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -369,7 +369,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="http://130.88.97.239/PRINTS/"
@@ -380,7 +380,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               PRINTS
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -405,55 +405,6 @@ exports[`<Consortium /> should render with data 1`] = `
         </td>
       </tr>
       <tr
-        id="prodom"
-      >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="prodom"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Connect(Link)
-            className="ext"
-            disabled={false}
-            href="http://prodom.prabi.fr/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              ProDom
-            </span>
-          </Connect(Link)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          2006.1
-        </td>
-        <td>
-          <p>
-            PRODOM protein domain database consists of an automatic compilation of homologous domains. Current versions of ProDom are built using a novel procedure based on recursive PSI-BLAST searches. ProDom is based at PRABI Villeurbanne, France.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2009-04-23T12:05:33.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
         id="profile"
       >
         <td
@@ -467,7 +418,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="https://prosite.expasy.org/"
@@ -478,7 +429,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               PROSITE profiles
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -514,7 +465,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="https://prosite.expasy.org/"
@@ -525,7 +476,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               PROSITE patterns
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -563,7 +514,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="http://sfld.rbvi.ucsf.edu/django/"
@@ -574,7 +525,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               SFLD
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -612,7 +563,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="http://smart.embl-heidelberg.de/"
@@ -623,7 +574,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               SMART
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -661,7 +612,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="http://supfam.org/"
@@ -672,7 +623,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               SUPERFAMILY
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"
@@ -710,7 +661,7 @@ exports[`<Consortium /> should render with data 1`] = `
         <td
           className="sm-inline"
         >
-          <Connect(Link)
+          <Memo(ConnectFunction)
             className="ext"
             disabled={false}
             href="http://tigrfams.jcvi.org/cgi-bin/index.cgi"
@@ -721,7 +672,7 @@ exports[`<Consortium /> should render with data 1`] = `
             >
               TIGRFAMs
             </span>
-          </Connect(Link)>
+          </Memo(ConnectFunction)>
         </td>
         <td
           className="sm-inline"

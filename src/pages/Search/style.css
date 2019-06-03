@@ -1,0 +1,27 @@
+.tabs-panel-content {
+  display: flex;
+  flex-wrap: wrap;
+  & .search-form {
+    flex-grow: 2;
+  }
+  & .show-help {
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(0deg);
+  }
+  & .show-help.expanded {
+    transform: rotate(180deg);
+  }
+  & .help-col {
+    flex-grow: 1;
+    transition: flex-grow 200ms linear, opacity 200ms linear;
+  }
+  & .help-col.removed {
+    flex-grow: 0.00001;
+    opacity: 0;
+    & div {
+      max-width: 0;
+      min-width: 0;
+      height: 0;
+    }
+  }
+}

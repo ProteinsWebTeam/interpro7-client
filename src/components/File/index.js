@@ -98,7 +98,6 @@ class Button extends PureComponent {
             href={blobURL || url}
             disabled={downloading || count > HARD_LIMIT}
             className={f('link', { downloading, failed })}
-            target="_blank"
             onClick={downloading || successful ? undefined : handleClick}
             data-url={url}
             data-type={fileType}
@@ -129,11 +128,13 @@ class File extends PureComponent {
   static propTypes = {
     api: T.object.isRequired,
     entryDescription: T.object.isRequired,
+    customLocationDescription: T.object,
     downloadURL: T.func.isRequired,
     fileType: T.oneOf(['accession', 'fasta']),
     count: T.number,
     subset: T.bool,
     name: T.string,
+    search: T.object,
   };
 
   constructor(props) {
@@ -152,6 +153,7 @@ class File extends PureComponent {
     const url = format({
       ...nextProps.api,
       pathname: nextProps.api.root + subpath,
+      query: nextProps.search,
     });
     if (
       prevState.url === url &&

@@ -40,16 +40,19 @@ class LatestEntry extends PureComponent {
 
   componentDidMount() {
     loadWebComponent(() =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      ).then(m => m.InterproType),
     ).as('interpro-type');
   }
 
   render() {
     const { entry } = this.props;
     return (
-      <div className={f('grid-card', 'card-shrink')}>
+      <div
+        className={f('grid-card', 'card-shrink')}
+        data-testid="by-latest-entries-box"
+      >
         <div className={f('list-body')}>
           <div className={f('card-header')}>
             <Link
@@ -242,7 +245,7 @@ class LatestEntry extends PureComponent {
                       className={f('icon', 'icon-conceptual', 'icon-wrapper')}
                       data-icon="s"
                     >
-                      {c.S && <div className={f('icon-over-anim')} />}
+                      {c.S !== 0 && <div className={f('icon-over-anim')} />}
                     </div>
                     <NumberComponent abbr noTitle>
                       {c.S}

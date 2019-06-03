@@ -44,7 +44,7 @@ const schemaProcessData = data => ({
   name: data.ida,
 });
 
-const ida2json = ida => {
+export const ida2json = ida => {
   const idaParts = ida.split('-');
   const n = idaParts.length;
   const feature = (FAKE_PROTEIN_LENGTH - GAP_BETWEEN_DOMAINS * (n + 1)) / n;
@@ -74,12 +74,44 @@ const ida2json = ida => {
   const obj = {
     length: FAKE_PROTEIN_LENGTH,
     domains: Object.values(grouped),
-    accessions: Object.keys(grouped),
+    accessions: domains.map(d => d.accession),
   };
   return obj;
 };
 
-class IDAProtVista extends ProtVistaMatches {
+export const TextIDA = ({ accessions }) => (
+  <div>
+    {accessions.map((accession, i) => (
+      <React.Fragment key={i}>
+        {i !== 0 && ' - '}
+        <span>
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: accession.toLowerCase().startsWith('ipr')
+                    ? 'InterPro'
+                    : 'pfam',
+                  accession,
+                },
+              },
+            }}
+          >
+            {' '}
+            {accession}{' '}
+          </Link>
+        </span>
+      </React.Fragment>
+    ))}
+  </div>
+);
+
+TextIDA.propTypes = {
+  accessions: T.arrayOf(T.string),
+};
+
+export class IDAProtVista extends ProtVistaMatches {
   static propTypes = {
     matches: T.arrayOf(T.object).isRequired,
   };
@@ -147,7 +179,7 @@ class IDAProtVista extends ProtVistaMatches {
   }
 }
 
-class DomainArchitectures extends PureComponent {
+class _DomainArchitecturesWithData extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
     mainAccession: T.string,
@@ -161,9 +193,17 @@ class DomainArchitectures extends PureComponent {
       search,
     } = this.props;
     if (loading) return <Loading />;
+    if (!payload.results) return null;
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
+          {payload.count === 0 ? (
+            <div className={f('callout', 'info', 'withicon')}>
+              There are not Domain architectures for the current selection.
+            </div>
+          ) : (
+            <h4>{payload.count} domain architectures found.</h4>
+          )}
           {(payload.results || []).map(obj => {
             const idaObj = ida2json(obj.ida);
             return (
@@ -186,31 +226,7 @@ class DomainArchitectures extends PureComponent {
                   </Link>
                   with this architecture:
                 </div>
-                <div>
-                  {idaObj.accessions.map((accession, i) => (
-                    <React.Fragment key={accession}>
-                      {i !== 0 && ' - '}
-                      <span>
-                        <Link
-                          to={{
-                            description: {
-                              main: { key: 'entry' },
-                              entry: {
-                                db: accession.toLowerCase().startsWith('ipr')
-                                  ? 'InterPro'
-                                  : 'pfam',
-                                accession,
-                              },
-                            },
-                          }}
-                        >
-                          {' '}
-                          {accession.toUpperCase()}{' '}
-                        </Link>
-                      </span>
-                    </React.Fragment>
-                  ))}
-                </div>
+                <TextIDA accessions={idaObj.accessions} />
                 <IDAProtVista
                   matches={idaObj.domains}
                   length={FAKE_PROTEIN_LENGTH}
@@ -261,6 +277,7 @@ const mapStateToProps = createSelector(
   (mainAccession, search) => ({ mainAccession, search }),
 );
 
+export const DomainArchitecturesWithData = _DomainArchitecturesWithData;
 export default loadData({ getUrl: getUrlFor, mapStateToProps })(
-  DomainArchitectures,
+  DomainArchitecturesWithData,
 );

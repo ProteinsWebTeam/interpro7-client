@@ -21,7 +21,7 @@ const singleEntityNames = new Map(
   Array.from(singleEntity).map(e => [e[1].name, e[0]]),
 );
 
-const whitelist = new Set(['Overview', 'Sequence']);
+const whitelist = new Set(['Overview', 'Sequence', 'Alignments']);
 
 /*:: type Props = {
   to: Object | function,
@@ -113,12 +113,23 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     if (!isFirstLevel && !isNaN(value) && !value) return null;
 
     const icons = new Map([
-      ['Entries', '&#xf1c0;'],
-      ['Proteins', '&#x50;'],
-      ['Structures', 's;'],
+      ['Overview', { icon: '\uF2BB', class: 'icon-common' }],
+      ['Entries', { icon: '\uF1C0', class: 'icon-common' }],
+      ['Proteins', { icon: 'P', class: 'icon-conceptual' }],
+      ['Structures', { icon: 's', class: 'icon-conceptual' }],
+      ['Domain Architectures', { icon: undefined, class: 'icon-count-ida' }],
+      ['Taxonomy', { icon: undefined, class: 'icon-count-species' }],
+      ['Proteomes', { icon: undefined, class: 'icon-count-proteome' }],
+      ['Sets', { icon: undefined, class: 'icon-count-set' }],
+      ['Signature', { icon: undefined, class: 'icon-count-hmm' }],
+      ['Alignments', { icon: '\uF1DE', class: 'icon-common' }],
+      ['Sequence', { icon: '\uF120', class: 'icon-common' }],
     ]);
     return (
-      <li className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}>
+      <li
+        className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}
+        data-testid={`menu-${name.toLowerCase().replace(/\s+/g, '_')}`}
+      >
         <Link
           to={to}
           exact={exact}
@@ -127,14 +138,17 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
         >
           <span data-content={name} className={f('name')}>
             <i
-              data-icon={icons.get(name)}
+              data-icon={(icons.get(name) || {}).icon}
               className={f(
                 'icon',
-                'icon-common',
+                (icons.get(name) || {}).class,
                 'icon-count-sm',
                 'margin-right-medium',
               )}
               aria-label={`icon ${name}`}
+              data-testid={`entry-menu-${name
+                .toLowerCase()
+                .replace(/\s+/g, '_')}`}
             />
             {name}
           </span>

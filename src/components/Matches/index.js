@@ -18,7 +18,6 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
-import { PDBeLink } from 'components/ExtLink';
 import Lazy from 'wrappers/Lazy';
 import LazyImage from 'components/LazyImage';
 
@@ -232,7 +231,7 @@ const Matches = (
     dbCounters={dbCounters}
   >
     <PageSizeSelector />
-    <SearchBox />
+    <SearchBox loading={isStale} />
     {description.main.key !== 'result' && (
       <Exporter>
         <ul>
@@ -279,10 +278,7 @@ const Matches = (
               }}
             >
               <span className={f('acc-row')}>
-                <HighlightedText
-                  text={acc.toUpperCase()}
-                  textToHighlight={search.search}
-                />
+                <HighlightedText text={acc} textToHighlight={search.search} />
               </span>
             </Link>{' '}
             {primary === 'protein' && sourceDatabase === 'reviewed' ? (
@@ -384,13 +380,25 @@ const Matches = (
       defaultKey="structureAccession"
       displayIf={primary === 'structure'}
       renderer={(accession /*: string */) => (
-        <PDBeLink id={accession}>
+        <Link
+          to={customLocation => ({
+            ...customLocation,
+            description: {
+              main: { key: 'structure' },
+              structure: {
+                db: customLocation.description.structure.db,
+                accession,
+              },
+            },
+            search: {},
+          })}
+        >
           <LazyImage
             src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
-            alt={`structure with accession ${accession.toUpperCase()}`}
+            alt={`structure with accession ${accession}`}
             style={{ maxWidth: '33%' }}
           />
-        </PDBeLink>
+        </Link>
       )}
     >
       Structure

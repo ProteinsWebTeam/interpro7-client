@@ -23,6 +23,10 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
+const AboutInterPro = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-interpro" */ 'components/About/InterPro'),
+});
 const Consortium = loadable({
   loader: () =>
     import(/* webpackChunkName: "about-consortium" */ 'components/About/Consortium'),
@@ -42,8 +46,14 @@ const Privacy = loadable({
   loader: () =>
     import(/* webpackChunkName: "about-funding" */ 'components/About/Privacy'),
 });
+const InterProScan = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-interproscan" */ 'components/About/InterProScan'),
+});
 
 const routes = new Map([
+  ['interpro', AboutInterPro],
+  ['interproscan', InterProScan],
   ['consortium', Consortium],
   ['citation', Citation],
   ['funding', Funding],
@@ -56,7 +66,7 @@ const locationSelector = createSelector(
 );
 
 const RedirectToDefault = () => (
-  <Redirect to={{ description: { other: ['about', 'consortium'] } }} />
+  <Redirect to={{ description: { other: ['about', 'interpro'] } }} />
 );
 
 class About extends PureComponent /*:: <{}> */ {
@@ -69,6 +79,30 @@ class About extends PureComponent /*:: <{}> */ {
         />
         <div className={f('columns', 'margin-bottom-large')}>
           <ul className={f('tabs', 'menu-style')}>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={AboutInterPro.preload}
+              onFocus={AboutInterPro.preload}
+            >
+              <Link
+                to={{ description: { other: ['about', 'interpro'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                InterPro
+              </Link>
+            </li>
+            <li
+              className={f('tabs-title')}
+              onMouseOver={InterProScan.preload}
+              onFocus={InterProScan.preload}
+            >
+              <Link
+                to={{ description: { other: ['about', 'interproscan'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                InterProScan
+              </Link>
+            </li>
             <li
               className={f('tabs-title')}
               onMouseOver={Consortium.preload}

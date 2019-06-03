@@ -30,6 +30,39 @@ const styles = foundationPartial(ebiGlobalStyles, ipro, localStyles);
 const offlineMessage =
   'Your browser appears to be offline, you might not have access to all the features of this website';
 
+export const InterProLogo = ({ loading = false } /*: {loading?: boolean}*/) => (
+  <svg className={styles('icon')} viewBox="0 0 88 88" width="62" height="62">
+    <defs>
+      <mask id="logo-mask">
+        <rect x="10" y="10" ry="8" width="65" height="65" fill="white" />
+        <rect x="10" y="41" height="4" width="65" fill="black" />
+        <rect
+          x="23"
+          y="34"
+          ry="8"
+          height="18"
+          width="38"
+          fill="black"
+          className={styles('domain', { loading })}
+        />
+      </mask>
+    </defs>
+    <g transform="rotate(-45 45 41)">
+      <rect
+        x="10"
+        y="10"
+        ry="8"
+        width="65"
+        height="65"
+        fill="currentColor"
+        mask="url(#logo-mask)"
+      />
+    </g>
+  </svg>
+);
+InterProLogo.propTypes = {
+  loading: T.bool,
+};
 export class Title extends PureComponent /*:: <Props> */ {
   static propTypes = {
     loading: T.bool.isRequired,
@@ -64,46 +97,7 @@ export class Title extends PureComponent /*:: <Props> */ {
                   online,
                 })}
               >
-                <svg
-                  className={styles('icon')}
-                  viewBox="0 0 88 88"
-                  width="62"
-                  height="62"
-                >
-                  <defs>
-                    <mask id="logo-mask">
-                      <rect
-                        x="10"
-                        y="10"
-                        ry="8"
-                        width="65"
-                        height="65"
-                        fill="white"
-                      />
-                      <rect x="10" y="41" height="4" width="65" fill="black" />
-                      <rect
-                        x="23"
-                        y="34"
-                        ry="8"
-                        height="18"
-                        width="38"
-                        fill="black"
-                        className={styles('domain', { loading })}
-                      />
-                    </mask>
-                  </defs>
-                  <g transform="rotate(-45 45 41)">
-                    <rect
-                      x="10"
-                      y="10"
-                      ry="8"
-                      width="65"
-                      height="65"
-                      fill="currentColor"
-                      mask="url(#logo-mask)"
-                    />
-                  </g>
-                </svg>
+                <InterProLogo loading={loading} />
               </div>
 
               <div className={styles('logo-flex-item', 'logo-text')}>

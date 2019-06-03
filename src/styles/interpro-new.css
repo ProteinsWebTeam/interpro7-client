@@ -851,14 +851,25 @@ hr {
   background: #fff url('../images/cover/tool/tool_api.png') no-repeat 50% 76%;
   background-size: 56%;
 }
+.image-tool-ida {
+  background: #fff url('../images/cover/tool/tool_ida_100.png') no-repeat 50%
+    76%;
+  background-size: contain;
+  background-color: #0d68a6;
+}
+.image-tool-textsearch {
+  background: #fff url('../images/cover/tool/tool_textsearch.svg') no-repeat 50%
+    76%;
+  background-size: 30%;
+  background-color: #0d68a6;
+}
 .image-tool-protvista {
   background: #fff url('../images/cover/tool/tool_protvista.png') no-repeat 40%
     14%;
   background-size: 268%;
 }
-.image-tool-litemol {
-  background: #fff url('../images/cover/tool/tool_litemol.png') no-repeat 50%
-    14%;
+.image-tool-ngl {
+  background: #fff url('../images/cover/tool/tool_ngl.png') no-repeat 50% 14%;
   background-size: 210%;
 }
 
@@ -879,6 +890,7 @@ hr {
     /* to make title underline work on title when single link */
   }
 }
+
 .main .card-title a {
   color: var(--colors-nearly-black);
   border-bottom: 2px transparent solid;
@@ -887,6 +899,10 @@ hr {
   &:hover {
     border-bottom: 2px var(--colors-dark) solid;
   }
+}
+/*remove padding when size title reduced - just for structure title*/
+.main .card-title.font-sm a {
+  padding-bottom: 0;
 }
 
 .card-info {
@@ -1377,4 +1393,26 @@ details.option-style > summary {
   .local-site-search {
     opacity: 0;
   }
+}
+
+.image-funding {
+  padding: 1em;
+}
+
+.image-funding-embl {
+  background: #fff url('../images/thirdparty/funding/logo_embl.png') no-repeat
+    50% 14%;
+  background-size: 30%;
+}
+
+.image-funding-wellcome-trust {
+  background: #fff url('../images/thirdparty/funding/logo_wellcome.jpg')
+    no-repeat 50% 14%;
+  background-size: 30%;
+}
+
+.image-funding-bbsrc {
+  background: #fff url('../images/thirdparty/funding/logo_bbsrc.png') no-repeat
+    50% 14%;
+  background-size: 30%;
 }

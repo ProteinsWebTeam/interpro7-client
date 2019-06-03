@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="100%"
+     height="100%"
+     viewBox="0 0 88 88">
+  <defs>
+    <mask id="logo-mask">
+      <rect x="10" y="10" ry="8" width="65" height="65" fill="white"></rect>
+      <rect x="10" y="41" height="4" width="65" fill="black"></rect>
+      <rect x="23" y="34" ry="8" height="18" width="38" fill="black"></rect>
+    </mask>
+  </defs>
+  <g transform="rotate(-45 45 41)">
+    <rect x="10" y="10" ry="8" width="65" height="65" fill="#9ee2fd" mask="url(#logo-mask)"></rect>
+  </g>
+</svg>

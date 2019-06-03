@@ -8,6 +8,7 @@ import { goToCustomLocation } from 'actions/creators';
 import Accession from 'components/Accession';
 import Description from 'components/Description';
 import { BaseLink } from 'components/ExtLink';
+import { setDBs } from 'utils/processDescription/handlers';
 
 import ClanViewer from 'clanviewer';
 import 'clanviewer/css/clanviewer.css';
@@ -25,14 +26,14 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
   data: {
     metadata: Object,
   },
-  db: string,
-  currentSet: Object
+  db: string
 }; */
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 
+const MAX_NUMBER_OF_NODES = 100;
 export const schemaProcessData = ({ data: { accession, score }, db }) => ({
   '@id': '@contains', // maybe 'is member of' http://semanticscience.org/resource/SIO_000095
   name: 'entry',
@@ -56,7 +57,6 @@ class SummarySet extends PureComponent /*:: <Props> */ {
       metadata: T.object,
     }).isRequired,
     db: T.string.isRequired,
-    currentSet: T.object,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.object.isRequired,
     loading: T.bool.isRequired,
@@ -66,25 +66,36 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     super(props);
 
     this._ref = React.createRef();
+    this.state = { showClanViewer: false };
+    this.loaded = false;
   }
 
   componentDidMount() {
     if (!this._ref.current) return;
     this._vis = new ClanViewer({ element: this._ref.current });
-    const data = (this.props.data &&
+    if (
+      this.props.data &&
       this.props.data.metadata &&
-      this.props.data.metadata.relationships) || {
-      nodes: [],
-      relationships: [],
-    };
-    this._vis.paint(data, false);
+      this.props.data.metadata.relationships &&
+      this.props.data.metadata.relationships.nodes &&
+      this.props.data.metadata.relationships.nodes.length <= MAX_NUMBER_OF_NODES
+    )
+      this.setState({ showClanViewer: true });
     this._ref.current.addEventListener('click', this._handleClick);
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.data) {
+    if (prevProps.data !== this.props.data) this.loaded = false;
+    if (
+      (this.state.showClanViewer ||
+        this.props.data.metadata.relationships.nodes.length <=
+          MAX_NUMBER_OF_NODES) &&
+      !this.loaded
+    ) {
       const data = this.props.data.metadata.relationships;
+      this._vis.clear();
       this._vis.paint(data, false);
+      this.loaded = true;
     }
   }
 
@@ -93,10 +104,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
       this._ref.current.removeEventListener('click', this._handleClick);
     }
     // TODO: Update clanviewer to clean SVG
-    this._vis._ro.disconnect();
-    this._vis.tick = null;
-    this._vis = null;
-    this._ref = null;
+    this._vis.clear();
   }
 
   _handleClick = event => {
@@ -120,7 +128,15 @@ class SummarySet extends PureComponent /*:: <Props> */ {
             id: '',
           }
         : this.props.data.metadata;
-    const { currentSet } = this.props;
+    // const { currentSet } = this.props;
+    let currentSet = null;
+    if (metadata.source_database) {
+      for (const db of setDBs) {
+        if (db.name === metadata.source_database) currentSet = db;
+      }
+    }
+
+    // const currentSet = setDBs
     return (
       <div className={f('sections')}>
         <section>
@@ -130,16 +146,18 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                 <tbody>
                   <tr>
                     <td>Accession</td>
-                    <td>
+                    <td data-testid="set-accession">
                       <Accession accession={metadata.accession} />
                     </td>
                   </tr>
                   <tr>
                     <td>Data type</td>
-                    <td>Set</td>
+                    <td data-testid="set-type">Set</td>
                   </tr>
                   <tr>
-                    <td style={{ width: '200px' }}>Member database</td>
+                    <td style={{ width: '200px' }} data-testid="set-memberdb">
+                      Member database
+                    </td>
                     <td className={f('text-up')}>{metadata.source_database}</td>
                   </tr>
                 </tbody>
@@ -167,7 +185,10 @@ class SummarySet extends PureComponent /*:: <Props> */ {
               <div className={f('medium-3', 'columns')}>
                 <div className={f('panel')}>
                   <h5>External Links</h5>
-                  <ul className={f('no-bullet')}>
+                  <ul
+                    className={f('no-bullet')}
+                    data-testid="set-external-links"
+                  >
                     <li>
                       <BaseLink
                         id={metadata.accession}
@@ -175,8 +196,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                         target="_blank"
                         pattern={currentSet.url_template}
                       >
-                        View {metadata.accession.toUpperCase()} in{' '}
-                        {currentSet.name}
+                        View {metadata.accession} in {currentSet.name}
                       </BaseLink>
                     </li>
                   </ul>
@@ -185,6 +205,29 @@ class SummarySet extends PureComponent /*:: <Props> */ {
             ) : null}
           </div>
           <div className={f('row')}>
+            {!this.state.showClanViewer &&
+              metadata.relationships &&
+              metadata.relationships.nodes &&
+              metadata.relationships.nodes.length > MAX_NUMBER_OF_NODES && (
+                <div
+                  className={f('flex-card')}
+                  style={{ width: '50%', padding: '1em' }}
+                >
+                  <h3>ClanViewer</h3>
+                  <section>
+                    The selected clan has {metadata.relationships.nodes.length}{' '}
+                    member entries. Displaying more than {MAX_NUMBER_OF_NODES}{' '}
+                    nodes in this visualisation can affect the performance of
+                    your browser.
+                    <button
+                      className={f('button')}
+                      onClick={() => this.setState({ showClanViewer: true })}
+                    >
+                      Visualise it
+                    </button>
+                  </section>
+                </div>
+              )}
             <div ref={this._ref} style={{ minHeight: 500 }} />
           </div>
         </section>

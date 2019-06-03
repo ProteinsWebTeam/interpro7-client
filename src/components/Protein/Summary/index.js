@@ -72,18 +72,23 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                   <tr>
                     <td>Short name</td>
                     <td>
-                      <i className={f('shortname')}>{metadata.id}</i>
+                      <i
+                        className={f('shortname')}
+                        data-testid="protein-shortname"
+                      >
+                        {metadata.id}
+                      </i>
                     </td>
                   </tr>
                   <tr>
                     <td>Length</td>
-                    <td>
+                    <td data-testid="protein-length">
                       <Length metadata={metadata} />
                     </td>
                   </tr>
                   <tr>
                     <td>Species</td>
-                    <td>
+                    <td data-testid="protein-species">
                       <Species
                         fullName={metadata.source_organism.fullName}
                         taxID={metadata.source_organism.taxId}
@@ -93,7 +98,7 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                   {metadata.proteome && metadata.proteome.length > 0 && (
                     <tr>
                       <td>Proteome</td>
-                      <td>
+                      <td data-testid="protein-proteome">
                         <Link
                           to={{
                             description: {
@@ -105,14 +110,14 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
                             },
                           }}
                         >
-                          {metadata.proteome.toUpperCase()}
+                          {metadata.proteome}
                         </Link>
                       </td>
                     </tr>
                   )}
                   {metadata.description && metadata.description.length ? (
                     <tr>
-                      <td>
+                      <td data-testid="protein-function">
                         Function{' '}
                         <Tooltip title="Provided By UniProt">
                           <span
@@ -137,10 +142,13 @@ class SummaryProtein extends PureComponent /*:: <Props> */ {
             <div className={f('medium-3', 'columns')}>
               <div className={f('panel')}>
                 <h5>External Links</h5>
-                <ul className={f('no-bullet')}>
+                <ul
+                  className={f('no-bullet')}
+                  data-testid="protein-external-links"
+                >
                   <li>
                     <UniProtLink id={metadata.accession} className={f('ext')}>
-                      View {metadata.accession.toUpperCase()} in UniProtKB
+                      View {metadata.accession} in UniProtKB
                     </UniProtLink>
                   </li>
                 </ul>
