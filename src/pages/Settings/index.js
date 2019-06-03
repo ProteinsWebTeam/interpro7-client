@@ -54,7 +54,7 @@ const DefaultInterProSettings = () => {
       <h4>Default InterPro Website</h4>
       <div className={f('row')}>
         <div className={f('medium-12', 'column')}>
-          <p>Use InterPro 7 (Beta) as your default InterPro website</p>
+          <p>Select this beta version as your default InterPro website"</p>
           <div className={f('switch', 'large')}>
             <input
               type="checkbox"
