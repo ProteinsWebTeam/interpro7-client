@@ -25,6 +25,9 @@ import PopperJS from 'popper.js';
 
 import loadWebComponent from 'utils/load-web-component';
 
+import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
@@ -103,6 +106,7 @@ class ProtVista extends Component {
 
   async componentDidMount() {
     await loadProtVistaWebComponents();
+    //await loadMemberDBData();
     const { data, protein } = this.props;
     this._webProteinRef.current.data = protein;
     this._hydroRef.current.data = protein;
@@ -640,6 +644,12 @@ const mapStateToProps = createSelector(
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
   }),
 );
+
+const loadMemberDBData = loadData({
+  getUrl: getUrlForMeta,
+  propNamespace: 'DB',
+  mapStateToProps,
+})(ProtVista);
 
 export default connect(
   mapStateToProps,
