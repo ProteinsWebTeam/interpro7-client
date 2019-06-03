@@ -533,6 +533,7 @@ export const InterPro /*: Array<Object> */ = [
 ];
 
 const _NOT_MEMBER_DBS = [
+  'PRODOM',
   'COILS',
   'SCOP',
   'MOBIDB',

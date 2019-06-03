@@ -3,9 +3,10 @@
 # standard library modules
 import sys, errno, re, json, ssl
 from urllib import request
+from urllib.error import HTTPError
 from time import sleep
 
-BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>"
+BASE_URL = "<%= url %>?page_size=100<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>"
 
 <% if (fileType === 'fasta') { %>
 HEADER_SEPARATOR = "|"
@@ -25,25 +26,36 @@ def output_list():
   sys.stdout.write("{ \"results\": [\n")
   <% } %>
   while next:
-    req = request.Request(next, headers={"Accept": "application/json"})
-    res = request.urlopen(req, context=context)
-    # If the API times out due a long running query
-    if res.status == 408:
-      # wait just over a minute
-      sleep(61)
-      # then continue this loop with the same URL
-      continue
-
-    payload = json.loads(res.read())
-    next = payload["next"]
-    if not next:
-      last_page = True
+    try:
+      req = request.Request(next, headers={"Accept": "application/json"})
+      res = request.urlopen(req, context=context)
+      # If the API times out due a long running query
+      if res.status == 408:
+        # wait just over a minute
+        sleep(61)
+        # then continue this loop with the same URL
+        continue
+      elif res.status == 204:
+        #no data so leave loop
+        break
+      payload = json.loads(res.read())
+      next = payload["next"]
+      if not next:
+        last_page = True
+    except HTTPError as e:
+      if e.code == 408:
+        sleep(61)
+        continue
+      else:
+        raise e
 
     for i, item in enumerate(payload["results"]):
       <% if (fileType === "json") { %>
       sys.stdout.write(json.dumps(item))
       # for indented output replace the above line with the following
       # sys.stdout.write(json.dumps(item, indent=4))
+      # for 1 record per line uncomment the following line
+      # sys.stdout.write("\n")
 
       if last_page and i+1 == len(payload["results"]):
         sys.stdout.write("")

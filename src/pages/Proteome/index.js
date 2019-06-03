@@ -329,6 +329,7 @@ class List extends PureComponent {
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
+            databases={databases}
           >
             <Exporter>
               <ul>
@@ -435,8 +436,8 @@ class List extends PureComponent {
                     className={f('no-decoration')}
                     to={{
                       description: {
-                        main: { key: 'taxonomy' },
-                        taxonomy: {
+                        main: { key: 'proteome' },
+                        proteome: {
                           db: 'uniprot',
                           accession: `${accession}`,
                         },

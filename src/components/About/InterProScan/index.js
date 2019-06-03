@@ -259,13 +259,13 @@ const InterProScan = (
   );
 };
 InterProScan.propTypes = {
-  data: {
+  data: T.shape({
     loading: T.bool,
     payload: T.shape({
       version: T.string,
       body: T.string,
     }),
-  },
+  }),
 };
 
 export default loadData(getUrlForRelease('IPScan'))(InterProScan);

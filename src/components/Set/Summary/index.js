@@ -146,16 +146,18 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                 <tbody>
                   <tr>
                     <td>Accession</td>
-                    <td>
+                    <td data-testid="set-accession">
                       <Accession accession={metadata.accession} />
                     </td>
                   </tr>
                   <tr>
                     <td>Data type</td>
-                    <td>Set</td>
+                    <td data-testid="set-type">Set</td>
                   </tr>
                   <tr>
-                    <td style={{ width: '200px' }}>Member database</td>
+                    <td style={{ width: '200px' }} data-testid="set-memberdb">
+                      Member database
+                    </td>
                     <td className={f('text-up')}>{metadata.source_database}</td>
                   </tr>
                 </tbody>
@@ -183,7 +185,10 @@ class SummarySet extends PureComponent /*:: <Props> */ {
               <div className={f('medium-3', 'columns')}>
                 <div className={f('panel')}>
                   <h5>External Links</h5>
-                  <ul className={f('no-bullet')}>
+                  <ul
+                    className={f('no-bullet')}
+                    data-testid="set-external-links"
+                  >
                     <li>
                       <BaseLink
                         id={metadata.accession}

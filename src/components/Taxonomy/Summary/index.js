@@ -179,14 +179,16 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
             <tbody>
               <tr>
                 <td>Tax ID</td>
-                <td>
+                <td data-testid="taxonomy-taxid">
                   <Accession accession={metadata.accession} title="Tax ID" />
                 </td>
               </tr>
               {metadata.rank && (
                 <tr>
                   <td>Rank</td>
-                  <td className={f('text-up')}>{metadata.rank}</td>
+                  <td className={f('text-up')} data-testid="taxonomy-rank">
+                    {metadata.rank}
+                  </td>
                 </tr>
               )}
 
@@ -203,13 +205,13 @@ class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 
               <tr>
                 <td>Lineage</td>
-                <td className={f('ico-primary')}>
+                <td className={f('ico-primary')} data-testid="taxonomy-lineage">
                   <Lineage lineage={metadata.lineage} names={names} />
                 </td>
               </tr>
               <tr>
                 <td>Children</td>
-                <td>
+                <td data-testid="taxonomy-children">
                   <Children taxChildren={metadata.children} names={names} />
                 </td>
               </tr>

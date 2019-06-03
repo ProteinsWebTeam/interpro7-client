@@ -68,6 +68,7 @@ class EntrySelection extends PureComponent {
         onChange={this.onSelectionChange}
         onBlur={this.onSelectionChange}
         value={this.props.selectedEntry}
+        data-testid="structure-entry-select"
       >
         {selectionGroups}
       </select>

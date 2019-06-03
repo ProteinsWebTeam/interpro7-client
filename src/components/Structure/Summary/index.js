@@ -90,13 +90,16 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                   <tbody>
                     <tr>
                       <td>Accession</td>
-                      <td>
+                      <td data-testid="structure-accession">
                         <Accession accession={metadata.accession} />
                       </td>
                     </tr>
                     <tr>
                       <td>Experiment type</td>
-                      <td className={f('text-cap')}>
+                      <td
+                        className={f('text-cap')}
+                        data-testid="structure-experiment-type"
+                      >
                         <Link
                           to={{
                             description: {
@@ -116,16 +119,20 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
                     {metadata.resolution && (
                       <tr>
                         <td>Resolution</td>
-                        <td>{metadata.resolution} Å</td>
+                        <td data-testid="structure-resolution">
+                          {metadata.resolution} Å
+                        </td>
                       </tr>
                     )}
                     <tr>
                       <td>Chains</td>
-                      <td>{chains.join(', ')}</td>
+                      <td data-testid="structure-chains">
+                        {chains.join(', ')}
+                      </td>
                     </tr>
                     <tr>
                       <td>Released</td>
-                      <td>
+                      <td data-testid="structure-date">
                         <TimeAgo
                           date={date}
                           noUpdate
@@ -140,7 +147,10 @@ class SummaryStructure extends PureComponent /*:: <Props> */ {
             <div className={f('medium-3', 'columns')}>
               <div className={f('panel')}>
                 <h5>External Links</h5>
-                <ul className={f('no-bullet')}>
+                <ul
+                  className={f('no-bullet')}
+                  data-testid="structure-external-links"
+                >
                   <li>
                     <PDBeLink
                       id={metadata.accession || ''}
