@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 
 import FiltersPanel from 'components/FiltersPanel';
 import CurationFilter from './CurationFilter';
-import SizeFilter from './SizeFilter';
+// import SizeFilter from './SizeFilter';
 import TaxonomyFilter from './TaxonomyFilter';
+import FragmentFilter from './FragmentFilter';
 import MatchPresenceFilter from './MatchPresenceFilter';
 
 const ProteinListFilters = ({ hasEntryFilter }) => (
@@ -15,7 +16,8 @@ const ProteinListFilters = ({ hasEntryFilter }) => (
     {!hasEntryFilter && <MatchPresenceFilter label="Matching Entries" />}
     <CurationFilter label="UniProt Curation" />
     <TaxonomyFilter label="Taxonomy" />
-    <SizeFilter label="Protein Size" />
+    {/*<SizeFilter label="Protein Size" />*/}
+    <FragmentFilter label="Fragment" />
   </FiltersPanel>
 );
 ProteinListFilters.propTypes = {
