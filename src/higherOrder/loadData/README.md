@@ -40,4 +40,4 @@ The above usage of the `loadData` function only supplies the getURL parameter, b
  * **mapDispatchToProps:** Similar to above, but to get Actions to interact with the App state.
  
  
-See the [/src/components/MemberDBSelector/index.js#L420](MemberDBSelector) comopnent for an example of multiple `loadData` using most of its parameters.
+See the [MemberDBSelector](/src/components/MemberDBSelector/index.js#L420) comopnent for an example of multiple `loadData` using most of its parameters.
