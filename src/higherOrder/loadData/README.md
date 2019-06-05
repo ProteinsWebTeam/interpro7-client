@@ -3,7 +3,7 @@ loadData()
 
 `loadData` is a high order comoponent that asyncronously injects data in a wrapped component.
 
-I uses the the adapted versions of `fetch` tha are in (/src/utils/cached-fetch).
+I uses the the adapted versions of `fetch` tha are in [/src/utils/cached-fetch](/src/utils/cached-fetch).
 
 
 loadData returns a function that receives a component and returns it wrapped with the React logic to load the data as a _prop_.
@@ -33,8 +33,11 @@ This will pass the _prop_ `data` to `YourComoponent`. `data` is an object with t
 The above usage of the `loadData` function only supplies the getURL parameter, but loadData has several more parameters:
 
  * **getUrl:** A function that should return the URL(as a string) to request. This function receives as parameters the App state(AKA redux state), and the _props_.
- * **fetchOptions:** 
- * **propNamespace:** 
+ * **fetchOptions:** Options to pass to the `fetch` function. See more in [/src/utils/cached-fetch](/src/utils/cached-fetch).
+ * **propNamespace:** Suffix to add to the `data` prop in the wrapped component, so if `propNamespace:EXT` the prop will be `dataEXT`. Useful to be able to embed a comopnent in multiple `loadData`.
  * **weight:** 
- * **mapStateToProps:** 
- * **mapDispatchToProps:** 
+ * **mapStateToProps:** `loadData` uses internally a `connect` in order to get the app state. This parameter allows to reuse that `connect` to get values from the stateApp to be included as _props_ in the Component.
+ * **mapDispatchToProps:** Similar to above, but to get Actions to interact with the App state.
+ 
+ 
+See the [/src/components/MemberDBSelector/index.js#L420](MemberDBSelector) comopnent for an example of multiple `loadData` using most of its parameters.
