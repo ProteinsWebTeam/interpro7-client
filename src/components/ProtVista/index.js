@@ -106,7 +106,6 @@ class ProtVista extends Component {
 
   async componentDidMount() {
     await loadProtVistaWebComponents();
-    //await loadMemberDBData();
     const { data, protein } = this.props;
     this._webProteinRef.current.data = protein;
     this._hydroRef.current.data = protein;
@@ -267,7 +266,28 @@ class ProtVista extends Component {
   }
 
   getElementFromEntry(detail) {
+    let databases = {};
+    const { dataDB } = this.props;
+    if (!dataDB.loading && dataDB.payload) {
+      databases = dataDB.payload.databases;
+    }
+
     const entry = detail.feature;
+    let source_database;
+    if (Array.isArray(entry.source_database)) {
+      if (entry.source_database[0] in databases) {
+        source_database = databases[entry.source_database[0]].name;
+      } else {
+        source_database = entry.source_database[0];
+      }
+    } else {
+      if (entry.source_database in databases) {
+        source_database = databases[entry.source_database].name;
+      } else {
+        source_database = entry.source_database;
+      }
+    }
+
     const isResidue = detail.type === 'residue';
     const isInterPro = entry.source_database === 'interpro';
     const tagString = `<section>   
@@ -295,11 +315,7 @@ class ProtVista extends Component {
         } 
         </div>
         <div>
-          ${
-            Array.isArray(entry.source_database)
-              ? entry.source_database[0]
-              : entry.source_database
-          }
+          ${source_database}
         ${(entry.entry_type || entry.type || '').replace('_', ' ') ||
           ''}</div>       
         </div>
@@ -645,13 +661,8 @@ const mapStateToProps = createSelector(
   }),
 );
 
-const loadMemberDBData = loadData({
+export default loadData({
   getUrl: getUrlForMeta,
   propNamespace: 'DB',
   mapStateToProps,
 })(ProtVista);
-
-export default connect(
-  mapStateToProps,
-  { changeSettingsRaw },
-)(ProtVista);
