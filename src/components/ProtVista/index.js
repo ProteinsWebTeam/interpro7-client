@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
-
-import { changeSettingsRaw } from 'actions/creators';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -77,6 +74,7 @@ class ProtVista extends Component {
   static propTypes = {
     protein: T.object,
     data: T.array,
+    dataDB: T.object,
     colorDomainsBy: T.string,
     changeSettingsRaw: T.func,
     title: T.string,
@@ -273,18 +271,18 @@ class ProtVista extends Component {
     }
 
     const entry = detail.feature;
-    let source_database;
+    let sourceDatabase;
     if (Array.isArray(entry.source_database)) {
       if (entry.source_database[0] in databases) {
-        source_database = databases[entry.source_database[0]].name;
+        sourceDatabase = databases[entry.source_database[0]].name;
       } else {
-        source_database = entry.source_database[0];
+        sourceDatabase = entry.source_database[0];
       }
     } else {
       if (entry.source_database in databases) {
-        source_database = databases[entry.source_database].name;
+        sourceDatabase = databases[entry.source_database].name;
       } else {
-        source_database = entry.source_database;
+        sourceDatabase = entry.source_database;
       }
     }
 
@@ -315,7 +313,7 @@ class ProtVista extends Component {
         } 
         </div>
         <div>
-          ${source_database}
+          ${sourceDatabase}
         ${(entry.entry_type || entry.type || '').replace('_', ' ') ||
           ''}</div>       
         </div>
