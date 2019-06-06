@@ -35,7 +35,7 @@ The above usage of the `loadData` function only supplies the getURL parameter, b
  * **getUrl:** A function that should return the URL(as a string) to request. This function receives as parameters the App state(AKA redux state), and the _props_.
  * **fetchOptions:** Options to pass to the `fetch` function. See more in [/src/utils/cached-fetch](/src/utils/cached-fetch).
  * **propNamespace:** Suffix to add to the `data` prop in the wrapped component, so if `propNamespace:EXT` the prop will be `dataEXT`. Useful to be able to embed a comopnent in multiple `loadData`.
- * **weight:** 
+ * **weight:** _Not Implemented_ The idea is to use to give priority to the requests. For example been able to upload the list queriest before than the filter's in the bbrowse pages.
  * **mapStateToProps:** `loadData` uses internally a `connect` in order to get the app state. This parameter allows to reuse that `connect` to get values from the stateApp to be included as _props_ in the Component.
  * **mapDispatchToProps:** Similar to above, but to get Actions to interact with the App state.
  
