@@ -285,7 +285,11 @@ class ProtVista extends Component {
         sourceDatabase = entry.source_database;
       }
     }
-
+    // Should this be handled by changing the data in MySQL?
+    if (entry.source_database === 'mobidblt') {
+      entry.type = null;
+      entry.accession = 'Disorder prediction';
+    }
     const isResidue = detail.type === 'residue';
     const isInterPro = entry.source_database === 'interpro';
     const tagString = `<section>   
