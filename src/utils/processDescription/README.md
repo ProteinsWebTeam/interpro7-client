@@ -59,3 +59,25 @@ This then implies that the URL should include `/protein/UniProt/` which togetehr
 **NOTE:** If the `numberOfFilters` is bigger than one, the procedure is the same for all the filters, only taking into account the value of `order` on each filter, to include the filter in the URL.
 
 
+handlers
+----
+In order to be able to walk through the tree of possible URL in the website, we defined a structure representing a directed graph of possible URL node. We give the name of `handler` to each of these nodes. And it is defined in this [file](handlers/index.js). 
+
+For an explanation of the class attributes of a Handler, see the inline comments [here](src/utils/processDescription/handlers/index.js#L96).
+
+The `handle` method of a `handler` is in charge of taking the piece of URL that correspond to the handler an mutate the description object to include that information, and then check if the next part of the URL, matches any of its children. If so it invokes the `handle` method of the child.
+
+Each handler defines its children, meaining the valid handler to deal with the next part of a URL. For example, the `rootHandler` represents the URL `"/"` and its children are defined [here](src/utils/processDescription/handlers/index.js#L877).
+
+
+pathToDescription
+----
+This functions takes a URL path as a string and returns the corresponding description object.
+
+This file is pretty simple, as most of its logic is delegated to the handlers:
+
+* It calls the handler of the `rootHandler`, if ecverything goes alright it returns the description object with all the changes done by `rootHandler` and its children. 
+
+* If there is an error in the process, it assumes that the handler then is `otherHandler` and process the rest of the URL that way.
+
+
