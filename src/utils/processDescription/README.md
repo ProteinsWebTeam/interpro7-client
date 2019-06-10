@@ -63,11 +63,11 @@ handlers
 ----
 In order to be able to walk through the tree of possible URL in the website, we defined a structure representing a directed graph of possible URL node. We give the name of `handler` to each of these nodes. And it is defined in this [file](handlers/index.js). 
 
-For an explanation of the class attributes of a Handler, see the inline comments [here](src/utils/processDescription/handlers/index.js#L96).
+For an explanation of the class attributes of a Handler, see the inline comments [here](handlers/index.js#L96).
 
 The `handle` method of a `handler` is in charge of taking the piece of URL that correspond to the handler an mutate the description object to include that information, and then check if the next part of the URL, matches any of its children. If so it invokes the `handle` method of the child.
 
-Each handler defines its children, meaining the valid handler to deal with the next part of a URL. For example, the `rootHandler` represents the URL `"/"` and its children are defined [here](src/utils/processDescription/handlers/index.js#L877).
+Each handler defines its children, meaining the valid handler to deal with the next part of a URL. For example, the `rootHandler` represents the URL `"/"` and its children are defined [here](handlers/index.js#L877).
 
 
 pathToDescription
@@ -81,3 +81,19 @@ This file is pretty simple, as most of its logic is delegated to the handlers:
 * If there is an error in the process, it assumes that the handler then is `otherHandler` and process the rest of the URL that way.
 
 
+descriptionItemToHandlers
+----
+
+A `Map` of all possible keys in a description with its potential handlers.
+
+
+descriptionToDescription
+----
+
+It takes a description object that doesn't include null values, and returns the description object making sure it includes all the attributes, even when their value is `null`. While doing this mapping it verifies that the given description is valid, by checking the existence of the matching handlers.
+You can check the inline comments to see the execution logic [file](descriptionToDescription/index.js). 
+
+
+descriptionToPath
+----
+Creates the URL string that represents the description object. It first uses the descriptionToDescription object to make sure it is valid and it contains all the parts of the object, and then seralized the object as a URL.
