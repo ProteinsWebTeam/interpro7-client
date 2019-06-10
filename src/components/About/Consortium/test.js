@@ -205,15 +205,6 @@ describe('<Consortium />', () => {
             canonical: 'cdd',
             version: '3.16',
           },
-          prodom: {
-            description:
-              'PRODOM protein domain database consists of an automatic compilation of homologous domains. Current versions of ProDom are built using a novel procedure based on recursive PSI-BLAST searches. ProDom is based at PRABI Villeurbanne, France.',
-            name: 'ProDom',
-            type: 'entry',
-            releaseDate: '2009-04-23T12:05:33Z',
-            canonical: 'prodom',
-            version: '2006.1',
-          },
           unreviewed: {
             description: null,
             name: 'UniProt/TrEMBL',

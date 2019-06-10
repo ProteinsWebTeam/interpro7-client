@@ -104,9 +104,7 @@ class SummaryCounterEntries extends PureComponent {
         </Tooltip>
 
         <Tooltip
-          title={`${domainArchitectures} domain architectures matching ${
-            metadata.name
-          }`}
+          title={`${domainArchitectures} domain architectures matching ${metadata.name}`}
           className={f('count-architectures')}
           style={{ display: 'flex' }}
         >
@@ -251,7 +249,7 @@ class DescriptionEntries extends PureComponent {
     const desc = description[0];
 
     const citations = description2IDs(desc);
-    const included = Object.entries(literature)
+    const included = Object.entries(literature || {})
       .filter(([id]) => citations.includes(id))
       .sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
 
@@ -466,6 +464,7 @@ class List extends PureComponent {
             query={search}
             notFound={notFound}
             withGrid={!!includeGrid}
+            databases={databases}
           >
             <Exporter>
               <ul>

@@ -12,7 +12,6 @@ export default {
       'pfam',
       'pirsf',
       'prints',
-      'prodom',
       'profile',
       'prosite',
       'sfld',

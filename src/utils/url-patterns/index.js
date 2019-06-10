@@ -35,10 +35,6 @@ export default (db /*: string */) => {
       'prints',
       'http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn={}&display_opts=Prints&category=None&queryform=false&regexpr=off',
     ],
-    [
-      'prodom',
-      'http://prodom.prabi.fr/prodom/current/cgi-bin/request.pl?question=DBEN&query={}',
-    ],
     ['profile', '//prosite.expasy.org/{}'],
     ['prosite', '//prosite.expasy.org/{}'],
     ['sfld', 'http://sfld.rbvi.ucsf.edu/django/family/{}/'],

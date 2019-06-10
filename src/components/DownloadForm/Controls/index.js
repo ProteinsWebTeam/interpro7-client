@@ -42,11 +42,8 @@ export const SOFT_LIMIT = 10000;
 
 export class Controls extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    data: T.shape({
-      payload: T.object,
-    }).isRequired,
     url: T.string.isRequired,
-    fileType: T.string.isRequired,
+    fileType: T.string,
     subset: T.bool.isRequired,
     entityType: T.string.isRequired,
     download: T.shape({
@@ -56,6 +53,9 @@ export class Controls extends PureComponent /*:: <Props> */ {
     }).isRequired,
     downloadURL: T.func.isRequired,
     downloadDelete: T.func.isRequired,
+    isStale: T.bool,
+    count: T.number.isRequired,
+    noData: T.bool.isRequired,
   };
 
   _handleGenerateClick = blockEvent(() =>
@@ -76,16 +76,17 @@ export class Controls extends PureComponent /*:: <Props> */ {
 
   render() {
     const {
-      data,
       fileType,
       entityType,
       download: { progress, successful, blobURL },
+      count,
+      noData,
+      isStale,
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
-    const count = (data.payload && data.payload.count) || 0;
     return (
       <>
-        {count > SOFT_LIMIT && (
+        {count > SOFT_LIMIT && !isStale && (
           <div
             className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
           >
@@ -94,9 +95,9 @@ export class Controls extends PureComponent /*:: <Props> */ {
             {toPlural(entityType)}.{' '}
             {count > HARD_LIMIT
               ? 'This file will be too large to generate within your browser'
-              : 'If you encounter any problems generating this file'}
-            , please check the “Code snippet” section of this page for
-            alternative suggestions.
+              : 'If you encounter any problems during the creation of this file'}
+            , please check the “Code snippet” section of this page for to see
+            how to download the data directly onto your computer.
           </div>
         )}
         <div className={f('container')}>
@@ -104,7 +105,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
             type="button"
             className={f('button', 'hollow', { warning: count > SOFT_LIMIT })}
             onClick={this._handleGenerateClick}
-            disabled={progress || count > HARD_LIMIT}
+            disabled={progress || count > HARD_LIMIT || isStale || noData}
           >
             Generate
           </button>

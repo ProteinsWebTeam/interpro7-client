@@ -263,7 +263,7 @@ OverlappingEntries.propTypes = {
   overlaps: T.arrayOf(T.object),
 };
 
-const Hierarchy = (hierarchy, type, accession) =>
+const Hierarchy = ({ hierarchy, type, accession }) =>
   hierarchy &&
   Object.keys(hierarchy).length &&
   hierarchy.children &&
@@ -275,6 +275,11 @@ const Hierarchy = (hierarchy, type, accession) =>
       <InterProHierarchy accession={accession} hierarchy={hierarchy} />
     </div>
   ) : null;
+Hierarchy.propTypes = {
+  hierarchy: T.object,
+  type: T.string,
+  accession: T.string,
+};
 
 /* :: type Props = {
     data: {

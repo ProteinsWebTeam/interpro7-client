@@ -63,7 +63,7 @@ class SummaryCounterProteins extends PureComponent /*:: <Props> */ {
 
   render() {
     const { entryDB, metadata, counters } = this.props;
-    const { entries, structures, sets } = counters;
+    const { entries, structures } = counters;
 
     return (
       <div className={f('card-block', 'card-counter', 'label-off')}>
@@ -133,36 +133,6 @@ class SummaryCounterProteins extends PureComponent /*:: <Props> */ {
             </span>
           </Link>
         </Tooltip>
-
-        {entryDB && // show sets counter + icon only when available
-        (entryDB.toLowerCase() === 'cdd' ||
-          entryDB.toLowerCase() === 'pfam') ? (
-          <Tooltip
-            title={`${sets} ${toPlural('set', sets)} matching ${metadata.name}`}
-            className={f('count-sets')}
-            style={{ display: 'flex' }}
-          >
-            <Link
-              to={{
-                description: {
-                  main: { key: 'protein' },
-                  protein: {
-                    db: 'uniprot',
-                    accession: metadata.accession,
-                  },
-                  set: { isFilter: true, db: entryDB },
-                },
-              }}
-              disabled={!sets}
-            >
-              <div className={f('icon', 'icon-count-set', 'icon-wrapper')}>
-                {sets !== 0 && <div className={f('icon-over-anim')} />}
-              </div>
-              <NumberComponent abbr>{sets}</NumberComponent>
-              <span className={f('label-number')}>{toPlural('set', sets)}</span>
-            </Link>
-          </Tooltip>
-        ) : null}
       </div>
     );
   }
@@ -218,9 +188,7 @@ const ProteinCard = ({ data, search, entryDB }) => (
 
     <div className={f('card-footer')}>
       <Tooltip
-        title={`${data.metadata.source_organism.fullName} (Tax ID: ${
-          data.metadata.source_organism.taxId
-        })`}
+        title={`${data.metadata.source_organism.fullName} (Tax ID: ${data.metadata.source_organism.taxId})`}
       >
         {data.metadata.source_organism.fullName}
       </Tooltip>
@@ -341,6 +309,7 @@ class List extends PureComponent /*:: <ListProps> */ {
             actualSize={_payload.count}
             query={search}
             notFound={notFound}
+            databases={databases}
           >
             <Exporter>
               <ul>

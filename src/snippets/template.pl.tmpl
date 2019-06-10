@@ -37,6 +37,9 @@ sub main {
       sleep(61);
       # then continue this loop with the same URL
       next;
+    } elsif ($res->code == 204) {
+      #no data matching query
+      last;
     }
     my $payload = decode_json($res->content);
     $next = $payload->{"next"};
