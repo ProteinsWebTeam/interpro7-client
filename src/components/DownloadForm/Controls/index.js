@@ -38,6 +38,9 @@ export const SOFT_LIMIT = 10000;
   },
   downloadURL: function,
   downloadDelete: function,
+  isStale: boolean,
+  count: number,
+  noData: boolean
 };*/
 
 export class Controls extends PureComponent /*:: <Props> */ {
