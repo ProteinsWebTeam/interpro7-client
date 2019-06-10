@@ -1,753 +1,305 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<InterProScan /> should render with data 1`] = `
-<section>
-  <h3>
-    The InterPro Consortium
-  </h3>
-  <p>
-    The following databases make up the InterPro Consortium:
-  </p>
-  <table
-    className="light responsive"
+<React.Fragment>
+  <section
+    className="banner"
   >
-    <tbody>
-      <tr
-        id="cathgene3d"
+    <div
+      className="image-tool-ipscan"
+    />
+    <div>
+      <h3>
+        InterProScan
+      </h3>
+      InterProScan is the software package that allows sequences (protein and nucleic) to be scanned against InterPro's signatures. Signatures are predictive models, provided by several different databases, that make up the InterPro consortium.
+    </div>
+  </section>
+  <section>
+    <h3>
+      Download the latest version 
+      <small>
+        (
+        5.35-74.0
+        )
+      </small>
+    </h3>
+    <div>
+      <span
+        className="icon icon-common"
+        data-icon=""
+      />
+       
+      Linux (64-bit) -
+       
+      <Tooltip
+        style={
+          Object {
+            "cursor": "help",
+            "textDecoration": "underline",
+          }
+        }
+        title="
+              <b>Software</b>:<br/>
+              <ul>
+                <li>Linux 64-bit</li>
+                <li>Perl 5</li>
+                <li>Python 3</li>
+                <li>Java 8</li>
+              </ul>"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="cathgene3d"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://www.cathdb.info/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              CATH-Gene3D
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          4.2.0
-        </td>
-        <td>
-          <p>
-            CATH-Gene3D database describes protein families and domain architectures in complete genomes. Protein families are formed using a Markov clustering algorithm, followed by multi-linkage clustering according to sequence identity. Mapping of predicted structure and sequence domains is undertaken using hidden Markov models libraries representing CATH and Pfam domains. CATH-Gene3D is based at University College, London, UK.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2017-09-04T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="cdd"
+        System requirements
+      </Tooltip>
+      <br />
+      <small>
+        <ul>
+          <li>
+            There are no versions planned for Windows or Apple operating systems. This is due to constraints in the various third-party binaries that InterProScan runs.
+          </li>
+          <li>
+            Older versions of InterProScan are not supported anymore. We highly recommend you to update to the latest version.
+          </li>
+        </ul>
+      </small>
+    </div>
+    <div
+      className="download flex-card"
+    >
+      <Memo(ConnectFunction)
+        className="button"
+        href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
+        target="_blank"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="cdd"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="https://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              CDD
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          3.16
-        </td>
-        <td>
-          <p>
-            CDD is a protein annotation resource that consists of a collection of annotated multiple sequence alignment models for ancient domains and full-length proteins. These are available as position-specific score matrices (PSSMs) for fast identification of conserved domains in protein sequences via RPS-BLAST. CDD content includes NCBI-curated domain models, which use 3D-structure information to explicitly define domain boundaries and provide insights into sequence/structure/function relationships, as well as domain models imported from a number of external source databases.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2017-03-28T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="hamap"
+        Download InterProScan
+      </Memo(ConnectFunction)>
+      <div
+        className="metadata"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="hamap"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="https://hamap.expasy.org/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              HAMAP
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          2018_03
-        </td>
-        <td>
-          <p>
-            HAMAP stands for High-quality Automated and Manual Annotation of Proteins. HAMAP profiles are manually created by expert curators. They identify proteins that are part of well-conserved proteins families or subfamilies. HAMAP is based at the SIB Swiss Institute of Bioinformatics, Geneva, Switzerland.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2018-03-28T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="mobidblt"
+        Version 
+        5.35-74.0
+         - 
+         64 bit
+         
+         Linux
+         - 
+         9.0GB
+      </div>
+      <div
+        className="metadata"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="mobidblt"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://mobidb.bio.unipd.it/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              MobiDB Lite
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          1.0
-        </td>
-        <td>
-          <p>
-            MobiDB offers a centralized resource for annotations of intrinsic protein disorder. The database features three levels of annotation: manually curated, indirect and predicted. The different sources present a clear tradeoff between quality and coverage. By combining them all into a consensus annotation, MobiDB aims at giving the best possible picture of the “disorder landscape” of a given protein of interest.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2016-05-02T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="panther"
+        MD5: 
+         fc003f262608423ab4c96ec099384ca6
+      </div>
+    </div>
+    <p>
+      For more information on downloading, installing and running InterProScan please see the
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="https://github.com/ebi-pf-team/interproscan/wiki"
+        target="_blank"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="panther"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://www.pantherdb.org/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              PANTHER
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          12.0
-        </td>
-        <td>
-          <p>
-            PANTHER is a large collection of protein families that have been subdivided into functionally related subfamilies, using human expertise. These subfamilies model the divergence of specific functions within protein families, allowing more accurate association with function, as well as inference of amino acids important for functional specificity. Hidden Markov models (HMMs) are built for each family and subfamily for classifying additional protein sequences. PANTHER is based at at University of Southern California, CA, US.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2017-05-08T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="pfam"
+        InterProScan wiki
+      </Memo(ConnectFunction)>
+      .
+    </p>
+  </section>
+  <section>
+    <h3>
+      Web services
+    </h3>
+    <p>
+      Programmatic access to InterProScan is possible via a number of different web service protocols, that allow up to 30 sequences to be analysed per request.
+    </p>
+    <div
+      className="cols"
+    >
+      <div
+        className="flex-card"
       >
-        <td
-          className="sm-inline"
+        <header>
+          REST
+        </header>
+        <p>
+          We provide access to InterProScan via RESTful services.
+        </p>
+        <Memo(ConnectFunction)
+          className="ext secondary"
+          href="https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=54652041"
+          target="_blank"
         >
-          <MemberSymbol
-            className="md-small"
-            type="pfam"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="https://pfam.xfam.org/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              Pfam
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          31.0
-        </td>
-        <td>
-          <p>
-            PFAM is a large collection of multiple sequence alignments and hidden Markov models covering many common protein domains. Pfam is based at EMBL-EBI, Hinxton, UK.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2017-03-08T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="pirsf"
+          REST API
+        </Memo(ConnectFunction)>
+      </div>
+      <div
+        className="flex-card"
       >
-        <td
-          className="sm-inline"
+        <header>
+          SOAP
+        </header>
+        <p>
+          We also provide access to InterProScan via SOAP-based web services.
+        </p>
+        <Memo(ConnectFunction)
+          className="ext"
+          href="https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=54652111"
+          target="_blank"
         >
-          <MemberSymbol
-            className="md-small"
-            type="pirsf"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="https://pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              PIRSF
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          3.02
-        </td>
-        <td>
-          <p>
-            PIRSF protein classification system is a network with multiple levels of sequence diversity from superfamilies to subfamilies that reflects the evolutionary relationship of full-length proteins and domains. PIRSF is based at the Protein Information Resource, Georgetown University Medical Centre, Washington DC, US.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2014-04-07T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="prints"
+          SOAP API
+        </Memo(ConnectFunction)>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h3>
+      Web based tools
+    </h3>
+    <p>
+      Web access using the sequence search box on the InterPro website (
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {},
+          }
+        }
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="prints"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://130.88.97.239/PRINTS/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              PRINTS
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          42.0
-        </td>
-        <td>
-          <p>
-            PRINTS is a compendium of protein fingerprints. A fingerprint is a group of conserved motifs used to characterise a protein family or domain. PRINTS is based at the University of Manchester, UK.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2012-06-14T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="prodom"
+        homepage
+      </Memo(ConnectFunction)>
+       or under
+       
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "sequence",
+              },
+            },
+          }
+        }
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="prodom"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://prodom.prabi.fr/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              ProDom
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          2006.1
-        </td>
-        <td>
-          <p>
-            PRODOM protein domain database consists of an automatic compilation of homologous domains. Current versions of ProDom are built using a novel procedure based on recursive PSI-BLAST searches. ProDom is based at PRABI Villeurbanne, France.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2009-04-23T12:05:33.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="profile"
+        /search/sequence
+      </Memo(ConnectFunction)>
+      ), for the analysis of 
+      <b>
+        single protein sequences
+      </b>
+       in FASTA format with a maximum length of 40,000 amino acid long.
+    </p>
+  </section>
+  <section>
+    <h3>
+      Source code
+    </h3>
+    <p>
+      You can find, clone, and download the full InterProScan source code on the Github repository, available under
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="https://github.com/ebi-pf-team/interproscan"
+        target="_blank"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="profile"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="https://prosite.expasy.org/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              PROSITE profiles
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          2018_02
-        </td>
-        <td>
-          <p />
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2018-02-28T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="prosite"
+        github.com/ebi-pf-team/interproscan
+      </Memo(ConnectFunction)>
+      .
+    </p>
+  </section>
+  <section>
+    <h3>
+      Previous releases
+    </h3>
+    <p>
+      To ensure you have the latest data and software enhancements we always recommend you download the latest version of InterProScan. However all previous releases are archived on the
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/"
+        target="_blank"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="prosite"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="https://prosite.expasy.org/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              PROSITE patterns
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          2018_02
-        </td>
-        <td>
-          <p>
-            PROSITE is a database of protein families and domains. It consists of biologically significant sites, patterns and profiles that help to reliably identify to which known protein family a new sequence belongs. PROSITE is base at the Swiss Institute of Bioinformatics (SIB), Geneva, Switzerland.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2018-02-28T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="sfld"
+        FTP site
+      </Memo(ConnectFunction)>
+      .
+    </p>
+  </section>
+  <section>
+    <h3>
+      License
+    </h3>
+    <p>
+      The InterProScan software is distributed under the open source Apache license, as are the included scanning tools (except SignalP and TMHMM). Therefore, you do not need a special license for commercial use but please cite the resource and keep the Copyright statement with your installation.
+    </p>
+  </section>
+  <section>
+    <h3>
+      Follow us & reporting bugs
+    </h3>
+    <p>
+      If you want to get updates on InterProScan, you can subscribe to the
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="http://listserver.ebi.ac.uk/mailman/listinfo/interproscan-announce"
+        target="_blank"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="sfld"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://sfld.rbvi.ucsf.edu/django/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              SFLD
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          3
-        </td>
-        <td>
-          <p>
-            SFLD (Structure-Function Linkage Database) is a hierarchical classification of enzymes that relates specific sequence-structure features to specific chemical capabilities.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2017-07-13T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="smart"
+        <span
+          className="icon icon-common"
+          data-icon=""
+        />
+         
+        interproscan-announce mailing list
+      </Memo(ConnectFunction)>
+       
+      or just follow InterPro on Twitter
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="https://twitter.com/InterProDB"
+        target="_blank"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="smart"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://smart.embl-heidelberg.de/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              SMART
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          7.1
-        </td>
-        <td>
-          <p>
-            SMART (a Simple Modular Architecture Research Tool) allows the identification and annotation of genetically mobile domains and the analysis of domain architectures. SMART is based at at EMBL, Heidelberg, Germany.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2016-02-05T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="ssf"
+        <span
+          className="icon icon-common"
+          data-icon=""
+        />
+         
+        @InterProDB
+      </Memo(ConnectFunction)>
+      .
+    </p>
+    <p>
+      If you want to submit a question or report a bug, please contact us by
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="mailto:interhelp@ebi.ac.uk"
+        target="_blank"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="ssf"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://supfam.org/"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              SUPERFAMILY
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          1.75
-        </td>
-        <td>
-          <p>
-            SUPERFAMILY is a library of profile hidden Markov models that represent all proteins of known structure. The library is based on the SCOP classification of proteins: each model corresponds to a SCOP domain and aims to represent the entire SCOP superfamily that the domain belongs to. SUPERFAMILY is based at the University of Bristol, UK.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2010-11-08T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-      <tr
-        id="tigrfams"
+        <span
+          className="icon icon-common"
+          data-icon=""
+        />
+         
+        email
+      </Memo(ConnectFunction)>
+       
+      or contact us using the
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="http://www.ebi.ac.uk/support/interproscan"
+        target="_blank"
       >
-        <td
-          className="sm-inline"
-        >
-          <MemberSymbol
-            className="md-small"
-            type="tigrfams"
-          />
-        </td>
-        <td
-          className="sm-inline"
-        >
-          <Memo(ConnectFunction)
-            className="ext"
-            disabled={false}
-            href="http://tigrfams.jcvi.org/cgi-bin/index.cgi"
-            target="_blank"
-          >
-            <span
-              className="h5"
-            >
-              TIGRFAMs
-            </span>
-          </Memo(ConnectFunction)>
-        </td>
-        <td
-          className="sm-inline"
-        >
-          15.0
-        </td>
-        <td>
-          <p>
-            TIGRFAMs is a collection of protein families, featuring curated multiple sequence alignments, hidden Markov models (HMMs) and annotation, which provides a tool for identifying functionally related proteins based on sequence homology. TIGRFAMs is based at the J. Craig Venter Institute, Rockville, MD, US.
-          </p>
-          <small
-            className="icon icon-common"
-            data-icon=""
-          >
-             
-            Released 
-            <TimeAgo
-              date={2014-09-16T00:00:00.000Z}
-              noUpdate={true}
-            />
-          </small>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+        <span
+          className="icon icon-common"
+          data-icon=""
+        />
+         
+        EBI form
+      </Memo(ConnectFunction)>
+      , providing as much information as possible so that we can recreate the problem.
+    </p>
+  </section>
+</React.Fragment>
 `;
-
-exports[`<InterProScan /> should render without data 1`] = `<Loading />`;
