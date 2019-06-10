@@ -35,6 +35,7 @@ const mapNameToClass = new Map([
   mainType: ?string,
   mainDB: ?string,
   mainAccession: ?string,
+  isSignature: boolean,
   data: {
     loading: boolean,
     payload?: ?Object,

@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Description /> should render 1`] = `
+<div
+  className="margin-bottom-large"
+  data-testid="description"
+>
+  <ParagraphWithCites
+    p="a"
+  />
+  <ParagraphWithCites
+    p="b"
+  />
+  <ParagraphWithCites
+    p="c"
+  />
+</div>
+`;

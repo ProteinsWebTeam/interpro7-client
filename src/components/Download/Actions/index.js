@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,7 +16,13 @@ import local from './style.css';
 
 const f = foundationPartial(fonts, ipro, local);
 
-class Actions extends PureComponent {
+/*:: type Props = {
+  localID: string,
+  blobURL: string,
+  downloadDelete: function
+};*/
+
+class Actions extends PureComponent /*:: <Props> */ {
   static propTypes = {
     localID: T.string.isRequired,
     blobURL: T.string,

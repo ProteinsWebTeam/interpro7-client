@@ -56,7 +56,7 @@ const getValue = (loading, payload, counter, name) => {
     payload?: ?Object,
   },
   isFirstLevel?: boolean,
-  isSignature: boolean
+  isSignature?: boolean
 }; */
 
 class BrowseTabsLink extends PureComponent /*:: <Props> */ {

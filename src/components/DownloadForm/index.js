@@ -37,7 +37,15 @@ const extractDataFromHash = hash => {
   return output;
 };
 
-class DownloadForm extends PureComponent {
+/*:: type Props = {
+  matched: string,
+  api: Object,
+  lowGraphics: boolean,
+  customLocation: Object,
+  goToCustomLocation: function
+}*/
+
+class DownloadForm extends PureComponent /*:: <Props> */ {
   static propTypes = {
     matched: T.string.isRequired,
     api: T.object.isRequired,

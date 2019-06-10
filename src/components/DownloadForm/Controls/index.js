@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -20,7 +21,26 @@ const f = foundationPartial(styles);
 export const HARD_LIMIT = 50000;
 export const SOFT_LIMIT = 10000;
 
-export class Controls extends PureComponent {
+/*:: type Props = {
+  data: {
+    payload: {
+      count: number
+     }
+   },
+  url: string,
+  fileType: string,
+  subset: boolean,
+  entityType: string,
+  download: {
+    progress: number,
+    successful: boolean,
+    blobURL: string
+  },
+  downloadURL: function,
+  downloadDelete: function,
+};*/
+
+export class Controls extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,

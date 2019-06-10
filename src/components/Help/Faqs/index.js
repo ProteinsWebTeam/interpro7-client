@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';
@@ -14,13 +15,13 @@ import local from './style.css';
 
 const f = foundationPartial(ipro, fonts, local);
 
-export default class Faqs extends PureComponent {
+export default class Faqs extends PureComponent /*:: <{}> */ {
   componentDidMount() {
     detailsTagPolyfill();
     loadWebComponent(() =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      ).then(m => m.InterproType),
     ).as('interpro-type');
   }
 

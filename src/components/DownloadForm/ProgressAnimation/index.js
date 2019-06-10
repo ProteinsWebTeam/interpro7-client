@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-magic-numbers */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
@@ -7,7 +8,14 @@ import styles from './style.css';
 
 const s = classnames.bind(styles);
 
-export default class ProgressAnimation extends PureComponent {
+/*:: type Props = {
+  download: {
+    progress: number,
+    successful: boolean
+  }
+};
+*/
+export default class ProgressAnimation extends PureComponent /*:: <Props> */ {
   static propTypes = {
     download: T.shape({
       progress: T.number,

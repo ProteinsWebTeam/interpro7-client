@@ -41,7 +41,8 @@
     "release:dev": "npm run release -- -- --mode=development",
     "release:staging": "npm run release -- -- --env.staging",
     "release:production": "npm run release",
-    "start": "npm run dev"  },
+    "start": "npm run dev"
+  },
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)",
     "Gustavo A. Salazar <gsalazar@ebi.ac.uk> (https://github.com/4ndr01d3/)"

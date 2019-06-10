@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ApiLink /> should render 1`] = `
+<section>
+  <h6>
+    Corresponding API call
+  </h6>
+  <p>
+    <Memo(ConnectFunction)
+      href="url"
+      target="_blank"
+    >
+      <code>
+        url
+      </code>
+    </Memo(ConnectFunction)>
+  </p>
+</section>
+`;

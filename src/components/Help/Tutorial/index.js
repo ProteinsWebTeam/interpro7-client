@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';
@@ -10,7 +11,7 @@ import local from './style.css';
 
 const f = foundationPartial(local, fonts, ipro);
 
-export default class Tutorial extends PureComponent /*:: <{||}> */ {
+export default class Tutorial extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <section>

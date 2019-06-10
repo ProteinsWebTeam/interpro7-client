@@ -1,4 +1,5 @@
-import React, { PureComponent } from 'react';
+// @flow
+import React from 'react';
 
 import loadable from 'higherOrder/loadable';
 
@@ -77,40 +78,38 @@ const citations = [
   },
 ];
 
-export default class Citation extends PureComponent {
-  render() {
-    return (
-      <section>
-        <h3>How to cite</h3>
-        <div className={f('row')}>
-          {citations.map(c => (
-            <div
-              key={c.resource}
-              className={f('columns', 'large-6', 'margin-bottom-large')}
-            >
-              <SchemaOrgData
-                data={{ identifier: c.doi, author: c.authors }}
-                processData={schemaProcessCitations}
-              />
-              <div className={f('cite-box')}>
-                <span
-                  className={f('cite-icon', 'icon', 'icon-conceptual')}
-                  data-icon="l"
-                />
-                <span className={f('cite-title')}>
-                  <h5>{c.resource}</h5>
-                </span>
-                <span className={f('cite-text')}>
-                  To cite {c.label}, please refer to the following publication:
-                  <br />
-                  <i>{c.authors}</i> ({c.year}). <strong>{c.title}</strong>.{' '}
-                  {c.journal}; doi: {c.doi}
-                </span>
-              </div>
-            </div>
-          ))}
+const Citation = () => (
+  <section>
+    <h3>How to cite</h3>
+    <div className={f('row')}>
+      {citations.map(c => (
+        <div
+          key={c.resource}
+          className={f('columns', 'large-6', 'margin-bottom-large')}
+        >
+          <SchemaOrgData
+            data={{ identifier: c.doi, author: c.authors }}
+            processData={schemaProcessCitations}
+          />
+          <div className={f('cite-box')}>
+            <span
+              className={f('cite-icon', 'icon', 'icon-conceptual')}
+              data-icon="l"
+            />
+            <span className={f('cite-title')}>
+              <h5>{c.resource}</h5>
+            </span>
+            <span className={f('cite-text')}>
+              To cite {c.label}, please refer to the following publication:
+              <br />
+              <i>{c.authors}</i> ({c.year}). <strong>{c.title}</strong>.{' '}
+              {c.journal}; doi: {c.doi}
+            </span>
+          </div>
         </div>
-      </section>
-    );
-  }
-}
+      ))}
+    </div>
+  </section>
+);
+
+export default Citation;

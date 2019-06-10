@@ -1,3 +1,4 @@
+// @flow
 import { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -6,7 +7,12 @@ import loadData from 'higherOrder/loadData';
 
 import { downloadSelector } from 'reducers/download';
 
-export class DataPreviewProviderWithoutData extends PureComponent {
+/*:: type Props = {
+  children: function,
+  url: string
+};*/
+
+export class DataPreviewProviderWithoutData extends PureComponent /* ::<Props> */ {
   static propTypes = {
     children: T.func.isRequired,
     url: T.string.isRequired,

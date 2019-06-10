@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';
@@ -9,7 +10,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts);
 
-class EBIFooter extends PureComponent {
+class EBIFooter extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <div id={f('global-footer')} className={f('global-footer')}>

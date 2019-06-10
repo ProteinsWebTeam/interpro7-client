@@ -19,7 +19,11 @@ const mapEndpointToName = new Map([
   ['ipScan', 'InterProScan API'],
 ]);
 
-class BrowserStatus extends PureComponent {
+/*:: type StatusProps = {
+  status: boolean
+}; */
+
+class BrowserStatus extends PureComponent /*:: <StatusProps> */ {
   static propTypes = {
     status: T.bool.isRequired,
   };
@@ -39,7 +43,14 @@ class BrowserStatus extends PureComponent {
   }
 }
 
-class ServerStatus extends PureComponent {
+/*:: type Props = {
+  browser: boolean,
+  endpoint: string,
+  status: boolean,
+  lastCheck: number,
+}; */
+
+class ServerStatus extends PureComponent /*:: <Props> */ {
   static propTypes = {
     browser: T.bool.isRequired,
     endpoint: T.string.isRequired,
@@ -72,7 +83,12 @@ class ServerStatus extends PureComponent {
   }
 }
 
-class _ServerStatuses extends PureComponent {
+/*:: type StatusesProps = {
+  statuses: Object,
+  browser: boolean,
+}; */
+
+class _ServerStatuses extends PureComponent /*:: <StatusesProps> */ {
   static propTypes = {
     statuses: T.object.isRequired,
     browser: T.bool.isRequired,

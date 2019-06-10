@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';
@@ -9,7 +10,7 @@ import local from './style.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 const f = foundationPartial(local, ebiStyles);
 
-class ElixirFooter extends PureComponent {
+class ElixirFooter extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <div className={f('elixir-ribbon')}>

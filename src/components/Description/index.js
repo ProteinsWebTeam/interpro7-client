@@ -180,6 +180,8 @@ ParagraphWithTags.propTypes = {
 /* :: type Props = {
   textBlocks: Array<string> ,
   literature?: Array,
+  accession?: string,
+  withoutIDs?: boolean
 }; */
 class Description extends PureComponent /*:: <Props> */ {
   static propTypes = {

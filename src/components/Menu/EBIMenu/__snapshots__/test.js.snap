@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EBIMenu /> should render 1`] = `
+<ul>
+  <li>
+    <Memo(ConnectFunction)
+      href="https://www.ebi.ac.uk"
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      EMBL-EBI
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      href="https://www.ebi.ac.uk/services"
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      Services
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      href="https://www.ebi.ac.uk/research"
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      Research
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      href="https://www.ebi.ac.uk/training"
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      Training
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      href="https://www.ebi.ac.uk/about"
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      About EBI
+    </Memo(ConnectFunction)>
+  </li>
+</ul>
+`;

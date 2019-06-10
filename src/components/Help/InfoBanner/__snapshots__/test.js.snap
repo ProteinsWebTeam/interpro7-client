@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<InfoBanner /> should render 1`] = `
+<div
+  className="help-banner flex-card"
+>
+  <div
+    className="card-image"
+  >
+    <div
+      className="card-tag tag-tool"
+    />
+  </div>
+  <div
+    className="card-content"
+  >
+    <div
+      className="card-description"
+    />
+  </div>
+</div>
+`;

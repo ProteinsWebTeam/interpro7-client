@@ -31,8 +31,6 @@ const MAX_DELAY_BEFORE_CHECKING_FIT = 200; // ms
 const InterProMin = InterPro.filter(item => item.name !== 'Settings');
 
 class DynamicMenu extends PureComponent /*:: <Props, State> */ {
-  /*:: _menuItems: Set<HTMLElement>; */
-  /*:: _dotdotdot: HTMLElement; */
   static propTypes = {
     width: T.number.isRequired,
   };
@@ -49,7 +47,9 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
       this.state[name] = true;
     }
 
+    /*:: _menuItems: Set<HTMLElement>; */
     this._menuItems = new Set();
+    /*:: _dotdotdotRef: HTMLElement; */
     this._dotdotdotRef = React.createRef();
   }
 

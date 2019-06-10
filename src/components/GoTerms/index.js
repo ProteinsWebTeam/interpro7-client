@@ -61,7 +61,7 @@ const GoTerms = (
     return acc;
   }, getDefaultPayload());
   let title = 'GO terms, ';
-  if (type === 'entry') {
+  if (type === 'entry' && typeof db !== 'undefined') {
     if (db.toLowerCase() === 'interpro') {
       title += 'annotated by InterPro curators';
     } else {
