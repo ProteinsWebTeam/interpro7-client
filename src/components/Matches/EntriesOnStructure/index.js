@@ -27,9 +27,7 @@ class EntriesOnStructure extends ProtVistaMatches {
 
   updateTracksWithData({ matches: data }) {
     if (data.length > 1) {
-      console.error(
-        'There are several matches and this component is using only one',
-      );
+      console.error('This component expects exactly 1 match but recieved more');
       console.table(data);
     }
     const structure = data[0].structure;
@@ -92,6 +90,7 @@ class EntriesOnStructure extends ProtVistaMatches {
               structure.structure_protein_locations ||
                 entry.structure_protein_locations,
               structure.accession,
+              structure.name.name ? structure.name.name : structure.name,
             )}
           >
             <protvista-interpro-track
@@ -111,6 +110,7 @@ class EntriesOnStructure extends ProtVistaMatches {
               entry.entry_protein_locations ||
                 structure.entry_protein_locations,
               entry.accession,
+              entry.name.name ? entry.name.name : entry.name,
             )}
           >
             <protvista-interpro-track
@@ -130,109 +130,3 @@ class EntriesOnStructure extends ProtVistaMatches {
 }
 
 export default EntriesOnStructure;
-
-// const EntriesOnStructure = ({
-//   matches,
-//   options: { baseSize = 10, offset = 30, niceRatio = 6 } = {},
-// }) => {
-//   const structure = matches[0].structure;
-//   const main = 'entry_protein_locations' in structure ? 'structure' : 'entry';
-//   const length = matches[0][main].protein_length;
-//   console.table(matches);
-//   return (
-//     <div className={style.svgContainer}>
-//       <svg
-//         className={style.svg}
-//         preserveAspectRatio="xMinYMid meet"
-//         viewBox={`0 0 ${length + offset} 60`}
-//         width={length}
-//       >
-//         <g transform={`translate(0 ${offset - baseSize / 2})`}>
-//           <rect
-//             x="0"
-//             y="0"
-//             rx={baseSize / niceRatio}
-//             width={length}
-//             height={baseSize}
-//             className={style.primary}
-//           />
-//           <text y="-0.2em" transform={`translate(${length} 0)`}>
-//             <tspan textAnchor="end">{length}</tspan>
-//           </text>
-//         </g>
-//         <g>
-//           {matches.map(
-//             ({ [main]: { entry_protein_locations: locations }, entry }) =>
-//               locations.map((location, i) =>
-//                 location.fragments.map((fragment, j) => (
-//                   <g
-//                     key={`${entry.accession}-${i}-${j}`}
-//                     transform={`translate(${fragment.start} ${offset -
-//                       baseSize / 2})`}
-//                   >
-//                     <title>{entry.accession}</title>
-//                     <rect
-//                       x="0"
-//                       y="0"
-//                       rx={baseSize / niceRatio}
-//                       width={fragment.end - fragment.start}
-//                       height={baseSize}
-//                       fill={colorHash.hex(entry.accession)}
-//                       className={style.secondary}
-//                     />
-//                     <text y="-0.2em">
-//                       <tspan textAnchor="middle">{fragment.start}</tspan>
-//                     </text>
-//                     <text
-//                       y="-0.2em"
-//                       transform={`translate(${fragment.end -
-//                         fragment.start} 0)`}
-//                     >
-//                       <tspan textAnchor="middle">{fragment.end}</tspan>
-//                     </text>
-//                   </g>
-//                 )),
-//               ),
-//           )}
-//         </g>
-//         <g>
-//           {matches.map(
-//             ({ [main]: { structure_protein_locations: locations } }) =>
-//               locations.map((location, i) =>
-//                 location.fragments.map((fragment, j) => (
-//                   <g
-//                     key={`${structure.accession}-${i}-${j}`}
-//                     transform={`translate(${fragment.start} ${offset -
-//                       baseSize})`}
-//                   >
-//                     <title>{structure.accession}</title>
-//                     <rect
-//                       x="0"
-//                       y="0"
-//                       rx={baseSize * 2 / niceRatio}
-//                       width={fragment.end - fragment.start}
-//                       height={baseSize * 2}
-//                       fill="rgba(30,10,10,0.2)"
-//                       stroke="#343"
-//                       strokeWidth="2px"
-//                       className={style.secondary}
-//                     />
-//                     <text y="-0.2em">
-//                       <tspan textAnchor="middle">{fragment.start}</tspan>
-//                     </text>
-//                     <text
-//                       y="-0.2em"
-//                       transform={`translate(${fragment.end -
-//                         fragment.start} 0)`}
-//                     >
-//                       <tspan textAnchor="middle">{fragment.end}</tspan>
-//                     </text>
-//                   </g>
-//                 )),
-//               ),
-//           )}
-//         </g>
-//       </svg>
-//     </div>
-//   );
-// };

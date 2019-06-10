@@ -77,6 +77,7 @@ class EntriesOnProtein extends ProtVistaMatches {
             title={location2html(
               entry.entry_protein_locations || protein.entry_protein_locations,
               entry.accession,
+              entry.name.name ? entry.name.name : entry.name,
             )}
           >
             <protvista-interpro-track
