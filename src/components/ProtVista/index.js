@@ -74,6 +74,7 @@ class ProtVista extends Component {
   static propTypes = {
     protein: T.object,
     data: T.array,
+    dataDB: T.object,
     colorDomainsBy: T.string,
     changeSettingsRaw: T.func,
     title: T.string,
