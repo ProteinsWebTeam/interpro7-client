@@ -263,15 +263,8 @@ class ProtVista extends Component {
     }
   }
 
-  getElementFromEntry(detail) {
-    let databases = {};
-    const { dataDB } = this.props;
-    if (!dataDB.loading && dataDB.payload) {
-      databases = dataDB.payload.databases;
-    }
-
-    const entry = detail.feature;
-    let sourceDatabase;
+  _getSourceDatabaseDisplayName = (entry, databases) => {
+    let sourceDatabase = '';
     if (Array.isArray(entry.source_database)) {
       if (entry.source_database[0] in databases) {
         sourceDatabase = databases[entry.source_database[0]].name;
@@ -285,7 +278,36 @@ class ProtVista extends Component {
         sourceDatabase = entry.source_database;
       }
     }
+    return sourceDatabase;
+  };
 
+  _getMobiDBLiteType = entry => {
+    let type = '';
+    if (entry.locations && entry.locations.length > 0) {
+      if (entry.locations[0].seq_feature) {
+        type = entry.locations[0].seq_feature;
+      } else {
+        type = 'Disorder prediction';
+      }
+    }
+    return type;
+  };
+
+  getElementFromEntry(detail) {
+    let databases = {};
+    const { dataDB } = this.props;
+    if (!dataDB.loading && dataDB.payload) {
+      databases = dataDB.payload.databases;
+    }
+
+    const entry = detail.feature;
+    const sourceDatabase = this._getSourceDatabaseDisplayName(entry, databases);
+
+    let type = entry.entry_type || entry.type || '';
+    if (sourceDatabase === 'MobiDB Lite') {
+      // Handle MobiDB Lite entries TODO change how MobiDBLt entries are stored in MySQL
+      type = this._getMobiDBLiteType(entry);
+    }
     const isResidue = detail.type === 'residue';
     const isInterPro = entry.source_database === 'interpro';
     const tagString = `<section>   
@@ -314,8 +336,7 @@ class ProtVista extends Component {
         </div>
         <div>
           ${sourceDatabase}
-        ${(entry.entry_type || entry.type || '').replace('_', ' ') ||
-          ''}</div>       
+        ${type.replace('_', ' ') || ''}</div>       
         </div>
         <p>
           <small>          
