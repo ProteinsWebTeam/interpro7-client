@@ -1,0 +1,9 @@
+@import '../../../styles/colors.css';
+
+.placeholder {
+  color: var(--colors-lightgray);
+}
+
+.isoform-panel {
+  background: var(--colors-active-form);
+}

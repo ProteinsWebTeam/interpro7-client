@@ -188,11 +188,12 @@ const getExtraURL = query =>
     },
   );
 
-export default loadData({
-  getUrl: getExtraURL('extra_features'),
-  propNamespace: 'Features',
-})(
-  loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
-    loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
-  ),
+// TODO: reactivate this once the fragments are corrected in the extra_features
+export default // loadData({
+//   getUrl: getExtraURL('extra_features'),
+//   propNamespace: 'Features',
+// })(
+loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
+  loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
+  // ),
 );

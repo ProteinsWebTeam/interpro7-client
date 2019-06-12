@@ -59,9 +59,7 @@ class DownloadForm extends PureComponent {
       set(object, e.target.dataset.key, !!e.target.dataset.value);
       if (!e.target.dataset.value) {
         for (const input of this._ref.current.querySelectorAll(
-          `input[data-reset="${e.target.dataset.reset}"], input[name="${
-            e.target.dataset.key
-          }"], select[name="${e.target.dataset.key}"]`,
+          `input[data-reset="${e.target.dataset.reset}"], input[name="${e.target.dataset.key}"], select[name="${e.target.dataset.key}"]`,
         )) {
           input.value = '';
         }
