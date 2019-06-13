@@ -9,5 +9,5 @@ The other elements included when creating the store are the reducer function whi
 
 These are the different parts of our source code that are directly related with the usage of react-redux:
 * Reducers: [/src/reducers](/src/reducers)
-* Action Types: [/src/actions/types](/src/actions/types)
+* Action Types: [/src/actions/types/index.js](/src/actions/types/index.js)
 * Action Creators: [/src/actions/creators](/src/actions/creators)
