@@ -18,3 +18,4 @@ The 1-level-depth object in our app store looks like this:
 ```
 Each of the folders here is incharge of a section of the reducer and it gets aggreageted in the index via `combineReducers()`.
 
+All the action types used to create the reducers are defined in [/src/actions/types/index.js](/src/actions/types/index.js)
