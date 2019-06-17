@@ -50,7 +50,7 @@
   }
 
   &.one-column {
-    column-count: 1;
+    column-count: auto;
     margin: 0;
   }
 }
