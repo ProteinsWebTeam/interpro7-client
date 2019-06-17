@@ -5,7 +5,9 @@ import { partition } from 'lodash-es';
 import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
-import Literature from 'components/Entry/Literature';
+import Literature, {
+  getLiteratureIdsFromDescription,
+} from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
 import Integration from 'components/Entry/Integration';
 import ContributingSignatures from 'components/Entry/ContributingSignatures';
@@ -26,17 +28,6 @@ import local from './style.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, theme, ipro, local);
 
 const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
-
-const description2IDs = description =>
-  (description || []).reduce(
-    (acc, part) => [
-      ...acc,
-      ...(part.match(/"(PUB\d+)"/gi) || []).map(t =>
-        t.replace(/(^")|("$)/g, ''),
-      ),
-    ],
-    [],
-  );
 
 const MemberDBSubtitle = ({ metadata, dbInfo }) => {
   if (
@@ -183,10 +174,20 @@ OtherSections.propTypes = {
   }),
 };
 
-const OverlappingEntries = ({ metadata, overlaps }) => {
+const OverlappingEntries = ({ metadata }) => {
   const [showAllOverlappingEntries, setShowAllOverlappingEntries] = useState(
     false,
   );
+  const overlaps = metadata.overlaps_with;
+  if (!overlaps || Object.keys(overlaps).length === 0) return null;
+  if (overlaps) {
+    overlaps.sort((a, b) => {
+      if (a.type > b.type) return 1;
+      if (a.type < b.type) return -1;
+      return a.accession > b.accession ? 1 : -1;
+    });
+  }
+
   let _overlaps = overlaps;
   if (!showAllOverlappingEntries)
     _overlaps = metadata.overlaps_with.slice(
@@ -318,21 +319,13 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
       dbInfo,
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
-    const citations = description2IDs(metadata.description);
-    const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
+    const citations = getLiteratureIdsFromDescription(metadata.description);
     const [included, extra] = partition(
       Object.entries(metadata.literature || {}),
       ([id]) => citations.includes(id),
     );
+    const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
     included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
-    const overlaps = metadata.overlaps_with;
-    if (metadata.overlaps_with) {
-      metadata.overlaps_with.sort((a, b) => {
-        if (a.type > b.type) return 1;
-        if (a.type < b.type) return -1;
-        return a.accession > b.accession ? 1 : -1;
-      });
-    }
     return (
       <div className={f('sections')}>
         <section>
@@ -348,9 +341,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                     <i className={f('shortname')}>{metadata.name.short}</i>
                   </p>
                 )}
-              {overlaps && Object.keys(overlaps).length ? (
-                <OverlappingEntries metadata={metadata} overlaps={overlaps} />
-              ) : null}
+              <OverlappingEntries metadata={metadata} />
               <Hierarchy
                 hierarchy={metadata.hierarchy}
                 accession={metadata.accession}

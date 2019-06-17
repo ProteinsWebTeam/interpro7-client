@@ -18,6 +18,17 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(refStyles, ebiStyles);
 
+export const getLiteratureIdsFromDescription = description =>
+  (description || []).reduce(
+    (acc, part) => [
+      ...acc,
+      ...(part.match(/\[cite:(PUB\d+)\]/gi) || []).map(t =>
+        t.replace(/(^\[cite:)|(]$)/g, ''),
+      ),
+    ],
+    [],
+  );
+
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
