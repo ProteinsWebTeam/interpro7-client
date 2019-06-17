@@ -6,6 +6,8 @@ import dropCacheIfVersionMismatch from './utils/drop-cache-if-version-mismatch';
 import config, { pkg } from 'config';
 
 const SUCCESS_STATUS = 200;
+const TIMEOUT_STATUS = 408;
+const A_BIT = 2000;
 
 const handleProgress = async (
   response /*: Response */,
@@ -26,6 +28,7 @@ const handleProgress = async (
     onProgress(received / total);
   }
 };
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
   const { useCache = true, ...restOfOptions } = options;
@@ -43,6 +46,10 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
   }
 
   return fetch(url, restOfOptions).then(response => {
+    if (response.status === TIMEOUT_STATUS) {
+      console.log(response.status);
+      return wait(A_BIT).then(() => response);
+    }
     const shouldCache =
       config.cache.enabled && useCache && response.status === SUCCESS_STATUS;
     if (shouldCache && response.clone) {

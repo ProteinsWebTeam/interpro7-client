@@ -399,6 +399,7 @@ class List extends PureComponent {
             notFound={notFound}
             withTree={true}
             withGrid={true}
+            databases={databases}
           >
             <Exporter>
               <ul>
