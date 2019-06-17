@@ -9,6 +9,7 @@ import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Footer from 'components/Table/Footer';
 import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
+import DynamicTooltip from 'components/SimpleCommonComponents/DynamicTooltip';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -21,6 +22,7 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from './style.css';
 import protvista from 'components/ProtVista/style.css';
+import { getUrlForMeta } from '../../../higherOrder/loadData/defaults';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, protvista);
 
@@ -115,15 +117,17 @@ export class IDAProtVista extends ProtVistaMatches {
   static propTypes = {
     matches: T.arrayOf(T.object).isRequired,
   };
+
   updateTracksWithData(props) {
     const { matches } = props;
 
     for (const domain of matches) {
       const isIPR = domain.accession.toLowerCase().startsWith('ipr');
+      const sourceDatabase = isIPR ? 'interpro' : 'pfam';
       const tmp = [
         {
           name: domain.accession,
-          source_database: isIPR ? 'InterPro' : 'pfam',
+          source_database: sourceDatabase,
           color: isIPR
             ? getTrackColor(
                 { accession: domain.accession },
@@ -134,7 +138,6 @@ export class IDAProtVista extends ProtVistaMatches {
           ...domain,
         },
       ];
-
       this.web_tracks[domain.accession].data = tmp;
     }
   }
@@ -145,15 +148,25 @@ export class IDAProtVista extends ProtVistaMatches {
         {matches.map(d => (
           <div key={d.accession} className={f('track-row')}>
             <div className={f('track-component')}>
-              <protvista-interpro-track
-                length={length}
-                displaystart="1"
-                displayend={length}
-                id={`track_${d.accession}`}
-                ref={e => (this.web_tracks[d.accession] = e)}
-                shape="roundRectangle"
-                expanded
-              />
+              <DynamicTooltip
+                type="entry"
+                source={
+                  d.accession.toLowerCase().startsWith('ipr')
+                    ? 'interpro'
+                    : 'pfam'
+                }
+                accession={`${d.accession}`}
+              >
+                <protvista-interpro-track
+                  length={length}
+                  displaystart="1"
+                  displayend={length}
+                  id={`track_${d.accession}`}
+                  ref={e => (this.web_tracks[d.accession] = e)}
+                  shape="roundRectangle"
+                  expanded
+                />
+              </DynamicTooltip>
             </div>
             <div className={f('track-accession')}>
               <Link
@@ -278,6 +291,12 @@ const mapStateToProps = createSelector(
 );
 
 export const DomainArchitecturesWithData = _DomainArchitecturesWithData;
-export default loadData({ getUrl: getUrlFor, mapStateToProps })(
-  DomainArchitecturesWithData,
+export default loadData({
+  getUrl: getUrlForMeta,
+  propNamespace: 'DB',
+})(
+  loadData({
+    getUrl: getUrlFor,
+    mapStateToProps,
+  })(DomainArchitecturesWithData),
 );
