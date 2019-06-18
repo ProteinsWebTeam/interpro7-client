@@ -15,7 +15,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
-const DownloadTable = (
+export const DownloadTable = (
   {
     data: { loading, payload },
   } /*: {data: {loading: boolean, payload: ?Object}}*/,

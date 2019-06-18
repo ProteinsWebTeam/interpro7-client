@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BrowseTabsWithoutData /> should render 1`] = `
+<ul
+  className="tabs pp-browse-tabs"
+>
+  <li
+    className="tabs-title"
+  >
+    <BrowseTabsLink
+      data={
+        Object {
+          "loading": false,
+          "payload": null,
+        }
+      }
+      isFirstLevel={true}
+      name="Entry"
+      to={[Function]}
+    />
+  </li>
+  <li
+    className="tabs-title"
+  >
+    <BrowseTabsLink
+      data={
+        Object {
+          "loading": false,
+          "payload": null,
+        }
+      }
+      isFirstLevel={true}
+      name="Protein"
+      to={[Function]}
+    />
+  </li>
+  <li
+    className="tabs-title"
+  >
+    <BrowseTabsLink
+      data={
+        Object {
+          "loading": false,
+          "payload": null,
+        }
+      }
+      isFirstLevel={true}
+      name="Structure"
+      to={[Function]}
+    />
+  </li>
+  <li
+    className="tabs-title"
+  >
+    <BrowseTabsLink
+      data={
+        Object {
+          "loading": false,
+          "payload": null,
+        }
+      }
+      isFirstLevel={true}
+      name="Taxonomy"
+      to={[Function]}
+    />
+  </li>
+  <li
+    className="tabs-title"
+  >
+    <BrowseTabsLink
+      data={
+        Object {
+          "loading": false,
+          "payload": null,
+        }
+      }
+      isFirstLevel={true}
+      name="Proteome"
+      to={[Function]}
+    />
+  </li>
+  <li
+    className="tabs-title"
+  >
+    <BrowseTabsLink
+      data={
+        Object {
+          "loading": false,
+          "payload": null,
+        }
+      }
+      isFirstLevel={true}
+      name="Set"
+      to={[Function]}
+    />
+  </li>
+</ul>
+`;

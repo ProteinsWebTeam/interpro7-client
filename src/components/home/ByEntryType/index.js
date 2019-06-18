@@ -32,7 +32,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
   },
 }; */
 
-class ByEntryType extends PureComponent /*:: <Props> */ {
+export class ByEntryType extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,

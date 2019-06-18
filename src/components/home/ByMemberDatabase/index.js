@@ -38,7 +38,7 @@ import { schemaProcessDataForDB } from 'schema_org/processors';
   },
 }; */
 
-class ByMemberDatabase extends PureComponent /*:: <Props> */ {
+export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,

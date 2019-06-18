@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CurrentVersion /> Current Version should show the proper version 1`] = `
+<div
+  className="version-block"
+>
+  <Memo(VersionBadge)
+    version="74.0"
+  />
+  <div
+    className="version-info"
+  >
+    <header>
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "other": Array [
+                "release_notes",
+              ],
+            },
+          }
+        }
+      >
+        InterPro 
+        74.0
+      </Memo(ConnectFunction)>
+    </header>
+    <div
+      className="version-date"
+    >
+      May 9, 2019
+    </div>
+  </div>
+</div>
+`;

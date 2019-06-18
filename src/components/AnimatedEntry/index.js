@@ -17,7 +17,7 @@ const DEFAULT_DURATION = 250;
   dispatch: function,
 } */
 
-class AnimatedEntry extends PureComponent /*:: <Props> */ {
+export class AnimatedEntry extends PureComponent /*:: <Props> */ {
   /*::
     _ref: { current: null | React$ElementRef<string> };
     _animations: ?Array<any>;

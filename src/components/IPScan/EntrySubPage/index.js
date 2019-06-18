@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 // import { connect } from 'react-redux';
@@ -16,7 +17,7 @@ import { iproscan2urlDB } from 'utils/url-patterns';
 /*:: type Props = {
   data: Object,
   dataBase: Object,
-  entryDB: entry,
+  entryDB: string,
 }*/
 
 const flatMatchesFromIPScanPayload = function*(ipScanMatches, proteinLength) {
@@ -126,9 +127,12 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToProps = createSelector(descriptionSelector, description => ({
-  entryDB: description.entry.db,
-}));
+const mapStateToProps = createSelector(
+  descriptionSelector,
+  description => ({
+    entryDB: description.entry.db,
+  }),
+);
 
 export default loadData({
   getUrl: getUrlForMeta,

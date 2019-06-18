@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SearchByIDA /> should render 1`] = `
+<div
+  className="row"
+>
+  <div
+    className="large-12 columns margin-bottom-medium"
+  >
+    <div
+      className="secondary callout border margin-bottom-none"
+    >
+      <div
+        className="row"
+      >
+        <div
+          className="large-12 columns search-input"
+        >
+          <h3
+            className="light"
+          >
+            Search by choosing the InterPro entries in your architecture
+          </h3>
+          <div
+            className="ida-workspace"
+          >
+            <PanelIDA
+              changeEntryHandler={[Function]}
+              changeIgnoreHandler={[Function]}
+              entryList={Array []}
+              ignoreList={Array []}
+              isOrdered={false}
+              removeEntryHandler={[Function]}
+              removeIgnoreHandler={[Function]}
+            />
+          </div>
+          <div
+            className="ida-controls"
+          >
+            <DomainButton
+              fill="#75bf40"
+              label="➕"
+              onClick={[Function]}
+              stroke="#75bf40"
+            />
+            <DomainButton
+              fill="#bf4540"
+              label="✖️️"
+              onClick={[Function]}
+              stroke="#bf4540"
+            />
+            <label
+              htmlFor="ordered"
+            >
+              <input
+                checked={false}
+                id="ordered"
+                onChange={[Function]}
+                type="checkbox"
+              />
+               
+              Order sensitivity
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

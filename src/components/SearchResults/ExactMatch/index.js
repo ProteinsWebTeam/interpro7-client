@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -53,7 +52,7 @@ const XREFS = new Map([
   },
   searchValue: ?string,
 } */
-class ExactMatch extends PureComponent /*:: <SMProps> */ {
+export class ExactMatch extends PureComponent /*:: <SMProps> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,

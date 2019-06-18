@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SearchResults /> should render 1`] = `
+<Memo(ConnectFunction)>
+  <LoadableComponent
+    data={
+      Object {
+        "description": "Text matches found in InterPro database",
+        "name": "Search Results",
+      }
+    }
+    processData={[Function]}
+  />
+  <Memo(ConnectFunction)
+    searchValue="IPR020422"
+  />
+  <Table
+    contentType="entry"
+    dataTable={
+      Array [
+        Object {
+          "fields": Object {
+            "description": Array [
+              "Description",
+            ],
+            "name": Array [
+              "Dual specificity protein phosphatase domain",
+            ],
+            "source_database": Array [],
+          },
+          "id": "IPR020422",
+          "source": "interpro",
+        },
+      ]
+    }
+    isStale={false}
+    loading={false}
+  >
+    <Memo(ConnectFunction)>
+      <Memo(ConnectFunction)
+        disabled={true}
+        download="SearchResults-IPR020422.json"
+        target="_blank"
+      >
+        JSON
+      </Memo(ConnectFunction)>
+    </Memo(ConnectFunction)>
+    <Column
+      dataKey="id"
+      renderer={[Function]}
+    >
+      Accession
+    </Column>
+    <Column
+      dataKey="id"
+      defaultKey="name"
+      headerStyle={
+        Object {
+          "width": "28%",
+        }
+      }
+      renderer={[Function]}
+    >
+      Name
+    </Column>
+    <Column
+      dataKey="fields.source_database"
+    >
+      Source database
+    </Column>
+    <Column
+      cellStyle={
+        Object {
+          "textAlign": "justify",
+        }
+      }
+      dataKey="fields.description"
+      renderer={[Function]}
+    >
+      Description
+    </Column>
+    <Memo(ConnectFunction) />
+  </Table>
+</Memo(ConnectFunction)>
+`;

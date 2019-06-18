@@ -14,7 +14,19 @@ import local from './style.css';
 
 const f = foundationPartial(local);
 
-class AdvancedOption extends PureComponent {
+/*:: type Props = {
+  name: string,
+  value: string,
+  children: string,
+  title?: string,
+  defaultChecked: boolean
+}*/
+
+/*:: type State = {
+  checked: boolean
+}*/
+
+class AdvancedOption extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     name: T.string.isRequired,
     value: T.string.isRequired,
@@ -116,8 +128,18 @@ const toggleAll = (toggle, node) => {
     checkbox.checked = toggle;
   }
 };
+/*:: type AdvancedOptionsProps = {
+  data: {
+    loading: boolean,
+    payload: Object,
+    ok: boolean
+  }
+}*/
 
-class AdvancedOptions extends PureComponent {
+export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> */ {
+  /* ::
+    _ref: { current: null | React$ElementRef<'fieldset'> };
+  */
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

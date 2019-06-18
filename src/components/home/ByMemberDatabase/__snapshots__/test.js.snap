@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ByMemberDatabase /> Member Databases types 1`] = `
+<div
+  className="md-list"
+  data-testid="by-member-database-box"
+>
+  <Memo(ConnectFunction)
+    className="row"
+    element="div"
+  >
+    <div
+      className="column text-center"
+    >
+      <LoadableComponent
+        data={
+          Object {
+            "location": Location {
+              "assign": [Function],
+              "hash": "",
+              "host": "localhost:8080",
+              "hostname": "localhost",
+              "href": "http://localhost:8080/interpro/",
+              "origin": "http://localhost:8080",
+              "pathname": "/interpro/",
+              "port": "8080",
+              "protocol": "http:",
+              "reload": [Function],
+              "replace": [Function],
+              "search": "",
+              "toString": [Function],
+            },
+            "name": "Pfam",
+            "releaseDate": "2018-10-02T00:00:00Z",
+            "version": "32.0",
+          }
+        }
+        processData={[Function]}
+      />
+      <Memo(ConnectFunction)
+        className="block"
+        data-testid="member-database-pfam"
+        to={
+          Object {
+            "description": Object {
+              "entry": Object {
+                "db": "pfam",
+              },
+              "main": Object {
+                "key": "entry",
+              },
+            },
+          }
+        }
+      >
+        <MemberSymbol
+          type="pfam"
+        />
+        <span
+          className="card-title"
+        >
+          Pfam
+           
+        </span>
+        <Tooltip>
+          <span
+            className="small icon icon-common"
+            data-icon=""
+          />
+        </Tooltip>
+        <br />
+        <small>
+          32.0
+        </small>
+        <p
+          className="margin-bottom-medium"
+        >
+          <span
+            className="count visible"
+          >
+            <Memo(ConnectFunction)
+              abbr={true}
+            >
+              17860
+            </Memo(ConnectFunction)>
+             entries
+          </span>
+        </p>
+      </Memo(ConnectFunction)>
+    </div>
+  </Memo(ConnectFunction)>
+  <Memo(ConnectFunction)
+    className="button margin-bottom-none margin-top-large"
+    to={
+      Object {
+        "description": Object {
+          "entry": Object {
+            "db": "InterPro",
+          },
+          "main": Object {
+            "key": "entry",
+          },
+        },
+      }
+    }
+  >
+    View all entries
+  </Memo(ConnectFunction)>
+</div>
+`;

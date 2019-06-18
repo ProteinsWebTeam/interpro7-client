@@ -22,7 +22,14 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
 
-class Species extends PureComponent /*:: <SpeciesProps> */ {
+/*:: type SpeciesProps = {
+  species: Object,
+  entries: number | string,
+  proteins: number | string,
+  loading: boolean
+}*/
+
+export class Species extends PureComponent /*:: <SpeciesProps> */ {
   static propTypes = {
     species: T.object.isRequired,
     entries: T.oneOfType([T.number, T.string]),
@@ -127,7 +134,7 @@ class Species extends PureComponent /*:: <SpeciesProps> */ {
   }
 }; */
 
-class BySpecies extends PureComponent /*:: <Props> */ {
+export class BySpecies extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.object,
     dataProtein: T.object,

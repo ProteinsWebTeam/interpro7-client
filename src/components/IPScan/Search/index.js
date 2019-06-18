@@ -46,7 +46,12 @@ const strategy = re => (block, cb) => {
 };
 
 const classedSpan = className => {
-  class Span extends PureComponent {
+  /*:: type ScanProps = {
+      offsetkey: string,
+      children: any
+  }*/
+
+  class Span extends PureComponent /*:: <Props> */ {
     static propTypes = {
       offsetKey: T.string.isRequired,
       children: T.any,
@@ -114,7 +119,14 @@ const compositeDecorator = new CompositeDecorator([
   },
 ]);
 
-class IPScanSearch extends PureComponent {
+/*:: type AdvancedOptionsProps = {
+  createJob: function,
+  goToCustomLocation: function,
+  ipScan: Object,
+  value: string,
+}*/
+
+class IPScanSearch extends PureComponent /*:: <AdvancedOptionsProps> */ {
   static propTypes = {
     createJob: T.func.isRequired,
     goToCustomLocation: T.func.isRequired,

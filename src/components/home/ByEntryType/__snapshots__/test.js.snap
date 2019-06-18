@@ -1,0 +1,516 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ByEntryType /> Entry types 1`] = `
+<div
+  className="entry-type"
+  data-testid="by-entry-type-box"
+>
+  <Memo(ConnectFunction)
+    className="row"
+    element="div"
+  >
+    <Memo(ConnectFunction)
+      className="columns medium-4 large-4 text-center block"
+      data-testid="entry-domain"
+      to={
+        Object {
+          "description": Object {
+            "entry": Object {
+              "db": "InterPro",
+            },
+            "main": Object {
+              "key": "entry",
+            },
+          },
+          "search": Object {
+            "type": "domain",
+          },
+        }
+      }
+    >
+      <Tooltip
+        title="
+      Domains are distinct functional, structural or sequence units that may
+      exist in a variety of biological contexts. A match to an InterPro entry of
+      this type indicates the presence of a domain.
+    "
+      >
+        <interpro-type
+          aria-label="Entry type"
+          dimension="4em"
+          style={
+            Object {
+              "display": "block",
+              "paddingTop": "1rem",
+            }
+          }
+          type="Domain"
+        >
+          <span
+            className="icon-type icon-domain"
+          >
+            D
+          </span>
+        </interpro-type>
+        <span
+          className="card-title"
+        >
+          Domain
+        </span>
+      </Tooltip>
+      <p>
+        <span
+          className="count visible"
+        >
+          <Memo(ConnectFunction)
+            abbr={true}
+          >
+            10637
+          </Memo(ConnectFunction)>
+           entries
+        </span>
+      </p>
+    </Memo(ConnectFunction)>
+    <Memo(ConnectFunction)
+      className="columns medium-4 large-4 text-center block"
+      data-testid="entry-family"
+      to={
+        Object {
+          "description": Object {
+            "entry": Object {
+              "db": "InterPro",
+            },
+            "main": Object {
+              "key": "entry",
+            },
+          },
+          "search": Object {
+            "type": "family",
+          },
+        }
+      }
+    >
+      <Tooltip
+        title="
+      A protein family is a group of proteins that share a common evolutionary
+      origin reflected by their related functions, similarities in sequence, or
+      similar primary, secondary or tertiary structure. A match to an InterPro
+      entry of this type indicates membership of a protein family.
+    "
+      >
+        <interpro-type
+          aria-label="Entry type"
+          dimension="4em"
+          style={
+            Object {
+              "display": "block",
+              "paddingTop": "1rem",
+            }
+          }
+          type="Family"
+        >
+          <span
+            className="icon-type icon-family"
+          >
+            F
+          </span>
+        </interpro-type>
+        <span
+          className="card-title"
+        >
+          Family
+        </span>
+      </Tooltip>
+      <p>
+        <span
+          className="count visible"
+        >
+          <Memo(ConnectFunction)
+            abbr={true}
+          >
+            21769
+          </Memo(ConnectFunction)>
+           entries
+        </span>
+      </p>
+    </Memo(ConnectFunction)>
+    <Memo(ConnectFunction)
+      className="columns medium-4 large-4 text-center block"
+      data-testid="entry-homologous_superfamily"
+      to={
+        Object {
+          "description": Object {
+            "entry": Object {
+              "db": "InterPro",
+            },
+            "main": Object {
+              "key": "entry",
+            },
+          },
+          "search": Object {
+            "type": "homologous_superfamily",
+          },
+        }
+      }
+    >
+      <Tooltip
+        title="A homologous superfamily is a group of proteins that share a common evolutionary origin, reflected by similarity in their structure. Since superfamily members often display very low similarity at the sequence level, this type of InterPro entry is usually based on a collection of underlying hidden Markov models, rather than a single signature."
+      >
+        <interpro-type
+          aria-label="Entry type"
+          dimension="4em"
+          style={
+            Object {
+              "display": "block",
+              "paddingTop": "1rem",
+            }
+          }
+          type="Homologous Superfamily"
+        >
+          <span
+            className="icon-type icon-hh"
+          >
+            H
+          </span>
+        </interpro-type>
+        <span
+          className="card-title"
+        >
+          Homologous Superfamily
+        </span>
+      </Tooltip>
+      <p>
+        <span
+          className="count visible"
+        >
+          <Memo(ConnectFunction)
+            abbr={true}
+          >
+            3078
+          </Memo(ConnectFunction)>
+           entries
+        </span>
+      </p>
+    </Memo(ConnectFunction)>
+    <Memo(ConnectFunction)
+      className="columns medium-4 large-4 text-center block"
+      data-testid="entry-repeat"
+      to={
+        Object {
+          "description": Object {
+            "entry": Object {
+              "db": "InterPro",
+            },
+            "main": Object {
+              "key": "entry",
+            },
+          },
+          "search": Object {
+            "type": "repeat",
+          },
+        }
+      }
+    >
+      <Tooltip
+        title="
+      It identifies a short sequence that is typically repeated within a
+      protein.
+    "
+      >
+        <interpro-type
+          aria-label="Entry type"
+          dimension="4em"
+          style={
+            Object {
+              "display": "block",
+              "paddingTop": "1rem",
+            }
+          }
+          type="Repeat"
+        >
+          <span
+            className="icon-type icon-repeat"
+          >
+            R
+          </span>
+        </interpro-type>
+        <span
+          className="card-title"
+        >
+          Repeat
+        </span>
+      </Tooltip>
+      <p>
+        <span
+          className="count visible"
+        >
+          <Memo(ConnectFunction)
+            abbr={true}
+          >
+            316
+          </Memo(ConnectFunction)>
+           entries
+        </span>
+      </p>
+    </Memo(ConnectFunction)>
+    <Memo(ConnectFunction)
+      className="columns medium-4 large-4 text-center block"
+      data-testid="entry-conserved_site"
+      to={
+        Object {
+          "description": Object {
+            "entry": Object {
+              "db": "InterPro",
+            },
+            "main": Object {
+              "key": "entry",
+            },
+          },
+          "search": Object {
+            "type": "conserved_site",
+          },
+        }
+      }
+    >
+      <Tooltip
+        title="
+      A short sequence that contains one or more conserved residues.
+    "
+      >
+        <interpro-type
+          aria-label="Entry type"
+          dimension="4em"
+          style={
+            Object {
+              "display": "block",
+              "paddingTop": "1rem",
+            }
+          }
+          type="Conserved Site"
+        >
+          <span
+            className="icon-type icon-site"
+          >
+            S
+          </span>
+        </interpro-type>
+        <span
+          className="card-title"
+        >
+          Conserved Site
+        </span>
+      </Tooltip>
+      <p>
+        <span
+          className="count visible"
+        >
+          <Memo(ConnectFunction)
+            abbr={true}
+          >
+            688
+          </Memo(ConnectFunction)>
+           entries
+        </span>
+      </p>
+    </Memo(ConnectFunction)>
+    <Memo(ConnectFunction)
+      className="columns medium-4 large-4 text-center block"
+      data-testid="entry-active_site"
+      to={
+        Object {
+          "description": Object {
+            "entry": Object {
+              "db": "InterPro",
+            },
+            "main": Object {
+              "key": "entry",
+            },
+          },
+          "search": Object {
+            "type": "active_site",
+          },
+        }
+      }
+    >
+      <Tooltip
+        title="
+      A short sequence that contains one or more conserved residues.
+    "
+      >
+        <interpro-type
+          aria-label="Entry type"
+          dimension="4em"
+          style={
+            Object {
+              "display": "block",
+              "paddingTop": "1rem",
+            }
+          }
+          type="Active Site"
+        >
+          <span
+            className="icon-type icon-site"
+          >
+            S
+          </span>
+        </interpro-type>
+        <span
+          className="card-title"
+        >
+          Active Site
+        </span>
+      </Tooltip>
+      <p>
+        <span
+          className="count visible"
+        >
+          <Memo(ConnectFunction)
+            abbr={true}
+          >
+            132
+          </Memo(ConnectFunction)>
+           entries
+        </span>
+      </p>
+    </Memo(ConnectFunction)>
+    <Memo(ConnectFunction)
+      className="columns medium-4 large-4 text-center block"
+      data-testid="entry-binding_site"
+      to={
+        Object {
+          "description": Object {
+            "entry": Object {
+              "db": "InterPro",
+            },
+            "main": Object {
+              "key": "entry",
+            },
+          },
+          "search": Object {
+            "type": "binding_site",
+          },
+        }
+      }
+    >
+      <Tooltip
+        title="
+      A short sequence that contains one or more conserved residues.
+    "
+      >
+        <interpro-type
+          aria-label="Entry type"
+          dimension="4em"
+          style={
+            Object {
+              "display": "block",
+              "paddingTop": "1rem",
+            }
+          }
+          type="Binding Site"
+        >
+          <span
+            className="icon-type icon-site"
+          >
+            S
+          </span>
+        </interpro-type>
+        <span
+          className="card-title"
+        >
+          Binding Site
+        </span>
+      </Tooltip>
+      <p>
+        <span
+          className="count visible"
+        >
+          <Memo(ConnectFunction)
+            abbr={true}
+          >
+            76
+          </Memo(ConnectFunction)>
+           entries
+        </span>
+      </p>
+    </Memo(ConnectFunction)>
+    <Memo(ConnectFunction)
+      className="columns medium-4 large-4 text-center block"
+      data-testid="entry-ptm"
+      to={
+        Object {
+          "description": Object {
+            "entry": Object {
+              "db": "InterPro",
+            },
+            "main": Object {
+              "key": "entry",
+            },
+          },
+          "search": Object {
+            "type": "ptm",
+          },
+        }
+      }
+    >
+      <Tooltip
+        title="
+      A short sequence that contains one or more conserved residues.
+      Post-translational modification site.
+    "
+      >
+        <interpro-type
+          aria-label="Entry type"
+          dimension="4em"
+          style={
+            Object {
+              "display": "block",
+              "paddingTop": "1rem",
+            }
+          }
+          type="PTM"
+        >
+          <span
+            className="icon-type icon-site"
+          >
+            S
+          </span>
+        </interpro-type>
+        <span
+          className="card-title"
+        >
+          PTM
+        </span>
+      </Tooltip>
+      <p>
+        <span
+          className="count visible"
+        >
+          <Memo(ConnectFunction)
+            abbr={true}
+          >
+            17
+          </Memo(ConnectFunction)>
+           entries
+        </span>
+      </p>
+    </Memo(ConnectFunction)>
+  </Memo(ConnectFunction)>
+  <Memo(ConnectFunction)
+    className="button margin-bottom-none margin-top-large"
+    to={
+      Object {
+        "description": Object {
+          "entry": Object {
+            "db": "InterPro",
+          },
+          "main": Object {
+            "key": "entry",
+          },
+        },
+      }
+    }
+  >
+    View all entries
+  </Memo(ConnectFunction)>
+</div>
+`;

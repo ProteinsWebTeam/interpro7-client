@@ -42,7 +42,17 @@ const GoToNewSearch = () => (
   </Link>
 );
 
-class IPScanStatus extends PureComponent {
+/*:: type Props = {
+  jobs: Array<Object>,
+  search: {
+    page: number,
+    page_size: number
+   },
+  defaultPageSize: number,
+  updateJobStatus: function
+}*/
+
+class IPScanStatus extends PureComponent /*:: <Props> */ {
   static propTypes = {
     jobs: T.arrayOf(T.object).isRequired,
     search: T.shape({

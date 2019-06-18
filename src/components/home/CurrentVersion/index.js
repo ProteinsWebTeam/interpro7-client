@@ -14,10 +14,10 @@ import Link from 'components/generic/Link';
 
 const f = foundationPartial(local);
 
-const CurrentVersion = ({ data }) => {
+export const CurrentVersion = ({ data }) => {
   if (!data) return <Loading />;
-  const { headers, loading, payload } = data;
-  if (loading || !headers || !payload) return <Loading />;
+  const { loading, payload } = data;
+  if (loading || !payload) return <Loading />;
   const current = Object.entries(payload).sort(([_, dateA], [__, dateB]) =>
     new Date(dateA).getTime() > new Date(dateB).getTime() ? -1 : 1,
   )[0][0];

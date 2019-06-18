@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SearchByText /> should render 1`] = `
+<div
+  className="row"
+>
+  <LoadableComponent
+    data={
+      Object {
+        "description": "Search families, domains, proteins, keywords or GO terms",
+        "name": "Search By Text",
+      }
+    }
+    processData={[Function]}
+  />
+  <div
+    className="large-12 columns margin-bottom-medium"
+  >
+    <form
+      data-category="navigation"
+      onSubmit={[Function]}
+    >
+      <div
+        className="secondary callout border margin-bottom-none"
+      >
+        <div
+          className="row"
+        >
+          <div
+            className="large-12 columns search-input"
+          >
+            <h3
+              className="light"
+            >
+              Search families, domains, proteins, keywords or GO terms
+            </h3>
+            <Memo(ConnectFunction)
+              inputRef={[Function]}
+            />
+          </div>
+        </div>
+        <div
+          className="row"
+        >
+          <div
+            className="medium-8 columns neutral"
+            style={
+              Object {
+                "float": "none",
+              }
+            }
+          >
+            <span>
+               
+              e.g.
+              <Example>
+                IPR020422
+              </Example>
+              ,
+              <Example>
+                kinase
+              </Example>
+              ,
+              <Example>
+                O00167
+              </Example>
+              ,
+              <Example>
+                PF02932
+              </Example>
+              ,
+              <Example>
+                GO:0007165
+              </Example>
+              ,
+              <Example>
+                1t2v
+              </Example>
+              ,
+              <Example>
+                UP000005640
+              </Example>
+            </span>
+          </div>
+          <div
+            className="medium-4 columns show-for-medium search-adv"
+          >
+            <span>
+              Powered by
+               
+              <Memo(ConnectFunction)
+                className="neutral ext"
+                href="https://www.ebi.ac.uk/ebisearch/"
+                target="_blank"
+              >
+                EBI search
+              </Memo(ConnectFunction)>
+            </span>
+          </div>
+        </div>
+        <div
+          className="row action-row"
+        >
+          <div
+            className="large-9 columns stacked-for-small margin-bottom-none button-group"
+          >
+            <button
+              className="button"
+              type="submit"
+            >
+              Search
+            </button>
+            <Memo(ConnectFunction)
+              className="secondary hollow button"
+              to={
+                Object {
+                  "description": Object {
+                    "main": Object {
+                      "key": "search",
+                    },
+                    "search": Object {
+                      "type": "text",
+                    },
+                  },
+                }
+              }
+            >
+              Clear
+            </Memo(ConnectFunction)>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;

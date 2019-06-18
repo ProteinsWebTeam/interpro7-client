@@ -31,6 +31,7 @@ import Link from 'components/generic/Link';
   remoteID?: string,
   status: string,
   data: {
+    loading: boolean,
     payload: {
       results: Array<Object>,
     },

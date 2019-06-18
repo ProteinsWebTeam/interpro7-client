@@ -17,7 +17,11 @@ const f = foundationPartial(interproTheme, fonts, local, ipro);
 
 const TITLE = 'Manually refresh job information';
 
-class RefreshButton extends PureComponent {
+/*:: type Props = {
+  updateJobStatus: function
+}; */
+
+class RefreshButton extends PureComponent /*:: <Props> */ {
   static propTypes = {
     updateJobStatus: T.func.isRequired,
   };
