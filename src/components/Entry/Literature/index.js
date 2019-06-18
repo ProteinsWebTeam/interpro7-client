@@ -137,7 +137,7 @@ const Literature = (
           ))}
         </div>
       ) : null}
-      {/* Only display “Further reading” if there have been main references */}
+      {/* Only display "Further reading" if there have been main references */}
       {included.length && extra.length ? <h5>Further reading</h5> : null}
       {extra.length ? (
         <div

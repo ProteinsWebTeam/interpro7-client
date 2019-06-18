@@ -16,8 +16,8 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ebiStyles, styles, theme, fonts);
 
-const TAG_REGEX = /(\[\w+:\w+])/;
-const TAG_REGEX_KV = /\[(\w+):(\w+)]/;
+const TAG_REGEX = /(\[\w+:[\w\.]+])/;
+const TAG_REGEX_KV = /\[(\w+):([\w\.]+)]/;
 const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](, )?';
 const CITATIONS_REGEX = `(\\[(${CITATION_REGEX})+\\])`;
 
@@ -82,6 +82,7 @@ const xReferenceURL = {
   cog: 'https://ftp.ncbi.nih.gov/pub/COG/COG2014/static/byCOG/{}.html',
   intenz: 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec={}',
   genprop: 'https://www.ebi.ac.uk/interpro/genomeproperties/#{}',
+  superfamily: 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid={}',
 };
 
 export const Paragraph = ({ p, literature = [], accession, withoutIDs }) => {
@@ -111,7 +112,8 @@ export const Paragraph = ({ p, literature = [], accession, withoutIDs }) => {
         if (tagMatch) {
           const [_, tagType, tagValue] = tagMatch;
           let type = tagType.toLowerCase();
-          if (type === 'superfamily') type = 'ssf';
+          let value = tagValue;
+          if (type === 'cathgene3d') value = `G3DSA:${tagValue}`;
           if (ENTRY_DBS.indexOf(type) >= 0) {
             return (
               <Link
@@ -119,11 +121,11 @@ export const Paragraph = ({ p, literature = [], accession, withoutIDs }) => {
                 to={{
                   description: {
                     main: { key: 'entry' },
-                    entry: { db: tagType, accession: tagValue },
+                    entry: { db: type, accession: value },
                   },
                 }}
               >
-                {tagValue}
+                {value}
               </Link>
             );
           }
@@ -134,11 +136,11 @@ export const Paragraph = ({ p, literature = [], accession, withoutIDs }) => {
                 to={{
                   description: {
                     main: { key: 'protein' },
-                    entry: { db: 'reviewed', accession: tagValue },
+                    protein: { db: 'reviewed', accession: value },
                   },
                 }}
               >
-                {tagValue}
+                {value}
               </Link>
             );
           }
@@ -149,11 +151,11 @@ export const Paragraph = ({ p, literature = [], accession, withoutIDs }) => {
                 to={{
                   description: {
                     main: { key: 'structure' },
-                    entry: { db: 'pdb', accession: tagValue },
+                    structure: { db: 'pdb', accession: value },
                   },
                 }}
               >
-                {tagValue}
+                {value}
               </Link>
             );
           }
@@ -181,7 +183,7 @@ export const Paragraph = ({ p, literature = [], accession, withoutIDs }) => {
                 part
                   .replace(/\[$/, ' ')
                   .replace(/^]/, ' ')
-                  .replace(/<li>/g, '&nbsp;• ')
+                  .replace(/<li>/g, '&nbsp;* ')
                   .replace(/<\/li>/g, '<br>')
                   .replace(/<ul>/g, '<br>')
                   .replace(/<\/ul>/g, '<br>')
