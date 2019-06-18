@@ -79,7 +79,7 @@ const ENTRY_DBS = [
 ];
 const xReferenceURL = {
   cazy: 'http://www.cazy.org/fam/{}.html',
-  cog: 'http://www.ncbi.nlm.nih.gov/COG/new/release/cow.cgi?cog={}',
+  cog: 'https://ftp.ncbi.nih.gov/pub/COG/COG2014/static/byCOG/{}.html',
   intenz: 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec={}',
   genprop: 'https://www.ebi.ac.uk/interpro/genomeproperties/#{}',
 };

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
 import { partition } from 'lodash-es';
@@ -28,8 +29,30 @@ import local from './style.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, theme, ipro, local);
 
 const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
-
-const MemberDBSubtitle = ({ metadata, dbInfo }) => {
+/*:: type Metadata = {
+        accession: string,
+        name: {name: string, short: ?string},
+        source_database: string,
+        type: string,
+        gene?: string,
+        experiment_type?: string,
+        source_organism?: Object,
+        release_date?: string,
+        chains?: Array<string>,
+        integrated: string,
+        member_databases?: Object,
+        go_terms: Object,
+        description: Array<string>,
+        literature: Object,
+        hierarchy: Object,
+        overlaps_with: Object,
+        cross_references: Object,
+        wikipedia: string,
+      }
+ */
+const MemberDBSubtitle = (
+  { metadata, dbInfo } /*: {metadata: Metadata, dbInfo: Object} */,
+) => {
   if (
     !metadata.source_database ||
     metadata.source_database.toLowerCase() === 'interpro'
@@ -90,44 +113,47 @@ MemberDBSubtitle.propTypes = {
   dbInfo: T.object.isRequired,
 };
 
-const SidePanel = ({ metadata, dbInfo }) => (
-  <div className={f('medium-4', 'large-4', 'columns')}>
-    {metadata.integrated && <Integration intr={metadata.integrated} />}
-    {metadata.source_database.toLowerCase() !== 'interpro' && (
-      <section>
-        <h5>External Links</h5>
-        <ul className={f('no-bullet')}>
-          <li>
-            <Link
-              className={f('ext')}
-              target="_blank"
-              href={getUrlFor(metadata.source_database)(metadata.accession)}
-            >
-              View {metadata.accession} in{' '}
-              {(dbInfo && dbInfo.name) || metadata.source_database}
-            </Link>
-          </li>
-          {false && // TODO: reactivate that after change in the API
-            metadata.wikipedia && (
-              <li>
-                <Link
-                  className={f('ext')}
-                  target="_blank"
-                  href={`https://en.wikipedia.org/wiki/${metadata.wikipedia}`}
-                >
-                  Wikipedia article
-                </Link>
-              </li>
-            )}
-        </ul>
-      </section>
-    )}
-    {metadata.member_databases &&
-    Object.keys(metadata.member_databases).length ? (
-      <ContributingSignatures contr={metadata.member_databases} />
-    ) : null}
-  </div>
-);
+const SidePanel = ({ metadata, dbInfo }) => {
+  const url = getUrlFor(metadata.source_database);
+  return (
+    <div className={f('medium-4', 'large-4', 'columns')}>
+      {metadata.integrated && <Integration intr={metadata.integrated} />}
+      {metadata.source_database.toLowerCase() !== 'interpro' && (
+        <section>
+          <h5>External Links</h5>
+          <ul className={f('no-bullet')}>
+            <li>
+              <Link
+                className={f('ext')}
+                target="_blank"
+                href={url && url(metadata.accession)}
+              >
+                View {metadata.accession} in{' '}
+                {(dbInfo && dbInfo.name) || metadata.source_database}
+              </Link>
+            </li>
+            {false && // TODO: reactivate that after change in the API
+              metadata.wikipedia && (
+                <li>
+                  <Link
+                    className={f('ext')}
+                    target="_blank"
+                    href={`https://en.wikipedia.org/wiki/${metadata.wikipedia}`}
+                  >
+                    Wikipedia article
+                  </Link>
+                </li>
+              )}
+          </ul>
+        </section>
+      )}
+      {metadata.member_databases &&
+      Object.keys(metadata.member_databases).length ? (
+        <ContributingSignatures contr={metadata.member_databases} />
+      ) : null}
+    </div>
+  );
+};
 SidePanel.propTypes = {
   metadata: T.object.isRequired,
   dbInfo: T.object.isRequired,
@@ -228,7 +254,7 @@ const OverlappingEntries = ({ metadata }) => {
           <small>({ov.accession})</small>
         </div>
       ))}
-      {Object.keys(metadata.overlaps_with || []).length >
+      {Object.keys(metadata.overlaps_with || {}).length >
         MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
         <button
           className={f('button', 'hollow', 'secondary', 'margin-bottom-none')}
@@ -282,26 +308,17 @@ Hierarchy.propTypes = {
   accession: T.string,
 };
 
-/* :: type Props = {
+/*:: type Props = {
     data: {
-      metadata: {
-        accession: string,
-        name: {name: string, short: ?string},
-        source_database: string,
-        type: string,
-        gene?: string,
-        experiment_type?: string,
-        source_organism?: Object,
-        release_date?: string,
-        chains?: Array<string>,
-        integrated: string,
-        member_databases?: Object,
-        go_terms: Object,
-        description: Array<string>,
-        literature: Object,
-      }
+      metadata: Metadata,
+      location: {
+        description: {
+          mainType: string,
+        },
+      },
     },
-    location: {description: {mainType: string}},
+    loading: boolean,
+    dbInfo: Object,
   };
 */
 
@@ -349,7 +366,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
               />
 
               {// doesn't work for some HAMAP as they have enpty <P> tag
-              Object.keys(metadata.description || []).length ? (
+              (metadata.description || []).length ? (
                 <>
                   <h4>Description</h4>
                   <Description

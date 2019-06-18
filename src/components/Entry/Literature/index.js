@@ -18,7 +18,9 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(refStyles, ebiStyles);
 
-export const getLiteratureIdsFromDescription = description =>
+export const getLiteratureIdsFromDescription = (
+  description /*: Array<string> */,
+) =>
   (description || []).reduce(
     (acc, part) => [
       ...acc,
@@ -33,13 +35,6 @@ const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
-
-// const schemaProcessData = data => ({
-//   '@type': 'ScholarlyArticle',
-//   '@id': '@citation',
-//   identifier: `http://identifiers.org/pubmed/${data.PMID}`,
-//   author: data.authors,
-// });
 
 /*:: type Reference = Object; */
 

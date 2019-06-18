@@ -1,4 +1,3 @@
-// @flow
 import React, { useState } from 'react';
 import T from 'prop-types';
 
@@ -41,7 +40,7 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const SummaryProtein = ({ data, loading } /*:: <Props> */) => {
+const SummaryProtein = ({ data, loading }) => {
   const [isoform, setIsoform] = useState('');
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
