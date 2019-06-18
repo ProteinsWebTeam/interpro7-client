@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -35,6 +35,50 @@ const Advanced = loadable({
       /* webpackChunkName: "about-advanced" */ 'components/Settings/Advanced'
     ),
 });
+
+const DefaultInterProSettings = () => {
+  const [shouldRedirect, setShouldRedirect] = useState(
+    window.localStorage.getItem('redirect_to_interpro7'),
+  );
+  const handleChange = () => {
+    if (shouldRedirect === 'default') {
+      setShouldRedirect(null);
+      window.localStorage.removeItem('redirect_to_interpro7');
+    } else {
+      setShouldRedirect('default');
+      window.localStorage.setItem('redirect_to_interpro7', 'default');
+    }
+  };
+  return (
+    <>
+      <h4>Default InterPro Website</h4>
+      <div className={f('row')}>
+        <div className={f('medium-12', 'column')}>
+          <p>Select this beta version as your default InterPro website</p>
+          <div className={f('switch', 'large')}>
+            <input
+              type="checkbox"
+              checked={shouldRedirect === 'default'}
+              className={f('switch-input')}
+              name="lowGraphics"
+              id="lowGraphics-input"
+              onChange={handleChange}
+            />
+            <label className={f('switch-paddle')} htmlFor="lowGraphics-input">
+              <span className={f('show-for-sr')}>Low graphics mode:</span>
+              <span className={f('switch-active')} aria-hidden="true">
+                On
+              </span>
+              <span className={f('switch-inactive')} aria-hidden="true">
+                Off
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
 
 const NavigationSettings = ({ navigation: { pageSize } }) => (
   <form data-category="navigation">
@@ -485,6 +529,8 @@ class Settings extends PureComponent {
           <div className={f('columns', 'large-12')}>
             <section onChange={changeSettings}>
               <h3>Settings</h3>
+
+              <DefaultInterProSettings />
 
               <NavigationSettings
                 navigation={navigation}

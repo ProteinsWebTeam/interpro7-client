@@ -48,7 +48,6 @@ class DownloadForm extends PureComponent {
 
   constructor(props) {
     super(props);
-
     this._ref = React.createRef();
   }
 
@@ -273,33 +272,44 @@ class DownloadForm extends PureComponent {
           fileType={fileType}
           subset={subset}
         >
-          {({ data, download }) => (
-            <>
-              <Estimate data={data} />
-              {/* Only display if the response from the API is a list of items */}
-              {description[main].db && !description[main].accession && (
-                <Snippet fileType={fileType} url={endpoint} subset={subset} />
-              )}
+          {({ data, download, isStale }) => {
+            const count = (data.payload && data.payload.count) || 0;
+            const { db, integration } = description[main];
+            const noData = count === 0 && (db !== null || integration !== null);
+            console.log(`NODATA DB: ${db} Integration:${integration}`);
+            return (
+              <>
+                <Estimate data={data} isStale={isStale} />
+                {/* Only display if the response from the API is a list of items */}
+                {description[main].db && !description[main].accession && (
+                  <Snippet fileType={fileType} url={endpoint} subset={subset} />
+                )}
 
-              <fieldset className={f('controls')}>
-                <legend>Download</legend>
-                <TextExplanation
-                  fileType={fileType}
-                  description={description}
-                  subset={subset}
-                />
-                <Controls
-                  fileType={fileType}
-                  subset={subset}
-                  entityType={main}
-                  url={endpoint}
-                  data={data}
-                  download={download}
-                />
-              </fieldset>
-              {lowGraphics || <ProgressAnimation download={download} />}
-            </>
-          )}
+                <div className={f('controls')}>
+                  <h3>Download</h3>
+                  <TextExplanation
+                    fileType={fileType}
+                    description={description}
+                    subset={subset}
+                    isStale={isStale}
+                    count={count}
+                    noData={noData}
+                  />
+                  <Controls
+                    fileType={fileType}
+                    subset={subset}
+                    entityType={main}
+                    url={endpoint}
+                    download={download}
+                    isStale={isStale}
+                    count={count}
+                    noData={noData}
+                  />
+                </div>
+                {lowGraphics || <ProgressAnimation download={download} />}
+              </>
+            );
+          }}
         </DataPreviewAndProgressProvider>
       </form>
     );
