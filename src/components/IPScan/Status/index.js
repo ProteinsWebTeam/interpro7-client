@@ -52,7 +52,7 @@ const GoToNewSearch = () => (
   updateJobStatus: function
 }*/
 
-class IPScanStatus extends PureComponent /*:: <Props> */ {
+export class IPScanStatus extends PureComponent /*:: <Props> */ {
   static propTypes = {
     jobs: T.arrayOf(T.object).isRequired,
     search: T.shape({

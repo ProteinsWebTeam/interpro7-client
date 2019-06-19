@@ -25,7 +25,7 @@ const f = foundationPartial(fonts, ipro, local);
   goToCustomLocation: function
 }*/
 
-class Actions extends PureComponent /*:: <Props> */ {
+export class Actions extends PureComponent /*:: <Props> */ {
   static propTypes = {
     localID: T.string.isRequired,
     withTitle: T.bool,

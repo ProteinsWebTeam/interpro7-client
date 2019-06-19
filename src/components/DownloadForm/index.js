@@ -45,7 +45,7 @@ const extractDataFromHash = hash => {
   goToCustomLocation: function
 }*/
 
-class DownloadForm extends PureComponent /*:: <Props> */ {
+export class DownloadForm extends PureComponent /*:: <Props> */ {
   static propTypes = {
     matched: T.string.isRequired,
     api: T.object.isRequired,

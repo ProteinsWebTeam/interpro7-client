@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Estimate /> should render 1`] = `
+<section>
+  <h6>
+    Estimate
+  </h6>
+  <React.Fragment>
+    Your file will contain 
+    <Memo(ConnectFunction)
+      abbr={true}
+    >
+      36713
+    </Memo(ConnectFunction)>
+     
+    item
+    s
+    .
+  </React.Fragment>
+</section>
+`;

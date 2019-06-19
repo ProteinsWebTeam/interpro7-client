@@ -56,7 +56,7 @@ export default class Estimate extends PureComponent {
       payload: T.oneOfType([T.arrayOf(T.object), T.object]),
       ok: T.bool,
       status: T.number,
-      headers: T.instanceOf(Headers),
+      headers: T.object, //TODO: change back instanceOf(Headers),
     }).isRequired,
     isStale: T.bool.isRequired,
   };

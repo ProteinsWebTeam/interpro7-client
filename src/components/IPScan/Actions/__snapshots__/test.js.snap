@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Actions /> should render 1`] = `
+<React.Fragment>
+  <Tooltip
+    title="Delete job"
+  >
+    <button
+      aria-label="Delete job"
+      className="icon icon-common ico-neutral"
+      data-icon=""
+      onClick={[Function]}
+    />
+  </Tooltip>
+</React.Fragment>
+`;

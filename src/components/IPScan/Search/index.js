@@ -126,7 +126,7 @@ const compositeDecorator = new CompositeDecorator([
   value: string,
 }*/
 
-class IPScanSearch extends PureComponent /*:: <AdvancedOptionsProps> */ {
+export class IPScanSearch extends PureComponent /*:: <AdvancedOptionsProps> */ {
   static propTypes = {
     createJob: T.func.isRequired,
     goToCustomLocation: T.func.isRequired,

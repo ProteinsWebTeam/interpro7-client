@@ -1,0 +1,291 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<IPScanSearch /> should render 1`] = `
+<div
+  className="row margin-bottom-medium"
+>
+  <div
+    className="large-12 columns"
+  >
+    <form
+      className="search-form"
+      onDrag={[Function]}
+      onDragEnd={[Function]}
+      onDragEnter={[Function]}
+      onDragExit={[Function]}
+      onDragLeave={[Function]}
+      onDragOver={[Function]}
+      onDragStart={[Function]}
+      onDrop={[Function]}
+      onSubmit={[Function]}
+    >
+      <div>
+        <div
+          className="secondary callout border margin-bottom-none"
+        >
+          <div
+            className="row"
+          >
+            <div
+              className="large-12 columns sqc-search-input"
+            >
+              <h3
+                className="light"
+              >
+                Sequence, in FASTA format
+              </h3>
+              <LoadableComponent
+                data={
+                  Object {
+                    "description": "Search for InterPro matches in your seqeunce",
+                    "name": "Search By Sequence",
+                  }
+                }
+                processData={[Function]}
+              />
+              <div
+                onClick={[Function]}
+                onKeyPress={[Function]}
+                role="presentation"
+              >
+                <div
+                  className="editor"
+                  type="text"
+                >
+                  <DraftEditor
+                    blockRenderMap={
+                      Immutable.Map {
+                        "ordered-list-item": Object {
+                          "element": "li",
+                          "wrapper": <ol
+                            className="public-DraftStyleDefault-ol"
+                          />,
+                        },
+                        "header-six": Object {
+                          "element": "h6",
+                        },
+                        "header-four": Object {
+                          "element": "h4",
+                        },
+                        "header-one": Object {
+                          "element": "h1",
+                        },
+                        "unordered-list-item": Object {
+                          "element": "li",
+                          "wrapper": <ul
+                            className="public-DraftStyleDefault-ul"
+                          />,
+                        },
+                        "atomic": Object {
+                          "element": "figure",
+                        },
+                        "unstyled": Object {
+                          "aliasedElements": Array [
+                            "p",
+                          ],
+                          "element": "div",
+                        },
+                        "header-two": Object {
+                          "element": "h2",
+                        },
+                        "code-block": Object {
+                          "element": "pre",
+                          "wrapper": <pre
+                            className="public-DraftStyleDefault-pre"
+                          />,
+                        },
+                        "blockquote": Object {
+                          "element": "blockquote",
+                        },
+                        "header-five": Object {
+                          "element": "h5",
+                        },
+                        "header-three": Object {
+                          "element": "h3",
+                        },
+                      }
+                    }
+                    blockRendererFn={[Function]}
+                    blockStyleFn={[Function]}
+                    editorState={
+                      EditorState {
+                        "_immutable": Immutable.Record {
+                          "allowUndo": true,
+                          "currentContent": Immutable.Record {
+                            "entityMap": Object {
+                              "__add": [Function],
+                              "__create": [Function],
+                              "__get": [Function],
+                              "__getLastCreatedEntityKey": [Function],
+                              "__mergeData": [Function],
+                              "__replaceData": [Function],
+                              "add": [Function],
+                              "create": [Function],
+                              "get": [Function],
+                              "getLastCreatedEntityKey": [Function],
+                              "mergeData": [Function],
+                              "replaceData": [Function],
+                            },
+                            "blockMap": Immutable.OrderedMap {
+                              "123": Immutable.Record {
+                                "key": "123",
+                                "type": "unstyled",
+                                "text": "",
+                                "characterList": Immutable.List [],
+                                "depth": 0,
+                                "data": Immutable.Map {},
+                              },
+                            },
+                            "selectionBefore": Immutable.Record {
+                              "anchorKey": "123",
+                              "anchorOffset": 0,
+                              "focusKey": "123",
+                              "focusOffset": 0,
+                              "isBackward": false,
+                              "hasFocus": false,
+                            },
+                            "selectionAfter": Immutable.Record {
+                              "anchorKey": "123",
+                              "anchorOffset": 0,
+                              "focusKey": "123",
+                              "focusOffset": 0,
+                              "isBackward": false,
+                              "hasFocus": false,
+                            },
+                          },
+                          "decorator": CompositeDraftDecorator {
+                            "_decorators": Array [
+                              Object {
+                                "component": [Function],
+                                "strategy": [Function],
+                              },
+                              Object {
+                                "component": [Function],
+                                "strategy": [Function],
+                              },
+                            ],
+                          },
+                          "directionMap": Immutable.OrderedMap {
+                            "123": "LTR",
+                          },
+                          "forceSelection": false,
+                          "inCompositionMode": false,
+                          "inlineStyleOverride": null,
+                          "lastChangeType": null,
+                          "nativelyRenderedContent": null,
+                          "redoStack": Immutable.Stack [],
+                          "selection": Immutable.Record {
+                            "anchorKey": "123",
+                            "anchorOffset": 0,
+                            "focusKey": "123",
+                            "focusOffset": 0,
+                            "isBackward": false,
+                            "hasFocus": false,
+                          },
+                          "treeMap": Immutable.OrderedMap {
+                            "123": Immutable.List [
+                              Immutable.Record {
+                                "start": 0,
+                                "end": 0,
+                                "decoratorKey": null,
+                                "leaves": Immutable.List [
+                                  Immutable.Record {
+                                    "start": 0,
+                                    "end": 0,
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                          "undoStack": Immutable.Stack [],
+                        },
+                      }
+                    }
+                    handleDroppedFiles={[Function]}
+                    handlePastedText={[Function]}
+                    keyBindingFn={[Function]}
+                    onChange={[Function]}
+                    placeholder="Enter your sequence"
+                    readOnly={false}
+                    spellCheck={false}
+                    stripPastedStyles={false}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="row"
+          >
+            <div
+              className="columns"
+            >
+              <div
+                className="button-group line-with-buttons"
+              >
+                <label
+                  className="hollow button tertiary user-select-none"
+                >
+                  Choose file
+                  <input
+                    hidden={true}
+                    onChange={[Function]}
+                    type="file"
+                  />
+                </label>
+                <button
+                  className="hollow button secondary user-select-none"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Example protein sequence
+                </button>
+                <button
+                  className="button alert hidden"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Automatic FASTA clean up
+                </button>
+              </div>
+            </div>
+          </div>
+          <Memo(ConnectFunction) />
+          <div
+            className="row"
+          >
+            <div
+              className="large-8 columns stacked-for-small button-group margin-bottom-none"
+            >
+              <input
+                className="button"
+                disabled={true}
+                type="submit"
+                value="Search"
+              />
+              <input
+                className="secondary hollow button"
+                onClick={[Function]}
+                type="button"
+                value="Clear"
+              />
+            </div>
+            <div
+              className="large-4 columns show-for-medium search-adv"
+            >
+              <span>
+                Powered by InterProScan
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="dragging-overlay"
+      >
+        Drop your file here
+      </div>
+    </form>
+  </div>
+</div>
+`;

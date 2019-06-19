@@ -21,7 +21,7 @@ const TITLE = 'Manually refresh job information';
   updateJobStatus: function
 }; */
 
-class RefreshButton extends PureComponent /*:: <Props> */ {
+export class RefreshButton extends PureComponent /*:: <Props> */ {
   static propTypes = {
     updateJobStatus: T.func.isRequired,
   };

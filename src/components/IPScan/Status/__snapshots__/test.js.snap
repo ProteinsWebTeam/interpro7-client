@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<IPScanStatus /> should render 1`] = `
+<div
+  className="row columns"
+>
+  <h3
+    className="light"
+  >
+    Your InterProScan searches
+  </h3>
+  <LoadableComponent
+    data={
+      Object {
+        "description": "The status of all the requested InterProScan searches",
+        "name": "Your InterProScan searches",
+      }
+    }
+    processData={[Function]}
+  />
+  <div
+    className="button-group"
+  >
+    <GoToNewSearch />
+    <Memo(ConnectFunction) />
+  </div>
+  <Table
+    actualSize={0}
+    contentType="result"
+    dataTable={Array []}
+    query={Object {}}
+    rowKey="localID"
+  >
+    <Column
+      dataKey="localID"
+      renderer={[Function]}
+    >
+      Job ID
+    </Column>
+    <Column
+      dataKey="localTitle"
+    >
+      Title
+    </Column>
+    <Column
+      dataKey="times.created"
+      renderer={[Function]}
+    >
+      Created
+    </Column>
+    <Column
+      cellClassName="table-center"
+      dataKey="status"
+      headerClassName="table-center"
+      renderer={[Function]}
+    >
+      Status
+    </Column>
+    <Column
+      cellClassName="table-center font-ml"
+      dataKey="localID"
+      defaultKey="actions"
+      headerClassName="table-center"
+      renderer={[Function]}
+    >
+      Action
+    </Column>
+  </Table>
+</div>
+`;
