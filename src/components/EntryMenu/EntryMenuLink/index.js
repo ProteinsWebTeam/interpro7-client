@@ -37,14 +37,23 @@ const icons = new Map([
   ['Sequence', { icon: '\uF120', class: 'icon-common' }],
 ]);
 
-export const EntryMenuLinkWithoutData = ({
-  name,
-  value,
-  loading,
-  to,
-  exact,
-  usedOnTheSide,
-}) => (
+export const EntryMenuLinkWithoutData = (
+  {
+    name,
+    value,
+    loading,
+    to,
+    exact,
+    usedOnTheSide,
+  } /*: {
+    name: string, 
+    value: number, 
+    loading: boolean, 
+    to: function, 
+    exact: boolean, 
+    usedOnTheSide: boolean
+  }*/,
+) => (
   <li
     className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}
     data-testid={`menu-${name.toLowerCase().replace(/\s+/g, '_')}`}

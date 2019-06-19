@@ -38,6 +38,12 @@ const SimilarProteins = loadable({
       /* webpackChunkName: "similar-proteins-subpage" */ './SimilarProteins'
     ),
 });
+const Genome3d = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "similar-proteins-subpage" */ 'components/Genome3D/List'
+    ),
+});
 
 const defaultMapStateToProps = createSelector(
   state => state.settings.api,
@@ -122,6 +128,23 @@ const mapStateToPropsForSimilarProteins = createSelector(
   },
 );
 
+const getGenome3dURL = createSelector(
+  state => state.settings.genome3d,
+  state => state.customLocation.search,
+  state => state.settings.navigation.pageSize,
+  state => state.customLocation.description.entry.accession,
+  ({ protocol, hostname, port, root }, search, settingsPageSize, accession) => {
+    const pageSize = search.page_size || settingsPageSize;
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}interpro/ipr/${accession}`,
+      query: { rows: pageSize },
+    });
+  },
+);
+
 const subPages = new Map([
   ['entry', loadData(defaultMapStateToProps)(List)],
   ['protein', loadData(defaultMapStateToProps)(List)],
@@ -133,6 +156,7 @@ const subPages = new Map([
   ['alignments', SetAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
+  ['genome3d', loadData(getGenome3dURL)(Genome3d)],
   [
     'similar_proteins',
     loadData({
