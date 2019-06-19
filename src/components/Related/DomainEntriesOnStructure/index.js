@@ -215,7 +215,7 @@ const getGenome3dURL = createSelector(
       hostname,
       port,
       pathname: `${root}classification/11/pdb/${accession}`,
-      // TODO: Replace 11 for latest once included in the genome3d api
+      //TODO: Replace 11 for latest once included in the genome3d api
     });
   },
 );

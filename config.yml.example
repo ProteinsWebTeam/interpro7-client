@@ -30,6 +30,7 @@ pages:
       - proteome
       - set
       - logo
+      - genome3d
   protein:
     subPages:
       - entry
