@@ -11,7 +11,7 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiStyles);
 const HTTP_404 = 404;
-const List = ({ data }) => {
+const List = ({ data, customLocation: { search } }) => {
   if (data.loading) return <Loading />;
   const data4table = data.payload.data.map(
     ({ accession, locations, metadata, tooltipContent }) => ({
@@ -33,17 +33,20 @@ const List = ({ data }) => {
           actualSize={data.payload.pager.total_entries}
           notFound={data.status === HTTP_404}
           rowKey={'id'}
+          query={search}
         >
           <Column
             dataKey="accession"
-            renderer={accession => <Genome3dLink id={accession} />}
+            renderer={accession => (
+              <Genome3dLink id={accession} className={f('ext')} />
+            )}
           >
             Protein
           </Column>
           <Column
             dataKey="evidences"
             renderer={({ source: { url, id, name } }) => (
-              <Link href={url}>
+              <Link href={url} className={f('ext')}>
                 {name}: {id}
               </Link>
             )}
@@ -51,7 +54,6 @@ const List = ({ data }) => {
             Evidence
           </Column>
           <Column dataKey="confidence" />
-          <Column dataKey="resource" />
           <Column
             dataKey="locations"
             renderer={(locations, { tooltipContent, accession }) => (
@@ -73,6 +75,9 @@ List.propTypes = {
   data: T.shape({
     loading: T.bool,
     payload: T.object,
+  }),
+  customLocation: T.shape({
+    search: T.object,
   }),
 };
 export default List;

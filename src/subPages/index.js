@@ -134,17 +134,19 @@ const getGenome3dURL = createSelector(
   state => state.settings.navigation.pageSize,
   state => state.customLocation.description.entry.accession,
   ({ protocol, hostname, port, root }, search, settingsPageSize, accession) => {
-    const pageSize = search.page_size || settingsPageSize;
+    const query = {
+      rows: search.page_size || settingsPageSize,
+    };
+    if (search.page) query.page = search.page;
     return format({
       protocol,
       hostname,
       port,
       pathname: `${root}interpro/ipr/${accession}`,
-      query: { rows: pageSize },
+      query,
     });
   },
 );
-
 const subPages = new Map([
   ['entry', loadData(defaultMapStateToProps)(List)],
   ['protein', loadData(defaultMapStateToProps)(List)],
@@ -156,7 +158,12 @@ const subPages = new Map([
   ['alignments', SetAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
-  ['genome3d', loadData(getGenome3dURL)(Genome3d)],
+  [
+    'genome3d',
+    loadData({
+      getUrl: getGenome3dURL,
+    })(Genome3d),
+  ],
   [
     'similar_proteins',
     loadData({
