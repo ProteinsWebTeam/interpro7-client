@@ -200,6 +200,7 @@ class _DomainArchitecturesWithData extends PureComponent {
     data: T.object.isRequired,
     mainAccession: T.string,
     search: T.object,
+    dataDB: T.object.isRequired,
   };
 
   render() {

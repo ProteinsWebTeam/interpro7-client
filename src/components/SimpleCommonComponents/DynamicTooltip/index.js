@@ -77,7 +77,7 @@ const DynamicTooltip = ({
 
   const _handleMouseOver = e => {
     if (e.target.classList.contains(popupTargetClass)) {
-      new PopperJS(e.target, popperContainer.current);
+      const _popper = new PopperJS(e.target, popperContainer.current);
       const child = _getTooltipContent();
       popperContainer.current.appendChild(child);
       setPopper(child);
@@ -128,6 +128,7 @@ DynamicTooltip.propTypes = {
   source: T.string.isRequired,
   accession: T.string.isRequired,
   databases: T.object.isRequired,
+  children: T.object,
 };
 
 export default DynamicTooltip;
