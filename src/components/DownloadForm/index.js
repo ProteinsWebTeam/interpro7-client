@@ -276,7 +276,6 @@ class DownloadForm extends PureComponent {
             const count = (data.payload && data.payload.count) || 0;
             const { db, integration } = description[main];
             const noData = count === 0 && (db !== null || integration !== null);
-            console.log(`NODATA DB: ${db} Integration:${integration}`);
             return (
               <>
                 <Estimate data={data} isStale={isStale} />

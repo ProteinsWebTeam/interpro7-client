@@ -71,6 +71,27 @@ const removeAllChildrenFromNode = node => {
   }
 };
 
+const COLOR_SCALE_WIDTH = 80;
+const COLOR_SCALE_HEIGHT = 20;
+const getColorScaleHTML = (
+  { domain, range },
+  width = COLOR_SCALE_WIDTH,
+  height = COLOR_SCALE_HEIGHT,
+) => `
+<div class="color-scale">
+  <span>${domain[0]}</span>
+  <svg height="${height}" width="${width}">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:${range[0]};" />
+      <stop offset="100%" style="stop-color:${range[1]};" />
+    </linearGradient>
+  </defs>
+    <rect width="100%" height="${height}" fill="url(#grad1)"/>
+  </svg>
+  <span>${domain[1]}</span>
+</div>`;
+
 class ProtVista extends Component {
   static propTypes = {
     protein: T.object,
@@ -118,8 +139,10 @@ class ProtVista extends Component {
         <section>
           <h6>Residue ${detail.feature.start}: ${detail.feature.aa}</h6>
           <div>
-            <b>Value:</b> ${detail.feature.value}<br/>
-            <b>Scale:</b> [-2 to 2]<br/>
+            <b>Hidrophobicity:</b> ${detail.feature.value}<br/>
+            <b>Scale:</b> ${getColorScaleHTML(
+              this._hydroRef.current.colorScale,
+            )}<br/>
           </div>
         </section>
         `);
