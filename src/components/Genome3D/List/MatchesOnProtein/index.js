@@ -24,6 +24,7 @@ class MatchesOnProtein extends ProtVistaMatches {
   updateTracksWithData({ matches, accession }) {
     this.web_tracks[accession].data = [
       {
+        accession,
         locations: matches,
         color: getTrackColor({ accession }, EntryColorMode.ACCESSION),
       },
@@ -55,7 +56,6 @@ class MatchesOnProtein extends ProtVistaMatches {
               displayend={protein.length}
               id={`track_${accession}`}
               ref={e => (this.web_tracks[accession] = e)}
-              shape="roundRectangle"
               expanded
             />
           </Tooltip>

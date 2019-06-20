@@ -3,6 +3,7 @@ import T from 'prop-types';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
+import { Genome3dLink } from 'components/ExtLink';
 
 import MatchesOnProtein from './MatchesOnProtein';
 import { foundationPartial } from 'styles/foundation';
@@ -14,6 +15,7 @@ const List = ({ data }) => {
   if (data.loading) return <Loading />;
   const data4table = data.payload.data.map(
     ({ accession, locations, metadata, tooltipContent }) => ({
+      id: metadata.anno_id,
       accession,
       locations,
       tooltipContent,
@@ -22,7 +24,7 @@ const List = ({ data }) => {
   );
   return (
     <div className={f('row')}>
-      <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+      <div className={f('columns')}>
         <Table
           dataTable={data4table}
           loading={data.loading}
@@ -30,17 +32,21 @@ const List = ({ data }) => {
           status={data.status}
           actualSize={data.payload.pager.total_entries}
           notFound={data.status === HTTP_404}
+          rowKey={'id'}
         >
-          <Column dataKey="accession" />
+          <Column
+            dataKey="accession"
+            renderer={accession => <Genome3dLink id={accession} />}
+          >
+            Protein
+          </Column>
           <Column
             dataKey="evidences"
-            renderer={evidences =>
-              evidences.map(({ source: { url, id, name } }) => (
-                <Link href={url} key={id}>
-                  {name}: {id}
-                </Link>
-              ))
-            }
+            renderer={({ source: { url, id, name } }) => (
+              <Link href={url}>
+                {name}: {id}
+              </Link>
+            )}
           >
             Evidence
           </Column>
