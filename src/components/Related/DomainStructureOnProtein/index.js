@@ -16,43 +16,6 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
-const getUrlFor = createSelector(
-  // this one only to memoize it
-  db => db,
-  db =>
-    createSelector(
-      state => state.settings.api,
-      state => state.customLocation.description,
-      ({ protocol, hostname, port, root }, description) => {
-        // copy description
-        const _description = {};
-        for (const [key, value] of Object.entries(description)) {
-          if (key === 'other') {
-            _description.other = [];
-          } else {
-            _description[key] = value.isFilter ? {} : { ...value };
-          }
-        }
-        // brand new search
-        const search = {};
-        if (db === 'StructureInfo') {
-          search.structureinfo = null;
-        } else {
-          _description.entry.isFilter = true;
-          _description.entry.db = db;
-        }
-        // build URL
-        return format({
-          protocol,
-          hostname,
-          port,
-          pathname: root + descriptionToPath(_description),
-          query: search,
-        });
-      },
-    ),
-);
-
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
 
@@ -79,19 +42,27 @@ const formatStructureInfoObj = data => {
 
 const mergeData = (interpro, structures, structureInfo) => {
   const ipro = {};
-  const out = interpro.reduce((acc, val) => {
-    val.signatures = [];
-    val.children = [];
-    val.coordinates = toArrayStructure(val.entry_protein_locations);
-    val.locations = val.entry_protein_locations;
-    val.link = `/entry/${val.source_database}/${val.accession}`;
-    ipro[val.accession] = val;
-    if (!(val.entry_type in acc)) {
-      acc[val.entry_type] = [];
-    }
-    acc[val.entry_type].push(val);
-    return acc;
-  }, {});
+  const out = {};
+  console.log(interpro);
+
+  out.interpro = interpro.map(({ metadata, proteins }) => ({
+    ...metadata,
+    locations: proteins[0].entry_protein_locations,
+  }));
+
+  // interpro.reduce((acc, val) => {
+  //   val.signatures = [];
+  //   val.children = [];
+  //   val.coordinates = toArrayStructure(val.entry_protein_locations);
+  //   val.locations = val.entry_protein_locations;
+  //   val.link = `/entry/${val.source_database}/${val.accession}`;
+  //   ipro[val.accession] = val;
+  //   if (!(val.entry_type in acc)) {
+  //     acc[val.entry_type] = [];
+  //   }
+  //   acc[val.entry_type].push(val);
+  //   return acc;
+  // }, {});
   if (structures.length) {
     out.structures = structures
       .map(({ ...obj }) => ({
@@ -129,7 +100,7 @@ class _StructureOnProtein extends PureComponent {
     }
     const mergedData = Object.entries(
       mergeData(
-        dataInterPro.payload ? dataInterPro.payload.entries : [],
+        dataInterPro.payload ? dataInterPro.payload.results : [],
         structures,
         dataStructureInfo.payload,
       ),
@@ -144,13 +115,71 @@ class _StructureOnProtein extends PureComponent {
   }
 }
 
-const StructureOnProtein = ['InterPro', 'StructureInfo'].reduce(
-  (Index, db) =>
-    loadData({
-      getUrl: getUrlFor(db),
-      propNamespace: db,
-    })(Index),
-  _StructureOnProtein,
+// const StructureOnProtein = ['InterPro', 'StructureInfo'].reduce(
+//   (Index, db) =>
+//     loadData({
+//       getUrl: getUrlFor(db),
+//       propNamespace: db,
+//     })(Index),
+//   _StructureOnProtein,
+// );
+const getUrlForInterPro = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    const _description = {
+      main: { key: 'entry' },
+      structure: {
+        ...description.structure,
+        isFilter: true,
+      },
+      protein: {
+        ...description.protein,
+        isFilter: true,
+      },
+      entry: {
+        db: 'InterPro',
+      },
+    };
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(_description),
+      query: search,
+    });
+  },
 );
-
-export default StructureOnProtein;
+const getUrlForStructureInfo = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
+  ({ protocol, hostname, port, root }, description, search) => {
+    const _description = {
+      main: { key: 'protein' },
+      protein: {
+        ...description.protein,
+      },
+    };
+    const _search = {
+      structureinfo: null,
+    };
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(_description),
+      query: _search,
+    });
+  },
+);
+export default loadData({
+  propNamespace: 'InterPro',
+  getUrl: getUrlForInterPro,
+})(
+  loadData({
+    propNamespace: 'StructureInfo',
+    getUrl: getUrlForStructureInfo,
+  })(_StructureOnProtein),
+);

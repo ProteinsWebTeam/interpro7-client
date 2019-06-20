@@ -198,7 +198,7 @@ ProtVistaLoaded.propTypes = {
   dataGenome3d: T.shape({
     loading: T.bool.isRequired,
     payload: T.shape({
-      metadata: T.object.isRequired,
+      metadata: T.object,
     }),
   }).isRequired,
   tracks: T.oneOfType([T.object, T.array]),
