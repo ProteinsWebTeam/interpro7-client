@@ -34,5 +34,6 @@ _Tooltip.propTypes = {
   interactive: T.bool,
   useContext: T.bool,
   children: T.any,
+  target: T.object,
 };
 export default _Tooltip;

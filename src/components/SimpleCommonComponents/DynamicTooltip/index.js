@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import T from 'prop-types';
 import loadData from 'higherOrder/loadData';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import PopperJS from 'popper.js';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import { foundationPartial } from 'styles/foundation';
+import local from './style.css';
+const f = foundationPartial(local);
 
-const _DataProvider = ({ data, onLoad }) => {
+const _DataProvider = ({ data, onLoad, databases }) => {
   if (data && !data.loading && data.payload && data.payload.metadata) {
     const {
       accession,
@@ -19,13 +22,14 @@ const _DataProvider = ({ data, onLoad }) => {
     const message = `
         <b>${accession}</b></br>
         ${name} </br>
-        ${db} </br>
+        <small>${databases[db].name}</small></br>
     `;
 
     onLoad(message);
   }
   return null;
 };
+
 _DataProvider.propTypes = {
   data: T.shape({
     payload: T.object,
@@ -33,6 +37,7 @@ _DataProvider.propTypes = {
   }),
   onLoad: T.func.isRequired,
 };
+
 const getUrlFor = createSelector(
   state => state.settings.api,
   (_, props) => props,
@@ -50,12 +55,45 @@ const getUrlFor = createSelector(
   },
 );
 
-const DynamicTooltip = ({ type, source, accession, ...props }) => {
+const DynamicTooltip = ({
+  type,
+  source,
+  accession,
+  children,
+  databases,
+  ...rest
+}) => {
   const [shouldLoad, setShouldLoad] = useState(false);
-  const [message, setMessage] = useState(accession);
-  const _handleMouseOver = () => {
+  const [message, setMessage] = useState(`<b>${accession}</b>`);
+  const [popper, setPopper] = useState();
+  const popperContainer = useRef(null);
+  const popupTargetClass = 'feature';
+
+  const _getTooltipContent = () => {
+    const element = document.createElement('div');
+    element.innerHTML = `<div>${message}</div>`;
+    return element;
+  };
+
+  const _handleMouseOver = e => {
+    if (e.target.classList.contains(popupTargetClass)) {
+      new PopperJS(e.target, popperContainer.current);
+      const child = _getTooltipContent();
+      popperContainer.current.appendChild(child);
+      setPopper(child);
+      popperContainer.current.classList.remove(f('hide'));
+    }
     setShouldLoad(true);
   };
+
+  const _handleMouseOut = e => {
+    if (e.target.classList.contains(popupTargetClass)) {
+      popperContainer.current.classList.add(f('hide'));
+      popperContainer.current.removeChild(popper);
+      setPopper(null);
+    }
+  };
+
   const DataProvider = shouldLoad
     ? loadData(getUrlFor)(_DataProvider)
     : _DataProvider;
@@ -67,13 +105,21 @@ const DynamicTooltip = ({ type, source, accession, ...props }) => {
         type={type}
         source={source}
         onLoad={setMessage}
+        databases={databases}
       />
-      <Tooltip
-        html={message}
-        {...props}
-        onMouseOver={_handleMouseOver}
-        onFocus={_handleMouseOver}
-      />
+      <div
+        style={{ display: 'inline' }}
+        {...rest}
+        onMouseOver={e => _handleMouseOver(e)}
+        onFocus={e => _handleMouseOver(e)}
+        onMouseOut={e => _handleMouseOut(e)}
+        onBlur={e => _handleMouseOut(e)}
+      >
+        {children}
+      </div>
+      <div ref={popperContainer} className={f('popper', 'hide')}>
+        <div className={f('popper__arrow')} />
+      </div>
     </>
   );
 };
@@ -81,6 +127,7 @@ DynamicTooltip.propTypes = {
   type: T.string.isRequired,
   source: T.string.isRequired,
   accession: T.string.isRequired,
+  databases: T.object.isRequired,
 };
 
 export default DynamicTooltip;

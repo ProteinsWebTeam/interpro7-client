@@ -116,6 +116,7 @@ TextIDA.propTypes = {
 export class IDAProtVista extends ProtVistaMatches {
   static propTypes = {
     matches: T.arrayOf(T.object).isRequired,
+    databases: T.object.isRequired,
   };
 
   updateTracksWithData(props) {
@@ -141,8 +142,9 @@ export class IDAProtVista extends ProtVistaMatches {
       this.web_tracks[domain.accession].data = tmp;
     }
   }
+
   render() {
-    const { matches, length } = this.props;
+    const { matches, length, databases } = this.props;
     return (
       <div>
         {matches.map(d => (
@@ -156,6 +158,7 @@ export class IDAProtVista extends ProtVistaMatches {
                     : 'pfam'
                 }
                 accession={`${d.accession}`}
+                databases={databases}
               >
                 <protvista-interpro-track
                   length={length}
@@ -204,8 +207,9 @@ class _DomainArchitecturesWithData extends PureComponent {
       data: { loading, payload },
       mainAccession,
       search,
+      dataDB,
     } = this.props;
-    if (loading) return <Loading />;
+    if (loading || dataDB.loading) return <Loading />;
     if (!payload.results) return null;
     return (
       <div className={f('row')}>
@@ -243,6 +247,7 @@ class _DomainArchitecturesWithData extends PureComponent {
                 <IDAProtVista
                   matches={idaObj.domains}
                   length={FAKE_PROTEIN_LENGTH}
+                  databases={dataDB.payload.databases}
                 />
                 {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
               </div>
