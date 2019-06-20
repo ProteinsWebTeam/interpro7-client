@@ -305,12 +305,10 @@ class ProtVista extends Component {
   };
 
   _getMobiDBLiteType = entry => {
-    let type = '';
+    let type = null;
     if (entry.locations && entry.locations.length > 0) {
       if (entry.locations[0].seq_feature) {
         type = entry.locations[0].seq_feature;
-      } else {
-        type = 'Disorder prediction';
       }
     }
     return type;
@@ -328,7 +326,8 @@ class ProtVista extends Component {
 
     let type = entry.entry_type || entry.type || '';
     if (sourceDatabase === 'MobiDB Lite') {
-      // Handle MobiDB Lite entries TODO change how MobiDBLt entries are stored in MySQL
+      // Handle MobiDB Lite entries
+      // TODO change how MobiDBLt entries are stored in MySQL
       type = this._getMobiDBLiteType(entry);
     }
     const isResidue = detail.type === 'residue';
@@ -359,7 +358,7 @@ class ProtVista extends Component {
         </div>
         <div>
           ${sourceDatabase}
-        ${type.replace('_', ' ') || ''}</div>       
+        ${type ? type.replace('_', ' ') : ''}</div>       
         </div>
         <p>
           <small>          
