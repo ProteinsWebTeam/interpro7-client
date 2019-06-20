@@ -52,7 +52,7 @@ const List = ({ data }) => {
               <MatchesOnProtein
                 matches={locations}
                 tooltip={tooltipContent}
-                accession={'' + accession}
+                accession={`${accession}`}
               />
             )}
           >
@@ -63,5 +63,10 @@ const List = ({ data }) => {
     </div>
   );
 };
-
+List.propTypes = {
+  data: T.shape({
+    loading: T.bool,
+    payload: T.object,
+  }),
+};
 export default List;

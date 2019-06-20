@@ -23,6 +23,10 @@ Genome3dMenuLink.propTypes = {
   exact: T.bool,
   name: T.string.isRequired,
   usedOnTheSide: T.bool,
+  data: T.shape({
+    loading: T.bool,
+    payload: T.object,
+  }),
 };
 const getGenome3dURL = createSelector(
   state => state.settings.genome3d,

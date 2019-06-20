@@ -46,11 +46,11 @@ export const EntryMenuLinkWithoutData = (
     exact,
     usedOnTheSide,
   } /*: {
-    name: string, 
-    value: number, 
-    loading: boolean, 
-    to: function, 
-    exact: ?boolean, 
+    name: string,
+    value: number,
+    loading: boolean,
+    to: function,
+    exact: ?boolean,
     usedOnTheSide?: boolean
   }*/,
 ) => (

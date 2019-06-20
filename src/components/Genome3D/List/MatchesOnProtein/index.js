@@ -11,10 +11,16 @@ const f = foundationPartial(protvista);
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-//TODO: get the length from genome3d?
+// TODO: get the length from genome3d?
 const protein = { length: 1000 };
 
 class MatchesOnProtein extends ProtVistaMatches {
+  static propTypes = {
+    matches: T.array.isRequired,
+    accession: T.string,
+    tooltip: T.string,
+  };
+
   updateTracksWithData({ matches, accession }) {
     this.web_tracks[accession].data = [
       {
