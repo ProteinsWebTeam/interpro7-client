@@ -14,9 +14,10 @@ const HTTP_404 = 404;
 const List = ({ data, customLocation: { search } }) => {
   if (data.loading) return <Loading />;
   const data4table = data.payload.data.map(
-    ({ accession, locations, metadata, tooltipContent }) => ({
+    ({ accession, locations, metadata, tooltipContent, length }) => ({
       id: metadata.anno_id,
       accession,
+      length,
       locations,
       tooltipContent,
       ...metadata,
@@ -56,11 +57,12 @@ const List = ({ data, customLocation: { search } }) => {
           <Column dataKey="confidence" />
           <Column
             dataKey="locations"
-            renderer={(locations, { tooltipContent, accession }) => (
+            renderer={(locations, { tooltipContent, accession, length }) => (
               <MatchesOnProtein
                 matches={locations}
                 tooltip={tooltipContent}
                 accession={`${accession}`}
+                length={length}
               />
             )}
           >
