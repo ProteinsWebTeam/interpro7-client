@@ -3,6 +3,7 @@ import T from 'prop-types';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
+import NumberComponent from 'components/NumberComponent';
 
 import MatchesOnProtein from './MatchesOnProtein';
 import { foundationPartial } from 'styles/foundation';
@@ -62,7 +63,12 @@ const List = ({ data, customLocation: { search } }) => {
           >
             Evidence
           </Column>
-          <Column dataKey="confidence" />
+          <Column
+            dataKey="confidence"
+            renderer={confidence => (
+              <NumberComponent>{confidence}</NumberComponent>
+            )}
+          />
           <Column
             dataKey="locations"
             renderer={(locations, { tooltipContent, accession, length }) => (
