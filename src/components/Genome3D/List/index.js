@@ -39,7 +39,16 @@ const List = ({ data, customLocation: { search } }) => {
           <Column
             dataKey="accession"
             renderer={accession => (
-              <Genome3dLink id={accession} className={f('ext')} />
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'protein' },
+                    protein: { db: 'uniprot', accession },
+                  },
+                }}
+              >
+                {accession}
+              </Link>
             )}
           >
             Protein
