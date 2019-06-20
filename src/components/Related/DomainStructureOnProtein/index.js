@@ -41,28 +41,12 @@ const formatStructureInfoObj = data => {
 };
 
 const mergeData = (interpro, structures, structureInfo) => {
-  const ipro = {};
   const out = {};
-  console.log(interpro);
 
   out.interpro = interpro.map(({ metadata, proteins }) => ({
     ...metadata,
     locations: proteins[0].entry_protein_locations,
   }));
-
-  // interpro.reduce((acc, val) => {
-  //   val.signatures = [];
-  //   val.children = [];
-  //   val.coordinates = toArrayStructure(val.entry_protein_locations);
-  //   val.locations = val.entry_protein_locations;
-  //   val.link = `/entry/${val.source_database}/${val.accession}`;
-  //   ipro[val.accession] = val;
-  //   if (!(val.entry_type in acc)) {
-  //     acc[val.entry_type] = [];
-  //   }
-  //   acc[val.entry_type].push(val);
-  //   return acc;
-  // }, {});
   if (structures.length) {
     out.structures = structures
       .map(({ ...obj }) => ({
@@ -115,14 +99,6 @@ class _StructureOnProtein extends PureComponent {
   }
 }
 
-// const StructureOnProtein = ['InterPro', 'StructureInfo'].reduce(
-//   (Index, db) =>
-//     loadData({
-//       getUrl: getUrlFor(db),
-//       propNamespace: db,
-//     })(Index),
-//   _StructureOnProtein,
-// );
 const getUrlForInterPro = createSelector(
   state => state.settings.api,
   state => state.customLocation.description,
@@ -154,8 +130,7 @@ const getUrlForInterPro = createSelector(
 const getUrlForStructureInfo = createSelector(
   state => state.settings.api,
   state => state.customLocation.description,
-  state => state.customLocation.search,
-  ({ protocol, hostname, port, root }, description, search) => {
+  ({ protocol, hostname, port, root }, description) => {
     const _description = {
       main: { key: 'protein' },
       protein: {

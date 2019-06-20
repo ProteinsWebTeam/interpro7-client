@@ -3,7 +3,6 @@ import T from 'prop-types';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
-import { Genome3dLink } from 'components/ExtLink';
 
 import MatchesOnProtein from './MatchesOnProtein';
 import { foundationPartial } from 'styles/foundation';

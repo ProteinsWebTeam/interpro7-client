@@ -47,7 +47,7 @@ export const EntryMenuLinkWithoutData = (
     usedOnTheSide,
   } /*: {
     name: string,
-    value: number,
+    value: ?number,
     loading: boolean,
     to: function,
     exact: ?boolean,
@@ -187,7 +187,7 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     return (
       <EntryMenuLinkWithoutData
         name={name}
-        value={value || 0}
+        value={value}
         loading={loading}
         to={to}
         exact={exact}
