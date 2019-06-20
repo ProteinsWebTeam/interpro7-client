@@ -50,8 +50,8 @@ export const EntryMenuLinkWithoutData = (
     value: number, 
     loading: boolean, 
     to: function, 
-    exact: boolean, 
-    usedOnTheSide: boolean
+    exact: ?boolean, 
+    usedOnTheSide?: boolean
   }*/,
 ) => (
   <li
@@ -183,9 +183,17 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
     }
 
     if (!isFirstLevel && !isNaN(value) && !value) return null;
-    const attrs = { name, value, loading, to, exact, usedOnTheSide };
 
-    return <EntryMenuLinkWithoutData {...attrs} />;
+    return (
+      <EntryMenuLinkWithoutData
+        name={name}
+        value={value || 0}
+        loading={loading}
+        to={to}
+        exact={exact}
+        usedOnTheSide={usedOnTheSide}
+      />
+    );
   }
 }
 const mapStateToProps = createSelector(
