@@ -34,7 +34,7 @@ export default (description /*: {[key: string]: string} */ = {}) => {
       }
     }
     if (!matchingHandler) {
-      throw new Error(`"${key}" doesn't allow a value like "${value}"`);
+      throw new Error(`"${value}" is not a valid value for "${key}"`);
     }
     // If I'm here, I do have a handler for this 'key', with this 'value'
     // So set the new description at 'key' with the cleaned up value

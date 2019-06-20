@@ -24,9 +24,6 @@ const _Tooltip = ({
   );
 };
 
-// const _Tooltip = ({ ...rest }) => (
-//   <Tooltip animation="shift" arrow="true" position="top" {...rest} />
-// );
 _Tooltip.displayName = 'Tooltip';
 _Tooltip.propTypes = {
   html: T.any,
