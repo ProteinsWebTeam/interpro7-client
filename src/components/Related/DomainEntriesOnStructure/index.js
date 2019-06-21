@@ -12,6 +12,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+import { format } from 'url';
 const f = foundationPartial(ebiGlobalStyles, fonts);
 
 const ProtVista = loadable({
@@ -104,7 +105,13 @@ GoToProtVistaMenu.propTypes = {
   entries: T.arrayOf(T.object).isRequired,
 };
 
-const ProtVistaLoaded = ({ dataprotein, tracks, chain, fixedHighlight }) => {
+const ProtVistaLoaded = ({
+  dataprotein,
+  tracks,
+  dataGenome3d,
+  chain,
+  fixedHighlight,
+}) => {
   const protvistaEl = useRef(null);
   useEffect(() => {
     if (!protvistaEl.current || !protvistaEl.current.addEventListener) return;
@@ -134,6 +141,40 @@ const ProtVistaLoaded = ({ dataprotein, tracks, chain, fixedHighlight }) => {
     };
   });
 
+  const enrichedTracks = [...tracks];
+
+  if (!dataGenome3d.loading && !dataprotein.loading) {
+    const domains = dataGenome3d.payload.data
+      .map(d => d.annotations)
+      .flat(1)
+      .filter(
+        ({ uniprot_acc: protein }) =>
+          protein === dataprotein.payload.metadata.accession,
+      );
+    const domainsObj = {};
+    for (const d of domains) {
+      if (!(d.resource in domainsObj)) {
+        domainsObj[d.resource] = {
+          locations: [],
+        };
+      }
+      domainsObj[d.resource].accession = `G3D:${d.resource}`;
+      domainsObj[d.resource].confidence = d.confidence;
+      domainsObj[d.resource].protein = dataprotein.payload.metadata.accession;
+      domainsObj[d.resource].type = 'template annotation';
+      domainsObj[d.resource].source_database = d.resource;
+      domainsObj[d.resource].locations.push({
+        fragments: d.segments.map(s => ({
+          start: s.uniprot_start,
+          end: s.uniprot_stop,
+        })),
+      });
+    }
+    enrichedTracks.push([
+      'template_annotations_(Provided_by_genome3D)',
+      Object.values(domainsObj),
+    ]);
+  }
   return (
     <div ref={protvistaEl}>
       {dataprotein.loading ? (
@@ -141,7 +182,7 @@ const ProtVistaLoaded = ({ dataprotein, tracks, chain, fixedHighlight }) => {
       ) : (
         <ProtVista
           protein={dataprotein.payload.metadata}
-          data={tracks}
+          data={enrichedTracks}
           fixedHighlight={fixedHighlight}
         />
       )}
@@ -155,20 +196,45 @@ ProtVistaLoaded.propTypes = {
       metadata: T.object.isRequired,
     }),
   }).isRequired,
+  dataGenome3d: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.shape({
+      metadata: T.object,
+    }),
+  }).isRequired,
   tracks: T.oneOfType([T.object, T.array]),
   chain: T.string,
   fixedHighlight: T.string,
 };
 
+const getGenome3dURL = createSelector(
+  state => state.settings.genome3d,
+  state => state.customLocation.description.structure.accession,
+  ({ protocol, hostname, port, root }, accession) => {
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}classification/11/pdb/${accession}`,
+      // TODO: Replace 11 for latest once included in the genome3d api
+    });
+  },
+);
+
 const includeProtein = accession =>
   loadData({
-    getUrl: createSelector(
-      state => state.settings.api,
-      ({ protocol, hostname, port, root }) =>
-        `${protocol}//${hostname}:${port}${root}/protein/uniprot/${accession}`,
-    ),
-    propNamespace: 'protein',
-  })(ProtVistaLoaded);
+    getUrl: getGenome3dURL,
+    propNamespace: 'Genome3d',
+  })(
+    loadData({
+      getUrl: createSelector(
+        state => state.settings.api,
+        ({ protocol, hostname, port, root }) =>
+          `${protocol}//${hostname}:${port}${root}/protein/uniprot/${accession}`,
+      ),
+      propNamespace: 'protein',
+    })(ProtVistaLoaded),
+  );
 
 const tagChimericStructures = data => {
   const proteinsPerChain = {};

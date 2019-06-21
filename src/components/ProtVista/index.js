@@ -7,6 +7,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { Genome3dLink } from 'components/ExtLink';
 
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaSequence from 'protvista-sequence';
@@ -448,6 +449,9 @@ class ProtVista extends Component {
     const { expandedTrack } = this.state;
     if (NOT_MEMBER_DBS.has(entry.source_database) || entry.type === 'chain')
       return entry.accession;
+    if (entry.accession.startsWith('G3D:')) {
+      return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
+    }
     return (
       <>
         <Link

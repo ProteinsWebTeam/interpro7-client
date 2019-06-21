@@ -9,6 +9,8 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { processData } from 'components/ProtVista/utils';
 
+import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
+
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -98,10 +100,17 @@ export class DomainOnProteinWithoutData extends PureComponent {
     data: T.object.isRequired,
     dataResidues: T.object.isRequired,
     dataFeatures: T.object.isRequired,
+    dataGenome3d: T.object.isRequired,
   };
 
   render() {
-    const { data, mainData, dataResidues, dataFeatures } = this.props;
+    const {
+      data,
+      mainData,
+      dataResidues,
+      dataFeatures,
+      dataGenome3d,
+    } = this.props;
 
     if (!data || data.loading) return <Loading />;
     if (!data.payload || !data.payload.results) {
@@ -118,8 +127,14 @@ export class DomainOnProteinWithoutData extends PureComponent {
     });
     const interproFamilies = interpro.filter(entry => entry.type === 'family');
     const groups = groupByEntryType(interpro);
+    const genome3d = formatGenome3dIntoProtVistaPanels(dataGenome3d);
     unintegrated.sort(orderByAccession);
-    const mergedData = { ...groups, unintegrated, other_features: other };
+    const mergedData = {
+      ...groups,
+      unintegrated,
+      other_features: other,
+      ...genome3d,
+    };
     if (dataResidues && !dataResidues.loading && dataResidues.payload) {
       mergeResidues(mergedData, dataResidues.payload);
     }
@@ -171,6 +186,18 @@ const getInterproRelatedEntriesURL = createSelector(
     });
   },
 );
+const getGenome3dURL = createSelector(
+  state => state.settings.genome3d,
+  state => state.customLocation.description.protein.accession,
+  ({ protocol, hostname, port, root }, accession) => {
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}uniprot/${accession}`,
+    });
+  },
+);
 const getExtraURL = query =>
   createSelector(
     state => state.settings.api,
@@ -193,6 +220,8 @@ export default loadData({
   propNamespace: 'Features',
 })(
   loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
-    loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
+    loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
+      loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
+    ),
   ),
 );

@@ -23,6 +23,85 @@ const singleEntityNames = new Map(
 
 const whitelist = new Set(['Overview', 'Sequence', 'Alignments']);
 
+const icons = new Map([
+  ['Overview', { icon: '\uF2BB', class: 'icon-common' }],
+  ['Entries', { icon: '\uF1C0', class: 'icon-common' }],
+  ['Proteins', { icon: 'P', class: 'icon-conceptual' }],
+  ['Structures', { icon: 's', class: 'icon-conceptual' }],
+  ['Domain Architectures', { icon: undefined, class: 'icon-count-ida' }],
+  ['Taxonomy', { icon: undefined, class: 'icon-count-species' }],
+  ['Proteomes', { icon: undefined, class: 'icon-count-proteome' }],
+  ['Sets', { icon: undefined, class: 'icon-count-set' }],
+  ['Signature', { icon: undefined, class: 'icon-count-hmm' }],
+  ['Alignments', { icon: '\uF1DE', class: 'icon-common' }],
+  ['Sequence', { icon: '\uF120', class: 'icon-common' }],
+]);
+
+export const EntryMenuLinkWithoutData = (
+  {
+    name,
+    value,
+    loading,
+    to,
+    exact,
+    usedOnTheSide,
+  } /*: {
+    name: string,
+    value: ?number,
+    loading: boolean,
+    to: function,
+    exact: ?boolean,
+    usedOnTheSide?: boolean
+  }*/,
+) => (
+  <li
+    className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}
+    data-testid={`menu-${name.toLowerCase().replace(/\s+/g, '_')}`}
+  >
+    <Link
+      to={to}
+      exact={exact}
+      className={f('browse-tabs-link')}
+      activeClass={f('is-active', 'is-active-tab')}
+    >
+      <span data-content={name} className={f('name')}>
+        <i
+          data-icon={(icons.get(name) || {}).icon}
+          className={f(
+            'icon',
+            (icons.get(name) || {}).class,
+            'icon-count-sm',
+            'margin-right-medium',
+          )}
+          aria-label={`icon ${name}`}
+          data-testid={`entry-menu-${name.toLowerCase().replace(/\s+/g, '_')}`}
+        />
+        {name}
+      </span>
+      {value !== null && ' '}
+      {value !== null && !isNaN(value) && (
+        <NumberComponent
+          label
+          loading={loading}
+          abbr
+          duration={usedOnTheSide ? 0 : undefined}
+          className={f('counter')}
+        >
+          {value}
+        </NumberComponent>
+      )}
+    </Link>
+  </li>
+);
+EntryMenuLinkWithoutData.propTypes = {
+  name: T.string.isRequired,
+  value: T.number,
+  loading: T.bool,
+  to: T.oneOfType([T.object, T.func]).isRequired,
+  exact: T.bool,
+  usedOnTheSide: T.bool,
+};
+
 /*:: type Props = {
   to: Object | function,
   exact: ?boolean,
@@ -94,13 +173,6 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
       }
       // TODO: find a generic way to deal with this:
       if (whitelist.has(name)) value = NaN;
-      // if (
-      //   name === 'Domain Architectures' &&
-      //   payload.metadata.counters &&
-      //   !payload.metadata.counters.proteins
-      // ) {
-      //   value = 0;
-      // }
       // TODO: find a generic way to deal with this:
       if (
         name === 'Domain Architectures' &&
@@ -112,60 +184,15 @@ class EntryMenuLink extends PureComponent /*:: <Props> */ {
 
     if (!isFirstLevel && !isNaN(value) && !value) return null;
 
-    const icons = new Map([
-      ['Overview', { icon: '\uF2BB', class: 'icon-common' }],
-      ['Entries', { icon: '\uF1C0', class: 'icon-common' }],
-      ['Proteins', { icon: 'P', class: 'icon-conceptual' }],
-      ['Structures', { icon: 's', class: 'icon-conceptual' }],
-      ['Domain Architectures', { icon: undefined, class: 'icon-count-ida' }],
-      ['Taxonomy', { icon: undefined, class: 'icon-count-species' }],
-      ['Proteomes', { icon: undefined, class: 'icon-count-proteome' }],
-      ['Sets', { icon: undefined, class: 'icon-count-set' }],
-      ['Signature', { icon: undefined, class: 'icon-count-hmm' }],
-      ['Alignments', { icon: '\uF1DE', class: 'icon-common' }],
-      ['Sequence', { icon: '\uF120', class: 'icon-common' }],
-    ]);
     return (
-      <li
-        className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}
-        data-testid={`menu-${name.toLowerCase().replace(/\s+/g, '_')}`}
-      >
-        <Link
-          to={to}
-          exact={exact}
-          className={f('browse-tabs-link')}
-          activeClass={f('is-active', 'is-active-tab')}
-        >
-          <span data-content={name} className={f('name')}>
-            <i
-              data-icon={(icons.get(name) || {}).icon}
-              className={f(
-                'icon',
-                (icons.get(name) || {}).class,
-                'icon-count-sm',
-                'margin-right-medium',
-              )}
-              aria-label={`icon ${name}`}
-              data-testid={`entry-menu-${name
-                .toLowerCase()
-                .replace(/\s+/g, '_')}`}
-            />
-            {name}
-          </span>
-          {value !== null && ' '}
-          {value !== null && !isNaN(value) && (
-            <NumberComponent
-              label
-              loading={loading}
-              abbr
-              duration={usedOnTheSide ? 0 : undefined}
-              className={f('counter')}
-            >
-              {value}
-            </NumberComponent>
-          )}
-        </Link>
-      </li>
+      <EntryMenuLinkWithoutData
+        name={name}
+        value={value}
+        loading={loading}
+        to={to}
+        exact={exact}
+        usedOnTheSide={usedOnTheSide}
+      />
     );
   }
 }
