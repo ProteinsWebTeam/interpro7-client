@@ -160,6 +160,6 @@ export const edgeCases = new Map([
   [STATUS_GONE, 'The data associated with this accession has been removed'],
   [
     STATUS_SERVER_ERROR,
-    "The API response reported an error, but we haven't been able to determined its cause",
+    'The API reported an error, but the cause has not been determined',
   ],
 ]);

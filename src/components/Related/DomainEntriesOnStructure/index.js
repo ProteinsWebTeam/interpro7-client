@@ -53,6 +53,7 @@ const mergeData = secondaryData => {
     }
     out[entry.chain][entry.protein].data.Entries.push({
       accession: entry.accession,
+      name: entry.name,
       source_database: entry.source_database,
       coordinates: toArrayStructure(entry.entry_protein_locations),
       locations: entry.entry_protein_locations,
