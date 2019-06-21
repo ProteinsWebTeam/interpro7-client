@@ -28,6 +28,7 @@ const SchemaOrgData = loadable({
 });
 
 import { schemaProcessDataForDB } from 'schema_org/processors';
+import { NOT_MEMBER_DBS } from 'menuConfig';
 
 /*:: type Props = {
   data: {
@@ -63,7 +64,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
       <div className={f('md-list')} data-testid="by-member-database-box">
         <AnimatedEntry className={f('row')} element="div">
           {memberDB
-            .filter(({ canonical }) => canonical !== 'mobidblt')
+            .filter(({ canonical }) => !NOT_MEMBER_DBS.has(canonical))
             .sort((a, b) => {
               // sort list by alphabetical order
               if (a.canonical.toUpperCase() > b.canonical.toUpperCase())
