@@ -395,6 +395,9 @@ const EBIEndpointSettings = connect(getStatusForEndpoint('ebi'))(
 const IPScanEndpointSettings = connect(getStatusForEndpoint('ipScan'))(
   EndpointSettings,
 );
+const Genome3DEndpointSettings = connect(getStatusForEndpoint('genome3d'))(
+  EndpointSettings,
+);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -506,6 +509,7 @@ class Settings extends PureComponent {
         api = {},
         ebi = {},
         ipScan = {},
+        genome3d = {},
       },
       changeSettings,
     } = this.props;
@@ -551,6 +555,13 @@ class Settings extends PureComponent {
                 InterProScan Settings{' '}
                 {!DEV && '(modification temporarily disabled)'}
               </IPScanEndpointSettings>
+              <Genome3DEndpointSettings
+                category="genome3d"
+                endpointDetails={genome3d}
+              >
+                Genome3D Settings{' '}
+                {!DEV && '(modification temporarily disabled)'}
+              </Genome3DEndpointSettings>
 
               <button onClick={this._handleReset} className={f('button')}>
                 Reset settings to default values

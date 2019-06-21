@@ -12,6 +12,7 @@ export default (combineReducers({
   api: server('api'),
   ebi: server('ebi'),
   ipScan: server('ipScan'),
+  genome3d: server('genome3d'),
 }) /*: (ServerStatuses | void, any) => ServerStatuses */);
 
 export const serverStatusesSelector = (
@@ -27,3 +28,4 @@ const serverStatusSelectorFor = server =>
 export const apiServerStatus = serverStatusSelectorFor('api');
 export const ebiServerStatus = serverStatusSelectorFor('ebi');
 export const ipScanServerStatus = serverStatusSelectorFor('ipScan');
+export const genome3dServerStatus = serverStatusSelectorFor('genome3d');

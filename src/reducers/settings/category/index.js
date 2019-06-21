@@ -44,6 +44,13 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         port: config.root.IPScan.port || DEFAULT_HTTP_PORT,
         root: config.root.IPScan.pathname,
       };
+    case 'genome3d':
+      return {
+        protocol: config.root.genome3d.protocol,
+        hostname: config.root.genome3d.hostname,
+        port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
+        root: config.root.genome3d.pathname,
+      };
     default:
       return null;
   }

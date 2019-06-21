@@ -173,6 +173,7 @@ const AllProteinDownload = ({ description, count }) => (
     }.fasta`}
     count={count}
     customLocationDescription={{
+      ...description,
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
       [description.main.key]: {

@@ -3,10 +3,13 @@ import {
   apiServerStatus,
   ebiServerStatus,
   ipScanServerStatus,
+  genome3dServerStatus,
 } from '.';
 
 describe('selectors', () => {
-  const state = { status: { servers: { api: {}, ebi: {}, ipScan: {} } } };
+  const state = {
+    status: { servers: { api: {}, ebi: {}, ipScan: {}, genome3d: {} } },
+  };
 
   test('serverStatusesSelector', () => {
     expect(serverStatusesSelector(state)).toBe(state.status.servers);
@@ -22,5 +25,8 @@ describe('selectors', () => {
 
   test('ipScanServerStatus', () => {
     expect(ipScanServerStatus(state)).toBe(state.status.servers.ipScan);
+  });
+  test('genome3dServerStatus', () => {
+    expect(genome3dServerStatus(state)).toBe(state.status.servers.genome3d);
   });
 });

@@ -107,7 +107,7 @@ export class Snippet extends PureComponent {
         {
           title: 'Error while copying',
           body:
-            'An error happened while trying to copy this snippet of code in your clipboard',
+            'An error was encountered while trying to copy this snippet of code in your clipboard',
           ttl: TTL,
           className: f('alert'),
         },

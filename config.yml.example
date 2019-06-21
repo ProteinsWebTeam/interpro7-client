@@ -4,6 +4,7 @@ root:
   API: https://wwwdev.ebi.ac.uk/interpro7/api/
   EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
   IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
+  genome3d: //www.genome3d.eu/api/v1/
 
 github:
   InterProClient:
@@ -29,6 +30,7 @@ pages:
       - proteome
       - set
       - logo
+      - genome3d
   protein:
     subPages:
       - entry

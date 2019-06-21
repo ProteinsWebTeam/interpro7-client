@@ -27,7 +27,8 @@ export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
       <div className={f('row')}>
         <div className={f('columns')}>
           <div className={f('callout', 'info', 'withicon')}>
-            An error happened while trying to load a component of this page.
+            An error was encountered while trying to load a component of this
+            page.
           </div>
           <p>
             If you really want this part of the page you might want to reload
@@ -48,7 +49,8 @@ export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
           >
             <span role="img" aria-label="email">
               ✉
-            </span>️ Contact form
+            </span>
+            ️ Contact form
           </Link>
         </div>
       </div>

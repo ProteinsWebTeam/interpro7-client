@@ -67,7 +67,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
     let sequence;
     let name;
     let payload = this.props.data.payload;
-    if (!payload.metadata)
+    if (payload && !payload.metadata)
       payload = this.props.data.payload.results
         ? this.props.data.payload.results[0]
         : this.props.localPayload;
