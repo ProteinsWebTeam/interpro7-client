@@ -59,7 +59,7 @@ const loadPDBWebComponents = () => {
   dataMatches: Data,
 }; */
 
-class SummaryStructure extends PureComponent /*:: <Props> */ {
+export class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({}).isRequired,
     dataMatches: T.shape({}).isRequired,

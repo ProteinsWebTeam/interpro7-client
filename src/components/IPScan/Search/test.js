@@ -7,7 +7,6 @@ import { IPScanSearch } from '.';
 jest.mock('draft-js/lib/generateRandomKey', () => () => '123');
 
 const renderer = new ShallowRenderer();
-// const myHeaders = new Headers({'client-cache': true});
 
 describe('<IPScanSearch />', () => {
   test('should render', () => {

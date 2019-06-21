@@ -5,7 +5,6 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { IPScanStatus } from '.';
 
 const renderer = new ShallowRenderer();
-// const myHeaders = new Headers({'client-cache': true});
 
 describe('<IPScanStatus />', () => {
   test('should render', () => {

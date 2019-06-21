@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -5,7 +6,7 @@ import Link from 'components/generic/Link';
 
 /*:: type Props = {
   accession: string | number,
-  data: {
+  data?: {
     payload: ?{
       metadata : ?{
         name: ?{
@@ -15,6 +16,9 @@ import Link from 'components/generic/Link';
     },
   },
   element?: any,
+  name: {
+    short: string
+  }
 }; */
 
 class TaxIdOrName extends PureComponent /*:: <Props> */ {

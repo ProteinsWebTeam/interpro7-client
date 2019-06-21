@@ -11,7 +11,7 @@ import IntegratedFilter from './IntegratedFilter';
 import SignaturesFilter from './SignaturesFilter';
 import GOTermsFilter from './GOTermsFilter';
 
-const EntryListFilter = ({ mainDB }) => (
+export const EntryListFilter = ({ mainDB } /*: {mainDB: string}*/) => (
   <FiltersPanel>
     <EntryTypeFilter
       label={`${mainDB === 'InterPro' ? 'InterPro' : 'Member Database'} Type`}
