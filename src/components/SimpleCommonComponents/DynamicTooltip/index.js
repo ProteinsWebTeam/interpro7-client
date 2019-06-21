@@ -9,6 +9,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import { foundationPartial } from 'styles/foundation';
 import local from './style.css';
+
 const f = foundationPartial(local);
 
 const _DataProvider = ({ data, onLoad, databases }) => {
@@ -19,11 +20,15 @@ const _DataProvider = ({ data, onLoad, databases }) => {
       source_database: db,
     } = data.payload.metadata;
 
-    const message = `
-        <b>${accession}</b></br>
-        ${name} </br>
-        <small>${databases[db].name}</small></br>
-    `;
+    const message = () => (
+      <>
+        <b>{accession}</b>
+        <br />
+        {name} <br />
+        <small>{databases[db].name}</small>
+        <br />
+      </>
+    );
 
     onLoad(message);
   }
@@ -55,6 +60,8 @@ const getUrlFor = createSelector(
   },
 );
 
+const dataProviders = {};
+
 const DynamicTooltip = ({
   type,
   source,
@@ -64,23 +71,13 @@ const DynamicTooltip = ({
   ...rest
 }) => {
   const [shouldLoad, setShouldLoad] = useState(false);
-  const [message, setMessage] = useState(`<b>${accession}</b>`);
-  const [popper, setPopper] = useState();
+  const [message, setMessage] = useState(() => <b>{accession}</b>);
   const popperContainer = useRef(null);
   const popupTargetClass = 'feature';
-
-  const _getTooltipContent = () => {
-    const element = document.createElement('div');
-    element.innerHTML = `<div>${message}</div>`;
-    return element;
-  };
 
   const _handleMouseOver = e => {
     if (e.target.classList.contains(popupTargetClass)) {
       const _popper = new PopperJS(e.target, popperContainer.current);
-      const child = _getTooltipContent();
-      popperContainer.current.appendChild(child);
-      setPopper(child);
       popperContainer.current.classList.remove(f('hide'));
     }
     setShouldLoad(true);
@@ -89,14 +86,16 @@ const DynamicTooltip = ({
   const _handleMouseOut = e => {
     if (e.target.classList.contains(popupTargetClass)) {
       popperContainer.current.classList.add(f('hide'));
-      popperContainer.current.removeChild(popper);
-      setPopper(null);
     }
   };
 
-  const DataProvider = shouldLoad
-    ? loadData(getUrlFor)(_DataProvider)
-    : _DataProvider;
+  let DataProvider = _DataProvider;
+  if (shouldLoad) {
+    if (!(accession in dataProviders)) {
+      dataProviders[accession] = loadData(getUrlFor)(_DataProvider);
+    }
+    DataProvider = dataProviders[accession];
+  }
 
   return (
     <>
@@ -119,6 +118,7 @@ const DynamicTooltip = ({
       </div>
       <div ref={popperContainer} className={f('popper', 'hide')}>
         <div className={f('popper__arrow')} />
+        <div>{message}</div>
       </div>
     </>
   );
