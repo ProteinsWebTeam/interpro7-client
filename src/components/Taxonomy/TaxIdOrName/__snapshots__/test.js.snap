@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TaxIdOrName /> should render 1`] = `
+<Memo(ConnectFunction)
+  to={
+    Object {
+      "description": Object {
+        "main": Object {
+          "key": "taxonomy",
+        },
+        "taxonomy": Object {
+          "accession": "1",
+          "db": "uniprot",
+        },
+      },
+    }
+  }
+>
+  root
+</Memo(ConnectFunction)>
+`;

@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MenuItem /> should render 1`] = `
+<Memo(ConnectFunction)
+  activeClass="active"
+  className="menu-item"
+  onClick={[Function]}
+  to={
+    Object {
+      "description": Object {
+        "other": Array [
+          "help",
+        ],
+      },
+    }
+  }
+>
+  Help
+</Memo(ConnectFunction)>
+`;

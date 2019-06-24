@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Lineage /> should render 1`] = `
+<div>
+  <span
+    className="icon icon-common primary"
+    data-icon=""
+  >
+     
+    <TaxIdOrName
+      accession="1"
+      name={
+        Object {
+          "name": "root",
+          "short": "root",
+        }
+      }
+    />
+     
+  </span>
+  <span
+    className="icon icon-common primary"
+    data-icon=""
+  >
+     
+    <TaxIdOrName
+      accession="131567"
+      name={
+        Object {
+          "name": "cellular organisms",
+          "short": "cellular organisms",
+        }
+      }
+    />
+     
+  </span>
+  <span
+    className="icon icon-common primary"
+    data-icon=""
+  >
+     
+    <TaxIdOrName
+      accession="2"
+      name={
+        Object {
+          "name": "Bacteria",
+          "short": "Bacteria (eubacteria)",
+        }
+      }
+    />
+     
+  </span>
+  <span
+    className="icon icon-common primary"
+    data-icon=""
+  >
+     
+    <TaxIdOrName
+      accession="1224"
+      name={
+        Object {
+          "name": "Proteobacteria",
+          "short": "Proteobacteria",
+        }
+      }
+    />
+     
+  </span>
+  <span
+    className="icon icon-common primary"
+    data-icon=""
+  >
+     
+    <TaxIdOrName
+      accession="28211"
+      name={
+        Object {
+          "name": "Alphaproteobacteria",
+          "short": "Alphaproteobacteria",
+        }
+      }
+    />
+     
+  </span>
+  <span
+    className="icon icon-common primary"
+    data-icon=""
+  >
+     
+    <TaxIdOrName
+      accession="356"
+      name={
+        Object {
+          "name": "Rhizobiales",
+          "short": "Rhizobiales (rhizobacteria)",
+        }
+      }
+    />
+     
+  </span>
+  <span
+    className="icon icon-common primary"
+    data-icon=""
+  >
+     
+    <TaxIdOrName
+      accession="335928"
+      name={
+        Object {
+          "name": "Xanthobacteraceae",
+          "short": "Xanthobacteraceae",
+        }
+      }
+    />
+     
+  </span>
+  <span
+    className="icon icon-common primary"
+    data-icon=""
+  >
+     
+    <TaxIdOrName
+      accession="99"
+      name={
+        Object {
+          "name": "Ancylobacter",
+          "short": "Ancylobacter",
+        }
+      }
+    />
+     
+  </span>
+  <span
+    className="icon icon-common primary"
+    data-icon=""
+  >
+     
+    <TaxIdOrName
+      accession="100"
+      name={
+        Object {
+          "name": "Ancylobacter aquaticus",
+          "short": "Ancylobacter aquaticus",
+        }
+      }
+    />
+     
+  </span>
+</div>
+`;

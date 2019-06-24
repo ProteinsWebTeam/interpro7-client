@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SideMenu /> should be hidden 1`] = `
+<aside
+  aria-hidden={true}
+  className="container"
+  inert=""
+  role="menu"
+/>
+`;
+
+exports[`<SideMenu /> should render 1`] = `
+<aside
+  aria-hidden={false}
+  className="container visible"
+  role="menu"
+>
+  <React.Fragment>
+    <button
+      aria-hidden="true"
+      className="exit"
+      onClick={[Function]}
+      title="Close side menu"
+    >
+      ×
+    </button>
+    <nav>
+      <ul>
+        <InterProMenu
+          className="secondary is-drilldown"
+        >
+          <span
+            className="menu-label cursor-default"
+          >
+            InterPro menu
+          </span>
+        </InterProMenu>
+        <EBIMenu
+          className="tertiary"
+        >
+          <span
+            className="menu-label cursor-default"
+          >
+            EBI menu
+          </span>
+        </EBIMenu>
+        <span />
+        <li
+          className="menu-label cursor-default tertiary"
+        >
+          <Memo(ConnectFunction) />
+        </li>
+        <li>
+          <span
+            className="menu-label cursor-default tertiary"
+          >
+            Connection status
+          </span>
+          <Memo(ConnectFunction) />
+        </li>
+      </ul>
+    </nav>
+  </React.Fragment>
+</aside>
+`;

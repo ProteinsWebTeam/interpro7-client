@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EntryListFilter /> should render 1`] = `
+<Memo(ConnectFunction)>
+  <Memo(ConnectFunction)
+    label="InterPro Type"
+  />
+  <Memo(ConnectFunction)
+    label="Integrated Database"
+  />
+  <Memo(ConnectFunction)
+    label="GO Terms"
+  />
+</Memo(ConnectFunction)>
+`;
