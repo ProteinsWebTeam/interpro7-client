@@ -10,6 +10,7 @@ import config from 'config';
 import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 
 import cancelable from 'utils/cancelable';
 import { toPlural } from 'utils/pages';
@@ -383,17 +384,6 @@ const getUrlForMemberDBCount = createSelector(
   },
 );
 
-const getUrlForMemberDB = createSelector(
-  state => state.settings.api,
-  ({ protocol, hostname, port, root }) =>
-    format({
-      protocol,
-      hostname,
-      port,
-      pathname: root,
-    }),
-);
-
 const getUrlForSubPageCount = createSelector(
   state => state.settings.api,
   state => state.customLocation.description,
@@ -418,7 +408,7 @@ const mapStateToProps = createSelector(
 );
 
 const FullyLoadedMemberDBSelector = loadData({
-  getUrl: getUrlForMemberDB,
+  getUrl: getUrlForMeta,
   propNamespace: 'DB',
 })(
   loadData({ getUrl: getUrlForAllCount, propNamespace: 'AllCount' })(
@@ -434,7 +424,7 @@ const FullyLoadedMemberDBSelector = loadData({
 );
 
 const SimplyLoadedMemberDBSelector = loadData({
-  getUrl: getUrlForMemberDB,
+  getUrl: getUrlForMeta,
   propNamespace: 'DB',
   mapStateToProps,
   mapDispatchToProps: { goToCustomLocation },
