@@ -11,11 +11,11 @@ describe('<Children />', () => {
     renderer.render(
       <Children
         names={{
-          '12333': {
+          12333: {
             name: 'unclassified bacterial viruses',
             short: 'unclassified bacterial viruses',
           },
-          '12877': {
+          12877: {
             name: 'Satellites',
             short: 'Satellites',
           },

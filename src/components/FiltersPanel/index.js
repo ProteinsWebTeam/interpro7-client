@@ -14,13 +14,14 @@ import style from './style.css';
 
 const f = foundationPartial(style);
 
-const FilterPanel = ({ label, collapsed, toggle, children }) => (
+export const FilterPanel = ({ label, collapsed, toggle, children }) => (
   /*: {|
                          label: string,
                          collapsed: boolean,
                          toggle: function,
                          children: any,
-                       |} */ <div
+                       |} */
+  <div
     className={f('columns', 'small-12', 'medium-4', 'large-4', 'end')}
     data-testid={`filterby-${label.toLowerCase().replace(/\s+/g, '_')}`}
   >
@@ -52,7 +53,7 @@ FilterPanel.propTypes = {
 /*:: type State = {
   filters: any
 }; */
-class FiltersPanel extends PureComponent /*:: <Props, State> */ {
+export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     children: T.any,
     goToCustomLocation: T.func.isRequired,

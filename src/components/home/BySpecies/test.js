@@ -30,7 +30,7 @@ describe('<BySpecies />', () => {
       <BySpecies
         data={{
           payload: {
-            '9606': {
+            9606: {
               title: 'Homo sapiens',
               value: 64093,
             },
@@ -38,7 +38,7 @@ describe('<BySpecies />', () => {
         }}
         dataProtein={{
           payload: {
-            '9606': {
+            9606: {
               title: 'Homo sapiens',
               value: 170588,
             },

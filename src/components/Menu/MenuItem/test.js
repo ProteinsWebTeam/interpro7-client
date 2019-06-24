@@ -10,14 +10,15 @@ describe('<MenuItem />', () => {
   test('should render', () => {
     renderer.render(
       <MenuItem
-        children={'Help'}
         closeEverything={() => {}}
         to={{
           description: {
             other: ['help'],
           },
         }}
-      />,
+      >
+        Help
+      </MenuItem>,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
