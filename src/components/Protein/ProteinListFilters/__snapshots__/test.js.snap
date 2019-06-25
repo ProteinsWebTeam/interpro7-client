@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProteinListFilters /> should render 1`] = `
+<Memo(ConnectFunction)>
+  <Memo(ConnectFunction)
+    label="UniProt Curation"
+  />
+  <Memo(ConnectFunction)
+    label="Taxonomy"
+  />
+  <Memo(ConnectFunction)
+    label="Protein Size"
+  />
+</Memo(ConnectFunction)>
+`;

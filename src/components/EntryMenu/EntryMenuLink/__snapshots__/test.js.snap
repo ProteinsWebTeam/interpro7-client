@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EntryMenuLink /> should render 1`] = `
+<EntryMenuLinkWithoutData
+  loading={false}
+  name="Proteins"
+  to={[Function]}
+  value={171145}
+/>
+`;
+
+exports[`<EntryMenuLinkWithoutData /> should render 1`] = `
+<li
+  className="tabs-title"
+  data-testid="menu-structures"
+>
+  <Memo(ConnectFunction)
+    activeClass="is-active is-active-tab"
+    className="browse-tabs-link"
+    to={[Function]}
+  >
+    <span
+      className="name"
+      data-content="Structures"
+    >
+      <i
+        aria-label="icon Structures"
+        className="icon icon-conceptual icon-count-sm margin-right-medium"
+        data-icon="s"
+        data-testid="entry-menu-structures"
+      />
+      Structures
+    </span>
+     
+    <Memo(ConnectFunction)
+      abbr={true}
+      className="counter"
+      label={true}
+      loading={false}
+    >
+      41369
+    </Memo(ConnectFunction)>
+  </Memo(ConnectFunction)>
+</li>
+`;

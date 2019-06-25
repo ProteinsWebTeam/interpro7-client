@@ -122,7 +122,7 @@ const dataType = T.shape({
   payload: T.object,
 });
 
-class _MemberDBSelector extends PureComponent {
+export class _MemberDBSelector extends PureComponent {
   static propTypes = {
     children: T.func,
     dataDB: dataType,

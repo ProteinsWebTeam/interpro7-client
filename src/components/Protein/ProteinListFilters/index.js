@@ -10,7 +10,9 @@ import SizeFilter from './SizeFilter';
 import TaxonomyFilter from './TaxonomyFilter';
 import MatchPresenceFilter from './MatchPresenceFilter';
 
-const ProteinListFilters = ({ hasEntryFilter }) => (
+export const ProteinListFilters = (
+  { hasEntryFilter } /*: {hasEntryFilter: boolean} */,
+) => (
   <FiltersPanel>
     {!hasEntryFilter && <MatchPresenceFilter label="Matching Entries" />}
     <CurationFilter label="UniProt Curation" />
