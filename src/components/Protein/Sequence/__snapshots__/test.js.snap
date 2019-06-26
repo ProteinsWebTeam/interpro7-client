@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Sequence /> should render 1`] = `
+<section
+  id="sequence"
+>
+  <div
+    className="row columns"
+  >
+    <h5>
+      Sequence
+    </h5>
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className="small-12 medium-12 large-8 columns margin-bottom-large"
+    >
+      <Inner
+        sequence="MASIRRPHSPAKQQHLLRHGHLGPFASSSPPSSPLRHSSSSSSPRSAAHHHHHLLAAAGHTSFRRPLPRFAAFFLLGSFLGLLHFLSHLPRPLGPIPNPNSHHRHRDPFPILQHPHPPSTPHSNHKLLIVVTPTRARPSQAYYLTRMAHTLRLLHDSPLLWIVVQAGNPTPEAAAALRRTAVLHRYVGCCHNINASAPDFRPHQINAALDIVDNHRLDGVLYFADEEGVYSLHLFHHLRQIRRFATWPVPEISQHTNEVVLQGPVCKQGQVVGWHTTHDGNKLRRFHLAMSGFAFNSTMLWDPKLRSHLAWNSIRHPEMVKESLQGSAFVEQLVEDESQMEGIPADCSQIMNWHVPFGSESVVYPKGWRVATDLDVIIPLK"
+      />
+    </div>
+    <div
+      className="small-12 medium-12 large-4 columns"
+    >
+      <Memo(ConnectFunction)
+        onClick={[Function]}
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "sequence",
+              },
+            },
+          }
+        }
+      >
+        <div
+          className="sequence-link button-more icon icon-common icon-right"
+          data-icon=""
+          style={
+            Object {
+              "marginRight": "1rem",
+              "minWidth": "302px",
+            }
+          }
+        >
+          <div
+            className="shape ips gray"
+          />
+          <div
+            className="shape ips green"
+          />
+          <div
+            className="shape ips pale-green"
+          />
+          <div
+            className="shape ips red"
+          />
+          <div
+            className="shape ips blue"
+          />
+          <span>
+            Search selection with InterProScan
+          </span>
+        </div>
+      </Memo(ConnectFunction)>
+      <Memo(ConnectFunction)
+        href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
+        onClick={[Function]}
+        target="_blank"
+      >
+        <div
+          className="sequence-link button-more icon icon-common icon-right"
+          data-icon=""
+          style={
+            Object {
+              "minWidth": "302px",
+            }
+          }
+        >
+          <div
+            className="shape hmmer yellow"
+          />
+          <div
+            className="shape hmmer red"
+          />
+          <div
+            className="shape hmmer blue"
+          />
+          <span>
+            Search selection with HMMER
+          </span>
+        </div>
+      </Memo(ConnectFunction)>
+    </div>
+  </div>
+</section>
+`;

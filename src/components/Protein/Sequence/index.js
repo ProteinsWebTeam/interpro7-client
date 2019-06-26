@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -80,7 +79,7 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
   name: ?string,
 }; */
 
-class Sequence extends PureComponent /*:: <SequenceProps> */ {
+export class Sequence extends PureComponent /*:: <SequenceProps> */ {
   /*:: _ref: { current: null | React$ElementRef<'div'> }; */
 
   static propTypes = {
