@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { sleep } from 'timing-functions/src';
+// import { sleep } from 'timing-functions/src';
 
 import Link from 'components/generic/Link';
 
@@ -15,7 +15,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, styles);
 
-const TWO_SECONDS = 2000;
+// const TWO_SECONDS = 2000;
 const BASE_URL_FOR_IP6 = 'https://www.ebi.ac.uk/interpro';
 
 class NotFound extends PureComponent /*:: <{}> */ {
