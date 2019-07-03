@@ -5,5 +5,15 @@
 }
 
 .isoform-panel {
-  background: var(--colors-active-form);
+  background: var(--colors-almost-white);
+}
+
+header {
+  & .key {
+    font-size: 110%;
+    font-weight: 600;
+  }
+  & .id {
+    background: var(--colors-active-form);
+  }
 }

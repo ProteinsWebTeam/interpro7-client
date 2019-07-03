@@ -97,7 +97,7 @@ export class DomainOnProteinWithoutData extends PureComponent {
     mainData: T.object.isRequired,
     data: T.object.isRequired,
     dataResidues: T.object.isRequired,
-    dataFeatures: T.object.isRequired,
+    dataFeatures: T.object,
   };
 
   render() {

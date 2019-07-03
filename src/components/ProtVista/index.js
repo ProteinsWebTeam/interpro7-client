@@ -168,6 +168,8 @@ class ProtVista extends Component {
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.data, this.props.data)) {
       this.updateTracksWithData(this.props.data);
+      this._webProteinRef.current.data = this.props.protein;
+      this._hydroRef.current.data = this.props.protein;
     }
   }
 
