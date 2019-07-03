@@ -52,14 +52,22 @@ export const findStart = (centerOfHighlight /*: number */) => (
 export const location2html = (
   locations /*: Array<Object> */,
   accession /*: string */,
+  name /*: string */,
+  sourceDatabase /*: string */,
 ) => {
   let text = '';
-  if (accession) text = `<b>${accession}</b><br/>`;
-  text += `${locations
-    .map(
-      loc =>
-        `<p>${loc.fragments.map(f => `${f.start}-${f.end}`).join('<br/>')}</p>`,
-    )
-    .join('')}`;
+  if (accession) text += `<b>${accession}</b><br/>`;
+  if (name) text += `${name}<br/>`;
+  if (sourceDatabase) text += `${sourceDatabase}<br/>`;
+  if (locations) {
+    text += `${locations
+      .map(
+        loc =>
+          `<p>${loc.fragments
+            .map(f => `${f.start}-${f.end}`)
+            .join('<br/>')}</p>`,
+      )
+      .join('')}`;
+  }
   return text;
 };

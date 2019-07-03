@@ -226,7 +226,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }
             if (type === 'chain')
               this.showEntryInStructure('pdb', pdbid, accession, protein);
-            else
+            else if (!accession.startsWith('G3D:'))
               this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
             break;
           case 'mouseout':
@@ -480,9 +480,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
             hits.forEach(hit => {
               selections.push([
                 hit.color,
-                `${hit.start_residue_number}-${hit.end_residue_number}:${
-                  hit.struct_asym_id
-                }`,
+                `${hit.start_residue_number}-${hit.end_residue_number}:${hit.struct_asym_id}`,
               ]);
             });
             const theme = ColormakerRegistry.addSelectionScheme(

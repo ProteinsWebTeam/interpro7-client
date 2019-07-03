@@ -5,7 +5,15 @@ export const lut = new Map([
   [/\/training(\.html?)?\/?$/, () => ['help', 'tutorial']],
   [/\/(faqs|documentation)(\.html?)?\/?$/, ([, other]) => ['help', other]],
   [
-    /\/(entry|signature|protein)\/([^/]*)?\/?/,
+    /\/(entry)\/([^/]*)?\/?/,
+    ([, , accession]) => ['entry', 'interpro', accession],
+  ],
+  [
+    /\/(protein)\/([^/]*)?\/?/,
+    ([, , accession]) => ['protein', 'uniprot', accession],
+  ],
+  [
+    /\/(signature)\/([^/]*)?\/?/,
     ([, , accession]) => ['search', 'text', accession],
   ],
   [/\/member-database\/([^/]*)?\/?/, ([, memberDB]) => ['entry', memberDB]],
@@ -15,7 +23,8 @@ export default pathname => {
   for (const [re, urlPartMaker] of lut.entries()) {
     const match = pathname.match(re);
     if (match) {
-      return urlPartMaker(match);
+      const mapper = urlPartMaker(match);
+      return mapper;
     }
   }
 };

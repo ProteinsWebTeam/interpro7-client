@@ -406,6 +406,24 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
       name: 'Alignments',
     },
   ],
+  [
+    'genome3d',
+    {
+      to(customLocation) {
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key: 'entry' },
+            entry: {
+              ...customLocation.description.entry,
+              detail: 'genome3d',
+            },
+          },
+        };
+      },
+      name: 'Genome3D',
+    },
+  ],
   // [
   //   'proteome',
   //   {

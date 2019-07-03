@@ -16,12 +16,12 @@ exports[`<NotFound /> should render 1`] = `
       <h1
         className="oversized"
       >
-        Keep searching…
+        No search results found
       </h1>
       <h5
         className="lead"
       >
-        We are sorry, the page you were trying to access doesn’t exist.
+        We are sorry, no data associated with your request could be found in InterPro.
       </h5>
       <br />
       <p>

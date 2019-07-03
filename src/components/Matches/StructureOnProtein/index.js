@@ -72,6 +72,7 @@ class StructureOnProtein extends ProtVistaMatches {
               structure.structure_protein_locations ||
                 protein.structure_protein_locations,
               structure.accession,
+              structure.name.name,
             )}
           >
             <protvista-interpro-track

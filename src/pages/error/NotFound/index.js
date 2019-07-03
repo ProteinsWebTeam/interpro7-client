@@ -26,7 +26,7 @@ class NotFound extends PureComponent /*:: <{}> */ {
     if (!newUrlParts) return;
     // If not coming from previous IP6, await a bit before redirecting
     if (!document.referrer.startsWith(BASE_URL_FOR_IP6)) {
-      await sleep(TWO_SECONDS);
+      // await sleep(TWO_SECONDS);
       // Just to give time to the user to realise that something is wrong
       // (because they might be coming from a bookmark)
     }
@@ -41,9 +41,10 @@ class NotFound extends PureComponent /*:: <{}> */ {
         <div className={f('row')}>
           <div className={f('small-12', 'columns', 'small-centered')}>
             <h5>404: Page Not Found</h5>
-            <h1 className={f('oversized')}>Keep searching…</h1>
+            <h1 className={f('oversized')}>No search results found</h1>
             <h5 className={f('lead')}>
-              We are sorry, the page you were trying to access doesn’t exist.
+              We are sorry, no data associated with your request could be found
+              in InterPro.
             </h5>
             <br />
             <p>

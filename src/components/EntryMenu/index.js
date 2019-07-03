@@ -10,6 +10,7 @@ import { entities, singleEntity } from 'menuConfig';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import Genome3dMenuLink from './EntryMenuLink/Genome3dMenuLink';
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
@@ -96,9 +97,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
 
     const countainerWidth = this.props.width;
     // current transform
-    const currentTransform = `translateX(${
-      this._currentTransformTranslateX
-    }px) scaleX(${this._currentTransformScaleX})`;
+    const currentTransform = `translateX(${this._currentTransformTranslateX}px) scaleX(${this._currentTransformScaleX})`;
     // next transform
     const nextTranslateX = boundingRect.left - containerBoundingRect.left;
     let nextScaleX = boundingRect.width / countainerWidth;
@@ -169,6 +168,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     if (loading || !payload || !payload.metadata) {
       return <Loading />;
     }
+    const genome3d = singleEntity.get('genome3d');
     return (
       <ul
         className={f('tabs', className, { sign: isSignature })}
@@ -200,6 +200,14 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             usedOnTheSide={usedOnTheSide}
           />
         ))}
+        {mainType === 'entry' && !isSignature && genome3d && (
+          <Genome3dMenuLink
+            to={genome3d.to}
+            exact={genome3d.exact}
+            name={genome3d.name}
+            usedOnTheSide={usedOnTheSide}
+          />
+        )}
       </ul>
     );
   }

@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
-
-import { changeSettingsRaw } from 'actions/creators';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { Genome3dLink } from 'components/ExtLink';
 
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaSequence from 'protvista-sequence';
@@ -24,6 +22,9 @@ import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton
 import PopperJS from 'popper.js';
 
 import loadWebComponent from 'utils/load-web-component';
+
+import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -95,6 +96,7 @@ class ProtVista extends Component {
   static propTypes = {
     protein: T.object,
     data: T.array,
+    dataDB: T.object,
     colorDomainsBy: T.string,
     changeSettingsRaw: T.func,
     title: T.string,
@@ -287,8 +289,50 @@ class ProtVista extends Component {
     }
   }
 
+  _getSourceDatabaseDisplayName = (entry, databases) => {
+    let sourceDatabase = '';
+    if (Array.isArray(entry.source_database)) {
+      if (entry.source_database[0] in databases) {
+        sourceDatabase = databases[entry.source_database[0]].name;
+      } else {
+        sourceDatabase = entry.source_database[0];
+      }
+    } else {
+      if (entry.source_database in databases) {
+        sourceDatabase = databases[entry.source_database].name;
+      } else {
+        sourceDatabase = entry.source_database;
+      }
+    }
+    return sourceDatabase;
+  };
+
+  _getMobiDBLiteType = entry => {
+    let type = null;
+    if (entry.locations && entry.locations.length > 0) {
+      if (entry.locations[0].seq_feature) {
+        type = entry.locations[0].seq_feature;
+      }
+    }
+    return type;
+  };
+
   getElementFromEntry(detail) {
+    let databases = {};
+    const { dataDB } = this.props;
+    if (!dataDB.loading && dataDB.payload) {
+      databases = dataDB.payload.databases;
+    }
+
     const entry = detail.feature;
+    const sourceDatabase = this._getSourceDatabaseDisplayName(entry, databases);
+
+    let type = entry.entry_type || entry.type || '';
+    if (sourceDatabase === 'MobiDB Lite') {
+      // Handle MobiDB Lite entries
+      // TODO change how MobiDBLt entries are stored in MySQL
+      type = this._getMobiDBLiteType(entry);
+    }
     const isResidue = detail.type === 'residue';
     const isInterPro = entry.source_database === 'interpro';
     const tagString = `<section>   
@@ -316,13 +360,8 @@ class ProtVista extends Component {
         } 
         </div>
         <div>
-          ${
-            Array.isArray(entry.source_database)
-              ? entry.source_database[0]
-              : entry.source_database
-          }
-        ${(entry.entry_type || entry.type || '').replace('_', ' ') ||
-          ''}</div>       
+          ${sourceDatabase}
+        ${type ? type.replace('_', ' ') : ''}</div>       
         </div>
         <p>
           <small>          
@@ -412,6 +451,9 @@ class ProtVista extends Component {
     const { expandedTrack } = this.state;
     if (NOT_MEMBER_DBS.has(entry.source_database) || entry.type === 'chain')
       return entry.accession;
+    if (entry.accession.startsWith('G3D:')) {
+      return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
+    }
     return (
       <>
         <Link
@@ -666,7 +708,8 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(
+export default loadData({
+  getUrl: getUrlForMeta,
+  propNamespace: 'DB',
   mapStateToProps,
-  { changeSettingsRaw },
-)(ProtVista);
+})(ProtVista);

@@ -34,6 +34,12 @@ export default history => {
         port: config.root.IPScan.port || DEFAULT_HTTP_PORT,
         root: config.root.IPScan.pathname,
       };
+      settings.genome3d = {
+        protocol: config.root.genome3d.protocol,
+        hostname: config.root.genome3d.hostname,
+        port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
+        root: config.root.genome3d.pathname,
+      };
     }
   }
   const description = pathToDescription(pathname);
