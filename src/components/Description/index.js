@@ -16,165 +16,191 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ebiStyles, styles, theme, fonts);
 
-export const ParagraphWithCites = ({
-  p,
-  literature = [],
-  accession,
-  withoutIDs,
-}) => (
-  <div className={styles.paragraph}>
-    {p
-      .split(/<cite id="([^"]+)" ?\/>,?/i /* /\[(PUB\d+)\]/i*/)
-      .map((part, i) => {
-        const refCounter = literature.map(d => d[0]).indexOf(part) + 1;
-        return i % 2 ? (
-          <sup key={i}>
-            <Link
-              className={f('text-high')}
-              id={withoutIDs ? null : `description-${refCounter}`}
-              to={customLocation => {
-                const key = customLocation.description.main.key;
-                return {
-                  ...customLocation,
-                  description: {
-                    main: { key },
-                    [key]: {
-                      db: customLocation.description[key].db,
-                      accession,
-                    },
-                  },
-                  hash: part,
-                };
-              }}
-            >
-              [{refCounter}]
-            </Link>
-          </sup>
-        ) : (
-          <span key={i}>
-            {part === ', ' ? (
-              '\u00a0'
-            ) : (
-              <ParagraphWithTags>{part}</ParagraphWithTags>
-            )}
-          </span>
-        );
-      })}
-  </div>
+const TAG_REGEX = /(\[\w+:[\w\.]+])/;
+const TAG_REGEX_KV = /\[(\w+):([\w\.]+)]/;
+const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](, )?';
+const CITATIONS_REGEX = `(\\[(${CITATION_REGEX})+\\])`;
+
+const Citations = ({ text, literature = [], withoutIDs, accession }) => (
+  <sup>
+    [
+    {text.split(',').map((cita, i) => {
+      const pubId = cita.match(CITATION_REGEX)[1];
+      const refCounter = literature.map(d => d[0]).indexOf(pubId) + 1;
+      return (
+        <Link
+          key={cita}
+          id={withoutIDs ? null : `description-${refCounter}`}
+          className={f('text-high')}
+          to={customLocation => {
+            const key = customLocation.description.main.key;
+            return {
+              ...customLocation,
+              description: {
+                main: { key },
+                [key]: {
+                  db: customLocation.description[key].db,
+                  accession,
+                },
+              },
+              hash: pubId,
+            };
+          }}
+        >
+          {refCounter}
+          {i + 1 < text.split(',').length && ', '}
+        </Link>
+      );
+    })}
+    ]
+  </sup>
 );
-ParagraphWithCites.propTypes = {
-  p: T.string.isRequired,
+Citations.propTypes = {
+  text: T.string.isRequired,
   literature: T.array,
   accession: T.string,
   withoutIDs: T.bool,
 };
-
-const _getAttributesFromStringTag = text =>
-  text
-    .split(/\s|\/|>/)
-    .map(e => (e.indexOf('=') <= 0 ? null : e.split('=')))
-    .filter(Boolean)
-    .reduce((acc, e) => {
-      acc[e[0]] = e[1].replace(/"/g, '');
-      return acc;
-    }, {});
-
-const _getTextFromStringTag = text => text.split(/>([^<]+)/)[1];
-
+const ENTRY_DBS = [
+  'panther',
+  'pfam',
+  'cathgene3d',
+  'ssf',
+  'cdd',
+  'profile',
+  'smart',
+  'tigrfams',
+  'prosite',
+  'prints',
+  'hamap',
+  'pirsf',
+  'sfld',
+  'interpro',
+];
 const xReferenceURL = {
-  intact: 'https://www.ebi.ac.uk/intact/interaction/{}',
-  ec: 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec={}',
-  prositedoc: 'https://prosite.expasy.org/cgi-bin/prosite/prosite-search-ac?{}',
-  cazy: 'http://www.cazy.org/{}.html',
-  cog: 'ftp://ftp.ncbi.nih.gov/pub/COG/COG2014/static/byCOG/{}.html',
-  tc: 'http://www.tcdb.org/search/result.php?tc={}',
+  cazy: 'http://www.cazy.org/fam/{}.html',
+  cog: 'https://ftp.ncbi.nih.gov/pub/COG/COG2014/static/byCOG/{}.html',
+  intenz: 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec={}',
+  genprop: 'https://www.ebi.ac.uk/interpro/genomeproperties/#{}',
+  superfamily: 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid={}',
 };
 
-const ParagraphWithTags = ({ children }) => (
-  <>
-    {// Checking for the TAG dbxref
-    children.split(/(<dbxref [^>]+?\/>)/i).map((part, i) => {
-      if (i % 2) {
-        const attrs = _getAttributesFromStringTag(part);
-        const mainType =
-          attrs.db.toLowerCase() === 'swissprot' ? 'protein' : 'entry';
-        const mainDB =
-          attrs.db.toLowerCase() === 'swissprot'
-            ? 'uniprot'
-            : attrs.db.toLowerCase();
-        if (mainDB in xReferenceURL) {
+export const Paragraph = ({ p, literature = [], accession, withoutIDs }) => {
+  let text = p;
+  let match = null;
+  const parts = [];
+  while ((match = text.match(CITATIONS_REGEX))) {
+    parts.push(...text.slice(0, match.index).split(TAG_REGEX));
+    parts.push(match[0]);
+    text = text.slice(match.index + match[0].length);
+  }
+  parts.push(...text.split(TAG_REGEX));
+  return (
+    <div>
+      {parts.map(part => {
+        if (part.match(CITATIONS_REGEX))
           return (
-            <Link
-              href={xReferenceURL[mainDB].replace('{}', attrs.id)}
-              target="_blank"
-              className={f('ext')}
-              key={i}
-            >
-              {attrs.id}
-            </Link>
+            <Citations
+              text={part}
+              key={part}
+              literature={literature}
+              accession={accession}
+              withoutIDs={withoutIDs}
+            />
           );
-        }
-        return (
-          <Link
-            to={{
-              description: {
-                main: { key: mainType },
-                [mainType]: { db: mainDB, accession: attrs.id },
-              },
-            }}
-            key={i}
-          >
-            {attrs.id}
-          </Link>
-        );
-      }
-      // Checking for the TAG taxon
-      return part.split(/(<taxon [^>]+>[^<]+<\/taxon>)/i).map((part, j) => {
-        if (j % 2) {
-          const text = _getTextFromStringTag(part);
-          const attrs = _getAttributesFromStringTag(part);
-          return (
-            <Link
-              key={`${i}-${j}`}
-              to={{
-                description: {
-                  main: { key: 'taxonomy' },
-                  taxonomy: {
-                    db: 'uniprot',
-                    accession: attrs.tax_id,
+        const tagMatch = part.match(TAG_REGEX_KV);
+        if (tagMatch) {
+          const [_, tagType, tagValue] = tagMatch;
+          let type = tagType.toLowerCase();
+          let value = tagValue;
+          if (type === 'cathgene3d') value = `G3DSA:${tagValue}`;
+          if (ENTRY_DBS.indexOf(type) >= 0) {
+            return (
+              <Link
+                key={part}
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: { db: type, accession: value },
                   },
-                },
-              }}
-            >
-              {text}
-            </Link>
-          );
+                }}
+              >
+                {value}
+              </Link>
+            );
+          }
+          if (type === 'swissprot') {
+            return (
+              <Link
+                key={part}
+                to={{
+                  description: {
+                    main: { key: 'protein' },
+                    protein: { db: 'reviewed', accession: value },
+                  },
+                }}
+              >
+                {value}
+              </Link>
+            );
+          }
+          if (type === 'pdbe') {
+            return (
+              <Link
+                key={part}
+                to={{
+                  description: {
+                    main: { key: 'structure' },
+                    structure: { db: 'pdb', accession: value },
+                  },
+                }}
+              >
+                {value}
+              </Link>
+            );
+          }
+          if (type in xReferenceURL) {
+            return (
+              <Link
+                href={xReferenceURL[type].replace('{}', tagValue)}
+                target="_blank"
+                className={f('ext')}
+                key={part}
+              >
+                {tagValue}
+              </Link>
+            );
+          }
         }
         // TODO: change the way descriptions work from the backend side.
         return (
           <div
             className={styles.inline}
-            key={`${i}-${j}`}
+            key={part}
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(
                 part
                   .replace(/\[$/, ' ')
                   .replace(/^]/, ' ')
-                  .replace(/<li>/g, '&nbsp;• ')
+                  .replace(/<li>/g, '&nbsp;* ')
                   .replace(/<\/li>/g, '<br>')
                   .replace(/<ul>/g, '<br>')
-                  .replace(/<\/?(ul|li)>/g, ''),
+                  .replace(/<\/ul>/g, '<br>')
+                  .replace(/<\/li>/g, ''),
               ),
             }}
           />
         );
-      });
-    })}
-  </>
-);
-ParagraphWithTags.propTypes = {
-  children: T.any,
+      })}
+    </div>
+  );
+};
+Paragraph.propTypes = {
+  p: T.string.isRequired,
+  literature: T.array,
+  accession: T.string,
+  withoutIDs: T.bool,
 };
 
 /* :: type Props = {
@@ -198,7 +224,7 @@ class Description extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('margin-bottom-large')} data-testid="description">
         {paragraphs.map((p, i) => (
-          <ParagraphWithCites
+          <Paragraph
             key={i}
             p={p}
             literature={literature}

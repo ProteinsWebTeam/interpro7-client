@@ -18,17 +18,23 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(refStyles, ebiStyles);
 
+export const getLiteratureIdsFromDescription = (
+  description /*: Array<string> */,
+) =>
+  (description || []).reduce(
+    (acc, part) => [
+      ...acc,
+      ...(part.match(/\[cite:(PUB\d+)\]/gi) || []).map(t =>
+        t.replace(/(^\[cite:)|(]$)/g, ''),
+      ),
+    ],
+    [],
+  );
+
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
-
-// const schemaProcessData = data => ({
-//   '@type': 'ScholarlyArticle',
-//   '@id': '@citation',
-//   identifier: `http://identifiers.org/pubmed/${data.PMID}`,
-//   author: data.authors,
-// });
 
 /*:: type Reference = Object; */
 
@@ -131,7 +137,7 @@ const Literature = (
           ))}
         </div>
       ) : null}
-      {/* Only display “Further reading” if there have been main references */}
+      {/* Only display "Further reading" if there have been main references */}
       {included.length && extra.length ? <h5>Further reading</h5> : null}
       {extra.length ? (
         <div
