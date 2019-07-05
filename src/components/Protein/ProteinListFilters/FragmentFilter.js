@@ -96,7 +96,7 @@ const getUrl = createSelector(
     // transform description
     const _description = {
       ...description,
-      protein: { db: 'UniProt' },
+      protein: { db: description.protein.db || 'UniProt' },
     };
     // For Subpages
     if (description.main.key !== 'protein') {
