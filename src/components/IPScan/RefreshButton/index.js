@@ -22,11 +22,14 @@ const TITLE = 'Manually refresh job information';
 }; */
 
 export class RefreshButton extends PureComponent /*:: <Props> */ {
+  /* ::
+    _ref: { current: null | React$ElementRef<'span'> };
+  */
   static propTypes = {
     updateJobStatus: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();

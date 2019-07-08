@@ -11,8 +11,21 @@ import { processData } from 'components/ProtVista/utils';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-const ProtVistaForStructure = ({ data }) => {
+const ProtVistaForStructure = ({
+  data,
+  dataSecondary,
+}) => /*: { data: { loading: boolean, payload: Object }, dataSecondary: { loading: boolean, payload: Object }} */ {
   if (!data || data.loading || !data.payload) return <Loading />;
+
+  let secondaryData;
+  if (dataSecondary && !dataSecondary.loading && dataSecondary.payload) {
+    if (
+      dataSecondary.payload.extra_fields &&
+      dataSecondary.payload.extra_fields.secondary_structures
+    ) {
+      secondaryData = dataSecondary.payload.extra_fields.secondary_structures;
+    }
+  }
 
   const { interpro, unintegrated } = processData({
     data,
@@ -23,6 +36,7 @@ const ProtVistaForStructure = ({ data }) => {
       <EntriesOnStructure
         entries={interpro.concat(unintegrated)}
         showChainMenu={true}
+        secondaryStructures={secondaryData}
       />
     </div>
   );
@@ -32,6 +46,10 @@ ProtVistaForStructure.propTypes = {
     loading: T.boolean,
     payload: T.object,
   }).isRequired,
+  dataSecondary: T.shape({
+    loading: T.boolean,
+    payload: T.object,
+  }),
 };
 
 const getInterproRelatedEntriesURL = createSelector(
@@ -55,4 +73,27 @@ const getInterproRelatedEntriesURL = createSelector(
   },
 );
 
-export default loadData(getInterproRelatedEntriesURL)(ProtVistaForStructure);
+const getSecondaryStructureURL = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description.structure,
+  ({ protocol, hostname, port, root }, { db, accession }) => {
+    const newDesc = {
+      main: { key: 'structure' },
+      structure: { db, accession },
+    };
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(newDesc),
+      query: {
+        extra_fields: 'secondary_structures',
+      },
+    });
+  },
+);
+
+export default loadData({
+  propNamespace: 'Secondary',
+  getUrl: getSecondaryStructureURL,
+})(loadData(getInterproRelatedEntriesURL)(ProtVistaForStructure));

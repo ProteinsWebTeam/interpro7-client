@@ -61,11 +61,6 @@ export const getUrl = createSelector(
         )
           _search.page_size = _search.page_size || settingsPageSize;
 
-        // TODO check if it is efficient
-        if (description.main.key === 'structure') {
-          _search.extra_fields = 'secondary_structures';
-        }
-
         if (hash === 'grid') {
           switch (description.main.key) {
             case 'entry':

@@ -54,7 +54,8 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     goToCustomLocation: T.func.isRequired,
   };
 
-  constructor(props) {
+  /*::  _ref: { current: null | React$ElementRef<'form'> } */
+  constructor(props /*: Props */) {
     super(props);
     this._ref = React.createRef();
   }

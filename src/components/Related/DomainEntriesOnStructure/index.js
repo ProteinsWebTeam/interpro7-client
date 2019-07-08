@@ -23,13 +23,39 @@ const ProtVista = loadable({
 const toArrayStructure = locations =>
   locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
 
-const mergeData = secondaryData => {
+const mergeData = (secondaryData, secondaryStructures) => {
   const out = {};
   for (const entry of secondaryData) {
     if (!(entry.chain in out)) {
       out[entry.chain] = {};
     }
     if (!(entry.protein in out[entry.chain])) {
+      // Merging the secondary structures data per chain
+      const secondaryStructArray = [];
+      if (secondaryStructures) {
+        for (const structure of secondaryStructures) {
+          // eslint-disable-next-line max-depth
+          if (entry.chain === structure.accession) {
+            structure.locations.forEach(loc => {
+              loc.fragments.forEach(f => {
+                if (f.shape === 'helix') {
+                  f.fill = 'transparent';
+                  loc.fragmentType = 'Helices';
+                } else {
+                  loc.fragmentType = 'Strands';
+                }
+              });
+            });
+            secondaryStructArray.push({
+              ...structure,
+              type: 'secondary_structure',
+              accession: `Chain ${structure.accession}`,
+              source_database: 'PDB',
+            });
+          }
+        }
+      }
+
       out[entry.chain][entry.protein] = {
         protein: {
           accession: entry.protein,
@@ -48,6 +74,7 @@ const mergeData = secondaryData => {
               protein: entry.protein,
             },
           ],
+          'Secondary Structure': secondaryStructArray,
         },
         chain: entry.chain,
       };
@@ -248,8 +275,12 @@ const tagChimericStructures = data => {
 };
 const protvistaPerChainProtein = {};
 
-const EntriesOnStructure = ({ entries, showChainMenu = false }) => {
-  const merged = mergeData(entries);
+const EntriesOnStructure = ({
+  entries,
+  showChainMenu = false,
+  secondaryStructures,
+}) => {
+  const merged = mergeData(entries, secondaryStructures);
   tagChimericStructures(merged);
   return (
     <>
@@ -325,6 +356,7 @@ const EntriesOnStructure = ({ entries, showChainMenu = false }) => {
 EntriesOnStructure.propTypes = {
   entries: T.array.isRequired,
   showChainMenu: T.bool,
+  secondaryStructures: T.array,
 };
 
 export default EntriesOnStructure;

@@ -300,7 +300,8 @@ Hierarchy.propTypes = {
         literature: Object,
       }
     },
-    location: {description: {mainType: string}},
+    dbInfo: Object,
+    loading: boolean,
   };
 */
 

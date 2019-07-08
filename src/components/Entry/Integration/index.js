@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
@@ -21,7 +22,12 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const Integration = ({ intr, dataBase }) => {
+const Integration = (
+  {
+    intr,
+    dataBase,
+  } /*: {intr: string, dataBase: {payload: {databases: {interpro: {version: string}}}}} */,
+) => {
   const databases = dataBase && dataBase.payload && dataBase.payload.databases;
   return (
     <div>

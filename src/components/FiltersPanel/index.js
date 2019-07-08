@@ -14,13 +14,19 @@ import style from './style.css';
 
 const f = foundationPartial(style);
 
-export const FilterPanel = ({ label, collapsed, toggle, children }) => (
-  /*: {|
+export const FilterPanel = (
+  {
+    label,
+    collapsed,
+    toggle,
+    children,
+  } /*: {|
                          label: string,
                          collapsed: boolean,
                          toggle: function,
                          children: any,
-                       |} */
+                       |} */,
+) => (
   <div
     className={f('columns', 'small-12', 'medium-4', 'large-4', 'end')}
     data-testid={`filterby-${label.toLowerCase().replace(/\s+/g, '_')}`}
@@ -40,19 +46,19 @@ FilterPanel.propTypes = {
   children: T.any,
 };
 
-/*:: type Props = {
+/*:: type Props = {|
   children: any,
   goToCustomLocation: function,
   customLocation: {
     search: {},
-    description: {},
+    description: {main: {}},
     hash: string
     }
-}; */
+|}; */
 
-/*:: type State = {
+/*:: type State = {|
   filters: any
-}; */
+|}; */
 export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     children: T.any,
@@ -64,7 +70,7 @@ export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
     }).isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props*/) {
     super(props);
 
     this.state = { filters: Children.map(props.children, () => false) };

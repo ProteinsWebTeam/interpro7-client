@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -29,7 +30,7 @@ const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
 const reducedStyleBundle = classnames.bind(styles);
 
 /*:: type Props = {
-  openSidenav: function,
+  openSideNav: function,
   open: boolean,
   svg: boolean,
   stuck: boolean

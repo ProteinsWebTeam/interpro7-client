@@ -128,7 +128,7 @@ export class Species extends PureComponent /*:: <SpeciesProps> */ {
     loading: boolean,
     payload: ?Object,
   },
-  dataEntry: {
+  dataProtein: {
     loading: boolean,
     payload: ?Object,
   }

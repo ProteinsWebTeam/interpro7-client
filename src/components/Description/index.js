@@ -16,12 +16,14 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ebiStyles, styles, theme, fonts);
 
-export const ParagraphWithCites = ({
-  p,
-  literature = [],
-  accession,
-  withoutIDs,
-}) => (
+export const ParagraphWithCites = (
+  {
+    p,
+    literature = [],
+    accession,
+    withoutIDs,
+  } /*: {p: string, literature: Array<string>, accession: string, withoutIDs: boolean} */,
+) => (
   <div className={styles.paragraph}>
     {p
       .split(/<cite id="([^"]+)" ?\/>,?/i /* /\[(PUB\d+)\]/i*/)
@@ -90,7 +92,7 @@ const xReferenceURL = {
   tc: 'http://www.tcdb.org/search/result.php?tc={}',
 };
 
-const ParagraphWithTags = ({ children }) => (
+const ParagraphWithTags = ({ children } /*: {children: any} */) => (
   <>
     {// Checking for the TAG dbxref
     children.split(/(<dbxref [^>]+?\/>)/i).map((part, i) => {
@@ -213,13 +215,20 @@ class Description extends PureComponent /*:: <Props> */ {
   }
 }
 
-export class DescriptionReadMore extends PureComponent {
+/* :: type DescriptionReadMoreProps = {|
+  text: string,
+  minNumberOfCharToShow: number,
+  patternToRemove: string
+|}; */
+
+/* :: type State = {| showMore: boolean |}; */
+export class DescriptionReadMore extends PureComponent /*:: <DescriptionReadMoreProps, State> */ {
   static propTypes = {
     text: T.string,
     minNumberOfCharToShow: T.number,
     patternToRemove: T.string,
   };
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
     this.state = { showMore: false };
   }

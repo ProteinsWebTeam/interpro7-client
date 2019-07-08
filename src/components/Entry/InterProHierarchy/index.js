@@ -58,7 +58,7 @@ class InterProHierarchy extends PureComponent /*:: <Props> */ {
     goToCustomLocation: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();

@@ -14,17 +14,17 @@ import local from './style.css';
 
 const f = foundationPartial(local);
 
-/*:: type Props = {
+/*:: type Props = {|
   name: string,
   value: string,
   children: string,
   title?: string,
   defaultChecked: boolean
-}*/
+|}*/
 
-/*:: type State = {
+/*:: type State = {|
   checked: boolean
-}*/
+|}*/
 
 class AdvancedOption extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
@@ -35,7 +35,7 @@ class AdvancedOption extends PureComponent /*:: <Props, State> */ {
     defaultChecked: T.bool,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.state = {
@@ -100,7 +100,7 @@ const groupApplications = applications => {
 };
 
 const applicationToCheckbox = ({ value, defaultValue, properties }) => (
-  <AdvancedOption
+  /*: {value: string, defaultValue: boolean, properties: {properties: Array<Object>}} */ <AdvancedOption
     name="appl"
     value={value}
     defaultChecked={defaultValue}
@@ -148,7 +148,7 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
     }).isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: AdvancedOptionsProps */) {
     super(props);
 
     this._ref = React.createRef();

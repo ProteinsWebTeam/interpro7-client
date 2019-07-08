@@ -1,4 +1,3 @@
-//
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -35,7 +34,8 @@ const f = foundationPartial(style, fonts);
 /*:: type Props = {
   id: string|number,
   matches: Array<Object>,
-  highlight?: string
+  highlight?: string,
+  colorDomainsBy?: string
 }; */
 
 const NUMBER_OF_CHECKS = 10;
@@ -53,7 +53,7 @@ const FULL_REQUESTER = 2;
 
 let fullScreenRequester = null;
 class StructureView extends PureComponent /*:: <Props> */ {
-  /*:: _structurevViewer: { current: ?HTMLElement }; */
+  /*:: _structureViewer: { current: ?HTMLElement }; */
 
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
@@ -179,7 +179,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
           chain: chainF,
           protein: proteinF,
           parent,
-        } = (feature || {}).feature || {};
+        } = feature || {};
         let proteinD = proteinF;
 
         switch (eventtype) {
@@ -226,11 +226,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }
             if (type === 'chain')
               this.showEntryInStructure('pdb', pdbid, accession, protein);
-            else if (!accession.startsWith('G3D:'))
+            else if (
+              !accession.startsWith('G3D:') &&
+              type !== 'secondary_structure'
+            )
+              // TODO: Needs refactoring
               this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
             break;
           case 'mouseout':
-            this.showEntryInStructure();
+            if (type !== 'secondary_structure') this.showEntryInStructure();
             break;
           default:
             break;

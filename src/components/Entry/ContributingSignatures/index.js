@@ -31,7 +31,13 @@ const schemaProcessData = ({ db, name }) => ({
   name,
 });
 
-const SignatureLink = React.memo(({ accession, db, label }) => (
+const SignatureLink = React.memo((
+  {
+    accession,
+    db,
+    label,
+  } /*: {accession: string, db: string, label: string} */,
+) => (
   <Link
     to={{
       description: {
@@ -52,7 +58,9 @@ SignatureLink.propTypes = {
   label: T.string.isRequired,
 };
 
-const ContributingSignatures = ({ contr, data } /*: {contr: Object} */) => {
+const ContributingSignatures = (
+  { contr, data } /*: {contr: Object, data: Object} */,
+) => {
   const metaDB = data.loading || !data.payload ? {} : data.payload.databases;
   const contrEntries = Object.entries(contr);
   return (

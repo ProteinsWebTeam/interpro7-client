@@ -83,6 +83,7 @@ const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
 /*:: type Props = {
   visible: boolean,
   mainAccession: ?string,
+  mainType?: string,
   closeSideNav: function,
 }; */
 /*:: type State = {

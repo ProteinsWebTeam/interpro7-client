@@ -230,8 +230,7 @@ describe('getUrlForApi', () => {
     };
 
     expect(getUrlForApi(state)).toBe(
-      // 'https://www.example.com:443/basename/structure/PDB/101m/',
-      'https://www.example.com:443/basename/structure/PDB/101m/?extra_fields=secondary_structures',
+      'https://www.example.com:443/basename/structure/PDB/101m/',
     );
   });
 

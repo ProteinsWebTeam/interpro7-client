@@ -141,21 +141,14 @@ const mapStateToUrlFor = createSelector(
     ),
 );
 
-/*:: type DBChoiceInputProps = {
-  type: string,
-};*/
-
-/*:: type DBChoiceInputState = {
-  DBChoiceInputWithData: any,
-  type: ?string
-};*/
+/* :: type DBChoiceInputProps =  {|type: string|} */
+/* :: type DBChoiceInputState =  {|DBChoiceInputWithData: any, type: ?string|} */
 
 export default class DBChoiceInput extends PureComponent /*:: <DBChoiceInputProps, DBChoiceInputState> */ {
   static propTypes = {
     type: T.string.isRequired,
   };
-
-  constructor(props /*:: <DBChoiceInputProps> */) {
+  constructor(props /*: DBChoiceInputProps */) {
     super(props);
 
     this.state = {
@@ -164,7 +157,10 @@ export default class DBChoiceInput extends PureComponent /*:: <DBChoiceInputProp
     };
   }
 
-  static getDerivedStateFromProps({ type }, prevState) {
+  static getDerivedStateFromProps(
+    { type } /*: DBChoiceInputState */,
+    prevState /*: DBChoiceInputState */,
+  ) {
     if (type === prevState.type) return null;
 
     return {

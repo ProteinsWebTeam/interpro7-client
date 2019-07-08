@@ -14,7 +14,9 @@ import Link from 'components/generic/Link';
 
 const f = foundationPartial(local);
 
-export const CurrentVersion = ({ data }) => {
+export const CurrentVersion = (
+  { data } /*: {data: {loading: boolean, payload: Object}} */,
+) => {
   if (!data) return <Loading />;
   const { loading, payload } = data;
   if (loading || !payload) return <Loading />;
