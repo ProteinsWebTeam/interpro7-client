@@ -169,8 +169,13 @@ const ProtVistaLoaded = ({
   });
 
   const enrichedTracks = [...tracks];
+  const HTTP_OK = 200;
 
-  if (!dataGenome3d.loading && !dataprotein.loading) {
+  if (
+    !dataGenome3d.loading &&
+    !dataprotein.loading &&
+    dataGenome3d.status === HTTP_OK
+  ) {
     const domains = dataGenome3d.payload.data
       .map(d => d.annotations)
       .flat(1)

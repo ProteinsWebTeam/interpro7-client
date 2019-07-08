@@ -9,7 +9,7 @@ exports[`<ProteinListFilters /> should render 1`] = `
     label="Taxonomy"
   />
   <Memo(ConnectFunction)
-    label="Protein Size"
+    label="Fragment"
   />
 </Memo(ConnectFunction)>
 `;

@@ -27,6 +27,14 @@ Development
 
 -   Access the website at the address defined in your configuration
 
+-   There are 3 special branch names:
+
+    - **master**: This branch should point the the code that is currently deployed in the Live machines.
+    - **dev**: Use this branch for ready to test features. IT gets automatically deploys in the internal dev machine.
+    - **future**: The new features in this branch require a new API release before they can be deployed. 
+
+-   Other branches are considered *feature branches* that could eventually be merged into one of the above.
+
 Other
 -----
 You can check the list of possible commands by running `npm run`,

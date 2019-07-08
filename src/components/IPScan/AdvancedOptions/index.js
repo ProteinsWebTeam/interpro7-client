@@ -100,7 +100,8 @@ const groupApplications = applications => {
 };
 
 const applicationToCheckbox = ({ value, defaultValue, properties }) => (
-  /*: {value: string, defaultValue: boolean, properties: {properties: Array<Object>}} */ <AdvancedOption
+  /*: {value: string, defaultValue: boolean, properties: {properties: Array<Object>}} */
+  <AdvancedOption
     name="appl"
     value={value}
     defaultChecked={defaultValue}

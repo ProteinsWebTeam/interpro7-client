@@ -5,13 +5,13 @@ exports[`<Description /> should render 1`] = `
   className="margin-bottom-large"
   data-testid="description"
 >
-  <ParagraphWithCites
+  <Paragraph
     p="a"
   />
-  <ParagraphWithCites
+  <Paragraph
     p="b"
   />
-  <ParagraphWithCites
+  <Paragraph
     p="c"
   />
 </div>
