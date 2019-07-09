@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SummaryStructure /> should render 1`] = `
+<div
+  className="sections"
+>
+  <section>
+    <div
+      className="row"
+    >
+      <div
+        className="medium-9 columns margin-bottom-large"
+      >
+        <table
+          className="light table-sum"
+        >
+          <tbody>
+            <tr>
+              <td>
+                Accession
+              </td>
+              <td
+                data-testid="structure-accession"
+              >
+                <Memo(ConnectFunction)
+                  accession="102m"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Experiment type
+              </td>
+              <td
+                className="text-cap"
+                data-testid="structure-experiment-type"
+              >
+                <Memo(ConnectFunction)
+                  to={
+                    Object {
+                      "description": Object {
+                        "entry": Object {
+                          "db": "InterPro",
+                          "isFilter": true,
+                        },
+                        "main": Object {
+                          "key": "structure",
+                        },
+                        "structure": Object {
+                          "db": "PDB",
+                        },
+                      },
+                      "search": Object {
+                        "experiment_type": "x-ray",
+                      },
+                    }
+                  }
+                >
+                  X-ray
+                </Memo(ConnectFunction)>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Resolution
+              </td>
+              <td
+                data-testid="structure-resolution"
+              >
+                1.84
+                 Å
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Chains
+              </td>
+              <td
+                data-testid="structure-chains"
+              >
+                A
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Released
+              </td>
+              <td
+                data-testid="structure-date"
+              >
+                <TimeAgo
+                  date={1998-04-08T00:00:00.000Z}
+                  noUpdate={true}
+                  title="4/8/1998"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        className="medium-3 columns"
+      >
+        <div
+          className="panel"
+        >
+          <h5>
+            External Links
+          </h5>
+          <ul
+            className="no-bullet"
+            data-testid="structure-external-links"
+          >
+            <li>
+              <PDBeLink
+                className="ext"
+                id="102m"
+              >
+                View 
+                102m
+                 in PDBe
+              </PDBeLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <Memo(ConnectFunction)>
+      <div
+        className="row"
+      >
+        <div
+          className="columns"
+        >
+          <Memo(ConnectFunction)
+            id="102m"
+            matches={
+              Array [
+                Object {
+                  "metadata": Object {
+                    "accession": "G3DSA:1.10.490.10",
+                    "go_terms": null,
+                    "integrated": "IPR012292",
+                    "member_databases": null,
+                    "name": "Globins",
+                    "source_database": "cathgene3d",
+                    "type": "homologous_superfamily",
+                  },
+                  "structures": Array [
+                    Object {
+                      "accession": "102m",
+                      "chain": "A",
+                    },
+                  ],
+                },
+              ]
+            }
+          />
+        </div>
+      </div>
+    </Memo(ConnectFunction)>
+  </section>
+  <div>
+    0
+  </div>
+</div>
+`;

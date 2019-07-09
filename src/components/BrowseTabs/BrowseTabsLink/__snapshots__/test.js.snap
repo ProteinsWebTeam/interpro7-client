@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BrowseTabsLink /> should render 1`] = `
+<Memo(ConnectFunction)
+  activeClass="is-active is-active-tab"
+  className="browse-tabs-link"
+  data-testid="browse-tab-entry"
+  to={[Function]}
+>
+  Entry
+</Memo(ConnectFunction)>
+`;

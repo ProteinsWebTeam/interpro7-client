@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProgressAnimation /> should render 1`] = `
+<React.Fragment>
+  <svg
+    height="0"
+    width="0"
+  >
+    <defs>
+      <filter
+        id="gooey-filter"
+      >
+        <feGaussianBlur
+          in="SourceGraphic"
+          result="blurred"
+          stdDeviation="10"
+        />
+        <feColorMatrix
+          in="blurred"
+          mode="matrix"
+          result="matrix"
+          values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+        />
+        <feBlend
+          in="SourceGraphic"
+          in2="matrix"
+        />
+      </filter>
+    </defs>
+  </svg>
+  <div
+    className="main-container"
+  >
+    <div
+      className="filter-container absolute"
+    >
+      <div
+        className="left side absolute"
+      />
+      <div
+        className="moving-container absolute"
+        style={
+          Object {
+            "transform": "translateX(110.00000000000001%)",
+          }
+        }
+      >
+        <div
+          className="trail absolute"
+        />
+        <div
+          className="trail ball absolute"
+        />
+        <div
+          className="progress ball absolute"
+        >
+          <span>
+            100
+            %
+          </span>
+        </div>
+      </div>
+      <div
+        className="right side absolute"
+      />
+    </div>
+    <div
+      className="left side absolute"
+    />
+    <div
+      className="right side absolute"
+    />
+  </div>
+</React.Fragment>
+`;

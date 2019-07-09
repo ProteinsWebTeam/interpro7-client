@@ -11,12 +11,14 @@ import TaxonomyFilter from './TaxonomyFilter';
 import FragmentFilter from './FragmentFilter';
 import MatchPresenceFilter from './MatchPresenceFilter';
 
-const ProteinListFilters = ({ hasEntryFilter }) => (
+export const ProteinListFilters = (
+  { hasEntryFilter } /*: {hasEntryFilter: boolean} */,
+) => (
   <FiltersPanel>
     {!hasEntryFilter && <MatchPresenceFilter label="Matching Entries" />}
     <CurationFilter label="UniProt Curation" />
     <TaxonomyFilter label="Taxonomy" />
-    {/*<SizeFilter label="Protein Size" />*/}
+    {/* <SizeFilter label="Protein Size" />*/}
     <FragmentFilter label="Fragment" />
   </FiltersPanel>
 );

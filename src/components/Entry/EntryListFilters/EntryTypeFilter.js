@@ -22,7 +22,24 @@ const f = foundationPartial(style);
 const allRE = /^all$/i;
 const isAll = string => allRE.test(string);
 
-class EntryTypeFilter extends PureComponent {
+/* :: type Props = {
+  data: {
+    loading: boolean,
+    payload: any,
+  },
+  isStale: boolean,
+  goToCustomLocation: function,
+  customLocation: {
+    description: {
+      entry: {
+        db: string,
+      }
+    },
+    search: Object,
+  }
+}; */
+
+class EntryTypeFilter extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -42,9 +59,9 @@ class EntryTypeFilter extends PureComponent {
 
   componentDidMount() {
     loadWebComponent(() =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      ).then(m => m.InterproType),
     ).as('interpro-type');
   }
 

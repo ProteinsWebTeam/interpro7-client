@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MemberDBSelector /> should render 1`] = `
+<div
+  className="container columns small-12 medium-3 large-2"
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onKeyPress={[Function]}
+  onMouseLeave={[Function]}
+  onMouseOver={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  <span
+    className="child-container"
+    onClick={[Function]}
+    onKeyPress={[Function]}
+    role="button"
+    tabIndex="0"
+  />
+  <div
+    className="potential-popup"
+  >
+    <div
+      className="filter-label"
+    >
+      Select your database:
+    </div>
+    <form
+      className="db-selector one-column"
+      onChange={[Function]}
+    >
+      <label
+        className="db-choice checked"
+        data-testid="memberdb-filter-interpro"
+        style={
+          Object {
+            "color": "#2daec1",
+          }
+        }
+      >
+        <input
+          checked={true}
+          disabled={false}
+          name="db-radio"
+          onChange={[Function]}
+          type="radio"
+          value="interpro"
+        />
+        <span
+          className="text"
+        >
+          InterPro
+        </span>
+        <Memo(ConnectFunction)
+          abbr={true}
+          className="label"
+          loading={false}
+          style={
+            Object {
+              "background": "#2daec1",
+            }
+          }
+          titleType="entry"
+        >
+          0
+        </Memo(ConnectFunction)>
+      </label>
+      <label
+        className="db-choice"
+        data-testid="memberdb-filter-cdd"
+        style={
+          Object {
+            "color": "#addc58",
+          }
+        }
+      >
+        <input
+          checked={false}
+          disabled={false}
+          name="db-radio"
+          onChange={[Function]}
+          type="radio"
+          value="cdd"
+        />
+        <span
+          className="text"
+        >
+          CDD
+        </span>
+        <Memo(ConnectFunction)
+          abbr={true}
+          className="label"
+          loading={false}
+          style={
+            Object {
+              "background": false,
+            }
+          }
+          titleType="entry"
+        >
+          0
+        </Memo(ConnectFunction)>
+      </label>
+    </form>
+  </div>
+</div>
+`;

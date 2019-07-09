@@ -37,7 +37,7 @@ const helpTopics = {
   },
 };
 
-const HelpBanner = ({ topic }) => {
+const HelpBanner = ({ topic } /*: {topic: string} */) => {
   const current = helpTopics[topic] || helpTopics.default;
   return (
     <div className={f('help-banner', 'flex-card')}>

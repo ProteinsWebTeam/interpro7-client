@@ -50,7 +50,7 @@ export const EntryMenuLinkWithoutData = (
     value: ?number,
     loading: boolean,
     to: function,
-    exact: ?boolean,
+    exact?: ?boolean,
     usedOnTheSide?: boolean
   }*/,
 ) => (
@@ -104,7 +104,7 @@ EntryMenuLinkWithoutData.propTypes = {
 
 /*:: type Props = {
   to: Object | function,
-  exact: ?boolean,
+  exact?: ?boolean,
   name: string,
   counter: string,
   data: {
@@ -117,7 +117,7 @@ EntryMenuLinkWithoutData.propTypes = {
   entryDB ?: string,
 }; */
 
-class EntryMenuLink extends PureComponent /*:: <Props> */ {
+export class EntryMenuLink extends PureComponent /*:: <Props> */ {
   static propTypes = {
     to: T.oneOfType([T.object, T.func]).isRequired,
     exact: T.bool,

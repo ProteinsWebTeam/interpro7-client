@@ -47,7 +47,7 @@ class FragmentFilter extends PureComponent {
   render() {
     const {
       data: { loading, payload },
-      customLocation: { description, search },
+      customLocation: { search },
     } = this.props;
     const groupsPayload = loading || !payload ? {} : payload.is_fragment;
     const groups = {

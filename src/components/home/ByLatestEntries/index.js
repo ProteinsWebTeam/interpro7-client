@@ -27,7 +27,17 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, local);
 
-class LatestEntry extends PureComponent {
+/*:: type Props = {
+  entry: {
+    accession: string,
+    type: string,
+    name: string,
+    counter: Array<Object>,
+    contributing: Array<Object>,
+  }
+}*/
+
+class LatestEntry extends PureComponent /*:: <Props> */ {
   static propTypes = {
     entry: T.shape({
       accession: T.string,
@@ -409,7 +419,13 @@ class LatestEntry extends PureComponent {
   }
 }
 
-class ByEntriesFeatured extends PureComponent {
+/*:: type EntriesProps = {
+  data: {
+    payload: Object
+  }
+}*/
+
+export class ByEntriesFeatured extends PureComponent /*:: <EntriesProps> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,

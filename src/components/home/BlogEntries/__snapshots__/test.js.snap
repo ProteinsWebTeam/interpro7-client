@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BlogEntries /> Blog entries 1`] = `
+<section>
+  <div
+    className="flex-column"
+  >
+    <BlogEntry
+      category="interpro"
+      excerpt="About InterPro"
+      title="Protein Families classification"
+      url="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
+    />
+  </div>
+  <div
+    className="flex-column read-all"
+  >
+    <Memo(ConnectFunction)
+      href="https://proteinswebteam.github.io/interpro-blog"
+      target="_blank"
+    >
+      <div
+        className="button margin-bottom-none"
+      >
+        Read all articles
+      </div>
+    </Memo(ConnectFunction)>
+  </div>
+</section>
+`;
+
+exports[`<BlogEntry /> Blog entry 1`] = `
+<div
+  className="flex-card"
+  data-testid="blog-entries-box"
+>
+  <div
+    className="card-image image-blog-type"
+  >
+    <div
+      className="card-tag tag-blog"
+    >
+      <Tooltip
+        title="View all Blog articles"
+      >
+        <Memo(ConnectFunction)
+          className="white-link"
+          href="https://proteinswebteam.github.io/interpro-blog/categories/interpro/"
+          target="_blank"
+        >
+          Blog
+        </Memo(ConnectFunction)>
+      </Tooltip>
+    </div>
+  </div>
+  <div
+    className="card-content"
+  >
+    <div
+      className="card-title"
+    >
+      <h4>
+        <Memo(ConnectFunction)
+          href="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
+          target="_blank"
+        >
+          Protein Families classification
+        </Memo(ConnectFunction)>
+      </h4>
+    </div>
+    <div
+      className="card-info"
+    />
+    <div
+      className="card-description"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "About InterPro",
+        }
+      }
+    />
+  </div>
+  <Memo(ConnectFunction)
+    className="card-more"
+    href="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
+    target="_blank"
+  >
+    <div
+      className="button-more icon icon-common icon-right"
+      data-icon=""
+    >
+      Read more
+    </div>
+  </Memo(ConnectFunction)>
+</div>
+`;

@@ -1,0 +1,282 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BySpecies /> By Species 1`] = `
+<div
+  className="species-list"
+>
+  <Memo(ConnectFunction)
+    className="row"
+    element="div"
+  >
+    <Species
+      species={
+        Object {
+          "color": "#5bc0de",
+          "description": "Saccharomyces cerevisiae (strain ATCC 204508 / S288c)",
+          "icon": "Y",
+          "kingdom": "Eukaryota",
+          "tax_id": "559292",
+          "title": "Baker’s yeast",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#d9534f",
+          "description": "Caenorhabditis elegans",
+          "icon": "W",
+          "kingdom": "Eukaryota",
+          "tax_id": "6239",
+          "title": "Caenorhabditis elegans",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#5bc0de",
+          "description": "Escherichia virus T4",
+          "icon": "v",
+          "kingdom": "Virus",
+          "tax_id": "10665",
+          "title": "Enterobacteria phage T4",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#5bc0de",
+          "description": "Escherichia coli O127:H6 (strain E2348/69 / EPEC)",
+          "icon": "L",
+          "kingdom": "Bacteria",
+          "tax_id": "83333",
+          "title": "Escherichia coli",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#5bc0de",
+          "description": "Schizosaccharomyces pombe (strain 972 / ATCC 24843)",
+          "icon": "Y",
+          "kingdom": "Eukaryota",
+          "tax_id": "284812",
+          "title": "Fission yeast",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#d9534f",
+          "description": "Drosophila melanogaster",
+          "icon": "F",
+          "kingdom": "Eukaryota",
+          "tax_id": "7227",
+          "title": "Fruit fly",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#5bc0de",
+          "description": "Escherichia virus T4",
+          "icon": "v",
+          "kingdom": "Archea",
+          "tax_id": "2242",
+          "title": "Halobacterium salinarum",
+        }
+      }
+    />
+    <Species
+      entries={64093}
+      proteins={170588}
+      species={
+        Object {
+          "color": "#d9534f",
+          "description": "Homo sapiens",
+          "icon": "H",
+          "kingdom": "Eukaryota",
+          "tax_id": "9606",
+          "title": "Human",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#d9534f",
+          "description": "Mus musculus",
+          "icon": "M",
+          "kingdom": "Eukaryota",
+          "tax_id": "10090",
+          "title": "Mouse",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#5cb85c",
+          "description": "Arabidopsis thaliana",
+          "icon": "B",
+          "kingdom": "Eukaryota",
+          "tax_id": "3702",
+          "title": "Mouse-ear cress",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#5cb85c",
+          "description": "Oryza sativa subsp. japonica",
+          "icon": "6",
+          "kingdom": "Eukaryota",
+          "tax_id": "39947",
+          "title": "Rice",
+        }
+      }
+    />
+    <Species
+      species={
+        Object {
+          "color": "#d9534f",
+          "description": "Danio rerio",
+          "icon": "Z",
+          "kingdom": "Eukaryota",
+          "tax_id": "7955",
+          "title": "Zebrafish",
+        }
+      }
+    />
+  </Memo(ConnectFunction)>
+  <Memo(ConnectFunction)
+    className="button margin-bottom-none margin-top-large"
+    to={
+      Object {
+        "description": Object {
+          "main": Object {
+            "key": "taxonomy",
+          },
+          "taxonomy": Object {
+            "db": "uniprot",
+          },
+        },
+      }
+    }
+  >
+    View all Taxa
+  </Memo(ConnectFunction)>
+</div>
+`;
+
+exports[`<Species /> Species 1`] = `
+<div
+  className="column small-3 medium-2 large-4 text-center"
+  data-testid="by-species-box"
+>
+  <Memo(ConnectFunction)
+    data-testid="species-9606"
+    to={
+      Object {
+        "description": Object {
+          "main": Object {
+            "key": "taxonomy",
+          },
+          "taxonomy": Object {
+            "accession": "9606",
+            "db": "uniprot",
+          },
+        },
+      }
+    }
+  >
+    <span
+      className="small icon icon-species"
+      data-icon="H"
+      style={
+        Object {
+          "color": "#d9534f",
+        }
+      }
+    />
+    <br />
+    <span
+      className="card-title"
+    >
+      Human
+    </span>
+  </Memo(ConnectFunction)>
+  <div
+    className="list-detail"
+  >
+    <p>
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "entry": Object {
+                "db": "all",
+                "isFilter": true,
+              },
+              "main": Object {
+                "key": "taxonomy",
+              },
+              "taxonomy": Object {
+                "accession": "9606",
+                "db": "uniprot",
+              },
+            },
+          }
+        }
+      >
+        <Memo(ConnectFunction)
+          abbr={true}
+          loading={true}
+          titleType="entry matching Human"
+        >
+          0
+        </Memo(ConnectFunction)>
+         
+        entry
+      </Memo(ConnectFunction)>
+      <br />
+      <Memo(ConnectFunction)
+        disabled={true}
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "taxonomy",
+              },
+              "protein": Object {
+                "db": "UniProt",
+                "isFilter": true,
+              },
+              "taxonomy": Object {
+                "accession": "9606",
+                "db": "uniprot",
+              },
+            },
+          }
+        }
+      >
+        <Memo(ConnectFunction)
+          abbr={true}
+          loading={true}
+          titleType="protein matching Human"
+        >
+          0
+        </Memo(ConnectFunction)>
+         
+        protein
+      </Memo(ConnectFunction)>
+    </p>
+  </div>
+</div>
+`;

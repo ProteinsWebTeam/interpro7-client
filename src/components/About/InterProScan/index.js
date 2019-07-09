@@ -27,7 +27,7 @@ const parseBody = text =>
       return agg;
     }, {});
 
-const InterProScan = (
+export const InterProScan = (
   {
     data: { loading, payload },
   } /*: {data: {loading: boolean, payload: ?Object}}*/,

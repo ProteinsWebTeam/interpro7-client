@@ -6,12 +6,17 @@ import { toPlural } from 'utils/pages';
 import NumberComComponent from 'components/NumberComponent';
 import styles from './style.css';
 
-class Highlight extends PureComponent {
+/* :: type Props = {
+  children: any,
+}; */
+
+class Highlight extends PureComponent /*:: <Props> */ {
+  /*::  _ref: { current: null | React$ElementRef<'span'> } */
   static propTypes = {
     children: T.any.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();
@@ -141,7 +146,25 @@ const getFilters = description =>
       </React.Fragment>
     ));
 
-export default class TextExplanation extends PureComponent {
+/* :: type textExplanationProps = {
+  fileType: string,
+  description: {
+    main: {
+      key: string
+      },
+     entry: {
+      isFilter: ?boolean,
+      accession: ?string,
+      db: string
+     },
+     },
+  subset: boolean,
+  isStale: boolean,
+  noData: boolean,
+  count: number,
+}; */
+
+export default class TextExplanation extends PureComponent /*:: <textExplanationProps> */ {
   static propTypes = {
     fileType: T.string,
     description: T.object.isRequired,

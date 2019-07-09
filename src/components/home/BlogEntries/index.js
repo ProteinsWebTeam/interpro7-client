@@ -133,7 +133,7 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
  },
  }; */
 
-class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
+export class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

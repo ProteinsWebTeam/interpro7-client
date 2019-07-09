@@ -14,7 +14,9 @@ const webComponents = [];
 const loadInterProWebComponents = () => {
   if (!webComponents.length) {
     const interproComponents = () =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components');
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      );
     webComponents.push(
       loadWebComponent(() =>
         interproComponents().then(m => m.InterproHierarchy),
@@ -42,14 +44,21 @@ const cleanHierarchyType = hierarchy => {
   }
   return output;
 };
-class InterProHierarchy extends PureComponent {
+
+/*:: type Props = {
+  accession: string,
+  hierarchy: string | object,
+  goToCustomLocation: function
+}; */
+
+class InterProHierarchy extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.string.isRequired,
     hierarchy: T.oneOfType([T.string, T.object]).isRequired,
     goToCustomLocation: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();

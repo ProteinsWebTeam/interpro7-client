@@ -60,6 +60,7 @@ export const getUrl = createSelector(
           (description.entry && description.entry.memberDB)
         )
           _search.page_size = _search.page_size || settingsPageSize;
+
         if (hash === 'grid') {
           switch (description.main.key) {
             case 'entry':

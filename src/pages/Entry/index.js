@@ -104,9 +104,7 @@ class SummaryCounterEntries extends PureComponent {
         </Tooltip>
 
         <Tooltip
-          title={`${domainArchitectures} domain architectures matching ${
-            metadata.name
-          }`}
+          title={`${domainArchitectures} domain architectures matching ${metadata.name}`}
           className={f('count-architectures')}
           style={{ display: 'flex' }}
         >

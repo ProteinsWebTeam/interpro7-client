@@ -24,7 +24,7 @@ const MAX = 20;
 
 const RESOLUTION_RANGE_REGEXP = /^(\d*(\.\d+)?)-(\d*(\.\d+)?)$/;
 
-class ResolutionFilter extends PureComponent {
+export class ResolutionFilter extends PureComponent {
   static propTypes = {
     customLocation: T.shape({
       description: T.object.isRequired,

@@ -32,7 +32,7 @@ const isExternal = ([first, second]) =>
 //   return defaultMatchFn(to, location) ? s('active', activeClass) : '';
 // };
 
-class MenuItem extends PureComponent {
+export class MenuItem extends PureComponent {
   static propTypes = {
     children: T.node.isRequired,
     href: T.string,
@@ -85,4 +85,7 @@ class MenuItem extends PureComponent {
   }
 }
 
-export default connect(null, { closeEverything })(MenuItem);
+export default connect(
+  null,
+  { closeEverything },
+)(MenuItem);

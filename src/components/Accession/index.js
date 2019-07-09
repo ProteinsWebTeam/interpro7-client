@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,6 +17,8 @@ Default.propTypes = {
 /*:: type Props = {
   accession: string | number,
   db: string,
+  withTitle?: boolean,
+  title?: string
 }; */
 
 export class Accession extends PureComponent /*:: <Props> */ {

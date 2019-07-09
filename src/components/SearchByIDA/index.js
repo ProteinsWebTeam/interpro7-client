@@ -87,7 +87,7 @@ PanelIDA.propTypes = {
   ida_ignore?: string,
   ordered?: boolean,
 }; */
-class SearchByIDA extends PureComponent /*:: <Props> */ {
+export class SearchByIDA extends PureComponent /*:: <Props> */ {
   static propTypes = {
     customLocation: T.shape({
       description: T.object.isRequired,

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -18,7 +19,13 @@ import local from '../ByLatestEntries/styles.css';
 
 const f = foundationPartial(fonts, ipro, theme, local);
 
-class ByEntriesFeatured extends PureComponent {
+/*:: type Props = {
+  data: {
+    payload: Object
+  }
+}*/
+
+class ByEntriesFeatured extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,

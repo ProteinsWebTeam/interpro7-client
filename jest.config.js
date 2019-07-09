@@ -12,7 +12,7 @@ module.exports = {
   verbose: false,
   moduleNameMapper: {
     'config.yml$': '<rootDir>/interpro-config.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$':
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|tmpl|fasta)$':
       '<rootDir>/src/__mocks__/fileMock.js',
     '\\.(css|less|scss)$': 'identity-obj-proxy',
   },

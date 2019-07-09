@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import { createSelector } from 'reselect';
 
@@ -25,16 +26,22 @@ const SchemaOrgData = loadable({
 
 const AboutInterPro = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-interpro" */ 'components/About/InterPro'),
+    import(
+      /* webpackChunkName: "about-interpro" */ 'components/About/InterPro'
+    ),
 });
 const Consortium = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-consortium" */ 'components/About/Consortium'),
+    import(
+      /* webpackChunkName: "about-consortium" */ 'components/About/Consortium'
+    ),
 });
 
 const Citation = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-citation" */ 'components/About/Citation'),
+    import(
+      /* webpackChunkName: "about-citation" */ 'components/About/Citation'
+    ),
 });
 
 const Funding = loadable({
@@ -48,7 +55,9 @@ const Privacy = loadable({
 });
 const InterProScan = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-interproscan" */ 'components/About/InterProScan'),
+    import(
+      /* webpackChunkName: "about-interproscan" */ 'components/About/InterProScan'
+    ),
 });
 
 const routes = new Map([

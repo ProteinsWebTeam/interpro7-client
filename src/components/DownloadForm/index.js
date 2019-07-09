@@ -37,7 +37,15 @@ const extractDataFromHash = hash => {
   return output;
 };
 
-class DownloadForm extends PureComponent {
+/*:: type Props = {
+  matched: string,
+  api: Object,
+  lowGraphics: boolean,
+  customLocation: Object,
+  goToCustomLocation: function
+}*/
+
+export class DownloadForm extends PureComponent /*:: <Props> */ {
   static propTypes = {
     matched: T.string.isRequired,
     api: T.object.isRequired,
@@ -46,7 +54,8 @@ class DownloadForm extends PureComponent {
     goToCustomLocation: T.func.isRequired,
   };
 
-  constructor(props) {
+  /*::  _ref: { current: null | React$ElementRef<'form'> } */
+  constructor(props /*: Props */) {
     super(props);
     this._ref = React.createRef();
   }

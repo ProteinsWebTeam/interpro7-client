@@ -14,6 +14,7 @@ import ProtVistaSequence from 'protvista-sequence';
 import ProtVistaColouredSequence from 'protvista-coloured-sequence';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
+import ProtvistaTrack from 'protvista-track';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
@@ -59,6 +60,10 @@ const loadProtVistaWebComponents = () => {
       loadWebComponent(() => ProtVistaInterProTrack).as(
         'protvista-interpro-track',
       ),
+    );
+
+    webComponents.push(
+      loadWebComponent(() => ProtvistaTrack).as('protvista-track'),
     );
   }
   return Promise.all(webComponents);
@@ -249,7 +254,7 @@ class ProtVista extends Component {
               if (detail) {
                 switch (detail.eventtype) {
                   case 'click':
-                    this.handleCollapseLabels(detail.feature.feature.accession);
+                    this.handleCollapseLabels(detail.feature.accession);
                     break;
                   case 'mouseout':
                     removeAllChildrenFromNode(this._popperContentRef.current);
@@ -260,7 +265,7 @@ class ProtVista extends Component {
                     this._popperRef.current.classList.remove(f('hide'));
                     removeAllChildrenFromNode(this._popperContentRef.current);
                     this._popperContentRef.current.appendChild(
-                      this.getElementFromEntry(detail.feature),
+                      this.getElementFromEntry(detail),
                     );
                     this._isPopperTop = !this._isPopperTop;
                     this.popper = new PopperJS(
@@ -317,6 +322,16 @@ class ProtVista extends Component {
     return type;
   };
 
+  _getSecondaryStructureType = entry => {
+    let type = null;
+    if (entry.locations && entry.locations.length > 0) {
+      if (entry.locations[0].fragmentType) {
+        type = entry.locations[0].fragmentType;
+      }
+    }
+    return type;
+  };
+
   getElementFromEntry(detail) {
     let databases = {};
     const { dataDB } = this.props;
@@ -333,6 +348,11 @@ class ProtVista extends Component {
       // TODO change how MobiDBLt entries are stored in MySQL
       type = this._getMobiDBLiteType(entry);
     }
+
+    if (type === 'secondary_structure') {
+      type = `Secondary Structure: ${this._getSecondaryStructureType(entry)}`;
+    }
+
     const isResidue = detail.type === 'residue';
     const isInterPro = entry.source_database === 'interpro';
     const tagString = `<section>   
@@ -361,7 +381,7 @@ class ProtVista extends Component {
         </div>
         <div>
           ${sourceDatabase}
-        ${type ? type.replace('_', ' ') : ''}</div>       
+        ${type ? type.replace('_', ' ') : ''}</div>
         </div>
         <p>
           <small>          
@@ -449,9 +469,13 @@ class ProtVista extends Component {
 
   renderLabels(entry) {
     const { expandedTrack } = this.state;
-    if (NOT_MEMBER_DBS.has(entry.source_database) || entry.type === 'chain')
+    if (
+      NOT_MEMBER_DBS.has(entry.source_database) ||
+      entry.type === 'chain' ||
+      entry.type === 'secondary_structure'
+    )
       return entry.accession;
-    if (entry.accession.startsWith('G3D:')) {
+    if (entry.accession && entry.accession.startsWith('G3D:')) {
       return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
     }
     return (
@@ -671,20 +695,40 @@ class ProtVista extends Component {
                               key={entry.accession}
                               className={f('track-row')}
                             >
-                              <div className={f('track-component')}>
-                                <protvista-interpro-track
-                                  length={length}
-                                  displaystart="1"
-                                  displayend={length}
-                                  id={`track_${entry.accession}`}
-                                  ref={e =>
-                                    (this.web_tracks[entry.accession] = e)
-                                  }
-                                  shape="roundRectangle"
-                                  highlight-event="onmouseover"
-                                  expanded
-                                />
-                              </div>
+                              {entry.type === 'secondary_structure' ? (
+                                <div
+                                  className={f(
+                                    'track-component',
+                                    'secondary-structure',
+                                  )}
+                                >
+                                  <protvista-track
+                                    length={length}
+                                    displaystart="1"
+                                    displayend={length}
+                                    id={`track_${entry.accession}`}
+                                    ref={e =>
+                                      (this.web_tracks[entry.accession] = e)
+                                    }
+                                    highlight-event="onmouseover"
+                                  />
+                                </div>
+                              ) : (
+                                <div className={f('track-component')}>
+                                  <protvista-interpro-track
+                                    length={length}
+                                    displaystart="1"
+                                    displayend={length}
+                                    id={`track_${entry.accession}`}
+                                    ref={e =>
+                                      (this.web_tracks[entry.accession] = e)
+                                    }
+                                    shape="roundRectangle"
+                                    highlight-event="onmouseover"
+                                    expanded
+                                  />
+                                </div>
+                              )}
                               <div className={f('track-accession')}>
                                 {this.renderLabels(entry)}
                               </div>

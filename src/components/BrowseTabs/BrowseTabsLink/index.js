@@ -50,13 +50,13 @@ const getValue = (loading, payload, counter, name) => {
   to: Object | function,
   name: string,
   exact?: boolean,
-  counter: string,
+  counter?: string,
   data: {
     loading: boolean,
     payload?: ?Object,
   },
   isFirstLevel?: boolean,
-  isSignature: boolean
+  isSignature?: boolean
 }; */
 
 class BrowseTabsLink extends PureComponent /*:: <Props> */ {

@@ -29,6 +29,10 @@ const Selector = ({ data, value = '', onChange = () => null }) => {
   );
 };
 Selector.propTypes = {
+  data: T.shape({
+    loading: T.bool,
+    payload: T.Object,
+  }),
   value: T.string,
   onChange: T.func,
 };

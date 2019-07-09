@@ -41,7 +41,20 @@ import {
 } from 'schema_org/processors';
 import { toPlural } from 'utils/pages';
 
-class SummaryCounterProteins extends PureComponent {
+/*:: type Props = {
+  metadata: {
+    name: string,
+    accession: string
+  },
+  counters: {
+    entries: Array
+    structures: Array
+    sets: Array
+    },
+  entryDB: string
+};*/
+
+class SummaryCounterProteins extends PureComponent /*:: <Props> */ {
   static propTypes = {
     metadata: T.object.isRequired,
     counters: T.object.isRequired,
@@ -175,9 +188,7 @@ const ProteinCard = ({ data, search, entryDB }) => (
 
     <div className={f('card-footer')}>
       <Tooltip
-        title={`${data.metadata.source_organism.fullName} (Tax ID: ${
-          data.metadata.source_organism.taxId
-        })`}
+        title={`${data.metadata.source_organism.fullName} (Tax ID: ${data.metadata.source_organism.taxId})`}
       >
         {data.metadata.source_organism.fullName}
       </Tooltip>
@@ -213,7 +224,35 @@ const propTypes = {
   }).isRequired,
 };
 
-class List extends PureComponent {
+/*:: type ListProps={
+  data: {
+    payload: {
+      databases: Array,
+      results: Array,
+      count: Number
+    },
+    loading: boolean,
+    ok: boolean,
+    url? : string,
+    status: Number
+  },
+  isStale: boolean,
+  customLocation: {
+    search: string,
+    description: {
+    entry: {
+      db: string
+     }
+    }
+  },
+  match: string,
+  dataBase: {
+    payload: {},
+    loading: boolean
+  }
+} */
+
+class List extends PureComponent /*:: <ListProps> */ {
   static propTypes = propTypes;
 
   render() {

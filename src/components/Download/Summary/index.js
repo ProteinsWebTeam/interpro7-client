@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -34,7 +35,7 @@ const GoToNewDownload = () => (
   </Link>
 );
 
-class Summary extends PureComponent {
+class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
   static propTypes = {
     download: T.arrayOf(T.object).isRequired,
   };
@@ -135,11 +136,14 @@ class Summary extends PureComponent {
   }
 }
 
-const mapStateToProps = createSelector(downloadSelector, download => ({
-  download: Object.entries(download).map(([localID, download]) => ({
-    localID,
-    ...download,
-  })),
-}));
+const mapStateToProps = createSelector(
+  downloadSelector,
+  download => ({
+    download: Object.entries(download).map(([localID, download]) => ({
+      localID,
+      ...download,
+    })),
+  }),
+);
 
 export default connect(mapStateToProps)(Summary);

@@ -1,9 +1,10 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 
-export default class ApiLink extends PureComponent {
+export default class ApiLink extends PureComponent /*:: < {url: string} > */ {
   static propTypes = {
     url: T.string.isRequired,
   };

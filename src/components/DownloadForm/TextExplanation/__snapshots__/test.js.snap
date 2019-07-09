@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TextExplanation /> should render 1`] = `
+<section>
+  <h6>
+    Explanation
+  </h6>
+  <p>
+    This
+     
+    <select
+      aria-label="Download type"
+      className="select"
+      name="fileType"
+      onBlur={[Function]}
+      onChange={[Function]}
+      value="accession"
+    >
+      <option
+        disabled={null}
+        value="accession"
+      >
+        Text
+      </option>
+      <option
+        disabled={true}
+        value="fasta"
+      >
+        FASTA
+      </option>
+      <option
+        value="json"
+      >
+        JSON
+      </option>
+    </select>
+     
+    file will contain 
+    <React.Fragment>
+      <Highlight>
+        a list
+      </Highlight>
+       of approximately
+       
+      <Memo(ConnectFunction)
+        abbr={true}
+      >
+        36713
+      </Memo(ConnectFunction)>
+       
+      <Highlight>
+        InterPro
+      </Highlight>
+       
+      <Highlight>
+        entries
+      </Highlight>
+    </React.Fragment>
+    
+    .
+  </p>
+</section>
+`;

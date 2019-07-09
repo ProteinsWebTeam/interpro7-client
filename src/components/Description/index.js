@@ -111,7 +111,7 @@ export const Paragraph = ({ p, literature = [], accession, withoutIDs }) => {
         const tagMatch = part.match(TAG_REGEX_KV);
         if (tagMatch) {
           const [_, tagType, tagValue] = tagMatch;
-          let type = tagType.toLowerCase();
+          const type = tagType.toLowerCase();
           let value = tagValue;
           if (type === 'cathgene3d') value = `G3DSA:${tagValue}`;
           if (ENTRY_DBS.indexOf(type) >= 0) {
@@ -206,6 +206,8 @@ Paragraph.propTypes = {
 /* :: type Props = {
   textBlocks: Array<string> ,
   literature?: Array,
+  accession?: string,
+  withoutIDs?: boolean
 }; */
 class Description extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -237,13 +239,20 @@ class Description extends PureComponent /*:: <Props> */ {
   }
 }
 
-export class DescriptionReadMore extends PureComponent {
+/* :: type DescriptionReadMoreProps = {|
+  text: string,
+  minNumberOfCharToShow: number,
+  patternToRemove: string
+|}; */
+
+/* :: type State = {| showMore: boolean |}; */
+export class DescriptionReadMore extends PureComponent /*:: <DescriptionReadMoreProps, State> */ {
   static propTypes = {
     text: T.string,
     minNumberOfCharToShow: T.number,
     patternToRemove: T.string,
   };
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
     this.state = { showMore: false };
   }

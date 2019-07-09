@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AdvancedOptions /> should render 1`] = `
+<div
+  className="row"
+>
+  <details
+    className="columns margin-bottom-medium option-style"
+  >
+    <summary>
+      Advanced options
+    </summary>
+    <fieldset
+      className="fieldset"
+    >
+      <legend>
+        Job configuration
+      </legend>
+      <Tooltip
+        title="Stay on this page after submitting a new job?"
+      >
+        <label
+          className="stay-checkbox"
+        >
+          <div
+            className="switch tiny"
+          >
+            <input
+              className="switch-input"
+              name="stay"
+              type="checkbox"
+            />
+            <span
+              className="switch-paddle"
+            >
+              <span />
+            </span>
+          </div>
+          Create another job after this one
+        </label>
+      </Tooltip>
+      <Tooltip
+        title="Give this job a local title (only visible on this browser)"
+      >
+        <label
+          className="input-group"
+        >
+          <span
+            className="input-group-label"
+          >
+            Job title
+          </span>
+          <input
+            className="input-group-field"
+            name="local-title"
+            type="text"
+          />
+        </label>
+      </Tooltip>
+    </fieldset>
+    <fieldset
+      className="fieldset"
+    >
+      <legend>
+        Applications
+      </legend>
+      <p>
+        A number of different protein sequence applications are launched, These applications search against specific databases and have preconfigured cut off thresholds.
+      </p>
+      <div
+        className="button-group"
+      >
+        <button
+          className="button secondary"
+          onClick={[Function]}
+        >
+          Select all
+        </button>
+        <button
+          className="button secondary"
+          onClick={[Function]}
+        >
+          Unselect all
+        </button>
+      </div>
+      <fieldset
+        className="fieldset"
+      >
+        <legend>
+          Member databases
+        </legend>
+        <fieldset
+          className="fieldset"
+        >
+          <legend>
+            Families, domains, sites & repeats
+          </legend>
+        </fieldset>
+        <fieldset
+          className="fieldset"
+        >
+          <legend>
+            Structural domains
+          </legend>
+        </fieldset>
+      </fieldset>
+      <fieldset
+        className="fieldset"
+      >
+        <legend>
+          Other sequence features
+        </legend>
+      </fieldset>
+    </fieldset>
+    <fieldset
+      className="fieldset"
+    >
+      <legend>
+        Other
+      </legend>
+      <AdvancedOption
+        defaultChecked={true}
+        name="goterms"
+        value="goterms"
+      >
+        Gene Ontology Terms
+      </AdvancedOption>
+      <AdvancedOption
+        defaultChecked={true}
+        name="pathways"
+        value="pathways"
+      >
+        Pathways
+      </AdvancedOption>
+    </fieldset>
+  </details>
+</div>
+`;

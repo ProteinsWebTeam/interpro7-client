@@ -33,13 +33,27 @@ const placeholderStyle = {
 
 const mounted = new WeakSet();
 
-class Embed extends PureComponent {
+/* :: type Props = {|
+  children: any,
+  title: string
+|}; */
+
+/* :: type State = {|
+  loading: boolean
+|}; */
+
+class Embed extends PureComponent /*:: <Props, State> */ {
+  /* ::
+    _iframeRef: { current: null | React$ElementRef<'span'> };
+    _placeholderRef: { current: null | React$ElementRef<'span'> };
+  */
+
   static propTypes = {
     children: T.element,
     title: T.string,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.state = { loading: true };

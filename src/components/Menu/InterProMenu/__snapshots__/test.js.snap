@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<InterProMenu /> should render 1`] = `
+<ul
+  className=" interpro-menu"
+>
+  <li>
+    <Memo(ConnectFunction)
+      exact={true}
+      to={
+        Object {
+          "description": Object {},
+        }
+      }
+    >
+      <span />
+      Home
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "main": Object {
+              "key": "search",
+            },
+          },
+        }
+      }
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      Search
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      activeClass={[Function]}
+      to={[Function]}
+    >
+      <i
+        className="icon icon-common"
+        data-icon="b"
+      />
+      Browse
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      to={[Function]}
+    >
+      <i
+        className="icon icon-common"
+        data-icon="*"
+      />
+      Results
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "release_notes",
+            ],
+          },
+        }
+      }
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      Release notes
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "download",
+            ],
+          },
+        }
+      }
+    >
+      <i
+        className="icon icon-common"
+        data-icon="="
+      />
+      Download
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "help",
+            ],
+          },
+        }
+      }
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      Help
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "about",
+            ],
+          },
+        }
+      }
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      About
+    </Memo(ConnectFunction)>
+  </li>
+  <li>
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "settings",
+            ],
+          },
+        }
+      }
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      Settings
+    </Memo(ConnectFunction)>
+  </li>
+</ul>
+`;

@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MemberSymbol /> should render 1`] = `
+<span
+  data-testid="entry-member-db-icon"
+>
+  <svg
+    className="md-sm"
+    id="md-smart"
+    viewBox="0 0 200 200"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <clipPath
+        id="clip-0"
+      >
+        <rect
+          height="68"
+          width="68"
+          x="33%"
+          y="38%"
+        />
+      </clipPath>
+    </defs>
+    <text
+      className="md-server"
+      dx="-0.01em"
+      dy="0.4em"
+      textAnchor="middle"
+      x="50%"
+      y="50%"
+    >
+      D
+    </text>
+    <text
+      className="md-color"
+      dx="-0.01em"
+      dy="0.4em"
+      style={
+        Object {
+          "clipPath": "url(#clip-0)",
+        }
+      }
+      textAnchor="middle"
+      x="50%"
+      y="50%"
+    >
+      D
+    </text>
+  </svg>
+</span>
+`;

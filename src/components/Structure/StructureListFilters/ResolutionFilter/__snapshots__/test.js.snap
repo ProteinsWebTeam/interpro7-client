@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ResolutionFilter /> should render 1`] = `
+<div
+  className="column"
+>
+  <label
+    className="row filter-button"
+  >
+    <input
+      checked={true}
+      className="radio"
+      name="resolution"
+      onChange={[Function]}
+      type="radio"
+      value="All"
+    />
+    <span>
+      All
+    </span>
+  </label>
+  <label
+    className="row filter-button"
+  >
+    <input
+      checked={false}
+      className="radio"
+      name="resolution"
+      onChange={[Function]}
+      type="radio"
+      value="Subset"
+    />
+    <span>
+      0
+       - 
+      20
+       Å
+    </span>
+  </label>
+  <MultipleInput
+    aria-label="resolution range"
+    className="range hideable hidden"
+    max={20}
+    maxValue={20}
+    min={0}
+    minValue={0}
+    onChange={[Function]}
+    step="0.05"
+  />
+</div>
+`;

@@ -17,7 +17,7 @@ import ResizeObserver from './ResizeObserver';
   element: ?string,
   children: State => Node,
   measurements: Measurement | Array<Measurement>,
-  updateCallback: ?function,
+  updateCallback?: ?function,
 }; */
 
 class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {

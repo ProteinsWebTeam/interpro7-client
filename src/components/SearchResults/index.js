@@ -30,7 +30,7 @@ const SchemaOrgData = loadable({
 const INTERPRO_ACCESSION_PADDING = 6;
 const MAX_LENGTH = 200;
 
-class SearchResults extends PureComponent {
+export class SearchResults extends PureComponent {
   static propTypes = {
     data: T.shape({
       payload: T.object,

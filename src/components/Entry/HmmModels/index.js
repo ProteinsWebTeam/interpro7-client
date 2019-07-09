@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import T from 'prop-types';
 
@@ -24,13 +25,18 @@ const schemaProcessData = data => ({
   alphabet: data.alphabet,
   minHeightObserved: data.min_height_obs,
 });
-
-class LogoSection extends Component {
+/*:: type Props = {
+  data: {}
+}; */
+class LogoSection extends Component /*:: <Props> */ {
+  /* ::
+    _ref: { current: null | React$ElementRef<'div'> };
+  */
   static propTypes = {
     data: T.object,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();
@@ -58,7 +64,7 @@ class LogoSection extends Component {
   }
 }
 
-const HmmModelSection = ({ logo }) => (
+const HmmModelSection = ({ logo } /*: {logo: {}} */) => (
   <div className={f('row')}>
     <div className={f('columns')}>
       <div className={f('logo_wrapper')}>

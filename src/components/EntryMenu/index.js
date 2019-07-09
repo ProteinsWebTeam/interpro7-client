@@ -36,6 +36,7 @@ const mapNameToClass = new Map([
   mainType: ?string,
   mainDB: ?string,
   mainAccession: ?string,
+  isSignature: boolean,
   data: {
     loading: boolean,
     payload?: ?Object,
@@ -48,6 +49,11 @@ const mapNameToClass = new Map([
 }; */
 
 export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
+  /* ::
+    _currentTransformTranslateX: number;
+    _currentTransformScaleX: number;
+    _ref: { current: null | React$ElementRef<'ul'> };
+  */
   static propTypes = {
     mainType: T.string,
     mainDB: T.string,
@@ -64,7 +70,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     width: T.number,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._currentTransformTranslateX = 0;

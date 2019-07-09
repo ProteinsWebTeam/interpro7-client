@@ -146,9 +146,7 @@ MatchesByPrimary.propTypes = propTypes;
 export const ProteinDownloadRenderer = description => (accession, row) => (
   <File
     fileType="fasta"
-    name={`protein-sequences-matching-${
-      description[description.main.key].accession
-    }-for-${accession}.fasta`}
+    name={`protein-sequences-matching-${description[description.main.key].accession}-for-${accession}.fasta`}
     count={row.proteins || row.counters.extra_fields.counters.proteins}
     customLocationDescription={{
       main: { key: 'protein' },
@@ -168,9 +166,7 @@ export const ProteinDownloadRenderer = description => (accession, row) => (
 const AllProteinDownload = ({ description, count }) => (
   <File
     fileType="fasta"
-    name={`protein-sequences-matching-${
-      description[description.main.key].accession
-    }.fasta`}
+    name={`protein-sequences-matching-${description[description.main.key].accession}.fasta`}
     count={count}
     customLocationDescription={{
       ...description,

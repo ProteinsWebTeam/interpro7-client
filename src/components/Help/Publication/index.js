@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 
 import { DescriptionReadMore } from 'components/Description';
@@ -13,7 +14,7 @@ import local from './style.css';
 
 const f = foundationPartial(EBIGlobal, fonts, ipro, helper, local);
 
-export default class Publication extends PureComponent /*:: <{||}> */ {
+export default class Publication extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <section>

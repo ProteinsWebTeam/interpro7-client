@@ -52,7 +52,7 @@ ReferenceSection.propTypes = {
   description: T.string.isRequired,
 };
 
-export default class CrossReferences extends PureComponent {
+export default class CrossReferences extends PureComponent /*:: <{xRefs: Object}> */ {
   static propTypes = {
     xRefs: T.object.isRequired,
   };

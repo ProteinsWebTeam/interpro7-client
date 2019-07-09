@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DownloadTable /> should render 1`] = `
+<table
+  className="classic"
+>
+  <thead>
+    <tr>
+      <th
+        className="min-width-sm"
+      >
+        Name
+      </th>
+      <th>
+        Description
+      </th>
+      <th>
+        Data
+      </th>
+      <th
+        className="xs-hide"
+      >
+        File name
+      </th>
+      <th
+        className="xs-hide"
+      >
+        Format
+      </th>
+      <th />
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <Memo(ConnectFunction)
+          href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
+          target="_blank"
+        >
+          InterProScan 
+          5.35-74.0
+        </Memo(ConnectFunction)>
+      </td>
+      <td>
+        Download and install the latest version of InterProScan (64-bit Linux)
+      </td>
+      <td>
+        v
+        74.0
+      </td>
+      <td
+        className="xs-hide"
+      >
+        interproscan-
+        5.35-74.0
+        -64-bit.tar.gz
+      </td>
+      <td
+        className="xs-hide"
+      >
+        gzipped
+      </td>
+      <td>
+        <Memo(ConnectFunction)
+          href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
+          target="_blank"
+        >
+           
+          <span
+            className="icon icon-common font-l"
+            data-icon="="
+          />
+           
+          64-bit
+        </Memo(ConnectFunction)>
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;

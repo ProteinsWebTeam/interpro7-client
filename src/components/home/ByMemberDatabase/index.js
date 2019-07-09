@@ -39,7 +39,7 @@ import { NOT_MEMBER_DBS } from 'menuConfig';
   },
 }; */
 
-class ByMemberDatabase extends PureComponent /*:: <Props> */ {
+export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,

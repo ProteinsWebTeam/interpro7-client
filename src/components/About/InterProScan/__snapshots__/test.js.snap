@@ -1,0 +1,305 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<InterProScan /> should render with data 1`] = `
+<React.Fragment>
+  <section
+    className="banner"
+  >
+    <div
+      className="image-tool-ipscan"
+    />
+    <div>
+      <h3>
+        InterProScan
+      </h3>
+      InterProScan is the software package that allows sequences (protein and nucleic) to be scanned against InterPro's signatures. Signatures are predictive models, provided by several different databases, that make up the InterPro consortium.
+    </div>
+  </section>
+  <section>
+    <h3>
+      Download the latest version 
+      <small>
+        (
+        5.35-74.0
+        )
+      </small>
+    </h3>
+    <div>
+      <span
+        className="icon icon-common"
+        data-icon=""
+      />
+       
+      Linux (64-bit) -
+       
+      <Tooltip
+        style={
+          Object {
+            "cursor": "help",
+            "textDecoration": "underline",
+          }
+        }
+        title="
+              <b>Software</b>:<br/>
+              <ul>
+                <li>Linux 64-bit</li>
+                <li>Perl 5</li>
+                <li>Python 3</li>
+                <li>Java 8</li>
+              </ul>"
+      >
+        System requirements
+      </Tooltip>
+      <br />
+      <small>
+        <ul>
+          <li>
+            There are no versions planned for Windows or Apple operating systems. This is due to constraints in the various third-party binaries that InterProScan runs.
+          </li>
+          <li>
+            Older versions of InterProScan are not supported anymore. We highly recommend you to update to the latest version.
+          </li>
+        </ul>
+      </small>
+    </div>
+    <div
+      className="download flex-card"
+    >
+      <Memo(ConnectFunction)
+        className="button"
+        href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
+        target="_blank"
+      >
+        Download InterProScan
+      </Memo(ConnectFunction)>
+      <div
+        className="metadata"
+      >
+        Version 
+        5.35-74.0
+         - 
+         64 bit
+         
+         Linux
+         - 
+         9.0GB
+      </div>
+      <div
+        className="metadata"
+      >
+        MD5: 
+         fc003f262608423ab4c96ec099384ca6
+      </div>
+    </div>
+    <p>
+      For more information on downloading, installing and running InterProScan please see the
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="https://github.com/ebi-pf-team/interproscan/wiki"
+        target="_blank"
+      >
+        InterProScan wiki
+      </Memo(ConnectFunction)>
+      .
+    </p>
+  </section>
+  <section>
+    <h3>
+      Web services
+    </h3>
+    <p>
+      Programmatic access to InterProScan is possible via a number of different web service protocols, that allow up to 30 sequences to be analysed per request.
+    </p>
+    <div
+      className="cols"
+    >
+      <div
+        className="flex-card"
+      >
+        <header>
+          REST
+        </header>
+        <p>
+          We provide access to InterProScan via RESTful services.
+        </p>
+        <Memo(ConnectFunction)
+          className="ext secondary"
+          href="https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=54652041"
+          target="_blank"
+        >
+          REST API
+        </Memo(ConnectFunction)>
+      </div>
+      <div
+        className="flex-card"
+      >
+        <header>
+          SOAP
+        </header>
+        <p>
+          We also provide access to InterProScan via SOAP-based web services.
+        </p>
+        <Memo(ConnectFunction)
+          className="ext"
+          href="https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=54652111"
+          target="_blank"
+        >
+          SOAP API
+        </Memo(ConnectFunction)>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h3>
+      Web based tools
+    </h3>
+    <p>
+      Web access using the sequence search box on the InterPro website (
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {},
+          }
+        }
+      >
+        homepage
+      </Memo(ConnectFunction)>
+       or under
+       
+      <Memo(ConnectFunction)
+        to={
+          Object {
+            "description": Object {
+              "main": Object {
+                "key": "search",
+              },
+              "search": Object {
+                "type": "sequence",
+              },
+            },
+          }
+        }
+      >
+        /search/sequence
+      </Memo(ConnectFunction)>
+      ), for the analysis of 
+      <b>
+        single protein sequences
+      </b>
+       in FASTA format with a maximum length of 40,000 amino acid long.
+    </p>
+  </section>
+  <section>
+    <h3>
+      Source code
+    </h3>
+    <p>
+      You can find, clone, and download the full InterProScan source code on the Github repository, available under
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="https://github.com/ebi-pf-team/interproscan"
+        target="_blank"
+      >
+        github.com/ebi-pf-team/interproscan
+      </Memo(ConnectFunction)>
+      .
+    </p>
+  </section>
+  <section>
+    <h3>
+      Previous releases
+    </h3>
+    <p>
+      To ensure you have the latest data and software enhancements we always recommend you download the latest version of InterProScan. However all previous releases are archived on the
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/"
+        target="_blank"
+      >
+        FTP site
+      </Memo(ConnectFunction)>
+      .
+    </p>
+  </section>
+  <section>
+    <h3>
+      License
+    </h3>
+    <p>
+      The InterProScan software is distributed under the open source Apache license, as are the included scanning tools (except SignalP and TMHMM). Therefore, you do not need a special license for commercial use but please cite the resource and keep the Copyright statement with your installation.
+    </p>
+  </section>
+  <section>
+    <h3>
+      Follow us & reporting bugs
+    </h3>
+    <p>
+      If you want to get updates on InterProScan, you can subscribe to the
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="http://listserver.ebi.ac.uk/mailman/listinfo/interproscan-announce"
+        target="_blank"
+      >
+        <span
+          className="icon icon-common"
+          data-icon=""
+        />
+         
+        interproscan-announce mailing list
+      </Memo(ConnectFunction)>
+       
+      or just follow InterPro on Twitter
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="https://twitter.com/InterProDB"
+        target="_blank"
+      >
+        <span
+          className="icon icon-common"
+          data-icon=""
+        />
+         
+        @InterProDB
+      </Memo(ConnectFunction)>
+      .
+    </p>
+    <p>
+      If you want to submit a question or report a bug, please contact us by
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="mailto:interhelp@ebi.ac.uk"
+        target="_blank"
+      >
+        <span
+          className="icon icon-common"
+          data-icon=""
+        />
+         
+        email
+      </Memo(ConnectFunction)>
+       
+      or contact us using the
+       
+      <Memo(ConnectFunction)
+        className="ext"
+        href="http://www.ebi.ac.uk/support/interproscan"
+        target="_blank"
+      >
+        <span
+          className="icon icon-common"
+          data-icon=""
+        />
+         
+        EBI form
+      </Memo(ConnectFunction)>
+      , providing as much information as possible so that we can recreate the problem.
+    </p>
+  </section>
+</React.Fragment>
+`;

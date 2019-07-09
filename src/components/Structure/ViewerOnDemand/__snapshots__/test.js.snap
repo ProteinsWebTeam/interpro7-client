@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ViewerOnDemand /> should render 1`] = `
+<div
+  className="wrapper"
+>
+  <button
+    className="inner-wrapper"
+    onClick={[Function]}
+  >
+    <div
+      className="background"
+    >
+      <LazyImage
+        alt="structure with accession 102m"
+        src="//www.ebi.ac.uk/thornton-srv/databases/pdbsum/102m/traces.jpg"
+      />
+    </div>
+    <div
+      className="text"
+    >
+      <p>
+        click or tap this area to display the interactive structure viewer
+      </p>
+      <p>
+        <label
+          onClick={[Function]}
+        >
+          Remember this next time?
+           
+          <input
+            type="checkbox"
+          />
+        </label>
+        <small>
+          This can be reversed in the
+           
+          <Memo(ConnectFunction)
+            to={
+              Object {
+                "description": Object {
+                  "other": Array [
+                    "settings",
+                  ],
+                },
+              }
+            }
+          >
+            Settings
+          </Memo(ConnectFunction)>
+           
+          page
+        </small>
+      </p>
+    </div>
+  </button>
+</div>
+`;

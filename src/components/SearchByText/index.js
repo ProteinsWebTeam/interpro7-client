@@ -26,7 +26,7 @@ const SchemaOrgData = loadable({
 
 /*:: type Props = { main: string }; */
 
-class SearchByText extends PureComponent /*:: <Props> */ {
+export class SearchByText extends PureComponent /*:: <Props> */ {
   /*:: _input: HTMLInputElement; */
   static propTypes = {
     main: T.string,

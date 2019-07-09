@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RefreshButton /> should render 1`] = `
+<button
+  aria-label="Manually refresh job information"
+  className="button"
+  onClick={[Function]}
+>
+  <Tooltip
+    title="Manually refresh job information"
+  >
+    <span
+      className="icon icon-common"
+      data-icon=""
+    />
+  </Tooltip>
+</button>
+`;

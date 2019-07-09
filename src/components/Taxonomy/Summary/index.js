@@ -49,7 +49,7 @@ const SchemaOrgData = loadable({
   goToCustomLocation: function,
 }; */
 
-class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
+export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   /*::
     _vis: any;
     _ref: { current: ?HTMLElement };

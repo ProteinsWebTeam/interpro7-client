@@ -7,17 +7,17 @@ const DEFAULT_ITEM_DELAY = 25;
 const DEFAULT_DURATION = 250;
 
 /*:: type Props = {
-  element: ?Node | string,
+  element: HTMLElement | string,
   keyframes: ?Array<Object> | Object,
-  delay: ?number,
-  itemDelay: ?number,
-  duration: ?number,
+  delay: number,
+  itemDelay: number,
+  duration: number,
   animateSelf: boolean,
   lowGraphics: boolean,
   dispatch: function,
 } */
 
-class AnimatedEntry extends PureComponent /*:: <Props> */ {
+export class AnimatedEntry extends PureComponent /*:: <Props> */ {
   /*::
     _ref: { current: null | React$ElementRef<string> };
     _animations: ?Array<any>;

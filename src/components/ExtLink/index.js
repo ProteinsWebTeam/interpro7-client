@@ -11,17 +11,29 @@ const types = {
   target: T.string,
 };
 
-export const BaseLink = ({
-  id,
-  pattern,
-  href,
-  to,
-  rel,
-  className,
-  children,
-  activeClass,
-  ...rest
-}) => {
+export const BaseLink = (
+  {
+    id,
+    pattern,
+    href,
+    to,
+    rel,
+    className,
+    children,
+    activeClass,
+    ...rest
+  } /*: {|
+  id: string | number,
+  pattern: string,
+  href: string,
+  rel: string,
+  to: object,
+  target: string,
+  className: string,
+  activeClass: string | function,
+  children: any
+|} */,
+) => {
   const props = {
     href: href || to || (pattern || '').replace('{id}', id),
   };

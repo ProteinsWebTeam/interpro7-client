@@ -45,13 +45,23 @@ const lut = new Map([
   ['tigrfams', 'http://tigrfams.jcvi.org/cgi-bin/index.cgi'],
 ]);
 
-/*:: type Props = {
+/*:: type DB = {
+  type: string,
+  name: string,
+  version: ?string,
+  releaseDate: ?string,
+  canonical: string,
+};
+
+type Props = {
   data: {
     loading: boolean,
-    payload?: {
-      databases: {},
+    payload?: ?{
+      databases: {
+        [key: ?string]: DB
+      }
     }
-  },
+  }
 }; */
 
 export const Consortium = class extends PureComponent /*:: <Props> */ {
@@ -71,7 +81,7 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
     if (loading || !payload) return <Loading />;
     const databases = payload && payload.databases;
     const memberDBs = Object.values(payload.databases).filter(
-      db => db.type === 'entry' && db.canonical !== 'interpro',
+      (db /*: DB */) => db.type === 'entry' && db.canonical !== 'interpro',
     );
     return (
       <section>

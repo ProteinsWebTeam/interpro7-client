@@ -6,7 +6,7 @@ import Funding from '.';
 
 const renderer = new ShallowRenderer();
 
-describe('<Consortium />', () => {
+describe('<Funding />', () => {
   test('should render', () => {
     renderer.render(<Funding />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();

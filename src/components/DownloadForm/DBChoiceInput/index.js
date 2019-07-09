@@ -36,7 +36,21 @@ const payloadToOptions = (payload, isIntegration = false) =>
       );
     });
 
-export class DBChoiceInputWithoutData extends PureComponent {
+/*:: type Props = {
+  type: string,
+  data: {
+    loading: boolean,
+    payload: Object
+  },
+  isStale: boolean,
+  onClick: function,
+  isIntegration: boolean,
+  name: string,
+  value: string,
+  valueIntegration: string
+};*/
+
+export class DBChoiceInputWithoutData extends PureComponent /*:: <Props> */ {
   static propTypes = {
     type: T.string.isRequired,
     data: T.shape({
@@ -81,19 +95,18 @@ export class DBChoiceInputWithoutData extends PureComponent {
           <span className={f('input-group-label')}>
             {type} {isIntegration ? 'integration' : 'DB'}:
           </span>
-          {(!loading &&
-            payload && (
-              <select
-                className={f('input-group-field')}
-                name={_name}
-                value={_value}
-                onChange={noop}
-                onBlur={noop}
-              >
-                <option value="">{'< no selection >'}</option>
-                {payloadToOptions(payload[toPlural(type)], isIntegration)}
-              </select>
-            )) || <input />}
+          {(!loading && payload && (
+            <select
+              className={f('input-group-field')}
+              name={_name}
+              value={_value}
+              onChange={noop}
+              onBlur={noop}
+            >
+              <option value="">{'< no selection >'}</option>
+              {payloadToOptions(payload[toPlural(type)], isIntegration)}
+            </select>
+          )) || <input />}
           <div className={f('input-group-button')}>
             <button
               type="button"
@@ -128,12 +141,14 @@ const mapStateToUrlFor = createSelector(
     ),
 );
 
-export default class DBChoiceInput extends PureComponent {
+/* :: type DBChoiceInputProps =  {|type: string|} */
+/* :: type DBChoiceInputState =  {|DBChoiceInputWithData: any, type: ?string|} */
+
+export default class DBChoiceInput extends PureComponent /*:: <DBChoiceInputProps, DBChoiceInputState> */ {
   static propTypes = {
     type: T.string.isRequired,
   };
-
-  constructor(props) {
+  constructor(props /*: DBChoiceInputProps */) {
     super(props);
 
     this.state = {
@@ -142,7 +157,10 @@ export default class DBChoiceInput extends PureComponent {
     };
   }
 
-  static getDerivedStateFromProps({ type }, prevState) {
+  static getDerivedStateFromProps(
+    { type } /*: DBChoiceInputState */,
+    prevState /*: DBChoiceInputState */,
+  ) {
     if (type === prevState.type) return null;
 
     return {

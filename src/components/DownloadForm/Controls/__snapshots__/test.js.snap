@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Controls /> should render 1`] = `
+<React.Fragment>
+  <div
+    className="callout warning"
+  >
+    We expect this file to contain
+     
+    <Memo(ConnectFunction)
+      abbr={true}
+    >
+      36713
+    </Memo(ConnectFunction)>
+     distinct
+     
+    entries
+    .
+     
+    If you encounter any problems during the creation of this file
+    , please check the “Code snippet” section of this page for to see how to download the data directly onto your computer.
+  </div>
+  <div
+    className="container"
+  >
+    <button
+      className="button hollow warning"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Generate
+    </button>
+    <ProgressButton
+      downloading={false}
+      failed={false}
+      progress={0}
+    />
+    <Memo(ConnectFunction)
+      className="button hollow warning"
+      disabled={true}
+      download="export.undefined"
+      type="button"
+    >
+      Download
+    </Memo(ConnectFunction)>
+  </div>
+</React.Fragment>
+`;

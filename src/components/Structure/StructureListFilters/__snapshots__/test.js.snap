@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StructureListFilters /> should render 1`] = `
+<Memo(ConnectFunction)>
+  <Memo(ConnectFunction)
+    label="Experiment Type"
+  />
+  <Memo(ConnectFunction)
+    label="Resolution (Å)"
+  />
+</Memo(ConnectFunction)>
+`;

@@ -289,14 +289,10 @@ class StructureCard extends PureComponent {
         <div className={f('card-header')}>
           <div className={f('card-image')}>
             <Tooltip
-              title={`3D visualisation for ${
-                data.metadata.accession
-              } structure`}
+              title={`3D visualisation for ${data.metadata.accession} structure`}
             >
               <LazyImage
-                src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${
-                  data.metadata.accession
-                }/traces.jpg`}
+                src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${data.metadata.accession}/traces.jpg`}
                 alt={`structure with accession ${data.metadata.accession}`}
               />
             </Tooltip>

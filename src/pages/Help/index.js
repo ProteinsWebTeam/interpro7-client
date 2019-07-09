@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import { createSelector } from 'reselect';
 
@@ -24,12 +25,16 @@ const f = foundationPartial(ebiGlobalStyles, ipro);
 
 const Publication = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-consortium" */ 'components/Help/Publication'),
+    import(
+      /* webpackChunkName: "about-consortium" */ 'components/Help/Publication'
+    ),
 });
 
 const Tutorial = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-consortium" */ 'components/Help/Tutorial'),
+    import(
+      /* webpackChunkName: "about-consortium" */ 'components/Help/Tutorial'
+    ),
 });
 
 const Faqs = loadable({
@@ -39,7 +44,9 @@ const Faqs = loadable({
 
 const Documentation = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-funding" */ 'components/Help/Documentation'),
+    import(
+      /* webpackChunkName: "about-funding" */ 'components/Help/Documentation'
+    ),
 });
 
 const innerRoutes = new Map([['publication', Publication]]);
@@ -49,7 +56,7 @@ const innerLocationSelector = createSelector(
   value => value,
 );
 
-class InnerSwitch extends PureComponent {
+class InnerSwitch extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <ErrorBoundary>

@@ -64,7 +64,20 @@ const lut = new Map([
 
 const TTL = 3000; // keep notification about copy to clipboard for 3 seconds
 
-export class Snippet extends PureComponent {
+/*:: type Props= {|
+  addToast: function
+|};*/
+
+/*:: type State= {|
+  language: string,
+  code: ?string,
+  href: ?string
+|};*/
+
+export class Snippet extends PureComponent /*:: <Props, State> */ {
+  /*::
+    _ref: React$ElementRef<'button'>
+  */
   static propTypes = {
     addToast: T.func.isRequired,
   };

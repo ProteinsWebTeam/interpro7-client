@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -28,7 +29,14 @@ import ipro from 'styles/interpro-new.css';
 const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
 const reducedStyleBundle = classnames.bind(styles);
 
-export class _HamburgerBtn extends PureComponent {
+/*:: type Props = {
+  openSideNav: function,
+  open: boolean,
+  svg: boolean,
+  stuck: boolean
+}; */
+
+export class _HamburgerBtn extends PureComponent /*:: <Props> */ {
   static propTypes = {
     openSideNav: T.func.isRequired,
     open: T.bool.isRequired,
@@ -85,15 +93,25 @@ export class _HamburgerBtn extends PureComponent {
   }
 }
 
-const mapStateToPropsHamburger = createSelector(sideNavSelector, open => ({
-  open,
-}));
+const mapStateToPropsHamburger = createSelector(
+  sideNavSelector,
+  open => ({
+    open,
+  }),
+);
 const HamburgerBtn = connect(
   mapStateToPropsHamburger,
   { openSideNav },
 )(_HamburgerBtn);
 
-export class _SideIcons extends PureComponent {
+/*:: type SideIconsProps = {
+  movedAway: boolean,
+  stuck: boolean,
+  lowGraphics: boolean,
+  search: Object
+}; */
+
+export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
   static propTypes = {
     movedAway: T.bool.isRequired,
     stuck: T.bool.isRequired,
@@ -192,7 +210,13 @@ const styleForHeader = (supportsSticky, offset, stuck) => {
   return style;
 };
 
-export class Header extends PureComponent {
+/*:: type HeaderProps = {
+  stickyMenuOffset: number,
+  stuck: boolean,
+  isSignature: boolean
+}; */
+
+export class Header extends PureComponent /*:: <HeaderProps> */ {
   static propTypes = {
     stickyMenuOffset: T.number.isRequired,
     stuck: T.bool.isRequired,

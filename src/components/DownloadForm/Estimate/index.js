@@ -49,14 +49,29 @@ const getText = ({ loading, payload, ok, status, headers }, isStale) => {
   return 'No estimate available.';
 };
 
-export default class Estimate extends PureComponent {
+/*:: type Props = {
+  data: {
+   loading: boolean,
+   payload: {
+      count: number,
+      next: any,
+      previous: any
+      },
+      ok: boolean,
+      status: number,
+      headers?: Object
+  },
+   isStale: boolean
+}; */
+
+export default class Estimate extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
       payload: T.oneOfType([T.arrayOf(T.object), T.object]),
       ok: T.bool,
       status: T.number,
-      headers: T.instanceOf(Headers),
+      headers: T.object, // TODO: change back instanceOf(Headers),
     }).isRequired,
     isStale: T.bool.isRequired,
   };

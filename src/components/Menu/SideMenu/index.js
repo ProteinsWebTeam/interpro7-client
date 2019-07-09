@@ -83,13 +83,14 @@ const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
 /*:: type Props = {
   visible: boolean,
   mainAccession: ?string,
+  mainType?: string,
   closeSideNav: function,
 }; */
 /*:: type State = {
   hasRendered: boolean,
 }; */
 
-class SideMenu extends PureComponent /*:: <Props, State> */ {
+export class SideMenu extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     visible: T.bool.isRequired,
     mainAccession: T.string,

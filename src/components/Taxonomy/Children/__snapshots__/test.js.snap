@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Children /> should render 1`] = `
+<div
+  className="list-children"
+>
+  <div>
+    <TaxIdOrName
+      accession="12333"
+      name={
+        Object {
+          "name": "unclassified bacterial viruses",
+          "short": "unclassified bacterial viruses",
+        }
+      }
+    />
+    <LoadableComponent
+      data={
+        Object {
+          "name": Object {
+            "name": "unclassified bacterial viruses",
+            "short": "unclassified bacterial viruses",
+          },
+          "taxId": "12333",
+        }
+      }
+      processData={[Function]}
+    />
+  </div>
+  <div>
+    <TaxIdOrName
+      accession="12877"
+      name={
+        Object {
+          "name": "Satellites",
+          "short": "Satellites",
+        }
+      }
+    />
+    <LoadableComponent
+      data={
+        Object {
+          "name": Object {
+            "name": "Satellites",
+            "short": "Satellites",
+          },
+          "taxId": "12877",
+        }
+      }
+      processData={[Function]}
+    />
+  </div>
+</div>
+`;

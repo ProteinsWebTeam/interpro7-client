@@ -1,0 +1,157 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DynamicMenu /> should render 1`] = `
+<ul
+  className="menu"
+>
+  <li
+    className="menu-item visible"
+    data-name="Home"
+    data-testid="menu-tab-home"
+  >
+    <Memo(ConnectFunction)
+      exact={true}
+      to={
+        Object {
+          "description": Object {},
+        }
+      }
+    >
+      Home
+    </Memo(ConnectFunction)>
+  </li>
+  <li
+    className="menu-item visible"
+    data-name="Search"
+    data-testid="menu-tab-search"
+  >
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "main": Object {
+              "key": "search",
+            },
+          },
+        }
+      }
+    >
+      Search
+    </Memo(ConnectFunction)>
+  </li>
+  <li
+    className="menu-item visible"
+    data-name="Browse"
+    data-testid="menu-tab-browse"
+  >
+    <Memo(ConnectFunction)
+      activeClass={[Function]}
+      to={[Function]}
+    >
+      Browse
+    </Memo(ConnectFunction)>
+  </li>
+  <li
+    className="menu-item visible"
+    data-name="Results"
+    data-testid="menu-tab-results"
+  >
+    <Memo(ConnectFunction)
+      to={[Function]}
+    >
+      Results
+    </Memo(ConnectFunction)>
+  </li>
+  <li
+    className="menu-item visible"
+    data-name="Release notes"
+    data-testid="menu-tab-release_notes"
+  >
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "release_notes",
+            ],
+          },
+        }
+      }
+    >
+      Release notes
+    </Memo(ConnectFunction)>
+  </li>
+  <li
+    className="menu-item visible"
+    data-name="Download"
+    data-testid="menu-tab-download"
+  >
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "download",
+            ],
+          },
+        }
+      }
+    >
+      Download
+    </Memo(ConnectFunction)>
+  </li>
+  <li
+    className="menu-item visible"
+    data-name="Help"
+    data-testid="menu-tab-help"
+  >
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "help",
+            ],
+          },
+        }
+      }
+    >
+      Help
+    </Memo(ConnectFunction)>
+  </li>
+  <li
+    className="menu-item visible"
+    data-name="About"
+    data-testid="menu-tab-about"
+  >
+    <Memo(ConnectFunction)
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "about",
+            ],
+          },
+        }
+      }
+    >
+      About
+    </Memo(ConnectFunction)>
+  </li>
+  <ul
+    className="menu-item view-more"
+    role="tree"
+    tabIndex="0"
+  >
+    <span
+      className="more-icon-container"
+    >
+      <img
+        alt="view all menu items"
+        src={Object {}}
+        width="30px"
+      />
+    </span>
+  </ul>
+</ul>
+`;

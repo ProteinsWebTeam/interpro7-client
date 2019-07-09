@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HelpBanner /> should render 1`] = `
+<div
+  className="help-banner flex-card"
+>
+  <header>
+    <span
+      className="icon icon-common font-l"
+      data-icon=""
+    />
+     
+    Need more Help?
+  </header>
+  <div>
+    If you need more info on 
+    , you can either look at the:
+    <br />
+    <span
+      className="icon icon-common font-l"
+      data-icon=""
+    />
+     
+    <Memo(ConnectFunction)
+      className=""
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "help",
+              "documentation",
+            ],
+          },
+        }
+      }
+    >
+      Documentation page
+    </Memo(ConnectFunction)>
+    <br />
+    or
+     
+    <Memo(ConnectFunction)
+      href="http://www.ebi.ac.uk/support/interpro-general-query"
+      target="_blank"
+    >
+      contact us
+    </Memo(ConnectFunction)>
+     
+    directly with your question.
+  </div>
+</div>
+`;
