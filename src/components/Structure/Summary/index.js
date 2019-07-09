@@ -23,6 +23,7 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { formatExperimentType } from 'components/Structure/utils';
+import { formatShortDate } from 'utils/date';
 
 const f = foundationPartial(ebiStyles);
 
@@ -136,7 +137,7 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
                         <TimeAgo
                           date={date}
                           noUpdate
-                          title={date.toLocaleDateString()}
+                          title={formatShortDate(date)}
                         />
                       </td>
                     </tr>
