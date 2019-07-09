@@ -1,5 +1,5 @@
-// flow-typed signature: 8dffde9ed1a3e12b1003871feca14476
-// flow-typed version: 8b0a1f6a01/jest_v24.x.x/flow_>=v0.39.x
+// flow-typed signature: 62afff77b0be14fade0f13aee8bda9db
+// flow-typed version: 9823121349/jest_v24.x.x/flow_>=v0.39.x
 
 type JestMockFn<TArguments: $ReadOnlyArray<*>, TReturn> = {
   (...args: TArguments): TReturn,
@@ -215,6 +215,7 @@ type EnzymeMatchersType = {
 // DOM testing library extensions https://github.com/kentcdodds/dom-testing-library#custom-jest-matchers
 type DomTestingLibraryType = {
   toBeDisabled(): void,
+  toBeEnabled(): void,
   toBeEmpty(): void,
   toBeInTheDocument(): void,
   toBeVisible(): void,
@@ -707,7 +708,7 @@ interface JestExpectType {
   /**
    *
    */
-  toHaveProperty(propPath: string, value?: any): void;
+  toHaveProperty(propPath: string | $ReadOnlyArray<string>, value?: any): void;
   /**
    * Use .toMatch to check that a string matches a regular expression or string.
    */

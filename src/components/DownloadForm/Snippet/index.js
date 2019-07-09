@@ -5,10 +5,10 @@ import { template } from 'lodash-es';
 import ClipboardJS from 'clipboard';
 
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-import js from 'react-syntax-highlighter/dist/languages/hljs/javascript';
-import python from 'react-syntax-highlighter/dist/languages/hljs/python';
-import perl from 'react-syntax-highlighter/dist/languages/hljs/perl';
-import docco from 'react-syntax-highlighter/dist/styles/hljs/docco';
+import python from 'react-syntax-highlighter/dist/esm/languages/hljs/python';
+import js from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
+import perl from 'react-syntax-highlighter/dist/esm/languages/hljs/perl';
+import docco from 'react-syntax-highlighter/dist/esm/styles/hljs/docco';
 
 import blockEvent from 'utils/block-event';
 

@@ -1,7 +1,6 @@
 // @flow
 /* global ga: false */
 /*:: import type { Middleware } from 'redux'; */
-/*:: import type history from 'history'; */
 /*:: declare var ga: (...args: Array<string>) => void; */
 import { format } from 'url';
 import { sleep } from 'timing-functions/src';
@@ -13,7 +12,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import autoScroll from 'utils/auto-scroll';
 
 // Middleware to handle history change events
-const middleware = (history /*: history */) /*: Middleware<*, *, *> */ => ({
+const middleware = (history /*: any */) /*: Middleware<*, *, *> */ => ({
   dispatch,
   getState,
 }) => {

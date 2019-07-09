@@ -20,6 +20,8 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.js', '!**/.*.js'],
   coverageReporters: ['json-summary', 'lcov', 'text-summary'],
   coverageDirectory: 'reports/jest-coverage',
-  transformIgnorePatterns: ['node_modules/(?!lodash-es|timing-functions|gsap)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!lodash-es|timing-functions|gsap|react-syntax-highlighter)',
+  ],
   testURL: websiteURL.href,
 };
