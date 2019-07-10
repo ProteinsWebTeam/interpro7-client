@@ -1,5 +1,7 @@
 import React from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
@@ -88,10 +90,7 @@ const List = ({ data, customLocation: { search } }) => {
   );
 };
 List.propTypes = {
-  data: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }),
+  data: dataPropType,
   customLocation: T.shape({
     search: T.object,
   }),

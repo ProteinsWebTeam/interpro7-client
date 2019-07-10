@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import Link from 'components/generic/Link';
 
 import ErrorBoundary, {
@@ -37,32 +39,20 @@ const SchemaOrgData = loadable({
 });
 
 const propTypes = {
-  data: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-    ok: T.bool,
-  }).isRequired,
+  data: dataPropType.isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
     description: T.object.isRequired,
   }).isRequired,
   match: T.string,
-  dataBase: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-    ok: T.bool,
-  }).isRequired,
+  dataBase: dataPropType.isRequired,
   subPagesForEndpoint: T.oneOfType([T.func, T.object]),
 };
 
 class SummaryComponent extends PureComponent {
   static propTypes = {
-    data: T.shape({
-      payload: T.any,
-    }).isRequired,
-    dataBase: T.shape({
-      payload: T.any,
-    }).isRequired,
+    data: dataPropType.isRequired,
+    dataBase: dataPropType.isRequired,
     customLocation: T.object.isRequired,
     SummaryAsync: T.func,
   };

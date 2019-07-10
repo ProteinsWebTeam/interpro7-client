@@ -1,5 +1,9 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import {
+  dataPropType,
+  metadataPropType,
+} from 'higherOrder/loadData/dataPropTypes';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
@@ -56,7 +60,7 @@ import { toPlural } from 'utils/pages';
 
 class SummaryCounterProteins extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    metadata: T.object.isRequired,
+    metadata: metadataPropType.isRequired,
     counters: T.object.isRequired,
     entryDB: T.string.isRequired,
   };
@@ -202,26 +206,20 @@ const ProteinCard = ({ data, search, entryDB }) => (
   </>
 );
 ProteinCard.propTypes = {
-  data: T.object,
+  data: dataPropType.object,
   search: T.string,
   entryDB: T.string,
 };
 
 const propTypes = {
-  data: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-    ok: T.bool,
-  }).isRequired,
+  data: dataPropType.isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
     description: T.object.isRequired,
+    search: T.object.isRequired,
   }).isRequired,
   match: T.string,
-  dataBase: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-  }).isRequired,
+  dataBase: dataPropType.isRequired,
 };
 
 /*:: type ListProps={

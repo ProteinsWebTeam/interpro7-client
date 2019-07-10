@@ -1,6 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
@@ -152,10 +154,7 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
   );
 };
 _KeySpeciesTableWithData.propTypes = {
-  data: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.object,
-  }).isRequired,
+  data: dataPropType.isRequired,
   description: T.object,
   status: T.number,
 };

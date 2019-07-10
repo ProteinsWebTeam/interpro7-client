@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Sequence from 'components/Protein/Sequence';
 
@@ -32,33 +33,7 @@ import Sequence from 'components/Protein/Sequence';
 
 class SequenceSubPage extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    data: T.shape({
-      payload: T.oneOfType([
-        T.shape({
-          metadata: T.shape({
-            accession: T.string,
-            sequence: T.string.isRequired,
-            name: T.shape({
-              name: T.string,
-            }),
-          }),
-        }),
-        T.shape({
-          results: T.shape(
-            {
-              0: T.shape({
-                sequence: T.string.isRequired,
-                xref: T.shape({
-                  0: T.shape({
-                    identifier: T.string,
-                  }).isRequired,
-                }).isRequired,
-              }).isRequired,
-            }.isRequired,
-          ),
-        }),
-      ]),
-    }).isRequired,
+    data: dataPropType.isRequired,
     localPayload: T.object,
   };
 

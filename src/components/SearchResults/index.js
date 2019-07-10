@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import { createSelector } from 'reselect';
 // import Description from 'components/Description';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -32,12 +33,7 @@ const MAX_LENGTH = 200;
 
 export class SearchResults extends PureComponent {
   static propTypes = {
-    data: T.shape({
-      payload: T.object,
-      loading: T.bool.isRequired,
-      ok: T.bool,
-      url: T.string,
-    }),
+    data: dataPropType,
     isStale: T.bool.isRequired,
     searchValue: T.string,
     query: T.object,

@@ -1,5 +1,9 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import {
+  dataPropType,
+  metadataPropType,
+} from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
@@ -41,7 +45,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, pageStyle, ipro);
 class SummaryCounterSet extends PureComponent {
   static propTypes = {
     entryDB: T.string,
-    metadata: T.object.isRequired,
+    metadata: metadataPropType.isRequired,
     counters: T.object.isRequired,
   };
 
@@ -259,26 +263,20 @@ const SetCard = ({ data, search, entryDB }) => (
   </>
 );
 SetCard.propTypes = {
-  data: T.object,
+  data: dataPropType,
   search: T.string,
   entryDB: T.string,
 };
 
 const propTypes = {
-  data: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-    ok: T.bool,
-  }).isRequired,
+  data: dataPropType.isRequired,
   loading: T.bool,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
     description: T.object.isRequired,
+    search: T.object.isRequired,
   }).isRequired,
-  dataBase: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-  }),
+  dataBase: dataPropType,
 };
 
 class List extends PureComponent {

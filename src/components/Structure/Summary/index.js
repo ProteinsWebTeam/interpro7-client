@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -62,8 +63,8 @@ const loadPDBWebComponents = () => {
 
 export class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    data: T.shape({}).isRequired,
-    dataMatches: T.shape({}).isRequired,
+    data: dataPropType.isRequired,
+    dataMatches: dataPropType.isRequired,
   };
 
   componentDidMount() {
