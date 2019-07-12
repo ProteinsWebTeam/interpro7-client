@@ -59,8 +59,7 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { loading, payload },
-      // eslint-disable-next-line no-unused-vars
-      customLocation: { description, search },
+      customLocation: { search },
     } = this.props;
     const groupsPayload = loading || !payload ? {} : payload.is_fragment;
     const groups = {
