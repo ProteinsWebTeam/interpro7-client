@@ -22,6 +22,7 @@ class TableView extends PureComponent {
     notFound: T.bool,
     dataTable: T.array,
     rowKey: T.string,
+    rowClassName: T.oneOfType([T.string, T.func]),
   };
 
   render() {
@@ -34,6 +35,7 @@ class TableView extends PureComponent {
       notFound,
       dataTable,
       rowKey,
+      rowClassName,
     } = this.props;
     return (
       <table
@@ -50,6 +52,7 @@ class TableView extends PureComponent {
           isStale={isStale}
           ok={ok}
           status={status}
+          rowClassName={rowClassName}
         />
       </table>
     );
