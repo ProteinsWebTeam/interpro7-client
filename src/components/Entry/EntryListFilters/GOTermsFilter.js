@@ -25,7 +25,18 @@ const categories = {
   'Molecular Function': 'F',
 };
 
-class GOTermsFilter extends PureComponent {
+/* :: type Props = {
+  data: {
+    loading: boolean,
+    payload: any,
+  },
+  goToCustomLocation: function,
+  customLocation: {
+    search: Object,
+  }
+}; */
+
+class GOTermsFilter extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

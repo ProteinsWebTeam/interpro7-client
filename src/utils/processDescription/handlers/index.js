@@ -24,7 +24,7 @@ import { get, set } from 'lodash-es';
     db: ?string,
     accession: ?string,
     memberDB: ?string,
-    memberAccession: ?string,
+    memberDBAccession: ?string,
     detail: ?string,
     order: ?number,
   |},

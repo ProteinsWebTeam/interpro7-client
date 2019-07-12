@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -10,13 +11,15 @@ import { requestFullScreen } from 'utils/fullscreen';
 
 const f = foundationPartial(fonts);
 
-const FullScreenButton = ({
-  handleFullScreen,
-  element,
-  tooltip,
-  className,
-  dataIcon = 'F',
-}) => {
+const FullScreenButton = (
+  {
+    handleFullScreen,
+    element,
+    tooltip,
+    className,
+    dataIcon = 'F',
+  } /*: {handleFullScreen?: function, element: any, tooltip: string, className?: string, dataIcon?: string} */,
+) => {
   if (!handleFullScreen && !element) return null;
   const _handleFullScreen =
     handleFullScreen || (() => requestFullScreen(element));

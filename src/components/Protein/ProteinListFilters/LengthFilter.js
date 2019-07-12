@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -18,7 +19,14 @@ const options = new Map([
   ['1001-100000', 'long (1,001-100,000 AA)'],
 ]);
 
-class LengthFilter extends PureComponent {
+/*:: type Props = {
+  goToCustomLocation: function,
+  customLocation: {
+    description: Object,
+    search: Object
+  }
+}; */
+class LengthFilter extends PureComponent /*:: <Props> */ {
   static propTypes = {
     customLocation: T.shape({
       description: T.object.isRequired,

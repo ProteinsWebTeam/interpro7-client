@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -30,7 +31,20 @@ const SchemaOrgData = loadable({
 const INTERPRO_ACCESSION_PADDING = 6;
 const MAX_LENGTH = 200;
 
-export class SearchResults extends PureComponent {
+/*:: type Props = {
+  data: {
+    payload: Object,
+    loading: boolean,
+    ok: boolean,
+    url: string,
+    status: number
+  },
+  isStale: boolean,
+  searchValue: string,
+  query: Object,
+}; */
+
+export class SearchResults extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,

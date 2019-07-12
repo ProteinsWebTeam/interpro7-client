@@ -11,14 +11,14 @@ const f = foundationPartial(protvista);
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-/* :: type Props = {|
+/* :: type Props = {
   matches: Array<Object>,
   accession: string,
   tooltip: string,
   length: number
-|}; */
+}; */
 
-class MatchesOnProtein extends ProtVistaMatches /*:: <Props> */ {
+class MatchesOnProtein extends ProtVistaMatches {
   static propTypes = {
     matches: T.array.isRequired,
     accession: T.string,

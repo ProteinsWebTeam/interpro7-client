@@ -44,14 +44,12 @@ const strategy = re => (block, cb) => {
     cb(match.index, match.index + match[0].length);
   }
 };
-
-const classedSpan = className => {
-  /*:: type ScanProps = {
-      offsetkey: string,
+/*:: type ScanProps = {
+      offsetKey: string,
       children: any
   }*/
-
-  class Span extends PureComponent /*:: <Props> */ {
+const classedSpan = className => {
+  class Span extends PureComponent /*:: <ScanProps> */ {
     static propTypes = {
       offsetKey: T.string.isRequired,
       children: T.any,
@@ -119,14 +117,24 @@ const compositeDecorator = new CompositeDecorator([
   },
 ]);
 
-/*:: type AdvancedOptionsProps = {
+/*:: type Props = {
   createJob: function,
   goToCustomLocation: function,
   ipScan: Object,
   value: string,
 }*/
 
-export class IPScanSearch extends PureComponent /*:: <AdvancedOptionsProps> */ {
+/*:: type State = {
+  editorState: Object,
+  valid: boolean,
+  tooShort: boolean,
+}*/
+
+export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
+  /*::
+    _formRef: { current: null | React$ElementRef<'form'> };
+    _editorRef: { current: null | React$ElementRef<'editor'> };
+  */
   static propTypes = {
     createJob: T.func.isRequired,
     goToCustomLocation: T.func.isRequired,
@@ -134,7 +142,7 @@ export class IPScanSearch extends PureComponent /*:: <AdvancedOptionsProps> */ {
     value: T.string,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     let editorState;

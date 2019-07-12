@@ -8,10 +8,9 @@ const colorHash = new ColorHash();
 const DEFAULT_SIDE = 30;
 const CHANGE_FIGURE_EVERY = 10;
 
-const VersionBadge = ({
-  version,
-  side = DEFAULT_SIDE,
-}) => /*: {version: string, side: number} */ {
+export const VersionBadge = (
+  { version, side = DEFAULT_SIDE } /*: {version: string, side?: number} */,
+) => {
   const n = parseInt(version / CHANGE_FIGURE_EVERY, 10) - 1;
   const r = side / 2;
   const circ = (Math.PI * 2) / n;

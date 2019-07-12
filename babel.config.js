@@ -8,10 +8,10 @@ module.exports = {
     test: {
       presets: [
         [
-          '@babel/env',
+          '@babel/preset-env',
           {
             useBuiltIns: 'usage',
-            targets: { node: '8' },
+            targets: { node: 'current' },
             corejs: 3,
           },
         ],

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -16,7 +17,9 @@ const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
-const schemaProcessData = ({ taxId, name }) => ({
+const schemaProcessData = (
+  { taxId, name } /*: {taxId: string, name: string} */,
+) => ({
   '@id': '@contains', // maybe 'is member of' http://semanticscience.org/resource/SIO_000095
   name: 'contains',
   value: {
@@ -32,7 +35,11 @@ const schemaProcessData = ({ taxId, name }) => ({
       }),
   },
 });
-class Children extends PureComponent {
+/*:: type Props = {
+  taxChildren: Array<string>,
+  names: Object
+}*/
+class Children extends PureComponent /*:: <Props> */ {
   static propTypes = {
     taxChildren: T.array.isRequired,
     names: T.object,

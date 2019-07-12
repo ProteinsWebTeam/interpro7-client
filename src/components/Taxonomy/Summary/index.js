@@ -25,7 +25,9 @@ import memberSelectorStyle from 'components/Table/TotalNb/style.css';
 
 const f = foundationPartial(ebiStyles, memberSelectorStyle);
 
-export const parentRelationship = ({ taxId, name = null }) => ({
+export const parentRelationship = (
+  { taxId, name = null } /*: {taxId: string, name: string} */,
+) => ({
   '@id': '@additionalProperty',
   '@type': 'PropertyValue',
   additionalType: 'http://semanticscience.org/resource/SIO_000095',
@@ -43,16 +45,22 @@ const SchemaOrgData = loadable({
 });
 
 /*:: type Props = {
-  data: {
-    metadata: Object,
+  dataNames: {
+    payload: {
+      metadata: Object,
+      names: Object
+    },
+    loading: boolean,
   },
   goToCustomLocation: function,
+  customLocation: Object
 }; */
 
 export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
   /*::
     _vis: any;
     _ref: { current: ?HTMLElement };
+    loadingVis: boolean;
   */
   static propTypes = {
     dataNames: T.shape({

@@ -32,7 +32,9 @@ const IPScanResult = loadable({
 
 const DownloadSummary = loadable({
   loader: () =>
-    import(/* webpackChunkName: "download-summary" */ 'components/Download/Summary'),
+    import(
+      /* webpackChunkName: "download-summary" */ 'components/Download/Summary'
+    ),
 });
 
 const DownloadForm = loadable({
@@ -61,7 +63,9 @@ const jobAccessionSelector = createSelector(
   value => value,
 );
 
-const _IPScanResultSafeGuardIfNotRehydratedYet = ({ jobs, ...props }) => {
+const _IPScanResultSafeGuardIfNotRehydratedYet = (
+  { jobs, ...props } /*: {jobs: Object} */,
+) => {
   if (!jobs) return <Loading />;
   return <IPScanResult {...props} />;
 };

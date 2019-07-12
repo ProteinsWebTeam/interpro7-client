@@ -46,11 +46,7 @@ import { toPlural } from 'utils/pages';
     name: string,
     accession: string
   },
-  counters: {
-    entries: Array
-    structures: Array
-    sets: Array
-    },
+  counters: Object,
   entryDB: string
 };*/
 
@@ -227,13 +223,13 @@ const propTypes = {
 /*:: type ListProps={
   data: {
     payload: {
-      databases: Array,
-      results: Array,
+      databases: Array<Object>,
+      results: Array<Object>,
       count: Number
     },
     loading: boolean,
     ok: boolean,
-    url? : string,
+    url : string,
     status: Number
   },
   isStale: boolean,
@@ -247,7 +243,10 @@ const propTypes = {
   },
   match: string,
   dataBase: {
-    payload: {},
+    payload: {
+      databases: Array<Object>,
+      results: Array<Object>,
+    },
     loading: boolean
   }
 } */

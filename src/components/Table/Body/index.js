@@ -13,12 +13,15 @@ import styles from './style.css';
 
 const f = foundationPartial(styles);
 
-class NoRows extends PureComponent {
+/*:: type Props = { children: any} */
+
+class NoRows extends PureComponent /*:: <Props> */ {
+  /*:: _ref: { current: null | React$ElementRef<'tbody'> }; */
   static propTypes = {
     children: T.any.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();
@@ -49,8 +52,17 @@ class NoRows extends PureComponent {
     );
   }
 }
+/*:: type BodyProps = {
+  loading: boolean,
+  ok: boolean,
+  status: number,
+  rows: Array<Object>,
+  rowKey: string,
+  columns: Array<string>,
+  notFound: boolean
+} */
 
-class Body extends PureComponent {
+class Body extends PureComponent /*:: <BodyProps> */ {
   static propTypes = {
     loading: T.bool,
     ok: T.bool,

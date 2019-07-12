@@ -141,8 +141,8 @@ const mapStateToUrlFor = createSelector(
     ),
 );
 
-/* :: type DBChoiceInputProps =  {|type: string|} */
-/* :: type DBChoiceInputState =  {|DBChoiceInputWithData: any, type: ?string|} */
+/* :: type DBChoiceInputProps =  {type: string} */
+/* :: type DBChoiceInputState =  {DBChoiceInputWithData: any, type: ?string} */
 
 export default class DBChoiceInput extends PureComponent /*:: <DBChoiceInputProps, DBChoiceInputState> */ {
   static propTypes = {

@@ -18,7 +18,19 @@ import { formatExperimentType } from 'components/Structure/utils';
 
 const f = foundationPartial(style);
 
-class ExperimentTypeFilter extends PureComponent {
+/* :: type Props = {
+  data: {
+    loading: boolean,
+    payload: Object,
+    },
+  goToCustomLocation: function,
+  customLocation: {
+    search: Object,
+  }
+}
+*/
+
+class ExperimentTypeFilter extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

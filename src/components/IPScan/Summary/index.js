@@ -77,7 +77,7 @@ const integrateSignature = (signature, interpro, integrated) => {
   integrated.set(accession, entry);
 };
 
-const StatusTooltip = React.memo(({ status }) => (
+const StatusTooltip = React.memo(({ status } /*: string */) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
       status === 'created' ||
@@ -197,7 +197,7 @@ const mergeData = (matches, sequenceLength) => {
   return mergedData;
 };
 
-class SummaryIPScanJob extends PureComponent /*:: <Props, State> */ {
+class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
   static propTypes = {
     accession: T.string.isRequired,
     localID: T.string.isRequired,

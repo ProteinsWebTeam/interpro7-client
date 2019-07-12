@@ -106,7 +106,7 @@ const mergeData = (secondaryData, secondaryStructures) => {
   return entries;
 };
 
-const GoToProtVistaMenu = ({ entries }) => (
+const GoToProtVistaMenu = ({ entries } /*: Array<Object> */) => (
   <div className={f('row')}>
     <div className={f('column')}>
       <DropDownButton label="Jump To" icon="&#xf124;">
@@ -132,13 +132,21 @@ GoToProtVistaMenu.propTypes = {
   entries: T.arrayOf(T.object).isRequired,
 };
 
-const ProtVistaLoaded = ({
-  dataprotein,
-  tracks,
-  dataGenome3d,
-  chain,
-  fixedHighlight,
-}) => {
+const ProtVistaLoaded = (
+  {
+    dataprotein,
+    tracks,
+    dataGenome3d,
+    chain,
+    fixedHighlight,
+  } /*: {
+  dataprotein: {loading: boolean, payload: {metadata: Object}},
+  tracks: Object | Array<Object>,
+  dataGenome3d: {loading: boolean, payload: {metadata: Object}},
+  chain: string,
+  fixedHighlight: string
+ } */,
+) => {
   const protvistaEl = useRef(null);
   useEffect(() => {
     if (!protvistaEl.current || !protvistaEl.current.addEventListener) return;
@@ -280,11 +288,13 @@ const tagChimericStructures = data => {
 };
 const protvistaPerChainProtein = {};
 
-const EntriesOnStructure = ({
-  entries,
-  showChainMenu = false,
-  secondaryStructures,
-}) => {
+const EntriesOnStructure = (
+  {
+    entries,
+    showChainMenu = false,
+    secondaryStructures,
+  } /*: {entries: Array<Object>, showChainMenu: boolean, secondaryStructures: Array<Object>} */,
+) => {
   const merged = mergeData(entries, secondaryStructures);
   tagChimericStructures(merged);
   return (

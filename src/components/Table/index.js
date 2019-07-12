@@ -31,13 +31,19 @@ const f = foundationPartial(ebiGlobalStyles, fonts, styles);
 
 /*:: type Props = {
   dataTable: Array<Object>,
-  isStale: ?boolean,
+  rowKey: string,
+  isStale?: boolean,
+  loading: boolean,
+  ok: boolean,
+  status: number,
   actualSize: number,
   query: Object,
   title: string,
   notFound: ?boolean,
-  contentType? string,
+  contentType?: string,
   children?: any,
+  withTree: boolean,
+  withGrid: boolean,
 } */
 
 const TableView = loadable({

@@ -18,7 +18,19 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class TaxonomyFilter extends PureComponent {
+/*:: type Props = {
+  data: {
+    loading: boolean,
+    payload: any
+  },
+  goToCustomLocation: function,
+  customLocation: {
+    description: Object,
+    search: Object
+  },
+  search: Object
+}; */
+class TaxonomyFilter extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

@@ -26,10 +26,12 @@ import VersionBadge from 'components/VersionBadge';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, local, ipro);
 
-const ReleaseNotesSelectorWithData = ({
-  data: { loading, payload },
-  current,
-}) => {
+const ReleaseNotesSelectorWithData = (
+  {
+    data: { loading, payload },
+    current,
+  } /*: {data: { loading: boolean, payload: Object}, current: string} */,
+) => {
   if (loading || !payload) return <Loading />;
   return (
     <ul className={f('release-selector')}>
@@ -81,7 +83,15 @@ const getReleaseNotesListUrl = createSelector(
 const ReleaseNotesSelector = loadData(getReleaseNotesListUrl)(
   ReleaseNotesSelectorWithData,
 );
-const StatsPerType = ({ iconType, label, type, count, child = false }) => (
+const StatsPerType = (
+  {
+    iconType,
+    label,
+    type,
+    count,
+    child = false,
+  } /*: {iconType: string, label: string, type: string, count: number, child: boolean } */,
+) => (
   <tr>
     <td>
       {iconType && (
@@ -122,7 +132,18 @@ StatsPerType.propTypes = {
   child: T.bool,
 };
 
-class ReleaseNotes extends PureComponent /*:: <{}> */ {
+/*:: type Props = {
+  data: {
+    payload: {
+      version: string,
+      release_date: string,
+      content: Object
+    },
+    loading: boolean,
+  },
+  description: Object,
+} */
+class ReleaseNotes extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       payload: T.shape({
@@ -136,9 +157,9 @@ class ReleaseNotes extends PureComponent /*:: <{}> */ {
   };
   componentDidMount() {
     loadWebComponent(() =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components').then(
-        m => m.InterproType,
-      ),
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      ).then(m => m.InterproType),
     ).as('interpro-type');
   }
   render() {

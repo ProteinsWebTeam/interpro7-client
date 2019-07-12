@@ -56,7 +56,16 @@ const listenScrolled = (element, args) => {
   return listenScrolledEventListener(args);
 };
 
-class Sentinel extends PureComponent {
+/*:: type Props = {
+  top: number,
+  stick: function,
+  unstick: function,
+}; */
+
+class Sentinel extends PureComponent /*:: <Props> */ {
+  /*::
+    _ref: { current: null | React$ElementRef<'span'> };
+  */
   static propTypes = {
     top: T.number.isRequired,
     stick: T.func.isRequired,
@@ -67,7 +76,7 @@ class Sentinel extends PureComponent {
     top: 0,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();

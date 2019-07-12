@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -21,7 +22,19 @@ const labels = new Map([
   ['both', 'All proteins'],
 ]);
 
-class MatchPresenceFilter extends PureComponent {
+/*:: type Props = {
+  data: {
+    loading: boolean,
+    payload: any
+  },
+  goToCustomLocation: function,
+  customLocation: {
+    description: Object,
+    search: Object
+  }
+}; */
+
+class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

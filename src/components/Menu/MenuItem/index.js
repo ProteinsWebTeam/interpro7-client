@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -32,7 +33,18 @@ const isExternal = ([first, second]) =>
 //   return defaultMatchFn(to, location) ? s('active', activeClass) : '';
 // };
 
-export class MenuItem extends PureComponent {
+/*:: type Props = {
+  children: any,
+  href?: string,
+  to: Object| function,
+  closeEverything: function,
+  disabled?: boolean,
+  className?: string,
+  activeClass?: string | function,
+  exact?: boolean
+}; */
+
+export class MenuItem extends PureComponent /*:: <Props> */ {
   static propTypes = {
     children: T.node.isRequired,
     href: T.string,

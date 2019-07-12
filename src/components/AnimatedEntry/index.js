@@ -19,7 +19,7 @@ const DEFAULT_DURATION = 250;
 
 export class AnimatedEntry extends PureComponent /*:: <Props> */ {
   /*::
-    _ref: { current: null | React$ElementRef<string> };
+    _ref: { current: null | React$ElementRef<'div'> };
     _animations: ?Array<any>;
   */
   static propTypes = {
@@ -42,7 +42,7 @@ export class AnimatedEntry extends PureComponent /*:: <Props> */ {
     animateSelf: false,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();

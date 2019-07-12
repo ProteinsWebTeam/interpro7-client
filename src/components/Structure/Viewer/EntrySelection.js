@@ -7,14 +7,26 @@ import style from './style.css';
 const f = foundationPartial(style);
 export const NO_SELECTION = 'NO_SELECTION';
 
-class EntrySelection extends PureComponent {
+/*:: type Props = {
+  updateStructure: function,
+  entryMap: Object,
+  selectedEntry?: any,
+}; */
+
+/*:: type State = {
+  memberDB: ?Object,
+  accession: ?string,
+  active: boolean,
+}; */
+
+class EntrySelection extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     updateStructure: T.func.isRequired,
     entryMap: T.object.isRequired,
     selectedEntry: T.any,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.state = {

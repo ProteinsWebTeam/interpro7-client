@@ -28,7 +28,7 @@ class Twitter extends PureComponent /*:: <{}> */ {
     };
   */
 
-  constructor(props) {
+  constructor(props /*: {} */) {
     super(props);
 
     this._ref = React.createRef();

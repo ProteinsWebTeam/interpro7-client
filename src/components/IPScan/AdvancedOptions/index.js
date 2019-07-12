@@ -14,17 +14,17 @@ import local from './style.css';
 
 const f = foundationPartial(local);
 
-/*:: type Props = {|
+/*:: type Props = {
   name: string,
   value: string,
   children: string,
   title?: string,
   defaultChecked: boolean
-|}*/
+}; */
 
-/*:: type State = {|
+/*:: type State = {
   checked: boolean
-|}*/
+}; */
 
 class AdvancedOption extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
@@ -99,8 +99,13 @@ const groupApplications = applications => {
   return { mdb1, mdb2, other, noCategory };
 };
 
-const applicationToCheckbox = ({ value, defaultValue, properties }) => (
-  /*: {value: string, defaultValue: boolean, properties: {properties: Array<Object>}} */
+const applicationToCheckbox = (
+  {
+    value,
+    defaultValue,
+    properties,
+  } /*: {value: string, defaultValue: boolean, properties: {properties: Array<Object>}} */,
+) => (
   <AdvancedOption
     name="appl"
     value={value}
