@@ -2,7 +2,6 @@ import React, { Component, PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import { goToCustomLocation } from 'actions/creators';
 import { connect } from 'react-redux';

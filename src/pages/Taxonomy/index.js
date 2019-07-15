@@ -101,6 +101,9 @@ const propTypes = {
   }).isRequired,
   match: T.string,
   dataBase: dataPropType,
+  accessionSearch: T.shape({
+    metadata: T.object,
+  }),
 };
 
 const subPagesForTaxonomy = new Map();
@@ -663,6 +666,11 @@ const Taxonomy = ({ search }) => {
       />
     </>
   );
+};
+Taxonomy.propTypes = {
+  search: T.shape({
+    search: T.string,
+  }),
 };
 
 const mapStateToProps = createSelector(
