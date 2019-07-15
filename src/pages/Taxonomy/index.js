@@ -371,7 +371,7 @@ class List extends PureComponent {
         results: [],
       };
     }
-    const results = [..._payload.results];
+    const results = [...(_payload.results || [])];
     let size = _payload.count || 0;
     if (accessionSearch) {
       const indexInPayload = results.findIndex(

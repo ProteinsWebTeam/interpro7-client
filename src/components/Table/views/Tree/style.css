@@ -1,3 +1,35 @@
+@import './../../../../styles/colors.css';
+
 .button {
   width: 100%;
+}
+
+.node-details {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--colors-progress);
+
+  & .node-info {
+    padding: 0.5em;
+    & header {
+      font-size: 1.2em;
+      color: var(--colors-ebidark);
+      text-transform: capitalize;
+    }
+    flex-grow: 2;
+  }
+  & .node-links {
+    text-align: right;
+    font-size: 0.8em;
+    & ul {
+      list-style-type: none;
+      padding-right: 0.5em;
+      white-space: nowrap;
+    }
+    & a.disable {
+      color: var(--colors-slightgray);
+      pointer-events: none;
+    }
+  }
 }
