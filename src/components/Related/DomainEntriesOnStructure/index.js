@@ -51,6 +51,7 @@ const mergeData = (secondaryData, secondaryStructures) => {
               type: 'secondary_structure',
               accession: `Chain ${structure.accession}`,
               source_database: 'PDB',
+              chain: structure.accession,
             });
           }
         }

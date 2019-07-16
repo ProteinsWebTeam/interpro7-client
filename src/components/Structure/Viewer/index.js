@@ -226,10 +226,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }
             if (type === 'chain')
               this.showEntryInStructure('pdb', pdbid, accession, protein);
-            else if (
-              !accession.startsWith('G3D:') &&
-              type !== 'secondary_structure'
-            )
+            else if (type === 'secondary_structure')
+              this.showSecondaryStructureEntries(feature);
+            else if (!accession.startsWith('G3D:'))
               // TODO: Needs refactoring
               this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
             break;
@@ -474,6 +473,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       prot = keep.protein;
     }
 
+    if (acc && acc.startsWith('Chain')) return; // Skip the keep procedure for secondary structure
     const hits = this._collateHits(db, acc, ch, prot);
     if (hits.length > 0) {
       if (this.stage) {
@@ -505,6 +505,39 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     }
     this.setState({ selectedEntry: acc || '' });
+  };
+
+  showSecondaryStructureEntries = feature => {
+    const hits = [];
+    if (feature.locations) {
+      for (const loc of feature.locations) {
+        for (const frag of loc.fragments) {
+          hits.push({ color: feature.color, start: frag.start, end: frag.end });
+        }
+      }
+    }
+
+    if (hits.length > 0) {
+      if (this.stage) {
+        const components = this.stage.getComponentsByName(this.name);
+        if (components) {
+          components.forEach(component => {
+            const selections = [];
+            hits.forEach(hit => {
+              selections.push([
+                hit.color,
+                `${hit.start}-${hit.end}:${feature.chain}`,
+              ]);
+            });
+            const theme = ColormakerRegistry.addSelectionScheme(
+              selections,
+              feature.accession,
+            );
+            component.addRepresentation('cartoon', { color: theme });
+          });
+        }
+      }
+    }
   };
 
   _toggleMinimize = () =>
