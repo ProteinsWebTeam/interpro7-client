@@ -2,7 +2,7 @@
 
 exports[`<TimeAgo /> should render 1`] = `
 <time
-  dateTime="1998-06-17T00:00:00.000Z"
+  dateTime="17-06-1998 01:00:00"
   title="17/06/1998"
 >
   21 years ago

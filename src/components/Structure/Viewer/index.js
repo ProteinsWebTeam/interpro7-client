@@ -442,6 +442,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return memberDBMap;
   }
 
+  // eslint-disable-next-line complexity
   showEntryInStructure = (memberDB, entry, chain, protein) => {
     const keep = this.state.selectedEntryToKeep;
     let db;
