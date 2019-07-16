@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flattenDeep } from 'lodash-es';
@@ -203,12 +205,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
     localID: T.string.isRequired,
     remoteID: T.string,
     status: T.string.isRequired,
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.shape({
-        results: T.array,
-      }),
-    }),
+    data: dataPropType,
     localPayload: T.object,
   };
 

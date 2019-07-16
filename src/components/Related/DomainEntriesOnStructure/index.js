@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData';
@@ -231,18 +233,8 @@ const ProtVistaLoaded = (
   );
 };
 ProtVistaLoaded.propTypes = {
-  dataprotein: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.shape({
-      metadata: T.object.isRequired,
-    }),
-  }).isRequired,
-  dataGenome3d: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.shape({
-      metadata: T.object,
-    }),
-  }).isRequired,
+  dataprotein: dataPropType.isRequired,
+  dataGenome3d: dataPropType.isRequired,
   tracks: T.oneOfType([T.object, T.array]),
   chain: T.string,
   fixedHighlight: T.string,

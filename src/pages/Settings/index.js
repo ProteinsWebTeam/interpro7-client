@@ -220,6 +220,8 @@ const UISettings = ({
 UISettings.propTypes = {
   ui: T.shape({
     lowGraphics: T.bool.isRequired,
+    colorDomainsBy: T.string.isRequired,
+    structureViewer: T.bool.isRequired,
   }).isRequired,
 };
 
@@ -372,6 +374,7 @@ const EndpointSettings = ({
 EndpointSettings.propTypes = {
   category: T.string.isRequired,
   endpointDetails: T.shape({
+    protocol: T.string.isRequired,
     hostname: T.string.isRequired,
     port: T.string.isRequired,
     root: T.string.isRequired,
@@ -493,6 +496,8 @@ class Settings extends PureComponent {
       cache: T.object.isRequired,
       api: T.object.isRequired,
       ebi: T.object.isRequired,
+      ipScan: T.object.isRequired,
+      genome3d: T.object.isRequired,
     }).isRequired,
     changeSettings: T.func.isRequired,
     resetSettings: T.func.isRequired,

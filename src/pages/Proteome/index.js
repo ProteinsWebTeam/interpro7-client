@@ -1,6 +1,10 @@
 /* eslint-disable react/display-name */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import {
+  dataPropType,
+  metadataPropType,
+} from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
@@ -85,7 +89,7 @@ const SummaryAsync = loadable({
 class SummaryCounterProteome extends PureComponent {
   static propTypes = {
     entryDB: T.string,
-    metadata: T.object.isRequired,
+    metadata: metadataPropType.isRequired,
     counters: T.object.isRequired,
   };
 
@@ -246,27 +250,20 @@ const ProteomeCard = ({ data, search, entryDB }) => (
   </>
 );
 ProteomeCard.propTypes = {
-  data: T.object,
+  data: dataPropType.object,
   search: T.string,
   entryDB: T.string,
 };
 
 const propTypes = {
-  data: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-    ok: T.bool,
-  }).isRequired,
+  data: dataPropType.isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
     description: T.object.isRequired,
+    search: T.object.isRequired,
   }).isRequired,
   match: T.string,
-  dataBase: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-    ok: T.bool,
-  }),
+  dataBase: dataPropType,
 };
 
 const subPagesForProteome = new Map();

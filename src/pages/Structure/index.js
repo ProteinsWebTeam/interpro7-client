@@ -62,6 +62,8 @@ const propTypes = {
     payload: T.object,
     loading: T.bool.isRequired,
     ok: T.bool,
+    url: T.string,
+    status: T.number,
   }).isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
@@ -203,8 +205,13 @@ class SummaryCounterStructures extends PureComponent {
 class TaxnameStructures extends PureComponent {
   static propTypes = {
     data: T.shape({
+      loading: T.bool,
       payload: T.shape({
-        databases: T.object,
+        results: T.arrayOf(
+          T.shape({
+            metadata: T.object,
+          }),
+        ),
       }),
     }).isRequired,
   };

@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -23,6 +24,7 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { formatExperimentType } from 'components/Structure/utils';
+import { formatShortDate } from 'utils/date';
 
 const f = foundationPartial(ebiStyles);
 
@@ -61,8 +63,8 @@ const loadPDBWebComponents = () => {
 
 export class SummaryStructure extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    data: T.shape({}).isRequired,
-    dataMatches: T.shape({}).isRequired,
+    data: dataPropType.isRequired,
+    dataMatches: dataPropType.isRequired,
   };
 
   componentDidMount() {
@@ -136,7 +138,7 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
                         <TimeAgo
                           date={date}
                           noUpdate
-                          title={date.toLocaleDateString()}
+                          title={formatShortDate(date)}
                         />
                       </td>
                     </tr>

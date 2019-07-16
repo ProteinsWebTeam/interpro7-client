@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import loadData from 'higherOrder/loadData';
 import PopperJS from 'popper.js';
 
@@ -26,6 +27,7 @@ const _DataProvider = (
       source_database: db,
     } = data.payload.metadata;
 
+    /* eslint-disable react/prop-types */
     const message = () => (
       <>
         <b>{accession}</b>
@@ -35,18 +37,20 @@ const _DataProvider = (
         <br />
       </>
     );
+    /* eslint-enable react/prop-types */
 
     onLoad(message);
   }
   return null;
 };
-
 _DataProvider.propTypes = {
-  data: T.shape({
-    payload: T.object,
-    loading: T.bool,
-  }),
+  data: dataPropType,
   onLoad: T.func.isRequired,
+  databases: T.objectOf(
+    T.shape({
+      name: T.string,
+    }),
+  ),
 };
 
 const getUrlFor = createSelector(

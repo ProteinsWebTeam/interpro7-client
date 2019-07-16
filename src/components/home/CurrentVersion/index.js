@@ -11,6 +11,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
 import Link from 'components/generic/Link';
+import { formatLongDate } from 'utils/date';
 
 const f = foundationPartial(local);
 
@@ -38,13 +39,7 @@ export const CurrentVersion = (
             InterPro {current}
           </Link>
         </header>
-        <div className={f('version-date')}>
-          {dateObj.toLocaleString('en-GB', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </div>
+        <div className={f('version-date')}>{formatLongDate(dateObj)}</div>
       </div>
     </div>
   );

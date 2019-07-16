@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
@@ -47,10 +49,7 @@ const SimilarProteinsHeaderWithData = ({
 };
 SimilarProteinsHeaderWithData.propTypes = {
   accession: T.string,
-  data: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }),
+  data: dataPropType,
 };
 
 const getUrlForIDA = createSelector(
@@ -93,9 +92,7 @@ const getAPIURLForSimilarProteins = ({ protocol, hostname, port, root }, ida) =>
 const AllProteinDownload = ({ description, count, ida }) => (
   <File
     fileType="fasta"
-    name={`protein-similar-to-${
-      description[description.main.key].accession
-    }.fasta`}
+    name={`protein-similar-to-${description[description.main.key].accession}.fasta`}
     count={count}
     customLocationDescription={{
       main: { key: 'protein' },
@@ -247,18 +244,8 @@ state: Object,
   );
 };
 SimilarProteins.propTypes = {
-  data: T.shape({
-    loading: T.bool,
-    payload: T.shape({
-      metadata: T.shape({
-        is_accession: T.string,
-      }),
-    }),
-  }).isRequired,
-  dataIDA: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }).isRequired,
+  data: dataPropType.isRequired,
+  dataIDA: dataPropType.isRequired,
   search: T.object.isRequired,
   state: T.object.isRequired,
 };

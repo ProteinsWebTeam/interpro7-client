@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
@@ -85,21 +86,14 @@ const SchemaOrgData = loadable({
 });
 
 const propTypes = {
-  data: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-    ok: T.bool,
-  }).isRequired,
+  data: dataPropType.isRequired,
   isStale: T.bool.isRequired,
   customLocation: T.shape({
     description: T.object.isRequired,
+    search: T.object,
   }).isRequired,
   match: T.string,
-  dataBase: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-    ok: T.bool,
-  }),
+  dataBase: dataPropType,
 };
 
 const subPagesForTaxonomy = new Map();

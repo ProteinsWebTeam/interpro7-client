@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
 
@@ -72,13 +72,7 @@ export const DownloadTable = (
   );
 };
 DownloadTable.propTypes = {
-  data: T.shape({
-    loading: T.bool,
-    payload: T.shape({
-      version: T.string,
-      body: T.string,
-    }),
-  }),
+  data: dataPropType,
 };
 
 export default loadData(getUrlForRelease('IPScan'))(DownloadTable);
