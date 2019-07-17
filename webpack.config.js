@@ -118,10 +118,8 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('node_modules', 'timing-functions'),
             /protvista/i,
             path.resolve('node_modules', 'd3'),
-            path.resolve('node_modules', 'data-loader'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
-            path.resolve('node_modules', 'pdb-web-components'),
           ],
           use: [
             {
