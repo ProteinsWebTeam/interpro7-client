@@ -118,8 +118,11 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('node_modules', 'timing-functions'),
             /protvista/i,
             path.resolve('node_modules', 'd3'),
+            path.resolve('node_modules', 'idb'),
+            path.resolve('node_modules', 'clanviewer'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
+            path.resolve('node_modules', 'taxonomy-visualisation'),
           ],
           use: [
             {
@@ -127,7 +130,7 @@ const getConfigFor = (env, mode, module = false) => {
               options: {
                 presets: [
                   [
-                    '@babel/env',
+                    '@babel/preset-env',
                     {
                       modules: false,
                       loose: true,
