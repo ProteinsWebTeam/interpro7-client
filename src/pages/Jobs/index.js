@@ -118,8 +118,10 @@ const routes = new Map([
   ['InterProScan', InterProScanInnerSwitch],
   ['download', Download],
 ]);
-
-class Wrapper extends PureComponent {
+/*:: type Props = {
+  children: Node
+};*/
+class Wrapper extends PureComponent /*:: <Props> */ {
   static propTypes = {
     children: T.node.isRequired,
   };

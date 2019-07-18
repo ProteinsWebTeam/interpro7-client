@@ -48,8 +48,15 @@ const mapStateToUrlFor = createSelector(
         }),
     ),
 );
-
-class DataProvider extends PureComponent {
+/*:: type Props = {
+  taxID: string,
+  data: {
+    loading: boolean,
+    payload: Object
+  },
+  sendData: function
+};*/
+class DataProvider extends PureComponent /*:: <Props> */ {
   static propTypes = {
     taxID: T.string.isRequired,
     data: T.shape({
@@ -103,8 +110,13 @@ const mergeData = (root, update, names) => {
   }
   return root;
 };
-
-class TreeView extends Component {
+/*:: type TreeViewProps = {
+  customLocation: {
+    description: Object,
+  },
+  goToCustomLocation: function
+};*/
+class TreeView extends Component /*:: <TreeViewProps> */ {
   static propTypes = {
     customLocation: T.shape({
       description: T.object,
@@ -112,7 +124,7 @@ class TreeView extends Component {
     goToCustomLocation: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: TreeViewProps */) {
     super(props);
 
     this.state = {

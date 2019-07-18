@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import {
@@ -85,8 +86,12 @@ const SummaryAsync = loadable({
       /* webpackChunkName: "proteome-summary" */ 'components/Proteome/Summary'
     ),
 });
-
-class SummaryCounterProteome extends PureComponent {
+/*:: type SummaryCounterProteomeProps = {
+  entryDB: string,
+  metadata: Object,
+  counters: Object
+};*/
+class SummaryCounterProteome extends PureComponent /*:: <SummaryCounterProteomeProps> */ {
   static propTypes = {
     entryDB: T.string,
     metadata: metadataPropType.isRequired,
@@ -203,7 +208,13 @@ class SummaryCounterProteome extends PureComponent {
   }
 }
 
-const ProteomeCard = ({ data, search, entryDB }) => (
+const ProteomeCard = (
+  {
+    data,
+    search,
+    entryDB,
+  } /*: {data: Object, search: string, entryDB: string} */,
+) => (
   <>
     <div className={f('card-header')}>
       <div className={f('card-image')}>
@@ -270,8 +281,25 @@ const subPagesForProteome = new Map();
 for (const subPage of config.pages.proteome.subPages) {
   subPagesForProteome.set(subPage, subPages.get(subPage));
 }
-
-class List extends PureComponent {
+/*:: type Props = {
+  data: {
+   payload: Object,
+   loading: boolean,
+   ok: boolean,
+   url: string,
+   status: number
+  },
+  isStale: boolean,
+  customLocation: {
+    description: Object,
+    search: Object
+  },
+  dataBase: {
+   payload: Object,
+   loading: boolean
+  }
+};*/
+class List extends PureComponent /*:: <Props> */ {
   static propTypes = propTypes;
 
   render() {
@@ -294,6 +322,7 @@ class List extends PureComponent {
     if (loading || notFound) {
       _payload = {
         results: [],
+        count: 0,
       };
     }
     const urlHasParameter = url && url.includes('?');

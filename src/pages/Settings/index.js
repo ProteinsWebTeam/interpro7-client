@@ -80,7 +80,11 @@ const DefaultInterProSettings = () => {
   );
 };
 
-const NavigationSettings = ({ navigation: { pageSize } }) => (
+const NavigationSettings = (
+  {
+    navigation: { pageSize },
+  } /*: {navigation: {pageSize: number}, handleChange: function} */,
+) => (
   <form data-category="navigation">
     <h4>Navigation settings</h4>
     <SchemaOrgData
@@ -121,9 +125,11 @@ NavigationSettings.propTypes = {
   handleChange: T.func.isRequired,
 };
 
-const UISettings = ({
-  ui: { lowGraphics, colorDomainsBy, structureViewer },
-}) => (
+const UISettings = (
+  {
+    ui: { lowGraphics, colorDomainsBy, structureViewer },
+  } /*: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean} */,
+) => (
   <form data-category="ui">
     <h4>UI settings</h4>
     <SchemaOrgData
@@ -225,7 +231,9 @@ UISettings.propTypes = {
   }).isRequired,
 };
 
-const CacheSettings = ({ cache: { enabled } }) => (
+const CacheSettings = (
+  { cache: { enabled } } /*: {cache: {enabled: boolean}} */,
+) => (
   <form data-category="cache">
     <h4>Cache settings</h4>
     <SchemaOrgData
@@ -283,12 +291,14 @@ const getStatusText = status => {
   return status ? 'Reachable' : 'Unreachable';
 };
 
-const EndpointSettings = ({
-  category,
-  endpointDetails: { protocol, hostname, port, root },
-  children,
-  status,
-}) => (
+const EndpointSettings = (
+  {
+    category,
+    endpointDetails: { protocol, hostname, port, root },
+    children,
+    status,
+  } /*: {category: string, endpointDetails: {protocol: string, hostname: string, port: string, root: string,}, children: any, status: boolean} */,
+) => (
   <form data-category={category}>
     <h4>{children}</h4>
     <SchemaOrgData
@@ -406,13 +416,16 @@ const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
+/*:: type Props = {
+  addToast: function
+};*/
 
-class _AddToHomeScreen extends PureComponent {
+class _AddToHomeScreen extends PureComponent /*:: <Props> */ {
   static propTypes = {
     addToast: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     // see if the event has been caught before somewhere else while browsing
@@ -488,7 +501,21 @@ const AddToHomeScreen = connect(
   { addToast },
 )(_AddToHomeScreen);
 
-class Settings extends PureComponent {
+/*:: type SettingsProps = {
+  settings: {
+    navigation: Object,
+    ui: Object,
+    cache: Object,
+    api: Object,
+    ebi: Object,
+    ipScan: Object,
+    genome3d: Object,
+  },
+  changeSettings: function,
+  resetSettings: function
+};*/
+
+class Settings extends PureComponent /*:: <SettingsProps> */ {
   static propTypes = {
     settings: T.shape({
       navigation: T.object.isRequired,

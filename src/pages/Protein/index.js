@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import {
@@ -46,10 +47,7 @@ import {
 import { toPlural } from 'utils/pages';
 
 /*:: type Props = {
-  metadata: {
-    name: string,
-    accession: string
-  },
+  metadata: Object,
   counters: Object,
   entryDB: string
 };*/
@@ -138,7 +136,13 @@ class SummaryCounterProteins extends PureComponent /*:: <Props> */ {
   }
 }
 
-const ProteinCard = ({ data, search, entryDB }) => (
+const ProteinCard = (
+  {
+    data,
+    search,
+    entryDB,
+  } /*: {data: Object, search: string, entryDB: string} */,
+) => (
   <>
     <div className={f('card-header')}>
       <div className={f('card-title')}>
@@ -218,36 +222,25 @@ const propTypes = {
   dataBase: dataPropType.isRequired,
 };
 
-/*:: type ListProps={
+/*:: type ListProps = {
   data: {
-    payload: {
-      databases: Array<Object>,
-      results: Array<Object>,
-      count: Number
-    },
-    loading: boolean,
-    ok: boolean,
-    url : string,
-    status: Number
+   payload: Object,
+   loading: boolean,
+   ok: boolean,
+   url: string,
+   status: number
   },
   isStale: boolean,
   customLocation: {
-    search: string,
-    description: {
-    entry: {
-      db: string
-     }
-    }
+    description: Object,
+    search: Object
   },
   match: string,
   dataBase: {
-    payload: {
-      databases: Array<Object>,
-      results: Array<Object>,
-    },
-    loading: boolean
+   payload: Object,
+   loading: boolean
   }
-} */
+};*/
 
 class List extends PureComponent /*:: <ListProps> */ {
   static propTypes = propTypes;
@@ -274,6 +267,7 @@ class List extends PureComponent /*:: <ListProps> */ {
     if (loading || notFound) {
       _payload = {
         results: [],
+        count: 0,
       };
     }
     const urlHasParameter = url && url.includes('?');

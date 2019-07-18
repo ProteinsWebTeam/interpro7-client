@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NumberComponent /> should render 1`] = `
+<span
+  className="label"
+/>
+`;
