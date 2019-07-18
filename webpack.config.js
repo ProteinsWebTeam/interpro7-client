@@ -395,8 +395,11 @@ const getConfigFor = (env, mode, module = false) => {
   };
 };
 
-module.exports = (env = { dev: true }, { mode = 'production' }) => {
-  const configModule = getConfigFor(env, mode, true);
+module.exports = (
+  env = { dev: true },
+  { mode = 'production', testingIE = false }
+) => {
+  const configModule = getConfigFor(env, mode, !testingIE);
 
   const htmlWebpackPlugin = getHTMLWebpackPlugin(mode);
 
@@ -425,6 +428,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
   // devServer
   if (mode === 'development') {
     configModule.devServer = {
+      host: '0.0.0.0',
       stats: 'errors-only',
       contentBase: publicPath,
       publicPath,

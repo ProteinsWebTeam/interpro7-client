@@ -99,8 +99,13 @@ const groupApplications = applications => {
   return { mdb1, mdb2, other, noCategory };
 };
 
-const applicationToCheckbox = ({ value, defaultValue, properties }) => (
-  /*: {value: string, defaultValue: boolean, properties: {properties: Array<Object>}} */
+const applicationToCheckbox = (
+  {
+    value,
+    defaultValue,
+    properties,
+  } /*: {value: string, defaultValue: boolean, properties: {properties: Array<Object>}} */,
+) => (
   <AdvancedOption
     name="appl"
     value={value}

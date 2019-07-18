@@ -1,6 +1,8 @@
 // Polyfills
 /* global ga: false */
 // import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
 import { elementMatches as elementMatchesPolyfill } from 'utils/polyfills';
 

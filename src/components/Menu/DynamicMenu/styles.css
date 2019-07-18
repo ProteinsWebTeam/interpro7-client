@@ -56,7 +56,7 @@
     }
 
     & .menu-item {
-      pointer-events: initial;
+      pointer-events: auto;
       opacity: 1;
       display: block;
     }
@@ -68,6 +68,6 @@
 }
 
 .visible {
-  pointer-events: initial;
+  pointer-events: auto;
   opacity: 1;
 }
