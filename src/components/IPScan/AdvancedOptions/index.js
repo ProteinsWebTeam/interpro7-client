@@ -69,7 +69,6 @@ const mdb1Values = new Set([
   'PfamA',
   'PIRSF',
   'PRINTS',
-  'ProDom',
   'PrositeProfiles',
   'SMART',
   'TIGRFAM',
@@ -84,6 +83,7 @@ const otherValues = new Set([
   'SignalP',
   'TMHMM',
 ]);
+const ignoreList = new Set(['ProDom']);
 
 const groupApplications = applications => {
   const mdb1 = [];
@@ -94,7 +94,7 @@ const groupApplications = applications => {
     if (mdb1Values.has(application.value)) mdb1.push(application);
     else if (mdb2Values.has(application.value)) mdb2.push(application);
     else if (otherValues.has(application.value)) other.push(application);
-    else noCategory.push(application);
+    else if (!ignoreList.has(application.value)) noCategory.push(application);
   }
   return { mdb1, mdb2, other, noCategory };
 };
