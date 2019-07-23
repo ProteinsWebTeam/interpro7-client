@@ -327,6 +327,7 @@ const getConfigFor = (env, mode, module = false) => {
         'process.info': JSON.stringify({
           git: buildInfo.git,
           build: buildInfo.build,
+          mode,
         }),
       }),
       mode === 'production' ? miniCssExtractPlugin : null,
