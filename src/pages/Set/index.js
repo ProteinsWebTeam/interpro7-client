@@ -438,9 +438,9 @@ class List extends PureComponent /*:: <ListProps> */ {
               dataKey="name"
               renderer={(
                 name /*: string */,
-                // eslint-disable-next-line camelcase
                 {
                   accession,
+                  // eslint-disable-next-line camelcase
                   source_database,
                 } /*: {accession: string, source_database: string} */,
               ) => (
