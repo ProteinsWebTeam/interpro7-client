@@ -196,13 +196,23 @@ class TreeView extends Component {
   };
 
   render() {
-    const { focused, data, entryDB } = this.state;
+    const { focused, data } = this.state;
     let ConnectedDataProvider = this._CDPMap.get(focused);
     if (!ConnectedDataProvider) {
       ConnectedDataProvider = loadData(mapStateToUrlFor(focused))(DataProvider);
       this._CDPMap.set(focused, ConnectedDataProvider);
     }
     const currentNode = findNodeWithId(focused, data);
+    const {
+      customLocation: { description },
+    } = this.props;
+    const mainEndpoint = description.main.key;
+    const countersToShow = {
+      entry: ['entries', 'all'],
+      protein: ['proteins', 'uniprot'],
+      structure: ['structures', 'pdb'],
+      proteome: ['proteomes', 'uniprot'],
+    };
     return (
       <>
         <div className={f('node-details')}>
@@ -230,115 +240,47 @@ class TreeView extends Component {
           {currentNode.counters && (
             <div className={f('node-links')}>
               <ul>
-                <li>
-                  <Link
-                    className={f('no-decoration', {
-                      disable: !currentNode.counters.entries,
-                    })}
-                    to={{
-                      description: {
-                        main: { key: 'taxonomy' },
-                        taxonomy: {
-                          db: 'uniprot',
-                          accession: `${currentNode.id}`,
-                        },
-                        entry: { isFilter: true, db: entryDB || 'all' },
-                      },
-                    }}
-                  >
-                    <NumberComponent abbr duration={ANIMATION_DURATION}>
-                      {(currentNode.counters.dbEntries &&
-                        currentNode.counters.dbEntries[entryDB]) ||
-                        currentNode.counters.entries}
-                    </NumberComponent>{' '}
-                    Entries{' '}
-                  </Link>{' '}
-                  -
-                </li>
-                <li>
-                  <Link
-                    className={f('no-decoration', {
-                      disable: !currentNode.counters.proteins,
-                    })}
-                    to={{
-                      description: {
-                        main: { key: 'taxonomy' },
-                        taxonomy: {
-                          db: 'uniprot',
-                          accession: `${currentNode.id}`,
-                        },
-                        protein: { isFilter: true, db: 'uniprot', order: 1 },
-                        entry: {
-                          isFilter: !!entryDB,
-                          db: entryDB || 'all',
-                          order: 2,
-                        },
-                      },
-                    }}
-                  >
-                    <NumberComponent abbr duration={ANIMATION_DURATION}>
-                      {currentNode.counters.proteins}
-                    </NumberComponent>{' '}
-                    Proteins
-                  </Link>{' '}
-                  -
-                </li>
-                <li>
-                  <Link
-                    className={f('no-decoration', {
-                      disable: !currentNode.counters.structures,
-                    })}
-                    to={{
-                      description: {
-                        main: { key: 'taxonomy' },
-                        taxonomy: {
-                          db: 'uniprot',
-                          accession: `${currentNode.id}`,
-                        },
-                        structure: { isFilter: true, db: 'pdb', order: 1 },
-                        entry: {
-                          isFilter: !!entryDB,
-                          db: entryDB || 'all',
-                          order: 2,
-                        },
-                      },
-                    }}
-                  >
-                    <NumberComponent abbr duration={ANIMATION_DURATION}>
-                      {currentNode.counters.structures}
-                    </NumberComponent>{' '}
-                    Structures
-                  </Link>{' '}
-                  -
-                </li>
-                <li>
-                  <Link
-                    className={f('no-decoration', {
-                      disable: !currentNode.counters.proteomes,
-                    })}
-                    to={{
-                      description: {
-                        main: { key: 'taxonomy' },
-                        taxonomy: {
-                          db: 'uniprot',
-                          accession: `${currentNode.id}`,
-                        },
-                        proteome: { isFilter: true, db: 'uniprot', order: 1 },
-                        entry: {
-                          isFilter: !!entryDB,
-                          db: entryDB || 'all',
-                          order: 2,
-                        },
-                      },
-                    }}
-                  >
-                    <NumberComponent abbr duration={ANIMATION_DURATION}>
-                      {currentNode.counters.proteomes}
-                    </NumberComponent>{' '}
-                    Proteomes
-                  </Link>{' '}
-                  -
-                </li>
+                {Object.entries(countersToShow)
+                  .map(([endpoint, [plural, db]]) => {
+                    if (
+                      endpoint === mainEndpoint ||
+                      typeof currentNode.counters[plural] === 'undefined'
+                    )
+                      return null;
+
+                    return (
+                      <li key={endpoint}>
+                        <Link
+                          className={f('no-decoration', {
+                            disable: !currentNode.counters[plural],
+                          })}
+                          to={{
+                            description: {
+                              ...description,
+                              taxonomy: {
+                                db: 'uniprot',
+                                accession: `${currentNode.id}`,
+                                isFilter: true,
+                                order: 2,
+                              },
+                              [endpoint]: {
+                                db,
+                                isFilter: true,
+                                order: 1,
+                              },
+                            },
+                          }}
+                        >
+                          <NumberComponent abbr duration={ANIMATION_DURATION}>
+                            {currentNode.counters[plural]}
+                          </NumberComponent>{' '}
+                          {plural}
+                        </Link>{' '}
+                        -
+                      </li>
+                    );
+                  })
+                  .filter(Boolean)}
               </ul>
             </div>
           )}
