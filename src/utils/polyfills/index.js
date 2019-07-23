@@ -51,7 +51,9 @@ export const detailsTag = () /*: Promise<boolean> */ => {
   return (
     loadPolyfillIfNeeded(
       async () =>
-        await import(/* webpackChunkName: "detailstags-polyfill" */ 'details-element-polyfill'),
+        await import(
+          /* webpackChunkName: "detailstags-polyfill" */ 'details-element-polyfill'
+        ),
       'detailsTag',
       supportsDetailsTag,
     ) || Promise.resolve(true)
@@ -62,7 +64,9 @@ export const intersectionObserver = () /*: Promise<boolean> */ => {
   return (
     loadPolyfillIfNeeded(
       async () => {
-        await import(/* webpackChunkName: "intersection-observer" */ 'intersection-observer');
+        await import(
+          /* webpackChunkName: "intersection-observer" */ 'intersection-observer'
+        );
       },
       'intersectionObserver',
       supprtsIntersectionObserver,
