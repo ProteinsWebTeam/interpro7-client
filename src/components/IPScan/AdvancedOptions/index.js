@@ -69,7 +69,6 @@ const mdb1Values = new Set([
   'PfamA',
   'PIRSF',
   'PRINTS',
-  'ProDom',
   'PrositeProfiles',
   'SMART',
   'TIGRFAM',
@@ -84,7 +83,14 @@ const otherValues = new Set([
   'SignalP',
   'TMHMM',
 ]);
+const ignoreList = new Set(['ProDom']);
 
+const labels = new Map([
+  ['PfamA', 'Pfam'],
+  ['Panther', 'PANTHER'],
+  ['SuperFamily', 'SUPERFAMILY'],
+  ['Gene3d', 'CATH-Gene3D'],
+]);
 const groupApplications = applications => {
   const mdb1 = [];
   const mdb2 = [];
@@ -94,13 +100,18 @@ const groupApplications = applications => {
     if (mdb1Values.has(application.value)) mdb1.push(application);
     else if (mdb2Values.has(application.value)) mdb2.push(application);
     else if (otherValues.has(application.value)) other.push(application);
-    else noCategory.push(application);
+    else if (!ignoreList.has(application.value)) noCategory.push(application);
   }
   return { mdb1, mdb2, other, noCategory };
 };
 
-const applicationToCheckbox = ({ value, defaultValue, properties }) => (
-  /*: {value: string, defaultValue: boolean, properties: {properties: Array<Object>}} */
+const applicationToCheckbox = (
+  {
+    value,
+    defaultValue,
+    properties,
+  } /*: {value: string, defaultValue: boolean, properties: {properties: Array<Object>}} */,
+) => (
   <AdvancedOption
     name="appl"
     value={value}
@@ -108,7 +119,7 @@ const applicationToCheckbox = ({ value, defaultValue, properties }) => (
     title={properties && properties.properties[0].value}
     key={value}
   >
-    {value}
+    {labels.get(value) || value}
   </AdvancedOption>
 );
 applicationToCheckbox.propTypes = {

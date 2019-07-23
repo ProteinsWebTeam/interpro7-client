@@ -506,9 +506,7 @@ class List extends PureComponent {
                   const _type = type.replace('_', ' ');
                   return (
                     <Tooltip title={`${_type} type`}>
-                      <interpro-type type={_type} dimension="26px">
-                        {_type}
-                      </interpro-type>
+                      <interpro-type type={_type} dimension="26px" />
                     </Tooltip>
                   );
                 }}
@@ -585,7 +583,10 @@ class List extends PureComponent {
                     title={`${type.replace(
                       '_',
                       ' ',
-                    )} type (as defined by ${db})`}
+                    )} type (as defined by ${(databases &&
+                      databases[db] &&
+                      databases[db].name) ||
+                      db})`}
                   >
                     {type.replace('_', ' ')}
                   </Tooltip>
@@ -608,7 +609,10 @@ class List extends PureComponent {
                   if (!externalLinkRenderer) return symbol;
                   return (
                     <Tooltip
-                      title={`link to ${accession} on the ${db} website`}
+                      title={`link to ${accession} on the ${(databases &&
+                        databases[db] &&
+                        databases[db].name) ||
+                        db} website`}
                     >
                       <Link
                         target="_blank"

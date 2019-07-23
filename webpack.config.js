@@ -118,10 +118,11 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('node_modules', 'timing-functions'),
             /protvista/i,
             path.resolve('node_modules', 'd3'),
-            path.resolve('node_modules', 'data-loader'),
+            path.resolve('node_modules', 'idb'),
+            path.resolve('node_modules', 'clanviewer'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
-            path.resolve('node_modules', 'pdb-web-components'),
+            path.resolve('node_modules', 'taxonomy-visualisation'),
           ],
           use: [
             {
@@ -129,7 +130,7 @@ const getConfigFor = (env, mode, module = false) => {
               options: {
                 presets: [
                   [
-                    '@babel/env',
+                    '@babel/preset-env',
                     {
                       modules: false,
                       loose: true,
@@ -326,6 +327,7 @@ const getConfigFor = (env, mode, module = false) => {
         'process.info': JSON.stringify({
           git: buildInfo.git,
           build: buildInfo.build,
+          mode,
         }),
       }),
       mode === 'production' ? miniCssExtractPlugin : null,
@@ -394,8 +396,11 @@ const getConfigFor = (env, mode, module = false) => {
   };
 };
 
-module.exports = (env = { dev: true }, { mode = 'production' }) => {
-  const configModule = getConfigFor(env, mode, true);
+module.exports = (
+  env = { dev: true },
+  { mode = 'production', testingIE = false }
+) => {
+  const configModule = getConfigFor(env, mode, !testingIE);
 
   const htmlWebpackPlugin = getHTMLWebpackPlugin(mode);
 
@@ -424,6 +429,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
   // devServer
   if (mode === 'development') {
     configModule.devServer = {
+      host: '0.0.0.0',
       stats: 'errors-only',
       contentBase: publicPath,
       publicPath,

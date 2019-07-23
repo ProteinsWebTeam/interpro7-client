@@ -13,8 +13,6 @@ import Literature from 'components/Entry/Literature';
 import TimeAgo from 'components/TimeAgo';
 import ViewerOnDemand from 'components/Structure/ViewerOnDemand';
 
-import loadWebComponent from 'utils/load-web-component';
-
 import { foundationPartial } from 'styles/foundation';
 
 import loadData from 'higherOrder/loadData';
@@ -27,29 +25,6 @@ import { formatExperimentType } from 'components/Structure/utils';
 import { formatShortDate } from 'utils/date';
 
 const f = foundationPartial(ebiStyles);
-
-const webComponents = [];
-
-const loadPDBWebComponents = () => {
-  if (!webComponents.length) {
-    const dataLoader = () =>
-      import(/* webpackChunkName: "data-loader" */ 'data-loader');
-    const pdbComponents = () =>
-      import(/* webpackChunkName: "pdb-web-components" */ 'pdb-web-components');
-    webComponents.push(loadWebComponent(() => dataLoader()).as('data-loader'));
-    webComponents.push(
-      loadWebComponent(() => pdbComponents().then(m => m.PdbDataLoader)).as(
-        'pdb-data-loader',
-      ),
-    );
-    webComponents.push(
-      loadWebComponent(() => pdbComponents().then(m => m.PdbPrints)).as(
-        'pdb-prints',
-      ),
-    );
-  }
-  return Promise.all(webComponents);
-};
 
 /*:: type Data = {
   loading: boolean,
@@ -66,10 +41,6 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
     data: dataPropType.isRequired,
     dataMatches: dataPropType.isRequired,
   };
-
-  componentDidMount() {
-    loadPDBWebComponents();
-  }
 
   render() {
     const {

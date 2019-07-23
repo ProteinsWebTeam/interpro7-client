@@ -1,11 +1,11 @@
 # src
 This directory contains all the source code for the site. 
 
-InterPro7 is a React application. The file [index.js](./index.js) is the start point for processing it. Its main function is to render our main react component([`<App>`](./App.js)). But before that, it sets up a few things:
-* such including absolute required polyfills
-* enables (if posible) *Hot Module Replacement* for development
-* prepares the handling of errors (throw them while in dev, or sending them to Google analytics for production)
-* Put in place the logic to be able to "Add to homescreen" InterPro7 in mobiles.
+InterPro7 is a React application. The file [index.js](./index.js) is the start point for the application. Its main function is to render our main react component([`<App>`](./App.js)). It also initialises some aspects required for the site:
+* Imports essential polyfills
+* Enables (if posible) *Hot Module Replacement* for development
+* Prepares the handling of errors (throw them while in dev, or sending them to Google analytics for production)
+* Initialise the logic to be enable to "Add to homescreen" InterPro7 in mobiles.
 * Creates the root element for the Schema.org metadata.
 
 The component [`<App>`](./App.js) is the place where we have setup the high level React logic for the App:

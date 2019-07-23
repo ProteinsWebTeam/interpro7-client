@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { DomainArchitecturesWithData } from 'components/Entry/DomainArchitectures/index';
 
 const mapStateToProps = createSelector(
@@ -47,9 +48,14 @@ const IDAResults = ({ searchFromURL, ignoreFromURL }) => {
   if (ignoreFromURL !== undefined && ignoreFromURL.trim() === '') return null; // single ignore entry empty
   if (ignoreFromURL !== undefined && ignore.indexOf('') !== -1) return null; // at least one of the ignore is empty
   const Results = loadData({
-    getUrl: getUrlForIDASearch,
-    mapStateToProps,
-  })(DomainArchitecturesWithData);
+    getUrl: getUrlForMeta,
+    propNamespace: 'DB',
+  })(
+    loadData({
+      getUrl: getUrlForIDASearch,
+      mapStateToProps,
+    })(DomainArchitecturesWithData),
+  );
   return <Results />;
 };
 IDAResults.propTypes = {
