@@ -85,6 +85,12 @@ const otherValues = new Set([
 ]);
 const ignoreList = new Set(['ProDom']);
 
+const labels = new Map([
+  ['PfamA', 'Pfam'],
+  ['Panther', 'PANTHER'],
+  ['SuperFamily', 'SUPERFAMILY'],
+  ['Gene3d', 'CATH-Gene3D'],
+]);
 const groupApplications = applications => {
   const mdb1 = [];
   const mdb2 = [];
@@ -113,7 +119,7 @@ const applicationToCheckbox = (
     title={properties && properties.properties[0].value}
     key={value}
   >
-    {value}
+    {labels.get(value) || value}
   </AdvancedOption>
 );
 applicationToCheckbox.propTypes = {
