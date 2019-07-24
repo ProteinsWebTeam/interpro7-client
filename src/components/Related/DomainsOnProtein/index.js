@@ -110,6 +110,7 @@ export class DomainOnProteinWithoutData extends PureComponent {
       dataResidues,
       dataFeatures,
       dataGenome3d,
+      dataConservation,
     } = this.props;
 
     if (!data || data.loading) return <Loading />;
@@ -203,7 +204,7 @@ const getExtraURL = query =>
     state => state.settings.api,
     state => state.customLocation.description,
     ({ protocol, hostname, port, root }, description) => {
-      return format({
+      const url = format({
         protocol,
         hostname,
         port,
@@ -212,16 +213,38 @@ const getExtraURL = query =>
           [query]: null,
         },
       });
+      return url;
     },
   );
+
+// const getConservationURL = query => createSelector(
+//     state => state.settings.api,
+//     state => state.customeLocation.description,
+//     ({protocol, hostname, port, root}, description) => {
+//       return format({
+//         protocol,
+//         hostname,
+//         port,
+//         pathname: root + descriptionToPath(description),
+//         query: {
+//           [query]: null,
+//         },
+//       });
+//     }
+//   );
 
 export default loadData({
   getUrl: getExtraURL('extra_features'),
   propNamespace: 'Features',
 })(
-  loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
-    loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
-      loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
+  loadData({
+    getUrl: getExtraURL('conservation'),
+    propNamespace: 'Conservation',
+  })(
+    loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
+      loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
+        loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
+      ),
     ),
   ),
 );
