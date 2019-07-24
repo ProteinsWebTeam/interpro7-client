@@ -8,8 +8,8 @@ import config from 'config';
 import foundation from 'styles/foundation';
 
 class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
-  /*:: _ref: { current: ?HTMLElement }; */
-  constructor(props) {
+  /*:: _ref: { current: null | React$ElementRef<'div'> }; */
+  constructor(props /*: {} */) {
     super(props);
 
     this.state = {
@@ -86,7 +86,8 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
               style={{ color: '#f8f8f8' }}
             >
               Terms of Use
-            </Link>.
+            </Link>
+            .
           </span>
           <button style={{ color: '#fff' }} onClick={this.handleClick}>
             I agree, dismiss this banner

@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+// @flow
 import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
@@ -111,7 +112,7 @@ for (const subPage of config.pages.taxonomy.subPages) {
   subPagesForTaxonomy.set(subPage, subPages.get(subPage));
 }
 
-export const SpeciesIcon = ({ lineage }) => {
+export const SpeciesIcon = ({ lineage } /*: {lineage: string} */) => {
   let icon = '.';
   let color;
   if (lineage) {
@@ -129,7 +130,13 @@ export const SpeciesIcon = ({ lineage }) => {
 SpeciesIcon.propTypes = {
   lineage: T.string.isRequired,
 };
-class SummaryCounterOrg extends PureComponent {
+
+/*:: type SummaryCounterOrgProps = {
+  entryDB: string,
+  metadata: Object,
+  counters: Object
+};*/
+class SummaryCounterOrg extends PureComponent /*:: <SummaryCounterOrgProps> */ {
   static propTypes = {
     entryDB: T.string,
     metadata: T.object.isRequired,
@@ -278,7 +285,7 @@ class SummaryCounterOrg extends PureComponent {
     );
   }
 }
-const Lineage = ({ lineage }) => {
+const Lineage = ({ lineage } /*: {lineage: string} */) => {
   const superkingdom = getSuperKingdom(lineage) || 'N/A';
   const nodespot = getNodeSpotlight(lineage);
   return (
@@ -291,7 +298,13 @@ Lineage.propTypes = {
   lineage: T.string.isRequired,
 };
 
-const TaxonomyCard = ({ data, search, entryDB }) => (
+const TaxonomyCard = (
+  {
+    data,
+    search,
+    entryDB,
+  } /*: {data: Object, search: string, entryDB: string} */,
+) => (
   <>
     <div className={f('card-header')}>
       <div className={f('card-image')}>
@@ -346,8 +359,31 @@ TaxonomyCard.propTypes = {
   search: T.string,
   entryDB: T.string,
 };
+/*:: type Props = {
+  data: {
+   payload: Object,
+   loading: boolean,
+   ok: boolean,
+   url: string,
+   status: number
+  },
+  isStale: boolean,
+  customLocation: {
+    description: Object,
+    search: Object
+  },
+  match: string,
+  dataBase: {
+   payload: Object,
+   loading: boolean
+  },
+  accessionSearch: {
+    metadata: Object,
+  },
 
-class List extends PureComponent {
+};*/
+class List extends PureComponent /*:: <Props> */ {
+  /*:: _payload: Object; */
   static propTypes = propTypes;
 
   render() {
@@ -372,6 +408,7 @@ class List extends PureComponent {
     if (loading || notFound) {
       _payload = {
         results: [],
+        count: 0,
       };
     }
     const results = [...(_payload.results || [])];

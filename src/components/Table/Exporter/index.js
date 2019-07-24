@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,7 +17,17 @@ import theme from 'styles/theme-interpro.css';
 
 const fPlus = foundationPartial(s, fonts, theme);
 
-class Exporter extends PureComponent {
+/*:: type Props = {
+  entryDB: string,
+  children: any,
+  includeSettings: boolean | function,
+  left: boolean | function,
+} */
+
+/*:: type State = {
+  isOpen: boolean,
+} */
+class Exporter extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     entryDB: T.string,
     children: T.any,
@@ -24,7 +35,7 @@ class Exporter extends PureComponent {
     left: T.oneOfType([T.bool, T.func]),
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
     this.state = { isOpen: false };
   }

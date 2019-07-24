@@ -51,16 +51,18 @@ SelectorSpoof.propTypes = {
   children: T.func.isRequired,
 };
 
-const TotalNb = ({
-  className,
-  data,
-  actualSize,
-  pagination,
-  description,
-  contentType,
-  databases,
-  dbCounters,
-}) => {
+export const TotalNb = (
+  {
+    className,
+    data,
+    actualSize,
+    pagination,
+    description,
+    contentType,
+    databases,
+    dbCounters,
+  } /*: {className?: string, data: Array<Object>, actualSize?: number, pagination: Object, notFound?: boolean, description: Object, contentType?: string, databases?: Object, dbCounters?: Object} */,
+) => {
   const page = parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,

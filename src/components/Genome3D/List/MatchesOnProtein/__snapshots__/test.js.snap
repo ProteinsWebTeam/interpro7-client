@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MatchesOnProtein /> should render 1`] = `
+<div
+  className="track-in-table"
+>
+  <div
+    className="track-container"
+  >
+    <div
+      className="aligned-to-track-component"
+    >
+      <protvista-sequence
+        displayend={597}
+        displaystart="1"
+        length={597}
+      />
+    </div>
+  </div>
+  <div
+    className="track-component"
+  >
+    <Tooltip
+      title="Predicted domain from Genome3D resource 'pDomTHREADER' based on UniProtKB Q80YC5/355-492 matching classification 1yphC00"
+    >
+      <protvista-interpro-track
+        displayend={597}
+        displaystart="1"
+        expanded={true}
+        id="track_Q80YC5"
+        length={597}
+      />
+    </Tooltip>
+  </div>
+</div>
+`;

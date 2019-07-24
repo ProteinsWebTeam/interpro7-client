@@ -18,16 +18,16 @@ import styles from './style.css';
 const f = foundationPartial(styles);
 
 /*:: type Props = {
-  mainType: ?string,
-  mainDB: ?string,
-  mainAccession: ?string,
+  mainType?: string,
+  mainDB?: string,
+  mainAccession?: string,
   data: {
     loading: boolean,
     payload?: ?Object,
   },
   isSignature?: boolean,
-  children: ?any,
-  className: ?string,
+  children?: any,
+  className?: string,
 }; */
 
 export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {

@@ -26,7 +26,12 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles);
 
-class ObjectToList extends PureComponent {
+/*:: type ObjectToListProps = {
+  obj: Object,
+  component: function,
+}; */
+
+class ObjectToList extends PureComponent /*:: <ObjectToListProps> */ {
   static propTypes = {
     obj: T.object.isRequired,
     component: T.func.isRequired,
@@ -59,7 +64,12 @@ class ObjectToList extends PureComponent {
   }
 }
 
-class _RelatedSimple extends PureComponent {
+/*:: type RelatedSimpleProps = {
+  secondaryData: Object,
+  mainType: string,
+  focusType: string,
+}; */
+class _RelatedSimple extends PureComponent /*:: <RelatedSimpleProps> */ {
   static propTypes = {
     secondaryData: T.object.isRequired,
     mainType: T.string.isRequired,
@@ -200,7 +210,13 @@ const primariesAndSecondaries = {
     },
   },
 };
-const InfoFilters = ({ filters, focusType, databases }) => {
+const InfoFilters = (
+  {
+    filters,
+    focusType,
+    databases,
+  } /*: {filters: Array<Object>, focusType: string, databases: Object} */,
+) => {
   if (!filters || filters.length === 0) return null;
   return (
     <div className={f('callout', 'info', 'withicon')}>
@@ -238,7 +254,20 @@ InfoFilters.propTypes = {
   filters: T.array,
 };
 
-export class _RelatedAdvanced extends PureComponent {
+/*:: type relatedAdvancedProps = {
+  mainData: Object,
+  secondaryData: Array<Object>,
+  isStale: boolean,
+  mainType: string,
+  focusType: string,
+  actualSize: number,
+  otherFilters?: Array<Object>,
+  dataBase: {
+    payload: Object,
+    loading: boolean
+  }
+}; */
+export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> */ {
   static propTypes = {
     mainData: T.object.isRequired,
     secondaryData: T.arrayOf(T.object).isRequired,
@@ -379,7 +408,11 @@ const RelatedAdvancedQuery = loadData({
   }),
 );
 
-class Related extends PureComponent {
+/*:: type RelatedProps = {
+  data: Object,
+  focusType: string,
+}; */
+class Related extends PureComponent /*:: <RelatedProps> */ {
   static propTypes = {
     data: T.object.isRequired,
     focusType: T.string.isRequired,

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -16,7 +17,22 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class IntegratedFilter extends PureComponent {
+/* :: type Props = {
+  data: {
+    loading: boolean,
+    payload: any,
+  },
+  goToCustomLocation: function,
+  customLocation: {
+    description: Object,
+  }
+}; */
+
+/* :: type State = {
+  value: ?string
+}; */
+
+class IntegratedFilter extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -28,7 +44,7 @@ class IntegratedFilter extends PureComponent {
     }).isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.state = { value: null };

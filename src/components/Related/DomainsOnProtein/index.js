@@ -72,7 +72,11 @@ const sortFunction = ([a], [b]) => {
   return a > b ? 1 : 0;
 };
 
-export class DomainOnProteinWithoutMergedData extends PureComponent {
+/*:: type Props = {
+  mainData: Object,
+  dataMerged: Object
+}; */
+export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props> */ {
   static propTypes = {
     mainData: T.object.isRequired,
     dataMerged: T.object.isRequired,
@@ -94,7 +98,16 @@ export class DomainOnProteinWithoutMergedData extends PureComponent {
     );
   }
 }
-export class DomainOnProteinWithoutData extends PureComponent {
+
+/*:: type DPWithoutDataProps = {
+  mainData: Object,
+  data: Object,
+  dataResidues: Object,
+  dataFeatures: Object,
+  dataGenome3d: Object
+}; */
+
+export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDataProps> */ {
   static propTypes = {
     mainData: T.object.isRequired,
     data: T.object.isRequired,

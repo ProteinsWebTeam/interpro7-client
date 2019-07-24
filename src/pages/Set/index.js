@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import {
@@ -42,7 +43,12 @@ import { toPlural } from 'utils/pages';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, pageStyle, ipro);
 
-class SummaryCounterSet extends PureComponent {
+/*:: type Props = {
+  entryDB: string,
+  metadata: Object,
+  counters: Object
+};*/
+class SummaryCounterSet extends PureComponent /*:: <Props> */ {
   static propTypes = {
     entryDB: T.string,
     metadata: metadataPropType.isRequired,
@@ -221,7 +227,13 @@ class SummaryCounterSet extends PureComponent {
   }
 }
 
-const SetCard = ({ data, search, entryDB }) => (
+const SetCard = (
+  {
+    data,
+    search,
+    entryDB,
+  } /*: {data: Object, search: string, entryDB: string} */,
+) => (
   <>
     <div className={f('card-header')}>
       <div className={f('card-title')}>
@@ -278,8 +290,26 @@ const propTypes = {
   }).isRequired,
   dataBase: dataPropType,
 };
-
-class List extends PureComponent {
+/*:: type ListProps = {
+  data: {
+   payload: Object,
+   loading: boolean,
+   ok: boolean,
+   url: string,
+   status: number
+  },
+  isStale: boolean,
+  loading: boolean,
+  customLocation: {
+    description: Object,
+    search: Object
+  },
+  dataBase: {
+   payload: Object,
+   loading: boolean
+  }
+};*/
+class List extends PureComponent /*:: <ListProps> */ {
   static propTypes = propTypes;
 
   render() {
@@ -305,6 +335,7 @@ class List extends PureComponent {
     if (loading || notFound) {
       _payload = {
         results: [],
+        count: 0,
       };
     }
     const urlHasParameter = url && url.includes('?');
@@ -407,8 +438,11 @@ class List extends PureComponent {
               dataKey="name"
               renderer={(
                 name /*: string */,
-                // eslint-disable-next-line camelcase
-                { accession, source_database } /*: {accession: string} */,
+                {
+                  accession,
+                  // eslint-disable-next-line camelcase
+                  source_database,
+                } /*: {accession: string, source_database: string} */,
               ) => (
                 <Link
                   to={customLocation => ({

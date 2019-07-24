@@ -18,7 +18,23 @@ const ANIMATION_OPTIONS = {
   fill: 'both',
 };
 
-export default class Toast extends PureComponent {
+/*:: type Props = {
+  toastId: string,
+  paused: boolean,
+  className: string,
+  title: string,
+  body: string,
+  link: Object,
+  action: Object,
+  ttl: number,
+  handleClose: function
+};*/
+
+export default class Toast extends PureComponent /*:: <Props> */ {
+  /* ::
+    _ref: { current: null | React$ElementRef<'li'> };
+    _remaining: number;
+  */
   static propTypes = {
     toastId: T.string.isRequired,
     paused: T.bool.isRequired,
@@ -31,7 +47,7 @@ export default class Toast extends PureComponent {
     handleClose: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();

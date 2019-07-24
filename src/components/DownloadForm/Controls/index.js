@@ -22,11 +22,6 @@ export const HARD_LIMIT = 50000;
 export const SOFT_LIMIT = 10000;
 
 /*:: type Props = {
-  data: {
-    payload: {
-      count: number
-     }
-   },
   url: string,
   fileType: string,
   subset: boolean,
@@ -38,7 +33,7 @@ export const SOFT_LIMIT = 10000;
   },
   downloadURL: function,
   downloadDelete: function,
-  isStale: boolean,
+  isStale?: boolean,
   count: number,
   noData: boolean
 };*/

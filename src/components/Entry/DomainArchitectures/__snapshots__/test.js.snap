@@ -1,0 +1,160 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DomainArchitecturesWithData /> should render 1`] = `
+<div
+  className="row"
+>
+  <div
+    className="columns"
+  >
+    <h4>
+      511
+       domain architectures found.
+    </h4>
+    <div
+      className="margin-bottom-large"
+    >
+      <LoadableComponent
+        data={
+          Object {
+            "ida": "PF00594:IPR000294-PF00051:IPR000001-PF00051:IPR000001-PF09396:IPR018992-PF00089:IPR001254",
+            "ida_id": "f4536d89e1b17ef8000602879b888026d22d1348",
+            "unique_proteins": 301,
+          }
+        }
+        processData={[Function]}
+      />
+      <div>
+        <Memo(ConnectFunction)
+          to={
+            Object {
+              "description": Object {
+                "entry": Object {
+                  "accession": "IPR000001",
+                  "db": "InterPro",
+                },
+                "main": Object {
+                  "key": "protein",
+                },
+                "protein": Object {
+                  "db": "UniProt",
+                },
+              },
+              "search": Object {
+                "ida": "f4536d89e1b17ef8000602879b888026d22d1348",
+              },
+            }
+          }
+        >
+          There 
+          are
+           
+          301
+           
+          proteins
+           
+        </Memo(ConnectFunction)>
+        with this architecture:
+      </div>
+      <TextIDA
+        accessions={
+          Array [
+            "IPR000294",
+            "IPR000001",
+            "IPR000001",
+            "IPR018992",
+            "IPR001254",
+          ]
+        }
+      />
+      <IDAProtVista
+        databases={
+          Object {
+            "interpro": Object {
+              "canonical": "interpro",
+              "name": "InterPro",
+              "releaseDate": "2019-07-04T00:00:00Z",
+              "type": "entry",
+              "version": "75.0",
+            },
+          }
+        }
+        length={1000}
+        matches={
+          Array [
+            Object {
+              "accession": "IPR000294",
+              "locations": Array [
+                Object {
+                  "fragments": Array [
+                    Object {
+                      "end": 199,
+                      "start": 5,
+                    },
+                  ],
+                },
+              ],
+              "unintegrated": false,
+            },
+            Object {
+              "accession": "IPR000001",
+              "locations": Array [
+                Object {
+                  "fragments": Array [
+                    Object {
+                      "end": 398,
+                      "start": 204,
+                    },
+                  ],
+                },
+                Object {
+                  "fragments": Array [
+                    Object {
+                      "end": 597,
+                      "start": 403,
+                    },
+                  ],
+                },
+              ],
+              "unintegrated": false,
+            },
+            Object {
+              "accession": "IPR018992",
+              "locations": Array [
+                Object {
+                  "fragments": Array [
+                    Object {
+                      "end": 796,
+                      "start": 602,
+                    },
+                  ],
+                },
+              ],
+              "unintegrated": false,
+            },
+            Object {
+              "accession": "IPR001254",
+              "locations": Array [
+                Object {
+                  "fragments": Array [
+                    Object {
+                      "end": 995,
+                      "start": 801,
+                    },
+                  ],
+                },
+              ],
+              "unintegrated": false,
+            },
+          ]
+        }
+      />
+    </div>
+    <Footer
+      actualSize={511}
+      pagination={Object {}}
+      withPageSizeSelector={true}
+    />
+  </div>
+</div>
+`;

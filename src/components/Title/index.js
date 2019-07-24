@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -33,8 +34,8 @@ const mapNameToClass = new Map([
   metadata: {
     name: { name: string, short: ?string },
     accession: string | number,
-    source_database?: string,
-    type?: string,
+    source_database: string,
+    type: string,
     gene?: string,
     experiment_type?: string,
     source_organism?: Object,
@@ -47,7 +48,19 @@ const mapNameToClass = new Map([
 
 const accessionDisplay = new Set(['protein', 'structure', 'proteome']);
 
-const EntryIcon = ({ metadata }) => (
+const EntryIcon = (
+  {
+    metadata,
+  } /*: {metadata: {name: { name: string, short: ?string },
+    accession: string | number,
+    source_database: string,
+    type: string,
+    gene?: string,
+    experiment_type?: string,
+    source_organism?: Object,
+    release_date?: string,
+    chains?: Array<string>}} */,
+) => (
   <Tooltip title={`${metadata.type.replace('_', ' ')} type`}>
     <interpro-type
       type={metadata.type.replace('_', ' ')}
@@ -92,7 +105,27 @@ EntryIcon.propTypes = {
   metadata: T.object.isRequired,
 };
 
-const TitleTag = ({ metadata, mainType, dbLabel }) => {
+const TitleTag = (
+  {
+    metadata,
+    mainType,
+    dbLabel,
+  } /*: {metadata:
+                    {
+                      name: { name: string, short: ?string },
+                      accession: string | number,
+                      source_database: string,
+                      type: string,
+                      gene?: string,
+                      experiment_type?: string,
+                      source_organism?: Object,
+                      release_date?: string,
+                      chains?: Array<string>
+                      },
+                      mainType: string,
+                      dbLabel: string
+                     } */,
+) => {
   const isEntry = mainType === 'entry';
   return (
     <div className={f('title-tag')} data-testid="title">
@@ -127,7 +160,25 @@ TitleTag.propTypes = {
   dbLabel: T.string,
 };
 
-const AccessionTag = ({ metadata, mainType }) => {
+const AccessionTag = (
+  {
+    metadata,
+    mainType,
+  } /*: {metadata:
+                    {
+                      name: { name: string, short: ?string },
+                      accession: string | number,
+                      source_database: string,
+                      type: string,
+                      gene?: string,
+                      experiment_type?: string,
+                      source_organism?: Object,
+                      release_date?: string,
+                      chains?: Array<string>
+                      },
+                      mainType: string
+                      } */,
+) => {
   const isEntry = mainType === 'entry';
   return (
     <div className={f('title-id')} data-testid="accession">
@@ -202,9 +253,7 @@ class Title extends PureComponent /*:: <Props> */ {
             <>
               <EntryIcon metadata={metadata} />
               <Helmet
-                titleTemplate={`${metadata.name.name} ${
-                  metadata.accession
-                } - Entry - InterPro`}
+                titleTemplate={`${metadata.name.name} ${metadata.accession} - Entry - InterPro`}
               >
                 <title>InterPro</title>
               </Helmet>

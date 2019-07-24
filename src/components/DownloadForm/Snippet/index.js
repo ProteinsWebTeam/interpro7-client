@@ -77,12 +77,13 @@ const TTL = 3000; // keep notification about copy to clipboard for 3 seconds
 export class Snippet extends PureComponent /*:: <Props, State> */ {
   /*::
     _ref: React$ElementRef<'button'>
+    _clipboard: ClipboardJS;
   */
   static propTypes = {
     addToast: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props*/) {
     super(props);
     this.state = { language: 'py', code: null, href: null };
     this._ref = React.createRef();

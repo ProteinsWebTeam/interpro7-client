@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -9,7 +10,11 @@ import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ipro);
 
-class Example extends PureComponent {
+/*:: type Props = {
+  children: string
+}; */
+
+class Example extends PureComponent /*:: <Props> */ {
   static propTypes = {
     children: T.string,
   };

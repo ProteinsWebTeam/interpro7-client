@@ -19,7 +19,21 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 const f = foundationPartial(style);
 
-class SignaturesFilter extends PureComponent {
+/* :: type Props = {
+  data: {
+    loading: boolean,
+    payload: any,
+  },
+  dataMeta: {
+    loading: boolean,
+    payload: any,
+  },
+  goToCustomLocation: function,
+  customLocation: {
+    search: Object,
+  }
+}; */
+class SignaturesFilter extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

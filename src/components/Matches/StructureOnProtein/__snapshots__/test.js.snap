@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StructureOnProtein /> should render 1`] = `
+<div
+  className="track-in-table"
+>
+  <div
+    className="track-container"
+  >
+    <div
+      className="aligned-to-track-component"
+    >
+      <protvista-sequence
+        displayend={625}
+        displaystart="1"
+        length={625}
+      />
+    </div>
+  </div>
+  <div
+    className="track-component"
+  >
+    <Tooltip
+      title="<b>1a0h</b><br/>THE X-RAY CRYSTAL STRUCTURE OF PPACK-MEIZOTHROMBIN DESF1: KRINGLE/THROMBIN AND CARBOHYDRATE/KRINGLE/THROMBIN INTERACTIONS AND LOCATION OF THE LINKER CHAIN<br/>"
+    >
+      <protvista-interpro-track
+        displayend={625}
+        displaystart="1"
+        expanded={true}
+        id="track_1a0h"
+        length={625}
+        shape="rectangle"
+      />
+    </Tooltip>
+  </div>
+</div>
+`;

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -15,7 +16,18 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class OrganismDBFilter extends PureComponent {
+/*:: type Props = {
+  data: {
+    loading: boolean,
+    payload: Object
+  },
+  goToCustomLocation: function,
+  customLocation: {
+    description: Object,
+    search: Object
+  }
+}; */
+class OrganismDBFilter extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

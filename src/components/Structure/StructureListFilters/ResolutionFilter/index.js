@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-param-reassign */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
@@ -24,7 +25,20 @@ const MAX = 20;
 
 const RESOLUTION_RANGE_REGEXP = /^(\d*(\.\d+)?)-(\d*(\.\d+)?)$/;
 
-export class ResolutionFilter extends PureComponent {
+/*:: type Props = {
+  goToCustomLocation: function,
+  customLocation: {
+    description: Object,
+    search: Object,
+  }
+}; */
+
+/*:: type State = {
+  min: number,
+  max: number
+}; */
+
+export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     customLocation: T.shape({
       description: T.object.isRequired,
@@ -33,7 +47,7 @@ export class ResolutionFilter extends PureComponent {
     goToCustomLocation: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     const [, min = MIN, , max = MAX] =

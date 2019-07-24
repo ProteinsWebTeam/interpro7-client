@@ -16,7 +16,18 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
-class SizeFilter extends PureComponent {
+/*:: type Props = {
+  data: {
+    loading: boolean,
+    payload: any
+  },
+  goToCustomLocation: function,
+  customLocation: {
+    description: Object,
+    search: Object
+  }
+}; */
+class SizeFilter extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,

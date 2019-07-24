@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Tree /> should render 1`] = `
+<React.Fragment>
+  <div
+    className="buttons"
+  >
+    <span
+      className="fullscreen"
+    >
+      <FullScreenButton
+        element={null}
+        tooltip="View the taxonomy tree in full screen mode"
+      />
+    </span>
+    <span>
+      <Tooltip
+        title="toggle fisheye view"
+      >
+        <button
+          onClick={[Function]}
+        >
+          <img
+            alt="toggle-fisheye"
+            src={Object {}}
+          />
+        </button>
+      </Tooltip>
+    </span>
+  </div>
+  <div
+    data-testid="data-tree"
+    style={
+      Object {
+        "alignItems": "stretch",
+        "display": "flex",
+        "flexDirection": "column",
+        "height": "50vh",
+        "justifyContent": "center",
+        "width": "100%",
+      }
+    }
+  >
+    <svg
+      className="container"
+      style={
+        Object {
+          "flex": "1",
+        }
+      }
+    />
+  </div>
+</React.Fragment>
+`;

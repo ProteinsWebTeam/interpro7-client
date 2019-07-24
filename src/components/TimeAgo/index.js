@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import TA from 'timeago.js';
 import { sleep, schedule } from 'timing-functions/src';
+import { formatShortDate, formatLongDateTime } from 'utils/date';
 
 import random from 'utils/random';
 
@@ -61,10 +62,10 @@ class TimeAgo extends PureComponent /*:: <Props> */ {
     const { date, title, noTitle } = this.props;
     let _title;
     if (!noTitle) {
-      _title = title || date.toLocaleString();
+      _title = title || formatShortDate(date);
     }
     return (
-      <time dateTime={date.toISOString()} title={_title} ref={this._ref}>
+      <time dateTime={formatLongDateTime(date)} title={_title} ref={this._ref}>
         {timeago.format(date)}
       </time>
     );

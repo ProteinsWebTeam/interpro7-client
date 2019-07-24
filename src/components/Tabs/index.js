@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
 
@@ -8,12 +9,19 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
-export default class Tabs extends PureComponent {
+/*:: type Props = {
+  children: any
+}; */
+
+/*:: type State = {
+  activeTab: number
+}; */
+export default class Tabs extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     children: T.any,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
     this.state = { activeTab: 0 };
   }

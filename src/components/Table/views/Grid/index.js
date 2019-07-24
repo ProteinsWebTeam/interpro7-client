@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -8,7 +9,13 @@ import getStatusMessage from 'utils/server-message';
 
 import local from './style.css';
 
-class GridView extends PureComponent {
+/*:: type Props = {
+  dataTable: Array<Object>,
+  card: function,
+  status: number,
+} */
+
+class GridView extends PureComponent /*:: <Props> */ {
   static propTypes = {
     dataTable: T.array,
     card: T.func,

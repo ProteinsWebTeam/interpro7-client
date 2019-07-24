@@ -26,7 +26,13 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
   data: {
     metadata: Object,
   },
-  db: string
+  db: string,
+  goToCustomLocation: function,
+  customLocation: Object,
+  loading: boolean
+}; */
+/*:: type State = {
+  showClanViewer: boolean
 }; */
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -34,7 +40,12 @@ const SchemaOrgData = loadable({
 });
 
 const MAX_NUMBER_OF_NODES = 100;
-export const schemaProcessData = ({ data: { accession, score }, db }) => ({
+export const schemaProcessData = (
+  {
+    data: { accession, score },
+    db,
+  } /*: {data: {accession: string, score: number}, db: string} */,
+) => ({
   '@id': '@contains', // maybe 'is member of' http://semanticscience.org/resource/SIO_000095
   name: 'entry',
   value: {
@@ -51,7 +62,12 @@ export const schemaProcessData = ({ data: { accession, score }, db }) => ({
   },
 });
 
-class SummarySet extends PureComponent /*:: <Props> */ {
+class SummarySet extends PureComponent /*:: <Props, State> */ {
+  /*::
+    _ref: { current: null | React$ElementRef<'div'> };
+    _vis: ClanViewer;
+    loaded: boolean;
+  */
   static propTypes = {
     data: T.shape({
       metadata: T.object,
@@ -62,7 +78,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
     loading: T.bool.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();

@@ -20,15 +20,25 @@ import local from './style.css';
 
 const f = foundationPartial(interproTheme, ipro, local);
 
-const PanelIDA = ({
-  entryList,
-  ignoreList,
-  isOrdered,
-  removeEntryHandler,
-  changeEntryHandler,
-  changeIgnoreHandler,
-  removeIgnoreHandler,
-}) => (
+const PanelIDA = (
+  {
+    entryList,
+    ignoreList,
+    isOrdered,
+    removeEntryHandler,
+    changeEntryHandler,
+    changeIgnoreHandler,
+    removeIgnoreHandler,
+  } /*: {
+  entryList: Array<string>,
+  ignoreList: Array<string>,
+  isOrdered: boolean,
+  removeEntryHandler: function,
+  changeEntryHandler: function,
+  changeIgnoreHandler: function,
+  removeIgnoreHandler: function
+  } */,
+) => (
   <div className={f('panels')}>
     <div className={f('ida-panel')}>
       <header>IDA</header>
