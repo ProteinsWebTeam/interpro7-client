@@ -10,6 +10,7 @@ import Link from 'components/generic/Link';
 import Tree from 'components/Tree';
 import Lineage from 'components/Taxonomy/Lineage';
 import NumberComponent from 'components/NumberComponent';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
@@ -19,8 +20,9 @@ import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(styles, fonts);
+const f = foundationPartial(ebiGlobalStyles, styles, fonts);
 const ANIMATION_DURATION = 0.3;
 
 const mapStateToUrlFor = createSelector(
@@ -218,6 +220,13 @@ class TreeView extends Component {
         <div className={f('node-details')}>
           <div className={f('node-info')}>
             <header>
+              <Tooltip title="[Tax ID]: [Tax Name]">
+                <span
+                  className={f('small', 'icon', 'icon-common')}
+                  data-icon="&#xf129;"
+                  aria-label="Tax ID: Tax Name"
+                />
+              </Tooltip>{' '}
               <Link
                 to={{
                   description: {
@@ -229,12 +238,33 @@ class TreeView extends Component {
                 {currentNode.id}: {currentNode.name}
               </Link>
             </header>
-            {currentNode.rank &&
-              currentNode.rank.toLowerCase() !== 'no rank' && (
+            {currentNode.rank && currentNode.rank.toLowerCase() !== 'no rank' && (
+              <div>
+                <Tooltip title="Rank.">
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                    aria-label="Rank."
+                  />
+                </Tooltip>{' '}
                 <i>{currentNode.rank}</i>
-              )}
+              </div>
+            )}
             {currentNode.lineage && (
-              <Lineage lineage={currentNode.lineage} names={{}} />
+              <>
+                <Tooltip title="Lineage. List of nodes from the root to the current taxon separated by '>'">
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                    aria-label="Lineage. List of nodes from the root to the current taxon separated by '>'."
+                  />
+                </Tooltip>{' '}
+                <Lineage
+                  lineage={currentNode.lineage}
+                  names={{}}
+                  className={f('lineage')}
+                />
+              </>
             )}
           </div>
           {currentNode.counters && (

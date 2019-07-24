@@ -12,12 +12,19 @@
 
   & .node-info {
     padding: 0.5em;
+    flex-grow: 2;
     & header {
       font-size: 1.2em;
       color: var(--colors-ebidark);
       text-transform: capitalize;
     }
-    flex-grow: 2;
+    & .lineage {
+      display: inline;
+    }
+    & .small {
+      vertical-align: super;
+      font-size: 10px;
+    }
   }
   & .node-links {
     text-align: right;
