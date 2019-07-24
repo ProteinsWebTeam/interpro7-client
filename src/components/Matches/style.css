@@ -67,3 +67,6 @@
 .matchColumn {
   min-width: 200px;
 }
+.exact {
+  background-color: var(--colors-marktext);
+}

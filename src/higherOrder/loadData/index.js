@@ -103,7 +103,14 @@ const loadData = params => {
       };
 
       _load = async (url /*: ?string */) => {
-        if (!url) return;
+        if (!url) {
+          this.setState({
+            staleData: {
+              ...this.state.data,
+            },
+          });
+          return;
+        }
         // Progress: 0
         this.props.dataProgressInfo(this._id, 0, weight);
         this._request = cancelable(signal =>
@@ -178,7 +185,7 @@ const loadData = params => {
           <UnconnectedErrorBoundary customLocation={appState.customLocation}>
             <Wrapped
               {...passedProps}
-              {...mapStateToProps(appState, passedProps) || {}}
+              {...(mapStateToProps(appState, passedProps) || {})}
             />
           </UnconnectedErrorBoundary>
         );
