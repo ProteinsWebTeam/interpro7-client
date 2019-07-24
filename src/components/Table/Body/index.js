@@ -71,6 +71,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
     rowKey: T.string,
     columns: T.array.isRequired,
     notFound: T.bool,
+    rowClassName: T.oneOfType([T.string, T.func]),
   };
 
   static defaultProps = {
@@ -78,7 +79,16 @@ class Body extends PureComponent /*:: <BodyProps> */ {
   };
 
   render() {
-    const { loading, ok, status, rows, rowKey, columns, notFound } = this.props;
+    const {
+      loading,
+      ok,
+      status,
+      rows,
+      rowKey,
+      columns,
+      notFound,
+      rowClassName,
+    } = this.props;
     const message = getStatusMessage(status);
     if (message) return <NoRows>{message}</NoRows>;
     // don't change next line to “!ok”, might be undefined
@@ -97,6 +107,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
               row={rowData}
               columns={columns}
               extra={extraData}
+              rowClassName={rowClassName}
             />
           );
         })}

@@ -442,7 +442,7 @@ class Related extends PureComponent /*:: <RelatedProps> */ {
 const mapStateToPropsDefault = createSelector(
   state =>
     (Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter,
+      ([_key, value]) => value.isFilter && value.order === 1,
     ) || [])[0],
   focusType => ({ focusType }),
 );

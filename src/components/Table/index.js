@@ -44,6 +44,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, styles);
   children?: any,
   withTree: boolean,
   withGrid: boolean,
+  rowClassName?: any,
 } */
 
 const TableView = loadable({
@@ -104,6 +105,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     children: T.any,
     withTree: T.bool,
     withGrid: T.bool,
+    rowClassName: T.oneOfType([T.string, T.func]),
   };
 
   render() {
@@ -121,6 +123,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       contentType,
       children,
       withTree,
+      rowClassName,
     } = this.props;
 
     const _query = query || {};
@@ -244,6 +247,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   rowKey={rowKey}
                   withTree={withTree}
                   withGrid={!!card}
+                  rowClassName={rowClassName}
                 />
               </div>
               <Switch

@@ -19,6 +19,9 @@ const toFunctionFor = page => customLocation => ({
   search: { ...customLocation.search, page },
 });
 
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};
 class PaginationItem extends PureComponent {
   static propTypes = {
     className: T.string,
@@ -41,7 +44,7 @@ class PaginationItem extends PureComponent {
     }
     return (
       <li className={className}>
-        <LinkOrSpan {...props}>
+        <LinkOrSpan {...props} onClick={() => !noLink && scrollToTop()}>
           {(value && children) || (
             <NumberComponent duration={duration || 0} noTitle>
               {value}

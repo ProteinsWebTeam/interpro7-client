@@ -1,8 +1,15 @@
 /* eslint-disable react/display-name */
 // @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { format } from 'url';
+
+import loadData from 'higherOrder/loadData';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
@@ -95,6 +102,9 @@ const propTypes = {
   }).isRequired,
   match: T.string,
   dataBase: dataPropType,
+  accessionSearch: T.shape({
+    metadata: T.object,
+  }),
 };
 
 const subPagesForTaxonomy = new Map();
@@ -383,10 +393,12 @@ class List extends PureComponent /*:: <Props> */ {
         search,
       },
       dataBase,
+      accessionSearch,
     } = this.props;
     let _payload = payload;
+    let _status = status;
     const HTTP_OK = 200;
-    const notFound = !loading && status !== HTTP_OK;
+    let notFound = !loading && status !== HTTP_OK;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
     if (loading || notFound) {
@@ -394,6 +406,36 @@ class List extends PureComponent /*:: <Props> */ {
         results: [],
         count: 0,
       };
+    }
+    const results = [...(_payload.results || [])];
+    let size = _payload.count || 0;
+    if (accessionSearch) {
+      const indexInPayload = results.findIndex(
+        ({ metadata: { accession } }) =>
+          accession === accessionSearch.metadata.accession,
+      );
+      if (indexInPayload >= 0) {
+        results.splice(indexInPayload, 1);
+        size--;
+      }
+
+      results.splice(0, 1, {
+        ...accessionSearch,
+        exact: true,
+        extra_fields: {
+          counters: accessionSearch.metadata.counters,
+        },
+        metadata: {
+          ...accessionSearch.metadata,
+          name:
+            accessionSearch.metadata.name.short ||
+            accessionSearch.metadata.name.name ||
+            accessionSearch.metadata.name,
+        },
+      });
+      size++;
+      notFound = false;
+      _status = HTTP_OK;
     }
     const urlHasParameter = url && url.includes('?');
     return (
@@ -415,13 +457,13 @@ class List extends PureComponent /*:: <Props> */ {
             />
           )}
           <Table
-            dataTable={_payload.results}
+            dataTable={results}
             contentType="taxonomy"
             loading={loading}
             ok={ok}
-            status={status}
+            status={_status}
             isStale={isStale}
-            actualSize={_payload.count}
+            actualSize={size}
             query={search}
             notFound={notFound}
             withTree={true}
@@ -612,13 +654,61 @@ class List extends PureComponent /*:: <Props> */ {
 }
 const childRoutes = /(\d+)|(all)/i;
 
-const Taxonomy = () => (
-  <EndPointPage
-    subpagesRoutes={childRoutes}
-    listOfEndpointEntities={List}
-    SummaryAsync={SummaryAsync}
-    subPagesForEndpoint={subPagesForTaxonomy}
-  />
+const _AccessionSearch = ({ data, onSearchComplete }) => {
+  onSearchComplete(data && !data.loading && data.payload);
+  return null;
+};
+
+const getURLFromState = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description,
+  state => state.customLocation.search,
+  ({ protocol, hostname, port, root }, description, { search }) => {
+    const desc = {
+      ...description,
+      taxonomy: {
+        db: 'uniprot',
+        accession: search,
+      },
+    };
+    try {
+      return format({
+        protocol,
+        hostname,
+        port,
+        pathname: root + descriptionToPath(desc),
+      });
+    } catch {
+      return;
+    }
+  },
+);
+const AccessionSearch = loadData(getURLFromState)(_AccessionSearch);
+const Taxonomy = ({ search }) => {
+  const [accSearch, setAccSearch] = useState(null);
+  const searchTerm = search && search.search;
+  return (
+    <>
+      {searchTerm && <AccessionSearch onSearchComplete={setAccSearch} />}
+      <EndPointPage
+        subpagesRoutes={childRoutes}
+        listOfEndpointEntities={List}
+        SummaryAsync={SummaryAsync}
+        subPagesForEndpoint={subPagesForTaxonomy}
+        accessionSearch={searchTerm && accSearch}
+      />
+    </>
+  );
+};
+Taxonomy.propTypes = {
+  search: T.shape({
+    search: T.string,
+  }),
+};
+
+const mapStateToProps = createSelector(
+  state => state.customLocation.search,
+  search => ({ search }),
 );
 
-export default Taxonomy;
+export default connect(mapStateToProps)(Taxonomy);

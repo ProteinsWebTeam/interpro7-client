@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
+import { toPlural } from 'utils/pages';
 
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
@@ -184,6 +185,41 @@ AllProteinDownload.propTypes = {
   count: T.number,
 };
 
+const includeAccessionSearch = (
+  dataTable,
+  accessionSearch,
+  primary,
+  secondary,
+  mainData,
+) => {
+  const indexInPayload = dataTable.findIndex(
+    ({ accession }) => accession === accessionSearch.metadata.accession,
+  );
+  const accMatch = {
+    ...accessionSearch.metadata,
+    exact: true,
+    counters: {
+      extra_fields: {
+        counters: accessionSearch.metadata.counters,
+      },
+    },
+    match: {
+      [primary]: accessionSearch.metadata,
+      [secondary]: {
+        ...mainData,
+        ...accessionSearch[toPlural(secondary)][0],
+      },
+    },
+    name:
+      accessionSearch.metadata.name.short ||
+      accessionSearch.metadata.name.name ||
+      accessionSearch.metadata.name,
+  };
+  if (indexInPayload >= 0) {
+    dataTable.splice(indexInPayload, 1);
+  }
+  dataTable.splice(0, 0, accMatch);
+};
 // List of all matches, many to many
 const Matches = (
   {
@@ -197,6 +233,8 @@ const Matches = (
     state,
     databases,
     dbCounters,
+    mainData,
+    accessionSearch,
     ...props
   } /*: {
     matches: Array<Object>,
@@ -211,279 +249,295 @@ const Matches = (
     dbCounters ?: Object,
     props: Array<any>
 } */,
-) => (
-  <Table
-    dataTable={matches.map(e => ({
-      ...e[primary],
-      accession: String(e[primary].accession),
-      match: e,
-    }))}
-    actualSize={actualSize}
-    query={search}
-    isStale={isStale}
-    notFound={matches.length === 0}
-    contentType={primary}
-    databases={databases}
-    withTree={primary === 'taxonomy'}
-    dbCounters={dbCounters}
-  >
-    <PageSizeSelector />
-    <SearchBox loading={isStale} />
-    {description.main.key !== 'result' && (
-      <Exporter>
-        <ul>
-          {primary === 'protein' && (
-            <li style={{ display: 'flex', alignItems: 'center' }}>
-              <div>
-                <AllProteinDownload
-                  description={description}
-                  count={actualSize}
-                />
-              </div>
-              <div>FASTA</div>
-            </li>
-          )}
-          <li>
-            <Link target="_blank" href={getUrlForApi(state)}>
-              Open in API web view
-            </Link>
-          </li>
-        </ul>
-      </Exporter>
-    )}
-    <Column
-      dataKey="accession"
-      renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
-        const { source_database: sourceDatabase } = obj;
-        return (
-          // let reviewed =null;
-          // if (primary === 'protein' && sourceDatabase === 'reviewed')
-          //   reviewed = (
-          //
-          //   )
-          <>
-            <SchemaOrgData
-              data={{ data: obj, primary, secondary }}
-              processData={schemaProcessData}
-            />
-            <Link
-              to={{
-                description: {
-                  main: { key: primary },
-                  [primary]: { db: sourceDatabase, accession: acc },
-                },
-              }}
-            >
-              <span className={f('acc-row')}>
-                <HighlightedText text={acc} textToHighlight={search.search} />
-              </span>
-            </Link>{' '}
-            {primary === 'protein' && sourceDatabase === 'reviewed' ? (
-              <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-                <span
-                  className={f('icon', 'icon-common')}
-                  data-icon="&#xf00c;"
-                  aria-label="reviewed"
-                />
-              </Tooltip>
-            ) : null}
-          </>
-        );
-      }}
+) => {
+  let aggSize = actualSize;
+  const dataTable = matches.map(e => ({
+    ...e[primary],
+    accession: String(e[primary].accession),
+    match: e,
+  }));
+  if (accessionSearch) {
+    const prevSize = dataTable.length;
+    includeAccessionSearch(
+      dataTable,
+      accessionSearch,
+      primary,
+      secondary,
+      mainData,
+    );
+    aggSize += prevSize - dataTable.length;
+  }
+  return (
+    <Table
+      dataTable={dataTable}
+      actualSize={aggSize}
+      query={search}
+      isStale={isStale}
+      notFound={matches.length === 0 && !accessionSearch}
+      contentType={primary}
+      databases={databases}
+      withTree={primary === 'taxonomy'}
+      dbCounters={dbCounters}
+      rowClassName={row => f({ exact: row.exact })}
     >
-      Accession
-    </Column>
-    <Column
-      dataKey="name"
-      renderer={(
-        name /*: string */,
-        {
-          accession,
-          source_database: sourceDatabase,
-        } /*: {accession: string, source_database: string} */,
-      ) => (
-        <Link
-          to={{
-            description: {
-              main: { key: primary },
-              [primary]: { db: sourceDatabase, accession },
-            },
-          }}
-        >
-          <HighlightedText text={name} textToHighlight={search.search} />
-        </Link>
+      <PageSizeSelector />
+      <SearchBox loading={isStale} />
+      {description.main.key !== 'result' && (
+        <Exporter>
+          <ul>
+            {primary === 'protein' && (
+              <li style={{ display: 'flex', alignItems: 'center' }}>
+                <div>
+                  <AllProteinDownload
+                    description={description}
+                    count={actualSize}
+                  />
+                </div>
+                <div>FASTA</div>
+              </li>
+            )}
+            <li>
+              <Link target="_blank" href={getUrlForApi(state)}>
+                Open in API web view
+              </Link>
+            </li>
+          </ul>
+        </Exporter>
       )}
-    />
-    <Column
-      dataKey="source_organism"
-      displayIf={primary === 'protein'}
-      renderer={sourceOrganism =>
-        sourceOrganism.taxId ? (
+      <Column
+        dataKey="accession"
+        renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
+          const { source_database: sourceDatabase } = obj;
+          return (
+            // let reviewed =null;
+            // if (primary === 'protein' && sourceDatabase === 'reviewed')
+            //   reviewed = (
+            //
+            //   )
+            <>
+              <SchemaOrgData
+                data={{ data: obj, primary, secondary }}
+                processData={schemaProcessData}
+              />
+              <Link
+                to={{
+                  description: {
+                    main: { key: primary },
+                    [primary]: { db: sourceDatabase, accession: acc },
+                  },
+                }}
+              >
+                <span className={f('acc-row')}>
+                  <HighlightedText text={acc} textToHighlight={search.search} />
+                </span>
+              </Link>{' '}
+              {primary === 'protein' && sourceDatabase === 'reviewed' ? (
+                <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                  <span
+                    className={f('icon', 'icon-common')}
+                    data-icon="&#xf00c;"
+                    aria-label="reviewed"
+                  />
+                </Tooltip>
+              ) : null}
+            </>
+          );
+        }}
+      >
+        Accession
+      </Column>
+      <Column
+        dataKey="name"
+        renderer={(
+          name /*: string */,
+          {
+            accession,
+            source_database: sourceDatabase,
+          } /*: {accession: string, source_database: string} */,
+        ) => (
           <Link
             to={{
               description: {
-                main: { key: 'taxonomy' },
-                taxonomy: {
+                main: { key: primary },
+                [primary]: { db: sourceDatabase, accession },
+              },
+            }}
+          >
+            <HighlightedText text={name} textToHighlight={search.search} />
+          </Link>
+        )}
+      />
+      <Column
+        dataKey="source_organism"
+        displayIf={primary === 'protein'}
+        renderer={sourceOrganism =>
+          sourceOrganism.taxId ? (
+            <Link
+              to={{
+                description: {
+                  main: { key: 'taxonomy' },
+                  taxonomy: {
+                    db: 'uniprot',
+                    accession: `${sourceOrganism.taxId}`,
+                  },
+                },
+              }}
+            >
+              {sourceOrganism.fullName}
+            </Link>
+          ) : (
+            sourceOrganism
+          )
+        }
+      >
+        Species
+      </Column>
+      <Column
+        dataKey="source_database"
+        headerClassName={f('table-center')}
+        cellClassName={f('table-center')}
+        displayIf={
+          primary !== 'taxonomy' &&
+          primary !== 'proteome' &&
+          primary !== 'protein'
+        }
+        renderer={(db /*: string */) =>
+          db === 'reviewed' ? (
+            <Tooltip
+              title={
+                db === 'reviewed'
+                  ? `${db} by curators (Swiss-Prot)`
+                  : 'Not reviewed by curators (TrEMBL)'
+              }
+            >
+              <span
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf00c;"
+                aria-label="reviewed"
+              />
+            </Tooltip>
+          ) : (
+            (databases && databases[db] && databases[db].name) || db
+          )
+        }
+      >
+        {primary === 'protein' ? 'Reviewed' : 'Source database'}
+      </Column>
+      <Column
+        dataKey="accession"
+        headerClassName={f('table-center')}
+        cellClassName={f('table-center')}
+        defaultKey="structureAccession"
+        displayIf={primary === 'structure'}
+        renderer={(accession /*: string */) => (
+          <Link
+            to={customLocation => ({
+              ...customLocation,
+              description: {
+                main: { key: 'structure' },
+                structure: {
+                  db: customLocation.description.structure.db,
+                  accession,
+                },
+              },
+              search: {},
+            })}
+          >
+            <LazyImage
+              src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
+              alt={`structure with accession ${accession}`}
+              style={{ maxWidth: '33%' }}
+            />
+          </Link>
+        )}
+      >
+        Structure
+      </Column>
+      <Column
+        dataKey="match"
+        headerClassName={f('matchColumn')}
+        displayIf={
+          primary !== 'taxonomy' &&
+          secondary !== 'taxonomy' &&
+          primary !== 'proteome' &&
+          secondary !== 'proteome' &&
+          primary !== 'set' &&
+          secondary !== 'set'
+        }
+        renderer={(match /*: Object */) => (
+          <Lazy>
+            {(hasBeenVisible /*: boolean */) =>
+              hasBeenVisible ? (
+                <MatchesByPrimary
+                  matches={[match]}
+                  primary={primary}
+                  secondary={secondary}
+                  {...props}
+                />
+              ) : null
+            }
+          </Lazy>
+        )}
+      >
+        {primary === 'protein' ? 'Domain Architecture' : 'Matches'}
+      </Column>
+      <Column
+        dataKey="counters.extra_fields.counters.proteins"
+        defaultKey="protein-count"
+        headerClassName={f('table-center')}
+        cellClassName={f('table-center')}
+        displayIf={primary === 'taxonomy' || primary === 'proteome'}
+        renderer={(
+          count,
+          {
+            accession,
+            source_database: sourceDatabase,
+            match: {
+              [secondary]: { accession: acc, source_database: db },
+            },
+          },
+        ) => (
+          <Link
+            to={{
+              description: {
+                main: { key: secondary },
+                [secondary]: {
+                  accession: acc,
+                  db,
+                },
+                protein: {
                   db: 'uniprot',
-                  accession: `${sourceOrganism.taxId}`,
+                  order: 1,
+                  isFilter: true,
+                },
+                [primary]: {
+                  db: sourceDatabase,
+                  accession,
+                  order: 2,
+                  isFilter: true,
                 },
               },
             }}
           >
-            {sourceOrganism.fullName}
+            <NumberComponent abbr>{count}</NumberComponent>
           </Link>
-        ) : (
-          sourceOrganism
-        )
-      }
-    >
-      Species
-    </Column>
-    <Column
-      dataKey="source_database"
-      headerClassName={f('table-center')}
-      cellClassName={f('table-center')}
-      displayIf={
-        primary !== 'taxonomy' &&
-        primary !== 'proteome' &&
-        primary !== 'protein'
-      }
-      renderer={(db /*: string */) =>
-        db === 'reviewed' ? (
-          <Tooltip
-            title={
-              db === 'reviewed'
-                ? `${db} by curators (Swiss-Prot)`
-                : 'Not reviewed by curators (TrEMBL)'
-            }
-          >
-            <span
-              className={f('icon', 'icon-common')}
-              data-icon="&#xf00c;"
-              aria-label="reviewed"
-            />
-          </Tooltip>
-        ) : (
-          (databases && databases[db] && databases[db].name) || db
-        )
-      }
-    >
-      {primary === 'protein' ? 'Reviewed' : 'Source database'}
-    </Column>
-    <Column
-      dataKey="accession"
-      headerClassName={f('table-center')}
-      cellClassName={f('table-center')}
-      defaultKey="structureAccession"
-      displayIf={primary === 'structure'}
-      renderer={(accession /*: string */) => (
-        <Link
-          to={customLocation => ({
-            ...customLocation,
-            description: {
-              main: { key: 'structure' },
-              structure: {
-                db: customLocation.description.structure.db,
-                accession,
-              },
-            },
-            search: {},
-          })}
-        >
-          <LazyImage
-            src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
-            alt={`structure with accession ${accession}`}
-            style={{ maxWidth: '33%' }}
-          />
-        </Link>
-      )}
-    >
-      Structure
-    </Column>
-    <Column
-      dataKey="match"
-      headerClassName={f('matchColumn')}
-      displayIf={
-        primary !== 'taxonomy' &&
-        secondary !== 'taxonomy' &&
-        primary !== 'proteome' &&
-        secondary !== 'proteome' &&
-        primary !== 'set' &&
-        secondary !== 'set'
-      }
-      renderer={(match /*: Object */) => (
-        <Lazy>
-          {(hasBeenVisible /*: boolean */) =>
-            hasBeenVisible ? (
-              <MatchesByPrimary
-                matches={[match]}
-                primary={primary}
-                secondary={secondary}
-                {...props}
-              />
-            ) : null
-          }
-        </Lazy>
-      )}
-    >
-      {primary === 'protein' ? 'Domain Architecture' : 'Matches'}
-    </Column>
-    <Column
-      dataKey="counters.extra_fields.counters.proteins"
-      defaultKey="protein-count"
-      headerClassName={f('table-center')}
-      cellClassName={f('table-center')}
-      displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={(
-        count,
-        {
-          accession,
-          source_database: sourceDatabase,
-          match: {
-            [secondary]: { accession: acc, source_database: db },
-          },
-        },
-      ) => (
-        <Link
-          to={{
-            description: {
-              main: { key: secondary },
-              [secondary]: {
-                accession: acc,
-                db,
-              },
-              protein: {
-                db: 'uniprot',
-                order: 1,
-                isFilter: true,
-              },
-              [primary]: {
-                db: sourceDatabase,
-                accession,
-                order: 2,
-                isFilter: true,
-              },
-            },
-          }}
-        >
-          <NumberComponent abbr>{count}</NumberComponent>
-        </Link>
-      )}
-    >
-      protein count
-    </Column>
-    <Column
-      dataKey="accession"
-      defaultKey="proteinFastas"
-      headerClassName={f('table-center')}
-      cellClassName={f('table-center')}
-      displayIf={primary === 'taxonomy' || primary === 'proteome'}
-      renderer={ProteinDownloadRenderer(description)}
-    >
-      FASTA
-    </Column>
-  </Table>
-);
+        )}
+      >
+        protein count
+      </Column>
+      <Column
+        dataKey="accession"
+        defaultKey="proteinFastas"
+        headerClassName={f('table-center')}
+        cellClassName={f('table-center')}
+        displayIf={primary === 'taxonomy' || primary === 'proteome'}
+        renderer={ProteinDownloadRenderer(description)}
+      >
+        FASTA
+      </Column>
+    </Table>
+  );
+};
 Matches.propTypes = {
   ...propTypes,
   search: T.object.isRequired,
