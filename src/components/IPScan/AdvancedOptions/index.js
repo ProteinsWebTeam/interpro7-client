@@ -262,15 +262,6 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
               </fieldset>
             ) : null}
           </fieldset>
-          <fieldset className={f('fieldset')}>
-            <legend>Other</legend>
-            <AdvancedOption name="goterms" value="goterms" defaultChecked>
-              Gene Ontology Terms
-            </AdvancedOption>
-            <AdvancedOption name="pathways" value="pathways" defaultChecked>
-              Pathways
-            </AdvancedOption>
-          </fieldset>
         </details>
       </div>
     );
