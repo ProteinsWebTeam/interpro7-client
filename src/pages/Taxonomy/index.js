@@ -376,7 +376,11 @@ TaxonomyCard.propTypes = {
   dataBase: {
    payload: Object,
    loading: boolean
-  }
+  },
+  accessionSearch: {
+    metadata: Object,
+  },
+
 };*/
 class List extends PureComponent /*:: <Props> */ {
   /*:: _payload: Object; */

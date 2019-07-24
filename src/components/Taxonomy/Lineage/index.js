@@ -12,7 +12,8 @@ const f = foundationPartial(fonts);
 
 /*:: type Props = {
   lineage: string,
-  names: Object
+  names: Object,
+  className?: ?string,
 }*/
 
 class Lineage extends PureComponent /*:: <Props> */ {

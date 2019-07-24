@@ -21,7 +21,8 @@ const f = foundationPartial(styles, ipro, fonts);
   ok: boolean,
   status: number,
   notFound: boolean,
-  columns: Array<string>
+  columns: Array<string>,
+  rowClassName: string | function,
 } */
 
 class TableView extends PureComponent /*:: <Props> */ {
