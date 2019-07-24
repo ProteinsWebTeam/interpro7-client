@@ -12,6 +12,7 @@ class Row extends PureComponent {
     row: T.object.isRequired,
     columns: T.array.isRequired,
     extra: T.object,
+    rowClassName: T.oneOfType([T.string, T.func]),
   };
 
   constructor(props) {
@@ -35,9 +36,11 @@ class Row extends PureComponent {
   }
 
   render() {
-    const { row, columns, extra } = this.props;
+    const { row, columns, extra, rowClassName } = this.props;
+    const rcn =
+      typeof rowClassName === 'function' ? rowClassName(row) : rowClassName;
     return (
-      <tr ref={this._ref}>
+      <tr ref={this._ref} className={rcn}>
         {columns
           .filter(({ displayIf = true }) => displayIf)
           .map(

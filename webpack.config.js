@@ -122,7 +122,7 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('node_modules', 'clanviewer'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
-            path.resolve('node_modules', 'taxonomy-visualisation'),
+            // path.resolve('node_modules', 'taxonomy-visualisation'),
           ],
           use: [
             {
