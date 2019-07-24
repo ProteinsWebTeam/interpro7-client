@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -9,7 +10,16 @@ const s = classname.bind(styles);
 
 const type = T.oneOfType([T.number, T.string]);
 
-class MultipleInput extends PureComponent {
+/*:: type Props = {
+  min?: string | number,
+  max?: string | number,
+  minValue: number,
+  maxValue: number,
+  'aria-label'?: string,
+  style?: Object,
+  className?: string
+}; */
+class MultipleInput extends PureComponent /*:: <Props> */ {
   static propTypes = {
     min: type,
     max: type,

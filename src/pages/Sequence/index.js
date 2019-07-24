@@ -26,12 +26,16 @@ const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
 const SummaryAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "ipscan-summary" */ 'components/IPScan/Summary'),
+    import(
+      /* webpackChunkName: "ipscan-summary" */ 'components/IPScan/Summary'
+    ),
 });
 
 const EntrySubPage = loadable({
   loader: () =>
-    import(/* webpackChunkName: "ips-entry-subpage" */ 'components/IPScan/EntrySubPage'),
+    import(
+      /* webpackChunkName: "ips-entry-subpage" */ 'components/IPScan/EntrySubPage'
+    ),
 });
 
 const SequenceSubPage = loadable({
@@ -75,8 +79,21 @@ const countLibraries = createSelector(
 );
 
 const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
+/*:: type Props = {
+  data: {
+   payload: Object,
+   loading: boolean,
+  },
+  matched: string,
+  entryDB: string,
+  localID: string,
+};*/
 
-class IPScanResult extends PureComponent {
+/*:: type State = {
+  localIDForLocalPayload: ?string,
+  localPayload: ?Object,
+};*/
+class IPScanResult extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool.isRequired,
@@ -89,7 +106,7 @@ class IPScanResult extends PureComponent {
     localID: T.string,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.state = { localIDForLocalPayload: null, localPayload: null };

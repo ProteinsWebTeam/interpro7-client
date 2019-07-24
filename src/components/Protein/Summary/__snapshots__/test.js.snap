@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SummaryProtein /> should render 1`] = `
+<div
+  className="sections"
+>
+  <LoadableComponent
+    data={
+      Object {
+        "gene": "moeA5",
+      }
+    }
+    processData={[Function]}
+  />
+  <LoadableComponent
+    data={
+      Object {
+        "fullName": "Streptomyces viridosporus",
+        "scientificName": "Streptomyces viridosporus",
+        "taxId": "67581",
+      }
+    }
+    processData={[Function]}
+  />
+  <section>
+    <div
+      className="row"
+    >
+      <div
+        className="medium-9 columns margin-bottom-large"
+      >
+        <table
+          className="light table-sum"
+        >
+          <tbody>
+            <tr>
+              <td>
+                Short name
+              </td>
+              <td>
+                <i
+                  className="shortname"
+                  data-testid="protein-shortname"
+                >
+                  A0A000_STRVD
+                </i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Length
+              </td>
+              <td
+                data-testid="protein-length"
+              >
+                <Length
+                  metadata={
+                    Object {
+                      "accession": "A0A000",
+                      "counters": Object {
+                        "dbEntries": Object {
+                          "cathgene3d": 2,
+                          "cdd": 1,
+                          "interpro": 5,
+                          "panther": 2,
+                          "pfam": 1,
+                          "ssf": 1,
+                          "tigrfams": 1,
+                        },
+                        "entries": 13,
+                        "idas": 323222,
+                        "isoforms": 0,
+                        "proteome": 0,
+                        "proteomes": 0,
+                        "sets": 3,
+                        "similar_proteins": 323222,
+                        "structures": 0,
+                        "taxa": 1,
+                        "taxonomy": 1,
+                      },
+                      "description": Array [],
+                      "gene": "moeA5",
+                      "go_terms": Array [
+                        Object {
+                          "category": Object {
+                            "code": "F",
+                            "name": "molecular_function",
+                          },
+                          "identifier": "GO:0030170",
+                          "name": "pyridoxal phosphate binding",
+                        },
+                      ],
+                      "id": "A0A000_STRVD",
+                      "ida_accession": "220d43766bfe69807874ea078bc783ea7854e968",
+                      "is_fragment": false,
+                      "length": 394,
+                      "name": Object {
+                        "name": "MoeA5",
+                      },
+                      "protein_evidence": 4,
+                      "proteome": null,
+                      "sequence": "MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN",
+                      "source_database": "unreviewed",
+                      "source_organism": Object {
+                        "fullName": "Streptomyces viridosporus",
+                        "scientificName": "Streptomyces viridosporus",
+                        "taxId": "67581",
+                      },
+                    }
+                  }
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Species
+              </td>
+              <td
+                data-testid="protein-species"
+              >
+                <Species
+                  fullName="Streptomyces viridosporus"
+                  taxID="67581"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        className="medium-3 columns"
+      >
+        <div
+          className="panel"
+        >
+          <h5>
+            External Links
+          </h5>
+          <ul
+            className="no-bullet"
+            data-testid="protein-external-links"
+          >
+            <li>
+              <UniProtLink
+                className="ext"
+                id="A0A000"
+              >
+                View 
+                A0A000
+                 in UniProtKB
+              </UniProtLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <Memo(ConnectFunction)
+    isoform=""
+  />
+  <section>
+    <div
+      className="row"
+    >
+      <div
+        className="medium-12 columns margin-bottom-large"
+      >
+        <Memo(ConnectFunction)
+          mainData={
+            Object {
+              "metadata": Object {
+                "accession": "A0A000",
+                "counters": Object {
+                  "dbEntries": Object {
+                    "cathgene3d": 2,
+                    "cdd": 1,
+                    "interpro": 5,
+                    "panther": 2,
+                    "pfam": 1,
+                    "ssf": 1,
+                    "tigrfams": 1,
+                  },
+                  "entries": 13,
+                  "idas": 323222,
+                  "isoforms": 0,
+                  "proteome": 0,
+                  "proteomes": 0,
+                  "sets": 3,
+                  "similar_proteins": 323222,
+                  "structures": 0,
+                  "taxa": 1,
+                  "taxonomy": 1,
+                },
+                "description": Array [],
+                "gene": "moeA5",
+                "go_terms": Array [
+                  Object {
+                    "category": Object {
+                      "code": "F",
+                      "name": "molecular_function",
+                    },
+                    "identifier": "GO:0030170",
+                    "name": "pyridoxal phosphate binding",
+                  },
+                ],
+                "id": "A0A000_STRVD",
+                "ida_accession": "220d43766bfe69807874ea078bc783ea7854e968",
+                "is_fragment": false,
+                "length": 394,
+                "name": Object {
+                  "name": "MoeA5",
+                },
+                "protein_evidence": 4,
+                "proteome": null,
+                "sequence": "MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN",
+                "source_database": "unreviewed",
+                "source_organism": Object {
+                  "fullName": "Streptomyces viridosporus",
+                  "scientificName": "Streptomyces viridosporus",
+                  "taxId": "67581",
+                },
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </section>
+  <GoTerms
+    terms={
+      Array [
+        Object {
+          "category": Object {
+            "code": "F",
+            "name": "molecular_function",
+          },
+          "identifier": "GO:0030170",
+          "name": "pyridoxal phosphate binding",
+        },
+      ]
+    }
+    type="protein"
+  />
+</div>
+`;

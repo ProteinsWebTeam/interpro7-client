@@ -29,10 +29,12 @@ import {
 const f = foundationPartial(fonts);
 const FAKE_PROTEIN_LENGTH = 1000;
 
-const SimilarProteinsHeaderWithData = ({
-  accession,
-  data: { payload, loading },
-}) => {
+const SimilarProteinsHeaderWithData = (
+  {
+    accession,
+    data: { payload, loading },
+  } /*: {accession: string, data: {payload: Object, loading: boolean}} */,
+) => {
   if (loading || !payload) return <Loading />;
   const idaObj = ida2json(payload.ida);
   return (
@@ -89,7 +91,13 @@ const getAPIURLForSimilarProteins = ({ protocol, hostname, port, root }, ida) =>
     query: { ida },
   });
 
-const AllProteinDownload = ({ description, count, ida }) => (
+const AllProteinDownload = (
+  {
+    description,
+    count,
+    ida,
+  } /*: {description: Object, count: number, ida: string} */,
+) => (
   <File
     fileType="fasta"
     name={`protein-similar-to-${description[description.main.key].accession}.fasta`}

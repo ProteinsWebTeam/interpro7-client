@@ -39,12 +39,12 @@ const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
         source_organism?: Object,
         release_date?: string,
         chains?: Array<string>,
-        integrated: string,
+        integrated?: string,
         member_databases?: Object,
         go_terms: Object,
         description: Array<string>,
         literature: Object,
-        hierarchy: Object,
+        hierarchy?: Object,
         overlaps_with: Object,
         cross_references: Object,
         wikipedia: string,
@@ -311,11 +311,6 @@ Hierarchy.propTypes = {
 /*:: type Props = {
     data: {
       metadata: Metadata,
-      location: {
-        description: {
-          mainType: string,
-        },
-      },
     },
     loading: boolean,
     dbInfo: Object,

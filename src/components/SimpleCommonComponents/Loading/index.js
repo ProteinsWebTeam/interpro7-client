@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 
 import { foundationPartial } from 'styles/foundation';
@@ -6,7 +7,7 @@ import style from './style.css';
 
 const f = foundationPartial(style);
 
-class Loading extends PureComponent {
+class Loading extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <div className={f('row')}>

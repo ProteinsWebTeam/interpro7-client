@@ -81,7 +81,7 @@ export const ida2json = ida => {
   return obj;
 };
 
-export const TextIDA = ({ accessions }) => (
+export const TextIDA = ({ accessions } /*: {accessions: Array<string>} */) => (
   <div>
     {accessions.map((accession, i) => (
       <React.Fragment key={i}>
@@ -112,14 +112,18 @@ export const TextIDA = ({ accessions }) => (
 TextIDA.propTypes = {
   accessions: T.arrayOf(T.string),
 };
-
+/* :: type Props = {
+  matches: Array<Object>,
+  databases: Object
+}
+*/
 export class IDAProtVista extends ProtVistaMatches {
   static propTypes = {
     matches: T.arrayOf(T.object).isRequired,
     databases: T.object.isRequired,
   };
 
-  updateTracksWithData(props) {
+  updateTracksWithData(props /*: Props */) {
     const { matches } = props;
 
     for (const domain of matches) {
@@ -195,7 +199,14 @@ export class IDAProtVista extends ProtVistaMatches {
   }
 }
 
-class _DomainArchitecturesWithData extends PureComponent {
+/* :: type DomainArchitecturesWithDataProps = {
+  data: Object,
+  dataDB: Object,
+  mainAccession: string,
+  search: Object,
+}
+*/
+class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitecturesWithDataProps> */ {
   static propTypes = {
     data: T.object.isRequired,
     mainAccession: T.string,

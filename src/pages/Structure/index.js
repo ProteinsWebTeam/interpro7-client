@@ -76,7 +76,11 @@ const propTypes = {
   }),
 };
 
-const Overview = ({ data: { payload, loading } }) => {
+const Overview = (
+  {
+    data: { payload, loading },
+  } /*: {data: {payload: Object, loading: boolean}} */,
+) => {
   if (loading) return <Loading />;
   return (
     <ul className={f('card')}>
@@ -99,7 +103,13 @@ const Overview = ({ data: { payload, loading } }) => {
 };
 Overview.propTypes = propTypes;
 
-class SummaryCounterStructures extends PureComponent {
+/*:: type SummaryCounterStructuresProps = {
+  entryDB: string,
+  metadata: Object,
+  counters: Object
+};*/
+
+class SummaryCounterStructures extends PureComponent /*:: <SummaryCounterStructuresProps> */ {
   static propTypes = {
     entryDB: T.string,
     metadata: T.object.isRequired,
@@ -201,8 +211,13 @@ class SummaryCounterStructures extends PureComponent {
     );
   }
 }
-
-class TaxnameStructures extends PureComponent {
+/*:: type TaxnameStructuresProps = {
+  data: {
+    loading: boolean,
+    payload: Object
+  }
+};*/
+class TaxnameStructures extends PureComponent /*:: <TaxnameStructuresProps> */ {
   static propTypes = {
     data: T.shape({
       loading: T.bool,
@@ -255,15 +270,24 @@ const getUrlForStructTaxname = accession =>
           }),
       }),
   );
+/*:: type StructureCardProps = {
+  data: Object,
+  search: string,
+  entryDB: string
+};*/
 
-class StructureCard extends PureComponent {
+/*:: type StructureCardState = {
+  TaxnameStructuresWithData: function,
+  accession: string
+};*/
+class StructureCard extends PureComponent /*:: <StructureCardProps, StructureCardState> */ {
   static propTypes = {
     data: T.object,
     search: T.string,
     entryDB: T.string,
   };
 
-  constructor(props) {
+  constructor(props /*: StructureCardProps */) {
     super(props);
 
     const accession = props.data.metadata.accession;
@@ -275,7 +299,10 @@ class StructureCard extends PureComponent {
     };
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(
+    nextProps /*: StructureCardProps */,
+    prevState /*: StructureCardState */,
+  ) {
     const nextAccession = nextProps.data.metadata.accession;
 
     if (nextAccession === prevState.accession) return null;
@@ -367,18 +394,35 @@ class StructureCard extends PureComponent {
   }
 }
 
-const List = ({
-  data: { payload, loading, ok, url, status },
-  isStale,
-  customLocation: {
-    description: {
-      entry: { db: entryDB },
-      structure: { db },
+const List = (
+  {
+    data: { payload, loading, ok, url, status },
+    isStale,
+    customLocation: {
+      description: {
+        entry: { db: entryDB },
+        structure: { db },
+      },
+      search,
     },
-    search,
+    dataBase,
+  } /*: { data: {
+   payload: Object,
+   loading: boolean,
+   ok: boolean,
+   url: string,
+   status: number
   },
-  dataBase,
-}) => {
+  isStale: boolean,
+  customLocation: {
+    description: Object,
+    search: Object
+  },
+  dataBase: {
+   payload: Object,
+   loading: boolean
+  }} */,
+) => {
   let _payload = payload;
   const HTTP_OK = 200;
   const notFound = !loading && status !== HTTP_OK;
@@ -386,6 +430,7 @@ const List = ({
   if (loading || notFound) {
     _payload = {
       results: [],
+      count: 0,
     };
   }
   const urlHasParameter = url && url.includes('?');

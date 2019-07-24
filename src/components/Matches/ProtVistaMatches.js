@@ -1,3 +1,4 @@
+// @flow
 import { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -26,14 +27,24 @@ const loadProtVistaWebComponents = () => {
   return Promise.all(webComponents);
 };
 
-class ProtVistaMatches extends PureComponent {
+/*:: type Props = {
+  matches: Array<Object>,
+  data: Array<Object>,
+  options: Object
+};*/
+
+class ProtVistaMatches extends PureComponent /*:: <Props> */ {
+  /*::
+    web_tracks: Object;
+    updateTracksWithData: function;
+  */
   static propTypes = {
     matches: T.array.isRequired,
     data: T.array,
     options: T.object,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.web_tracks = {};
@@ -44,7 +55,7 @@ class ProtVistaMatches extends PureComponent {
     this.updateTracksWithData(this.props);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps /*: Props */) {
     if (prevProps.data !== this.props.matches) {
       this.updateTracksWithData(this.props);
     }

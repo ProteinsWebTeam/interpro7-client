@@ -31,15 +31,25 @@ const areMergedDataTheSame = (prev, next) => {
   }
   return true;
 };
+/*:: type Props = {
+  protein: Object,
+  data: Object,
+  goToCustomLocation: function,
+}; */
 
-class DomainArchitecture extends PureComponent {
+/*:: type State = {
+  collapsed: boolean,
+  entryHovered: any,
+  colorMode: number
+}; */
+class DomainArchitecture extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     protein: T.object,
     data: T.object,
     goToCustomLocation: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
     this.state = {
       collapsed: false,
@@ -78,7 +88,7 @@ class DomainArchitecture extends PureComponent {
     });
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps /*: Props */) {
     if (!areMergedDataTheSame(prevProps.data, this.props.data)) {
       this.ec.data = this.props.data;
     }

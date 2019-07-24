@@ -55,7 +55,12 @@ const GO_COLORS = new Map([
   ['C', '#f5ddd3'],
 ]);
 
-class SummaryCounterEntries extends PureComponent {
+/*:: type SummaryCounterEntriesProps = {
+  entryDB: string,
+  metadata: Object,
+  counters: Object
+};*/
+class SummaryCounterEntries extends PureComponent /*:: <SummaryCounterEntriesProps> */ {
   static propTypes = {
     entryDB: T.string,
     metadata: metadataPropType.isRequired,
@@ -237,8 +242,12 @@ const description2IDs = description =>
   (description.match(/"(PUB\d+)"/gi) || []).map(t =>
     t.replace(/(^")|("$)/g, ''),
   );
-
-class DescriptionEntries extends PureComponent {
+/*:: type DescriptionEntriesProps = {
+  description: Array<string>,
+  literature: Object,
+  accession: string
+};*/
+class DescriptionEntries extends PureComponent /*:: <DescriptionEntriesProps> */ {
   static propTypes = {
     description: T.arrayOf(T.string),
     literature: T.object,
@@ -271,8 +280,12 @@ class DescriptionEntries extends PureComponent {
     );
   }
 }
-
-class EntryCard extends PureComponent {
+/*:: type EntryCardProps = {
+  data: Object,
+  search: string,
+  entryDB: string
+};*/
+class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
   static propTypes = {
     data: dataPropType.object,
     search: T.string,
@@ -383,8 +396,25 @@ class EntryCard extends PureComponent {
     );
   }
 }
-
-class List extends PureComponent {
+/*:: type Props = {
+  data: {
+   payload: Object,
+   loading: boolean,
+   ok: boolean,
+   url: string,
+   status: number
+  },
+  isStale: boolean,
+  customLocation: {
+    description: Object,
+    search: Object
+  },
+  dataBase: {
+   payload: Object,
+   loading: boolean
+  }
+};*/
+class List extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: dataPropType.isRequired,
     isStale: T.bool.isRequired,
@@ -583,7 +613,10 @@ class List extends PureComponent {
                     title={`${type.replace(
                       '_',
                       ' ',
-                    )} type (as defined by ${db})`}
+                    )} type (as defined by ${(databases &&
+                      databases[db] &&
+                      databases[db].name) ||
+                      db})`}
                   >
                     {type.replace('_', ' ')}
                   </Tooltip>
@@ -606,7 +639,10 @@ class List extends PureComponent {
                   if (!externalLinkRenderer) return symbol;
                   return (
                     <Tooltip
-                      title={`link to ${accession} on the ${db} website`}
+                      title={`link to ${accession} on the ${(databases &&
+                        databases[db] &&
+                        databases[db].name) ||
+                        db} website`}
                     >
                       <Link
                         target="_blank"
@@ -626,7 +662,7 @@ class List extends PureComponent {
               <Column
                 dataKey="member_databases"
                 cellClassName={f('col-md')}
-                renderer={(memberDataBases /*: object */) => (
+                renderer={(memberDataBases /*: Object */) => (
                   <div className={f('signature-container')}>
                     {memberDataBases &&
                       Object.entries(memberDataBases).map(([db, entries]) =>

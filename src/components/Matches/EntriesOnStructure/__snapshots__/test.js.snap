@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EntriesOnStructure /> should render 1`] = `
+<div
+  className="track-in-table"
+>
+  <div
+    className="track-container"
+  >
+    <div
+      className="aligned-to-track-component"
+    >
+      <protvista-sequence
+        displayend={622}
+        displaystart="1"
+        length={622}
+      />
+    </div>
+  </div>
+  <div
+    className="track-component"
+  >
+    <Tooltip
+      title="<b>1a4w</b><br/>CRYSTAL STRUCTURES OF THROMBIN WITH THIAZOLE-CONTAINING INHIBITORS: PROBES OF THE S1' BINDING SITE<br/>"
+    >
+      <protvista-interpro-track
+        displayend={622}
+        displaystart="1"
+        expanded={true}
+        id="track_1a4w"
+        length={622}
+        shape="rectangle"
+      />
+    </Tooltip>
+  </div>
+  <div
+    className="track-component"
+  >
+    <Tooltip
+      title="<b>IPR000001</b><br/>Kringle<br/><p>105-188</p><p>211-293</p>"
+    >
+      <protvista-interpro-track
+        displayend={622}
+        displaystart="1"
+        expanded={true}
+        id="track_IPR000001"
+        length={622}
+        shape="roundRectangle"
+      />
+    </Tooltip>
+  </div>
+</div>
+`;

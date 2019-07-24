@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SearchBox /> should render 1`] = `
+<div
+  className="table-filter"
+>
+  <div
+    className="filter-box"
+  >
+    <input
+      id="table-filter-text"
+      onChange={[Function]}
+      placeholder="Search organism"
+      type="text"
+      value="virus"
+    />
+    <button
+      aria-label="Cancel button"
+      className="cancel-button"
+      onClick={[Function]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+  </div>
+</div>
+`;

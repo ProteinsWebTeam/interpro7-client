@@ -14,7 +14,9 @@ import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ipro, fonts, ebiStyles, local);
 
-const ReferenceItem = ({ url, accession }) => (
+const ReferenceItem = (
+  { url, accession } /*: {url: string, accession: string} */,
+) => (
   <li>
     <Link href={url} className={f('ext')}>
       {accession}
@@ -26,7 +28,13 @@ ReferenceItem.propTypes = {
   accession: T.string.isRequired,
 };
 
-const ReferenceSection = ({ accessions, name, description }) =>
+const ReferenceSection = (
+  {
+    accessions,
+    name,
+    description,
+  } /*: {accessions: Array<Object>, name: string, description: string} */,
+) =>
   name !== 'pdb' && (
     <li className={f('xref-section', 'small')}>
       <h5 className={f('text-up')}>

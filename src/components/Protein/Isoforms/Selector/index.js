@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -12,7 +13,13 @@ import { foundationPartial } from 'styles/foundation';
 import style from '../style.css';
 const f = foundationPartial(style);
 
-const Selector = ({ data, value = '', onChange = () => null }) => {
+const Selector = (
+  {
+    data,
+    value = '',
+    onChange = () => null,
+  } /*: {data: {loading: boolean, payload: Object}, value: string, onChange: function} */,
+) => {
   if (!data || data.loading || !data.payload) return <Loading />;
 
   const isoforms = data.payload.results;
@@ -31,7 +38,7 @@ const Selector = ({ data, value = '', onChange = () => null }) => {
 Selector.propTypes = {
   data: T.shape({
     loading: T.bool,
-    payload: T.Object,
+    payload: T.object,
   }),
   value: T.string,
   onChange: T.func,

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -13,6 +14,12 @@ import memberSelectorStyle from 'components/Table/TotalNb/style.css';
 
 const f = foundationPartial(ebiStyles, memberSelectorStyle);
 
+/*:: type Props = {
+  data: {
+    metadata: Object
+  },
+  loading: boolean
+}; */
 class SummaryProteome extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({

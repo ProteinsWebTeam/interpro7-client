@@ -9,13 +9,24 @@ import Toast from 'components/Toast/Toast';
 
 import styles from './style.css';
 
-class ToastDisplay extends PureComponent {
+/*:: type Props = {
+  toasts: Object,
+  removeToast: function
+};*/
+/*:: type State = {
+  over: boolean,
+};*/
+
+class ToastDisplay extends PureComponent /*:: <Props, State> */ {
+  /* ::
+      _ref: { current: null | React$ElementRef<'ul'> };
+    */
   static propTypes = {
     toasts: T.object.isRequired,
     removeToast: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.state = { over: false };

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import loadData from 'higherOrder/loadData';
@@ -11,10 +12,12 @@ import { processData } from 'components/ProtVista/utils';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-const ProtVistaForStructure = ({
-  data,
-  dataSecondary,
-}) => /*: { data: { loading: boolean, payload: Object }, dataSecondary: { loading: boolean, payload: Object }} */ {
+const ProtVistaForStructure = (
+  {
+    data,
+    dataSecondary,
+  } /*: { data: { loading: boolean, payload: Object }, dataSecondary: { loading: boolean, payload: Object }} */,
+) => {
   if (!data || data.loading || !data.payload) return <Loading />;
 
   let secondaryData;
@@ -43,11 +46,11 @@ const ProtVistaForStructure = ({
 };
 ProtVistaForStructure.propTypes = {
   data: T.shape({
-    loading: T.boolean,
+    loading: T.bool,
     payload: T.object,
   }).isRequired,
   dataSecondary: T.shape({
-    loading: T.boolean,
+    loading: T.bool,
     payload: T.object,
   }),
 };
