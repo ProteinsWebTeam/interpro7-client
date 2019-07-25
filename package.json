@@ -103,7 +103,7 @@
     "popper.js": "1.15.0",
     "prop-types": "15.7.2",
     "protvista-coloured-sequence": "2.1.15",
-    "protvista-interpro-track": "2.1.15",
+    "protvista-interpro-track": "2.1.16-alpha.6",
     "protvista-manager": "2.1.13",
     "protvista-navigation": "2.1.13",
     "protvista-sequence": "2.1.15",
