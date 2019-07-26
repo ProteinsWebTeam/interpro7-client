@@ -163,6 +163,10 @@ exports[`<IPScanSearch /> should render 1`] = `
                                 "component": [Function],
                                 "strategy": [Function],
                               },
+                              Object {
+                                "component": [Function],
+                                "strategy": [Function],
+                              },
                             ],
                           },
                           "directionMap": Immutable.OrderedMap {

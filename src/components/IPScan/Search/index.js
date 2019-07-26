@@ -44,6 +44,28 @@ const strategy = re => (block, cb) => {
     cb(match.index, match.index + match[0].length);
   }
 };
+const isFirstBlockWithContent = (block, contentState) => {
+  const before = contentState.getBlockBefore(block.key);
+  if (!before) return true;
+  if (before.getText().trim() === '')
+    return isFirstBlockWithContent(before, contentState);
+  return false;
+};
+const commentsStrategy = (re, forErrors = false) => (
+  block,
+  cb,
+  contentState,
+) => {
+  const text = block.getText();
+  let match;
+  while ((match = re.exec(text))) {
+    const isFirstComment = isFirstBlockWithContent(block, contentState);
+    if (!forErrors && isFirstComment)
+      cb(match.index, match.index + match[0].length);
+    if (forErrors && !isFirstComment)
+      cb(match.index, match.index + match[0].length);
+  }
+};
 /*:: type ScanProps = {
       offsetKey: string,
       children: any
@@ -89,8 +111,11 @@ const commentRE = /^\s*[>;].*$/m;
 const IUPACProtRE = /^[a-z* -]*$/im;
 
 const checkValidity = lines => {
-  for (const line of lines) {
-    if (!commentRE.test(line) && !IUPACProtRE.test(line)) return false;
+  const trimmedLines = lines.map(l => l.trim()).filter(Boolean);
+  if (!commentRE.test(trimmedLines[0]) && !IUPACProtRE.test(trimmedLines[0]))
+    return false;
+  for (const line of trimmedLines.slice(1)) {
+    if (!IUPACProtRE.test(line)) return false;
   }
   return true;
 };
@@ -106,10 +131,23 @@ const isTooShort = lines => {
   return true;
 };
 
+const hasHeaderIssues = lines => {
+  const trimmedLines = lines.map(l => l.trim()).filter(Boolean);
+  const isFirstLineAComment =
+    trimmedLines.length && trimmedLines[0].startsWith('>');
+  const numberOfComments = trimmedLines.filter(l => l.startsWith('>')).length;
+  if (numberOfComments === 0) return false;
+  if (numberOfComments === 1 && isFirstLineAComment) return false;
+  return true;
+};
 const compositeDecorator = new CompositeDecorator([
   {
-    strategy: strategy(/^\s*[>;].*$/gm),
+    strategy: commentsStrategy(/^\s*[>;].*$/gm),
     component: classedSpan(f('comment')),
+  },
+  {
+    strategy: commentsStrategy(/^\s*[>;].*$/gm, true),
+    component: classedSpan(f('invalid-comment')),
   },
   {
     strategy: strategy(/[^a-z* -]+/gi),
@@ -148,6 +186,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     let editorState;
     let valid = true;
     let tooShort = true;
+    let headerIssues = false;
     if (props.value) {
       editorState = EditorState.createWithContent(
         ContentState.createFromText(decodeURIComponent(props.value)),
@@ -158,6 +197,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       );
       valid = checkValidity(lines);
       tooShort = isTooShort(lines);
+      headerIssues = hasHeaderIssues(lines);
     } else {
       editorState = EditorState.createEmpty(compositeDecorator);
     }
@@ -165,6 +205,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       editorState,
       valid,
       tooShort,
+      headerIssues,
     };
 
     this._formRef = React.createRef();
@@ -193,6 +234,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
             : EditorState.createEmpty(compositeDecorator),
         valid: true,
         tooShort: true,
+        headerIssues: false,
         dragging: false,
         uploading: false,
       },
@@ -245,9 +287,13 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
   _cleanUp = () =>
     this._handleReset(
       convertToRaw(this.state.editorState.getCurrentContent())
-        .blocks.map(({ text }) => {
+        .blocks.map(({ text }, i, lines) => {
           const line = text.trim();
           if (!line) return null;
+          const firstComment = lines.findIndex(({ text: l }) =>
+            l.trim().startsWith('>'),
+          );
+          if (line.startsWith('>') && firstComment !== i) return null;
           if (/^[;>]/.test(line)) return line;
           return line.replace(/[^a-z* -]/gi, '').trim();
         })
@@ -295,6 +341,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       editorState,
       valid: checkValidity(lines),
       tooShort: isTooShort(lines),
+      headerIssues: hasHeaderIssues(lines),
     });
   };
 
@@ -312,7 +359,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
           }}
         />
       );
-    const { editorState, valid, tooShort, dragging } = this.state;
+    const { editorState, valid, tooShort, headerIssues, dragging } = this.state;
     return (
       <div className={f('row', 'margin-bottom-medium')}>
         <div className={f('large-12', 'columns')}>
@@ -368,6 +415,28 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                         />
                       </div>
                     </div>
+                    {editorState.getCurrentContent().getPlainText().length >
+                      0 &&
+                      (tooShort || headerIssues) && (
+                        <div className={f('text-right')}>
+                          {tooShort && (
+                            <div>
+                              The sequence is too short.{' '}
+                              <span role="img" aria-label="warning">
+                                ⚠️
+                              </span>
+                            </div>
+                          )}
+                          {headerIssues && (
+                            <div>
+                              There are issues with the header of the sequence .{' '}
+                              <span role="img" aria-label="warning">
+                                ⚠️
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                   </div>
                 </div>
 
