@@ -152,6 +152,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                 )}
 
                 {status === 'not found' ||
+                status === 'failed' ||
                 status === 'failure' ||
                 status === 'error' ? (
                   <span

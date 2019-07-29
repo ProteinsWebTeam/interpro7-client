@@ -110,7 +110,7 @@ const isStayChecked = isXChecked('stay');
 const commentRE = /^\s*[>;].*$/m;
 const IUPACProtRE = /^[a-z* -]*$/im;
 
-const checkValidity = lines => {
+export const checkValidity = lines => {
   const trimmedLines = lines.map(l => l.trim()).filter(Boolean);
   if (!commentRE.test(trimmedLines[0]) && !IUPACProtRE.test(trimmedLines[0]))
     return false;
@@ -122,7 +122,7 @@ const checkValidity = lines => {
 
 const MIN_LENGTH = 3;
 
-const isTooShort = lines => {
+export const isTooShort = lines => {
   let count = 0;
   for (const line of lines) {
     if (IUPACProtRE.test(line)) count += line.trim().length;
@@ -154,6 +154,26 @@ const compositeDecorator = new CompositeDecorator([
     component: classedSpan(f('invalid-letter')),
   },
 ]);
+
+export const cleanUp = blocks => {
+  let endOfFirstSequence = false;
+  return blocks
+    .map(({ text }, i, lines) => {
+      const line = text.trim();
+      if (!line || endOfFirstSequence) return null;
+      const firstComment = lines.findIndex(({ text: l }) =>
+        l.trim().startsWith('>'),
+      );
+      if (line.startsWith('>') && firstComment !== i) {
+        endOfFirstSequence = true;
+        return null;
+      }
+      if (/^[;>]/.test(line)) return line;
+      return line.replace(/[^a-z* -]/gi, '').trim();
+    })
+    .filter(Boolean)
+    .join('\n');
+};
 
 /*:: type Props = {
   createJob: function,
@@ -286,19 +306,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
 
   _cleanUp = () =>
     this._handleReset(
-      convertToRaw(this.state.editorState.getCurrentContent())
-        .blocks.map(({ text }, i, lines) => {
-          const line = text.trim();
-          if (!line) return null;
-          const firstComment = lines.findIndex(({ text: l }) =>
-            l.trim().startsWith('>'),
-          );
-          if (line.startsWith('>') && firstComment !== i) return null;
-          if (/^[;>]/.test(line)) return line;
-          return line.replace(/[^a-z* -]/gi, '').trim();
-        })
-        .filter(Boolean)
-        .join('\n'),
+      cleanUp(convertToRaw(this.state.editorState.getCurrentContent()).blocks),
     );
 
   _handleDroppedFiles = blockEvent(({ dataTransfer: { files: [file] } }) =>
