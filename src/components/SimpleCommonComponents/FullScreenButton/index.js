@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -7,7 +7,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import { foundationPartial } from 'styles/foundation';
-import { requestFullScreen } from 'utils/fullscreen';
+import { requestFullScreen, exitFullScreen } from 'utils/fullscreen';
 
 const f = foundationPartial(fonts);
 
@@ -17,19 +17,31 @@ const FullScreenButton = (
     element,
     tooltip,
     className,
-    dataIcon = 'F',
+    dataIcon,
   } /*: {handleFullScreen?: function, element: any, tooltip: string, className?: string, dataIcon?: string} */,
 ) => {
+  const [isFull, setFull] = useState(false);
+  const [icon, setIcon] = useState(dataIcon || 'F');
   if (!handleFullScreen && !element) return null;
   const _handleFullScreen =
-    handleFullScreen || (() => requestFullScreen(element));
+    handleFullScreen ||
+    (() => {
+      if (isFull) {
+        exitFullScreen();
+        setIcon(dataIcon || 'F');
+      } else {
+        requestFullScreen(element);
+        setIcon(dataIcon || 'G');
+      }
+      setFull(!isFull);
+    });
   const _className =
     className || f('margin-bottom-none', 'icon', 'icon-common');
   return (
     <Tooltip title={tooltip}>
       <button
         onClick={_handleFullScreen}
-        data-icon={dataIcon}
+        data-icon={icon}
         title="Full screen"
         className={_className}
       />
