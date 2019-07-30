@@ -26,6 +26,7 @@ import loadWebComponent from 'utils/load-web-component';
 
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+import { changeSettingsRaw } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -772,4 +773,5 @@ export default loadData({
   getUrl: getUrlForMeta,
   propNamespace: 'DB',
   mapStateToProps,
+  mapDispatchToProps: { changeSettingsRaw },
 })(ProtVista);
