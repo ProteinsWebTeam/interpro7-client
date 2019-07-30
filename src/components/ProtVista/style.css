@@ -82,6 +82,7 @@
 
 .tracks-container {
   color: rgb(102, 102, 102);
+  /*color: white;*/
 }
 
 .tracks-container header {
@@ -125,7 +126,7 @@
 }
 .track-component {
   width: 88%;
-  background: rgba(0, 0, 0, 0.14);
+  background: rgba(0, 0, 0, 0.02);
   cursor: move;
 }
 

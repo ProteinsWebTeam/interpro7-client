@@ -27,6 +27,64 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
+const processConservationData = (entry, match) => {
+  const fragments = [];
+  for (const residue of match) {
+    if (residue.score > 0) {
+      let color;
+      /* eslint-disable no-magic-numbers */
+      if (residue.score > 0.0 && residue.score <= 1.29) {
+        color = '#f5ffe5';
+      } else if (residue.score > 1.29 && residue.score <= 2.58) {
+        color = '#e4ff7a';
+      } else if (residue.score > 2.58 && residue.score <= 3.23) {
+        color = '#ffe81a';
+      } else if (residue.score > 3.23 && residue.score <= 4.52) {
+        color = '#ffbd00';
+      } else if (residue.score > 4.52 && residue.score <= 5.81) {
+        color = '#ffa000';
+      } else {
+        color = '#fc7f00';
+      }
+      /* eslint-enable no-magic-numbers */
+      const tooltip = `${entry}. Score: ${residue.score}`;
+      fragments.push({
+        start: residue.position,
+        end: residue.position,
+        color: color,
+        tooltipContent: tooltip,
+      });
+    }
+  }
+  return fragments;
+};
+
+const mergeConservationData = (data, conservationData) => {
+  data.hmm_conservation_score = [];
+  for (const db of Object.keys(conservationData)) {
+    if (db.toLowerCase() !== 'sequence') {
+      const dbConservationScores = {
+        category: 'Sequence conservation',
+        type: 'sequence_conservation',
+        accession: db,
+        locations: [],
+      };
+      const entries = conservationData[db].entries;
+      for (const entry of Object.keys(entries)) {
+        const matches = entries[entry];
+        for (const match of matches) {
+          const fragments = processConservationData(entry, match);
+          dbConservationScores.locations.push({
+            fragments: fragments,
+            tooltip: entry,
+          });
+        }
+      }
+      data.hmm_conservation_score.push(dbConservationScores);
+    }
+  }
+};
+
 const mergeResidues = (data, residues) => {
   Object.values(data).forEach(group =>
     group.forEach(entry => {
@@ -136,6 +194,7 @@ export class DomainOnProteinWithoutData extends PureComponent {
       other_features: other,
       ...genome3d,
     };
+
     if (dataResidues && !dataResidues.loading && dataResidues.payload) {
       mergeResidues(mergedData, dataResidues.payload);
     }
@@ -144,6 +203,13 @@ export class DomainOnProteinWithoutData extends PureComponent {
     }
     if (!mergedData.other_features || !mergedData.other_features.length) {
       delete mergedData.other_features;
+    }
+    if (
+      dataConservation &&
+      !dataConservation.loading &&
+      dataConservation.payload
+    ) {
+      mergeConservationData(mergedData, dataConservation.payload);
     }
 
     return (
@@ -216,22 +282,6 @@ const getExtraURL = query =>
       return url;
     },
   );
-
-// const getConservationURL = query => createSelector(
-//     state => state.settings.api,
-//     state => state.customeLocation.description,
-//     ({protocol, hostname, port, root}, description) => {
-//       return format({
-//         protocol,
-//         hostname,
-//         port,
-//         pathname: root + descriptionToPath(description),
-//         query: {
-//           [query]: null,
-//         },
-//       });
-//     }
-//   );
 
 export default loadData({
   getUrl: getExtraURL('extra_features'),

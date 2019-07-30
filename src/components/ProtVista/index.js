@@ -472,7 +472,8 @@ class ProtVista extends Component {
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
       entry.type === 'chain' ||
-      entry.type === 'secondary_structure'
+      entry.type === 'secondary_structure' ||
+      entry.type === 'sequence_conservation'
     )
       return entry.accession;
     if (entry.accession && entry.accession.startsWith('G3D:')) {
@@ -565,7 +566,7 @@ class ProtVista extends Component {
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
           <div className={f('option-color', 'margin-right-medium')}>
-            Color By:{' '}
+            Colour By:{' '}
             <select
               className={f('select-inline')}
               value={this.props.colorDomainsBy}
