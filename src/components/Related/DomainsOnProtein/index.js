@@ -34,17 +34,17 @@ const processConservationData = (entry, match) => {
       let color;
       /* eslint-disable no-magic-numbers */
       if (residue.score > 0.0 && residue.score <= 1.29) {
-        color = '#f5ffe5';
+        color = '#ffffe0';
       } else if (residue.score > 1.29 && residue.score <= 2.58) {
-        color = '#e4ff7a';
+        color = '#b1dfdb';
       } else if (residue.score > 2.58 && residue.score <= 3.23) {
-        color = '#ffe81a';
+        color = '#85b7ce';
       } else if (residue.score > 3.23 && residue.score <= 4.52) {
-        color = '#ffbd00';
+        color = '#618fbf';
       } else if (residue.score > 4.52 && residue.score <= 5.81) {
-        color = '#ffa000';
+        color = '#3e67ae';
       } else {
-        color = '#fc7f00';
+        color = '#ffffe0';
       }
       /* eslint-enable no-magic-numbers */
       const tooltip = `${entry}. Score: ${residue.score}`;

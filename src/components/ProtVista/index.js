@@ -126,6 +126,7 @@ class ProtVista extends Component {
     this._popperContentRef = React.createRef();
     this._webProteinRef = React.createRef();
     this._hydroRef = React.createRef();
+    this._conservationRef = React.createRef();
     this._isPopperTop = true;
   }
 
@@ -696,11 +697,14 @@ class ProtVista extends Component {
                               key={entry.accession}
                               className={f('track-row')}
                             >
-                              {entry.type === 'secondary_structure' ? (
+                              {entry.type === 'secondary_structure' ||
+                              entry.type === 'sequence_conservation' ? (
                                 <div
                                   className={f(
                                     'track-component',
-                                    'secondary-structure',
+                                    entry.type === 'secondary_structure'
+                                      ? 'secondary-structure'
+                                      : 'sequence-conservation',
                                   )}
                                 >
                                   <protvista-track
