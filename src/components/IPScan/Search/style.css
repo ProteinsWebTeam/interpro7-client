@@ -74,7 +74,8 @@
   color: gray;
 }
 
-.invalid-letter {
+.invalid-letter,
+.invalid-comment {
   color: var(--colors-alert-txt);
   font-weight: bold;
 }

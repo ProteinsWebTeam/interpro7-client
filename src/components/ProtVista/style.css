@@ -144,6 +144,10 @@
     opacity: 1;
   }
 }
+g:global(.residues-group) path:global(.feature),
+g:global(.child-group) path:global(.feature) {
+  transition: fill 0.2s ease-out;
+}
 
 .track-component path:global(.helix) {
   stroke: red;

@@ -64,7 +64,7 @@ const List = (
           <Column
             dataKey="evidences"
             renderer={({ source: { url, id, name } }) => (
-              <Link href={url} className={f('ext')}>
+              <Link href={url} target="_blank" className={f('ext')}>
                 {name}: {id}
               </Link>
             )}

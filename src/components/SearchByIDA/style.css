@@ -43,6 +43,11 @@
   min-height: 50px;
   display: flex;
   justify-content: space-between;
+  & button.button.secondary {
+    & span {
+      font-size: 1.2em;
+    }
+  }
 }
 
 .ida-button {
