@@ -164,7 +164,9 @@ export const ProteinDownloadRenderer = description => (accession, row) => (
     }}
   />
 );
-const AllProteinDownload = ({ description, count }) => (
+const AllProteinDownload = (
+  { description, count } /*: {description: Object, count: number} */,
+) => (
   <File
     fileType="fasta"
     name={`protein-sequences-matching-${description[description.main.key].accession}.fasta`}
@@ -247,6 +249,8 @@ const Matches = (
     state: Object,
     databases: Object,
     dbCounters ?: Object,
+    mainData: Object,
+    accessionSearch: Object,
     props: Array<any>
 } */,
 ) => {

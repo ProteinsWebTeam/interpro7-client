@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -7,13 +8,15 @@ import { format } from 'url';
 
 import { EntryMenuLinkWithoutData } from '.';
 
-const Genome3dMenuLink = ({
-  to,
-  exact,
-  name,
-  usedOnTheSide,
-  data: { loading, payload },
-}) => {
+const Genome3dMenuLink = (
+  {
+    to,
+    exact,
+    name,
+    usedOnTheSide,
+    data: { loading, payload },
+  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Object}} */,
+) => {
   const value = (payload && payload.pager.total_entries) || 0;
   const attrs = { name, value, loading, to, exact, usedOnTheSide };
   return <EntryMenuLinkWithoutData {...attrs} />;

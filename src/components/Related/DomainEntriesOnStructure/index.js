@@ -145,7 +145,7 @@ const ProtVistaLoaded = (
   } /*: {
   dataprotein: {loading: boolean, payload: {metadata: Object}},
   tracks: Object | Array<Object>,
-  dataGenome3d: {loading: boolean, payload: {metadata: Object}},
+  dataGenome3d: {loading: boolean, payload: {metadata: Object}, status: number},
   chain: string,
   fixedHighlight: string
  } */,
