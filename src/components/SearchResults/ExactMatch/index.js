@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
+import { format } from 'url';
 
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
+import { proteinAccessionHandler } from 'utils/processDescription/handlers';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -45,6 +47,42 @@ const XREFS = new Map([
   ['PDB', { type: 'structure', db: 'PDB' }],
   ['PROTEOME', { type: 'proteome', db: 'UniProt' }],
 ]);
+
+const _ExactMatchProteinID = ({ data, identifier, type }) => {
+  // Not getting the redirect URL!!!
+  if (!data || data.loading || !data.payload || !data.payload.metadata)
+    return null;
+  const { db, accession } = data.payload.metadata;
+  return (
+    <ExactMatchWrapper
+      key={type}
+      to={{
+        description: {
+          main: { key: type },
+          [type]: { db, accession },
+        },
+      }}
+    >
+      {type} {accession} [ID: {identifier}]
+    </ExactMatchWrapper>
+  );
+};
+const getProteinIDUrl = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description.search.value,
+  ({ protocol, hostname, port, root }, searchValue) =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}/protein/UniProt/${searchValue}`,
+    }),
+);
+
+const ExactMatchProteinID = loadData({
+  getUrl: getProteinIDUrl,
+  // fetchOptions: { method: 'HEAD' },
+})(_ExactMatchProteinID);
 
 /*:: type SMProps = {
   data: {
@@ -103,20 +141,34 @@ export class ExactMatch extends PureComponent /*:: <SMProps> */ {
         if (exactMatches.has(type)) continue;
         for (const accession of datum.fields[key]) {
           if (searchRE.test(accession)) {
-            exactMatches.set(
-              type,
-              <ExactMatchWrapper
-                key={type}
-                to={{
-                  description: {
-                    main: { key: type },
-                    [type]: { db, accession },
-                  },
-                }}
-              >
-                {type} {accession}
-              </ExactMatchWrapper>,
-            );
+            if (
+              type === 'protein' &&
+              !accession.match(proteinAccessionHandler.regexp)
+            ) {
+              exactMatches.set(
+                type,
+                <ExactMatchProteinID
+                  key={type}
+                  type={type}
+                  identifier={accession}
+                />,
+              );
+            } else {
+              exactMatches.set(
+                type,
+                <ExactMatchWrapper
+                  key={type}
+                  to={{
+                    description: {
+                      main: { key: type },
+                      [type]: { db, accession },
+                    },
+                  }}
+                >
+                  {type} {accession}
+                </ExactMatchWrapper>,
+              );
+            }
             break;
           }
         }
