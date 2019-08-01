@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ContributingSignatures /> should render 1`] = `
+<div
+  className="side-panel margin-top-small margin-bottom-large"
+>
+  <div
+    className="md-icon-list-box margin-bottom-large"
+  >
+    <h5>
+      Contributing Member Database Entr
+      y
+    </h5>
+    <ul
+      className="md-list"
+    >
+      <li>
+        <MemberSymbol
+          className="md-small"
+          type="pfam"
+        />
+        <div>
+          <span
+            className="db-name"
+          >
+            Pfam
+            :
+             
+          </span>
+           
+          <React.Fragment>
+            <LoadableComponent
+              data={
+                Object {
+                  "db": "pfam",
+                  "name": "PF00051",
+                }
+              }
+              processData={[Function]}
+            />
+            
+            <Memo
+              accession="PF00051"
+              db="pfam"
+              label="Kringle domain"
+            />
+          </React.Fragment>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

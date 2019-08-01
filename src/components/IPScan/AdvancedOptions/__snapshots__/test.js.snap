@@ -112,27 +112,6 @@ exports[`<AdvancedOptions /> should render 1`] = `
         </legend>
       </fieldset>
     </fieldset>
-    <fieldset
-      className="fieldset"
-    >
-      <legend>
-        Other
-      </legend>
-      <AdvancedOption
-        defaultChecked={true}
-        name="goterms"
-        value="goterms"
-      >
-        Gene Ontology Terms
-      </AdvancedOption>
-      <AdvancedOption
-        defaultChecked={true}
-        name="pathways"
-        value="pathways"
-      >
-        Pathways
-      </AdvancedOption>
-    </fieldset>
   </details>
 </div>
 `;

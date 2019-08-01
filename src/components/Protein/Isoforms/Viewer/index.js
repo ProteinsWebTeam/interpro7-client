@@ -45,7 +45,12 @@ const features2protvista = features => {
   return [['interpro', interpro], ['unintegrated', unintegrated]];
 };
 
-const Viewer = ({ isoform, data }) => {
+const Viewer = (
+  {
+    isoform,
+    data,
+  } /*: {isoform: string, data: {loading: boolean, payload: Object}} */,
+) => {
   if (!isoform) return null;
   if (!data || data.loading || !data.payload || !data.payload.accession)
     return <Loading />;

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -23,7 +24,20 @@ import styles from './style.css';
 const f = foundationPartial(styles);
 
 const SMALL = 0.01;
-class Button extends PureComponent {
+
+/*:: type ButtonProps = {
+  fileType: string,
+  url: string,
+  subpath: string,
+  count: number,
+  name: string,
+  progress: number,
+  successful: boolean,
+  blobURL: string,
+  handleClick: function
+}; */
+
+class Button extends PureComponent /*:: <ButtonProps> */ {
   static propTypes = {
     fileType: T.oneOf(['accession', 'fasta']).isRequired,
     url: T.string.isRequired,
@@ -124,7 +138,27 @@ const mapStateToPropsFor = (url, fileType, subset) =>
       ] || {},
   );
 
-class File extends PureComponent {
+/*:: type Props = {
+ api: Object,
+ entryDescription: Object,
+ customLocationDescription?: Object,
+ downloadURL: function,
+ fileType: string,
+ count: number,
+ subset?: boolean,
+ name: string,
+ search?: Object
+}; */
+
+/*:: type State = {
+ url: ?string,
+ fileType: ?string,
+ subset: ?boolean,
+ ConnectedButton: Object,
+ subpath: ?string
+}; */
+
+export class File extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     api: T.object.isRequired,
     entryDescription: T.object.isRequired,
@@ -137,7 +171,7 @@ class File extends PureComponent {
     search: T.object,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.state = {
@@ -145,10 +179,14 @@ class File extends PureComponent {
       fileType: null,
       subset: null,
       ConnectedButton: null,
+      subpath: null,
     };
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(
+    nextProps /*: Props */,
+    prevState /*: State */,
+  ) {
     const subpath = descriptionToPath(nextProps.customLocationDescription);
     const url = format({
       ...nextProps.api,

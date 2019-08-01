@@ -1,9 +1,15 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-
-class Length extends PureComponent {
+/*:: type Props = {
+  metadata: {
+    length: number,
+    fragment?: string
+  }
+}; */
+class Length extends PureComponent /*:: <Props> */ {
   static propTypes = {
     metadata: T.shape({
       length: T.number.isRequired,

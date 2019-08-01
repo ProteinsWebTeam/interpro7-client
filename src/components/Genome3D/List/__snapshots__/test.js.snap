@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<List /> should render 1`] = `
+<div
+  className="row"
+>
+  <div
+    className="columns"
+  >
+    <Table
+      actualSize={1649}
+      dataTable={
+        Array [
+          Object {
+            "accession": "E0W2I7",
+            "anno_id": 581570,
+            "confidence": "99",
+            "id": 581570,
+            "length": 1010,
+            "locations": Array [
+              Object {
+                "fragments": Array [
+                  Object {
+                    "end": 179,
+                    "start": 87,
+                  },
+                ],
+              },
+            ],
+            "resource": "Gene3D",
+            "tooltipContent": "Predicted domain from Genome3D resource 'Gene3D' based on UniProtKB E0W2I7/87-179 matching classification 1nl1A00",
+            "type": "PREDICTED_DOMAIN",
+          },
+        ]
+      }
+      loading={false}
+      notFound={false}
+      rowKey="id"
+    >
+      <Column
+        dataKey="accession"
+        renderer={[Function]}
+      >
+        Protein
+      </Column>
+      <Column
+        dataKey="evidences"
+        renderer={[Function]}
+      >
+        Evidence
+      </Column>
+      <Column
+        dataKey="confidence"
+        renderer={[Function]}
+      />
+      <Column
+        dataKey="locations"
+        renderer={[Function]}
+      >
+        Matches
+      </Column>
+    </Table>
+  </div>
+</div>
+`;

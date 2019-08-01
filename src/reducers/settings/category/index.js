@@ -5,7 +5,7 @@ import { EntryColorMode } from 'utils/entry-color';
 
 const DEFAULT_HTTP_PORT = 80;
 
-// type Category = 'navigation' | 'ui' | 'cache' | 'ebi' | 'api' | 'ipScan';
+/*:: type Category = 'navigation' | 'ui' | 'cache' | 'ebi' | 'api' | 'ipScan'; */
 
 export const getDefaultSettingsFor = (category /*: Category */) => {
   switch (category) {

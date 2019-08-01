@@ -33,14 +33,14 @@ const placeholderStyle = {
 
 const mounted = new WeakSet();
 
-/* :: type Props = {|
+/* :: type Props = {
   children: any,
   title: string
-|}; */
+}; */
 
-/* :: type State = {|
+/* :: type State = {
   loading: boolean
-|}; */
+}; */
 
 class Embed extends PureComponent /*:: <Props, State> */ {
   /* ::

@@ -27,18 +27,17 @@ export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
       <div className={f('row')}>
         <div className={f('columns')}>
           <div className={f('callout', 'info', 'withicon')}>
-            An error was encountered while trying to load a component of this
+            An error was encountered while trying to load an element of this
             page.
           </div>
           <p>
-            If you really want this part of the page you might want to reload
-            it.
+            Please try reloading the page to see if this resolves the problem.
           </p>
           <button onClick={reload} className={f('button')}>
             Reload this page
           </button>
           <p>
-            If this keeps happening, you might want to get in touch with us
+            If this error persists, please get in touch with us
             through our contact form.
           </p>
           <Link

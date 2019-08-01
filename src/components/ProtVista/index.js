@@ -97,7 +97,23 @@ const getColorScaleHTML = (
   <span>${domain[1]}</span>
 </div>`;
 
-class ProtVista extends Component {
+/*:: type Props = {
+  protein: Object,
+  data: Array<Object>,
+  dataDB: Object,
+  colorDomainsBy: string,
+  changeSettingsRaw: function,
+  title: string,
+  fixedHighlight: string
+}; */
+
+/*:: type State = {
+  entryHovered: any,
+  hideCategory: Object,
+  expandedTrack: Object,
+  collapsed: boolean
+}; */
+class ProtVista extends Component /*:: <Props, State> */ {
   static propTypes = {
     protein: T.object,
     data: T.array,
@@ -108,7 +124,7 @@ class ProtVista extends Component {
     fixedHighlight: T.string,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.web_tracks = {};

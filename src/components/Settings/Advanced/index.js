@@ -14,6 +14,7 @@ const url = pkg.repository.url.replace('.git', '');
 
 export default class Advanced extends PureComponent /*:: <{}> */ {
   render() {
+    console.log(info);
     return (
       <section>
         <h4>Developer information</h4>
@@ -21,6 +22,10 @@ export default class Advanced extends PureComponent /*:: <{}> */ {
         <div>
           {'This website has been built on '}
           <code>{new Date(info.build.time).toString()}</code>
+        </div>
+        <div>
+          {'Build mode: '}
+          <code>{info.mode}</code>
         </div>
         <div>
           It has been built from the repository at:
@@ -36,15 +41,14 @@ export default class Advanced extends PureComponent /*:: <{}> */ {
                 <code>{info.git.branch}</code>
               </Link>
             </li>
-            {info.git.tag !== info.git.commit &&
-              info.git.tag && (
-                <li>
-                  {'tag: '}
-                  <Link target="_blank" href={`${url}/tree/${info.git.tag}`}>
-                    <code>{info.git.tag}</code>
-                  </Link>
-                </li>
-              )}
+            {info.git.tag !== info.git.commit && info.git.tag && (
+              <li>
+                {'tag: '}
+                <Link target="_blank" href={`${url}/tree/${info.git.tag}`}>
+                  <code>{info.git.tag}</code>
+                </Link>
+              </li>
+            )}
             <li>
               {'commit: '}
               <Link target="_blank" href={`${url}/tree/${info.git.commit}`}>

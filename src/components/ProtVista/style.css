@@ -145,11 +145,6 @@
   }
 }
 
-/*div.track-component.secondary-structure path {*/
-/*  stroke: red */
-/*  stroke-width: 1;*/
-/*}*/
-
 .track-component path:global(.helix) {
   stroke: red;
   stroke-width: 1;

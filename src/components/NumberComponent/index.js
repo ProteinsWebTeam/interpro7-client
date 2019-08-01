@@ -40,7 +40,7 @@ const DELAY_RANGE = 0.25;
   titleType?: string,
 }; */
 
-class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
+export class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
   /*::
     _ref: { current: HTMLSpanElement | null };
     _animation: ?any;

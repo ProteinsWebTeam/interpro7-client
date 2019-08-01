@@ -21,7 +21,14 @@ const TAG_REGEX_KV = /\[(\w+):([\w\.]+)]/;
 const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](, )?';
 const CITATIONS_REGEX = `(\\[(${CITATION_REGEX})+\\])`;
 
-const Citations = ({ text, literature = [], withoutIDs, accession }) => (
+const Citations = (
+  {
+    text,
+    literature = [],
+    withoutIDs,
+    accession,
+  } /*: {text: string, literature?: Array<string>, accession: string, withoutIDs: boolean} */,
+) => (
   <sup>
     [
     {text.split(',').map((cita, i) => {
@@ -85,7 +92,14 @@ const xReferenceURL = {
   superfamily: 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid={}',
 };
 
-export const Paragraph = ({ p, literature = [], accession, withoutIDs }) => {
+export const Paragraph = (
+  {
+    p,
+    literature = [],
+    accession,
+    withoutIDs,
+  } /*: {p: string, literature?: Array<string>, accession?: string, withoutIDs?: boolean} */,
+) => {
   let text = p;
   let match = null;
   const parts = [];
@@ -205,7 +219,7 @@ Paragraph.propTypes = {
 
 /* :: type Props = {
   textBlocks: Array<string> ,
-  literature?: Array,
+  literature?: Array<string>,
   accession?: string,
   withoutIDs?: boolean
 }; */
@@ -242,7 +256,7 @@ class Description extends PureComponent /*:: <Props> */ {
 /* :: type DescriptionReadMoreProps = {|
   text: string,
   minNumberOfCharToShow: number,
-  patternToRemove: string
+  patternToRemove?: string
 |}; */
 
 /* :: type State = {| showMore: boolean |}; */
@@ -252,7 +266,7 @@ export class DescriptionReadMore extends PureComponent /*:: <DescriptionReadMore
     minNumberOfCharToShow: T.number,
     patternToRemove: T.string,
   };
-  constructor(props /*: Props */) {
+  constructor(props /*: DescriptionReadMoreProps */) {
     super(props);
     this.state = { showMore: false };
   }

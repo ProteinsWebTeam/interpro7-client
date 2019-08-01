@@ -81,11 +81,13 @@ const routes = new Map([
   ['ida', WrappedIDASearch],
 ]);
 
-const RedirectToDefault = ({
-  customLocation: {
-    search: { q: value },
-  },
-}) => {
+const RedirectToDefault = (
+  {
+    customLocation: {
+      search: { q: value },
+    },
+  } /*: {customLocation: {search: {q: string}}} */,
+) => {
   // TODO: after a decent amount of time, remove from here…
   // This logic is only to handle old IP6 URL structure and redirect to new one
   if (typeof value === 'string') {
@@ -117,7 +119,9 @@ RedirectToDefault.propTypes = {
   }).isRequired,
 };
 
-const Wrapper = ({ topic, children }) => {
+const Wrapper = (
+  { topic, children } /*: {topic: string, children: Node} */,
+) => {
   const [showHelp, setShowHelp] = useState(false);
   const toggleShowHelp = () => setShowHelp(!showHelp);
   return (

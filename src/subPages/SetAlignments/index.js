@@ -77,9 +77,10 @@ class AlignmentProtvista extends ProtVistaMatches {
 
 /*:: type Props = {
   data: Object,
+  search: Object
 }; */
 
-class SetAlignmentsSubPage extends PureComponent /*:: <Props> */ {
+class SetAlignmentsSubPage extends PureComponent /*:: <Props, {}> */ {
   static propTypes = {
     data: T.object.isRequired,
     search: T.object,

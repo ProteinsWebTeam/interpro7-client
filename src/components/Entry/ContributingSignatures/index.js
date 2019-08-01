@@ -58,7 +58,7 @@ SignatureLink.propTypes = {
   label: T.string.isRequired,
 };
 
-const ContributingSignatures = (
+export const ContributingSignatures = (
   { contr, data } /*: {contr: Object, data: Object} */,
 ) => {
   const metaDB = data.loading || !data.payload ? {} : data.payload.databases;

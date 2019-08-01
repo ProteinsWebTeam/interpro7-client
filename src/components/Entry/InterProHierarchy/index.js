@@ -47,11 +47,14 @@ const cleanHierarchyType = hierarchy => {
 
 /*:: type Props = {
   accession: string,
-  hierarchy: string | object,
+  hierarchy: string | Object,
   goToCustomLocation: function
 }; */
 
 class InterProHierarchy extends PureComponent /*:: <Props> */ {
+  /*::
+      _ref: { current: null | React$ElementRef<'interpro-hierarchy'> };
+    */
   static propTypes = {
     accession: T.string.isRequired,
     hierarchy: T.oneOfType([T.string, T.object]).isRequired,

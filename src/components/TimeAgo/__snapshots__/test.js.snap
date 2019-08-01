@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TimeAgo /> should render 1`] = `
+<time
+  dateTime="17-06-1998 01:00:00"
+  title="17/06/1998"
+>
+  21 years ago
+</time>
+`;
