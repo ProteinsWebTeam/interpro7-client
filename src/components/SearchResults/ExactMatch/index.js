@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -49,7 +51,6 @@ const XREFS = new Map([
 ]);
 
 const _ExactMatchProteinID = ({ data, identifier, type }) => {
-  // Not getting the redirect URL!!!
   if (!data || data.loading || !data.payload || !data.payload.metadata)
     return null;
   const { db, accession } = data.payload.metadata;
@@ -66,6 +67,11 @@ const _ExactMatchProteinID = ({ data, identifier, type }) => {
       {type} {accession} [ID: {identifier}]
     </ExactMatchWrapper>
   );
+};
+_ExactMatchProteinID.propTypes = {
+  data: dataPropType,
+  identifier: T.string,
+  type: T.string,
 };
 const getProteinIDUrl = createSelector(
   state => state.settings.api,
@@ -92,9 +98,7 @@ const ExactMatchProteinID = loadData({
 } */
 export class ExactMatch extends PureComponent /*:: <SMProps> */ {
   static propTypes = {
-    data: T.shape({
-      payload: T.object,
-    }),
+    data: dataPropType,
     searchValue: T.string,
   };
 
@@ -141,6 +145,7 @@ export class ExactMatch extends PureComponent /*:: <SMProps> */ {
         if (exactMatches.has(type)) continue;
         for (const accession of datum.fields[key]) {
           if (searchRE.test(accession)) {
+            // eslint-disable-next-line max-depth
             if (
               type === 'protein' &&
               !accession.match(proteinAccessionHandler.regexp)
