@@ -44,6 +44,9 @@
   display: flex;
   justify-content: space-between;
   & button.button.secondary {
+    & * {
+      vertical-align: middle;
+    }
     & span {
       font-size: 1.2em;
     }
@@ -110,6 +113,7 @@ ul.ordered {
     border: none;
     color: #ffffff;
     transition: color 0.5s ease-in-out;
+    font-weight: bold;
   }
   @nest & input:hover {
     background: rgba(255, 255, 255, 0.2);
@@ -117,6 +121,11 @@ ul.ordered {
   @nest & input:focus {
     background: rgba(255, 255, 255, 0.4);
     color: #444444;
+  }
+  @nest & .entry-name {
+    font-size: 0.7em;
+    color: #ffffff;
+    margin-top: -0.6em;
   }
 }
 .ignore .ida-entry {
