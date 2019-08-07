@@ -218,9 +218,11 @@ exports[`<Faqs /> should render 1`] = `
                 href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/"
                 target="_blank"
               >
-                 ftp site
+                 
+                ftp site
               </Memo(ConnectFunction)>
-               for download.
+               
+              for download.
             </p>
           </div>
         </details>
@@ -295,7 +297,8 @@ exports[`<Faqs /> should render 1`] = `
                   }
                 }
               >
-                 here
+                 
+                here
               </Memo(ConnectFunction)>
               .
             </p>
@@ -463,7 +466,8 @@ exports[`<Faqs /> should render 1`] = `
                 <b>
                   Settings
                 </b>
-                 link from the 
+                 link from the
+                 
                 <b>
                   InterPro Menu
                 </b>
