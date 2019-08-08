@@ -436,7 +436,8 @@ export default class Faqs extends PureComponent /*:: <{}> */ {
               <h4>Troubleshooting</h4>
               <details className={f('accordion-style')}>
                 <summary>
-                  Does the website work in Web Browser private/incognito mode?
+                  Why doesn&apos;t the website work properly in Web Browser
+                  private/incognito mode?
                 </summary>
                 <div className={f('accordion-info')}>
                   <p>

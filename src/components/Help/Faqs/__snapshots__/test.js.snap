@@ -432,7 +432,7 @@ exports[`<Faqs /> should render 1`] = `
           className="accordion-style"
         >
           <summary>
-            Does the website work in Web Browser private/incognito mode?
+            Why doesn't the website work properly in Web Browser private/incognito mode?
           </summary>
           <div
             className="accordion-info"
