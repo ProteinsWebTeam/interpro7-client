@@ -117,7 +117,6 @@
 }
 .track-container svg rect {
   stroke-width: 0;
-  fill-opacity: 0.45; /*fill: black;*/
 }
 
 .track-row {
@@ -130,8 +129,8 @@
 }
 
 /*can't use highlight class*/
-.track-component rect {
-  fill: grey;
+.track-component g:global(.highlighted) rect {
+  fill: #fff;
 }
 
 /*blobs*/
