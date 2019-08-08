@@ -48,6 +48,7 @@ const PanelIDA = (
             entryList.map((e, i) => (
               <li key={i}>
                 <IdaEntry
+                  position={i}
                   entry={e}
                   active={true}
                   removeEntryHandler={() => removeEntryHandler(i)}
@@ -65,6 +66,7 @@ const PanelIDA = (
           ignoreList.map((e, i) => (
             <li key={i}>
               <IdaEntry
+                position={i}
                 entry={e}
                 active={true}
                 removeEntryHandler={() => removeIgnoreHandler(i)}
@@ -188,10 +190,8 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                   />
                 </div>
                 <div className={f('ida-controls')}>
-                  <DomainButton
-                    label="➕"
-                    fill="#75bf40"
-                    stroke="#75bf40"
+                  <button
+                    className={f('button', 'secondary')}
                     onClick={() =>
                       this._handleSubmit({
                         entries: entries.concat(''),
@@ -199,11 +199,12 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                         order,
                       })
                     }
-                  />
-                  <DomainButton
-                    label="✖️️"
-                    fill="#bf4540"
-                    stroke="#bf4540"
+                  >
+                    <DomainButton label="➕" fill="#75bf40" stroke="#75bf40" />{' '}
+                    <span>Add Entry</span>
+                  </button>
+                  <button
+                    className={f('button', 'secondary')}
                     onClick={() =>
                       this._handleSubmit({
                         ignore: ignore.concat(''),
@@ -211,7 +212,10 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                         order,
                       })
                     }
-                  />
+                  >
+                    <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
+                    <span>Ignore Entry</span>
+                  </button>
                   <label htmlFor="ordered">
                     <input
                       type="checkbox"

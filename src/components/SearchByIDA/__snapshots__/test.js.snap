@@ -37,18 +37,34 @@ exports[`<SearchByIDA /> should render 1`] = `
           <div
             className="ida-controls"
           >
-            <DomainButton
-              fill="#75bf40"
-              label="➕"
+            <button
+              className="button secondary"
               onClick={[Function]}
-              stroke="#75bf40"
-            />
-            <DomainButton
-              fill="#bf4540"
-              label="✖️️"
+            >
+              <DomainButton
+                fill="#75bf40"
+                label="➕"
+                stroke="#75bf40"
+              />
+               
+              <span>
+                Add Entry
+              </span>
+            </button>
+            <button
+              className="button secondary"
               onClick={[Function]}
-              stroke="#bf4540"
-            />
+            >
+              <DomainButton
+                fill="#bf4540"
+                label="✖️️"
+                stroke="#bf4540"
+              />
+               
+              <span>
+                Ignore Entry
+              </span>
+            </button>
             <label
               htmlFor="ordered"
             >

@@ -79,6 +79,11 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
             },
           }
         }
+        highlight={
+          Array [
+            "IPR000001",
+          ]
+        }
         length={1000}
         matches={
           Array [

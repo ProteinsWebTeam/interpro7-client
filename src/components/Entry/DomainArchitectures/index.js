@@ -114,6 +114,7 @@ TextIDA.propTypes = {
 };
 /* :: type Props = {
   matches: Array<Object>,
+  highlight: Array<string>,
   databases: Object
 }
 */
@@ -121,6 +122,7 @@ export class IDAProtVista extends ProtVistaMatches {
   static propTypes = {
     matches: T.arrayOf(T.object).isRequired,
     databases: T.object.isRequired,
+    highlight: T.arrayOf(T.string),
   };
 
   updateTracksWithData(props /*: Props */) {
@@ -148,12 +150,16 @@ export class IDAProtVista extends ProtVistaMatches {
   }
 
   render() {
-    const { matches, length, databases } = this.props;
+    const { matches, length, databases, highlight = [] } = this.props;
     return (
       <div>
         {matches.map(d => (
           <div key={d.accession} className={f('track-row')}>
-            <div className={f('track-component')}>
+            <div
+              className={f('track-component', {
+                highlight: highlight.indexOf(d.accession) >= 0,
+              })}
+            >
               <DynamicTooltip
                 type="entry"
                 source={
@@ -204,6 +210,7 @@ export class IDAProtVista extends ProtVistaMatches {
   dataDB: Object,
   mainAccession: string,
   search: Object,
+  highlight: Array<string>,
 }
 */
 class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitecturesWithDataProps> */ {
@@ -212,6 +219,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     mainAccession: T.string,
     search: T.object,
     dataDB: T.object.isRequired,
+    highlight: T.arrayOf(T.string),
   };
 
   render() {
@@ -220,9 +228,12 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       mainAccession,
       search,
       dataDB,
+      highlight = [],
     } = this.props;
     if (loading || dataDB.loading) return <Loading />;
     if (!payload.results) return null;
+    const toHighlight =
+      highlight.length === 0 && mainAccession ? [mainAccession] : highlight;
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
@@ -260,6 +271,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                   matches={idaObj.domains}
                   length={FAKE_PROTEIN_LENGTH}
                   databases={dataDB.payload.databases}
+                  highlight={toHighlight}
                 />
                 {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
               </div>

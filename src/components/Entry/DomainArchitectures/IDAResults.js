@@ -56,7 +56,7 @@ const IDAResults = ({ searchFromURL, ignoreFromURL }) => {
       mapStateToProps,
     })(DomainArchitecturesWithData),
   );
-  return <Results />;
+  return <Results highlight={entries} />;
 };
 IDAResults.propTypes = {
   searchFromURL: T.string,

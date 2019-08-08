@@ -113,6 +113,8 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
         dispatch(
           updateJob({ metadata: { ...meta, remoteID, status: 'submitted' } }),
         );
+      } else {
+        dispatch(updateJob({ metadata: { ...meta, status: 'failed' } }));
       }
       return;
     }
@@ -140,9 +142,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
               addToast(
                 {
                   title: `Job ${status}`,
-                  body: `Your job with id ${
-                    meta.remoteID
-                  } is in a “${status}” state.`,
+                  body: `Your job with id ${meta.remoteID} is in a “${status}” state.`,
                   ttl: 10000, // eslint-disable-line no-magic-numbers
                   link: {
                     to: {
