@@ -202,18 +202,23 @@ class ProtVista extends Component /*:: <Props, State> */ {
       const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
       const style = document.createElement('style');
       style.setAttribute('id', 'tmp_style');
-      let str = localCSSasText;
+      let str = localCSSasText + iproCSSasText;
       Object.keys(localCSS).forEach(key => {
         str = str.replace(
           new RegExp(`\\.${key}([:,[\\s])`, 'gm'),
           `.${localCSS[key]}$1`,
         );
       });
+      Object.keys(ipro).forEach(key => {
+        str = str.replace(
+          new RegExp(`\\.${key}([:,[\\s])`, 'gm'),
+          `.${ipro[key]}$1`,
+        );
+      });
       // TODO it needs to be changed in an efficient way through webpack
       str =
         str +
         foundationCSSasText +
-        iproCSSasText +
         ebiGlobalCSS +
         globalCSS +
         fontCSS +
