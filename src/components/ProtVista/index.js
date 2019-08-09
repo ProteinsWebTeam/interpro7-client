@@ -221,7 +221,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       style.innerHTML = `${str}`;
       base.appendChild(style);
     };
-    //removes the added style from the DOM
+    // removes the added style from the DOM
     document.querySelector(`#${this.props.id}Saver`).postSave = () => {
       document
         .querySelector(`#${this.props.id}ProtvistaDiv`)

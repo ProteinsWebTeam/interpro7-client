@@ -7,7 +7,7 @@ import { DownloadTable } from '.';
 const renderer = new ShallowRenderer();
 
 describe('<DownloadTable />', () => {
-  test('' + 'should render', () => {
+  test('should render', () => {
     renderer.render(
       <DownloadTable
         data={{
