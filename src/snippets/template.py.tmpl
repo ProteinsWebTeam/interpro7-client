@@ -38,7 +38,7 @@ def output_list():
       elif res.status == 204:
         #no data so leave loop
         break
-      payload = json.loads(res.read())
+      payload = json.loads(res.read().decode())
       next = payload["next"]
       if not next:
         last_page = True
