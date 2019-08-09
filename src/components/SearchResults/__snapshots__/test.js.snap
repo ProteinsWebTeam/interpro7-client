@@ -35,6 +35,7 @@ exports[`<SearchResults /> should render 1`] = `
     }
     isStale={false}
     loading={false}
+    query={Object {}}
   >
     <Memo(ConnectFunction)>
       <Memo(ConnectFunction)

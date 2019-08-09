@@ -125,7 +125,14 @@ const mergeData = (root, update, names) => {
   },
   goToCustomLocation: function
 };*/
-class TreeView extends Component /*:: <TreeViewProps> */ {
+
+/*:: type State = {
+  data: {name: string, id: string},
+  focused: string,
+  entryDB: Object,
+}; */
+class TreeView extends Component /*:: <TreeViewProps, State> */ {
+  /*:: _CDPMap: Map<string, Object>*/
   static propTypes = {
     customLocation: T.shape({
       description: T.object,

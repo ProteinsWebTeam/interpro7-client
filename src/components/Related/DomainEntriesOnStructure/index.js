@@ -142,12 +142,14 @@ const ProtVistaLoaded = (
     dataGenome3d,
     chain,
     fixedHighlight,
+    id,
   } /*: {
   dataprotein: {loading: boolean, payload: {metadata: Object}},
   tracks: Object | Array<Object>,
-  dataGenome3d: {loading: boolean, payload: {metadata: Object}},
+  dataGenome3d: {loading: boolean, payload: {metadata: Object}, status: number},
   chain: string,
-  fixedHighlight: string
+  fixedHighlight: string,
+  id: string
  } */,
 ) => {
   const protvistaEl = useRef(null);
@@ -227,6 +229,7 @@ const ProtVistaLoaded = (
           protein={dataprotein.payload.metadata}
           data={enrichedTracks}
           fixedHighlight={fixedHighlight}
+          id={id}
         />
       )}
     </div>
@@ -238,6 +241,7 @@ ProtVistaLoaded.propTypes = {
   tracks: T.oneOfType([T.object, T.array]),
   chain: T.string,
   fixedHighlight: T.string,
+  id: T.string,
 };
 
 const getGenome3dURL = createSelector(
@@ -353,6 +357,7 @@ const EntriesOnStructure = (
                     )
                     .join(',')
                 }
+                id={`${e.chain}-${e.protein.accession}`}
               />
             </div>
           );

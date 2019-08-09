@@ -7,7 +7,14 @@ const defaultRenderer = (value /*: string | number */) => <div>{value}</div>;
 
 const DURATION = 250;
 
-class Row extends PureComponent {
+/*:: type Props = {
+  row: Object,
+  columns: Array<Object>,
+  extra: Object,
+  rowClassName:string | function
+}; */
+class Row extends PureComponent /*:: <Props> */ {
+  /*:: _ref: {current: null | React$ElementRef<string>} */
   static propTypes = {
     row: T.object.isRequired,
     columns: T.array.isRequired,
@@ -15,7 +22,7 @@ class Row extends PureComponent {
     rowClassName: T.oneOfType([T.string, T.func]),
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this._ref = React.createRef();

@@ -39,6 +39,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
       <Memo(ConnectFunction)
         chain="A"
         fixedHighlight="208:366"
+        id="A-p00735"
         tracks={
           Array [
             Array [

@@ -1,3 +1,4 @@
+// @flow
 /* eslint no-magic-numbers: [1, {ignore: [-1, 1, 10, 20, 50, 100]}] */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
@@ -19,8 +20,17 @@ const getPageSize = createSelector(
   props => props,
   props => +(props.customLocation.search.page_size || props.settingsPageSize),
 );
+/*:: type Props = {
+  customLocation: Object,
+  settingsPageSize: number,
+  changePosition: function,
+  goToCustomLocation: function,
+}; */
 
-class PageSizeSelector extends PureComponent {
+/*:: type State = {
+  pageSize: number
+}; */
+class PageSizeSelector extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     customLocation: T.object.isRequired,
     settingsPageSize: T.number,

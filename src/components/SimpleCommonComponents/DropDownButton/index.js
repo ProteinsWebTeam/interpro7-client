@@ -1,3 +1,4 @@
+// @flow
 import React, { useState } from 'react';
 import T from 'prop-types';
 import { foundationPartial } from 'styles/foundation';
@@ -15,7 +16,7 @@ const DropDownButton = (
     color = undefined,
     children,
     alignLeft = false,
-  } /*: {label: string, icon: string, color: string, children: any, alignLeft: boolean} */,
+  } /*: {label: string, icon: string, color: ?string, children: any, alignLeft: boolean} */,
 ) => {
   const [isOpen, setOpen] = useState(false);
   return (
