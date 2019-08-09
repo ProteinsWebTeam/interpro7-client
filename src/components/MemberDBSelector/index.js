@@ -181,6 +181,7 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
   };
 
   constructor(props /*: Props */) {
+    /* _dbs : Map<string, Object> */
     super(props);
 
     this.state = { visible: false };

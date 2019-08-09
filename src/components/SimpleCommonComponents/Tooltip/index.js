@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import Tippy from '@tippy.js/react';
@@ -10,7 +11,7 @@ const _Tooltip = (
     useContext: _uC,
     children,
     ...rest
-  } /*: {html?: any, title: any, interactive?: boolean, useContext?: boolean, children: any, target?: Object} */,
+  } /*: {html?: any, title?: any, interactive?: boolean, useContext?: boolean, children: any, target?: Object} */,
 ) => {
   let content = html || title;
   if (typeof content === 'string') {
