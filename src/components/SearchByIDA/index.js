@@ -48,6 +48,7 @@ const PanelIDA = (
             entryList.map((e, i) => (
               <li key={i}>
                 <IdaEntry
+                  position={i}
                   entry={e}
                   active={true}
                   removeEntryHandler={() => removeEntryHandler(i)}
@@ -65,6 +66,7 @@ const PanelIDA = (
           ignoreList.map((e, i) => (
             <li key={i}>
               <IdaEntry
+                position={i}
                 entry={e}
                 active={true}
                 removeEntryHandler={() => removeIgnoreHandler(i)}
