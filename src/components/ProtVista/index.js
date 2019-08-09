@@ -31,6 +31,7 @@ import { changeSettingsRaw } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
+import foundationCSS from 'foundation-sites/dist/css/foundation-float.css';
 import foundationCSSasText from '!!raw-loader!foundation-sites/dist/css/foundation-float.css';
 import ipro from 'styles/interpro-new.css';
 import iproCSSasText from '!!raw-loader!styles/interpro-new.css';
@@ -202,27 +203,20 @@ class ProtVista extends Component /*:: <Props, State> */ {
       const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
       const style = document.createElement('style');
       style.setAttribute('id', 'tmp_style');
-      let str = localCSSasText + iproCSSasText;
-      Object.keys(localCSS).forEach(key => {
-        str = str.replace(
-          new RegExp(`\\.${key}([:,[\\s])`, 'gm'),
-          `.${localCSS[key]}$1`,
-        );
-      });
-      Object.keys(ipro).forEach(key => {
-        str = str.replace(
-          new RegExp(`\\.${key}([:,[\\s])`, 'gm'),
-          `.${ipro[key]}$1`,
-        );
-      });
       // TODO it needs to be changed in an efficient way through webpack
-      str =
-        str +
-        foundationCSSasText +
-        ebiGlobalCSS +
-        globalCSS +
-        fontCSS +
-        colorsCSS;
+      let str = localCSSasText + iproCSSasText + foundationCSSasText;
+      const cssStyles = [localCSS, ipro, foundationCSS];
+      cssStyles.forEach(item => {
+        Object.keys(item).forEach(key => {
+          str = str.replace(
+            new RegExp(`\\.${key}([:,[\\s])`, 'gm'),
+            `.${item[key]}$1`,
+          );
+        });
+      });
+
+      str = str + ebiGlobalCSS + globalCSS + fontCSS + colorsCSS;
+      console.log(str);
       style.innerHTML = `${str}`;
       base.appendChild(style);
     };
