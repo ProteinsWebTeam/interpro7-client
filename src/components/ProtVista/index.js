@@ -325,7 +325,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     this._popperRef.current.classList.remove(f('hide'));
                     removeAllChildrenFromNode(this._popperContentRef.current);
                     this._popperContentRef.current.appendChild(
-                      this.getElementFromEntry(detail),
+                      this.getElementFromDetail(detail),
                     );
                     this._isPopperTop = !this._isPopperTop;
                     this.popper = new PopperJS(
@@ -392,16 +392,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     return type;
   };
 
-  getElementFromEntry(detail) {
-    let databases = {};
-    const { dataDB } = this.props;
-    if (!dataDB.loading && dataDB.payload) {
-      databases = dataDB.payload.databases;
-    }
-
-    const entry = detail.feature;
-    const sourceDatabase = this._getSourceDatabaseDisplayName(entry, databases);
-
+  getHTMLStringForEntry(entry, sourceDatabase) {
     let type = entry.entry_type || entry.type || '';
     if (sourceDatabase === 'MobiDB Lite') {
       // Handle MobiDB Lite entries
@@ -413,64 +404,95 @@ class ProtVista extends Component /*:: <Props, State> */ {
       type = `Secondary Structure: ${this._getSecondaryStructureType(entry)}`;
     }
 
-    const isResidue = detail.type === 'residue';
-    const isInterPro = entry.source_database === 'interpro';
-    const tagString = `<section>
+    return this.getHTMLString(
+      { ...entry, type, sourceDatabase },
+      entry.source_database === 'interpro',
+    );
+  }
+  getHTMLStringForResidue(entry, sourceDatabase) {
+    const residue = entry.currentResidue;
+    return this.getHTMLString(
+      {
+        ...entry,
+        ...residue,
+        residue: residue.residue || residue.residues,
+        sourceDatabase,
+        description: residue.description || residue.location.description,
+      },
+      false,
+      true,
+    );
+  }
+  getHTMLString(
+    {
+      accession,
+      sourceDatabase,
+      description,
+      name,
+      entry,
+      locations,
+      type,
+      start,
+      end,
+      residue,
+    },
+    isInterPro = false,
+    isResidue = false,
+  ) {
+    return `
+      <section>   
         <h6>
-          ${entry.accession}
-          ${
-            isResidue
-              ? `<br/>[${detail.description || detail.location.description}]`
-              : ''
-          }
+          ${accession}
+          ${description ? `<br/>[${description}]` : ''} 
          </h6>
-
-        ${entry.name ? `<h4>${entry.name}</h4>` : ''}
-
-        <!-- use class as Protvista is not react-->
+          
+        ${name && !isResidue ? `<h4>${name}</h4>` : ''}
+        
+        <!-- use class as Protvista is not react-->       
         <div class="${f('pop-wrapper')}" >
-        <div>${
-          isInterPro
-            ? `<interpro-type
-                    type="${(entry.entry_type || entry.type).replace('_', ' ')}"
-                    dimension="1.4em"
-                    aria-label="Entry type"
-                  />`
-            : ''
-        }
-        </div>
-        <div>
-          ${sourceDatabase}
-        ${type ? type.replace('_', ' ') : ''}</div>
+          <div>${
+            isInterPro
+              ? `<interpro-type
+                      type="${type.replace('_', ' ')}"
+                      dimension="1.4em"
+                      aria-label="Entry type"
+                    />`
+              : ''
+          } 
+          </div>
+          <div>
+            ${isResidue ? 'Residue in ' : ''}
+            ${sourceDatabase} ${type ? type.replace('_', ' ') : ''}
+          </div>
         </div>
         <p>
-          <small>
-            ${entry.entry ? `(${entry.entry})` : ''}
+          <small>          
+            ${entry ? `(${entry})` : ''}
           </small>
         </p>
         <ul>
           ${
             isResidue
               ? `
-              <li>Position: ${detail.start}</li>
-              <li>Residue: ${detail.residue || detail.residues}</li>
-              `
-              : entry.locations
+            <li>Position: ${start}</li>
+            <li>Residue: ${residue}</li>
+            `
+              : locations
                   .map(({ fragments, model_acc: model }) =>
                     `
-          <li> 
-          <!--location:-->
-            ${model && model !== entry.accession ? `Model: ${model}` : ''}
-            <ul>
-              ${fragments
-                .map(({ start, end }) =>
-                  `
-                <li>${start} - ${end}</li>
-              `.trim(),
-                )
-                .join('')}
-            </ul>
-          </li>
+            <li> 
+            <!--location:-->
+              ${model && model !== accession ? `Model: ${model}` : ''}
+              <ul>
+                ${fragments
+                  .map(({ start, end }) =>
+                    `
+                  <li>${start} - ${end}</li>
+                `.trim(),
+                  )
+                  .join('')}
+              </ul>
+            </li>
           `.trim(),
                   )
                   .join('')
@@ -478,6 +500,23 @@ class ProtVista extends Component /*:: <Props, State> */ {
         </ul>
       </section>
     `.trim();
+  }
+
+  getElementFromDetail(detail) {
+    let databases = {};
+    const { dataDB } = this.props;
+    if (!dataDB.loading && dataDB.payload) {
+      databases = dataDB.payload.databases;
+    }
+
+    const entry = detail.feature;
+    const sourceDatabase = this._getSourceDatabaseDisplayName(entry, databases);
+
+    const isResidue =
+      detail.target && detail.target.classList.contains('residue');
+    const tagString = isResidue
+      ? this.getHTMLStringForResidue(entry, sourceDatabase)
+      : this.getHTMLStringForEntry(entry, sourceDatabase);
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
     return range.createContextualFragment(tagString);
