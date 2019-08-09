@@ -38,6 +38,18 @@ const f = foundationPartial(style, fonts);
   colorDomainsBy?: string
 }; */
 
+/*:: type State = {
+  plugin: ?Object,
+  entryMap: Object,
+  selectedEntry: string,
+  selectedEntryToKeep: ?Object,
+  isStuck: boolean,
+  isSpinning: boolean,
+  isStructureFullScreen: boolean,
+  isSplitScreen: boolean,
+  isMinimized: boolean,
+}; */
+
 const NUMBER_OF_CHECKS = 10;
 const optionsForObserver = {
   root: null,
@@ -52,7 +64,7 @@ const SPLIT_REQUESTER = 1;
 const FULL_REQUESTER = 2;
 
 let fullScreenRequester = null;
-class StructureView extends PureComponent /*:: <Props> */ {
+class StructureView extends PureComponent /*:: <Props, State> */ {
   /*:: _structureViewer: { current: ?HTMLElement }; */
 
   static propTypes = {

@@ -242,6 +242,11 @@ const getConfigFor = (env, mode, module = false) => {
           exclude: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
         },
         {
+          test: /\.css\?string$/i,
+          use: [{ loader: 'raw-loader' }],
+          exclude: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+        },
+        {
           test: /\.scss$/i,
           use: [
             {

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -28,6 +29,7 @@ describe('<SearchResults />', () => {
         }}
         isStale={false}
         searchValue={'IPR020422'}
+        query={{}}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
