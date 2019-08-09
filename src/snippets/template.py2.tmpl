@@ -45,7 +45,7 @@ def output_list():
       else:
         raise e
 
-    payload = json.loads(res.read())
+    payload = json.loads(res.read().decode())
     next = payload["next"]
     if not next:
       last_page = True
