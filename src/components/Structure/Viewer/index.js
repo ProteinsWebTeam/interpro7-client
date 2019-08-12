@@ -271,7 +271,8 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       this.splitViewStyle.protvistaWidth = protvistaElement.style.width;
       this.splitViewStyle.viewControlsHeight = structureControls.style.height;
       this.splitViewStyle.viewElementHeight = structureViewer.style.height;
-      this.splitViewStyle.viewElementWidth = structureContainer.style.width;
+      this.splitViewStyle.viewContainerWidth = structureContainer.style.width;
+      this.splitViewStyle.viewContainerHeight = structureContainer.style.height;
 
       element.style.display = 'flex';
       element.style.backgroundColor = '#FFFFFF';
@@ -280,13 +281,15 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       structureControls.style.height = '5vh';
       structureViewer.style.height = '95vh';
       structureContainer.style.width = '50vw';
+      structureContainer.style.height = 'initial';
     } else {
       element.style.display = this.splitViewStyle.display;
       element.style.backgroundColor = this.splitViewStyle.backgroundColor;
       protvistaElement.style.overflow = this.splitViewStyle.protvistaOverflow;
       structureControls.style.height = this.splitViewStyle.viewControlsHeight;
       structureViewer.style.height = this.splitViewStyle.viewElementHeight;
-      structureContainer.style.width = this.splitViewStyle.viewElementWidth;
+      structureContainer.style.width = this.splitViewStyle.viewContainerWidth;
+      structureContainer.style.height = this.splitViewStyle.viewContainerHeight;
       protvistaElement.style.width = this.splitViewStyle.protvistaWidth;
     }
   };

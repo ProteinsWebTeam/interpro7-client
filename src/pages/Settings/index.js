@@ -40,7 +40,7 @@ const DefaultInterProSettings = () => {
   const [shouldRedirect, setShouldRedirect] = useState(
     window.localStorage.getItem('redirect_to_interpro7'),
   );
-  const handleChange = () => {
+  const handleRedirectChange = () => {
     if (shouldRedirect === 'default') {
       setShouldRedirect(null);
       window.localStorage.removeItem('redirect_to_interpro7');
@@ -60,12 +60,15 @@ const DefaultInterProSettings = () => {
               type="checkbox"
               checked={shouldRedirect === 'default'}
               className={f('switch-input')}
-              name="lowGraphics"
-              id="lowGraphics-input"
-              onChange={handleChange}
+              name="i6RedirectSetting"
+              id="i6RedirectSetting-input"
+              onChange={handleRedirectChange}
             />
-            <label className={f('switch-paddle')} htmlFor="lowGraphics-input">
-              <span className={f('show-for-sr')}>Low graphics mode:</span>
+            <label
+              className={f('switch-paddle')}
+              htmlFor="i6RedirectSetting-input"
+            >
+              <span className={f('show-for-sr')}>InterPro 6 Redirect:</span>
               <span className={f('switch-active')} aria-hidden="true">
                 On
               </span>
@@ -559,11 +562,11 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
             processData={schemaProcessDataWebPage}
           />
           <div className={f('columns', 'large-12')}>
-            <section onChange={changeSettings}>
-              <h3>Settings</h3>
-
+            <h3>Settings</h3>
+            <section>
               <DefaultInterProSettings />
-
+            </section>
+            <section onChange={changeSettings}>
               <NavigationSettings
                 navigation={navigation}
                 handleChange={changeSettings}
