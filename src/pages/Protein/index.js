@@ -228,7 +228,7 @@ const AllProteinDownload = (
 ) => (
   <File
     fileType="fasta"
-    name={`protein-sequences.fasta`}
+    name="protein-sequences.fasta"
     count={count}
     customLocationDescription={description}
   />

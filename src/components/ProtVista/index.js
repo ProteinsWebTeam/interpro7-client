@@ -445,7 +445,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
       locations,
       type,
       start,
-      end,
       residue,
     },
     isInterPro = false,
