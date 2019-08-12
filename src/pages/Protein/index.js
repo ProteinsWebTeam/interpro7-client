@@ -279,7 +279,7 @@ class List extends PureComponent /*:: <ListProps> */ {
         />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          <ProteinListFilters />
+          {!search.ida && <ProteinListFilters />}
           <hr className={f('margin-bottom-none')} />
           {databases && db && databases[db.toLowerCase()] && (
             <SchemaOrgData
