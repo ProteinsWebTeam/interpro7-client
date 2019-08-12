@@ -392,7 +392,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     return type;
   };
 
-  getHTMLStringForEntry(entry, sourceDatabase) {
+  getHTMLStringForEntry(entry, sourceDatabase, highlightChild) {
     let type = entry.entry_type || entry.type || '';
     if (sourceDatabase === 'MobiDB Lite') {
       // Handle MobiDB Lite entries
@@ -403,9 +403,21 @@ class ProtVista extends Component /*:: <Props, State> */ {
     if (type === 'secondary_structure') {
       type = `Secondary Structure: ${this._getSecondaryStructureType(entry)}`;
     }
+    let newLocations = null;
+    if (highlightChild) {
+      newLocations = highlightChild.split(',').map(loc => {
+        const [start, end] = loc.split(':');
+        return { fragments: [{ start, end }] };
+      });
+    }
 
     return this.getHTMLString(
-      { ...entry, type, sourceDatabase },
+      {
+        ...entry,
+        locations: newLocations || entry.locations,
+        type,
+        sourceDatabase,
+      },
       entry.source_database === 'interpro',
     );
   }
@@ -514,9 +526,13 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
     const isResidue =
       detail.target && detail.target.classList.contains('residue');
+    const highlightChild =
+      detail.target &&
+      detail.target.classList.contains('child-fragment') &&
+      detail.highlight;
     const tagString = isResidue
       ? this.getHTMLStringForResidue(entry, sourceDatabase)
-      : this.getHTMLStringForEntry(entry, sourceDatabase);
+      : this.getHTMLStringForEntry(entry, sourceDatabase, highlightChild);
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
     return range.createContextualFragment(tagString);
