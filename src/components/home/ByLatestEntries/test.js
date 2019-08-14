@@ -12,28 +12,31 @@ describe('<ByEntriesFeatured />', () => {
       <ByEntriesFeatured
         data={{
           payload: {
-            entries: {
-              all: 215965,
-              integrated: 49513,
-              interpro: 36651,
-              member_databases: {
-                cathgene3d: 6035,
-                cdd: 12779,
-                hamap: 2274,
-                mobidblt: 1,
-                panther: 122736,
-                pfam: 17860,
-                pirsf: 3292,
-                prints: 2106,
-                profile: 1232,
-                prosite: 1310,
-                sfld: 303,
-                smart: 1312,
-                ssf: 2019,
-                tigrfams: 4444,
+            results: [
+              {
+                extra_fields: {
+                  counters: {
+                    domain_architectures: 0,
+                    proteins: 504,
+                    proteomes: 141,
+                    sets: 0,
+                    structures: 0,
+                    taxa: 220,
+                  },
+                },
+                metadata: {
+                  accession: 'IPR026652',
+                  member_databases: {
+                    panther: {
+                      PTHR46657: 'FAMILY NOT NAMED',
+                    },
+                  },
+                  name: 'Centrosomal protein of 128kDa',
+                  source_database: 'interpro',
+                  type: 'family',
+                },
               },
-              unintegrated: 128272,
-            },
+            ],
           },
         }}
       />,

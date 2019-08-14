@@ -17,186 +17,27 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
         <LatestEntry
           entry={
             Object {
-              "accession": "IPR033983",
-              "contributing": Array [
-                Object {
-                  "accession": "PF05690",
-                  "source_database": "pfam",
+              "extra_fields": Object {
+                "counters": Object {
+                  "domain_architectures": 0,
+                  "proteins": 504,
+                  "proteomes": 141,
+                  "sets": 0,
+                  "structures": 0,
+                  "taxa": 220,
                 },
-              ],
-              "counter": Array [
-                Object {
-                  "Go": 0,
-                  "I": 19,
-                  "O": 12172,
-                  "P": 14591,
-                  "Pu": 1,
-                  "S": 12,
-                  "Si": 1,
+              },
+              "metadata": Object {
+                "accession": "IPR026652",
+                "member_databases": Object {
+                  "panther": Object {
+                    "PTHR46657": "FAMILY NOT NAMED",
+                  },
                 },
-              ],
-              "name": "Thiazole synthase ThiG",
-              "type": "Domain",
-            }
-          }
-        />
-        <LatestEntry
-          entry={
-            Object {
-              "accession": "IPR033985",
-              "contributing": Array [
-                Object {
-                  "accession": "PF14322",
-                  "source_database": "pfam",
-                },
-              ],
-              "counter": Array [
-                Object {
-                  "Go": 0,
-                  "I": 38,
-                  "O": 1627,
-                  "P": 41685,
-                  "Pu": 1,
-                  "S": 26,
-                  "Si": 1,
-                },
-              ],
-              "name": "SusD-like, N-terminal",
-              "type": "Domain",
-            }
-          }
-        />
-        <LatestEntry
-          entry={
-            Object {
-              "accession": "IPR033986",
-              "contributing": Array [
-                Object {
-                  "accession": "PS00492",
-                  "source_database": "patterns",
-                },
-                Object {
-                  "accession": "PS00493",
-                  "source_database": "patterns",
-                },
-              ],
-              "counter": Array [
-                Object {
-                  "Go": 0,
-                  "I": 4,
-                  "O": 112,
-                  "P": 203,
-                  "Pu": 4,
-                  "S": 0,
-                  "Si": 2,
-                },
-              ],
-              "name": "Clusterin, conserved site",
-              "type": "Site",
-            }
-          }
-        />
-        <LatestEntry
-          entry={
-            Object {
-              "accession": "IPR033987",
-              "contributing": Array [
-                Object {
-                  "accession": "cd03588",
-                  "source_database": "CDD",
-                },
-              ],
-              "counter": Array [
-                Object {
-                  "Go": 0,
-                  "I": 55,
-                  "O": 119,
-                  "P": 376,
-                  "Pu": 4,
-                  "S": 0,
-                  "Si": 1,
-                },
-              ],
-              "name": "Aggrecan/versican, C-type lectin-like domain",
-              "type": "Domain",
-            }
-          }
-        />
-        <LatestEntry
-          entry={
-            Object {
-              "accession": "IPR033988",
-              "contributing": Array [
-                Object {
-                  "accession": "cd03589",
-                  "source_database": "CDD",
-                },
-              ],
-              "counter": Array [
-                Object {
-                  "Go": 0,
-                  "I": 4,
-                  "O": 87,
-                  "P": 100,
-                  "Pu": 6,
-                  "S": 3,
-                  "Si": 1,
-                },
-              ],
-              "name": "CEL-1-like C-type lectin-like domain",
-              "type": "Domain",
-            }
-          }
-        />
-        <LatestEntry
-          entry={
-            Object {
-              "accession": "IPR033989",
-              "contributing": Array [
-                Object {
-                  "accession": "cd03590",
-                  "source_database": "CDD",
-                },
-              ],
-              "counter": Array [
-                Object {
-                  "Go": 0,
-                  "I": 58,
-                  "O": 185,
-                  "P": 2415,
-                  "Pu": 8,
-                  "S": 84,
-                  "Si": 1,
-                },
-              ],
-              "name": "CD209-like, C-type lectin-like domain",
-              "type": "Domain",
-            }
-          }
-        />
-        <LatestEntry
-          entry={
-            Object {
-              "accession": "IPR034005",
-              "contributing": Array [
-                Object {
-                  "accession": "cd06456",
-                  "source_database": "CDD",
-                },
-              ],
-              "counter": Array [
-                Object {
-                  "Go": 1,
-                  "I": 19,
-                  "O": 8838,
-                  "P": 14329,
-                  "Pu": 3,
-                  "S": 4,
-                  "Si": 1,
-                },
-              ],
-              "name": "Peptidyl-dipeptidase DCP",
-              "type": "Family",
+                "name": "Centrosomal protein of 128kDa",
+                "source_database": "interpro",
+                "type": "family",
+              },
             }
           }
         />
@@ -212,6 +53,9 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
               "main": Object {
                 "key": "entry",
               },
+            },
+            "search": Object {
+              "latest_entries": "",
             },
           }
         }
