@@ -83,7 +83,7 @@ const ToastDisplayAsync = loadable({
   loading: NullComponent,
 });
 
-const CookieFooterAsync = loadable({
+const CookieFooterAsyncOld = loadable({
   loader: () =>
     schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
       try {
@@ -101,6 +101,25 @@ const CookieFooterAsync = loadable({
   loading: NullComponent,
 });
 
+const CookieFooterAsync = () => {
+  try {
+    if (
+      window.document &&
+      window.document.cookie.match(/cookies-accepted=(true)/i)[1]
+    )
+      return null;
+  } catch {
+    const CookieBanner = loadable({
+      loader: () =>
+        schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
+          return import(
+            /* webpackChunkName: "cookie-banner" */ 'components/CookieBanner'
+          );
+        }),
+    });
+    return <CookieBanner />;
+  }
+};
 const renderNull = () => null;
 
 const Root = () => (

@@ -114,7 +114,6 @@
     "react-autocomplete": "1.8.1",
     "react-dom": "16.9.0",
     "react-helmet": "5.2.1",
-    "react-loadable": "5.5.0",
     "react-redux": "7.1.0",
     "react-syntax-highlighter": "11.0.2",
     "redux": "4.0.4",
