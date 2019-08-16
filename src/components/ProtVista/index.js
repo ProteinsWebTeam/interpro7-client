@@ -210,11 +210,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
         this._popperRef.current.classList.add(f('hide'));
       }
     });
+    const saver = document.querySelector(`#${this.props.id}Saver`);
 
-    document.querySelector(`#${this.props.id}Saver`).preSave = () => {
+    saver.preSave = () => {
       const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
       // Including the styles of interpr-type elements
-      document.querySelectorAll('interpro-type').forEach(el => {
+      base.querySelectorAll('interpro-type').forEach(el => {
         el.innerHTML = el.shadowRoot.innerHTML;
       });
       const style = document.createElement('style');
@@ -236,11 +237,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
       base.appendChild(style);
     };
     // removes the added style from the DOM
-    document.querySelector(`#${this.props.id}Saver`).postSave = () => {
-      document
-        .querySelector(`#${this.props.id}ProtvistaDiv`)
-        .removeChild(document.getElementById('tmp_style'));
-      document.querySelectorAll('interpro-type').forEach(el => {
+    saver.postSave = () => {
+      const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
+      base.removeChild(document.getElementById('tmp_style'));
+      base.querySelectorAll('interpro-type').forEach(el => {
         el.innerHTML = '';
       });
     };
