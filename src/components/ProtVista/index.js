@@ -213,6 +213,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
     document.querySelector(`#${this.props.id}Saver`).preSave = () => {
       const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
+      // Including the styles of interpr-type elements
+      document.querySelectorAll('interpro-type').forEach(el => {
+        el.innerHTML = el.shadowRoot.innerHTML;
+      });
       const style = document.createElement('style');
       style.setAttribute('id', 'tmp_style');
       // TODO it needs to be changed in an efficient way through webpack
@@ -221,7 +225,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       cssStyles.forEach(item => {
         Object.keys(item).forEach(key => {
           str = str.replace(
-            new RegExp(`\\.${key}([:,[\\s])`, 'gm'),
+            new RegExp(`\\.${key}([:,[.\\s])`, 'gm'),
             `.${item[key]}$1`,
           );
         });
