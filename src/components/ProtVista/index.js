@@ -8,7 +8,6 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Genome3dLink } from 'components/ExtLink';
-import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaSequence from 'protvista-sequence';
