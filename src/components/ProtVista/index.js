@@ -240,6 +240,9 @@ class ProtVista extends Component /*:: <Props, State> */ {
       document
         .querySelector(`#${this.props.id}ProtvistaDiv`)
         .removeChild(document.getElementById('tmp_style'));
+      document.querySelectorAll('interpro-type').forEach(el => {
+        el.innerHTML = '';
+      });
     };
   }
 
