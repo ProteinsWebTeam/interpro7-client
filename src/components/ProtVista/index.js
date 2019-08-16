@@ -8,6 +8,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Genome3dLink } from 'components/ExtLink';
+import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaSequence from 'protvista-sequence';
@@ -21,6 +22,7 @@ import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import PopperJS from 'popper.js';
 
 import loadWebComponent from 'utils/load-web-component';
@@ -42,7 +44,7 @@ import localCSSasText from '!!raw-loader!./style.css';
 import ebiGlobalCSS from '!!raw-loader!ebi-framework/css/ebi-global.css';
 import globalCSS from '!!raw-loader!styles/global.css';
 
-const f = foundationPartial(ipro, localCSS);
+const f = foundationPartial(ipro, localCSS, fonts);
 
 const webComponents = [];
 
@@ -78,6 +80,12 @@ const loadProtVistaWebComponents = () => {
 
     webComponents.push(
       loadWebComponent(() => ProtvistaSaver).as('protvista-saver'),
+    );
+
+    webComponents.push(
+      loadWebComponent(() =>
+        import('interpro-components').then(m => m.InterproType),
+      ).as('interpro-type'),
     );
   }
   return Promise.all(webComponents);
@@ -126,7 +134,9 @@ const getColorScaleHTML = (
   entryHovered: any,
   hideCategory: Object,
   expandedTrack: Object,
-  collapsed: boolean
+  collapsed: boolean,
+  label: string,
+  addLabelClass: string,
 }; */
 class ProtVista extends Component /*:: <Props, State> */ {
   static propTypes = {
@@ -151,6 +161,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
       hideCategory: {},
       expandedTrack: {},
       collapsed: false,
+      label: 'accession',
+      addLabelClass: '',
     };
 
     this._mainRef = React.createRef();
@@ -216,7 +228,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
       });
 
       str = str + ebiGlobalCSS + globalCSS + fontCSS + colorsCSS;
-      console.log(str);
       style.innerHTML = `${str}`;
       base.appendChild(style);
     };
@@ -421,6 +432,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       entry.source_database === 'interpro',
     );
   }
+
   getHTMLStringForResidue(entry, sourceDatabase) {
     const residue = entry.currentResidue;
     return this.getHTMLString(
@@ -435,6 +447,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       true,
     );
   }
+
   getHTMLString(
     {
       accession,
@@ -581,8 +594,20 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
   };
 
+  toggleLabel = () => {
+    if (this.state.label === 'accession')
+      this.setState({ label: 'name', addLabelClass: 'label-by-name' });
+    else this.setState({ label: 'accession', addLabelClass: '' });
+  };
+
   renderLabels(entry) {
     const { expandedTrack } = this.state;
+    const { dataDB } = this.props;
+    let databases = {};
+    if (dataDB.payload) {
+      databases = dataDB.payload.databases;
+    }
+    // const databases = dataDB.payload.databases;
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
       entry.type === 'chain' ||
@@ -607,7 +632,17 @@ class ProtVista extends Component /*:: <Props, State> */ {
             },
           }}
         >
-          {entry.accession}
+          {this.state.label === 'name'
+            ? (
+                <>
+                  <interpro-type
+                    type={entry.type.replace('_', ' ')}
+                    dimension="1em"
+                  />
+                  {entry.name}
+                </>
+              ) || entry.accession
+            : entry.accession}
         </Link>
         <div
           className={f({
@@ -632,7 +667,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     },
                   }}
                 >
-                  {d.accession}
+                  {this.state.label === 'name'
+                    ? `${d.name}-${this._getSourceDatabaseDisplayName(
+                        d,
+                        databases,
+                      )}` || d.accession
+                    : d.accession}
                 </Link>
                 {this.renderResidueLabels(d)}
               </div>
@@ -676,7 +716,13 @@ class ProtVista extends Component /*:: <Props, State> */ {
     const title = this.props.title || 'Domains on protein';
 
     return (
-      <div className={f('aligned-to-track-component', 'view-options-wrap')}>
+      <div
+        className={f(
+          'aligned-to-track-component',
+          'view-options-wrap',
+          `${this.state.addLabelClass}`,
+        )}
+      >
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
           <div className={f('option-color', 'margin-right-medium')}>
@@ -712,12 +758,32 @@ class ProtVista extends Component /*:: <Props, State> */ {
               tooltip="View the domain viewer in full screen mode"
             />
           </div>
-          <div>
-            <protvista-saver
-              element-id={`${this.props.id}ProtvistaDiv`}
-              background-color={'#e5e5e5'}
-              id={`${this.props.id}Saver`}
-            />
+          <div
+            className={f('option-fullscreen', 'font-l', 'margin-right-large')}
+          >
+            <Tooltip title={'Click to take the snapshot'}>
+              <protvista-saver
+                element-id={`${this.props.id}ProtvistaDiv`}
+                background-color={'#e5e5e5'}
+                id={`${this.props.id}Saver`}
+              >
+                <button
+                  className={f('icon', 'icon-common')}
+                  data-icon="&#xf030;"
+                />
+              </protvista-saver>
+            </Tooltip>
+          </div>
+          <div
+            className={f('option-fullscreen', 'font-l', 'margin-right-large')}
+          >
+            <Tooltip title={'Label by Accession/Name'}>
+              <button
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf02b;"
+                onClick={this.toggleLabel}
+              />
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -751,7 +817,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
             >
               <div className={f('track-container')}>
                 <div className={f('track-row')}>
-                  <div className={f('aligned-to-track-component')}>
+                  <div
+                    className={f(
+                      'aligned-to-track-component',
+                      `${this.state.addLabelClass}`,
+                    )}
+                  >
                     <protvista-navigation
                       length={length}
                       displaystart="1"
@@ -760,7 +831,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
                   </div>
                 </div>
                 <div className={f('track-row')}>
-                  <div className={f('aligned-to-track-component')}>
+                  <div
+                    className={f(
+                      'aligned-to-track-component',
+                      `${this.state.addLabelClass}`,
+                    )}
+                  >
                     <protvista-sequence
                       ref={this._webProteinRef}
                       length={length}
@@ -788,7 +864,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
                       <div key={type} className={f('track-container')}>
                         <div className={f('track-row')}>
                           <div
-                            className={f('track-component')}
+                            className={f(
+                              'track-component',
+                              `${this.state.addLabelClass}`,
+                            )}
                             style={{ borderBottom: 0 }}
                           >
                             <header>
@@ -822,6 +901,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                     className={f(
                                       'track-component',
                                       'secondary-structure',
+                                      `${this.state.addLabelClass}`,
                                     )}
                                   >
                                     <protvista-track
@@ -836,7 +916,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                     />
                                   </div>
                                 ) : (
-                                  <div className={f('track-component')}>
+                                  <div
+                                    className={f(
+                                      'track-component',
+                                      `${this.state.addLabelClass}`,
+                                    )}
+                                  >
                                     <protvista-interpro-track
                                       length={length}
                                       displaystart="1"
@@ -851,7 +936,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                     />
                                   </div>
                                 )}
-                                <div className={f('track-accession')}>
+                                <div
+                                  className={f(
+                                    'track-accession',
+                                    `${this.state.addLabelClass}`,
+                                  )}
+                                >
                                   {this.renderLabels(entry)}
                                 </div>
                               </div>
