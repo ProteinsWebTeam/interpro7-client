@@ -42,11 +42,11 @@ exports[`<TextExplanation /> should render 1`] = `
       </Highlight>
        of approximately
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(NumberComponent))
         abbr={true}
       >
         36713
-      </Memo(ConnectFunction)>
+      </Memo(Connect(NumberComponent))>
        
       <Highlight>
         InterPro

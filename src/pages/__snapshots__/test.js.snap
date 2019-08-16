@@ -4,14 +4,14 @@ exports[`<Pages /> should render 1`] = `
 <div
   className="main stuck"
 >
-  <Memo(ConnectFunction)>
+  <Memo(Connect(UnconnectedErrorBoundary))>
     <div
       className="row"
     >
       <div
         className="large-12 columns"
       >
-        <Memo(ConnectFunction)
+        <Memo(Connect(_Switch))
           catchAll={
             Object {
               "$$typeof": Symbol(react.memo),
@@ -31,25 +31,63 @@ exports[`<Pages /> should render 1`] = `
         />
       </div>
     </div>
-  </Memo(ConnectFunction)>
-  <Memo(ConnectFunction)>
-    <Memo(ConnectFunction)
-      catchAll={[Function]}
+  </Memo(Connect(UnconnectedErrorBoundary))>
+  <Memo(Connect(UnconnectedErrorBoundary))>
+    <Memo(Connect(_Switch))
+      catchAll={
+        Object {
+          "$$typeof": Symbol(react.memo),
+          "compare": null,
+          "type": [Function],
+        }
+      }
       childRoutes={
         Map {
-          "entry" => [Function],
-          "protein" => [Function],
-          "structure" => [Function],
-          "taxonomy" => [Function],
-          "proteome" => [Function],
-          "set" => [Function],
-          "search" => [Function],
-          "result" => [Function],
+          "entry" => Object {
+            "$$typeof": Symbol(react.memo),
+            "compare": null,
+            "type": [Function],
+          },
+          "protein" => Object {
+            "$$typeof": Symbol(react.memo),
+            "compare": null,
+            "type": [Function],
+          },
+          "structure" => Object {
+            "$$typeof": Symbol(react.memo),
+            "compare": null,
+            "type": [Function],
+          },
+          "taxonomy" => Object {
+            "$$typeof": Symbol(react.memo),
+            "compare": null,
+            "type": [Function],
+          },
+          "proteome" => Object {
+            "$$typeof": Symbol(react.memo),
+            "compare": null,
+            "type": [Function],
+          },
+          "set" => Object {
+            "$$typeof": Symbol(react.memo),
+            "compare": null,
+            "type": [Function],
+          },
+          "search" => Object {
+            "$$typeof": Symbol(react.memo),
+            "compare": null,
+            "type": [Function],
+          },
+          "result" => Object {
+            "$$typeof": Symbol(react.memo),
+            "compare": null,
+            "type": [Function],
+          },
         }
       }
       indexRoute={[Function]}
       locationSelector={[Function]}
     />
-  </Memo(ConnectFunction)>
+  </Memo(Connect(UnconnectedErrorBoundary))>
 </div>
 `;

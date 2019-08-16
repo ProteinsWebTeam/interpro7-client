@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`External links <BaseLink /> should render simple links 1`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   href="http://www.example.com/some_id"
   rel="noopener noreferrer"
   target="_blank"
@@ -9,11 +9,11 @@ exports[`External links <BaseLink /> should render simple links 1`] = `
   <div>
     link
   </div>
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;
 
 exports[`External links <BaseLink /> should render simple links 2`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   href="http://www.example.com/some_id"
   rel="noopener noreferrer"
   target="_blank"
@@ -24,21 +24,21 @@ exports[`External links <BaseLink /> should render simple links 2`] = `
       span
     </span>
   </div>
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;
 
 exports[`External links <BaseLink /> should render simple links 3`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   href="http://www.example.com/some_id"
   rel="noopener noreferrer"
   target="_blank"
 >
   link
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;
 
 exports[`External links <BaseLink /> should render simple links 4`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   href="https://example.com/999/something"
   rel="noopener noreferrer"
   target="_blank"
@@ -46,11 +46,11 @@ exports[`External links <BaseLink /> should render simple links 4`] = `
   <div>
     link
   </div>
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;
 
 exports[`External links <BaseLink /> should render simple links 5`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   href="https://example.com/999/something"
   rel="noopener noreferrer"
   target="_blank"
@@ -61,21 +61,21 @@ exports[`External links <BaseLink /> should render simple links 5`] = `
       span
     </span>
   </div>
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;
 
 exports[`External links <BaseLink /> should render simple links 6`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   href="https://example.com/999/something"
   rel="noopener noreferrer"
   target="_blank"
 >
   link
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;
 
 exports[`External links <BaseLink /> should render simple links 7`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   href="example.com/id:Identification"
   rel="noopener noreferrer"
   target="_blank"
@@ -83,11 +83,11 @@ exports[`External links <BaseLink /> should render simple links 7`] = `
   <div>
     link
   </div>
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;
 
 exports[`External links <BaseLink /> should render simple links 8`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   href="example.com/id:Identification"
   rel="noopener noreferrer"
   target="_blank"
@@ -98,17 +98,17 @@ exports[`External links <BaseLink /> should render simple links 8`] = `
       span
     </span>
   </div>
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;
 
 exports[`External links <BaseLink /> should render simple links 9`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   href="example.com/id:Identification"
   rel="noopener noreferrer"
   target="_blank"
 >
   link
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;
 
 exports[`External links <DOILink /> should render simple links 1`] = `

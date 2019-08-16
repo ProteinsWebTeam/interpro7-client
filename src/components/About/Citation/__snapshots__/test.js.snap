@@ -11,7 +11,7 @@ exports[`<Citation /> should render 1`] = `
     <div
       className="columns large-6 margin-bottom-large"
     >
-      <LoadableComponent
+      <Memo(Loadable)
         data={
           Object {
             "author": "Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, 
@@ -83,7 +83,7 @@ exports[`<Citation /> should render 1`] = `
     <div
       className="columns large-6 margin-bottom-large"
     >
-      <LoadableComponent
+      <Memo(Loadable)
         data={
           Object {
             "author": "Philip Jones, David Binns, Hsin-Yu Chang, Matthew
