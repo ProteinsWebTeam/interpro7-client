@@ -53,6 +53,10 @@ const SearchByText = loadable({
   loader: () =>
     import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
 });
+const SearchByIDA = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "search-by-ida" */ 'components/SearchByIDA'),
+});
 const IPScanSearch = loadable({
   loader: () =>
     import(
@@ -477,6 +481,11 @@ class Home extends PureComponent {
               <div title="Search by text">
                 <ErrorBoundary>
                   <SearchByText />
+                </ErrorBoundary>
+              </div>
+              <div title="Search by Domain Architecture">
+                <ErrorBoundary>
+                  <SearchByIDA />
                 </ErrorBoundary>
               </div>
             </Tabs>

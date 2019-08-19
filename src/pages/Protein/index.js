@@ -22,6 +22,7 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import NumberComponent from 'components/NumberComponent';
+import File from 'components/File';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -222,6 +223,21 @@ const propTypes = {
   dataBase: dataPropType.isRequired,
 };
 
+const AllProteinDownload = (
+  { description, count } /*: {description: Object, count: number} */,
+) => (
+  <File
+    fileType="fasta"
+    name="protein-sequences.fasta"
+    count={count}
+    customLocationDescription={description}
+  />
+);
+AllProteinDownload.propTypes = {
+  description: T.object,
+  count: T.number,
+};
+
 /*:: type ListProps = {
   data: {
    payload: Object,
@@ -249,15 +265,13 @@ class List extends PureComponent /*:: <ListProps> */ {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
-      customLocation: {
-        search,
-        description: {
-          entry: { db: entryDB },
-        },
-      },
+      customLocation: { search, description },
       // customLocation: { description: { protein: { db } }, search },
       dataBase,
     } = this.props;
+    const {
+      entry: { db: entryDB },
+    } = description;
     let _payload = payload;
     const HTTP_OK = 200;
     const notFound = !loading && status !== HTTP_OK;
@@ -279,7 +293,7 @@ class List extends PureComponent /*:: <ListProps> */ {
         />
 
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          <ProteinListFilters />
+          {!search.ida && <ProteinListFilters />}
           <hr className={f('margin-bottom-none')} />
           {databases && db && databases[db.toLowerCase()] && (
             <SchemaOrgData
@@ -304,6 +318,15 @@ class List extends PureComponent /*:: <ListProps> */ {
           >
             <Exporter>
               <ul>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllProteinDownload
+                      description={description}
+                      count={_payload.count}
+                    />
+                  </div>
+                  <div>FASTA</div>
+                </li>
                 <li>
                   <Link
                     href={`${url}${urlHasParameter ? '&' : '?'}format=json`}

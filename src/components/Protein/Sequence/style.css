@@ -29,6 +29,11 @@
   color: var(--colors-lightgray);
   position: absolute;
   left: -3.8em;
+  top: 0;
+}
+.sequence_word_spacer {
+  width: 0;
+  display: inline-block;
 }
 
 .sequence-link {

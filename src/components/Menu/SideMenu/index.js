@@ -40,6 +40,7 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
         className={f('old-interpro-link')}
         href={this.props.href}
         target="_blank"
+        onClick={() => window.localStorage.removeItem('redirect_to_interpro7')}
       >
         See this page in the old InterPro website
       </Link>
