@@ -152,5 +152,15 @@
     <script nomodule defer type="text/javascript" src="<%= file %>"></script>
     <% } %>
     <% } %>
+      <script>
+        function forceRefreshIfNotloaded(){
+          if (!document.getElementById('interpro-root')) {
+            console.log('REFRESH');
+            window.location.reload();
+          }
+        }
+        //If in 5 seconds it hasn't render the root of the page thne reload the page.
+        setTimeout(forceRefreshIfNotloaded, 5000)
+      </script>
   </body>
 </html>

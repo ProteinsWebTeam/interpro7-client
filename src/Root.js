@@ -104,7 +104,7 @@ const CookieFooterAsync = loadable({
 const renderNull = () => null;
 
 const Root = () => (
-  <>
+  <div id="interpro-root">
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
     <LoadingBarAsync />
     <Overlay />
@@ -127,7 +127,7 @@ const Root = () => (
     <ErrorBoundary renderOnError={renderNull}>
       <CookieFooterAsync />
     </ErrorBoundary>
-  </>
+  </div>
 );
 
 export default Root;
