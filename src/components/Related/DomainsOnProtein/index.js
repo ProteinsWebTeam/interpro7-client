@@ -94,6 +94,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
         protein={mainData.metadata || mainData.payload.metadata}
         data={sortedData}
         title="Entry matches to this protein"
+        id={mainData.metadata.accession || mainData.payload.metadata.accession}
       />
     );
   }
