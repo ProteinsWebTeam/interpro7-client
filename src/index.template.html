@@ -152,14 +152,17 @@
     <script nomodule defer type="text/javascript" src="<%= file %>"></script>
     <% } %>
     <% } %>
+    <% if (!htmlWebpackPlugin.options.inject) { %>
       <script>
         function forceRefreshIfNotloaded(){
           if (!document.getElementById('interpro-root')) {
+            ga('send', 'exception', { exDescription: 'Issue with the first load', exFatal: true });
             window.location.reload();
           }
         }
         //If in 5 seconds it hasn't render the root of the page thne reload the page.
-        setTimeout(forceRefreshIfNotloaded, 5000)
+        setTimeout(forceRefreshIfNotloaded, 30000)
       </script>
+    <% } %>
   </body>
 </html>
