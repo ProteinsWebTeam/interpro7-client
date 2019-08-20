@@ -24,7 +24,7 @@ exports[`<Sequence /> should render 1`] = `
     <div
       className="small-12 medium-12 large-4 columns"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         onClick={[Function]}
         to={
           Object {
@@ -68,8 +68,8 @@ exports[`<Sequence /> should render 1`] = `
             Search selection with InterProScan
           </span>
         </div>
-      </Memo(ConnectFunction)>
-      <Memo(ConnectFunction)
+      </Memo(Connect(Link))>
+      <Memo(Connect(Link))
         href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
         onClick={[Function]}
         target="_blank"
@@ -96,7 +96,7 @@ exports[`<Sequence /> should render 1`] = `
             Search selection with HMMER
           </span>
         </div>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </div>
   </div>
 </section>

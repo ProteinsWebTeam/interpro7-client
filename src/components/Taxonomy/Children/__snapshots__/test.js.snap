@@ -14,7 +14,7 @@ exports[`<Children /> should render 1`] = `
         }
       }
     />
-    <LoadableComponent
+    <Memo(Loadable)
       data={
         Object {
           "name": Object {
@@ -37,7 +37,7 @@ exports[`<Children /> should render 1`] = `
         }
       }
     />
-    <LoadableComponent
+    <Memo(Loadable)
       data={
         Object {
           "name": Object {

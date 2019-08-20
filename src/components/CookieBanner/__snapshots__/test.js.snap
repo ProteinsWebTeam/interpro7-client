@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<CookieBanner /> should render 1`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(AnimatedEntry))
   animateSelf={true}
   element="div"
   keyframes={
@@ -47,7 +47,7 @@ exports[`<CookieBanner /> should render 1`] = `
     >
       This website requires cookies, and the limited processing of your personal data in order to function. By using the site you are agreeing to this as outlined in our
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         href="https://www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
         style={
           Object {
@@ -57,9 +57,9 @@ exports[`<CookieBanner /> should render 1`] = `
         target="_blank"
       >
         Privacy Notice
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
        and 
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         href="https://www.ebi.ac.uk/about/terms-of-use"
         style={
           Object {
@@ -69,7 +69,7 @@ exports[`<CookieBanner /> should render 1`] = `
         target="_blank"
       >
         Terms of Use
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       .
     </span>
     <button
@@ -83,5 +83,5 @@ exports[`<CookieBanner /> should render 1`] = `
       I agree, dismiss this banner
     </button>
   </div>
-</Memo(ConnectFunction)>
+</Memo(Connect(AnimatedEntry))>
 `;

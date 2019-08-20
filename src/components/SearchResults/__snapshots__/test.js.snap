@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<SearchResults /> should render 1`] = `
-<Memo(ConnectFunction)>
-  <LoadableComponent
+<Memo(Connect(UnconnectedErrorBoundary))>
+  <Memo(Loadable)
     data={
       Object {
         "description": "Text matches found in InterPro database",
@@ -11,7 +11,7 @@ exports[`<SearchResults /> should render 1`] = `
     }
     processData={[Function]}
   />
-  <Memo(ConnectFunction)
+  <Memo(Connect(loadData(ExactMatch)))
     searchValue="IPR020422"
   />
   <Table
@@ -37,15 +37,15 @@ exports[`<SearchResults /> should render 1`] = `
     loading={false}
     query={Object {}}
   >
-    <Memo(ConnectFunction)>
-      <Memo(ConnectFunction)
+    <Memo(Connect(Exporter))>
+      <Memo(Connect(Link))
         disabled={true}
         download="SearchResults-IPR020422.json"
         target="_blank"
       >
         JSON
-      </Memo(ConnectFunction)>
-    </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
+    </Memo(Connect(Exporter))>
     <Column
       dataKey="id"
       renderer={[Function]}
@@ -80,7 +80,7 @@ exports[`<SearchResults /> should render 1`] = `
     >
       Description
     </Column>
-    <Memo(ConnectFunction) />
+    <Memo(Connect(PageSizeSelector)) />
   </Table>
-</Memo(ConnectFunction)>
+</Memo(Connect(UnconnectedErrorBoundary))>
 `;

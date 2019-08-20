@@ -7,11 +7,11 @@ exports[`<Controls /> should render 1`] = `
   >
     We expect this file to contain
      
-    <Memo(ConnectFunction)
+    <Memo(Connect(NumberComponent))
       abbr={true}
     >
       36713
-    </Memo(ConnectFunction)>
+    </Memo(Connect(NumberComponent))>
      distinct
      
     entries
@@ -36,14 +36,14 @@ exports[`<Controls /> should render 1`] = `
       failed={false}
       progress={0}
     />
-    <Memo(ConnectFunction)
+    <Memo(Connect(Link))
       className="button hollow warning"
       disabled={true}
       download="export.undefined"
       type="button"
     >
       Download
-    </Memo(ConnectFunction)>
+    </Memo(Connect(Link))>
   </div>
 </React.Fragment>
 `;

@@ -15,6 +15,7 @@ describe('<EMBLDropdown />', () => {
   });
 
   test('should render as invisible', () => {
+    renderer.render(<EMBLDropdown closeEMBLMapNav={noop} visible />);
     renderer.render(<EMBLDropdown closeEMBLMapNav={noop} />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });

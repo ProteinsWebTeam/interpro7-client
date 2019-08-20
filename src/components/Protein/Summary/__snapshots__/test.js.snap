@@ -4,7 +4,7 @@ exports[`<SummaryProtein /> should render 1`] = `
 <div
   className="sections"
 >
-  <LoadableComponent
+  <Memo(Loadable)
     data={
       Object {
         "gene": "moeA5",
@@ -12,7 +12,7 @@ exports[`<SummaryProtein /> should render 1`] = `
     }
     processData={[Function]}
   />
-  <LoadableComponent
+  <Memo(Loadable)
     data={
       Object {
         "fullName": "Streptomyces viridosporus",
@@ -155,7 +155,7 @@ exports[`<SummaryProtein /> should render 1`] = `
       </div>
     </div>
   </section>
-  <Memo(ConnectFunction)
+  <Memo(Connect(loadData(Viewer)))
     isoform=""
   />
   <section>
@@ -165,7 +165,7 @@ exports[`<SummaryProtein /> should render 1`] = `
       <div
         className="medium-12 columns margin-bottom-large"
       >
-        <Memo(ConnectFunction)
+        <Memo(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(DomainOnProteinWithoutData)))))))))
           mainData={
             Object {
               "metadata": Object {

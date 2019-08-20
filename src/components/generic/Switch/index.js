@@ -34,7 +34,7 @@ const match = (childRoutes, indexRoute, valueFromLocation) => {
 
 class _Switch extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    indexRoute: T.func.isRequired,
+    indexRoute: T.oneOfType([T.func, T.object]),
     locationSelector: T.func.isRequired,
     childRoutes: T.instanceOf(Map),
     catchAll: T.oneOfType([T.func, T.object]),

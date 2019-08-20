@@ -9,7 +9,7 @@ exports[`<IPScanStatus /> should render 1`] = `
   >
     Your InterProScan searches
   </h3>
-  <LoadableComponent
+  <Memo(Loadable)
     data={
       Object {
         "description": "The status of all the requested InterProScan searches",
@@ -22,7 +22,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     className="button-group"
   >
     <GoToNewSearch />
-    <Memo(ConnectFunction) />
+    <Memo(Connect(RefreshButton)) />
   </div>
   <Table
     actualSize={0}

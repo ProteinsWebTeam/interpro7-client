@@ -7,11 +7,11 @@ exports[`<Estimate /> should render 1`] = `
   </h6>
   <React.Fragment>
     Your file will contain 
-    <Memo(ConnectFunction)
+    <Memo(Connect(NumberComponent))
       abbr={true}
     >
       36713
-    </Memo(ConnectFunction)>
+    </Memo(Connect(NumberComponent))>
      
     item
     s

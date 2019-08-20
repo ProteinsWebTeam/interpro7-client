@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<TaxIdOrName /> should render 1`] = `
-<Memo(ConnectFunction)
+<Memo(Connect(Link))
   to={
     Object {
       "description": Object {
@@ -17,5 +17,5 @@ exports[`<TaxIdOrName /> should render 1`] = `
   }
 >
   root
-</Memo(ConnectFunction)>
+</Memo(Connect(Link))>
 `;

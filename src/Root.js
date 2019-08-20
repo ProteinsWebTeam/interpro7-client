@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { schedule } from 'timing-functions/src';
 
@@ -83,50 +83,54 @@ const ToastDisplayAsync = loadable({
   loading: NullComponent,
 });
 
-const CookieFooterAsync = loadable({
-  loader: () =>
-    schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
-      try {
-        if (
-          window.document &&
-          window.document.cookie.match(/cookies-accepted=(true)/i)[1]
-        )
-          return;
-      } catch {
-        return import(
-          /* webpackChunkName: "cookie-banner" */ 'components/CookieBanner'
-        );
-      }
-    }),
-  loading: NullComponent,
-});
-
+const CookieFooterAsync = () => {
+  try {
+    if (
+      window.document &&
+      window.document.cookie.match(/cookies-accepted=(true)/i)[1]
+    )
+      return null;
+  } catch {
+    const CookieBanner = loadable({
+      loader: () =>
+        schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
+          return import(
+            /* webpackChunkName: "cookie-banner" */ 'components/CookieBanner'
+          );
+        }),
+    });
+    return <CookieBanner />;
+  }
+  return null;
+};
 const renderNull = () => null;
 
 const Root = () => (
   <div id="interpro-root">
-    <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
-    <LoadingBarAsync />
-    <Overlay />
-    <EMBLDropdownAsync />
-    <SideMenuAsync />
-    <EbiSkipToDiv />
-    <header>
-      <EBIHeader />
-      <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
-    </header>
-    <Sentinel top={STICKY_MENU_OFFSET} />
-    <Pages top={STICKY_MENU_OFFSET} />
-    <footer>
-      <ElixirFooterAsync />
-      <EBIFooterAsync />
-    </footer>
-    <ErrorBoundary renderOnError={renderNull}>
-      <ToastDisplayAsync />
-    </ErrorBoundary>
-    <ErrorBoundary renderOnError={renderNull}>
-      <CookieFooterAsync />
-    </ErrorBoundary>
+    <HelmetProvider>
+      <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
+      <LoadingBarAsync />
+      <Overlay />
+      <EMBLDropdownAsync />
+      <SideMenuAsync />
+      <EbiSkipToDiv />
+      <header>
+        <EBIHeader />
+        <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
+      </header>
+      <Sentinel top={STICKY_MENU_OFFSET} />
+      <Pages top={STICKY_MENU_OFFSET} />
+      <footer>
+        <ElixirFooterAsync />
+        <EBIFooterAsync />
+      </footer>
+      <ErrorBoundary renderOnError={renderNull}>
+        <ToastDisplayAsync />
+      </ErrorBoundary>
+      <ErrorBoundary renderOnError={renderNull}>
+        <CookieFooterAsync />
+      </ErrorBoundary>
+    </HelmetProvider>
   </div>
 );
 

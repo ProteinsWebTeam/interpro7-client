@@ -22,7 +22,7 @@ exports[`<Twitter /> should render 1`] = `
           className="icon icon-common"
           data-icon=""
         />
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           className="twitter-timeline"
           data-chrome="nofooter noborders noheader noscrollbar transparent"
           data-dnt="true"
@@ -31,7 +31,7 @@ exports[`<Twitter /> should render 1`] = `
           target="_blank"
         >
           Tweets by @InterProDB
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </div>
     </div>
   </div>

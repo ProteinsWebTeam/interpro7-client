@@ -75,10 +75,15 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
   _updateLocation = debounce(fromMount => {
     const { min, max } = this.state;
     const { goToCustomLocation, customLocation } = this.props;
-    const { page, resolution: _, ...search } = customLocation.search;
+    const { page, resolution: _, ...search } = { ...customLocation.search };
     if (fromMount && page) search.page = page;
     if (min !== MIN || max !== MAX) search.resolution = `${min}-${max}`;
-    goToCustomLocation({ ...customLocation, search }, true);
+    if (
+      customLocation.search.page !== search.page ||
+      customLocation.search.resolution !== search.resolution
+    ) {
+      goToCustomLocation({ ...customLocation, search }, true);
+    }
   }, DEBOUNCE_RATE);
 
   _handleSelection = ({ target: { value } }) => {
