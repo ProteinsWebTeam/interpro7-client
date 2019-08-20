@@ -4,7 +4,7 @@ const parser = 'babel-eslint';
 
 const settings = {
   react: {
-    version: '16.6.3',
+    version: '16.9.0',
   },
 };
 const parserOptions = {
