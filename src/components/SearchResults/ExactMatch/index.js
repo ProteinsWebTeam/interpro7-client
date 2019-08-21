@@ -47,7 +47,7 @@ class ExactMatchWrapper extends PureComponent /*:: <EMWProps> */ {
 const XREFS = new Map([
   ['UNIPROT', { type: 'protein', db: 'UniProt' }],
   ['PDB', { type: 'structure', db: 'PDB' }],
-  ['PROTEOME', { type: 'proteome', db: 'UniProt' }],
+  ['PROTEOMES', { type: 'proteome', db: 'UniProt' }],
 ]);
 
 const _ExactMatchProteinID = ({ data, identifier, type }) => {
@@ -203,7 +203,7 @@ const getEbiSearchUrl = createSelector(
   state => state.customLocation.description.search.value,
   ({ protocol, hostname, port, root }, searchValue) => {
     if (!searchValue) return null;
-    const fields = 'UNIPROT,PDB,PROTEOME,source_database';
+    const fields = 'UNIPROT,PDB,PROTEOMES,source_database';
     const query = getQueryTerm(searchValue);
     const params = `?query=${query}&format=json&fields=${fields}&start=0&size=2`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
