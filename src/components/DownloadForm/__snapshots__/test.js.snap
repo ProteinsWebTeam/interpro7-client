@@ -133,12 +133,12 @@ exports[`<DownloadForm /> should render 1`] = `
   <ApiLink
     url="https://wwwdev.ebi.ac.uk:443/interpro7/api/entry/InterPro/"
   />
-  <Memo(ConnectFunction)
+  <Memo(Connect(loadData(DataPreviewProviderWithoutData)))
     fileType="accession"
     subset={false}
     url="https://wwwdev.ebi.ac.uk:443/interpro7/api/entry/InterPro/"
   >
     [Function]
-  </Memo(ConnectFunction)>
+  </Memo(Connect(loadData(DataPreviewProviderWithoutData)))>
 </form>
 `;

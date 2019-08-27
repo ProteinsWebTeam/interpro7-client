@@ -48,7 +48,7 @@ exports[`<SideMenu /> should render 1`] = `
         <li
           className="menu-label cursor-default tertiary"
         >
-          <Memo(ConnectFunction) />
+          <Memo(Connect(_OldInterProLink)) />
         </li>
         <li>
           <span
@@ -56,7 +56,7 @@ exports[`<SideMenu /> should render 1`] = `
           >
             Connection status
           </span>
-          <Memo(ConnectFunction) />
+          <Memo(Connect(_ServerStatuses)) />
         </li>
       </ul>
     </nav>

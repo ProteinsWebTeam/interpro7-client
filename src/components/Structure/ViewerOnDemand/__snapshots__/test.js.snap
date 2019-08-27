@@ -35,7 +35,7 @@ exports[`<ViewerOnDemand /> should render 1`] = `
         <small>
           This can be reversed in the
            
-          <Memo(ConnectFunction)
+          <Memo(Connect(Link))
             to={
               Object {
                 "description": Object {
@@ -47,7 +47,7 @@ exports[`<ViewerOnDemand /> should render 1`] = `
             }
           >
             Settings
-          </Memo(ConnectFunction)>
+          </Memo(Connect(Link))>
            
           page
         </small>

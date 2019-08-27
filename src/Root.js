@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { schedule } from 'timing-functions/src';
 
@@ -83,28 +83,30 @@ const ToastDisplayAsync = loadable({
   loading: NullComponent,
 });
 
-const CookieFooterAsync = loadable({
-  loader: () =>
-    schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
-      try {
-        if (
-          window.document &&
-          window.document.cookie.match(/cookies-accepted=(true)/i)[1]
-        )
-          return;
-      } catch {
-        return import(
-          /* webpackChunkName: "cookie-banner" */ 'components/CookieBanner'
-        );
-      }
-    }),
-  loading: NullComponent,
-});
-
+const CookieFooterAsync = () => {
+  try {
+    if (
+      window.document &&
+      window.document.cookie.match(/cookies-accepted=(true)/i)[1]
+    )
+      return null;
+  } catch {
+    const CookieBanner = loadable({
+      loader: () =>
+        schedule(2 * DEFAULT_SCHEDULE_DELAY).then(() => {
+          return import(
+            /* webpackChunkName: "cookie-banner" */ 'components/CookieBanner'
+          );
+        }),
+    });
+    return <CookieBanner />;
+  }
+  return null;
+};
 const renderNull = () => null;
 
 const Root = () => (
-  <>
+  <HelmetProvider>
     <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
     <LoadingBarAsync />
     <Overlay />
@@ -127,7 +129,7 @@ const Root = () => (
     <ErrorBoundary renderOnError={renderNull}>
       <CookieFooterAsync />
     </ErrorBoundary>
-  </>
+  </HelmetProvider>
 );
 
 export default Root;

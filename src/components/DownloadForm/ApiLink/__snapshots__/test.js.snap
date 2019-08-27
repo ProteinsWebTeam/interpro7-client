@@ -6,14 +6,14 @@ exports[`<ApiLink /> should render 1`] = `
     Corresponding API call
   </h6>
   <p>
-    <Memo(ConnectFunction)
+    <Memo(Connect(Link))
       href="url"
       target="_blank"
     >
       <code>
         url
       </code>
-    </Memo(ConnectFunction)>
+    </Memo(Connect(Link))>
   </p>
 </section>
 `;

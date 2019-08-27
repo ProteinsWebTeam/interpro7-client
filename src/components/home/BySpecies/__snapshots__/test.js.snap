@@ -4,7 +4,7 @@ exports[`<BySpecies /> By Species 1`] = `
 <div
   className="species-list"
 >
-  <Memo(ConnectFunction)
+  <Memo(Connect(AnimatedEntry))
     className="row"
     element="div"
   >
@@ -154,8 +154,8 @@ exports[`<BySpecies /> By Species 1`] = `
         }
       }
     />
-  </Memo(ConnectFunction)>
-  <Memo(ConnectFunction)
+  </Memo(Connect(AnimatedEntry))>
+  <Memo(Connect(Link))
     className="button margin-bottom-none margin-top-large"
     to={
       Object {
@@ -171,7 +171,7 @@ exports[`<BySpecies /> By Species 1`] = `
     }
   >
     View all Taxa
-  </Memo(ConnectFunction)>
+  </Memo(Connect(Link))>
 </div>
 `;
 
@@ -180,7 +180,7 @@ exports[`<Species /> Species 1`] = `
   className="column small-3 medium-2 large-4 text-center"
   data-testid="by-species-box"
 >
-  <Memo(ConnectFunction)
+  <Memo(Connect(Link))
     data-testid="species-9606"
     to={
       Object {
@@ -211,12 +211,12 @@ exports[`<Species /> Species 1`] = `
     >
       Human
     </span>
-  </Memo(ConnectFunction)>
+  </Memo(Connect(Link))>
   <div
     className="list-detail"
   >
     <p>
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -235,18 +235,18 @@ exports[`<Species /> Species 1`] = `
           }
         }
       >
-        <Memo(ConnectFunction)
+        <Memo(Connect(NumberComponent))
           abbr={true}
           loading={true}
           titleType="entry matching Human"
         >
           0
-        </Memo(ConnectFunction)>
+        </Memo(Connect(NumberComponent))>
          
         entry
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       <br />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         disabled={true}
         to={
           Object {
@@ -266,16 +266,16 @@ exports[`<Species /> Species 1`] = `
           }
         }
       >
-        <Memo(ConnectFunction)
+        <Memo(Connect(NumberComponent))
           abbr={true}
           loading={true}
           titleType="protein matching Human"
         >
           0
-        </Memo(ConnectFunction)>
+        </Memo(Connect(NumberComponent))>
          
         protein
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </p>
   </div>
 </div>

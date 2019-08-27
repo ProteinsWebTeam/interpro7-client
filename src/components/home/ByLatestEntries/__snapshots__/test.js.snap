@@ -10,7 +10,7 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
     <div
       className="columns"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(AnimatedEntry))
         className="card-wrapper"
         element="div"
       >
@@ -200,8 +200,8 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
             }
           }
         />
-      </Memo(ConnectFunction)>
-      <Memo(ConnectFunction)
+      </Memo(Connect(AnimatedEntry))>
+      <Memo(Connect(Link))
         className="button margin-bottom-none"
         to={
           Object {
@@ -217,7 +217,7 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
         }
       >
         View all latest entries
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </div>
   </div>
 </div>

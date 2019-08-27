@@ -5,11 +5,11 @@ exports[`<ByEntryType /> Entry types 1`] = `
   className="entry-type"
   data-testid="by-entry-type-box"
 >
-  <Memo(ConnectFunction)
+  <Memo(Connect(AnimatedEntry))
     className="row"
     element="div"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(Link))
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-domain"
       to={
@@ -62,16 +62,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <span
           className="count visible"
         >
-          <Memo(ConnectFunction)
+          <Memo(Connect(NumberComponent))
             abbr={true}
           >
             10637
-          </Memo(ConnectFunction)>
+          </Memo(Connect(NumberComponent))>
            entries
         </span>
       </p>
-    </Memo(ConnectFunction)>
-    <Memo(ConnectFunction)
+    </Memo(Connect(Link))>
+    <Memo(Connect(Link))
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-family"
       to={
@@ -125,16 +125,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <span
           className="count visible"
         >
-          <Memo(ConnectFunction)
+          <Memo(Connect(NumberComponent))
             abbr={true}
           >
             21769
-          </Memo(ConnectFunction)>
+          </Memo(Connect(NumberComponent))>
            entries
         </span>
       </p>
-    </Memo(ConnectFunction)>
-    <Memo(ConnectFunction)
+    </Memo(Connect(Link))>
+    <Memo(Connect(Link))
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-homologous_superfamily"
       to={
@@ -183,16 +183,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <span
           className="count visible"
         >
-          <Memo(ConnectFunction)
+          <Memo(Connect(NumberComponent))
             abbr={true}
           >
             3078
-          </Memo(ConnectFunction)>
+          </Memo(Connect(NumberComponent))>
            entries
         </span>
       </p>
-    </Memo(ConnectFunction)>
-    <Memo(ConnectFunction)
+    </Memo(Connect(Link))>
+    <Memo(Connect(Link))
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-repeat"
       to={
@@ -244,16 +244,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <span
           className="count visible"
         >
-          <Memo(ConnectFunction)
+          <Memo(Connect(NumberComponent))
             abbr={true}
           >
             316
-          </Memo(ConnectFunction)>
+          </Memo(Connect(NumberComponent))>
            entries
         </span>
       </p>
-    </Memo(ConnectFunction)>
-    <Memo(ConnectFunction)
+    </Memo(Connect(Link))>
+    <Memo(Connect(Link))
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-conserved_site"
       to={
@@ -304,16 +304,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <span
           className="count visible"
         >
-          <Memo(ConnectFunction)
+          <Memo(Connect(NumberComponent))
             abbr={true}
           >
             688
-          </Memo(ConnectFunction)>
+          </Memo(Connect(NumberComponent))>
            entries
         </span>
       </p>
-    </Memo(ConnectFunction)>
-    <Memo(ConnectFunction)
+    </Memo(Connect(Link))>
+    <Memo(Connect(Link))
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-active_site"
       to={
@@ -364,16 +364,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <span
           className="count visible"
         >
-          <Memo(ConnectFunction)
+          <Memo(Connect(NumberComponent))
             abbr={true}
           >
             132
-          </Memo(ConnectFunction)>
+          </Memo(Connect(NumberComponent))>
            entries
         </span>
       </p>
-    </Memo(ConnectFunction)>
-    <Memo(ConnectFunction)
+    </Memo(Connect(Link))>
+    <Memo(Connect(Link))
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-binding_site"
       to={
@@ -424,16 +424,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <span
           className="count visible"
         >
-          <Memo(ConnectFunction)
+          <Memo(Connect(NumberComponent))
             abbr={true}
           >
             76
-          </Memo(ConnectFunction)>
+          </Memo(Connect(NumberComponent))>
            entries
         </span>
       </p>
-    </Memo(ConnectFunction)>
-    <Memo(ConnectFunction)
+    </Memo(Connect(Link))>
+    <Memo(Connect(Link))
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-ptm"
       to={
@@ -485,17 +485,17 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <span
           className="count visible"
         >
-          <Memo(ConnectFunction)
+          <Memo(Connect(NumberComponent))
             abbr={true}
           >
             17
-          </Memo(ConnectFunction)>
+          </Memo(Connect(NumberComponent))>
            entries
         </span>
       </p>
-    </Memo(ConnectFunction)>
-  </Memo(ConnectFunction)>
-  <Memo(ConnectFunction)
+    </Memo(Connect(Link))>
+  </Memo(Connect(AnimatedEntry))>
+  <Memo(Connect(Link))
     className="button margin-bottom-none margin-top-large"
     to={
       Object {
@@ -511,6 +511,6 @@ exports[`<ByEntryType /> Entry types 1`] = `
     }
   >
     View all entries
-  </Memo(ConnectFunction)>
+  </Memo(Connect(Link))>
 </div>
 `;
