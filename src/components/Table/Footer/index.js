@@ -27,10 +27,11 @@ const scrollToTop = () => {
 };
 /*:: type Props = {
   className?: string,
-  value?: number,
+  value?: number | string,
   noLink?: boolean,
   children?: number| string,
-  duration?: number
+  duration?: number,
+  attributeName?: string,
 }; */
 class PaginationItem extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -234,12 +235,20 @@ const NumberedPaginationLinks = ({ pagination, actualSize }) => {
     </>
   );
 };
+NumberedPaginationLinks.propTypes = {
+  actualSize: T.number,
+  pagination: T.object.isRequired,
+};
 
 const CursorPaginationItem = ({ cursor, label }) => (
   <PaginationItem value={cursor || '_'} noLink={!cursor} attributeName="cursor">
     {label}
   </PaginationItem>
 );
+CursorPaginationItem.propTypes = {
+  cursor: T.string,
+  label: T.string,
+};
 
 const CursorPaginationLinks = ({ next, previous }) => (
   <>
@@ -247,6 +256,11 @@ const CursorPaginationLinks = ({ next, previous }) => (
     <CursorPaginationItem cursor={next} label="Next" />
   </>
 );
+CursorPaginationLinks.propTypes = {
+  next: T.string,
+  previous: T.string,
+};
+
 const Footer = (
   {
     withPageSizeSelector,
@@ -255,7 +269,7 @@ const Footer = (
     notFound,
     nextAPICall,
     previousAPICall,
-  } /*: {withPageSizeSelector: boolean, actualSize: number, pagination: Object, notFound: boolean} */,
+  } /*: {withPageSizeSelector: boolean, actualSize: number, pagination: Object, notFound: boolean, nextAPICall: string, previousAPICall: string } */,
 ) => {
   if (notFound) return null;
 
@@ -297,6 +311,8 @@ Footer.propTypes = {
   actualSize: T.number,
   pagination: T.object.isRequired,
   notFound: T.bool,
+  nextAPICall: T.string,
+  previousAPICall: T.string,
 };
 
 export default Footer;

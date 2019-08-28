@@ -33,7 +33,7 @@ export const buildAnchorLink = (
   anchor /*: string */ = '',
 ) => `${pathname}#${anchor}`;
 
-export const getCursor = url => {
+export const getCursor = (url /*: string */) => {
   if (!url) return null;
   const ulrObj = parse(url);
   for (const attr of ulrObj.query.split('&')) {

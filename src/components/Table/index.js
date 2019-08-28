@@ -45,6 +45,8 @@ const f = foundationPartial(ebiGlobalStyles, fonts, styles);
   withTree: boolean,
   withGrid: boolean,
   rowClassName?: any,
+  nextAPICall?: ?string,
+  previousAPICall?: ?string,
 } */
 
 const TableView = loadable({
@@ -99,6 +101,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
     status: T.number,
     actualSize: T.number,
     query: T.object,
+    nextAPICall: T.string,
+    previousAPICall: T.string,
     title: T.string,
     notFound: T.bool,
     contentType: T.string,

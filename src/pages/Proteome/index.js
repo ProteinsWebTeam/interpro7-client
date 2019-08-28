@@ -323,6 +323,8 @@ class List extends PureComponent /*:: <Props> */ {
       _payload = {
         results: [],
         count: 0,
+        next: null,
+        previous: null,
       };
     }
     const urlHasParameter = url && url.includes('?');
