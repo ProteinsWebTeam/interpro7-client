@@ -20,6 +20,7 @@ import File from 'components/File';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
+
 import {
   IDAProtVista,
   TextIDA,
@@ -33,7 +34,8 @@ const SimilarProteinsHeaderWithData = (
   {
     accession,
     data: { payload, loading },
-  } /*: {accession: string, data: {payload: Object, loading: boolean}} */,
+    databases,
+  } /*: {accession: string, data: {payload: Object, loading: boolean}, databases:Object} */,
 ) => {
   if (loading || !payload) return <Loading />;
   const idaObj = ida2json(payload.ida);
@@ -44,7 +46,11 @@ const SimilarProteinsHeaderWithData = (
         the protein with accession <b>{accession}</b>.
       </header>
       <TextIDA accessions={idaObj.accessions} />
-      <IDAProtVista matches={idaObj.domains} length={FAKE_PROTEIN_LENGTH} />
+      <IDAProtVista
+        matches={idaObj.domains}
+        length={FAKE_PROTEIN_LENGTH}
+        databases={databases}
+      />
       <br />
     </div>
   );
@@ -52,6 +58,7 @@ const SimilarProteinsHeaderWithData = (
 SimilarProteinsHeaderWithData.propTypes = {
   accession: T.string,
   data: dataPropType,
+  databases: T.object,
 };
 
 const getUrlForIDA = createSelector(
@@ -124,6 +131,7 @@ const SimilarProteins = (
       },
     },
     dataIDA: { loading, payload, isStale },
+    dataBase,
     search,
     state,
   } /*: {
@@ -136,6 +144,9 @@ dataIDA: {
   isStale: boolean,
   payload: Object,
 },
+dataBase: {
+  payload: Object,
+},
 search: Object,
 state: Object,
 }*/,
@@ -145,12 +156,15 @@ state: Object,
     <div className={f('row', 'column')}>
       <SimilarProteinsHeader
         accession={state.customLocation.description.protein.accession}
+        databases={(dataBase.payload && dataBase.payload.databases) || {}}
       />
       <Table
         dataTable={payload.results}
         actualSize={payload.count}
         query={search}
         isStale={isStale}
+        nextAPICall={payload.next}
+        previousAPICall={payload.previous}
         notFound={payload.results.length === 0}
       >
         <PageSizeSelector />
@@ -254,6 +268,7 @@ state: Object,
 SimilarProteins.propTypes = {
   data: dataPropType.isRequired,
   dataIDA: dataPropType.isRequired,
+  dataBase: dataPropType,
   search: T.object.isRequired,
   state: T.object.isRequired,
 };
