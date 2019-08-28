@@ -402,6 +402,8 @@ const RelatedAdvancedQuery = loadData({
       <RelatedAdvanced
         secondaryData={_secondaryData}
         actualSize={c}
+        nextAPICall={payload.next}
+        previousAPICall={payload.previous}
         {...props}
       />
     );

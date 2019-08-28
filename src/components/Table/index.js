@@ -175,8 +175,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       className={f('icon-view', 'table-view')}
                       activeClass={f('active')}
                       aria-label="view your results as a table"
-                      onMouseOver={TableView.preload}
-                      onFocus={TableView.preload}
                       data-testid="view-table-button"
                     />
                   </Tooltip>
@@ -191,8 +189,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                           activeClass={f('active')}
                           aria-disabled={card ? 'false' : 'true'}
                           aria-label="view your results in a grid"
-                          onMouseOver={GridView.preload}
-                          onFocus={GridView.preload}
                           data-testid="view-grid-button"
                         />
                       </Tooltip>
@@ -208,8 +204,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                         activeClass={f('active')}
                         aria-disabled={withTree ? 'false' : 'true'}
                         aria-label="view your results as a tree"
-                        onMouseOver={TreeView.preload}
-                        onFocus={TreeView.preload}
                         data-testid="view-tree-button"
                       />
                     </Tooltip>
