@@ -124,11 +124,12 @@ const getUrlFor = createSelector(
   state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
-    // eslint-disable-next-line camelcase
     const {
+      // eslint-disable-next-line camelcase
       signature_in,
       search: _,
       cursor: __,
+      // eslint-disable-next-line camelcase
       page_size,
       ..._search
     } = search;

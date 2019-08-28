@@ -25,6 +25,7 @@ const f = foundationPartial(style);
   goToCustomLocation: function,
   customLocation: {
     description: Object,
+    search: Object,
   }
 }; */
 
@@ -41,6 +42,7 @@ class IntegratedFilter extends PureComponent /*:: <Props, State> */ {
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
       description: T.object,
+      search: T.object,
     }).isRequired,
   };
 
