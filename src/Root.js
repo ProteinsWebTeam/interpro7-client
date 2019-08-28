@@ -106,30 +106,32 @@ const CookieFooterAsync = () => {
 const renderNull = () => null;
 
 const Root = () => (
-  <HelmetProvider>
-    <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
-    <LoadingBarAsync />
-    <Overlay />
-    <EMBLDropdownAsync />
-    <SideMenuAsync />
-    <EbiSkipToDiv />
-    <header>
-      <EBIHeader />
-      <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
-    </header>
-    <Sentinel top={STICKY_MENU_OFFSET} />
-    <Pages top={STICKY_MENU_OFFSET} />
-    <footer>
-      <ElixirFooterAsync />
-      <EBIFooterAsync />
-    </footer>
-    <ErrorBoundary renderOnError={renderNull}>
-      <ToastDisplayAsync />
-    </ErrorBoundary>
-    <ErrorBoundary renderOnError={renderNull}>
-      <CookieFooterAsync />
-    </ErrorBoundary>
-  </HelmetProvider>
+  <div id="interpro-root">
+    <HelmetProvider>
+      <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
+      <LoadingBarAsync />
+      <Overlay />
+      <EMBLDropdownAsync />
+      <SideMenuAsync />
+      <EbiSkipToDiv />
+      <header>
+        <EBIHeader />
+        <Header stickyMenuOffset={STICKY_MENU_OFFSET} />
+      </header>
+      <Sentinel top={STICKY_MENU_OFFSET} />
+      <Pages top={STICKY_MENU_OFFSET} />
+      <footer>
+        <ElixirFooterAsync />
+        <EBIFooterAsync />
+      </footer>
+      <ErrorBoundary renderOnError={renderNull}>
+        <ToastDisplayAsync />
+      </ErrorBoundary>
+      <ErrorBoundary renderOnError={renderNull}>
+        <CookieFooterAsync />
+      </ErrorBoundary>
+    </HelmetProvider>
+  </div>
 );
 
 export default Root;
