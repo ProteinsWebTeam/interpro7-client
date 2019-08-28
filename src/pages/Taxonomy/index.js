@@ -473,6 +473,8 @@ class List extends PureComponent /*:: <Props> */ {
             withTree={true}
             withGrid={true}
             databases={databases}
+            nextAPICall={_payload.next}
+            previousAPICall={_payload.previous}
           >
             <Exporter>
               <ul>

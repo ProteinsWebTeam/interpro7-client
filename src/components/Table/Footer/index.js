@@ -7,6 +7,8 @@ import Link from 'components/generic/Link';
 import PageSizeSelector from '../PageSizeSelector';
 import NumberComponent from 'components/NumberComponent';
 
+import { getCursor } from 'utils/url';
+
 import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
@@ -15,9 +17,9 @@ import s from '../style.css';
 
 const f = foundationPartial(s);
 
-const toFunctionFor = page => customLocation => ({
+const toFunctionFor = (value, key = 'page') => customLocation => ({
   ...customLocation,
-  search: { ...customLocation.search, page },
+  search: { ...customLocation.search, [key]: value },
 });
 
 const scrollToTop = () => {
@@ -33,21 +35,29 @@ const scrollToTop = () => {
 class PaginationItem extends PureComponent /*:: <Props> */ {
   static propTypes = {
     className: T.string,
-    value: T.number,
+    attributeName: T.string,
+    value: T.oneOfType([T.number, T.string]),
     noLink: T.bool,
     children: T.oneOfType([T.number, T.string]),
     duration: T.number,
   };
 
   render() {
-    const { className, value, noLink, children, duration } = this.props;
+    const {
+      className,
+      attributeName = 'page',
+      value,
+      noLink,
+      children,
+      duration,
+    } = this.props;
     const LinkOrSpan = !value || noLink ? 'span' : Link;
     const props = {};
     if (value) {
       if (noLink) {
         props.className = f('no-link');
       } else {
-        props.to = toFunctionFor(value);
+        props.to = toFunctionFor(value, attributeName);
       }
     }
     return (
@@ -200,16 +210,7 @@ class NextText extends PureComponent /*:: <NextTextProps> */ {
   }
 }
 
-const Footer = (
-  {
-    withPageSizeSelector,
-    actualSize,
-    pagination,
-    notFound,
-  } /*: {withPageSizeSelector: boolean, actualSize: number, pagination: Object, notFound: boolean} */,
-) => {
-  if (notFound) return null;
-
+const NumberedPaginationLinks = ({ pagination, actualSize }) => {
   const first = 1;
   const current = parseInt(pagination.page || first, 10);
   const pageSize = parseInt(
@@ -221,6 +222,50 @@ const Footer = (
   const next = Math.min(current + 1, last);
 
   return (
+    <>
+      <PreviousText previous={previous} current={current} />
+      <First first={first} current={current} />
+      <PreviousDotDotDot first={first} previous={previous} />
+      <Previous first={first} previous={previous} current={current} />
+      <Current current={current} />
+      <Next current={current} next={next} last={last} />
+      <NextDotDotDot next={next} last={last} />
+      <NextText current={current} next={next} />
+    </>
+  );
+};
+
+const CursorPaginationItem = ({ cursor, label }) => (
+  <PaginationItem value={cursor || '_'} noLink={!cursor} attributeName="cursor">
+    {label}
+  </PaginationItem>
+);
+
+const CursorPaginationLinks = ({ next, previous }) => (
+  <>
+    <CursorPaginationItem cursor={previous} label="Previous" />
+    <CursorPaginationItem cursor={next} label="Next" />
+  </>
+);
+const Footer = (
+  {
+    withPageSizeSelector,
+    actualSize,
+    pagination,
+    notFound,
+    nextAPICall,
+    previousAPICall,
+  } /*: {withPageSizeSelector: boolean, actualSize: number, pagination: Object, notFound: boolean} */,
+) => {
+  if (notFound) return null;
+
+  const nextCursor = getCursor(nextAPICall);
+  const previousCursor = getCursor(previousAPICall);
+  // if (nextCursor || previousCursor) {
+  //   return
+  // }
+
+  return (
     <div className={f('table-footer')}>
       <div className={f('table-footer-content')}>
         {withPageSizeSelector && <PageSizeSelector search={pagination} />}
@@ -230,14 +275,17 @@ const Footer = (
             role="navigation"
             aria-label="Pagination"
           >
-            <PreviousText previous={previous} current={current} />
-            <First first={first} current={current} />
-            <PreviousDotDotDot first={first} previous={previous} />
-            <Previous first={first} previous={previous} current={current} />
-            <Current current={current} />
-            <Next current={current} next={next} last={last} />
-            <NextDotDotDot next={next} last={last} />
-            <NextText current={current} next={next} />
+            {nextCursor || previousCursor ? (
+              <CursorPaginationLinks
+                next={nextCursor}
+                previous={previousCursor}
+              />
+            ) : (
+              <NumberedPaginationLinks
+                pagination={pagination}
+                actualSize={actualSize}
+              />
+            )}
           </ul>
         </div>
       </div>

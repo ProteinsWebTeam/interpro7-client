@@ -118,6 +118,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
       status,
       actualSize,
       query,
+      nextAPICall,
+      previousAPICall,
       title,
       notFound,
       contentType,
@@ -259,6 +261,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 withPageSizeSelector={withPageSizeSelector}
                 actualSize={actualSize}
                 pagination={_query}
+                nextAPICall={nextAPICall}
+                previousAPICall={previousAPICall}
               />
             </div>
           </div>

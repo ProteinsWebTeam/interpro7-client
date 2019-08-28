@@ -465,6 +465,8 @@ const List = (
           notFound={notFound}
           withGrid={!!includeGrid}
           databases={databases}
+          nextAPICall={_payload.next}
+          previousAPICall={_payload.previous}
         >
           <Exporter>
             <ul>

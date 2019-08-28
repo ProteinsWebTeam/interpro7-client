@@ -356,6 +356,8 @@ class List extends PureComponent /*:: <Props> */ {
             query={search}
             notFound={notFound}
             databases={databases}
+            nextAPICall={_payload.next}
+            previousAPICall={_payload.previous}
           >
             <Exporter>
               <ul>
