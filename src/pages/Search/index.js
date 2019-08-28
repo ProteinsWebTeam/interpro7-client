@@ -54,19 +54,12 @@ const TextSearchAndResults = () => (
     <SearchResults />
   </Wrapper>
 );
-TextSearchAndResults.preload = () => {
-  SearchByText.preload();
-  SearchResults.preload();
-};
 
 const WrappedIPScanSearch = () => (
   <Wrapper topic="InterProScan">
     <IPScanSearch />
   </Wrapper>
 );
-WrappedIPScanSearch.preload = () => {
-  IPScanSearch.preload();
-};
 
 const WrappedIDASearch = () => (
   <Wrapper topic="IDA">
@@ -137,11 +130,7 @@ const Wrapper = (
       <div className={f('columns', 'margin-bottom-large')}>
         <h3>Search InterPro</h3>
         <ul className={f('tabs', 'main-style', 'margin-top-large')}>
-          <li
-            className={f('tabs-title')}
-            onMouseOver={WrappedIPScanSearch.preload}
-            onFocus={WrappedIPScanSearch.preload}
-          >
+          <li className={f('tabs-title')}>
             <Link
               to={{
                 description: {
@@ -154,11 +143,7 @@ const Wrapper = (
               by sequence
             </Link>
           </li>
-          <li
-            className={f('tabs-title')}
-            onMouseOver={TextSearchAndResults.preload}
-            onFocus={TextSearchAndResults.preload}
-          >
+          <li className={f('tabs-title')}>
             <Link
               to={{
                 description: {
@@ -175,11 +160,7 @@ const Wrapper = (
               by text
             </Link>
           </li>
-          <li
-            className={f('tabs-title')}
-            onMouseOver={WrappedIPScanSearch.preload}
-            onFocus={WrappedIPScanSearch.preload}
-          >
+          <li className={f('tabs-title')}>
             <Link
               to={{
                 description: {
