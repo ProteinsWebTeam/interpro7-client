@@ -45,7 +45,7 @@ class TaxonomyFilter extends PureComponent /*:: <Props> */ {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { page, ...search } = this.props.customLocation.search;
+    const { page, cursor, ...search } = this.props.customLocation.search;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       description: {
@@ -116,7 +116,7 @@ const getUrlFor = createSelector(
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     // eslint-disable-next-line camelcase
-    const { tax_id, search: _, ..._search } = search;
+    const { tax_id, search: _, cursor: __, ..._search } = search;
     // add to search
     _search.group_by = 'tax_id';
     // build URL
