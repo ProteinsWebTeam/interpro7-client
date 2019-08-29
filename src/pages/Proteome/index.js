@@ -261,7 +261,7 @@ const ProteomeCard = (
   </>
 );
 ProteomeCard.propTypes = {
-  data: dataPropType.object,
+  data: dataPropType,
   search: T.string,
   entryDB: T.string,
 };

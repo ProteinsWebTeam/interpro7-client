@@ -261,7 +261,7 @@ const SetCard = (
     <SummaryCounterSet
       entryDB={entryDB}
       metadata={data.metadata}
-      counters={data.extra_fields.counters}
+      counters={(data && data.extra_fields && data.extra_fields.counters) || {}}
     />
 
     <div className={f('card-footer')}>
