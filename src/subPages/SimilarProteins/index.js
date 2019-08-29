@@ -143,6 +143,7 @@ dataIDA: {
   loading: boolean,
   isStale: boolean,
   payload: Object,
+  url: string,
 },
 dataBase: {
   payload: Object,

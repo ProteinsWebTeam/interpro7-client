@@ -51,8 +51,10 @@ const SelectorSpoof = ({ children } /*: { children: function } */) =>
 SelectorSpoof.propTypes = {
   children: T.func.isRequired,
 };
+
 const url2page = new Map();
 
+// eslint-disable-next-line complexity
 export const TotalNb = (
   {
     className,
@@ -66,9 +68,22 @@ export const TotalNb = (
     currentAPICall,
     nextAPICall,
     previousAPICall,
-  } /*: {className?: string, data: Array<Object>, actualSize?: number, pagination: Object, notFound?: boolean, description: Object, contentType?: string, databases?: Object, dbCounters?: Object} */,
+  } /*: {
+    className?: string,
+    data: Array<Object>,
+    actualSize?: number,
+    pagination: Object,
+    notFound?: boolean,
+    description: Object,
+    contentType?: string,
+    databases?: Object,
+    dbCounters?: Object,
+    currentAPICall?: ?string,
+    nextAPICall?: ?string,
+    previousAPICall?: ?string,
+  } */,
 ) => {
-  let page =
+  const page =
     (currentAPICall && url2page.get(toCanonicalURL(currentAPICall))) ||
     parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
@@ -77,7 +92,6 @@ export const TotalNb = (
   );
 
   if (currentAPICall && !pagination.page) {
-    // url2page.set(currentAPICall, page);
     if (nextAPICall) url2page.set(toCanonicalURL(nextAPICall), page + 1);
     if (previousAPICall)
       url2page.set(toCanonicalURL(previousAPICall), page - 1);
@@ -147,6 +161,9 @@ TotalNb.propTypes = {
   contentType: T.string,
   databases: T.object,
   dbCounters: T.object,
+  currentAPICall: T.string,
+  nextAPICall: T.string,
+  previousAPICall: T.string,
 };
 
 const mapStateToProps = createSelector(
