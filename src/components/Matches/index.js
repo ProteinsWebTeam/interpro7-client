@@ -238,6 +238,7 @@ const Matches = (
     dbCounters,
     mainData,
     accessionSearch,
+    currentAPICall,
     nextAPICall,
     previousAPICall,
     ...props
@@ -296,6 +297,7 @@ const Matches = (
       rowClassName={row => f({ exact: row.exact })}
       nextAPICall={nextAPICall}
       previousAPICall={previousAPICall}
+      currentAPICall={currentAPICall}
     >
       <PageSizeSelector />
       <SearchBox loading={isStale} />

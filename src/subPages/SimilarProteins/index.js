@@ -130,7 +130,7 @@ const SimilarProteins = (
         metadata: { ida_accession: ida },
       },
     },
-    dataIDA: { loading, payload, isStale },
+    dataIDA: { loading, payload, isStale, url },
     dataBase,
     search,
     state,
@@ -163,6 +163,7 @@ state: Object,
         actualSize={payload.count}
         query={search}
         isStale={isStale}
+        currentAPICall={url}
         nextAPICall={payload.next}
         previousAPICall={payload.previous}
         notFound={payload.results.length === 0}
