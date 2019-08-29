@@ -85,7 +85,7 @@ export const getUrl = createSelector(
           }
         }
         const cursor = _search.cursor;
-        if (cursor) _search.cursor = undefined;
+        if (cursor) delete _search.cursor;
 
         const urlTmp = cleanUpMultipleSlashes(
           format({

@@ -41,3 +41,12 @@ export const getCursor = (url /*: string */) => {
   }
   return null;
 };
+
+export const toCanonicalURL = (url /*: string */) => {
+  const [path, attr] = url.split('?');
+  if (!attr) return path;
+  return `${path}?${attr
+    .split('&')
+    .sort()
+    .join('&')}`;
+};

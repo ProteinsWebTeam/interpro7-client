@@ -319,6 +319,7 @@ class List extends PureComponent /*:: <ListProps> */ {
             databases={databases}
             nextAPICall={_payload.next}
             previousAPICall={_payload.previous}
+            currentAPICall={url}
           >
             <Exporter>
               <ul>

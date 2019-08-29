@@ -15,6 +15,7 @@ import config from 'config';
 import { toPlural } from 'utils/pages';
 
 import styles from './style.css';
+import { toCanonicalURL } from 'utils/url';
 
 const s = cn.bind(styles);
 
@@ -50,6 +51,7 @@ const SelectorSpoof = ({ children } /*: { children: function } */) =>
 SelectorSpoof.propTypes = {
   children: T.func.isRequired,
 };
+const url2page = new Map();
 
 export const TotalNb = (
   {
@@ -61,13 +63,25 @@ export const TotalNb = (
     contentType,
     databases,
     dbCounters,
+    currentAPICall,
+    nextAPICall,
+    previousAPICall,
   } /*: {className?: string, data: Array<Object>, actualSize?: number, pagination: Object, notFound?: boolean, description: Object, contentType?: string, databases?: Object, dbCounters?: Object} */,
 ) => {
-  const page = parseInt(pagination.page || 1, 10);
+  let page =
+    (currentAPICall && url2page.get(toCanonicalURL(currentAPICall))) ||
+    parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
     10,
   );
+
+  if (currentAPICall && !pagination.page) {
+    // url2page.set(currentAPICall, page);
+    if (nextAPICall) url2page.set(toCanonicalURL(nextAPICall), page + 1);
+    if (previousAPICall)
+      url2page.set(toCanonicalURL(previousAPICall), page - 1);
+  }
 
   const index = (page - 1) * pageSize + 1;
 
