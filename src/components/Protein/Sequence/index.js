@@ -58,9 +58,8 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
           processData={schemaProcessData}
         />
         {sequenceWords.map((e, i) => (
-          <>
+          <React.Fragment key={i}>
             <span
-              key={i}
               className={f('sequence_word')}
               style={{ zIndex: -i }}
               data-index={i}
@@ -68,7 +67,7 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
               {e}
             </span>
             <div className={f('sequence_word_spacer')} />
-          </>
+          </React.Fragment>
         ))}
       </div>
     );
