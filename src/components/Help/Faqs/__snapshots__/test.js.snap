@@ -183,7 +183,7 @@ exports[`<Faqs /> should render 1`] = `
           >
             <p>
               The assignment of GO terms to InterPro entries is performed manually, and is an ongoing process (
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 to={
                   Object {
                     "description": Object {
@@ -197,7 +197,7 @@ exports[`<Faqs /> should render 1`] = `
                 }
               >
                 view related publication
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
               ).
             </p>
           </div>
@@ -213,14 +213,14 @@ exports[`<Faqs /> should render 1`] = `
           >
             <p>
               The database and related software are freely available from the
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 className="ext"
                 href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/"
                 target="_blank"
               >
                  
                 ftp site
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
                
               for download.
             </p>
@@ -238,14 +238,14 @@ exports[`<Faqs /> should render 1`] = `
             <p>
               We welcome your contributions. To report errors or problems with the database, please
                
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 className="ext"
                 href="//www.ebi.ac.uk/support/interpro"
                 target="_blank"
                 withReferrer={true}
               >
                 get in touch via EBI support
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
               .
             </p>
           </div>
@@ -262,14 +262,14 @@ exports[`<Faqs /> should render 1`] = `
             <p>
               If you are interested in potential collaborations with InterPro, please
                
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 className="ext"
                 href="//www.ebi.ac.uk/support/interpro"
                 target="_blank"
                 withReferrer={true}
               >
                 contact us via EBI support
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
               .
             </p>
           </div>
@@ -285,7 +285,7 @@ exports[`<Faqs /> should render 1`] = `
           >
             <p>
               See details
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 to={
                   Object {
                     "description": Object {
@@ -299,7 +299,7 @@ exports[`<Faqs /> should render 1`] = `
               >
                  
                 here
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
               .
             </p>
           </div>
@@ -321,14 +321,14 @@ exports[`<Faqs /> should render 1`] = `
             <p>
               We adhere to EMBL standards on data privacy. However, if you have privacy concerns about submitting sequences for analysis via the web, the InterProScan software package can be downloaded for local installation from the
                
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 className="ext"
                 href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan"
                 target="_blank"
               >
                  
                 EBI's FTP server
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
               .
             </p>
           </div>
@@ -345,25 +345,25 @@ exports[`<Faqs /> should render 1`] = `
             <p>
               InterProScan can be accessed programmatically via Web services that allow up to one sequence per request, and up to 25 requests in parallel (both
                
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 className="ext"
                 href="//www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=68165103"
                 target="_blank"
               >
                  
                 SOAP
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
                
               and
                
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 className="ext"
                 href="//www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=68165098"
                 target="_blank"
               >
                  
                 REST
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
               -based services are available).
             </p>
           </div>
@@ -380,11 +380,11 @@ exports[`<Faqs /> should render 1`] = `
             <p>
               Please see the online tutorials section on the
                
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="/help/tutorial/"
               >
                 Training & tutorials
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
                
               page.
             </p>
@@ -411,14 +411,14 @@ exports[`<Faqs /> should render 1`] = `
             <p>
               Nevertheless, please bear in mind that the member database signatures are computational predictions. If you think one of our signatures matches false positives, please
                
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 className="ext"
                 href="//www.ebi.ac.uk/support/interpro"
                 target="_blank"
                 withReferrer={true}
               >
                 contact us
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
               .
             </p>
           </div>
@@ -498,7 +498,7 @@ exports[`<Faqs /> should render 1`] = `
         </h3>
         <ul>
           <li>
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.ebi.ac.uk/support/interpro"
               target="_blank"
               withReferrer={true}
@@ -509,7 +509,7 @@ exports[`<Faqs /> should render 1`] = `
               />
                
               Submit a ticket
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </li>
         </ul>
       </div>

@@ -11,7 +11,7 @@ exports[`<CurrentVersion /> Current Version should show the proper version 1`] =
     className="version-info"
   >
     <header>
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -24,7 +24,7 @@ exports[`<CurrentVersion /> Current Version should show the proper version 1`] =
       >
         InterPro 
         74.0
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </header>
     <div
       className="version-date"

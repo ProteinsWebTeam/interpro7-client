@@ -30,12 +30,12 @@ exports[`<Tutorial /> should render 1`] = `
           className="card-title"
         >
           <h4>
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies"
               target="_blank"
             >
               InterPro: A case study of 3 protein family building methodologies
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </h4>
         </div>
         <div
@@ -82,7 +82,7 @@ exports[`<Tutorial /> should render 1`] = `
       <div
         className="card-more"
       >
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies"
           target="_blank"
         >
@@ -92,7 +92,7 @@ exports[`<Tutorial /> should render 1`] = `
           >
             Start the course
           </div>
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </div>
     </div>
     <div
@@ -114,12 +114,12 @@ exports[`<Tutorial /> should render 1`] = `
           className="card-title"
         >
           <h4>
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro"
               target="_blank"
             >
               InterPro: functional and structural analysis of protein sequences
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </h4>
         </div>
         <div
@@ -165,7 +165,7 @@ exports[`<Tutorial /> should render 1`] = `
       <div
         className="card-more"
       >
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro"
           target="_blank"
         >
@@ -175,7 +175,7 @@ exports[`<Tutorial /> should render 1`] = `
           >
             Start the course
           </div>
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </div>
     </div>
     <div
@@ -197,12 +197,12 @@ exports[`<Tutorial /> should render 1`] = `
           className="card-title"
         >
           <h4>
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou"
               target="_blank"
             >
               Protein classification: An introduction to EMBL-EBI resources
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </h4>
         </div>
         <div
@@ -249,7 +249,7 @@ exports[`<Tutorial /> should render 1`] = `
       <div
         className="card-more"
       >
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou"
           target="_blank"
         >
@@ -259,7 +259,7 @@ exports[`<Tutorial /> should render 1`] = `
           >
             Start the course
           </div>
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </div>
     </div>
     <div
@@ -281,12 +281,12 @@ exports[`<Tutorial /> should render 1`] = `
           className="card-title"
         >
           <h4>
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour"
               target="_blank"
             >
               A Quick Tour of InterPro
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </h4>
         </div>
         <div
@@ -333,7 +333,7 @@ exports[`<Tutorial /> should render 1`] = `
       <div
         className="card-more"
       >
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour"
           target="_blank"
         >
@@ -343,7 +343,7 @@ exports[`<Tutorial /> should render 1`] = `
           >
             Start the course
           </div>
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </div>
     </div>
   </div>
@@ -355,12 +355,12 @@ exports[`<Tutorial /> should render 1`] = `
   <p>
     InterPro hands-on practical sessions feature regularly as part of the EBI training courses and workshops.
      
-    <Memo(ConnectFunction)
+    <Memo(Connect(Link))
       className="ext"
       href="//www.ebi.ac.uk/training"
     >
       Find out more
-    </Memo(ConnectFunction)>
+    </Memo(Connect(Link))>
      
     about when and where these training courses will run, as well as how to apply to host them.
   </p>

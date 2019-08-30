@@ -1,5 +1,5 @@
-// flow-typed signature: 5dc4832be8a4e3b97e16fecc54691aac
-// flow-typed version: b6551bfd76/source-map_v0.7.x/flow_>=v0.25.x
+// flow-typed signature: df79a314b7d0c7ec7dd9f01a8fcd37cf
+// flow-typed version: 4f76a29260/source-map_v0.7.x/flow_>=v0.104.x
 
 declare module 'source-map' {
   declare export type SourceMapUrl = string;
@@ -50,21 +50,35 @@ declare module 'source-map' {
     +column: number | null,
     +name: string | null,
   |};
-  declare export type MappingItem = {|
-    +source: string,
-    +generatedLine: number,
-    +generatedColumn: number,
-    +lastGeneratedColumn?: number,
-    +originalLine: number,
-    +originalColumn: number,
-    +name: string,
-  |};
-  declare export type Mapping = {|
-    +generated: Position,
-    +original: Position,
-    +source: string,
-    +name?: string,
-  |};
+  declare export type MappingItem =
+    | {|
+        +source: string,
+        +name: string,
+        +generatedLine: number,
+        +generatedColumn: number,
+        +lastGeneratedColumn?: number,
+        +originalLine: number,
+        +originalColumn: number
+      |}
+    | {|
+        +source: null,
+        +name: null,
+        +generatedLine: number,
+        +generatedColumn: number,
+        +lastGeneratedColumn?: number,
+        +originalLine: null,
+        +originalColumn: null
+      |};
+  declare export type Mapping =
+    | {|
+        +generated: Position,
+        +original: Position,
+        +source: string,
+        +name?: string
+      |}
+    | {|
+        +generated: Position
+      |};
   declare export type CodeWithSourceMap = {|
     +code: string,
     +map: SourceMapGenerator,
@@ -161,9 +175,7 @@ declare module 'source-map' {
      *    - name: The original identifier, or null.
      */
     originalPositionFor(
-      generatedPosition: Position & {
-        bias?: number,
-      }
+      generatedPosition: Position & { bias?: number, ... }
     ): NullableMappedPosition;
 
     /**
@@ -186,9 +198,7 @@ declare module 'source-map' {
      *    - column: The column number in the generated source, or null.
      */
     generatedPositionFor(
-      originalPosition: MappedPosition & {
-        bias?: number,
-      }
+      originalPosition: MappedPosition & { bias?: number, ... }
     ): NullablePosition;
 
     /**

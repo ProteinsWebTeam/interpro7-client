@@ -18,7 +18,7 @@ exports[`<SummaryTaxonomy /> should render 1`] = `
           <td
             data-testid="taxonomy-taxid"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(Accession))
               accession="131567"
               title="Tax ID"
             />
@@ -35,7 +35,7 @@ exports[`<SummaryTaxonomy /> should render 1`] = `
             no rank
           </td>
         </tr>
-        <LoadableComponent
+        <Memo(Loadable)
           data={
             Object {
               "name": "root",

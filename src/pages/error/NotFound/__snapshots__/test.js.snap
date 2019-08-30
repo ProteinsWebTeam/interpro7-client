@@ -26,7 +26,7 @@ exports[`<NotFound /> should render 1`] = `
       <br />
       <p>
         Double check the URL or go back to the 
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           to={
             Object {
               "description": Object {},
@@ -34,15 +34,15 @@ exports[`<NotFound /> should render 1`] = `
           }
         >
           homepage
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
         . If you continue to get this page, contact us using the 
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           href="http://www.ebi.ac.uk/support/interpro"
           target="_blank"
           withReferrer={true}
         >
           EMBL-EBI feedback form
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </p>
       <br />
       <h3>
@@ -50,7 +50,7 @@ exports[`<NotFound /> should render 1`] = `
       </h3>
       <ul>
         <li>
-          <Memo(ConnectFunction)
+          <Memo(Connect(Link))
             to={
               Object {
                 "description": Object {
@@ -62,10 +62,10 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             What’s new in InterPro?
-          </Memo(ConnectFunction)>
+          </Memo(Connect(Link))>
         </li>
         <li>
-          <Memo(ConnectFunction)
+          <Memo(Connect(Link))
             to={
               Object {
                 "description": Object {
@@ -78,10 +78,10 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             InterPro tutorials & training material
-          </Memo(ConnectFunction)>
+          </Memo(Connect(Link))>
         </li>
         <li>
-          <Memo(ConnectFunction)
+          <Memo(Connect(Link))
             to={
               Object {
                 "description": Object {
@@ -94,10 +94,10 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             InterPro FAQs
-          </Memo(ConnectFunction)>
+          </Memo(Connect(Link))>
         </li>
         <li>
-          <Memo(ConnectFunction)
+          <Memo(Connect(Link))
             to={
               Object {
                 "description": Object {
@@ -110,7 +110,7 @@ exports[`<NotFound /> should render 1`] = `
             }
           >
             InterPro Documentation
-          </Memo(ConnectFunction)>
+          </Memo(Connect(Link))>
         </li>
       </ul>
     </div>

@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React from 'react';
+import React, { useEffect } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -21,6 +21,7 @@ import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
 import Lazy from 'wrappers/Lazy';
 import LazyImage from 'components/LazyImage';
+import loadWebComponent from 'utils/load-web-component';
 
 import { getUrlForApi } from 'higherOrder/loadData/defaults';
 
@@ -254,6 +255,14 @@ const Matches = (
     props: Array<any>
 } */,
 ) => {
+  useEffect(() => {
+    loadWebComponent(() =>
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      ).then(m => m.InterproType),
+    ).as('interpro-type');
+  }, []);
+
   let aggSize = actualSize;
   const dataTable = matches.map(e => ({
     ...e[primary],
@@ -332,6 +341,12 @@ const Matches = (
                 }}
               >
                 <span className={f('acc-row')}>
+                  {obj.source_database === 'interpro' ? (
+                    <interpro-type
+                      type={obj.type.replace('_', ' ')}
+                      dimension=".8em"
+                    />
+                  ) : null}
                   <HighlightedText text={acc} textToHighlight={search.search} />
                 </span>
               </Link>{' '}

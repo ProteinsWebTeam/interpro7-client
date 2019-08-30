@@ -297,6 +297,23 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                     )
                       return null;
 
+                    const to = {
+                      ...description,
+                      [endpoint]: {
+                        db,
+                        isFilter: true,
+                        order: 1,
+                      },
+                    };
+                    if (description.main.key !== 'taxonomy') {
+                      to.taxonomy = {
+                        db: 'uniprot',
+                        isFilter: true,
+                        order: 2,
+                      };
+                    }
+                    to.taxonomy.accession = currentNode.id;
+
                     return (
                       <li key={endpoint}>
                         <Link
@@ -304,20 +321,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                             disable: !currentNode.counters[plural],
                           })}
                           to={{
-                            description: {
-                              ...description,
-                              taxonomy: {
-                                db: 'uniprot',
-                                accession: `${currentNode.id}`,
-                                isFilter: true,
-                                order: 2,
-                              },
-                              [endpoint]: {
-                                db,
-                                isFilter: true,
-                                order: 1,
-                              },
-                            },
+                            description: to,
                           }}
                         >
                           <NumberComponent abbr duration={ANIMATION_DURATION}>

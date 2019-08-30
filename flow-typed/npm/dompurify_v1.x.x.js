@@ -1,5 +1,5 @@
-// flow-typed signature: 379bd590cc7f00e50af043bc8d8af5cf
-// flow-typed version: 45cf127840/dompurify_v1.x.x/flow_>=v0.69.x
+// flow-typed signature: 9e05740b150fda28177daf99496cfa53
+// flow-typed version: c6154227d1/dompurify_v1.x.x/flow_>=v0.104.x
 
 type dompurify$htmlTags =
   | 'a'
@@ -574,6 +574,7 @@ type dompurify$configBase = {|
     svg: boolean,
     svgFilters: boolean,
     mathMl: boolean,
+    ...
   }>,
   /**
    * leave all as it is but forbid specified tags
@@ -655,11 +656,12 @@ type dompurify$hookType =
 
 type dompurify$hookEvent = {
   +tagName: ?$Subtype<dompurify$tags>,
-  +allowedTags: ?{ [$Subtype<dompurify$tags>]: boolean },
-  +allowedAttributes: ?{ [$Subtype<dompurify$attr>]: boolean },
+  +allowedTags: ?{ [$Subtype<dompurify$tags>]: boolean, ... },
+  +allowedAttributes: ?{ [$Subtype<dompurify$attr>]: boolean, ... },
   +attrName: ?$Subtype<dompurify$attr>,
   +attrValue: ?string,
   +keepAttr: ?boolean,
+  ...
 };
 
 declare type dompurify$config = $Shape<dompurify$configBase>;
@@ -667,16 +669,36 @@ declare type dompurify$config = $Shape<dompurify$configBase>;
 type dompurify$hook = (node: $Subtype<Node>, data: ?dompurify$hookEvent, config?: dompurify$config) => $Subtype<Node>;
 
 interface dompurify$sanitizer {
-  (dirty: string, config: $Shape<$Diff<dompurify$configBase, { RETURN_DOM: boolean, RETURN_DOM_FRAGMENT: boolean }>>): string,
-  (dirty: string, config: dompurify$config & { RETURN_DOM: false, RETURN_DOM_FRAGMENT: false }): string,
-  (dirty: string, config: dompurify$config & { RETURN_DOM: true, RETURN_DOM_FRAGMENT?: void | false }): HTMLBodyElement,
-  (dirty: string, config: dompurify$config & { RETURN_DOM?: void | false, RETURN_DOM_FRAGMENT: true }): DocumentFragment,
+  (dirty: string, config: $Shape<$Diff<dompurify$configBase, {
+    RETURN_DOM: boolean,
+    RETURN_DOM_FRAGMENT: boolean,
+    ...
+  }>>): string,
+  (dirty: string, config: dompurify$config & {
+    RETURN_DOM: false,
+    RETURN_DOM_FRAGMENT: false,
+    ...
+  }): string,
+  (dirty: string, config: dompurify$config & {
+    RETURN_DOM: true,
+    RETURN_DOM_FRAGMENT?: void | false,
+    ...
+  }): HTMLBodyElement,
+  (dirty: string, config: dompurify$config & {
+    RETURN_DOM?: void | false,
+    RETURN_DOM_FRAGMENT: true,
+    ...
+  }): DocumentFragment,
   (dirty: string): string,
 }
 
 type dompurify$instance = {|
   +version: string,
-  +removed: Array<{ element: $Subtype<Node> } | { attribute: ?Attr, from: $Subtype<Node> }>,
+  +removed: Array<{ element: $Subtype<Node>, ... } | {
+    attribute: ?Attr,
+    from: $Subtype<Node>,
+    ...
+  }>,
   +isSupported: boolean,
   sanitize: dompurify$sanitizer,
   setConfig: (config: dompurify$config) => void,
