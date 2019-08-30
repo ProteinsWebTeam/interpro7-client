@@ -99,6 +99,9 @@ class SetAlignmentsSubPage extends PureComponent /*:: <Props, {}> */ {
           actualSize={data.payload.count}
           dataTable={data.payload.results}
           query={search}
+          nextAPICall={data.payload.next}
+          previousAPICall={data.payload.previous}
+          currentAPICall={data.url}
         >
           <Column
             dataKey="accession"
