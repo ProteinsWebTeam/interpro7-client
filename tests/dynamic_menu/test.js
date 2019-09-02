@@ -76,7 +76,9 @@ describe('tests', () => {
       page.click('[data-testid="menu-tab-home"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/$/));
+    expect(url).toEqual(
+      expect.stringMatching(new RegExp(`${window.location.href}/`))
+    );
   });
 
   test('click-dynamic-menu-search', async () => {
@@ -85,7 +87,9 @@ describe('tests', () => {
       page.click('[data-testid="menu-tab-search"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/search/));
+    expect(url).toEqual(
+      expect.stringMatching(new RegExp(`${window.location.href}/search/`))
+    );
   });
 
   test('click-dynamic-menu-browse', async () => {
@@ -94,7 +98,9 @@ describe('tests', () => {
       page.click('[data-testid="menu-tab-browse"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/entry/));
+    expect(url).toEqual(
+      expect.stringMatching(new RegExp(`${window.location.href}/entry/`))
+    );
   });
 
   test('click-dynamic-menu-results', async () => {
@@ -103,7 +109,9 @@ describe('tests', () => {
       page.click('[data-testid="menu-tab-results"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/result/));
+    expect(url).toEqual(
+      expect.stringMatching(new RegExp(`${window.location.href}/result/`))
+    );
   });
 
   test('click-dynamic-menu-release_notes', async () => {
@@ -112,7 +120,11 @@ describe('tests', () => {
       page.click('[data-testid="menu-tab-release_notes"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/release_notes/));
+    expect(url).toEqual(
+      expect.stringMatching(
+        new RegExp(`${window.location.href}/release_notes/`)
+      )
+    );
   });
 
   test('click-dynamic-menu-download', async () => {
@@ -121,7 +133,9 @@ describe('tests', () => {
       page.click('[data-testid="menu-tab-download"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/download/));
+    expect(url).toEqual(
+      expect.stringMatching(new RegExp(`${window.location.href}/download/`))
+    );
   });
 
   test('click-dynamic-menu-help', async () => {
@@ -130,7 +144,9 @@ describe('tests', () => {
       page.click('[data-testid="menu-tab-help"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/help/));
+    expect(url).toEqual(
+      expect.stringMatching(new RegExp(`${window.location.href}/help/`))
+    );
   });
 
   test('click-dynamic-menu-about', async () => {
@@ -139,6 +155,8 @@ describe('tests', () => {
       page.click('[data-testid="menu-tab-about"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/about/));
+    expect(url).toEqual(
+      expect.stringMatching(new RegExp(`${window.location.href}/about/`))
+    );
   });
 });
