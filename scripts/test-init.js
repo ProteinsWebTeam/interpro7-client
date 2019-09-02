@@ -1,5 +1,4 @@
 import puppeteer from 'puppeteer';
-const { defaults } = require('jest-config');
 
 export const RESOLUTION = {
   VGA: {

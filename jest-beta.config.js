@@ -1,8 +1,4 @@
 /* eslint-env node */
-const fs = require('fs');
-
-const url = require('url');
-const yaml = require('js-yaml');
 
 module.exports = {
   verbose: false,
