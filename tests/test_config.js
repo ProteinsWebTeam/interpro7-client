@@ -1,10 +1,4 @@
 export default {
-  servers: {
-    live: 'https://www.ebi.ac.uk/interpro',
-    beta: 'https://www.ebi.ac.uk/interpro/beta',
-    dev: 'https://wwwdev.ebi.ac.uk/interpro7',
-  },
-
   two_minutes: 120000,
   five_minutes: 300000,
   fast_timeout: 100,
