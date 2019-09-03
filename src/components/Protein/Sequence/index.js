@@ -58,14 +58,17 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
           processData={schemaProcessData}
         />
         {sequenceWords.map((e, i) => (
-          <span
-            key={i}
-            className={f('sequence_word')}
-            style={{ zIndex: -i }}
-            data-index={i}
-          >
-            {e}
-          </span>
+          <>
+            <span
+              key={i}
+              className={f('sequence_word')}
+              style={{ zIndex: -i }}
+              data-index={i}
+            >
+              {e}
+            </span>
+            <div className={f('sequence_word_spacer')} />
+          </>
         ))}
       </div>
     );
@@ -118,7 +121,7 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
         // Get the text in the selection
         const selectionString = selection.toString().trim();
         if (selectionString) {
-          sequenceToSearch = selectionString;
+          sequenceToSearch = selectionString.replace(/\s/gi, '');
         }
         // define start and end value of sequence selection
         start =

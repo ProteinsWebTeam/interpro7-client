@@ -1,24 +1,6 @@
 import { createSelector } from 'reselect';
 import { toPlural } from 'utils/pages';
-
-const splitMobiFeatures = features => {
-  const newFeatures = {};
-  for (const f of features) {
-    for (const loc of f.entry_protein_locations) {
-      const key = loc.seq_feature || f.name;
-      if (newFeatures[key]) {
-        newFeatures[key].entry_protein_locations.push(loc);
-      } else {
-        newFeatures[key] = {
-          ...f,
-          accession: `Mobidblt-${key}`,
-          entry_protein_locations: [loc],
-        };
-      }
-    }
-  }
-  return Object.values(newFeatures);
-};
+import { NOT_MEMBER_DBS } from 'menuConfig';
 
 export const processData = createSelector(
   data => data.data.payload.results,
@@ -49,12 +31,7 @@ export const processData = createSelector(
     const unintegrated = results.filter(
       entry =>
         interpro.concat(integrated).indexOf(entry) === -1 &&
-        entry.source_database.toLowerCase() !== 'mobidblt',
-    );
-    const mobidb = splitMobiFeatures(
-      results.filter(
-        entry => entry.source_database.toLowerCase() === 'mobidblt',
-      ),
+        !NOT_MEMBER_DBS.has(entry.source_database.toLowerCase()),
     );
     integrated.forEach(entry => {
       const ipro =
@@ -68,7 +45,7 @@ export const processData = createSelector(
     return {
       interpro,
       unintegrated,
-      other: mobidb,
+      other: [],
     };
   },
 );

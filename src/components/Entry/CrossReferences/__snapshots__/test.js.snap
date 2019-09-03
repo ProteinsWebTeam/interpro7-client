@@ -7,7 +7,7 @@ exports[`<CrossReferences /> should render 1`] = `
   <div
     className="large-12 columns"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(AnimatedEntry))
       className="list margin-left-none"
       duration={500}
       itemDelay={100}
@@ -24,7 +24,7 @@ exports[`<CrossReferences /> should render 1`] = `
         description="PROSITE is a database of protein families and domains."
         name="prositedoc"
       />
-    </Memo(ConnectFunction)>
+    </Memo(Connect(AnimatedEntry))>
   </div>
 </div>
 `;

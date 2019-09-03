@@ -36,9 +36,9 @@ const MAX_LENGTH = 200;
   data: {
     payload: Object,
     loading: boolean,
-    ok: boolean,
-    url: string,
-    status: number
+    ok?: boolean,
+    url?: string,
+    status?: number
   },
   isStale: boolean,
   searchValue: string,

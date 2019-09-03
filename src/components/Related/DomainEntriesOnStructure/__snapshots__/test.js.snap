@@ -16,7 +16,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
          
         <small>
           (
-          <Memo(ConnectFunction)
+          <Memo(Connect(Link))
             to={
               Object {
                 "description": Object {
@@ -32,13 +32,14 @@ exports[`<EntriesOnStructure /> should render 1`] = `
             }
           >
             P00735
-          </Memo(ConnectFunction)>
+          </Memo(Connect(Link))>
           )
         </small>
       </h4>
-      <Memo(ConnectFunction)
+      <Memo(Connect(loadData(Connect(loadData(ProtVistaLoaded)))))
         chain="A"
         fixedHighlight="208:366"
+        id="A-p00735"
         tracks={
           Array [
             Array [

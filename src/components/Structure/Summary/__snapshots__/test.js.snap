@@ -22,7 +22,7 @@ exports[`<SummaryStructure /> should render 1`] = `
               <td
                 data-testid="structure-accession"
               >
-                <Memo(ConnectFunction)
+                <Memo(Connect(Accession))
                   accession="102m"
                 />
               </td>
@@ -35,7 +35,7 @@ exports[`<SummaryStructure /> should render 1`] = `
                 className="text-cap"
                 data-testid="structure-experiment-type"
               >
-                <Memo(ConnectFunction)
+                <Memo(Connect(Link))
                   to={
                     Object {
                       "description": Object {
@@ -57,7 +57,7 @@ exports[`<SummaryStructure /> should render 1`] = `
                   }
                 >
                   X-ray
-                </Memo(ConnectFunction)>
+                </Memo(Connect(Link))>
               </td>
             </tr>
             <tr>
@@ -125,14 +125,14 @@ exports[`<SummaryStructure /> should render 1`] = `
         </div>
       </div>
     </div>
-    <Memo(ConnectFunction)>
+    <Memo(Connect(UnconnectedErrorBoundary))>
       <div
         className="row"
       >
         <div
           className="columns"
         >
-          <Memo(ConnectFunction)
+          <Memo(Connect(ViewerOnDemand))
             id="102m"
             matches={
               Array [
@@ -158,7 +158,7 @@ exports[`<SummaryStructure /> should render 1`] = `
           />
         </div>
       </div>
-    </Memo(ConnectFunction)>
+    </Memo(Connect(UnconnectedErrorBoundary))>
   </section>
   <div>
     0

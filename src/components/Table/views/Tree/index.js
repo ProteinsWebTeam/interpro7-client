@@ -125,7 +125,14 @@ const mergeData = (root, update, names) => {
   },
   goToCustomLocation: function
 };*/
-class TreeView extends Component /*:: <TreeViewProps> */ {
+
+/*:: type State = {
+  data: {name: string, id: string},
+  focused: string,
+  entryDB: Object,
+}; */
+class TreeView extends Component /*:: <TreeViewProps, State> */ {
+  /*:: _CDPMap: Map<string, Object>*/
   static propTypes = {
     customLocation: T.shape({
       description: T.object,
@@ -290,6 +297,23 @@ class TreeView extends Component /*:: <TreeViewProps> */ {
                     )
                       return null;
 
+                    const to = {
+                      ...description,
+                      [endpoint]: {
+                        db,
+                        isFilter: true,
+                        order: 1,
+                      },
+                    };
+                    if (description.main.key !== 'taxonomy') {
+                      to.taxonomy = {
+                        db: 'uniprot',
+                        isFilter: true,
+                        order: 2,
+                      };
+                    }
+                    to.taxonomy.accession = currentNode.id;
+
                     return (
                       <li key={endpoint}>
                         <Link
@@ -297,20 +321,7 @@ class TreeView extends Component /*:: <TreeViewProps> */ {
                             disable: !currentNode.counters[plural],
                           })}
                           to={{
-                            description: {
-                              ...description,
-                              taxonomy: {
-                                db: 'uniprot',
-                                accession: `${currentNode.id}`,
-                                isFilter: true,
-                                order: 2,
-                              },
-                              [endpoint]: {
-                                db,
-                                isFilter: true,
-                                order: 1,
-                              },
-                            },
+                            description: to,
                           }}
                         >
                           <NumberComponent abbr duration={ANIMATION_DURATION}>

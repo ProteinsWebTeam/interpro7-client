@@ -46,11 +46,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
                 }
               }
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//embl.org"
               >
                 EMBL
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h3>
              
             was set up in 1974 as Europe’s flagship laboratory for the life sciences – an intergovernmental organisation with more than 80 independent research groups covering the spectrum of molecular biology:
@@ -62,7 +62,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
           <div
             className="column padding-bottom-medium"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.embl.de/research/index.php"
             >
               <h5
@@ -72,12 +72,12 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               </h5>
                
               perform basic research in molecular biology
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </div>
           <div
             className="column padding-bottom-medium"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.embl.de/services/index.html"
             >
               <h5
@@ -87,12 +87,12 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               </h5>
                
               offer vital services to scientists in the member states
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </div>
           <div
             className="column padding-bottom-medium"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.embl.de/training/index.php"
             >
               <h5
@@ -102,12 +102,12 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               </h5>
                
               scientists, students and visitors at all levels
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </div>
           <div
             className="column padding-bottom-medium"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.embl.de/research/tech_transfer/index.html"
             >
               <h5
@@ -117,7 +117,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
               </h5>
                
               and development of technology
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </div>
           <div
             className="column padding-bottom-medium"
@@ -146,12 +146,12 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
           className="margin-top-xlarge no-underline"
         >
           <h3>
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               className="readmore"
               href="//embl.org"
             >
               More about EMBL
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </h3>
         </div>
       </div>
@@ -179,11 +179,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl-barcelona.es/"
               >
                 Barcelona
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Tissue biology and disease modelling
@@ -195,11 +195,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl.fr/"
               >
                 Grenoble
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Structural biology
@@ -211,11 +211,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl-hamburg.de/"
               >
                 Hamburg
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Structural biology
@@ -227,11 +227,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl.de/"
               >
                 Heidelberg
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Main laboratory
@@ -243,11 +243,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.ebi.ac.uk/"
               >
                 Hinxton
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p
               className="margin-bottom-none"
@@ -261,11 +261,11 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl.it/"
               >
                 Rome
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Epigenetics and neurobiology
@@ -323,11 +323,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
                 }
               }
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//embl.org"
               >
                 EMBL
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h3>
              
             was set up in 1974 as Europe’s flagship laboratory for the life sciences – an intergovernmental organisation with more than 80 independent research groups covering the spectrum of molecular biology:
@@ -339,7 +339,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
           <div
             className="column padding-bottom-medium"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.embl.de/research/index.php"
             >
               <h5
@@ -349,12 +349,12 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               </h5>
                
               perform basic research in molecular biology
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </div>
           <div
             className="column padding-bottom-medium"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.embl.de/services/index.html"
             >
               <h5
@@ -364,12 +364,12 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               </h5>
                
               offer vital services to scientists in the member states
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </div>
           <div
             className="column padding-bottom-medium"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.embl.de/training/index.php"
             >
               <h5
@@ -379,12 +379,12 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               </h5>
                
               scientists, students and visitors at all levels
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </div>
           <div
             className="column padding-bottom-medium"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               href="//www.embl.de/research/tech_transfer/index.html"
             >
               <h5
@@ -394,7 +394,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
               </h5>
                
               and development of technology
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </div>
           <div
             className="column padding-bottom-medium"
@@ -423,12 +423,12 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
           className="margin-top-xlarge no-underline"
         >
           <h3>
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               className="readmore"
               href="//embl.org"
             >
               More about EMBL
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </h3>
         </div>
       </div>
@@ -456,11 +456,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl-barcelona.es/"
               >
                 Barcelona
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Tissue biology and disease modelling
@@ -472,11 +472,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl.fr/"
               >
                 Grenoble
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Structural biology
@@ -488,11 +488,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl-hamburg.de/"
               >
                 Hamburg
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Structural biology
@@ -504,11 +504,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl.de/"
               >
                 Heidelberg
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Main laboratory
@@ -520,11 +520,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.ebi.ac.uk/"
               >
                 Hinxton
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p
               className="margin-bottom-none"
@@ -538,11 +538,11 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             <h5
               className="inline"
             >
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 href="//www.embl.it/"
               >
                 Rome
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </h5>
             <p>
               Epigenetics and neurobiology

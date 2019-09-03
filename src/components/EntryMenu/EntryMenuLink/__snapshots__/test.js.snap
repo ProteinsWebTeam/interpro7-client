@@ -14,7 +14,7 @@ exports[`<EntryMenuLinkWithoutData /> should render 1`] = `
   className="tabs-title"
   data-testid="menu-structures"
 >
-  <Memo(ConnectFunction)
+  <Memo(Connect(Link))
     activeClass="is-active is-active-tab"
     className="browse-tabs-link"
     to={[Function]}
@@ -32,14 +32,14 @@ exports[`<EntryMenuLinkWithoutData /> should render 1`] = `
       Structures
     </span>
      
-    <Memo(ConnectFunction)
+    <Memo(Connect(NumberComponent))
       abbr={true}
       className="counter"
       label={true}
       loading={false}
     >
       41369
-    </Memo(ConnectFunction)>
-  </Memo(ConnectFunction)>
+    </Memo(Connect(NumberComponent))>
+  </Memo(Connect(Link))>
 </li>
 `;

@@ -15,11 +15,13 @@ import ProtVistaColouredSequence from 'protvista-coloured-sequence';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 import ProtvistaTrack from 'protvista-track';
+import ProtvistaSaver from 'protvista-saver';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import PopperJS from 'popper.js';
 
 import loadWebComponent from 'utils/load-web-component';
@@ -30,10 +32,18 @@ import { changeSettingsRaw } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
+import foundationCSS from 'foundation-sites/dist/css/foundation-float.css';
+import foundationCSSasText from '!!raw-loader!foundation-sites/dist/css/foundation-float.css';
 import ipro from 'styles/interpro-new.css';
-import local from './style.css';
+import iproCSSasText from '!!raw-loader!styles/interpro-new.css';
+import fontCSS from '!!raw-loader!styles/fonts.css';
+import colorsCSS from '!!raw-loader!styles/colors.css';
+import localCSS from './style.css';
+import localCSSasText from '!!raw-loader!./style.css';
+import ebiGlobalCSS from '!!raw-loader!ebi-framework/css/ebi-global.css';
+import globalCSS from '!!raw-loader!styles/global.css';
 
-const f = foundationPartial(ipro, local);
+const f = foundationPartial(ipro, localCSS, fonts);
 
 const webComponents = [];
 
@@ -65,6 +75,16 @@ const loadProtVistaWebComponents = () => {
 
     webComponents.push(
       loadWebComponent(() => ProtvistaTrack).as('protvista-track'),
+    );
+
+    webComponents.push(
+      loadWebComponent(() => ProtvistaSaver).as('protvista-saver'),
+    );
+
+    webComponents.push(
+      loadWebComponent(() =>
+        import('interpro-components').then(m => m.InterproType),
+      ).as('interpro-type'),
     );
   }
   return Promise.all(webComponents);
@@ -105,14 +125,17 @@ const getColorScaleHTML = (
   colorDomainsBy: string,
   changeSettingsRaw: function,
   title: string,
-  fixedHighlight: string
+  fixedHighlight: string,
+  id: string,
 }; */
 
 /*:: type State = {
   entryHovered: any,
   hideCategory: Object,
   expandedTrack: Object,
-  collapsed: boolean
+  collapsed: boolean,
+  label: string,
+  addLabelClass: string,
 }; */
 class ProtVista extends Component /*:: <Props, State> */ {
   static propTypes = {
@@ -123,6 +146,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     changeSettingsRaw: T.func,
     title: T.string,
     fixedHighlight: T.string,
+    id: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -136,6 +160,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
       hideCategory: {},
       expandedTrack: {},
       collapsed: false,
+      label: 'accession',
+      addLabelClass: '',
     };
 
     this._mainRef = React.createRef();
@@ -183,6 +209,40 @@ class ProtVista extends Component /*:: <Props, State> */ {
         this._popperRef.current.classList.add(f('hide'));
       }
     });
+    const saver = document.querySelector(`#${this.props.id}Saver`);
+
+    saver.preSave = () => {
+      const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
+      // Including the styles of interpr-type elements
+      base.querySelectorAll('interpro-type').forEach(el => {
+        el.innerHTML = el.shadowRoot.innerHTML;
+      });
+      const style = document.createElement('style');
+      style.setAttribute('id', 'tmp_style');
+      // TODO it needs to be changed in an efficient way through webpack
+      let str = localCSSasText + iproCSSasText + foundationCSSasText;
+      const cssStyles = [localCSS, ipro, foundationCSS];
+      cssStyles.forEach(item => {
+        Object.keys(item).forEach(key => {
+          str = str.replace(
+            new RegExp(`\\.${key}([:,[.\\s])`, 'gm'),
+            `.${item[key]}$1`,
+          );
+        });
+      });
+
+      str = str + ebiGlobalCSS + globalCSS + fontCSS + colorsCSS;
+      style.innerHTML = `${str}`;
+      base.appendChild(style);
+    };
+    // removes the added style from the DOM
+    saver.postSave = () => {
+      const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
+      base.removeChild(document.getElementById('tmp_style'));
+      base.querySelectorAll('interpro-type').forEach(el => {
+        el.innerHTML = '';
+      });
+    };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -282,7 +342,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     this._popperRef.current.classList.remove(f('hide'));
                     removeAllChildrenFromNode(this._popperContentRef.current);
                     this._popperContentRef.current.appendChild(
-                      this.getElementFromEntry(detail),
+                      this.getElementFromDetail(detail),
                     );
                     this._isPopperTop = !this._isPopperTop;
                     this.popper = new PopperJS(
@@ -349,16 +409,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     return type;
   };
 
-  getElementFromEntry(detail) {
-    let databases = {};
-    const { dataDB } = this.props;
-    if (!dataDB.loading && dataDB.payload) {
-      databases = dataDB.payload.databases;
-    }
-
-    const entry = detail.feature;
-    const sourceDatabase = this._getSourceDatabaseDisplayName(entry, databases);
-
+  getHTMLStringForEntry(entry, sourceDatabase, highlightChild) {
     let type = entry.entry_type || entry.type || '';
     if (sourceDatabase === 'MobiDB Lite') {
       // Handle MobiDB Lite entries
@@ -369,65 +420,109 @@ class ProtVista extends Component /*:: <Props, State> */ {
     if (type === 'secondary_structure') {
       type = `Secondary Structure: ${this._getSecondaryStructureType(entry)}`;
     }
+    let newLocations = null;
+    if (highlightChild) {
+      newLocations = highlightChild.split(',').map(loc => {
+        const [start, end] = loc.split(':');
+        return { fragments: [{ start, end }] };
+      });
+    }
 
-    const isResidue = detail.type === 'residue';
-    const isInterPro = entry.source_database === 'interpro';
-    const tagString = `<section>   
+    return this.getHTMLString(
+      {
+        ...entry,
+        locations: newLocations || entry.locations,
+        type,
+        sourceDatabase,
+      },
+      entry.source_database === 'interpro',
+    );
+  }
+
+  getHTMLStringForResidue(entry, sourceDatabase) {
+    const residue = entry.currentResidue;
+    return this.getHTMLString(
+      {
+        ...entry,
+        ...residue,
+        residue: residue.residue || residue.residues,
+        sourceDatabase,
+        description: residue.description || residue.location.description,
+      },
+      false,
+      true,
+    );
+  }
+
+  getHTMLString(
+    {
+      accession,
+      sourceDatabase,
+      description,
+      name,
+      entry,
+      locations,
+      type,
+      start,
+      residue,
+    },
+    isInterPro = false,
+    isResidue = false,
+  ) {
+    return `
+      <section>   
         <h6>
-          ${entry.accession}
-          ${
-            isResidue
-              ? `<br/>[${detail.description || detail.location.description}]`
-              : ''
-          } 
+          ${accession}
+          ${description ? `<br/>[${description}]` : ''} 
          </h6>
           
-        ${entry.name ? `<h4>${entry.name}</h4>` : ''}
+        ${name && !isResidue ? `<h4>${name}</h4>` : ''}
         
         <!-- use class as Protvista is not react-->       
         <div class="${f('pop-wrapper')}" >
-        <div>${
-          isInterPro
-            ? `<interpro-type
-                    type="${(entry.entry_type || entry.type).replace('_', ' ')}"
-                    dimension="1.4em"
-                    aria-label="Entry type"
-                  />`
-            : ''
-        } 
-        </div>
-        <div>
-          ${sourceDatabase}
-        ${type ? type.replace('_', ' ') : ''}</div>
+          <div>${
+            isInterPro
+              ? `<interpro-type
+                      type="${type.replace('_', ' ')}"
+                      dimension="1.4em"
+                      aria-label="Entry type"
+                    />`
+              : ''
+          } 
+          </div>
+          <div>
+            ${isResidue ? 'Residue in ' : ''}
+            ${sourceDatabase} ${type ? type.replace('_', ' ') : ''}
+          </div>
         </div>
         <p>
           <small>          
-            ${entry.entry ? `(${entry.entry})` : ''}
+            ${entry ? `(${entry})` : ''}
           </small>
         </p>
         <ul>
           ${
             isResidue
               ? `
-              <li>Position: ${detail.start}</li>
-              <li>Residue: ${detail.residue || detail.residues}</li>
-              `
-              : entry.locations
+            <li>Position: ${start}</li>
+            <li>Residue: ${residue}</li>
+            `
+              : locations
                   .map(({ fragments, model_acc: model }) =>
                     `
-          <li> 
-          <!--location:-->
-            ${model && model !== entry.accession ? `Model: ${model}` : ''}
-            <ul>
-              ${fragments
-                .map(({ start, end }) =>
-                  `
-                <li>${start} - ${end}</li>
-              `.trim(),
-                )
-                .join('')}
-            </ul>
-          </li>
+            <li> 
+            <!--location:-->
+              ${model && model !== accession ? `Model: ${model}` : ''}
+              <ul>
+                ${fragments
+                  .map(({ start, end }) =>
+                    `
+                  <li>${start} - ${end}</li>
+                `.trim(),
+                  )
+                  .join('')}
+              </ul>
+            </li>
           `.trim(),
                   )
                   .join('')
@@ -435,6 +530,27 @@ class ProtVista extends Component /*:: <Props, State> */ {
         </ul>
       </section>
     `.trim();
+  }
+
+  getElementFromDetail(detail) {
+    let databases = {};
+    const { dataDB } = this.props;
+    if (!dataDB.loading && dataDB.payload) {
+      databases = dataDB.payload.databases;
+    }
+
+    const entry = detail.feature;
+    const sourceDatabase = this._getSourceDatabaseDisplayName(entry, databases);
+
+    const isResidue =
+      detail.target && detail.target.classList.contains('residue');
+    const highlightChild =
+      detail.target &&
+      detail.target.classList.contains('child-fragment') &&
+      detail.highlight;
+    const tagString = isResidue
+      ? this.getHTMLStringForResidue(entry, sourceDatabase)
+      : this.getHTMLStringForEntry(entry, sourceDatabase, highlightChild);
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
     return range.createContextualFragment(tagString);
@@ -484,8 +600,20 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
   };
 
+  toggleLabel = () => {
+    if (this.state.label === 'accession')
+      this.setState({ label: 'name', addLabelClass: 'label-by-name' });
+    else this.setState({ label: 'accession', addLabelClass: '' });
+  };
+
   renderLabels(entry) {
     const { expandedTrack } = this.state;
+    const { dataDB } = this.props;
+    let databases = {};
+    if (dataDB.payload) {
+      databases = dataDB.payload.databases;
+    }
+    // const databases = dataDB.payload.databases;
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
       entry.type === 'chain' ||
@@ -510,7 +638,17 @@ class ProtVista extends Component /*:: <Props, State> */ {
             },
           }}
         >
-          {entry.accession}
+          {this.state.label === 'name'
+            ? (
+                <>
+                  <interpro-type
+                    type={entry.type.replace('_', ' ')}
+                    dimension="1em"
+                  />
+                  {entry.name}
+                </>
+              ) || entry.accession
+            : entry.accession}
         </Link>
         <div
           className={f({
@@ -535,7 +673,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     },
                   }}
                 >
-                  {d.accession}
+                  {this.state.label === 'name'
+                    ? `${d.name}-${this._getSourceDatabaseDisplayName(
+                        d,
+                        databases,
+                      )}` || d.accession
+                    : d.accession}
                 </Link>
                 {this.renderResidueLabels(d)}
               </div>
@@ -577,8 +720,15 @@ class ProtVista extends Component /*:: <Props, State> */ {
   renderOptions() {
     const { collapsed } = this.state;
     const title = this.props.title || 'Domains on protein';
+
     return (
-      <div className={f('aligned-to-track-component', 'view-options-wrap')}>
+      <div
+        className={f(
+          'aligned-to-track-component',
+          'view-options-wrap',
+          `${this.state.addLabelClass}`,
+        )}
+      >
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
           <div className={f('option-color', 'margin-right-medium')}>
@@ -614,6 +764,33 @@ class ProtVista extends Component /*:: <Props, State> */ {
               tooltip="View the domain viewer in full screen mode"
             />
           </div>
+          <div
+            className={f('option-fullscreen', 'font-l', 'margin-right-large')}
+          >
+            <Tooltip title={'Click to take the snapshot'}>
+              <protvista-saver
+                element-id={`${this.props.id}ProtvistaDiv`}
+                background-color={'#e5e5e5'}
+                id={`${this.props.id}Saver`}
+              >
+                <button
+                  className={f('icon', 'icon-common')}
+                  data-icon="&#xf030;"
+                />
+              </protvista-saver>
+            </Tooltip>
+          </div>
+          <div
+            className={f('option-fullscreen', 'font-l', 'margin-right-large')}
+          >
+            <Tooltip title={'Label by Accession/Name'}>
+              <button
+                className={f('icon', 'icon-common')}
+                data-icon="&#xf02b;"
+                onClick={this.toggleLabel}
+              />
+            </Tooltip>
+          </div>
         </div>
       </div>
     );
@@ -638,124 +815,149 @@ class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper__arrow')} />
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
-
-        <div className={f('protvista')}>
-          <protvista-manager
-            attributes="length displaystart displayend highlight"
-            id="pv-manager"
-          >
-            <div className={f('track-container')}>
-              <div className={f('track-row')}>
-                <div className={f('aligned-to-track-component')}>
-                  <protvista-navigation
-                    length={length}
-                    displaystart="1"
-                    displayend={length}
-                  />
+        <div id={`${this.props.id}ProtvistaDiv`}>
+          <div className={f('protvista')}>
+            <protvista-manager
+              attributes="length displaystart displayend highlight"
+              id="pv-manager"
+            >
+              <div className={f('track-container')}>
+                <div className={f('track-row')}>
+                  <div
+                    className={f(
+                      'aligned-to-track-component',
+                      `${this.state.addLabelClass}`,
+                    )}
+                  >
+                    <protvista-navigation
+                      length={length}
+                      displaystart="1"
+                      displayend={length}
+                    />
+                  </div>
+                </div>
+                <div className={f('track-row')}>
+                  <div
+                    className={f(
+                      'aligned-to-track-component',
+                      `${this.state.addLabelClass}`,
+                    )}
+                  >
+                    <protvista-sequence
+                      ref={this._webProteinRef}
+                      length={length}
+                      displaystart="1"
+                      displayend={length}
+                      highlight-event="onmouseover"
+                    />
+                    <protvista-coloured-sequence
+                      ref={this._hydroRef}
+                      length={length}
+                      displaystart="1"
+                      displayend={length}
+                      scale="hydrophobicity-scale"
+                      height="10px"
+                      highlight-event="onmouseover"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className={f('track-row')}>
-                <div className={f('aligned-to-track-component')}>
-                  <protvista-sequence
-                    ref={this._webProteinRef}
-                    length={length}
-                    displaystart="1"
-                    displayend={length}
-                    highlight-event="onmouseover"
-                  />
-                  <protvista-coloured-sequence
-                    ref={this._hydroRef}
-                    length={length}
-                    displaystart="1"
-                    displayend={length}
-                    scale="hydrophobicity-scale"
-                    height="10px"
-                    highlight-event="onmouseover"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={f('tracks-container')}>
-              {data &&
-                data
-                  .filter(([_, tracks]) => tracks && tracks.length)
-                  .map(([type, entries]) => (
-                    <div key={type} className={f('track-container')}>
-                      <div className={f('track-row')}>
-                        <div
-                          className={f('track-component')}
-                          style={{ borderBottom: 0 }}
-                        >
-                          <header>
-                            <button
-                              onClick={() =>
-                                this.setObjectValueInState(
-                                  'hideCategory',
-                                  type,
-                                  !hideCategory[type],
-                                )
-                              }
-                            >
-                              {hideCategory[type] ? '▸' : '▾'} {type}
-                            </button>
-                          </header>
+              <div className={f('tracks-container')}>
+                {data &&
+                  data
+                    .filter(([_, tracks]) => tracks && tracks.length)
+                    .map(([type, entries]) => (
+                      <div key={type} className={f('track-container')}>
+                        <div className={f('track-row')}>
+                          <div
+                            className={f(
+                              'track-component',
+                              `${this.state.addLabelClass}`,
+                            )}
+                            style={{ borderBottom: 0 }}
+                          >
+                            <header>
+                              <button
+                                onClick={() =>
+                                  this.setObjectValueInState(
+                                    'hideCategory',
+                                    type,
+                                    !hideCategory[type],
+                                  )
+                                }
+                              >
+                                {hideCategory[type] ? '▸' : '▾'} {type}
+                              </button>
+                            </header>
+                          </div>
                         </div>
-                      </div>
-                      <div
-                        className={f('track-group', {
-                          hideCategory: hideCategory[type],
-                        })}
-                      >
-                        {entries &&
-                          entries.map(entry => (
-                            <div
-                              key={entry.accession}
-                              className={f('track-row')}
-                            >
-                              {entry.type === 'secondary_structure' ? (
+                        <div
+                          className={f('track-group', {
+                            hideCategory: hideCategory[type],
+                          })}
+                        >
+                          {entries &&
+                            entries.map(entry => (
+                              <div
+                                key={entry.accession}
+                                className={f('track-row')}
+                              >
+                                {entry.type === 'secondary_structure' ? (
+                                  <div
+                                    className={f(
+                                      'track-component',
+                                      'secondary-structure',
+                                      `${this.state.addLabelClass}`,
+                                    )}
+                                  >
+                                    <protvista-track
+                                      length={length}
+                                      displaystart="1"
+                                      displayend={length}
+                                      id={`track_${entry.accession}`}
+                                      ref={e =>
+                                        (this.web_tracks[entry.accession] = e)
+                                      }
+                                      highlight-event="onmouseover"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div
+                                    className={f(
+                                      'track-component',
+                                      `${this.state.addLabelClass}`,
+                                    )}
+                                  >
+                                    <protvista-interpro-track
+                                      length={length}
+                                      displaystart="1"
+                                      displayend={length}
+                                      id={`track_${entry.accession}`}
+                                      ref={e =>
+                                        (this.web_tracks[entry.accession] = e)
+                                      }
+                                      shape="roundRectangle"
+                                      highlight-event="onmouseover"
+                                      expanded
+                                    />
+                                  </div>
+                                )}
                                 <div
                                   className={f(
-                                    'track-component',
-                                    'secondary-structure',
+                                    'track-accession',
+                                    `${this.state.addLabelClass}`,
                                   )}
                                 >
-                                  <protvista-track
-                                    length={length}
-                                    displaystart="1"
-                                    displayend={length}
-                                    id={`track_${entry.accession}`}
-                                    ref={e =>
-                                      (this.web_tracks[entry.accession] = e)
-                                    }
-                                    highlight-event="onmouseover"
-                                  />
+                                  {this.renderLabels(entry)}
                                 </div>
-                              ) : (
-                                <div className={f('track-component')}>
-                                  <protvista-interpro-track
-                                    length={length}
-                                    displaystart="1"
-                                    displayend={length}
-                                    id={`track_${entry.accession}`}
-                                    ref={e =>
-                                      (this.web_tracks[entry.accession] = e)
-                                    }
-                                    shape="roundRectangle"
-                                    highlight-event="onmouseover"
-                                    expanded
-                                  />
-                                </div>
-                              )}
-                              <div className={f('track-accession')}>
-                                {this.renderLabels(entry)}
                               </div>
-                            </div>
-                          ))}
+                            ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-            </div>
-          </protvista-manager>
+                    ))}
+              </div>
+            </protvista-manager>
+          </div>
         </div>
       </div>
     );

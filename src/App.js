@@ -29,7 +29,9 @@ class App extends PureComponent /*:: <{||}> */ {
     return (
       <Provider store={store}>
         <ErrorBoundary>
-          <Root />
+          <React.StrictMode>
+            <Root />
+          </React.StrictMode>
         </ErrorBoundary>
       </Provider>
     );

@@ -9,7 +9,7 @@ exports[`<DynamicMenu /> should render 1`] = `
     data-name="Home"
     data-testid="menu-tab-home"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       exact={true}
       to={
         Object {
@@ -18,14 +18,14 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
     >
       Home
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li
     className="menu-item visible"
     data-name="Search"
     data-testid="menu-tab-search"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -37,37 +37,37 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
     >
       Search
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li
     className="menu-item visible"
     data-name="Browse"
     data-testid="menu-tab-browse"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       activeClass={[Function]}
       to={[Function]}
     >
       Browse
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li
     className="menu-item visible"
     data-name="Results"
     data-testid="menu-tab-results"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={[Function]}
     >
       Results
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li
     className="menu-item visible"
     data-name="Release notes"
     data-testid="menu-tab-release_notes"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -79,14 +79,14 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
     >
       Release notes
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li
     className="menu-item visible"
     data-name="Download"
     data-testid="menu-tab-download"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -98,14 +98,14 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
     >
       Download
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li
     className="menu-item visible"
     data-name="Help"
     data-testid="menu-tab-help"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -117,14 +117,14 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
     >
       Help
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li
     className="menu-item visible"
     data-name="About"
     data-testid="menu-tab-about"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -136,7 +136,7 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
     >
       About
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <ul
     className="menu-item view-more"

@@ -5,7 +5,7 @@ exports[`<InterProMenu /> should render 1`] = `
   className=" interpro-menu"
 >
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       exact={true}
       to={
         Object {
@@ -15,10 +15,10 @@ exports[`<InterProMenu /> should render 1`] = `
     >
       <span />
       Home
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -34,10 +34,10 @@ exports[`<InterProMenu /> should render 1`] = `
         data-icon=""
       />
       Search
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       activeClass={[Function]}
       to={[Function]}
     >
@@ -46,10 +46,10 @@ exports[`<InterProMenu /> should render 1`] = `
         data-icon="b"
       />
       Browse
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={[Function]}
     >
       <i
@@ -57,10 +57,10 @@ exports[`<InterProMenu /> should render 1`] = `
         data-icon="*"
       />
       Results
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -76,10 +76,10 @@ exports[`<InterProMenu /> should render 1`] = `
         data-icon=""
       />
       Release notes
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -95,10 +95,10 @@ exports[`<InterProMenu /> should render 1`] = `
         data-icon="="
       />
       Download
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -114,10 +114,10 @@ exports[`<InterProMenu /> should render 1`] = `
         data-icon=""
       />
       Help
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -133,10 +133,10 @@ exports[`<InterProMenu /> should render 1`] = `
         data-icon=""
       />
       About
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       to={
         Object {
           "description": Object {
@@ -152,7 +152,7 @@ exports[`<InterProMenu /> should render 1`] = `
         data-icon=""
       />
       Settings
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
 </ul>
 `;

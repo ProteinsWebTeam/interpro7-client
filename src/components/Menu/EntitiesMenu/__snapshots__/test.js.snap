@@ -3,52 +3,52 @@
 exports[`<EntitiesMenu /> should render 1`] = `
 <ul>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       activeClass="active"
       to={[Function]}
     >
       Entry
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       activeClass="active"
       to={[Function]}
     >
       Protein
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       activeClass="active"
       to={[Function]}
     >
       Structure
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       activeClass="active"
       to={[Function]}
     >
       Taxonomy
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       activeClass="active"
       to={[Function]}
     >
       Proteome
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       activeClass="active"
       to={[Function]}
     >
       Set
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
 </ul>
 `;
