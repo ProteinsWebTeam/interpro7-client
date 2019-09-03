@@ -85,7 +85,8 @@ describe('tests', () => {
       page.click('[data-testid="browse-tab-entry"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/entry/));
+    const urlMatch = new RegExp(`${window.location.href}/entry/`, 'i');
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-page-entry-interpro-filter', async () => {
@@ -103,7 +104,10 @@ describe('tests', () => {
       }),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp(`interpro\/entry\/${interprodb}`, 'i');
+    const urlMatch = new RegExp(
+      `${window.location.href}\/entry\/${interprodb}`,
+      'i'
+    );
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
@@ -124,7 +128,10 @@ describe('tests', () => {
         }),
       ]);
       const url = await page.evaluate(() => window.location.href);
-      const urlMatch = new RegExp(`interpro\/entry\/${memberdb}`, 'i');
+      const urlMatch = new RegExp(
+        `${window.location.href}\/entry\/${memberdb}`,
+        'i'
+      );
       expect(url).toEqual(expect.stringMatching(urlMatch));
     });
 
@@ -173,7 +180,10 @@ describe('tests', () => {
     expect(item).not.toBeNull();
 
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp('interpro/entry/interpro/#grid', 'i');
+    const urlMatch = new RegExp(
+      `${window.location.href}/entry/interpro/#grid`,
+      'i'
+    );
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 });
