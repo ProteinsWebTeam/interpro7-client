@@ -29,62 +29,55 @@ const ProtVista = loadable({
 
 const processConservationData = (entry, match) => {
   const fragments = [];
+  // applying run-length-encoding style compression
+
+  let currentFragment;
   for (const residue of match) {
-    if (residue.score > 0) {
-      let color;
-      /* eslint-disable no-magic-numbers */
-      if (residue.score > 0.0 && residue.score <= 0.5) {
-        color = '#ffffe0';
-      } else if (residue.score > 0.5 && residue.score <= 1) {
-        color = '#d3f4e0';
-      } else if (residue.score > 1 && residue.score <= 1.5) {
-        color = '#b9e5dd';
-      } else if (residue.score > 1.5 && residue.score <= 2) {
-        color = '#a5d5d8';
-      } else if (residue.score > 2 && residue.score <= 2.5) {
-        color = '#93c4d2';
-      } else if (residue.score > 2.5 && residue.score <= 3) {
-        color = '#82b3cd';
-      } else if (residue.score > 3 && residue.score <= 3.5) {
-        color = '#73a2c6';
-      } else if (residue.score > 3.5 && residue.score <= 4) {
-        color = '#6492c0';
-      } else if (residue.score > 4 && residue.score <= 4.5) {
-        color = '#5681b9';
-      } else if (residue.score > 4.5 && residue.score <= 5) {
-        color = '#4771b2';
-      } else if (residue.score > 5 && residue.score <= 5.5) {
-        color = '#3761ab';
-      } else if (residue.score > 5.5 && residue.score <= 6) {
-        color = '#2451a4';
-      } else {
-        color = '#00429d';
-      }
-      /*
-      if (residue.score > 0.0 && residue.score <= 1.29) {
-        color = '#ffffe0';
-      } else if (residue.score > 1.29 && residue.score <= 2.58) {
-        color = '#b1dfdb';
-      } else if (residue.score > 2.58 && residue.score <= 3.23) {
-        color = '#85b7ce';
-      } else if (residue.score > 3.23 && residue.score <= 4.52) {
-        color = '#618fbf';
-      } else if (residue.score > 4.52 && residue.score <= 5.81) {
-        color = '#3e67ae';
-      } else {
-        color = '#00429d';
-      }
-      */
-      /* eslint-enable no-magic-numbers */
-      const tooltip = `${entry}. Score: ${residue.score}`;
-      fragments.push({
+    let color;
+    /* eslint-disable no-magic-numbers */
+    if (residue.score > 0.0 && residue.score <= 0.5) {
+      color = '#ffffe0';
+    } else if (residue.score > 0.5 && residue.score <= 1) {
+      color = '#d3f4e0';
+    } else if (residue.score > 1 && residue.score <= 1.5) {
+      color = '#b9e5dd';
+    } else if (residue.score > 1.5 && residue.score <= 2) {
+      color = '#a5d5d8';
+    } else if (residue.score > 2 && residue.score <= 2.5) {
+      color = '#93c4d2';
+    } else if (residue.score > 2.5 && residue.score <= 3) {
+      color = '#82b3cd';
+    } else if (residue.score > 3 && residue.score <= 3.5) {
+      color = '#73a2c6';
+    } else if (residue.score > 3.5 && residue.score <= 4) {
+      color = '#6492c0';
+    } else if (residue.score > 4 && residue.score <= 4.5) {
+      color = '#5681b9';
+    } else if (residue.score > 4.5 && residue.score <= 5) {
+      color = '#4771b2';
+    } else if (residue.score > 5 && residue.score <= 5.5) {
+      color = '#3761ab';
+    } else if (residue.score > 5.5 && residue.score <= 6) {
+      color = '#2451a4';
+    } else {
+      color = '#00429d';
+    }
+    /* eslint-enable no-magic-numbers */
+
+    if (!currentFragment) {
+      currentFragment = {
         start: residue.position,
         end: residue.position,
         color: color,
-        tooltipContent: tooltip,
-      });
+      };
+    }
+    currentFragment.end = residue.position;
+    if (color !== currentFragment.color) {
+      fragments.push(currentFragment);
+      currentFragment = null;
     }
   }
+  fragments.push(currentFragment);
   return fragments;
 };
 
