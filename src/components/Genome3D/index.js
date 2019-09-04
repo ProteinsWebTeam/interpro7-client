@@ -1,3 +1,4 @@
+// @flow
 const HTTP_OK = 200;
 
 const _getProtvistaTracksData = ({ annotations, condition, type, protein }) => {
@@ -27,11 +28,13 @@ const _getProtvistaTracksData = ({ annotations, condition, type, protein }) => {
   return null;
 };
 
-export const formatGenome3dIntoProtVistaPanels = ({
-  loading,
-  status,
-  payload,
-}) => {
+export const formatGenome3dIntoProtVistaPanels = (
+  {
+    loading,
+    status,
+    payload,
+  } /*: {loading: boolean, status: number, payload: Object} */,
+) => {
   const panelsData = {};
   if (
     !loading &&

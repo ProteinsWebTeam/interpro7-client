@@ -34,7 +34,7 @@ exports[`<IPScanSearch /> should render 1`] = `
               >
                 Sequence, in FASTA format
               </h3>
-              <LoadableComponent
+              <Memo(Loadable)
                 data={
                   Object {
                     "description": "Search for InterPro matches in your seqeunce",
@@ -163,6 +163,10 @@ exports[`<IPScanSearch /> should render 1`] = `
                                 "component": [Function],
                                 "strategy": [Function],
                               },
+                              Object {
+                                "component": [Function],
+                                "strategy": [Function],
+                              },
                             ],
                           },
                           "directionMap": Immutable.OrderedMap {
@@ -250,7 +254,7 @@ exports[`<IPScanSearch /> should render 1`] = `
               </div>
             </div>
           </div>
-          <Memo(ConnectFunction) />
+          <Memo(Connect(loadData(AdvancedOptions))) />
           <div
             className="row"
           >

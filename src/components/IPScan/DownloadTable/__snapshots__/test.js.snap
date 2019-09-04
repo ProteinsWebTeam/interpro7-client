@@ -33,13 +33,13 @@ exports[`<DownloadTable /> should render 1`] = `
   <tbody>
     <tr>
       <td>
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
           target="_blank"
         >
           InterProScan 
           5.35-74.0
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </td>
       <td>
         Download and install the latest version of InterProScan (64-bit Linux)
@@ -61,7 +61,7 @@ exports[`<DownloadTable /> should render 1`] = `
         gzipped
       </td>
       <td>
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
           target="_blank"
         >
@@ -72,7 +72,7 @@ exports[`<DownloadTable /> should render 1`] = `
           />
            
           64-bit
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </td>
     </tr>
   </tbody>

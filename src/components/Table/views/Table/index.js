@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -12,7 +13,19 @@ import styles from '../../style.css';
 
 const f = foundationPartial(styles, ipro, fonts);
 
-class TableView extends PureComponent {
+/*:: type Props = {
+  dataTable: Array<Object>,
+  rowKey: string,
+  isStale?: boolean,
+  loading: boolean,
+  ok: boolean,
+  status: number,
+  notFound: boolean,
+  columns: Array<string>,
+  rowClassName: string | function,
+} */
+
+class TableView extends PureComponent /*:: <Props> */ {
   static propTypes = {
     loading: T.bool,
     isStale: T.bool,
@@ -22,6 +35,7 @@ class TableView extends PureComponent {
     notFound: T.bool,
     dataTable: T.array,
     rowKey: T.string,
+    rowClassName: T.oneOfType([T.string, T.func]),
   };
 
   render() {
@@ -34,6 +48,7 @@ class TableView extends PureComponent {
       notFound,
       dataTable,
       rowKey,
+      rowClassName,
     } = this.props;
     return (
       <table
@@ -50,6 +65,7 @@ class TableView extends PureComponent {
           isStale={isStale}
           ok={ok}
           status={status}
+          rowClassName={rowClassName}
         />
       </table>
     );

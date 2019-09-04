@@ -122,7 +122,43 @@ const dataType = T.shape({
   payload: T.object,
 });
 
-export class _MemberDBSelector extends PureComponent {
+/*:: type Props = {
+  children?: function,
+  dataDB: {
+    loading: boolean,
+    payload: Object
+   },
+   dataAllCount?: {
+    loading: boolean,
+    payload: Object
+   },
+   dataDBCount: {
+    loading: boolean,
+    payload: Object
+   },
+   dataSubPageCount?: {
+    loading: boolean,
+    payload: Object
+   },
+   contentType: string,
+   filterType?: string,
+   customLocation: {
+     description: Object,
+     search: Object
+   },
+   lowGraphics: boolean,
+   goToCustomLocation: function,
+   className?: string,
+   isSelected?: function,
+   onChange?: function,
+   hideCounters?: boolean,
+   dbCounters?: Object
+}; */
+
+/*:: type State = {
+  visible: boolean
+}; */
+export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     children: T.func,
     dataDB: dataType,
@@ -144,7 +180,8 @@ export class _MemberDBSelector extends PureComponent {
     dbCounters: T.object,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
+    /* _dbs : Map<string, Object> */
     super(props);
 
     this.state = { visible: false };

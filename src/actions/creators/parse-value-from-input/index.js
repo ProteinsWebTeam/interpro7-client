@@ -1,3 +1,4 @@
+// @flow
 export default (input /*: HTMLInputElement */) => {
   switch (input.type) {
     case 'range':

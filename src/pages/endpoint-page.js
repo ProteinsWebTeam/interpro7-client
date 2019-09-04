@@ -54,7 +54,7 @@ class SummaryComponent extends PureComponent {
     data: dataPropType.isRequired,
     dataBase: dataPropType.isRequired,
     customLocation: T.object.isRequired,
-    SummaryAsync: T.func,
+    SummaryAsync: T.oneOfType([T.func, T.object]),
   };
 
   render() {

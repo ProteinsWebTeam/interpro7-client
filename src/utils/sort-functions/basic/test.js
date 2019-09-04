@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+// @flow
 import sortFn from '.';
 
 describe('sort-basic', () => {

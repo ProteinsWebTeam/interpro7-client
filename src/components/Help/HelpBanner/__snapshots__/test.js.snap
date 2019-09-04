@@ -21,7 +21,7 @@ exports[`<HelpBanner /> should render 1`] = `
       data-icon=""
     />
      
-    <Memo(ConnectFunction)
+    <Memo(Connect(Link))
       className=""
       to={
         Object {
@@ -35,16 +35,16 @@ exports[`<HelpBanner /> should render 1`] = `
       }
     >
       Documentation page
-    </Memo(ConnectFunction)>
+    </Memo(Connect(Link))>
     <br />
     or
      
-    <Memo(ConnectFunction)
+    <Memo(Connect(Link))
       href="http://www.ebi.ac.uk/support/interpro-general-query"
       target="_blank"
     >
       contact us
-    </Memo(ConnectFunction)>
+    </Memo(Connect(Link))>
      
     directly with your question.
   </div>

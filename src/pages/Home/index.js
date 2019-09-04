@@ -53,6 +53,10 @@ const SearchByText = loadable({
   loader: () =>
     import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
 });
+const SearchByIDA = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "search-by-ida" */ 'components/SearchByIDA'),
+});
 const IPScanSearch = loadable({
   loader: () =>
     import(
@@ -97,32 +101,6 @@ const Twitter = loadable({
 });
 
 class InterProGraphicAnim extends PureComponent {
-  // componentDidMount() {
-  //   this._tl = new Timeline();
-  //   this._tl.add('start');
-  //   this._tl.staggerTo(
-  //     `.${f('blob')}.${f('line-up')}`,
-  //     1.5,
-  //     {
-  //       y: 160,
-  //       ease: Expo.easeOut,
-  //     },
-  //     0.1,
-  //     'start',
-  //   );
-  //   this._tl.staggerTo(
-  //     `.${f('blob')}.${f('line-down')}`,
-  //     1.5,
-  //     {
-  //       y: -160,
-  //       ease: Expo.easeOut,
-  //     },
-  //     0.05,
-  //     'start',
-  //   );
-  //   this._tl.pause();
-  // }
-
   _handleMouseOver = () => {
     // this._tl.play();
     TweenLite.to('.blob:not(.high-blob)', 1, {
@@ -479,6 +457,11 @@ class Home extends PureComponent {
                   <SearchByText />
                 </ErrorBoundary>
               </div>
+              <div title="Search by Domain Architecture">
+                <ErrorBoundary>
+                  <SearchByIDA />
+                </ErrorBoundary>
+              </div>
             </Tabs>
           </div>
         </div>
@@ -522,36 +505,6 @@ class Home extends PureComponent {
                 <div title="Latest entries">
                   <ByLatestEntries />
                 </div>
-                {
-                  // <div title="Featured">
-                  //  <div className={f('row')}>
-                  //   <div className={f('columns')}>
-                  //    <ByEntriesFeatured />
-                  //  </div>
-                  // </div>
-                  // </div>
-                }
-                {
-                  // <div title="My entries">
-                  //   <div className={f('row')}>
-                  //     <div className={f('columns')}>
-                  //       <p>
-                  //         You didn&#39;t &quot;save&quot; any entry yet. Please
-                  //         use the{' '}
-                  //         <Link
-                  //           to={{ description: { other: ['settings'] } }}
-                  //           className={f('icon', 'icon-common')}
-                  //           data-icon="&#xf067;"
-                  //           aria-label="add to your favorite"
-                  //         />{' '}
-                  //         icon next to an entry to add this entry to your
-                  //         &quot;favorites&quot;. It should then appear on this
-                  //         dedicated dashboard and in your settings.
-                  //       </p>
-                  //     </div>
-                  //   </div>
-                  // </div>
-                }
               </Tabs>
             </div>
             {
@@ -817,143 +770,6 @@ class Home extends PureComponent {
             </div>
           </div>
         </section>
-
-        {
-          // Begin Publications and tools
-        }
-        {
-          // <div className={f('row', 'small-up-1', 'medium-up-1', 'large-up-2')}>
-          //     <div className={f('columns', 'publication-list')}>
-          //       <div className={f('callout')}>
-          //         <h5>Publications</h5>
-          //         <Link href="http://nar.oxfordjournals.org/content/43/D1/D213">
-          //           <div className={f('media-object')}>
-          //             <div className={f('media-object-section')}>
-          //               <span
-          //                 className={f('icon', 'icon-conceptual')}
-          //                 data-icon="l"
-          //               >
-          //                 &nbsp;
-          //               </span>
-          //             </div>
-          //             <div className={f('media-object-section')}>
-          //               <p>
-          //                 The InterPro protein families database: the classification
-          //                 resource after 15 years <br />
-          //                 <i>Nucleic Acids Research</i>, 2015.
-          //               </p>
-          //             </div>
-          //           </div>
-          //         </Link>
-          //         <Link href="http://database.oxfordjournals.org/content/2016/baw027.full">
-          //           <div className={f('media-object')}>
-          //             <div className={f('media-object-section')}>
-          //               <span
-          //                 className={f('icon', 'icon-conceptual')}
-          //                 data-icon="l"
-          //               >
-          //                 &nbsp;
-          //               </span>
-          //             </div>
-          //             <div className={f('media-object-section')}>
-          //               <p>
-          //                 GO annotation in InterPro: why stability does not indicate
-          //                 accuracy in a sea of changing annotation.
-          //                 <br />
-          //                 <i>Database</i>, 2016.
-          //               </p>
-          //             </div>
-          //           </div>
-          //         </Link>
-          //
-          //         <Link href="http://bioinformatics.oxfordjournals.org/content/30/9/1236">
-          //           <div className={f('media-object')}>
-          //             <div className={f('media-object-section')}>
-          //               <span
-          //                 className={f('icon', 'icon-conceptual')}
-          //                 data-icon="l"
-          //               >
-          //                 &nbsp;
-          //               </span>
-          //             </div>
-          //             <div className={f('media-object-section')}>
-          //               <p>
-          //                 InterProScan 5: genome-scale protein function
-          //                 classification.
-          //                 <br />
-          //                 <i>Bioinformatics</i>, 2014.
-          //               </p>
-          //             </div>
-          //           </div>
-          //         </Link>
-          //         <Link
-          //           to={{
-          //             description: {
-          //               other: ['help', 'documentation', 'publication'],
-          //             },
-          //           }}
-          //           className={f('button')}
-          //         >
-          //           View all publications
-          //         </Link>
-          //       </div>
-          // </div>
-          //   <div className={f('columns', 'tools-list')}>
-          //
-          //     <div className={f('callout')}>
-          //       <h5>Tools</h5>
-          //
-          //       <div className={f('row')}>
-          //         <div className={f('columns', 'medium-6')}>
-          //           <h5>IDA</h5>
-          //           <LazyImage
-          //             alt="IDA logo"
-          //             src={idaLogo}
-          //             className={local['ida-logo']}
-          //           />
-          //           <p>
-          //             The InterPro Domain Architecture (IDA) tool allows you to
-          //             search the InterPro database with a particular set of
-          //             domains, and returns all of the domain architectures and
-          //             associated proteins that match the query.{' '}
-          //             <Link
-          //               to={{
-          //                   description: { other: ['about'] },
-          //                   hash: 'tools-ida',
-          //                 }}
-          //               className={f('readmore')}
-          //             >
-          //               Read more
-          //             </Link>
-          //           </p>
-          //         </div>
-          //         <div className={f('columns', 'medium-6')}>
-          //           <h5>InterProScan</h5>
-          //           <LazyImage
-          //             alt="InterProScan logo"
-          //             src={ipscanLogo}
-          //             className={local['ipscan-logo']}
-          //           />
-          //           <p>
-          //             InterProScan is a sequence analysis application (nucleotide
-          //             and protein sequences) that combines different protein
-          //             signature recognition methods into one resource.{' '}
-          //             <Link
-          //               to={{
-          //                   description: { other: ['about'] },
-          //                   hash: 'tools-interproscan',
-          //                 }}
-          //               className={f('readmore')}
-          //             >
-          //               Read more
-          //             </Link>
-          //           </p>
-          //         </div>
-          //       </div>
-          //     </div>
-          //   </div>
-          // </div>
-        }
 
         <ErrorBoundary>
           <Twitter />

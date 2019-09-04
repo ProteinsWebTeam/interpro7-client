@@ -5,14 +5,14 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
   className="md-list"
   data-testid="by-member-database-box"
 >
-  <Memo(ConnectFunction)
+  <Memo(Connect(AnimatedEntry))
     className="row"
     element="div"
   >
     <div
       className="column text-center"
     >
-      <LoadableComponent
+      <Memo(Loadable)
         data={
           Object {
             "location": Location {
@@ -37,7 +37,7 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
         }
         processData={[Function]}
       />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="block"
         data-testid="member-database-pfam"
         to={
@@ -78,18 +78,18 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
           <span
             className="count visible"
           >
-            <Memo(ConnectFunction)
+            <Memo(Connect(NumberComponent))
               abbr={true}
             >
               17860
-            </Memo(ConnectFunction)>
+            </Memo(Connect(NumberComponent))>
              entries
           </span>
         </p>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </div>
-  </Memo(ConnectFunction)>
-  <Memo(ConnectFunction)
+  </Memo(Connect(AnimatedEntry))>
+  <Memo(Connect(Link))
     className="button margin-bottom-none margin-top-large"
     to={
       Object {
@@ -105,6 +105,6 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
     }
   >
     View all entries
-  </Memo(ConnectFunction)>
+  </Memo(Connect(Link))>
 </div>
 `;

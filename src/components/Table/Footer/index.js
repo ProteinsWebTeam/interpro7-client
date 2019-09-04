@@ -1,3 +1,4 @@
+// @flow
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
@@ -19,7 +20,17 @@ const toFunctionFor = page => customLocation => ({
   search: { ...customLocation.search, page },
 });
 
-class PaginationItem extends PureComponent {
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+/*:: type Props = {
+  className?: string,
+  value?: number,
+  noLink?: boolean,
+  children?: number| string,
+  duration?: number
+}; */
+class PaginationItem extends PureComponent /*:: <Props> */ {
   static propTypes = {
     className: T.string,
     value: T.number,
@@ -41,7 +52,7 @@ class PaginationItem extends PureComponent {
     }
     return (
       <li className={className}>
-        <LinkOrSpan {...props}>
+        <LinkOrSpan {...props} onClick={() => !noLink && scrollToTop()}>
           {(value && children) || (
             <NumberComponent duration={duration || 0} noTitle>
               {value}
@@ -52,8 +63,11 @@ class PaginationItem extends PureComponent {
     );
   }
 }
-
-class PreviousText extends PureComponent {
+/*:: type PreviousTextProps = {
+  previous: number,
+  current: number,
+}; */
+class PreviousText extends PureComponent /*:: <PreviousTextProps> */ {
   static propTypes = {
     previous: T.number.isRequired,
     current: T.number.isRequired,
@@ -68,8 +82,11 @@ class PreviousText extends PureComponent {
     );
   }
 }
-
-class First extends PureComponent {
+/*:: type FirstProps = {
+  first: number,
+  current: number,
+}; */
+class First extends PureComponent /*:: <FirstProps> */ {
   static propTypes = {
     first: T.number.isRequired,
     current: T.number.isRequired,
@@ -81,8 +98,11 @@ class First extends PureComponent {
     return <PaginationItem value={first} />;
   }
 }
-
-class PreviousDotDotDot extends PureComponent {
+/*:: type PreviousDotDotProps = {
+  first: number,
+  previous: number,
+}; */
+class PreviousDotDotDot extends PureComponent /*:: <PreviousDotDotProps> */ {
   static propTypes = {
     first: T.number.isRequired,
     previous: T.number.isRequired,
@@ -93,8 +113,12 @@ class PreviousDotDotDot extends PureComponent {
     return <PaginationItem className={f('ellipsis')} />;
   }
 }
-
-class Previous extends PureComponent {
+/*:: type PreviousProps = {
+  first: number,
+  previous: number,
+  current: number,
+}; */
+class Previous extends PureComponent /*:: <PreviousProps> */ {
   static propTypes = {
     first: T.number.isRequired,
     previous: T.number.isRequired,
@@ -108,7 +132,7 @@ class Previous extends PureComponent {
   }
 }
 
-class Current extends PureComponent {
+class Current extends PureComponent /*:: <{current: number}> */ {
   static propTypes = {
     current: T.number.isRequired,
   };
@@ -123,8 +147,12 @@ class Current extends PureComponent {
     );
   }
 }
-
-class Next extends PureComponent {
+/*:: type NextProps = {
+  current: number,
+  next: number,
+  last: number
+}; */
+class Next extends PureComponent /*:: <NextProps> */ {
   static propTypes = {
     current: T.number.isRequired,
     next: T.number.isRequired,
@@ -137,8 +165,11 @@ class Next extends PureComponent {
     return <PaginationItem value={next} />;
   }
 }
-
-class NextDotDotDot extends PureComponent {
+/*:: type NextDotDotDotProps = {
+  next: number,
+  last: number,
+}; */
+class NextDotDotDot extends PureComponent /*:: <NextDotDotDotProps> */ {
   static propTypes = {
     next: T.number.isRequired,
     last: T.number.isRequired,
@@ -149,8 +180,11 @@ class NextDotDotDot extends PureComponent {
     return <PaginationItem className={f('ellipsis')} />;
   }
 }
-
-class NextText extends PureComponent {
+/*:: type NextTextProps = {
+  current: number,
+  next: number,
+}; */
+class NextText extends PureComponent /*:: <NextTextProps> */ {
   static propTypes = {
     current: T.number.isRequired,
     next: T.number.isRequired,
@@ -166,12 +200,14 @@ class NextText extends PureComponent {
   }
 }
 
-const Footer = ({
-  withPageSizeSelector /*: boolean */,
-  actualSize /*: number */,
-  pagination /*: Object */,
-  notFound,
-}) => {
+const Footer = (
+  {
+    withPageSizeSelector,
+    actualSize,
+    pagination,
+    notFound,
+  } /*: {withPageSizeSelector: boolean, actualSize: number, pagination: Object, notFound: boolean} */,
+) => {
   if (notFound) return null;
 
   const first = 1;

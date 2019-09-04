@@ -38,6 +38,18 @@ const f = foundationPartial(style, fonts);
   colorDomainsBy?: string
 }; */
 
+/*:: type State = {
+  plugin: ?Object,
+  entryMap: Object,
+  selectedEntry: string,
+  selectedEntryToKeep: ?Object,
+  isStuck: boolean,
+  isSpinning: boolean,
+  isStructureFullScreen: boolean,
+  isSplitScreen: boolean,
+  isMinimized: boolean,
+}; */
+
 const NUMBER_OF_CHECKS = 10;
 const optionsForObserver = {
   root: null,
@@ -52,7 +64,7 @@ const SPLIT_REQUESTER = 1;
 const FULL_REQUESTER = 2;
 
 let fullScreenRequester = null;
-class StructureView extends PureComponent /*:: <Props> */ {
+class StructureView extends PureComponent /*:: <Props, State> */ {
   /*:: _structureViewer: { current: ?HTMLElement }; */
 
   static propTypes = {
@@ -226,10 +238,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
             }
             if (type === 'chain')
               this.showEntryInStructure('pdb', pdbid, accession, protein);
-            else if (
-              !accession.startsWith('G3D:') &&
-              type !== 'secondary_structure'
-            )
+            else if (type === 'secondary_structure')
+              this.showSecondaryStructureEntries(feature);
+            else if (!accession.startsWith('G3D:'))
               // TODO: Needs refactoring
               this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
             break;
@@ -260,7 +271,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.splitViewStyle.protvistaWidth = protvistaElement.style.width;
       this.splitViewStyle.viewControlsHeight = structureControls.style.height;
       this.splitViewStyle.viewElementHeight = structureViewer.style.height;
-      this.splitViewStyle.viewElementWidth = structureContainer.style.width;
+      this.splitViewStyle.viewContainerWidth = structureContainer.style.width;
+      this.splitViewStyle.viewContainerHeight = structureContainer.style.height;
 
       element.style.display = 'flex';
       element.style.backgroundColor = '#FFFFFF';
@@ -269,13 +281,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
       structureControls.style.height = '5vh';
       structureViewer.style.height = '95vh';
       structureContainer.style.width = '50vw';
+      structureContainer.style.height = 'initial';
     } else {
       element.style.display = this.splitViewStyle.display;
       element.style.backgroundColor = this.splitViewStyle.backgroundColor;
       protvistaElement.style.overflow = this.splitViewStyle.protvistaOverflow;
       structureControls.style.height = this.splitViewStyle.viewControlsHeight;
       structureViewer.style.height = this.splitViewStyle.viewElementHeight;
-      structureContainer.style.width = this.splitViewStyle.viewElementWidth;
+      structureContainer.style.width = this.splitViewStyle.viewContainerWidth;
+      structureContainer.style.height = this.splitViewStyle.viewContainerHeight;
       protvistaElement.style.width = this.splitViewStyle.protvistaWidth;
     }
   };
@@ -443,6 +457,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     return memberDBMap;
   }
 
+  // eslint-disable-next-line complexity
   showEntryInStructure = (memberDB, entry, chain, protein) => {
     const keep = this.state.selectedEntryToKeep;
     let db;
@@ -474,6 +489,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       prot = keep.protein;
     }
 
+    if (acc && acc.startsWith('Chain')) return; // Skip the keep procedure for secondary structure
     const hits = this._collateHits(db, acc, ch, prot);
     if (hits.length > 0) {
       if (this.stage) {
@@ -505,6 +521,39 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     }
     this.setState({ selectedEntry: acc || '' });
+  };
+
+  showSecondaryStructureEntries = feature => {
+    const hits = [];
+    if (feature.locations) {
+      for (const loc of feature.locations) {
+        for (const frag of loc.fragments) {
+          hits.push({ color: feature.color, start: frag.start, end: frag.end });
+        }
+      }
+    }
+
+    if (hits.length > 0) {
+      if (this.stage) {
+        const components = this.stage.getComponentsByName(this.name);
+        if (components) {
+          components.forEach(component => {
+            const selections = [];
+            hits.forEach(hit => {
+              selections.push([
+                hit.color,
+                `${hit.start}-${hit.end}:${feature.chain}`,
+              ]);
+            });
+            const theme = ColormakerRegistry.addSelectionScheme(
+              selections,
+              feature.accession,
+            );
+            component.addRepresentation('cartoon', { color: theme });
+          });
+        }
+      }
+    }
   };
 
   _toggleMinimize = () =>

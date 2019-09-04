@@ -1,0 +1,218 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SummaryEntry /> should render 1`] = `
+<div
+  className="sections"
+>
+  <section>
+    <div
+      className="row"
+    >
+      <div
+        className="medium-8 large-8 columns"
+      >
+        <MemberDBSubtitle
+          dbInfo={Object {}}
+          metadata={
+            Object {
+              "accession": "IPR000001",
+              "counters": Object {
+                "domain_architectures": 511,
+                "matches": 44375,
+                "proteins": 6786,
+                "proteomes": 343,
+                "sets": 0,
+                "structures": 698,
+                "taxa": 675,
+              },
+              "cross_references": Object {},
+              "description": Array [
+                "<p>Kringle</p>",
+              ],
+              "go_terms": Object {},
+              "literature": Object {},
+              "name": Object {
+                "name": "Kringle",
+                "short": "Kringle",
+              },
+              "overlaps_with": Array [
+                Object {
+                  "accession": "IPR013806",
+                  "name": "Kringle-like fold",
+                  "type": "homologous_superfamily",
+                },
+                Object {
+                  "accession": "IPR038178",
+                  "name": "Kringle superfamily",
+                  "type": "homologous_superfamily",
+                },
+              ],
+              "source_database": "interpro",
+              "type": "domain",
+              "wikipedia": "",
+            }
+          }
+        />
+        <p
+          data-testid="entry-shortname"
+        >
+          Short name: 
+          <i
+            className="shortname"
+          >
+            Kringle
+          </i>
+        </p>
+        <OverlappingEntries
+          metadata={
+            Object {
+              "accession": "IPR000001",
+              "counters": Object {
+                "domain_architectures": 511,
+                "matches": 44375,
+                "proteins": 6786,
+                "proteomes": 343,
+                "sets": 0,
+                "structures": 698,
+                "taxa": 675,
+              },
+              "cross_references": Object {},
+              "description": Array [
+                "<p>Kringle</p>",
+              ],
+              "go_terms": Object {},
+              "literature": Object {},
+              "name": Object {
+                "name": "Kringle",
+                "short": "Kringle",
+              },
+              "overlaps_with": Array [
+                Object {
+                  "accession": "IPR013806",
+                  "name": "Kringle-like fold",
+                  "type": "homologous_superfamily",
+                },
+                Object {
+                  "accession": "IPR038178",
+                  "name": "Kringle superfamily",
+                  "type": "homologous_superfamily",
+                },
+              ],
+              "source_database": "interpro",
+              "type": "domain",
+              "wikipedia": "",
+            }
+          }
+        />
+        <Hierarchy
+          accession="IPR000001"
+          type="domain"
+        />
+        <React.Fragment>
+          <h4>
+            Description
+          </h4>
+          <Description
+            accession="IPR000001"
+            literature={Array []}
+            textBlocks={
+              Array [
+                "<p>Kringle</p>",
+              ]
+            }
+          />
+        </React.Fragment>
+      </div>
+      <SidePanel
+        dbInfo={Object {}}
+        metadata={
+          Object {
+            "accession": "IPR000001",
+            "counters": Object {
+              "domain_architectures": 511,
+              "matches": 44375,
+              "proteins": 6786,
+              "proteomes": 343,
+              "sets": 0,
+              "structures": 698,
+              "taxa": 675,
+            },
+            "cross_references": Object {},
+            "description": Array [
+              "<p>Kringle</p>",
+            ],
+            "go_terms": Object {},
+            "literature": Object {},
+            "name": Object {
+              "name": "Kringle",
+              "short": "Kringle",
+            },
+            "overlaps_with": Array [
+              Object {
+                "accession": "IPR013806",
+                "name": "Kringle-like fold",
+                "type": "homologous_superfamily",
+              },
+              Object {
+                "accession": "IPR038178",
+                "name": "Kringle superfamily",
+                "type": "homologous_superfamily",
+              },
+            ],
+            "source_database": "interpro",
+            "type": "domain",
+            "wikipedia": "",
+          }
+        }
+      />
+    </div>
+  </section>
+  <OtherSections
+    citations={
+      Object {
+        "extra": Array [],
+        "included": Array [],
+      }
+    }
+    metadata={
+      Object {
+        "accession": "IPR000001",
+        "counters": Object {
+          "domain_architectures": 511,
+          "matches": 44375,
+          "proteins": 6786,
+          "proteomes": 343,
+          "sets": 0,
+          "structures": 698,
+          "taxa": 675,
+        },
+        "cross_references": Object {},
+        "description": Array [
+          "<p>Kringle</p>",
+        ],
+        "go_terms": Object {},
+        "literature": Object {},
+        "name": Object {
+          "name": "Kringle",
+          "short": "Kringle",
+        },
+        "overlaps_with": Array [
+          Object {
+            "accession": "IPR013806",
+            "name": "Kringle-like fold",
+            "type": "homologous_superfamily",
+          },
+          Object {
+            "accession": "IPR038178",
+            "name": "Kringle superfamily",
+            "type": "homologous_superfamily",
+          },
+        ],
+        "source_database": "interpro",
+        "type": "domain",
+        "wikipedia": "",
+      }
+    }
+  />
+</div>
+`;

@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<File /> should render 1`] = `
+<Memo(Connect(Button))
+  count={6795}
+  fileType="fasta"
+  handleClick={[Function]}
+  name="protein-sequences-matching-IPR000001.fasta"
+  subpath="/"
+  url="http://wp-np3-ac.ebi.ac.uk:80/interpro7/api//"
+/>
+`;

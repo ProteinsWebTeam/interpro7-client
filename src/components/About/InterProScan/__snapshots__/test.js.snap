@@ -65,13 +65,13 @@ exports[`<InterProScan /> should render with data 1`] = `
     <div
       className="download flex-card"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="button"
         href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
         target="_blank"
       >
         Download InterProScan
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       <div
         className="metadata"
       >
@@ -94,13 +94,13 @@ exports[`<InterProScan /> should render with data 1`] = `
     <p>
       For more information on downloading, installing and running InterProScan please see the
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="ext"
         href="https://github.com/ebi-pf-team/interproscan/wiki"
         target="_blank"
       >
         InterProScan wiki
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       .
     </p>
   </section>
@@ -123,13 +123,13 @@ exports[`<InterProScan /> should render with data 1`] = `
         <p>
           We provide access to InterProScan via RESTful services.
         </p>
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           className="ext secondary"
           href="https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=54652041"
           target="_blank"
         >
           REST API
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </div>
       <div
         className="flex-card"
@@ -140,13 +140,13 @@ exports[`<InterProScan /> should render with data 1`] = `
         <p>
           We also provide access to InterProScan via SOAP-based web services.
         </p>
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           className="ext"
           href="https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=54652111"
           target="_blank"
         >
           SOAP API
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </div>
     </div>
   </section>
@@ -156,7 +156,7 @@ exports[`<InterProScan /> should render with data 1`] = `
     </h3>
     <p>
       Web access using the sequence search box on the InterPro website (
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {},
@@ -164,10 +164,10 @@ exports[`<InterProScan /> should render with data 1`] = `
         }
       >
         homepage
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
        or under
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -182,7 +182,7 @@ exports[`<InterProScan /> should render with data 1`] = `
         }
       >
         /search/sequence
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       ), for the analysis of 
       <b>
         single protein sequences
@@ -197,13 +197,13 @@ exports[`<InterProScan /> should render with data 1`] = `
     <p>
       You can find, clone, and download the full InterProScan source code on the Github repository, available under
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="ext"
         href="https://github.com/ebi-pf-team/interproscan"
         target="_blank"
       >
         github.com/ebi-pf-team/interproscan
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       .
     </p>
   </section>
@@ -214,13 +214,13 @@ exports[`<InterProScan /> should render with data 1`] = `
     <p>
       To ensure you have the latest data and software enhancements we always recommend you download the latest version of InterProScan. However all previous releases are archived on the
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="ext"
         href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/"
         target="_blank"
       >
         FTP site
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       .
     </p>
   </section>
@@ -239,7 +239,7 @@ exports[`<InterProScan /> should render with data 1`] = `
     <p>
       If you want to get updates on InterProScan, you can subscribe to the
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="ext"
         href="http://listserver.ebi.ac.uk/mailman/listinfo/interproscan-announce"
         target="_blank"
@@ -250,11 +250,11 @@ exports[`<InterProScan /> should render with data 1`] = `
         />
          
         interproscan-announce mailing list
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
        
       or just follow InterPro on Twitter
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="ext"
         href="https://twitter.com/InterProDB"
         target="_blank"
@@ -265,13 +265,13 @@ exports[`<InterProScan /> should render with data 1`] = `
         />
          
         @InterProDB
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       .
     </p>
     <p>
       If you want to submit a question or report a bug, please contact us by
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="ext"
         href="mailto:interhelp@ebi.ac.uk"
         target="_blank"
@@ -282,11 +282,11 @@ exports[`<InterProScan /> should render with data 1`] = `
         />
          
         email
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
        
       or contact us using the
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="ext"
         href="http://www.ebi.ac.uk/support/interproscan"
         target="_blank"
@@ -297,7 +297,7 @@ exports[`<InterProScan /> should render with data 1`] = `
         />
          
         EBI form
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       , providing as much information as possible so that we can recreate the problem.
     </p>
   </section>

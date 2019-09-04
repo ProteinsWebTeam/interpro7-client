@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EntriesOnStructure /> should render 1`] = `
+<React.Fragment>
+  <div
+    className="row"
+  >
+    <div
+      className="columns"
+    >
+      <h4
+        id="protvista-A-p00735"
+      >
+        Chain 
+        A
+         
+        <small>
+          (
+          <Memo(Connect(Link))
+            to={
+              Object {
+                "description": Object {
+                  "main": Object {
+                    "key": "protein",
+                  },
+                  "protein": Object {
+                    "accession": "p00735",
+                    "db": "uniprot",
+                  },
+                },
+              }
+            }
+          >
+            P00735
+          </Memo(Connect(Link))>
+          )
+        </small>
+      </h4>
+      <Memo(Connect(loadData(Connect(loadData(ProtVistaLoaded)))))
+        chain="A"
+        fixedHighlight="208:366"
+        id="A-p00735"
+        tracks={
+          Array [
+            Array [
+              "Chain",
+              Array [
+                Object {
+                  "accession": "A",
+                  "coordinates": Array [
+                    Array [
+                      Array [
+                        208,
+                        366,
+                      ],
+                    ],
+                  ],
+                  "label": "Chain A",
+                  "locations": Array [
+                    Object {
+                      "fragments": Array [
+                        Object {
+                          "end": 366,
+                          "start": 208,
+                        },
+                      ],
+                    },
+                  ],
+                  "protein": "p00735",
+                  "source_database": "pdb",
+                  "type": "chain",
+                },
+              ],
+            ],
+            Array [
+              "Secondary Structure",
+              Array [],
+            ],
+            Array [
+              "Entries",
+              Array [
+                Object {
+                  "accession": "IPR038178",
+                  "chain": "A",
+                  "children": undefined,
+                  "coordinates": Array [
+                    Array [
+                      Array [
+                        44,
+                        199,
+                      ],
+                    ],
+                  ],
+                  "link": "/entry/interpro/IPR038178",
+                  "locations": Array [
+                    Object {
+                      "fragments": Array [
+                        Object {
+                          "dc-status": "CONTINUOUS",
+                          "end": 199,
+                          "start": 44,
+                        },
+                      ],
+                    },
+                  ],
+                  "name": "Kringle superfamily",
+                  "protein": "p00735",
+                  "source_database": "interpro",
+                  "type": "homologous_superfamily",
+                },
+              ],
+            ],
+          ]
+        }
+      />
+    </div>
+  </div>
+</React.Fragment>
+`;

@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SummaryTaxonomy /> should render 1`] = `
+<div
+  className="row"
+>
+  <div
+    className="medium-12 columns"
+  >
+    <table
+      className="light table-sum"
+    >
+      <tbody>
+        <tr>
+          <td>
+            Tax ID
+          </td>
+          <td
+            data-testid="taxonomy-taxid"
+          >
+            <Memo(Connect(Accession))
+              accession="131567"
+              title="Tax ID"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Rank
+          </td>
+          <td
+            className="text-up"
+            data-testid="taxonomy-rank"
+          >
+            no rank
+          </td>
+        </tr>
+        <Memo(Loadable)
+          data={
+            Object {
+              "name": "root",
+              "taxId": "1",
+            }
+          }
+          processData={[Function]}
+        />
+        <tr>
+          <td>
+            Lineage
+          </td>
+          <td
+            className="ico-primary"
+            data-testid="taxonomy-lineage"
+          >
+            <Lineage
+              lineage=" 1 131567 "
+              names={
+                Object {
+                  "1": Object {
+                    "name": "root",
+                    "short": "root",
+                  },
+                  "131567": Object {
+                    "name": "cellular organisms",
+                    "short": "cellular organisms",
+                  },
+                  "2": Object {
+                    "name": "Bacteria",
+                    "short": "Bacteria (eubacteria)",
+                  },
+                  "2157": Object {
+                    "name": "Archaea",
+                    "short": "Archaea",
+                  },
+                  "2759": Object {
+                    "name": "Eukaryota",
+                    "short": "Eukaryota (eucaryotes)",
+                  },
+                }
+              }
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Children
+          </td>
+          <td
+            data-testid="taxonomy-children"
+          >
+            <Children
+              names={
+                Object {
+                  "1": Object {
+                    "name": "root",
+                    "short": "root",
+                  },
+                  "131567": Object {
+                    "name": "cellular organisms",
+                    "short": "cellular organisms",
+                  },
+                  "2": Object {
+                    "name": "Bacteria",
+                    "short": "Bacteria (eubacteria)",
+                  },
+                  "2157": Object {
+                    "name": "Archaea",
+                    "short": "Archaea",
+                  },
+                  "2759": Object {
+                    "name": "Eukaryota",
+                    "short": "Eukaryota (eucaryotes)",
+                  },
+                }
+              }
+              taxChildren={
+                Array [
+                  "2",
+                  "2157",
+                  "2759",
+                ]
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <OptMemberDBSelector
+      contentType="taxonomy"
+      filterType="entry"
+      hideCounters={true}
+      isSelected={[Function]}
+      onChange={[Function]}
+    >
+      [Function]
+    </OptMemberDBSelector>
+    <Tree
+      changeFocus={[Function]}
+      initialFisheye={true}
+    />
+  </div>
+</div>
+`;

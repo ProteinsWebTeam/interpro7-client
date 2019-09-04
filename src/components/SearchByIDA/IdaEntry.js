@@ -33,6 +33,7 @@ const getUrlForAutocomplete = ({ protocol, hostname, port, root }, search) => {
 
 /*:: type Props = {
   entry: string,
+  position: number,
   changeEntryHandler: function,
   removeEntryHandler: function,
   api: {
@@ -55,13 +56,17 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     changeEntryHandler: T.func,
     removeEntryHandler: T.func,
     api: T.object,
+    position: T.number,
   };
   state = {
     options: {},
   };
-  _handleOnChenge = (evt, value) => {
+  componentDidMount() {
+    if (this.props.entry) this._handleOnChange(null, this.props.entry);
+  }
+  _handleOnChange = (_evt, value) => {
     this.props.changeEntryHandler(value);
-    fetchFun(getUrlForAutocomplete(this.props.api, evt.target.value)).then((
+    fetchFun(getUrlForAutocomplete(this.props.api, value)).then((
       data /*: DataType */,
     ) => {
       if (!data || !data.ok) return;
@@ -73,7 +78,12 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     });
   };
   render() {
-    const { entry, changeEntryHandler, removeEntryHandler } = this.props;
+    const {
+      entry,
+      changeEntryHandler,
+      removeEntryHandler,
+      position,
+    } = this.props;
     return (
       <div className={f('ida-entry')}>
         <Autocomplete
@@ -92,16 +102,31 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
             </div>
           )}
           value={entry}
-          onChange={this._handleOnChenge}
+          onChange={this._handleOnChange}
           onSelect={val => changeEntryHandler(val)}
           shouldItemRender={({ accession, name }, value) =>
             accession.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
             name.toLowerCase().indexOf(value.toLowerCase()) !== -1
           }
           renderInput={props => (
-            <input {...props} placeholder={'Search entry'} />
+            <>
+              <input
+                {...props}
+                id={props.id + position}
+                placeholder={'Search entry'}
+              />
+              {this.state.options[props.value] && (
+                <label
+                  htmlFor={props.id + position}
+                  className={f('entry-name')}
+                >
+                  {this.state.options[props.value].name}
+                </label>
+              )}
+            </>
           )}
         />
+
         <button onClick={removeEntryHandler}>✖</button>
       </div>
     );

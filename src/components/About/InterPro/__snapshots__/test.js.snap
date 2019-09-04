@@ -20,13 +20,13 @@ exports[`<AboutInterPro /> should render 1`] = `
     <p>
       InterProScan is the software package that allows sequences to be scanned against InterPro's signatures (more information about
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         className="ext"
         href="//github.com/ebi-pf-team/interproscan/wiki"
         target="_blank"
       >
         InterProScan
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
       ).
     </p>
   </div>
@@ -53,7 +53,7 @@ exports[`<AboutInterPro /> should render 1`] = `
     <p>
       InterPro is updated approximately every 8 weeks. Our
        
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -65,7 +65,7 @@ exports[`<AboutInterPro /> should render 1`] = `
         }
       >
         release notes pages
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
        
       contain information about what has changed in each update.
     </p>

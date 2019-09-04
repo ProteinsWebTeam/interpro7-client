@@ -22,17 +22,17 @@ export const BaseLink = (
     children,
     activeClass,
     ...rest
-  } /*: {|
-  id: string | number,
-  pattern: string,
-  href: string,
-  rel: string,
-  to: object,
-  target: string,
-  className: string,
-  activeClass: string | function,
+  } /*: {
+  id?: string | number,
+  pattern?: string,
+  href?: string,
+  rel?: string,
+  to?: Object,
+  target?: string,
+  className?: string,
+  activeClass?: string | function,
   children: any
-|} */,
+} */,
 ) => {
   const props = {
     href: href || to || (pattern || '').replace('{id}', id),
@@ -64,7 +64,14 @@ BaseLink.propTypes = {
 BaseLink.displayName = 'BaseLink';
 
 const patternLinkWrapper = pattern => {
-  const Wrapped = ({ id, target, children, ...props }) => (
+  const Wrapped = (
+    {
+      id,
+      target,
+      children,
+      ...props
+    } /*: {id: string | number, target?: string, children?: any} */,
+  ) => (
     <BaseLink id={id} target={target || '_blank'} pattern={pattern} {...props}>
       {children || id}
     </BaseLink>
@@ -73,7 +80,14 @@ const patternLinkWrapper = pattern => {
   return Wrapped;
 };
 
-export const ProteomeLink = ({ id, target, children, ...props }) => (
+export const ProteomeLink = (
+  {
+    id,
+    target,
+    children,
+    ...props
+  } /*: {id: string, target?: string, children: any} */,
+) => (
   <BaseLink
     id={id}
     target={target || '_blank'}
@@ -89,7 +103,14 @@ ProteomeLink.propTypes = {
 };
 ProteomeLink.displayName = 'ProteomeLink';
 
-export const PMCLink = ({ id, target, children, ...props }) => (
+export const PMCLink = (
+  {
+    id,
+    target,
+    children,
+    ...props
+  } /*: {id: string | number, target?: string, children?: any} */,
+) => (
   <BaseLink
     id={`${id}`}
     target={target || '_blank'}
@@ -108,7 +129,15 @@ PMCLink.displayName = 'PMCLink';
 export const DOILink = patternLinkWrapper('{id}');
 DOILink.displayName = 'DOILink';
 
-export const GoLink = ({ id, target, className, children, ...props }) => {
+export const GoLink = (
+  {
+    id,
+    target,
+    className,
+    children,
+    ...props
+  } /*: {id: string | number, target?: string, className?: string, children?: any} */,
+) => {
   const pattern = 'https://www.ebi.ac.uk/QuickGO/GTerm?id={id}';
   return (
     <BaseLink
@@ -146,7 +175,13 @@ export const Genome3dLink = patternLinkWrapper(
 );
 Genome3dLink.displayName = 'Genome3DLink';
 
-const ExtLink = ({ id, children, ...props }) => {
+const ExtLink = (
+  {
+    id,
+    children,
+    ...props
+  } /*: {id: string | number, target?: string, children: any} */,
+) => {
   switch (true) {
     case id.startsWith('PUB'):
       return (

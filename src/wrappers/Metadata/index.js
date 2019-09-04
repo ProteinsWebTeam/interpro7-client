@@ -18,7 +18,21 @@ const getURLFor = (mainType, mainDB, mainAccession) =>
       })}`,
   );
 
-class Metadata extends PureComponent {
+/*:: type Props = {
+   endpoint: string,
+   db: string,
+   accession: string | number,
+   children: Element
+};
+*/
+
+/*:: type State = {
+   child: Element,
+   element: Element,
+};
+*/
+
+class Metadata extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     endpoint: T.string.isRequired,
     db: T.string.isRequired,
@@ -26,7 +40,7 @@ class Metadata extends PureComponent {
     children: T.element.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.state = {

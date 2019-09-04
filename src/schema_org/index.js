@@ -145,8 +145,12 @@ const shallowEquals = (obj1, obj2) =>
       );
     return obj1[key] === obj2[key];
   });
-
-export default class SchemaOrgData extends PureComponent {
+/*:: type Props = {
+  data: any,
+  processData: function,
+  chidren: Node
+};*/
+export default class SchemaOrgData extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.any,
     processData: T.func.isRequired,

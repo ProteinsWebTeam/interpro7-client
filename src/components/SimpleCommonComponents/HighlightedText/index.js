@@ -8,7 +8,13 @@ const CENTER_OF_HIGHLIGHT = 0.25;
 
 const findStartCentered = findStart(CENTER_OF_HIGHLIGHT);
 
-class HighlightedText extends PureComponent {
+/*:: type Props = {
+  text: string | number,
+  textToHighlight?: string,
+  maxLength?: number
+ } */
+
+class HighlightedText extends PureComponent /*:: <Props> */ {
   static propTypes = {
     text: T.oneOfType([T.string, T.number]).isRequired,
     textToHighlight: T.string,

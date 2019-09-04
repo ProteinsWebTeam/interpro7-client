@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -39,6 +40,7 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
         className={f('old-interpro-link')}
         href={this.props.href}
         target="_blank"
+        onClick={() => window.localStorage.removeItem('redirect_to_interpro7')}
       >
         See this page in the old InterPro website
       </Link>
@@ -82,7 +84,7 @@ const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
 
 /*:: type Props = {
   visible: boolean,
-  mainAccession: ?string,
+  mainAccession?: string,
   mainType?: string,
   closeSideNav: function,
 }; */
@@ -98,13 +100,16 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
     closeSideNav: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.state = { hasRendered: false };
   }
 
-  static getDerivedStateFromProps({ visible }, { hasRendered }) {
+  static getDerivedStateFromProps(
+    { visible } /*: {visible: boolean} */,
+    { hasRendered } /*: {hasRendered: boolean} */,
+  ) {
     if (hasRendered || !visible) return null;
     return { hasRendered: true };
   }

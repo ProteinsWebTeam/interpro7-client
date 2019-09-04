@@ -127,10 +127,37 @@ const mergeResidues = (data, residues) => {
     }),
   );
 };
+const splitMobiFeatures = feature => {
+  const newFeatures = {};
+  for (const loc of feature.locations) {
+    const key =
+      (loc.fragments[0] && loc.fragments[0].seq_feature) ||
+      loc.seq_feature ||
+      'Consensus Disorder Prediction';
+    if (key in newFeatures) {
+      newFeatures[key].locations.push(loc);
+    } else {
+      newFeatures[key] = {
+        ...feature,
+        accession: `Mobidblt-${key}`,
+        locations: [loc],
+      };
+    }
+  }
+  return Object.values(newFeatures);
+};
 const mergeExtraFeatures = (data, extraFeatures) => {
+  if ('mobidb-lite' in extraFeatures) {
+    data.other_features = data.other_features.concat(
+      splitMobiFeatures(extraFeatures['mobidb-lite']),
+    );
+  }
   data.other_features = data.other_features.concat(
-    Object.values(extraFeatures),
+    Object.values(extraFeatures).filter(
+      ({ source_database: db }) => db !== 'mobidblt',
+    ),
   );
+
   return data;
 };
 const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
@@ -159,7 +186,11 @@ const sortFunction = ([a], [b]) => {
   return a > b ? 1 : 0;
 };
 
-export class DomainOnProteinWithoutMergedData extends PureComponent {
+/*:: type Props = {
+  mainData: Object,
+  dataMerged: Object
+}; */
+export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props> */ {
   static propTypes = {
     mainData: T.object.isRequired,
     dataMerged: T.object.isRequired,
@@ -177,11 +208,21 @@ export class DomainOnProteinWithoutMergedData extends PureComponent {
         protein={mainData.metadata || mainData.payload.metadata}
         data={sortedData}
         title="Entry matches to this protein"
+        id={mainData.metadata.accession || mainData.payload.metadata.accession}
       />
     );
   }
 }
-export class DomainOnProteinWithoutData extends PureComponent {
+
+/*:: type DPWithoutDataProps = {
+  mainData: Object,
+  data: Object,
+  dataResidues: Object,
+  dataFeatures: Object,
+  dataGenome3d: Object
+}; */
+
+export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDataProps> */ {
   static propTypes = {
     mainData: T.object.isRequired,
     data: T.object.isRequired,
@@ -261,7 +302,7 @@ export class DomainOnProteinWithoutData extends PureComponent {
   }
 }
 
-const getInterproRelatedEntriesURL = createSelector(
+const getRelatedEntriesURL = createSelector(
   state => state.settings.api,
   state => state.customLocation.description.protein.accession,
   ({ protocol, hostname, port, root }, accession) => {
@@ -322,7 +363,7 @@ export default loadData({
   })(
     loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
       loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
-        loadData(getInterproRelatedEntriesURL)(DomainOnProteinWithoutData),
+        loadData(getRelatedEntriesURL)(DomainOnProteinWithoutData),
       ),
     ),
   ),

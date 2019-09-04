@@ -14,17 +14,17 @@ import local from './style.css';
 
 const f = foundationPartial(local);
 
-/*:: type Props = {|
+/*:: type Props = {
   name: string,
   value: string,
   children: string,
   title?: string,
   defaultChecked: boolean
-|}*/
+}; */
 
-/*:: type State = {|
+/*:: type State = {
   checked: boolean
-|}*/
+}; */
 
 class AdvancedOption extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
@@ -85,6 +85,12 @@ const otherValues = new Set([
 ]);
 const ignoreList = new Set(['ProDom']);
 
+const labels = new Map([
+  ['PfamA', 'Pfam'],
+  ['Panther', 'PANTHER'],
+  ['SuperFamily', 'SUPERFAMILY'],
+  ['Gene3d', 'CATH-Gene3D'],
+]);
 const groupApplications = applications => {
   const mdb1 = [];
   const mdb2 = [];
@@ -113,7 +119,7 @@ const applicationToCheckbox = (
     title={properties && properties.properties[0].value}
     key={value}
   >
-    {value}
+    {labels.get(value) || value}
   </AdvancedOption>
 );
 applicationToCheckbox.propTypes = {
@@ -255,15 +261,6 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
                 {noCategory.map(applicationToCheckbox)}
               </fieldset>
             ) : null}
-          </fieldset>
-          <fieldset className={f('fieldset')}>
-            <legend>Other</legend>
-            <AdvancedOption name="goterms" value="goterms" defaultChecked>
-              Gene Ontology Terms
-            </AdvancedOption>
-            <AdvancedOption name="pathways" value="pathways" defaultChecked>
-              Pathways
-            </AdvancedOption>
           </fieldset>
         </details>
       </div>

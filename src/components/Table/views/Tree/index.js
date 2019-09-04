@@ -8,6 +8,9 @@ import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
 import Tree from 'components/Tree';
+import Lineage from 'components/Taxonomy/Lineage';
+import NumberComponent from 'components/NumberComponent';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
@@ -16,8 +19,11 @@ import loadData from 'higherOrder/loadData';
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(styles);
+const f = foundationPartial(ebiGlobalStyles, styles, fonts);
+const ANIMATION_DURATION = 0.3;
 
 const mapStateToUrlFor = createSelector(
   taxID => taxID,
@@ -48,8 +54,15 @@ const mapStateToUrlFor = createSelector(
         }),
     ),
 );
-
-class DataProvider extends PureComponent {
+/*:: type Props = {
+  taxID: string,
+  data: {
+    loading: boolean,
+    payload: Object
+  },
+  sendData: function
+};*/
+class DataProvider extends PureComponent /*:: <Props> */ {
   static propTypes = {
     taxID: T.string.isRequired,
     data: T.shape({
@@ -95,6 +108,9 @@ const findNodeWithId = (id, node) => {
 
 const mergeData = (root, update, names) => {
   const toUpdate = findNodeWithId(update.accession, root);
+  toUpdate.lineage = update.lineage;
+  toUpdate.counters = update.counters;
+  toUpdate.rank = update.rank;
   if (!toUpdate.children || (update.children && update.children.length)) {
     toUpdate.children = update.children.map(id => ({
       name: names[id].short || names[id].name,
@@ -103,8 +119,20 @@ const mergeData = (root, update, names) => {
   }
   return root;
 };
+/*:: type TreeViewProps = {
+  customLocation: {
+    description: Object,
+  },
+  goToCustomLocation: function
+};*/
 
-class TreeView extends Component {
+/*:: type State = {
+  data: {name: string, id: string},
+  focused: string,
+  entryDB: Object,
+}; */
+class TreeView extends Component /*:: <TreeViewProps, State> */ {
+  /*:: _CDPMap: Map<string, Object>*/
   static propTypes = {
     customLocation: T.shape({
       description: T.object,
@@ -112,7 +140,7 @@ class TreeView extends Component {
     goToCustomLocation: T.func.isRequired,
   };
 
-  constructor(props) {
+  constructor(props /*: TreeViewProps */) {
     super(props);
 
     this.state = {
@@ -195,20 +223,120 @@ class TreeView extends Component {
       ConnectedDataProvider = loadData(mapStateToUrlFor(focused))(DataProvider);
       this._CDPMap.set(focused, ConnectedDataProvider);
     }
+    const currentNode = findNodeWithId(focused, data);
+    const {
+      customLocation: { description },
+    } = this.props;
+    const mainEndpoint = description.main.key;
+    const countersToShow = {
+      entry: ['entries', 'all'],
+      protein: ['proteins', 'uniprot'],
+      structure: ['structures', 'pdb'],
+      proteome: ['proteomes', 'uniprot'],
+    };
     return (
       <>
-        <div>
-          <Link
-            className={f('button', 'hollow')}
-            to={{
-              description: {
-                main: { key: 'taxonomy' },
-                taxonomy: { db: 'uniprot', accession: focused },
-              },
-            }}
-          >
-            Go to taxonomy page for “{findNodeWithId(focused, data).name}”
-          </Link>
+        <div className={f('node-details')}>
+          <div className={f('node-info')}>
+            <header>
+              <Tooltip title="[Tax ID]: [Tax Name]">
+                <span
+                  className={f('small', 'icon', 'icon-common')}
+                  data-icon="&#xf129;"
+                  aria-label="Tax ID: Tax Name"
+                />
+              </Tooltip>{' '}
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'taxonomy' },
+                    taxonomy: { db: 'uniprot', accession: focused },
+                  },
+                }}
+              >
+                {currentNode.id}: {currentNode.name}
+              </Link>
+            </header>
+            {currentNode.rank && currentNode.rank.toLowerCase() !== 'no rank' && (
+              <div>
+                <Tooltip title="Rank.">
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                    aria-label="Rank."
+                  />
+                </Tooltip>{' '}
+                <i>{currentNode.rank}</i>
+              </div>
+            )}
+            {currentNode.lineage && (
+              <>
+                <Tooltip title="Lineage. List of nodes from the root to the current taxon separated by '>'">
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                    aria-label="Lineage. List of nodes from the root to the current taxon separated by '>'."
+                  />
+                </Tooltip>{' '}
+                <Lineage
+                  lineage={currentNode.lineage}
+                  names={{}}
+                  className={f('lineage')}
+                />
+              </>
+            )}
+          </div>
+          {currentNode.counters && (
+            <div className={f('node-links')}>
+              <ul>
+                {Object.entries(countersToShow)
+                  .map(([endpoint, [plural, db]]) => {
+                    if (
+                      endpoint === mainEndpoint ||
+                      typeof currentNode.counters[plural] === 'undefined'
+                    )
+                      return null;
+
+                    const to = {
+                      ...description,
+                      [endpoint]: {
+                        db,
+                        isFilter: true,
+                        order: 1,
+                      },
+                    };
+                    if (description.main.key !== 'taxonomy') {
+                      to.taxonomy = {
+                        db: 'uniprot',
+                        isFilter: true,
+                        order: 2,
+                      };
+                    }
+                    to.taxonomy.accession = currentNode.id;
+
+                    return (
+                      <li key={endpoint}>
+                        <Link
+                          className={f('no-decoration', {
+                            disable: !currentNode.counters[plural],
+                          })}
+                          to={{
+                            description: to,
+                          }}
+                        >
+                          <NumberComponent abbr duration={ANIMATION_DURATION}>
+                            {currentNode.counters[plural]}
+                          </NumberComponent>{' '}
+                          {plural}
+                        </Link>{' '}
+                        -
+                      </li>
+                    );
+                  })
+                  .filter(Boolean)}
+              </ul>
+            </div>
+          )}
         </div>
         <ConnectedDataProvider sendData={this._handleNewData} taxID={focused} />
         <Tree
@@ -216,7 +344,6 @@ class TreeView extends Component {
           focused={focused}
           changeFocus={this._handleNewFocus}
           data-testid="data-tree"
-          labelClick={this._handleLabelClick}
         />
       </>
     );

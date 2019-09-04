@@ -13,7 +13,13 @@ import local from './style.css';
 
 const f = foundationPartial(local);
 
-const _DataProvider = ({ data, onLoad, databases }) => {
+const _DataProvider = (
+  {
+    data,
+    onLoad,
+    databases,
+  } /*: {data?: {loading: boolean, payload: Object}, onLoad: function, databases: Object} */,
+) => {
   if (data && !data.loading && data.payload && data.payload.metadata) {
     const {
       accession,
@@ -66,14 +72,16 @@ const getUrlFor = createSelector(
 
 const dataProviders = {};
 
-const DynamicTooltip = ({
-  type,
-  source,
-  accession,
-  children,
-  databases,
-  ...rest
-}) => {
+const DynamicTooltip = (
+  {
+    type,
+    source,
+    accession,
+    children,
+    databases,
+    ...rest
+  } /*: {type: string, source: string, accession: string, children: Object, databases: Object} */,
+) => {
   const [shouldLoad, setShouldLoad] = useState(false);
   const [message, setMessage] = useState(() => <b>{accession}</b>);
   const popperContainer = useRef(null);

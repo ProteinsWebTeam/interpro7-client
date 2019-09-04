@@ -38,7 +38,12 @@ const getUrlForIDASearch = createSelector(
     });
   },
 );
-const IDAResults = ({ searchFromURL, ignoreFromURL }) => {
+const IDAResults = (
+  {
+    searchFromURL,
+    ignoreFromURL,
+  } /*: {searchFromURL: string , ignoreFromURL: string} */,
+) => {
   if (!searchFromURL) return null; // Empty search
   const entries = searchFromURL.split(',').map(e => e.trim());
   const ignore = ignoreFromURL
@@ -56,7 +61,7 @@ const IDAResults = ({ searchFromURL, ignoreFromURL }) => {
       mapStateToProps,
     })(DomainArchitecturesWithData),
   );
-  return <Results />;
+  return <Results highlight={entries} />;
 };
 IDAResults.propTypes = {
   searchFromURL: T.string,

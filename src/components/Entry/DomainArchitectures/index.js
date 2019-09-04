@@ -81,7 +81,7 @@ export const ida2json = ida => {
   return obj;
 };
 
-export const TextIDA = ({ accessions }) => (
+export const TextIDA = ({ accessions } /*: {accessions: Array<string>} */) => (
   <div>
     {accessions.map((accession, i) => (
       <React.Fragment key={i}>
@@ -112,14 +112,20 @@ export const TextIDA = ({ accessions }) => (
 TextIDA.propTypes = {
   accessions: T.arrayOf(T.string),
 };
-
+/* :: type Props = {
+  matches: Array<Object>,
+  highlight: Array<string>,
+  databases: Object
+}
+*/
 export class IDAProtVista extends ProtVistaMatches {
   static propTypes = {
     matches: T.arrayOf(T.object).isRequired,
     databases: T.object.isRequired,
+    highlight: T.arrayOf(T.string),
   };
 
-  updateTracksWithData(props) {
+  updateTracksWithData(props /*: Props */) {
     const { matches } = props;
 
     for (const domain of matches) {
@@ -144,12 +150,16 @@ export class IDAProtVista extends ProtVistaMatches {
   }
 
   render() {
-    const { matches, length, databases } = this.props;
+    const { matches, length, databases, highlight = [] } = this.props;
     return (
       <div>
         {matches.map(d => (
           <div key={d.accession} className={f('track-row')}>
-            <div className={f('track-component')}>
+            <div
+              className={f('track-component', {
+                highlight: highlight.indexOf(d.accession) >= 0,
+              })}
+            >
               <DynamicTooltip
                 type="entry"
                 source={
@@ -195,12 +205,21 @@ export class IDAProtVista extends ProtVistaMatches {
   }
 }
 
-class _DomainArchitecturesWithData extends PureComponent {
+/* :: type DomainArchitecturesWithDataProps = {
+  data: Object,
+  dataDB: Object,
+  mainAccession: string,
+  search: Object,
+  highlight: Array<string>,
+}
+*/
+class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitecturesWithDataProps> */ {
   static propTypes = {
     data: T.object.isRequired,
     mainAccession: T.string,
     search: T.object,
     dataDB: T.object.isRequired,
+    highlight: T.arrayOf(T.string),
   };
 
   render() {
@@ -209,9 +228,12 @@ class _DomainArchitecturesWithData extends PureComponent {
       mainAccession,
       search,
       dataDB,
+      highlight = [],
     } = this.props;
     if (loading || dataDB.loading) return <Loading />;
     if (!payload.results) return null;
+    const toHighlight =
+      highlight.length === 0 && mainAccession ? [mainAccession] : highlight;
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
@@ -249,6 +271,7 @@ class _DomainArchitecturesWithData extends PureComponent {
                   matches={idaObj.domains}
                   length={FAKE_PROTEIN_LENGTH}
                   databases={dataDB.payload.databases}
+                  highlight={toHighlight}
                 />
                 {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
               </div>

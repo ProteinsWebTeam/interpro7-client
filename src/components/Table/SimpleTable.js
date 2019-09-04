@@ -20,11 +20,15 @@ import TableView from './views/Table';
 
 /*:: type Props = {
   dataTable: Array<Object>,
-  isStale: ?boolean,
-  query: Object,
-  title: string,
-  notFound: ?boolean,
-  contentType? string,
+  rowKey?: string,
+  isStale?: boolean,
+  loading?: boolean,
+  ok?: boolean,
+  status?: number,
+  query?: Object,
+  title?: string,
+  notFound?: boolean,
+  contentType?: string,
   children?: any,
 } */
 

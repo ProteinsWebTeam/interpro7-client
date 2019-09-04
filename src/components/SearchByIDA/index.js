@@ -20,15 +20,25 @@ import local from './style.css';
 
 const f = foundationPartial(interproTheme, ipro, local);
 
-const PanelIDA = ({
-  entryList,
-  ignoreList,
-  isOrdered,
-  removeEntryHandler,
-  changeEntryHandler,
-  changeIgnoreHandler,
-  removeIgnoreHandler,
-}) => (
+const PanelIDA = (
+  {
+    entryList,
+    ignoreList,
+    isOrdered,
+    removeEntryHandler,
+    changeEntryHandler,
+    changeIgnoreHandler,
+    removeIgnoreHandler,
+  } /*: {
+  entryList: Array<string>,
+  ignoreList: Array<string>,
+  isOrdered: boolean,
+  removeEntryHandler: function,
+  changeEntryHandler: function,
+  changeIgnoreHandler: function,
+  removeIgnoreHandler: function
+  } */,
+) => (
   <div className={f('panels')}>
     <div className={f('ida-panel')}>
       <header>IDA</header>
@@ -38,6 +48,7 @@ const PanelIDA = ({
             entryList.map((e, i) => (
               <li key={i}>
                 <IdaEntry
+                  position={i}
                   entry={e}
                   active={true}
                   removeEntryHandler={() => removeEntryHandler(i)}
@@ -55,6 +66,7 @@ const PanelIDA = ({
           ignoreList.map((e, i) => (
             <li key={i}>
               <IdaEntry
+                position={i}
                 entry={e}
                 active={true}
                 removeEntryHandler={() => removeIgnoreHandler(i)}
@@ -101,9 +113,14 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
     };
     if (order) search.ordered = true;
     if (ignore && ignore.length) search.ida_ignore = ignore.join(',');
+    console.log(this.props.customLocation);
 
     this.props.goToCustomLocation({
       ...this.props.customLocation,
+      description: {
+        main: { key: 'search' },
+        search: { type: 'ida' },
+      },
       search,
     });
   };
@@ -178,10 +195,8 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                   />
                 </div>
                 <div className={f('ida-controls')}>
-                  <DomainButton
-                    label="➕"
-                    fill="#75bf40"
-                    stroke="#75bf40"
+                  <button
+                    className={f('button', 'secondary')}
                     onClick={() =>
                       this._handleSubmit({
                         entries: entries.concat(''),
@@ -189,11 +204,12 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                         order,
                       })
                     }
-                  />
-                  <DomainButton
-                    label="✖️️"
-                    fill="#bf4540"
-                    stroke="#bf4540"
+                  >
+                    <DomainButton label="➕" fill="#75bf40" stroke="#75bf40" />{' '}
+                    <span>Add Entry</span>
+                  </button>
+                  <button
+                    className={f('button', 'secondary')}
                     onClick={() =>
                       this._handleSubmit({
                         ignore: ignore.concat(''),
@@ -201,7 +217,10 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                         order,
                       })
                     }
-                  />
+                  >
+                    <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
+                    <span>Ignore Entry</span>
+                  </button>
                   <label htmlFor="ordered">
                     <input
                       type="checkbox"

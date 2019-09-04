@@ -125,14 +125,18 @@
   display: flex;
 }
 .track-component {
-  width: 88%;
+  width: 85%;
   background: rgba(0, 0, 0, 0.02);
   cursor: move;
 }
 
+.track-component.label-by-name {
+  width: 70%;
+}
+
 /*can't use highlight class*/
-.track-component rect {
-  fill: grey;
+.track-component g:global(.highlighted) rect {
+  fill: #fff;
 }
 
 /*blobs*/
@@ -145,11 +149,10 @@
     opacity: 1;
   }
 }
-
-/*div.track-component.secondary-structure path {*/
-/*  stroke: red */
-/*  stroke-width: 1;*/
-/*}*/
+g:global(.residues-group) path:global(.feature),
+g:global(.child-group) path:global(.feature) {
+  transition: fill 0.2s ease-out;
+}
 
 .sequence-conservation {
   stroke-width: 0px;
@@ -169,13 +172,17 @@
 }
 
 .aligned-to-track-component {
-  width: 88%;
+  width: 85%;
   line-height: 0;
+}
+
+.aligned-to-track-component.label-by-name {
+  width: 70%;
 }
 
 .track-accession {
   font-family: var(--fonts-system);
-  width: 12%;
+  width: 15%;
   overflow: hidden;
   white-space: nowrap;
   padding-left: 0.5rem;
@@ -183,6 +190,11 @@
   & a:hover {
     border-bottom: 1px var(--colors-dark) solid;
   }
+}
+
+.track-accession.label-by-name {
+  width: 30%;
+  text-transform: none;
 }
 .track-accession > a,
 .track-accession > a:focus,

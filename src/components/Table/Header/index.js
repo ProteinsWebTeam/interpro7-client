@@ -1,7 +1,10 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
-const Header = ({ columns, notFound } /*: {columns: Array<Object>} */) => {
+const Header = (
+  { columns, notFound } /*: {columns: Array<Object>, notFound: boolean} */,
+) => {
   if (notFound) {
     return null;
   }

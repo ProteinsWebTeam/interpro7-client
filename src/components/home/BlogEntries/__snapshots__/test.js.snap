@@ -15,7 +15,7 @@ exports[`<BlogEntries /> Blog entries 1`] = `
   <div
     className="flex-column read-all"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(Link))
       href="https://proteinswebteam.github.io/interpro-blog"
       target="_blank"
     >
@@ -24,7 +24,7 @@ exports[`<BlogEntries /> Blog entries 1`] = `
       >
         Read all articles
       </div>
-    </Memo(ConnectFunction)>
+    </Memo(Connect(Link))>
   </div>
 </section>
 `;
@@ -43,13 +43,13 @@ exports[`<BlogEntry /> Blog entry 1`] = `
       <Tooltip
         title="View all Blog articles"
       >
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           className="white-link"
           href="https://proteinswebteam.github.io/interpro-blog/categories/interpro/"
           target="_blank"
         >
           Blog
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </Tooltip>
     </div>
   </div>
@@ -60,12 +60,12 @@ exports[`<BlogEntry /> Blog entry 1`] = `
       className="card-title"
     >
       <h4>
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           href="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
           target="_blank"
         >
           Protein Families classification
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
       </h4>
     </div>
     <div
@@ -80,7 +80,7 @@ exports[`<BlogEntry /> Blog entry 1`] = `
       }
     />
   </div>
-  <Memo(ConnectFunction)
+  <Memo(Connect(Link))
     className="card-more"
     href="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
     target="_blank"
@@ -91,6 +91,6 @@ exports[`<BlogEntry /> Blog entry 1`] = `
     >
       Read more
     </div>
-  </Memo(ConnectFunction)>
+  </Memo(Connect(Link))>
 </div>
 `;

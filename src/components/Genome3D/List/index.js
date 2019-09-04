@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
@@ -13,7 +14,12 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiStyles);
 const HTTP_404 = 404;
-const List = ({ data, customLocation: { search } }) => {
+const List = (
+  {
+    data,
+    customLocation: { search },
+  } /*: {data: {loading: boolean, payload: Object, ok?: boolean, status?: number}, customLocation: {search?: Object}} */,
+) => {
   if (data.loading) return <Loading />;
   const data4table = data.payload.data.map(
     ({ accession, locations, metadata, tooltipContent, length }) => ({
@@ -58,7 +64,7 @@ const List = ({ data, customLocation: { search } }) => {
           <Column
             dataKey="evidences"
             renderer={({ source: { url, id, name } }) => (
-              <Link href={url} className={f('ext')}>
+              <Link href={url} target="_blank" className={f('ext')}>
                 {name}: {id}
               </Link>
             )}

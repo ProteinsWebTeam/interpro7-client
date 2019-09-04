@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CrossReferences /> should render 1`] = `
+<div
+  className="row"
+>
+  <div
+    className="large-12 columns"
+  >
+    <Memo(Connect(AnimatedEntry))
+      className="list margin-left-none"
+      duration={500}
+      itemDelay={100}
+    >
+      <ReferenceSection
+        accessions={
+          Array [
+            Object {
+              "accession": "PDOC00020",
+              "url": "http://prosite.expasy.org/PDOC00020",
+            },
+          ]
+        }
+        description="PROSITE is a database of protein families and domains."
+        name="prositedoc"
+      />
+    </Memo(Connect(AnimatedEntry))>
+  </div>
+</div>
+`;

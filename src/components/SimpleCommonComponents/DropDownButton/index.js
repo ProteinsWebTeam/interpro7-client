@@ -1,3 +1,4 @@
+// @flow
 import React, { useState } from 'react';
 import T from 'prop-types';
 import { foundationPartial } from 'styles/foundation';
@@ -8,13 +9,15 @@ import theme from 'styles/theme-interpro.css';
 
 const fPlus = foundationPartial(s, fonts, theme);
 
-const DropDownButton = ({
-  label,
-  icon,
-  color = undefined,
-  children,
-  alignLeft = false,
-}) => {
+const DropDownButton = (
+  {
+    label,
+    icon,
+    color = undefined,
+    children,
+    alignLeft = false,
+  } /*: {label: string, icon: string, color: ?string, children: any, alignLeft: boolean} */,
+) => {
   const [isOpen, setOpen] = useState(false);
   return (
     <div className={fPlus('button-group', 'small', 'dropdown-container')}>

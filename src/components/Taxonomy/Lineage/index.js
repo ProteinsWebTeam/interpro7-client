@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -9,17 +10,24 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(fonts);
 
-class Lineage extends PureComponent {
+/*:: type Props = {
+  lineage: string,
+  names: Object,
+  className?: ?string,
+}*/
+
+class Lineage extends PureComponent /*:: <Props> */ {
   static propTypes = {
     lineage: T.string.isRequired,
     names: T.object,
+    className: T.string,
   };
 
   render() {
     const lineage = this.props.lineage.trim().split(' ');
-    const names = this.props.names;
+    const { names, className } = this.props;
     return (
-      <div>
+      <div className={className}>
         {lineage.map(taxId => (
           <span
             key={taxId}

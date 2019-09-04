@@ -69,7 +69,14 @@ const mergeData = (interpro, structures, structureInfo) => {
 
 const UNDERSCORE = /_/g;
 
-class _StructureOnProtein extends PureComponent {
+/*:: type Props = {
+  structures: Array<Object>,
+  dataInterPro: Object,
+  protein: Object,
+  dataStructureInfo: Object,
+}; */
+
+class _StructureOnProtein extends PureComponent /*:: <Props> */ {
   static propTypes = {
     structures: T.array.isRequired,
     dataInterPro: T.object,

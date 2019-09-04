@@ -3,7 +3,7 @@
 exports[`<EBIMenu /> should render 1`] = `
 <ul>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       href="https://www.ebi.ac.uk"
     >
       <i
@@ -11,10 +11,10 @@ exports[`<EBIMenu /> should render 1`] = `
         data-icon=""
       />
       EMBL-EBI
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       href="https://www.ebi.ac.uk/services"
     >
       <i
@@ -22,10 +22,10 @@ exports[`<EBIMenu /> should render 1`] = `
         data-icon=""
       />
       Services
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       href="https://www.ebi.ac.uk/research"
     >
       <i
@@ -33,10 +33,10 @@ exports[`<EBIMenu /> should render 1`] = `
         data-icon=""
       />
       Research
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       href="https://www.ebi.ac.uk/training"
     >
       <i
@@ -44,10 +44,10 @@ exports[`<EBIMenu /> should render 1`] = `
         data-icon=""
       />
       Training
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
   <li>
-    <Memo(ConnectFunction)
+    <Memo(Connect(MenuItem))
       href="https://www.ebi.ac.uk/about"
     >
       <i
@@ -55,7 +55,7 @@ exports[`<EBIMenu /> should render 1`] = `
         data-icon=""
       />
       About EBI
-    </Memo(ConnectFunction)>
+    </Memo(Connect(MenuItem))>
   </li>
 </ul>
 `;

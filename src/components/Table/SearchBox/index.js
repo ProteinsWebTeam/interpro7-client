@@ -27,7 +27,7 @@ const DEBOUNCE_RATE = 500; // In ms
   localSearch: ?string,
 |}; */
 
-class SearchBox extends PureComponent /*:: <Props, State> */ {
+export class SearchBox extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     customLocation: T.object.isRequired,
     goToCustomLocation: T.func.isRequired,
@@ -35,7 +35,7 @@ class SearchBox extends PureComponent /*:: <Props, State> */ {
     loading: T.bool,
   };
 
-  constructor(props) {
+  constructor(props /*: Props */) {
     super(props);
 
     this.routerPush = debounce(this.routerPush, DEBOUNCE_RATE);
@@ -49,8 +49,9 @@ class SearchBox extends PureComponent /*:: <Props, State> */ {
 
   handleReset = () => this.handleChange({ target: { value: null } });
 
-  handleChange = ({ target: { value: search } }) =>
-    this.setState({ localSearch: search }, this.routerPush);
+  handleChange = (
+    { target: { value: search } } /*: {target: {value: ?string}} */,
+  ) => this.setState({ localSearch: search }, this.routerPush);
 
   routerPush = () => {
     const { page, search, ...rest } = this.props.customLocation.search;

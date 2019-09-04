@@ -1,15 +1,18 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import Tippy from '@tippy.js/react';
 
-const _Tooltip = ({
-  html,
-  title,
-  interactive,
-  useContext: _uC,
-  children,
-  ...rest
-}) => {
+const _Tooltip = (
+  {
+    html,
+    title,
+    interactive,
+    useContext: _uC,
+    children,
+    ...rest
+  } /*: {html?: any, title?: any, interactive?: boolean, useContext?: boolean, children: any, target?: Object} */,
+) => {
   let content = html || title;
   if (typeof content === 'string') {
     // eslint-disable-next-line react/no-danger

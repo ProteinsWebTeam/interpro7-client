@@ -18,7 +18,6 @@ const DEFAULT_LINE_WIDTH = 7;
   width?: number,
   height?: number,
   lineW?: number,
-  onClick: function,
 }; */
 
 const DomainButton = (
@@ -29,37 +28,34 @@ const DomainButton = (
     width = DEFAULT_DOMAIN_WIDTH,
     height = DEFAULT_DOMAIN_HEIGHT,
     lineW = DEFAULT_LINE_WIDTH,
-    onClick,
   } /*: Props */,
 ) => {
   const midY = height / 2;
   return (
-    <button onClick={onClick}>
-      <svg
-        className={f('ida-button')}
-        width={width + 2 * lineW + 2 * midY}
-        height={height + 2}
-      >
-        <line
-          stroke={stroke}
-          strokeWidth={3}
-          x1={0}
-          y1={midY}
-          x2={width + 2 * lineW + 2 * midY}
-          y2={midY}
-        />
-        <path
-          className="feature"
-          d={`M${midY},0h${width},0a${midY},${midY} 0 0 1 ${midY},${midY}v2a${midY},${midY} 0 0 1 -${midY},${midY}h-${width}a${midY},${midY} 0 0 1 -${midY},-${midY}v-2a${midY},${midY} 0 0 1 ${midY},-${midY}Z`}
-          fill={fill}
-          stroke={stroke}
-          transform={`translate(${lineW}, 0)`}
-        />
-        <text x={lineW + midY + width / 2} y={height - 1} textAnchor="middle">
-          {label}
-        </text>
-      </svg>
-    </button>
+    <svg
+      className={f('ida-button')}
+      width={width + 2 * lineW + 2 * midY}
+      height={height + 2}
+    >
+      <line
+        stroke={stroke}
+        strokeWidth={3}
+        x1={0}
+        y1={midY}
+        x2={width + 2 * lineW + 2 * midY}
+        y2={midY}
+      />
+      <path
+        className="feature"
+        d={`M${midY},0h${width},0a${midY},${midY} 0 0 1 ${midY},${midY}v2a${midY},${midY} 0 0 1 -${midY},${midY}h-${width}a${midY},${midY} 0 0 1 -${midY},-${midY}v-2a${midY},${midY} 0 0 1 ${midY},-${midY}Z`}
+        fill={fill}
+        stroke={stroke}
+        transform={`translate(${lineW}, 0)`}
+      />
+      <text x={lineW + midY + width / 2} y={height - 1} textAnchor="middle">
+        {label}
+      </text>
+    </svg>
   );
 };
 DomainButton.propTypes = {
@@ -69,7 +65,6 @@ DomainButton.propTypes = {
   width: T.number,
   height: T.number,
   lineW: T.number,
-  onClick: T.func,
 };
 
 export default DomainButton;

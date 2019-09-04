@@ -53,6 +53,7 @@ const mergeData = (secondaryData, secondaryStructures) => {
               type: 'secondary_structure',
               accession: `Chain ${structure.accession}`,
               source_database: 'PDB',
+              chain: structure.accession,
             });
           }
         }
@@ -108,7 +109,7 @@ const mergeData = (secondaryData, secondaryStructures) => {
   return entries;
 };
 
-const GoToProtVistaMenu = ({ entries }) => (
+const GoToProtVistaMenu = ({ entries } /*: Array<Object> */) => (
   <div className={f('row')}>
     <div className={f('column')}>
       <DropDownButton label="Jump To" icon="&#xf124;">
@@ -134,13 +135,23 @@ GoToProtVistaMenu.propTypes = {
   entries: T.arrayOf(T.object).isRequired,
 };
 
-const ProtVistaLoaded = ({
-  dataprotein,
-  tracks,
-  dataGenome3d,
-  chain,
-  fixedHighlight,
-}) => {
+const ProtVistaLoaded = (
+  {
+    dataprotein,
+    tracks,
+    dataGenome3d,
+    chain,
+    fixedHighlight,
+    id,
+  } /*: {
+  dataprotein: {loading: boolean, payload: {metadata: Object}},
+  tracks: Object | Array<Object>,
+  dataGenome3d: {loading: boolean, payload: {metadata: Object}, status: number},
+  chain: string,
+  fixedHighlight: string,
+  id: string
+ } */,
+) => {
   const protvistaEl = useRef(null);
   useEffect(() => {
     if (!protvistaEl.current || !protvistaEl.current.addEventListener) return;
@@ -218,6 +229,7 @@ const ProtVistaLoaded = ({
           protein={dataprotein.payload.metadata}
           data={enrichedTracks}
           fixedHighlight={fixedHighlight}
+          id={id}
         />
       )}
     </div>
@@ -229,6 +241,7 @@ ProtVistaLoaded.propTypes = {
   tracks: T.oneOfType([T.object, T.array]),
   chain: T.string,
   fixedHighlight: T.string,
+  id: T.string,
 };
 
 const getGenome3dURL = createSelector(
@@ -272,11 +285,13 @@ const tagChimericStructures = data => {
 };
 const protvistaPerChainProtein = {};
 
-const EntriesOnStructure = ({
-  entries,
-  showChainMenu = false,
-  secondaryStructures,
-}) => {
+const EntriesOnStructure = (
+  {
+    entries,
+    showChainMenu = false,
+    secondaryStructures,
+  } /*: {entries: Array<Object>, showChainMenu: boolean, secondaryStructures: Array<Object>} */,
+) => {
   const merged = mergeData(entries, secondaryStructures);
   tagChimericStructures(merged);
   return (
@@ -342,6 +357,7 @@ const EntriesOnStructure = ({
                     )
                     .join(',')
                 }
+                id={`${e.chain}-${e.protein.accession}`}
               />
             </div>
           );

@@ -14,6 +14,7 @@ before_script:
 script:
   - npm run deploy:production
   - npm run report
+after_script:
   - npm run coveralls
 notifications:
   slack:
