@@ -15,6 +15,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { format } from 'url';
+
 const f = foundationPartial(ebiGlobalStyles, fonts);
 
 const ProtVista = loadable({
@@ -38,18 +39,25 @@ const mergeData = (secondaryData, secondaryStructures) => {
         for (const structure of secondaryStructures) {
           // eslint-disable-next-line max-depth
           if (entry.chain === structure.accession) {
+            const allFragments = [];
             structure.locations.forEach(loc => {
               loc.fragments.forEach(f => {
                 if (f.shape === 'helix') {
                   f.fill = 'transparent';
-                  loc.fragmentType = 'Helices';
+                  allFragments.push({ ...f });
                 } else {
-                  loc.fragmentType = 'Strands';
+                  allFragments.push({ ...f });
                 }
               });
             });
+            const newLocations = [];
+            // eslint-disable-next-line max-depth
+            for (const f of allFragments) {
+              // To be consistent with the expected structure loc = [{fragments: [{}]}]
+              newLocations.push({ fragments: [{ ...f }] });
+            }
             secondaryStructArray.push({
-              ...structure,
+              locations: newLocations,
               type: 'secondary_structure',
               accession: `Chain ${structure.accession}`,
               source_database: 'PDB',

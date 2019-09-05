@@ -213,7 +213,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
     saver.preSave = () => {
       const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
-      // Including the styles of interpr-type elements
+      // Including the styles of interpro-type elements
       base.querySelectorAll('interpro-type').forEach(el => {
         el.innerHTML = el.shadowRoot.innerHTML;
       });
@@ -402,8 +402,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
   _getSecondaryStructureType = entry => {
     let type = null;
     if (entry.locations && entry.locations.length > 0) {
-      if (entry.locations[0].fragmentType) {
-        type = entry.locations[0].fragmentType;
+      if (entry.locations[0].fragments && entry.locations[0].fragments[0]) {
+        type = entry.locations[0].fragments[0].shape;
       }
     }
     return type;
@@ -906,7 +906,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                   <div
                                     className={f(
                                       'track-component',
-                                      'secondary-structure',
                                       `${this.state.addLabelClass}`,
                                     )}
                                   >
