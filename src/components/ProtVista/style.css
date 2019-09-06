@@ -136,7 +136,7 @@
 
 /*can't use highlight class*/
 .track-component g:global(.highlighted) rect {
-  fill: #fff;
+  fill: #7f7f7f;
 }
 
 /*blobs*/
