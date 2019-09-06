@@ -27,6 +27,7 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
+/* eslint-disable complexity  */
 const processConservationData = (entry, match) => {
   const fragments = [];
   // applying run-length-encoding style compression
@@ -34,7 +35,7 @@ const processConservationData = (entry, match) => {
   let currentFragment;
   for (const residue of match) {
     let color;
-    /* eslint-disable no-magic-numbers */
+    /* eslint-disable no-magic-numbers  */
     if (residue.score > 0.0 && residue.score <= 0.5) {
       color = '#ffffe0';
     } else if (residue.score > 0.5 && residue.score <= 1) {
@@ -62,7 +63,7 @@ const processConservationData = (entry, match) => {
     } else {
       color = '#00429d';
     }
-    /* eslint-enable no-magic-numbers */
+    /* eslint-enable no-magic-numbers  */
 
     if (!currentFragment) {
       currentFragment = {
@@ -77,12 +78,13 @@ const processConservationData = (entry, match) => {
       currentFragment = null;
     }
   }
-  fragments.push(currentFragment);
+  if (currentFragment) fragments.push(currentFragment);
   return fragments;
 };
+/* eslint-enable complexity  */
 
 const mergeConservationData = (data, conservationData) => {
-  data.hmm_conservation_score = [];
+  data.match_conservation = [];
   for (const db of Object.keys(conservationData)) {
     if (db.toLowerCase() !== 'sequence') {
       const dbConservationScores = {
@@ -98,11 +100,11 @@ const mergeConservationData = (data, conservationData) => {
           const fragments = processConservationData(entry, match);
           dbConservationScores.locations.push({
             fragments: fragments,
-            tooltip: entry,
+            match: entry,
           });
         }
       }
-      data.hmm_conservation_score.push(dbConservationScores);
+      data.match_conservation.push(dbConservationScores);
     }
   }
 };

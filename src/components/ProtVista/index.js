@@ -465,6 +465,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       locations,
       type,
       start,
+      end,
       residue,
     },
     isInterPro = false,
@@ -508,27 +509,39 @@ class ProtVista extends Component /*:: <Props, State> */ {
             <li>Position: ${start}</li>
             <li>Residue: ${residue}</li>
             `
-              : locations
+              : ''
+          } 
+          ${
+            !isResidue && locations
+              ? locations
                   .map(({ fragments, model_acc: model }) =>
                     `
             <li> 
             <!--location:-->
               ${model && model !== accession ? `Model: ${model}` : ''}
               <ul>
-                ${fragments
-                  .map(({ start, end }) =>
-                    `
+                ${
+                  fragments
+                    ? fragments
+                        .map(({ start, end }) =>
+                          `
                   <li>${start} - ${end}</li>
                 `.trim(),
-                  )
-                  .join('')}
+                        )
+                        .join('')
+                    : ''
+                }
               </ul>
             </li>
           `.trim(),
                   )
                   .join('')
+              : ''
           }
         </ul>
+        <p>
+          ${start && end ? `${start} - ${end}` : ''}
+        </p>
       </section>
     `.trim();
   }
@@ -540,18 +553,36 @@ class ProtVista extends Component /*:: <Props, State> */ {
       databases = dataDB.payload.databases;
     }
 
-    const entry = detail.feature;
-    const sourceDatabase = this._getSourceDatabaseDisplayName(entry, databases);
+    let tagString;
+    if (detail.feature.type === 'sequence_conservation') {
+      const match = detail.feature;
+      const sourceDatabase =
+        match.accession in databases
+          ? databases[match.accession].name
+          : match.accession;
+      const startLocation = match.locations[0];
+      const endLocation = match.locations[match.locations.length - 1];
+      const start = startLocation.fragments[0].start;
+      const end = endLocation.fragments[endLocation.fragments.length - 1].end;
+      const accession = startLocation.match;
+      tagString = this.getHTMLString({ accession, sourceDatabase, start, end });
+    } else {
+      const entry = detail.feature;
+      const sourceDatabase = this._getSourceDatabaseDisplayName(
+        entry,
+        databases,
+      );
 
-    const isResidue =
-      detail.target && detail.target.classList.contains('residue');
-    const highlightChild =
-      detail.target &&
-      detail.target.classList.contains('child-fragment') &&
-      detail.highlight;
-    const tagString = isResidue
-      ? this.getHTMLStringForResidue(entry, sourceDatabase)
-      : this.getHTMLStringForEntry(entry, sourceDatabase, highlightChild);
+      const isResidue =
+        detail.target && detail.target.classList.contains('residue');
+      const highlightChild =
+        detail.target &&
+        detail.target.classList.contains('child-fragment') &&
+        detail.highlight;
+      tagString = isResidue
+        ? this.getHTMLStringForResidue(entry, sourceDatabase)
+        : this.getHTMLStringForEntry(entry, sourceDatabase, highlightChild);
+    }
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
     return range.createContextualFragment(tagString);
@@ -618,10 +649,15 @@ class ProtVista extends Component /*:: <Props, State> */ {
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
       entry.type === 'chain' ||
-      entry.type === 'secondary_structure' ||
-      entry.type === 'sequence_conservation'
+      entry.type === 'secondary_structure'
     )
       return entry.accession;
+    if (entry.type === 'sequence_conservation') {
+      if (entry.accession in databases) {
+        return `${databases[entry.accession].name} conservation`;
+      }
+      return `${entry.accession} conservation`;
+    }
     if (entry.accession && entry.accession.startsWith('G3D:')) {
       return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
     }
