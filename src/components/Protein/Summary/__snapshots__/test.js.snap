@@ -165,7 +165,7 @@ exports[`<SummaryProtein /> should render 1`] = `
       <div
         className="medium-12 columns margin-bottom-large"
       >
-        <Memo(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(DomainOnProteinWithoutData)))))))))
+        <Memo(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(DomainOnProteinWithoutData)))))))))))
           mainData={
             Object {
               "metadata": Object {
