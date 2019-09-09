@@ -238,6 +238,9 @@ const Matches = (
     dbCounters,
     mainData,
     accessionSearch,
+    currentAPICall,
+    nextAPICall,
+    previousAPICall,
     ...props
   } /*: {
     matches: Array<Object>,
@@ -292,6 +295,9 @@ const Matches = (
       withTree={primary === 'taxonomy'}
       dbCounters={dbCounters}
       rowClassName={row => f({ exact: row.exact })}
+      nextAPICall={nextAPICall}
+      previousAPICall={previousAPICall}
+      currentAPICall={currentAPICall}
     >
       <PageSizeSelector />
       <SearchBox loading={isStale} />

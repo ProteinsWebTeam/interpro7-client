@@ -88,11 +88,7 @@ class About extends PureComponent /*:: <{}> */ {
         />
         <div className={f('columns', 'margin-bottom-large')}>
           <ul className={f('tabs', 'menu-style')}>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={AboutInterPro.preload}
-              onFocus={AboutInterPro.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{ description: { other: ['about', 'interpro'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
@@ -100,11 +96,7 @@ class About extends PureComponent /*:: <{}> */ {
                 InterPro
               </Link>
             </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={InterProScan.preload}
-              onFocus={InterProScan.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{ description: { other: ['about', 'interproscan'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
@@ -112,11 +104,7 @@ class About extends PureComponent /*:: <{}> */ {
                 InterProScan
               </Link>
             </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={Consortium.preload}
-              onFocus={Consortium.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{ description: { other: ['about', 'consortium'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
@@ -124,11 +112,7 @@ class About extends PureComponent /*:: <{}> */ {
                 The InterPro Consortium
               </Link>
             </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={Citation.preload}
-              onFocus={Citation.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{ description: { other: ['about', 'citation'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
@@ -136,11 +120,7 @@ class About extends PureComponent /*:: <{}> */ {
                 How to cite
               </Link>
             </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={Funding.preload}
-              onFocus={Funding.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{ description: { other: ['about', 'funding'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
@@ -148,11 +128,7 @@ class About extends PureComponent /*:: <{}> */ {
                 Funding
               </Link>
             </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={Privacy.preload}
-              onFocus={Privacy.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{ description: { other: ['about', 'privacy'] } }}
                 activeClass={f('is-active', 'is-active-tab')}

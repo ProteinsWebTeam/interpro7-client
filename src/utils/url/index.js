@@ -1,4 +1,6 @@
 // @flow
+
+import { parse } from 'url';
 const FINAL_SLASH = /\/*$/;
 
 export const removeLastSlash = (str /*: string*/) =>
@@ -30,3 +32,21 @@ export const buildAnchorLink = (
   pathname /*: string */,
   anchor /*: string */ = '',
 ) => `${pathname}#${anchor}`;
+
+export const getCursor = (url /*: string */) => {
+  if (!url) return null;
+  const ulrObj = parse(url);
+  for (const attr of ulrObj.query.split('&')) {
+    if (attr.toLowerCase().startsWith('cursor=')) return attr.split('=')[1];
+  }
+  return null;
+};
+
+export const toCanonicalURL = (url /*: string */) => {
+  const [path, attr] = url.split('?');
+  if (!attr) return path;
+  return `${path}?${attr
+    .split('&')
+    .sort()
+    .join('&')}`;
+};

@@ -1,5 +1,5 @@
 // @flow
-import { removeLastSlash, buildLink, buildAnchorLink } from '.';
+import { removeLastSlash, buildLink, buildAnchorLink, toCanonicalURL } from '.';
 
 describe('url utils', () => {
   describe('removeLastSlash', () => {
@@ -25,6 +25,16 @@ describe('url utils', () => {
     });
   });
 
+  describe('toCanonicalURL', () => {
+    test('shold return the same URL even if the order is different', () => {
+      expect(toCanonicalURL('http://example.com?a=1&b=2&c')).toEqual(
+        toCanonicalURL('http://example.com?a=1&c&b=2'),
+      );
+      expect(toCanonicalURL('http://example.com?a=1&b=2&c')).toEqual(
+        toCanonicalURL('http://example.com?c&a=1&b=2'),
+      );
+    });
+  });
   describe('buildAnchorLink', () => {
     test('should build a valid anchor link href', () => {
       expect(buildAnchorLink('/some/url/')).toBe('/some/url/#');

@@ -53,6 +53,7 @@ class SignaturesFilter extends PureComponent /*:: <Props> */ {
     const {
       page,
       signature_in: _,
+      cursor: __,
       ...search
     } = this.props.customLocation.search;
     if (value !== 'All') search.signature_in = value;
@@ -123,8 +124,15 @@ const getUrlFor = createSelector(
   state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
-    // eslint-disable-next-line camelcase
-    const { signature_in, search: _, page_size, ..._search } = search;
+    const {
+      // eslint-disable-next-line camelcase
+      signature_in,
+      search: _,
+      cursor: __,
+      // eslint-disable-next-line camelcase
+      page_size,
+      ..._search
+    } = search;
     // add to search
     _search.group_by = 'member_databases';
     // build URL

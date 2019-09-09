@@ -49,8 +49,14 @@ class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
 
   _handleSelection = ({ target: { value } }) => {
     const { goToCustomLocation, customLocation } = this.props;
-    const { page, match_presence: _, ...search } = customLocation.search;
-    if (labels.has(value)) search.match_presence = value;
+    const {
+      page,
+      match_presence: _,
+      cursor,
+      ...search
+    } = customLocation.search;
+    if (labels.has(value) && value.toLowerCase() !== 'both')
+      search.match_presence = value;
     goToCustomLocation({ ...customLocation, search });
   };
 
@@ -106,7 +112,7 @@ const getUrl = createSelector(
       protein: { db: 'UniProt' },
     };
     // omit from search
-    const { search: _, match_presence: __, ..._search } = search;
+    const { search: _, match_presence: __, cursor, ..._search } = search;
     // add to search
     _search.group_by = 'match_presence';
     // build URL

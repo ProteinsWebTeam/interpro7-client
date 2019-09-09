@@ -40,12 +40,12 @@ class PageSizeSelector extends PureComponent /*:: <Props, State> */ {
 
   _handleChange = event => {
     this.setState({ pageSize: event.target.value });
+    const { cursor, page, ...search } = this.props.customLocation.search;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       search: {
-        ...this.props.customLocation.search,
+        ...search,
         page_size: +event.target.value,
-        page: 1,
       },
     });
   };

@@ -52,6 +52,7 @@ class GOTermsFilter extends PureComponent /*:: <Props> */ {
     const {
       page,
       go_category: _,
+      cursor: __,
       ...search
     } = this.props.customLocation.search;
     if (value !== 'All') search.go_category = value;
@@ -157,8 +158,15 @@ const getUrlFor = createSelector(
   state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
-    // eslint-disable-next-line camelcase
-    const { page_size, search: _, go_category, ..._search } = search;
+    const {
+      // eslint-disable-next-line camelcase
+      page_size,
+      search: _,
+      cursor: __,
+      // eslint-disable-next-line camelcase
+      go_category,
+      ..._search
+    } = search;
     // add to search
     _search.group_by = 'go_categories';
     // build URL
