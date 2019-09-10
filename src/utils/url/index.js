@@ -43,9 +43,10 @@ export const getCursor = (url /*: string */) => {
 };
 
 export const toCanonicalURL = (url /*: string */) => {
-  const [path, attr] = url.split('?');
-  if (!attr) return path;
-  return `${path}?${attr
+  const ulrObj = parse(url);
+  if (!ulrObj.search) return ulrObj.pathname;
+  return `${ulrObj.pathname}?${ulrObj.search
+    .slice(1)
     .split('&')
     .sort()
     .join('&')}`;
