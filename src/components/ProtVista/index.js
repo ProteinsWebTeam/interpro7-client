@@ -403,7 +403,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
     let type = null;
     if (entry.locations && entry.locations.length > 0) {
       if (entry.locations[0].fragments && entry.locations[0].fragments[0]) {
-        type = entry.locations[0].fragments[0].shape;
+        const shape = entry.locations[0].fragments[0].shape;
+        type = shape.charAt(0).toUpperCase() + shape.slice(1);
       }
     }
     return type;
