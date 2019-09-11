@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import T from 'prop-types';
-import Tippy from '@tippy.js/react';
+import Tippy, { tippy } from '@tippy.js/react';
 
 const _Tooltip = (
   {
@@ -19,7 +19,12 @@ const _Tooltip = (
     content = <div dangerouslySetInnerHTML={{ __html: content }} />;
   }
   return (
-    <Tippy content={content} arrow={true} interactive={true}>
+    <Tippy
+      content={content}
+      arrow={true}
+      interactive={true}
+      onShow={() => tippy.hideAll({ duration: 0 })}
+    >
       <div style={{ display: 'inline' }} {...rest}>
         {children}
       </div>
