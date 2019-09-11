@@ -56,9 +56,11 @@ describe('tests', () => {
       page.click('[data-testid="table-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/proteome\/uniprot\/UP.*?\//i)
+    const urlMatch = new RegExp(
+      `${window.location.href}\/proteome\/uniprot\/UP.*?\/`,
+      'i'
     );
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-taxonomy-grid-item', async () => {
@@ -74,9 +76,11 @@ describe('tests', () => {
       page.click('[data-testid="grid-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/proteome\/uniprot\/UP.*?\//i)
+    const urlMatch = new RegExp(
+      `${window.location.href}\/proteome\/uniprot\/UP.*?\/`,
+      'i'
     );
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   // TODO test('click-browse-taxonomy-tree-item', async () => {});

@@ -62,7 +62,8 @@ describe('tests', () => {
       page.click('[data-testid="browse-tab-taxonomy"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/taxonomy/));
+    const urlMatch = new RegExp(`${window.location.href}/taxonomy`, 'i');
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-page-taxonomy-all-taxonomy-filter', async () => {
@@ -78,7 +79,10 @@ describe('tests', () => {
       page.click(`[data-testid="memberdb-filter-${allItems}"]`),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp('interpro/taxonomy/uniprot', 'i');
+    const urlMatch = new RegExp(
+      `${window.location.href}/taxonomy/uniprot`,
+      'i'
+    );
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
@@ -101,7 +105,7 @@ describe('tests', () => {
       ]);
       const url = await page.evaluate(() => window.location.href);
       const urlMatch = new RegExp(
-        `interpro\/taxonomy\/uniprot\/entry\/${memberdb}`,
+        `${window.location.href}\/taxonomy\/uniprot\/entry\/${memberdb}`,
         'i'
       );
       expect(url).toEqual(expect.stringMatching(urlMatch));
@@ -144,7 +148,10 @@ describe('tests', () => {
     expect(item).not.toBeNull();
 
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp('interpro/taxonomy/uniprot/#grid', 'i');
+    const urlMatch = new RegExp(
+      `${window.location.href}/taxonomy/uniprot/#grid`,
+      'i'
+    );
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
@@ -163,7 +170,10 @@ describe('tests', () => {
     expect(selection).not.toBeNull();
 
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp('interpro/taxonomy/uniprot/#tree', 'i');
+    const urlMatch = new RegExp(
+      `${window.location.href}/taxonomy/uniprot/#tree`,
+      'i'
+    );
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 });

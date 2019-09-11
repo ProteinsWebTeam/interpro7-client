@@ -61,9 +61,11 @@ describe('tests', () => {
       page.click('[data-testid="table-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/entry\/interpro\/IPR/i)
+    const urlMatch = new RegExp(
+      `${window.location.href}/entry/interpro/IPR`,
+      'i'
     );
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-entry-grid-item', async () => {
@@ -79,9 +81,11 @@ describe('tests', () => {
       page.click('[data-testid="grid-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/entry\/interpro\/IPR/i)
+    const urlMatch = new RegExp(
+      `${window.location.href}/entry/interpro/IPR`,
+      'i'
     );
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-entry-page-elements', async () => {

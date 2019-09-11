@@ -1,6 +1,4 @@
 import puppeteer from 'puppeteer';
-import server from './serve';
-export const app = (port /*: number */) => `http://localhost:${port}/interpro/`;
 
 export const RESOLUTION = {
   VGA: {
@@ -65,7 +63,7 @@ export const memberDatabases = [
   'tigrfams',
 ];
 
-export const config = {
+export const puppeteerConfig = {
   headless: true,
   slowMo: 250,
   args: [
@@ -77,7 +75,10 @@ export const config = {
   ],
 };
 
-export default (resolutionCode /*: string */ = 'HD1080') =>
+export default (
+  resolutionCode /*: string */ = 'HD1080',
+  server /*: string */ = 'dev'
+) =>
   (() => {
     let browser;
     return {
@@ -88,19 +89,15 @@ export default (resolutionCode /*: string */ = 'HD1080') =>
           );
         }
         const resolution = RESOLUTION[resolutionCode];
-        const port = await server.start();
-        if (!port) throw new Error("Server didn't start correctly");
-        config.args.push(
-          `--window-size=${resolution.width},${resolution.height}`
-        );
-        browser = await puppeteer.launch(config);
+
+        browser = await puppeteer.launch(puppeteerConfig);
         const page = await browser.newPage();
         page.setViewport({
           width: resolution.width,
           height: resolution.height,
           deviceSaleFactor: 4,
         });
-        await page.goto(app(port));
+        await page.goto(location.href);
         return page;
       },
       async cleanup() {
