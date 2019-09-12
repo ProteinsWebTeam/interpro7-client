@@ -64,7 +64,7 @@ export class ExactMatch extends PureComponent /*:: <SMProps> */ {
       data: { payload },
       dataNumber: { payload: numberPayload },
     } = this.props;
-    if (!searchValue || !payload) return null;
+    if (!searchValue || (!payload && !numberPayload)) return null;
     const searchRE = new RegExp(
       `^(${searchValue}|IPR${searchValue.padStart(
         INTERPRO_ACCESSION_PADDING,
@@ -73,41 +73,42 @@ export class ExactMatch extends PureComponent /*:: <SMProps> */ {
       'i',
     );
     const exactMatches = new Map();
-    const { accession, endpoint: type, source_database: db } = payload;
-    if (searchRE.test(accession)) {
-      exactMatches.set(
-        type,
-        <ExactMatchWrapper
-          key={type}
-          to={{
-            description: {
-              main: { key: type },
-              [type]: { db, accession },
-            },
-          }}
-        >
-          {type} {accession}
-        </ExactMatchWrapper>,
-      );
+    if (payload) {
+      const { accession, endpoint: type, source_database: db } = payload;
+      if (searchRE.test(accession)) {
+        exactMatches.set(
+          type,
+          <ExactMatchWrapper
+            key={type}
+            to={{
+              description: {
+                main: { key: type },
+                [type]: { db, accession },
+              },
+            }}
+          >
+            {type} {accession}
+          </ExactMatchWrapper>,
+        );
+      }
+      // For identifier names (ex: VAV_HUMAN)
+      if (searchValue && searchValue.includes('_')) {
+        exactMatches.set(
+          type,
+          <ExactMatchWrapper
+            key={type}
+            to={{
+              description: {
+                main: { key: type },
+                [type]: { db, accession },
+              },
+            }}
+          >
+            {type} {accession} [ID: {searchValue.toUpperCase()}]
+          </ExactMatchWrapper>,
+        );
+      }
     }
-    // For identifier names (ex: VAV_HUMAN)
-    if (searchValue && searchValue.includes('_') && payload) {
-      exactMatches.set(
-        type,
-        <ExactMatchWrapper
-          key={type}
-          to={{
-            description: {
-              main: { key: type },
-              [type]: { db, accession },
-            },
-          }}
-        >
-          {type} {accession} [ID: {searchValue.toUpperCase()}]
-        </ExactMatchWrapper>,
-      );
-    }
-
     if (numberPayload) {
       const {
         accession: numberAccession,
