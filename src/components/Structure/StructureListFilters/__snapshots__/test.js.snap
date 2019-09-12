@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<StructureListFilters /> should render 1`] = `
-<Memo(ConnectFunction)>
-  <Memo(ConnectFunction)
+<Memo(Connect(FiltersPanel))>
+  <Memo(Connect(loadData(ExperimentTypeFilter)))
     label="Experiment Type"
   />
-  <Memo(ConnectFunction)
+  <Memo(Connect(ResolutionFilter))
     label="Resolution (Å)"
   />
-</Memo(ConnectFunction)>
+</Memo(Connect(FiltersPanel))>
 `;

@@ -29,7 +29,7 @@ exports[`<ContributingSignatures /> should render 1`] = `
           </span>
            
           <React.Fragment>
-            <LoadableComponent
+            <Memo(Loadable)
               data={
                 Object {
                   "db": "pfam",
@@ -39,7 +39,7 @@ exports[`<ContributingSignatures /> should render 1`] = `
               processData={[Function]}
             />
             
-            <Memo
+            <Memo(SignatureLink)
               accession="PF00051"
               db="pfam"
               label="Kringle domain"

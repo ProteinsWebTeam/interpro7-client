@@ -14,7 +14,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
     <div
       className="margin-bottom-large"
     >
-      <LoadableComponent
+      <Memo(Loadable)
         data={
           Object {
             "ida": "PF00594:IPR000294-PF00051:IPR000001-PF00051:IPR000001-PF09396:IPR018992-PF00089:IPR001254",
@@ -25,7 +25,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
         processData={[Function]}
       />
       <div>
-        <Memo(ConnectFunction)
+        <Memo(Connect(Link))
           to={
             Object {
               "description": Object {
@@ -53,7 +53,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
            
           proteins
            
-        </Memo(ConnectFunction)>
+        </Memo(Connect(Link))>
         with this architecture:
       </div>
       <TextIDA

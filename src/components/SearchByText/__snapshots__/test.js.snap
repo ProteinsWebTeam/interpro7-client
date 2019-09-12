@@ -4,7 +4,7 @@ exports[`<SearchByText /> should render 1`] = `
 <div
   className="row"
 >
-  <LoadableComponent
+  <Memo(Loadable)
     data={
       Object {
         "description": "Search families, domains, proteins, keywords or GO terms",
@@ -34,7 +34,7 @@ exports[`<SearchByText /> should render 1`] = `
             >
               Search families, domains, proteins, keywords or GO terms
             </h3>
-            <Memo(ConnectFunction)
+            <Memo(Connect(TextSearchBox))
               inputRef={[Function]}
             />
           </div>
@@ -88,13 +88,13 @@ exports[`<SearchByText /> should render 1`] = `
             <span>
               Powered by
                
-              <Memo(ConnectFunction)
+              <Memo(Connect(Link))
                 className="neutral ext"
                 href="https://www.ebi.ac.uk/ebisearch/"
                 target="_blank"
               >
                 EBI search
-              </Memo(ConnectFunction)>
+              </Memo(Connect(Link))>
             </span>
           </div>
         </div>
@@ -110,7 +110,7 @@ exports[`<SearchByText /> should render 1`] = `
             >
               Search
             </button>
-            <Memo(ConnectFunction)
+            <Memo(Connect(Link))
               className="secondary hollow button"
               to={
                 Object {
@@ -126,7 +126,7 @@ exports[`<SearchByText /> should render 1`] = `
               }
             >
               Clear
-            </Memo(ConnectFunction)>
+            </Memo(Connect(Link))>
           </div>
         </div>
       </div>

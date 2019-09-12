@@ -190,8 +190,8 @@ exports[`<Header /> stuck, not signature 1`] = `
   <div
     className="masthead-inner row"
   >
-    <Memo(ConnectFunction) />
-    <Memo(ConnectFunction)
+    <Memo(Connect(Title)) />
+    <Memo(Connect(_SideIcons))
       stuck={true}
     />
     <ResizeObserverComponent
@@ -218,8 +218,8 @@ exports[`<Header /> stuck, signature 1`] = `
   <div
     className="masthead-inner row"
   >
-    <Memo(ConnectFunction) />
-    <Memo(ConnectFunction)
+    <Memo(Connect(Title)) />
+    <Memo(Connect(_SideIcons))
       stuck={true}
     />
     <ResizeObserverComponent
@@ -245,8 +245,8 @@ exports[`<Header /> unstuck, not signature 1`] = `
   <div
     className="masthead-inner row"
   >
-    <Memo(ConnectFunction) />
-    <Memo(ConnectFunction)
+    <Memo(Connect(Title)) />
+    <Memo(Connect(_SideIcons))
       stuck={false}
     />
     <ResizeObserverComponent
@@ -272,8 +272,8 @@ exports[`<Header /> unstuck, signature 1`] = `
   <div
     className="masthead-inner row"
   >
-    <Memo(ConnectFunction) />
-    <Memo(ConnectFunction)
+    <Memo(Connect(Title)) />
+    <Memo(Connect(_SideIcons))
       stuck={false}
     />
     <ResizeObserverComponent
@@ -293,7 +293,7 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
   <div
     className="side-icons movedAway"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(_HamburgerBtn))
       aria-label="Show the InterPro Menu"
       stuck={true}
       svg={true}
@@ -301,10 +301,10 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
     <label
       className="side-search stuck"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(TextSearchBox))
         name="search"
       />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -337,7 +337,7 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
             />
           </svg>
         </div>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </label>
   </div>
 </div>
@@ -350,7 +350,7 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
   <div
     className="side-icons movedAway"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(_HamburgerBtn))
       aria-label="Show the InterPro Menu"
       stuck={true}
       svg={true}
@@ -358,10 +358,10 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
     <label
       className="side-search stuck"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(TextSearchBox))
         name="search"
       />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -394,7 +394,7 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
             />
           </svg>
         </div>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </label>
   </div>
 </div>
@@ -407,7 +407,7 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
   <div
     className="side-icons movedAway"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(_HamburgerBtn))
       aria-label="Show the InterPro Menu"
       stuck={false}
       svg={true}
@@ -415,10 +415,10 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
     <label
       className="side-search"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(TextSearchBox))
         name="search"
       />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -451,7 +451,7 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
             />
           </svg>
         </div>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </label>
   </div>
 </div>
@@ -464,7 +464,7 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
   <div
     className="side-icons movedAway"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(_HamburgerBtn))
       aria-label="Show the InterPro Menu"
       stuck={false}
       svg={true}
@@ -472,10 +472,10 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
     <label
       className="side-search"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(TextSearchBox))
         name="search"
       />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -508,7 +508,7 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
             />
           </svg>
         </div>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </label>
   </div>
 </div>
@@ -521,7 +521,7 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
   <div
     className="side-icons"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(_HamburgerBtn))
       aria-label="Show the InterPro Menu"
       stuck={true}
       svg={true}
@@ -529,10 +529,10 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
     <label
       className="side-search stuck"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(TextSearchBox))
         name="search"
       />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -565,7 +565,7 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
             />
           </svg>
         </div>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </label>
   </div>
 </div>
@@ -578,7 +578,7 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
   <div
     className="side-icons"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(_HamburgerBtn))
       aria-label="Show the InterPro Menu"
       stuck={true}
       svg={true}
@@ -586,10 +586,10 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
     <label
       className="side-search stuck"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(TextSearchBox))
         name="search"
       />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -622,7 +622,7 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
             />
           </svg>
         </div>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </label>
   </div>
 </div>
@@ -635,7 +635,7 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
   <div
     className="side-icons"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(_HamburgerBtn))
       aria-label="Show the InterPro Menu"
       stuck={false}
       svg={true}
@@ -643,10 +643,10 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
     <label
       className="side-search"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(TextSearchBox))
         name="search"
       />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -679,7 +679,7 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
             />
           </svg>
         </div>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </label>
   </div>
 </div>
@@ -692,7 +692,7 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
   <div
     className="side-icons"
   >
-    <Memo(ConnectFunction)
+    <Memo(Connect(_HamburgerBtn))
       aria-label="Show the InterPro Menu"
       stuck={false}
       svg={true}
@@ -700,10 +700,10 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
     <label
       className="side-search"
     >
-      <Memo(ConnectFunction)
+      <Memo(Connect(TextSearchBox))
         name="search"
       />
-      <Memo(ConnectFunction)
+      <Memo(Connect(Link))
         to={
           Object {
             "description": Object {
@@ -736,7 +736,7 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
             />
           </svg>
         </div>
-      </Memo(ConnectFunction)>
+      </Memo(Connect(Link))>
     </label>
   </div>
 </div>

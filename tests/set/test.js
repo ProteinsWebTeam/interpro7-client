@@ -57,9 +57,11 @@ describe('tests', () => {
       page.click('[data-testid="table-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/set\/pfam\/CL\d{4}\//i)
+    const urlMatch = new RegExp(
+      `${window.location.href}/set/pfam/CL\\d{4}`,
+      'i'
     );
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-set-grid-item', async () => {
@@ -75,9 +77,11 @@ describe('tests', () => {
       page.click('[data-testid="grid-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/set\/pfam\/CL\d{4}\//i)
+    const urlMatch = new RegExp(
+      `${window.location.href}/set/pfam/CL\\d{4}`,
+      'i'
     );
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-set-page-elements', async () => {
