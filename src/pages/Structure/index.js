@@ -555,7 +555,10 @@ const List = (
                   search: {},
                 })}
               >
-                <HighlightedText text={name} textToHighlight={search.search} />
+                <HighlightedText
+                  text={name.toUpperCase()}
+                  textToHighlight={search.search}
+                />
               </Link>
             )}
           >

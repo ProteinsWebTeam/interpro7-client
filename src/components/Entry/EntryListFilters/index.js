@@ -11,10 +11,12 @@ import IntegratedFilter from './IntegratedFilter';
 import SignaturesFilter from './SignaturesFilter';
 import GOTermsFilter from './GOTermsFilter';
 
-export const EntryListFilter = ({ mainDB } /*: {mainDB: string}*/) => (
+export const EntryListFilter = ({ mainDB } /*: {mainDB: string} */) => (
   <FiltersPanel>
     <EntryTypeFilter
-      label={`${mainDB === 'InterPro' ? 'InterPro' : 'Member Database'} Type`}
+      label={`${
+        mainDB === 'InterPro' ? 'InterPro' : 'Member Database Entry'
+      } Type`}
     />
     {mainDB === 'InterPro' ? (
       <SignaturesFilter label="Integrated Database" />

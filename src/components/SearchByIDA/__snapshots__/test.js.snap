@@ -19,7 +19,7 @@ exports[`<SearchByIDA /> should render 1`] = `
           <h3
             className="light"
           >
-            Search by choosing the InterPro entries in your architecture
+            Search for proteins with a specific domain architecture
           </h3>
           <div
             className="ida-workspace"
@@ -48,7 +48,7 @@ exports[`<SearchByIDA /> should render 1`] = `
               />
                
               <span>
-                Add Entry
+                Add Domain
               </span>
             </button>
             <button
@@ -62,7 +62,7 @@ exports[`<SearchByIDA /> should render 1`] = `
               />
                
               <span>
-                Ignore Entry
+                Ignore Domain
               </span>
             </button>
             <label

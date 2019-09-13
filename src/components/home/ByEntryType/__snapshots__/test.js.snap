@@ -213,7 +213,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
     >
       <Tooltip
         title="
-      It identifies a short sequence that is typically repeated within a
+      A short sequence that is typically repeated within a
       protein.
     "
       >

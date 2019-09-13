@@ -280,7 +280,7 @@ export const entryType = [
   {
     type: 'Repeat',
     description: `
-      It identifies a short sequence that is typically repeated within a
+      A short sequence that is typically repeated within a
       protein.
     `,
   },

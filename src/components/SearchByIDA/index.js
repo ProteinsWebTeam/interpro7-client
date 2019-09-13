@@ -151,7 +151,7 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
             <div className={f('row')}>
               <div className={f('large-12', 'columns', 'search-input')}>
                 <h3 className={f('light')}>
-                  Search by choosing the InterPro entries in your architecture
+                  Search for proteins with a specific domain architecture
                 </h3>
                 <div className={f('ida-workspace')}>
                   <PanelIDA
@@ -206,7 +206,7 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                     }
                   >
                     <DomainButton label="➕" fill="#75bf40" stroke="#75bf40" />{' '}
-                    <span>Add Entry</span>
+                    <span>Add Domain</span>
                   </button>
                   <button
                     className={f('button', 'secondary')}
@@ -219,7 +219,7 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                     }
                   >
                     <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
-                    <span>Ignore Entry</span>
+                    <span>Ignore Domain</span>
                   </button>
                   <label htmlFor="ordered">
                     <input

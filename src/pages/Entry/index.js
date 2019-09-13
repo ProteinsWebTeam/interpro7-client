@@ -365,7 +365,7 @@ class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
             <div>
               {data.metadata.integrated ? (
                 <div>
-                  Integrated to{' '}
+                  Integrated into{' '}
                   <Link
                     to={{
                       description: {
@@ -432,6 +432,7 @@ class List extends PureComponent /*:: <Props> */ {
       ).then(m => m.InterproType),
     ).as('interpro-type');
   }
+
   // eslint-disable-next-line
   render() {
     const {
@@ -643,6 +644,7 @@ class List extends PureComponent /*:: <Props> */ {
                         databases[db] &&
                         databases[db].name) ||
                         db} website`}
+                      distance={30}
                     >
                       <Link
                         target="_blank"
@@ -669,7 +671,7 @@ class List extends PureComponent /*:: <Props> */ {
                         Object.entries(entries).map(([accession, id]) => (
                           <Tooltip
                             key={accession}
-                            title={`${id} (${db})`}
+                            title={`${id} (${databases[db].name})`}
                             className={f('signature', {
                               'corresponds-to-filter':
                                 search.signature_in &&
@@ -693,7 +695,7 @@ class List extends PureComponent /*:: <Props> */ {
                   </div>
                 )}
               >
-                Member Database
+                Integrated Signature(s)
               </Column>
             ) : (
               <Column

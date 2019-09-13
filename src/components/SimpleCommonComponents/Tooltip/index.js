@@ -10,8 +10,9 @@ const _Tooltip = (
     interactive,
     useContext: _uC,
     children,
+    distance,
     ...rest
-  } /*: {html?: any, title?: any, interactive?: boolean, useContext?: boolean, children: any, target?: Object} */,
+  } /*: {html?: any, title?: any, interactive?: boolean, useContext?: boolean, children: any, target?: Object, distance? : number} */,
 ) => {
   let content = html || title;
   if (typeof content === 'string') {
@@ -24,6 +25,7 @@ const _Tooltip = (
       arrow={true}
       interactive={true}
       onShow={() => tippy.hideAll({ duration: 0 })}
+      distance={distance}
     >
       <div style={{ display: 'inline' }} {...rest}>
         {children}
@@ -40,5 +42,6 @@ _Tooltip.propTypes = {
   useContext: T.bool,
   children: T.any,
   target: T.object,
+  distance: T.number,
 };
 export default _Tooltip;

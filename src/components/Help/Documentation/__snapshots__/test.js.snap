@@ -221,7 +221,7 @@ exports[`<Documentation /> should render 1`] = `
                   }
                 }
               >
-                List of InterPro publications
+                Show all previous InterPro publications
               </Memo(Connect(Link))>
             </li>
           </ul>
@@ -237,7 +237,7 @@ exports[`<Documentation /> should render 1`] = `
         <h3
           className="light"
         >
-          Additional help
+          Contact us/Additional help
         </h3>
         <ul>
           <li>
