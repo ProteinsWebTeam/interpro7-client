@@ -72,10 +72,21 @@ const processConservationData = (entry, match) => {
         color: color,
       };
     }
-    currentFragment.end = residue.position;
+    currentFragment.end = residue.position - 1;
     if (color !== currentFragment.color) {
+      console.log(
+        `New block: ${residue.position} ${color} !== ${currentFragment.color}`,
+      );
       fragments.push(currentFragment);
-      currentFragment = null;
+      currentFragment = {
+        start: residue.position,
+        end: residue.position,
+        color: color,
+      };
+    } else {
+      console.log(
+        `Continue block: ${residue.position} ${color} === ${currentFragment.color}`,
+      );
     }
   }
   if (currentFragment) fragments.push(currentFragment);
