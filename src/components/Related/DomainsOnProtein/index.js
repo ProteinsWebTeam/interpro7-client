@@ -74,19 +74,12 @@ const processConservationData = (entry, match) => {
     }
     currentFragment.end = residue.position - 1;
     if (color !== currentFragment.color) {
-      console.log(
-        `New block: ${residue.position} ${color} !== ${currentFragment.color}`,
-      );
       fragments.push(currentFragment);
       currentFragment = {
         start: residue.position,
         end: residue.position,
         color: color,
       };
-    } else {
-      console.log(
-        `Continue block: ${residue.position} ${color} === ${currentFragment.color}`,
-      );
     }
   }
   if (currentFragment) fragments.push(currentFragment);
@@ -250,9 +243,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     if (!data || data.loading) return <Loading />;
     if (!data.payload || !data.payload.results) {
       return (
-        <div className={f('callout')}>
-          There are no entries matching this protein.
-        </div>
+        <div className={f('callout')}>No entries found in this protein.</div>
       );
     }
 
