@@ -84,7 +84,10 @@ export const getUrl = createSelector(
               break;
           }
         }
-        return cleanUpMultipleSlashes(
+        const cursor = _search.cursor;
+        if (cursor) delete _search.cursor;
+
+        const urlTmp = cleanUpMultipleSlashes(
           format({
             protocol,
             hostname,
@@ -93,6 +96,12 @@ export const getUrl = createSelector(
             query: _search,
           }),
         );
+        // Cursors can have symbols that shouldn't be escaped
+        if (cursor) {
+          const sep = urlTmp.indexOf('?') === -1 ? '?' : '&';
+          return `${urlTmp}${sep}cursor=${cursor}`;
+        }
+        return urlTmp;
       },
     ),
 );

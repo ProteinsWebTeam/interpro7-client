@@ -30,7 +30,7 @@ export const interProScanPropType = T.shape({
 });
 
 export const dataPropType = T.shape({
-  loading: T.bool.isRequired,
+  loading: T.bool,
   payload: T.oneOfType([
     metadataPropType,
     resultsPropType,

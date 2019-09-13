@@ -25,6 +25,7 @@ const f = foundationPartial(style);
   goToCustomLocation: function,
   customLocation: {
     description: Object,
+    search: Object,
   }
 }; */
 
@@ -41,6 +42,7 @@ class IntegratedFilter extends PureComponent /*:: <Props, State> */ {
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
       description: T.object,
+      search: T.object,
     }).isRequired,
   };
 
@@ -63,13 +65,18 @@ class IntegratedFilter extends PureComponent /*:: <Props, State> */ {
 
   _handleSelection = ({ target: { value } }) => {
     this.setState({ value });
-    const { goToCustomLocation, customLocation } = this.props;
+    const {
+      goToCustomLocation,
+      customLocation: { description, search: s, ...rest },
+    } = this.props;
+    const { cursor: _, ...search } = s;
     goToCustomLocation({
-      ...customLocation,
+      ...rest,
+      search,
       description: {
-        ...customLocation.description,
+        ...description,
         entry: {
-          ...customLocation.description.entry,
+          ...description.entry,
           integration: value === 'both' ? null : value,
         },
       },
@@ -121,7 +128,7 @@ const getUrlFor = createSelector(
     } = description;
     _description.entry = entry;
     // omit from search
-    const { search: _, ..._search } = search;
+    const { search: _, cursor: __, ..._search } = search;
     // add to search
     _search.interpro_status = null;
     // build URL

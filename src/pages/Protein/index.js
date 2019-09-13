@@ -282,6 +282,8 @@ class List extends PureComponent /*:: <ListProps> */ {
       _payload = {
         results: [],
         count: 0,
+        next: null,
+        previous: null,
       };
     }
     const urlHasParameter = url && url.includes('?');
@@ -315,6 +317,9 @@ class List extends PureComponent /*:: <ListProps> */ {
             query={search}
             notFound={notFound}
             databases={databases}
+            nextAPICall={_payload.next}
+            previousAPICall={_payload.previous}
+            currentAPICall={url}
           >
             <Exporter>
               <ul>

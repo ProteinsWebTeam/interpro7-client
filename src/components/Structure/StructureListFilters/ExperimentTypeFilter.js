@@ -45,6 +45,7 @@ class ExperimentTypeFilter extends PureComponent /*:: <Props> */ {
   _handleSelection = ({ target: { value } }) => {
     const {
       page,
+      cursor,
       experiment_type: _,
       ...search
     } = this.props.customLocation.search;
@@ -106,7 +107,7 @@ const getUrlFor = createSelector(
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     // eslint-disable-next-line camelcase
-    const { experiment_type, search: _, ..._search } = search;
+    const { experiment_type, search: _, cursor, ..._search } = search;
     // add to search
     _search.group_by = 'experiment_type';
     // build URL

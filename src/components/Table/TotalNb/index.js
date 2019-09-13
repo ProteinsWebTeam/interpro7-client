@@ -15,6 +15,7 @@ import config from 'config';
 import { toPlural } from 'utils/pages';
 
 import styles from './style.css';
+import { toCanonicalURL } from 'utils/url';
 
 const s = cn.bind(styles);
 
@@ -51,6 +52,9 @@ SelectorSpoof.propTypes = {
   children: T.func.isRequired,
 };
 
+const url2page = new Map();
+
+// eslint-disable-next-line complexity
 export const TotalNb = (
   {
     className,
@@ -61,13 +65,37 @@ export const TotalNb = (
     contentType,
     databases,
     dbCounters,
-  } /*: {className?: string, data: Array<Object>, actualSize?: number, pagination: Object, notFound?: boolean, description: Object, contentType?: string, databases?: Object, dbCounters?: Object} */,
+    currentAPICall,
+    nextAPICall,
+    previousAPICall,
+  } /*: {
+    className?: string,
+    data: Array<Object>,
+    actualSize?: number,
+    pagination: Object,
+    notFound?: boolean,
+    description: Object,
+    contentType?: string,
+    databases?: Object,
+    dbCounters?: Object,
+    currentAPICall?: ?string,
+    nextAPICall?: ?string,
+    previousAPICall?: ?string,
+  } */,
 ) => {
-  const page = parseInt(pagination.page || 1, 10);
+  const page =
+    (currentAPICall && url2page.get(toCanonicalURL(currentAPICall))) ||
+    parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
     10,
   );
+
+  if (currentAPICall && !pagination.page) {
+    if (nextAPICall) url2page.set(toCanonicalURL(nextAPICall), page + 1);
+    if (previousAPICall)
+      url2page.set(toCanonicalURL(previousAPICall), page - 1);
+  }
 
   const index = (page - 1) * pageSize + 1;
 
@@ -133,6 +161,9 @@ TotalNb.propTypes = {
   contentType: T.string,
   databases: T.object,
   dbCounters: T.object,
+  currentAPICall: T.string,
+  nextAPICall: T.string,
+  previousAPICall: T.string,
 };
 
 const mapStateToProps = createSelector(

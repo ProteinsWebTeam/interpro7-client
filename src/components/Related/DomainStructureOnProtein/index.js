@@ -110,7 +110,11 @@ const getUrlForInterPro = createSelector(
   state => state.settings.api,
   state => state.customLocation.description,
   state => state.customLocation.search,
-  ({ protocol, hostname, port, root }, description, search) => {
+  (
+    { protocol, hostname, port, root },
+    description,
+    { cursor: _, ...search },
+  ) => {
     const _description = {
       main: { key: 'entry' },
       structure: {

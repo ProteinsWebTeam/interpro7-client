@@ -140,11 +140,7 @@ class Wrapper extends PureComponent /*:: <Props> */ {
             processData={schemaProcessDataWebPage}
           />
           <ul className={f('tabs', 'menu-style')}>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={IPScanStatus.preload}
-              onFocus={IPScanStatus.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{
                   description: {
@@ -163,11 +159,7 @@ class Wrapper extends PureComponent /*:: <Props> */ {
                 Your InterProScan searches
               </Link>
             </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={DownloadSummary.preload}
-              onFocus={DownloadSummary.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{
                   description: {

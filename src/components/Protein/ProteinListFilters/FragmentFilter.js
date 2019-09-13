@@ -42,7 +42,7 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { page, ...search } = this.props.customLocation.search;
+    const { page, cursor, ...search } = this.props.customLocation.search;
     const _search = { ...search, is_fragment: value };
     if (value === 'both') {
       delete _search.is_fragment;
@@ -120,7 +120,7 @@ const getUrl = createSelector(
     }
 
     // omit from search
-    const { search: _, ..._search } = search;
+    const { search: _, cursor: __, ..._search } = search;
     if ('is_fragment' in _search) delete _search.is_fragment;
     // add to search
     _search.group_by = 'is_fragment';

@@ -261,7 +261,7 @@ const ProteomeCard = (
   </>
 );
 ProteomeCard.propTypes = {
-  data: dataPropType.object,
+  data: dataPropType,
   search: T.string,
   entryDB: T.string,
 };
@@ -323,6 +323,8 @@ class List extends PureComponent /*:: <Props> */ {
       _payload = {
         results: [],
         count: 0,
+        next: null,
+        previous: null,
       };
     }
     const urlHasParameter = url && url.includes('?');
@@ -356,6 +358,9 @@ class List extends PureComponent /*:: <Props> */ {
             query={search}
             notFound={notFound}
             databases={databases}
+            nextAPICall={_payload.next}
+            previousAPICall={_payload.previous}
+            currentAPICall={url}
           >
             <Exporter>
               <ul>
