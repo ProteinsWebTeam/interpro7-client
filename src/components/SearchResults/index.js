@@ -62,6 +62,12 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
     } = this.props;
     if (!searchValue) return null;
     const { entries, hitCount } = payload || {};
+    if (entries)
+      entries.sort((_, b) => {
+        return b.fields.source_database[0].toLowerCase() === 'interpro'
+          ? 1
+          : -1;
+      });
     if (!loading && hitCount === 0) {
       return (
         <>
