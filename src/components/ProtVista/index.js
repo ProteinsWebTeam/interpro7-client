@@ -189,7 +189,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
         <section>
           <h6>Residue ${detail.feature.start}: ${detail.feature.aa}</h6>
           <div>
-            <b>Hidrophobicity:</b> ${detail.feature.value}<br/>
+            <b>Hydrophobicity:</b> ${detail.feature.value}<br/>
             <b>Scale:</b> ${getColorScaleHTML(
               this._hydroRef.current.colorScale,
             )}<br/>
