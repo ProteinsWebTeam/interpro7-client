@@ -49,6 +49,15 @@
     }
   }
 }
+.description {
+  color: var(--colors-graydark);
+  font-size: 0.9em;
+  & .sequence {
+    font-family: var(--fonts-mono);
+    background: var(--colors-vlightgray);
+    color: var(--colors-dark);
+  }
+}
 
 .dragging-overlay {
   position: absolute;
