@@ -68,6 +68,7 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
   _handleSelection = ({ target: { value } }) => {
     const { page, type, ...search } = this.props.customLocation.search;
     if (!isAll(value)) search.type = value;
+    delete search.cursor;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
@@ -143,7 +144,7 @@ const getUrlFor = createSelector(
   state => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
-    const { type, search: _, ..._search } = search;
+    const { type, search: _, cursor: __, ..._search } = search;
     // add to search
     _search.group_by = 'type';
     // build URL

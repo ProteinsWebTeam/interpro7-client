@@ -43,7 +43,7 @@ class CurationFilter extends PureComponent /*:: <Props> */ {
   };
 
   _handleSelection = ({ target: { value } }) => {
-    const { page, ...search } = this.props.customLocation.search;
+    const { page, cursor, ...search } = this.props.customLocation.search;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       description: {
@@ -118,7 +118,7 @@ const getUrl = createSelector(
     }
 
     // omit from search
-    const { search: _, ..._search } = search;
+    const { search: _, cursor: __, ..._search } = search;
     // add to search
     _search.group_by = 'source_database';
     // build URL

@@ -45,6 +45,8 @@ const f = foundationPartial(ebiGlobalStyles, fonts, styles);
   withTree: boolean,
   withGrid: boolean,
   rowClassName?: any,
+  nextAPICall?: ?string,
+  previousAPICall?: ?string,
 } */
 
 const TableView = loadable({
@@ -99,6 +101,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
     status: T.number,
     actualSize: T.number,
     query: T.object,
+    nextAPICall: T.string,
+    previousAPICall: T.string,
     title: T.string,
     notFound: T.bool,
     contentType: T.string,
@@ -118,6 +122,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
       status,
       actualSize,
       query,
+      nextAPICall,
+      previousAPICall,
       title,
       notFound,
       contentType,
@@ -173,8 +179,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                       className={f('icon-view', 'table-view')}
                       activeClass={f('active')}
                       aria-label="view your results as a table"
-                      onMouseOver={TableView.preload}
-                      onFocus={TableView.preload}
                       data-testid="view-table-button"
                     />
                   </Tooltip>
@@ -189,8 +193,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                           activeClass={f('active')}
                           aria-disabled={card ? 'false' : 'true'}
                           aria-label="view your results in a grid"
-                          onMouseOver={GridView.preload}
-                          onFocus={GridView.preload}
                           data-testid="view-grid-button"
                         />
                       </Tooltip>
@@ -206,8 +208,6 @@ export default class Table extends PureComponent /*:: <Props> */ {
                         activeClass={f('active')}
                         aria-disabled={withTree ? 'false' : 'true'}
                         aria-label="view your results as a tree"
-                        onMouseOver={TreeView.preload}
-                        onFocus={TreeView.preload}
                         data-testid="view-tree-button"
                       />
                     </Tooltip>
@@ -259,6 +259,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 withPageSizeSelector={withPageSizeSelector}
                 actualSize={actualSize}
                 pagination={_query}
+                nextAPICall={nextAPICall}
+                previousAPICall={previousAPICall}
               />
             </div>
           </div>

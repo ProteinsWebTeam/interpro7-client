@@ -113,7 +113,6 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
     };
     if (order) search.ordered = true;
     if (ignore && ignore.length) search.ida_ignore = ignore.join(',');
-    console.log(this.props.customLocation);
 
     this.props.goToCustomLocation({
       ...this.props.customLocation,

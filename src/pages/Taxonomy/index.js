@@ -409,6 +409,8 @@ class List extends PureComponent /*:: <Props> */ {
       _payload = {
         results: [],
         count: 0,
+        next: null,
+        previous: null,
       };
     }
     const results = [...(_payload.results || [])];
@@ -473,6 +475,9 @@ class List extends PureComponent /*:: <Props> */ {
             withTree={true}
             withGrid={true}
             databases={databases}
+            nextAPICall={_payload.next}
+            previousAPICall={_payload.previous}
+            currentAPICall={url}
           >
             <Exporter>
               <ul>

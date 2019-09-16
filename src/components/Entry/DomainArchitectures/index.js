@@ -281,6 +281,8 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
             withPageSizeSelector={true}
             actualSize={payload.count}
             pagination={search}
+            nextAPICall={payload.next}
+            previousAPICall={payload.previous}
           />
         </div>
       </div>

@@ -100,11 +100,7 @@ export default class Help extends PureComponent /*:: <{}> */ {
         />
         <div className={f('columns', 'margin-bottom-large')}>
           <ul className={f('tabs', 'menu-style')}>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={Tutorial.preload}
-              onFocus={Tutorial.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{ description: { other: ['help', 'tutorial'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
@@ -112,11 +108,7 @@ export default class Help extends PureComponent /*:: <{}> */ {
                 Tutorials &amp; training
               </Link>
             </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={Faqs.preload}
-              onFocus={Faqs.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{ description: { other: ['help', 'faqs'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
@@ -124,11 +116,7 @@ export default class Help extends PureComponent /*:: <{}> */ {
                 FAQs
               </Link>
             </li>
-            <li
-              className={f('tabs-title')}
-              onMouseOver={Documentation.preload}
-              onFocus={Documentation.preload}
-            >
+            <li className={f('tabs-title')}>
               <Link
                 to={{ description: { other: ['help', 'documentation'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
