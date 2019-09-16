@@ -62,12 +62,6 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
     } = this.props;
     if (!searchValue) return null;
     const { entries, hitCount } = payload || {};
-    if (entries)
-      entries.sort((_, b) => {
-        return b.fields.source_database[0].toLowerCase() === 'interpro'
-          ? 1
-          : -1;
-      });
     if (!loading && hitCount === 0) {
       return (
         <>
@@ -212,16 +206,7 @@ const mapStateToProps = createSelector(
 
 const getQueryTerm = createSelector(
   query => query,
-  query => {
-    const number = +query;
-    if (!Number.isInteger(number)) return query;
-    const stringified = number.toString();
-    if (stringified.length > INTERPRO_ACCESSION_PADDING) return query;
-    return `IPR${stringified.padStart(
-      INTERPRO_ACCESSION_PADDING,
-      '0',
-    )} OR ${query}`;
-  },
+  query => `${query} AND (source_database:interpro%5E2 OR *:*)`,
 );
 
 const getEbiSearchUrl = createSelector(
