@@ -242,9 +242,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 
     if (!data || data.loading) return <Loading />;
     if (!data.payload || !data.payload.results) {
-      return (
-        <div className={f('callout')}>No entries found in this protein.</div>
-      );
+      return <div className={f('callout')}>No entries match this protein.</div>;
     }
 
     const { interpro, unintegrated, other } = processData({
