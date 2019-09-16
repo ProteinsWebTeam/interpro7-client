@@ -49,6 +49,7 @@ class ExperimentTypeFilter extends PureComponent /*:: <Props> */ {
       ...search
     } = this.props.customLocation.search;
     if (value !== 'All') search.experiment_type = value;
+    if (value === 'nmr' && search.resolution) delete search.resolution;
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
