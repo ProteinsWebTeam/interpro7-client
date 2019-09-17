@@ -4,7 +4,10 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import TextSearchBox from 'components/SearchByText/TextSearchBox';
+import TextSearchBox, {
+  DEBOUNCE_RATE,
+  DEBOUNCE_RATE_SLOW,
+} from 'components/SearchByText/TextSearchBox';
 import Example from 'components/SearchByText/Example';
 import Link from 'components/generic/Link';
 
@@ -67,7 +70,14 @@ export class SearchByText extends PureComponent /*:: <Props> */ {
                   <h3 className={f('light')}>
                     Search families, domains, proteins, keywords or GO terms
                   </h3>
-                  <TextSearchBox inputRef={node => (this._input = node)} />
+                  <TextSearchBox
+                    inputRef={node => (this._input = node)}
+                    delay={
+                      this.props.main === 'search'
+                        ? DEBOUNCE_RATE
+                        : DEBOUNCE_RATE_SLOW
+                    }
+                  />
                 </div>
               </div>
 

@@ -29,7 +29,6 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const INTERPRO_ACCESSION_PADDING = 6;
 const MAX_LENGTH = 200;
 
 /*:: type Props = {

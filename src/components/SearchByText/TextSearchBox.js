@@ -15,7 +15,8 @@ import local from './style.css';
 
 const f = foundationPartial(interproTheme, fonts, local);
 
-const DEBOUNCE_RATE = 1000; // 1s
+export const DEBOUNCE_RATE = 1000; // 1s
+export const DEBOUNCE_RATE_SLOW = 2000; // 2s
 
 /*:: type Props = {
   pageSize?: number,
@@ -24,6 +25,7 @@ const DEBOUNCE_RATE = 1000; // 1s
   className?: string,
   goToCustomLocation: goToCustomLocation,
   inputRef: function,
+  delay?: ?number,
 }; */
 /*:: type State = {|
   localValue: ?string,
@@ -39,6 +41,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
     className: T.string,
     goToCustomLocation: T.func,
     inputRef: T.func,
+    delay: T.number,
   };
 
   constructor(props) {
@@ -46,7 +49,10 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
 
     this.state = { localValue: null, loading: false };
 
-    this._debouncedPush = debounce(this.routerPush, DEBOUNCE_RATE);
+    this._debouncedPush = debounce(
+      this.routerPush,
+      +props.delay || DEBOUNCE_RATE,
+    );
   }
 
   componentDidMount() {

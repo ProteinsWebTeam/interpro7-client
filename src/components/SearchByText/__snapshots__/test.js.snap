@@ -35,6 +35,7 @@ exports[`<SearchByText /> should render 1`] = `
               Search families, domains, proteins, keywords or GO terms
             </h3>
             <Memo(Connect(TextSearchBox))
+              delay={1000}
               inputRef={[Function]}
             />
           </div>
