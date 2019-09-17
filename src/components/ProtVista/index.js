@@ -609,18 +609,23 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
   renderLabels(entry) {
     const { expandedTrack } = this.state;
-    const { dataDB } = this.props;
+    const { dataDB, id } = this.props;
     let databases = {};
     if (dataDB.payload) {
       databases = dataDB.payload.databases;
     }
     // const databases = dataDB.payload.databases;
+    if (entry.source_database === 'mobidblt')
+      return (
+        <Link href={`http://mobidb.bio.unipd.it/${id}`}>{entry.accession}</Link>
+      );
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
       entry.type === 'chain' ||
       entry.type === 'secondary_structure'
     )
       return entry.accession;
+
     if (entry.accession && entry.accession.startsWith('G3D:')) {
       return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
     }
