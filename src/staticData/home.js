@@ -287,19 +287,19 @@ export const entryType = [
   {
     type: 'Conserved Site',
     description: `
-      A short sequence that contains one or more conserved residues.
+      A short sequence that contains one or more conserved residues
     `,
   },
   {
     type: 'Active Site',
     description: `
-      A short sequence that contains one or more conserved residues.
+      A short sequence that contains one or more conserved residues, which allow the protein to bind to a ligand.
     `,
   },
   {
     type: 'Binding Site',
     description: `
-      A short sequence that contains one or more conserved residues.
+      A short sequence that contains one or more conserved residues, which form a protein interaction site.
     `,
   },
   {
