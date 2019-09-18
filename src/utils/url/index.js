@@ -35,9 +35,11 @@ export const buildAnchorLink = (
 
 export const getCursor = (url /*: string */) => {
   if (!url) return null;
-  const ulrObj = parse(url);
-  for (const attr of ulrObj.query.split('&')) {
-    if (attr.toLowerCase().startsWith('cursor=')) return attr.split('=')[1];
+  const urlObj = parse(url);
+  if (urlObj.query) {
+    for (const attr of urlObj.query.split('&')) {
+      if (attr.toLowerCase().startsWith('cursor=')) return attr.split('=')[1];
+    }
   }
   return null;
 };

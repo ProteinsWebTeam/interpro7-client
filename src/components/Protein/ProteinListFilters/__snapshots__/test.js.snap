@@ -9,7 +9,7 @@ exports[`<ProteinListFilters /> should render 1`] = `
     label="Taxonomy"
   />
   <Memo(Connect(loadData(FragmentFilter)))
-    label="Fragment"
+    label="Sequence Status"
   />
 </Memo(Connect(FiltersPanel))>
 `;
