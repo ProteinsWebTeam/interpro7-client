@@ -184,10 +184,16 @@ const Wrapper = (
                 <div>
                   <button onClick={toggleShowHelp} className={f('hollow')}>
                     <span
-                      className={f('icon', 'icon-common', 'show-help', {
-                        expanded: showHelp,
-                      })}
-                      data-icon="&#xf137;"
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        'show-help',
+                        //   {
+                        //   expanded: showHelp,
+                        // }
+                      )}
+                      data-icon="&#xf129;"
+                      // data-icon="&#xf137;"
                     />
                   </button>
                 </div>

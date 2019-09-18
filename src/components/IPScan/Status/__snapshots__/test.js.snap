@@ -30,6 +30,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     dataTable={Array []}
     query={Object {}}
     rowKey="localID"
+    showTableIcon={false}
   >
     <Column
       dataKey="localID"

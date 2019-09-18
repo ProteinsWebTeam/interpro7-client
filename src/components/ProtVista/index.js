@@ -647,10 +647,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
           {this.state.label === 'name'
             ? (
                 <>
-                  <interpro-type
-                    type={entry.type.replace('_', ' ')}
-                    dimension="1em"
-                  />
+                  {entry.type ? (
+                    <interpro-type
+                      type={entry.type.replace('_', ' ')}
+                      dimension="1em"
+                    />
+                  ) : null}
                   {entry.name}
                 </>
               ) || entry.accession

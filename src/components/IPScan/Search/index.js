@@ -417,7 +417,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                           <span className={f('sequence')}>
                             PMPIGSKERPTFFEIFKTRCNKADLGPISLN
                           </span>
-                          ), with a maximum length of 40,000 amino acid long.
+                          ), with a maximum length of 40,000 amino acids.
                         </p>
                         <p>
                           Please note that you can only scan one sequence at a

@@ -543,7 +543,7 @@ class List extends PureComponent /*:: <Props> */ {
                 </Link>
               )}
             >
-              Accession
+              Tax ID
             </Column>
             <Column
               dataKey="name"

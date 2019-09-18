@@ -19,7 +19,7 @@ export const ProteinListFilters = (
     <CurationFilter label="UniProt Curation" />
     <TaxonomyFilter label="Taxonomy" />
     {/* <SizeFilter label="Protein Size" />*/}
-    <FragmentFilter label="Fragment" />
+    <FragmentFilter label="Sequence Status" />
   </FiltersPanel>
 );
 ProteinListFilters.propTypes = {
