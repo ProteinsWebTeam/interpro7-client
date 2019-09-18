@@ -32,6 +32,13 @@ export const columns = {
     { name: 'Tax Name', selector: 'metadata.source_organism.scientificName' },
     { name: 'Length', selector: 'metadata.length' },
   ],
+  structure: [
+    { name: 'Accession', selector: 'metadata.accession' },
+    { name: 'Source Database', selector: 'metadata.source_database' },
+    { name: 'Name', selector: 'metadata.name' },
+    { name: 'Experiment Type', selector: 'metadata.experiment_type' },
+    { name: 'Resolution', selector: 'metadata.resolution' },
+  ],
 };
 
 export const object2TSV = (object, selectors) => {
