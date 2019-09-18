@@ -24,6 +24,14 @@ export const columns = {
         terms ? terms.map(t => t.identifier).join(',') : '',
     },
   ],
+  protein: [
+    { name: 'Accession', selector: 'metadata.accession' },
+    { name: 'Source Database', selector: 'metadata.source_database' },
+    { name: 'Name', selector: 'metadata.name' },
+    { name: 'Tax ID', selector: 'metadata.source_organism.taxId' },
+    { name: 'Tax Name', selector: 'metadata.source_organism.scientificName' },
+    { name: 'Length', selector: 'metadata.length' },
+  ],
 };
 
 export const object2TSV = (object, selectors) => {
