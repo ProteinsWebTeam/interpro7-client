@@ -674,7 +674,10 @@ class List extends PureComponent /*:: <Props> */ {
                         Object.entries(entries).map(([accession, id]) => (
                           <Tooltip
                             key={accession}
-                            title={`${id} (${databases[db].name})`}
+                            title={`${id} (${(databases &&
+                              databases[db] &&
+                              databases[db].name) ||
+                              db})`}
                             className={f('signature', {
                               'corresponds-to-filter':
                                 search.signature_in &&
