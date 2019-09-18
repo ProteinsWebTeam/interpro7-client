@@ -165,11 +165,13 @@ export const downloadURL = (
   url /*: string */,
   fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
+  endpoint /*: string */,
 ) => ({
   type: types.DOWNLOAD_URL,
   url,
   fileType,
   subset,
+  endpoint,
 });
 
 export const downloadError = (
@@ -189,12 +191,14 @@ export const downloadSuccess = (
   url /*: string */,
   fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
+  endpoint /*: string */,
   { blobURL, size } /*: { string, size } */,
 ) => ({
   type: types.DOWNLOAD_SUCCESS,
   url,
   fileType,
   subset,
+  endpoint,
   blobURL,
   size,
 });
@@ -203,12 +207,14 @@ export const downloadProgress = (
   url /*: string */,
   fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
+  endpoint,
   progress /*: number */,
 ) => ({
   type: types.DOWNLOAD_PROGRESS,
   url,
   fileType,
   subset,
+  endpoint,
   progress,
 });
 

@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch';
 import { format, parse } from 'url';
 import { throttle } from 'lodash-es';
 import { sleep } from 'timing-functions/src';
+import { object2TSV, columns } from './object2TSV';
 
 import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';
 
@@ -12,7 +13,7 @@ import {
   downloadSuccess,
 } from 'actions/creators';
 
-/*:: type FileType = 'accession' | 'fasta'; */
+/*:: type FileType = 'accession' | 'fasta' | 'json' | 'tsv'; */
 
 // Max page size provided by the server
 // to maximise the number of results sent by the server at once
@@ -42,7 +43,7 @@ const createActionCallerFor = (...args1) => (creator, ...args2) =>
 
 const DESCRIPTION_SEPARATOR = '|';
 
-const processResultsFor = (fileType, subset) =>
+const processResultsFor = (fileType, subset, endpoint) =>
   function*(results) {
     for (const result of results) {
       let content = '';
@@ -86,9 +87,15 @@ const processResultsFor = (fileType, subset) =>
             '$1\n',
           );
         }
-      } else {
-        // accession
+      } else if (fileType === 'json') {
+        content += JSON.stringify(result.metadata);
+      } else if (fileType === 'accession') {
         content += `${result.metadata.accession}\n`;
+      } else if (fileType === 'tsv') {
+        content += `${object2TSV(result, columns[endpoint])}\n`;
+      } else {
+        // TSV?
+        content += `${result}\n`;
       }
       yield content;
     }
@@ -117,16 +124,25 @@ const downloadContent = (onProgress, onSuccess, onError) => async (
   url,
   fileType,
   subset,
+  endpoint,
   _,
 ) => {
   try {
     const firstPage = getFirstPage(url, fileType);
+    // TSV header
+    if (fileType === 'tsv') {
+      onProgress({
+        part: `${columns[endpoint].map(({ name }) => name).join('\t')}\n`,
+        progress: 0,
+      });
+    }
+
     const key = [url, fileType, subset].filter(Boolean).join('');
     // Counters for progress information
     let totalCount;
     let i = 0;
     // Create a function to transform API response into processed file part
-    const processResults = processResultsFor(fileType, subset);
+    const processResults = processResultsFor(fileType, subset, endpoint);
     // As long as we have a next page, we keep processing
     // Let's start with the first one
     let next = format(firstPage);
@@ -176,7 +192,8 @@ const generateFileHandle = (
   content /*: Array<string> */,
   fileType /*: FileType */,
 ) => {
-  const blob = new Blob(content, { type: lut.get(fileType) });
+  const _content = fileType === 'json' ? [`[${content.join(',')}]`] : content;
+  const blob = new Blob(_content, { type: lut.get(fileType) });
   return { blobURL: URL.createObjectURL(blob), size: blob.size };
 };
 
@@ -186,8 +203,8 @@ const postProgress = throttle(
 );
 
 // Download manager, send messages from there
-const download = async (url, fileType, subset) => {
-  const action = createActionCallerFor(url, fileType, subset);
+const download = async (url, fileType, subset, endpoint) => {
+  const action = createActionCallerFor(url, fileType, subset, endpoint);
   const onError = error => {
     console.error(error);
     postProgress(action(downloadProgress, 1));
@@ -210,6 +227,7 @@ const download = async (url, fileType, subset) => {
         () => {
           // Finished getting all the content, generate a blob out of that
           // and get its URL
+
           const urlAndSize = generateFileHandle(content, fileType);
           // OK, we have done everything, set progress to 1 and set success
           postProgress(action(downloadProgress, 1));
@@ -227,7 +245,7 @@ const download = async (url, fileType, subset) => {
 const main = ({ data }) => {
   switch (data.type) {
     case DOWNLOAD_URL:
-      download(data.url, data.fileType, data.subset);
+      download(data.url, data.fileType, data.subset, data.endpoint);
       break;
     case DOWNLOAD_DELETE:
       canceled.add(

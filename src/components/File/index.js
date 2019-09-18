@@ -25,6 +25,11 @@ const f = foundationPartial(styles);
 
 const SMALL = 0.01;
 
+const extensions = {
+  accession: 'txt',
+  fasta: 'fasta',
+  json: 'json',
+};
 /*:: type ButtonProps = {
   fileType: string,
   url: string,
@@ -39,7 +44,7 @@ const SMALL = 0.01;
 
 class Button extends PureComponent /*:: <ButtonProps> */ {
   static propTypes = {
-    fileType: T.oneOf(['accession', 'fasta']).isRequired,
+    fileType: T.oneOf(['accession', 'fasta', 'json', 'tsv']).isRequired,
     url: T.string.isRequired,
     subpath: T.string.isRequired,
     count: T.number,
@@ -77,8 +82,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
       title += 'Click icon to generate';
     }
     title += ` ${fileType} file`;
-    const filename =
-      name || `${fileType}.${fileType === 'accession' ? 'txt' : 'fasta'}`;
+    const filename = name || `${fileType}.${extensions[fileType]}`;
     return (
       <Tooltip
         interactive
@@ -147,7 +151,8 @@ const mapStateToPropsFor = (url, fileType, subset) =>
  count: number,
  subset?: boolean,
  name: string,
- search?: Object
+ search?: Object,
+ endpoint?: ?string,
 }; */
 
 /*:: type State = {
@@ -164,11 +169,12 @@ export class File extends PureComponent /*:: <Props, State> */ {
     entryDescription: T.object.isRequired,
     customLocationDescription: T.object,
     downloadURL: T.func.isRequired,
-    fileType: T.oneOf(['accession', 'fasta']),
+    fileType: T.oneOf(['accession', 'fasta', 'json', 'tsv']),
     count: T.number,
     subset: T.bool,
     name: T.string,
     search: T.object,
+    endpoint: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -217,6 +223,7 @@ export class File extends PureComponent /*:: <Props, State> */ {
       this.state.url,
       this.props.fileType,
       this.props.subset,
+      this.props.endpoint,
     ),
   );
 
