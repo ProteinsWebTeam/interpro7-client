@@ -14,6 +14,7 @@ import {
 
 import AdvancedOptions from 'components/IPScan/AdvancedOptions';
 import Redirect from 'components/generic/Redirect';
+import Link from 'components/generic/Link';
 
 import { createJob, goToCustomLocation } from 'actions/creators';
 import loadable from 'higherOrder/loadable';
@@ -180,6 +181,7 @@ export const cleanUp = blocks => {
   goToCustomLocation: function,
   ipScan: Object,
   value: string,
+  main: string,
 }*/
 
 /*:: type State = {
@@ -198,6 +200,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     goToCustomLocation: T.func.isRequired,
     ipScan: T.object.isRequired,
     value: T.string,
+    main: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -404,6 +407,33 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                       }}
                       processData={schemaProcessDataPageSection}
                     />
+                    {this.props.main === 'search' && (
+                      <div className={f('description')}>
+                        <p>
+                          This form allows you to scan your sequence for matches
+                          against the InterPro protein signature databases,
+                          using InterProScan tool. Enter or paste a protein
+                          sequence in FASTA format (complete or not - e.g.{' '}
+                          <span className={f('sequence')}>
+                            PMPIGSKERPTFFEIFKTRCNKADLGPISLN
+                          </span>
+                          ), with a maximum length of 40,000 amino acid long.
+                        </p>
+                        <p>
+                          Please note that you can only scan one sequence at a
+                          time. Alternatively, read{' '}
+                          <Link
+                            to={{
+                              description: { other: ['about', 'interproscan'] },
+                            }}
+                          >
+                            more about InterProScan
+                          </Link>{' '}
+                          for other ways of running sequences through
+                          InterProScan.
+                        </p>
+                      </div>
+                    )}
                     <div
                       onClick={this._focusEditor}
                       onKeyPress={this._focusEditor}
@@ -537,8 +567,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   state => state.settings.ipScan,
-  state => state.customLocation.description.search.value,
-  (ipScan, value) => ({ ipScan, value }),
+  state => state.customLocation.description,
+  (ipScan, desc) => ({ ipScan, value: desc.search.value, main: desc.main.key }),
 );
 
 export default connect(

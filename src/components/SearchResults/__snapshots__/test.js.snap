@@ -11,7 +11,7 @@ exports[`<SearchResults /> should render 1`] = `
     }
     processData={[Function]}
   />
-  <Memo(Connect(loadData(ExactMatch)))
+  <Memo(Connect(loadData(Connect(loadData(ExactMatch)))))
     searchValue="IPR020422"
   />
   <Table

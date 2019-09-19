@@ -492,6 +492,9 @@ class List extends PureComponent /*:: <Props> */ {
             notFound={notFound}
             withGrid={!!includeGrid}
             databases={databases}
+            nextAPICall={_payload.next}
+            previousAPICall={_payload.previous}
+            currentAPICall={data.url}
           >
             <Exporter>
               <ul>

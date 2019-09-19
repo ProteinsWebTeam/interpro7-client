@@ -60,7 +60,11 @@ describe('tests', () => {
       page.click('[data-testid="table-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/protein\/uniprot\//i));
+    const urlMatch = new RegExp(
+      `${window.location.href}\/protein\/uniprot`,
+      'i'
+    );
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-protein-grid-item', async () => {

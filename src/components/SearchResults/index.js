@@ -62,12 +62,21 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
     } = this.props;
     if (!searchValue) return null;
     const { entries, hitCount } = payload || {};
+    if (entries)
+      entries.sort((_, b) => {
+        return b.fields.source_database[0].toLowerCase() === 'interpro'
+          ? 1
+          : -1;
+      });
     if (!loading && hitCount === 0) {
       return (
-        <div className={f('callout', 'info', 'withicon')}>
-          Your search for <strong>{searchValue}</strong> did not match any
-          records in our database.
-        </div>
+        <>
+          <ExactMatch searchValue={searchValue} />
+          <div className={f('callout', 'info', 'withicon')}>
+            Your search for <strong>{searchValue}</strong> did not match any
+            InterPro entries.
+          </div>
+        </>
       );
     }
     // TODO: Use Improved description component to show summary (with  limit of characters and highlight) as there is a limitation for search starting with "cite..." or "taxon..." in this case

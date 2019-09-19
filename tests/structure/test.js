@@ -21,7 +21,7 @@ describe('tests', () => {
     '[data-testid="structure-experiment-type"]',
     '[data-testid="structure-resolution"]',
     '[data-testid="structure-chains"]',
-    '[data-testid="structure-released"]',
+    '[data-testid="structure-date"]',
     '[data-testid="structure-external-links"]',
     '[data-testid="structure-3d-viewer"]',
     '[data-testid="structure-protvista"]',
@@ -61,9 +61,11 @@ describe('tests', () => {
       page.click('[data-testid="table-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/structure\/pdb\/[^\s]{4}/i)
+    const urlMatch = new RegExp(
+      `${window.location.href}/structure/pdb/[^\\s]{4}/`,
+      'i'
     );
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-structure-grid-item', async () => {
@@ -79,9 +81,11 @@ describe('tests', () => {
       page.click('[data-testid="grid-entity"] a'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(
-      expect.stringMatching(/interpro\/structure\/pdb\/[^\s]{4}/i)
+    const urlMatch = new RegExp(
+      `${window.location.href}/structure/pdb/[^\\s]{4}/`,
+      'i'
     );
+    expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
   test('click-browse-structure-page-elements', async () => {

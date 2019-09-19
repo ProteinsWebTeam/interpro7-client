@@ -1748,12 +1748,8 @@ const hmmLogo = function(logoElement, options = {}) {
 
     const scaleControls =
       '<fieldset><legend>Scale</legend>' +
-      `<label><input type="radio" name="scale" class="${
-        styles.logo_scale
-      }" value="obs" ${obsChecked}/>Maximum Observed ${obsHelp}</label></br>` +
-      `<label><input type="radio" name="scale" class="${
-        styles.logo_scale
-      }" value="theory" ${theoryChecked}/>Maximum Theoretical ${theoryHelp}</label>` +
+      `<label><input type="radio" name="scale" class="${styles.logo_scale}" value="obs" ${obsChecked}/>Maximum Observed ${obsHelp}</label></br>` +
+      `<label><input type="radio" name="scale" class="${styles.logo_scale}" value="theory" ${theoryChecked}/>Maximum Theoretical ${theoryHelp}</label>` +
       '</fieldset>';
 
     settings.innerHTML += scaleControls;
@@ -1775,12 +1771,8 @@ const hmmLogo = function(logoElement, options = {}) {
 
     settings.innerHTML += `
       <fieldset><legend>Color Scheme</legend>
-        <label><input type="radio" name="color" class="${
-          styles.logo_color
-        }" value="default" ${defColor}/>Default</label></br>
-        <label><input type="radio" name="color" class="${
-          styles.logo_color
-        }" value="consensus" ${conColor}/>Consensus Colors</label>
+        <label><input type="radio" name="color" class="${styles.logo_color}" value="default" ${defColor}/>Default</label></br>
+        <label><input type="radio" name="color" class="${styles.logo_color}" value="consensus" ${conColor}/>Consensus Colours</label>
       </fieldset>
     `;
   }
@@ -1797,12 +1789,8 @@ const hmmLogo = function(logoElement, options = {}) {
 
     const aliControls =
       '<fieldset><legend>Coordinates</legend>' +
-      `<label><input type="radio" name="coords" class="${
-        styles.logo_ali_map
-      }" value="model" ${modChecked}/>Model</label></br>` +
-      `<label><input type="radio" name="coords" class="${
-        styles.logo_ali_map
-      }" value="alignment" ${aliChecked}/>Alignment</label>` +
+      `<label><input type="radio" name="coords" class="${styles.logo_ali_map}" value="model" ${modChecked}/>Model</label></br>` +
+      `<label><input type="radio" name="coords" class="${styles.logo_ali_map}" value="alignment" ${aliChecked}/>Alignment</label>` +
       '</fieldset>';
     settings.innerHTML += aliControls;
 
@@ -1812,9 +1800,7 @@ const hmmLogo = function(logoElement, options = {}) {
     ) {
       let activeSites =
         '<fieldset><legend>ActiveSites</legend>' +
-        `<label>Source: <select name="member_db" class="${
-          styles.logo_ali_map
-        }">`;
+        `<label>Source: <select name="member_db" class="${styles.logo_ali_map}">`;
       for (const key of Object.keys(logo.active_sites_sources)) {
         activeSites += `<option value="${key}">${key}</option> `;
       }
@@ -1822,9 +1808,7 @@ const hmmLogo = function(logoElement, options = {}) {
         '</select></label> ' + // + modHelp +
         '</br>' +
         '<label>Accession number: ' +
-        `  <input type="text" name="family_accession" class="${
-          styles.logo_ali_map
-        }" value=""/>` +
+        `  <input type="text" name="family_accession" class="${styles.logo_ali_map}" value=""/>` +
         '</label><br/>' +
         '<button id="active_sites">Get Active Sites</button>' +
         '</fieldset>';

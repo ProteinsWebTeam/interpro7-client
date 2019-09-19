@@ -171,9 +171,9 @@ const UISettings = (
     </div>
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
-        <p>Color Domains:</p>
+        <p>Colour Domains:</p>
         <p>
-          <small>Selection mode to color by</small>
+          <small>Selection mode to colour by</small>
         </p>
         <select
           className={f('select-inline')}

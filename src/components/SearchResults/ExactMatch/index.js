@@ -3,12 +3,10 @@ import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import { createSelector } from 'reselect';
-import { format } from 'url';
 
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData';
-import { proteinAccessionHandler } from 'utils/processDescription/handlers';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -44,54 +42,11 @@ class ExactMatchWrapper extends PureComponent /*:: <EMWProps> */ {
   }
 }
 
-const XREFS = new Map([
-  ['UNIPROT', { type: 'protein', db: 'UniProt' }],
-  ['PDB', { type: 'structure', db: 'PDB' }],
-  ['PROTEOMES', { type: 'proteome', db: 'UniProt' }],
-]);
-
-const _ExactMatchProteinID = ({ data, identifier, type }) => {
-  if (!data || data.loading || !data.payload || !data.payload.metadata)
-    return null;
-  const { db, accession } = data.payload.metadata;
-  return (
-    <ExactMatchWrapper
-      key={type}
-      to={{
-        description: {
-          main: { key: type },
-          [type]: { db, accession },
-        },
-      }}
-    >
-      {type} {accession} [ID: {identifier}]
-    </ExactMatchWrapper>
-  );
-};
-_ExactMatchProteinID.propTypes = {
-  data: dataPropType,
-  identifier: T.string,
-  type: T.string,
-};
-const getProteinIDUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.search.value,
-  ({ protocol, hostname, port, root }, searchValue) =>
-    format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}/protein/UniProt/${searchValue}`,
-    }),
-);
-
-const ExactMatchProteinID = loadData({
-  getUrl: getProteinIDUrl,
-  // fetchOptions: { method: 'HEAD' },
-})(_ExactMatchProteinID);
-
 /*:: type SMProps = {
   data: {
+    payload: Object,
+  },
+  dataNumber: {
     payload: Object,
   },
   searchValue: ?string,
@@ -99,6 +54,7 @@ const ExactMatchProteinID = loadData({
 export class ExactMatch extends PureComponent /*:: <SMProps> */ {
   static propTypes = {
     data: dataPropType,
+    dataNumber: dataPropType,
     searchValue: T.string,
   };
 
@@ -106,8 +62,9 @@ export class ExactMatch extends PureComponent /*:: <SMProps> */ {
     const {
       searchValue,
       data: { payload },
+      dataNumber: { payload: numberPayload },
     } = this.props;
-    if (!searchValue || !payload || !payload.entries) return null;
+    if (!searchValue || (!payload && !numberPayload)) return null;
     const searchRE = new RegExp(
       `^(${searchValue}|IPR${searchValue.padStart(
         INTERPRO_ACCESSION_PADDING,
@@ -116,69 +73,64 @@ export class ExactMatch extends PureComponent /*:: <SMProps> */ {
       'i',
     );
     const exactMatches = new Map();
-    for (const {
-      id: accession,
-      fields: {
-        source_database: [db],
-      },
-    } of payload.entries) {
+    if (payload) {
+      const { accession, endpoint: type, source_database: db } = payload;
       if (searchRE.test(accession)) {
         exactMatches.set(
-          'entry',
+          type,
           <ExactMatchWrapper
-            key="entry"
+            key={type}
             to={{
               description: {
-                main: { key: 'entry' },
-                entry: { db, accession },
+                main: { key: type },
+                [type]: { db, accession },
               },
             }}
           >
-            entry {accession}
+            {type} {accession}
           </ExactMatchWrapper>,
         );
-        break;
+      }
+      // For identifier names (ex: VAV_HUMAN)
+      if (searchValue && searchValue.includes('_')) {
+        exactMatches.set(
+          type,
+          <ExactMatchWrapper
+            key={type}
+            to={{
+              description: {
+                main: { key: type },
+                [type]: { db, accession },
+              },
+            }}
+          >
+            {type} {accession} [ID: {searchValue.toUpperCase()}]
+          </ExactMatchWrapper>,
+        );
       }
     }
-    for (const datum of payload.entries) {
-      for (const [key, { type, db }] of XREFS.entries()) {
-        if (exactMatches.has(type)) continue;
-        for (const accession of datum.fields[key]) {
-          if (searchRE.test(accession)) {
-            // eslint-disable-next-line max-depth
-            if (
-              type === 'protein' &&
-              !accession.match(proteinAccessionHandler.regexp)
-            ) {
-              exactMatches.set(
-                type,
-                <ExactMatchProteinID
-                  key={type}
-                  type={type}
-                  identifier={accession}
-                />,
-              );
-            } else {
-              exactMatches.set(
-                type,
-                <ExactMatchWrapper
-                  key={type}
-                  to={{
-                    description: {
-                      main: { key: type },
-                      [type]: { db, accession },
-                    },
-                  }}
-                >
-                  {type} {accession}
-                </ExactMatchWrapper>,
-              );
-            }
-            break;
-          }
-        }
-      }
+    if (numberPayload) {
+      const {
+        accession: numberAccession,
+        endpoint,
+        source_database: sourceDB,
+      } = numberPayload;
+      exactMatches.set(
+        endpoint,
+        <ExactMatchWrapper
+          key={endpoint}
+          to={{
+            description: {
+              main: { key: endpoint },
+              [endpoint]: { db: sourceDB, accession: numberAccession },
+            },
+          }}
+        >
+          {endpoint} {numberAccession}
+        </ExactMatchWrapper>,
+      );
     }
+
     if (!exactMatches.size) return null;
     return Array.from(exactMatches.values());
   }
@@ -191,23 +143,34 @@ const getQueryTerm = createSelector(
     if (!Number.isInteger(number)) return query;
     const stringified = number.toString();
     if (stringified.length > INTERPRO_ACCESSION_PADDING) return query;
-    return `IPR${stringified.padStart(
-      INTERPRO_ACCESSION_PADDING,
-      '0',
-    )} OR ${query}`;
+    return `IPR${stringified.padStart(INTERPRO_ACCESSION_PADDING, '0')}`;
   },
 );
 
-const getEbiSearchUrl = createSelector(
-  state => state.settings.ebi,
+const getSearchStringUrl = createSelector(
+  state => state.settings.api,
   state => state.customLocation.description.search.value,
   ({ protocol, hostname, port, root }, searchValue) => {
     if (!searchValue) return null;
-    const fields = 'UNIPROT,PDB,PROTEOMES,source_database';
     const query = getQueryTerm(searchValue);
-    const params = `?query=${query}&format=json&fields=${fields}&start=0&size=2`;
-    return `${protocol}//${hostname}:${port}${root}${params}`;
+    const param = `utils/accession/${query}`;
+    return `${protocol}//${hostname}:${port}${root}${param}`;
   },
 );
 
-export default loadData(getEbiSearchUrl)(ExactMatch);
+const getSearchNumberUrl = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description.search.value,
+  ({ protocol, hostname, port, root }, searchValue) => {
+    if (!searchValue) return null;
+    if (Number.isInteger(+searchValue)) {
+      return `${protocol}//${hostname}:${port}${root}utils/accession/${searchValue}`;
+    }
+    return '';
+  },
+);
+
+export default loadData({
+  getUrl: getSearchNumberUrl,
+  propNamespace: 'Number',
+})(loadData(getSearchStringUrl)(ExactMatch));

@@ -20,7 +20,7 @@ describe('tests', () => {
     '[data-testid="filters-panel"]',
     '[data-testid="filterby-uniprot_curation"]',
     '[data-testid="filterby-taxonomy"]',
-    '[data-testid="filterby-protein_size"]',
+    '[data-testid="filterby-fragment"]',
     '[data-testid="view-table-button"]',
     '[data-testid="view-grid-button"]',
     '[data-testid="data-table"]',
@@ -36,7 +36,7 @@ describe('tests', () => {
     '[data-testid="filterby-matching_entries"]',
     '[data-testid="filterby-uniprot_curation"]',
     '[data-testid="filterby-taxonomy"]',
-    '[data-testid="filterby-protein_size"]',
+    '[data-testid="filterby-fragment"]',
     '[data-testid="view-table-button"]',
     '[data-testid="view-grid-button"]',
     '[data-testid="data-table"]',
@@ -82,7 +82,9 @@ describe('tests', () => {
       page.click('[data-testid="browse-tab-protein"]'),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    expect(url).toEqual(expect.stringMatching(/interpro\/protein/));
+    expect(url).toEqual(
+      expect.stringMatching(new RegExp(`${window.location.href}/protein/`))
+    );
   });
 
   test('click-browse-page-protein-all-proteins-filter', async () => {
@@ -100,7 +102,7 @@ describe('tests', () => {
       }),
     ]);
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp('interpro/protein/UniProt', 'i');
+    const urlMatch = new RegExp(`${window.location.href}/protein/UniProt`, 'i');
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 
@@ -123,7 +125,7 @@ describe('tests', () => {
       ]);
       const url = await page.evaluate(() => window.location.href);
       const urlMatch = new RegExp(
-        `interpro\/protein\/UniProt\/entry\/${memberdb}`,
+        `${window.location.href}\/protein\/UniProt\/entry\/${memberdb}`,
         'i'
       );
       expect(url).toEqual(expect.stringMatching(urlMatch));
@@ -174,7 +176,10 @@ describe('tests', () => {
     expect(item).not.toBeNull();
 
     const url = await page.evaluate(() => window.location.href);
-    const urlMatch = new RegExp('interpro/protein/uniprot/#grid', 'i');
+    const urlMatch = new RegExp(
+      `${window.location.href}/protein/uniprot/#grid`,
+      'i'
+    );
     expect(url).toEqual(expect.stringMatching(urlMatch));
   });
 });

@@ -113,7 +113,6 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
     };
     if (order) search.ordered = true;
     if (ignore && ignore.length) search.ida_ignore = ignore.join(',');
-    console.log(this.props.customLocation);
 
     this.props.goToCustomLocation({
       ...this.props.customLocation,
@@ -151,7 +150,7 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
             <div className={f('row')}>
               <div className={f('large-12', 'columns', 'search-input')}>
                 <h3 className={f('light')}>
-                  Search by choosing the InterPro entries in your architecture
+                  Search for proteins with a specific domain architecture
                 </h3>
                 <div className={f('ida-workspace')}>
                   <PanelIDA
