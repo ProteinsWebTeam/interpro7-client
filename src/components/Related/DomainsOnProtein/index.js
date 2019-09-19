@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useEffect } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -18,9 +18,11 @@ import loadable from 'higherOrder/loadable';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
+import protvista from 'components/Protvista/style.css';
+
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
-const f = foundationPartial(ipro);
+const f = foundationPartial(ipro, protvista);
 
 const ProtVista = loadable({
   loader: () =>
@@ -126,6 +128,7 @@ const mergeResidues = (data, residues) => {
     }),
   );
 };
+
 const splitMobiFeatures = feature => {
   const newFeatures = {};
   for (const loc of feature.locations) {
@@ -145,6 +148,7 @@ const splitMobiFeatures = feature => {
   }
   return Object.values(newFeatures);
 };
+
 const mergeExtraFeatures = (data, extraFeatures) => {
   if ('mobidb-lite' in extraFeatures) {
     data.other_features = data.other_features.concat(
@@ -159,6 +163,7 @@ const mergeExtraFeatures = (data, extraFeatures) => {
 
   return data;
 };
+
 const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
 const groupByEntryType = interpro => {
   const groups = {};
@@ -184,6 +189,24 @@ const sortFunction = ([a], [b]) => {
   }
   return a > b ? 1 : 0;
 };
+
+const getExtraURL = query =>
+  createSelector(
+    state => state.settings.api,
+    state => state.customLocation.description,
+    ({ protocol, hostname, port, root }, description) => {
+      const url = format({
+        protocol,
+        hostname,
+        port,
+        pathname: root + descriptionToPath(description),
+        query: {
+          [query]: null,
+        },
+      });
+      return url;
+    },
+  );
 
 /*:: type Props = {
   mainData: Object,
@@ -213,6 +236,24 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
   }
 }
 
+const ConservationProvider = ({ handleLoaded, dataConservation }) => {
+  useEffect(() => {
+    if (
+      dataConservation &&
+      !dataConservation.loading &&
+      dataConservation.payload
+    ) {
+      handleLoaded(dataConservation.payload);
+    }
+  });
+  return null;
+};
+
+const ConservationProviderLoaded = loadData({
+  getUrl: getExtraURL('conservation'),
+  propNamespace: 'Conservation',
+})(ConservationProvider);
+
 /*:: type DPWithoutDataProps = {
   mainData: Object,
   data: Object,
@@ -230,6 +271,57 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     dataGenome3d: T.object.isRequired,
   };
 
+  /* eslint-disable no-magic-numbers */
+  static MAX_PROTEIN_LENGTH_FOR_HMMER = 5000;
+  /* eslint-enable no-magic-numbers */
+
+  constructor(props /*: Props */) {
+    super(props);
+    this.state = {
+      generateConservationData: false,
+      showConservationButton: false,
+      dataConservation: null,
+    };
+  }
+
+  fetchConservationData = () => {
+    this.setState({ generateConservationData: true });
+  };
+
+  isConservationDataAvailable = data => {
+    // check if conservation data has already been generated
+    if (this.state.dataConservation) return false;
+
+    // check protein length is less than HmmerWeb length limit
+    if (data.domain.length > 0) {
+      if (
+        data.domain[0].protein_length >=
+        DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER
+      )
+        return false;
+    }
+    if (data.unintegrated.length > 0) {
+      if (
+        data.unintegrated[0].protein_length >=
+        DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER
+      )
+        return false;
+    }
+
+    // ensure there is a pfam entry somewhere in the matches
+    for (const entry of data.domain) {
+      for (const memberDatabase of Object.keys(entry.member_databases)) {
+        if (memberDatabase.toLowerCase() === 'pfam') return true;
+      }
+    }
+    for (const entry of data.unintegrated) {
+      if (entry.source_database.toLowerCase() === 'pfam') return true;
+    }
+
+    return false;
+  };
+
+  /* eslint-disable complexity  */
   render() {
     const {
       data,
@@ -237,7 +329,6 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       dataResidues,
       dataFeatures,
       dataGenome3d,
-      dataConservation,
     } = this.props;
 
     if (!data || data.loading) return <Loading />;
@@ -269,16 +360,20 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     if (!mergedData.other_features || !mergedData.other_features.length) {
       delete mergedData.other_features;
     }
-    if (
-      dataConservation &&
-      !dataConservation.loading &&
-      dataConservation.payload
-    ) {
-      mergeConservationData(mergedData, dataConservation.payload);
+    if (this.state.dataConservation) {
+      mergeConservationData(mergedData, this.state.dataConservation);
     }
+
+    const showConservationButton = this.isConservationDataAvailable(mergedData);
+    const ConservationProviderElement = this.state.generateConservationData
+      ? ConservationProviderLoaded
+      : ConservationProvider;
 
     return (
       <>
+        <ConservationProviderElement
+          handleLoaded={data => this.setState({ dataConservation: data })}
+        />
         <div className={f('margin-bottom-large')}>
           <h5>Protein family membership</h5>
           {interproFamilies.length ? (
@@ -292,10 +387,36 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
           mainData={mainData}
           dataMerged={mergedData}
         />
+        {showConservationButton ? (
+          <div className={f('track-container')}>
+            <div className={f('track-row')}>
+              <div className={f('track-component')}>
+                <header>
+                  <button onClick={this.fetchConservationData}>
+                    ▸ Match Conservation
+                  </button>
+                </header>
+              </div>
+              <div className={f('track-accession')}>
+                <button
+                  type="button"
+                  className={f('hollow', 'button', 'user-select-none')}
+                  onClick={this.fetchConservationData}
+                >
+                  {' '}
+                  Fetch data: {this.state.refresh}{' '}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
       </>
     );
   }
 }
+/* eslint-enable complexity  */
 
 const getRelatedEntriesURL = createSelector(
   state => state.settings.api,
@@ -318,6 +439,7 @@ const getRelatedEntriesURL = createSelector(
     });
   },
 );
+
 const getGenome3dURL = createSelector(
   state => state.settings.genome3d,
   state => state.customLocation.description.protein.accession,
@@ -330,36 +452,14 @@ const getGenome3dURL = createSelector(
     });
   },
 );
-const getExtraURL = query =>
-  createSelector(
-    state => state.settings.api,
-    state => state.customLocation.description,
-    ({ protocol, hostname, port, root }, description) => {
-      const url = format({
-        protocol,
-        hostname,
-        port,
-        pathname: root + descriptionToPath(description),
-        query: {
-          [query]: null,
-        },
-      });
-      return url;
-    },
-  );
 
 export default loadData({
   getUrl: getExtraURL('extra_features'),
   propNamespace: 'Features',
 })(
-  loadData({
-    getUrl: getExtraURL('conservation'),
-    propNamespace: 'Conservation',
-  })(
-    loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
-      loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
-        loadData(getRelatedEntriesURL)(DomainOnProteinWithoutData),
-      ),
+  loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
+    loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
+      loadData(getRelatedEntriesURL)(DomainOnProteinWithoutData),
     ),
   ),
 );

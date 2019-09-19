@@ -124,6 +124,7 @@ const getColorScaleHTML = (
   dataDB: Object,
   colorDomainsBy: string,
   changeSettingsRaw: function,
+  fetchConservation: function,
   title: string,
   fixedHighlight: string,
   id: string,
@@ -136,6 +137,7 @@ const getColorScaleHTML = (
   collapsed: boolean,
   label: string,
   addLabelClass: string,
+  showConservationButton: boolean,
 }; */
 class ProtVista extends Component /*:: <Props, State> */ {
   static propTypes = {
@@ -169,7 +171,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this._popperContentRef = React.createRef();
     this._webProteinRef = React.createRef();
     this._hydroRef = React.createRef();
-    this._conservationRef = React.createRef();
+    this._showConservationRef = React.createRef();
     this._isPopperTop = true;
   }
 
@@ -214,7 +216,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
     saver.preSave = () => {
       const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
-      // Including the styles of interpr-type elements
+      // Including the styles of interpro-type elements
       base.querySelectorAll('interpro-type').forEach(el => {
         el.innerHTML = el.shadowRoot.innerHTML;
       });
@@ -271,7 +273,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
   updateTracksWithData(data) {
     const b2sh = new Map([
-      ['N_TERMINAL_DISC', 'discontinuosStart'],
+      ['N_TERMINAL_DISC', 'discontinuosStart'], // TODO fix spelling in this and nightingale
       ['C_TERMINAL_DISC', 'discontinuosEnd'],
       ['CN_TERMINAL_DISC', 'discontinuos'],
       ['NC_TERMINAL_DISC', 'discontinuos'],
@@ -403,8 +405,9 @@ class ProtVista extends Component /*:: <Props, State> */ {
   _getSecondaryStructureType = entry => {
     let type = null;
     if (entry.locations && entry.locations.length > 0) {
-      if (entry.locations[0].fragmentType) {
-        type = entry.locations[0].fragmentType;
+      if (entry.locations[0].fragments && entry.locations[0].fragments[0]) {
+        const shape = entry.locations[0].fragments[0].shape;
+        type = shape.charAt(0).toUpperCase() + shape.slice(1);
       }
     }
     return type;
@@ -770,6 +773,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
           <div className={f('option-color', 'margin-right-medium')}>
+            Colour By:{' '}
             <select
               className={f('select-inline')}
               value={this.props.colorDomainsBy}
