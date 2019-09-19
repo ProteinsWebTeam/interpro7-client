@@ -19,6 +19,7 @@ import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import NumberComponent from 'components/NumberComponent';
+import File from 'components/File';
 
 import loadable from 'higherOrder/loadable';
 
@@ -290,6 +291,30 @@ const propTypes = {
   }).isRequired,
   dataBase: dataPropType,
 };
+const AllSetDownload = (
+  {
+    description,
+    search,
+    count,
+    fileType,
+  } /*: {description: Object, search: Object, count: number, fileType: string} */,
+) => (
+  <File
+    fileType={fileType}
+    name={`sets.${fileType}`}
+    count={count}
+    customLocationDescription={description}
+    search={{ ...search, extra_fields: 'counters' }}
+    endpoint={'set'}
+  />
+);
+AllSetDownload.propTypes = {
+  description: T.object,
+  search: T.object,
+  count: T.number,
+  fileType: T.string,
+};
+
 /*:: type ListProps = {
   data: {
    payload: Object,
@@ -316,16 +341,15 @@ class List extends PureComponent /*:: <ListProps> */ {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
-      customLocation: {
-        description: {
-          set: { db: dbS },
-          entry: { db: dbE },
-        },
-        search,
-      },
+      customLocation: { description, search },
       dataBase,
     } = this.props;
     let _payload = payload;
+    const {
+      set: { db: dbS },
+      entry: { db: dbE },
+    } = description;
+
     const HTTP_OK = 200;
     const notFound = !loading && status !== HTTP_OK;
     const databases =
@@ -340,7 +364,6 @@ class List extends PureComponent /*:: <ListProps> */ {
         previous: null,
       };
     }
-    const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBSelector
@@ -377,24 +400,36 @@ class List extends PureComponent /*:: <ListProps> */ {
           >
             <Exporter>
               <ul>
-                <li>
-                  <Link
-                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
-                    download="sets.json"
-                  >
-                    JSON
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllSetDownload
+                      description={description}
+                      search={search}
+                      count={_payload.count}
+                      fileType="json"
+                    />
+                  </div>
+                  <div>JSON</div>
                 </li>
-                <li>
-                  <Link
-                    href={`${url}${urlHasParameter ? '&' : '?'}format=tsv`}
-                    download="sets.tsv"
-                  >
-                    TSV
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllSetDownload
+                      description={description}
+                      search={search}
+                      count={_payload.count}
+                      fileType="tsv"
+                    />
+                  </div>
+                  <div>TSV</div>
                 </li>
-                <li>
-                  <Link href={url}>Open in API web view</Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <Link target="_blank" href={url}>
+                    <span
+                      className={f('icon', 'icon-common', 'icon-export')}
+                      data-icon="&#xf233;"
+                    />
+                  </Link>
+                  <div>API Web View</div>
                 </li>
               </ul>
             </Exporter>
@@ -469,6 +504,45 @@ class List extends PureComponent /*:: <ListProps> */ {
               )}
             >
               Name
+            </Column>
+            <Column
+              dataKey="accession"
+              defaultKey="entry-count"
+              renderer={(
+                accession /*: string */,
+                {
+                  // eslint-disable-next-line camelcase
+                  source_database,
+                } /*: {accession: string, source_database: string} */,
+                extra,
+              ) => {
+                const count =
+                  (extra && extra.counters && extra.counters.entries) || '-';
+                return (
+                  <Link
+                    to={customLocation => ({
+                      ...customLocation,
+                      description: {
+                        main: { key: 'set' },
+                        set: {
+                          db: source_database,
+                          accession,
+                        },
+                        entry: {
+                          isFilter: true,
+                          db: source_database,
+                        },
+                      },
+                    })}
+                  >
+                    <NumberComponent loading={loading} abbr>
+                      {count}
+                    </NumberComponent>
+                  </Link>
+                );
+              }}
+            >
+              Number of Entries
             </Column>
           </Table>
         </div>

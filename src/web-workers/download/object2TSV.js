@@ -60,6 +60,13 @@ export const columns = {
     { name: 'Number of Entries', selector: 'extra_fields.counters.entries' },
     { name: 'Number of Proteins', selector: 'extra_fields.counters.proteins' },
   ],
+  set: [
+    { name: 'Accession', selector: 'metadata.accession' },
+    { name: 'Source Database', selector: 'metadata.source_database' },
+    { name: 'Name', selector: 'metadata.name' },
+    { name: 'Number of Entries', selector: 'extra_fields.counters.entries' },
+    { name: 'Number of Proteins', selector: 'extra_fields.counters.proteins' },
+  ],
 };
 
 export const object2TSV = (object, selectors) => {
