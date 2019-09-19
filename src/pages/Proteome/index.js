@@ -281,6 +281,31 @@ const subPagesForProteome = new Map();
 for (const subPage of config.pages.proteome.subPages) {
   subPagesForProteome.set(subPage, subPages.get(subPage));
 }
+
+const AllProteomesDownload = (
+  {
+    description,
+    search,
+    count,
+    fileType,
+  } /*: {description: Object, search: Object, count: number, fileType: string} */,
+) => (
+  <File
+    fileType={fileType}
+    name={`proteomes.${fileType}`}
+    count={count}
+    customLocationDescription={description}
+    search={{ ...search, extra_fields: 'counters' }}
+    endpoint={'proteome'}
+  />
+);
+AllProteomesDownload.propTypes = {
+  description: T.object,
+  search: T.object,
+  count: T.number,
+  fileType: T.string,
+};
+
 /*:: type Props = {
   data: {
    payload: Object,
@@ -306,12 +331,7 @@ class List extends PureComponent /*:: <Props> */ {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
-      customLocation: {
-        search,
-        description: {
-          entry: { db: entryDB },
-        },
-      },
+      customLocation: { search, description },
       dataBase,
     } = this.props;
     let _payload = payload;
@@ -319,6 +339,9 @@ class List extends PureComponent /*:: <Props> */ {
     const notFound = !loading && status !== HTTP_OK;
     const databases =
       dataBase && dataBase.payload && dataBase.payload.databases;
+    const {
+      entry: { db: entryDB },
+    } = description;
     if (loading || notFound) {
       _payload = {
         results: [],
@@ -327,7 +350,6 @@ class List extends PureComponent /*:: <Props> */ {
         previous: null,
       };
     }
-    const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBSelector
@@ -364,26 +386,36 @@ class List extends PureComponent /*:: <Props> */ {
           >
             <Exporter>
               <ul>
-                <li>
-                  <Link
-                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
-                    download="proteome.json"
-                  >
-                    JSON
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllProteomesDownload
+                      description={description}
+                      search={search}
+                      count={_payload.count}
+                      fileType="json"
+                    />
+                  </div>
+                  <div>JSON</div>
                 </li>
-                <li>
-                  <Link
-                    href={`${url}${urlHasParameter ? '&' : '?'}format=tsv`}
-                    download="proteome.tsv"
-                  >
-                    TSV
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllProteomesDownload
+                      description={description}
+                      search={search}
+                      count={_payload.count}
+                      fileType="tsv"
+                    />
+                  </div>
+                  <div>TSV</div>
                 </li>
-                <li>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
                   <Link target="_blank" href={url}>
-                    Open in API web view
+                    <span
+                      className={f('icon', 'icon-common', 'icon-export')}
+                      data-icon="&#xf233;"
+                    />
                   </Link>
+                  <div>API Web View</div>
                 </li>
               </ul>
             </Exporter>
