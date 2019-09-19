@@ -39,6 +39,19 @@ export const columns = {
     { name: 'Experiment Type', selector: 'metadata.experiment_type' },
     { name: 'Resolution', selector: 'metadata.resolution' },
   ],
+  taxonomy: [
+    { name: 'Accession', selector: 'metadata.accession' },
+    { name: 'Source Database', selector: 'metadata.source_database' },
+    { name: 'Name', selector: 'metadata.name' },
+    { name: 'Parent', selector: 'metadata.parent' },
+    {
+      name: 'Children',
+      selector: 'metadata.children',
+      serializer: children => (children ? children.join(',') : ''),
+    },
+    { name: 'Number of Entries', selector: 'extra_fields.counters.entries' },
+    { name: 'Number of Proteins', selector: 'extra_fields.counters.proteins' },
+  ],
 };
 
 export const object2TSV = (object, selectors) => {
