@@ -224,18 +224,27 @@ const propTypes = {
 };
 
 const AllProteinDownload = (
-  { description, count } /*: {description: Object, count: number} */,
+  {
+    description,
+    count,
+    fileType,
+    search,
+  } /*: {description: Object, search: Object, count: number, fileType: string} */,
 ) => (
   <File
-    fileType="fasta"
-    name="protein-sequences.fasta"
+    fileType={fileType}
+    name={`protein-sequences.${fileType}`}
     count={count}
     customLocationDescription={description}
+    endpoint="protein"
+    search={search}
   />
 );
 AllProteinDownload.propTypes = {
   description: T.object,
+  search: T.object,
   count: T.number,
+  fileType: T.string,
 };
 
 /*:: type ListProps = {
@@ -286,7 +295,6 @@ class List extends PureComponent /*:: <ListProps> */ {
         previous: null,
       };
     }
-    const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBSelector
@@ -327,31 +335,43 @@ class List extends PureComponent /*:: <ListProps> */ {
                   <div>
                     <AllProteinDownload
                       description={description}
+                      search={search}
                       count={_payload.count}
+                      fileType="fasta"
                     />
                   </div>
                   <div>FASTA</div>
                 </li>
-                <li>
-                  <Link
-                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
-                    download="proteins.json"
-                  >
-                    JSON
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllProteinDownload
+                      description={description}
+                      search={search}
+                      count={_payload.count}
+                      fileType="json"
+                    />
+                  </div>
+                  <div>JSON</div>
                 </li>
-                <li>
-                  <Link
-                    href={`${url}${urlHasParameter ? '&' : '?'}format=tsv`}
-                    download="proteins.tsv"
-                  >
-                    TSV
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllProteinDownload
+                      description={description}
+                      search={search}
+                      count={_payload.count}
+                      fileType="tsv"
+                    />
+                  </div>
+                  <div>TSV</div>
                 </li>
-                <li>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
                   <Link target="_blank" href={url}>
-                    Open in API web view
+                    <span
+                      className={f('icon', 'icon-common', 'icon-export')}
+                      data-icon="&#xf233;"
+                    />
                   </Link>
+                  <div>API Web View</div>
                 </li>
               </ul>
             </Exporter>

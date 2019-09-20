@@ -78,6 +78,7 @@ export const getUrl = createSelector(
           switch (description.main.key) {
             case 'taxonomy':
             case 'proteome':
+            case 'set':
               _search.extra_fields = 'counters';
               break;
             default:

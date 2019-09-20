@@ -103,23 +103,26 @@ const AllProteinDownload = (
     description,
     count,
     ida,
-  } /*: {description: Object, count: number, ida: string} */,
+    fileType,
+  } /*: {description: Object, count: number, ida: string, fileType: string} */,
 ) => (
   <File
-    fileType="fasta"
-    name={`protein-similar-to-${description[description.main.key].accession}.fasta`}
+    fileType={fileType}
+    name={`protein-similar-to-${description[description.main.key].accession}.${fileType}`}
     count={count}
     customLocationDescription={{
       main: { key: 'protein' },
       protein: { db: 'UniProt' },
     }}
     search={{ ida }}
+    endpoint="protein"
   />
 );
 AllProteinDownload.propTypes = {
   description: T.object,
   count: T.number,
   ida: T.string,
+  fileType: T.string,
 };
 
 const SimilarProteins = (
@@ -178,9 +181,32 @@ state: Object,
                   description={state.customLocation.description}
                   ida={ida}
                   count={payload.count}
+                  fileType="fasta"
                 />
               </div>
               <div>FASTA</div>
+            </li>
+            <li style={{ display: 'flex', alignItems: 'center' }}>
+              <div>
+                <AllProteinDownload
+                  description={state.customLocation.description}
+                  ida={ida}
+                  count={payload.count}
+                  fileType="json"
+                />
+              </div>
+              <div>JSON</div>
+            </li>
+            <li style={{ display: 'flex', alignItems: 'center' }}>
+              <div>
+                <AllProteinDownload
+                  description={state.customLocation.description}
+                  ida={ida}
+                  count={payload.count}
+                  fileType="tsv"
+                />
+              </div>
+              <div>TSV</div>
             </li>
             <li>
               <Link

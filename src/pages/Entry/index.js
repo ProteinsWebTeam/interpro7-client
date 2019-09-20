@@ -404,7 +404,7 @@ const AllEntriesDownload = (
     search,
     count,
     fileType,
-  } /*: {description: Object, count: number} */,
+  } /*: {description: Object, search: Object, count: number, fileType: string} */,
 ) => (
   <File
     fileType={fileType}
