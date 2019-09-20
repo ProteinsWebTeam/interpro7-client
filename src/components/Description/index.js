@@ -18,7 +18,7 @@ const f = foundationPartial(ebiStyles, styles, theme, fonts);
 
 const TAG_REGEX = /(\[\w+:[\w\.]+])/;
 const TAG_REGEX_KV = /\[(\w+):([\w\.]+)]/;
-const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](, )?';
+const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](,\\s?)?';
 const CITATIONS_REGEX = `(\\[(${CITATION_REGEX})+\\])`;
 
 const Citations = (
@@ -111,12 +111,12 @@ export const Paragraph = (
   parts.push(...text.split(TAG_REGEX));
   return (
     <div>
-      {parts.map(part => {
+      {parts.map((part, i) => {
         if (part.match(CITATIONS_REGEX))
           return (
             <Citations
               text={part}
-              key={part}
+              key={i}
               literature={literature}
               accession={accession}
               withoutIDs={withoutIDs}
@@ -131,7 +131,7 @@ export const Paragraph = (
           if (ENTRY_DBS.indexOf(type) >= 0) {
             return (
               <Link
-                key={part}
+                key={i}
                 to={{
                   description: {
                     main: { key: 'entry' },
@@ -146,7 +146,7 @@ export const Paragraph = (
           if (type === 'swissprot') {
             return (
               <Link
-                key={part}
+                key={i}
                 to={{
                   description: {
                     main: { key: 'protein' },
@@ -161,7 +161,7 @@ export const Paragraph = (
           if (type === 'pdbe') {
             return (
               <Link
-                key={part}
+                key={i}
                 to={{
                   description: {
                     main: { key: 'structure' },
@@ -179,7 +179,7 @@ export const Paragraph = (
                 href={xReferenceURL[type].replace('{}', tagValue)}
                 target="_blank"
                 className={f('ext')}
-                key={part}
+                key={i}
               >
                 {tagValue}
               </Link>
@@ -190,7 +190,7 @@ export const Paragraph = (
         return (
           <div
             className={styles.inline}
-            key={part}
+            key={i}
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(

@@ -48,7 +48,7 @@ exports[`<SearchByIDA /> should render 1`] = `
               />
                
               <span>
-                Add Entry
+                Add Domain
               </span>
             </button>
             <button
@@ -62,7 +62,7 @@ exports[`<SearchByIDA /> should render 1`] = `
               />
                
               <span>
-                Ignore Entry
+                Ignore Domain
               </span>
             </button>
             <label

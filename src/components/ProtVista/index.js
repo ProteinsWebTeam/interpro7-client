@@ -468,7 +468,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
       locations,
       type,
       start,
-      end,
       residue,
     },
     isInterPro = false,
@@ -643,12 +642,16 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
   renderLabels(entry) {
     const { expandedTrack } = this.state;
-    const { dataDB } = this.props;
+    const { dataDB, id } = this.props;
     let databases = {};
     if (dataDB.payload) {
       databases = dataDB.payload.databases;
     }
     // const databases = dataDB.payload.databases;
+    if (entry.source_database === 'mobidblt')
+      return (
+        <Link href={`http://mobidb.bio.unipd.it/${id}`}>{entry.accession}</Link>
+      );
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
       entry.type === 'chain' ||
@@ -682,10 +685,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
           {this.state.label === 'name'
             ? (
                 <>
-                  <interpro-type
-                    type={entry.type.replace('_', ' ')}
-                    dimension="1em"
-                  />
+                  {entry.type ? (
+                    <interpro-type
+                      type={entry.type.replace('_', ' ')}
+                      dimension="1em"
+                    />
+                  ) : null}
                   {entry.name}
                 </>
               ) || entry.accession
@@ -773,7 +778,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
           <div className={f('option-color', 'margin-right-medium')}>
-            Colour By:{' '}
+            Color By:{' '}
             <select
               className={f('select-inline')}
               value={this.props.colorDomainsBy}
@@ -943,14 +948,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                 key={entry.accession}
                                 className={f('track-row')}
                               >
-                                {entry.type === 'secondary_structure' ||
-                                entry.type === 'sequence_conservation' ? (
+                                {entry.type === 'secondary_structure' ? (
                                   <div
                                     className={f(
                                       'track-component',
-                                      entry.type === 'secondary_structure'
-                                        ? 'secondary-structure'
-                                        : 'sequence-conservation',
                                       `${this.state.addLabelClass}`,
                                     )}
                                   >

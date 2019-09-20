@@ -6,7 +6,7 @@ exports[`<Privacy /> should render 1`] = `
     Privacy
   </h3>
   <p>
-    We have updated our privacy policy to comply with the changes brought by the European Union data protection law (GDPR). You can find more information on the
+    Our privacy policy complies with the changes brought by the European Union data protection law (GDPR). You can find more information on the
      
     <Memo(Connect(Link))
       className="ext"

@@ -186,7 +186,6 @@ g:global(.child-group) path:global(.feature) {
   overflow: hidden;
   white-space: nowrap;
   padding-left: 0.5rem;
-  text-transform: uppercase;
   & a:hover {
     border-bottom: 1px var(--colors-dark) solid;
   }
@@ -210,6 +209,7 @@ g:global(.child-group) path:global(.feature) {
 .track-accession-child > a:focus,
 .track-accession-child > a:visited {
   font-size: 90%;
+  text-transform: capitalize;
   color: var(--colors-graydark);
 }
 /*resize elements for small screens in order to see full IPR number*/

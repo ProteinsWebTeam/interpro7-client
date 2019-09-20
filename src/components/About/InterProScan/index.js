@@ -126,7 +126,7 @@ export const InterProScan = (
             <p>We provide access to InterProScan via RESTful services.</p>
             <Link
               className={f('ext', 'secondary')}
-              href="https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=54652041"
+              href="https://www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation#InterProScan5HelpandDocumentation-RESTAPI"
               target="_blank"
             >
               REST API
@@ -140,7 +140,7 @@ export const InterProScan = (
             </p>
             <Link
               className={f('ext')}
-              href="https://www.ebi.ac.uk/seqdb/confluence/pages/viewpage.action?pageId=54652111"
+              href="https://www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation#InterProScan5HelpandDocumentation-SOAPAPIPrivacy"
               target="_blank"
             >
               SOAP API
@@ -165,7 +165,7 @@ export const InterProScan = (
             /search/sequence
           </Link>
           ), for the analysis of <b>single protein sequences</b> in FASTA format
-          with a maximum length of 40,000 amino acid long.
+          with a maximum length of 40,000 amino acids.
         </p>
       </section>
       <section>

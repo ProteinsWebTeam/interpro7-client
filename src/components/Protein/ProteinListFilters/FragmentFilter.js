@@ -62,6 +62,11 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
       customLocation: { search },
     } = this.props;
     const groupsPayload = loading || !payload ? {} : payload.is_fragment;
+    const names = new Map([
+      ['true', 'Fragment'],
+      ['false', 'Complete Sequence'],
+      ['both', 'Both/All'],
+    ]);
     const groups = {
       true: groupsPayload.true || 0,
       false: groupsPayload.false || 0,
@@ -83,7 +88,7 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
                 checked={currentValue === isFragment}
                 style={{ margin: '0.25em' }}
               />
-              <span>{isFragment}</span>
+              <span>{names.get(isFragment)}</span>
               <NumberComponent
                 label
                 loading={loading}

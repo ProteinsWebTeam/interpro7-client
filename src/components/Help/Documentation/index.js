@@ -177,7 +177,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                         },
                       }}
                     >
-                      List of InterPro publications
+                      Show all previous InterPro publications
                     </Link>
                   </li>
                 </ul>
@@ -186,7 +186,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
           </div>
           <div className={f('columns', 'large-4')}>
             <div className={f('box-add', 'margin-top-xxlarge')}>
-              <h3 className={f('light')}>Additional help</h3>
+              <h3 className={f('light')}>Contact us/Additional help</h3>
               <ul>
                 {
                   // <li>

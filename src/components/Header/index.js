@@ -15,7 +15,9 @@ import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 import Link from 'components/generic/Link';
 import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
-import TextSearchBox from 'components/SearchByText/TextSearchBox';
+import TextSearchBox, {
+  DEBOUNCE_RATE_SLOW,
+} from 'components/SearchByText/TextSearchBox';
 
 import { sticky as supportsSticky } from 'utils/support';
 
@@ -130,7 +132,7 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
         <div className={reducedStyleBundle('side-icons', { movedAway })}>
           <HamburgerBtn svg stuck={stuck} aria-label="Show the InterPro Menu" />
           <label className={reducedStyleBundle('side-search', { stuck })}>
-            <TextSearchBox name="search" />
+            <TextSearchBox name="search" delay={DEBOUNCE_RATE_SLOW} />
             <Link
               to={{
                 description: {

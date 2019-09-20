@@ -359,6 +359,31 @@ TaxonomyCard.propTypes = {
   search: T.string,
   entryDB: T.string,
 };
+
+const AllTaxDownload = (
+  {
+    description,
+    search,
+    count,
+    fileType,
+  } /*: {description: Object, search: Object, count: number, fileType: string} */,
+) => (
+  <File
+    fileType={fileType}
+    name={`taxon.${fileType}`}
+    count={count}
+    customLocationDescription={description}
+    search={{ ...search, extra_fields: 'counters' }}
+    endpoint={'taxonomy'}
+  />
+);
+AllTaxDownload.propTypes = {
+  description: T.object,
+  search: T.object,
+  count: T.number,
+  fileType: T.string,
+};
+
 /*:: type Props = {
   data: {
    payload: Object,
@@ -390,17 +415,16 @@ class List extends PureComponent /*:: <Props> */ {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
-      customLocation: {
-        description: {
-          entry: { db: entryDB },
-        },
-        search,
-      },
+      customLocation: { description, search },
       dataBase,
       accessionSearch,
     } = this.props;
     let _payload = payload;
     let _status = status;
+    const {
+      entry: { db: entryDB },
+    } = description;
+
     const HTTP_OK = 200;
     let notFound = !loading && status !== HTTP_OK;
     const databases =
@@ -443,7 +467,6 @@ class List extends PureComponent /*:: <Props> */ {
       notFound = false;
       _status = HTTP_OK;
     }
-    const urlHasParameter = url && url.includes('?');
     return (
       <div className={f('row')}>
         <MemberDBSelector
@@ -481,26 +504,36 @@ class List extends PureComponent /*:: <Props> */ {
           >
             <Exporter>
               <ul>
-                <li>
-                  <Link
-                    href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
-                    download="taxonomy.json"
-                  >
-                    JSON
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllTaxDownload
+                      description={description}
+                      search={search}
+                      count={size}
+                      fileType="json"
+                    />
+                  </div>
+                  <div>JSON</div>
                 </li>
-                <li>
-                  <Link
-                    href={`${url}${urlHasParameter ? '&' : '?'}format=tsv`}
-                    download="taxonomy.tsv"
-                  >
-                    TSV
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllTaxDownload
+                      description={description}
+                      search={search}
+                      count={size}
+                      fileType="tsv"
+                    />
+                  </div>
+                  <div>TSV</div>
                 </li>
-                <li>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
                   <Link target="_blank" href={url}>
-                    Open in API web view
+                    <span
+                      className={f('icon', 'icon-common', 'icon-export')}
+                      data-icon="&#xf233;"
+                    />
                   </Link>
+                  <div>API Web View</div>
                 </li>
               </ul>
             </Exporter>
@@ -543,7 +576,7 @@ class List extends PureComponent /*:: <Props> */ {
                 </Link>
               )}
             >
-              Accession
+              Tax ID
             </Column>
             <Column
               dataKey="name"

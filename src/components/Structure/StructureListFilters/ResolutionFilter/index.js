@@ -122,6 +122,10 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
       },
     } = this.props;
     const { min, max } = this.state;
+    let disable = false;
+    if (this.props.customLocation.search.experiment_type === 'nmr') {
+      disable = !disable;
+    }
     return (
       <div className={f('column')}>
         <label className={f('row', 'filter-button')}>
@@ -132,6 +136,7 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
             onChange={this._handleSelection}
             checked={!resolution}
             className={f('radio')}
+            disabled={disable}
           />
           <span>All</span>
         </label>
@@ -143,6 +148,7 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
             onChange={this._handleSelection}
             checked={!!resolution}
             className={f('radio')}
+            disabled={disable}
           />
           <span>
             {min} - {max} Å

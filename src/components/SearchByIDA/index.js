@@ -205,7 +205,7 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                     }
                   >
                     <DomainButton label="➕" fill="#75bf40" stroke="#75bf40" />{' '}
-                    <span>Add Entry</span>
+                    <span>Add Domain</span>
                   </button>
                   <button
                     className={f('button', 'secondary')}
@@ -218,7 +218,7 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                     }
                   >
                     <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
-                    <span>Ignore Entry</span>
+                    <span>Ignore Domain</span>
                   </button>
                   <label htmlFor="ordered">
                     <input

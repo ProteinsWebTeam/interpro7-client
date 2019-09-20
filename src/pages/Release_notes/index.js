@@ -169,6 +169,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
     const { version, release_date: date, content } = this.props.data.payload;
     const totalIpro = content.interpro.entries;
     const newIpro = content.interpro.new_entries.length;
+    const lastEntry = content.interpro.latest_entry;
     const updates = Object.values(content.member_databases).filter(
       db => db.is_updated,
     );
@@ -179,9 +180,9 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
       0,
     );
     const types = [
+      { label: 'Homologous Superfamily', key: 'homologous_superfamily' },
       { label: 'Family', key: 'family' },
       { label: 'Domain', key: 'domain' },
-      { label: 'Homologous Superfamily', key: 'homologous_superfamily' },
       { label: 'Repeat', key: 'repeat' },
       {
         label: 'Site',
@@ -199,6 +200,11 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
       ['PROSITE patterns', 'prosite'],
       ['PROSITE profiles', 'profile'],
       ['SUPERFAMILY', 'ssf'],
+    ]);
+    const sourceDB = new Map([
+      ['structures', 'PDB'],
+      ['taxonomy', 'UnitProtKB'],
+      ['proteomes', 'UniProtKB'],
     ]);
     return (
       <div className={f('row')}>
@@ -235,10 +241,13 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               {updates && !!updates.length && (
                 <li>
                   An update to{' '}
-                  {updates.map(({ name, recently_integrated: r }) => (
-                    <span key={name}>
-                      {name} ({r.length})
-                    </span>
+                  {updates.map(({ name, recently_integrated: r }, i) => (
+                    <React.Fragment key={name}>
+                      {i === 0 ? ' ' : ', '}
+                      <span key={name}>
+                        {name} ({r.length})
+                      </span>
+                    </React.Fragment>
                   ))}
                   .
                 </li>
@@ -254,7 +263,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                   .map(([name, db], i) => (
                     <React.Fragment key={name}>
                       {i === 0 ? ' ' : ', '}
-                      {name} (
+                      {db.name} (
                       <NumberComponent noTitle noAnimation>
                         {db.recently_integrated.length}
                       </NumberComponent>
@@ -277,9 +286,20 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                   },
                 }}
               >
-                <NumberComponent noTitle>{totalIpro}</NumberComponent> entries
+                <NumberComponent noTitle>{totalIpro}</NumberComponent>
+              </Link>{' '}
+              entries (last entry:{' '}
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: { db: 'InterPro', accession: lastEntry },
+                  },
+                }}
+              >
+                {lastEntry}
               </Link>
-              , representing:
+              ), representing:
             </p>
 
             <table
@@ -533,6 +553,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                 <table className={f('light', 'margin-top-large')}>
                   <thead>
                     <tr>
+                      <th>Database</th>
                       <th>Version</th>
                       <th>Count</th>
                       <th>Integrated</th>
@@ -540,6 +561,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                   </thead>
                   <tbody>
                     <tr>
+                      <td>{sourceDB.get(key)}</td>
                       <td>{content[key].version}</td>
                       <td>
                         <NumberComponent noTitle>

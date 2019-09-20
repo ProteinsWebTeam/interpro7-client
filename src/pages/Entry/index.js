@@ -14,6 +14,7 @@ import MemberDBSelector from 'components/MemberDBSelector';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import File from 'components/File';
 
 import Table, {
   Column,
@@ -365,7 +366,7 @@ class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
             <div>
               {data.metadata.integrated ? (
                 <div>
-                  Integrated to{' '}
+                  Integrated into{' '}
                   <Link
                     to={{
                       description: {
@@ -396,6 +397,31 @@ class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
     );
   }
 }
+
+const AllEntriesDownload = (
+  {
+    description,
+    search,
+    count,
+    fileType,
+  } /*: {description: Object, search: Object, count: number, fileType: string} */,
+) => (
+  <File
+    fileType={fileType}
+    name={`entries.${fileType}`}
+    count={count}
+    customLocationDescription={description}
+    search={search}
+    endpoint={'entry'}
+  />
+);
+AllEntriesDownload.propTypes = {
+  description: T.object,
+  search: T.object,
+  count: T.number,
+  fileType: T.string,
+};
+
 /*:: type Props = {
   data: {
    payload: Object,
@@ -432,20 +458,20 @@ class List extends PureComponent /*:: <Props> */ {
       ).then(m => m.InterproType),
     ).as('interpro-type');
   }
+
   // eslint-disable-next-line
   render() {
     const {
       data,
       isStale,
-      customLocation: {
-        description: {
-          entry: { db },
-        },
-        search,
-      },
+      customLocation: { description, search },
       dataBase,
     } = this.props;
     let _payload = data.payload;
+    const {
+      entry: { db },
+    } = description;
+
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
     const databases =
@@ -460,7 +486,6 @@ class List extends PureComponent /*:: <Props> */ {
     if (data.loading || notFound || isStaleButShouldntDisplayStale) {
       _payload = { results: [] };
     }
-    const urlHasParameter = data.url && data.url.includes('?');
     const includeGrid = data.url;
     return (
       <div className={f('row')}>
@@ -498,28 +523,36 @@ class List extends PureComponent /*:: <Props> */ {
           >
             <Exporter>
               <ul>
-                <li>
-                  <Link
-                    href={`${data.url}${
-                      urlHasParameter ? '&' : '?'
-                    }format=json`}
-                    download="entries.json"
-                  >
-                    JSON
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllEntriesDownload
+                      description={description}
+                      search={search}
+                      count={_payload.count}
+                      fileType="json"
+                    />
+                  </div>
+                  <div>JSON</div>
                 </li>
-                <li>
-                  <Link
-                    href={`${data.url}${urlHasParameter ? '&' : '?'}format=tsv`}
-                    download="entries.tsv"
-                  >
-                    TSV
-                  </Link>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
+                  <div>
+                    <AllEntriesDownload
+                      description={description}
+                      search={search}
+                      count={_payload.count}
+                      fileType="tsv"
+                    />
+                  </div>
+                  <div>TSV</div>
                 </li>
-                <li>
+                <li style={{ display: 'flex', alignItems: 'center' }}>
                   <Link target="_blank" href={data.url}>
-                    Open in API web view
+                    <span
+                      className={f('icon', 'icon-common', 'icon-export')}
+                      data-icon="&#xf233;"
+                    />
                   </Link>
+                  <div>API Web View</div>
                 </li>
               </ul>
             </Exporter>
@@ -646,6 +679,7 @@ class List extends PureComponent /*:: <Props> */ {
                         databases[db] &&
                         databases[db].name) ||
                         db} website`}
+                      distance={30}
                     >
                       <Link
                         target="_blank"
@@ -672,7 +706,10 @@ class List extends PureComponent /*:: <Props> */ {
                         Object.entries(entries).map(([accession, id]) => (
                           <Tooltip
                             key={accession}
-                            title={`${id} (${db})`}
+                            title={`${id} (${(databases &&
+                              databases[db] &&
+                              databases[db].name) ||
+                              db})`}
                             className={f('signature', {
                               'corresponds-to-filter':
                                 search.signature_in &&
@@ -696,7 +733,7 @@ class List extends PureComponent /*:: <Props> */ {
                   </div>
                 )}
               >
-                Member Database
+                Integrated Signature(s)
               </Column>
             ) : (
               <Column

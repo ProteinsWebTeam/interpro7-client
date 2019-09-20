@@ -280,26 +280,26 @@ export const entryType = [
   {
     type: 'Repeat',
     description: `
-      It identifies a short sequence that is typically repeated within a
+      A short sequence that is typically repeated within a
       protein.
     `,
   },
   {
     type: 'Conserved Site',
     description: `
-      A short sequence that contains one or more conserved residues.
+      A short sequence that contains one or more conserved residues
     `,
   },
   {
     type: 'Active Site',
     description: `
-      A short sequence that contains one or more conserved residues.
+      A short sequence that contains one or more conserved residues, which allow the protein to bind to a ligand.
     `,
   },
   {
     type: 'Binding Site',
     description: `
-      A short sequence that contains one or more conserved residues.
+      A short sequence that contains one or more conserved residues, which form a protein interaction site.
     `,
   },
   {

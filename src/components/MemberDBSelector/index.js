@@ -233,10 +233,11 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
     }
     if (description.taxonomy.isFilter) description.taxonomy.isFilter = false;
     // const { page, ...search } = this.props.customLocation.search;
+    const { search } = this.props.customLocation.search;
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       description,
-      search: {},
+      search: { search },
     });
     // this._handleExit(DELAY);
     /* TODO: if we decide to not close after click on database, remove this, and

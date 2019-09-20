@@ -10,6 +10,7 @@ exports[`<ResolutionFilter /> should render 1`] = `
     <input
       checked={true}
       className="radio"
+      disabled={false}
       name="resolution"
       onChange={[Function]}
       type="radio"
@@ -25,6 +26,7 @@ exports[`<ResolutionFilter /> should render 1`] = `
     <input
       checked={false}
       className="radio"
+      disabled={false}
       name="resolution"
       onChange={[Function]}
       type="radio"

@@ -72,6 +72,12 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
+  _formatType = type => {
+    if (type === 'ptm') return 'PTM';
+    else if (type === 'unknown') return 'Other';
+    return type.replace('_', ' ');
+  };
+
   render() {
     const {
       data: { loading, payload },
@@ -106,7 +112,7 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
                 style={{ margin: '0.25em' }}
               />
               {isAll(type) || db !== 'InterPro' ? (
-                type.replace('_', ' ')
+                this._formatType(type)
               ) : (
                 <interpro-type
                   type={type.replace('_', ' ')}

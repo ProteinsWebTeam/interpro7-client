@@ -239,7 +239,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
         <div className={f('columns')}>
           {payload.count === 0 ? (
             <div className={f('callout', 'info', 'withicon')}>
-              There are not Domain architectures for the current selection.
+              There are no Domain architectures for the current selection.
             </div>
           ) : (
             <h4>{payload.count} domain architectures found.</h4>

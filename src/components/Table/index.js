@@ -47,6 +47,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, styles);
   rowClassName?: any,
   nextAPICall?: ?string,
   previousAPICall?: ?string,
+  showTableIcon?: boolean,
 } */
 
 const TableView = loadable({
@@ -110,6 +111,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     withTree: T.bool,
     withGrid: T.bool,
     rowClassName: T.oneOfType([T.string, T.func]),
+    showTableIcon: T.bool,
   };
 
   render() {
@@ -130,6 +132,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       children,
       withTree,
       rowClassName,
+      showTableIcon,
     } = this.props;
 
     const _query = query || {};
@@ -147,6 +150,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       child => child.type === _PageSizeSelector,
     );
     const exporter = _children.find(child => child.type === _Exporter);
+    const tableIcon = showTableIcon === undefined ? true : showTableIcon;
 
     return (
       <div className={f('row')}>
@@ -173,15 +177,17 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     'pp-table-options',
                   )}
                 >
-                  <Tooltip title="View your results as a table">
-                    <Link
-                      to={l => ({ ...l, hash: 'table' })}
-                      className={f('icon-view', 'table-view')}
-                      activeClass={f('active')}
-                      aria-label="view your results as a table"
-                      data-testid="view-table-button"
-                    />
-                  </Tooltip>
+                  {tableIcon && (
+                    <Tooltip title="View your results as a table">
+                      <Link
+                        to={l => ({ ...l, hash: 'table' })}
+                        className={f('icon-view', 'table-view')}
+                        activeClass={f('active')}
+                        aria-label="view your results as a table"
+                        data-testid="view-table-button"
+                      />
+                    </Tooltip>
+                  )}
                   {card && (
                     <div className={f('test-support-grid')}>
                       <Tooltip title="View your results in a grid">

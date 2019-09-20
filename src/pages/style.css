@@ -7,6 +7,11 @@
   flex-wrap: nowrap;
   margin: 1rem 0 2rem 0;
 }
+.icon-export {
+  font-size: 1em;
+  color: var(--colors-graydark);
+  padding: 0.3rem 1rem;
+}
 
 /*homepage figures - temp while there is a specific component*/
 .intro-fig {

@@ -15,16 +15,16 @@ export default class Privacy extends PureComponent /*:: <{}> */ {
       <section>
         <h3>Privacy</h3>
         <p>
-          We have updated our privacy policy to comply with the changes brought
-          by the European Union data protection law (GDPR). You can find more
-          information on the{' '}
+          Our privacy policy complies with the changes brought by the European
+          Union data protection law (GDPR). You can find more information on the{' '}
           <Link
             href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
             className={f('ext')}
             target="_blank"
           >
             Privacy Notice for EMBL-EBI Public Website
-          </Link>. If you have any questions about this privacy policy, please{' '}
+          </Link>
+          . If you have any questions about this privacy policy, please{' '}
           <Link
             href="//www.ebi.ac.uk/support/interpro"
             className={f('ext')}
@@ -32,7 +32,8 @@ export default class Privacy extends PureComponent /*:: <{}> */ {
             withReferrer
           >
             contact us via EBI support
-          </Link>.{' '}
+          </Link>
+          .{' '}
         </p>
       </section>
     );

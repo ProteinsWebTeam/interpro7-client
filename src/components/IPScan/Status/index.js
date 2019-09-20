@@ -97,6 +97,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           contentType="result"
           actualSize={jobs.length}
           query={search}
+          showTableIcon={false}
         >
           <Column
             dataKey="localID"

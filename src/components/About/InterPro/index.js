@@ -53,7 +53,7 @@ const AboutInterPro = () => (
         InterPro is used by research scientists interested in the large-scale
         analysis of whole proteomes, genomes and metagenomes, as well as
         researchers seeking to characterise individual protein sequences. Within
-        the EBI, InterPro is used to help annotate protein sequences in
+        the EMBL-EBI, InterPro is used to help annotate protein sequences in
         UniProtKB. It is also used by the Gene Ontology Annotation group to
         automatically assign Gene Ontology terms to protein sequences.
       </p>

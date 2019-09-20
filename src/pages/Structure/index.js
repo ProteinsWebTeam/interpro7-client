@@ -20,6 +20,7 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import NumberComponent from 'components/NumberComponent';
+import File from 'components/File';
 
 import { toPlural } from 'utils/pages';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -393,18 +394,35 @@ class StructureCard extends PureComponent /*:: <StructureCardProps, StructureCar
     );
   }
 }
+const AllStructuresDownload = (
+  {
+    description,
+    search,
+    count,
+    fileType,
+  } /*: {description: Object, count: number} */,
+) => (
+  <File
+    fileType={fileType}
+    name={`structures.${fileType}`}
+    count={count}
+    customLocationDescription={description}
+    search={search}
+    endpoint={'structure'}
+  />
+);
+AllStructuresDownload.propTypes = {
+  description: T.object,
+  search: T.object,
+  count: T.number,
+  fileType: T.string,
+};
 
 const List = (
   {
     data: { payload, loading, ok, url, status },
     isStale,
-    customLocation: {
-      description: {
-        entry: { db: entryDB },
-        structure: { db },
-      },
-      search,
-    },
+    customLocation: { description, search },
     dataBase,
   } /*: { data: {
    payload: Object,
@@ -424,6 +442,10 @@ const List = (
   }} */,
 ) => {
   let _payload = payload;
+  const {
+    entry: { db: entryDB },
+    structure: { db },
+  } = description;
   const HTTP_OK = 200;
   const notFound = !loading && status !== HTTP_OK;
   const databases = dataBase && dataBase.payload && dataBase.payload.databases;
@@ -433,7 +455,6 @@ const List = (
       count: 0,
     };
   }
-  const urlHasParameter = url && url.includes('?');
   const includeGrid = url;
   return (
     <div className={f('row')}>
@@ -471,26 +492,36 @@ const List = (
         >
           <Exporter>
             <ul>
-              <li>
-                <Link
-                  href={`${url}${urlHasParameter ? '&' : '?'}format=json`}
-                  download="structures.json"
-                >
-                  JSON
-                </Link>
+              <li style={{ display: 'flex', alignItems: 'center' }}>
+                <div>
+                  <AllStructuresDownload
+                    description={description}
+                    search={search}
+                    count={_payload.count}
+                    fileType="json"
+                  />
+                </div>
+                <div>JSON</div>
               </li>
-              <li>
-                <Link
-                  href={`${url}${urlHasParameter ? '&' : '?'}format=tsv`}
-                  download="structures.tsv"
-                >
-                  TSV
-                </Link>
+              <li style={{ display: 'flex', alignItems: 'center' }}>
+                <div>
+                  <AllStructuresDownload
+                    description={description}
+                    search={search}
+                    count={_payload.count}
+                    fileType="tsv"
+                  />
+                </div>
+                <div>TSV</div>
               </li>
-              <li>
+              <li style={{ display: 'flex', alignItems: 'center' }}>
                 <Link target="_blank" href={url}>
-                  Open in API web view
+                  <span
+                    className={f('icon', 'icon-common', 'icon-export')}
+                    data-icon="&#xf233;"
+                  />
                 </Link>
+                <div>API Web View</div>
               </li>
             </ul>
           </Exporter>
@@ -558,7 +589,10 @@ const List = (
                   search: {},
                 })}
               >
-                <HighlightedText text={name} textToHighlight={search.search} />
+                <HighlightedText
+                  text={name.toUpperCase()}
+                  textToHighlight={search.search}
+                />
               </Link>
             )}
           >

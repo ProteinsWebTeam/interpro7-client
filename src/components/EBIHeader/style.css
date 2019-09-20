@@ -6,10 +6,6 @@
 .global-nav > * {
   float: initial !important;
 
-  &.active {
-    float: left !important;
-  }
-
   &.embl-selector {
     float: right !important;
 

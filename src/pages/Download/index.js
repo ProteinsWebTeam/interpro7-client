@@ -226,18 +226,24 @@ class Download extends PureComponent /*:: <{}> */ {
                 </tr>
 
                 {
-                  // SP: Is it Needed still ?
-                  // <tr><td><Link
-                  //    href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">Latest release note</Link></td>
-                  //    <td>The current release notes, in text-based format.</td>
-                  //    <td>release_notes.txt</td><td >TXT</td>
-                  //    <td>
-                  //      <Link
-                  //        href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
-                  //        <span className={f('icon', 'icon-common', 'font-l')} data-icon="&#x3d;"/>
-                  //      </Link>
-                  //    </td>
-                  //  </tr>
+                  <tr>
+                    <td>
+                      <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
+                        Latest release note
+                      </Link>
+                    </td>
+                    <td>The current release notes, in text-based format.</td>
+                    <td>release_notes.txt</td>
+                    <td>TXT</td>
+                    <td>
+                      <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
+                        <span
+                          className={f('icon', 'icon-common', 'font-l')}
+                          data-icon="&#x3d;"
+                        />
+                      </Link>
+                    </td>
+                  </tr>
                 }
               </tbody>
             </table>
