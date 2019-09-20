@@ -18,11 +18,11 @@ import loadable from 'higherOrder/loadable';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import protvista from 'components/Protvista/style.css';
+import pvista from 'components/Protvista/style.css';
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
-const f = foundationPartial(ipro, protvista);
+const f = foundationPartial(ipro, pvista);
 
 const ProtVista = loadable({
   loader: () =>
@@ -89,10 +89,29 @@ const processConservationData = (entry, match) => {
 };
 /* eslint-enable complexity  */
 
+const addExistingEntiesToConservationResults = (
+  data,
+  conservationDatabases,
+) => {
+  for (const entry of data.domain) {
+    for (const child of entry.children) {
+      if (conservationDatabases.includes(child.source_database)) {
+        data.match_conservation.push(child);
+      }
+    }
+  }
+  for (const entry of data.unintegrated) {
+    if (conservationDatabases.includes(entry.source_database)) {
+      data.match_conservation.push(entry);
+    }
+  }
+};
 const mergeConservationData = (data, conservationData) => {
   data.match_conservation = [];
+  const conservationDatabases = [];
   for (const db of Object.keys(conservationData)) {
     if (db.toLowerCase() !== 'sequence') {
+      conservationDatabases.push(db);
       const dbConservationScores = {
         category: 'Sequence conservation',
         type: 'sequence_conservation',
@@ -111,6 +130,8 @@ const mergeConservationData = (data, conservationData) => {
         }
       }
       data.match_conservation.push(dbConservationScores);
+      // add data from integrated and unintegrated matches to panel for ease of use
+      addExistingEntiesToConservationResults(data, conservationDatabases);
     }
   }
 };
