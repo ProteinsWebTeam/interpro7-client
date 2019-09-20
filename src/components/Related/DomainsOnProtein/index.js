@@ -18,7 +18,7 @@ import loadable from 'higherOrder/loadable';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
-import pvista from 'components/Protvista/style.css';
+import pvista from 'components/ProtVista/style.css';
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
