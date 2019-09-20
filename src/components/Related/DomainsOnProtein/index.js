@@ -16,14 +16,14 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
-
 import ipro from 'styles/interpro-new.css';
 import pvista from 'components/ProtVista/style.css';
+import spinner from 'components/SimpleCommonComponents/Loading/style.css';
 import localCSS from './style.css';
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
-const f = foundationPartial(localCSS, ipro, pvista);
+const f = foundationPartial(localCSS, ipro, pvista, spinner);
 
 const ProtVista = loadable({
   loader: () =>
@@ -420,14 +420,41 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
                     </button>
                   </header>
                 </div>
-                <div className={f('track-accession')}>
-                  <button
-                    type="button"
-                    className={f('hollow', 'button', 'user-select-none')}
-                    onClick={this.fetchConservationData}
+              </div>
+              <div className={f('track-group')}>
+                <div className={f('track-row')}>
+                  <div
+                    className={f(
+                      'track-component',
+                      'conservation-placeholder-component',
+                    )}
                   >
-                    Fetch conservation{this.state.refresh}
-                  </button>
+                    {this.state.generateConservationData ? (
+                      <div
+                        className={f('loading-spinner')}
+                        style={{ margin: '10px auto' }}
+                      >
+                        <div />
+                        <div />
+                        <div />
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                  {!this.state.generateConservationData ? (
+                    <div className={f('track-accession')}>
+                      <button
+                        type="button"
+                        className={f('hollow', 'button', 'user-select-none')}
+                        onClick={this.fetchConservationData}
+                      >
+                        Fetch Conservation
+                      </button>
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             </div>

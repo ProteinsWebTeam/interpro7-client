@@ -1,3 +1,9 @@
+@import '../../../styles/timing.css';
+
 .conservation-placeholder {
-  margin-top: -16px;
+  margin-top: -1.35em;
+}
+
+.conservation-placeholder-component {
+  height: 4em;
 }
