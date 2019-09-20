@@ -228,7 +228,8 @@ const AllProteinDownload = (
     description,
     count,
     fileType,
-  } /*: {description: Object, count: number, fileType: string} */,
+    search,
+  } /*: {description: Object, search: Object, count: number, fileType: string} */,
 ) => (
   <File
     fileType={fileType}
@@ -236,10 +237,12 @@ const AllProteinDownload = (
     count={count}
     customLocationDescription={description}
     endpoint="protein"
+    search={search}
   />
 );
 AllProteinDownload.propTypes = {
   description: T.object,
+  search: T.object,
   count: T.number,
   fileType: T.string,
 };
@@ -332,6 +335,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   <div>
                     <AllProteinDownload
                       description={description}
+                      search={search}
                       count={_payload.count}
                       fileType="fasta"
                     />
@@ -342,6 +346,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   <div>
                     <AllProteinDownload
                       description={description}
+                      search={search}
                       count={_payload.count}
                       fileType="json"
                     />
@@ -352,6 +357,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   <div>
                     <AllProteinDownload
                       description={description}
+                      search={search}
                       count={_payload.count}
                       fileType="tsv"
                     />
