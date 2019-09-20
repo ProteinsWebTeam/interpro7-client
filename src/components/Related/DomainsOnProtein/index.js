@@ -19,10 +19,11 @@ import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import pvista from 'components/ProtVista/style.css';
+import localCSS from './style.css';
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
-const f = foundationPartial(ipro, pvista);
+const f = foundationPartial(localCSS, ipro, pvista);
 
 const ProtVista = loadable({
   loader: () =>
@@ -409,24 +410,25 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
           dataMerged={mergedData}
         />
         {showConservationButton ? (
-          <div className={f('track-container')}>
-            <div className={f('track-row')}>
-              <div className={f('track-component')}>
-                <header>
-                  <button onClick={this.fetchConservationData}>
-                    ▸ Match Conservation
+          <div className={f('protvista', 'tracks-container')}>
+            <div className={f('track-container', 'conservation-placeholder')}>
+              <div className={f('track-row')}>
+                <div className={f('track-component')}>
+                  <header>
+                    <button onClick={this.fetchConservationData}>
+                      ▸ Match Conservation
+                    </button>
+                  </header>
+                </div>
+                <div className={f('track-accession')}>
+                  <button
+                    type="button"
+                    className={f('hollow', 'button', 'user-select-none')}
+                    onClick={this.fetchConservationData}
+                  >
+                    Fetch conservation{this.state.refresh}
                   </button>
-                </header>
-              </div>
-              <div className={f('track-accession')}>
-                <button
-                  type="button"
-                  className={f('hollow', 'button', 'user-select-none')}
-                  onClick={this.fetchConservationData}
-                >
-                  {' '}
-                  Fetch data: {this.state.refresh}{' '}
-                </button>
+                </div>
               </div>
             </div>
           </div>
