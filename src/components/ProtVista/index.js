@@ -468,6 +468,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       locations,
       type,
       start,
+      end,
       residue,
     },
     isInterPro = false,
@@ -778,7 +779,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
           <div className={f('option-color', 'margin-right-medium')}>
-            Color By:{' '}
+            Colour By:{' '}
             <select
               className={f('select-inline')}
               value={this.props.colorDomainsBy}
@@ -948,10 +949,14 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                 key={entry.accession}
                                 className={f('track-row')}
                               >
-                                {entry.type === 'secondary_structure' ? (
+                                {entry.type === 'secondary_structure' ||
+                                entry.type === 'sequence_conservation' ? (
                                   <div
                                     className={f(
                                       'track-component',
+                                      entry.type === 'secondary_structure'
+                                        ? 'secondary-structure'
+                                        : 'sequence-conservation',
                                       `${this.state.addLabelClass}`,
                                     )}
                                   >
