@@ -166,7 +166,7 @@ class SummaryCounterOrg extends PureComponent /*:: <SummaryCounterOrgProps> */ {
                   db: 'uniprot',
                   accession: metadata.accession.toString(),
                 },
-                entry: { isFilter: true, db: entryDB && 'all' },
+                entry: { isFilter: true, db: entryDB || 'all' },
               },
             }}
             disabled={!entries}
