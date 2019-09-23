@@ -661,9 +661,17 @@ class ProtVista extends Component /*:: <Props, State> */ {
       return entry.accession;
     if (entry.type === 'sequence_conservation') {
       if (entry.accession in databases) {
-        return `${databases[entry.accession].name} conservation`;
+        return (
+          <div className={f('sequence-conservation-label')}>
+            {databases[entry.accession].name} conservation
+          </div>
+        );
       }
-      return `${entry.accession} conservation`;
+      return (
+        <div className={f('sequence-conservation-label')}>
+          {entry.accession} conservation
+        </div>
+      );
     }
     if (entry.accession && entry.accession.startsWith('G3D:')) {
       return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
