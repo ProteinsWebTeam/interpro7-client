@@ -36,53 +36,6 @@ const Advanced = loadable({
     ),
 });
 
-const DefaultInterProSettings = () => {
-  const [shouldRedirect, setShouldRedirect] = useState(
-    window.localStorage.getItem('redirect_to_interpro7'),
-  );
-  const handleRedirectChange = () => {
-    if (shouldRedirect === 'default') {
-      setShouldRedirect(null);
-      window.localStorage.removeItem('redirect_to_interpro7');
-    } else {
-      setShouldRedirect('default');
-      window.localStorage.setItem('redirect_to_interpro7', 'default');
-    }
-  };
-  return (
-    <>
-      <h4>Default InterPro Website</h4>
-      <div className={f('row')}>
-        <div className={f('medium-12', 'column')}>
-          <p>Select this beta version as your default InterPro website</p>
-          <div className={f('switch', 'large')}>
-            <input
-              type="checkbox"
-              checked={shouldRedirect === 'default'}
-              className={f('switch-input')}
-              name="i6RedirectSetting"
-              id="i6RedirectSetting-input"
-              onChange={handleRedirectChange}
-            />
-            <label
-              className={f('switch-paddle')}
-              htmlFor="i6RedirectSetting-input"
-            >
-              <span className={f('show-for-sr')}>InterPro 6 Redirect:</span>
-              <span className={f('switch-active')} aria-hidden="true">
-                On
-              </span>
-              <span className={f('switch-inactive')} aria-hidden="true">
-                Off
-              </span>
-            </label>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
 const NavigationSettings = (
   {
     navigation: { pageSize },
@@ -563,9 +516,6 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
           />
           <div className={f('columns', 'large-12')}>
             <h3>Settings</h3>
-            <section>
-              <DefaultInterProSettings />
-            </section>
             <section onChange={changeSettings}>
               <NavigationSettings
                 navigation={navigation}
