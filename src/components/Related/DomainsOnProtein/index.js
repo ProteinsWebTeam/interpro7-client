@@ -95,10 +95,12 @@ const addExistingEntiesToConservationResults = (
   conservationDatabases,
 ) => {
   for (const matches of [data.domain, data.family]) {
-    for (const entry of matches) {
-      for (const child of entry.children) {
-        if (conservationDatabases.includes(child.source_database)) {
-          data.match_conservation.push(child);
+    if (matches) {
+      for (const entry of matches) {
+        for (const child of entry.children) {
+          if (conservationDatabases.includes(child.source_database)) {
+            data.match_conservation.push(child);
+          }
         }
       }
     }
@@ -334,9 +336,11 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 
     // ensure there is a pfam entry somewhere in the matches
     for (const matches of [data.domain, data.family]) {
-      for (const entry of matches) {
-        for (const memberDatabase of Object.keys(entry.member_databases)) {
-          if (memberDatabase.toLowerCase() === 'pfam') return true;
+      if (matches) {
+        for (const entry of matches) {
+          for (const memberDatabase of Object.keys(entry.member_databases)) {
+            if (memberDatabase.toLowerCase() === 'pfam') return true;
+          }
         }
       }
     }
