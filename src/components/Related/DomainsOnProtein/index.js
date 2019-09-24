@@ -94,6 +94,7 @@ const addExistingEntiesToConservationResults = (
   data,
   conservationDatabases,
 ) => {
+  /* eslint-disable max-depth */
   for (const matches of [data.domain, data.family]) {
     if (matches) {
       for (const entry of matches) {
@@ -105,6 +106,8 @@ const addExistingEntiesToConservationResults = (
       }
     }
   }
+  /* eslint-enable max-depth */
+
   for (const entry of data.unintegrated) {
     if (conservationDatabases.includes(entry.source_database)) {
       data.match_conservation.push(entry);
@@ -335,6 +338,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     }
 
     // ensure there is a pfam entry somewhere in the matches
+    /* eslint-disable max-depth */
     for (const matches of [data.domain, data.family]) {
       if (matches) {
         for (const entry of matches) {
@@ -344,6 +348,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
         }
       }
     }
+    /* eslint-enable max-depth */
     for (const entry of data.unintegrated) {
       if (entry.source_database.toLowerCase() === 'pfam') return true;
     }
@@ -450,7 +455,9 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
                       ''
                     )}
                   </div>
-                  {!this.state.generateConservationData ? (
+                  {this.state.generateConservationData ? (
+                    ''
+                  ) : (
                     <div className={f('track-accession')}>
                       <button
                         type="button"
@@ -460,8 +467,6 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
                         Fetch Conservation
                       </button>
                     </div>
-                  ) : (
-                    ''
                   )}
                 </div>
               </div>
