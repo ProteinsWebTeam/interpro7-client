@@ -23,32 +23,32 @@ exports[`<DownloadForm /> should render 1`] = `
         <option
           value="entry"
         >
-          entry
+          Entry
         </option>
         <option
           value="protein"
         >
-          protein
+          Protein
         </option>
         <option
           value="structure"
         >
-          structure
+          Structure
         </option>
         <option
           value="taxonomy"
         >
-          taxonomy
+          Taxonomy
         </option>
         <option
           value="proteome"
         >
-          proteome
+          Proteome
         </option>
         <option
           value="set"
         >
-          set
+          Set
         </option>
       </select>
     </label>
@@ -79,7 +79,7 @@ exports[`<DownloadForm /> should render 1`] = `
           type="button"
           value="protein"
         >
-          protein
+          Protein
         </button>
         <button
           className="button"
@@ -89,7 +89,7 @@ exports[`<DownloadForm /> should render 1`] = `
           type="button"
           value="structure"
         >
-          structure
+          Structure
         </button>
         <button
           className="button"
@@ -99,7 +99,7 @@ exports[`<DownloadForm /> should render 1`] = `
           type="button"
           value="taxonomy"
         >
-          taxonomy
+          Taxonomy
         </button>
         <button
           className="button"
@@ -109,7 +109,7 @@ exports[`<DownloadForm /> should render 1`] = `
           type="button"
           value="proteome"
         >
-          proteome
+          Proteome
         </button>
         <button
           className="button"
@@ -119,7 +119,7 @@ exports[`<DownloadForm /> should render 1`] = `
           type="button"
           value="set"
         >
-          set
+          Set
         </button>
       </div>
       <ul
