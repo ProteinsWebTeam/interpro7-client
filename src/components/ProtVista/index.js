@@ -865,6 +865,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                       displayend={length}
                       scale="hydrophobicity-scale"
                       height="10px"
+                      color_range="#ffdd00:-3,#0000FF:3"
                       highlight-event="onmouseover"
                     />
                   </div>
