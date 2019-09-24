@@ -124,6 +124,7 @@ const getColorScaleHTML = (
   dataDB: Object,
   colorDomainsBy: string,
   changeSettingsRaw: function,
+  fetchConservation: function,
   title: string,
   fixedHighlight: string,
   id: string,
@@ -136,6 +137,7 @@ const getColorScaleHTML = (
   collapsed: boolean,
   label: string,
   addLabelClass: string,
+  showConservationButton: boolean,
 }; */
 class ProtVista extends Component /*:: <Props, State> */ {
   static propTypes = {
@@ -169,6 +171,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this._popperContentRef = React.createRef();
     this._webProteinRef = React.createRef();
     this._hydroRef = React.createRef();
+    this._showConservationRef = React.createRef();
     this._isPopperTop = true;
   }
 
@@ -188,7 +191,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
         <section>
           <h6>Residue ${detail.feature.start}: ${detail.feature.aa}</h6>
           <div>
-            <b>Hidrophobicity:</b> ${detail.feature.value}<br/>
+            <b>Hydrophobicity:</b> ${detail.feature.value}<br/>
             <b>Scale:</b> ${getColorScaleHTML(
               this._hydroRef.current.colorScale,
             )}<br/>
@@ -270,7 +273,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
   updateTracksWithData(data) {
     const b2sh = new Map([
-      ['N_TERMINAL_DISC', 'discontinuosStart'],
+      ['N_TERMINAL_DISC', 'discontinuosStart'], // TODO fix spelling in this and nightingale
       ['C_TERMINAL_DISC', 'discontinuosEnd'],
       ['CN_TERMINAL_DISC', 'discontinuos'],
       ['NC_TERMINAL_DISC', 'discontinuos'],
@@ -465,6 +468,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       locations,
       type,
       start,
+      end,
       residue,
     },
     isInterPro = false,
@@ -508,27 +512,39 @@ class ProtVista extends Component /*:: <Props, State> */ {
             <li>Position: ${start}</li>
             <li>Residue: ${residue}</li>
             `
-              : locations
+              : ''
+          } 
+          ${
+            !isResidue && locations
+              ? locations
                   .map(({ fragments, model_acc: model }) =>
                     `
             <li> 
             <!--location:-->
               ${model && model !== accession ? `Model: ${model}` : ''}
               <ul>
-                ${fragments
-                  .map(({ start, end }) =>
-                    `
+                ${
+                  fragments
+                    ? fragments
+                        .map(({ start, end }) =>
+                          `
                   <li>${start} - ${end}</li>
                 `.trim(),
-                  )
-                  .join('')}
+                        )
+                        .join('')
+                    : ''
+                }
               </ul>
             </li>
           `.trim(),
                   )
                   .join('')
+              : ''
           }
         </ul>
+        <p>
+          ${start && end ? `${start} - ${end}` : ''}
+        </p>
       </section>
     `.trim();
   }
@@ -540,18 +556,36 @@ class ProtVista extends Component /*:: <Props, State> */ {
       databases = dataDB.payload.databases;
     }
 
-    const entry = detail.feature;
-    const sourceDatabase = this._getSourceDatabaseDisplayName(entry, databases);
+    let tagString;
+    if (detail.feature.type === 'sequence_conservation') {
+      const match = detail.feature;
+      const sourceDatabase =
+        match.accession in databases
+          ? databases[match.accession].name
+          : match.accession;
+      const startLocation = match.locations[0];
+      const endLocation = match.locations[match.locations.length - 1];
+      const start = startLocation.fragments[0].start;
+      const end = endLocation.fragments[endLocation.fragments.length - 1].end;
+      const accession = startLocation.match;
+      tagString = this.getHTMLString({ accession, sourceDatabase, start, end });
+    } else {
+      const entry = detail.feature;
+      const sourceDatabase = this._getSourceDatabaseDisplayName(
+        entry,
+        databases,
+      );
 
-    const isResidue =
-      detail.target && detail.target.classList.contains('residue');
-    const highlightChild =
-      detail.target &&
-      detail.target.classList.contains('child-fragment') &&
-      detail.highlight;
-    const tagString = isResidue
-      ? this.getHTMLStringForResidue(entry, sourceDatabase)
-      : this.getHTMLStringForEntry(entry, sourceDatabase, highlightChild);
+      const isResidue =
+        detail.target && detail.target.classList.contains('residue');
+      const highlightChild =
+        detail.target &&
+        detail.target.classList.contains('child-fragment') &&
+        detail.highlight;
+      tagString = isResidue
+        ? this.getHTMLStringForResidue(entry, sourceDatabase)
+        : this.getHTMLStringForEntry(entry, sourceDatabase, highlightChild);
+    }
     const range = document.createRange();
     range.selectNode(document.getElementsByTagName('div').item(0));
     return range.createContextualFragment(tagString);
@@ -625,7 +659,20 @@ class ProtVista extends Component /*:: <Props, State> */ {
       entry.type === 'secondary_structure'
     )
       return entry.accession;
-
+    if (entry.type === 'sequence_conservation') {
+      if (entry.accession in databases) {
+        return (
+          <div className={f('sequence-conservation-label')}>
+            {databases[entry.accession].name} conservation
+          </div>
+        );
+      }
+      return (
+        <div className={f('sequence-conservation-label')}>
+          {entry.accession} conservation
+        </div>
+      );
+    }
     if (entry.accession && entry.accession.startsWith('G3D:')) {
       return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
     }
@@ -740,7 +787,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
           <div className={f('option-color', 'margin-right-medium')}>
-            Color By:{' '}
+            Colour By:{' '}
             <select
               className={f('select-inline')}
               value={this.props.colorDomainsBy}
@@ -911,10 +958,14 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                 key={entry.accession}
                                 className={f('track-row')}
                               >
-                                {entry.type === 'secondary_structure' ? (
+                                {entry.type === 'secondary_structure' ||
+                                entry.type === 'sequence_conservation' ? (
                                   <div
                                     className={f(
                                       'track-component',
+                                      entry.type === 'secondary_structure'
+                                        ? 'secondary-structure'
+                                        : 'sequence-conservation',
                                       `${this.state.addLabelClass}`,
                                     )}
                                   >
