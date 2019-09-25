@@ -175,7 +175,7 @@ class DomainArchitecture extends PureComponent /*:: <Props, State> */ {
               <div className={f('view-options-title')}>Domains on protein</div>
               <div className={f('view-options')}>
                 <div className={f('option-color', 'margin-right-large')}>
-                  Color By:{' '}
+                  Colour By:{' '}
                   <select
                     className={f('select-inline')}
                     value={this.state.colorMode}
