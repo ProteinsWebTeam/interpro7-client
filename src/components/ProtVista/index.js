@@ -470,6 +470,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       start,
       end,
       residue,
+      scoreRange,
     },
     isInterPro = false,
     isResidue = false,
@@ -545,9 +546,12 @@ class ProtVista extends Component /*:: <Props, State> */ {
         <p>
           ${start && end ? `${start} - ${end}` : ''}
         </p>
+        ${scoreRange ? `<p>Score range: ${scoreRange}</p>` : ''}
       </section>
     `.trim();
   }
+
+  getConservationScoreRange(match, highlight) {}
 
   getElementFromDetail(detail) {
     let databases = {};
@@ -567,8 +571,16 @@ class ProtVista extends Component /*:: <Props, State> */ {
       const endLocation = match.locations[match.locations.length - 1];
       const start = startLocation.fragments[0].start;
       const end = endLocation.fragments[endLocation.fragments.length - 1].end;
+      //const scoreRange = this.getScoreRange(match, detail.target.highlight);
+      const scoreRange = 'blah';
       const accession = startLocation.match;
-      tagString = this.getHTMLString({ accession, sourceDatabase, start, end });
+      tagString = this.getHTMLString({
+        accession,
+        sourceDatabase,
+        start,
+        end,
+        scoreRange,
+      });
     } else {
       const entry = detail.feature;
       const sourceDatabase = this._getSourceDatabaseDisplayName(
