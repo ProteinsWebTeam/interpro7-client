@@ -128,19 +128,21 @@ const mergeConservationData = (data, conservationData) => {
         locations: [],
       };
       const entries = conservationData[db].entries;
-      for (const entry of Object.keys(entries)) {
-        const matches = entries[entry];
-        for (const match of matches) {
-          const fragments = processConservationData(entry, match);
-          dbConservationScores.locations.push({
-            fragments: fragments,
-            match: entry,
-          });
+      if (entries) {
+        for (const entry of Object.keys(entries)) {
+          const matches = entries[entry];
+          for (const match of matches) {
+            const fragments = processConservationData(entry, match);
+            dbConservationScores.locations.push({
+              fragments: fragments,
+              match: entry,
+            });
+          }
         }
+        data.match_conservation.push(dbConservationScores);
+        // add data from integrated and unintegrated matches to panel for ease of use
+        addExistingEntiesToConservationResults(data, conservationDatabases);
       }
-      data.match_conservation.push(dbConservationScores);
-      // add data from integrated and unintegrated matches to panel for ease of use
-      addExistingEntiesToConservationResults(data, conservationDatabases);
     }
   }
 };
