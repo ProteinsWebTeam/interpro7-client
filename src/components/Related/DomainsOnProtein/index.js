@@ -109,11 +109,12 @@ const addExistingEntiesToConservationResults = (
   /* eslint-enable max-depth */
 
   for (const entry of data.unintegrated) {
-    if (conservationDatabases.includes(entry.source_database)) {
+    if (entry && conservationDatabases.includes(entry.source_database)) {
       data.match_conservation.push(entry);
     }
   }
 };
+
 const mergeConservationData = (data, conservationData) => {
   data.match_conservation = [];
   const conservationDatabases = [];
@@ -322,14 +323,14 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     if (this.state.dataConservation) return false;
 
     // check protein length is less than HmmerWeb length limit
-    if (data.domain.length > 0) {
+    if (data.domain && data.domain.length > 0) {
       if (
         data.domain[0].protein_length >=
         DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER
       )
         return false;
     }
-    if (data.unintegrated.length > 0) {
+    if (data.unintegrated && data.unintegrated.length > 0) {
       if (
         data.unintegrated[0].protein_length >=
         DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER
