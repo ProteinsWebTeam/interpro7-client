@@ -221,6 +221,7 @@ const Matches = (
     currentAPICall,
     nextAPICall,
     previousAPICall,
+    focusType,
     ...props
   } /*: {
     matches: Array<Object>,
@@ -235,6 +236,7 @@ const Matches = (
     dbCounters ?: Object,
     mainData: Object,
     accessionSearch: Object,
+    focusType?: string,
     props: Array<any>
 } */,
 ) => {
@@ -263,6 +265,7 @@ const Matches = (
     );
     aggSize += prevSize - dataTable.length;
   }
+
   return (
     <Table
       dataTable={dataTable}
@@ -370,7 +373,7 @@ const Matches = (
           );
         }}
       >
-        Accession
+        {focusType === 'taxonomy' ? 'Tax ID' : 'Accession'}
       </Column>
       <Column
         dataKey="name"
