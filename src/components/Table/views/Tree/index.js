@@ -312,7 +312,6 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                         order: 2,
                       };
                     }
-                    to.taxonomy.accession = currentNode.id;
 
                     return (
                       <li key={endpoint}>
