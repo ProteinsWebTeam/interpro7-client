@@ -204,6 +204,7 @@ const includeAccessionSearch = (
   dataTable.splice(0, 0, accMatch);
 };
 // List of all matches, many to many
+// eslint-disable-next-line complexity
 const Matches = (
   {
     matches,
