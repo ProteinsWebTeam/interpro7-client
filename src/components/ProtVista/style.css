@@ -397,3 +397,7 @@ g:global(.child-location-group.clg-5) path {
     margin-right: 0.5rem;
   }
 }
+
+.tooltip-disable {
+  opacity: 0.2;
+}
