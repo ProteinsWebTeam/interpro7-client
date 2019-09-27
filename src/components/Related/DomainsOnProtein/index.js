@@ -128,6 +128,7 @@ const mergeConservationData = (data, conservationData) => {
         locations: [],
       };
       const entries = conservationData[db].entries;
+      /* eslint-disable max-depth */
       if (entries) {
         for (const entry of Object.keys(entries)) {
           const matches = entries[entry];
@@ -139,6 +140,7 @@ const mergeConservationData = (data, conservationData) => {
             });
           }
         }
+        /* eslint-enable max-depth */
         data.match_conservation.push(dbConservationScores);
         // add data from integrated and unintegrated matches to panel for ease of use
         addExistingEntiesToConservationResults(data, conservationDatabases);
