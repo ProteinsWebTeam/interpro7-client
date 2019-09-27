@@ -433,6 +433,46 @@ export default class Faqs extends PureComponent /*:: <{}> */ {
             </div>
 
             <div>
+              <h4>Interface</h4>
+              <details className={f('accordion-style')}>
+                <summary>
+                  How do I view entry names instead of accessions in the
+                  graphical protein viewer?
+                </summary>
+                <div className={f('accordion-info')}>
+                  <p>
+                    Please click on the &quot;tag&quot; icon in the top right
+                    corner of the protein viewer above the protein scroll bar.
+                    This will toggle between showing Entry accession values and
+                    names.
+                  </p>
+                </div>
+              </details>
+              <details className={f('accordion-style')}>
+                <summary>How do I explore the Taxonomy Tree viewer?</summary>
+                <div className={f('accordion-info')}>
+                  <p>
+                    The taxonomy tree viewer can be navigated by clicking on
+                    nodes or using keyboard arrow keys.
+                  </p>
+                </div>
+              </details>
+              <details className={f('accordion-style')}>
+                <summary>
+                  I have selected a node in the Taxonomy tree viewer, how do I
+                  see data matching my selected taxonomy?
+                </summary>
+                <div className={f('accordion-info')}>
+                  <p>
+                    The information bar above the taxonomy viewer contains links
+                    on the right which lead to data filtered to match the
+                    selected taxonomy node.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div>
               <h4>Troubleshooting</h4>
               <details className={f('accordion-style')}>
                 <summary>
@@ -456,29 +496,46 @@ export default class Faqs extends PureComponent /*:: <{}> */ {
               </details>
 
               <details className={f('accordion-style')}>
-                <summary>
-                  How do I stop my browser redirecting from InterPro to InterPro
-                  Beta?
-                </summary>
+                <summary>Can I still view the old InterPro website?</summary>
                 <div className={f('accordion-info')}>
                   <p>
-                    Automatic redirection from the existing InterPro website to
-                    the beta can be switched off as follows:
+                    Yes you can! There two ways to access the old (legacy)
+                    website:
                   </p>
                   <ol>
                     <li>
-                      Click on the &lsquo;Hamburger&rsquo; icon in the top right
-                      area of the page to open the InterPro sidebar
+                      Navigate to this URL:{' '}
+                      <Link
+                        href="https://www.ebi.ac.uk/interpro/legacy"
+                        className={f('ext')}
+                        target="_blank"
+                      >
+                        https://www.ebi.ac.uk/interpro/legacy/
+                      </Link>
                     </li>
                     <li>
                       Click on the <b>Settings</b> link from the{' '}
                       <b>InterPro Menu</b> section of the sidebar
-                    </li>
-                    <li>
-                      Set the <b>Default InterPro Website</b> switch off to
-                      suppress redirection to the beta site
+                      <ul>
+                        <li>
+                          Click on the &quot;hamburger&quot; icon above the
+                          magnifying glass icon to open the <b>InterPro Menu</b>{' '}
+                          sidebar.
+                        </li>
+                        <li>
+                          Then click the <b>See this page in the old website</b>{' '}
+                          link to be taken to the nearest matching page in the
+                          legacy website.
+                        </li>
+                      </ul>
                     </li>
                   </ol>
+                  <p>
+                    Please note we will continue to update the legacy website
+                    for a few releases, but due to planned changes in our
+                    infrastructure, the legacy site will eventually cease to be
+                    updated with new data.
+                  </p>
                 </div>
               </details>
             </div>
