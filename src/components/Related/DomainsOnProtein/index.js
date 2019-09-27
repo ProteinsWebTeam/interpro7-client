@@ -132,6 +132,7 @@ const mergeConservationData = (data, conservationData) => {
       if (entries) {
         for (const entry of Object.keys(entries)) {
           const matches = entries[entry];
+          // eslint-disable-next-line max-depth
           for (const match of matches) {
             const fragments = processConservationData(entry, match);
             dbConservationScores.locations.push({

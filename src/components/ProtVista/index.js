@@ -43,6 +43,8 @@ import localCSSasText from '!!raw-loader!./style.css';
 import ebiGlobalCSS from '!!raw-loader!ebi-framework/css/ebi-global.css';
 import globalCSS from '!!raw-loader!styles/global.css';
 
+import popupsvg from 'images/icons/ico-tooltip.svg';
+
 const f = foundationPartial(ipro, localCSS, fonts);
 
 const webComponents = [];
@@ -164,6 +166,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
       collapsed: false,
       label: 'accession',
       addLabelClass: '',
+      enableTooltip: true,
+      addTooltipClass: '',
     };
 
     this._mainRef = React.createRef();
@@ -342,20 +346,22 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     this._popperRef.current.classList.add(f('hide'));
                     break;
                   case 'mouseover':
-                    this._popperRef.current.classList.remove(f('hide'));
-                    removeAllChildrenFromNode(this._popperContentRef.current);
-                    this._popperContentRef.current.appendChild(
-                      this.getElementFromDetail(detail),
-                    );
-                    this._isPopperTop = !this._isPopperTop;
-                    this.popper = new PopperJS(
-                      detail.target,
-                      this._popperRef.current,
-                      {
-                        placement: this._isPopperTop ? 'top' : 'bottom',
-                        applyStyle: { enabled: false },
-                      },
-                    );
+                    if (this.state.enableTooltip) {
+                      this._popperRef.current.classList.remove(f('hide'));
+                      removeAllChildrenFromNode(this._popperContentRef.current);
+                      this._popperContentRef.current.appendChild(
+                        this.getElementFromDetail(detail),
+                      );
+                      this._isPopperTop = !this._isPopperTop;
+                      this.popper = new PopperJS(
+                        detail.target,
+                        this._popperRef.current,
+                        {
+                          placement: this._isPopperTop ? 'top' : 'bottom',
+                          applyStyle: { enabled: false },
+                        },
+                      );
+                    }
                     break;
                   default:
                     break;
@@ -641,6 +647,16 @@ class ProtVista extends Component /*:: <Props, State> */ {
     else this.setState({ label: 'accession', addLabelClass: '' });
   };
 
+  togglePopper = () => {
+    const tooltipStatus = this.state.enableTooltip;
+    if (tooltipStatus)
+      this.setState({
+        enableTooltip: !tooltipStatus,
+        addTooltipClass: 'tooltip-disable',
+      });
+    else this.setState({ enableTooltip: !tooltipStatus, addTooltipClass: '' });
+  };
+
   renderLabels(entry) {
     const { expandedTrack } = this.state;
     const { dataDB, id } = this.props;
@@ -844,6 +860,18 @@ class ProtVista extends Component /*:: <Props, State> */ {
                 data-icon="&#xf02b;"
                 onClick={this.toggleLabel}
               />
+            </Tooltip>
+          </div>
+          <div
+            className={f(
+              'option-fullscreen',
+              'font-l',
+              'margin-right-large',
+              `${this.state.addTooltipClass}`,
+            )}
+          >
+            <Tooltip title={'Enable/Disable Tooltip'}>
+              <img src={popupsvg} width="20px" onClick={this.togglePopper} />
             </Tooltip>
           </div>
         </div>

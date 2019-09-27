@@ -474,14 +474,11 @@ class List extends PureComponent /*:: <Props> */ {
 
     const HTTP_OK = 200;
     const notFound = !data.loading && data.status !== HTTP_OK;
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
+    const databases = dataBase?.payload?.databases;
     const isStaleButShouldntDisplayStale =
       isStale &&
-      _payload &&
-      _payload.results &&
-      _payload.results[0] &&
-      _payload.results[0].metadata.source_database.toLowerCase() !==
+      // eslint-disable-next-line camelcase
+      _payload?.results?.[0]?.metadata?.source_database?.toLowerCase() !==
         db.toLowerCase();
     if (data.loading || notFound || isStaleButShouldntDisplayStale) {
       _payload = { results: [] };
