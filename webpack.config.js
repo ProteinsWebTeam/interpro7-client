@@ -146,6 +146,7 @@ const getConfigFor = (env, mode, module = false) => {
                 plugins: [
                   '@babel/plugin-syntax-dynamic-import',
                   ['@babel/plugin-proposal-class-properties', { loose: true }],
+                  ['@babel/plugin-proposal-optional-chaining', { loose: true }],
                 ],
                 env: {
                   dev: {
