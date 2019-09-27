@@ -109,11 +109,12 @@ const addExistingEntiesToConservationResults = (
   /* eslint-enable max-depth */
 
   for (const entry of data.unintegrated) {
-    if (conservationDatabases.includes(entry.source_database)) {
+    if (entry && conservationDatabases.includes(entry.source_database)) {
       data.match_conservation.push(entry);
     }
   }
 };
+
 const mergeConservationData = (data, conservationData) => {
   data.match_conservation = [];
   const conservationDatabases = [];
@@ -127,19 +128,22 @@ const mergeConservationData = (data, conservationData) => {
         locations: [],
       };
       const entries = conservationData[db].entries;
-      for (const entry of Object.keys(entries)) {
-        const matches = entries[entry];
-        for (const match of matches) {
-          const fragments = processConservationData(entry, match);
-          dbConservationScores.locations.push({
-            fragments: fragments,
-            match: entry,
-          });
+      if (entries) {
+        for (const entry of Object.keys(entries)) {
+          const matches = entries[entry];
+          // eslint-disable-next-line max-depth
+          for (const match of matches) {
+            const fragments = processConservationData(entry, match);
+            dbConservationScores.locations.push({
+              fragments: fragments,
+              match: entry,
+            });
+          }
         }
+        data.match_conservation.push(dbConservationScores);
+        // add data from integrated and unintegrated matches to panel for ease of use
+        addExistingEntiesToConservationResults(data, conservationDatabases);
       }
-      data.match_conservation.push(dbConservationScores);
-      // add data from integrated and unintegrated matches to panel for ease of use
-      addExistingEntiesToConservationResults(data, conservationDatabases);
     }
   }
 };
@@ -322,14 +326,14 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     if (this.state.dataConservation) return false;
 
     // check protein length is less than HmmerWeb length limit
-    if (data.domain.length > 0) {
+    if (data.domain && data.domain.length > 0) {
       if (
         data.domain[0].protein_length >=
         DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER
       )
         return false;
     }
-    if (data.unintegrated.length > 0) {
+    if (data.unintegrated && data.unintegrated.length > 0) {
       if (
         data.unintegrated[0].protein_length >=
         DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER
