@@ -52,12 +52,13 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
     }
     const shouldCache =
       config.cache.enabled && useCache && response.status === SUCCESS_STATUS;
-    if (shouldCache && response.clone) {
+    if (response.clone) {
       dropCacheIfVersionMismatch(response.headers);
-      response
-        .clone()
-        .text()
-        .then(text => sessionStorage.setItem(key, text));
+      if (shouldCache)
+        response
+          .clone()
+          .text()
+          .then(text => sessionStorage.setItem(key, text));
     }
     return response;
   });

@@ -50,6 +50,7 @@ export const toCanonicalURL = (url /*: string */) => {
   return `${ulrObj.pathname}?${ulrObj.search
     .slice(1)
     .split('&')
+    .filter(arg => arg.toLowerCase() !== 'page_size=20')
     .sort()
     .join('&')}`;
 };

@@ -20,6 +20,7 @@ module.exports = {
       plugins: [
         'babel-plugin-dynamic-import-node',
         '@babel/plugin-proposal-class-properties',
+        '@babel/plugin-proposal-optional-chaining',
       ],
     },
   },

@@ -14,7 +14,6 @@ const url = pkg.repository.url.replace('.git', '');
 
 export default class Advanced extends PureComponent /*:: <{}> */ {
   render() {
-    console.log(info);
     return (
       <section>
         <h4>Developer information</h4>
