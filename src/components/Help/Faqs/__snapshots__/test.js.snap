@@ -533,14 +533,16 @@ exports[`<Faqs /> should render 1`] = `
                     <b>
                       InterPro Menu
                     </b>
-                     sidebar.
+                     
+                    sidebar.
                   </li>
                   <li>
                     Then click the 
                     <b>
                       See this page in the old website
                     </b>
-                     link to be taken to the nearest matching page in the legacy website.
+                     
+                    link to be taken to the nearest matching page in the legacy website.
                   </li>
                 </ul>
               </li>

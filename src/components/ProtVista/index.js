@@ -828,6 +828,20 @@ class ProtVista extends Component /*:: <Props, State> */ {
             </Tooltip>
           </div>
           <div
+            className={f(
+              'option-fullscreen',
+              'font-l',
+              'margin-right-large',
+              `${this.state.addTooltipClass}`,
+            )}
+          >
+            <Tooltip title={'Enable/Disable Tooltip'}>
+              <button onClick={this.togglePopper}>
+                <img src={popupsvg} width="20px" alt="Enable/Disable Tooltip" />
+              </button>
+            </Tooltip>
+          </div>
+          <div
             className={f('option-fullscreen', 'font-l', 'margin-right-large')}
           >
             <FullScreenButton
@@ -860,18 +874,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
                 data-icon="&#xf02b;"
                 onClick={this.toggleLabel}
               />
-            </Tooltip>
-          </div>
-          <div
-            className={f(
-              'option-fullscreen',
-              'font-l',
-              'margin-right-large',
-              `${this.state.addTooltipClass}`,
-            )}
-          >
-            <Tooltip title={'Enable/Disable Tooltip'}>
-              <img src={popupsvg} width="20px" onClick={this.togglePopper} />
             </Tooltip>
           </div>
         </div>
