@@ -212,7 +212,16 @@ const groupByEntryType = interpro => {
 
 const UNDERSCORE = /_/g;
 const sortFunction = ([a], [b]) => {
-  const firsts = ['family', 'domain'];
+  const firsts = [
+    'family',
+    'domain',
+    'homologous_superfamily',
+    'repeat',
+    'conserved_site',
+    'active-site',
+    'binding_site',
+    'ptm',
+  ];
   const lasts = ['residues', 'features', 'predictions'];
   for (const label of firsts) {
     if (a.toLowerCase() === label) return -1;
