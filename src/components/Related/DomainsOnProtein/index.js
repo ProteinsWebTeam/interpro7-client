@@ -218,7 +218,7 @@ const sortFunction = ([a], [b]) => {
     'homologous_superfamily',
     'repeat',
     'conserved_site',
-    'active-site',
+    'active_site',
     'binding_site',
     'ptm',
   ];
@@ -267,7 +267,10 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
     const sortedData = Object.entries(dataMerged)
       .sort(sortFunction)
       // “Binding_site” -> “Binding site”
-      .map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
+      .map(([key, value]) => [
+        key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
+        value,
+      ]);
 
     return (
       <ProtVista
