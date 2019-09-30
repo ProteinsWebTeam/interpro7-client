@@ -541,126 +541,6 @@ class Home extends PureComponent {
           <div className={f('row', 'columns', 'margin-bottom-large')}>
             <div className={f('flex-column')}>
               {
-                // LiteMol
-              }
-              <div className={f('flex-card')}>
-                <div className={f('card-image', 'image-tool-ngl')}>
-                  <div className={f('card-tag', 'tag-tool')}>Library</div>
-                </div>
-
-                <div className={f('card-content')}>
-                  <div className={f('card-title')}>
-                    <h4>
-                      <Link href="//nglviewer.org" target="_blank" />
-                    </h4>
-                  </div>
-                  <div className={f('card-description')}>
-                    NGL Viewer is a collection of tools for web-based molecular
-                    graphics. WebGL is employed to display molecules like
-                    proteins and DNA/RNA with a variety of representations.
-                  </div>
-                </div>
-
-                <div className={f('card-more')}>
-                  <Link href="//github.com/arose/ngl" target="_blank">
-                    <div
-                      className={f(
-                        'icon',
-                        'icon-common',
-                        'icon-right',
-                        'button-nu',
-                      )}
-                    >
-                      <em
-                        className={f('icon', 'icon-common')}
-                        data-icon="&#xf09b;"
-                      />
-                    </div>
-                  </Link>
-
-                  <Link href="//nglviewer.org/" target="_blank">
-                    <div
-                      className={f(
-                        'button-more',
-                        'icon',
-                        'icon-common',
-                        'icon-right',
-                      )}
-                      data-icon="&#xf061;"
-                    >
-                      Read more
-                    </div>
-                  </Link>
-                </div>
-              </div>
-
-              {
-                // ProtVista
-              }
-              <div className={f('flex-card')}>
-                <div className={f('card-image', 'image-tool-protvista')}>
-                  <div className={f('card-tag', 'tag-tool')}>Library</div>
-                </div>
-
-                <div className={f('card-content')}>
-                  <div className={f('card-title')}>
-                    <h4>
-                      <Link
-                        href="//ebi-uniprot.github.io/ProtVista/developerGuide.html"
-                        target="_blank"
-                      >
-                        Nigthtingale
-                      </Link>
-                    </h4>
-                  </div>
-                  <div className={f('card-description')}>
-                    Nigthtingale is a monorepo containing visualisation web
-                    components, including the formerly known Protvista, a
-                    powerful and blazing-fast tool for handling protein sequence
-                    visualisation in the browser. ProtVista has been developed
-                    by UniProt.
-                  </div>
-                </div>
-
-                <div className={f('card-more')}>
-                  <Link
-                    href="//github.com/ebi-webcomponents/nightingale"
-                    target="_blank"
-                  >
-                    <div
-                      className={f(
-                        'icon',
-                        'icon-common',
-                        'icon-right',
-                        'button-nu',
-                      )}
-                    >
-                      <em
-                        className={f('icon', 'icon-common')}
-                        data-icon="&#xf09b;"
-                      />
-                    </div>
-                  </Link>
-                  <Link
-                    href="//ebi-webcomponents.github.io/nightingale"
-                    target="_blank"
-                  >
-                    <div
-                      className={f(
-                        'button-more',
-                        'icon',
-                        'icon-common',
-                        'icon-right',
-                      )}
-                      data-icon="&#xf061;"
-                    >
-                      Read more
-                    </div>
-                  </Link>
-                </div>
-              </div>
-
-              {
                 // InterProScan
               }
               <div className={f('flex-card')}>
@@ -753,6 +633,72 @@ class Home extends PureComponent {
 
                 <div className={f('card-more')}>
                   <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
+                    <div
+                      className={f(
+                        'button-more',
+                        'icon',
+                        'icon-common',
+                        'icon-right',
+                      )}
+                      data-icon="&#xf061;"
+                    >
+                      Read more
+                    </div>
+                  </Link>
+                </div>
+              </div>
+
+              {
+                // ProtVista
+              }
+              <div className={f('flex-card')}>
+                <div className={f('card-image', 'image-tool-protvista')}>
+                  <div className={f('card-tag', 'tag-tool')}>Library</div>
+                </div>
+
+                <div className={f('card-content')}>
+                  <div className={f('card-title')}>
+                    <h4>
+                      <Link
+                        href="//ebi-uniprot.github.io/ProtVista/developerGuide.html"
+                        target="_blank"
+                      >
+                        Nigthtingale
+                      </Link>
+                    </h4>
+                  </div>
+                  <div className={f('card-description')}>
+                    Nigthtingale is a monorepo containing visualisation web
+                    components, including the formerly known Protvista, a
+                    powerful and blazing-fast tool for handling protein sequence
+                    visualisation in the browser. ProtVista has been developed
+                    by UniProt.
+                  </div>
+                </div>
+
+                <div className={f('card-more')}>
+                  <Link
+                    href="//github.com/ebi-webcomponents/nightingale"
+                    target="_blank"
+                  >
+                    <div
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        'icon-right',
+                        'button-nu',
+                      )}
+                    >
+                      <em
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#xf09b;"
+                      />
+                    </div>
+                  </Link>
+                  <Link
+                    href="//ebi-webcomponents.github.io/nightingale"
+                    target="_blank"
+                  >
                     <div
                       className={f(
                         'button-more',
