@@ -181,7 +181,19 @@ const splitMobiFeatures = feature => {
       };
     }
   }
-  return Object.values(newFeatures);
+
+  const sortedObj = Object.keys(newFeatures)
+    .sort((a, b) => {
+      return a === 'Consensus Disorder Prediction' &&
+        b !== 'Consensus Disorder Prediction'
+        ? -1
+        : 1;
+    })
+    .reduce((acc, key) => {
+      acc[key] = newFeatures[key];
+      return acc;
+    }, {});
+  return Object.values(sortedObj);
 };
 
 const mergeExtraFeatures = (data, extraFeatures) => {
