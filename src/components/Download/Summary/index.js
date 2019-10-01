@@ -56,7 +56,12 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
           <Table dataTable={download} contentType="files" actualSize={0}>
             <Column
               dataKey="localID"
-              renderer={(localID /*: string */) => localID.split('|')[0]}
+              renderer={(localID /*: string */) => (
+                <Link target="_blank" href={localID.split('|')[0]}>
+                  {' '}
+                  {localID.split('|')[0]}{' '}
+                </Link>
+              )}
             >
               URL
             </Column>

@@ -10,7 +10,9 @@ import { toPlural } from 'utils/pages';
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
+import FileExporter from './FileExporter';
 import File from 'components/File';
+
 import Table, {
   Column,
   PageSizeSelector,
@@ -23,7 +25,7 @@ import Lazy from 'wrappers/Lazy';
 import LazyImage from 'components/LazyImage';
 import loadWebComponent from 'utils/load-web-component';
 
-import { getUrlForApi } from 'higherOrder/loadData/defaults';
+import { getReversedUrl } from 'higherOrder/loadData/defaults';
 
 import { searchSelector } from 'reducers/custom-location/search';
 import { descriptionSelector } from 'reducers/custom-location/description';
@@ -165,28 +167,6 @@ export const ProteinDownloadRenderer = description => (accession, row) => (
     }}
   />
 );
-const AllProteinDownload = (
-  { description, count } /*: {description: Object, count: number} */,
-) => (
-  <File
-    fileType="fasta"
-    name={`protein-sequences-matching-${description[description.main.key].accession}.fasta`}
-    count={count}
-    customLocationDescription={{
-      ...description,
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      [description.main.key]: {
-        ...description[description.main.key],
-        isFilter: true,
-      },
-    }}
-  />
-);
-AllProteinDownload.propTypes = {
-  description: T.object,
-  count: T.number,
-};
 
 const includeAccessionSearch = (
   dataTable,
@@ -224,6 +204,7 @@ const includeAccessionSearch = (
   dataTable.splice(0, 0, accMatch);
 };
 // List of all matches, many to many
+// eslint-disable-next-line complexity
 const Matches = (
   {
     matches,
@@ -241,6 +222,7 @@ const Matches = (
     currentAPICall,
     nextAPICall,
     previousAPICall,
+    focusType,
     ...props
   } /*: {
     matches: Array<Object>,
@@ -255,6 +237,7 @@ const Matches = (
     dbCounters ?: Object,
     mainData: Object,
     accessionSearch: Object,
+    focusType?: string,
     props: Array<any>
 } */,
 ) => {
@@ -283,6 +266,7 @@ const Matches = (
     );
     aggSize += prevSize - dataTable.length;
   }
+
   return (
     <Table
       dataTable={dataTable}
@@ -305,20 +289,41 @@ const Matches = (
         <Exporter>
           <ul>
             {primary === 'protein' && (
-              <li style={{ display: 'flex', alignItems: 'center' }}>
-                <div>
-                  <AllProteinDownload
-                    description={description}
-                    count={actualSize}
-                  />
-                </div>
-                <div>FASTA</div>
-              </li>
+              <>
+                <FileExporter
+                  description={description}
+                  count={actualSize}
+                  search={search}
+                  fileType="fasta"
+                  primary={primary}
+                  secondary={secondary}
+                />
+              </>
             )}
-            <li>
-              <Link target="_blank" href={getUrlForApi(state)}>
-                Open in API web view
+            <FileExporter
+              description={description}
+              count={actualSize}
+              search={search}
+              fileType="tsv"
+              primary={primary}
+              secondary={secondary}
+            />
+            <FileExporter
+              description={description}
+              count={actualSize}
+              search={search}
+              fileType="json"
+              primary={primary}
+              secondary={secondary}
+            />
+            <li style={{ display: 'flex', alignItems: 'center' }}>
+              <Link target="_blank" href={getReversedUrl(state)}>
+                <span
+                  className={f('icon', 'icon-common', 'icon-export')}
+                  data-icon="&#xf233;"
+                />
               </Link>
+              <div>API Web View</div>
             </li>
           </ul>
         </Exporter>
@@ -369,7 +374,7 @@ const Matches = (
           );
         }}
       >
-        Accession
+        {focusType === 'taxonomy' ? 'Tax ID' : 'Accession'}
       </Column>
       <Column
         dataKey="name"

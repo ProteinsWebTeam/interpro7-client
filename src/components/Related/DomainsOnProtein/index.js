@@ -124,11 +124,12 @@ const addExistingEntiesToConservationResults = (
   /* eslint-enable max-depth */
 
   for (const entry of data.unintegrated) {
-    if (conservationDatabases.includes(entry.source_database)) {
+    if (entry && conservationDatabases.includes(entry.source_database)) {
       data.match_conservation.push(entry);
     }
   }
 };
+
 const mergeConservationData = (data, conservationData) => {
   data.match_conservation = [];
   const conservationDatabases = [];
@@ -142,19 +143,24 @@ const mergeConservationData = (data, conservationData) => {
         locations: [],
       };
       const entries = conservationData[db].entries;
-      for (const entry of Object.keys(entries)) {
-        const matches = entries[entry];
-        for (const match of matches) {
-          const fragments = processConservationData(entry, match);
-          dbConservationScores.locations.push({
-            fragments: fragments,
-            match: entry,
-          });
+      /* eslint-disable max-depth */
+      if (entries) {
+        for (const entry of Object.keys(entries)) {
+          const matches = entries[entry];
+          // eslint-disable-next-line max-depth
+          for (const match of matches) {
+            const fragments = processConservationData(entry, match);
+            dbConservationScores.locations.push({
+              fragments: fragments,
+              match: entry,
+            });
+          }
         }
+        /* eslint-enable max-depth */
+        data.match_conservation.push(dbConservationScores);
+        // add data from integrated and unintegrated matches to panel for ease of use
+        addExistingEntiesToConservationResults(data, conservationDatabases);
       }
-      data.match_conservation.push(dbConservationScores);
-      // add data from integrated and unintegrated matches to panel for ease of use
-      addExistingEntiesToConservationResults(data, conservationDatabases);
     }
   }
 };
@@ -221,7 +227,16 @@ const groupByEntryType = interpro => {
 
 const UNDERSCORE = /_/g;
 const sortFunction = ([a], [b]) => {
-  const firsts = ['family', 'domain'];
+  const firsts = [
+    'family',
+    'domain',
+    'homologous_superfamily',
+    'repeat',
+    'conserved_site',
+    'active_site',
+    'binding_site',
+    'ptm',
+  ];
   const lasts = ['residues', 'features', 'predictions'];
   for (const label of firsts) {
     if (a.toLowerCase() === label) return -1;
@@ -267,7 +282,10 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
     const sortedData = Object.entries(dataMerged)
       .sort(sortFunction)
       // “Binding_site” -> “Binding site”
-      .map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
+      .map(([key, value]) => [
+        key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
+        value,
+      ]);
 
     return (
       <ProtVista
@@ -337,14 +355,14 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     if (this.state.dataConservation) return false;
 
     // check protein length is less than HmmerWeb length limit
-    if (data.domain.length > 0) {
+    if (data.domain && data.domain.length > 0) {
       if (
         data.domain[0].protein_length >=
         DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER
       )
         return false;
     }
-    if (data.unintegrated.length > 0) {
+    if (data.unintegrated && data.unintegrated.length > 0) {
       if (
         data.unintegrated[0].protein_length >=
         DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER

@@ -170,7 +170,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
             <select name="description.main.key" defaultValue={main}>
               {typeObjects.map(([type]) => (
                 <option key={type} value={type}>
-                  {type}
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
                 </option>
               ))}
             </select>
@@ -204,7 +204,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                     data-value
                     onClick={this._handleChange}
                   >
-                    {type}
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
                   </button>
                 ))}
             </div>

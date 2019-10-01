@@ -544,6 +544,20 @@ class List extends PureComponent /*:: <ListProps> */ {
             >
               Number of Entries
             </Column>
+            <Column
+              dataKey="source_database"
+              renderer={(
+                accession /*: string */,
+                {
+                  // eslint-disable-next-line camelcase
+                  source_database,
+                } /*: {accession: string, source_database: string} */,
+              ) => {
+                return <div>{databases[source_database].name}</div>;
+              }}
+            >
+              Source Database
+            </Column>
           </Table>
         </div>
       </div>

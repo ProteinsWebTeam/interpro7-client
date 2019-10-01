@@ -88,7 +88,7 @@ const processResultsFor = (fileType, subset, endpoint) =>
           );
         }
       } else if (fileType === 'json') {
-        content += JSON.stringify(result.metadata);
+        content += JSON.stringify(result);
       } else if (fileType === 'accession') {
         content += `${result.metadata.accession}\n`;
       } else if (fileType === 'tsv') {

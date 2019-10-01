@@ -14,6 +14,11 @@
     }
   }
 }
+.icon-export {
+  font-size: 1em;
+  color: var(--colors-graydark);
+  padding: 0.3rem 1rem;
+}
 
 .svgContainer {
   /*margin: var(--spacing-small) 0 var(--spacing-small)*/

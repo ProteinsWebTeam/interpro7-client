@@ -82,31 +82,43 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
       title += 'Click icon to generate';
     }
     title += ` ${fileType} file`;
+
+    // if (count === 0) {
+    //   title = 'No data available to download';
+    // }
     const filename = name || `${fileType}.${extensions[fileType]}`;
     return (
       <Tooltip
         interactive
         useContext
         html={
-          <div>
-            <p className={f('tooltip-paragraph')}>
-              <span>{title}</span>
-            </p>
-            <p className={f('tooltip-paragraph')}>
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'result' },
-                    result: { type: 'download' },
-                  },
-                  hash: `${subpath}|${fileType}`,
-                }}
-                className={f('button', 'hollow')}
-              >
-                See more download options
-              </Link>
-            </p>
-          </div>
+          count === 0 ? (
+            <div>
+              <p className={f('tooltip-paragraph')}>
+                <span>No data available</span>
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p className={f('tooltip-paragraph')}>
+                <span>{title}</span>
+              </p>
+              <p className={f('tooltip-paragraph')}>
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'result' },
+                      result: { type: 'download' },
+                    },
+                    hash: `${subpath}|${fileType}`,
+                  }}
+                  className={f('button', 'hollow')}
+                >
+                  See more download options
+                </Link>
+              </p>
+            </div>
+          )
         }
       >
         <div>
@@ -114,7 +126,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
           <Link
             download={filename}
             href={blobURL || url}
-            disabled={downloading || count > HARD_LIMIT}
+            disabled={downloading || count > HARD_LIMIT || count === 0}
             className={f('link', { downloading, failed })}
             onClick={downloading || successful ? undefined : handleClick}
             data-url={url}

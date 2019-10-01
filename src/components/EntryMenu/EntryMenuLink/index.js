@@ -158,7 +158,9 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
           mainKey &&
           mainKey.toLowerCase() !== 'set'
         ) {
-          value = payload.metadata.counters.dbEntries.interpro;
+          value = payload.metadata.counters.dbEntries.interpro
+            ? payload.metadata.counters.dbEntries.interpro
+            : value;
           if (entryDB) {
             value = payload.metadata.counters.dbEntries[entryDB.toLowerCase()];
           }

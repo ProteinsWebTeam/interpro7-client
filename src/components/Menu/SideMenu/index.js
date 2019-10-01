@@ -51,7 +51,7 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
 const mapStateToPropsForOldLink = createSelector(
   state => state.customLocation.description,
   d => {
-    const href = 'https://www.ebi.ac.uk/interpro/';
+    const href = 'https://www.ebi.ac.uk/interpro/legacy/';
     const { key } = d.main;
     if (
       key === 'result' &&

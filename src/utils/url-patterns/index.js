@@ -9,7 +9,7 @@ export const iproscan2urlDB = (db /*: string */) =>
   new Map([
     ['TIGRFAM', 'tigrfams'],
     ['PROSITE_PROFILES', 'profile'],
-    ['PROSITE_PATTERNS', 'patterns'],
+    ['PROSITE_PATTERNS', 'prosite'],
     ['SUPERFAMILY', 'ssf'],
     ['GENE3D', 'cathgene3d'],
   ]).get(db) || db.toLowerCase();
