@@ -21,6 +21,7 @@ import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import { iproscan2urlDB } from 'utils/url-patterns';
+import ResultImporter from 'components/IPScan/ResultImporter';
 
 const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
@@ -104,12 +105,18 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
     matched: T.string.isRequired,
     entryDB: T.string,
     localID: T.string,
+    job: T.object,
   };
 
   constructor(props /*: Props */) {
     super(props);
 
-    this.state = { localIDForLocalPayload: null, localPayload: null };
+    this.state = {
+      localIDForLocalPayload: null,
+      localPayload: null,
+      shouldImportResults: false,
+      isImporting: false,
+    };
   }
 
   componentDidMount() {
@@ -121,7 +128,11 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
   }
 
   #getLocalDataIfNeeded = () => {
-    const { localID } = this.props;
+    const { localID, job } = this.props;
+    if (!localID && !job && !this.state.isImporting) {
+      this.setState({ shouldImportResults: true, isImporting: true });
+      return;
+    }
     if (
       !localID ||
       this.props.data.payload ||
@@ -134,7 +145,9 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
       const data = await dataT.get(localID);
       this.setState({
         localPayload: {
-          sequence: data.input.replace(FASTA_CLEANER, '').toUpperCase(),
+          sequence: (data?.input || '')
+            .replace(FASTA_CLEANER, '')
+            .toUpperCase(),
           matches: [],
           xref: [
             { name: 'Results are being processed on the InterProScan server' },
@@ -159,6 +172,10 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
 
     return (
       <>
+        <ResultImporter
+          shouldImport={this.state.shouldImportResults}
+          handleImported={() => this.setState({ shouldImportResults: false })}
+        />
         <ErrorBoundary>
           <div className={f('row')}>
             <div className={f('large-12', 'columns')}>
@@ -192,15 +209,17 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
             </div>
           </div>
         </ErrorBoundary>
-        <ErrorBoundary>
-          <Switch
-            {...this.props}
-            localPayload={this.state.localPayload}
-            locationSelector={locationSelector}
-            indexRoute={SummaryAsync}
-            childRoutes={subPagesForSequence}
-          />
-        </ErrorBoundary>
+        {!this.state.shouldImportResults && (
+          <ErrorBoundary>
+            <Switch
+              {...this.props}
+              localPayload={this.state.localPayload}
+              locationSelector={locationSelector}
+              indexRoute={SummaryAsync}
+              childRoutes={subPagesForSequence}
+            />
+          </ErrorBoundary>
+        )}
       </>
     );
   }
@@ -237,7 +256,10 @@ const mapStateToProps = createSelector(
         job.metadata.localID === accession ||
         job.metadata.remoteID === accession,
     );
-    return { localID: job.metadata.localID, entryDB: isFilter && db };
+
+    return job
+      ? { localID: job.metadata.localID, entryDB: isFilter && db }
+      : null;
   },
 );
 

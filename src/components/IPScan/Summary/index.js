@@ -83,6 +83,7 @@ const StatusTooltip = React.memo(({ status } /*: string */) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
       status === 'created' ||
+      status === 'importing' ||
       status === 'submitted') && (
       <span
         className={f('icon', 'icon-common', 'ico-neutral')}
@@ -112,6 +113,7 @@ StatusTooltip.propTypes = {
   status: T.oneOf([
     'running',
     'created',
+    'importing',
     'submitted',
     'not found',
     'failure',
@@ -289,7 +291,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
               </table>
             </div>
             <div className={f('medium-3', 'columns', 'margin-bottom-large')}>
-              {status === 'finished' && (
+              {status === 'finished' && data?.url && (
                 <Exporter includeSettings={false} left={false}>
                   <ul>
                     {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(

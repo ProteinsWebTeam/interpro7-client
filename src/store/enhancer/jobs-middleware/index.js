@@ -17,6 +17,7 @@ import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
 import config from 'config';
 
 import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
+import { IMPORT_JOB } from '../../../actions/types';
 
 // eslint-disable-next-line no-magic-numbers
 const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
@@ -118,7 +119,11 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       }
       return;
     }
-    if (meta.status === 'submitted' || meta.status === 'running') {
+    if (
+      meta.status === 'submitted' ||
+      meta.status === 'running' ||
+      meta.status === 'importing'
+    ) {
       const ipScanInfo = getState().settings.ipScan;
       const { payload, ok } = await cachedFetchText(
         url.resolve(
@@ -211,9 +216,11 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     const previousState = getState();
     const output = next(action);
 
-    if (action.type === CREATE_JOB) {
+    if (action.type === CREATE_JOB || action.type === IMPORT_JOB) {
       const job = getState().jobs[action.job.metadata.localID];
       createJobInDB(job.metadata, action.job.data);
+      if (action.type === IMPORT_JOB)
+        processJob(action.job.metadata.localID, job.metadata);
     }
 
     if (action.type === UPDATE_JOB) {
