@@ -271,7 +271,9 @@ class Title extends PureComponent /*:: <Props> */ {
           )}
         {metadata && (
           <Helmet
-            titleTemplate={`${metadata.name.name} (${metadata.accession}) - ${
+            titleTemplate={`${metadata.name.name ||
+              metadata.name.short ||
+              metadata.accession} (${metadata.accession}) - ${
               isEntry ? dbLabel : ' '
             } ${mainType} - InterPro`}
           >
