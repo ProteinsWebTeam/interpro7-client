@@ -206,6 +206,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
     accession: T.string.isRequired,
     localID: T.string.isRequired,
     remoteID: T.string,
+    localTitle: T.string,
     status: T.string.isRequired,
     data: dataPropType,
     localPayload: T.object,
@@ -219,6 +220,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
       status,
       data,
       localPayload,
+      localTitle,
     } = this.props;
     if (remoteID && remoteID !== accession) {
       return (
@@ -249,6 +251,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
         short: payload.xref[0].name,
       },
     };
+    const title = localTitle || payload.xref[0].name;
 
     const goTerms = getGoTerms(payload.matches);
 
@@ -261,6 +264,12 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
               <Title metadata={metadata} mainType="protein" />
               <table className={f('light', 'table-sum', 'margin-bottom-none')}>
                 <tbody>
+                  {title && (
+                    <tr>
+                      <td>Title</td>
+                      <td>{title}</td>
+                    </tr>
+                  )}
                   <tr>
                     <td>Job ID</td>
                     <td>
@@ -346,11 +355,12 @@ const jobSelector = createSelector(
 const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
-  (accession, { metadata: { localID, remoteID, status } }) => ({
+  (accession, { metadata: { localID, remoteID, status, localTitle } }) => ({
     accession,
     localID,
     remoteID,
     status,
+    localTitle,
   }),
 );
 

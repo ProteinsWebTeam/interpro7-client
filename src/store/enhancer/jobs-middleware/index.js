@@ -68,8 +68,11 @@ const createJobInDB = async (metadata, data) => {
 
 const updateJobInDB = async (metadata, data) => {
   const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
+  if (data) {
+    dataT.update(metadata.localID, prev => ({ ...prev, ...data }));
+    metadata.localTitle = data?.results?.[0]?.xref?.[0]?.name;
+  }
   metaT.set(metadata, metadata.localID);
-  if (data) dataT.update(metadata.localID, prev => ({ ...prev, ...data }));
 };
 
 const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {

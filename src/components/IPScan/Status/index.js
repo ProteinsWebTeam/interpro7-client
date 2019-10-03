@@ -121,12 +121,19 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           </Column>
           <Column dataKey="localTitle">Title</Column>
           <Column
-            dataKey="times.created"
-            renderer={(created /*: string */) => {
-              const parsed = new Date(created);
+            dataKey="times"
+            renderer={(
+              {
+                created,
+                importing,
+              } /*: {created: string, importing: string} */,
+            ) => {
+              const parsed = new Date(created || importing);
               return (
                 <Tooltip
-                  title={`Created on ${parsed.toLocaleDateString()} at ${parsed.toLocaleTimeString()}`}
+                  title={`${
+                    created ? 'Created' : 'Imported'
+                  } on ${parsed.toLocaleDateString()} at ${parsed.toLocaleTimeString()}`}
                 >
                   <TimeAgo date={parsed} noTitle />
                 </Tooltip>

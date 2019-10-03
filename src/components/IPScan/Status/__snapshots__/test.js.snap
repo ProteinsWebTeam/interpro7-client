@@ -44,7 +44,7 @@ exports[`<IPScanStatus /> should render 1`] = `
       Title
     </Column>
     <Column
-      dataKey="times.created"
+      dataKey="times"
       renderer={[Function]}
     >
       Created

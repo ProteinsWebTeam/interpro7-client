@@ -160,7 +160,8 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
   };
 
   render() {
-    const { sequence } = this.props;
+    const { sequence, accession, name } = this.props;
+    const header = accession || name;
     return (
       <section id="sequence">
         <div className={f('row', 'columns')}>
@@ -178,6 +179,17 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
             )}
             ref={this._ref}
           >
+            {header && (
+              <div
+                className={f(
+                  'raw-sequence-viewer',
+                  'row',
+                  'raw-sequence-header',
+                )}
+              >
+                {`> ${header}`}
+              </div>
+            )}
             <Inner sequence={sequence} />
           </div>
           <div className={f('small-12', 'medium-12', 'large-4', 'columns')}>
