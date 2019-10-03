@@ -30,63 +30,75 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
-/* eslint-disable complexity  */
+const colourMap = [
+  {
+    color: '#dff9e1',
+    min: 0,
+    max: 1,
+  },
+  {
+    color: '#bce7dd',
+    min: 1,
+    max: 2,
+  },
+  {
+    color: '#a2d2d7',
+    min: 2,
+    max: 3,
+  },
+  {
+    color: '#8cbdd0',
+    min: 3,
+    max: 4,
+  },
+  {
+    color: '#78a8c8',
+    min: 4,
+    max: 5,
+  },
+  {
+    color: '#6593c0',
+    min: 5,
+    max: 6,
+  },
+  {
+    color: '#537eb8',
+    min: 6,
+    max: 7,
+  },
+  {
+    color: '#4069af',
+    min: 7,
+    max: 8,
+  },
+  {
+    color: '#2955a6',
+    min: 8,
+    max: 9,
+  },
+  {
+    color: '#00429d',
+    min: 9,
+    max: 10,
+  },
+];
+
 const processConservationData = (entry, match) => {
   const fragments = [];
   // applying run-length-encoding style compression
 
   let currentFragment;
   for (const residue of match) {
-    let color, range;
-    /* eslint-disable no-magic-numbers  */
-    if (residue.score > 0.0 && residue.score <= 0.5) {
-      color = '#ffffe0';
-      range = `0 to 0.5`;
-    } else if (residue.score > 0.5 && residue.score <= 1) {
-      color = '#d3f4e0';
-      range = `0.5 to 1`;
-    } else if (residue.score > 1 && residue.score <= 1.5) {
-      color = '#b9e5dd';
-      range = `1 to 1.5`;
-    } else if (residue.score > 1.5 && residue.score <= 2) {
-      color = '#a5d5d8';
-      range = `1.5 to 2`;
-    } else if (residue.score > 2 && residue.score <= 2.5) {
-      color = '#93c4d2';
-      range = `2 to 2.5`;
-    } else if (residue.score > 2.5 && residue.score <= 3) {
-      color = '#82b3cd';
-      range = `2.5 to 3`;
-    } else if (residue.score > 3 && residue.score <= 3.5) {
-      color = '#73a2c6';
-      range = `3 to 3.5`;
-    } else if (residue.score > 3.5 && residue.score <= 4) {
-      color = '#6492c0';
-      range = `3.5 to 4`;
-    } else if (residue.score > 4 && residue.score <= 4.5) {
-      color = '#5681b9';
-      range = `4 to 4.5`;
-    } else if (residue.score > 4.5 && residue.score <= 5) {
-      color = '#4771b2';
-      range = `4.5 to 5`;
-    } else if (residue.score > 5 && residue.score <= 5.5) {
-      color = '#3761ab';
-      range = `5 to 5.5`;
-    } else if (residue.score > 5.5 && residue.score <= 6) {
-      color = '#2451a4';
-      range = `5.5 to 6`;
-    } else {
-      color = '#00429d';
-      range = ` greater than 6`;
-    }
-    /* eslint-enable no-magic-numbers  */
+    const hit = colourMap.find(element => {
+      return residue.score > element.min && residue.score <= element.max;
+    });
 
+    const color = hit.color;
     if (!currentFragment) {
       currentFragment = {
         start: residue.position,
         end: residue.position,
         color: color,
-        range: range,
       };
     }
     currentFragment.end = residue.position - 1;
@@ -96,14 +108,12 @@ const processConservationData = (entry, match) => {
         start: residue.position,
         end: residue.position,
         color: color,
-        range: range,
       };
     }
   }
   if (currentFragment) fragments.push(currentFragment);
   return fragments;
 };
-/* eslint-enable complexity  */
 
 const addExistingEntiesToConservationResults = (
   data,
@@ -141,6 +151,7 @@ const mergeConservationData = (data, conservationData) => {
         type: 'sequence_conservation',
         accession: db,
         locations: [],
+        range: colourMap,
       };
       const entries = conservationData[db].entries;
       /* eslint-disable max-depth */
