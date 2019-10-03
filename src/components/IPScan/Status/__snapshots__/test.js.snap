@@ -19,10 +19,15 @@ exports[`<IPScanStatus /> should render 1`] = `
     processData={[Function]}
   />
   <div
-    className="button-group"
+    className="button-bar"
   >
-    <GoToNewSearch />
-    <Memo(Connect(RefreshButton)) />
+    <div
+      className="button-group"
+    >
+      <GoToNewSearch />
+      <Memo(Connect(RefreshButton)) />
+    </div>
+    <Memo(Connect(ImportResultSearch)) />
   </div>
   <Table
     actualSize={0}
