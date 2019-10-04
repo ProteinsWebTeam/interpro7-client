@@ -27,6 +27,17 @@ exports[`<Tree /> should render 1`] = `
         </button>
       </Tooltip>
     </span>
+    <span>
+      <Tooltip
+        title="Recenter"
+      >
+        <button
+          className="icon icon-common font-l"
+          data-icon=""
+          onClick={[Function]}
+        />
+      </Tooltip>
+    </span>
   </div>
   <div
     data-testid="data-tree"

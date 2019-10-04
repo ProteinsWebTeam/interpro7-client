@@ -11,6 +11,9 @@ import styles from './style.css';
 import fisheyeOff from 'EBI-Icon-fonts/source/common/font-awesome/solid/dot-circle.svg';
 import fisheyeOn from 'EBI-Icon-fonts/source/common/font-awesome/solid/bullseye.svg';
 
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import { foundationPartial } from 'styles/foundation';
+
 /*:: type Props = {
   data?: Object,
   focused?: string,
@@ -22,6 +25,8 @@ import fisheyeOn from 'EBI-Icon-fonts/source/common/font-awesome/solid/bullseye.
 /*:: type State = {
   fisheye: boolean,
 }; */
+
+const f = foundationPartial(fonts);
 
 export default class Tree extends PureComponent /*:: <Props, State> */ {
   /* ::
@@ -92,6 +97,10 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
 
   _handleClick = () => this.setState(({ fisheye }) => ({ fisheye: !fisheye }));
 
+  _recenter = () => {
+    this._vis.resetZoom();
+  };
+
   _handleFocus = ({ detail: { id } }) => {
     if (!this._loadingVis && this.props.changeFocus) this.props.changeFocus(id);
   };
@@ -130,6 +139,15 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
               </Tooltip>
             </span>
           )}
+          <span>
+            <Tooltip title="Recenter">
+              <button
+                onClick={this._recenter}
+                className={f('icon', 'icon-common', 'font-l')}
+                data-icon="&#xf05b;"
+              />
+            </Tooltip>
+          </span>
         </div>
 
         <div
