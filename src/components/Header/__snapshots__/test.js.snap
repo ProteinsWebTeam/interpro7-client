@@ -304,6 +304,7 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
       <Memo(Connect(TextSearchBox))
         delay={2000}
         name="search"
+        shouldRedirect={true}
       />
       <Memo(Connect(Link))
         to={
@@ -362,6 +363,7 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
       <Memo(Connect(TextSearchBox))
         delay={2000}
         name="search"
+        shouldRedirect={true}
       />
       <Memo(Connect(Link))
         to={
@@ -420,6 +422,7 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
       <Memo(Connect(TextSearchBox))
         delay={2000}
         name="search"
+        shouldRedirect={true}
       />
       <Memo(Connect(Link))
         to={
@@ -478,6 +481,7 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
       <Memo(Connect(TextSearchBox))
         delay={2000}
         name="search"
+        shouldRedirect={true}
       />
       <Memo(Connect(Link))
         to={
@@ -536,6 +540,7 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
       <Memo(Connect(TextSearchBox))
         delay={2000}
         name="search"
+        shouldRedirect={true}
       />
       <Memo(Connect(Link))
         to={
@@ -594,6 +599,7 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
       <Memo(Connect(TextSearchBox))
         delay={2000}
         name="search"
+        shouldRedirect={true}
       />
       <Memo(Connect(Link))
         to={
@@ -652,6 +658,7 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
       <Memo(Connect(TextSearchBox))
         delay={2000}
         name="search"
+        shouldRedirect={true}
       />
       <Memo(Connect(Link))
         to={
@@ -710,6 +717,7 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
       <Memo(Connect(TextSearchBox))
         delay={2000}
         name="search"
+        shouldRedirect={true}
       />
       <Memo(Connect(Link))
         to={

@@ -196,10 +196,17 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     this._CDPMap.clear();
   }
 
-  _handleNewData = (taxID, payload) =>
+  _handleNewData = (taxID, payload) => {
+    if (payload?.metadata?.children) {
+      const c = payload.metadata.children.length;
+      if (c === 1) {
+        this._handleNewFocus(payload.metadata.children[0]);
+      }
+    }
     this.setState(({ data }) => ({
       data: { ...mergeData(data, payload.metadata, payload.names) },
     }));
+  };
 
   _handleNewFocus = taxID => {
     if (taxID) this.setState({ focused: taxID });

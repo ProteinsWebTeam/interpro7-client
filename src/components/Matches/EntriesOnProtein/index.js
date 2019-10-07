@@ -7,11 +7,10 @@ import ProtVistaMatches from '../ProtVistaMatches';
 
 import protvista from 'components/ProtVista/style.css';
 import { location2html } from 'utils/text';
+import { EntryColorMode, getTrackColor } from 'utils/entry-color';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 const f = foundationPartial(protvista);
-
-import { getTrackColor, EntryColorMode } from 'utils/entry-color';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 class EntriesOnProtein extends ProtVistaMatches {
   static propTypes = {
@@ -38,7 +37,7 @@ class EntriesOnProtein extends ProtVistaMatches {
       locations = firstMatch.entry.entry_protein_locations;
     else if (firstMatch.protein && firstMatch.protein.entry_protein_locations)
       locations = firstMatch.protein.entry_protein_locations;
-    const tmp = locations.map(loc => ({
+    this.web_tracks[entry.accession].data = locations.map(loc => ({
       accession: entry.accession,
       name: entry.name,
       source_database: entry.source_database,
@@ -47,8 +46,6 @@ class EntriesOnProtein extends ProtVistaMatches {
       entry_type: entry.entry_type,
       type: 'entry',
     }));
-
-    this.web_tracks[entry.accession].data = tmp;
 
     if (!this.web_protein.data)
       this.web_protein.data =
@@ -77,7 +74,9 @@ class EntriesOnProtein extends ProtVistaMatches {
             title={location2html(
               entry.entry_protein_locations || protein.entry_protein_locations,
               entry.accession,
-              entry.name.name ? entry.name.name : entry.name,
+              entry.name.name
+                ? entry.name.name
+                : entry.name.short || entry.name,
             )}
           >
             <protvista-interpro-track
