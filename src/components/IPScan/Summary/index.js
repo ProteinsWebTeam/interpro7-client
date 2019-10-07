@@ -10,12 +10,14 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Redirect from 'components/generic/Redirect';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
+
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
-import Actions from 'components/IPScan/Actions';
+import Actions, { getIProScanURL } from 'components/IPScan/Actions';
 
 import { Exporter } from 'components/Table';
 import { NOT_MEMBER_DBS } from 'menuConfig';
@@ -23,8 +25,9 @@ import { iproscan2urlDB } from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(fonts);
+const f = foundationPartial(ebiGlobalStyles, fonts);
 import Link from 'components/generic/Link';
 
 /*:: type Props = {
@@ -271,9 +274,22 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
                     </tr>
                   )}
                   <tr>
-                    <td>Job ID</td>
                     <td>
-                      <Accession accession={accession} title="Job ID" />
+                      Job ID{' '}
+                      <Tooltip title={'Case sensitive'}>
+                        <span
+                          className={f('small', 'icon', 'icon-common')}
+                          data-icon="&#xf129;"
+                          aria-label={'Case sensitive'}
+                        />
+                      </Tooltip>
+                    </td>
+                    <td style={{ display: 'flex' }}>
+                      <Accession accession={accession} title="Job ID" />{' '}
+                      <CopyToClipboard
+                        textToCopy={getIProScanURL(accession)}
+                        tooltipText="CopyURL"
+                      />
                     </td>
                   </tr>
                   <tr>

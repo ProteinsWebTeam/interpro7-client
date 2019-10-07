@@ -191,7 +191,9 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
             defaultKey="actions"
             headerClassName={f('table-center')}
             cellClassName={f('table-center', 'font-ml')}
-            renderer={(localID /*: string */) => <Actions localID={localID} />}
+            renderer={(localID /*: string */, { remoteID }) => (
+              <Actions localID={localID} remoteID={remoteID} />
+            )}
           >
             Action
           </Column>
