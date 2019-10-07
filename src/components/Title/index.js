@@ -235,6 +235,7 @@ class Title extends PureComponent /*:: <Props> */ {
     ).as('interpro-type');
   }
 
+  /* eslint-disable complexity */
   render() {
     const { metadata, mainType, data } = this.props;
     const isEntry = mainType === 'entry';
@@ -294,6 +295,7 @@ class Title extends PureComponent /*:: <Props> */ {
       </div>
     );
   }
+  /* eslint-enable complexity */
 }
 
 export default loadData(getUrlForMeta)(Title);
