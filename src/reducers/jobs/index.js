@@ -8,6 +8,7 @@ import {
   LOAD_DATA_JOB,
   UNLOAD_DATA_JOB,
 } from 'actions/types';
+import { IMPORT_JOB } from '../../actions/types';
 
 /*:: type Job = {
   metadata: Object,
@@ -23,6 +24,7 @@ export default (
     case UPDATE_JOB:
     case LOAD_DATA_JOB:
     case UNLOAD_DATA_JOB:
+    case IMPORT_JOB:
       let id = action.job.metadata.localID;
       let job = state[id];
       if (!id) {

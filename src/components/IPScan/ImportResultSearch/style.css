@@ -1,0 +1,23 @@
+@import '../../../styles/fonts.css';
+@import '../../../styles/colors.css';
+
+.import-result {
+  font: initial;
+  font-family: var(--fonts-ebi);
+  display: flex;
+  flex-wrap: nowrap;
+  width: 50%;
+  padding: 1px;
+  & label {
+    font-size: 1.1em;
+    color: var(--colors-gray);
+    padding-right: 0.5em;
+  }
+
+  & input {
+    margin: 0;
+  }
+  & button {
+    margin: 0 0 0 2px;
+  }
+}

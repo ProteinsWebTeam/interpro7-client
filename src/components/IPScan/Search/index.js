@@ -104,8 +104,6 @@ const getLocalTitle = form =>
 
 const isXChecked = x => form => !!form.querySelector(checkedSelectorFor(x));
 
-const isGoTermsChecked = isXChecked('goterms');
-const isPathwaysChecked = isXChecked('pathways');
 const isStayChecked = isXChecked('stay');
 
 const commentRE = /^\s*[>;].*$/m;
@@ -281,8 +279,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       data: {
         input: lines.join('\n'),
         applications: getCheckedApplications(this._formRef.current),
-        goterms: isGoTermsChecked(this._formRef.current),
-        pathways: isPathwaysChecked(this._formRef.current),
+        goterms: true,
+        pathways: true,
       },
     });
     if (isStayChecked(this._formRef.current)) {

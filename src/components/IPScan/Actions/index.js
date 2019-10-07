@@ -5,8 +5,12 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 
 import { updateJob, deleteJob, goToCustomLocation } from 'actions/creators';
+import { format } from 'url';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import config from 'config';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -16,8 +20,25 @@ import local from './style.css';
 
 const f = foundationPartial(fonts, ipro, local);
 
+export const getIProScanURL = (accession /*: string*/) => {
+  const { protocol, hostname, port, pathname } = config.root.website;
+  const url = format({
+    protocol,
+    hostname,
+    port,
+    pathname:
+      pathname +
+      descriptionToPath({
+        main: { key: 'result' },
+        result: { type: 'InterProScan', accession },
+      }),
+  });
+
+  return url;
+};
 /*:: type Props = {
   localID: string,
+  remoteID?: ?string,
   withTitle: boolean,
   jobs: Object,
   updateJob: function,
@@ -28,6 +49,7 @@ const f = foundationPartial(fonts, ipro, local);
 export class Actions extends PureComponent /*:: <Props> */ {
   static propTypes = {
     localID: T.string.isRequired,
+    remoteID: T.string,
     withTitle: T.bool,
     jobs: T.object.isRequired,
     updateJob: T.func.isRequired,
@@ -54,7 +76,7 @@ export class Actions extends PureComponent /*:: <Props> */ {
 
   render() {
     // const { localID, withTitle, jobs } = this.props;
-    const { withTitle } = this.props;
+    const { withTitle, remoteID } = this.props;
     // const { saved } = (jobs[localID] || {}).metadata || {};
     return (
       <>
@@ -76,7 +98,13 @@ export class Actions extends PureComponent /*:: <Props> */ {
             data-icon="&#xf1f8;"
             aria-label="Delete job"
           />
-        </Tooltip>
+        </Tooltip>{' '}
+        {remoteID && (
+          <CopyToClipboard
+            textToCopy={getIProScanURL(remoteID)}
+            tooltipText="CopyURL"
+          />
+        )}
       </>
     );
   }
