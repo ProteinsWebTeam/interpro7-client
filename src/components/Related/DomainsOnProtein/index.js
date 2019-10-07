@@ -90,12 +90,12 @@ const processConservationData = (entry, match) => {
   let currentFragment;
   for (const residue of match) {
     let hit;
-    // silently handle out-of-range values
+    // handle out-of-range values
     if (residue.score < colourMap[0].min) {
       // score < 0 = 0. Insertion
       hit = colourMap[0];
     } else if (residue.score > colourMap[colourMap.length - 1].max) {
-      // score > 10 = 10. Shouldn't happen
+      // score > 10 = 10. Shouldn't happen as it's a probability * 10
       hit = colourMap[colourMap.length - 1];
     } else {
       hit = colourMap.find(element => {
