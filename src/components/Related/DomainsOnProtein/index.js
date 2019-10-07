@@ -89,26 +89,40 @@ const processConservationData = (entry, match) => {
 
   let currentFragment;
   for (const residue of match) {
-    const hit = colourMap.find(element => {
-      return residue.score > element.min && residue.score <= element.max;
-    });
-
-    const color = hit.color;
-    if (!currentFragment) {
-      currentFragment = {
-        start: residue.position,
-        end: residue.position,
-        color: color,
-      };
+    let hit;
+    // silently handle out-of-range values
+    if (residue.score < colourMap[0].min) {
+      // score < 0 = 0. Insertion
+      hit = colourMap[0];
+    } else if (residue.score > colourMap[colourMap.length - 1].max) {
+      // score > 10 = 10. Shouldn't happen
+      hit = colourMap[colourMap.length - 1];
+    } else {
+      hit = colourMap.find(element => {
+        return residue.score > element.min && residue.score <= element.max;
+      });
     }
-    currentFragment.end = residue.position - 1;
-    if (color !== currentFragment.color) {
-      fragments.push(currentFragment);
-      currentFragment = {
-        start: residue.position,
-        end: residue.position,
-        color: color,
-      };
+
+    if (hit) {
+      const color = hit.color;
+      if (!currentFragment) {
+        currentFragment = {
+          start: residue.position,
+          end: residue.position,
+          color: color,
+        };
+      }
+      currentFragment.end = residue.position - 1;
+      if (color !== currentFragment.color) {
+        fragments.push(currentFragment);
+        currentFragment = {
+          start: residue.position,
+          end: residue.position,
+          color: color,
+        };
+      }
+    } else {
+      console.log(`Failed to find score ${residue.score}`);
     }
   }
   if (currentFragment) fragments.push(currentFragment);
