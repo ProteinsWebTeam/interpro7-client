@@ -13,6 +13,7 @@ const config /*: {
   root: {|
     website: {|
       pathname: string,
+      hostname: string,
       port: string,
       protocol: string,
       href: string,

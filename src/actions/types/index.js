@@ -15,6 +15,7 @@ export const UPDATE_JOB_STATUS = 'UPDATE_JOB_STATUS';
 export const REHYDRATE_JOBS = 'REHYDRATE_JOBS';
 export const LOAD_DATA_JOB = 'LOAD_DATA_JOB';
 export const UNLOAD_DATA_JOB = 'UNLOAD_DATA_JOB';
+export const IMPORT_JOB = 'IMPORT_JOB';
 
 // download
 export const DOWNLOAD_URL = 'DOWNLOAD_URL';

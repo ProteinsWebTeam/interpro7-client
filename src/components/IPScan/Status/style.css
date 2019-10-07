@@ -1,0 +1,9 @@
+.button-bar {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  margin-bottom: 0.3em;
+}
+div.button-group {
+  margin: 0;
+}
