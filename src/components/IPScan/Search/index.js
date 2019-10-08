@@ -455,7 +455,15 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                       0 &&
                       (tooShort || headerIssues) && (
                         <div className={f('text-right')}>
-                          {tooShort && (
+                          {!valid && (
+                            <div>
+                              The sequence has invalid characters.{' '}
+                              <span role="img" aria-label="warning">
+                                ⚠️
+                              </span>
+                            </div>
+                          )}
+                          {valid && tooShort && (
                             <div>
                               The sequence is too short.{' '}
                               <span role="img" aria-label="warning">
