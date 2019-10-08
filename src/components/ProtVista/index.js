@@ -476,10 +476,18 @@ class ProtVista extends Component /*:: <Props, State> */ {
       start,
       end,
       residue,
+      score,
+      scale,
     },
     isInterPro = false,
     isResidue = false,
   ) {
+    const scaleComponent = scale
+      ? getColorScaleHTML({
+          domain: [scale[0].min, scale[scale.length - 1].max],
+          range: [scale[0].color, scale[scale.length - 1].color],
+        })
+      : '';
     return `
       <section>   
         <h6>
@@ -551,8 +559,21 @@ class ProtVista extends Component /*:: <Props, State> */ {
         <p>
           ${start && end ? `${start} - ${end}` : ''}
         </p>
-      </section>
-    `.trim();
+        ${score ? `<p>Conservation : ${score}</p>` : ''}
+        <div>Scale: ${scaleComponent}</div>
+        </section>
+`.trim();
+  }
+
+  getConservationScore(highlight, match, scale) {
+    const start = parseInt(highlight.split(':')[0], 10);
+    const matchFragment = match.locations[0].fragments.find(fragment => {
+      return start >= fragment.start && start <= fragment.end;
+    });
+    const scaleEntry = scale.find(element => {
+      return matchFragment.color === element.color;
+    });
+    return `${scaleEntry.min} - ${scaleEntry.max}`;
   }
 
   getElementFromDetail(detail) {
@@ -573,8 +594,30 @@ class ProtVista extends Component /*:: <Props, State> */ {
       const endLocation = match.locations[match.locations.length - 1];
       const start = startLocation.fragments[0].start;
       const end = endLocation.fragments[endLocation.fragments.length - 1].end;
+      const matchConservation = this.props.data.find(element => {
+        if (element[0] && element[0].toLowerCase() === 'match conservation') {
+          return element[1].find(
+            e => (e.type && e.type.toLowerCase()) === 'sequence_conservation',
+          );
+        }
+        return false;
+      });
+
+      const scale = matchConservation[1].find(element => {
+        return (
+          element.type && element.type.toLowerCase() === 'sequence_conservation'
+        );
+      }).range;
+      const score = this.getConservationScore(detail.highlight, match, scale);
       const accession = startLocation.match;
-      tagString = this.getHTMLString({ accession, sourceDatabase, start, end });
+      tagString = this.getHTMLString({
+        accession,
+        sourceDatabase,
+        start,
+        end,
+        score,
+        scale,
+      });
     } else {
       const entry = detail.feature;
       const sourceDatabase = this._getSourceDatabaseDisplayName(
@@ -678,9 +721,11 @@ class ProtVista extends Component /*:: <Props, State> */ {
     if (entry.type === 'sequence_conservation') {
       if (entry.accession in databases) {
         return (
-          <div className={f('sequence-conservation-label')}>
-            {databases[entry.accession].name} conservation
-          </div>
+          <Tooltip title={'Score calculated using Phmmer and HMM profile'}>
+            <div className={f('sequence-conservation-label')}>
+              {databases[entry.accession].name} conservation
+            </div>
+          </Tooltip>
         );
       }
       return (
