@@ -23,6 +23,22 @@ export const ebiSearch2urlDB = (db /*: string */) =>
     ['CATH-Gene3D', 'cathgene3d'],
   ]).get(db) || db.toLowerCase();
 
+export const ENTRY_DBS = [
+  'panther',
+  'pfam',
+  'cathgene3d',
+  'ssf',
+  'cdd',
+  'profile',
+  'smart',
+  'tigrfams',
+  'prosite',
+  'prints',
+  'hamap',
+  'pirsf',
+  'sfld',
+  'interpro',
+];
 export default (db /*: string */) => {
   const patterns = new Map([
     ['cathgene3d', 'http://www.cathdb.info/version/latest/superfamily/{}'],

@@ -5,6 +5,7 @@ import T from 'prop-types';
 import DOMPurify from 'dompurify';
 
 import { transformFormatted } from 'utils/text';
+import { ENTRY_DBS } from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
@@ -68,22 +69,7 @@ Citations.propTypes = {
   accession: T.string,
   withoutIDs: T.bool,
 };
-const ENTRY_DBS = [
-  'panther',
-  'pfam',
-  'cathgene3d',
-  'ssf',
-  'cdd',
-  'profile',
-  'smart',
-  'tigrfams',
-  'prosite',
-  'prints',
-  'hamap',
-  'pirsf',
-  'sfld',
-  'interpro',
-];
+
 const xReferenceURL = {
   cazy: 'http://www.cazy.org/fam/{}.html',
   cog: 'https://ftp.ncbi.nih.gov/pub/COG/COG2014/static/byCOG/{}.html',

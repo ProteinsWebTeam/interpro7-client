@@ -132,7 +132,11 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
         <div className={reducedStyleBundle('side-icons', { movedAway })}>
           <HamburgerBtn svg stuck={stuck} aria-label="Show the InterPro Menu" />
           <label className={reducedStyleBundle('side-search', { stuck })}>
-            <TextSearchBox name="search" delay={DEBOUNCE_RATE_SLOW} />
+            <TextSearchBox
+              name="search"
+              delay={DEBOUNCE_RATE_SLOW}
+              shouldRedirect={true}
+            />
             <Link
               to={{
                 description: {

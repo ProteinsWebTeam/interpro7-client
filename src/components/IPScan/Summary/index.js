@@ -10,12 +10,14 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Redirect from 'components/generic/Redirect';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
+
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
-import Actions from 'components/IPScan/Actions';
+import Actions, { getIProScanURL } from 'components/IPScan/Actions';
 
 import { Exporter } from 'components/Table';
 import { NOT_MEMBER_DBS } from 'menuConfig';
@@ -23,8 +25,9 @@ import { iproscan2urlDB } from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(fonts);
+const f = foundationPartial(ebiGlobalStyles, fonts);
 import Link from 'components/generic/Link';
 
 /*:: type Props = {
@@ -83,6 +86,7 @@ const StatusTooltip = React.memo(({ status } /*: string */) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
       status === 'created' ||
+      status === 'importing' ||
       status === 'submitted') && (
       <span
         className={f('icon', 'icon-common', 'ico-neutral')}
@@ -112,6 +116,7 @@ StatusTooltip.propTypes = {
   status: T.oneOf([
     'running',
     'created',
+    'importing',
     'submitted',
     'not found',
     'failure',
@@ -204,6 +209,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
     accession: T.string.isRequired,
     localID: T.string.isRequired,
     remoteID: T.string,
+    localTitle: T.string,
     status: T.string.isRequired,
     data: dataPropType,
     localPayload: T.object,
@@ -217,6 +223,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
       status,
       data,
       localPayload,
+      localTitle,
     } = this.props;
     if (remoteID && remoteID !== accession) {
       return (
@@ -247,6 +254,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
         short: payload.xref[0].name,
       },
     };
+    const title = localTitle || payload.xref[0].name;
 
     const goTerms = getGoTerms(payload.matches);
 
@@ -259,10 +267,29 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
               <Title metadata={metadata} mainType="protein" />
               <table className={f('light', 'table-sum', 'margin-bottom-none')}>
                 <tbody>
+                  {title && (
+                    <tr>
+                      <td>Title</td>
+                      <td>{title}</td>
+                    </tr>
+                  )}
                   <tr>
-                    <td>Job ID</td>
                     <td>
-                      <Accession accession={accession} title="Job ID" />
+                      Job ID{' '}
+                      <Tooltip title={'Case sensitive'}>
+                        <span
+                          className={f('small', 'icon', 'icon-common')}
+                          data-icon="&#xf129;"
+                          aria-label={'Case sensitive'}
+                        />
+                      </Tooltip>
+                    </td>
+                    <td style={{ display: 'flex' }}>
+                      <Accession accession={accession} title="Job ID" />{' '}
+                      <CopyToClipboard
+                        textToCopy={getIProScanURL(accession)}
+                        tooltipText="CopyURL"
+                      />
                     </td>
                   </tr>
                   <tr>
@@ -289,7 +316,7 @@ class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
               </table>
             </div>
             <div className={f('medium-3', 'columns', 'margin-bottom-large')}>
-              {status === 'finished' && (
+              {status === 'finished' && data?.url && (
                 <Exporter includeSettings={false} left={false}>
                   <ul>
                     {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
@@ -344,11 +371,12 @@ const jobSelector = createSelector(
 const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
-  (accession, { metadata: { localID, remoteID, status } }) => ({
+  (accession, { metadata: { localID, remoteID, status, localTitle } }) => ({
     accession,
     localID,
     remoteID,
     status,
+    localTitle,
   }),
 );
 

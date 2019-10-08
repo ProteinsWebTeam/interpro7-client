@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { debounce } from 'lodash-es';
 
+import { ENTRY_DBS } from 'utils/url-patterns';
+
 import { goToCustomLocation } from 'actions/creators';
+import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -26,6 +29,7 @@ export const DEBOUNCE_RATE_SLOW = 2000; // 2s
   goToCustomLocation: goToCustomLocation,
   inputRef: function,
   delay?: ?number,
+  shouldRedirect?: ?boolean,
 }; */
 /*:: type State = {|
   localValue: ?string,
@@ -42,6 +46,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
     goToCustomLocation: T.func,
     inputRef: T.func,
     delay: T.number,
+    shouldRedirect: T.bool,
   };
 
   constructor(props) {
@@ -72,18 +77,50 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
     }
   }
   routerPush = replace => {
-    const { pageSize } = this.props;
+    const { pageSize, shouldRedirect } = this.props;
     const query /*: { page: number, page_size?: number } */ = { page: 1 };
     if (pageSize) query.page_size = pageSize;
+    const value = this.state.localValue
+      ? this.state.localValue.trim()
+      : this.state.localValue;
+    const directLinkDescription = {
+      main: { key: 'entry' },
+      entry: {
+        accession: value,
+        db: 'InterPro',
+      },
+    };
+    if (shouldRedirect) {
+      // First check for exact match in InterPro
+      try {
+        descriptionToDescription(directLinkDescription);
+        this.props.goToCustomLocation({
+          description: directLinkDescription,
+        });
+        return;
+        // eslint-disable-next-line no-empty
+      } catch (error) {}
+      // Then for exact match in other member DBs
+      for (const db of ENTRY_DBS) {
+        try {
+          directLinkDescription.entry.db = db;
+          descriptionToDescription(directLinkDescription);
+          this.props.goToCustomLocation({
+            description: directLinkDescription,
+          });
+          return;
+          // eslint-disable-next-line no-empty
+        } catch (error) {}
+      }
+    }
+    // Finally just trigger a search
     this.props.goToCustomLocation(
       {
         description: {
           main: { key: 'search' },
           search: {
             type: 'text',
-            value: this.state.localValue
-              ? this.state.localValue.trim()
-              : this.state.localValue,
+            value,
           },
         },
         search: query,

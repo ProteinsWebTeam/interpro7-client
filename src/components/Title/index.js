@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { Helmet } from 'react-helmet-async';
+
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadWebComponent from 'utils/load-web-component';
@@ -234,7 +235,6 @@ class Title extends PureComponent /*:: <Props> */ {
       ).then(m => m.InterproType),
     ).as('interpro-type');
   }
-
   // eslint-disable-next-line complexity
   render() {
     const { metadata, mainType, data } = this.props;
