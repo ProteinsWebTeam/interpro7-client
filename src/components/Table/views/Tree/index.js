@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
 import Tree from 'components/Tree';
-import Lineage from 'components/Taxonomy/Lineage';
 import NumberComponent from 'components/NumberComponent';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -17,6 +16,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
 import { foundationPartial } from 'styles/foundation';
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 
 import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -149,6 +149,8 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       entryDB: props.customLocation.description.entry.db,
     };
     this._CDPMap = new Map();
+    this._lineageNames = new Map();
+    this._initailLoad = true; // Automatically opens the tree until it finds a branch of children when it loads the first time
   }
 
   static getDerivedStateFromProps(
@@ -199,8 +201,10 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   _handleNewData = (taxID, payload) => {
     if (payload?.metadata?.children) {
       const c = payload.metadata.children.length;
-      if (c === 1) {
+      if (c === 1 && this._initailLoad) {
         this._handleNewFocus(payload.metadata.children[0]);
+      } else {
+        this._initailLoad = false;
       }
     }
     this.setState(({ data }) => ({
@@ -223,12 +227,23 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     });
   };
 
+  _storeLineageNames = (focused, data) => {
+    if (focused === data.id) {
+      this._lineageNames.set(focused, data.name);
+    } else {
+      data?.children?.forEach(child => {
+        this._storeLineageNames(focused, child);
+      });
+    }
+  };
+
   render() {
     const { focused, data } = this.state;
     let ConnectedDataProvider = this._CDPMap.get(focused);
     if (!ConnectedDataProvider) {
       ConnectedDataProvider = loadData(mapStateToUrlFor(focused))(DataProvider);
       this._CDPMap.set(focused, ConnectedDataProvider);
+      this._storeLineageNames(focused, data);
     }
     const currentNode = findNodeWithId(focused, data);
     const {
@@ -277,20 +292,27 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
               </div>
             )}
             {currentNode.lineage && (
-              <>
-                <Tooltip title="Lineage. List of nodes from the root to the current taxon separated by '>'">
-                  <span
-                    className={f('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                    aria-label="Lineage. List of nodes from the root to the current taxon separated by '>'."
-                  />
-                </Tooltip>{' '}
-                <Lineage
-                  lineage={currentNode.lineage}
-                  names={{}}
-                  className={f('lineage')}
-                />
-              </>
+              <DropDownButton label="Lineage" fontSize="12px">
+                <ul>
+                  {Array.from(this._lineageNames.keys()).map(key => (
+                    <li key={key}>
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'taxonomy' },
+                            taxonomy: { db: 'uniprot', accession: key },
+                          },
+                        }}
+                      >
+                        {this._lineageNames
+                          .get(key)
+                          .charAt(0)
+                          .toUpperCase() + this._lineageNames.get(key).slice(1)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </DropDownButton>
             )}
           </div>
           {currentNode.counters && (

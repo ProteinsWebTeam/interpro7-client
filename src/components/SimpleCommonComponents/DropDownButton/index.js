@@ -16,7 +16,8 @@ const DropDownButton = (
     color = undefined,
     children,
     alignLeft = false,
-  } /*: {label: string, icon: string, color: ?string, children: any, alignLeft: boolean} */,
+    fontSize,
+  } /*: {label: string, icon: string, color: ?string, children: any, alignLeft: boolean, fontSize ?: string} */,
 ) => {
   const [isOpen, setOpen] = useState(false);
   return (
@@ -26,7 +27,9 @@ const DropDownButton = (
         style={{ backgroundColor: color }}
         onClick={() => setOpen(!isOpen)}
       >
-        <span className={fPlus('icon', 'icon-common')} data-icon={icon} />{' '}
+        {icon
+          ? "<span className={fPlus('icon', 'icon-common')} data-icon={icon} />{' '}"
+          : null}
         <span className={fPlus('hide-for-small-only')}>{label}</span>{' '}
       </button>
       <div
@@ -36,6 +39,7 @@ const DropDownButton = (
         style={{
           borderColor: color,
           transform: `scaleY(${isOpen ? 1 : 0})`,
+          fontSize: fontSize,
         }}
       >
         {children}
@@ -50,5 +54,6 @@ DropDownButton.propTypes = {
   color: T.string,
   children: T.any,
   alignLeft: T.bool,
+  fontSize: T.string,
 };
 export default DropDownButton;
