@@ -27,9 +27,9 @@ const DropDownButton = (
         style={{ backgroundColor: color }}
         onClick={() => setOpen(!isOpen)}
       >
-        {icon
-          ? "<span className={fPlus('icon', 'icon-common')} data-icon={icon} />{' '}"
-          : null}
+        {icon ? (
+          <span className={fPlus('icon', 'icon-common')} data-icon={icon} />
+        ) : null}
         <span className={fPlus('hide-for-small-only')}>{label}</span>{' '}
       </button>
       <div
