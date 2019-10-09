@@ -296,6 +296,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
           residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
           chain: d.chain,
           protein: d.protein,
+          confidence: d.confidence,
         }));
         const children = d.children
           ? d.children.map(child => ({
@@ -464,6 +465,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
+  // eslint-disable-next-line complexity
   getHTMLString(
     {
       accession,
@@ -478,6 +480,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       residue,
       score,
       scale,
+      confidence,
     },
     isInterPro = false,
     isResidue = false,
@@ -560,7 +563,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
           ${start && end ? `${start} - ${end}` : ''}
         </p>
         ${score ? `<p>Conservation : ${score}</p>` : ''}
-        <div>Scale: ${scaleComponent}</div>
+        ${confidence ? `<p>Confidence: ${confidence}</p>` : ''}
+        ${scaleComponent ? `<p>Scale: ${scaleComponent}</p>` : ''}
         </section>
 `.trim();
   }

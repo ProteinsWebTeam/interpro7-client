@@ -179,7 +179,7 @@ const KeySpeciesTableData = connect(mapStateToPropsDefault)(
 class KeySpeciesTable extends PureComponent /*:: <Props, State> */ {
   constructor(props /*: Props */) {
     super(props);
-    this.state = { open: false };
+    this.state = { open: true };
   }
   render() {
     const { open } = this.state;
