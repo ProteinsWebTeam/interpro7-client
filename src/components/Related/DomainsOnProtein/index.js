@@ -582,6 +582,9 @@ const getGenome3dURL = createSelector(
       hostname,
       port,
       pathname: `${root}uniprot/${accession}`,
+      query: {
+        protvista: true,
+      },
     });
   },
 );
