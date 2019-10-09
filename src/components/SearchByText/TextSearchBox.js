@@ -21,6 +21,21 @@ const f = foundationPartial(interproTheme, fonts, local);
 export const DEBOUNCE_RATE = 1000; // 1s
 export const DEBOUNCE_RATE_SLOW = 2000; // 2s
 
+const otherEndpoints = {
+  protein: 'uniprot',
+  structure: 'pdb',
+  proteome: 'uniprot',
+  taxonomy: 'uniprot',
+  set: 'all',
+};
+const isDescriptionValid = description => {
+  try {
+    descriptionToDescription(description);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 /*:: type Props = {
   pageSize?: number,
   main: ?string,
@@ -92,25 +107,37 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
     };
     if (shouldRedirect) {
       // First check for exact match in InterPro
-      try {
-        descriptionToDescription(directLinkDescription);
+      if (isDescriptionValid(directLinkDescription)) {
         this.props.goToCustomLocation({
           description: directLinkDescription,
         });
         return;
-        // eslint-disable-next-line no-empty
-      } catch (error) {}
+      }
       // Then for exact match in other member DBs
       for (const db of ENTRY_DBS) {
-        try {
-          directLinkDescription.entry.db = db;
-          descriptionToDescription(directLinkDescription);
+        directLinkDescription.entry.db = db;
+        if (isDescriptionValid(directLinkDescription)) {
           this.props.goToCustomLocation({
             description: directLinkDescription,
           });
           return;
-          // eslint-disable-next-line no-empty
-        } catch (error) {}
+        }
+      }
+      //then cehcking other endpoints
+      for (const [ep, db] of Object.entries(otherEndpoints)) {
+        const directEndpointLinkDescription = {
+          main: { key: ep },
+          [ep]: {
+            accession: value,
+            db,
+          },
+        };
+        if (isDescriptionValid(directEndpointLinkDescription)) {
+          this.props.goToCustomLocation({
+            description: directEndpointLinkDescription,
+          });
+          return;
+        }
       }
     }
     // Finally just trigger a search

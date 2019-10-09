@@ -32,7 +32,13 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { downloading, success, progress, failed } = this.props;
+    const {
+      downloading,
+      success,
+      progress,
+      failed,
+      showIcon = true,
+    } = this.props;
     return (
       <span className={s('container', { failed })}>
         <svg
@@ -63,25 +69,27 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
               fill="none"
             />
           </g>
-          <g className={s('icon-flip', { flipped: success })}>
-            <image
-              x="30"
-              y="10"
-              width="60"
-              height="100"
-              className={s('back')}
-              xlinkHref={download}
-            />
+          {showIcon && (
+            <g className={s('icon-flip', { flipped: success })}>
+              <image
+                x="30"
+                y="10"
+                width="60"
+                height="100"
+                className={s('back')}
+                xlinkHref={download}
+              />
 
-            <image
-              x="30"
-              y="10"
-              width="60"
-              height="100"
-              className={s('front')}
-              xlinkHref={save}
-            />
-          </g>
+              <image
+                x="30"
+                y="10"
+                width="60"
+                height="100"
+                className={s('front')}
+                xlinkHref={save}
+              />
+            </g>
+          )}
         </svg>
       </span>
     );

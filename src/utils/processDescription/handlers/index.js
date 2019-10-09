@@ -404,7 +404,7 @@ export const structureAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['structure', 'accession'],
   },
   regexp: {
-    value: /^[A-Z0-9]{4}$/i,
+    value: /^[1-9][A-Za-z0-9]{3}$/i,
   },
 });
 
@@ -454,7 +454,7 @@ export const taxonomyAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value,
   },
   regexp: {
-    value: /[1-9]\d*/,
+    value: /^[1-9]\d*$/,
   },
 });
 
