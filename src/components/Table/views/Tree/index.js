@@ -150,7 +150,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     };
     this._CDPMap = new Map();
     this._lineageNames = new Map();
-    this._initailLoad = true; // Automatically opens the tree until it finds a branch of children when it loads the first time
+    this._initialLoad = true; // Automatically opens the tree until it finds a branch of children when it loads the first time
   }
 
   static getDerivedStateFromProps(
@@ -201,10 +201,10 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   _handleNewData = (taxID, payload) => {
     if (payload?.metadata?.children) {
       const c = payload.metadata.children.length;
-      if (c === 1 && this._initailLoad) {
+      if (c === 1 && this._initialLoad) {
         this._handleNewFocus(payload.metadata.children[0]);
       } else {
-        this._initailLoad = false;
+        this._initialLoad = false;
       }
     }
     this.setState(({ data }) => ({
