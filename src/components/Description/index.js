@@ -21,6 +21,7 @@ const TAG_REGEX = /(\[\w+:[\w\.]+])/;
 const TAG_REGEX_KV = /\[(\w+):([\w\.]+)]/;
 const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](,\\s?)?';
 const CITATIONS_REGEX = `(\\[(${CITATION_REGEX})+\\])`;
+const REMOVE_TRAILING_COMMA_REGEX = /,\s*(?=\])/;
 
 const Citations = (
   {
@@ -33,7 +34,11 @@ const Citations = (
   <sup>
     [
     {text.split(',').map((cita, i) => {
-      const pubId = cita.match(CITATION_REGEX)[1];
+      const citMatch = cita.match(CITATION_REGEX);
+      if (!citMatch || citMatch.length < 2) {
+        return null;
+      }
+      const pubId = citMatch[1];
       const refCounter = literature.map(d => d[0]).indexOf(pubId) + 1;
       return (
         <Link
@@ -98,16 +103,18 @@ export const Paragraph = (
   return (
     <div>
       {parts.map((part, i) => {
-        if (part.match(CITATIONS_REGEX))
+        if (part.match(CITATIONS_REGEX)) {
+          const text = part.replace(REMOVE_TRAILING_COMMA_REGEX, '');
           return (
             <Citations
-              text={part}
+              text={text}
               key={i}
               literature={literature}
               accession={accession}
               withoutIDs={withoutIDs}
             />
           );
+        }
         const tagMatch = part.match(TAG_REGEX_KV);
         if (tagMatch) {
           const [_, tagType, tagValue] = tagMatch;
