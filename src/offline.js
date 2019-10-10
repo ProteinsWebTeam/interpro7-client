@@ -39,8 +39,8 @@ export default async ({ dispatch } /*: Store<*, *, *> */) => {
         addToast(
           {
             title: 'New version ready',
-            body:
-              'A new version of this website is ready, reload this page now to use it',
+            body: `A new version of this website is ready, reload this page to activate it.
+              ⚠️ The website might not function correctly until updated.`,
             action: {
               text: 'Load new version',
               fn() {

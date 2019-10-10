@@ -53,6 +53,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
       name = payload.metadata.name.name;
     } else {
       accession = payload.xref[0].identifier || '';
+      name = payload.xref[0].name || '';
       sequence = payload.sequence;
     }
     return <Sequence accession={accession} sequence={sequence} name={name} />;

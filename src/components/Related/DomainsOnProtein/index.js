@@ -30,65 +30,104 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
-/* eslint-disable complexity  */
+const colourMap = [
+  {
+    color: '#dff9e1',
+    min: 0,
+    max: 1,
+  },
+  {
+    color: '#bce7dd',
+    min: 1,
+    max: 2,
+  },
+  {
+    color: '#a2d2d7',
+    min: 2,
+    max: 3,
+  },
+  {
+    color: '#8cbdd0',
+    min: 3,
+    max: 4,
+  },
+  {
+    color: '#78a8c8',
+    min: 4,
+    max: 5,
+  },
+  {
+    color: '#6593c0',
+    min: 5,
+    max: 6,
+  },
+  {
+    color: '#537eb8',
+    min: 6,
+    max: 7,
+  },
+  {
+    color: '#4069af',
+    min: 7,
+    max: 8,
+  },
+  {
+    color: '#2955a6',
+    min: 8,
+    max: 9,
+  },
+  {
+    color: '#00429d',
+    min: 9,
+    max: 10,
+  },
+];
+
 const processConservationData = (entry, match) => {
   const fragments = [];
   // applying run-length-encoding style compression
 
   let currentFragment;
   for (const residue of match) {
-    let color;
-    /* eslint-disable no-magic-numbers  */
-    if (residue.score > 0.0 && residue.score <= 0.5) {
-      color = '#ffffe0';
-    } else if (residue.score > 0.5 && residue.score <= 1) {
-      color = '#d3f4e0';
-    } else if (residue.score > 1 && residue.score <= 1.5) {
-      color = '#b9e5dd';
-    } else if (residue.score > 1.5 && residue.score <= 2) {
-      color = '#a5d5d8';
-    } else if (residue.score > 2 && residue.score <= 2.5) {
-      color = '#93c4d2';
-    } else if (residue.score > 2.5 && residue.score <= 3) {
-      color = '#82b3cd';
-    } else if (residue.score > 3 && residue.score <= 3.5) {
-      color = '#73a2c6';
-    } else if (residue.score > 3.5 && residue.score <= 4) {
-      color = '#6492c0';
-    } else if (residue.score > 4 && residue.score <= 4.5) {
-      color = '#5681b9';
-    } else if (residue.score > 4.5 && residue.score <= 5) {
-      color = '#4771b2';
-    } else if (residue.score > 5 && residue.score <= 5.5) {
-      color = '#3761ab';
-    } else if (residue.score > 5.5 && residue.score <= 6) {
-      color = '#2451a4';
+    let hit;
+    // handle out-of-range values
+    if (residue.score < colourMap[0].min) {
+      // score < 0 = 0. Insertion
+      hit = colourMap[0];
+    } else if (residue.score > colourMap[colourMap.length - 1].max) {
+      // score > 10 = 10. Shouldn't happen as it's a probability * 10
+      hit = colourMap[colourMap.length - 1];
     } else {
-      color = '#00429d';
+      hit = colourMap.find(element => {
+        return residue.score > element.min && residue.score <= element.max;
+      });
     }
-    /* eslint-enable no-magic-numbers  */
 
-    if (!currentFragment) {
-      currentFragment = {
-        start: residue.position,
-        end: residue.position,
-        color: color,
-      };
-    }
-    currentFragment.end = residue.position - 1;
-    if (color !== currentFragment.color) {
-      fragments.push(currentFragment);
-      currentFragment = {
-        start: residue.position,
-        end: residue.position,
-        color: color,
-      };
+    if (hit) {
+      const color = hit.color;
+      if (!currentFragment) {
+        currentFragment = {
+          start: residue.position,
+          end: residue.position,
+          color: color,
+        };
+      }
+      currentFragment.end = residue.position - 1;
+      if (color !== currentFragment.color) {
+        fragments.push(currentFragment);
+        currentFragment = {
+          start: residue.position,
+          end: residue.position,
+          color: color,
+        };
+      }
+    } else {
+      console.log(`Failed to find score ${residue.score}`);
     }
   }
   if (currentFragment) fragments.push(currentFragment);
   return fragments;
 };
-/* eslint-enable complexity  */
 
 const addExistingEntiesToConservationResults = (
   data,
@@ -126,6 +165,7 @@ const mergeConservationData = (data, conservationData) => {
         type: 'sequence_conservation',
         accession: db,
         locations: [],
+        range: colourMap,
       };
       const entries = conservationData[db].entries;
       /* eslint-disable max-depth */
@@ -542,6 +582,9 @@ const getGenome3dURL = createSelector(
       hostname,
       port,
       pathname: `${root}uniprot/${accession}`,
+      query: {
+        protvista: true,
+      },
     });
   },
 );

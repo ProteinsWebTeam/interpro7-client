@@ -8,6 +8,7 @@ import Table, { Column } from 'components/Table';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import RefreshButton from 'components/IPScan/RefreshButton';
+import ImportResultSearch from 'components/IPScan/ImportResultSearch';
 import Actions from 'components/IPScan/Actions';
 
 import loadable from 'higherOrder/loadable';
@@ -20,8 +21,9 @@ import { foundationPartial } from 'styles/foundation';
 import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
 
-const f = foundationPartial(interproTheme, fonts, ipro);
+const f = foundationPartial(interproTheme, fonts, ipro, local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -85,12 +87,13 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           }}
           processData={schemaProcessDataPageSection}
         />
-
-        <div className={f('button-group')}>
-          <GoToNewSearch />
-          <RefreshButton />
+        <div className={f('button-bar')}>
+          <div className={f('button-group')}>
+            <GoToNewSearch />
+            <RefreshButton />
+          </div>
+          <ImportResultSearch />
         </div>
-
         <Table
           dataTable={paginatedJobs}
           rowKey="localID"
@@ -121,12 +124,19 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           </Column>
           <Column dataKey="localTitle">Title</Column>
           <Column
-            dataKey="times.created"
-            renderer={(created /*: string */) => {
-              const parsed = new Date(created);
+            dataKey="times"
+            renderer={(
+              {
+                created,
+                importing,
+              } /*: {created: string, importing: string} */,
+            ) => {
+              const parsed = new Date(created || importing);
               return (
                 <Tooltip
-                  title={`Created on ${parsed.toLocaleDateString()} at ${parsed.toLocaleTimeString()}`}
+                  title={`${
+                    created ? 'Created' : 'Imported'
+                  } on ${parsed.toLocaleDateString()} at ${parsed.toLocaleTimeString()}`}
                 >
                   <TimeAgo date={parsed} noTitle />
                 </Tooltip>
@@ -181,7 +191,9 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
             defaultKey="actions"
             headerClassName={f('table-center')}
             cellClassName={f('table-center', 'font-ml')}
-            renderer={(localID /*: string */) => <Actions localID={localID} />}
+            renderer={(localID /*: string */, { remoteID }) => (
+              <Actions localID={localID} remoteID={remoteID} />
+            )}
           >
             Action
           </Column>

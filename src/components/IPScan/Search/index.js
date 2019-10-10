@@ -104,12 +104,10 @@ const getLocalTitle = form =>
 
 const isXChecked = x => form => !!form.querySelector(checkedSelectorFor(x));
 
-const isGoTermsChecked = isXChecked('goterms');
-const isPathwaysChecked = isXChecked('pathways');
 const isStayChecked = isXChecked('stay');
 
 const commentRE = /^\s*[>;].*$/m;
-const IUPACProtRE = /^[a-z* -]*$/im;
+const IUPACProtRE = /^[a-z -]*$/im;
 
 export const checkValidity = lines => {
   const trimmedLines = lines.map(l => l.trim()).filter(Boolean);
@@ -151,7 +149,7 @@ const compositeDecorator = new CompositeDecorator([
     component: classedSpan(f('invalid-comment')),
   },
   {
-    strategy: strategy(/[^a-z* -]+/gi),
+    strategy: strategy(/[^a-z -]+/gi),
     component: classedSpan(f('invalid-letter')),
   },
 ]);
@@ -170,7 +168,7 @@ export const cleanUp = blocks => {
         return null;
       }
       if (/^[;>]/.test(line)) return line;
-      return line.replace(/[^a-z* -]/gi, '').trim();
+      return line.replace(/[^a-z -]/gi, '').trim();
     })
     .filter(Boolean)
     .join('\n');
@@ -281,8 +279,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       data: {
         input: lines.join('\n'),
         applications: getCheckedApplications(this._formRef.current),
-        goterms: isGoTermsChecked(this._formRef.current),
-        pathways: isPathwaysChecked(this._formRef.current),
+        goterms: true,
+        pathways: true,
       },
     });
     if (isStayChecked(this._formRef.current)) {
@@ -457,7 +455,15 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                       0 &&
                       (tooShort || headerIssues) && (
                         <div className={f('text-right')}>
-                          {tooShort && (
+                          {!valid && (
+                            <div>
+                              The sequence has invalid characters.{' '}
+                              <span role="img" aria-label="warning">
+                                ⚠️
+                              </span>
+                            </div>
+                          )}
+                          {valid && tooShort && (
                             <div>
                               The sequence is too short.{' '}
                               <span role="img" aria-label="warning">

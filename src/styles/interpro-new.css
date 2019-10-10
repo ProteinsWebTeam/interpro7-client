@@ -643,7 +643,6 @@ hr {
   background-color: var(--colors-other-main);
   padding: 0.3rem 0.5rem;
   color: var(--colors-light-title);
-  text-transform: uppercase;
 }
 
 /*CALLOUT info & alert messages*/
