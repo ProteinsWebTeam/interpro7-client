@@ -21,6 +21,7 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
   success: boolean,
   failed: boolean,
   progress: number,
+  showIcon?: ?boolean,
 }; */
 
 class ProgressButton extends PureComponent /*:: <Props> */ {
@@ -29,6 +30,7 @@ class ProgressButton extends PureComponent /*:: <Props> */ {
     success: T.bool,
     failed: T.bool.isRequired,
     progress: T.number.isRequired,
+    showIcon: T.bool,
   };
 
   render() {

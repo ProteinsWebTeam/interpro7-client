@@ -11,7 +11,7 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 const f = foundationPartial(ebiGlobalStyles);
 
-function useInterval(callback, delay) {
+const useInterval = (callback, delay) => {
   const savedCallback = useRef();
 
   // Remember the latest callback.
@@ -21,27 +21,27 @@ function useInterval(callback, delay) {
 
   // Set up the interval.
   useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
+    const tick = () => savedCallback.current();
     if (delay !== null) {
-      let id = setInterval(tick, delay);
+      const id = setInterval(tick, delay);
       return () => clearInterval(id);
     }
   }, [delay]);
-}
+};
 
 const SECONDS = 3;
-const HTTP_EMPTY = 204;
-const EdgeCase = ({ code, text, accession, goToCustomLocation }) => {
-  let [count, setCount] = useState(0);
+const ONE_SECOND = 1000;
+const HERTZ = 10;
+
+const EdgeCase = ({ text, accession, goToCustomLocation }) => {
+  const [count, setCount] = useState(0);
 
   useInterval(() => {
     // Your custom logic here
     setCount(count + 1);
-  }, 100);
+  }, ONE_SECOND / HERTZ);
 
-  const limit = 10 * SECONDS;
+  const limit = HERTZ * SECONDS;
 
   useEffect(() => {
     if (count >= limit) {
@@ -53,13 +53,12 @@ const EdgeCase = ({ code, text, accession, goToCustomLocation }) => {
       });
     }
   });
-
   return (
     <div className={f('callout', 'info', 'withicon')}>
       <b>{text}</b>
       <br />
       <span>
-        Redirecting to Search in {Math.ceil((limit - count) / 10)} seconds.
+        Redirecting to Search in {Math.ceil((limit - count) / HERTZ)} seconds.
       </span>
       <ProgressButton
         downloading={true}
@@ -70,6 +69,11 @@ const EdgeCase = ({ code, text, accession, goToCustomLocation }) => {
       />
     </div>
   );
+};
+EdgeCase.propTypes = {
+  text: T.string.isRequired,
+  accession: T.string,
+  goToCustomLocation: T.func.isRequired,
 };
 const mapStateToProps = createSelector(
   state => state.customLocation.description,

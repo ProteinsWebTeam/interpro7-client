@@ -112,7 +112,7 @@ class Summary extends PureComponent {
       },
     } = customLocation;
     const edgeCaseText = edgeCases.get(status);
-    if (edgeCaseText) return <EdgeCase code={status} text={edgeCaseText} />;
+    if (edgeCaseText) return <EdgeCase text={edgeCaseText} />;
     if (loading || (!locationhasDetailOrFilter(customLocation) && !payload)) {
       return <Loading />;
     }

@@ -123,7 +123,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
           return;
         }
       }
-      //then cehcking other endpoints
+      // Then cehcking other endpoints
       for (const [ep, db] of Object.entries(otherEndpoints)) {
         const directEndpointLinkDescription = {
           main: { key: ep },
