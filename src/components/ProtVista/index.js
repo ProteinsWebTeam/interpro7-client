@@ -798,8 +798,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
                   }}
                 >
                   {this.state.label === 'name'
-                    ? `${d.name.charAt(0).toUpperCase() +
-                        d.name.slice(1)}-${this._getSourceDatabaseDisplayName(
+                    ? `${d.name?.charAt(0).toUpperCase() +
+                        d.name?.slice(1)}-${this._getSourceDatabaseDisplayName(
                         d,
                         databases,
                       )}` || d.accession

@@ -53,5 +53,5 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  border: 2px solid var(--colors-secondary-header);
+  /*border: 2px solid var(--colors-secondary-header);*/
 }
