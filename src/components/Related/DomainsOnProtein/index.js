@@ -307,15 +307,17 @@ const getExtraURL = query =>
 /*:: type Props = {
   mainData: Object,
   dataMerged: Object
+  handleToggle: function,
 }; */
 export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props> */ {
   static propTypes = {
     mainData: T.object.isRequired,
     dataMerged: T.object.isRequired,
+    handleToggle: T.func,
   };
 
   render() {
-    const { mainData, dataMerged } = this.props;
+    const { mainData, dataMerged, handleToggle } = this.props;
     const sortedData = Object.entries(dataMerged)
       .sort(sortFunction)
       // “Binding_site” -> “Binding site”
@@ -330,6 +332,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
         data={sortedData}
         title="Entry matches to this protein"
         id={mainData.metadata.accession || mainData.payload.metadata.accession}
+        handleToggle={handleToggle}
       />
     );
   }
@@ -380,6 +383,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       generateConservationData: false,
       showConservationButton: false,
       dataConservation: null,
+      addLabelClass: '',
     };
   }
 
@@ -424,6 +428,13 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     }
 
     return false;
+  };
+
+  // To adjust the Conservation track in ProtVista width when label by name/accession is switched
+  _handleToggleLabel = isAccession => {
+    isAccession
+      ? this.setState({ addLabelClass: 'label-by-name' })
+      : this.setState({ addLabelClass: '' });
   };
 
   /* eslint-disable complexity  */
@@ -491,12 +502,13 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
         <DomainOnProteinWithoutMergedData
           mainData={mainData}
           dataMerged={mergedData}
+          handleToggle={this._handleToggleLabel}
         />
         {showConservationButton ? (
           <div className={f('protvista', 'tracks-container')}>
             <div className={f('track-container', 'conservation-placeholder')}>
               <div className={f('track-row')}>
-                <div className={f('track-component')}>
+                <div className={f('track-component', this.state.addLabelClass)}>
                   <header>
                     <button onClick={this.fetchConservationData}>
                       ▸ Match Conservation
@@ -510,6 +522,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
                     className={f(
                       'track-component',
                       'conservation-placeholder-component',
+                      this.state.addLabelClass,
                     )}
                   >
                     {this.state.generateConservationData ? (
@@ -528,7 +541,9 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
                   {this.state.generateConservationData ? (
                     ''
                   ) : (
-                    <div className={f('track-accession')}>
+                    <div
+                      className={f('track-accession', this.state.addLabelClass)}
+                    >
                       <button
                         type="button"
                         className={f('hollow', 'button', 'user-select-none')}

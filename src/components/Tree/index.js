@@ -151,14 +151,16 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
         </div>
 
         <div
-          style={{
-            width: '100%',
-            height: '50vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-            justifyContent: 'center',
-          }}
+          // style={{
+          //   width: '100%',
+          //   height: '50vh',
+          //   display: 'flex',
+          //   flexDirection: 'column',
+          //   alignItems: 'stretch',
+          //   justifyContent: 'center',
+          //   border: '2px solid black',
+          // }}
+          className={styles.tree}
           data-testid="data-tree"
         >
           <svg
