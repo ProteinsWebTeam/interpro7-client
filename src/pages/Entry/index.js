@@ -735,6 +735,7 @@ class List extends PureComponent /*:: <Props> */ {
             ) : (
               <Column
                 dataKey="integrated"
+                headerClassName={f('table-center')}
                 renderer={(accession /*: string */) =>
                   accession ? (
                     <Link
@@ -753,7 +754,7 @@ class List extends PureComponent /*:: <Props> */ {
                   )
                 }
               >
-                Integrated
+                Integrated Into
               </Column>
             )}
 

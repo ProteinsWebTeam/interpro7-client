@@ -509,7 +509,7 @@ const Matches = (
           </Lazy>
         )}
       >
-        {primary === 'protein' ? 'Domain Architecture' : 'Matches'}
+        Matches
       </Column>
       <Column
         dataKey="counters.extra_fields.counters.proteins"
