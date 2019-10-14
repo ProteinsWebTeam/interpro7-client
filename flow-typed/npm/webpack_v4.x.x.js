@@ -1,14 +1,17 @@
-// flow-typed signature: e83d8c935213b2ded091b3c22acb780b
-// flow-typed version: c6154227d1/webpack_v4.x.x/flow_>=v0.104.x
+// flow-typed signature: fab19979b6b943bd172a4ace0f3a0550
+// flow-typed version: b942841feb/webpack_v4.x.x/flow_>=v0.104.x
 
 import * as http from 'http';
 import fs from 'fs';
 
 declare module 'webpack' {
-  declare class WebpackError extends Error {
+  declare class $WebpackError extends Error {
     constructor(message: string): WebpackError;
     inspect(): string;
+    details: string;
   }
+
+  declare type WebpackError = $WebpackError;
 
   declare interface Stats {
     hasErrors(): boolean;
@@ -608,6 +611,66 @@ declare module 'webpack' {
     >;
   }
 
+  declare class DefinePlugin {
+    constructor({ [string]: string, ... }): $ElementType<
+      $NonMaybeType<$PropertyType<ResolveOptions, 'plugins'>>,
+      number
+    >;
+  }
+
+  declare class IgnorePlugin {
+    constructor(RegExp | {|
+      resourceRegExp: RegExp,
+      contextRegExp?: RegExp,
+    |}, void | RegExp): $ElementType<
+      $NonMaybeType<$PropertyType<ResolveOptions, 'plugins'>>,
+      number
+    >;
+  }
+
+  declare class SourceMapDevToolPlugin {
+    constructor({|
+      test?: ?(string | RegExp | Array<string | RegExp>),
+      include?: ?(string | RegExp | Array<string | RegExp>),
+      exclude?: ?(string | RegExp | Array<string | RegExp>),
+      filename?: ?string,
+      append?: ?(string | false),
+      moduleFilenameTemplate?: ?string,
+      fallbackModuleFilenameTemplate?: ?string,
+      namespace?: ?string,
+      module?: ?boolean,
+      columns?: ?boolean,
+      lineToLine?: ?(boolean | {|
+        test?: ?(string | RegExp | Array<string | RegExp>),
+        include?: ?(string | RegExp | Array<string | RegExp>),
+        exclude?: ?(string | RegExp | Array<string | RegExp>),
+      |}),
+      noSources?: ?boolean,
+      publicPath?: ?string,
+      fileContext?: ?string,
+    |}): $ElementType<
+      $NonMaybeType<$PropertyType<ResolveOptions, 'plugins'>>,
+      number
+    >;
+  }
+
+  declare class HotModuleReplacementPlugin {
+    constructor(): $ElementType<
+      $NonMaybeType<$PropertyType<ResolveOptions, 'plugins'>>,
+      number
+    >;
+  }
+
+  declare class ContextReplacementPlugin {
+    constructor(
+      resourceRegExp: RegExp,
+      newContentRegExp?: RegExp
+    ): $ElementType<
+      $NonMaybeType<$PropertyType<ResolveOptions, 'plugins'>>,
+      number
+    >;
+  }
+
   declare function builder(
     options: WebpackOptions,
     callback?: Callback
@@ -617,5 +680,13 @@ declare module 'webpack' {
     callback?: Callback
   ): WebpackMultiCompiler;
 
-  declare module.exports: typeof builder & { EnvironmentPlugin: typeof EnvironmentPlugin, ... };
+  declare module.exports: typeof builder & {
+    EnvironmentPlugin: typeof EnvironmentPlugin,
+    DefinePlugin: typeof DefinePlugin,
+    IgnorePlugin: typeof IgnorePlugin,
+    SourceMapDevToolPlugin: typeof SourceMapDevToolPlugin,
+    HotModuleReplacementPlugin: typeof HotModuleReplacementPlugin,
+    ContextReplacementPlugin: typeof ContextReplacementPlugin,
+    ...
+  };
 }

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import T from 'prop-types';
-import Tippy, { tippy } from '@tippy.js/react';
+import Tippy from '@tippy.js/react';
 import { hideAll } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 
