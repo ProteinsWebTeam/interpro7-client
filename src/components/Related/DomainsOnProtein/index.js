@@ -274,7 +274,7 @@ const sortFunction = ([a], [b]) => {
     'binding_site',
     'ptm',
   ];
-  const lasts = ['residues', 'features', 'predictions'];
+  const lasts = ['residues', 'features', 'predictions', 'match_conservation'];
   for (const label of firsts) {
     if (a.toLowerCase() === label) return -1;
     if (b.toLowerCase() === label) return 1;
