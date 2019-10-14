@@ -373,10 +373,6 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     dataGenome3d: T.object.isRequired,
   };
 
-  /* eslint-disable no-magic-numbers */
-  static MAX_PROTEIN_LENGTH_FOR_HMMER = 5000;
-  /* eslint-enable no-magic-numbers */
-
   constructor(props /*: Props */) {
     super(props);
     this.state = {
@@ -386,6 +382,8 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       addLabelClass: '',
     };
   }
+  // eslint-disable-next-line no-magic-numbers
+  static MAX_PROTEIN_LENGTH_FOR_HMMER = 5000;
 
   fetchConservationData = () => {
     this.setState({ generateConservationData: true });
