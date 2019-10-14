@@ -273,6 +273,7 @@ const sortFunction = ([a], [b]) => {
     'active_site',
     'binding_site',
     'ptm',
+    'unintegrated',
   ];
   const lasts = ['residues', 'features', 'predictions', 'match_conservation'];
   for (const label of firsts) {
