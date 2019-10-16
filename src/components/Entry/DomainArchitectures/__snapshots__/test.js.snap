@@ -10,6 +10,15 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
     <h4>
       511
        domain architectures found.
+      <Tooltip
+        title="Toogle between domain architectures based on Pfam and InterPro entries"
+      >
+        <button
+          className="icon icon-common"
+          data-icon=""
+          onClick={[Function]}
+        />
+      </Tooltip>
     </h4>
     <div
       className="margin-bottom-large"
@@ -59,11 +68,11 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
       <TextIDA
         accessions={
           Array [
-            "IPR000294",
-            "IPR000001",
-            "IPR000001",
-            "IPR018992",
-            "IPR001254",
+            "PF00594",
+            "PF00051",
+            "PF00051",
+            "PF09396",
+            "PF00089",
           ]
         }
       />
@@ -88,7 +97,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
         matches={
           Array [
             Object {
-              "accession": "IPR000294",
+              "accession": "PF00594",
               "locations": Array [
                 Object {
                   "fragments": Array [
@@ -102,7 +111,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
               "unintegrated": false,
             },
             Object {
-              "accession": "IPR000001",
+              "accession": "PF00051",
               "locations": Array [
                 Object {
                   "fragments": Array [
@@ -124,7 +133,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
               "unintegrated": false,
             },
             Object {
-              "accession": "IPR018992",
+              "accession": "PF09396",
               "locations": Array [
                 Object {
                   "fragments": Array [
@@ -138,7 +147,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
               "unintegrated": false,
             },
             Object {
-              "accession": "IPR001254",
+              "accession": "PF00089",
               "locations": Array [
                 Object {
                   "fragments": Array [

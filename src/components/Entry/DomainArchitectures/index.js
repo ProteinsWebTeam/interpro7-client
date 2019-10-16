@@ -10,6 +10,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Footer from 'components/Table/Footer';
 import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
 import DynamicTooltip from 'components/SimpleCommonComponents/DynamicTooltip';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -18,13 +19,14 @@ import { toPlural } from 'utils/pages';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from './style.css';
 import protvista from 'components/ProtVista/style.css';
 import { getUrlForMeta } from '../../../higherOrder/loadData/defaults';
 
-const f = foundationPartial(ebiGlobalStyles, pageStyle, protvista);
+const f = foundationPartial(ebiGlobalStyles, pageStyle, protvista, fonts);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -46,14 +48,15 @@ const schemaProcessData = data => ({
   name: data.ida,
 });
 
-export const ida2json = ida => {
+export const ida2json = (ida, domain) => {
   const idaParts = ida.split('-');
   const n = idaParts.length;
   const feature = (FAKE_PROTEIN_LENGTH - GAP_BETWEEN_DOMAINS * (n + 1)) / n;
   const domains = idaParts.map((p, i) => {
     const [pf, ipr] = p.split(':');
     return {
-      accession: ipr || pf,
+      // accession: ipr || pf,
+      accession: domain === 'pfam' ? pf : ipr || pf,
       unintegrated: !ipr,
       locations: [
         {
@@ -135,12 +138,16 @@ export class IDAProtVista extends ProtVistaMatches {
         {
           name: domain.accession,
           source_database: sourceDatabase,
-          color: isIPR
-            ? getTrackColor(
-                { accession: domain.accession },
-                EntryColorMode.ACCESSION,
-              )
-            : '#888888',
+          // color: !isIPR
+          //   ? getTrackColor(
+          //       { accession: domain.accession },
+          //       EntryColorMode.ACCESSION,
+          //     )
+          //   : '#888888',
+          color: getTrackColor(
+            { accession: domain.accession },
+            EntryColorMode.ACCESSION,
+          ),
           type: 'entry',
           ...domain,
         },
@@ -222,6 +229,18 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     highlight: T.arrayOf(T.string),
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      domain: 'pfam',
+    };
+  }
+  toggleDomain = () => {
+    if (this.state.domain === 'pfam') this.setState({ domain: 'interpro' });
+    else this.setState({ domain: 'pfam' });
+  };
+
   render() {
     const {
       data: { loading, payload },
@@ -231,6 +250,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       highlight = [],
     } = this.props;
     if (loading || dataDB.loading) return <Loading />;
+
     if (!payload.results) return null;
     const toHighlight =
       highlight.length === 0 && mainAccession ? [mainAccession] : highlight;
@@ -242,10 +262,27 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
               There are no Domain architectures for the current selection.
             </div>
           ) : (
-            <h4>{payload.count} domain architectures found.</h4>
+            <h4>
+              {payload.count} domain architectures found.
+              <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
+                {this.state.domain === 'pfam' ? (
+                  <button
+                    className={f('icon', 'icon-common')}
+                    data-icon="&#xf204;"
+                    onClick={this.toggleDomain}
+                  />
+                ) : (
+                  <button
+                    className={f('icon', 'icon-common')}
+                    data-icon="&#xf205;"
+                    onClick={this.toggleDomain}
+                  />
+                )}
+              </Tooltip>
+            </h4>
           )}
           {(payload.results || []).map(obj => {
-            const idaObj = ida2json(obj.ida);
+            const idaObj = ida2json(obj.ida, this.state.domain);
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
