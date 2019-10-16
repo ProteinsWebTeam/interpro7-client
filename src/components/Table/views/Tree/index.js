@@ -32,7 +32,17 @@ const mapStateToUrlFor = createSelector(
       state => state.settings.api,
       state => state.customLocation.description,
       ({ protocol, hostname, port, root }, description) => {
-        if (description.main.key === 'entry' && description.entry.accession) {
+        if (
+          (description.main.key === 'entry' && description.entry.accession) ||
+          (description.main.key === 'taxonomy' && description.entry.db)
+        ) {
+          const query = description.entry.accession
+            ? {
+                filter_by_entry: description.entry.accession,
+              }
+            : {
+                filter_by_entry_db: description.entry.db,
+              };
           return format({
             protocol,
             hostname,
@@ -46,9 +56,7 @@ const mapStateToUrlFor = createSelector(
                   accession: taxID,
                 },
               }),
-            query: {
-              filter_by_entry: description.entry.accession,
-            },
+            query,
           });
         }
         return format({
