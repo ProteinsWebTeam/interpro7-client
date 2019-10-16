@@ -31,8 +31,27 @@ const mapStateToUrlFor = createSelector(
     createSelector(
       state => state.settings.api,
       state => state.customLocation.description,
-      ({ protocol, hostname, port, root }, description) =>
-        format({
+      ({ protocol, hostname, port, root }, description) => {
+        if (description.main.key === 'entry' && description.entry.accession) {
+          return format({
+            protocol,
+            hostname,
+            port,
+            pathname:
+              root +
+              descriptionToPath({
+                main: { key: 'taxonomy' },
+                taxonomy: {
+                  db: 'uniprot',
+                  accession: taxID,
+                },
+              }),
+            query: {
+              filter_by_entry: description.entry.accession,
+            },
+          });
+        }
+        return format({
           protocol,
           hostname,
           port,
@@ -51,7 +70,8 @@ const mapStateToUrlFor = createSelector(
               },
             }),
           search: 'with_names',
-        }),
+        });
+      },
     ),
 );
 /*:: type Props = {
@@ -106,15 +126,17 @@ const findNodeWithId = (id, node) => {
   }
 };
 
-const mergeData = (root, update, names) => {
+const mergeData = (root, update, names, childrenCounters) => {
   const toUpdate = findNodeWithId(update.accession, root);
   toUpdate.lineage = update.lineage;
   toUpdate.counters = update.counters;
   toUpdate.rank = update.rank;
+  toUpdate.hitcount = update?.counters?.proteins;
   if (!toUpdate.children || (update.children && update.children.length)) {
     toUpdate.children = update.children.map(id => ({
       name: names[id].short || names[id].name,
       id,
+      hitcount: childrenCounters?.[id]?.proteins,
     }));
   }
   return root;
@@ -208,7 +230,9 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       }
     }
     this.setState(({ data }) => ({
-      data: { ...mergeData(data, payload.metadata, payload.names) },
+      data: {
+        ...mergeData(data, payload.metadata, payload.names, payload.children),
+      },
     }));
   };
 
