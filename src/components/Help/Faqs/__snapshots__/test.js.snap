@@ -500,7 +500,7 @@ exports[`<Faqs /> should render 1`] = `
             </p>
             <ol>
               <li>
-                Click on the 
+                Click on the
                  
                 <Memo(Connect(Link))
                   to={
