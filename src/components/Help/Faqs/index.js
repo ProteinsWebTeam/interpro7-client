@@ -433,7 +433,7 @@ export default class Faqs extends PureComponent /*:: <{}> */ {
             </div>
 
             <div>
-              <h4>Interface</h4>
+              <h4>Web interface</h4>
               <details className={f('accordion-style')}>
                 <summary>
                   How do I view entry names instead of accessions in the
@@ -467,6 +467,115 @@ export default class Faqs extends PureComponent /*:: <{}> */ {
                     The information bar above the taxonomy viewer contains links
                     on the right which lead to data filtered to match the
                     selected taxonomy node.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div>
+              <h4>Application programming interface (API)</h4>
+              <details className={f('accordion-style')}>
+                <summary>How do I get started using the REST API?</summary>
+                <div className={f('accordion-info')}>
+                  <p>
+                    Documentation for the API is available at our{' '}
+                    <Link
+                      href="https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      GitHub repository
+                    </Link>
+                  </p>
+                  <p>
+                    If you&apos;d like to see some example scripts in Perl,
+                    Python 2, Python 3 or Javascript we have a script generator.
+                    Please follow the steps below: The resulting page allows
+                    combinations
+                  </p>
+                  <ol>
+                    <li>
+                      Click on the{' '}
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'result' },
+                            result: { type: 'download' },
+                          },
+                        }}
+                      >
+                        Results
+                      </Link>{' '}
+                      tab in the tab list
+                    </li>
+                    <li>
+                      Click the{' '}
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'result' },
+                            result: { type: 'download' },
+                          },
+                        }}
+                      >
+                        Your downloads
+                      </Link>{' '}
+                      sub-tab
+                    </li>
+                    <li>
+                      Click the{' '}
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'result' },
+                            result: { type: 'download' },
+                          },
+                          hash: '/entry/InterPro/|accession',
+                        }}
+                      >
+                        Select and Download InterPro data
+                      </Link>{' '}
+                      button
+                    </li>
+                  </ol>
+                  <p>
+                    You can select the data type you&apos;re interested in and
+                    apply filters to your query on this page. The{' '}
+                    <b>Code snippet</b> section shows an example of code which
+                    you can run on your computer to fetch the data from the
+                    InterPro API.
+                  </p>
+                </div>
+              </details>
+
+              <details className={f('accordion-style')}>
+                <summary>
+                  Why do I get HTTP timeouts (code 408) when running queries?
+                </summary>
+                <div className={f('accordion-info')}>
+                  <p>
+                    Certain queries of the InterPro API may take a long time to
+                    run. Any request that takes longer than a few minutes is
+                    moved to run in the background and the API will return the
+                    HTTP status code 408 corresponding to a timeout. The query
+                    will continue to run in the background and the data will
+                    eventually become available.
+                  </p>
+                  <p>
+                    The{' '}
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'result' },
+                          result: { type: 'download' },
+                        },
+                        hash: '/entry/InterPro/|accession',
+                      }}
+                    >
+                      Select and Download InterPro data
+                    </Link>{' '}
+                    page shows examples of code which handles these timeout
+                    codes to allow fetching of data from the API.
                   </p>
                 </div>
               </details>
