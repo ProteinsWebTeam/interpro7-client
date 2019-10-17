@@ -40,17 +40,8 @@ exports[`<Tree /> should render 1`] = `
     </span>
   </div>
   <div
+    className="tree"
     data-testid="data-tree"
-    style={
-      Object {
-        "alignItems": "stretch",
-        "display": "flex",
-        "flexDirection": "column",
-        "height": "50vh",
-        "justifyContent": "center",
-        "width": "100%",
-      }
-    }
   >
     <svg
       className="container"

@@ -8,7 +8,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: var(--colors-progress);
+  background-color: var(--colors-secondary-header);
 
   & .node-info {
     padding: 0.5em;

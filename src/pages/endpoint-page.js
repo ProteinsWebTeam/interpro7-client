@@ -18,6 +18,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import EntryMenu from 'components/EntryMenu';
 import Title from 'components/Title';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+import EdgeCase from 'components/EdgeCase';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -111,7 +112,7 @@ class Summary extends PureComponent {
       },
     } = customLocation;
     const edgeCaseText = edgeCases.get(status);
-    if (edgeCaseText) return <div className={f('row')}>{edgeCaseText}</div>;
+    if (edgeCaseText) return <EdgeCase text={edgeCaseText} />;
     if (loading || (!locationhasDetailOrFilter(customLocation) && !payload)) {
       return <Loading />;
     }

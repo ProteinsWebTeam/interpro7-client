@@ -130,6 +130,7 @@ const getColorScaleHTML = (
   title: string,
   fixedHighlight: string,
   id: string,
+  handleToggle: function,
 }; */
 
 /*:: type State = {
@@ -151,6 +152,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     title: T.string,
     fixedHighlight: T.string,
     id: T.string,
+    handleToggle: T.func,
   };
 
   constructor(props /*: Props */) {
@@ -692,6 +694,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
     if (this.state.label === 'accession')
       this.setState({ label: 'name', addLabelClass: 'label-by-name' });
     else this.setState({ label: 'accession', addLabelClass: '' });
+    if (this.props.handleToggle)
+      this.props.handleToggle(this.state.label === 'accession');
   };
 
   togglePopper = () => {
@@ -794,7 +798,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
                   }}
                 >
                   {this.state.label === 'name'
-                    ? `${d.name}-${this._getSourceDatabaseDisplayName(
+                    ? `${d.name?.charAt(0).toUpperCase() +
+                        d.name?.slice(1)}-${this._getSourceDatabaseDisplayName(
                         d,
                         databases,
                       )}` || d.accession
@@ -830,7 +835,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
               },
             }}
           >
-            {r.accession || r.description}
+            {r.accession ||
+              r.description.charAt(0).toUpperCase() + r.description.slice(1)}
           </Link>
         </div>
       )),
