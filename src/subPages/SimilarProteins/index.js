@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -38,12 +38,28 @@ const SimilarProteinsHeaderWithData = (
   } /*: {accession: string, data: {payload: Object, loading: boolean}, databases:Object} */,
 ) => {
   if (loading || !payload) return <Loading />;
-  const idaObj = ida2json(payload.ida);
+  const [entry, setEntry] = useState('pfam');
+  const idaObj = ida2json(payload.ida, entry);
   return (
     <div>
       <header>
         All the proteins in this page share the domain architecture below with
         the protein with accession <b>{accession}</b>.
+        <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
+          {entry === 'pfam' ? (
+            <button
+              className={f('icon', 'icon-common')}
+              data-icon="&#xf204;"
+              onClick={() => setEntry('interpro')}
+            />
+          ) : (
+            <button
+              className={f('icon', 'icon-common')}
+              data-icon="&#xf205;"
+              onClick={() => setEntry('pfam')}
+            />
+          )}
+        </Tooltip>
       </header>
       <TextIDA accessions={idaObj.accessions} />
       <IDAProtVista

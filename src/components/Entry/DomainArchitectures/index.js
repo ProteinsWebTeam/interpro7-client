@@ -48,7 +48,7 @@ const schemaProcessData = data => ({
   name: data.ida,
 });
 
-export const ida2json = (ida, domain) => {
+export const ida2json = (ida, entry) => {
   const idaParts = ida.split('-');
   const n = idaParts.length;
   const feature = (FAKE_PROTEIN_LENGTH - GAP_BETWEEN_DOMAINS * (n + 1)) / n;
@@ -56,7 +56,7 @@ export const ida2json = (ida, domain) => {
     const [pf, ipr] = p.split(':');
     return {
       // accession: ipr || pf,
-      accession: domain === 'pfam' ? pf : ipr || pf,
+      accession: entry === 'pfam' ? pf : ipr || pf,
       unintegrated: !ipr,
       locations: [
         {
@@ -233,12 +233,12 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     super(props);
 
     this.state = {
-      domain: 'pfam',
+      entry: 'pfam',
     };
   }
-  toggleDomain = () => {
-    if (this.state.domain === 'pfam') this.setState({ domain: 'interpro' });
-    else this.setState({ domain: 'pfam' });
+  toggleDomainEntry = () => {
+    if (this.state.entry === 'pfam') this.setState({ entry: 'interpro' });
+    else this.setState({ entry: 'pfam' });
   };
 
   render() {
@@ -265,24 +265,24 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
             <h4>
               {payload.count} domain architectures found.
               <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-                {this.state.domain === 'pfam' ? (
+                {this.state.entry === 'pfam' ? (
                   <button
                     className={f('icon', 'icon-common')}
                     data-icon="&#xf204;"
-                    onClick={this.toggleDomain}
+                    onClick={this.toggleDomainEntry}
                   />
                 ) : (
                   <button
                     className={f('icon', 'icon-common')}
                     data-icon="&#xf205;"
-                    onClick={this.toggleDomain}
+                    onClick={this.toggleDomainEntry}
                   />
                 )}
               </Tooltip>
             </h4>
           )}
           {(payload.results || []).map(obj => {
-            const idaObj = ida2json(obj.ida, this.state.domain);
+            const idaObj = ida2json(obj.ida, this.state.entry);
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
