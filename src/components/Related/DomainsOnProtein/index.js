@@ -308,7 +308,7 @@ const getExtraURL = query =>
 /*:: type Props = {
   mainData: Object,
   dataMerged: Object
-  handleToggle: function,
+  handleToggle?: function,
 }; */
 export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props> */ {
   static propTypes = {
