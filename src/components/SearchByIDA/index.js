@@ -157,8 +157,8 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                   The results will show all proteins matching the criteria
                   selected below. You can select entries which must be included
                   or excluded from your search results. Entries can be selected
-                  by either entering a Pfam or InterPro accesson (if the
-                  InterPro entry has a Pfam entry integrated with it).
+                  by either entering a Pfam accession, or an InterPro accession
+                  if a Pfam entry is integrated with it.
                 </p>
                 <div className={f('ida-workspace')}>
                   <PanelIDA
