@@ -364,5 +364,37 @@ exports[`<Tutorial /> should render 1`] = `
      
     about when and where these training courses will run, as well as how to apply to host them.
   </p>
+  <div
+    className="box-add"
+  >
+    <h3
+      className="margin-top-large"
+    >
+      Additional Help
+    </h3>
+    <ul
+      style={
+        Object {
+          "listStyleType": "none",
+          "margin": 0,
+        }
+      }
+    >
+      <li>
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/support/interpro"
+          target="_blank"
+          withReferrer={true}
+        >
+          <span
+            className="icon icon-common"
+            data-icon="n"
+          />
+           
+          Submit a ticket
+        </Memo(Connect(Link))>
+      </li>
+    </ul>
+  </div>
 </section>
 `;

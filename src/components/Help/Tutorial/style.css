@@ -1,4 +1,6 @@
 /* grid not yet working with IE11*/
+@import '../../../styles/colors.css';
+
 .flex-grid {
   margin: 0;
   list-style-type: none;
@@ -26,4 +28,15 @@
 .image-tuto-tour {
   background: url('../../../images/cover/tuto/quicktour.jpg') no-repeat 42% 40%;
   background-size: 190%;
+}
+
+.box-add {
+  border-left: 4px solid var(--colors-submain);
+  padding: 0 1rem;
+}
+.box-add ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  line-height: 2;
 }

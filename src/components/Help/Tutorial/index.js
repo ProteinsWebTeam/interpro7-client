@@ -302,6 +302,21 @@ export default class Tutorial extends PureComponent /*:: <{}> */ {
           about when and where these training courses will run, as well as how
           to apply to host them.
         </p>
+        <div className={f('box-add')}>
+          <h3 className={f('margin-top-large')}>Additional Help</h3>
+          <ul style={{ listStyleType: 'none', margin: 0 }}>
+            <li>
+              <Link
+                href="//www.ebi.ac.uk/support/interpro"
+                target="_blank"
+                withReferrer
+              >
+                <span className={f('icon', 'icon-common')} data-icon="&#x6e;" />{' '}
+                Submit a ticket
+              </Link>
+            </li>
+          </ul>
+        </div>
       </section>
     );
   }
