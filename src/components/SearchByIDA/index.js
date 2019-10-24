@@ -41,7 +41,7 @@ const PanelIDA = (
 ) => (
   <div className={f('panels')}>
     <div className={f('ida-panel')}>
-      <header>IDA</header>
+      <header>Architectures must include</header>
       <div>
         <ul className={f('ida-list', { ordered: isOrdered })}>
           {entryList &&
@@ -60,7 +60,7 @@ const PanelIDA = (
       </div>
     </div>
     <div className={f('ida-ignore')}>
-      <header>Ignore</header>
+      <header>Architectures must exclude</header>
       <ul className={f('ida-list', 'ignore')}>
         {ignoreList &&
           ignoreList.map((e, i) => (
@@ -152,6 +152,14 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                 <h3 className={f('light')}>
                   Search for proteins with a specific domain architecture
                 </h3>
+                <p>
+                  Domain architectures are derived from matches to Pfam Entries.
+                  The results will show all proteins matching the criteria
+                  selected below. You can select entries which must be included
+                  or excluded from your search results. Entries can be selected
+                  by either entering a Pfam or InterPro accesson (if the
+                  InterPro entry has a Pfam entry integrated with it).
+                </p>
                 <div className={f('ida-workspace')}>
                   <PanelIDA
                     entryList={entries}
@@ -205,7 +213,7 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                     }
                   >
                     <DomainButton label="➕" fill="#75bf40" stroke="#75bf40" />{' '}
-                    <span>Add Domain</span>
+                    <span>Add Domain to include</span>
                   </button>
                   <button
                     className={f('button', 'secondary')}
@@ -218,7 +226,7 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                     }
                   >
                     <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
-                    <span>Ignore Domain</span>
+                    <span>Add Domain to exclude</span>
                   </button>
                   <label htmlFor="ordered">
                     <input
