@@ -1,10 +1,14 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flattenDeep } from 'lodash-es';
+
+import { format } from 'url';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import getFetch from 'higherOrder/loadData/getFetch';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Redirect from 'components/generic/Redirect';
@@ -18,6 +22,7 @@ import Accession from 'components/Accession';
 import Title from 'components/Title';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
 import Actions, { getIProScanURL } from 'components/IPScan/Actions';
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 import { Exporter } from 'components/Table';
 import { NOT_MEMBER_DBS } from 'menuConfig';
@@ -26,9 +31,11 @@ import { iproscan2urlDB } from 'utils/url-patterns';
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import Link from 'components/generic/Link';
 
 const f = foundationPartial(ebiGlobalStyles, fonts);
-import Link from 'components/generic/Link';
+
+const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
 /*:: type Props = {
   accession: string,
@@ -204,153 +211,195 @@ const mergeData = (matches, sequenceLength) => {
   return mergedData;
 };
 
-class SummaryIPScanJob extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    accession: T.string.isRequired,
-    localID: T.string.isRequired,
-    remoteID: T.string,
-    localTitle: T.string,
-    status: T.string.isRequired,
-    data: dataPropType,
-    localPayload: T.object,
+const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
+  const description = {
+    main: { key: 'entry' },
+    entry: { db: 'interpro', accession },
   };
+  return format({
+    protocol,
+    hostname,
+    port,
+    pathname: root + descriptionToPath(description),
+  });
+};
 
-  render() {
-    const {
-      accession,
-      localID,
-      remoteID,
-      status,
-      data,
-      localPayload,
-      localTitle,
-    } = this.props;
-    if (remoteID && remoteID !== accession) {
-      return (
-        <Redirect
-          to={customLocation => ({
-            ...customLocation,
-            description: {
-              ...customLocation.description,
-              result: {
-                ...customLocation.description.result,
-                accession: remoteID,
-              },
-            },
-          })}
-        />
-      );
+const SummaryIPScanJob = ({
+  accession,
+  localID,
+  remoteID,
+  localTitle,
+  status,
+  data,
+  localPayload,
+  api,
+}) => {
+  const [mergedData, setMergedData] = useState({});
+  const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
+
+  useEffect(() => {
+    if (data.payload || localPayload) {
+      const payload = data.payload ? data.payload.results[0] : localPayload;
+
+      const organisedData = mergeData(payload.matches, payload.sequenceLength);
+      setMergedData(organisedData);
+      if (organisedData.family) {
+        const families = [];
+        organisedData.family.forEach(entry => {
+          fetchFun(getEntryURL(api, entry.accession)).then(data => {
+            if (data?.payload?.metadata) {
+              families.push(data.payload.metadata);
+              setFamilyHierarchyData(families);
+            }
+          });
+        });
+      }
     }
-    const payload = data.payload ? data.payload.results[0] : localPayload;
+  }, [data.payload]);
 
-    if (!payload) return <Loading />;
-
-    const metadata = {
-      accession,
-      length: payload.sequence.length,
-      sequence: payload.sequence,
-      name: {
-        name: 'InterProScan Search',
-        short: payload.xref[0].name,
-      },
-    };
-    const title = localTitle || payload.xref[0].name;
-
-    const goTerms = getGoTerms(payload.matches);
-
-    const mergedData = mergeData(payload.matches, payload.sequenceLength);
+  if (remoteID && remoteID !== accession) {
     return (
-      <div className={f('sections')}>
-        <section>
-          <div className={f('row')}>
-            <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-              <Title metadata={metadata} mainType="protein" />
-              <table className={f('light', 'table-sum', 'margin-bottom-none')}>
-                <tbody>
-                  {title && (
-                    <tr>
-                      <td>Title</td>
-                      <td>{title}</td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td>
-                      Job ID{' '}
-                      <Tooltip title={'Case sensitive'}>
-                        <span
-                          className={f('small', 'icon', 'icon-common')}
-                          data-icon="&#xf129;"
-                          aria-label={'Case sensitive'}
-                        />
-                      </Tooltip>
-                    </td>
-                    <td style={{ display: 'flex' }}>
-                      <Accession accession={accession} title="Job ID" />{' '}
-                      <CopyToClipboard
-                        textToCopy={getIProScanURL(accession)}
-                        tooltipText="CopyURL"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Length</td>
-                    <td>
-                      <Length metadata={metadata} />
-                    </td>
-                  </tr>
-                  {localID && (
-                    <tr>
-                      <td>Action</td>
-                      <td>
-                        <Actions localID={localID} />
-                      </td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td>Status</td>
-                    <td>
-                      <StatusTooltip status={status} /> {status}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className={f('medium-3', 'columns', 'margin-bottom-large')}>
-              {status === 'finished' && data?.url && (
-                <Exporter includeSettings={false} left={false}>
-                  <ul>
-                    {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
-                      type => (
-                        <li key={type}>
-                          <Link
-                            target="_blank"
-                            href={data.url.replace('json', type)}
-                            download={`InterProScan.${type}`}
-                          >
-                            {type.toUpperCase()}
-                          </Link>
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </Exporter>
-              )}
-            </div>
-          </div>
-        </section>
-        {status === 'finished' && (
-          <>
-            <DomainOnProteinWithoutMergedData
-              mainData={{ metadata }}
-              dataMerged={mergedData}
-            />
-            <GoTerms terms={Array.from(goTerms.values())} type="protein" />
-          </>
-        )}
-      </div>
+      <Redirect
+        to={customLocation => ({
+          ...customLocation,
+          description: {
+            ...customLocation.description,
+            result: {
+              ...customLocation.description.result,
+              accession: remoteID,
+            },
+          },
+        })}
+      />
     );
   }
-}
+
+  const payload = data.payload ? data.payload.results[0] : localPayload;
+
+  if (!payload) return <Loading />;
+
+  const metadata = {
+    accession,
+    length: payload.sequence.length,
+    sequence: payload.sequence,
+    name: {
+      name: 'InterProScan Search',
+      short: payload.xref[0].name,
+    },
+  };
+  const title = localTitle || payload.xref[0].name;
+
+  const goTerms = getGoTerms(payload.matches);
+
+  return (
+    <div className={f('sections')}>
+      <section>
+        <div className={f('row')}>
+          <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
+            <Title metadata={metadata} mainType="protein" />
+            <table className={f('light', 'table-sum', 'margin-bottom-none')}>
+              <tbody>
+                {title && (
+                  <tr>
+                    <td>Title</td>
+                    <td>{title}</td>
+                  </tr>
+                )}
+                <tr>
+                  <td>
+                    Job ID{' '}
+                    <Tooltip title={'Case sensitive'}>
+                      <span
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="&#xf129;"
+                        aria-label={'Case sensitive'}
+                      />
+                    </Tooltip>
+                  </td>
+                  <td style={{ display: 'flex' }}>
+                    <Accession accession={accession} title="Job ID" />{' '}
+                    <CopyToClipboard
+                      textToCopy={getIProScanURL(accession)}
+                      tooltipText="CopyURL"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Length</td>
+                  <td>
+                    <Length metadata={metadata} />
+                  </td>
+                </tr>
+                {localID && (
+                  <tr>
+                    <td>Action</td>
+                    <td>
+                      <Actions localID={localID} />
+                    </td>
+                  </tr>
+                )}
+                <tr>
+                  <td>Status</td>
+                  <td>
+                    <StatusTooltip status={status} /> {status}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h5>Protein family membership</h5>
+            {familyHierarchyData.length ? (
+              <ProteinEntryHierarchy entries={familyHierarchyData} />
+            ) : (
+              <p className={f('margin-bottom-medium')}>None predicted</p>
+            )}
+          </div>
+
+          <div className={f('medium-3', 'columns', 'margin-bottom-large')}>
+            {status === 'finished' && data?.url && (
+              <Exporter includeSettings={false} left={false}>
+                <ul>
+                  {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
+                    type => (
+                      <li key={type}>
+                        <Link
+                          target="_blank"
+                          href={data.url.replace('json', type)}
+                          download={`InterProScan.${type}`}
+                        >
+                          {type.toUpperCase()}
+                        </Link>
+                      </li>
+                    ),
+                  )}
+                </ul>
+              </Exporter>
+            )}
+          </div>
+        </div>
+      </section>
+      {status === 'finished' && (
+        <>
+          <DomainOnProteinWithoutMergedData
+            mainData={{ metadata }}
+            dataMerged={mergedData}
+          />
+          <GoTerms terms={Array.from(goTerms.values())} type="protein" />
+        </>
+      )}
+    </div>
+  );
+};
+SummaryIPScanJob.propTypes = {
+  accession: T.string.isRequired,
+  localID: T.string.isRequired,
+  remoteID: T.string,
+  localTitle: T.string,
+  status: T.string.isRequired,
+  data: dataPropType,
+  localPayload: T.object,
+  api: T.object,
+};
 
 const jobMapSelector = state => state.jobs;
 const accessionSelector = state =>
@@ -371,12 +420,18 @@ const jobSelector = createSelector(
 const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
-  (accession, { metadata: { localID, remoteID, status, localTitle } }) => ({
+  state => state.settings.api,
+  (
+    accession,
+    { metadata: { localID, remoteID, status, localTitle } },
+    api,
+  ) => ({
     accession,
     localID,
     remoteID,
     status,
     localTitle,
+    api,
   }),
 );
 

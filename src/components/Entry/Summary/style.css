@@ -1,8 +1,18 @@
 /* overlapping entries Tree : to align exactly with title */
+@import '../../../styles/colors.css';
+
 .list-items {
   padding-left: 1px;
 }
 
 .list-items:last-of-type {
   margin-bottom: 0.5rem;
+}
+
+.annotation-button {
+  border: solid black 1px;
+  border-radius: 4px;
+  padding: 5px 10px;
+  color: var(--colors-almost-white);
+  background-color: var(--colors-tag);
 }

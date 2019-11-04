@@ -13,6 +13,9 @@ import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
+import loadWebComponent from 'utils/load-web-component';
+import ProtvistaInterproTrack from 'protvista-interpro-track';
+
 import { foundationPartial } from 'styles/foundation';
 // import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -172,6 +175,7 @@ state: Object,
 }*/,
 ) => {
   if (loading || loadingData || !payload) return <Loading />;
+  loadWebComponent(() => ProtvistaInterproTrack).as('protvista-interpro-track');
   return (
     <div className={f('row', 'column')}>
       <SimilarProteinsHeader
