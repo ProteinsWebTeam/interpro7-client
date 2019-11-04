@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import Link from 'components/generic/Link';
 import Tree from 'components/Tree';
 import NumberComponent from 'components/NumberComponent';
+import abbreviateNumber from 'components/NumberComponent/utils/number-to-display-text';
+
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -139,12 +141,12 @@ const mergeData = (root, update, names, childrenCounters) => {
   toUpdate.lineage = update.lineage;
   toUpdate.counters = update.counters;
   toUpdate.rank = update.rank;
-  toUpdate.hitcount = update?.counters?.proteins;
+  toUpdate.hitcount = abbreviateNumber(update?.counters?.proteins, true);
   if (!toUpdate.children || (update.children && update.children.length)) {
     toUpdate.children = update.children.map(id => ({
       name: names[id].short || names[id].name,
       id,
-      hitcount: childrenCounters?.[id]?.proteins,
+      hitcount: abbreviateNumber(childrenCounters?.[id]?.proteins, true),
     }));
   }
   return root;
