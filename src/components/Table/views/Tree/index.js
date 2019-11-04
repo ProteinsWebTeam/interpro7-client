@@ -386,7 +386,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                             description: to,
                           }}
                         >
-                          <NumberComponent abbr duration={ANIMATION_DURATION}>
+                          <NumberComponent duration={ANIMATION_DURATION}>
                             {currentNode.counters[plural]}
                           </NumberComponent>{' '}
                           {plural}
