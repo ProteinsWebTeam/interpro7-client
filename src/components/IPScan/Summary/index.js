@@ -249,7 +249,7 @@ const SummaryIPScanJob = ({
           fetchFun(getEntryURL(api, entry.accession)).then(data => {
             if (data?.payload?.metadata) {
               families.push(data.payload.metadata);
-              setFamilyHierarchyData(families);
+              setFamilyHierarchyData([...families]);
             }
           });
         });
