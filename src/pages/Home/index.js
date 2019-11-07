@@ -618,7 +618,7 @@ class Home extends PureComponent {
                 <div className={f('card-content')}>
                   <div className={f('card-title')}>
                     <h4>
-                      <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
+                      <Link href="//www.ebi.ac.uk/interpro/api/static_files/swagger/">
                         A new API for InterPro
                       </Link>
                     </h4>
@@ -632,7 +632,7 @@ class Home extends PureComponent {
                 </div>
 
                 <div className={f('card-more')}>
-                  <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
+                  <Link href="//www.ebi.ac.uk/interpro/api/static_files/swagger/">
                     <div
                       className={f(
                         'button-more',
@@ -660,7 +660,7 @@ class Home extends PureComponent {
                   <div className={f('card-title')}>
                     <h4>
                       <Link
-                        href="//ebi-uniprot.github.io/ProtVista/developerGuide.html"
+                        href="//ebi-webcomponents.github.io/nightingale"
                         target="_blank"
                       >
                         Nigthtingale

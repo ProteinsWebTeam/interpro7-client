@@ -142,7 +142,9 @@ exports[`<Documentation /> should render 1`] = `
             </li>
             <li>
               <Memo(Connect(Link))
-                href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/"
+                className="ext"
+                href="//www.ebi.ac.uk/interpro/api/static_files/swagger/"
+                target="_blank"
               >
                 Swagger API documentation
               </Memo(Connect(Link))>
@@ -159,7 +161,7 @@ exports[`<Documentation /> should render 1`] = `
                         "type": "download",
                       },
                     },
-                    "hash": "/",
+                    "hash": "/entry/interpro",
                   }
                 }
               >

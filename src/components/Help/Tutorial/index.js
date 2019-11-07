@@ -363,7 +363,11 @@ export default class Tutorial extends PureComponent /*:: <{}> */ {
         <p>
           InterPro hands-on practical sessions feature regularly as part of the
           EBI training courses and workshops.{' '}
-          <Link href="//www.ebi.ac.uk/training" className={f('ext')}>
+          <Link
+            href="//www.ebi.ac.uk/training"
+            className={f('ext')}
+            target="_blank"
+          >
             Find out more
           </Link>{' '}
           about when and where these training courses will run, as well as how

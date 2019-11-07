@@ -442,6 +442,7 @@ exports[`<Tutorial /> should render 1`] = `
     <Memo(Connect(Link))
       className="ext"
       href="//www.ebi.ac.uk/training"
+      target="_blank"
     >
       Find out more
     </Memo(Connect(Link))>

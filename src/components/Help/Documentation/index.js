@@ -115,7 +115,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                     </Link>
                   </li>
                   <li>
-                    <Link href="//www.ebi.ac.uk/interpro/beta/api/static_files/swagger/">
+                    <Link
+                      href="//www.ebi.ac.uk/interpro/api/static_files/swagger/"
+                      className={f('ext')}
+                      target="_blank"
+                    >
                       Swagger API documentation
                     </Link>
                   </li>
@@ -126,7 +130,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                           main: { key: 'result' },
                           result: { type: 'download' },
                         },
-                        hash: '/',
+                        hash: '/entry/interpro',
                       }}
                     >
                       Code snippet generator
