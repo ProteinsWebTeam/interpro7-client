@@ -25,8 +25,8 @@ const payloadToOptions = (payload, isIntegration = false, memberDBs) =>
       if (typeof value !== 'object') {
         return (
           <option key={key} value={key.toLowerCase()}>
-            {memberDBs
-              ? memberDBs[key]?.name
+            {memberDBs && memberDBs[key]
+              ? memberDBs[key].name
               : key.charAt(0).toUpperCase() + key.slice(1)}
           </option>
         );
