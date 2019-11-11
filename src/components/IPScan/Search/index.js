@@ -107,7 +107,7 @@ const isXChecked = x => form => !!form.querySelector(checkedSelectorFor(x));
 const isStayChecked = isXChecked('stay');
 
 const commentRE = /^\s*[>;].*$/m;
-const IUPACProtRE = /^[a-z -]*$/im;
+const IUPACProtRE = /^[a-z]*$/im;
 
 export const checkValidity = lines => {
   const trimmedLines = lines.map(l => l.trim()).filter(Boolean);
@@ -168,7 +168,7 @@ export const cleanUp = blocks => {
         return null;
       }
       if (/^[;>]/.test(line)) return line;
-      return line.replace(/[^a-z -]/gi, '').trim();
+      return line.replace(/[^a-z ]/gi, '').trim();
     })
     .filter(Boolean)
     .join('\n');
