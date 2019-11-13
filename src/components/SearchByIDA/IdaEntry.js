@@ -17,10 +17,14 @@ const f = foundationPartial(local);
 
 const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
-const getUrlForAutocomplete = ({ protocol, hostname, port, root }, search) => {
+const getUrlForAutocomplete = (
+  { protocol, hostname, port, root },
+  entryDB,
+  search,
+) => {
   const description = {
     main: { key: 'entry' },
-    entry: { db: 'interpro' },
+    entry: { db: entryDB },
   };
   return format({
     protocol,
@@ -66,17 +70,28 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
   }
   _handleOnChange = (_evt, value) => {
     this.props.changeEntryHandler(value);
-    fetchFun(getUrlForAutocomplete(this.props.api, value)).then((
+    fetchFun(getUrlForAutocomplete(this.props.api, 'interpro', value)).then((
       data /*: DataType */,
     ) => {
-      if (!data || !data.ok) return;
-      const options = { ...this.state.options };
-      for (const e of data.payload.results) {
-        options[e.metadata.accession] = e.metadata;
-      }
-      this.setState({ options });
+      this._mergeResults(data);
+    });
+
+    fetchFun(getUrlForAutocomplete(this.props.api, 'pfam', value)).then((
+      data /*: DataType */,
+    ) => {
+      this._mergeResults(data);
     });
   };
+
+  _mergeResults = data => {
+    if (!data || !data.ok) return;
+    const options = { ...this.state.options };
+    for (const e of data.payload.results) {
+      options[e.metadata.accession] = e.metadata;
+    }
+    this.setState({ options });
+  };
+
   render() {
     const {
       entry,

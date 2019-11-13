@@ -1,13 +1,12 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import TA from 'timeago.js';
+import { format } from 'timeago.js';
 import { sleep, schedule } from 'timing-functions/src';
 import { formatShortDate, formatLongDateTime } from 'utils/date';
 
 import random from 'utils/random';
 
-let timeago;
 const ONE_MINUTE = 60000;
 
 /*:: type Props = {
@@ -32,10 +31,6 @@ class TimeAgo extends PureComponent /*:: <Props> */ {
 
   constructor(props /*: Props */) {
     super(props);
-
-    // Only create one instance, and only when it is needed
-    if (!timeago) timeago = new TA();
-
     this._ref = React.createRef();
   }
 
@@ -46,7 +41,7 @@ class TimeAgo extends PureComponent /*:: <Props> */ {
     // infinite loop while mounted
     while (this._ref.current) {
       // $FlowIgnore
-      this._ref.current.textContent = timeago.format(this.props.date);
+      this._ref.current.textContent = format(this.props.date);
       await sleep(this._delay);
       await schedule();
     }
@@ -66,7 +61,7 @@ class TimeAgo extends PureComponent /*:: <Props> */ {
     }
     return (
       <time dateTime={formatLongDateTime(date)} title={_title} ref={this._ref}>
-        {timeago.format(date)}
+        {format(date)}
       </time>
     );
   }

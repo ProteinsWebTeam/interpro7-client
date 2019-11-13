@@ -119,7 +119,7 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       });
   };
 
-  _populateData = ({ metadata: data, names }) => {
+  _populateData = ({ metadata: data, names, children }) => {
     const lineage = data.lineage.trim().split(/\s+/);
     let root;
     let currentNode;
@@ -136,10 +136,13 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       currentNode = newNode;
     }
     currentNode.name = data.name.short || data.name.name || data.accession;
+    currentNode.hitcount = data?.counters?.proteins;
+
     if (data.children) {
       currentNode.children = data.children.map(id => ({
         name: names[id].short,
         id,
+        hitcount: children?.[id]?.proteins,
       }));
     }
     this.setState({ data: root, focused: `${data.accession}` });
@@ -265,22 +268,13 @@ const getUrl = createSelector(
     const hasFilters = Object.values(description).some(
       endpoint => endpoint.isFilter,
     );
-    _search.with_names = true;
-    const newDescription =
-      hasFilters || !db || db === 'all'
-        ? description
-        : {
-            ...description,
-            entry: {
-              isFilter: true,
-              db,
-            },
-          };
+    if (hasFilters || !db || db === 'all') _search.with_names = true;
+    else _search.filter_by_entry_db = db;
     return format({
       protocol,
       hostname,
       port,
-      pathname: root + descriptionToPath(newDescription),
+      pathname: root + descriptionToPath(description),
       query: _search,
     });
   },

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -14,7 +14,9 @@ const webComponents = [];
 const loadInterProWebComponents = () => {
   if (!webComponents.length) {
     const interproComponents = () =>
-      import(/* webpackChunkName: "interpro-components" */ 'interpro-components');
+      import(
+        /* webpackChunkName: "interpro-components" */ 'interpro-components'
+      );
     webComponents.push(
       loadWebComponent(() =>
         interproComponents().then(m => m.InterproHierarchy),
@@ -33,46 +35,29 @@ const loadInterProWebComponents = () => {
   }
   return Promise.all(webComponents);
 };
+
 const getUniqueHierarchies = hierarchies =>
   Array.from(new Map(hierarchies.map(h => [h.accession, h])).values());
 
-class ProteinEntryHierarchy extends PureComponent {
-  static propTypes = {
-    entries: T.arrayOf(
-      T.shape({
-        accession: T.string.isRequired,
-        type: T.string.isRequired,
-        hierarchy: T.object.isRequired,
-      }),
-    ),
-    api: T.shape({
-      protocol: T.string.isRequired,
-      hostname: T.string.isRequired,
-      port: T.string.isRequired,
-      root: T.string.isRequired,
-    }),
-    goToCustomLocation: T.func,
-  };
-
-  constructor(props) {
-    super(props);
-    this._ref = React.createRef();
-  }
-
-  async componentDidMount() {
-    await loadInterProWebComponents();
-    if (this._ref.current) {
+const ProteinEntryHierarchy = ({
+  hierarchy,
+  accessions,
+  hrefroot,
+  goToCustomLocation,
+  ready,
+}) => {
+  const componentRef = useRef();
+  useEffect(() => {
+    if (componentRef.current && ready) {
       // Making sure the same hierarchy only appears once.
-      this._ref.current.hierarchy = getUniqueHierarchies(
-        this.props.entries.map(e => e.hierarchy),
-      );
+      componentRef.current.hierarchy = hierarchy;
       // Adding the click event so it doesn't refresh the whole page,
       // but instead use the customLocation.
-      this._ref.current.addEventListener('click', e => {
+      componentRef.current.addEventListener('click', e => {
         const target = (e.path || e.composedPath())[0];
         if (target.classList.contains('link')) {
           e.preventDefault();
-          this.props.goToCustomLocation({
+          goToCustomLocation({
             description: pathToDescription(
               target
                 .getAttribute('href')
@@ -82,20 +67,67 @@ class ProteinEntryHierarchy extends PureComponent {
         }
       });
     }
+  });
+
+  return (
+    <interpro-hierarchy
+      accessions={accessions}
+      hrefroot={hrefroot}
+      ref={componentRef}
+      displaymode="pruned no-children"
+    />
+  );
+};
+ProteinEntryHierarchy.propTypes = {
+  hierarchy: T.object.isRequired,
+  accessions: T.array.isRequired,
+  hrefroot: T.string.isRequired,
+  goToCustomLocation: T.func.isRequired,
+  ready: T.bool.isRequired,
+};
+
+const ProteinEntryHierarchies = ({ entries, goToCustomLocation }) => {
+  const [ready, setReady] = useState(false);
+
+  // eslint-disable-next-line func-style,require-jsdoc
+  async function loadComponents() {
+    return await loadInterProWebComponents();
   }
 
-  render() {
-    const { entries } = this.props;
-    return (
-      <interpro-hierarchy
-        accessions={entries.map(e => e.accession)}
-        hrefroot={`${config.root.website.path}/entry/interpro`}
-        ref={this._ref}
-        displaymode="pruned no-children"
-      />
-    );
-  }
-}
+  useEffect(() => {
+    loadComponents().then(() => {
+      setReady(true);
+    });
+  }, []);
+
+  const hierarchies = getUniqueHierarchies(entries.map(e => e.hierarchy));
+  return (
+    <div>
+      {hierarchies.length
+        ? hierarchies.map(h => (
+            <ProteinEntryHierarchy
+              hierarchy={h}
+              accessions={entries.map(e => e.accession)}
+              hrefroot={`${config.root.website.path}/entry/interpro`}
+              goToCustomLocation={goToCustomLocation}
+              key={h.accession}
+              ready={ready}
+            />
+          ))
+        : null}
+    </div>
+  );
+};
+ProteinEntryHierarchies.propTypes = {
+  entries: T.arrayOf(
+    T.shape({
+      accession: T.string.isRequired,
+      type: T.string.isRequired,
+      hierarchy: T.object.isRequired,
+    }),
+  ),
+  goToCustomLocation: T.func,
+};
 
 const mapStateToProps = createSelector(
   state => state.settings.api,
@@ -105,4 +137,4 @@ const mapStateToProps = createSelector(
 export default connect(
   mapStateToProps,
   { goToCustomLocation },
-)(ProteinEntryHierarchy);
+)(ProteinEntryHierarchies);

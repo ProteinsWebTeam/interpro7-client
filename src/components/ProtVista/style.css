@@ -213,7 +213,6 @@ g:global(.child-group) path:global(.feature) {
 .track-accession-child > a:focus,
 .track-accession-child > a:visited {
   font-size: 90%;
-  text-transform: capitalize;
   color: var(--colors-graydark);
 }
 /*resize elements for small screens in order to see full IPR number*/

@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import Link from 'components/generic/Link';
 import Tree from 'components/Tree';
 import NumberComponent from 'components/NumberComponent';
+import abbreviateNumber from 'components/NumberComponent/utils/number-to-display-text';
+
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -31,8 +33,35 @@ const mapStateToUrlFor = createSelector(
     createSelector(
       state => state.settings.api,
       state => state.customLocation.description,
-      ({ protocol, hostname, port, root }, description) =>
-        format({
+      ({ protocol, hostname, port, root }, description) => {
+        if (
+          (description.main.key === 'entry' && description.entry.accession) ||
+          (description.main.key === 'taxonomy' && description.entry.db)
+        ) {
+          const query = description.entry.accession
+            ? {
+                filter_by_entry: description.entry.accession,
+              }
+            : {
+                filter_by_entry_db: description.entry.db,
+              };
+          return format({
+            protocol,
+            hostname,
+            port,
+            pathname:
+              root +
+              descriptionToPath({
+                main: { key: 'taxonomy' },
+                taxonomy: {
+                  db: 'uniprot',
+                  accession: taxID,
+                },
+              }),
+            query,
+          });
+        }
+        return format({
           protocol,
           hostname,
           port,
@@ -51,7 +80,8 @@ const mapStateToUrlFor = createSelector(
               },
             }),
           search: 'with_names',
-        }),
+        });
+      },
     ),
 );
 /*:: type Props = {
@@ -106,15 +136,17 @@ const findNodeWithId = (id, node) => {
   }
 };
 
-const mergeData = (root, update, names) => {
+const mergeData = (root, update, names, childrenCounters) => {
   const toUpdate = findNodeWithId(update.accession, root);
   toUpdate.lineage = update.lineage;
   toUpdate.counters = update.counters;
   toUpdate.rank = update.rank;
+  toUpdate.hitcount = abbreviateNumber(update?.counters?.proteins, true);
   if (!toUpdate.children || (update.children && update.children.length)) {
     toUpdate.children = update.children.map(id => ({
       name: names[id].short || names[id].name,
       id,
+      hitcount: abbreviateNumber(childrenCounters?.[id]?.proteins, true),
     }));
   }
   return root;
@@ -208,7 +240,9 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       }
     }
     this.setState(({ data }) => ({
-      data: { ...mergeData(data, payload.metadata, payload.names) },
+      data: {
+        ...mergeData(data, payload.metadata, payload.names, payload.children),
+      },
     }));
   };
 
@@ -352,7 +386,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                             description: to,
                           }}
                         >
-                          <NumberComponent abbr duration={ANIMATION_DURATION}>
+                          <NumberComponent duration={ANIMATION_DURATION}>
                             {currentNode.counters[plural]}
                           </NumberComponent>{' '}
                           {plural}

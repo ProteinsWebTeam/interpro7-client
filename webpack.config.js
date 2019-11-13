@@ -186,7 +186,7 @@ const getConfigFor = (env, mode, module = false) => {
           ],
         },
         {
-          test: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          test: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
           use: [
             {
               loader:
@@ -212,6 +212,27 @@ const getConfigFor = (env, mode, module = false) => {
                   cssNext(),
                   mode === 'production' && cssNano(),
                 ].filter(Boolean),
+              },
+            },
+          ],
+        },
+        {
+          test: /tippy.css$/i,
+          use: [
+            {
+              loader:
+                mode === 'production'
+                  ? MiniCssExtractPlugin.loader
+                  : 'style-loader',
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                ...cssSettings,
+                modules: {
+                  ...cssSettings.modules,
+                  localIdentName: '[local]',
+                },
               },
             },
           ],

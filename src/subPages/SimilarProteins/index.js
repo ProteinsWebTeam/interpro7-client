@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -12,6 +12,9 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
+import loadWebComponent from 'utils/load-web-component';
+import ProtvistaInterproTrack from 'protvista-interpro-track';
 
 import { foundationPartial } from 'styles/foundation';
 // import localStyle from './style.css';
@@ -38,12 +41,28 @@ const SimilarProteinsHeaderWithData = (
   } /*: {accession: string, data: {payload: Object, loading: boolean}, databases:Object} */,
 ) => {
   if (loading || !payload) return <Loading />;
-  const idaObj = ida2json(payload.ida);
+  const [entry, setEntry] = useState('pfam');
+  const idaObj = ida2json(payload.ida, entry);
   return (
     <div>
       <header>
         All the proteins in this page share the domain architecture below with
         the protein with accession <b>{accession}</b>.
+        <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
+          {entry === 'pfam' ? (
+            <button
+              className={f('icon', 'icon-common')}
+              data-icon="&#xf204;"
+              onClick={() => setEntry('interpro')}
+            />
+          ) : (
+            <button
+              className={f('icon', 'icon-common')}
+              data-icon="&#xf205;"
+              onClick={() => setEntry('pfam')}
+            />
+          )}
+        </Tooltip>
       </header>
       <TextIDA accessions={idaObj.accessions} />
       <IDAProtVista
@@ -156,6 +175,7 @@ state: Object,
 }*/,
 ) => {
   if (loading || loadingData || !payload) return <Loading />;
+  loadWebComponent(() => ProtvistaInterproTrack).as('protvista-interpro-track');
   return (
     <div className={f('row', 'column')}>
       <SimilarProteinsHeader

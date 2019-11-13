@@ -291,17 +291,103 @@ export default class Tutorial extends PureComponent /*:: <{}> */ {
               </Link>
             </div>
           </div>
+
+          <div className={f('flex-card')}>
+            <div className={f('card-image', 'image-tuto-g3d')}>
+              <div className={f('card-tag', 'tag-tuto')}>Tutorial</div>
+            </div>
+
+            <div className={f('card-content')}>
+              <div className={f('card-title')}>
+                <h4>
+                  <Link
+                    href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
+                    target="_blank"
+                  >
+                    Genome 3D annotations in InterPro webinar
+                  </Link>
+                </h4>
+              </div>
+              <div className={f('card-info')}>
+                <div className={f('card-info-author')}>
+                  <em
+                    className={f('icon', 'icon-common')}
+                    data-icon="&#xf007;"
+                  />{' '}
+                  Typhaine Paysan-Lafosse{' '}
+                </div>
+                <div className={f('card-info-level')}>
+                  <em
+                    className={f('icon', 'icon-common')}
+                    data-icon="&#xf14e;"
+                  />{' '}
+                  Beginner
+                </div>
+                <div className={f('card-info-duration')}>
+                  <em
+                    className={f('icon', 'icon-common')}
+                    data-icon="&#xf017;"
+                  />{' '}
+                  0.5 hour
+                </div>
+              </div>
+              <div className={f('card-description')}>
+                This course presents the new InterPro entry type, Homologous
+                superfamily, as well as describing domain and structure
+                predictions from Genome3D annotations, and how they are
+                integrated in InterPro.
+              </div>
+            </div>
+
+            <div className={f('card-more')}>
+              <Link
+                href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
+                target="_blank"
+              >
+                <div
+                  className={f(
+                    'button-more',
+                    'icon',
+                    'icon-common',
+                    'icon-right',
+                  )}
+                  data-icon="&#xf061;"
+                >
+                  Start the course
+                </div>
+              </Link>
+            </div>
+          </div>
         </div>
         <h3 className={f('margin-top-large')}>Training</h3>
         <p>
           InterPro hands-on practical sessions feature regularly as part of the
           EBI training courses and workshops.{' '}
-          <Link href="//www.ebi.ac.uk/training" className={f('ext')}>
+          <Link
+            href="//www.ebi.ac.uk/training"
+            className={f('ext')}
+            target="_blank"
+          >
             Find out more
           </Link>{' '}
           about when and where these training courses will run, as well as how
           to apply to host them.
         </p>
+        <div className={f('box-add')}>
+          <h3 className={f('margin-top-large')}>Additional Help</h3>
+          <ul style={{ listStyleType: 'none', margin: 0 }}>
+            <li>
+              <Link
+                href="//www.ebi.ac.uk/support/interpro"
+                target="_blank"
+                withReferrer
+              >
+                <span className={f('icon', 'icon-common')} data-icon="&#x6e;" />{' '}
+                Submit a ticket
+              </Link>
+            </li>
+          </ul>
+        </div>
       </section>
     );
   }

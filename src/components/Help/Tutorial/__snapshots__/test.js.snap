@@ -346,6 +346,90 @@ exports[`<Tutorial /> should render 1`] = `
         </Memo(Connect(Link))>
       </div>
     </div>
+    <div
+      className="flex-card"
+    >
+      <div
+        className="card-image image-tuto-g3d"
+      >
+        <div
+          className="card-tag tag-tuto"
+        >
+          Tutorial
+        </div>
+      </div>
+      <div
+        className="card-content"
+      >
+        <div
+          className="card-title"
+        >
+          <h4>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
+              target="_blank"
+            >
+              Genome 3D annotations in InterPro webinar
+            </Memo(Connect(Link))>
+          </h4>
+        </div>
+        <div
+          className="card-info"
+        >
+          <div
+            className="card-info-author"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Typhaine Paysan-Lafosse
+             
+          </div>
+          <div
+            className="card-info-level"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Beginner
+          </div>
+          <div
+            className="card-info-duration"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            0.5 hour
+          </div>
+        </div>
+        <div
+          className="card-description"
+        >
+          This course presents the new InterPro entry type, Homologous superfamily, as well as describing domain and structure predictions from Genome3D annotations, and how they are integrated in InterPro.
+        </div>
+      </div>
+      <div
+        className="card-more"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
+          target="_blank"
+        >
+          <div
+            className="button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Start the course
+          </div>
+        </Memo(Connect(Link))>
+      </div>
+    </div>
   </div>
   <h3
     className="margin-top-large"
@@ -358,11 +442,44 @@ exports[`<Tutorial /> should render 1`] = `
     <Memo(Connect(Link))
       className="ext"
       href="//www.ebi.ac.uk/training"
+      target="_blank"
     >
       Find out more
     </Memo(Connect(Link))>
      
     about when and where these training courses will run, as well as how to apply to host them.
   </p>
+  <div
+    className="box-add"
+  >
+    <h3
+      className="margin-top-large"
+    >
+      Additional Help
+    </h3>
+    <ul
+      style={
+        Object {
+          "listStyleType": "none",
+          "margin": 0,
+        }
+      }
+    >
+      <li>
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/support/interpro"
+          target="_blank"
+          withReferrer={true}
+        >
+          <span
+            className="icon icon-common"
+            data-icon="n"
+          />
+           
+          Submit a ticket
+        </Memo(Connect(Link))>
+      </li>
+    </ul>
+  </div>
 </section>
 `;

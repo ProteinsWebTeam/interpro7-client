@@ -150,17 +150,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
           </span>
         </div>
 
-        <div
-          style={{
-            width: '100%',
-            height: '50vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-            justifyContent: 'center',
-          }}
-          data-testid="data-tree"
-        >
+        <div className={styles.tree} data-testid="data-tree">
           <svg
             className={styles.container}
             ref={this._ref}

@@ -426,7 +426,7 @@ exports[`<Faqs /> should render 1`] = `
       </div>
       <div>
         <h4>
-          Interface
+          Web interface
         </h4>
         <details
           className="accordion-style"
@@ -467,6 +467,150 @@ exports[`<Faqs /> should render 1`] = `
           >
             <p>
               The information bar above the taxonomy viewer contains links on the right which lead to data filtered to match the selected taxonomy node.
+            </p>
+          </div>
+        </details>
+      </div>
+      <div>
+        <h4>
+          Application programming interface (API)
+        </h4>
+        <details
+          className="accordion-style"
+        >
+          <summary>
+            How do I get started using the REST API?
+          </summary>
+          <div
+            className="accordion-info"
+          >
+            <p>
+              Documentation for the API is available at our
+               
+              <Memo(Connect(Link))
+                className="ext"
+                href="https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
+                target="_blank"
+              >
+                GitHub repository
+              </Memo(Connect(Link))>
+            </p>
+            <p>
+              If you'd like to see some example scripts in Perl, Python 2, Python 3 or Javascript we have a script generator. Please follow the steps below: The resulting page allows combinations
+            </p>
+            <ol>
+              <li>
+                Click on the
+                 
+                <Memo(Connect(Link))
+                  to={
+                    Object {
+                      "description": Object {
+                        "main": Object {
+                          "key": "result",
+                        },
+                        "result": Object {
+                          "type": "download",
+                        },
+                      },
+                    }
+                  }
+                >
+                  Results
+                </Memo(Connect(Link))>
+                 
+                tab in the tab list
+              </li>
+              <li>
+                Click the
+                 
+                <Memo(Connect(Link))
+                  to={
+                    Object {
+                      "description": Object {
+                        "main": Object {
+                          "key": "result",
+                        },
+                        "result": Object {
+                          "type": "download",
+                        },
+                      },
+                    }
+                  }
+                >
+                  Your downloads
+                </Memo(Connect(Link))>
+                 
+                sub-tab
+              </li>
+              <li>
+                Click the
+                 
+                <Memo(Connect(Link))
+                  to={
+                    Object {
+                      "description": Object {
+                        "main": Object {
+                          "key": "result",
+                        },
+                        "result": Object {
+                          "type": "download",
+                        },
+                      },
+                      "hash": "/entry/InterPro/|accession",
+                    }
+                  }
+                >
+                  Select and Download InterPro data
+                </Memo(Connect(Link))>
+                 
+                button
+              </li>
+            </ol>
+            <p>
+              You can select the data type you're interested in and apply filters to your query on this page. The
+               
+              <b>
+                Code snippet
+              </b>
+               section shows an example of code which you can run on your computer to fetch the data from the InterPro API.
+            </p>
+          </div>
+        </details>
+        <details
+          className="accordion-style"
+        >
+          <summary>
+            Why do I get HTTP timeouts (code 408) when running queries?
+          </summary>
+          <div
+            className="accordion-info"
+          >
+            <p>
+              Certain queries of the InterPro API may take a long time to run. Any request that takes longer than a few minutes is moved to run in the background and the API will return the HTTP status code 408 corresponding to a timeout. The query will continue to run in the background and the data will eventually become available.
+            </p>
+            <p>
+              The
+               
+              <Memo(Connect(Link))
+                to={
+                  Object {
+                    "description": Object {
+                      "main": Object {
+                        "key": "result",
+                      },
+                      "result": Object {
+                        "type": "download",
+                      },
+                    },
+                    "hash": "/entry/InterPro/|accession",
+                  }
+                }
+              >
+                Select and Download InterPro data
+              </Memo(Connect(Link))>
+               
+              page shows examples of code which handles these timeout codes to allow fetching of data from the API.
             </p>
           </div>
         </details>

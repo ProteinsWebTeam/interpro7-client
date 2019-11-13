@@ -20,6 +20,7 @@ import TextSearchBox, {
 } from 'components/SearchByText/TextSearchBox';
 
 import { sticky as supportsSticky } from 'utils/support';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -232,15 +233,17 @@ export class Header extends PureComponent /*:: <HeaderProps> */ {
   // TODO: check why position:sticky banner in the page works just on top - pbm with container
   render() {
     const { stickyMenuOffset: offset, stuck, isSignature } = this.props;
+    // console.log(this.state);
+    const shouldStuck = stuck;
     return (
       <div
         id={ebiGlobalStyles.masthead}
         className={styleBundle('masthead', { sign: isSignature })}
-        style={styleForHeader(false && supportsSticky, offset, stuck)}
+        style={styleForHeader(false && supportsSticky, offset, shouldStuck)}
       >
         <div className={styleBundle('masthead-inner', 'row')}>
           <Title />
-          <SideIcons stuck={stuck} />
+          <SideIcons stuck={shouldStuck} />
           <ResizeObserverComponent element="nav" measurements="width">
             {({ width }) => <DynamicMenu width={width} />}
           </ResizeObserverComponent>
@@ -255,13 +258,15 @@ const mapStateToProps = createSelector(
   state => state.customLocation.description.main.key,
   state => state.customLocation.description.entry.db,
   state => state.customLocation.description.entry.accession,
-  (stuck, mainType, entryDB, entryAccession) => ({
+  state => state.customLocation.description,
+  (stuck, mainType, entryDB, entryAccession, description) => ({
     stuck,
     isSignature: !!(
       mainType === 'entry' &&
       entryDB !== 'InterPro' &&
       entryAccession
     ),
+    path: descriptionToPath(description).split('/')?.[1],
   }),
 );
 export default connect(mapStateToProps)(Header);

@@ -37,7 +37,10 @@ export const getTrackColor = (
     case EntryColorMode.MEMBER_DB:
       return config.colors.get(entry.source_database);
     case EntryColorMode.DOMAIN_RELATIONSHIP:
-      if (entry.source_database.toLowerCase() === 'interpro') {
+      if (
+        entry.source_database &&
+        entry.source_database.toLowerCase() === 'interpro'
+      ) {
         acc = entry.accession
           .split('')
           .reverse()

@@ -17,7 +17,7 @@ const integrationFlags = new Set(['all', 'integrated', 'unintegrated']);
 
 const sortFn = sortFnFor({ selector: tuple => tuple[0] });
 
-const payloadToOptions = (payload, isIntegration = false) =>
+const payloadToOptions = (payload, isIntegration = false, memberDBs) =>
   Object.entries(payload)
     .filter(([key]) => integrationFlags.has(key) === isIntegration)
     .sort(sortFn)
@@ -25,13 +25,15 @@ const payloadToOptions = (payload, isIntegration = false) =>
       if (typeof value !== 'object') {
         return (
           <option key={key} value={key.toLowerCase()}>
-            {key}
+            {memberDBs && memberDBs[key]
+              ? memberDBs[key].name
+              : key.charAt(0).toUpperCase() + key.slice(1)}
           </option>
         );
       }
       return (
         <optgroup key={key} label={key.replace('_', ' ')}>
-          {payloadToOptions(value, isIntegration)}
+          {payloadToOptions(value, isIntegration, memberDBs)}
         </optgroup>
       );
     });
@@ -47,7 +49,8 @@ const payloadToOptions = (payload, isIntegration = false) =>
   isIntegration: boolean,
   name: string,
   value: string,
-  valueIntegration: string
+  valueIntegration: string,
+  databases: Object,
 };*/
 
 export class DBChoiceInputWithoutData extends PureComponent /*:: <Props> */ {
@@ -63,6 +66,7 @@ export class DBChoiceInputWithoutData extends PureComponent /*:: <Props> */ {
     name: T.string.isRequired,
     value: T.string.isRequired,
     valueIntegration: T.string.isRequired,
+    databases: T.object,
   };
 
   render() {
@@ -75,6 +79,7 @@ export class DBChoiceInputWithoutData extends PureComponent /*:: <Props> */ {
       name,
       value,
       valueIntegration,
+      databases,
     } = this.props;
     let integration;
     let _name = name;
@@ -104,7 +109,11 @@ export class DBChoiceInputWithoutData extends PureComponent /*:: <Props> */ {
               onBlur={noop}
             >
               <option value="">{'< no selection >'}</option>
-              {payloadToOptions(payload[toPlural(type)], isIntegration)}
+              {payloadToOptions(
+                payload[toPlural(type)],
+                isIntegration,
+                databases,
+              )}
             </select>
           )) || <input />}
           <div className={f('input-group-button')}>

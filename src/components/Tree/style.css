@@ -45,3 +45,13 @@
     cursor: pointer;
   }
 }
+
+.tree {
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  border: 2px solid var(--colors-secondary-header);
+}

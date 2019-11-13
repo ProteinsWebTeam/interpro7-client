@@ -23,6 +23,8 @@ import { customLocationSelector } from 'reducers/custom-location';
 import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
+import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 const f = foundationPartial(local);
 
@@ -52,12 +54,17 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     lowGraphics: T.bool.isRequired,
     customLocation: T.object.isRequired,
     goToCustomLocation: T.func.isRequired,
+    data: T.shape({
+      loading: T.bool,
+      payload: T.object,
+    }),
   };
 
   /*::  _ref: { current: null | React$ElementRef<'form'> } */
   constructor(props /*: Props */) {
     super(props);
     this._ref = React.createRef();
+    this.memberDb = {};
   }
 
   // eslint-disable-next-line complexity
@@ -134,7 +141,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { matched, api, lowGraphics } = this.props;
+    const { matched, api, lowGraphics, data } = this.props;
 
     const { description, fileType, subset } = extractDataFromHash(matched);
 
@@ -155,6 +162,10 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     const filters = typeObjects.filter(([, type]) => type.isFilter);
 
     const main = description.main.key || 'entry';
+
+    if (!data?.loading && data?.payload) {
+      this.memberDB = data.payload.databases;
+    }
 
     return (
       <form
@@ -183,6 +194,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
             ).toLowerCase()}
             name={`description.${main}.db`}
             onClick={this._handleChange}
+            databases={this.memberDB}
           />
         </fieldset>
         <fieldset className={f('fieldset')}>
@@ -332,4 +344,4 @@ const mapStateToProps = createSelector(
 export default connect(
   mapStateToProps,
   { goToCustomLocation },
-)(DownloadForm);
+)(loadData(getUrlForMeta)(DownloadForm));
