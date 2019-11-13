@@ -94,7 +94,7 @@ ul.ordered {
   //border: black solid 2px;
   border-radius: var(--entry-padding);
 
-  @nest & button {
+  @nest & button.close {
     position: absolute;
     background: transparent;
     font-size: 0.8em;
@@ -104,8 +104,32 @@ ul.ordered {
     //border: black solid 1px;
     width: 1em;
   }
-  @nest & button:hover {
+  @nest & button.drag {
+    position: absolute;
+    background: transparent;
+    font-size: 0.8em;
+    left: 0.4em;
+    top: -0.3em;
+    width: 1em;
+  }
+  @nest & button.close:hover {
     font-weight: bold;
+  }
+  @nest & button.drag {
+    position: absolute;
+    background: transparent;
+    font-size: 0.8em;
+    left: 1.3em;
+    top: 1em;
+    color: var(--colors-ulightgray);
+    width: 1em;
+    cursor: grabbing;
+  }
+  @nest & button.nodata {
+    top: 0.5em;
+  }
+  @nest & button.drag {
+    color: var(--colors-nearly-white);
   }
   @nest & input {
     width: var(--entry-width);
