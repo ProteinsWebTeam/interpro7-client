@@ -21,6 +21,11 @@ exports[`<Controls /> should render 1`] = `
     , please check the “Code snippet” section of this page for to see how to download the data directly onto your computer.
   </div>
   <div
+    className="text"
+  >
+    Please generate the file in order to download it.
+  </div>
+  <div
     className="container"
   >
     <button

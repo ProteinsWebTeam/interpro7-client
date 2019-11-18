@@ -98,6 +98,12 @@ export class Controls extends PureComponent /*:: <Props> */ {
             how to download the data directly onto your computer.
           </div>
         )}
+        {count < HARD_LIMIT ? (
+          <div className={f('text')}>
+            Please generate the file in order to download it.
+          </div>
+        ) : null}
+
         <div className={f('container')}>
           <button
             type="button"

@@ -202,11 +202,18 @@ export const InterProScan = (
       <section>
         <h3>License</h3>
         <p>
-          The InterProScan software is distributed under the open source Apache
-          license, as are the included scanning tools (except SignalP and
-          TMHMM). Therefore, you do not need a special license for commercial
-          use but please cite the resource and keep the Copyright statement with
-          your installation.
+          The InterProScan software is distributed under the open source{' '}
+          <Link
+            href="http://www.apache.org/licenses/LICENSE-2.0.txt"
+            target="_blank"
+            className={f('ext')}
+          >
+            Apache License
+          </Link>
+          , as are the included scanning tools (except SignalP and TMHMM).
+          Therefore, you do not need a special license for commercial use but
+          please cite the resource and keep the Copyright statement with your
+          installation.
         </p>
       </section>
       <section>

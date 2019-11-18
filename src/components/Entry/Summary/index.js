@@ -155,7 +155,7 @@ const SidePanel = ({ metadata, dbInfo }) => {
             'helpful if you can include literature references supporting your annotation suggestion.'
           }
         >
-          <button className={f('annotation-button')}>
+          <button className={f('button')}>
             <Link
               href="//www.ebi.ac.uk/support/interpro"
               target="_blank"
