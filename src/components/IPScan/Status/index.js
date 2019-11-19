@@ -116,6 +116,10 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                   },
                 }}
               >
+                <span
+                  className={f('icon', 'icon-common')}
+                  data-icon="&#xf0c1;"
+                />{' '}
                 {row.remoteID || localID}
               </Link>
             )}
@@ -154,12 +158,13 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                 {(status === 'running' ||
                   status === 'created' ||
                   status === 'submitted') && (
-                  <span
-                    style={{ fontSize: '200%' }}
-                    className={f('icon', 'icon-common', 'ico-neutral')}
-                    data-icon="&#xf017;"
-                    aria-label={`Job ${status}`}
-                  />
+                  <span>In progress</span>
+                  // <span
+                  //   style={{ fontSize: '200%' }}
+                  //   className={f('icon', 'icon-common', 'ico-neutral')}
+                  //   data-icon="&#xf017;"
+                  //   aria-label={`Job ${status}`}
+                  // />
                 )}
 
                 {status === 'not found' ||

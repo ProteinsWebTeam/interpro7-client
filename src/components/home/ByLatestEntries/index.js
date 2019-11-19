@@ -103,7 +103,7 @@ class LatestEntry extends PureComponent /*:: <Props> */ {
               <Tooltip title={`${entry.metadata.type} type`}>
                 <interpro-type
                   dimension="1.5em"
-                  type={entry.metadata.type}
+                  type={entry.metadata.type.replace('_', ' ')}
                   aria-label="Entry type"
                 >
                   {
