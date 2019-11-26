@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData';
-import { edgeCases, STATUS_OK } from 'higherOrder/loadData/defaults';
+import { STATUS_OK } from 'higherOrder/loadData/defaults';
 import { getReversedUrl } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Column } from 'components/Table';
@@ -42,8 +42,8 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
   } = props;
   if (!loading && status !== STATUS_OK)
     return (
-      <div className={f('callout', 'info', 'withicon')}>
-        {edgeCases.get(status)}
+      <div className={f('callout', 'info')}>
+        There is no key species associated with this accession
       </div>
     );
   if (loading || !payload) return <Loading />;
