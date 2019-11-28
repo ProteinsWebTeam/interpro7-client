@@ -29,8 +29,9 @@ const PanelIDA = (
     changeEntryHandler,
     changeIgnoreHandler,
     removeIgnoreHandler,
-    markerBeforeEntry = '',
+    markerBeforeEntry = null,
     handleMoveMarker,
+    handleMoveEntry,
   } /*: {
   entryList: Array<string>,
   ignoreList: Array<string>,
@@ -49,14 +50,15 @@ const PanelIDA = (
           {entryList &&
             entryList.map((e, i) => (
               <>
-                {markerBeforeEntry == e && <div>|</div>}
+                {markerBeforeEntry === e && <div>|</div>}
                 <li key={i}>
                   <IdaEntry
                     position={i}
                     entry={e}
                     active={true}
                     draggable={isOrdered}
-                    handleMoveMarker={handleMoveMarker}
+                    handleMoveMarker={handleMoveMarker(i)}
+                    handleMoveEntry={handleMoveEntry(i)}
                     removeEntryHandler={() => removeEntryHandler(i)}
                     changeEntryHandler={name => changeEntryHandler(i, name)}
                   />
@@ -115,7 +117,7 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
     goToCustomLocation: T.func.isRequired,
   };
   state = {
-    markerBeforeEntry: '',
+    markerBeforeEntry: null,
   };
   _handleSubmit = ({ entries, order, ignore }) => {
     const search /*: SearchProps */ = {
@@ -133,16 +135,25 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
       search,
     });
   };
-  _handleMoveMarker = (entry, delta) => {
-    const { ida_search: searchFromURL } = this.props.customLocation.search;
-    const entries = searchFromURL ? searchFromURL.split(',') : [];
-    const pos = entries.indexOf(entry);
-    if (pos >= 0) {
-      const newPos = Math.max(0, Math.min(entries.length - 1, pos + delta));
-      this.setState({ markerBeforeEntry: entries[newPos] });
+  _handleMoveMarker = entries => pos => delta => {
+    if (delta === null) {
+      this.setState({ markerBeforeEntry: null });
       return;
     }
-    this.setState({ markerBeforeEntry: '' });
+    const newPos = Math.max(0, Math.min(entries.length - 1, pos + delta));
+    this.setState({ markerBeforeEntry: entries[newPos] });
+  };
+  _handleMoveEntry = (currentEntries, ignore) => pos => delta => {
+    const newPos = Math.max(
+      0,
+      Math.min(currentEntries.length - 1, pos + delta),
+    );
+
+    const entries = [...currentEntries];
+    entries.splice(pos, 1);
+    entries.splice(newPos, 0, currentEntries[pos]);
+
+    this._handleSubmit({ entries, order: true, ignore });
   };
   render() {
     const {
@@ -187,7 +198,8 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                     ignoreList={ignore}
                     isOrdered={order}
                     markerBeforeEntry={this.state.markerBeforeEntry}
-                    handleMoveMarker={this._handleMoveMarker}
+                    handleMoveMarker={this._handleMoveMarker(entries)}
+                    handleMoveEntry={this._handleMoveEntry(entries, ignore)}
                     removeEntryHandler={n =>
                       this._handleSubmit({
                         entries: entries

@@ -96,32 +96,27 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     }
     this.setState({ options });
   };
+  _getDeltaFromDragging = event => {
+    let delta = Math.floor((event.pageX - this.startPos) / this.currentWidth);
+    if (delta <= 0) delta++;
+    return delta;
+  };
   _handleStartDragging = event => {
     this.currentWidth = this.container.current.offsetWidth;
     this.startPos = event.pageX;
   };
+  _handleDragging = event => {
+    this.props.handleMoveMarker(this._getDeltaFromDragging(event));
+  };
   _handleEndDragging = event => {
-    // if (this.startPos -event.pageX > this.currentWidth/2){
-
-    // }
-    //   console.log("move -1");
-    // if (event.pageX - this.startPos > this.currentWidth){
-    let delta = Math.floor((event.pageX - this.startPos) / this.currentWidth);
-    if (delta < 0) delta++;
-    this.props.handleMoveMarker('', 0);
-    console.log(`move ${delta}`);
-    // }
+    let delta = this._getDeltaFromDragging(event);
+    this.props.handleMoveMarker(null);
+    if (delta > 0) delta--;
+    if (delta !== 0) {
+      this.props.handleMoveEntry(delta);
+    }
     this.currentWidth = null;
     this.startPos = null;
-  };
-  _handleDragging = event => {
-    let delta = Math.floor((event.pageX - this.startPos) / this.currentWidth);
-    if (delta < 0) delta++;
-    this.props.handleMoveMarker(this.props.entry, delta);
-    // if (this.startPos -event.pageX > this.currentWidth/2)
-    //   console.log("move -1");
-    // if (this.startPos -event.pageX > this.currentWidth/2)
-    //   console.log("move +1");
   };
   render() {
     const {
