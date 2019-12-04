@@ -316,14 +316,14 @@ const Matches = (
               primary={primary}
               secondary={secondary}
             />
-            <li style={{ display: 'flex', alignItems: 'center' }}>
+            <li className={f('exporter-link')}>
               <Link target="_blank" href={getReversedUrl(state)}>
                 <span
                   className={f('icon', 'icon-common', 'icon-export')}
                   data-icon="&#xf233;"
                 />
+                <span className={f('file-label')}>API Web View</span>
               </Link>
-              <div>API Web View</div>
             </li>
           </ul>
         </Exporter>

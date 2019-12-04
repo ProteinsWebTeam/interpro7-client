@@ -6,6 +6,7 @@ import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
 import Link from 'components/generic/Link';
+import FileExporter from 'components/Matches/FileExporter';
 
 import { UniProtLink } from 'components/ExtLink';
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
@@ -173,6 +174,22 @@ const SummaryProtein = (
                   </UniProtLink>
                 </li>
               </ul>
+              <FileExporter
+                description={{
+                  main: { key: 'protein' },
+                  protein: {
+                    db: metadata.source_database,
+                    accession: metadata.accession,
+                  },
+                  entry: { integration: 'all' },
+                }}
+                count={metadata.counters.entries}
+                fileType="tsv"
+                primary="entry"
+                secondary="protein"
+                label="Export Matches [TSV]"
+                className={'button hollow'}
+              />
             </div>
           </div>
         </div>

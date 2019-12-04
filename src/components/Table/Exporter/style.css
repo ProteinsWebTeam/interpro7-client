@@ -26,7 +26,6 @@
   padding: 0;
 }
 .exporter .dropdown-pane ul li a {
-  display: block;
   padding: 0.3rem 1rem;
 }
 .exporter .dropdown-pane ul li a:hover {
