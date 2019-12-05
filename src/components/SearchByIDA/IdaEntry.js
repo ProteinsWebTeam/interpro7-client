@@ -10,6 +10,8 @@ import getFetch from 'higherOrder/loadData/getFetch';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+
 import { foundationPartial } from 'styles/foundation';
 import local from './style.css';
 
@@ -136,6 +138,14 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
       draggable = false,
       options = {},
     } = this.props;
+    const style = options[this.props.entry]
+      ? {
+          background: getTrackColor(
+            { accession: this.props.entry, source_database: '' },
+            EntryColorMode.ACCESSION,
+          ),
+        }
+      : {};
     return (
       <div
         className={f('ida-entry')}
@@ -144,6 +154,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
         onDragEnd={this._handleEndDragging}
         onDragCapture={this._handleDragging}
         ref={this.container}
+        style={style}
       >
         <Autocomplete
           inputProps={{ id: 'entries-autocomplete' }}

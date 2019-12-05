@@ -112,6 +112,8 @@ PanelIDA.propTypes = {
   markerAfterEntry: T.string,
   handleMoveMarker: T.func,
   handleMoveEntry: T.func,
+  mergeResults: T.func,
+  options: T.object,
 };
 
 /*:: type Props = {

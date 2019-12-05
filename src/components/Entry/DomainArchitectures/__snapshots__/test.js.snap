@@ -7,19 +7,54 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
   <div
     className="columns"
   >
-    <h4>
-      511
-       domain architectures found.
-      <Tooltip
-        title="Toogle between domain architectures based on Pfam and InterPro entries"
+    <React.Fragment>
+      <h4>
+        511
+         domain architectures found.
+      </h4>
+      <div
+        className="accession-selector-panel"
       >
-        <button
-          className="icon icon-common"
-          data-icon=""
-          onClick={[Function]}
-        />
-      </Tooltip>
-    </h4>
+        <Tooltip
+          title="Toogle between domain architectures based on Pfam and InterPro entries"
+        >
+          <div
+            className="switch large"
+          >
+            <input
+              checked={true}
+              className="switch-input"
+              id="accessionDB-input"
+              name="accessionDB"
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <label
+              className="switch-paddle accession-selector"
+              htmlFor="accessionDB-input"
+            >
+              <span
+                className="show-for-sr"
+              >
+                Use accessions from:
+              </span>
+              <span
+                aria-hidden="true"
+                className="switch-active"
+              >
+                PFam
+              </span>
+              <span
+                aria-hidden="true"
+                className="switch-inactive"
+              >
+                InterPro
+              </span>
+            </label>
+          </div>
+        </Tooltip>
+      </div>
+    </React.Fragment>
     <div
       className="margin-bottom-large"
     >

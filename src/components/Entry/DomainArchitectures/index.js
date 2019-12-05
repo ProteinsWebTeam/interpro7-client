@@ -138,12 +138,6 @@ export class IDAProtVista extends ProtVistaMatches {
         {
           name: domain.accession,
           source_database: sourceDatabase,
-          // color: !isIPR
-          //   ? getTrackColor(
-          //       { accession: domain.accession },
-          //       EntryColorMode.ACCESSION,
-          //     )
-          //   : '#888888',
           color: getTrackColor(
             { accession: domain.accession },
             EntryColorMode.ACCESSION,
@@ -237,6 +231,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     };
   }
   toggleDomainEntry = () => {
+    // TODO: change to put the value in the redux state
     if (this.state.entry === 'pfam') this.setState({ entry: 'interpro' });
     else this.setState({ entry: 'pfam' });
   };
@@ -262,24 +257,37 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
               There are no Domain architectures for the current selection.
             </div>
           ) : (
-            <h4>
-              {payload.count} domain architectures found.
-              <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-                {this.state.entry === 'pfam' ? (
-                  <button
-                    className={f('icon', 'icon-common')}
-                    data-icon="&#xf204;"
-                    onClick={this.toggleDomainEntry}
-                  />
-                ) : (
-                  <button
-                    className={f('icon', 'icon-common')}
-                    data-icon="&#xf205;"
-                    onClick={this.toggleDomainEntry}
-                  />
-                )}
-              </Tooltip>
-            </h4>
+            <>
+              <h4>{payload.count} domain architectures found.</h4>
+              <div className={f('accession-selector-panel')}>
+                <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
+                  <div className={f('switch', 'large')}>
+                    <input
+                      type="checkbox"
+                      checked={this.state.entry === 'pfam'}
+                      className={f('switch-input')}
+                      name="accessionDB"
+                      id="accessionDB-input"
+                      onChange={this.toggleDomainEntry}
+                    />
+                    <label
+                      className={f('switch-paddle', 'accession-selector')}
+                      htmlFor="accessionDB-input"
+                    >
+                      <span className={f('show-for-sr')}>
+                        Use accessions from:
+                      </span>
+                      <span className={f('switch-active')} aria-hidden="true">
+                        PFam
+                      </span>
+                      <span className={f('switch-inactive')} aria-hidden="true">
+                        InterPro
+                      </span>
+                    </label>
+                  </div>
+                </Tooltip>
+              </div>
+            </>
           )}
           {(payload.results || []).map(obj => {
             const idaObj = ida2json(obj.ida, this.state.entry);
