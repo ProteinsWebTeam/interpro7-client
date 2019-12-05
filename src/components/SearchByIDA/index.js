@@ -29,6 +29,8 @@ const PanelIDA = (
     changeEntryHandler,
     changeIgnoreHandler,
     removeIgnoreHandler,
+    mergeResults,
+    options,
     markerBeforeEntry = null,
     markerAfterEntry = null,
     handleMoveMarker,
@@ -41,6 +43,8 @@ const PanelIDA = (
   changeEntryHandler: function,
   changeIgnoreHandler: function,
   removeIgnoreHandler: function,
+  mergeResults: function,
+  options: {},
   markerBeforeEntry: ?string,
   markerAfterEntry: ?string,
   handleMoveMarker: function,
@@ -66,6 +70,8 @@ const PanelIDA = (
                     handleMoveEntry={handleMoveEntry(i)}
                     removeEntryHandler={() => removeEntryHandler(i)}
                     changeEntryHandler={name => changeEntryHandler(i, name)}
+                    mergeResults={mergeResults}
+                    options={options}
                   />
                 </li>
                 {markerAfterEntry === e && <div>|</div>}
@@ -115,6 +121,7 @@ PanelIDA.propTypes = {
 /*:: type State = {
   markerBeforeEntry: ?string,
   markerAfterEntry: ?string,
+  options: {},
 }; */
 
 /*:: type SearchProps = {
@@ -133,6 +140,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
   state = {
     markerBeforeEntry: null,
     markerAfterEntry: null,
+    options: {},
   };
   _handleSubmit = ({ entries, order, ignore }) => {
     const search /*: SearchProps */ = {
@@ -180,6 +188,16 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
 
     this._handleSubmit({ entries, order: true, ignore });
   };
+
+  _mergeResults = data => {
+    if (!data || !data.ok) return;
+    const options = { ...this.state.options };
+    for (const e of data.payload.results) {
+      options[e.metadata.accession] = e.metadata;
+    }
+    this.setState({ options });
+  };
+
   render() {
     const {
       ida_search: searchFromURL,
@@ -226,6 +244,8 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                     markerAfterEntry={this.state.markerAfterEntry}
                     handleMoveMarker={this._handleMoveMarker(entries)}
                     handleMoveEntry={this._handleMoveEntry(entries, ignore)}
+                    mergeResults={this._mergeResults}
+                    options={this.state.options}
                     removeEntryHandler={n =>
                       this._handleSubmit({
                         entries: entries

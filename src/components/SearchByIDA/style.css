@@ -19,7 +19,7 @@
         height: 85%;
         padding: 0.2em 0 0;
         overflow: scroll;
-        max-width: calc(100vh - var(--entry-width) + var(--entry-padding) * 4);
+        max-width: calc(100vw - var(--entry-width) + var(--entry-padding) * 4);
       }
     }
     @nest & div.ida-ignore {
@@ -43,6 +43,7 @@
   min-height: 50px;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   & button.button.secondary {
     & * {
       vertical-align: middle;

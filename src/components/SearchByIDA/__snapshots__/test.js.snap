@@ -37,6 +37,8 @@ exports[`<SearchByIDA /> should render 1`] = `
               isOrdered={false}
               markerAfterEntry={null}
               markerBeforeEntry={null}
+              mergeResults={[Function]}
+              options={Object {}}
               removeEntryHandler={[Function]}
               removeIgnoreHandler={[Function]}
             />

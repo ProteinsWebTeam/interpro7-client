@@ -43,6 +43,8 @@ const getUrlForAutocomplete = (
   removeEntryHandler: function,
   handleMoveMarker: function,
   handleMoveEntry: function,
+  mergeResults: function,
+  options: {},
   api: {
     protocol: string,
     hostname: string,
@@ -51,7 +53,6 @@ const getUrlForAutocomplete = (
   },
 }; */
 /*:: type State = {
-  options: {},
   draggable: boolean,
 }; */
 /*:: type DataType = {
@@ -68,9 +69,11 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     removeEntryHandler: T.func,
     handleMoveMarker: T.func,
     handleMoveEntry: T.func,
+    mergeResults: T.func,
     api: T.object,
     position: T.number,
     draggable: T.bool,
+    options: T.object,
   };
   constructor(props) {
     super(props);
@@ -79,7 +82,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     this.currentWidth = 1;
   }
   state = {
-    options: {},
+    // options: {},
     draggable: false,
   };
   componentDidMount() {
@@ -90,24 +93,16 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     fetchFun(getUrlForAutocomplete(this.props.api, 'interpro', value)).then((
       data /*: DataType */,
     ) => {
-      this._mergeResults(data);
+      this.props.mergeResults(data);
     });
 
     fetchFun(getUrlForAutocomplete(this.props.api, 'pfam', value)).then((
       data /*: DataType */,
     ) => {
-      this._mergeResults(data);
+      this.props.mergeResults(data);
     });
   };
 
-  _mergeResults = data => {
-    if (!data || !data.ok) return;
-    const options = { ...this.state.options };
-    for (const e of data.payload.results) {
-      options[e.metadata.accession] = e.metadata;
-    }
-    this.setState({ options });
-  };
   _getDeltaFromDragging = event => {
     let delta = Math.floor(
       (event.pageX - (this.startPos || 0)) / this.currentWidth,
@@ -139,6 +134,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
       removeEntryHandler,
       position,
       draggable = false,
+      options = {},
     } = this.props;
     return (
       <div
@@ -152,7 +148,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
         <Autocomplete
           inputProps={{ id: 'entries-autocomplete' }}
           getItemValue={item => item.accession}
-          items={Object.values(this.state.options)}
+          items={Object.values(options)}
           renderItem={(item, isHighlighted) => (
             <div
               style={{ background: isHighlighted ? 'lightgray' : 'white' }}
@@ -178,12 +174,12 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
                 id={props.id + position}
                 placeholder={'Search entry'}
               />
-              {this.state.options[props.value] && (
+              {options[props.value] && (
                 <label
                   htmlFor={props.id + position}
                   className={f('entry-name')}
                 >
-                  {this.state.options[props.value].name}
+                  {options[props.value].name}
                 </label>
               )}
             </>
@@ -191,7 +187,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
         />
         {draggable && (
           <button
-            className={f('drag', { nodata: !this?.state?.options[entry] })}
+            className={f('drag', { nodata: !options[entry] })}
             onMouseEnter={() => this.setState({ draggable: true })}
             onMouseLeave={() => this.setState({ draggable: false })}
           >
