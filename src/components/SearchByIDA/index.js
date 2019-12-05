@@ -39,7 +39,10 @@ const PanelIDA = (
   removeEntryHandler: function,
   changeEntryHandler: function,
   changeIgnoreHandler: function,
-  removeIgnoreHandler: function
+  removeIgnoreHandler: function,
+  markerBeforeEntry: ?string,
+  handleMoveMarker: function,
+  handleMoveEntry: function,
   } */,
 ) => (
   <div className={f('panels')}>
@@ -96,11 +99,17 @@ PanelIDA.propTypes = {
   changeEntryHandler: T.func,
   changeIgnoreHandler: T.func,
   goToCustomLocation: T.func,
+  markerBeforeEntry: T.string,
+  handleMoveMarker: T.func,
+  handleMoveEntry: T.func,
 };
 
 /*:: type Props = {
   customLocation: CustomLocation,
   goToCustomLocation: goToCustomLocation,
+}; */
+/*:: type State = {
+  markerBeforeEntry: ?string,
 }; */
 
 /*:: type SearchProps = {
@@ -108,7 +117,7 @@ PanelIDA.propTypes = {
   ida_ignore?: string,
   ordered?: boolean,
 }; */
-export class SearchByIDA extends PureComponent /*:: <Props> */ {
+export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     customLocation: T.shape({
       description: T.object.isRequired,

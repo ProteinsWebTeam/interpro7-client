@@ -38,8 +38,11 @@ const getUrlForAutocomplete = (
 /*:: type Props = {
   entry: string,
   position: number,
+  draggable: boolean,
   changeEntryHandler: function,
   removeEntryHandler: function,
+  handleMoveMarker: function,
+  handleMoveEntry: function,
   api: {
     protocol: string,
     hostname: string,
@@ -49,27 +52,36 @@ const getUrlForAutocomplete = (
 }; */
 /*:: type State = {
   options: {},
+  draggable: boolean,
 }; */
 /*:: type DataType = {
   ok: bool,
   payload: Object,
 }; */
 class IdaEntry extends PureComponent /*:: <Props, State> */ {
+  /*:: container: { current: null | React$ElementRef<'div'> }; */
+  /*:: startPos: number; */
+  /*:: currentWidth: number; */
   static propTypes = {
     entry: T.string,
     changeEntryHandler: T.func,
     removeEntryHandler: T.func,
+    handleMoveMarker: T.func,
+    handleMoveEntry: T.func,
     api: T.object,
     position: T.number,
-  };
-  state = {
-    options: {},
-    draggable: false,
+    draggable: T.bool,
   };
   constructor(props) {
     super(props);
     this.container = React.createRef();
+    this.startPos = 0;
+    this.currentWidth = 1;
   }
+  state = {
+    options: {},
+    draggable: false,
+  };
   componentDidMount() {
     if (this.props.entry) this._handleOnChange(null, this.props.entry);
   }
@@ -97,12 +109,14 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     this.setState({ options });
   };
   _getDeltaFromDragging = event => {
-    let delta = Math.floor((event.pageX - this.startPos) / this.currentWidth);
+    let delta = Math.floor(
+      (event.pageX - (this.startPos || 0)) / this.currentWidth,
+    );
     if (delta <= 0) delta++;
     return delta;
   };
   _handleStartDragging = event => {
-    this.currentWidth = this.container.current.offsetWidth;
+    this.currentWidth = this.container?.current?.offsetWidth || 1;
     this.startPos = event.pageX;
   };
   _handleDragging = event => {
@@ -115,8 +129,8 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     if (delta !== 0) {
       this.props.handleMoveEntry(delta);
     }
-    this.currentWidth = null;
-    this.startPos = null;
+    this.currentWidth = 1;
+    this.startPos = 0;
   };
   render() {
     const {
