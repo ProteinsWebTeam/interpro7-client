@@ -35,6 +35,7 @@ exports[`<SearchByIDA /> should render 1`] = `
               handleMoveMarker={[Function]}
               ignoreList={Array []}
               isOrdered={false}
+              markerAfterEntry={null}
               markerBeforeEntry={null}
               removeEntryHandler={[Function]}
               removeIgnoreHandler={[Function]}

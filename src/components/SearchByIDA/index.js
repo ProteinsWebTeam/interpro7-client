@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -30,6 +30,7 @@ const PanelIDA = (
     changeIgnoreHandler,
     removeIgnoreHandler,
     markerBeforeEntry = null,
+    markerAfterEntry = null,
     handleMoveMarker,
     handleMoveEntry,
   } /*: {
@@ -41,6 +42,7 @@ const PanelIDA = (
   changeIgnoreHandler: function,
   removeIgnoreHandler: function,
   markerBeforeEntry: ?string,
+  markerAfterEntry: ?string,
   handleMoveMarker: function,
   handleMoveEntry: function,
   } */,
@@ -52,9 +54,9 @@ const PanelIDA = (
         <ul className={f('ida-list', { ordered: isOrdered })}>
           {entryList &&
             entryList.map((e, i) => (
-              <>
+              <Fragment key={i}>
                 {markerBeforeEntry === e && <div>|</div>}
-                <li key={i}>
+                <li>
                   <IdaEntry
                     position={i}
                     entry={e}
@@ -66,7 +68,8 @@ const PanelIDA = (
                     changeEntryHandler={name => changeEntryHandler(i, name)}
                   />
                 </li>
-              </>
+                {markerAfterEntry === e && <div>|</div>}
+              </Fragment>
             ))}
         </ul>
       </div>
@@ -100,6 +103,7 @@ PanelIDA.propTypes = {
   changeIgnoreHandler: T.func,
   goToCustomLocation: T.func,
   markerBeforeEntry: T.string,
+  markerAfterEntry: T.string,
   handleMoveMarker: T.func,
   handleMoveEntry: T.func,
 };
@@ -110,6 +114,7 @@ PanelIDA.propTypes = {
 }; */
 /*:: type State = {
   markerBeforeEntry: ?string,
+  markerAfterEntry: ?string,
 }; */
 
 /*:: type SearchProps = {
@@ -127,6 +132,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
   };
   state = {
     markerBeforeEntry: null,
+    markerAfterEntry: null,
   };
   _handleSubmit = ({ entries, order, ignore }) => {
     const search /*: SearchProps */ = {
@@ -146,11 +152,21 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
   };
   _handleMoveMarker = entries => pos => delta => {
     if (delta === null) {
-      this.setState({ markerBeforeEntry: null });
+      this.setState({ markerBeforeEntry: null, markerAfterEntry: null });
       return;
     }
-    const newPos = Math.max(0, Math.min(entries.length - 1, pos + delta));
-    this.setState({ markerBeforeEntry: entries[newPos] });
+    const newPos = Math.max(0, Math.min(entries.length, pos + delta));
+    if (newPos === entries.length) {
+      this.setState({
+        markerBeforeEntry: null,
+        markerAfterEntry: entries[newPos - 1],
+      });
+    } else {
+      this.setState({
+        markerBeforeEntry: entries[newPos],
+        markerAfterEntry: null,
+      });
+    }
   };
   _handleMoveEntry = (currentEntries, ignore) => pos => delta => {
     const newPos = Math.max(
@@ -207,6 +223,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                     ignoreList={ignore}
                     isOrdered={order}
                     markerBeforeEntry={this.state.markerBeforeEntry}
+                    markerAfterEntry={this.state.markerAfterEntry}
                     handleMoveMarker={this._handleMoveMarker(entries)}
                     handleMoveEntry={this._handleMoveEntry(entries, ignore)}
                     removeEntryHandler={n =>
