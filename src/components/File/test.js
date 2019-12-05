@@ -14,7 +14,7 @@ describe('<File />', () => {
           hostname: 'wp-np3-ac.ebi.ac.uk',
           port: '80',
           protocol: 'http:',
-          root: '/interpro7/api/',
+          root: '/interpro/api/',
         }}
         entryDescription={{
           accession: 'IPR000001',

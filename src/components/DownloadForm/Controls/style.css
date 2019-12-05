@@ -6,6 +6,10 @@
   }
 }
 
+.text {
+  margin: 1ch 0;
+}
+
 .button {
   line-height: initial;
 }

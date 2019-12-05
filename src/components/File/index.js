@@ -39,6 +39,8 @@ const extensions = {
   progress: number,
   successful: boolean,
   blobURL: string,
+  label?: string,
+  className?: string,
   handleClick: function
 }; */
 
@@ -52,6 +54,8 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
     progress: T.number,
     successful: T.bool,
     blobURL: T.string,
+    label: T.string,
+    className: T.string,
     handleClick: T.func.isRequired,
   };
 
@@ -66,6 +70,8 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
       successful,
       blobURL,
       handleClick,
+      label,
+      className,
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
     const failed = successful === false;
@@ -127,7 +133,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
             download={filename}
             href={blobURL || url}
             disabled={downloading || count > HARD_LIMIT || count === 0}
-            className={f('link', { downloading, failed })}
+            className={f('link', className, { downloading, failed })}
             onClick={downloading || successful ? undefined : handleClick}
             data-url={url}
             data-type={fileType}
@@ -138,6 +144,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
               failed={failed}
               progress={progress || SMALL}
             />
+            {label && <span className={f('file-label')}>{label}</span>}
           </Link>
         </div>
       </Tooltip>
@@ -250,6 +257,7 @@ export class File extends PureComponent /*:: <Props, State> */ {
         name={name}
         handleClick={this._handleClick}
         count={count}
+        {...this.props}
       />
     );
   }

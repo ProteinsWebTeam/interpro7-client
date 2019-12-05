@@ -1,7 +1,19 @@
-.link {
-  border-bottom-width: 0 !important;
-  display: inline-block;
+@import '../../styles/colors.css';
+
+a.link {
   line-height: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
+
+  & span {
+    border-bottom-width: 0;
+  }
+  & span.file-label {
+    cursor: pointer;
+    min-width: 10em;
+    color: var(--colors-gray);
+  }
 }
 
 .downloading {

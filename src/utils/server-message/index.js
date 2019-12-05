@@ -31,7 +31,7 @@ const statusMessages = new Map([
   [
     408,
     message(
-      'The request timed out, your query is running in the server, try again later',
+      'The server takes too long to respond. Your request is running in the background. Please check again in a while for the results',
     ),
   ],
   [500, message('There was an error while getting data from the server')],
