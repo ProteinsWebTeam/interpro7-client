@@ -8,3 +8,42 @@
 .list-items:last-of-type {
   margin-bottom: 0.5rem;
 }
+
+.dropdown-container {
+  display: flex;
+  margin: 0.5rem 0 0 0;
+  position: relative;
+
+  & .dropdown-content {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    padding: 1rem 0.5rem;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--timing-really-fast) ease-in-out;
+    visibility: visible;
+    display: block;
+  }
+  & .left {
+    right: 30px; /*temp value while popup positioning is working better*/
+    min-width: 180%; /*temp value*/
+  }
+
+  & .dropdown-pane {
+    z-index: 2; /* so sticky header stay on top*/
+    & ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      & li a {
+        display: block;
+        padding: 0.3rem 1rem;
+      }
+      & li a:hover {
+        background-color: #1878ba;
+        color: white;
+      }
+    }
+  }
+}
