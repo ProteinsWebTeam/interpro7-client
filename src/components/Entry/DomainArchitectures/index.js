@@ -4,6 +4,8 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import { toggleAccessionDBForIDA } from 'actions/creators';
+
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -212,6 +214,8 @@ export class IDAProtVista extends ProtVistaMatches {
   mainAccession: string,
   search: Object,
   highlight: Array<string>,
+  idaAccessionDB: string,
+  toggleAccessionDBForIDA: function,
 }
 */
 class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitecturesWithDataProps> */ {
@@ -221,19 +225,15 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     search: T.object,
     dataDB: T.object.isRequired,
     highlight: T.arrayOf(T.string),
+    idaAccessionDB: T.string,
+    toggleAccessionDBForIDA: T.func,
   };
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      entry: 'pfam',
-    };
   }
   toggleDomainEntry = () => {
-    // TODO: change to put the value in the redux state
-    if (this.state.entry === 'pfam') this.setState({ entry: 'interpro' });
-    else this.setState({ entry: 'pfam' });
+    this.props.toggleAccessionDBForIDA();
   };
 
   render() {
@@ -243,6 +243,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       search,
       dataDB,
       highlight = [],
+      idaAccessionDB,
     } = this.props;
     if (loading || dataDB.loading) return <Loading />;
 
@@ -264,7 +265,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                   <div className={f('switch', 'large')}>
                     <input
                       type="checkbox"
-                      checked={this.state.entry === 'pfam'}
+                      checked={idaAccessionDB === 'pfam'}
                       className={f('switch-input')}
                       name="accessionDB"
                       id="accessionDB-input"
@@ -290,7 +291,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
             </>
           )}
           {(payload.results || []).map(obj => {
-            const idaObj = ida2json(obj.ida, this.state.entry);
+            const idaObj = ida2json(obj.ida, idaAccessionDB);
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
@@ -363,7 +364,12 @@ const mapStateToProps = createSelector(
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
   state => state.customLocation.search,
-  (mainAccession, search) => ({ mainAccession, search }),
+  state => state.ui.idaAccessionDB,
+  (mainAccession, search, idaAccessionDB) => ({
+    mainAccession,
+    search,
+    idaAccessionDB,
+  }),
 );
 
 export const DomainArchitecturesWithData = _DomainArchitecturesWithData;
@@ -374,5 +380,6 @@ export default loadData({
   loadData({
     getUrl: getUrlFor,
     mapStateToProps,
+    mapDispatchToProps: { toggleAccessionDBForIDA },
   })(DomainArchitecturesWithData),
 );
