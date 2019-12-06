@@ -279,7 +279,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                         Use accessions from:
                       </span>
                       <span className={f('switch-active')} aria-hidden="true">
-                        PFam
+                        Pfam
                       </span>
                       <span className={f('switch-inactive')} aria-hidden="true">
                         InterPro
