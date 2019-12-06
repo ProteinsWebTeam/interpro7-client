@@ -92,6 +92,8 @@ const PanelIDA = (
                 active={true}
                 removeEntryHandler={() => removeIgnoreHandler(i)}
                 changeEntryHandler={name => changeIgnoreHandler(i, name)}
+                mergeResults={mergeResults}
+                options={options}
               />
             </li>
           ))}
