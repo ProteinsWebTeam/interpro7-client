@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import { goToCustomLocation } from 'actions/creators';
+import { goToCustomLocation, addToast } from 'actions/creators';
 import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
@@ -155,7 +155,8 @@ const mergeData = (root, update, names, childrenCounters) => {
   customLocation: {
     description: Object,
   },
-  goToCustomLocation: function
+  goToCustomLocation: function,
+  addToast: function,
 };*/
 
 /*:: type State = {
@@ -170,6 +171,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       description: T.object,
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
+    addToast: T.func.isRequired,
   };
 
   constructor(props /*: TreeViewProps */) {
@@ -205,6 +207,23 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       };
     }
     return null;
+  }
+
+  updateToastSettings() {
+    // TODO update the settings in redux state
+    console.log('inside tree component');
+  }
+
+  componentDidMount() {
+    this.props.addToast(
+      {
+        title: '💡 Tip',
+        body: 'Arrow keys can be used to navigate the tree',
+        action: { text: 'Do not show again', fn: this.updateToastSettings },
+        ttl: 10000,
+      },
+      'tip',
+    );
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -414,5 +433,5 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 
 export default connect(
   null,
-  { goToCustomLocation },
+  { goToCustomLocation, addToast },
 )(TreeView);
