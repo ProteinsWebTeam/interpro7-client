@@ -42,7 +42,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
                 aria-hidden="true"
                 className="switch-active"
               >
-                PFam
+                Pfam
               </span>
               <span
                 aria-hidden="true"
