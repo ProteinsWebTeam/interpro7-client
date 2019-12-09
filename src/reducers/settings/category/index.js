@@ -13,6 +13,10 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
       return {
         pageSize: config.pagination.pageSize,
       };
+    case 'tips':
+      return {
+        showTreeToast: true,
+      };
     case 'ui':
       return {
         lowGraphics: false,

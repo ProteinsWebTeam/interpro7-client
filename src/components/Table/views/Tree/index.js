@@ -3,7 +3,11 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import { goToCustomLocation, addToast } from 'actions/creators';
+import {
+  goToCustomLocation,
+  addToast,
+  changeSettingsRaw,
+} from 'actions/creators';
 import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
@@ -156,7 +160,9 @@ const mergeData = (root, update, names, childrenCounters) => {
     description: Object,
   },
   goToCustomLocation: function,
+  showTreeToast: boolean,
   addToast: function,
+  changeSettingsRaw: function,
 };*/
 
 /*:: type State = {
@@ -171,7 +177,9 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       description: T.object,
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
-    addToast: T.func.isRequired,
+    showTreeToast: T.bool,
+    addToast: T.func,
+    changeSettingsRaw: T.func,
   };
 
   constructor(props /*: TreeViewProps */) {
@@ -209,21 +217,25 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     return null;
   }
 
-  updateToastSettings() {
-    // TODO update the settings in redux state
-    console.log('inside tree component');
+  updateToastSettings(context) {
+    context.props.changeSettingsRaw('tips', 'showTreeToast', false);
   }
 
   componentDidMount() {
-    this.props.addToast(
-      {
-        title: '💡 Tip',
-        body: 'Arrow keys can be used to navigate the tree',
-        action: { text: 'Do not show again', fn: this.updateToastSettings },
-        ttl: 10000,
-      },
-      'tip',
-    );
+    if (this.props.showTreeToast) {
+      this.props.addToast(
+        {
+          title: '💡 Tip',
+          body: 'Arrow keys can be used to navigate the tree',
+          action: {
+            text: 'Do not show again',
+            fn: () => this.updateToastSettings(this),
+          },
+          ttl: 10000,
+        },
+        'tip',
+      );
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -431,7 +443,12 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   }
 }
 
+const mapStateToProps = createSelector(
+  state => state.settings.tips.showTreeToast,
+  showTreeToast => ({ showTreeToast }),
+);
+
 export default connect(
-  null,
-  { goToCustomLocation, addToast },
+  mapStateToProps,
+  { goToCustomLocation, addToast, changeSettingsRaw },
 )(TreeView);
