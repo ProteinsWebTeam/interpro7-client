@@ -221,7 +221,12 @@ export default class TextExplanation extends PureComponent /*:: <textExplanation
               </option>
               <option value="json">JSON</option>
               {/* <option value="ndjson">Newline-delimited JSON</option> */}
-              {/* <option value="tsv">TSV</option> */}
+              <option
+                value="tsv"
+                disabled={!description[main].db || description[main].accession}
+              >
+                TSV
+              </option>
               {/* <option value="xml">XML</option> */}
             </select>{' '}
             file will contain {getMainFragment(description, count)}

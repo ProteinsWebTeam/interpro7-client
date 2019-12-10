@@ -33,6 +33,12 @@ exports[`<TextExplanation /> should render 1`] = `
       >
         JSON
       </option>
+      <option
+        disabled={null}
+        value="tsv"
+      >
+        TSV
+      </option>
     </select>
      
     file will contain 
