@@ -14,7 +14,7 @@ import Actions from 'components/IPScan/Actions';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
-import { updateJobStatus } from 'actions/creators';
+import { updateJobStatus, addToast, changeSettingsRaw } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -51,7 +51,10 @@ const GoToNewSearch = () => (
     page_size: number
    },
   defaultPageSize: number,
-  updateJobStatus: function
+  updateJobStatus: function,
+  showIPScanJobToast: boolean,
+  addToast: function,
+  changeSettingsRaw: function,
 }*/
 
 export class IPScanStatus extends PureComponent /*:: <Props> */ {
@@ -63,10 +66,35 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
     }).isRequired,
     defaultPageSize: T.number.isRequired,
     updateJobStatus: T.func.isRequired,
+    showIPScanJobToast: T.bool.isRequired,
+    addToast: T.func.isRequired,
+    changeSettingsRaw: T.func.isRequired,
   };
 
   componentDidMount() {
     this.props.updateJobStatus();
+    if (this.props.showIPScanJobToast) {
+      this.props.addToast(
+        {
+          title: '💡 Tip',
+          body: 'To view the results, click on the Job ID',
+          checkBox: {
+            label: 'Do not show again',
+            fn: () => this.updateToastSettings(this),
+          },
+          ttl: 5000,
+        },
+        'IPScanJob',
+      );
+    }
+  }
+
+  updateToastSettings(context) {
+    context.props.changeSettingsRaw(
+      'notifications',
+      'showIPScanJobToast',
+      false,
+    );
   }
 
   render() {
@@ -215,10 +243,16 @@ const mapsStateToProps = createSelector(
       .sort((a, b) => b.times.created - a.times.created),
   state => state.customLocation.search,
   state => state.settings.navigation.pageSize,
-  (jobs, search, defaultPageSize) => ({ jobs, search, defaultPageSize }),
+  state => state.settings.notifications.showIPScanJobToast,
+  (jobs, search, defaultPageSize, showIPScanJobToast) => ({
+    jobs,
+    search,
+    defaultPageSize,
+    showIPScanJobToast,
+  }),
 );
 
 export default connect(
   mapsStateToProps,
-  { updateJobStatus },
+  { updateJobStatus, addToast, changeSettingsRaw },
 )(IPScanStatus);

@@ -5,7 +5,7 @@ import { EntryColorMode } from 'utils/entry-color';
 
 const DEFAULT_HTTP_PORT = 80;
 
-/*:: type Category = 'navigation' | 'ui' | 'cache' | 'ebi' | 'api' | 'ipScan'; */
+/*:: type Category = 'navigation' | 'notifications' | 'ui' | 'cache' | 'ebi' | 'api' | 'ipScan'; */
 
 export const getDefaultSettingsFor = (category /*: Category */) => {
   switch (category) {
@@ -13,9 +13,11 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
       return {
         pageSize: config.pagination.pageSize,
       };
-    case 'tips':
+    case 'notifications':
       return {
         showTreeToast: true,
+        showIPScanJobToast: true,
+        showConnectionStatusToast: true,
       };
     case 'ui':
       return {

@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { closeSideNav } from 'actions/creators';
+import { closeSideNav, addToast, changeSettingsRaw } from 'actions/creators';
 import { sideNavSelector } from 'reducers/ui/sideNav';
 
 import EBIMenu from 'components/Menu/EBIMenu';
@@ -87,6 +87,9 @@ const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
   mainAccession?: string,
   mainType?: string,
   closeSideNav: function,
+  showConnectionStatusToast: boolean,
+  addToast: function,
+  changeSettingsRaw: function,
 }; */
 /*:: type State = {
   hasRendered: boolean,
@@ -98,6 +101,9 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
     mainAccession: T.string,
     mainType: T.string,
     closeSideNav: T.func.isRequired,
+    showConnectionStatusToast: T.bool.isRequired,
+    addToast: T.func.isRequired,
+    changeSettingsRaw: T.func.isRequired,
   };
 
   constructor(props /*: Props */) {
@@ -118,10 +124,33 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
     inertPolyfill();
   }
 
+  updateToastSettings(context) {
+    context.props.changeSettingsRaw(
+      'notifications',
+      'showConnectionStatusToast',
+      false,
+    );
+  }
+
   render() {
     const { visible, mainAccession, mainType, closeSideNav } = this.props;
     const { hasRendered } = this.state;
     let content = null;
+    if (this.props.visible && this.props.showConnectionStatusToast) {
+      this.props.addToast(
+        {
+          title: '💡 Tip',
+          body:
+            'The green and red signals of the connection status shows the connectivity strength of the URLs',
+          checkBox: {
+            label: 'Do not show again',
+            fn: () => this.updateToastSettings(this),
+          },
+          ttl: 5000,
+        },
+        'connectivity',
+      );
+    }
     if (hasRendered || visible) {
       content = (
         <>
@@ -196,10 +225,16 @@ const mapStateToProps = createSelector(
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  (visible, mainType, mainAccession) => ({ visible, mainType, mainAccession }),
+  state => state.settings.notifications.showConnectionStatusToast,
+  (visible, mainType, mainAccession, showConnectionStatusToast) => ({
+    visible,
+    mainType,
+    mainAccession,
+    showConnectionStatusToast,
+  }),
 );
 
 export default connect(
   mapStateToProps,
-  { closeSideNav },
+  { closeSideNav, addToast, changeSettingsRaw },
 )(SideMenu);

@@ -177,9 +177,9 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       description: T.object,
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
-    showTreeToast: T.bool,
-    addToast: T.func,
-    changeSettingsRaw: T.func,
+    showTreeToast: T.bool.isRequired,
+    addToast: T.func.isRequired,
+    changeSettingsRaw: T.func.isRequired,
   };
 
   constructor(props /*: TreeViewProps */) {
@@ -217,23 +217,19 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     return null;
   }
 
-  updateToastSettings(context) {
-    context.props.changeSettingsRaw('tips', 'showTreeToast', false);
-  }
-
   componentDidMount() {
     if (this.props.showTreeToast) {
       this.props.addToast(
         {
           title: '💡 Tip',
           body: 'Arrow keys can be used to navigate the tree',
-          action: {
-            text: 'Do not show again',
+          checkBox: {
+            label: 'Do not show again',
             fn: () => this.updateToastSettings(this),
           },
-          ttl: 10000,
+          ttl: 5000,
         },
-        'tip',
+        'Tree',
       );
     }
   }
@@ -259,6 +255,10 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 
   componentWillUnmount() {
     this._CDPMap.clear();
+  }
+
+  updateToastSettings(context) {
+    context.props.changeSettingsRaw('notifications', 'showTreeToast', false);
   }
 
   _handleNewData = (taxID, payload) => {
@@ -444,7 +444,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.tips.showTreeToast,
+  state => state.settings.notifications.showTreeToast,
   showTreeToast => ({ showTreeToast }),
 );
 
