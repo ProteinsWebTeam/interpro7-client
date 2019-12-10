@@ -52,6 +52,12 @@
       font-size: 1.2em;
     }
   }
+  & label {
+    display: flex;
+    & > span {
+      margin-left: 1em;
+    }
+  }
 }
 
 .ida-button {
@@ -94,6 +100,10 @@ ul.ordered {
   background: #75bf40;
   //border: black solid 2px;
   border-radius: var(--entry-padding);
+
+  & > div {
+    padding-left: 0.3em;
+  }
 
   @nest & button.close {
     position: absolute;
@@ -161,5 +171,11 @@ ul.ordered {
   border-left: 0.5em solid var(--colors-very-white);
   @nest & ul.ida-list {
     justify-content: flex-start;
+  }
+}
+
+input:checked ~ .switch-paddle {
+  & .switch-active {
+    display: block;
   }
 }

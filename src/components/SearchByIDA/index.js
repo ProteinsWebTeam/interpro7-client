@@ -81,7 +81,9 @@ const PanelIDA = (
       </div>
     </div>
     <div className={f('ida-ignore')}>
-      <header>Architectures must exclude</header>
+      <header>
+        Architectures must <u>not</u> include
+      </header>
       <ul className={f('ida-list', 'ignore')}>
         {ignoreList &&
           ignoreList.map((e, i) => (
@@ -313,21 +315,35 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                     <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
                     <span>Add Domain to exclude</span>
                   </button>
-                  <label htmlFor="ordered">
-                    <input
-                      type="checkbox"
-                      id="ordered"
-                      checked={order}
-                      onChange={event =>
-                        this._handleSubmit({
-                          order: event.target.checked,
-                          entries,
-                          ignore,
-                        })
-                      }
-                    />{' '}
-                    Order sensitivity
-                  </label>
+                  <div className={f('switch', 'tiny')}>
+                    <label htmlFor="ordered">
+                      <input
+                        className={f('switch-input')}
+                        type="checkbox"
+                        id="ordered"
+                        checked={order}
+                        onChange={event =>
+                          this._handleSubmit({
+                            order: event.target.checked,
+                            entries,
+                            ignore,
+                          })
+                        }
+                      />{' '}
+                      Order of domain matters:{' '}
+                      <span className={f('switch-paddle')}>
+                        <span className={f('switch-active')} aria-hidden="true">
+                          Yes
+                        </span>
+                        <span
+                          className={f('switch-inactive')}
+                          aria-hidden="true"
+                        >
+                          No
+                        </span>
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
