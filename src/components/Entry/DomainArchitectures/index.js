@@ -229,9 +229,6 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     toggleAccessionDBForIDA: T.func,
   };
 
-  constructor(props) {
-    super(props);
-  }
   toggleDomainEntry = () => {
     this.props.toggleAccessionDBForIDA();
   };
