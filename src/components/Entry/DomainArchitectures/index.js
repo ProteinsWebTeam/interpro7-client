@@ -4,6 +4,8 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import { toggleAccessionDBForIDA } from 'actions/creators';
+
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -138,12 +140,6 @@ export class IDAProtVista extends ProtVistaMatches {
         {
           name: domain.accession,
           source_database: sourceDatabase,
-          // color: !isIPR
-          //   ? getTrackColor(
-          //       { accession: domain.accession },
-          //       EntryColorMode.ACCESSION,
-          //     )
-          //   : '#888888',
           color: getTrackColor(
             { accession: domain.accession },
             EntryColorMode.ACCESSION,
@@ -218,6 +214,8 @@ export class IDAProtVista extends ProtVistaMatches {
   mainAccession: string,
   search: Object,
   highlight: Array<string>,
+  idaAccessionDB: string,
+  toggleAccessionDBForIDA: function,
 }
 */
 class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitecturesWithDataProps> */ {
@@ -227,18 +225,12 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     search: T.object,
     dataDB: T.object.isRequired,
     highlight: T.arrayOf(T.string),
+    idaAccessionDB: T.string,
+    toggleAccessionDBForIDA: T.func,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      entry: 'pfam',
-    };
-  }
   toggleDomainEntry = () => {
-    if (this.state.entry === 'pfam') this.setState({ entry: 'interpro' });
-    else this.setState({ entry: 'pfam' });
+    this.props.toggleAccessionDBForIDA();
   };
 
   render() {
@@ -248,6 +240,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       search,
       dataDB,
       highlight = [],
+      idaAccessionDB,
     } = this.props;
     if (loading || dataDB.loading) return <Loading />;
 
@@ -262,27 +255,40 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
               There are no Domain architectures for the current selection.
             </div>
           ) : (
-            <h4>
-              {payload.count} domain architectures found.
-              <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-                {this.state.entry === 'pfam' ? (
-                  <button
-                    className={f('icon', 'icon-common')}
-                    data-icon="&#xf204;"
-                    onClick={this.toggleDomainEntry}
-                  />
-                ) : (
-                  <button
-                    className={f('icon', 'icon-common')}
-                    data-icon="&#xf205;"
-                    onClick={this.toggleDomainEntry}
-                  />
-                )}
-              </Tooltip>
-            </h4>
+            <>
+              <h4>{payload.count} domain architectures found.</h4>
+              <div className={f('accession-selector-panel')}>
+                <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
+                  <div className={f('switch', 'large')}>
+                    <input
+                      type="checkbox"
+                      checked={idaAccessionDB === 'pfam'}
+                      className={f('switch-input')}
+                      name="accessionDB"
+                      id="accessionDB-input"
+                      onChange={this.toggleDomainEntry}
+                    />
+                    <label
+                      className={f('switch-paddle', 'accession-selector')}
+                      htmlFor="accessionDB-input"
+                    >
+                      <span className={f('show-for-sr')}>
+                        Use accessions from:
+                      </span>
+                      <span className={f('switch-active')} aria-hidden="true">
+                        Pfam
+                      </span>
+                      <span className={f('switch-inactive')} aria-hidden="true">
+                        InterPro
+                      </span>
+                    </label>
+                  </div>
+                </Tooltip>
+              </div>
+            </>
           )}
           {(payload.results || []).map(obj => {
-            const idaObj = ida2json(obj.ida, this.state.entry);
+            const idaObj = ida2json(obj.ida, idaAccessionDB);
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
@@ -355,7 +361,12 @@ const mapStateToProps = createSelector(
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
   state => state.customLocation.search,
-  (mainAccession, search) => ({ mainAccession, search }),
+  state => state.ui.idaAccessionDB,
+  (mainAccession, search, idaAccessionDB) => ({
+    mainAccession,
+    search,
+    idaAccessionDB,
+  }),
 );
 
 export const DomainArchitecturesWithData = _DomainArchitecturesWithData;
@@ -366,5 +377,6 @@ export default loadData({
   loadData({
     getUrl: getUrlFor,
     mapStateToProps,
+    mapDispatchToProps: { toggleAccessionDBForIDA },
   })(DomainArchitecturesWithData),
 );

@@ -49,6 +49,7 @@ describe('<DomainArchitecturesWithData />', () => {
         }}
         mainAccession={'IPR000001'}
         search={{}}
+        idaAccessionDB="pfam"
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
