@@ -166,7 +166,7 @@ columns.structureEntry = [
   {
     name: 'matches',
     selector: 'entries',
-    selectorInGroup: 'chain',
+    selectorInGroup: 'entry_protein_locations',
     serializer: mapToString('entry_protein_locations', locationsToString),
   },
 ];
