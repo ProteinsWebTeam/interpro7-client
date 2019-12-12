@@ -5,7 +5,7 @@ Redux provides a way to extend the normal flow of data in the store called [midd
 
 Basically, a _middleware_ intercepts all the dispatched actions, before the root reducer gets executed.
 
-Currently we are using 4 _middlewares_ (described below). They are initialized in the [index.js file](./index.js), which is used when creating the store in [App.js](../../App.js)
+Currently we are using 4 _middlewares_ (described below). They are initialized in [this file](./index.js), which is used when creating the store in [App.js](../../App.js)
 
 download-middleware
 ---
@@ -19,10 +19,10 @@ Here is an example of the process of downloading a file:
 4. Because the action is of of the type `DOWNLOAD_URL` it post a message to the worker, including the action object.
 5. The root reducer gets called, which eventually calls the [download reducer](../../reducers/download/index.js), and the new redux state would be something like:
     ```javascript
-    newState = {
-      ...prevState,
+    newStore = {
+      ...prevStore,
       download: {
-        ...prevState.download,
+        ...prevStore.download,
         [URL|fileType]:{
           progress: 0,
           successful: null,
@@ -34,7 +34,7 @@ Here is an example of the process of downloading a file:
     ```
     In our example `[URL|fileType]` would be `"https://www.ebi.ac.uk/interpro/api/protein/UniProt/entry/InterPro/IPR000001/|fasta"`
 
-6. The user will notice the icon of the download button have changed, indicating that now is generating the file, and including a progress bar, which in this inittial render would be 0.
+6. The user will notice the icon of the download button have changed, indicating that now is generating the file, and including a progress bar, which in this inittial render would be `0`.
 
 When step 4 sent the message to the worker, another set of actions were triggered in that thread:
 1. Given that the action is of the type `DOWNLOAD_URL`, the `download()` funtion is called.
@@ -46,7 +46,7 @@ When step 4 sent the message to the worker, another set of actions were triggere
    4. gets the URL for the next page from the payload.
 4. If everything went well, it post a message, reporting the success of the download procedure. This triggers another dispatch to reflect this in the redux state.
 
-*Note:* I'm not sure why step 4 was done via `postMessage` instead of dispatching the action directly from the worker.
+**Note:** I'm not sure why step 4 was done via `postMessage` instead of dispatching the action directly from the worker.
 
 
 jobs-middleware
@@ -57,3 +57,12 @@ location-middleware
 
 status-middleware
 ---
+When this middleware gets applied, it creates an infinite loop based on `setTimeout()`. Inside this loop it executes a `fetch()` for each of the servers saved in the redux store: `store.status.servers`. The requests are done using the HEAD method just to check the server responds but avoiding unnecesary network transfers.
+
+Once one of the `fetch()` resolves, and action gets dispatched reporting the status of the corresponding server.
+
+The time in between each of the iterations is of the loop grows from 1 minute to a maximum of 1 hour, as long as all the calls result in a positive outcome; otherwise the time get reset to 1 minute.
+
+The advantage of having this logic in a middleware is to be able to trigger the execution of the loop at any given time, by the exectution of `CHANGE_SETTINGS` or `RESET_SETTINGS` actions.
+
+
