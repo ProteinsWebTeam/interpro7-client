@@ -5,6 +5,8 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
+import { toggleAccessionDBForIDA } from 'actions/creators';
+
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
@@ -17,7 +19,12 @@ const mapStateToProps = createSelector(
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
   state => state.customLocation.search,
-  (mainAccession, search) => ({ mainAccession, search }),
+  state => state.ui.idaAccessionDB,
+  (mainAccession, search, idaAccessionDB) => ({
+    mainAccession,
+    search,
+    idaAccessionDB,
+  }),
 );
 
 const getUrlForIDASearch = createSelector(
@@ -59,6 +66,7 @@ const IDAResults = (
     loadData({
       getUrl: getUrlForIDASearch,
       mapStateToProps,
+      mapDispatchToProps: { toggleAccessionDBForIDA },
     })(DomainArchitecturesWithData),
   );
   return <Results highlight={entries} />;
