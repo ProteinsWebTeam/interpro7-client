@@ -38,27 +38,7 @@ const middleware = (history /*: any */) /*: Middleware<*, *, *> */ => ({
   });
 
   const historyDispatch = ({ customLocation, replace, state }) => {
-    const { from_interpro6: fromIP6, ...query } = customLocation.search || {};
-    if (typeof fromIP6 !== 'undefined') {
-      // eslint-disable-next-line no-magic-numbers
-      sleep(1000).then(() => {
-        dispatch(
-          addToast(
-            {
-              title: 'Welcome on the new InterPro website 👋',
-              body:
-                'Explore the website and try our new features, but keep in mind that this is a ⚠️beta⚠️ and things can break. If they do, send us a ticket',
-              link: {
-                href: 'https://www.ebi.ac.uk/support/interpro',
-                children: 'Click here to submit a ticket 📩',
-              },
-              ttl: 15000, // eslint-disable-line no-magic-numbers
-            },
-            'welcome_from_interpro6',
-          ),
-        );
-      });
-    }
+    const { from_interpro6: _, ...query } = customLocation.search || {};
     history[replace ? 'replace' : 'push']({
       pathname: descriptionToPath(customLocation.description),
       search: format({ query }),
