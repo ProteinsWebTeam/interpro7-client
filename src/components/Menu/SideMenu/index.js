@@ -124,8 +124,8 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
     inertPolyfill();
   }
 
-  updateToastSettings(context) {
-    context.props.changeSettingsRaw(
+  updateToastSettings(props /*: Props */) {
+    props.changeSettingsRaw(
       'notifications',
       'showConnectionStatusToast',
       false,
@@ -144,7 +144,7 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
             'The green and red signals of the connection status shows the connectivity strength of the URLs',
           checkBox: {
             label: 'Do not show again',
-            fn: () => this.updateToastSettings(this),
+            fn: () => this.updateToastSettings(this.props),
           },
           ttl: 5000,
         },

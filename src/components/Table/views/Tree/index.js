@@ -225,7 +225,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
           body: 'Arrow keys can be used to navigate the tree',
           checkBox: {
             label: 'Do not show again',
-            fn: () => this.updateToastSettings(this),
+            fn: () => this.updateToastSettings(this.props),
           },
           ttl: 5000,
         },
@@ -257,8 +257,8 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     this._CDPMap.clear();
   }
 
-  updateToastSettings(context) {
-    context.props.changeSettingsRaw('notifications', 'showTreeToast', false);
+  updateToastSettings(props) {
+    props.changeSettingsRaw('notifications', 'showTreeToast', false);
   }
 
   _handleNewData = (taxID, payload) => {

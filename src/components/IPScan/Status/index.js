@@ -80,7 +80,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           body: 'To view the results, click on the Job ID',
           checkBox: {
             label: 'Do not show again',
-            fn: () => this.updateToastSettings(this),
+            fn: () => this.updateToastSettings(this.props),
           },
           ttl: 5000,
         },
@@ -89,12 +89,8 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
     }
   }
 
-  updateToastSettings(context) {
-    context.props.changeSettingsRaw(
-      'notifications',
-      'showIPScanJobToast',
-      false,
-    );
+  updateToastSettings(props) {
+    props.changeSettingsRaw('notifications', 'showIPScanJobToast', false);
   }
 
   render() {

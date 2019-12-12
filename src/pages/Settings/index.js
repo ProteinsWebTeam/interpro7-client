@@ -23,10 +23,12 @@ import { EntryColorMode } from 'utils/entry-color';
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
 
-const f = foundationPartial(ebiGlobalStyles, theme, local);
+const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
 
 // Generate async components
 const Advanced = loadable({
@@ -79,6 +81,106 @@ NavigationSettings.propTypes = {
     pageSize: T.number.isRequired,
   }).isRequired,
   handleChange: T.func.isRequired,
+};
+
+const NotificationSettings = (
+  {
+    notifications: {
+      showTreeToast,
+      showIPScanJobToast,
+      showConnectionStatusToast,
+      showSettingsToast,
+    },
+  } /*: {notifications: {showTreeToast: boolean, showIPScanJobToast: boolean, showConnectionStatusToast: boolean, showSettingsToast: boolean}} */,
+) => (
+  <form data-category="notifications">
+    <h4>Notification settings</h4>
+    <SchemaOrgData
+      data={{
+        name: 'Notification settings',
+        description: 'Notifications in the website can be turned on/off.',
+      }}
+      processData={schemaProcessDataPageSection}
+    />
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <p>
+          There are few tips shown in the website on how to use features
+          efficiently. It can be turned on/off.
+        </p>
+        <div className={f('row')}>
+          <div className={f('medium-4', 'column')}>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tip</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Taxonomy Tree navigation</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      name="showTreeToast"
+                      id="showTreeToast-input"
+                      checked={showTreeToast}
+                      onChange={noop}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>View InterProScan results</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      name="showIPScanJobToast"
+                      id="showIPScanJobToast-input"
+                      checked={showIPScanJobToast}
+                      onChange={noop}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Check connectivity</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      name="showConnectionStatusToast"
+                      id="showConnectionStatusToast-input"
+                      checked={showConnectionStatusToast}
+                      onChange={noop}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Customise Settings</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      name="showSettingsToast"
+                      id="showSettingsToast-input"
+                      checked={showSettingsToast}
+                      onChange={noop}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+);
+NotificationSettings.propTypes = {
+  notifications: T.shape({
+    showTreeToast: T.bool.isRequired,
+    showIPScanJobToast: T.bool.isRequired,
+    showConnectionStatusToast: T.bool.isRequired,
+    showSettingsToast: T.bool.isRequired,
+  }).isRequired,
 };
 
 const UISettings = (
@@ -460,6 +562,7 @@ const AddToHomeScreen = connect(
 /*:: type SettingsProps = {
   settings: {
     navigation: Object,
+    notifications: Object,
     ui: Object,
     cache: Object,
     api: Object,
@@ -475,6 +578,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
   static propTypes = {
     settings: T.shape({
       navigation: T.object.isRequired,
+      notifications: T.object.isRequired,
       ui: T.object.isRequired,
       cache: T.object.isRequired,
       api: T.object.isRequired,
@@ -492,6 +596,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
     const {
       settings: {
         navigation = {},
+        notifications = {},
         ui = {},
         cache = {},
         api = {},
@@ -521,6 +626,8 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
                 navigation={navigation}
                 handleChange={changeSettings}
               />
+
+              <NotificationSettings notifications={notifications} />
 
               <UISettings ui={ui} />
 

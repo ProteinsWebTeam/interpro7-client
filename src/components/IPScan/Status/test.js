@@ -14,6 +14,9 @@ describe('<IPScanStatus />', () => {
         search={{}}
         defaultPageSize={20}
         updateJobStatus={() => {}}
+        showIPScanJobToast={true}
+        addToast={() => {}}
+        changeSettingsRaw={() => {}}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();

@@ -18,6 +18,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         showTreeToast: true,
         showIPScanJobToast: true,
         showConnectionStatusToast: true,
+        showSettingsToast: true,
       };
     case 'ui':
       return {
