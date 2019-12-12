@@ -54,6 +54,14 @@ jobs-middleware
 
 location-middleware
 ---
+This middleware takes care of syncronising the redux store with the browser history, and therefore the current URL.
+In the setup of the middleware, it adds 2 listeners to changes in `history`:
+* One that dispatches an action to update the redux store, this only works when using the `[Back]` and `[Forward]` buttons of the browser. When there is a change directly in the URL bar, the page gets loaded completely and the `customLocation` gets build when creating the [initial state](../utils/get-initial-state/index.js).
+* And another to send information to google analytics.
+
+When this middleware intercepts an action of the type `NEW_CUSTOM_LOCATION`, it converts the customLocation of the redux state into a path (using [descriptionToPath](../../utils/processDescription/descriptionToPath/index.js)), and includes it in the history. Additionally, it scrolls the page to the position of the hash, if one is given, otherwise it goes to the top of the page.
+
+
 
 status-middleware
 ---
@@ -61,8 +69,12 @@ When this middleware gets applied, it creates an infinite loop based on `setTime
 
 Once one of the `fetch()` resolves, and action gets dispatched reporting the status of the corresponding server.
 
-The time in between each of the iterations is of the loop grows from 1 minute to a maximum of 1 hour, as long as all the calls result in a positive outcome; otherwise the time get reset to 1 minute.
+The time in between each of the iterations is of the loop grows from 1 minute to a maximum of 10 minutes, as long as all the calls result in a positive outcome; otherwise the time get reset to 1 minute.
 
-The advantage of having this logic in a middleware is to be able to trigger the execution of the loop at any given time, by the exectution of `CHANGE_SETTINGS` or `RESET_SETTINGS` actions.
+Additionally the status of connectivity of the browser gets set as a listener of the window events `offline` and `online`.
+
+There are 2 advantages of having this logic in a middleware:
+1. to be able to trigger the execution of the loop at any given time, by the exectution of `CHANGE_SETTINGS` or `RESET_SETTINGS` actions.
+2. Access to the current redux state and to the `dispatch` function.
 
 
