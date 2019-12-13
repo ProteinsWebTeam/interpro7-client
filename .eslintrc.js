@@ -48,7 +48,7 @@ const rules = {
   // Require camel case names
   camelcase: [1, { properties: 'never' }],
   // Disallow trailing commas in object literals
-  'comma-dangle': [1, 'always-multiline'],
+  'comma-dangle': [1, 'only-multiline'],
   // Enforce spacing after comma
   'comma-spacing': [1, { before: false, after: true }],
   // Enforce one true comma style
