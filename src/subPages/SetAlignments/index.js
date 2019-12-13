@@ -48,6 +48,7 @@ class AlignmentProtvista extends ProtVistaMatches {
               length={length}
               displaystart="1"
               displayend={length}
+              use-ctrl-to-zoom
             />
           </div>
         </div>
@@ -66,6 +67,7 @@ class AlignmentProtvista extends ProtVistaMatches {
                 ref={e => (this.web_tracks[entry] = e)}
                 shape="roundRectangle"
                 expanded
+                use-ctrl-to-zoom
               />
             </Tooltip>
           </div>

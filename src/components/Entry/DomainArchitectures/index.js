@@ -181,6 +181,7 @@ export class IDAProtVista extends ProtVistaMatches {
                   ref={e => (this.web_tracks[d.accession] = e)}
                   shape="roundRectangle"
                   expanded
+                  use-ctrl-to-zoom
                 />
               </DynamicTooltip>
             </div>
