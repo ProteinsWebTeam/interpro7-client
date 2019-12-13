@@ -9,12 +9,74 @@ use Data::Dumper;
 # Switching off SSL verification
 $ENV{'PERL_LWP_SSL_VERIFY_HOSTNAME'} = 0;
 
-my $HEADER_SEPARATOR = "|";
-my $LINE_LENGTH = 80;
-
 my $BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>";
+<% if (fileType === "tsv" && columns.some(x => x.indexOf("extra_fields.counters")>=0)) { %>
+  $BASE_URL .= "&extra_fields=counters"
+<% }  if (fileType === 'fasta') { %>
+  my $HEADER_SEPARATOR = "|";
+  my $LINE_LENGTH = 80;
+<% } if (fileType === "tsv") { %>
+  sub parseItems {
+    my (@items) = @_;
+    my $tsvValue = "";
+    $tsvValue = join(",", @items) if (@items);
+    return $tsvValue;
+  }
 
-# If used as a module, can be used as a generator
+  sub parseMemberDatabases {
+    my (%dbs) = @_;
+    my $tsvValue = "";
+    foreach my $db (keys %dbs) {
+      $tsvValue .= "$db:" . join(",", $dbs{$db});
+    }
+    return $tsvValue;
+  }
+
+  sub parseGoTerms {
+    my (@terms) = @_;
+    my $tsvValue = "";
+    $tsvValue = join (",", (map {$_{'identifier'}} @terms)) if (@terms);
+    return $tsvValue;
+  }
+
+  sub parseLocations {
+    my (@locations) = @_;
+    my $tsvValue;
+    foreach my $location (@locations) {
+      $tsvValue .= join (",", (map {$_->{'start'}..$_->{'end'}} $location->{'fragments'}));
+    }
+    return $tsvValue;
+  }
+
+  sub parseGroupColumn {
+    my (@values, %selector) = @_;
+    my $tsvValue = "";
+    foreach my $value (@values) {
+      $tsvValue = join ",", ;
+    }
+    return $tsvValue;
+  }
+
+  sub parseColumn {
+    my ($value, $selector) = @_;
+    unless ($value) {
+      return ""
+    }
+    if ($selector =~ /member_databases/ ) {
+      return parse_member_databases($value);
+    }
+    if ($selector =~ /go_terms/) {
+      return parseGoTerms($value);
+    }
+    if ($selector =~ /children/) {
+      return parseItems($value);
+    }
+    if ($selector =~ /locations/) {
+      return parseLocations($value);
+    }
+    return "$value";
+  }
+<% } %>
 sub main {
   my $agent = LWP::UserAgent->new();
 
@@ -54,6 +116,19 @@ sub main {
       unless ($last_page && $i+1 == (@{$results})){
         print ",\n";
       }
+      <% } else if (fileType === "tsv") { %>
+      my $value;
+      <%
+          for (column of columns) {
+             if (column.indexOf("[*]") !== -1) {
+      %>
+      $value = parseGroupColumn(<%= path2code(column, "$item").replace(/\[/g, '->{').replace(/\]/g, '}') %>, '<%= column %>');
+      <% } else { %> 
+      $value = parseColumn(<%= path2code(column, "$item").replace(/\[/g, '->{').replace(/\]/g, '}') %>, '<%= column %>');
+      <% } %>
+      print "$value\t";
+      <% } %>
+        print "\n";
       <% } else if (fileType === "fasta") { %>
       if (defined $item->{"entries"}){
         foreach my $entry (@{$item->{"entries"}}) {
