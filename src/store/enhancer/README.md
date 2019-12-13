@@ -51,6 +51,21 @@ When step 4 sent the message to the worker, another set of actions were triggere
 
 jobs-middleware
 ---
+InterProScan runs as an independent [web service at EBI](https://www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation#InterProScan5HelpandDocumentation-RESTAPI). In the client we submit jobs and visualize the results calculated in this service.
+This middleware takes care of submting the jobs and keeping the redux store updated with changes in the status of those jobs.
+We also keep the results in indexedDB, to be able to show previously obtained results in offline situations.
+
+In order to keep in sync the store, the jobs and the IndexedDB, an infinite loop is set when this middleware is applied. 
+
+In the loop we checked any registered Job in the IndexedDB, and depending of its status:
+* `'failed'`: Do nothing.
+* `'created'`: It is a brand new request, and the job needs to be submitted to the server for the first time. When the submission is sucessful the server returns an ID that we can use to check its status in the future. In any case, a new action of the type `UPDATE_JOB` gets distpatched,  changing the status of this job to either `'submitted'` or `'failed'` depending of this outcome.
+* `'submitted'`, `'running'` or `'importing'`: In these 3 states what we want to know is what is the progress of the job. To do this we query again the interproscan server but using the `/status` endpoint. As in the previous case we dispatch an `UPDATE_JOB` action reporting the outcome of the call.
+  If the new status is going to be `'finished'`, we dispatch an action to request the display of a notification toast, to inform the user its job has finished.
+* `'finished'`: In this case we check if we have already saved results, if so, we don't need to do anything. Otherwise, we do another call to the interproscan server but using the `/result` endpoint, and then dispatch anoter `UPDATE_JOB` action, that includes this results.
+
+The middleware function is basically in charge of include all the changes in the IndexedDB, plus the option of execute the loop, whenever the action `UPDATE_JOB_STATUS` is dispatched.
+
 
 location-middleware
 ---
