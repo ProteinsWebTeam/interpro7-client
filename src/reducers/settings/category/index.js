@@ -16,7 +16,6 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
     case 'notifications':
       return {
         showTreeToast: true,
-        showIPScanJobToast: true,
         showConnectionStatusToast: true,
         showSettingsToast: true,
       };

@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { closeSideNav, addToast, changeSettingsRaw } from 'actions/creators';
+import { closeSideNav } from 'actions/creators';
 import { sideNavSelector } from 'reducers/ui/sideNav';
 
 import EBIMenu from 'components/Menu/EBIMenu';
@@ -12,6 +12,7 @@ import InterProMenu from 'components/Menu/InterProMenu';
 import EntryMenu from 'components/EntryMenu';
 import Link from 'components/generic/Link';
 import ServerStatus from './ServerStatus';
+import Tip from 'components/Tip';
 
 import { inert as inertPolyfill } from 'utils/polyfills';
 
@@ -88,8 +89,6 @@ const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
   mainType?: string,
   closeSideNav: function,
   showConnectionStatusToast: boolean,
-  addToast: function,
-  changeSettingsRaw: function,
 }; */
 /*:: type State = {
   hasRendered: boolean,
@@ -102,8 +101,6 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
     mainType: T.string,
     closeSideNav: T.func.isRequired,
     showConnectionStatusToast: T.bool.isRequired,
-    addToast: T.func.isRequired,
-    changeSettingsRaw: T.func.isRequired,
   };
 
   constructor(props /*: Props */) {
@@ -124,36 +121,21 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
     inertPolyfill();
   }
 
-  updateToastSettings(props /*: Props */) {
-    props.changeSettingsRaw(
-      'notifications',
-      'showConnectionStatusToast',
-      false,
-    );
-  }
-
   render() {
     const { visible, mainAccession, mainType, closeSideNav } = this.props;
     const { hasRendered } = this.state;
     let content = null;
-    if (this.props.visible && this.props.showConnectionStatusToast) {
-      this.props.addToast(
-        {
-          title: '💡 Tip',
-          body:
-            'The green and red signals of the connection status shows the connectivity strength of the URLs',
-          checkBox: {
-            label: 'Do not show again',
-            fn: () => this.updateToastSettings(this.props),
-          },
-          ttl: 5000,
-        },
-        'connectivity',
-      );
-    }
+
     if (hasRendered || visible) {
       content = (
         <>
+          {this.props.visible && this.props.showConnectionStatusToast ? (
+            <Tip
+              body="The green and red signals of the connection status shows the connectivity strength of the URLs"
+              toastID="connectivity"
+              settingsName="showConnectionStatusToast"
+            />
+          ) : null}
           <button
             className={f('exit')}
             title="Close side menu"
@@ -236,5 +218,5 @@ const mapStateToProps = createSelector(
 
 export default connect(
   mapStateToProps,
-  { closeSideNav, addToast, changeSettingsRaw },
+  { closeSideNav },
 )(SideMenu);

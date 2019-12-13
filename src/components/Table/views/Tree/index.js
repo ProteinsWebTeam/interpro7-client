@@ -3,11 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import {
-  goToCustomLocation,
-  addToast,
-  changeSettingsRaw,
-} from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
@@ -23,6 +19,7 @@ import loadData from 'higherOrder/loadData';
 
 import { foundationPartial } from 'styles/foundation';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+import Tip from 'components/Tip';
 
 import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -178,8 +175,6 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
     showTreeToast: T.bool.isRequired,
-    addToast: T.func.isRequired,
-    changeSettingsRaw: T.func.isRequired,
   };
 
   constructor(props /*: TreeViewProps */) {
@@ -217,23 +212,6 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     return null;
   }
 
-  componentDidMount() {
-    if (this.props.showTreeToast) {
-      this.props.addToast(
-        {
-          title: '💡 Tip',
-          body: 'Arrow keys can be used to navigate the tree',
-          checkBox: {
-            label: 'Do not show again',
-            fn: () => this.updateToastSettings(this.props),
-          },
-          ttl: 5000,
-        },
-        'Tree',
-      );
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     const {
       customLocation: {
@@ -255,10 +233,6 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 
   componentWillUnmount() {
     this._CDPMap.clear();
-  }
-
-  updateToastSettings(props) {
-    props.changeSettingsRaw('notifications', 'showTreeToast', false);
   }
 
   _handleNewData = (taxID, payload) => {
@@ -323,6 +297,13 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     };
     return (
       <>
+        {this.props.showTreeToast ? (
+          <Tip
+            body="Arrow keys can be used to navigate the tree"
+            toastID="tree"
+            settingsName="showTreeToast"
+          />
+        ) : null}
         <div className={f('node-details')}>
           <div className={f('node-info')}>
             <header>
@@ -450,5 +431,5 @@ const mapStateToProps = createSelector(
 
 export default connect(
   mapStateToProps,
-  { goToCustomLocation, addToast, changeSettingsRaw },
+  { goToCustomLocation },
 )(TreeView);

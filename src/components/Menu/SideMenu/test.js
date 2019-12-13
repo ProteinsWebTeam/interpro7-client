@@ -13,8 +13,6 @@ describe('<SideMenu />', () => {
         visible={false}
         closeSideNav={() => {}}
         showConnectionStatusToast={true}
-        addToast={() => {}}
-        changeSettingsRaw={() => {}}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
@@ -26,8 +24,6 @@ describe('<SideMenu />', () => {
         visible={true}
         closeSideNav={() => {}}
         showConnectionStatusToast={true}
-        addToast={() => {}}
-        changeSettingsRaw={() => {}}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();

@@ -3,7 +3,6 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { addToast, changeSettingsRaw } from 'actions/creators';
 import loadable from 'higherOrder/loadable';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
@@ -11,6 +10,7 @@ import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
 import CurrentVersion from 'components/home/CurrentVersion';
+import Tip from 'components/Tip';
 
 // Functions
 import { schedule } from 'timing-functions/src';
@@ -427,35 +427,19 @@ InterPro provides functional analysis of proteins by classifying them into famil
 class Home extends PureComponent {
   static propTypes = {
     showSettingsToast: T.bool.isRequired,
-    addToast: T.func.isRequired,
-    changeSettingsRaw: T.func.isRequired,
   };
-
-  componentDidMount() {
-    if (this.props.showSettingsToast) {
-      this.props.addToast(
-        {
-          title: '💡 Tip',
-          body:
-            'To customise settings, click on the ☰ icon at the top right corner and select settings from the menu options',
-          checkBox: {
-            label: 'Do not show again',
-            fn: () => this.updateToastSettings(this.props),
-          },
-          ttl: 5000,
-        },
-        'settings',
-      );
-    }
-  }
-
-  updateToastSettings(props) {
-    props.changeSettingsRaw('notifications', 'showSettingsToast', false);
-  }
 
   render() {
     return (
       <>
+        {this.props.showSettingsToast ? (
+          <Tip
+            body="To customise settings, click on the ☰ icon at the top right corner and select settings from the menu options"
+            toastID="settings"
+            settingsName="showSettingsToast"
+          />
+        ) : null}
+
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData
@@ -771,7 +755,4 @@ const mapStateToProps = createSelector(
   showSettingsToast => ({ showSettingsToast }),
 );
 
-export default connect(
-  mapStateToProps,
-  { addToast, changeSettingsRaw },
-)(Home);
+export default connect(mapStateToProps)(Home);

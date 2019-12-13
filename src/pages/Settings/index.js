@@ -87,11 +87,10 @@ const NotificationSettings = (
   {
     notifications: {
       showTreeToast,
-      showIPScanJobToast,
       showConnectionStatusToast,
       showSettingsToast,
     },
-  } /*: {notifications: {showTreeToast: boolean, showIPScanJobToast: boolean, showConnectionStatusToast: boolean, showSettingsToast: boolean}} */,
+  } /*: {notifications: {showTreeToast: boolean, showConnectionStatusToast: boolean, showSettingsToast: boolean}} */,
 ) => (
   <form data-category="notifications">
     <h4>Notification settings</h4>
@@ -131,18 +130,6 @@ const NotificationSettings = (
                   </td>
                 </tr>
                 <tr>
-                  <td>View InterProScan results</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showIPScanJobToast"
-                      id="showIPScanJobToast-input"
-                      checked={showIPScanJobToast}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-                <tr>
                   <td>Check connectivity</td>
                   <td>
                     <input
@@ -177,7 +164,6 @@ const NotificationSettings = (
 NotificationSettings.propTypes = {
   notifications: T.shape({
     showTreeToast: T.bool.isRequired,
-    showIPScanJobToast: T.bool.isRequired,
     showConnectionStatusToast: T.bool.isRequired,
     showSettingsToast: T.bool.isRequired,
   }).isRequired,
