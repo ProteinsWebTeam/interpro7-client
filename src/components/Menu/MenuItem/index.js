@@ -80,6 +80,7 @@ export class MenuItem extends PureComponent /*:: <Props> */ {
     }
     return (
       <CustomLink
+        {...props}
         to={to}
         href={href}
         onClick={closeEverything}
@@ -89,7 +90,6 @@ export class MenuItem extends PureComponent /*:: <Props> */ {
         {...(disabled
           ? { disabled: true, tabIndex: '-1', 'aria-disabled': 'true' }
           : {})}
-        {...props}
       >
         {children}
       </CustomLink>
@@ -97,7 +97,4 @@ export class MenuItem extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(
-  null,
-  { closeEverything },
-)(MenuItem);
+export default connect(null, { closeEverything })(MenuItem);
