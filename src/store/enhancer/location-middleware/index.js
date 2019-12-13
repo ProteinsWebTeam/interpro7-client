@@ -3,10 +3,9 @@
 /*:: import type { Middleware } from 'redux'; */
 /*:: declare var ga: (...args: Array<string>) => void; */
 import { format } from 'url';
-import { sleep } from 'timing-functions/src';
 
 import { NEW_CUSTOM_LOCATION } from 'actions/types';
-import { customLocationChangeFromHistory, addToast } from 'actions/creators';
+import { customLocationChangeFromHistory } from 'actions/creators';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import autoScroll from 'utils/auto-scroll';
