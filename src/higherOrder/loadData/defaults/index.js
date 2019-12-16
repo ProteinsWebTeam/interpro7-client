@@ -163,12 +163,17 @@ export const getUrlForApi = (...parameters) =>
 export const STATUS_OK = 200;
 export const STATUS_NO_CONTENT = 204;
 export const STATUS_NOT_FOUND = 404;
+export const STATUS_TIMEOUT = 408;
 export const STATUS_GONE = 410;
 export const STATUS_SERVER_ERROR = 500;
 
 export const edgeCases = new Map([
   [STATUS_NO_CONTENT, 'There is no data associated with this accession'],
   [STATUS_NOT_FOUND, 'This is not a valid accession'],
+  [
+    STATUS_TIMEOUT,
+    'The server takes too long to respond. Your request is running in the background. Please check again in a while for the results',
+  ],
   [STATUS_GONE, 'The data associated with this accession has been removed'],
   [
     STATUS_SERVER_ERROR,

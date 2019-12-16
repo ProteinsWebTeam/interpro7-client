@@ -14,6 +14,7 @@ exports[`<StructureOnProtein /> should render 1`] = `
         displayend={625}
         displaystart="1"
         length={625}
+        use-ctrl-to-zoom={true}
       />
     </div>
   </div>
@@ -30,6 +31,7 @@ exports[`<StructureOnProtein /> should render 1`] = `
         id="track_1a0h"
         length={625}
         shape="rectangle"
+        use-ctrl-to-zoom={true}
       />
     </Tooltip>
   </div>

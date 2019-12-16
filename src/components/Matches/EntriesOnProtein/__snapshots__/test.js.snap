@@ -14,6 +14,7 @@ exports[`<EntriesOnProtein /> should render 1`] = `
         displayend={882}
         displaystart="1"
         length={882}
+        use-ctrl-to-zoom={true}
       />
     </div>
   </div>
@@ -30,6 +31,7 @@ exports[`<EntriesOnProtein /> should render 1`] = `
         id="track_IPR000001"
         length={882}
         shape="roundRectangle"
+        use-ctrl-to-zoom={true}
       />
     </Tooltip>
   </div>

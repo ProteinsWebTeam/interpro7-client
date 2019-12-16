@@ -127,10 +127,12 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
 }
 
 /*:: type BlogEntriesProps = {
- data: {
- loading: boolean,
- payload?: Object,
- },
+  data: {
+    loading: boolean,
+    payload?: {
+      [string] : BlogEntryProps,
+    },
+  },
  }; */
 
 export class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
@@ -151,7 +153,8 @@ export class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
       <section>
         <div className={f('flex-column')}>
           {Object.entries(payload).map(([type, content]) => (
-            <BlogEntry key={type} {...content} />
+            // $FlowFixMe
+            <BlogEntry {...content} key={type} />
           ))}
         </div>
         <div className={f('flex-column', 'read-all')}>

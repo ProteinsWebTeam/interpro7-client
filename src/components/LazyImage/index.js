@@ -14,7 +14,7 @@ class LazyImage extends PureComponent /*:: <{ alt: string }> */ {
     return (
       <Lazy>
         {hasBeenVisible =>
-          hasBeenVisible ? <img alt={alt} {...props} /> : null
+          hasBeenVisible ? <img {...props} alt={alt} /> : null
         }
       </Lazy>
     );

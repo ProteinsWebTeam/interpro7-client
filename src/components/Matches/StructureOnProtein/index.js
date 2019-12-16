@@ -63,6 +63,7 @@ class StructureOnProtein extends ProtVistaMatches {
               length={protein.length}
               displaystart="1"
               displayend={protein.length}
+              use-ctrl-to-zoom
             />
           </div>
         </div>
@@ -83,6 +84,7 @@ class StructureOnProtein extends ProtVistaMatches {
               ref={e => (this.web_tracks[structure.accession] = e)}
               shape="rectangle"
               expanded
+              use-ctrl-to-zoom
             />
           </Tooltip>
         </div>

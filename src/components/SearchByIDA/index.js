@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import T from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -29,6 +29,12 @@ const PanelIDA = (
     changeEntryHandler,
     changeIgnoreHandler,
     removeIgnoreHandler,
+    mergeResults,
+    options,
+    markerBeforeEntry = null,
+    markerAfterEntry = null,
+    handleMoveMarker,
+    handleMoveEntry,
   } /*: {
   entryList: Array<string>,
   ignoreList: Array<string>,
@@ -36,7 +42,13 @@ const PanelIDA = (
   removeEntryHandler: function,
   changeEntryHandler: function,
   changeIgnoreHandler: function,
-  removeIgnoreHandler: function
+  removeIgnoreHandler: function,
+  mergeResults: function,
+  options: {},
+  markerBeforeEntry: ?string,
+  markerAfterEntry: ?string,
+  handleMoveMarker: function,
+  handleMoveEntry: function,
   } */,
 ) => (
   <div className={f('panels')}>
@@ -46,21 +58,32 @@ const PanelIDA = (
         <ul className={f('ida-list', { ordered: isOrdered })}>
           {entryList &&
             entryList.map((e, i) => (
-              <li key={i}>
-                <IdaEntry
-                  position={i}
-                  entry={e}
-                  active={true}
-                  removeEntryHandler={() => removeEntryHandler(i)}
-                  changeEntryHandler={name => changeEntryHandler(i, name)}
-                />
-              </li>
+              <Fragment key={i}>
+                {markerBeforeEntry === e && <div>|</div>}
+                <li>
+                  <IdaEntry
+                    position={i}
+                    entry={e}
+                    active={true}
+                    draggable={isOrdered}
+                    handleMoveMarker={handleMoveMarker(i)}
+                    handleMoveEntry={handleMoveEntry(i)}
+                    removeEntryHandler={() => removeEntryHandler(i)}
+                    changeEntryHandler={name => changeEntryHandler(i, name)}
+                    mergeResults={mergeResults}
+                    options={options}
+                  />
+                </li>
+                {markerAfterEntry === e && <div>|</div>}
+              </Fragment>
             ))}
         </ul>
       </div>
     </div>
     <div className={f('ida-ignore')}>
-      <header>Architectures must exclude</header>
+      <header>
+        Architectures must <u>not</u> include
+      </header>
       <ul className={f('ida-list', 'ignore')}>
         {ignoreList &&
           ignoreList.map((e, i) => (
@@ -71,6 +94,8 @@ const PanelIDA = (
                 active={true}
                 removeEntryHandler={() => removeIgnoreHandler(i)}
                 changeEntryHandler={name => changeIgnoreHandler(i, name)}
+                mergeResults={mergeResults}
+                options={options}
               />
             </li>
           ))}
@@ -87,11 +112,22 @@ PanelIDA.propTypes = {
   changeEntryHandler: T.func,
   changeIgnoreHandler: T.func,
   goToCustomLocation: T.func,
+  markerBeforeEntry: T.string,
+  markerAfterEntry: T.string,
+  handleMoveMarker: T.func,
+  handleMoveEntry: T.func,
+  mergeResults: T.func,
+  options: T.object,
 };
 
 /*:: type Props = {
   customLocation: CustomLocation,
   goToCustomLocation: goToCustomLocation,
+}; */
+/*:: type State = {
+  markerBeforeEntry: ?string,
+  markerAfterEntry: ?string,
+  options: {},
 }; */
 
 /*:: type SearchProps = {
@@ -99,13 +135,18 @@ PanelIDA.propTypes = {
   ida_ignore?: string,
   ordered?: boolean,
 }; */
-export class SearchByIDA extends PureComponent /*:: <Props> */ {
+export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     customLocation: T.shape({
       description: T.object.isRequired,
       search: T.object.isRequired,
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
+  };
+  state = {
+    markerBeforeEntry: null,
+    markerAfterEntry: null,
+    options: {},
   };
   _handleSubmit = ({ entries, order, ignore }) => {
     const search /*: SearchProps */ = {
@@ -123,6 +164,46 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
       search,
     });
   };
+  _handleMoveMarker = entries => pos => delta => {
+    if (delta === null) {
+      this.setState({ markerBeforeEntry: null, markerAfterEntry: null });
+      return;
+    }
+    const newPos = Math.max(0, Math.min(entries.length, pos + delta));
+    if (newPos === entries.length) {
+      this.setState({
+        markerBeforeEntry: null,
+        markerAfterEntry: entries[newPos - 1],
+      });
+    } else {
+      this.setState({
+        markerBeforeEntry: entries[newPos],
+        markerAfterEntry: null,
+      });
+    }
+  };
+  _handleMoveEntry = (currentEntries, ignore) => pos => delta => {
+    const newPos = Math.max(
+      0,
+      Math.min(currentEntries.length - 1, pos + delta),
+    );
+
+    const entries = [...currentEntries];
+    entries.splice(pos, 1);
+    entries.splice(newPos, 0, currentEntries[pos]);
+
+    this._handleSubmit({ entries, order: true, ignore });
+  };
+
+  _mergeResults = data => {
+    if (!data || !data.ok) return;
+    const options = { ...this.state.options };
+    for (const e of data.payload.results) {
+      options[e.metadata.accession] = e.metadata;
+    }
+    this.setState({ options });
+  };
+
   render() {
     const {
       ida_search: searchFromURL,
@@ -165,6 +246,12 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                     entryList={entries}
                     ignoreList={ignore}
                     isOrdered={order}
+                    markerBeforeEntry={this.state.markerBeforeEntry}
+                    markerAfterEntry={this.state.markerAfterEntry}
+                    handleMoveMarker={this._handleMoveMarker(entries)}
+                    handleMoveEntry={this._handleMoveEntry(entries, ignore)}
+                    mergeResults={this._mergeResults}
+                    options={this.state.options}
                     removeEntryHandler={n =>
                       this._handleSubmit({
                         entries: entries
@@ -228,21 +315,35 @@ export class SearchByIDA extends PureComponent /*:: <Props> */ {
                     <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
                     <span>Add Domain to exclude</span>
                   </button>
-                  <label htmlFor="ordered">
-                    <input
-                      type="checkbox"
-                      id="ordered"
-                      checked={order}
-                      onChange={event =>
-                        this._handleSubmit({
-                          order: event.target.checked,
-                          entries,
-                          ignore,
-                        })
-                      }
-                    />{' '}
-                    Order sensitivity
-                  </label>
+                  <div className={f('switch', 'tiny')}>
+                    <label htmlFor="ordered">
+                      <input
+                        className={f('switch-input')}
+                        type="checkbox"
+                        id="ordered"
+                        checked={order}
+                        onChange={event =>
+                          this._handleSubmit({
+                            order: event.target.checked,
+                            entries,
+                            ignore,
+                          })
+                        }
+                      />{' '}
+                      Order of domain matters:{' '}
+                      <span className={f('switch-paddle')}>
+                        <span className={f('switch-active')} aria-hidden="true">
+                          Yes
+                        </span>
+                        <span
+                          className={f('switch-inactive')}
+                          aria-hidden="true"
+                        >
+                          No
+                        </span>
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>

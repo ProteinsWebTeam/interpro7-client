@@ -1,14 +1,12 @@
 // @flow
 import React from 'react';
-import ShallowRenderer from 'react-test-renderer/shallow';
+import TestRenderer from 'react-test-renderer';
 
 import InfoBanner from '.';
 
-const renderer = new ShallowRenderer();
-
 describe('<InfoBanner />', () => {
   test('should render', () => {
-    renderer.render(<InfoBanner />);
-    expect(renderer.getRenderOutput()).toMatchSnapshot();
+    const testRenderer = TestRenderer.create(<InfoBanner />);
+    expect(testRenderer.toJSON()).toMatchSnapshot();
   });
 });

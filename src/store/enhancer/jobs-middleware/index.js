@@ -171,6 +171,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
           }
         }
       }
+      // TODO: we need to handle the cases when the response is not OK.
     }
     if (meta.status === 'finished' && !meta.hasResults) {
       const ipScanInfo = getState().settings.ipScan;

@@ -20,16 +20,19 @@ const endpoint = {
 const FileExporter = (
   {
     description,
-    search,
+    search = {},
     count,
     fileType,
     primary,
     secondary,
-  } /*: {description: Object, search: Object, count: number, fileType: string, primary: string, secondary: string} */,
+    label,
+    className,
+  } /*: {description: Object, search: Object, count: number, fileType: string, primary: string, secondary: string, label?: string, className?: string} */,
 ) => (
   <li style={{ display: 'flex', alignItems: 'center' }}>
     <div>
       <File
+        className={className}
         fileType={fileType}
         name={`${primary}-matching-${description[description.main.key].accession}.${fileType}`}
         count={count}
@@ -51,9 +54,9 @@ const FileExporter = (
         endpoint={
           (endpoint[primary] && endpoint[primary][secondary]) || primary
         }
+        label={label || fileType.toUpperCase()}
       />
     </div>
-    <div>{fileType.toUpperCase()}</div>
   </li>
 );
 FileExporter.propTypes = {
@@ -63,6 +66,8 @@ FileExporter.propTypes = {
   fileType: T.string,
   primary: T.string,
   secondary: T.string,
+  label: T.string,
+  className: T.string,
 };
 
 export default FileExporter;

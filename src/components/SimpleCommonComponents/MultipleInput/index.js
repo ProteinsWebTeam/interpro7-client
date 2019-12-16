@@ -79,6 +79,7 @@ class MultipleInput extends PureComponent /*:: <Props> */ {
           )}
         </div>
         <input
+          {...props}
           type="range"
           min={min}
           max={max}
@@ -86,9 +87,9 @@ class MultipleInput extends PureComponent /*:: <Props> */ {
           value={minValue}
           className={s('original')}
           aria-label={arialLabel && `${arialLabel} lower bound`}
-          {...props}
         />
         <input
+          {...props}
           type="range"
           min={min}
           max={max}
@@ -96,7 +97,6 @@ class MultipleInput extends PureComponent /*:: <Props> */ {
           value={maxValue}
           className={s('ghost')}
           aria-label={arialLabel && `${arialLabel} higher bound`}
-          {...props}
         />
       </div>
     );

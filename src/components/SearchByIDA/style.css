@@ -19,7 +19,7 @@
         height: 85%;
         padding: 0.2em 0 0;
         overflow: scroll;
-        max-width: calc(100vh - var(--entry-width) + var(--entry-padding) * 4);
+        max-width: calc(100vw - var(--entry-width) + var(--entry-padding) * 4);
       }
     }
     @nest & div.ida-ignore {
@@ -43,12 +43,19 @@
   min-height: 50px;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   & button.button.secondary {
     & * {
       vertical-align: middle;
     }
     & span {
       font-size: 1.2em;
+    }
+  }
+  & label {
+    display: flex;
+    & > span {
+      margin-left: 1em;
     }
   }
 }
@@ -94,7 +101,11 @@ ul.ordered {
   //border: black solid 2px;
   border-radius: var(--entry-padding);
 
-  @nest & button {
+  & > div {
+    padding-left: 0.3em;
+  }
+
+  @nest & button.close {
     position: absolute;
     background: transparent;
     font-size: 0.8em;
@@ -104,8 +115,32 @@ ul.ordered {
     //border: black solid 1px;
     width: 1em;
   }
-  @nest & button:hover {
+  @nest & button.drag {
+    position: absolute;
+    background: transparent;
+    font-size: 0.8em;
+    left: 0.4em;
+    top: -0.3em;
+    width: 1em;
+  }
+  @nest & button.close:hover {
     font-weight: bold;
+  }
+  @nest & button.drag {
+    position: absolute;
+    background: transparent;
+    font-size: 0.8em;
+    left: 1.3em;
+    top: 1em;
+    color: var(--colors-ulightgray);
+    width: 1em;
+    cursor: grabbing;
+  }
+  @nest & button.nodata {
+    top: 0.5em;
+  }
+  @nest & button.drag {
+    color: var(--colors-nearly-white);
   }
   @nest & input {
     width: var(--entry-width);
@@ -136,5 +171,11 @@ ul.ordered {
   border-left: 0.5em solid var(--colors-very-white);
   @nest & ul.ida-list {
     justify-content: flex-start;
+  }
+}
+
+input:checked ~ .switch-paddle {
+  & .switch-active {
+    display: block;
   }
 }

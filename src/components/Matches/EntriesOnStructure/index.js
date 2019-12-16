@@ -81,6 +81,7 @@ class EntriesOnStructure extends ProtVistaMatches {
               length={length}
               displaystart="1"
               displayend={length}
+              use-ctrl-to-zoom
             />
           </div>
         </div>
@@ -101,6 +102,7 @@ class EntriesOnStructure extends ProtVistaMatches {
               ref={e => (this.web_tracks[structure.accession] = e)}
               shape="rectangle"
               expanded
+              use-ctrl-to-zoom
             />
           </Tooltip>
         </div>
@@ -121,6 +123,7 @@ class EntriesOnStructure extends ProtVistaMatches {
               ref={e => (this.web_tracks[entry.accession] = e)}
               shape="roundRectangle"
               expanded
+              use-ctrl-to-zoom
             />
           </Tooltip>
         </div>
