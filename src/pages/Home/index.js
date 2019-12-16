@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import loadable from 'higherOrder/loadable';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -8,6 +10,7 @@ import Link from 'components/generic/Link';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
 import CurrentVersion from 'components/home/CurrentVersion';
+import Tip from 'components/Tip';
 
 // Functions
 import { schedule } from 'timing-functions/src';
@@ -422,9 +425,21 @@ InterPro provides functional analysis of proteins by classifying them into famil
 `.trim();
 
 class Home extends PureComponent {
+  static propTypes = {
+    showSettingsToast: T.bool.isRequired,
+  };
+
   render() {
     return (
       <>
+        {this.props.showSettingsToast ? (
+          <Tip
+            body="To customise settings, click on the ☰ icon at the top right corner and select settings from the menu options"
+            toastID="settings"
+            settingsName="showSettingsToast"
+          />
+        ) : null}
+
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData
@@ -735,4 +750,9 @@ class Home extends PureComponent {
   }
 }
 
-export default Home;
+const mapStateToProps = createSelector(
+  state => state.settings.notifications.showSettingsToast,
+  showSettingsToast => ({ showSettingsToast }),
+);
+
+export default connect(mapStateToProps)(Home);

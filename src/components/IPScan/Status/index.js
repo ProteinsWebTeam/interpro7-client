@@ -51,7 +51,7 @@ const GoToNewSearch = () => (
     page_size: number
    },
   defaultPageSize: number,
-  updateJobStatus: function
+  updateJobStatus: function,
 }*/
 
 export class IPScanStatus extends PureComponent /*:: <Props> */ {
@@ -64,10 +64,6 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
     defaultPageSize: T.number.isRequired,
     updateJobStatus: T.func.isRequired,
   };
-
-  componentDidMount() {
-    this.props.updateJobStatus();
-  }
 
   render() {
     const { jobs, search, defaultPageSize } = this.props;
@@ -215,7 +211,11 @@ const mapsStateToProps = createSelector(
       .sort((a, b) => b.times.created - a.times.created),
   state => state.customLocation.search,
   state => state.settings.navigation.pageSize,
-  (jobs, search, defaultPageSize) => ({ jobs, search, defaultPageSize }),
+  (jobs, search, defaultPageSize) => ({
+    jobs,
+    search,
+    defaultPageSize,
+  }),
 );
 
 export default connect(

@@ -27,6 +27,7 @@ const ANIMATION_OPTIONS = {
   link: Object,
   action: Object,
   ttl: number,
+  checkBox: Object,
   handleClose: function
 };*/
 
@@ -44,6 +45,7 @@ export default class Toast extends PureComponent /*:: <Props> */ {
     link: T.object,
     action: T.object,
     ttl: T.number,
+    checkBox: T.object,
     handleClose: T.func.isRequired,
   };
 
@@ -104,6 +106,7 @@ export default class Toast extends PureComponent /*:: <Props> */ {
       className,
       paused,
       ttl,
+      checkBox,
       handleClose,
       ...props // passed
     } = this.props;
@@ -123,6 +126,13 @@ export default class Toast extends PureComponent /*:: <Props> */ {
           <button type="button" className={s('button')} onClick={action.fn}>
             {action.text || 'Action'}
           </button>
+        ) : null}
+        {checkBox ? (
+          <label>
+            {' '}
+            <input type="checkbox" value={false} onClick={checkBox.fn} />{' '}
+            {checkBox.label}{' '}
+          </label>
         ) : null}
       </li>
     );
