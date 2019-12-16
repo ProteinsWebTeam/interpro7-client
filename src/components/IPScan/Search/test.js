@@ -38,6 +38,8 @@ describe('checkValidity()', () => {
   });
   test('other char', () => {
     expect(checkValidity(`${seq}4`.split('\n'))).toEqual(false);
+    expect(checkValidity(`${seq}-`.split('\n'))).toEqual(false);
+    expect(checkValidity(`${seq}.`.split('\n'))).toEqual(false);
     expect(isTooShort(`${seq}4`.split('\n'))).toEqual(false);
   });
   test('too short', () => {
@@ -53,9 +55,9 @@ describe('clenUp()', () => {
     );
   });
   test('cleaning other chars', () => {
-    expect(cleanUp(`${seq}41$9{`.split('\n').map(l => ({ text: l })))).toEqual(
-      seq.trim(),
-    );
+    expect(
+      cleanUp(`${seq}41$9{-.`.split('\n').map(l => ({ text: l }))),
+    ).toEqual(seq.trim());
   });
   test('multiple sequence', () => {
     expect(
