@@ -14,6 +14,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
         displayend={622}
         displaystart="1"
         length={622}
+        use-ctrl-to-zoom={true}
       />
     </div>
   </div>
@@ -30,6 +31,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
         id="track_1a4w"
         length={622}
         shape="rectangle"
+        use-ctrl-to-zoom={true}
       />
     </Tooltip>
   </div>
@@ -46,6 +48,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
         id="track_IPR000001"
         length={622}
         shape="roundRectangle"
+        use-ctrl-to-zoom={true}
       />
     </Tooltip>
   </div>
