@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import T from 'prop-types';
 
 import { addToast, changeSettingsRaw } from 'actions/creators';
@@ -52,7 +52,4 @@ class Tip extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(
-  null,
-  { addToast, changeSettingsRaw },
-)(Tip);
+export default connect(null, { addToast, changeSettingsRaw })(Tip);

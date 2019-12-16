@@ -17,6 +17,7 @@ const Genome3dMenuLink = (
     data: { loading, payload },
   } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Object}} */,
 ) => {
+  // eslint-disable-next-line camelcase
   const value = payload?.pager?.total_entries || 0;
   const attrs = { name, value, loading, to, exact, usedOnTheSide };
   return value ? <EntryMenuLinkWithoutData {...attrs} /> : null;
