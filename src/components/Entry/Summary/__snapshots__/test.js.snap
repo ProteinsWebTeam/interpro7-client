@@ -124,6 +124,7 @@ exports[`<SummaryEntry /> should render 1`] = `
         </React.Fragment>
       </div>
       <SidePanel
+        api={Object {}}
         dbInfo={Object {}}
         metadata={
           Object {

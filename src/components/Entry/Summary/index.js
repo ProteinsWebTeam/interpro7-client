@@ -415,10 +415,11 @@ Hierarchy.propTypes = {
     },
     loading: boolean,
     dbInfo: Object,
+    api: Object,
   };
 */
 
-class SummaryEntry extends PureComponent /*:: <Props> */ {
+export class SummaryEntry extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       metadata: T.object,
