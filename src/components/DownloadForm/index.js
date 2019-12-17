@@ -17,6 +17,8 @@ import ProgressAnimation from './ProgressAnimation';
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import { columns } from 'web-workers/download/object2TSV';
+
 import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
 
@@ -162,10 +164,43 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     const filters = typeObjects.filter(([, type]) => type.isFilter);
 
     const main = description.main.key || 'entry';
+    const secondary = filters.length && filters[0][0];
+    let columnKey =
+      secondary && description[secondary].accession
+        ? `${main}${secondary[0].toUpperCase()}${secondary.slice(1)}`
+        : main;
+    if (!columns[columnKey]) columnKey = main;
 
+    const path2code = (path, varName) => {
+      const parts = path.split('[*]');
+      const selector = parts[0]
+        .split(/(\[\d\])/)
+        .flatMap(part => part.split('.'))
+        .filter(Boolean)
+        .map(part => (part.startsWith('[') ? part : `["${part}"]`))
+        .join('');
+      if (parts.length > 1) {
+        return `[x${parts[1]} for x in ${varName}${selector}]`;
+      }
+      return `${varName}${selector}`;
+    };
     if (!data?.loading && data?.payload) {
       this.memberDB = data.payload.databases;
     }
+
+    const path2perl = (path, varName) => {
+      const parts = path.split('[*]');
+      const selector = parts[0]
+        .split(/(\[\d\])/)
+        .flatMap(part => part.split('.'))
+        .filter(Boolean)
+        .map(part => (part.startsWith('[') ? part : `->{"${part}"}`))
+        .join('');
+      if (parts.length > 1) {
+        return `${parts[1]}, ${varName}${selector}`.replace(/[\[\]]/g, '');
+      }
+      return `${varName}${selector}`;
+    };
 
     return (
       <form
@@ -300,7 +335,19 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                 <Estimate data={data} isStale={isStale} />
                 {/* Only display if the response from the API is a list of items */}
                 {description[main].db && !description[main].accession && (
-                  <Snippet fileType={fileType} url={endpoint} subset={subset} />
+                  <Snippet
+                    fileType={fileType}
+                    url={endpoint}
+                    subset={subset}
+                    columns={columns[columnKey].map(
+                      c =>
+                        `${c.selector}${
+                          c.selectorInGroup ? `[*]["${c.selectorInGroup}"]` : ''
+                        }`,
+                    )}
+                    path2code={path2code}
+                    path2perl={path2perl}
+                  />
                 )}
 
                 <div className={f('controls')}>
