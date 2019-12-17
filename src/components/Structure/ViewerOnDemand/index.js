@@ -17,7 +17,9 @@ import styles from './style.css';
 
 const StructureViewAsync = loadable({
   loader: () =>
-    import(/* webpackChunkName: "structure-viewer" */ 'components/Structure/Viewer'),
+    import(
+      /* webpackChunkName: "structure-viewer" */ 'components/Structure/Viewer'
+    ),
 });
 
 /*:: type Props = {
@@ -79,9 +81,14 @@ export class ViewerOnDemand extends PureComponent /*:: <Props, State> */ {
               click or tap this area to display the interactive structure viewer
             </p>
             <p>
-              <label onClick={this._handleCheckboxClick}>
+              <label htmlFor="cb_reminder">
                 Remember this next time?{' '}
-                <input type="checkbox" ref={this._ref} />
+                <input
+                  type="checkbox"
+                  ref={this._ref}
+                  id="cb_reminder"
+                  onClick={this._handleCheckboxClick}
+                />
               </label>
               <small>
                 This can be reversed in the{' '}
@@ -105,7 +112,4 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(
-  mapStateToProps,
-  { changeSettingsRaw },
-)(ViewerOnDemand);
+export default connect(mapStateToProps, { changeSettingsRaw })(ViewerOnDemand);

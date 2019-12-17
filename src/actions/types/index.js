@@ -38,6 +38,7 @@ export const TOGGLE_EMBL_MAP_NAV = 'TOGGLE_EMBL_MAP_NAV';
 export const CLOSE_EVERYTHING = 'CLOSE_EVERYTHING';
 export const STUCK = 'STUCK';
 export const UNSTUCK = 'UNSTUCK';
+export const TOGGLE_ACCESSION_DB_FOR_IDA = 'TOGGLE_ACCESSION_DB_FOR_IDA';
 
 // toast messages
 export const ADD_TOAST = 'ADD_TOAST';

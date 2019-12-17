@@ -12,6 +12,7 @@ import InterProMenu from 'components/Menu/InterProMenu';
 import EntryMenu from 'components/EntryMenu';
 import Link from 'components/generic/Link';
 import ServerStatus from './ServerStatus';
+import Tip from 'components/Tip';
 
 import { inert as inertPolyfill } from 'utils/polyfills';
 
@@ -87,6 +88,7 @@ const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
   mainAccession?: string,
   mainType?: string,
   closeSideNav: function,
+  showConnectionStatusToast: boolean,
 }; */
 /*:: type State = {
   hasRendered: boolean,
@@ -98,6 +100,7 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
     mainAccession: T.string,
     mainType: T.string,
     closeSideNav: T.func.isRequired,
+    showConnectionStatusToast: T.bool.isRequired,
   };
 
   constructor(props /*: Props */) {
@@ -122,9 +125,17 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
     const { visible, mainAccession, mainType, closeSideNav } = this.props;
     const { hasRendered } = this.state;
     let content = null;
+
     if (hasRendered || visible) {
       content = (
         <>
+          {this.props.visible && this.props.showConnectionStatusToast ? (
+            <Tip
+              body="The green and red signals of the connection status shows the connectivity strength of the URLs"
+              toastID="connectivity"
+              settingsName="showConnectionStatusToast"
+            />
+          ) : null}
           <button
             className={f('exit')}
             title="Close side menu"
@@ -196,7 +207,13 @@ const mapStateToProps = createSelector(
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  (visible, mainType, mainAccession) => ({ visible, mainType, mainAccession }),
+  state => state.settings.notifications.showConnectionStatusToast,
+  (visible, mainType, mainAccession, showConnectionStatusToast) => ({
+    visible,
+    mainType,
+    mainAccession,
+    showConnectionStatusToast,
+  }),
 );
 
 export default connect(

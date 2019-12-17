@@ -4,6 +4,7 @@ import category from './category';
 
 export default combineReducers({
   navigation: category('navigation'),
+  notifications: category('notifications'),
   ui: category('ui'),
   cache: category('cache'),
   ebi: category('ebi'),

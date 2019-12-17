@@ -10,7 +10,7 @@ import { serverStatus, browserStatus } from 'actions/creators';
 
 const DEFAULT_SCHEDULE_DELAY = 2000; // 2 seconds
 const DEFAULT_LOOP_TIMEOUT = 60000; // one minute
-const MAX_LOOP_TIMEOUT = 360000; // one hour
+const MAX_LOOP_TIMEOUT = 360000; // 10 minutes
 const BACK_OFF_RATE = 1.5;
 
 let loopTimeoutWithBackOff = DEFAULT_LOOP_TIMEOUT;

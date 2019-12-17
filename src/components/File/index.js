@@ -251,13 +251,13 @@ export class File extends PureComponent /*:: <Props, State> */ {
     const { fileType, name, count } = this.props;
     return (
       <ConnectedButton
+        {...this.props}
         fileType={fileType}
         url={url}
         subpath={subpath}
         name={name}
         handleClick={this._handleClick}
         count={count}
-        {...this.props}
       />
     );
   }
@@ -269,7 +269,4 @@ const mapStateToProps = createSelector(
   (api, entryDescription) => ({ api, entryDescription }),
 );
 
-export default connect(
-  mapStateToProps,
-  { downloadURL },
-)(File);
+export default connect(mapStateToProps, { downloadURL })(File);

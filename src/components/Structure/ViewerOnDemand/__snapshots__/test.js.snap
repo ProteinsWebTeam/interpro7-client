@@ -24,11 +24,13 @@ exports[`<ViewerOnDemand /> should render 1`] = `
       </p>
       <p>
         <label
-          onClick={[Function]}
+          htmlFor="cb_reminder"
         >
           Remember this next time?
            
           <input
+            id="cb_reminder"
+            onClick={[Function]}
             type="checkbox"
           />
         </label>

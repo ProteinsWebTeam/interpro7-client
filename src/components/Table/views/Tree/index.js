@@ -19,6 +19,7 @@ import loadData from 'higherOrder/loadData';
 
 import { foundationPartial } from 'styles/foundation';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+import Tip from 'components/Tip';
 
 import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -155,7 +156,10 @@ const mergeData = (root, update, names, childrenCounters) => {
   customLocation: {
     description: Object,
   },
-  goToCustomLocation: function
+  goToCustomLocation: function,
+  showTreeToast: boolean,
+  addToast: function,
+  changeSettingsRaw: function,
 };*/
 
 /*:: type State = {
@@ -170,6 +174,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       description: T.object,
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
+    showTreeToast: T.bool.isRequired,
   };
 
   constructor(props /*: TreeViewProps */) {
@@ -292,6 +297,13 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     };
     return (
       <>
+        {this.props.showTreeToast ? (
+          <Tip
+            body="Arrow keys can be used to navigate the tree"
+            toastID="tree"
+            settingsName="showTreeToast"
+          />
+        ) : null}
         <div className={f('node-details')}>
           <div className={f('node-info')}>
             <header>
@@ -412,7 +424,12 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   }
 }
 
+const mapStateToProps = createSelector(
+  state => state.settings.notifications.showTreeToast,
+  showTreeToast => ({ showTreeToast }),
+);
+
 export default connect(
-  null,
+  mapStateToProps,
   { goToCustomLocation },
 )(TreeView);

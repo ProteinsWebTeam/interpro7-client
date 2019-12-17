@@ -16,6 +16,11 @@ exports[`<SideMenu /> should render 1`] = `
   role="menu"
 >
   <React.Fragment>
+    <Memo(Connect(Tip))
+      body="The green and red signals of the connection status shows the connectivity strength of the URLs"
+      settingsName="showConnectionStatusToast"
+      toastID="connectivity"
+    />
     <button
       aria-hidden="true"
       className="exit"

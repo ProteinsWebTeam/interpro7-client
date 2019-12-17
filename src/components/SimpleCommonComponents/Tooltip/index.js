@@ -30,7 +30,7 @@ const _Tooltip = (
       distance={distance}
       appendTo={document.body}
     >
-      <div style={{ display: 'inline' }} {...rest}>
+      <div {...rest} style={{ display: 'inline' }}>
         {children}
       </div>
     </Tippy>

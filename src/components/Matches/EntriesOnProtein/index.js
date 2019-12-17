@@ -66,6 +66,7 @@ class EntriesOnProtein extends ProtVistaMatches {
               length={protein.length}
               displaystart="1"
               displayend={protein.length}
+              use-ctrl-to-zoom
             />
           </div>
         </div>
@@ -87,6 +88,7 @@ class EntriesOnProtein extends ProtVistaMatches {
               ref={e => (this.web_tracks[entry.accession] = e)}
               shape="roundRectangle"
               expanded
+              use-ctrl-to-zoom
             />
           </Tooltip>
         </div>

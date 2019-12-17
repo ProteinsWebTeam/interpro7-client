@@ -17,9 +17,10 @@ const Genome3dMenuLink = (
     data: { loading, payload },
   } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Object}} */,
 ) => {
-  const value = (payload && payload.pager.total_entries) || 0;
+  // eslint-disable-next-line camelcase
+  const value = payload?.pager?.total_entries || 0;
   const attrs = { name, value, loading, to, exact, usedOnTheSide };
-  return <EntryMenuLinkWithoutData {...attrs} />;
+  return value ? <EntryMenuLinkWithoutData {...attrs} /> : null;
 };
 Genome3dMenuLink.propTypes = {
   to: T.oneOfType([T.object, T.func]).isRequired,

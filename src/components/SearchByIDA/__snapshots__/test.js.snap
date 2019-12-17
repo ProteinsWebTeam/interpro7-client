@@ -31,8 +31,14 @@ exports[`<SearchByIDA /> should render 1`] = `
               changeEntryHandler={[Function]}
               changeIgnoreHandler={[Function]}
               entryList={Array []}
+              handleMoveEntry={[Function]}
+              handleMoveMarker={[Function]}
               ignoreList={Array []}
               isOrdered={false}
+              markerAfterEntry={null}
+              markerBeforeEntry={null}
+              mergeResults={[Function]}
+              options={Object {}}
               removeEntryHandler={[Function]}
               removeIgnoreHandler={[Function]}
             />
@@ -68,18 +74,40 @@ exports[`<SearchByIDA /> should render 1`] = `
                 Add Domain to exclude
               </span>
             </button>
-            <label
-              htmlFor="ordered"
+            <div
+              className="switch tiny"
             >
-              <input
-                checked={false}
-                id="ordered"
-                onChange={[Function]}
-                type="checkbox"
-              />
-               
-              Order sensitivity
-            </label>
+              <label
+                htmlFor="ordered"
+              >
+                <input
+                  checked={false}
+                  className="switch-input"
+                  id="ordered"
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                 
+                Order of domain matters:
+                 
+                <span
+                  className="switch-paddle"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="switch-active"
+                  >
+                    Yes
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="switch-inactive"
+                  >
+                    No
+                  </span>
+                </span>
+              </label>
+            </div>
           </div>
         </div>
       </div>

@@ -16,6 +16,7 @@ import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 import ProtvistaTrack from 'protvista-track';
 import ProtvistaSaver from 'protvista-saver';
+import ProtvistaOverlay from 'protvista-overlay';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
@@ -81,6 +82,9 @@ const loadProtVistaWebComponents = () => {
 
     webComponents.push(
       loadWebComponent(() => ProtvistaSaver).as('protvista-saver'),
+    );
+    webComponents.push(
+      loadWebComponent(() => ProtvistaOverlay).as('protvista-overlay'),
     );
 
     webComponents.push(
@@ -955,6 +959,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper__arrow')} />
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
+        <protvista-overlay for={`${this.props.id}ProtvistaDiv`} />
         <div id={`${this.props.id}ProtvistaDiv`}>
           <div className={f('protvista')}>
             <protvista-manager
@@ -989,6 +994,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                       displaystart="1"
                       displayend={length}
                       highlight-event="onmouseover"
+                      use-ctrl-to-zoom
                     />
                     <protvista-coloured-sequence
                       ref={this._hydroRef}
@@ -996,9 +1002,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
                       displaystart="1"
                       displayend={length}
                       scale="hydrophobicity-scale"
-                      height="10px"
+                      height="10"
                       color_range="#ffdd00:-3,#0000FF:3"
                       highlight-event="onmouseover"
+                      use-ctrl-to-zoom
                     />
                   </div>
                 </div>
@@ -1063,6 +1070,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                         (this.web_tracks[entry.accession] = e)
                                       }
                                       highlight-event="onmouseover"
+                                      use-ctrl-to-zoom
                                     />
                                   </div>
                                 ) : (
@@ -1082,6 +1090,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                       }
                                       shape="roundRectangle"
                                       highlight-event="onmouseover"
+                                      use-ctrl-to-zoom
                                       expanded
                                     />
                                   </div>

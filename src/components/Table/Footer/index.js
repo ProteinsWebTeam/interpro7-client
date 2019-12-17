@@ -19,6 +19,7 @@ const f = foundationPartial(s);
 
 const toFunctionFor = (value, key = 'page') => customLocation => ({
   ...customLocation,
+  // $FlowFixMe
   search: { ...customLocation.search, [key]: value },
 });
 
