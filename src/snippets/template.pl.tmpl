@@ -36,16 +36,21 @@ my $BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_field
   sub parseGoTerms {
     my ($terms) = @_;
     my $tsvValue = "";
-    $tsvValue = join ",", (map {$_->{'identifier'}} @{$terms}) if (@{$terms});
+    ($tsvValue = join ",", map {$_->{'identifier'}} @{$terms}) if (@{$terms});
     return $tsvValue;
   }
 
   sub parseLocations {
     my ($locations) = @_;
-    my $tsvValue;
+    my $tsvValue = "";
+    my (@tsvValues);
     foreach my $location (@{$locations}) {
-      $tsvValue .= join ",", (map {$_->{'start'}."..".$_->{'end'}} @{$location->{'fragments'}});
+      push (@tsvValues,
+            join ",",
+            map {$_->{'start'}."..".$_->{'end'}}
+            @{$location->{'fragments'}});
     }
+    $tsvValue = join ",", @tsvValues if (@tsvValues);
     return $tsvValue;
   }
 
