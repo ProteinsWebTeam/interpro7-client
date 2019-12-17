@@ -41,10 +41,10 @@ my $BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_field
   }
 
   sub parseLocations {
-    my (@locations) = @_;
+    my ($locations) = @_;
     my $tsvValue;
-    foreach my $location (@locations) {
-      $tsvValue .= join ",", (map {$_->{'start'}..$_->{'end'}} @{$location->{'fragments'}});
+    foreach my $location (@{$locations}) {
+      $tsvValue .= join ",", (map {$_->{'start'}."..".$_->{'end'}} @{$location->{'fragments'}});
     }
     return $tsvValue;
   }
@@ -53,7 +53,7 @@ my $BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_field
     my ($key, $values, $selector) = @_;
     my @tsvValues;
     foreach my $value (@{$values}) {
-      push(@tsvValues, parseColumn($value, $selector));
+      push(@tsvValues, parseColumn($value->{$key}, $selector));
     }
     my $tsvValue = "";
     $tsvValue = join ",", @tsvValues if (@tsvValues);
