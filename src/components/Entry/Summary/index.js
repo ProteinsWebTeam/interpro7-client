@@ -140,9 +140,7 @@ const SidePanel = ({ metadata, dbInfo, api }) => {
     fetch(apiUrl, {
       method: 'POST',
       body: data,
-    }).then(response => {
-      console.log(response);
-      alert('mail sent');
+    }).then(() => {
       setMessage('');
       setEmail('');
       setOpen(false);
