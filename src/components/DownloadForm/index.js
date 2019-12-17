@@ -188,6 +188,20 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
       this.memberDB = data.payload.databases;
     }
 
+    const path2perl = (path, varName) => {
+      const parts = path.split('[*]');
+      const selector = parts[0]
+        .split(/(\[\d\])/)
+        .flatMap(part => part.split('.'))
+        .filter(Boolean)
+        .map(part => (part.startsWith('[') ? part : `->{"${part}"}`))
+        .join('');
+      if (parts.length > 1) {
+        return `${parts[1]}, ${varName}${selector}`.replace(/[\[\]]/g, '');
+      }
+      return `${varName}${selector}`;
+    };
+
     return (
       <form
         onChange={this._handleChange}
@@ -332,6 +346,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                         }`,
                     )}
                     path2code={path2code}
+                    path2perl={path2perl}
                   />
                 )}
 
