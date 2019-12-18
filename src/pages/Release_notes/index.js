@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import loadWebComponent from 'utils/load-web-component';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -32,31 +32,45 @@ const ReleaseNotesSelectorWithData = (
     current,
   } /*: {data: { loading: boolean, payload: Object}, current: string} */,
 ) => {
+  const [showFullList, setShowFullList] = useState(false);
   if (loading || !payload) return <Loading />;
+  const releasesToShow = showFullList
+    ? Object.entries(payload)
+    : Object.entries(payload).slice(-1);
   return (
-    <ul className={f('release-selector')}>
-      {Object.entries(payload).map(([version, date]) => (
-        <li key={version} className={f({ current: version === current })}>
-          <Link
-            to={{
-              description: {
-                other: ['release_notes', version],
-              },
-            }}
-            disabled={version === current}
-          >
-            <VersionBadge
-              version={version}
-              side={version === current ? 30 : 20}
-            />
-            InterPro {version}{' '}
-            <small>
-              • <time dateTime={date}>{formatISODate(date)}</time>
-            </small>
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <>
+      {!showFullList && (
+        <button
+          className={f('show-more-releases', 'link')}
+          onClick={() => setShowFullList(true)}
+        >
+          Show Previous Releases
+        </button>
+      )}
+      <ul className={f('release-selector')}>
+        {releasesToShow.map(([version, date]) => (
+          <li key={version} className={f({ current: version === current })}>
+            <Link
+              to={{
+                description: {
+                  other: ['release_notes', version],
+                },
+              }}
+              disabled={version === current}
+            >
+              <VersionBadge
+                version={version}
+                side={version === current ? 30 : 20}
+              />
+              InterPro {version}{' '}
+              <small>
+                • <time dateTime={date}>{formatISODate(date)}</time>
+              </small>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 };
 ReleaseNotesSelectorWithData.propTypes = {

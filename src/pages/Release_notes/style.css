@@ -28,6 +28,16 @@
   font-size: 1.4rem;
 }
 
+button.show-more-releases {
+  padding-left: 1em;
+  margin-bottom: 0.5em;
+  color: rgb(0, 112, 187);
+  text-decoration: underline;
+  opacity: 0.8;
+}
+button.show-more-releases:hover {
+  opacity: 1;
+}
 ul.release-selector li.current a {
   opacity: 1 !important;
   color: #444444;
