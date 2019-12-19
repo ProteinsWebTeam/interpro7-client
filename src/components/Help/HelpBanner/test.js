@@ -2,7 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import HelpBanner from '.';
+import { HelpBanner } from '.';
 
 const renderer = new ShallowRenderer();
 

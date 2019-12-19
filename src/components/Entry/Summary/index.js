@@ -6,6 +6,7 @@ import { partition } from 'lodash-es';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import { addToast } from 'actions/creators';
 
 import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
@@ -117,7 +118,7 @@ MemberDBSubtitle.propTypes = {
   dbInfo: T.object.isRequired,
 };
 
-const SidePanel = ({ metadata, dbInfo, api }) => {
+const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
   const url = getUrlFor(metadata.source_database);
   const { protocol, hostname, port, root } = api;
 
@@ -140,7 +141,24 @@ const SidePanel = ({ metadata, dbInfo, api }) => {
     fetch(apiUrl, {
       method: 'POST',
       body: data,
-    }).then(() => {
+    }).then(response => {
+      let text;
+      // eslint-disable-next-line no-magic-numbers
+      if (response.status === 200) {
+        text = 'Thanks for your feedback';
+        // eslint-disable-next-line no-magic-numbers
+      } else if (response.status === 429) {
+        text = 'Request aborted as too many requests are made within a minute';
+      } else {
+        text = 'Invalid request';
+      }
+      addToast(
+        {
+          title: text,
+          ttl: 3000,
+        },
+        'interhelp-mail',
+      );
       setMessage('');
       setEmail('');
       setOpen(false);
@@ -249,11 +267,21 @@ const SidePanel = ({ metadata, dbInfo, api }) => {
     </div>
   );
 };
-SidePanel.propTypes = {
+_SidePanel.propTypes = {
   metadata: T.object.isRequired,
   dbInfo: T.object.isRequired,
-  api: T.object,
+  api: T.object.isRequired,
+  addToast: T.func.isRequired,
 };
+
+const mapStateToProps = createSelector(
+  state => state.settings.api,
+  api => ({
+    api,
+  }),
+);
+
+const SidePanel = connect(mapStateToProps, { addToast })(_SidePanel);
 
 const OtherSections = ({ metadata, citations: { included, extra } }) => (
   <>
@@ -415,25 +443,22 @@ Hierarchy.propTypes = {
     },
     loading: boolean,
     dbInfo: Object,
-    api: Object,
   };
 */
 
-export class SummaryEntry extends PureComponent /*:: <Props> */ {
+class SummaryEntry extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: T.shape({
       metadata: T.object,
     }).isRequired,
     dbInfo: T.object.isRequired,
     loading: T.bool.isRequired,
-    api: T.object,
   };
 
   render() {
     const {
       data: { metadata },
       dbInfo,
-      api,
     } = this.props;
     if (this.props.loading || !metadata) return <Loading />;
     const citations = getLiteratureIdsFromDescription(metadata.description);
@@ -477,7 +502,7 @@ export class SummaryEntry extends PureComponent /*:: <Props> */ {
                 </>
               ) : null}
             </div>
-            <SidePanel metadata={metadata} dbInfo={dbInfo} api={api} />
+            <SidePanel metadata={metadata} dbInfo={dbInfo} />
           </div>
         </section>
         <OtherSections metadata={metadata} citations={{ included, extra }} />
@@ -486,11 +511,4 @@ export class SummaryEntry extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToProps = createSelector(
-  state => state.settings.api,
-  api => ({
-    api,
-  }),
-);
-
-export default connect(mapStateToProps)(SummaryEntry);
+export default SummaryEntry;

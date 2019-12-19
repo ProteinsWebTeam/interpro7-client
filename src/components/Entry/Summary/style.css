@@ -1,5 +1,6 @@
 /* overlapping entries Tree : to align exactly with title */
 @import '../../../styles/colors.css';
+@import '../../../styles/timing.css';
 
 .list-items {
   padding-left: 1px;

@@ -2,7 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { SummaryEntry } from '.';
+import SummaryEntry from '.';
 
 const renderer = new ShallowRenderer();
 
@@ -49,7 +49,6 @@ describe('<SummaryEntry />', () => {
         }}
         dbInfo={{}}
         loading={false}
-        api={{}}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
