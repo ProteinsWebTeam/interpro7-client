@@ -2,7 +2,7 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
 
-import InfoBanner from '.';
+import { InfoBanner } from '.';
 
 describe('<InfoBanner />', () => {
   test('should render', () => {
