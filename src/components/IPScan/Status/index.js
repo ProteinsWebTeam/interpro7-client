@@ -10,6 +10,11 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import RefreshButton from 'components/IPScan/RefreshButton';
 import ImportResultSearch from 'components/IPScan/ImportResultSearch';
 import Actions from 'components/IPScan/Actions';
+import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
+
+import { format } from 'url';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import config from 'config';
 
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
@@ -29,6 +34,23 @@ const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
+
+export const getIProScanURL = (accession /*: string*/) => {
+  const { protocol, hostname, port, pathname } = config.root.website;
+  const url = format({
+    protocol,
+    hostname,
+    port,
+    pathname:
+      pathname +
+      descriptionToPath({
+        main: { key: 'result' },
+        result: { type: 'InterProScan', accession },
+      }),
+  });
+
+  return url;
+};
 
 const GoToNewSearch = () => (
   <Link
@@ -101,23 +123,27 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           <Column
             dataKey="localID"
             renderer={(localID /*: string */, row /*: Object */) => (
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'result' },
-                    result: {
-                      type: 'InterProScan',
-                      accession: row.remoteID || localID,
+              <>
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'result' },
+                      result: {
+                        type: 'InterProScan',
+                        accession: row.remoteID || localID,
+                      },
                     },
-                  },
-                }}
-              >
-                <span
-                  className={f('icon', 'icon-common')}
-                  data-icon="&#xf0c1;"
-                />{' '}
-                {row.remoteID || localID}
-              </Link>
+                  }}
+                >
+                  {row.remoteID || localID}{' '}
+                </Link>
+                {row.remoteID && (
+                  <CopyToClipboard
+                    textToCopy={getIProScanURL(row.remoteID)}
+                    tooltipText="CopyURL"
+                  />
+                )}
+              </>
             )}
           >
             Job ID
@@ -192,9 +218,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
             defaultKey="actions"
             headerClassName={f('table-center')}
             cellClassName={f('table-center', 'font-ml')}
-            renderer={(localID /*: string */, { remoteID }) => (
-              <Actions localID={localID} remoteID={remoteID} />
-            )}
+            renderer={(localID /*: string */) => <Actions localID={localID} />}
           >
             Action
           </Column>
@@ -218,7 +242,4 @@ const mapsStateToProps = createSelector(
   }),
 );
 
-export default connect(
-  mapsStateToProps,
-  { updateJobStatus },
-)(IPScanStatus);
+export default connect(mapsStateToProps, { updateJobStatus })(IPScanStatus);

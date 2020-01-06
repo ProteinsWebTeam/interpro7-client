@@ -12,6 +12,5 @@ exports[`<Actions /> should render 1`] = `
       onClick={[Function]}
     />
   </Tooltip>
-   
 </React.Fragment>
 `;

@@ -385,6 +385,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                         db: 'uniprot',
                         isFilter: true,
                         order: 2,
+                        accession: this.state.focused,
                       };
                     }
 
@@ -429,7 +430,4 @@ const mapStateToProps = createSelector(
   showTreeToast => ({ showTreeToast }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(TreeView);
+export default connect(mapStateToProps, { goToCustomLocation })(TreeView);
