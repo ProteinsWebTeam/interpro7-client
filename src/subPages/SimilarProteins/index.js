@@ -1,10 +1,11 @@
 // @flow
-import React, { useState } from 'react';
+import React from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { toggleAccessionDBForIDA } from 'actions/creators';
 
 import { searchSelector } from 'reducers/custom-location/search';
 import { descriptionSelector } from 'reducers/custom-location/description';
@@ -17,7 +18,7 @@ import loadWebComponent from 'utils/load-web-component';
 import ProtvistaInterproTrack from 'protvista-interpro-track';
 
 import { foundationPartial } from 'styles/foundation';
-// import localStyle from './style.css';
+import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import File from 'components/File';
 import { format } from 'url';
@@ -30,7 +31,7 @@ import {
   ida2json,
 } from 'components/Entry/DomainArchitectures';
 
-const f = foundationPartial(fonts);
+const f = foundationPartial(fonts, localStyle);
 const FAKE_PROTEIN_LENGTH = 1000;
 
 const SimilarProteinsHeaderWithData = (
@@ -38,31 +39,43 @@ const SimilarProteinsHeaderWithData = (
     accession,
     data: { payload, loading },
     databases,
-  } /*: {accession: string, data: {payload: Object, loading: boolean}, databases:Object} */,
+    idaAccessionDB,
+    toggleAccessionDBForIDA,
+  } /*: {accession: string, data: {payload: Object, loading: boolean}, databases: Object, idaAccessionDB: string, toggleAccessionDBForIDA: function} */,
 ) => {
   if (loading || !payload) return <Loading />;
-  const [entry, setEntry] = useState('pfam');
-  const idaObj = ida2json(payload.ida, entry);
+  const idaObj = ida2json(payload.ida, idaAccessionDB);
   return (
     <div>
       <header>
         All the proteins in this page share the domain architecture below with
         the protein with accession <b>{accession}</b>.
-        <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-          {entry === 'pfam' ? (
-            <button
-              className={f('icon', 'icon-common')}
-              data-icon="&#xf204;"
-              onClick={() => setEntry('interpro')}
-            />
-          ) : (
-            <button
-              className={f('icon', 'icon-common')}
-              data-icon="&#xf205;"
-              onClick={() => setEntry('pfam')}
-            />
-          )}
-        </Tooltip>
+        <div className={f('accession-selector-panel')}>
+          <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
+            <div className={f('switch', 'large')}>
+              <input
+                type="checkbox"
+                checked={idaAccessionDB === 'pfam'}
+                className={f('switch-input')}
+                name="accessionDB"
+                id="accessionDB-input"
+                onChange={toggleAccessionDBForIDA}
+              />
+              <label
+                className={f('switch-paddle', 'accession-selector')}
+                htmlFor="accessionDB-input"
+              >
+                <span className={f('show-for-sr')}>Use accessions from:</span>
+                <span className={f('switch-active')} aria-hidden="true">
+                  Pfam
+                </span>
+                <span className={f('switch-inactive')} aria-hidden="true">
+                  InterPro
+                </span>
+              </label>
+            </div>
+          </Tooltip>
+        </div>
       </header>
       <TextIDA accessions={idaObj.accessions} />
       <IDAProtVista
@@ -78,6 +91,8 @@ SimilarProteinsHeaderWithData.propTypes = {
   accession: T.string,
   data: dataPropType,
   databases: T.object,
+  idaAccessionDB: T.string,
+  toggleAccessionDBForIDA: T.func,
 };
 
 const getUrlForIDA = createSelector(
@@ -100,9 +115,20 @@ const getUrlForIDA = createSelector(
     });
   },
 );
-const SimilarProteinsHeader = loadData(getUrlForIDA)(
-  SimilarProteinsHeaderWithData,
+
+const mapStateToPropsAccessionDB = createSelector(
+  state => state.ui.idaAccessionDB,
+  idaAccessionDB => ({
+    idaAccessionDB,
+  }),
 );
+
+const SimilarProteinsHeader = loadData({
+  getUrl: getUrlForIDA,
+  mapStateToProps: mapStateToPropsAccessionDB,
+  mapDispatchToProps: { toggleAccessionDBForIDA },
+})(SimilarProteinsHeaderWithData);
+
 const getAPIURLForSimilarProteins = ({ protocol, hostname, port, root }, ida) =>
   format({
     protocol,
@@ -127,7 +153,9 @@ const AllProteinDownload = (
 ) => (
   <File
     fileType={fileType}
-    name={`protein-similar-to-${description[description.main.key].accession}.${fileType}`}
+    name={`protein-similar-to-${
+      description[description.main.key].accession
+    }.${fileType}`}
     count={count}
     customLocationDescription={{
       main: { key: 'protein' },
