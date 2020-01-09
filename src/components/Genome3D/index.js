@@ -14,8 +14,17 @@ const _getProtvistaTracksData = ({ annotations, condition, type, protein }) => {
         ].accession = `G3D:${metadata.resource}-${metadata.type}`;
         agg[metadata.resource].type = type;
         agg[metadata.resource].source_database = metadata.resource;
-        agg[metadata.resource].confidence = metadata.confidence;
-        agg[metadata.resource].locations = locations;
+        const addedInfoLocation = {
+          confidence: metadata.confidence,
+          fragments: locations[0].fragments,
+        };
+        if (agg[metadata.resource].locations) {
+          const presentLocations = agg[metadata.resource].locations;
+          presentLocations.push(addedInfoLocation);
+          agg[metadata.resource].locations = presentLocations;
+        } else {
+          agg[metadata.resource].locations = [addedInfoLocation];
+        }
         return agg;
       }, {}),
     );
