@@ -146,7 +146,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
               </>
             )}
           >
-            Job ID
+            Results
           </Column>
           <Column dataKey="localTitle">Title</Column>
           <Column
