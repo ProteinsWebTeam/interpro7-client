@@ -21,7 +21,8 @@ import Length from 'components/Protein/Length';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
-import Actions, { getIProScanURL } from 'components/IPScan/Actions';
+import Actions from 'components/IPScan/Actions';
+import { getIProScanURL } from 'components/IPScan/Status';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 import { Exporter } from 'components/Table';

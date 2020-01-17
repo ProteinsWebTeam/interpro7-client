@@ -61,6 +61,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
       this.props.url,
       this.props.fileType,
       this.props.subset,
+      this.props.entityType,
     ),
   );
 
@@ -69,6 +70,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
       this.props.url,
       this.props.fileType,
       this.props.subset,
+      this.props.entityType,
     ),
   );
 

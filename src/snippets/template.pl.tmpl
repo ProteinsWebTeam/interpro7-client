@@ -9,12 +9,82 @@ use Data::Dumper;
 # Switching off SSL verification
 $ENV{'PERL_LWP_SSL_VERIFY_HOSTNAME'} = 0;
 
-my $HEADER_SEPARATOR = "|";
-my $LINE_LENGTH = 80;
-
 my $BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>";
+<% if (fileType === "tsv" && columns.some(x => x.indexOf("extra_fields.counters")>=0)) { %>
+  $BASE_URL .= "&extra_fields=counters"
+<% }  if (fileType === 'fasta') { %>
+  my $HEADER_SEPARATOR = "|";
+  my $LINE_LENGTH = 80;
+<% } if (fileType === "tsv") { %>
+  sub parseItems {
+    my (@items) = @_;
+    my $tsvValue = "";
+    $tsvValue = join(",", @items) if (@items);
+    return $tsvValue;
+  }
 
-# If used as a module, can be used as a generator
+  sub parseMemberDatabases {
+    my ($dbs) = @_;
+    my $tsvValue = "";
+    foreach my $db (keys %{$dbs}) {
+      $tsvValue .= "$db:" . join(",", keys $dbs->{$db}) . ";";
+    }
+    $tsvValue =~ s/\;$//; #remove terminal semi-colon
+    return $tsvValue;
+  }
+
+  sub parseGoTerms {
+    my ($terms) = @_;
+    my $tsvValue = "";
+    ($tsvValue = join ",", map {$_->{'identifier'}} @{$terms}) if (@{$terms});
+    return $tsvValue;
+  }
+
+  sub parseLocations {
+    my ($locations) = @_;
+    my $tsvValue = "";
+    my (@tsvValues);
+    foreach my $location (@{$locations}) {
+      push (@tsvValues,
+            join ",",
+            map {$_->{'start'}."..".$_->{'end'}}
+            @{$location->{'fragments'}});
+    }
+    $tsvValue = join ",", @tsvValues if (@tsvValues);
+    return $tsvValue;
+  }
+
+  sub parseGroupColumn {
+    my ($key, $values, $selector) = @_;
+    my @tsvValues;
+    foreach my $value (@{$values}) {
+      push(@tsvValues, parseColumn($value->{$key}, $selector));
+    }
+    my $tsvValue = "";
+    $tsvValue = join ",", @tsvValues if (@tsvValues);
+    return $tsvValue;
+  }
+
+  sub parseColumn {
+    my ($value, $selector) = @_;
+    unless ($value) {
+      return ""
+    }
+    if ($selector =~ /member_databases/ ) {
+      return parseMemberDatabases($value);
+    }
+    if ($selector =~ /go_terms/) {
+      return parseGoTerms($value);
+    }
+    if ($selector =~ /children/) {
+      return parseItems($value);
+    }
+    if ($selector =~ /locations/) {
+      return parseLocations($value);
+    }
+    return "$value";
+  }
+<% } %>
 sub main {
   my $agent = LWP::UserAgent->new();
 
@@ -54,6 +124,19 @@ sub main {
       unless ($last_page && $i+1 == (@{$results})){
         print ",\n";
       }
+      <% } else if (fileType === "tsv") { %>
+      my $value;
+      <%
+          for (column of columns) {
+             if (column.indexOf("[*]") !== -1) {
+      %>
+      $value = parseGroupColumn(<%= path2perl(column, "$item") %>, '<%= column %>');
+      <% } else { %> 
+      $value = parseColumn(<%= path2perl(column, "$item") %>, '<%= column %>');
+      <% } %>
+      print "$value\t";
+      <% } %>
+        print "\n";
       <% } else if (fileType === "fasta") { %>
       if (defined $item->{"entries"}){
         foreach my $entry (@{$item->{"entries"}}) {

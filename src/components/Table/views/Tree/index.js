@@ -374,19 +374,24 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 
                     const to = {
                       ...description,
+                      main: {
+                        key:
+                          description.main.key === 'taxonomy'
+                            ? endpoint
+                            : description.main.key,
+                      },
                       [endpoint]: {
                         db,
-                        isFilter: true,
+                        isFilter: description.main.key !== 'taxonomy',
                         order: 1,
                       },
-                    };
-                    if (description.main.key !== 'taxonomy') {
-                      to.taxonomy = {
+                      taxonomy: {
                         db: 'uniprot',
                         isFilter: true,
                         order: 2,
-                      };
-                    }
+                        accession: this.state.focused,
+                      },
+                    };
 
                     return (
                       <li key={endpoint}>
@@ -429,7 +434,4 @@ const mapStateToProps = createSelector(
   showTreeToast => ({ showTreeToast }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(TreeView);
+export default connect(mapStateToProps, { goToCustomLocation })(TreeView);

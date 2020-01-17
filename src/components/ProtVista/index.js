@@ -302,7 +302,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
           residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
           chain: d.chain,
           protein: d.protein,
-          confidence: d.confidence,
+          confidence: loc.confidence,
         }));
         const children = d.children
           ? d.children.map(child => ({
@@ -498,15 +498,15 @@ class ProtVista extends Component /*:: <Props, State> */ {
         })
       : '';
     return `
-      <section>   
+      <section>
         <h6>
           ${accession}
-          ${description ? `<br/>[${description}]` : ''} 
+          ${description ? `<br/>[${description}]` : ''}
          </h6>
-          
+
         ${name && !isResidue ? `<h4>${name}</h4>` : ''}
-        
-        <!-- use class as Protvista is not react-->       
+
+        <!-- use class as Protvista is not react-->
         <div class="${f('pop-wrapper')}" >
           <div>${
             isInterPro
@@ -516,7 +516,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                       aria-label="Entry type"
                     />`
               : ''
-          } 
+          }
           </div>
           <div>
             ${isResidue ? 'Residue in ' : ''}
@@ -524,7 +524,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
           </div>
         </div>
         <p>
-          <small>          
+          <small>
             ${entry ? `(${entry})` : ''}
           </small>
         </p>
@@ -536,13 +536,13 @@ class ProtVista extends Component /*:: <Props, State> */ {
             <li>Residue: ${residue}</li>
             `
               : ''
-          } 
+          }
           ${
             !isResidue && locations
               ? locations
                   .map(({ fragments, model_acc: model }) =>
                     `
-            <li> 
+            <li>
             <!--location:-->
               ${model && model !== accession ? `Model: ${model}` : ''}
               <ul>

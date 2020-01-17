@@ -96,69 +96,110 @@ columns.proteinEntry = [
 ];
 columns.proteinStructure = [
   ...columns.protein,
-  { name: 'Structure Accession', selector: 'structures[0].accession' },
-  { name: 'Chain', selector: 'structures[0].chain' },
+  {
+    name: 'Structure Accession',
+    selector: 'structures',
+    selectorInGroup: 'accession',
+    serializer: mapToString('accession'),
+  },
+  {
+    name: 'Chain',
+    selector: 'structures',
+    selectorInGroup: 'chain',
+    serializer: mapToString('chain'),
+  },
   {
     name: 'Structure Location',
-    selector: 'structures[0].structure_protein_locations',
-    serializer: locationsToString,
+    selector: 'structures',
+    selectorInGroup: 'structure_protein_locations',
+    serializer: mapToString('structure_protein_locations', locationsToString),
   },
 ];
 columns.structureProtein = [
   ...columns.structure,
-  { name: 'Chains', selector: 'proteins', serializer: mapToString('chain') },
+  {
+    name: 'Chains',
+    selector: 'proteins',
+    selectorInGroup: 'chain',
+    serializer: mapToString('chain'),
+  },
   {
     name: 'Proteins',
     selector: 'proteins',
+    selectorInGroup: 'accession',
+
     serializer: mapToString('accession'),
   },
   {
     name: 'Structure Location',
     selector: 'proteins',
+    selectorInGroup: 'structure_protein_locations',
     serializer: mapToString('structure_protein_locations', locationsToString),
   },
 ];
 columns.structureEntry = [
   ...columns.structure,
-  { name: 'Chains', selector: 'entries', serializer: mapToString('chain') },
-  { name: 'Proteins', selector: 'entries', serializer: mapToString('protein') },
+  {
+    name: 'Chains',
+    selector: 'entries',
+    selectorInGroup: 'chain',
+    serializer: mapToString('chain'),
+  },
+  {
+    name: 'Proteins',
+    selector: 'entries',
+    selectorInGroup: 'protein',
+    serializer: mapToString('protein'),
+  },
   {
     name: 'Protein Length',
     selector: 'entries',
+    selectorInGroup: 'protein_length',
     serializer: mapToString('protein_length'),
   },
   {
     name: 'Structure Location',
     selector: 'entries',
+    selectorInGroup: 'structure_protein_locations',
     serializer: mapToString('structure_protein_locations', locationsToString),
   },
   {
     name: 'matches',
     selector: 'entries',
+    selectorInGroup: 'entry_protein_locations',
     serializer: mapToString('entry_protein_locations', locationsToString),
   },
 ];
 columns.entryStructure = [
   ...columns.entry,
-  { name: 'Chains', selector: 'structures', serializer: mapToString('chain') },
+  {
+    name: 'Chains',
+    selector: 'structures',
+    selectorInGroup: 'chain',
+    serializer: mapToString('chain'),
+  },
   {
     name: 'Proteins',
     selector: 'structures',
+    selectorInGroup: 'protein',
     serializer: mapToString('protein'),
   },
   {
     name: 'Protein Length',
     selector: 'structures',
+    selectorInGroup: 'protein_length',
     serializer: mapToString('protein_length'),
   },
   {
     name: 'Structure Location',
     selector: 'structures',
+    selectorInGroup: 'structure_protein_locations',
     serializer: mapToString('structure_protein_locations', locationsToString),
   },
   {
     name: 'matches',
     selector: 'structures',
+    selectorInGroup: 'entry_protein_locations',
     serializer: mapToString('entry_protein_locations', locationsToString),
   },
 ];

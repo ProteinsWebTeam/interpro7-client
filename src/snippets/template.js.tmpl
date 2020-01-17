@@ -44,7 +44,65 @@ const processItem = function* ({ metadata: { accession } }) {
 const processItem = function* (item) {
   yield JSON.stringify(item);<% if (fileType === 'ndjson') { %>
   yield '\n';<% } %>
+<% } else if (fileType === 'tsv') { %>
+const isObject = o => o instanceof Object && o.constructor === Object;
+
+const parseItems = items => Array.isArray(items) ? items.join() : "";
+
+const parseMemberDatabases = dbs => isObject(dbs)
+  ? Object.entries(dbs)
+      .map(([db,entries]) => `${db}:${Object.keys(entries).join()}`)
+      .join()
+  : ""
+
+const parseGoTerms = gos => Array.isArray(gos) ? gos.map(go=>go.identifier).join() : "";
+
+const parseLocations = locations =>
+  locations && Array.isArray(locations)
+    ? locations
+        .map(({ fragments }) =>
+          fragments.map(({ start, end }) => `${start}..${end}`).join(','),
+        )
+        .join(',')
+    : '';
+
+const parseGroupColumn = (item, selector) => {
+  const [main, selectorInGoup] = selector.split("[*]");
+  return item[main]
+    .map(
+      group => parseColumn(
+        group[selectorInGoup.slice(2,-2)],
+        selector,
+      )
+    ).join()
+
+}
+const parseColumn = (value, selector) => {
+  if (value === null) 
+    return ""
+  else if (selector.indexOf("member_databases") !== -1)
+    return parseMemberDatabases(value);
+  else if (selector.indexOf("go_terms") !== -1)
+    return parseGoTerms(value);
+  else if (selector.indexOf("children") !== -1)
+    return parseItems(value);
+  else if (selector.indexOf("locations") !== -1)
+    return parseLocations(value);
+  return "" + value;
 };
+const processItem = function* (item) {
+  let row = "";
+  <% for (column of columns) {
+       if (column.indexOf("[*]") !== -1) {
+       %>row += parseGroupColumn(item, '<%= column %>') + "\t";
+  <%   } else {
+       %>row += parseColumn(<%= path2code(column, "item") %>, '<%= column %>') + "\t";
+  <%   }
+  } %>
+  row += "\n";
+  yield row;
+};
+
 <% } %>
 
 const main = async function* (startURL) {
@@ -85,8 +143,11 @@ const main = async function* (startURL) {
   }
 };
 
-const BASE_URL = '<%= url %>?page_size=100<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>';
-
+let BASE_URL = '<%= url %>?page_size=100<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>';
+<% if (fileType === "tsv" && columns.some(x => x.indexOf("extra_fields.counters")>=0)) { 
+%>BASE_URL += "&extra_fields=counters"
+<% } %>
+  
 if (require.main === module) {
   // If used from the command line, will write data to stdout asap
   const mainWriteToStdout = async () => {

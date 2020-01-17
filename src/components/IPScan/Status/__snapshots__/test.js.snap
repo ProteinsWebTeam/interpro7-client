@@ -41,7 +41,7 @@ exports[`<IPScanStatus /> should render 1`] = `
       dataKey="localID"
       renderer={[Function]}
     >
-      Job ID
+      Results
     </Column>
     <Column
       dataKey="localTitle"
