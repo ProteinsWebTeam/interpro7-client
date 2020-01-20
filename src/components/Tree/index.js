@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import TaxonomyVisualisation from 'taxonomy-visualisation';
+import ZoomOverlay from 'components/ZoomOverlay';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
@@ -61,6 +62,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
         node: styles.node,
       },
       enableZooming: true,
+      useCtrlToZoom: true,
       // shouldCorrectNodesOutside: true,
     });
 
@@ -150,7 +152,8 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
           </span>
         </div>
 
-        <div className={styles.tree} data-testid="data-tree">
+        <ZoomOverlay elementId="treeDiv" />
+        <div className={styles.tree} data-testid="data-tree" id="treeDiv">
           <svg
             className={styles.container}
             ref={this._ref}
