@@ -24,6 +24,7 @@ import NumberComponent from 'components/NumberComponent';
 import Lazy from 'wrappers/Lazy';
 import LazyImage from 'components/LazyImage';
 import loadWebComponent from 'utils/load-web-component';
+import { toPublicAPI } from 'utils/url';
 
 import { getReversedUrl } from 'higherOrder/loadData/defaults';
 
@@ -150,7 +151,9 @@ MatchesByPrimary.propTypes = propTypes;
 export const ProteinDownloadRenderer = description => (accession, row) => (
   <File
     fileType="fasta"
-    name={`protein-sequences-matching-${description[description.main.key].accession}-for-${accession}.fasta`}
+    name={`protein-sequences-matching-${
+      description[description.main.key].accession
+    }-for-${accession}.fasta`}
     count={row.proteins || row.counters.extra_fields.counters.proteins}
     customLocationDescription={{
       main: { key: 'protein' },
@@ -317,7 +320,7 @@ const Matches = (
               secondary={secondary}
             />
             <li className={f('exporter-link')}>
-              <Link target="_blank" href={getReversedUrl(state)}>
+              <Link target="_blank" href={toPublicAPI(getReversedUrl(state))}>
                 <span
                   className={f('icon', 'icon-common', 'icon-export')}
                   data-icon="&#xf233;"

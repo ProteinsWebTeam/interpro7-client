@@ -17,6 +17,8 @@ import ProgressAnimation from './ProgressAnimation';
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import { toPublicAPI } from 'utils/url';
+
 import { columns } from 'web-workers/download/object2TSV';
 
 import { goToCustomLocation } from 'actions/creators';
@@ -147,15 +149,17 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
 
     const { description, fileType, subset } = extractDataFromHash(matched);
 
-    const endpoint = format({
-      protocol: api.protocol,
-      hostname: api.hostname,
-      port: api.port,
-      pathname: (api.root + descriptionToPath(description)).replace(
-        /\/+/g,
-        '/',
-      ),
-    });
+    const endpoint = toPublicAPI(
+      format({
+        protocol: api.protocol,
+        hostname: api.hostname,
+        port: api.port,
+        pathname: (api.root + descriptionToPath(description)).replace(
+          /\/+/g,
+          '/',
+        ),
+      }),
+    );
 
     const typeObjects = Object.entries(description).filter(
       ([, { isFilter }]) => isFilter !== undefined,
@@ -388,7 +392,6 @@ const mapStateToProps = createSelector(
   (customLocation, api, lowGraphics) => ({ customLocation, api, lowGraphics }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(loadData(getUrlForMeta)(DownloadForm));
+export default connect(mapStateToProps, { goToCustomLocation })(
+  loadData(getUrlForMeta)(DownloadForm),
+);
