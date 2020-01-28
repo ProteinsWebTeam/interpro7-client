@@ -43,7 +43,7 @@ export default history => {
     }
   }
   // TODO: remove this line when the logs show that users are now using /wwwapi/
-  if (settings.api.hostname === 'www.ebi.ac.uk') {
+  if (settings?.api?.hostname === 'www.ebi.ac.uk') {
     settings.api.root = settings.api.root.replace('/api/', '/wwwapi/');
   }
   const description = pathToDescription(pathname);
