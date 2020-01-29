@@ -226,6 +226,7 @@ const Matches = (
     nextAPICall,
     previousAPICall,
     focusType,
+    status,
     ...props
   } /*: {
     matches: Array<Object>,
@@ -285,6 +286,7 @@ const Matches = (
       nextAPICall={nextAPICall}
       previousAPICall={previousAPICall}
       currentAPICall={currentAPICall}
+      status={status}
     >
       <PageSizeSelector />
       <SearchBox loading={isStale} />

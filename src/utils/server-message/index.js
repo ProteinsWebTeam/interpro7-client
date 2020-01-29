@@ -31,10 +31,12 @@ const statusMessages = new Map([
   [
     408,
     message(
-      'The server takes too long to respond. Your request is running in the background. Please check again in a while for the results',
+      'The query is still running in the background. Please reload in a short while to see the results.',
     ),
   ],
   [500, message('There was an error while getting data from the server')],
+  [502, message('There was an error while getting data from the server')],
+  [503, message('There was an error while getting data from the server')],
 ]);
 
 export default (status /*:: ?: number */) => {
