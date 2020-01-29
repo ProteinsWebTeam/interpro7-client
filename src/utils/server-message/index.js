@@ -31,7 +31,7 @@ const statusMessages = new Map([
   [
     408,
     message(
-      'The query is still running in the background. Please reload in a short while to see the results.',
+      'The query is still running in the background. We will update the page once the data is ready',
     ),
   ],
   [500, message('There was an error while getting data from the server')],
