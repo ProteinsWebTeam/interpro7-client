@@ -40,7 +40,7 @@ const Advanced = loadable({
 
 const NavigationSettings = (
   {
-    navigation: { pageSize },
+    navigation: { pageSize, secondsToRetry },
   } /*: {navigation: {pageSize: number}, handleChange: function} */,
 ) => (
   <form data-category="navigation">
@@ -70,6 +70,28 @@ const NavigationSettings = (
               />
             </div>
             <div className={f('medium-8', 'column')}>{pageSize}</div>
+          </div>
+        </label>
+      </div>
+    </div>
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <label>
+          Time (sec) to retry timed out queries:
+          <div className={f('row')}>
+            <div className={f('medium-4', 'column')}>
+              <input
+                type="range"
+                min="10"
+                max="200"
+                step="10"
+                value={secondsToRetry || 20}
+                name="secondsToRetry"
+                className={local.fullwidth}
+                onChange={noop}
+              />
+            </div>
+            <div className={f('medium-8', 'column')}>{secondsToRetry}</div>
           </div>
         </label>
       </div>
@@ -540,10 +562,7 @@ class _AddToHomeScreen extends PureComponent /*:: <Props> */ {
     );
   }
 }
-const AddToHomeScreen = connect(
-  undefined,
-  { addToast },
-)(_AddToHomeScreen);
+const AddToHomeScreen = connect(undefined, { addToast })(_AddToHomeScreen);
 
 /*:: type SettingsProps = {
   settings: {
@@ -659,7 +678,6 @@ const mapStateToProps = createSelector(
   settings => ({ settings }),
 );
 
-export default connect(
-  mapStateToProps,
-  { changeSettings, resetSettings },
-)(Settings);
+export default connect(mapStateToProps, { changeSettings, resetSettings })(
+  Settings,
+);

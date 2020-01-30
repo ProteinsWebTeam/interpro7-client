@@ -13,8 +13,8 @@ import getFetch from './getFetch';
 
 import { UnconnectedErrorBoundary } from 'wrappers/ErrorBoundary';
 
-const msToRetry = 10000;
 const TIMEOUT = 408;
+const MS = 1000;
 
 const mapStateToState = createSelector(
   state => state,
@@ -97,6 +97,9 @@ const loadData = params => {
       // cancel current request on unmount
       componentWillUnmount() {
         this._cancel();
+        if (this.timeoutID) {
+          clearTimeout(this.timeoutID);
+        }
       }
 
       _cancel = () => {
@@ -147,9 +150,11 @@ const loadData = params => {
           // Progress: 1
           this.props.dataProgressInfo(this._id, 1, weight);
 
+          const msToRetry =
+            this.props.appState.settings.navigation.secondsToRetry * MS;
           // Schedulling to retry because we got a 408
           if (response.status === TIMEOUT) {
-            setTimeout(() => {
+            this.timeoutID = setTimeout(() => {
               console.log('Retrying the Timed out query');
               this.setState({ retries: this.state.retries + 1 });
             }, msToRetry);
