@@ -11,7 +11,7 @@ import Switch from 'components/generic/Switch';
 import { mainDBLocationSelector } from 'reducers/custom-location/description';
 import { getUrlForApi, getUrlForMeta } from 'higherOrder/loadData/defaults';
 import loadData from 'higherOrder/loadData';
-import { edgeCases } from 'higherOrder/loadData/defaults';
+import { edgeCases } from 'utils/server-message';
 import { toPlural } from 'utils/pages';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -112,7 +112,7 @@ class Summary extends PureComponent {
       },
     } = customLocation;
     const edgeCaseText = edgeCases.get(status);
-    if (edgeCaseText) return <EdgeCase text={edgeCaseText} />;
+    if (edgeCaseText) return <EdgeCase text={edgeCaseText} status={status} />;
     if (loading || (!locationhasDetailOrFilter(customLocation) && !payload)) {
       return <Loading />;
     }

@@ -337,11 +337,11 @@ const TaxonomyCard = (
     <SummaryCounterOrg
       entryDB={entryDB}
       metadata={data.metadata}
-      counters={data.extra_fields.counters}
+      counters={data?.extra_fields?.counters || {}}
     />
 
     <div className={f('card-footer')}>
-      {data.extra_fields.lineage && (
+      {data?.extra_fields?.lineage && (
         <Lineage lineage={data.extra_fields.lineage} />
       )}
       <div>

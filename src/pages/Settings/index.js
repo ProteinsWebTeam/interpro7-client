@@ -82,9 +82,9 @@ const NavigationSettings = (
             <div className={f('medium-4', 'column')}>
               <input
                 type="range"
-                min="10"
-                max="200"
-                step="10"
+                min="5"
+                max="120"
+                step="5"
                 value={secondsToRetry || 20}
                 name="secondsToRetry"
                 className={local.fullwidth}

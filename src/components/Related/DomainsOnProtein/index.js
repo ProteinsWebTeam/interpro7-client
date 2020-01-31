@@ -448,7 +448,11 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 
     if (!data || data.loading) return <Loading />;
     if (!data.payload || !data.payload.results) {
-      return <div className={f('callout')}>No entries match this protein.</div>;
+      return data.payload.status === 408 ? (
+        <div className={f('callout')}>No entries match this protein.</div>
+      ) : (
+        <div className={f('callout')}>No entries match this protein.</div>
+      );
     }
 
     const { interpro, unintegrated, other } = processData({

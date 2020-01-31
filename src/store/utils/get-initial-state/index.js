@@ -46,7 +46,12 @@ export default history => {
   if (settings?.api?.hostname === 'www.ebi.ac.uk') {
     settings.api.root = settings.api.root.replace('/api/', '/wwwapi/');
   }
-  const description = pathToDescription(pathname);
+  let description = { other: ['NotFound'] };
+  try {
+    description = pathToDescription(pathname);
+  } catch {
+    console.error('Unable to identify resouce based on the URL request');
+  }
   return {
     customLocation: {
       description,

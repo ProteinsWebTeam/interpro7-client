@@ -61,7 +61,8 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
       data: { loading, payload },
       customLocation: { search },
     } = this.props;
-    const groupsPayload = loading || !payload ? {} : payload.is_fragment;
+    const groupsPayload =
+      loading || !payload?.is_fragment ? {} : payload.is_fragment;
     const names = new Map([
       ['true', 'Fragment'],
       ['false', 'Complete Sequence'],
