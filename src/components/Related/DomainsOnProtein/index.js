@@ -12,6 +12,8 @@ import { processData } from 'components/ProtVista/utils';
 import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
+import EdgeCase from 'components/EdgeCase';
 
 import loadable from 'higherOrder/loadable';
 
@@ -448,8 +450,9 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 
     if (!data || data.loading) return <Loading />;
     if (!data.payload || !data.payload.results) {
-      return data.payload.status === 408 ? (
-        <div className={f('callout')}>No entries match this protein.</div>
+      const edgeCaseText = edgeCases.get(STATUS_TIMEOUT);
+      return data.payload?.detail === 'Query timed out' ? (
+        <EdgeCase text={edgeCaseText} status={STATUS_TIMEOUT} />
       ) : (
         <div className={f('callout')}>No entries match this protein.</div>
       );

@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+/* eslint-disable camelcase */
 // @flow
 import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';

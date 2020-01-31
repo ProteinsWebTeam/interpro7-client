@@ -30,6 +30,8 @@ import local from './styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
 
+const DEFAULT_SEC = 20;
+
 // Generate async components
 const Advanced = loadable({
   loader: () =>
@@ -85,7 +87,7 @@ const NavigationSettings = (
                 min="5"
                 max="120"
                 step="5"
-                value={secondsToRetry || 20}
+                value={secondsToRetry || DEFAULT_SEC}
                 name="secondsToRetry"
                 className={local.fullwidth}
                 onChange={noop}
@@ -101,6 +103,7 @@ const NavigationSettings = (
 NavigationSettings.propTypes = {
   navigation: T.shape({
     pageSize: T.number.isRequired,
+    secondsToRetry: T.number.isRequired,
   }).isRequired,
   handleChange: T.func.isRequired,
 };

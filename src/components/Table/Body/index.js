@@ -5,7 +5,6 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import Row from '../Row';
 
-import getStatusMessage from 'utils/server-message';
 import { edgeCases } from 'utils/server-message';
 import EdgeCase from 'components/EdgeCase';
 

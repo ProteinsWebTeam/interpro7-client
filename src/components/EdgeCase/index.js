@@ -63,25 +63,24 @@ const EdgeCase = ({
   return (
     <div className={f('callout', 'info', 'withicon')}>
       <b>{text}</b>
-      {shouldRedirect ||
-        (status === STATUS_TIMEOUT && (
-          <>
-            <br />
-            <span>
-              {status === STATUS_TIMEOUT
-                ? 'Checking again in '
-                : 'Redirecting to Search in '}
-              {Math.ceil((limit - count) / HERTZ)} seconds.
-            </span>
-            <ProgressButton
-              downloading={true}
-              success={true}
-              progress={count / limit}
-              failed={true}
-              showIcon={false}
-            />
-          </>
-        ))}
+      {(shouldRedirect || status === STATUS_TIMEOUT) && (
+        <>
+          <br />
+          <span>
+            {status === STATUS_TIMEOUT
+              ? 'Checking again in '
+              : 'Redirecting to Search in '}
+            {Math.ceil((limit - count) / HERTZ)} seconds.
+          </span>
+          <ProgressButton
+            downloading={true}
+            success={true}
+            progress={count / limit}
+            failed={true}
+            showIcon={false}
+          />
+        </>
+      )}
     </div>
   );
 };
@@ -89,6 +88,8 @@ EdgeCase.propTypes = {
   text: T.string.isRequired,
   accession: T.string,
   status: T.number,
+  shouldRedirect: T.bool,
+  secondsToRetry: T.number,
   goToCustomLocation: T.func.isRequired,
 };
 const mapStateToProps = createSelector(
