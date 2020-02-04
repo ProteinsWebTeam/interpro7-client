@@ -28,7 +28,7 @@ exports[`server-message should render 4`] = `
 <div
   className="callout withicon alert"
 >
-  The server takes too long to respond. Your request is running in the background. Please check again in a while for the results
+  The query is still running in the background. Please reload in a short while to see the results.
 </div>
 `;
 

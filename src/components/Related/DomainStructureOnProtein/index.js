@@ -58,11 +58,8 @@ const mergeData = (interpro, structures, structureInfo) => {
       }))
       .sort((a, b) => a.label > b.label);
   }
-  if (structureInfo && structureInfo.prediction) {
-    out.predictions = formatStructureInfoObj(structureInfo.prediction);
-  }
-  if (structureInfo && structureInfo.feature) {
-    out.features = formatStructureInfoObj(structureInfo.feature);
+  if (structureInfo) {
+    out.features = formatStructureInfoObj(structureInfo);
   }
   return out;
 };
