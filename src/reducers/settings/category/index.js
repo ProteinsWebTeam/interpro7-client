@@ -4,6 +4,7 @@ import config from 'config';
 import { EntryColorMode } from 'utils/entry-color';
 
 const DEFAULT_HTTP_PORT = 80;
+const DEFAULT_SECONDS_TO_RETRY = 10;
 
 /*:: type Category = 'navigation' | 'notifications' | 'ui' | 'cache' | 'ebi' | 'api' | 'ipScan'; */
 
@@ -12,6 +13,8 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
     case 'navigation':
       return {
         pageSize: config.pagination.pageSize,
+        secondsToRetry:
+          config?.timeout?.secondsToRetry || DEFAULT_SECONDS_TO_RETRY,
       };
     case 'notifications':
       return {

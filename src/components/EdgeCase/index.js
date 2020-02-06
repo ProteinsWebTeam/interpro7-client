@@ -29,22 +29,29 @@ const useInterval = (callback, delay) => {
   }, [delay]);
 };
 
-const SECONDS = 3;
 const ONE_SECOND = 1000;
 const HERTZ = 10;
 
-const EdgeCase = ({ text, accession, goToCustomLocation }) => {
+export const STATUS_TIMEOUT = 408;
+
+const EdgeCase = ({
+  text,
+  status,
+  shouldRedirect = true,
+  accession,
+  secondsToRetry,
+  goToCustomLocation,
+}) => {
   const [count, setCount] = useState(0);
+  const limit = HERTZ * secondsToRetry;
 
   useInterval(() => {
     // Your custom logic here
-    setCount(count + 1);
+    setCount(count + 1 > limit ? 0 : count + 1);
   }, ONE_SECOND / HERTZ);
 
-  const limit = HERTZ * SECONDS;
-
   useEffect(() => {
-    if (count >= limit) {
+    if (shouldRedirect && status !== STATUS_TIMEOUT && count >= limit) {
       goToCustomLocation({
         description: {
           main: { key: 'search' },
@@ -56,38 +63,47 @@ const EdgeCase = ({ text, accession, goToCustomLocation }) => {
   return (
     <div className={f('callout', 'info', 'withicon')}>
       <b>{text}</b>
-      <br />
-      <span>
-        Redirecting to Search in {Math.ceil((limit - count) / HERTZ)} seconds.
-      </span>
-      <ProgressButton
-        downloading={true}
-        success={true}
-        progress={count / limit}
-        failed={true}
-        showIcon={false}
-      />
+      {(shouldRedirect || status === STATUS_TIMEOUT) && (
+        <>
+          <br />
+          <span>
+            {status === STATUS_TIMEOUT
+              ? 'Checking again in '
+              : 'Redirecting to Search in '}
+            {Math.ceil((limit - count) / HERTZ)} seconds.
+          </span>
+          <ProgressButton
+            downloading={true}
+            success={true}
+            progress={count / limit}
+            failed={true}
+            showIcon={false}
+          />
+        </>
+      )}
     </div>
   );
 };
 EdgeCase.propTypes = {
   text: T.string.isRequired,
   accession: T.string,
+  status: T.number,
+  shouldRedirect: T.bool,
+  secondsToRetry: T.number,
   goToCustomLocation: T.func.isRequired,
 };
 const mapStateToProps = createSelector(
   state => state.customLocation.description,
-  description => {
+  state => state.settings.navigation.secondsToRetry,
+  (description, secondsToRetry) => {
     const { key } = description.main;
     return {
       accession: description[key].accession,
+      secondsToRetry,
     };
   },
 );
 
-export default connect(
-  mapStateToProps,
-  {
-    goToCustomLocation,
-  },
-)(EdgeCase);
+export default connect(mapStateToProps, {
+  goToCustomLocation,
+})(EdgeCase);

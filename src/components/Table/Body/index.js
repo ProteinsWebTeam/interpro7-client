@@ -5,7 +5,8 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import Row from '../Row';
 
-import getStatusMessage from 'utils/server-message';
+import { edgeCases } from 'utils/server-message';
+import EdgeCase from 'components/EdgeCase';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -89,8 +90,20 @@ class Body extends PureComponent /*:: <BodyProps> */ {
       notFound,
       rowClassName,
     } = this.props;
-    const message = getStatusMessage(status);
-    if (message) return <NoRows>{message}</NoRows>;
+    const edgeCaseText = edgeCases.get(status);
+    if (edgeCaseText)
+      return (
+        <NoRows>
+          <EdgeCase
+            text={edgeCaseText}
+            status={status}
+            shouldRedirect={false}
+          />
+        </NoRows>
+      );
+
+    // const message = getStatusMessage(status);
+    // if (message) return <NoRows>{message}</NoRows>;
     // don't change next line to “!ok”, might be undefined
     if (ok === false) return <NoRows>The API request failed</NoRows>;
     if (notFound || !rows.length) {
