@@ -45,13 +45,32 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
 
   componentDidUpdate() {
     this.routerPush.cancel();
+    this.handleUpdateOfWaitingForRoute();
   }
+  isWaitingForRouter = false;
+  handleUpdateOfWaitingForRoute = () => {
+    if (
+      !this.isWaitingForRouter &&
+      this.props.customLocation.search?.search !== this.state.localSearch
+    ) {
+      this.setState({ localSearch: null });
+    }
+    if (
+      this.isWaitingForRouter &&
+      this.props.customLocation.search?.search === this.state.localSearch
+    ) {
+      this.isWaitingForRouter = false;
+    }
+  };
 
   handleReset = () => this.handleChange({ target: { value: null } });
 
   handleChange = (
     { target: { value: search } } /*: {target: {value: ?string}} */,
-  ) => this.setState({ localSearch: search }, this.routerPush);
+  ) => {
+    this.isWaitingForRouter = true;
+    this.setState({ localSearch: search }, this.routerPush);
+  };
 
   routerPush = () => {
     const { page, search, cursor, ...rest } = this.props.customLocation.search;
@@ -96,7 +115,4 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(SearchBox);
+export default connect(mapStateToProps, { goToCustomLocation })(SearchBox);

@@ -183,6 +183,13 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       );
       if (ok) {
         dispatch(updateJob({ metadata: { ...meta, hasResults: true }, data }));
+      } else {
+        console.log('GOT here', data);
+        dispatch(
+          updateJob({
+            metadata: { ...meta, hasResults: false, status: 'error' },
+          }),
+        );
       }
     }
   };
