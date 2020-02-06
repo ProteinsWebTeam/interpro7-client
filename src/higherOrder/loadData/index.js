@@ -13,6 +13,9 @@ import getFetch from './getFetch';
 
 import { UnconnectedErrorBoundary } from 'wrappers/ErrorBoundary';
 
+const TIMEOUT = 408;
+const MS = 1000;
+
 const mapStateToState = createSelector(
   state => state,
   appState => ({ appState }),
@@ -60,6 +63,7 @@ const loadData = params => {
           url,
           data: newData(url),
           staleData: null,
+          retries: 0,
         };
       }
 
@@ -79,7 +83,10 @@ const loadData = params => {
 
       componentDidUpdate(prevProps, prevState) {
         // if the url has changed
-        if (prevState.url !== this.state.url) {
+        if (
+          prevState.url !== this.state.url ||
+          prevState.retries !== this.state.retries
+        ) {
           // cancel current request
           this._cancel();
           // and start new one
@@ -90,6 +97,9 @@ const loadData = params => {
       // cancel current request on unmount
       componentWillUnmount() {
         this._cancel();
+        if (this.timeoutID) {
+          clearTimeout(this.timeoutID);
+        }
       }
 
       _cancel = () => {
@@ -139,6 +149,16 @@ const loadData = params => {
           });
           // Progress: 1
           this.props.dataProgressInfo(this._id, 1, weight);
+
+          const msToRetry =
+            this.props.appState.settings.navigation.secondsToRetry * MS;
+          // Schedulling to retry because we got a 408
+          if (response.status === TIMEOUT) {
+            this.timeoutID = setTimeout(() => {
+              console.log('Retrying the Timed out query');
+              this.setState({ retries: this.state.retries + 1 });
+            }, msToRetry);
+          }
         } catch (error) {
           // If request has been canceled, it means we did it, on purpose, so
           // just ignore, otherwise it's a real error
@@ -192,10 +212,11 @@ const loadData = params => {
       }
     }
 
-    return connect(
-      mapStateToState,
-      { dataProgressInfo, dataProgressUnload, ...mapDispatchToProps },
-    )(DataWrapper);
+    return connect(mapStateToState, {
+      dataProgressInfo,
+      dataProgressUnload,
+      ...mapDispatchToProps,
+    })(DataWrapper);
   };
 };
 

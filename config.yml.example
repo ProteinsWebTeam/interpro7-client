@@ -68,6 +68,8 @@ pages:
   result:
 pagination:
   pageSize: 20
+timeout:
+  secondsToRetry: 20
 cache:
   enabled: true
 colors:

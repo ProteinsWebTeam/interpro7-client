@@ -244,11 +244,13 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
         this._initialLoad = false;
       }
     }
-    this.setState(({ data }) => ({
-      data: {
-        ...mergeData(data, payload.metadata, payload.names, payload.children),
-      },
-    }));
+    if (payload.metadata) {
+      this.setState(({ data }) => ({
+        data: {
+          ...mergeData(data, payload.metadata, payload.names, payload.children),
+        },
+      }));
+    }
   };
 
   _handleNewFocus = taxID => {
