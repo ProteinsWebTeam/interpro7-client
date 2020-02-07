@@ -42,7 +42,16 @@ export default history => {
       };
     }
   }
-  const description = pathToDescription(pathname);
+  // TODO: remove this line when the logs show that users are now using /wwwapi/
+  if (settings?.api?.hostname === 'www.ebi.ac.uk') {
+    settings.api.root = settings.api.root.replace('/api/', '/wwwapi/');
+  }
+  let description = { other: ['NotFound'] };
+  try {
+    description = pathToDescription(pathname);
+  } catch {
+    console.error('Unable to identify resouce based on the URL request');
+  }
   return {
     customLocation: {
       description,

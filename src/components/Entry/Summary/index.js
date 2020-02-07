@@ -3,6 +3,11 @@ import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
 import { partition } from 'lodash-es';
 
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+import { format } from 'url';
+import { addToast } from 'actions/creators';
+
 import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
@@ -113,10 +118,118 @@ MemberDBSubtitle.propTypes = {
   dbInfo: T.object.isRequired,
 };
 
-const SidePanel = ({ metadata, dbInfo }) => {
+const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
   const url = getUrlFor(metadata.source_database);
+  const { protocol, hostname, port, root } = api;
+
+  const [isOpen, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState('');
+
+  const apiUrl = format({
+    protocol,
+    hostname,
+    port,
+    pathname: `${root}/mail/`,
+  });
+  const entry = `${metadata.name.name} (${metadata.accession})`;
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    data.append('subject', `Add annotation, ${entry}`);
+    fetch(apiUrl, {
+      method: 'POST',
+      body: data,
+    }).then(response => {
+      let text;
+      // eslint-disable-next-line no-magic-numbers
+      if (response.status === 200) {
+        text = 'Thanks for your feedback';
+        // eslint-disable-next-line no-magic-numbers
+      } else if (response.status === 429) {
+        text = 'Request aborted as too many requests are made within a minute';
+      } else {
+        text = 'Invalid request';
+      }
+      addToast(
+        {
+          title: text,
+          ttl: 3000,
+        },
+        'interhelp-mail',
+      );
+      setMessage('');
+      setEmail('');
+      setOpen(false);
+    });
+  };
+
+  const handleFields = e => {
+    if (e.target.name === 'message') setMessage(e.target.value);
+    else setEmail(e.target.value);
+  };
+
+  const clearFields = () => {
+    setMessage('');
+    setEmail('');
+  };
+
   return (
     <div className={f('medium-4', 'large-4', 'columns')}>
+      <div>
+        <div
+          className={f('button-group', 'dropdown-container')}
+          style={{ display: 'flex' }}
+        >
+          <button
+            className={f('button', 'dropdown')}
+            onClick={() => setOpen(!isOpen)}
+          >
+            <Tooltip
+              title={
+                'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
+                'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
+                'helpful if you can include literature references supporting your annotation suggestion.'
+              }
+            >
+              <i className={f('icon', 'icon-common')} data-icon="&#xf303;" />{' '}
+              Add your annotation
+            </Tooltip>
+          </button>
+          <div
+            className={f('dropdown-pane', 'dropdown-content')}
+            style={{
+              transform: `scaleY(${isOpen ? 1 : 0})`,
+            }}
+          >
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="message">Your annotation</label>
+              <textarea
+                id="message"
+                name="message"
+                value={message}
+                onChange={handleFields}
+                rows="5"
+                required
+              />
+              <label htmlFor="from_email">Email address</label>
+              <input
+                id="from_email"
+                name="from_email"
+                type="email"
+                value={email}
+                onChange={handleFields}
+                required
+              />
+              <button className={f('button')}>Submit</button>
+              <button className={f('button')} onClick={clearFields}>
+                Clear
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
       {metadata.integrated && <Integration intr={metadata.integrated} />}
       {metadata.source_database.toLowerCase() !== 'interpro' && (
         <section>
@@ -147,27 +260,6 @@ const SidePanel = ({ metadata, dbInfo }) => {
           </ul>
         </section>
       )}
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Tooltip
-          title={
-            'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
-            'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
-            'helpful if you can include literature references supporting your annotation suggestion.'
-          }
-        >
-          <button className={f('button')}>
-            <Link
-              href="//www.ebi.ac.uk/support/interpro"
-              target="_blank"
-              style={{ color: 'inherit' }}
-              withReferrer
-            >
-              <i className={f('icon', 'icon-common')} data-icon="&#xf303;" />{' '}
-              Add your annotation
-            </Link>
-          </button>
-        </Tooltip>
-      </div>
       {metadata.member_databases &&
       Object.keys(metadata.member_databases).length ? (
         <ContributingSignatures contr={metadata.member_databases} />
@@ -175,10 +267,21 @@ const SidePanel = ({ metadata, dbInfo }) => {
     </div>
   );
 };
-SidePanel.propTypes = {
+_SidePanel.propTypes = {
   metadata: T.object.isRequired,
   dbInfo: T.object.isRequired,
+  api: T.object.isRequired,
+  addToast: T.func.isRequired,
 };
+
+const mapStateToProps = createSelector(
+  state => state.settings.api,
+  api => ({
+    api,
+  }),
+);
+
+const SidePanel = connect(mapStateToProps, { addToast })(_SidePanel);
 
 const OtherSections = ({ metadata, citations: { included, extra } }) => (
   <>

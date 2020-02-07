@@ -244,11 +244,13 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
         this._initialLoad = false;
       }
     }
-    this.setState(({ data }) => ({
-      data: {
-        ...mergeData(data, payload.metadata, payload.names, payload.children),
-      },
-    }));
+    if (payload.metadata) {
+      this.setState(({ data }) => ({
+        data: {
+          ...mergeData(data, payload.metadata, payload.names, payload.children),
+        },
+      }));
+    }
   };
 
   _handleNewFocus = taxID => {
@@ -374,20 +376,24 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 
                     const to = {
                       ...description,
+                      main: {
+                        key:
+                          description.main.key === 'taxonomy'
+                            ? endpoint
+                            : description.main.key,
+                      },
                       [endpoint]: {
                         db,
-                        isFilter: true,
+                        isFilter: description.main.key !== 'taxonomy',
                         order: 1,
                       },
-                    };
-                    if (description.main.key !== 'taxonomy') {
-                      to.taxonomy = {
+                      taxonomy: {
                         db: 'uniprot',
                         isFilter: true,
                         order: 2,
                         accession: this.state.focused,
-                      };
-                    }
+                      },
+                    };
 
                     return (
                       <li key={endpoint}>

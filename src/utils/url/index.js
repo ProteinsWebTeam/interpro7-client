@@ -54,3 +54,6 @@ export const toCanonicalURL = (url /*: string */) => {
     .sort()
     .join('&')}`;
 };
+
+// Function to use when an API URL needs to be exposed
+export const toPublicAPI = (url /*: string */) => url.replace('wwwapi', 'api');

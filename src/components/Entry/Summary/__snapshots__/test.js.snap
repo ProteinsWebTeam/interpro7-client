@@ -123,7 +123,7 @@ exports[`<SummaryEntry /> should render 1`] = `
           />
         </React.Fragment>
       </div>
-      <SidePanel
+      <Memo(Connect(_SidePanel))
         dbInfo={Object {}}
         metadata={
           Object {

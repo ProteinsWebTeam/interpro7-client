@@ -46,10 +46,15 @@ const ResultImporter = ({
   }, [data.payload]);
   if (!shouldImport) return null;
   if (data.loading) return <Loading />;
-  if (data.status !== STATUS_OK) {
+  if (data.status !== STATUS_OK || data.payload !== 'FINISHED') {
     return (
       <div className={f('callout', 'info', 'withicon')}>
         There was an error retrieving the InterProScan Job with ID {accession}
+        {data.status === STATUS_OK && (
+          <div>
+            Server response: <code>{data.payload}</code>
+          </div>
+        )}
       </div>
     );
   }

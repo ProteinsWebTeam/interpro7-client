@@ -2,7 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import HelpBanner from '.';
+import { HelpBanner } from '.';
 
 // TODO: the shallow render  is having issues with React.memo and
 // this needs to be changed to TestRenderer, but that approach has

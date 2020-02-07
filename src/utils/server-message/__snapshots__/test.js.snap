@@ -4,7 +4,7 @@ exports[`server-message should render 1`] = `
 <div
   className="callout withicon info"
 >
-  Valid query, but unfortunately no data was available on the server
+  There is no data associated with this request
 </div>
 `;
 
@@ -28,7 +28,7 @@ exports[`server-message should render 4`] = `
 <div
   className="callout withicon alert"
 >
-  The server takes too long to respond. Your request is running in the background. Please check again in a while for the results
+  The query is still running in the background. We will update the page once the data is ready
 </div>
 `;
 
@@ -36,6 +36,6 @@ exports[`server-message should render 5`] = `
 <div
   className="callout withicon alert"
 >
-  There was an error while getting data from the server
+  The API reported an error, but the cause has not been determined
 </div>
 `;

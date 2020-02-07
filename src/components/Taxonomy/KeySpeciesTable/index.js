@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData';
-import { STATUS_OK } from 'higherOrder/loadData/defaults';
+import { STATUS_OK } from 'utils/server-message';
 import { getReversedUrl } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Column } from 'components/Table';

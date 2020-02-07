@@ -12,7 +12,7 @@ import Switch from 'components/generic/Switch';
 
 import loadable from 'higherOrder/loadable';
 
-import getTableAccess, { IPScanJobsData } from 'storage/idb';
+import getTableAccess, { IPScanJobsData, IPScanJobsMeta } from 'storage/idb';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -143,6 +143,10 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
     this.setState({ localIDForLocalPayload: localID }, async () => {
       const dataT = await getTableAccess(IPScanJobsData);
       const data = await dataT.get(localID);
+      const metaTA = await getTableAccess(IPScanJobsMeta);
+      const meta = await metaTA.get(localID);
+      console.log(meta);
+
       this.setState({
         localPayload: {
           sequence: (data?.input || '')
@@ -150,7 +154,12 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
             .toUpperCase(),
           matches: [],
           xref: [
-            { name: 'Results are being processed on the InterProScan server' },
+            {
+              name:
+                meta.status === 'error'
+                  ? 'There was an error recovering this job from the server.'
+                  : 'Results are being processed on the InterProScan server',
+            },
           ],
         },
       });
