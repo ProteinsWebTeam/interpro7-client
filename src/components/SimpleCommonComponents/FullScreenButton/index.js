@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import T from 'prop-types';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -21,22 +21,26 @@ const FullScreenButton = (
   } /*: {handleFullScreen?: function, element: any, tooltip: string, className?: string, dataIcon?: string} */,
 ) => {
   const [isFull, setFull] = useState(false);
-  const [icon, setIcon] = useState(dataIcon || 'F');
+  const handleFullscreen = () => setFull(!!document.fullscreenElement);
+  useEffect(() => {
+    document.addEventListener('fullscreenchange', handleFullscreen);
+    return () =>
+      document.removeEventListener('fullscreenchange', handleFullscreen);
+  }, []);
   if (!handleFullScreen && !element) return null;
   const _handleFullScreen =
     handleFullScreen ||
     (() => {
       if (isFull) {
         exitFullScreen();
-        setIcon(dataIcon || 'F');
       } else {
         requestFullScreen(element);
-        setIcon(dataIcon || 'G');
       }
       setFull(!isFull);
     });
   const _className =
     className || f('margin-bottom-none', 'icon', 'icon-common');
+  const icon = dataIcon || (isFull ? 'G' : 'F');
   return (
     <Tooltip title={tooltip}>
       <button
