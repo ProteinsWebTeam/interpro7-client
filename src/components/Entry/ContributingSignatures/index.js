@@ -47,7 +47,9 @@ const SignatureLink = React.memo((
     }}
   >
     <small>
-      <Tooltip title={`${label} (${accession})`}>{accession || label}</Tooltip>
+      <Tooltip title={`${label || 'Unintegrated'} (${accession})`}>
+        {accession || label}
+      </Tooltip>
     </small>
   </Link>
 ));

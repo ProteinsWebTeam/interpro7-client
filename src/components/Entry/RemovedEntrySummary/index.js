@@ -17,21 +17,7 @@ const RemovedEntrySummary = ({ detail, accession, date, history, dbInfo }) => {
     name: { name: history.names?.[0] || '???' },
     source_database: 'Removed',
     type: 'unknown',
-    member_databases: {
-      smart: {
-        SM00130: 'Kringle domain',
-      },
-      pfam: {
-        PF00051: 'Kringle domain',
-      },
-      profile: {
-        PS50070: 'Kringle domain profile',
-      },
-      cdd: {
-        cd00108:
-          'Kringle domain; Kringle domains are believed to play a role in binding mediat...',
-      },
-    },
+    member_databases: history.signatures,
     description: [
       `<b>Removed</b>: ${date}`,
       '<b>Used names</b>:',
