@@ -13,6 +13,8 @@ import Footer from 'components/Table/Footer';
 import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
 import DynamicTooltip from 'components/SimpleCommonComponents/DynamicTooltip';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import { edgeCases } from 'utils/server-message';
+import EdgeCase from 'components/EdgeCase';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -236,7 +238,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
 
   render() {
     const {
-      data: { loading, payload },
+      data: { loading, payload, status },
       mainAccession,
       search,
       dataDB,
@@ -244,6 +246,8 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       idaAccessionDB,
     } = this.props;
     if (loading || dataDB.loading) return <Loading />;
+    const edgeCaseText = edgeCases.get(status);
+    if (edgeCaseText) return <EdgeCase text={edgeCaseText} status={status} />;
 
     if (!payload.results) return null;
     const toHighlight =
