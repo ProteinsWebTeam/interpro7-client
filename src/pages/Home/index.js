@@ -16,7 +16,7 @@ import Tip from 'components/Tip';
 import { schedule } from 'timing-functions/src';
 
 // Animation
-import { TweenLite, Expo } from 'gsap/all';
+import { gsap, Expo } from 'gsap/all';
 
 import {
   schemaProcessDataInterpro,
@@ -106,23 +106,23 @@ const Twitter = loadable({
 class InterProGraphicAnim extends PureComponent {
   _handleMouseOver = () => {
     // this._tl.play();
-    TweenLite.to('.blob:not(.high-blob)', 1, {
+    gsap.to('.blob:not(.high-blob)', 1, {
       opacity: 0.2,
     });
-    TweenLite.to('.blob.line-up', 2, {
+    gsap.to('.blob.line-up', 2, {
       y: 160,
       ease: Expo.easeOut,
     });
-    TweenLite.to('.blob.line-down', 2, {
+    gsap.to('.blob.line-down', 2, {
       y: -160,
       ease: Expo.easeOut,
     });
-    TweenLite.to('.high-blob', 1, { opacity: 1, ease: Expo.easeOut });
+    gsap.to('.high-blob', 1, { opacity: 1, ease: Expo.easeOut });
   };
 
   _handleMouseOut = () => {
     // this._tl.reverse();
-    TweenLite.to('.blob', 2, { y: 0, opacity: 1, ease: Expo.easeOut });
+    gsap.to('.blob', 2, { y: 0, opacity: 1, ease: Expo.easeOut });
   };
 
   render() {

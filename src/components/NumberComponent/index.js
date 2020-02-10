@@ -3,7 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { TweenLite, Power2 } from 'gsap/all';
+import { gsap, Power2 } from 'gsap/all';
 
 import random from 'utils/random';
 import numberToDisplayText from './utils/number-to-display-text';
@@ -18,7 +18,7 @@ const UNIT_SCALE_MARGIN = 1; // abbr at this level
 
 // Jump ahead if the animation didn't run because it wasn't visible
 // We don't want transitions to stop and resume later
-TweenLite.lagSmoothing(0);
+gsap.ticker.lagSmoothing(0);
 
 export const DEFAULT_DURATION = 1;
 
@@ -126,7 +126,7 @@ export class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
     const animatable = { value: from };
     // eslint-disable-next-line no-magic-numbers
     const duration = this.props.duration + random(-0.5, 0.5) * DELAY_RANGE;
-    this._animation = TweenLite.to(animatable, duration, {
+    this._animation = gsap.to(animatable, duration, {
       value: to,
       delay: random() * this.props.duration * DELAY_RANGE,
       onUpdate: () => {
