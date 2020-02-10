@@ -39,9 +39,13 @@ exports[`<Tree /> should render 1`] = `
       </Tooltip>
     </span>
   </div>
+  <Memo(Connect(ZoomOverlay))
+    elementId="treeDiv"
+  />
   <div
     className="tree"
     data-testid="data-tree"
+    id="treeDiv"
   >
     <svg
       className="container"

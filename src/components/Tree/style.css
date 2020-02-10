@@ -26,23 +26,26 @@
   }
 }
 
-.container .node {
-  opacity: 1;
-  transition: opacity var(--timing-slow) ease-in-out;
+.container {
+  background-color: white;
+  & .node {
+    opacity: 1;
+    transition: opacity var(--timing-slow) ease-in-out;
 
-  &:not(.in-path) {
-    opacity: 0.5;
-  }
-  & circle {
-    fill: var(--colors-lightgray);
-    cursor: crosshair;
-  }
-  &:hover circle {
-    fill: var(--colors-gray);
-  }
-  & text:hover {
-    text-decoration: underline;
-    cursor: pointer;
+    &:not(.in-path) {
+      opacity: 0.5;
+    }
+    & circle {
+      fill: var(--colors-lightgray);
+      cursor: crosshair;
+    }
+    &:hover circle {
+      fill: var(--colors-gray);
+    }
+    & text:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
 }
 

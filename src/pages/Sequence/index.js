@@ -145,7 +145,6 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
       const data = await dataT.get(localID);
       const metaTA = await getTableAccess(IPScanJobsMeta);
       const meta = await metaTA.get(localID);
-      console.log(meta);
 
       this.setState({
         localPayload: {
