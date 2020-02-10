@@ -33,6 +33,7 @@ const ONE_SECOND = 1000;
 const HERTZ = 10;
 
 export const STATUS_TIMEOUT = 408;
+export const STATUS_GONE = 410;
 
 const EdgeCase = ({
   text,
@@ -61,7 +62,12 @@ const EdgeCase = ({
     }
   });
   return (
-    <div className={f('callout', 'info', 'withicon')}>
+    <div
+      className={f('callout', 'withicon', {
+        info: status !== STATUS_GONE,
+        alert: status === STATUS_GONE,
+      })}
+    >
       <b>{text}</b>
       {(shouldRedirect || status === STATUS_TIMEOUT) && (
         <>

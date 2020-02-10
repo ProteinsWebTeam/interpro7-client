@@ -28,14 +28,12 @@ const RemovedEntrySummary = ({ detail, accession, date, history, dbInfo }) => {
     <div className={f('row')}>
       <div className={f('medium-12', 'large-12', 'columns')}>
         <EdgeCase text={detail} status={410} shouldRedirect={false} />
-        <div className={f('callout', 'alert')}>
-          <Title metadata={metadata} mainType="entry" />
-          <SummaryEntry
-            data={{ metadata: { ...metadata, source_database: 'interpro' } }}
-            loading={false}
-            dbInfo={dbInfo}
-          />
-        </div>
+        <Title metadata={metadata} mainType="entry" />
+        <SummaryEntry
+          data={{ metadata: { ...metadata, source_database: 'interpro' } }}
+          loading={false}
+          dbInfo={dbInfo}
+        />
       </div>
     </div>
   );
