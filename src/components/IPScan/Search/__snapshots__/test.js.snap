@@ -64,6 +64,9 @@ exports[`<IPScanSearch /> should render 1`] = `
                         "header-six": Object {
                           "element": "h6",
                         },
+                        "section": Object {
+                          "element": "section",
+                        },
                         "header-four": Object {
                           "element": "h4",
                         },
@@ -99,6 +102,9 @@ exports[`<IPScanSearch /> should render 1`] = `
                         },
                         "header-five": Object {
                           "element": "h5",
+                        },
+                        "article": Object {
+                          "element": "article",
                         },
                         "header-three": Object {
                           "element": "h3",
