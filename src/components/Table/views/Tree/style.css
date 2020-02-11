@@ -30,6 +30,7 @@
     text-align: right;
     font-size: 0.8em;
     text-transform: capitalize;
+    margin-top: 1em;
     & ul {
       list-style-type: none;
       padding-right: 0.5em;

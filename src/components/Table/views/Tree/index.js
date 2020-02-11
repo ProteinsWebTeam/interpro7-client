@@ -7,6 +7,8 @@ import { goToCustomLocation } from 'actions/creators';
 import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
+import Loading from 'components/SimpleCommonComponents/Loading';
+
 import Tree from 'components/Tree';
 import NumberComponent from 'components/NumberComponent';
 import abbreviateNumber from 'components/NumberComponent/utils/number-to-display-text';
@@ -363,8 +365,8 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
               </DropDownButton>
             )}
           </div>
-          {currentNode.counters && (
-            <div className={f('node-links')}>
+          <div className={f('node-links')}>
+            {currentNode.counters ? (
               <ul>
                 {Object.entries(countersToShow)
                   .map(([endpoint, [plural, db]]) => {
@@ -416,8 +418,10 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                   })
                   .filter(Boolean)}
               </ul>
-            </div>
-          )}
+            ) : (
+              <Loading inline={true} />
+            )}
+          </div>
         </div>
         <ConnectedDataProvider sendData={this._handleNewData} taxID={focused} />
         <Tree
