@@ -7,6 +7,7 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import NumberComponent from 'components/NumberComponent';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
@@ -27,6 +28,7 @@ const labels = new Map([
     loading: boolean,
     payload: any
   },
+  isStale: boolean,
   goToCustomLocation: function,
   customLocation: {
     description: Object,
@@ -40,6 +42,7 @@ class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isStale: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
       description: T.object.isRequired,
@@ -63,16 +66,22 @@ class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { loading, payload },
+      isStale,
       customLocation: { search },
     } = this.props;
-    const hasMatches = loading || !payload ? {} : payload.match_presence;
+    // eslint-disable-next-line camelcase
+    const hasMatches = getPayloadOrEmpty(
+      payload?.match_presence,
+      loading,
+      isStale,
+    );
     if (!loading) {
       hasMatches.both = hasMatches.true + hasMatches.false;
     }
     const selectedValue = search.match_presence || 'both';
 
     return (
-      <div className={f('list-match-presence')}>
+      <div className={f('list-match-presence', { stale: isStale })}>
         {Object.entries(hasMatches).map(([key, value]) => (
           <div key={key} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -80,6 +89,7 @@ class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
                 type="radio"
                 name="match_presence_filter"
                 value={key}
+                disabled={isStale}
                 checked={selectedValue === key}
                 onChange={this._handleSelection}
                 style={{ margin: '0.25em' }}
@@ -109,7 +119,7 @@ const getUrl = createSelector(
     // transform description
     const _description = {
       ...description,
-      protein: { db: 'UniProt' },
+      protein: { db: description.protein.db || 'UniProt' },
     };
     // omit from search
     const { search: _, match_presence: __, cursor, ..._search } = search;

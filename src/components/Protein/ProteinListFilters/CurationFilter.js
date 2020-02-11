@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -22,6 +23,7 @@ const f = foundationPartial(style);
     loading: boolean,
     payload: any
   },
+  isStale: boolean,
   goToCustomLocation: function,
   customLocation: {
     description: Object,
@@ -35,6 +37,7 @@ class CurationFilter extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isStale: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
       description: T.object.isRequired,
@@ -60,16 +63,17 @@ class CurationFilter extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { loading, payload },
+      isStale,
       customLocation: { description },
     } = this.props;
-    const databases = loading || !payload ? {} : payload;
+    const databases = getPayloadOrEmpty(payload, loading, isStale);
     if (!loading) {
       databases.uniprot = databases
         ? (databases.reviewed || 0) + (databases.unreviewed || 0)
         : 0;
     }
     return (
-      <div className={f('list-curation')}>
+      <div className={f('list-curation', { stale: isStale })}>
         {Object.entries(databases).map(([db, value]) => (
           <div key={db} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -77,6 +81,7 @@ class CurationFilter extends PureComponent /*:: <Props> */ {
                 type="radio"
                 name="curated_filter"
                 value={db}
+                disabled={isStale}
                 onChange={this._handleSelection}
                 checked={description.protein.db.toLowerCase() === db}
                 style={{ margin: '0.25em' }}
