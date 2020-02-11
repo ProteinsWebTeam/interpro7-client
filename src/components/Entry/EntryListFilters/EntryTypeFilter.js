@@ -89,14 +89,16 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
         search,
       },
     } = this.props;
-    const types = Object.entries(isStale || loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
-    );
+    let _payload = payload;
+    if (payload && loading && !isStale) _payload = {};
+    if (!payload) _payload = {};
+
+    const types = Object.entries(_payload).sort(([, a], [, b]) => b - a);
     if (!(loading || isStale)) {
       types.unshift(['All', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (
-      <div className={f('list-entries')}>
+      <div className={f('list-entries', { stale: isStale })}>
         {types.map(([type, count]) => (
           <div key={type} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -105,6 +107,7 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
                 name="entry_type"
                 value={type.toLowerCase()}
                 onChange={this._handleSelection}
+                disabled={isStale}
                 checked={
                   (!search.type && isAll(type)) ||
                   search.type === type.toLowerCase()
