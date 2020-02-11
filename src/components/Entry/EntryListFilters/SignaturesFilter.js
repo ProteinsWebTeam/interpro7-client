@@ -39,6 +39,7 @@ class SignaturesFilter extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isStale: T.bool.isRequired,
     dataMeta: T.shape({
       loading: T.bool.isRequired,
       payload: T.any,
@@ -70,11 +71,16 @@ class SignaturesFilter extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { loading, payload },
+      isStale,
       customLocation: {
         search: { signature_in: signature },
       },
     } = this.props;
-    const signatureDBs = Object.entries(loading ? {} : payload)
+    let _payload = payload;
+    if (payload && loading && !isStale) _payload = {};
+    if (!payload) _payload = {};
+
+    const signatureDBs = Object.entries(_payload)
       .sort(([, a], [, b]) => b - a)
       .filter(s => {
         const text = s[0].toLowerCase();
@@ -84,7 +90,7 @@ class SignaturesFilter extends PureComponent /*:: <Props> */ {
       signatureDBs.unshift(['All', NaN]);
     }
     return (
-      <div className={f('list-sign')}>
+      <div className={f('list-sign', { stale: isStale })}>
         {signatureDBs.map(([signatureDB, count]) => (
           <div key={signatureDB} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -93,6 +99,7 @@ class SignaturesFilter extends PureComponent /*:: <Props> */ {
                 name="interpro_state"
                 value={signatureDB}
                 onChange={this._handleSelection}
+                disabled={isStale}
                 checked={
                   (signatureDB === 'All' && !signature) ||
                   signature === signatureDB
