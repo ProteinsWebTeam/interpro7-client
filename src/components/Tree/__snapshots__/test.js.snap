@@ -42,19 +42,15 @@ exports[`<Tree /> should render 1`] = `
   <Memo(Connect(ZoomOverlay))
     elementId="treeDiv"
   />
-  <div
-    className="tree"
-    data-testid="data-tree"
-    id="treeDiv"
+  <ResizeObserverComponent
+    element="div"
+    measurements={
+      Array [
+        "width",
+      ]
+    }
   >
-    <svg
-      className="container"
-      style={
-        Object {
-          "flex": "1",
-        }
-      }
-    />
-  </div>
+    [Function]
+  </ResizeObserverComponent>
 </React.Fragment>
 `;
