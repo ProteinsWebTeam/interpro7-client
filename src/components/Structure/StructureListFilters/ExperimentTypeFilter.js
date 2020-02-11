@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -23,6 +24,7 @@ const f = foundationPartial(style);
     loading: boolean,
     payload: Object,
     },
+  isStale: boolean,
   goToCustomLocation: function,
   customLocation: {
     search: Object,
@@ -36,6 +38,7 @@ class ExperimentTypeFilter extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.object,
     }).isRequired,
+    isStale: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
       search: T.object.isRequired,
@@ -57,17 +60,26 @@ class ExperimentTypeFilter extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { loading, payload },
+      isStale,
       customLocation: { search },
     } = this.props;
     const defaultObject = { 'x-ray': NaN, nmr: NaN, em: NaN };
-    const types = Object.entries(
-      loading ? defaultObject : { ...defaultObject, ...payload },
-    ).sort(([, a], [, b]) => b - a);
+    const _payload = getPayloadOrEmpty(
+      { ...defaultObject, ...payload },
+      loading,
+      isStale,
+    );
+    const types = Object.entries(_payload)
+      .filter(([_, v]) => !!v)
+      .sort(([, a], [, b]) => b - a);
     if (!loading) {
       types.unshift(['All', NaN]);
     }
     return (
-      <div style={{ overflowX: 'hidden' }} className={f('list-experiment')}>
+      <div
+        style={{ overflowX: 'hidden' }}
+        className={f('list-experiment', { stale: isStale })}
+      >
         {types.map(([type, count]) => (
           <div key={type} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -75,6 +87,7 @@ class ExperimentTypeFilter extends PureComponent /*:: <Props> */ {
                 type="radio"
                 name="experiment_type"
                 value={type}
+                disabled={isStale}
                 onChange={this._handleSelection}
                 checked={
                   (!search.experiment_type && type === 'All') ||

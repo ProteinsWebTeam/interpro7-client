@@ -69,8 +69,8 @@ class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
       isStale,
       customLocation: { search },
     } = this.props;
-    // eslint-disable-next-line camelcase
     const hasMatches = getPayloadOrEmpty(
+      // eslint-disable-next-line camelcase
       payload?.match_presence,
       loading,
       isStale,
