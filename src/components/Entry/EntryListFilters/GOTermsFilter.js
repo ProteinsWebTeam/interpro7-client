@@ -5,6 +5,7 @@ import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -42,6 +43,7 @@ class GOTermsFilter extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isStale: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
       search: T.object.isRequired,
@@ -62,16 +64,18 @@ class GOTermsFilter extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { loading, payload },
+      isStale,
       customLocation: { search },
     } = this.props;
-    const terms = Object.entries(loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
-    );
+
+    const terms = Object.entries(
+      getPayloadOrEmpty(payload, loading, isStale),
+    ).sort(([, a], [, b]) => b - a);
     if (!loading) {
       terms.unshift(['All', NaN]);
     }
     return (
-      <div className={f('list-go')}>
+      <div className={f('list-go', { stale: isStale })}>
         {terms.map(([term, count]) => (
           <div key={term} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -79,6 +83,7 @@ class GOTermsFilter extends PureComponent /*:: <Props> */ {
                 type="radio"
                 name="go_category"
                 value={categories[term] || 'All'}
+                disabled={isStale}
                 onChange={this._handleSelection}
                 checked={
                   (term === 'All' && !search.go_category) ||

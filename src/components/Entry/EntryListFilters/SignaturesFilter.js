@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
-// import MemberDBSelector from 'components/MemberDBSelector';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -76,11 +76,10 @@ class SignaturesFilter extends PureComponent /*:: <Props> */ {
         search: { signature_in: signature },
       },
     } = this.props;
-    let _payload = payload;
-    if (payload && loading && !isStale) _payload = {};
-    if (!payload) _payload = {};
 
-    const signatureDBs = Object.entries(_payload)
+    const signatureDBs = Object.entries(
+      getPayloadOrEmpty(payload, loading, isStale),
+    )
       .sort(([, a], [, b]) => b - a)
       .filter(s => {
         const text = s[0].toLowerCase();

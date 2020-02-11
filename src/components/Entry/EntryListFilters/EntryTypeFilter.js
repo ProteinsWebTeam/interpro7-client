@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -89,11 +90,10 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
         search,
       },
     } = this.props;
-    let _payload = payload;
-    if (payload && loading && !isStale) _payload = {};
-    if (!payload) _payload = {};
 
-    const types = Object.entries(_payload).sort(([, a], [, b]) => b - a);
+    const types = Object.entries(
+      getPayloadOrEmpty(payload, loading, isStale),
+    ).sort(([, a], [, b]) => b - a);
     if (!loading) {
       types.unshift(['All', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
