@@ -31,6 +31,7 @@ const categories = {
     loading: boolean,
     payload: any,
   },
+  isStale: boolean,
   goToCustomLocation: function,
   customLocation: {
     search: Object,

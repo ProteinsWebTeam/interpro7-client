@@ -24,6 +24,7 @@ const f = foundationPartial(style);
     loading: boolean,
     payload: any,
   },
+  isStale: boolean,
   dataMeta: {
     loading: boolean,
     payload: any,
