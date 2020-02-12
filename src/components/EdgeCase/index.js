@@ -60,17 +60,18 @@ const EdgeCase = ({
       });
     }
   });
+  const seconds = Math.ceil((limit - count) / HERTZ);
   return (
     <div className={f('callout', 'info', 'withicon')}>
       <b>{text}</b>
-      {(shouldRedirect || status === STATUS_TIMEOUT) && (
+      {(shouldRedirect || status === STATUS_TIMEOUT) && !isNaN(seconds) && (
         <>
           <br />
           <span>
             {status === STATUS_TIMEOUT
               ? 'Checking again in '
               : 'Redirecting to Search in '}
-            {Math.ceil((limit - count) / HERTZ)} seconds.
+            {seconds} seconds.
           </span>
           <ProgressButton
             downloading={true}
