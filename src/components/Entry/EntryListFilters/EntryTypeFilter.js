@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -89,14 +90,15 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
         search,
       },
     } = this.props;
-    const types = Object.entries(isStale || loading ? {} : payload).sort(
-      ([, a], [, b]) => b - a,
-    );
-    if (!(loading || isStale)) {
+
+    const types = Object.entries(
+      getPayloadOrEmpty(payload, loading, isStale),
+    ).sort(([, a], [, b]) => b - a);
+    if (!loading) {
       types.unshift(['All', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (
-      <div className={f('list-entries')}>
+      <div className={f('list-entries', { stale: isStale })}>
         {types.map(([type, count]) => (
           <div key={type} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -105,6 +107,7 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
                 name="entry_type"
                 value={type.toLowerCase()}
                 onChange={this._handleSelection}
+                disabled={isStale}
                 checked={
                   (!search.type && isAll(type)) ||
                   search.type === type.toLowerCase()

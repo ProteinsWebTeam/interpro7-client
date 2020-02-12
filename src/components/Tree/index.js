@@ -8,6 +8,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import styles from './style.css';
+import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import fisheyeOff from 'EBI-Icon-fonts/source/common/font-awesome/solid/dot-circle.svg';
 import fisheyeOn from 'EBI-Icon-fonts/source/common/font-awesome/solid/bullseye.svg';
@@ -153,13 +154,18 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
         </div>
 
         <ZoomOverlay elementId="treeDiv" />
-        <div className={styles.tree} data-testid="data-tree" id="treeDiv">
-          <svg
-            className={styles.container}
-            ref={this._ref}
-            style={{ flex: '1' }}
-          />
-        </div>
+        <ResizeObserverComponent measurements={['width']} element="div">
+          {({ width }) => (
+            <div className={styles.tree} data-testid="data-tree" id="treeDiv">
+              <svg
+                className={styles.container}
+                ref={this._ref}
+                style={{ flex: '1' }}
+                width={width}
+              />
+            </div>
+          )}
+        </ResizeObserverComponent>
       </>
     );
   }

@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -22,6 +23,7 @@ const f = foundationPartial(style);
     loading: boolean,
     payload: any,
   },
+  isStale: boolean,
   goToCustomLocation: function,
   customLocation: {
     description: Object,
@@ -39,6 +41,7 @@ class IntegratedFilter extends PureComponent /*:: <Props, State> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isStale: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
       description: T.object,
@@ -86,11 +89,12 @@ class IntegratedFilter extends PureComponent /*:: <Props, State> */ {
   render() {
     const {
       data: { loading, payload },
+      isStale,
     } = this.props;
-    const types = loading ? {} : payload;
+    const types = getPayloadOrEmpty(payload, loading, isStale);
     if (!loading) types.both = payload.integrated + payload.unintegrated;
     return (
-      <div className={f('list-integrated')}>
+      <div className={f('list-integrated', { stale: isStale })}>
         {Object.keys(types)
           .sort()
           .map(type => (
@@ -100,6 +104,7 @@ class IntegratedFilter extends PureComponent /*:: <Props, State> */ {
                   type="radio"
                   name="interpro_state"
                   value={type}
+                  disabled={isStale}
                   onChange={this._handleSelection}
                   checked={this.state.value === type}
                   style={{ margin: '0.25em' }}

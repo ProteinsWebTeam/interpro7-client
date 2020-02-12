@@ -92,3 +92,7 @@ hr {
     max-height: 124px;
   }
 }
+
+.stale {
+  opacity: 0.5;
+}

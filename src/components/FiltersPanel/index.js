@@ -14,6 +14,13 @@ import style from './style.css';
 
 const f = foundationPartial(style);
 
+export const getPayloadOrEmpty = (payload, loading, isStale) => {
+  let _payload = payload;
+  if (payload && loading && !isStale) _payload = {};
+  if (!payload) _payload = {};
+  return _payload;
+};
+
 export const FilterPanel = (
   {
     label,
@@ -169,7 +176,4 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(FiltersPanel);
+export default connect(mapStateToProps, { goToCustomLocation })(FiltersPanel);

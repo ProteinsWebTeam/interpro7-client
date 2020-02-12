@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -22,6 +23,7 @@ const f = foundationPartial(style);
     loading: boolean,
     payload: any
   },
+  isStale: boolean,
   goToCustomLocation: function,
   customLocation: {
     description: Object,
@@ -35,6 +37,7 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isStale: T.bool.isRequired,
     goToCustomLocation: T.func.isRequired,
     customLocation: T.shape({
       description: T.object.isRequired,
@@ -60,10 +63,14 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
   render() {
     const {
       data: { loading, payload },
+      isStale,
       customLocation: { search },
     } = this.props;
-    const groupsPayload =
-      loading || !payload?.is_fragment ? {} : payload.is_fragment;
+    const groupsPayload = getPayloadOrEmpty(
+      payload?.is_fragment,
+      loading,
+      isStale,
+    );
     const names = new Map([
       ['true', 'Fragment'],
       ['false', 'Complete Sequence'],
@@ -78,7 +85,7 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
     }
     const currentValue = (search.is_fragment || 'both').toLowerCase();
     return (
-      <div className={f('list-curation')}>
+      <div className={f('list-curation', { stale: isStale })}>
         {Object.entries(groups).map(([isFragment, value]) => (
           <div key={isFragment} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -86,6 +93,7 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
                 type="radio"
                 name="fragment_filter"
                 value={isFragment}
+                disabled={isStale}
                 onChange={this._handleSelection}
                 checked={currentValue === isFragment}
                 style={{ margin: '0.25em' }}

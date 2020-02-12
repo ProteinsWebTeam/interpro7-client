@@ -5,6 +5,7 @@ import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -23,6 +24,7 @@ const f = foundationPartial(style);
     loading: boolean,
     payload: any
   },
+  isStale: boolean,
   goToCustomLocation: function,
   customLocation: {
     description: Object,
@@ -36,6 +38,7 @@ class TaxonomyFilter extends PureComponent /*:: <Props> */ {
       loading: T.bool.isRequired,
       payload: T.any,
     }).isRequired,
+    isStale: T.bool.isRequired,
     customLocation: T.shape({
       description: T.object.isRequired,
       search: T.object.isRequired,
@@ -64,21 +67,25 @@ class TaxonomyFilter extends PureComponent /*:: <Props> */ {
     if (!this.props.data || this.props.data.loading) return <Loading />;
     const {
       data: { loading, payload },
+      isStale,
       customLocation: {
         description: {
           taxonomy: { accession: acc, isFilter },
         },
       },
     } = this.props;
-    const taxes = Object.entries(loading ? {} : payload).sort(
-      ([, { value: a }], [, { value: b }]) => b - a,
-    );
+    const taxes = Object.entries(
+      getPayloadOrEmpty(payload, loading, isStale),
+    ).sort(([, { value: a }], [, { value: b }]) => b - a);
     const accession = isFilter ? acc : null;
     if (!loading) {
       taxes.unshift(['ALL', NaN]);
     }
     return (
-      <div style={{ overflowX: 'hidden' }} className={f('list-taxonomy')}>
+      <div
+        style={{ overflowX: 'hidden' }}
+        className={f('list-taxonomy', { stale: isStale })}
+      >
         {taxes.map(([taxId, { value: count, title }]) => (
           <div key={taxId} className={f('column')}>
             <label className={f('row', 'filter-button')}>
@@ -86,6 +93,7 @@ class TaxonomyFilter extends PureComponent /*:: <Props> */ {
                 type="radio"
                 name="entry_type"
                 value={taxId}
+                disabled={isStale}
                 onChange={this._handleSelection}
                 checked={(!accession && taxId === 'ALL') || accession === taxId}
                 style={{ margin: '0.25em' }}
