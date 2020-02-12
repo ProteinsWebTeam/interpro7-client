@@ -256,7 +256,7 @@ const SummaryIPScanJob = ({
         });
       }
     }
-  }, [data.payload]);
+  }, [data.payload, localPayload]);
 
   if (remoteID && remoteID !== accession) {
     return (
