@@ -6,10 +6,6 @@
   font-size: 90%;
 }
 
-.go-list li:first-letter {
-  text-transform: capitalize;
-}
-
 a.go-terms,
 a.go-terms:visited,
 a.go-terms:focus {
