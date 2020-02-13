@@ -151,7 +151,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
           sequence: (data?.input || '')
             .replace(FASTA_CLEANER, '')
             .toUpperCase(),
-          matches: [],
+          matches: data?.results?.[0]?.matches || [],
           xref: [
             {
               name:
@@ -201,19 +201,6 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
                   payload: { metadata: { counters: { entries } } },
                 }}
               />
-              {
-                // <EntryMenuWithoutData
-                //   data={{
-                //   loading: false}}
-                //   metadata={{ counters: { entries }}}
-                //   key="browseplus"
-                //   mainType="sequence"
-                //   mainDB=""
-                //   mainAccession={matched}
-                //   lowGraphics={false}
-                //   isSignature={false}
-                // />
-              }
             </div>
           </div>
         </ErrorBoundary>
