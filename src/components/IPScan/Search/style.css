@@ -93,13 +93,13 @@ input:disabled {
   background: gray;
 }
 
-.sqc-search-input h3 {
+.search-input h3 {
   font-size: 150%;
   margin-bottom: 0.5rem;
 }
 
 @media screen and (max-width: 75rem) {
-  .sqc-search-input h3 {
+  .search-input h3 {
     font-size: 130%;
   }
 }

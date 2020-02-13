@@ -395,7 +395,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                 )}
               >
                 <div className={f('row')}>
-                  <div className={f('large-12', 'columns', 'sqc-search-input')}>
+                  <div className={f('large-12', 'columns', 'search-input')}>
                     <h3 className={f('light')}>Sequence, in FASTA format</h3>
                     <SchemaOrgData
                       data={{
@@ -577,10 +577,7 @@ const mapStateToProps = createSelector(
   (ipScan, desc) => ({ ipScan, value: desc.search.value, main: desc.main.key }),
 );
 
-export default connect(
-  mapStateToProps,
-  {
-    createJob,
-    goToCustomLocation,
-  },
-)(IPScanSearch);
+export default connect(mapStateToProps, {
+  createJob,
+  goToCustomLocation,
+})(IPScanSearch);

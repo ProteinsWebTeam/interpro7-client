@@ -15,10 +15,11 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
 import local from './style.css';
+import search from 'components/IPScan/Search/style.css';
 
 /*:: import type { CustomLocation } from 'actions/creators'; */
 
-const f = foundationPartial(interproTheme, ipro, local);
+const f = foundationPartial(interproTheme, ipro, local, search);
 
 const PanelIDA = (
   {
@@ -233,14 +234,16 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                 <h3 className={f('light')}>
                   Search for proteins with a specific domain architecture
                 </h3>
-                <p>
-                  Domain architectures are derived from matches to Pfam Entries.
-                  The results will show all proteins matching the criteria
-                  selected below. You can select entries which must be included
-                  or excluded from your search results. Entries can be selected
-                  by either entering a Pfam accession, or an InterPro accession
-                  if a Pfam entry is integrated with it.
-                </p>
+                <div className={f('description')}>
+                  <p>
+                    Domain architectures are derived from matches to Pfam
+                    Entries. The results will show all proteins matching the
+                    criteria selected below. You can select entries which must
+                    be included or excluded from your search results. Entries
+                    can be selected by either entering a Pfam accession, or an
+                    InterPro accession if a Pfam entry is integrated with it.
+                  </p>
+                </div>
                 <div className={f('ida-workspace')}>
                   <PanelIDA
                     entryList={entries}
@@ -358,7 +361,4 @@ const mapStateToProps = createSelector(
   customLocation => ({ customLocation }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(SearchByIDA);
+export default connect(mapStateToProps, { goToCustomLocation })(SearchByIDA);
