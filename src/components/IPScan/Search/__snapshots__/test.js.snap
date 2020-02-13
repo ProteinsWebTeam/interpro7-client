@@ -27,7 +27,7 @@ exports[`<IPScanSearch /> should render 1`] = `
             className="row"
           >
             <div
-              className="large-12 columns sqc-search-input"
+              className="large-12 columns search-input"
             >
               <h3
                 className="light"

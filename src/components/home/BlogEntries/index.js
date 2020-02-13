@@ -54,7 +54,7 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
             `${url.includes('2017/07/06') ? 'image-blog-newskin' : ''}`,
             `${url.includes('2017/01/23') ? 'image-blog-iceberg' : ''}`,
             `${
-              url.includes('2018/11/01') ? 'image-blog-newweb' : ''
+              url.includes('2020/02/04') ? 'image-blog-newweb' : ''
             }` /* not published yet*/,
           )}
         >
