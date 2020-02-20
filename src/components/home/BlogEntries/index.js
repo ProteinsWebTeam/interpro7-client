@@ -28,6 +28,7 @@ const BLOG_ROOT = 'https://proteinswebteam.github.io/interpro-blog';
  title: string,
  url: string,
  published: string,
+ image_category: string,
  }; */
 
 export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
@@ -38,24 +39,27 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
     title: T.string.isRequired,
     url: T.string.isRequired,
     published: T.string,
+    image_category: T.string,
   };
 
   render() {
-    const { category, author, excerpt, title, url, published } = this.props;
+    const {
+      category,
+      author,
+      excerpt,
+      title,
+      url,
+      published,
+      image_category: imageCategory,
+    } = this.props;
     const maxString = 10;
     return (
       <div className={f('flex-card')} data-testid="blog-entries-box">
         <div
           className={f(
             'card-image',
-            // TODO Generate and use image from Blog directly - only possible if the blog can resize originals
-            `${url.includes('2017/09/22') ? 'image-focus-ape' : ''}`,
-            `${url.includes('2017/10/03') ? 'image-blog-type' : ''}`,
-            `${url.includes('2017/07/06') ? 'image-blog-newskin' : ''}`,
-            `${url.includes('2017/01/23') ? 'image-blog-iceberg' : ''}`,
-            `${
-              url.includes('2020/02/04') ? 'image-blog-newweb' : ''
-            }` /* not published yet*/,
+            // TODO imageCategory options are technical, biological and general. Image name would be like 'image-blog-technical'
+            `image-blog-${imageCategory}`,
           )}
         >
           <div
