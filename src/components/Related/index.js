@@ -375,7 +375,7 @@ const RelatedAdvancedQuery = loadData({
   loadData({
     getUrl: getReversedUrl,
     mapStateToProps: mapStateToPropsAdvancedQuery,
-  })(({ data, secondaryData, ...props }) => {
+  })(({ data, ...props }) => {
     const { payload, loading, url, status } = data;
     if (loading) return <Loading />;
     const _secondaryData =
@@ -415,40 +415,31 @@ const RelatedAdvancedQuery = loadData({
 /*:: type RelatedProps = {
   data: Object,
   focusType: string,
+  hasSecondary: boolean,
 }; */
 class Related extends PureComponent /*:: <RelatedProps> */ {
   static propTypes = {
     data: T.object.isRequired,
     focusType: T.string.isRequired,
+    hasSecondary: T.bool,
   };
 
   render() {
-    const { data, focusType, ...props } = this.props;
+    const { data, focusType, hasSecondary, ...props } = this.props;
     if (data.loading) return <Loading />;
-    const {
-      metadata: mainData,
-      [`${focusType}_subset`]: secondaryData,
-    } = data.payload;
-    if (!secondaryData) return <Loading />;
-    const RelatedComponent = Array.isArray(secondaryData)
+    const RelatedComponent = hasSecondary
       ? RelatedAdvancedQuery
       : RelatedSimple;
-    return (
-      <RelatedComponent
-        secondaryData={secondaryData}
-        mainData={mainData}
-        {...props}
-      />
-    );
+    return <RelatedComponent mainData={data.payload.metadata} {...props} />;
   }
 }
 
 const mapStateToPropsDefault = createSelector(
   state =>
-    (Object.entries(state.customLocation.description).find(
+    Object.entries(state.customLocation.description).find(
       ([_key, value]) => value.isFilter && value.order === 1,
-    ) || [])[0],
-  focusType => ({ focusType }),
+    ) || [],
+  ([focusType, filter]) => ({ focusType, hasSecondary: filter && !!filter.db }),
 );
 
 export default connect(mapStateToPropsDefault)(Related);

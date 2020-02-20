@@ -85,6 +85,16 @@ export const getUrl = createSelector(
               break;
           }
         }
+
+        // subpages will get the reverseURL, so its base dataLoader shold only get the accession payload
+        const _description =
+          description.main.key && description[description.main.key].accession
+            ? {
+                main: description.main,
+                [description.main.key]: description[description.main.key],
+              }
+            : description;
+
         const cursor = _search.cursor;
         if (cursor) delete _search.cursor;
 
@@ -93,7 +103,7 @@ export const getUrl = createSelector(
             protocol,
             hostname,
             port,
-            pathname: root + descriptionToPath(description),
+            pathname: root + descriptionToPath(_description),
             query: _search,
           }),
         );
@@ -156,6 +166,7 @@ export const getUrlForApi = (...parameters) =>
     .replace('/alignments', '/')
     .replace('/logo', '/')
     .replace('/domain_architecture', '/')
+    .replace('/interactions', '/')
     .replace('/sequence', '/')
     .replace('/genome3d', '/')
     .replace('/similar_proteins', '/');
