@@ -15,6 +15,7 @@ describe('<BlogEntry />', () => {
         url={
           'https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/'
         }
+        image_category={'biological'}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
@@ -34,6 +35,7 @@ describe('<BlogEntries />', () => {
               title: 'Protein Families classification',
               url:
                 'https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/',
+              image_category: 'biological',
             },
           ],
         }}

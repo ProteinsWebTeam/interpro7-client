@@ -8,6 +8,7 @@ exports[`<BlogEntries /> Blog entries 1`] = `
     <BlogEntry
       category="interpro"
       excerpt="About InterPro"
+      image_category="biological"
       title="Protein Families classification"
       url="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
     />
@@ -35,7 +36,7 @@ exports[`<BlogEntry /> Blog entry 1`] = `
   data-testid="blog-entries-box"
 >
   <div
-    className="card-image image-blog-type"
+    className="card-image image-blog-biological"
   >
     <div
       className="card-tag tag-blog"
