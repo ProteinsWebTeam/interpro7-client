@@ -23,6 +23,12 @@ const DomainArchitecture = loadable({
       /* webpackChunkName: "domain-architecture-subpage" */ './DomainArchitecture'
     ),
 });
+const FullyLoadedTable = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "fully-loaded-table-subpage" */ './FullyLoadedTable'
+    ),
+});
 
 const HMMModel = loadable({
   loader: () =>
@@ -61,11 +67,18 @@ const defaultMapStateToProps = createSelector(
         ? {}
         : _search || {};
     search.page_size = search.page_size || settingsPageSize;
+    const _description =
+      description.main.key && description[description.main.key].accession
+        ? {
+            main: description.main,
+            [description.main.key]: description[description.main.key],
+          }
+        : description;
     return format({
       protocol,
       hostname,
       port,
-      pathname: root + descriptionToPath(description),
+      pathname: root + descriptionToPath(_description),
       query: search,
     });
   },
@@ -147,6 +160,30 @@ const getGenome3dURL = createSelector(
     });
   },
 );
+const getInteractionsURL = createSelector(
+  state => state.settings.api,
+  state => state.customLocation.description.entry,
+  ({ protocol, hostname, port, root }, entry) => {
+    const search = {
+      interactions: '',
+    };
+    const _description = {
+      main: { key: 'entry' },
+      entry: {
+        db: 'interpro',
+        accession: entry.accession,
+      },
+    };
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(_description),
+      query: search,
+    });
+  },
+);
+
 const subPages = new Map([
   ['entry', loadData(defaultMapStateToProps)(List)],
   ['protein', loadData(defaultMapStateToProps)(List)],
@@ -155,6 +192,7 @@ const subPages = new Map([
   ['set', loadData(defaultMapStateToProps)(List)],
   ['sequence', Sequence],
   ['domain_architecture', DomainArchitecture],
+  ['interactions', loadData(getInteractionsURL)(FullyLoadedTable)],
   ['alignments', SetAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],

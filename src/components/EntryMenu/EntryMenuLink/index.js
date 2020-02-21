@@ -21,7 +21,12 @@ const singleEntityNames = new Map(
   Array.from(singleEntity).map(e => [e[1].name, e[0]]),
 );
 
-const whitelist = new Set(['Overview', 'Sequence', 'Alignments']);
+const whitelist = new Set([
+  'Overview',
+  'Sequence',
+  'Alignments',
+  'Interactions',
+]);
 
 const icons = new Map([
   ['Overview', { icon: '\uF2BB', class: 'icon-common' }],

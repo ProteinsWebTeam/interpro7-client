@@ -133,6 +133,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       withTree,
       rowClassName,
       showTableIcon,
+      paginationAction,
     } = this.props;
 
     const _query = query || {};
@@ -267,6 +268,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 pagination={_query}
                 nextAPICall={nextAPICall}
                 previousAPICall={previousAPICall}
+                paginationAction={paginationAction}
               />
             </div>
           </div>

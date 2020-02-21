@@ -389,6 +389,26 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
+    'interactions',
+    {
+      to(customLocation) {
+        const { key } = customLocation.description.main;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'interactions',
+            },
+          },
+        };
+      },
+      name: 'Interactions',
+      // counter: 'interactions',
+    },
+  ],
+  [
     'alignments',
     {
       to(customLocation) {
@@ -493,11 +513,7 @@ export const InterPro /*: Array<Object> */ = [
         },
       };
     },
-    activeClass(
-      {
-        description: { main },
-      } /*: Location */,
-    ) {
+    activeClass({ description: { main } } /*: Location */) {
       if (main.key && main.key !== 'search' && main.key !== 'result') {
         return f('is-active');
       }
