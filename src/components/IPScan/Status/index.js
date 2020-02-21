@@ -232,7 +232,9 @@ const mapsStateToProps = createSelector(
   state =>
     Object.values(state.jobs || {})
       .map(j => j.metadata)
-      .sort((a, b) => b.times.created - a.times.created),
+      .sort((a, b) =>
+        (b.remoteID || b.localID) > (a.remoteID || a.localID) ? 1 : -1,
+      ),
   state => state.customLocation.search,
   state => state.settings.navigation.pageSize,
   (jobs, search, defaultPageSize) => ({
