@@ -50,17 +50,31 @@ const FullLoadedTableSubPage = ({ description, data, search, pageSize }) => {
     renderers['molecule_1'] = renderMolecule;
     renderers['molecule_2'] = renderMolecule;
   }
+  const keys = Object.keys(_data?.[0] || {});
+  let subset = _data;
+  for (let key of keys) {
+    if (search[key]) {
+      subset = subset.filter(
+        row =>
+          JSON.stringify(row[key])
+            .toLowerCase()
+            .indexOf(search[key].toLowerCase()) !== -1,
+      );
+    }
+  }
   const size = search.page_size || pageSize;
-  const subset = _data.slice((page - 1) * size, page * size);
+  subset = subset.slice((page - 1) * size, page * size);
   return (
     <div className={f('row', 'column')}>
+      <p>{header}</p>
       <Table actualSize={_data.length} dataTable={subset} query={search}>
         <PageSizeSelector />
-        {Object.keys(_data?.[0] || {}).map(key => (
+        {keys.map(key => (
           <Column
             key={key}
             dataKey={key}
             renderer={renderers[key] || (d => d)}
+            isSearchable={true}
           />
         ))}
       </Table>
