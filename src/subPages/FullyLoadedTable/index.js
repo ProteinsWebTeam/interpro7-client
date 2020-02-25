@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -11,16 +11,11 @@ import localStyle from './style.css';
 
 const f = foundationPartial(localStyle);
 
-import Table, {
-  Column,
-  PageSizeSelector,
-  SearchBox,
-  Exporter,
-} from 'components/Table';
+import Table, { Column, PageSizeSelector } from 'components/Table';
 
 const formatInteractionsData = data => data.interactions || [];
 
-const renderMolecule = ({ accession, identifier, type }) =>
+const Molecule = ({ accession, identifier, type }) =>
   type === 'protein' ? (
     <Link
       to={{
@@ -37,6 +32,11 @@ const renderMolecule = ({ accession, identifier, type }) =>
       {identifier} ({accession})
     </span>
   );
+Molecule.propTypes = {
+  accession: T.string.isRequired,
+  identifier: T.string,
+  type: T.string,
+};
 
 const FullLoadedTableSubPage = ({ description, data, search, pageSize }) => {
   let _data = data?.payload || [];
@@ -47,12 +47,12 @@ const FullLoadedTableSubPage = ({ description, data, search, pageSize }) => {
     _data = formatInteractionsData(_data);
     header =
       'Proteins matching this entry have been experimentally proven to be involved in Protein:Protein interactions.';
-    renderers['molecule_1'] = renderMolecule;
-    renderers['molecule_2'] = renderMolecule;
+    renderers.molecule_1 = Molecule;
+    renderers.molecule_2 = Molecule;
   }
   const keys = Object.keys(_data?.[0] || {});
   let subset = _data;
-  for (let key of keys) {
+  for (const key of keys) {
     if (search[key]) {
       subset = subset.filter(
         row =>
@@ -80,6 +80,12 @@ const FullLoadedTableSubPage = ({ description, data, search, pageSize }) => {
       </Table>
     </div>
   );
+};
+FullLoadedTableSubPage.propTypes = {
+  description: T.object.isRequired,
+  data: T.object.isRequired,
+  search: T.object,
+  pageSize: T.number,
 };
 
 const mapStateToProps = createSelector(

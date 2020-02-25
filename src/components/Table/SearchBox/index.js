@@ -77,7 +77,6 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
   routerPush = () => {
     const { page, cursor, ...rest } = this.props.customLocation.search;
     const field = this.props.field || 'search';
-    const searchValue = this.props.customLocation.search[field];
     if (this.state.localSearch) {
       rest[field] = this.state.localSearch;
     } else {
