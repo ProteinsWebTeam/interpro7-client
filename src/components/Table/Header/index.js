@@ -2,13 +2,11 @@
 import React, { useState } from 'react';
 import T from 'prop-types';
 
-import { foundationPartial } from 'styles/foundation';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-import local from '../style.css';
-
-import { SearchBox } from 'components/Table';
-
-const f = foundationPartial(local, fonts);
+import {
+  ConnectedSortButton,
+  FilterButton,
+  ColumnSearchBox,
+} from 'components/SimpleCommonComponents/ColumnIcons';
 
 const Header = (
   { columns, notFound } /*: {columns: Array<Object>, notFound: boolean} */,
@@ -39,28 +37,25 @@ const Header = (
                 style={headerStyle}
                 className={headerClassName}
               >
-                {children || name || dataKey}
                 {isSearchable && (
                   <>
-                    {' '}
-                    <button
+                    <ConnectedSortButton field={dataKey} />{' '}
+                    <FilterButton
+                      isOpen={showFilter[dataKey]}
                       onClick={() =>
                         setShowFilter({
                           ...showFilter,
                           [dataKey]: !showFilter[dataKey],
                         })
                       }
-                    >
-                      <span
-                        className={f('icon-filter', 'icon', 'icon-common', {
-                          open: showFilter[dataKey],
-                        })}
-                        data-icon="f"
-                      />
-                    </button>
-                    {showFilter[dataKey] && <SearchBox field={dataKey} />}
+                    />{' '}
                   </>
                 )}
+                {children || name || dataKey}
+                <ColumnSearchBox
+                  field={dataKey}
+                  forceToShow={showFilter[dataKey]}
+                />
               </th>
             ),
           )}

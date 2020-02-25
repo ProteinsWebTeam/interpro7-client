@@ -37,11 +37,14 @@ Molecule.propTypes = {
   identifier: T.string,
   type: T.string,
 };
+const moleculeToString = ({ accession, identifier }) =>
+  `${identifier}${accession}`;
 
 const FullLoadedTableSubPage = ({ description, data, search, pageSize }) => {
   let _data = data?.payload || [];
   let header = '';
   const renderers = {};
+  const toString = {};
   const page = search?.page || 1;
   if (description.entry?.detail === 'interactions') {
     _data = formatInteractionsData(_data);
@@ -49,6 +52,8 @@ const FullLoadedTableSubPage = ({ description, data, search, pageSize }) => {
       'Proteins matching this entry have been experimentally proven to be involved in Protein:Protein interactions.';
     renderers.molecule_1 = Molecule;
     renderers.molecule_2 = Molecule;
+    toString.molecule_1 = moleculeToString;
+    toString.molecule_2 = moleculeToString;
   }
   const keys = Object.keys(_data?.[0] || {});
   let subset = _data;
@@ -60,6 +65,13 @@ const FullLoadedTableSubPage = ({ description, data, search, pageSize }) => {
             .toLowerCase()
             .indexOf(search[key].toLowerCase()) !== -1,
       );
+    }
+    const str = toString[key] || (x => `${x}`);
+    if (search.sort_by === key) {
+      subset.sort((a, b) => (str(a[key]) > str(b[key]) ? 1 : -1));
+    }
+    if (search.sort_by === `-${key}`) {
+      subset.sort((a, b) => (str(a[key]) > str(b[key]) ? -1 : 1));
     }
   }
   const size = search.page_size || pageSize;
