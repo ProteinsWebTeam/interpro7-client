@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
+import { createSelector } from 'reselect';
 import Link from 'components/generic/Link';
 
 import ErrorBoundary, {
@@ -16,21 +17,22 @@ import { toPlural } from 'utils/pages';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import EntryMenu from 'components/EntryMenu';
+import RemovedEntrySummary from 'components/Entry/RemovedEntrySummary';
 import Title from 'components/Title';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 import EdgeCase from 'components/EdgeCase';
+
+import {
+  schemaProcessDataRecord,
+  schemaProcessMainEntity,
+} from 'schema_org/processors';
+import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 
 import pageStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import { createSelector } from 'reselect';
-import {
-  schemaProcessDataRecord,
-  schemaProcessMainEntity,
-} from 'schema_org/processors';
-import loadable from 'higherOrder/loadable';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, pageStyle);
 
@@ -95,6 +97,7 @@ const locationhasDetailOrFilter = createSelector(
   value => value,
 );
 
+const STATUS_GONE = 410;
 class Summary extends PureComponent {
   static propTypes = propTypes;
 
@@ -111,16 +114,18 @@ class Summary extends PureComponent {
         main: { key: endpoint },
       },
     } = customLocation;
+    const databases = dataBase?.payload?.databases;
+    if (status === STATUS_GONE) {
+      return <RemovedEntrySummary {...payload} dbInfo={databases} />;
+    }
     const edgeCaseText = edgeCases.get(status);
     if (edgeCaseText) return <EdgeCase text={edgeCaseText} status={status} />;
     if (loading || (!locationhasDetailOrFilter(customLocation) && !payload)) {
       return <Loading />;
     }
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
     return (
       <>
-        {payload && payload.metadata && payload.metadata.accession && (
+        {payload?.metadata?.accession && (
           <>
             <SchemaOrgData
               data={{

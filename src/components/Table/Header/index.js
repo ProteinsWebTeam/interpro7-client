@@ -1,10 +1,19 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'prop-types';
+
+import {
+  ConnectedSortButton,
+  FilterButton,
+  ColumnSearchBox,
+} from 'components/SimpleCommonComponents/ColumnIcons';
 
 const Header = (
   { columns, notFound } /*: {columns: Array<Object>, notFound: boolean} */,
 ) => {
+  const [showFilter, setShowFilter] = useState(
+    Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),
+  );
   if (notFound) {
     return null;
   }
@@ -21,13 +30,32 @@ const Header = (
               headerStyle,
               children,
               headerClassName,
+              isSearchable = false,
             }) => (
               <th
                 key={defaultKey || dataKey}
                 style={headerStyle}
                 className={headerClassName}
               >
+                {isSearchable && (
+                  <>
+                    <ConnectedSortButton field={dataKey} />{' '}
+                    <FilterButton
+                      isOpen={showFilter[dataKey]}
+                      onClick={() =>
+                        setShowFilter({
+                          ...showFilter,
+                          [dataKey]: !showFilter[dataKey],
+                        })
+                      }
+                    />{' '}
+                  </>
+                )}
                 {children || name || dataKey}
+                <ColumnSearchBox
+                  field={dataKey}
+                  forceToShow={showFilter[dataKey]}
+                />
               </th>
             ),
           )}

@@ -12,6 +12,7 @@ Column.propTypes = {
   cellStyle: T.object,
   headerClassName: T.string,
   cellClassName: T.string,
+  isSearchable: T.bool,
   children: T.any,
 };
 

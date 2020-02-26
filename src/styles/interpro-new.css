@@ -292,6 +292,7 @@ table.light thead {
   background: transparent; /*Overwrite EBI global*/
 }
 table.light thead th {
+  vertical-align: top;
   background: rgba(255, 255, 255, 0.8);
   outline: none;
   border-bottom: 1px solid #d4dddf;

@@ -5,7 +5,6 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import PageSizeSelector from '../PageSizeSelector';
-import NumberComponent from 'components/NumberComponent';
 
 import { getCursor } from 'utils/url';
 
@@ -31,7 +30,6 @@ const scrollToTop = () => {
   value?: number | string,
   noLink?: boolean,
   children?: number| string,
-  duration?: number,
   attributeName?: string,
 }; */
 class PaginationItem extends PureComponent /*:: <Props> */ {
@@ -41,7 +39,6 @@ class PaginationItem extends PureComponent /*:: <Props> */ {
     value: T.oneOfType([T.number, T.string]),
     noLink: T.bool,
     children: T.oneOfType([T.number, T.string]),
-    duration: T.number,
   };
 
   render() {
@@ -51,7 +48,6 @@ class PaginationItem extends PureComponent /*:: <Props> */ {
       value,
       noLink,
       children,
-      duration,
     } = this.props;
     const LinkOrSpan = !value || noLink ? 'span' : Link;
     const props = {};
@@ -65,11 +61,7 @@ class PaginationItem extends PureComponent /*:: <Props> */ {
     return (
       <li className={className}>
         <LinkOrSpan {...props} onClick={() => !noLink && scrollToTop()}>
-          {(value && children) || (
-            <NumberComponent duration={duration || 0} noTitle>
-              {value}
-            </NumberComponent>
-          )}
+          {children || value}
         </LinkOrSpan>
       </li>
     );

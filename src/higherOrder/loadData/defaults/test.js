@@ -249,7 +249,7 @@ describe('getUrlForApi', () => {
     };
 
     expect(getUrlForApi(state)).toBe(
-      'https://www.example.com:443/basename/entry/InterPro/IPR000001/protein/structure/',
+      'https://www.example.com:443/basename/entry/InterPro/IPR000001/',
     );
   });
 

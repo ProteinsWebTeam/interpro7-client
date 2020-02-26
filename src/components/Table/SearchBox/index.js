@@ -22,6 +22,7 @@ const DEBOUNCE_RATE = 500; // In ms
   goToCustomLocation: goToCustomLocation,
   loading?: ?boolean,
   children?: ?string,
+  field?: ?string,
 }; */
 /*:: type State = {|
   localSearch: ?string,
@@ -33,6 +34,7 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
     goToCustomLocation: T.func.isRequired,
     children: T.string,
     loading: T.bool,
+    field: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -73,8 +75,13 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
   };
 
   routerPush = () => {
-    const { page, search, cursor, ...rest } = this.props.customLocation.search;
-    if (this.state.localSearch) rest.search = this.state.localSearch;
+    const { page, cursor, ...rest } = this.props.customLocation.search;
+    const field = this.props.field || 'search';
+    if (this.state.localSearch) {
+      rest[field] = this.state.localSearch;
+    } else {
+      delete rest[field];
+    }
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       search: rest,
@@ -90,7 +97,9 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
             type="text"
             value={
               this.state.localSearch === null
-                ? this.props.customLocation.search.search || ''
+                ? this.props.customLocation.search[
+                    this.props.field || 'search'
+                  ] || ''
                 : this.state.localSearch
             }
             onChange={this.handleChange}
