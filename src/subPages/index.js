@@ -23,11 +23,14 @@ const DomainArchitecture = loadable({
       /* webpackChunkName: "domain-architecture-subpage" */ './DomainArchitecture'
     ),
 });
-const FullyLoadedTable = loadable({
+const InteractionsSubPage = loadable({
   loader: () =>
     import(
-      /* webpackChunkName: "fully-loaded-table-subpage" */ './FullyLoadedTable'
+      /* webpackChunkName: "interactions-subpage" */ './InteractionsSubPage'
     ),
+});
+const PathwaysSubPage = loadable({
+  loader: () => import(/* webpackChunkName: "pathways-subpage" */ './Pathways'),
 });
 
 const HMMModel = loadable({
@@ -160,29 +163,29 @@ const getGenome3dURL = createSelector(
     });
   },
 );
-const getInteractionsURL = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.entry,
-  ({ protocol, hostname, port, root }, entry) => {
-    const search = {
-      interactions: '',
-    };
-    const _description = {
-      main: { key: 'entry' },
-      entry: {
-        db: 'interpro',
-        accession: entry.accession,
-      },
-    };
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + descriptionToPath(_description),
-      query: search,
-    });
-  },
-);
+const getInterProModifierURL = modifier =>
+  createSelector(
+    state => state.settings.api,
+    state => state.customLocation.description.entry,
+    ({ protocol, hostname, port, root }, entry) => {
+      const search = {};
+      search[modifier] = '';
+      const _description = {
+        main: { key: 'entry' },
+        entry: {
+          db: 'interpro',
+          accession: entry.accession,
+        },
+      };
+      return format({
+        protocol,
+        hostname,
+        port,
+        pathname: root + descriptionToPath(_description),
+        query: search,
+      });
+    },
+  );
 
 const subPages = new Map([
   ['entry', loadData(defaultMapStateToProps)(List)],
@@ -192,7 +195,11 @@ const subPages = new Map([
   ['set', loadData(defaultMapStateToProps)(List)],
   ['sequence', Sequence],
   ['domain_architecture', DomainArchitecture],
-  ['interactions', loadData(getInteractionsURL)(FullyLoadedTable)],
+  [
+    'interactions',
+    loadData(getInterProModifierURL('interactions'))(InteractionsSubPage),
+  ],
+  ['pathways', loadData(getInterProModifierURL('pathways'))(PathwaysSubPage)],
   ['alignments', SetAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],

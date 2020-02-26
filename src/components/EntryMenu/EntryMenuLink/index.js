@@ -26,6 +26,7 @@ const whitelist = new Set([
   'Sequence',
   'Alignments',
   'Interactions',
+  'Pathways',
 ]);
 
 const icons = new Map([

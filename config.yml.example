@@ -31,6 +31,7 @@ pages:
       - set
       - logo
       - interactions
+      - pathways
       - genome3d
   protein:
     subPages:

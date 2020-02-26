@@ -409,6 +409,26 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
+    'pathways',
+    {
+      to(customLocation) {
+        const { key } = customLocation.description.main;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'pathways',
+            },
+          },
+        };
+      },
+      name: 'Pathways',
+      // counter: 'interactions',
+    },
+  ],
+  [
     'alignments',
     {
       to(customLocation) {

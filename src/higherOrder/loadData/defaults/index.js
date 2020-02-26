@@ -167,6 +167,7 @@ export const getUrlForApi = (...parameters) =>
     .replace('/logo', '/')
     .replace('/domain_architecture', '/')
     .replace('/interactions', '/')
+    .replace('/pathways', '/')
     .replace('/sequence', '/')
     .replace('/genome3d', '/')
     .replace('/similar_proteins', '/');
