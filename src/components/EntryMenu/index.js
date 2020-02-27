@@ -74,6 +74,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     super(props);
 
     this._currentTransformTranslateX = 0;
+    this._currentTransformTranslateY = 0;
     this._currentTransformScaleX = 1;
     this._ref = React.createRef();
   }
@@ -103,22 +104,26 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
 
     const countainerWidth = this.props.width;
     // current transform
-    const currentTransform = `translateX(${this._currentTransformTranslateX}px) scaleX(${this._currentTransformScaleX})`;
+    const currentTransform = `translateX(${this._currentTransformTranslateX}px) translateY(${this._currentTransformTranslateY}px) scaleX(${this._currentTransformScaleX})`;
     // next transform
     const nextTranslateX = boundingRect.left - containerBoundingRect.left;
+    const nextTranslateY =
+      boundingRect.top + boundingRect.height - containerBoundingRect.top;
     let nextScaleX = boundingRect.width / countainerWidth;
     if (Number.isNaN(nextScaleX)) nextScaleX = this._currentTransformScaleX;
-    const nextTransform = `translateX(${nextTranslateX}px) scaleX(${nextScaleX})`;
+    const nextTransform = `translateX(${nextTranslateX}px) translateY(${nextTranslateY}px) scaleX(${nextScaleX})`;
     if (!fakeBorder.animate) {
       fakeBorder.style.transform = nextTransform;
       return;
     }
     // middle transform
     let middleTranslateX = this._currentTransformTranslateX;
+    let middleTranslateY = this._currentTransformTranslateY;
     let middleScaleX = this._currentTransformScaleX;
     if (nextTranslateX > this._currentTransformTranslateX) {
       // going right
       middleTranslateX = this._currentTransformTranslateX;
+      middleTranslateY = this._currentTransformTranslateY;
       middleScaleX =
         (boundingRect.right -
           containerBoundingRect.left -
@@ -127,13 +132,14 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     } else if (nextTranslateX < this._currentTransformTranslateX) {
       // going left
       middleTranslateX = nextTranslateX;
+      middleTranslateY = nextTranslateY;
       middleScaleX =
         (this._currentTransformScaleX +
           this._currentTransformTranslateX -
           nextTranslateX) /
         countainerWidth;
     }
-    const middleTransform = `translateX(${middleTranslateX}px) scaleX(${middleScaleX})`;
+    const middleTransform = `translateX(${middleTranslateX}px) translateY(${middleTranslateY}px) scaleX(${middleScaleX})`;
 
     // cancel previous animation in case it's still running
     if (this._animation) this._animation.cancel();
@@ -149,6 +155,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     // stash end values inside this instance to use them as
     // the starting point of the next animation
     this._currentTransformTranslateX = nextTranslateX;
+    this._currentTransformTranslateY = nextTranslateY;
     this._currentTransformScaleX = nextScaleX;
   };
 
@@ -228,11 +235,21 @@ const mapStateToProps = createSelector(
   state =>
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
+  state =>
+    state.customLocation.description[state.customLocation.description.main.key]
+      .detail,
+  state =>
+    Object.entries(state.customLocation.description)
+      .filter(([_, { isFilter }]) => isFilter)
+      .map(([f]) => f),
+
   state => state.settings.ui.lowGraphics,
-  (mainType, mainDB, mainAccession, lowGraphics) => ({
+  (mainType, mainDB, mainAccession, mainDetail, filters, lowGraphics) => ({
     mainType,
     mainDB,
     mainAccession,
+    mainDetail,
+    filters,
     isSignature: !!(
       mainType === 'entry' &&
       mainDB !== 'InterPro' &&

@@ -22,7 +22,7 @@
   height: 3px;
   background-color: var(--colors-submain);
   position: absolute;
-  bottom: 0;
+  /* bottom: 0; */
   left: 0;
   transform-origin: left;
   transform: translateX(0) scaleX(0);
