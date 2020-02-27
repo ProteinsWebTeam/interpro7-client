@@ -718,9 +718,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     }
     // const databases = dataDB.payload.databases;
     if (entry.source_database === 'mobidblt')
-      return (
-        <Link href={`http://mobidb.bio.unipd.it/${id}`}>{entry.accession}</Link>
-      );
+      return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
       entry.type === 'chain' ||

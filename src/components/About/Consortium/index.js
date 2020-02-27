@@ -32,7 +32,7 @@ const lut = new Map([
   ['cdd', 'https://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml'],
   ['cathgene3d', 'http://www.cathdb.info/'],
   ['hamap', 'https://hamap.expasy.org/'],
-  ['mobidblt', 'http://mobidb.bio.unipd.it/'],
+  ['mobidblt', 'https://mobidb.org/'],
   ['panther', 'http://www.pantherdb.org/'],
   ['pfam', 'https://pfam.xfam.org/'],
   ['pirsf', 'https://pir.georgetown.edu/pirwww/dbinfo/pirsf.shtml'],
