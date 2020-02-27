@@ -405,7 +405,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'Interactions',
-      // counter: 'interactions',
+      counter: 'interactions',
     },
   ],
   [
@@ -425,7 +425,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'Pathways',
-      // counter: 'interactions',
+      counter: 'pathways',
     },
   ],
   [
