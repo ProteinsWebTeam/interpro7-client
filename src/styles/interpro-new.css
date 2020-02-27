@@ -810,6 +810,27 @@ hr {
 }
 
 /*img tool + focus&blog homepage - background-position for 4 cards - temp*/
+.image-blog-default {
+  background: url('../images/cover/blog/blog_default.png') no-repeat 50% 0%;
+  background-size: 100%;
+}
+.image-blog-biology {
+  background: url('../images/cover/blog/blog_biology.png') no-repeat 50% 0%;
+  background-size: 100%;
+}
+.image-blog-protein {
+  background: url('../images/cover/blog/blog_protein.png') no-repeat 50% 0%;
+  background-size: 100%;
+}
+.image-blog-technical {
+  background: url('../images/cover/blog/blog_technical.png') no-repeat 50% 0%;
+  background-size: 100%;
+}
+.image-blog-website {
+  background: url('../images/cover/blog/blog_website.png') no-repeat 50% 0%;
+  background-size: 100%;
+}
+
 .image-blog-newweb {
   background: url('../images/cover/blog/blog_newinterpro.png') no-repeat 50% 0%;
   background-size: 100%;

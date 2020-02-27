@@ -6,6 +6,7 @@ import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import { unescape } from 'utils/text';
 
@@ -59,7 +60,7 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
           className={f(
             'card-image',
             // TODO imageCategory options are technical, biological and general. Image name would be like 'image-blog-technical'
-            `image-blog-${imageCategory}`,
+            `image-blog-${imageCategory || 'default'}`,
           )}
         >
           <div
@@ -153,14 +154,22 @@ export class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
     } = this.props;
     if (loading) return 'Loading…';
     if (!payload) return null;
+    const minWidth = 300;
+
     return (
       <section>
-        <div className={f('flex-column')}>
-          {Object.entries(payload).map(([type, content]) => (
-            // $FlowFixMe
-            <BlogEntry {...content} key={type} />
-          ))}
-        </div>
+        <ResizeObserverComponent measurements={['width']} element="div">
+          {({ width }) => (
+            <div className={f('flex-column')}>
+              {Object.entries(payload)
+                .slice(0, Math.min(width / minWidth))
+                .map(([type, content]) => (
+                  // $FlowFixMe
+                  <BlogEntry {...content} key={type} />
+                ))}
+            </div>
+          )}
+        </ResizeObserverComponent>
         <div className={f('flex-column', 'read-all')}>
           <Link href={`${BLOG_ROOT}`} target="_blank">
             <div className={f('button', 'margin-bottom-none')}>

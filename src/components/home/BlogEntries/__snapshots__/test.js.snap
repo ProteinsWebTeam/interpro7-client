@@ -2,17 +2,16 @@
 
 exports[`<BlogEntries /> Blog entries 1`] = `
 <section>
-  <div
-    className="flex-column"
+  <ResizeObserverComponent
+    element="div"
+    measurements={
+      Array [
+        "width",
+      ]
+    }
   >
-    <BlogEntry
-      category="interpro"
-      excerpt="About InterPro"
-      image_category="biological"
-      title="Protein Families classification"
-      url="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
-    />
-  </div>
+    [Function]
+  </ResizeObserverComponent>
   <div
     className="flex-column read-all"
   >
