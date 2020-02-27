@@ -176,7 +176,7 @@ exports[`<Consortium /> should render with data 1`] = `
           <Memo(Connect(Link))
             className="ext"
             disabled={false}
-            href="http://mobidb.bio.unipd.it/"
+            href="https://mobidb.org/"
             target="_blank"
           >
             <span

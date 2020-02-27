@@ -86,6 +86,7 @@ export const EntryMenuLinkWithoutData = (
           abbr
           duration={usedOnTheSide ? 0 : undefined}
           className={f('counter')}
+          noAnimation
         >
           {value}
         </NumberComponent>

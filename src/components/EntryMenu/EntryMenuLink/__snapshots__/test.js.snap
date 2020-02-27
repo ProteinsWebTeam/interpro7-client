@@ -37,6 +37,7 @@ exports[`<EntryMenuLinkWithoutData /> should render 1`] = `
       className="counter"
       label={true}
       loading={false}
+      noAnimation={true}
     >
       41369
     </Memo(Connect(NumberComponent))>
