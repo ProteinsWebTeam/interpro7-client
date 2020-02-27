@@ -255,11 +255,11 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               {updates && !!updates.length && (
                 <li>
                   An update to{' '}
-                  {updates.map(({ name, recently_integrated: r }, i) => (
+                  {updates.map(({ name, version }, i) => (
                     <React.Fragment key={name}>
                       {i === 0 ? ' ' : ', '}
                       <span key={name}>
-                        {name} ({r.length})
+                        {name} [{version}]
                       </span>
                     </React.Fragment>
                   ))}
