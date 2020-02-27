@@ -457,7 +457,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               </Link>
               , a derivative of the
               <Link
-                href="http://mobidb.bio.unipd.it/"
+                href="https://mobidb.org/"
                 className={f('ext')}
                 target="_blank"
               >
