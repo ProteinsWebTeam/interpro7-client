@@ -35,11 +35,9 @@ export const buildAnchorLink = (
 
 export const getCursor = (url /*: string */) => {
   if (!url) return null;
-  const urlObj = parse(url);
+  const urlObj = parse(url, true);
   if (urlObj.query) {
-    for (const attr of urlObj.query.split('&')) {
-      if (attr.toLowerCase().startsWith('cursor=')) return attr.split('=')[1];
-    }
+    return urlObj.query.cursor;
   }
   return null;
 };
