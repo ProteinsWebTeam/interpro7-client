@@ -11,6 +11,7 @@ InterPro7 is a React application. The file [index.js](./index.js) is the start p
 The component [`<App>`](./App.js) is the place where we have setup the high level React logic for the App:
 * Gets the browser history manager to take manual control over it.
 * Creates the App store, we are using redux for this. See [`/store`](./store) for details.
+* Activates the service worker that caches the App files(`.js`, `.css`, etc.) and refreshes them if there is a new version. [Read More](./README_SW.md)
 * Renders `Provider>ErrorBoundary>Root`, where:
   * `<Provider>` is the `react-redux` wrapper component that allows to pass the App sotr to inner components via `connect()`.
   * `<ErrorBoundary>` a sort of global `catch` in case anything goes wrong down the line. 
