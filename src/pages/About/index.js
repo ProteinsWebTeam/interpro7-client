@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import { createSelector } from 'reselect';
+import { Helmet } from 'react-helmet-async';
 
 import Link from 'components/generic/Link';
 import Switch from 'components/generic/Switch';
@@ -82,6 +83,9 @@ class About extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <div className={f('row')}>
+        <Helmet>
+          <title>About</title>
+        </Helmet>
         <SchemaOrgData
           data={{ location: window.location }}
           processData={schemaProcessDataInterpro}

@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 import Link from 'components/generic/Link';
 import DownloadTable from 'components/IPScan/DownloadTable';
@@ -18,6 +19,9 @@ class Download extends PureComponent /*:: <{}> */ {
       <div className={f('row')}>
         <div className={f('columns')}>
           <section>
+            <Helmet>
+              <title>Download</title>
+            </Helmet>
             <h3>Download</h3>
             <DownloadTable />
             <h4>InterProScan</h4>

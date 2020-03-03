@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import { createSelector } from 'reselect';
+import { Helmet } from 'react-helmet-async';
 
 import Link from 'components/generic/Link';
 import Switch from 'components/generic/Switch';
@@ -90,6 +91,10 @@ export default class Help extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <div className={f('row')}>
+        <Helmet>
+          <title>Help</title>
+        </Helmet>
+
         <SchemaOrgData
           data={{
             name: 'InterPro Help Page',

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
+import { Helmet } from 'react-helmet-async';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -119,6 +120,9 @@ const Wrapper = (
   const toggleShowHelp = () => setShowHelp(!showHelp);
   return (
     <div className={f('row')}>
+      <Helmet>
+        <title>Search</title>
+      </Helmet>
       <SchemaOrgData
         data={{
           name: 'InterPro Search Page',

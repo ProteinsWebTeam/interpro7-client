@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+import { Helmet } from 'react-helmet-async';
 
 import { createSelector } from 'reselect';
 import Link from 'components/generic/Link';
@@ -266,6 +267,9 @@ class EndPointPage extends PureComponent {
   render() {
     return (
       <ErrorBoundary>
+        <Helmet>
+          <title>Browse</title>
+        </Helmet>
         <Switch
           {...this.props}
           locationSelector={mainDBLocationSelector}
