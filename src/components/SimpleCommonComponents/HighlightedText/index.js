@@ -23,7 +23,7 @@ class HighlightedText extends PureComponent /*:: <Props> */ {
 
   render() {
     const { text, textToHighlight = '', maxLength = +Infinity } = this.props;
-    if (!textToHighlight) return text;
+    if (!textToHighlight || !text) return text;
     let _text = text.toString();
     _text = subsetText(
       _text,
