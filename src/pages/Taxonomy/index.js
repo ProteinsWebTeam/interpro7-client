@@ -727,6 +727,7 @@ const getURLFromState = createSelector(
   },
 );
 const AccessionSearch = loadData(getURLFromState)(_AccessionSearch);
+
 const Taxonomy = ({ search }) => {
   const [accSearch, setAccSearch] = useState(null);
   const searchTerm = search && search.search;
@@ -738,7 +739,7 @@ const Taxonomy = ({ search }) => {
         listOfEndpointEntities={List}
         SummaryAsync={SummaryAsync}
         subPagesForEndpoint={subPagesForTaxonomy}
-        accessionSearch={searchTerm && accSearch}
+        accessionSearch={(searchTerm && accSearch) || null}
       />
     </>
   );
