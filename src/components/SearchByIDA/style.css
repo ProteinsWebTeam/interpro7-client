@@ -37,7 +37,17 @@
     }
   }
 }
-
+.options {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  & .switch {
+    margin-bottom: 0.3rem;
+    &.disabled label {
+      color: var(--colors-slightgray);
+    }
+  }
+}
 .ida-controls {
   padding: 1em;
   min-height: 50px;

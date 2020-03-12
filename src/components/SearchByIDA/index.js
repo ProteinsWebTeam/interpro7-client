@@ -135,6 +135,7 @@ PanelIDA.propTypes = {
   ida_search?: string,
   ida_ignore?: string,
   ordered?: boolean,
+  exact?: boolean,
 }; */
 export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
@@ -149,11 +150,14 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
     markerAfterEntry: null,
     options: {},
   };
-  _handleSubmit = ({ entries, order, ignore }) => {
+  _handleSubmit = ({ entries, order, exact = false, ignore }) => {
     const search /*: SearchProps */ = {
       ida_search: entries.join(','),
     };
-    if (order) search.ordered = true;
+    if (order) {
+      search.ordered = true;
+      if (exact) search.exact = true;
+    }
     if (ignore && ignore.length) search.ida_ignore = ignore.join(',');
 
     this.props.goToCustomLocation({
@@ -209,12 +213,14 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
     const {
       ida_search: searchFromURL,
       ordered,
+      exact,
       ida_ignore: ignoreFromURL,
     } = this.props.customLocation.search;
     const entries = searchFromURL ? searchFromURL.split(',') : [];
     if (searchFromURL !== undefined && searchFromURL.trim() === '')
       entries.push('');
     const order = !!ordered;
+    const _exact = !!exact;
     const ignore = ignoreFromURL ? ignoreFromURL.split(',') : [];
     if (ignoreFromURL !== undefined && ignoreFromURL.trim() === '')
       ignore.push('');
@@ -318,34 +324,75 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                     <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
                     <span>Add Domain to exclude</span>
                   </button>
-                  <div className={f('switch', 'tiny')}>
-                    <label htmlFor="ordered">
-                      <input
-                        className={f('switch-input')}
-                        type="checkbox"
-                        id="ordered"
-                        checked={order}
-                        onChange={event =>
-                          this._handleSubmit({
-                            order: event.target.checked,
-                            entries,
-                            ignore,
-                          })
-                        }
-                      />{' '}
-                      Order of domain matters:{' '}
-                      <span className={f('switch-paddle')}>
-                        <span className={f('switch-active')} aria-hidden="true">
-                          Yes
+                  <div className={f('options')}>
+                    <div className={f('switch', 'tiny')}>
+                      <label htmlFor="ordered">
+                        <input
+                          className={f('switch-input')}
+                          type="checkbox"
+                          id="ordered"
+                          checked={order}
+                          onChange={event =>
+                            this._handleSubmit({
+                              order: event.target.checked,
+                              entries,
+                              ignore,
+                            })
+                          }
+                        />{' '}
+                        Order of domain matters:{' '}
+                        <span className={f('switch-paddle')}>
+                          <span
+                            className={f('switch-active')}
+                            aria-hidden="true"
+                          >
+                            Yes
+                          </span>
+                          <span
+                            className={f('switch-inactive')}
+                            aria-hidden="true"
+                          >
+                            No
+                          </span>
                         </span>
-                        <span
-                          className={f('switch-inactive')}
-                          aria-hidden="true"
-                        >
-                          No
+                      </label>
+                    </div>
+                    <div
+                      className={f('switch', 'tiny', { disabled: !ordered })}
+                    >
+                      <label htmlFor="exact">
+                        <input
+                          className={f('switch-input')}
+                          type="checkbox"
+                          id="exact"
+                          disabled={!order}
+                          checked={_exact}
+                          onChange={event =>
+                            this._handleSubmit({
+                              exact: event.target.checked,
+                              order: true,
+                              entries,
+                              ignore,
+                            })
+                          }
+                        />{' '}
+                        Exact match:{' '}
+                        <span className={f('switch-paddle')}>
+                          <span
+                            className={f('switch-active')}
+                            aria-hidden="true"
+                          >
+                            Yes
+                          </span>
+                          <span
+                            className={f('switch-inactive')}
+                            aria-hidden="true"
+                          >
+                            No
+                          </span>
                         </span>
-                      </span>
-                    </label>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
