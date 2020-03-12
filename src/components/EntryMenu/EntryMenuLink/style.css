@@ -64,7 +64,7 @@ a.is-active-tab {
 .tabs-title {
   display: flex;
   align-items: stretch;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
 }
 
 /* hide icons on main menu - show them only on sidemenu and revert color from black to white */
