@@ -13,7 +13,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts);
 
 const RemovedEntrySummary = ({ detail, accession, date, history, dbInfo }) => {
   const metadata = {
-    accession,
+    accession: accession.toUpperCase(),
     name: { name: history.names?.[0] || '???' },
     source_database: 'Removed',
     type: 'unknown',
@@ -24,10 +24,12 @@ const RemovedEntrySummary = ({ detail, accession, date, history, dbInfo }) => {
       ...(history.names || []).map(n => ` * ${n}`),
     ],
   };
+  const regex = /ipr[0-9]{6}/gi;
+  const detailF = (detail || '').replace(regex, accession.toUpperCase());
   return (
     <div className={f('row')}>
       <div className={f('medium-12', 'large-12', 'columns')}>
-        <EdgeCase text={detail} status={410} shouldRedirect={false} />
+        <EdgeCase text={detailF} status={410} shouldRedirect={false} />
         <Title metadata={metadata} mainType="entry" />
         <SummaryEntry
           data={{ metadata: { ...metadata, source_database: 'interpro' } }}
