@@ -10,7 +10,7 @@ const f = foundationPartial(ebiGlobalStyles);
 
 const GeneralWarning = ({ data }) => {
   const message = data?.payload;
-  if (!message) return null;
+  if ((message || '').trim() === '') return null;
   return (
     <div className={f('callout', 'withicon', 'alert')}>
       <b>{message}</b>
