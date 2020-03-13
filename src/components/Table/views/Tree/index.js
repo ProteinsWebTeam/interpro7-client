@@ -26,6 +26,7 @@ import Tip from 'components/Tip';
 import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import { cloneDeep } from 'lodash-es';
 
 const f = foundationPartial(ebiGlobalStyles, styles, fonts);
 const ANIMATION_DURATION = 0.3;
@@ -375,28 +376,26 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                       typeof currentNode.counters[plural] === 'undefined'
                     )
                       return null;
-
                     const to = {
-                      ...description,
-                      main: {
-                        key:
-                          description.main.key === 'taxonomy'
-                            ? endpoint
-                            : description.main.key,
-                      },
+                      ...cloneDeep(description),
                       [endpoint]: {
+                        isFilter: true,
                         db,
-                        isFilter: description.main.key !== 'taxonomy',
                         order: 1,
                       },
-                      taxonomy: {
+                    };
+
+                    if (description.main.key === 'taxonomy') {
+                      to.taxonomy.accession = this.state.focused;
+                      to.entry.order = 2;
+                    } else {
+                      to.taxonomy = {
                         db: 'uniprot',
                         isFilter: true,
                         order: 2,
                         accession: this.state.focused,
-                      },
-                    };
-
+                      };
+                    }
                     return (
                       <li key={endpoint}>
                         <Link

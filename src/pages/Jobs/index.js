@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Helmet } from 'react-helmet-async';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Switch from 'components/generic/Switch';
@@ -194,11 +195,16 @@ const jobTypeSelector = createSelector(
 );
 
 const Jobs = () => (
-  <Switch
-    locationSelector={jobTypeSelector}
-    indexRoute={RedirectToIPScan}
-    childRoutes={routes}
-  />
+  <>
+    <Helmet>
+      <title>Results</title>
+    </Helmet>
+    <Switch
+      locationSelector={jobTypeSelector}
+      indexRoute={RedirectToIPScan}
+      childRoutes={routes}
+    />
+  </>
 );
 
 export default Jobs;

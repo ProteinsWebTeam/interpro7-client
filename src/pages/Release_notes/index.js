@@ -5,6 +5,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import { Helmet } from 'react-helmet-async';
 
 import loadData from 'higherOrder/loadData';
 
@@ -224,6 +225,9 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
       <div className={f('row')}>
         <div className={f('columns', 'release')}>
           <section>
+            <Helmet>
+              <title>Release notes</title>
+            </Helmet>
             <h3>Release notes</h3>
             <ReleaseNotesSelector current={version} />
             <hr />

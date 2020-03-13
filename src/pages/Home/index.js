@@ -9,6 +9,7 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Tabs from 'components/Tabs';
 import Description from 'components/Description';
 import CurrentVersion from 'components/home/CurrentVersion';
+import GeneralWarning from 'components/home/GeneralWarning';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
 import Tip from 'components/Tip';
 
@@ -151,6 +152,7 @@ class Home extends PureComponent {
             settingsName="showSettingsToast"
           />
         ) : null}
+        <GeneralWarning />
 
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>

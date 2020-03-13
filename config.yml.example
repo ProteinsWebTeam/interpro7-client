@@ -6,6 +6,8 @@ root:
   IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
   genome3d: //www.genome3d.eu/api/v1/
 
+title: InterPro
+
 github:
   InterProClient:
     owner: ProteinsWebTeam

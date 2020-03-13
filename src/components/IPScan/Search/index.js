@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Helmet } from 'react-helmet-async';
 
 import {
   Editor,
@@ -407,6 +408,9 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                     />
                     {this.props.main === 'search' && (
                       <div className={f('description')}>
+                        <Helmet>
+                          <title>InterProScan</title>
+                        </Helmet>
                         <p>
                           This form allows you to scan your sequence for matches
                           against the InterPro protein signature databases,

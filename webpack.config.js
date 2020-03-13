@@ -47,7 +47,7 @@ const publicPath = websiteURL.pathname || '/interpro/';
 
 const getHTMLWebpackPlugin = mode =>
   new HTMLWebpackPlugin({
-    title: pkg.name,
+    title: iprConfig.title || 'InterPro',
     template: path.join('.', 'src', 'index.template.html'),
     inject: mode === 'development',
   });

@@ -19,6 +19,50 @@ import style from 'components/FiltersPanel/style.css';
 
 const f = foundationPartial(style);
 
+const TaxonomyOption = ({
+  checked,
+  taxId,
+  count,
+  title,
+  isStale,
+  onChange,
+  loading,
+}) => (
+  <div key={taxId} className={f('column')}>
+    <label className={f('row', 'filter-button')}>
+      <input
+        type="radio"
+        name="entry_type"
+        value={taxId}
+        disabled={isStale}
+        onChange={onChange}
+        checked={checked}
+        style={{ margin: '0.25em' }}
+      />
+      {taxId === 'ALL' ? <div>All</div> : title}
+      {typeof count === 'undefined' || isNaN(count) ? null : (
+        <NumberComponent
+          label
+          loading={loading}
+          className={f('filter-label')}
+          abbr
+        >
+          {count}
+        </NumberComponent>
+      )}
+    </label>
+  </div>
+);
+TaxonomyOption.propTypes = {
+  checked: T.bool,
+  taxId: T.string.isRequired,
+  count: T.number,
+  title: T.string,
+  isStale: T.bool,
+  onChange: T.func,
+  loading: T.bool,
+};
+
 /*:: type Props = {
   data: {
     loading: boolean,
@@ -46,7 +90,36 @@ class TaxonomyFilter extends PureComponent /*:: <Props> */ {
     goToCustomLocation: T.func.isRequired,
     search: T.object,
   };
+  state = {
+    taxes: [],
+    extraFeature: null,
+  };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!nextProps.data || nextProps.data.loading) return prevState;
+    const {
+      data: { loading, payload },
+      isStale,
+      customLocation: {
+        description: {
+          taxonomy: { accession: acc, isFilter },
+        },
+      },
+    } = nextProps;
+    const taxes = Object.entries(
+      getPayloadOrEmpty(payload, loading, isStale),
+    ).sort(([, { value: a }], [, { value: b }]) => b - a);
+    const accession = isFilter ? acc : null;
+    if (!loading) {
+      taxes.unshift(['ALL', NaN]);
+    }
+    const isMissingInTaxes =
+      accession !== null && !taxes.find(([tax]) => tax === accession);
+    return {
+      taxes,
+      extraFeature: isMissingInTaxes ? accession : prevState.extraFeature,
+    };
+  }
   _handleSelection = ({ target: { value } }) => {
     const { page, cursor, ...search } = this.props.customLocation.search;
     this.props.goToCustomLocation({
@@ -66,7 +139,7 @@ class TaxonomyFilter extends PureComponent /*:: <Props> */ {
   render() {
     if (!this.props.data || this.props.data.loading) return <Loading />;
     const {
-      data: { loading, payload },
+      data: { loading },
       isStale,
       customLocation: {
         description: {
@@ -74,48 +147,68 @@ class TaxonomyFilter extends PureComponent /*:: <Props> */ {
         },
       },
     } = this.props;
-    const taxes = Object.entries(
-      getPayloadOrEmpty(payload, loading, isStale),
-    ).sort(([, { value: a }], [, { value: b }]) => b - a);
     const accession = isFilter ? acc : null;
-    if (!loading) {
-      taxes.unshift(['ALL', NaN]);
-    }
     return (
       <div
         style={{ overflowX: 'hidden' }}
         className={f('list-taxonomy', { stale: isStale })}
       >
-        {taxes.map(([taxId, { value: count, title }]) => (
-          <div key={taxId} className={f('column')}>
-            <label className={f('row', 'filter-button')}>
-              <input
-                type="radio"
-                name="entry_type"
-                value={taxId}
-                disabled={isStale}
-                onChange={this._handleSelection}
-                checked={(!accession && taxId === 'ALL') || accession === taxId}
-                style={{ margin: '0.25em' }}
-              />
-              {taxId === 'ALL' ? <div>All</div> : title}
-              {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberComponent
-                  label
-                  loading={loading}
-                  className={f('filter-label')}
-                  abbr
-                >
-                  {count}
-                </NumberComponent>
-              )}
-            </label>
-          </div>
+        {this.state.extraFeature && (
+          <ExtraTaxonomyOption
+            taxId={this.state.extraFeature}
+            checked={this.state.extraFeature === accession}
+            onChange={this._handleSelection}
+          />
+        )}
+        {this.state.taxes.map(([taxId, { value: count, title }]) => (
+          <TaxonomyOption
+            key={taxId}
+            taxId={taxId}
+            checked={(!accession && taxId === 'ALL') || accession === taxId}
+            loading={loading}
+            count={count}
+            title={title}
+            isStale={isStale}
+            onChange={this._handleSelection}
+          />
         ))}
       </div>
     );
   }
 }
+const _ExtraTaxonomyOption = ({ taxId, checked, data, onChange }) => (
+  <TaxonomyOption
+    taxId={taxId}
+    checked={checked}
+    title={data?.payload?.metadata?.name?.name || taxId}
+    onChange={onChange}
+  />
+);
+_ExtraTaxonomyOption.propTypes = {
+  taxId: T.string.isRequired,
+  checked: T.bool,
+  data: T.shape({
+    payload: T.any,
+  }).isRequired,
+  onChange: T.func,
+};
+const getUrlForMetadata = createSelector(
+  state => state.settings.api,
+  (_, props) => props.taxId,
+  ({ protocol, hostname, port, root }, accession) =>
+    format({
+      protocol,
+      hostname,
+      port,
+      pathname:
+        root +
+        descriptionToPath({
+          main: { key: 'taxonomy' },
+          taxonomy: { db: 'uniprot', accession },
+        }),
+    }),
+);
+const ExtraTaxonomyOption = loadData(getUrlForMetadata)(_ExtraTaxonomyOption);
 
 const getUrlFor = createSelector(
   state => state.settings.api,
