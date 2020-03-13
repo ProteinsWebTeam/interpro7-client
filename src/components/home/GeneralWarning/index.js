@@ -7,10 +7,10 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles);
-
-const GeneralWarning = ({ data }) => {
+const STATUS_OK = 200;
+const GeneralWarning = ({ data, status }) => {
   const message = data?.payload;
-  if ((message || '').trim() === '') return null;
+  if (status !== STATUS_OK || (message || '').trim() === '') return null;
   return (
     <div className={f('callout', 'withicon', 'alert')}>
       <b>{message}</b>
