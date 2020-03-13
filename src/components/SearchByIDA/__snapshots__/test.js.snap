@@ -79,38 +79,77 @@ exports[`<SearchByIDA /> should render 1`] = `
               </span>
             </button>
             <div
-              className="switch tiny"
+              className="options"
             >
-              <label
-                htmlFor="ordered"
+              <div
+                className="switch tiny"
               >
-                <input
-                  checked={false}
-                  className="switch-input"
-                  id="ordered"
-                  onChange={[Function]}
-                  type="checkbox"
-                />
-                 
-                Order of domain matters:
-                 
-                <span
-                  className="switch-paddle"
+                <label
+                  htmlFor="ordered"
                 >
+                  <input
+                    checked={false}
+                    className="switch-input"
+                    id="ordered"
+                    onChange={[Function]}
+                    type="checkbox"
+                  />
+                   
+                  Order of domain matters:
+                   
                   <span
-                    aria-hidden="true"
-                    className="switch-active"
+                    className="switch-paddle"
                   >
-                    Yes
+                    <span
+                      aria-hidden="true"
+                      className="switch-active"
+                    >
+                      Yes
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="switch-inactive"
+                    >
+                      No
+                    </span>
                   </span>
+                </label>
+              </div>
+              <div
+                className="switch tiny disabled"
+              >
+                <label
+                  htmlFor="exact"
+                >
+                  <input
+                    checked={false}
+                    className="switch-input"
+                    disabled={true}
+                    id="exact"
+                    onChange={[Function]}
+                    type="checkbox"
+                  />
+                   
+                  Exact match:
+                   
                   <span
-                    aria-hidden="true"
-                    className="switch-inactive"
+                    className="switch-paddle"
                   >
-                    No
+                    <span
+                      aria-hidden="true"
+                      className="switch-active"
+                    >
+                      Yes
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="switch-inactive"
+                    >
+                      No
+                    </span>
                   </span>
-                </span>
-              </label>
+                </label>
+              </div>
             </div>
           </div>
         </div>
