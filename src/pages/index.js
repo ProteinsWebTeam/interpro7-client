@@ -75,6 +75,10 @@ const NotFound = loadable({
   loader: () =>
     import(/* webpackChunkName: "not-found-page" */ './error/NotFound'),
 });
+const Coronavirus = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "coronavirus-page" */ './Coronavirus'),
+});
 
 const pages = new Map([
   // pages with data from API
@@ -98,6 +102,7 @@ const otherPages = new Map([
   ['help', Help],
   ['contact', Contact],
   ['settings', Settings],
+  ['coronavirus', Coronavirus],
 ]);
 
 const Null = () => null;
