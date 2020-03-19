@@ -1,5 +1,6 @@
-import React, { PureComponent, useEffect } from 'react';
-import T from 'prop-types';
+import React from 'react';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -36,6 +37,10 @@ const ProteomeEntryHierarchy = ({ data }) => {
     </div>
   );
 };
+ProteomeEntryHierarchy.propTypes = {
+  data: dataPropType,
+};
+
 const getUrlFor = createSelector(
   state => state.settings.api,
   (_, props) => props.accession,

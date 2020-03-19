@@ -1,6 +1,8 @@
 import React from 'react';
 import T from 'prop-types';
 
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { format } from 'url';
 import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData';
@@ -33,6 +35,7 @@ const ProteomeFocus = ({ accession, data }) => {
 };
 ProteomeFocus.propTypes = {
   accession: T.string,
+  data: dataPropType,
 };
 
 const getUrlFor = createSelector(

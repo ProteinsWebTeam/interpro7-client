@@ -85,6 +85,7 @@ ProteinEntryHierarchy.propTypes = {
   hrefroot: T.string.isRequired,
   goToCustomLocation: T.func.isRequired,
   ready: T.bool.isRequired,
+  includeChildren: T.bool,
 };
 
 const ProteinEntryHierarchies = ({
@@ -134,6 +135,7 @@ ProteinEntryHierarchies.propTypes = {
     }),
   ),
   goToCustomLocation: T.func,
+  includeChildren: T.bool,
 };
 
 const mapStateToProps = createSelector(

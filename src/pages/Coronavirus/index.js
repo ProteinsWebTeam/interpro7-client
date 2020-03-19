@@ -1,5 +1,4 @@
 import React from 'react';
-import T from 'prop-types';
 
 import { Helmet } from 'react-helmet-async';
 
@@ -13,7 +12,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
-const Coronavirus = ({}) => {
+const Coronavirus = () => {
   return (
     <div className={f('row')}>
       <div className={f('columns')}>
