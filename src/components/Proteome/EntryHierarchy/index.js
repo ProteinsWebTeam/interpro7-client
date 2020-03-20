@@ -64,4 +64,4 @@ const getUrlFor = createSelector(
     });
   },
 );
-export default loadData(getUrlFor)(ProteomeEntryHierarchy);
+export default loadData(getUrlFor)(React.memo(ProteomeEntryHierarchy));

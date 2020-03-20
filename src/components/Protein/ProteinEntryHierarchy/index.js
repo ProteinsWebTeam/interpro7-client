@@ -107,7 +107,7 @@ const ProteinEntryHierarchies = ({
   }, []);
 
   const hierarchies = getUniqueHierarchies(entries.map(e => e.hierarchy));
-  console.log(hierarchies);
+  if (!ready) return null;
   return (
     <div>
       {hierarchies.length
@@ -144,5 +144,5 @@ const mapStateToProps = createSelector(
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(
-  ProteinEntryHierarchies,
+  React.memo(ProteinEntryHierarchies),
 );
