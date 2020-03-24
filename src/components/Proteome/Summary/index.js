@@ -6,7 +6,7 @@ import Accession from 'components/Accession';
 import Species from 'components/Protein/Species';
 import { ProteomeLink } from 'components/ExtLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import SarsCov2 from 'components/Proteome/SARS-CoV-2';
+import SarsCov2 from 'components/Proteome/SarsCov2';
 
 import { foundationPartial } from 'styles/foundation';
 
