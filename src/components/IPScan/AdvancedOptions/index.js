@@ -90,6 +90,9 @@ const labels = new Map([
   ['Panther', 'PANTHER'],
   ['SuperFamily', 'SUPERFAMILY'],
   ['Gene3d', 'CATH-Gene3D'],
+  ['TIGRFAM', 'TIGRFAMs'],
+  ['PrositeProfiles', 'PROSITE profiles'],
+  ['PrositePatterns', 'PROSITE patterns'],
 ]);
 const groupApplications = applications => {
   const mdb1 = [];
