@@ -13,7 +13,7 @@ import local from 'components/Table/views/Grid/style.css';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts, local);
 
-const SarsCov2 = ({ metadata: { accession, lineage } }) => {
+const SarsCov2 = ({ metadata: { lineage } }) => {
   // eslint-disable-next-line no-unused-vars
   const groupBy = accessions => {
     const n = 5;
@@ -46,17 +46,17 @@ const SarsCov2 = ({ metadata: { accession, lineage } }) => {
               </p>
               <ul>
                 <li>
-                  The "Entries" link above lists all InterPro entries which
-                  match any of the SARS-Cov-2 proteins. Selecting the name or
-                  IPR accession from that list will open the entry page with
+                  The &quot;Entries&quot; link above lists all InterPro entries
+                  which match any of the SARS-Cov-2 proteins. Selecting the name
+                  or IPR accession from that list will open the entry page with
                   more information, including any other sequences matched by
                   that entry.
                 </li>
                 <li>
-                  The "Proteins" link above lists all SARS-Cov-2 proteins.
-                  Clicking on the accession in this list will open a protein
-                  viewer, showing the location of all InterPro matches to that
-                  protein.
+                  The &quot;Proteins&quot; link above lists all SARS-Cov-2
+                  proteins. Clicking on the accession in this list will open a
+                  protein viewer, showing the location of all InterPro matches
+                  to that protein.
                 </li>
               </ul>
             </div>
