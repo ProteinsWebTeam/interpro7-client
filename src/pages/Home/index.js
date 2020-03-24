@@ -161,7 +161,8 @@ const Announcement = () => (
         <Link
           to={{
             description: {
-              other: ['coronavirus'],
+              main: { key: 'proteome' },
+              proteome: { db: 'uniprot', accession: 'UP000000354' },
             },
           }}
         >
