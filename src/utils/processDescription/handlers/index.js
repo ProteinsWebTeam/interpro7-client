@@ -164,22 +164,26 @@ const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
 export const setDBs /*: Set<Object> */ = new Set([
   {
     name: 'pfam',
+    dbName: 'Pfam',
     re: /^[Cc][lL][0-9]{4}$/,
     url_template: 'http://pfam.xfam.org/clan/{id}',
   },
   {
     name: 'cdd',
+    dbName: 'CDD',
     re: /^[Cc][lL][0-9]{5}$/,
     url_template:
       'https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={id}',
   },
   {
     name: 'pirsf',
+    dbName: 'PIRSF',
     re: /^[Pp][Ii][Rr][Ss][Ff][0-9]{6}$/,
     url_template: 'https://pir.georgetown.edu/cgi-bin/pf_sf_tree.pl?id={id}',
   },
   {
     name: 'panther',
+    dbName: 'PANTHER',
     re: /^PTHR[0-9]{5}(:SF[0-9]{1,3})?$/i,
     url_template:
       'http://www.pantherdb.org/panther/family.do?clsAccession={id}',
@@ -314,12 +318,7 @@ export const memberDBAccessionHandler /*: Handler */ = handlerConstructor({
     value: value => value.toUpperCase(),
   },
   match: {
-    value(
-      current,
-      {
-        entry: { db, memberDB: mdb },
-      },
-    ) {
+    value(current, { entry: { db, memberDB: mdb } }) {
       const _mdb = db === 'InterPro' ? mdb : db;
       const _current = this.cleanUp(current);
       for (const { name, re } of memberDB) {
