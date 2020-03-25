@@ -28,7 +28,7 @@ const FileExporter = (
     label,
     className,
     focused = null,
-  } /*: {description: Object, search: Object, count: number, fileType: string, primary: string, secondary: string, label?: string, className?: string} */,
+  } /*: {description: Object, search: Object, count: number, fileType: string, primary: string, secondary: string, label?: string, className?: string, focused?: string} */,
 ) => {
   const customLocationDescription = {
     ...description,
@@ -77,6 +77,7 @@ FileExporter.propTypes = {
   secondary: T.string,
   label: T.string,
   className: T.string,
+  focused: T.string,
 };
 
 export default FileExporter;
