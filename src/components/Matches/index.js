@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -26,7 +26,10 @@ import LazyImage from 'components/LazyImage';
 import loadWebComponent from 'utils/load-web-component';
 import { toPublicAPI } from 'utils/url';
 
-import { getReversedUrl } from 'higherOrder/loadData/defaults';
+import {
+  getReversedUrl,
+  includeTaxonFocusedOnURL,
+} from 'higherOrder/loadData/defaults';
 
 import { searchSelector } from 'reducers/custom-location/search';
 import { descriptionSelector } from 'reducers/custom-location/description';
@@ -245,6 +248,7 @@ const Matches = (
     props: Array<any>
 } */,
 ) => {
+  const [focused, setFocused] = useState(null);
   useEffect(() => {
     loadWebComponent(() =>
       import(
@@ -287,6 +291,7 @@ const Matches = (
       previousAPICall={previousAPICall}
       currentAPICall={currentAPICall}
       status={status}
+      onFocusChanged={setFocused}
     >
       <PageSizeSelector />
       <SearchBox loading={isStale} />
@@ -302,6 +307,7 @@ const Matches = (
                   fileType="fasta"
                   primary={primary}
                   secondary={secondary}
+                  focused={focused}
                 />
               </>
             )}
@@ -312,6 +318,7 @@ const Matches = (
               fileType="tsv"
               primary={primary}
               secondary={secondary}
+              focused={focused}
             />
             <FileExporter
               description={description}
@@ -320,9 +327,15 @@ const Matches = (
               fileType="json"
               primary={primary}
               secondary={secondary}
+              focused={focused}
             />
             <li className={f('exporter-link')}>
-              <Link target="_blank" href={toPublicAPI(getReversedUrl(state))}>
+              <Link
+                target="_blank"
+                href={toPublicAPI(
+                  includeTaxonFocusedOnURL(getReversedUrl(state), focused),
+                )}
+              >
                 <span
                   className={f('icon', 'icon-common', 'icon-export')}
                   data-icon="&#xf233;"

@@ -12,6 +12,7 @@ import { cloneDeep } from 'lodash-es';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { includeTaxonFocusedOnURL } from 'higherOrder/loadData/defaults';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
@@ -483,18 +484,18 @@ class List extends PureComponent /*:: <Props,State> */ {
       notFound = false;
       _status = HTTP_OK;
     }
-    let urlToExport = url;
-    const hasTaxIdRegex = /taxonomy\/uniprot\/\d+/gi;
-    if (
-      this.state.focused &&
-      +this.state.focused !== 1 &&
-      !url.match(hasTaxIdRegex)
-    ) {
-      urlToExport = urlToExport.replace(
-        /taxonomy\/uniprot\//,
-        `/taxonomy/uniprot/${this.state.focused}/`,
-      );
-    }
+    const urlToExport = includeTaxonFocusedOnURL(url);
+    // const hasTaxIdRegex = /taxonomy\/uniprot\/\d+/gi;
+    // if (
+    //   this.state.focused &&
+    //   +this.state.focused !== 1 &&
+    //   !url.match(hasTaxIdRegex)
+    // ) {
+    //   urlToExport = urlToExport.replace(
+    //     /taxonomy\/uniprot\//,
+    //     `/taxonomy/uniprot/${this.state.focused}/`,
+    //   );
+    // }
     return (
       <div className={f('row')}>
         <MemberDBSelector
