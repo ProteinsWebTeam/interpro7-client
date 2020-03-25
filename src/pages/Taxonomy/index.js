@@ -406,11 +406,17 @@ AllTaxDownload.propTypes = {
   accessionSearch: {
     metadata: Object,
   },
-
-};*/
-class List extends PureComponent /*:: <Props> */ {
+};
+  type State = {
+    focused: ?string,
+  }
+*/
+class List extends PureComponent /*:: <Props,State> */ {
   /*:: _payload: Object; */
   static propTypes = propTypes;
+  state = {
+    focused: null,
+  };
 
   render() {
     const {
@@ -468,6 +474,14 @@ class List extends PureComponent /*:: <Props> */ {
       notFound = false;
       _status = HTTP_OK;
     }
+    let urlToExport = url;
+    const hasTaxIdRegex = /taxonomy\/uniprot\/\d+/gi;
+    if (this.state.focused && !url.match(hasTaxIdRegex)) {
+      urlToExport = urlToExport.replace(
+        /taxonomy\/uniprot\//,
+        `/taxonomy/uniprot/${this.state.focused}/`,
+      );
+    }
     return (
       <div className={f('row')}>
         <MemberDBSelector
@@ -502,6 +516,7 @@ class List extends PureComponent /*:: <Props> */ {
             nextAPICall={_payload.next}
             previousAPICall={_payload.previous}
             currentAPICall={url}
+            onFocusChanged={focused => this.setState({ focused })}
           >
             <Exporter>
               <ul>
@@ -528,7 +543,7 @@ class List extends PureComponent /*:: <Props> */ {
                   <div>TSV</div>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <Link target="_blank" href={url}>
+                  <Link target="_blank" href={urlToExport}>
                     <span
                       className={f('icon', 'icon-common', 'icon-export')}
                       data-icon="&#xf233;"

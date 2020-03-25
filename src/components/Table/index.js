@@ -133,6 +133,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       withTree,
       rowClassName,
       showTableIcon,
+      onFocusChanged,
     } = this.props;
 
     const _query = query || {};
@@ -254,6 +255,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   withTree={withTree}
                   withGrid={!!card}
                   rowClassName={rowClassName}
+                  onFocusChanged={onFocusChanged}
                 />
               </div>
               <Switch
