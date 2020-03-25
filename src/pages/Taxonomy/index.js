@@ -8,6 +8,7 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import { cloneDeep } from 'lodash-es';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -366,22 +367,30 @@ const AllTaxDownload = (
     description,
     search,
     count,
+    focused,
     fileType,
-  } /*: {description: Object, search: Object, count: number, fileType: string} */,
-) => (
-  <File
-    fileType={fileType}
-    name={`taxon.${fileType}`}
-    count={count}
-    customLocationDescription={description}
-    search={{ ...search, extra_fields: 'counters' }}
-    endpoint={'taxonomy'}
-  />
-);
+  } /*: {description: Object, search: Object, count: number, focused: ?string, fileType: string} */,
+) => {
+  const newDescription = cloneDeep(description);
+  if (focused) {
+    newDescription.taxonomy.accession = focused;
+  }
+  return (
+    <File
+      fileType={fileType}
+      name={`taxon.${fileType}`}
+      count={count}
+      customLocationDescription={newDescription}
+      search={{ ...search, extra_fields: 'counters' }}
+      endpoint={'taxonomy'}
+    />
+  );
+};
 AllTaxDownload.propTypes = {
   description: T.object,
   search: T.object,
   count: T.number,
+  focused: T.string,
   fileType: T.string,
 };
 
@@ -476,7 +485,11 @@ class List extends PureComponent /*:: <Props,State> */ {
     }
     let urlToExport = url;
     const hasTaxIdRegex = /taxonomy\/uniprot\/\d+/gi;
-    if (this.state.focused && !url.match(hasTaxIdRegex)) {
+    if (
+      this.state.focused &&
+      +this.state.focused !== 1 &&
+      !url.match(hasTaxIdRegex)
+    ) {
       urlToExport = urlToExport.replace(
         /taxonomy\/uniprot\//,
         `/taxonomy/uniprot/${this.state.focused}/`,
@@ -526,6 +539,7 @@ class List extends PureComponent /*:: <Props,State> */ {
                       description={description}
                       search={search}
                       count={size}
+                      focused={this.state.focused}
                       fileType="json"
                     />
                   </div>
@@ -537,6 +551,7 @@ class List extends PureComponent /*:: <Props,State> */ {
                       description={description}
                       search={search}
                       count={size}
+                      focused={this.state.focused}
                       fileType="tsv"
                     />
                   </div>

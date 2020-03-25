@@ -178,6 +178,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
     showTreeToast: T.bool.isRequired,
+    onFocusChanged: T.func,
   };
 
   constructor(props /*: TreeViewProps */) {
