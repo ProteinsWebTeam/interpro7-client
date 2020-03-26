@@ -234,47 +234,55 @@ const SetCard = (
     search,
     entryDB,
   } /*: {data: Object, search: string, entryDB: string} */,
-) => (
-  <>
-    <div className={f('card-header')}>
-      <div className={f('card-title')}>
-        <h6>
-          <Link
-            to={{
-              description: {
-                main: { key: 'set' },
-                set: {
-                  db: data.metadata.source_database,
-                  accession: `${data.metadata.accession}`,
+) => {
+  const preferredName =
+    data.metadata.source_database === 'pfam' &&
+    data.extra_fields &&
+    data.extra_fields.description
+      ? data.extra_fields.description
+      : data.metadata.name;
+  return (
+    <>
+      <div className={f('card-header')}>
+        <div className={f('card-title')}>
+          <h6>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'set' },
+                  set: {
+                    db: data.metadata.source_database,
+                    accession: `${data.metadata.accession}`,
+                  },
                 },
-              },
-            }}
-          >
-            <HighlightedText
-              text={data.metadata.name}
-              textToHighlight={search}
-            />
-          </Link>
-        </h6>
+              }}
+            >
+              <HighlightedText text={preferredName} textToHighlight={search} />
+            </Link>
+          </h6>
+        </div>
       </div>
-    </div>
 
-    <SummaryCounterSet
-      entryDB={entryDB}
-      metadata={data.metadata}
-      counters={(data && data.extra_fields && data.extra_fields.counters) || {}}
-    />
+      <SummaryCounterSet
+        entryDB={entryDB}
+        metadata={data.metadata}
+        counters={
+          (data && data.extra_fields && data.extra_fields.counters) || {}
+        }
+      />
 
-    <div className={f('card-footer')}>
-      <div>
-        <HighlightedText
-          text={data.metadata.accession || ''}
-          textToHighlight={search}
-        />
+      <div className={f('card-footer')}>
+        <div>
+          <HighlightedText
+            text={data.metadata.accession || ''}
+            textToHighlight={search}
+          />
+        </div>
       </div>
-    </div>
-  </>
-);
+    </>
+  );
+};
+
 SetCard.propTypes = {
   data: dataPropType,
   search: T.string,
@@ -486,8 +494,10 @@ class List extends PureComponent /*:: <ListProps> */ {
                 extra,
               ) => {
                 const preferredName =
-                  (source_database === 'pfam' && extra && extra.description) ||
-                  name;
+                  // eslint-disable-next-line camelcase
+                  source_database === 'pfam' && extra && extra.description
+                    ? extra.description
+                    : name;
                 return (
                   <Link
                     to={customLocation => ({

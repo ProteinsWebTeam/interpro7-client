@@ -19,6 +19,7 @@ const GeneralWarning = ({ data, status }) => {
 };
 GeneralWarning.propTypes = {
   data: T.object,
+  status: T.number,
 };
 
 export default loadData({

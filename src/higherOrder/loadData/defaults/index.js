@@ -69,6 +69,9 @@ export const getUrl = createSelector(
             case 'taxonomy':
               _search.extra_fields = 'lineage,counters';
               break;
+            case 'set':
+              _search.extra_fields = 'counters,description';
+              break;
             default:
               _search.extra_fields = 'counters';
               break;
