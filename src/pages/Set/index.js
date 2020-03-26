@@ -489,15 +489,15 @@ class List extends PureComponent /*:: <ListProps> */ {
                 {
                   accession,
                   // eslint-disable-next-line camelcase
-                  source_database,
+                  source_database: db,
                 } /*: {accession: string, source_database: string} */,
                 extra,
               ) => {
                 const preferredName =
-                  // eslint-disable-next-line camelcase
-                  source_database === 'pfam' && extra && extra.description
+                  db === 'pfam' && extra && extra.description
                     ? extra.description
                     : name;
+
                 return (
                   <Link
                     to={customLocation => ({
@@ -505,7 +505,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                       description: {
                         main: { key: 'set' },
                         set: {
-                          db: source_database,
+                          db,
                           accession,
                         },
                       },

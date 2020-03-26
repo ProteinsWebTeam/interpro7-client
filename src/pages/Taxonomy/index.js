@@ -8,9 +8,11 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import { cloneDeep } from 'lodash-es';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { includeTaxonFocusedOnURL } from 'higherOrder/loadData/defaults';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
@@ -366,22 +368,30 @@ const AllTaxDownload = (
     description,
     search,
     count,
+    focused,
     fileType,
-  } /*: {description: Object, search: Object, count: number, fileType: string} */,
-) => (
-  <File
-    fileType={fileType}
-    name={`taxon.${fileType}`}
-    count={count}
-    customLocationDescription={description}
-    search={{ ...search, extra_fields: 'counters' }}
-    endpoint={'taxonomy'}
-  />
-);
+  } /*: {description: Object, search: Object, count: number, focused: ?string, fileType: string} */,
+) => {
+  const newDescription = cloneDeep(description);
+  if (focused) {
+    newDescription.taxonomy.accession = focused;
+  }
+  return (
+    <File
+      fileType={fileType}
+      name={`taxon.${fileType}`}
+      count={count}
+      customLocationDescription={newDescription}
+      search={{ ...search, extra_fields: 'counters' }}
+      endpoint={'taxonomy'}
+    />
+  );
+};
 AllTaxDownload.propTypes = {
   description: T.object,
   search: T.object,
   count: T.number,
+  focused: T.string,
   fileType: T.string,
 };
 
@@ -406,11 +416,17 @@ AllTaxDownload.propTypes = {
   accessionSearch: {
     metadata: Object,
   },
-
-};*/
-class List extends PureComponent /*:: <Props> */ {
+};
+  type State = {
+    focused: ?string,
+  }
+*/
+class List extends PureComponent /*:: <Props,State> */ {
   /*:: _payload: Object; */
   static propTypes = propTypes;
+  state = {
+    focused: null,
+  };
 
   render() {
     const {
@@ -468,6 +484,18 @@ class List extends PureComponent /*:: <Props> */ {
       notFound = false;
       _status = HTTP_OK;
     }
+    const urlToExport = includeTaxonFocusedOnURL(url);
+    // const hasTaxIdRegex = /taxonomy\/uniprot\/\d+/gi;
+    // if (
+    //   this.state.focused &&
+    //   +this.state.focused !== 1 &&
+    //   !url.match(hasTaxIdRegex)
+    // ) {
+    //   urlToExport = urlToExport.replace(
+    //     /taxonomy\/uniprot\//,
+    //     `/taxonomy/uniprot/${this.state.focused}/`,
+    //   );
+    // }
     return (
       <div className={f('row')}>
         <MemberDBSelector
@@ -502,6 +530,7 @@ class List extends PureComponent /*:: <Props> */ {
             nextAPICall={_payload.next}
             previousAPICall={_payload.previous}
             currentAPICall={url}
+            onFocusChanged={focused => this.setState({ focused })}
           >
             <Exporter>
               <ul>
@@ -511,6 +540,7 @@ class List extends PureComponent /*:: <Props> */ {
                       description={description}
                       search={search}
                       count={size}
+                      focused={this.state.focused}
                       fileType="json"
                     />
                   </div>
@@ -522,13 +552,14 @@ class List extends PureComponent /*:: <Props> */ {
                       description={description}
                       search={search}
                       count={size}
+                      focused={this.state.focused}
                       fileType="tsv"
                     />
                   </div>
                   <div>TSV</div>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <Link target="_blank" href={url}>
+                  <Link target="_blank" href={urlToExport}>
                     <span
                       className={f('icon', 'icon-common', 'icon-export')}
                       data-icon="&#xf233;"

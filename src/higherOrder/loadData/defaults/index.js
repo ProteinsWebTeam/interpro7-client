@@ -165,6 +165,13 @@ export const getReversedUrl = createSelector(
     return url;
   },
 );
+export const includeTaxonFocusedOnURL = (url, focused) => {
+  const hasTaxIdRegex = /taxonomy\/uniprot\/\d+/gi;
+  if (focused && +focused !== 1 && !url.match(hasTaxIdRegex)) {
+    return url.replace(/taxonomy\/uniprot\//, `/taxonomy/uniprot/${focused}/`);
+  }
+  return url;
+};
 
 export const getUrlForApi = (...parameters) =>
   getUrl('api')(...parameters)

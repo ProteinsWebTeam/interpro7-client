@@ -178,6 +178,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
     showTreeToast: T.bool.isRequired,
+    onFocusChanged: T.func,
   };
 
   constructor(props /*: TreeViewProps */) {
@@ -257,7 +258,12 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   };
 
   _handleNewFocus = taxID => {
-    if (taxID) this.setState({ focused: taxID });
+    if (taxID) {
+      this.setState({ focused: taxID });
+      if (this.props.onFocusChanged) {
+        this.props.onFocusChanged(taxID);
+      }
+    }
   };
   _handleLabelClick = taxID => {
     this.props.goToCustomLocation({
