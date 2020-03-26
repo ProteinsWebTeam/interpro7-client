@@ -2,7 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import Tree from '.';
+import { Tree } from '.';
 
 const renderer = new ShallowRenderer();
 

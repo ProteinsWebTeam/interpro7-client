@@ -134,9 +134,8 @@ exports[`<SummaryTaxonomy /> should render 1`] = `
     >
       [Function]
     </OptMemberDBSelector>
-    <Tree
+    <Memo(Connect(Tree))
       changeFocus={[Function]}
-      initialFisheye={true}
     />
   </div>
 </div>
