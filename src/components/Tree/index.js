@@ -72,6 +72,7 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
       enableZooming: true,
       useCtrlToZoom: true,
       searchTerm: search,
+      highlightColor: '#094EEE',
       // shouldCorrectNodesOutside: true,
     });
 
