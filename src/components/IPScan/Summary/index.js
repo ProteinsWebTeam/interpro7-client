@@ -295,59 +295,59 @@ const SummaryIPScanJob = ({
   return (
     <div className={f('sections')}>
       <section>
-        <div className={f('row')}>
-          <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-            <Title metadata={metadata} mainType="protein" />
-            <table className={f('light', 'table-sum', 'margin-bottom-none')}>
-              <tbody>
-                {title && (
-                  <tr>
-                    <td>Title</td>
-                    <td>{title}</td>
-                  </tr>
-                )}
-                <tr>
-                  <td>
-                    Job ID{' '}
-                    <Tooltip title={'Case sensitive'}>
-                      <span
-                        className={f('small', 'icon', 'icon-common')}
-                        data-icon="&#xf129;"
-                        aria-label={'Case sensitive'}
-                      />
-                    </Tooltip>
-                  </td>
-                  <td style={{ display: 'flex' }}>
-                    <Accession accession={accession} title="Job ID" />{' '}
-                    <CopyToClipboard
-                      textToCopy={getIProScanURL(accession)}
-                      tooltipText="CopyURL"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Length</td>
-                  <td>
-                    <Length metadata={metadata} />
-                  </td>
-                </tr>
-                {localID && (
-                  <tr>
-                    <td>Action</td>
-                    <td>
-                      <Actions localID={localID} />
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td>Status</td>
-                  <td>
-                    <StatusTooltip status={status} /> {status}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <Title metadata={metadata} mainType="protein" />
+        <table className={f('light', 'table-sum', 'margin-bottom-none')}>
+          <tbody>
+            {title && (
+              <tr>
+                <td>Title</td>
+                <td>{title}</td>
+              </tr>
+            )}
+            <tr>
+              <td>
+                Job ID{' '}
+                <Tooltip title={'Case sensitive'}>
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                    aria-label={'Case sensitive'}
+                  />
+                </Tooltip>
+              </td>
+              <td style={{ display: 'flex' }}>
+                <Accession accession={accession} title="Job ID" />{' '}
+                <CopyToClipboard
+                  textToCopy={getIProScanURL(accession)}
+                  tooltipText="CopyURL"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Length</td>
+              <td>
+                <Length metadata={metadata} />
+              </td>
+            </tr>
+            {localID && (
+              <tr>
+                <td>Action</td>
+                <td>
+                  <Actions localID={localID} />
+                </td>
+              </tr>
+            )}
+            <tr>
+              <td>Status</td>
+              <td>
+                <StatusTooltip status={status} /> {status}
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
+        <div className={'row'}>
+          <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
             <h5>Protein family membership</h5>
             {familyHierarchyData.length ? (
               <ProteinEntryHierarchy entries={familyHierarchyData} />
@@ -355,10 +355,13 @@ const SummaryIPScanJob = ({
               <p className={f('margin-bottom-medium')}>None predicted</p>
             )}
           </div>
-
           <div className={f('medium-3', 'columns', 'margin-bottom-large')}>
             {status === 'finished' && data?.url && (
-              <Exporter includeSettings={false} left={false}>
+              <Exporter
+                includeSettings={false}
+                left={false}
+                backgroundColor={'#2daec1'}
+              >
                 <ul>
                   {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
                     type => (
@@ -379,6 +382,7 @@ const SummaryIPScanJob = ({
           </div>
         </div>
       </section>
+
       {status === 'finished' && (
         <>
           <DomainOnProteinWithoutMergedData
