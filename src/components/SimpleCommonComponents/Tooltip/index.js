@@ -29,6 +29,8 @@ const _Tooltip = (
       onShow={() => hideAll({ duration: 0 })}
       distance={distance}
       appendTo={document.body}
+      allowHTML={true}
+      className={'tippy-box'}
     >
       <div {...rest} style={{ display: 'inline' }}>
         {children}
