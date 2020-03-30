@@ -9,4 +9,7 @@
   & .help-col.removed {
     display: none;
   }
+  & .hollow {
+    margin-left: 0.5em;
+  }
 }
