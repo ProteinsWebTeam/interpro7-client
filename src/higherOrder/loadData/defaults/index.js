@@ -90,6 +90,9 @@ export const getUrl = createSelector(
               break;
           }
         }
+        if (hash === 'tree' && _search.search !== undefined) {
+          delete _search.search;
+        }
 
         // subpages will get the reverseURL, so its base dataLoader shold only get the accession payload
         const _description =
@@ -127,14 +130,21 @@ export const getReversedUrl = createSelector(
   state => state.settings.navigation.pageSize,
   state => state.customLocation.description,
   state => state.customLocation.search,
+  state => state.customLocation.hash,
   (
     { protocol, hostname, port, root },
     settingsPageSize,
     description,
     search,
+    hash,
   ) => {
     // copy of description, to modify it after
     const newDesc = {};
+    const _search = { ...search };
+    if (hash === 'tree' && _search.search !== undefined) {
+      delete _search.search;
+    }
+
     let newMain;
     for (const [key, value] of Object.entries(description)) {
       newDesc[key] = key === 'other' ? [...value] : { ...value };
@@ -151,7 +161,7 @@ export const getReversedUrl = createSelector(
       port,
       pathname: root + descriptionToPath(newDesc),
       query: {
-        ...search,
+        ..._search,
         extra_fields: 'counters',
         page_size: search.page_size || settingsPageSize,
       },
