@@ -11,653 +11,307 @@ exports[`<Publication /> should render 1`] = `
   <div
     className="flex-column"
   >
-    <div
-      className="flex-card"
-    >
-      <div
-        className="card-image image-nar-default"
-      >
-        <div
-          className="card-tag tag-publi"
-        >
-          Publication
-        </div>
-      </div>
-      <div
-        className="card-content"
-      >
-        <div
-          className="card-title"
-        >
-          <h4>
-            <Memo(Connect(Link))
-              href="https://doi.org/10.1093/nar/gky1100"
-              target="_blank"
-            >
-              InterPro in 2019: improving coverage, classification and access to protein sequence annotations
-            </Memo(Connect(Link))>
-          </h4>
-        </div>
-        <div
-          className="card-info"
-        >
-          <div
-            className="card-info-author"
-          >
-            <DescriptionReadMore
-              minNumberOfCharToShow={300}
-              text="<span data-icon=\\"&#xf007;\\" class=\\"icon icon-common\\"></span> Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt,
-                    Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown,
-                  Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough,
-                  David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez,
-                  Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu
-                  Mi, Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo,
-                  Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien
-                  Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings,
-                  Nicole Redaschi, Lorna J Richardson, Catherine Rivoire,
-                  Gustavo A Salazar, Amaia Sangrador-Vegas, Christian J A
-                  Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul
-                  D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn"
-            />
-          </div>
-          <div
-            className="card-info-source"
-          >
-            <span
-              className="icon icon-common"
-              data-icon=""
-            />
-             
-            Nucleic Acids Research, Jan 2019, (doi: 10.1093/nar/gky1100)
-          </div>
-        </div>
-      </div>
-      <div
-        className="card-more"
-      >
-        <Memo(Connect(Link))
-          href="https://doi.org/10.1093/nar/gky1100"
-          target="_blank"
-        >
-          <div
-            className="button-more icon icon-common icon-right"
-            data-icon=""
-          >
-            Read more
-          </div>
-        </Memo(Connect(Link))>
-      </div>
-    </div>
-    <div
-      className="flex-card"
-    >
-      <div
-        className="card-image image-tuto-beyond"
-      >
-        <div
-          className="card-tag tag-publi"
-        >
-          Publication
-        </div>
-      </div>
-      <div
-        className="card-content"
-      >
-        <div
-          className="card-title"
-        >
-          <h4>
-            <Memo(Connect(Link))
-              href="http://nar.oxfordjournals.org/content/45/D1/D190"
-              target="_blank"
-            >
-              InterPro in 2017 — beyond protein family and domain annotations
-            </Memo(Connect(Link))>
-          </h4>
-        </div>
-        <div
-          className="card-info"
-        >
-          <div
-            className="card-info-author"
-          >
-            <DescriptionReadMore
-              minNumberOfCharToShow={300}
-              text="<span data-icon=\\"&#xf007;\\" class=\\"icon icon-common\\"></span> Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt, Alex Bateman, Peer Bork, Alan J. Bridge, Hsin-Yu Chang, Zsuzsanna Dosztányi, Sara El-Gebali, Matthew Fraser, Julian Gough, David Haft, Gemma L. Holliday, Hongzhan Huang, Xiaosong Huang, Ivica Letunic, Rodrigo Lopez, Shennan Lu, Aron Marchler-Bauer, Huaiyu Mi, Jaina Mistry, Darren A. Natale, Marco Necci, Gift Nuka, Christine A. Orengo, Youngmi Park, Sebastien Pesseat, Damiano Piovesan, Simon C. Potter, Neil D. Rawlings, Nicole Redaschi, Lorna Richardson, Catherine Rivoire, Amaia Sangrador-Vegas, Christian Sigrist, Ian Sillitoe, Ben Smithers, Silvano Squizzato, Granger Sutton, Narmada Thanki, Paul D Thomas, Silvio C. E. Tosatto, Cathy H. Wu, Ioannis Xenarios, Lai-Su Yeh, Siew-Yit Youngand Alex L. Mitchell"
-            />
-          </div>
-          <div
-            className="card-info-source"
-          >
-            <span
-              className="icon icon-common"
-              data-icon=""
-            />
-             
-            Nucleic Acids Research, Jan 2017, (doi: 10.1093/nar/gkw1107)
-          </div>
-        </div>
-      </div>
-      <div
-        className="card-more"
-      >
-        <Memo(Connect(Link))
-          href="http://nar.oxfordjournals.org/content/45/D1/D190"
-          target="_blank"
-        >
-          <div
-            className="button-more icon icon-common icon-right"
-            data-icon=""
-          >
-            Read more
-          </div>
-        </Memo(Connect(Link))>
-      </div>
-    </div>
-    <div
-      className="flex-card"
-    >
-      <div
-        className="card-image image-tuto-go"
-      >
-        <div
-          className="card-tag tag-publi"
-        >
-          Publication
-        </div>
-      </div>
-      <div
-        className="card-content"
-      >
-        <div
-          className="card-title"
-        >
-          <h4>
-            <Memo(Connect(Link))
-              href="http://database.oxfordjournals.org/content/2016/baw027.full"
-              target="_blank"
-            >
-              GO annotation in InterPro: why stability does not indicate accuracy in a sea of changing annotation
-            </Memo(Connect(Link))>
-          </h4>
-        </div>
-        <div
-          className="card-info"
-        >
-          <div
-            className="card-info-author"
-          >
-            <DescriptionReadMore
-              minNumberOfCharToShow={300}
-              text="<span data-icon=\\"&#xf007;\\" class=\\"icon icon-common\\"></span> Sangrador-Vegas A, Mitchell AL, Chang HY, Yong SY and Finn RD"
-            />
-          </div>
-          <div
-            className="card-info-source"
-          >
-            <span
-              className="icon icon-common"
-              data-icon=""
-            />
-             
-            Database, 2016, 1–8, (doi: 10.1093/database/baw027)
-          </div>
-        </div>
-      </div>
-      <div
-        className="card-more"
-      >
-        <Memo(Connect(Link))
-          href="http://database.oxfordjournals.org/content/2016/baw027.full"
-          target="_blank"
-        >
-          <div
-            className="button-more icon icon-common icon-right"
-            data-icon=""
-          >
-            Read more
-          </div>
-        </Memo(Connect(Link))>
-      </div>
-    </div>
-    <div
-      className="flex-card"
-    >
-      <div
-        className="card-image image-tuto-ipscan"
-      >
-        <div
-          className="card-tag tag-publi"
-        >
-          Publication
-        </div>
-      </div>
-      <div
-        className="card-content"
-      >
-        <div
-          className="card-title"
-        >
-          <h4>
-            <Memo(Connect(Link))
-              href="http://bioinformatics.oxfordjournals.org/content/early/2014/01/29/bioinformatics.btu031.full"
-              target="_blank"
-            >
-              InterProScan 5: genome-scale protein function classification
-            </Memo(Connect(Link))>
-          </h4>
-        </div>
-        <div
-          className="card-info"
-        >
-          <div
-            className="card-info-author"
-          >
-            <DescriptionReadMore
-              minNumberOfCharToShow={300}
-              text="<span data-icon=\\"&#xf007;\\" class=\\"icon icon-common\\"></span> Philip Jones, David Binns, Hsin-Yu Chang, Matthew Fraser, Weizhong Li, Craig McAnulla, Hamish McWilliam, John Maslen, Alex Mitchell, Gift Nuka, Sebastien Pesseat, Antony F. Quinn, Amaia Sangrador-Vegas, Maxim Scheremetjew, Siew-Yit Yong, Rodrigo Lopez, and Sarah Hunter"
-            />
-          </div>
-          <div
-            className="card-info-source"
-          >
-            <span
-              className="icon icon-common"
-              data-icon=""
-            />
-             
-            Bioinformatics, Jan 2014 (doi:10.1093/bioinformatics/btu031)
-          </div>
-        </div>
-      </div>
-      <div
-        className="card-more"
-      >
-        <Memo(Connect(Link))
-          href="http://bioinformatics.oxfordjournals.org/content/early/2014/01/29/bioinformatics.btu031.full"
-          target="_blank"
-        >
-          <div
-            className="button-more icon icon-common icon-right"
-            data-icon=""
-          >
-            Read more
-          </div>
-        </Memo(Connect(Link))>
-      </div>
-    </div>
+    <InterPro2019 />
+    <Publication
+      authors="Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt,
+                      Alex Bateman, Peer Bork, Alan J. Bridge, Hsin-Yu Chang,
+                      Zsuzsanna Dosztányi, Sara El-Gebali, Matthew Fraser,
+                      Julian Gough, David Haft, Gemma L. Holliday, Hongzhan Huang,
+                      Xiaosong Huang, Ivica Letunic, Rodrigo Lopez, Shennan Lu,
+                      Aron Marchler-Bauer, Huaiyu Mi, Jaina Mistry, Darren A. Natale,
+                      Marco Necci, Gift Nuka, Christine A. Orengo, Youngmi Park,
+                      Sebastien Pesseat, Damiano Piovesan, Simon C. Potter,
+                      Neil D. Rawlings, Nicole Redaschi, Lorna Richardson,
+                      Catherine Rivoire, Amaia Sangrador-Vegas, Christian Sigrist,
+                      Ian Sillitoe, Ben Smithers, Silvano Squizzato, Granger Sutton,
+                      Narmada Thanki, Paul D Thomas, Silvio C. E. Tosatto, Cathy H. Wu,
+                      Ioannis Xenarios, Lai-Su Yeh, Siew-Yit Youngand Alex L. Mitchell"
+      imageClass="image-tuto-beyond"
+      source="Nucleic Acids Research, Jan 2017, (doi: 10.1093/nar/gkw1107)"
+      title="InterPro in 2017 — beyond protein family and domain annotations"
+      url="http://nar.oxfordjournals.org/content/45/D1/D190"
+    />
+    <Publication
+      authors="Sangrador-Vegas A, Mitchell AL, Chang HY, Yong SY and Finn RD"
+      imageClass="image-tuto-go"
+      source="Database, 2016, 1–8, (doi: 10.1093/database/baw027)"
+      title="GO annotation in InterPro: why stability does not indicate
+                    accuracy in a sea of changing annotation"
+      url="http://database.oxfordjournals.org/content/2016/baw027.full"
+    />
   </div>
+  <InterProScan2014 />
   <details
     className="option-style"
   >
     <summary>
       All previous InterPro publications
     </summary>
-    <p
-      className="margin-top-large"
-    >
-      <Memo(Connect(Link))
-        className="ext"
-        href="//nar.oxfordjournals.org/content/43/D1/D213"
-        target="_blank"
-      >
-        The InterPro protein families database: the classification resource after 15 years
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Alex Mitchell, Hsin-Yu Chang, Louise Daugherty, Matthew Fraser, Sarah Hunter, Rodrigo Lopez, Craig McAnulla, Conor McMenamin, Gift Nuka, Sebastien Pesseat, Amaia Sangrador-Vegas, Maxim Scheremetjew, Claudia Rato, Siew-Yit Yong, Alex Bateman, Marco Punta, Teresa K. Attwood, Christian J.A. Sigrist, Nicole Redaschi, Catherine Rivoire, Ioannis Xenarios, Daniel Kahn, Dominique Guyot, Peer Bork, Ivica Letunic, Julian Gough, Matt Oates, Daniel Haft, Hongzhan Huang, Darren A. Natale, Cathy H. Wu, Christine Orengo, Ian Sillitoe, Huaiyu Mi, Paul D. Thomas and Robert D. Finn.
-        </span>
-        <span>
-          <i>
-            Nucleic Acids Research
-          </i>
-          , Jan 2015, (doi: 10.1093/nar/gku1243)
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//nar.oxfordjournals.org/content/40/D1/D306.full"
-        target="_blank"
-      >
-        InterPro in 2011: new developments in the family and domain prediction database
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Sarah Hunter; Philip Jones; Alex Mitchell; Rolf Apweiler; Teresa K. Attwood; Alex Bateman; Thomas Bernard; David Binns; Peer Bork; Sarah Burge; Edouard de Castro; Penny Coggill; Matthew Corbett; Ujjwal Das; Louise Daugherty; Lauranne Duquenne; Robert D. Finn; Matthew Fraser; Julian Gough; Daniel Haft; Nicolas Hulo; Daniel Kahn; Elizabeth Kelly; Ivica Letunic; David Lonsdale; Rodrigo Lopez; Martin Madera; John Maslen; Craig McAnulla; Jennifer McDowall; Conor McMenamin; Huaiyu Mi; Prudence Mutowo-Muellenet; Nicola Mulder; Darren Natale; Christine Orengo; Sebastien Pesseat; Marco Punta; Antony F. Quinn; Catherine Rivoire; Amaia Sangrador-Vegas; Jeremy D. Selengut; Christian J. A. Sigrist; Maxim Scheremetjew; John Tate; Manjulapramila Thimmajanarthanan; Paul D. Thomas; Cathy H. Wu; Corin Yeats; Siew-Yit Yong.
-        </span>
-        <span>
-          <i>
-            Nucleic Acids Research
-          </i>
-          , 2012, Vol. 40, Database issue (doi: 10.1093/nar/gkr948)
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//database.oxfordjournals.org/content/2012/bar068.full"
-        target="_blank"
-      >
-        Manual GO annotation of predictive protein signatures: the InterPro approach to GO curation
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Burge, S., Kelly, E., Lonsdale, D., Mutowo-Muellenet, P., McAnulla, C., Mitchell, A., Sangrador-Vegas, A., Yong, S., Mulder, N., Hunter, S.
-        </span>
-        <span>
-          <i>
-            Database
-          </i>
-           Vol. 2012 (doi: 10.1093/database/bar068)
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//database.oxfordjournals.org/content/2011/bar033.full"
-        target="_blank"
-      >
-        The InterPro BioMart: federated query and web service access to the InterPro Resource
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Jones P., Binns D., McMenamin C., McAnulla C., Hunter S.
-        </span>
-        <span>
-          <i>
-            Database
-          </i>
-           Vol. 2011 (doi: 10.1093/database/bar033)
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pubmed/21082426"
-        target="_blank"
-      >
-        InterPro protein classification.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          McDowall J, Hunter S.
-        </span>
-        <span>
-          <i>
-            Methods Mol Biol.
-          </i>
-          , 2011, 694:37-47. doi: 10.1007/978-1-60761-977-2_3.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pmc/articles/PMC2686546/"
-        target="_blank"
-      >
-        InterPro: the integrative protein signature database.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Hunter S, Apweiler R, Attwood TK, Bairoch A, Bateman A, Binns D, Bork P, Das U, Daugherty L, Duquenne L, Finn RD, Gough J, Haft D, Hulo N, Kahn D, Kelly E, Laugraud A, Letunic I, Lonsdale D, Lopez R, Madera M, Maslen J, McAnulla C, McDowall J, Mistry J, Mitchell A, Mulder N, Natale D, Orengo C, Quinn AF, Selengut JD, Sigrist CJ, Thimma M, Thomas PD, Valentin F, Wilson D, Wu CH, Yeats C.
-           
-        </span>
-        <span>
-          <i>
-            Nucleic Acids Res.
-          </i>
-          , 2009 Jan, 37(Database issue):D211-5. doi: 10.1093/nar/gkn785.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pubmed/18428686"
-        target="_blank"
-      >
-        The InterPro database and tools for protein domain analysis.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Mulder NJ, Apweiler R.
-        </span>
-        <span>
-          <i>
-            Curr Protoc Bioinformatics
-          </i>
-          , 2008 Mar, Chapter 2:Unit 2.7. doi:10.1002/0471250953.bi0207s21.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pubmed/18025686"
-        target="_blank"
-      >
-        InterPro and InterProScan: tools for protein sequence classification and comparison.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Mulder N, Apweiler R.
-        </span>
-        <span>
-          <i>
-            Methods Mol Biol
-          </i>
-          , 2007,396:59-70.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pmc/articles/PMC1899100/"
-        target="_blank"
-      >
-        New developments in the InterPro database.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Mulder NJ, Apweiler R, Attwood TK, Bairoch A, Bateman A, Binns D, Bork P, Buillard V, Cerutti L, Copley R, Courcelle E, Das U, Daugherty L, Dibley M, Finn R, Fleischmann W, Gough J, Haft D, Hulo N, Hunter S, Kahn D, Kanapin A, Kejariwal A, Labarga A, Langendijk-Genevaux PS, Lonsdale D, Lopez R, Letunic I, Madera M, Maslen J, McAnulla C, McDowall J, Mistry J, Mitchell A, Nikolskaya AN, Orchard S, Orengo C, Petryszak R, Selengut JD, Sigrist CJ, Thomas PD, Valentin F, Wilson D, Wu CH, Yeats C.
-        </span>
-        <span>
-          <i>
-            Nucleic Acids Research
-          </i>
-          , 2007 Jan, 35(Database issue):D224-8.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//nar.oxfordjournals.org/content/33/suppl_2/W116.full"
-        target="_blank"
-      >
-        InterProScan: protein domains identifier
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Quevillon E., Silventoinen V., Pillai S., Harte N., Mulder N., Apweiler R., Lopez R.
-        </span>
-        <span>
-          <i>
-            Nucleic Acids Research
-          </i>
-          , 2005, Vol. 33, Issue suppl 2 (doi: 10.1093/nar/gki442)
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pubmed/15608177"
-        target="_blank"
-      >
-        InterPro, progress and status in 2005.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Mulder NJ, Apweiler R, Attwood TK, Bairoch A, Bateman A, Binns D, Bradley P, Bork P, Bucher P, Cerutti L, Copley R, Courcelle E, Das U, Durbin R, Fleischmann W, Gough J, Haft D, Harte N, Hulo N, Kahn D, Kanapin A, Krestyaninova M, Lonsdale D, Lopez R, Letunic I, Madera M, Maslen J, McDowall J, Mitchell A, Nikolskaya AN, Orchard S, Pagni M, Ponting CP, Quevillon E, Selengut J, Sigrist CJ, Silventoinen V, Studholme DJ, Vaughan R, Wu CH.
-        </span>
-        <span>
-          <i>
-            Nucleic Acids Res
-          </i>
-          , 33(Database issue):D201-5.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pmc/articles/PMC165493/"
-        target="_blank"
-      >
-         
-        The InterPro Database, 2003 brings increased coverage and new features.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Mulder NJ, Apweiler R, Attwood TK, Bairoch A, Barrell D, Bateman A, Binns D, Biswas M, Bradley P, Bork P, Bucher P, Copley RR, Courcelle E, Das U, Durbin R, Falquet L, Fleischmann W, Griffiths-Jones S, Haft D, Harte N, Hulo N, Kahn D, Kanapin A, Krestyaninova M, Lopez R, Letunic I, Lonsdale D, Silventoinen V, Orchard SE, Pagni M, Peyruc D, Ponting CP, Selengut JD, Servant F, Sigrist CJ, Vaughan R, Zdobnov EM.
-        </span>
-        <span>
-          <i>
-            Nucleic Acids Res
-          </i>
-          , 2003 Jan 1;31(1):315-8.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pubmed/12230032"
-        target="_blank"
-      >
-         
-        HMM-based databases in InterPro.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Bateman A, Haft DH.
-        </span>
-        <span>
-          <i>
-             Brief Bioinform
-          </i>
-          , 2002 Sep;3(3):236-45.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pubmed/12230031"
-        target="_blank"
-      >
-        InterPro: an integrated documentation resource for protein families, domains and functional sites.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Mulder NJ, Apweiler R, Attwood TK, Bairoch A, Bateman A, Binns D, Biswas M, Bradley P, Bork P, Bucher P, Copley R, Courcelle E, Durbin R, Falquet L, Fleischmann W, Gouzy J, Griffith-Jones S, Haft D, Hermjakob H, Hulo N, Kahn D, Kanapin A, Krestyaninova M, Lopez R, Letunic I, Orchard S, Pagni M, Peyruc D, Ponting CP, Servant F, Sigrist CJ; InterPro Consortium.
-        </span>
-        <span>
-          <i>
-             Brief Bioinform
-          </i>
-          , 2002 Sep;3(3):225-35.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pubmed/11847096"
-        target="_blank"
-      >
-        Interactive InterPro-based comparisons of proteins in whole genomes.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Kanapin A, Apweiler R, Biswas M, Fleischmann W, Karavidopoulou Y, Kersey P, Kriventseva EV, Mittard V, Mulder N, Oinn T, Phan I, Servant F, Zdobnov E.
-        </span>
-        <span>
-          <i>
-             Bioinformatics
-          </i>
-          , 2002 Feb;18(2):374-5.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pubmed/11590104"
-        target="_blank"
-      >
-        InterProScan--an integration platform for the signature-recognition methods in InterPro.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Zdobnov EM, Apweiler R.
-        </span>
-        <span>
-          <i>
-             Bioinformatics
-          </i>
-          , 2001 Sep;17(9):847-8.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="//www.ncbi.nlm.nih.gov/pubmed/11159333"
-        target="_blank"
-      >
-        InterPro--an integrated documentation resource for protein families, domains and functional sites.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Apweiler R, Attwood TK, Bairoch A, Bateman A, Birney E, Biswas M, Bucher P, Cerutti L, Corpet F, Croning MD, Durbin R, Falquet L, Fleischmann W, Gouzy J, Hermjakob H, Hulo N, Jonassen I, Kahn D, Kanapin A, Karavidopoulou Y, Lopez R, Marx B, Mulder NJ, Oinn TM, Pagni M, Servant F, Sigrist CJ, Zdobnov EM; InterPro Consortium.
-        </span>
-        <span>
-          <i>
-             Bioinformatics
-          </i>
-          , 2000 Dec;16(12):1145-50.
-        </span>
-      </div>
-    </p>
-    <p>
-      <Memo(Connect(Link))
-        className="ext"
-        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC29841/"
-        target="_blank"
-      >
-        The InterPro database, an integrated documentation resource for protein families, domains and functional sites.
-      </Memo(Connect(Link))>
-      <div>
-        <span>
-          Apweiler R, Attwood TK, Bairoch A, Bateman A, Birney E, Biswas M, Bucher P, Cerutti L, Corpet F, Croning MD, Durbin R, Falquet L, Fleischmann W, Gouzy J, Hermjakob H, Hulo N, Jonassen I, Kahn D, Kanapin A, Karavidopoulou Y, Lopez R, Marx B, Mulder NJ, Oinn TM, Pagni M, Servant F, Sigrist CJ, Zdobnov EM.
-        </span>
-        <span>
-          <i>
-             Nucleic Acids Res
-          </i>
-          , 2001 Jan 1;29(1):37-40.
-        </span>
-      </div>
-    </p>
+    <PreviousPublication
+      authors="Alex Mitchell, Hsin-Yu Chang, Louise Daugherty, Matthew Fraser,
+              Sarah Hunter, Rodrigo Lopez, Craig McAnulla, Conor McMenamin,
+              Gift Nuka, Sebastien Pesseat, Amaia Sangrador-Vegas, Maxim
+              Scheremetjew, Claudia Rato, Siew-Yit Yong, Alex Bateman, Marco
+              Punta, Teresa K. Attwood, Christian J.A. Sigrist, Nicole
+              Redaschi, Catherine Rivoire, Ioannis Xenarios, Daniel Kahn,
+              Dominique Guyot, Peer Bork, Ivica Letunic, Julian Gough, Matt
+              Oates, Daniel Haft, Hongzhan Huang, Darren A. Natale, Cathy H.
+              Wu, Christine Orengo, Ian Sillitoe, Huaiyu Mi, Paul D. Thomas
+              and Robert D. Finn."
+      source={
+        Object {
+          "details": "Jan 2015, (doi:10.1093/nar/gku1243)",
+          "journal": "Nucleic Acids Research",
+        }
+      }
+      title="The InterPro protein families database: the classification resource after 15 years"
+      url="//nar.oxfordjournals.org/content/43/D1/D213"
+    />
+    <PreviousPublication
+      authors="Sarah Hunter; Philip Jones; Alex Mitchell; Rolf Apweiler; Teresa
+              K. Attwood; Alex Bateman; Thomas Bernard; David Binns; Peer
+              Bork; Sarah Burge; Edouard de Castro; Penny Coggill; Matthew
+              Corbett; Ujjwal Das; Louise Daugherty; Lauranne Duquenne; Robert
+              D. Finn; Matthew Fraser; Julian Gough; Daniel Haft; Nicolas
+              Hulo; Daniel Kahn; Elizabeth Kelly; Ivica Letunic; David
+              Lonsdale; Rodrigo Lopez; Martin Madera; John Maslen; Craig
+              McAnulla; Jennifer McDowall; Conor McMenamin; Huaiyu Mi;
+              Prudence Mutowo-Muellenet; Nicola Mulder; Darren Natale;
+              Christine Orengo; Sebastien Pesseat; Marco Punta; Antony F.
+              Quinn; Catherine Rivoire; Amaia Sangrador-Vegas; Jeremy D.
+              Selengut; Christian J. A. Sigrist; Maxim Scheremetjew; John
+              Tate; Manjulapramila Thimmajanarthanan; Paul D. Thomas; Cathy H.
+              Wu; Corin Yeats; Siew-Yit Yong."
+      source={
+        Object {
+          "details": "2012, Vol. 40, Database issue (doi: 10.1093/nar/gkr948)",
+          "journal": "Nucleic Acids Research",
+        }
+      }
+      title="InterPro in 2011: new developments in the family and domain prediction database"
+      url="//nar.oxfordjournals.org/content/40/D1/D306.full"
+    />
+    <PreviousPublication
+      authors="Burge, S., Kelly, E., Lonsdale, D., Mutowo-Muellenet, P.,
+              McAnulla, C., Mitchell, A., Sangrador-Vegas, A., Yong, S.,
+              Mulder, N., Hunter, S."
+      source={
+        Object {
+          "details": "Vol. 2012 (doi: 10.1093/database/bar068)",
+          "journal": "Database",
+        }
+      }
+      title="Manual GO annotation of predictive protein signatures: the InterPro approach to GO curation"
+      url="//database.oxfordjournals.org/content/2012/bar068.full"
+    />
+    <PreviousPublication
+      authors="Jones P., Binns D., McMenamin C., McAnulla C., Hunter S."
+      source={
+        Object {
+          "details": "Vol. 2011 (doi: 10.1093/database/bar033)",
+          "journal": "Database",
+        }
+      }
+      title="The InterPro BioMart: federated query and web service access to the InterPro Resource"
+      url="//database.oxfordjournals.org/content/2011/bar033.full"
+    />
+    <PreviousPublication
+      authors="McDowall J, Hunter S."
+      source={
+        Object {
+          "details": "2011, 694:37-47. doi:10.1007/978-1-60761-977-2_3",
+          "journal": "Methods Mol Biol.",
+        }
+      }
+      title="InterPro protein classification."
+      url="//www.ncbi.nlm.nih.gov/pubmed/21082426"
+    />
+    <PreviousPublication
+      authors="Hunter S, Apweiler R, Attwood TK, Bairoch A, Bateman A, Binns D,
+              Bork P, Das U, Daugherty L, Duquenne L, Finn RD, Gough J, Haft
+              D, Hulo N, Kahn D, Kelly E, Laugraud A, Letunic I, Lonsdale D,
+              Lopez R, Madera M, Maslen J, McAnulla C, McDowall J, Mistry J,
+              Mitchell A, Mulder N, Natale D, Orengo C, Quinn AF, Selengut JD,
+              Sigrist CJ, Thimma M, Thomas PD, Valentin F, Wilson D, Wu CH,
+              Yeats C."
+      source={
+        Object {
+          "details": "2009 Jan, 37(Database issue):D211-5.doi: 10.1093/nar/gkn785.",
+          "journal": "Nucleic Acids Res.",
+        }
+      }
+      title="InterPro: the integrative protein signature database."
+      url="//www.ncbi.nlm.nih.gov/pmc/articles/PMC2686546/"
+    />
+    <PreviousPublication
+      authors="Mulder NJ, Apweiler R."
+      source={
+        Object {
+          "details": "2008 Mar, Chapter 2:Unit 2.7. doi:10.1002/0471250953.bi0207s21.",
+          "journal": "Curr Protoc Bioinformatics",
+        }
+      }
+      title="The InterPro database and tools for protein domain analysis."
+      url="//www.ncbi.nlm.nih.gov/pubmed/18428686"
+    />
+    <PreviousPublication
+      authors="Mulder N, Apweiler R."
+      source={
+        Object {
+          "details": "2007,396:59-70.",
+          "journal": "Methods Mol Biol",
+        }
+      }
+      title="InterPro and InterProScan: tools for protein sequence classification and comparison."
+      url="//www.ncbi.nlm.nih.gov/pubmed/18025686"
+    />
+    <PreviousPublication
+      authors="Mulder NJ, Apweiler R, Attwood TK, Bairoch A, Bateman A, Binns
+              D, Bork P, Buillard V, Cerutti L, Copley R, Courcelle E, Das U,
+              Daugherty L, Dibley M, Finn R, Fleischmann W, Gough J, Haft D,
+              Hulo N, Hunter S, Kahn D, Kanapin A, Kejariwal A, Labarga A,
+              Langendijk-Genevaux PS, Lonsdale D, Lopez R, Letunic I, Madera
+              M, Maslen J, McAnulla C, McDowall J, Mistry J, Mitchell A,
+              Nikolskaya AN, Orchard S, Orengo C, Petryszak R, Selengut JD,
+              Sigrist CJ, Thomas PD, Valentin F, Wilson D, Wu CH, Yeats C."
+      source={
+        Object {
+          "details": "2007 Jan, 35(Database issue):D224-8.",
+          "journal": "Nucleic Acids Research",
+        }
+      }
+      title="New developments in the InterPro database."
+      url="//www.ncbi.nlm.nih.gov/pmc/articles/PMC1899100/"
+    />
+    <PreviousPublication
+      authors="Quevillon E., Silventoinen V., Pillai S., Harte N., Mulder N.,
+              Apweiler R., Lopez R."
+      source={
+        Object {
+          "details": "2005, Vol. 33, Issue suppl 2 (doi: 10.1093/nar/gki442)",
+          "journal": "Nucleic Acids Research",
+        }
+      }
+      title="InterProScan: protein domains identifier"
+      url="//nar.oxfordjournals.org/content/33/suppl_2/W116.full"
+    />
+    <PreviousPublication
+      authors="Mulder NJ, Apweiler R, Attwood TK, Bairoch A, Bateman A, Binns
+              D, Bradley P, Bork P, Bucher P, Cerutti L, Copley R, Courcelle
+              E, Das U, Durbin R, Fleischmann W, Gough J, Haft D, Harte N,
+              Hulo N, Kahn D, Kanapin A, Krestyaninova M, Lonsdale D, Lopez R,
+              Letunic I, Madera M, Maslen J, McDowall J, Mitchell A,
+              Nikolskaya AN, Orchard S, Pagni M, Ponting CP, Quevillon E,
+              Selengut J, Sigrist CJ, Silventoinen V, Studholme DJ, Vaughan R,
+              Wu CH."
+      source={
+        Object {
+          "details": "33(Database issue):D201-5.",
+          "journal": "Nucleic Acids Res",
+        }
+      }
+      title="InterPro, progress and status in 2005."
+      url="//www.ncbi.nlm.nih.gov/pubmed/15608177"
+    />
+    <PreviousPublication
+      authors="Mulder NJ, Apweiler R, Attwood TK, Bairoch A, Barrell D, Bateman
+              A, Binns D, Biswas M, Bradley P, Bork P, Bucher P, Copley RR,
+              Courcelle E, Das U, Durbin R, Falquet L, Fleischmann W,
+              Griffiths-Jones S, Haft D, Harte N, Hulo N, Kahn D, Kanapin A,
+              Krestyaninova M, Lopez R, Letunic I, Lonsdale D, Silventoinen V,
+              Orchard SE, Pagni M, Peyruc D, Ponting CP, Selengut JD, Servant
+              F, Sigrist CJ, Vaughan R, Zdobnov EM."
+      source={
+        Object {
+          "details": "2003 Jan 1;31(1):315-8.",
+          "journal": "Nucleic Acids Res",
+        }
+      }
+      title="The InterPro Database, 2003 brings increased coverage and new features."
+      url="//www.ncbi.nlm.nih.gov/pmc/articles/PMC165493/"
+    />
+    <PreviousPublication
+      authors="Bateman A, Haft DH."
+      source={
+        Object {
+          "details": "2002 Sep;3(3):236-45.",
+          "journal": "Brief Bioinform",
+        }
+      }
+      title="HMM-based databases in InterPro."
+      url="//www.ncbi.nlm.nih.gov/pubmed/12230032"
+    />
+    <PreviousPublication
+      authors="Mulder NJ, Apweiler R, Attwood TK, Bairoch A, Bateman A, Binns
+              D, Biswas M, Bradley P, Bork P, Bucher P, Copley R, Courcelle E,
+              Durbin R, Falquet L, Fleischmann W, Gouzy J, Griffith-Jones S,
+              Haft D, Hermjakob H, Hulo N, Kahn D, Kanapin A, Krestyaninova M,
+              Lopez R, Letunic I, Orchard S, Pagni M, Peyruc D, Ponting CP,
+              Servant F, Sigrist CJ; InterPro Consortium."
+      source={
+        Object {
+          "details": "2002 Sep;3(3):225-35.",
+          "journal": "Brief Bioinform",
+        }
+      }
+      title="InterPro: an integrated documentation resource for protein families, domains and functional sites."
+      url="//www.ncbi.nlm.nih.gov/pubmed/12230031"
+    />
+    <PreviousPublication
+      authors="Kanapin A, Apweiler R, Biswas M, Fleischmann W, Karavidopoulou
+              Y, Kersey P, Kriventseva EV, Mittard V, Mulder N, Oinn T, Phan
+              I, Servant F, Zdobnov E."
+      source={
+        Object {
+          "details": "2002 Feb;18(2):374-5.",
+          "journal": "Bioinformatics",
+        }
+      }
+      title="Interactive InterPro-based comparisons of proteins in whole genomes."
+      url="//www.ncbi.nlm.nih.gov/pubmed/11847096"
+    />
+    <PreviousPublication
+      authors="Zdobnov EM, Apweiler R."
+      source={
+        Object {
+          "details": "2001 Sep;17(9):847-8.",
+          "journal": "Bioinformatics",
+        }
+      }
+      title="InterProScan--an integration platform for the signature-recognition methods in InterPro."
+      url="//www.ncbi.nlm.nih.gov/pubmed/11590104"
+    />
+    <PreviousPublication
+      authors="Apweiler R, Attwood TK, Bairoch A, Bateman A, Birney E, Biswas
+              M, Bucher P, Cerutti L, Corpet F, Croning MD, Durbin R, Falquet
+              L, Fleischmann W, Gouzy J, Hermjakob H, Hulo N, Jonassen I, Kahn
+              D, Kanapin A, Karavidopoulou Y, Lopez R, Marx B, Mulder NJ, Oinn
+              TM, Pagni M, Servant F, Sigrist CJ, Zdobnov EM; InterPro
+              Consortium."
+      source={
+        Object {
+          "details": "2000 Dec;16(12):1145-50.",
+          "journal": "Bioinformatics",
+        }
+      }
+      title="InterPro--an integrated documentation resource for protein families, domains and functional sites."
+      url="//www.ncbi.nlm.nih.gov/pubmed/11159333"
+    />
+    <PreviousPublication
+      authors="Apweiler R, Attwood TK, Bairoch A, Bateman A, Birney E, Biswas
+              M, Bucher P, Cerutti L, Corpet F, Croning MD, Durbin R, Falquet
+              L, Fleischmann W, Gouzy J, Hermjakob H, Hulo N, Jonassen I, Kahn
+              D, Kanapin A, Karavidopoulou Y, Lopez R, Marx B, Mulder NJ, Oinn
+              TM, Pagni M, Servant F, Sigrist CJ, Zdobnov EM."
+      source={
+        Object {
+          "details": "2001 Jan 1;29(1):37-40.",
+          "journal": "Nucleic Acids Res",
+        }
+      }
+      title="The InterPro database, an integrated documentation resource for protein families, domains and functional sites."
+      url="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC29841/"
+    />
   </details>
   <h3
     className="margin-top-large"
@@ -667,18 +321,10 @@ exports[`<Publication /> should render 1`] = `
   <p>
     To cite InterPro, please refer to the following publication:
   </p>
-  <blockquote
-    className="quote"
-  >
-    Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown, Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough, David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez, Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu Mi, Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo, Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings, Nicole Redaschi, Lorna J Richardson, Catherine Rivoire, Gustavo A Salazar, Amaia Sangrador-Vegas, Christian J A Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn;
-    <strong>
-       
-      InterPro in 2019: improving coverage, classification and access to protein sequence annotations
-    </strong>
-    . 
-    <i>
-      Nucleic Acids Research, Jan 2019; doi: 10.1093/nar/gky1100
-    </i>
-  </blockquote>
+  <PrintedInterPro2019 />
+  <p>
+    To cite InterProScan, please refer to the following publication:
+  </p>
+  <PrintedInterProScan2014 />
 </section>
 `;
