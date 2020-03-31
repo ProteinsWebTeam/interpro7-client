@@ -50,6 +50,14 @@ const getHTMLWebpackPlugin = mode =>
     title: iprConfig.title || 'InterPro',
     template: path.join('.', 'src', 'index.template.html'),
     inject: mode === 'development',
+    templateParameters: (compilation, assets, assetTags, options) => ({
+      webpack: compilation.getStats().toJson(),
+      webpackConfig: compilation.options,
+      htmlWebpackPlugin: {
+        files: assets,
+        options: options,
+      },
+    }),
   });
 
 const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();

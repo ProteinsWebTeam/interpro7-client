@@ -7,6 +7,7 @@
 .*/node_modules/fbjs.*
 .*/node_modules/babel.*
 .*/node_modules/draft-js
+.*/node_modules/@popperjs
 .*/node_modules/.*json
 .*/node_modules/eslint-plugin*
 .*/node_modules/timing-functions
