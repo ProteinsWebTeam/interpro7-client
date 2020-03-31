@@ -432,10 +432,10 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
   };
 
   // To adjust the Conservation track in ProtVista width when label by name/accession is switched
-  _handleToggleLabel = isAccession => {
-    isAccession
-      ? this.setState({ addLabelClass: 'label-by-name' })
-      : this.setState({ addLabelClass: '' });
+  _handleToggleLabel = labels => {
+    if (labels.includes('name'))
+      this.setState({ addLabelClass: 'label-by-name' });
+    else this.setState({ addLabelClass: '' });
   };
 
   /* eslint-disable complexity  */

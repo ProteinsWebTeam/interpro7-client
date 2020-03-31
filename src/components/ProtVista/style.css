@@ -397,6 +397,40 @@ g:global(.child-location-group.clg-5) path {
   }
 }
 
-.tooltip-disable {
-  opacity: 0.2;
+.dropdown-container {
+  display: flex;
+  margin: 0.5rem 0 0 0;
+  position: relative;
+
+  & .button {
+    background-color: #2daec1;
+  }
+
+  & .dropdown-content {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    padding: 1rem 0.5rem;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--timing-really-fast) ease-in-out;
+    visibility: visible;
+    display: block;
+    min-width: 180%; /*temp value*/
+  }
+}
+
+.dropdown-container .dropdown-pane {
+  z-index: 2; /* so sticky header stay on top*/
+}
+
+.dropdown-container .dropdown-pane ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-container .dropdown-pane li {
+  display: block;
+  padding: 0.3rem 1rem;
 }

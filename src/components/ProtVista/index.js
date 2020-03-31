@@ -44,8 +44,6 @@ import localCSSasText from '!!raw-loader!./style.css';
 import ebiGlobalCSS from '!!raw-loader!ebi-framework/css/ebi-global.css';
 import globalCSS from '!!raw-loader!styles/global.css';
 
-import popupsvg from 'images/icons/ico-tooltip.svg';
-
 const f = foundationPartial(ipro, localCSS, fonts);
 
 const webComponents = [];
@@ -170,7 +168,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       label: 'accession',
       addLabelClass: '',
       enableTooltip: true,
-      addTooltipClass: '',
+      dropdownOpen: false,
     };
 
     this._mainRef = React.createRef();
@@ -179,6 +177,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this._webProteinRef = React.createRef();
     this._hydroRef = React.createRef();
     this._showConservationRef = React.createRef();
+    this._labelOptionsRef = React.createRef();
     this._isPopperTop = true;
   }
 
@@ -691,23 +690,47 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
   };
 
-  toggleLabel = () => {
-    if (this.state.label === 'accession')
-      this.setState({ label: 'name', addLabelClass: 'label-by-name' });
-    else this.setState({ label: 'accession', addLabelClass: '' });
-    if (this.props.handleToggle)
-      this.props.handleToggle(this.state.label === 'accession');
+  updateLabel = () => {
+    this.setState({ dropdownOpen: false });
+    const items = this._labelOptionsRef.current.childNodes;
+    const labels = [];
+    items.forEach(item => {
+      if (item.firstChild.checked) labels.push(item.firstChild.value);
+    });
+    if (labels.includes('name')) {
+      this.setState({ addLabelClass: 'label-by-name' });
+      if (labels.includes('accession')) this.setState({ label: 'both' });
+      else this.setState({ label: 'name' });
+    } else {
+      this.setState({ label: 'accession', addLabelClass: '' });
+    }
+    if (this.props.handleToggle) this.props.handleToggle(labels);
   };
 
-  togglePopper = () => {
-    const tooltipStatus = this.state.enableTooltip;
-    if (tooltipStatus)
-      this.setState({
-        enableTooltip: !tooltipStatus,
-        addTooltipClass: 'tooltip-disable',
-      });
-    else this.setState({ enableTooltip: !tooltipStatus, addTooltipClass: '' });
-  };
+  renderSwitch(label, entry) {
+    const type = entry.type ? (
+      <interpro-type type={entry.type.replace('_', ' ')} dimension="1em" />
+    ) : null;
+    switch (label) {
+      case 'name':
+        return (
+          <>
+            {type}
+            {entry.name}
+          </>
+        );
+      case 'both':
+        return (
+          <>
+            {type}
+            {entry.accession}: {entry.name}
+          </>
+        );
+      case 'accession':
+      default:
+        return entry.accession;
+    }
+  }
 
   renderLabels(entry) {
     const { expandedTrack } = this.state;
@@ -744,6 +767,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     if (entry.accession && entry.accession.startsWith('G3D:')) {
       return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
     }
+
     return (
       <>
         <Link
@@ -759,19 +783,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
             },
           }}
         >
-          {this.state.label === 'name'
-            ? (
-                <>
-                  {entry.type ? (
-                    <interpro-type
-                      type={entry.type.replace('_', ' ')}
-                      dimension="1em"
-                    />
-                  ) : null}
-                  {entry.name}
-                </>
-              ) || entry.accession
-            : entry.accession}
+          {this.renderSwitch(this.state.label, entry)}
         </Link>
         <div
           className={f({
@@ -796,13 +808,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     },
                   }}
                 >
-                  {this.state.label === 'name'
-                    ? `${d.name?.charAt(0).toUpperCase() +
-                        d.name?.slice(1)}-${this._getSourceDatabaseDisplayName(
-                        d,
-                        databases,
-                      )}` || d.accession
-                    : d.accession}
+                  {this.renderSwitch(this.state.label, entry)}
                 </Link>
                 {this.renderResidueLabels(d)}
               </div>
@@ -882,20 +888,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
             </Tooltip>
           </div>
           <div
-            className={f(
-              'option-fullscreen',
-              'font-l',
-              'margin-right-large',
-              `${this.state.addTooltipClass}`,
-            )}
-          >
-            <Tooltip title={'Enable/Disable Tooltip'}>
-              <button onClick={this.togglePopper}>
-                <img src={popupsvg} width="20px" alt="Enable/Disable Tooltip" />
-              </button>
-            </Tooltip>
-          </div>
-          <div
             className={f('option-fullscreen', 'font-l', 'margin-right-large')}
           >
             <FullScreenButton
@@ -920,15 +912,67 @@ class ProtVista extends Component /*:: <Props, State> */ {
             </Tooltip>
           </div>
           <div
-            className={f('option-fullscreen', 'font-l', 'margin-right-large')}
+            className={f('button-group', 'dropdown-container')}
+            style={{ display: 'flex' }}
           >
-            <Tooltip title={'Label by Accession/Name'}>
-              <button
-                className={f('icon', 'icon-common')}
-                data-icon="&#xf02b;"
-                onClick={this.toggleLabel}
-              />
-            </Tooltip>
+            <button
+              className={f('button', 'dropdown')}
+              onClick={() =>
+                this.setState({ dropdownOpen: !this.state.dropdownOpen })
+              }
+            >
+              <Tooltip
+                title={
+                  'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
+                  'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
+                  'helpful if you can include literature references supporting your annotation suggestion.'
+                }
+              >
+                Display
+              </Tooltip>
+            </button>
+            <div
+              className={f('dropdown-pane', 'dropdown-content', 'left')}
+              style={{
+                transform: `scaleY(${this.state.dropdownOpen ? 1 : 0})`,
+              }}
+            >
+              <ul ref={this._labelOptionsRef}>
+                <li key={'accession'}>
+                  <input
+                    type="checkbox"
+                    onChange={this.updateLabel}
+                    value={'accession'}
+                    checked={
+                      this.state.label === 'accession' ||
+                      this.state.label === 'both'
+                    }
+                  />
+                  Accession
+                </li>
+                <li key={'name'}>
+                  <input
+                    type="checkbox"
+                    onChange={this.updateLabel}
+                    value={'name'}
+                  />{' '}
+                  Name
+                </li>
+                <li key={'tooltip'}>
+                  <input
+                    type="checkbox"
+                    onChange={() =>
+                      this.setState({
+                        enableTooltip: !this.state.enableTooltip,
+                        dropdownOpen: false,
+                      })
+                    }
+                    checked={this.state.enableTooltip}
+                  />{' '}
+                  Tooltip
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

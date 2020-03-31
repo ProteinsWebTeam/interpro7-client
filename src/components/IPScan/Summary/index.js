@@ -296,7 +296,10 @@ const SummaryIPScanJob = ({
     <div className={f('sections')}>
       <section>
         <Title metadata={metadata} mainType="protein" />
-        <table className={f('light', 'table-sum', 'margin-bottom-none')}>
+        <table
+          className={f('light', 'table-sum', 'margin-bottom-none')}
+          style={{ width: '70%' }}
+        >
           <tbody>
             {title && (
               <tr>
