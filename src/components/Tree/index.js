@@ -1,6 +1,9 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
+
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 import ZoomOverlay from 'components/ZoomOverlay';
 
@@ -23,14 +26,16 @@ import { foundationPartial } from 'styles/foundation';
   labelClick?: string => any,
   hideToggle?: boolean,
   initialFisheye?: boolean,
+  search: string,
 }; */
 /*:: type State = {
   fisheye: boolean,
+  searchTerm: string,
 }; */
 
 const f = foundationPartial(fonts);
 
-export default class Tree extends PureComponent /*:: <Props, State> */ {
+export class Tree extends PureComponent /*:: <Props, State> */ {
   /* ::
     _ref: { current: null | React$ElementRef<'svg'> };
     _loadingVis: ?boolean;
@@ -43,6 +48,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     labelClick: T.func,
     hideToggle: T.bool,
     initialFisheye: T.bool,
+    search: T.string,
   };
 
   static defaultProps = {
@@ -53,6 +59,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     super(props);
 
     const fisheye = !!props.initialFisheye;
+    const search = props.search;
 
     this._vis = new TaxonomyVisualisation(undefined, {
       initialMaxNodes: +Infinity,
@@ -64,6 +71,8 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
       },
       enableZooming: true,
       useCtrlToZoom: true,
+      searchTerm: search,
+      highlightColor: '#094EEE',
       // shouldCorrectNodesOutside: true,
     });
 
@@ -72,7 +81,15 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     this._loadingVis = false;
     this._ref = React.createRef();
 
-    this.state = { fisheye };
+    this.state = { fisheye, searchTerm: search };
+  }
+
+  static getDerivedStateFromProps(
+    { search } /*: {search: string} */,
+    { searchTerm } /*: {searchTerm: string} */,
+  ) {
+    if (search !== searchTerm) return { searchTerm: search };
+    return null;
   }
 
   componentDidMount() {
@@ -91,6 +108,7 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     if (focused !== this.props.focused) {
       this._vis.focusNodeWithID(this.props.focused);
     }
+    this._vis.searchTerm = this.state.searchTerm;
     this._vis.fisheye = this.state.fisheye;
   }
 
@@ -170,3 +188,10 @@ export default class Tree extends PureComponent /*:: <Props, State> */ {
     );
   }
 }
+
+const mapStateToProps = createSelector(
+  state => state.customLocation.search.search,
+  search => ({ search }),
+);
+
+export default connect(mapStateToProps)(Tree);

@@ -48,6 +48,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, styles);
   nextAPICall?: ?string,
   previousAPICall?: ?string,
   showTableIcon?: boolean,
+  onFocusChanged?: ?function,
 } */
 
 const TableView = loadable({
@@ -112,6 +113,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     withGrid: T.bool,
     rowClassName: T.oneOfType([T.string, T.func]),
     showTableIcon: T.bool,
+    onFocusChanged: T.func,
   };
 
   render() {
@@ -133,6 +135,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       withTree,
       rowClassName,
       showTableIcon,
+      onFocusChanged,
     } = this.props;
 
     const _query = query || {};
@@ -254,6 +257,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   withTree={withTree}
                   withGrid={!!card}
                   rowClassName={rowClassName}
+                  onFocusChanged={onFocusChanged}
                 />
               </div>
               <Switch

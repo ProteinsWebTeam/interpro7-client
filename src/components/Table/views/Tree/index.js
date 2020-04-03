@@ -140,8 +140,40 @@ const findNodeWithId = (id, node) => {
   }
 };
 
+const addNodesFromLineage = (update, root, names) => {
+  const lineage = update.lineage.trim().split(' ');
+  lineage.splice(-1);
+  const parentId = lineage.splice(-1)?.[0];
+  let parent = findNodeWithId(parentId, root);
+  if (!parent) {
+    parent = addNodesFromLineage(
+      {
+        name: names[parentId]?.short || parentId,
+        id: parentId,
+        lineage: [...lineage, parentId].join(' '),
+      },
+      root,
+      names,
+    );
+  }
+
+  if (!parent.children) parent.children = [];
+  parent.children.push(update);
+  return update;
+};
 const mergeData = (root, update, names, childrenCounters) => {
-  const toUpdate = findNodeWithId(update.accession, root);
+  let toUpdate = findNodeWithId(update.accession, root);
+  if (!toUpdate) {
+    toUpdate = addNodesFromLineage(
+      {
+        id: update.accession,
+        name: names[update.accession].short,
+        lineage: update.lineage,
+      },
+      root,
+      names,
+    );
+  }
   toUpdate.lineage = update.lineage;
   toUpdate.counters = update.counters;
   toUpdate.rank = update.rank;
@@ -175,9 +207,13 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   static propTypes = {
     customLocation: T.shape({
       description: T.object,
+      search: T.shape({
+        search: T.string,
+      }),
     }).isRequired,
     goToCustomLocation: T.func.isRequired,
     showTreeToast: T.bool.isRequired,
+    onFocusChanged: T.func,
   };
 
   constructor(props /*: TreeViewProps */) {
@@ -199,9 +235,10 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
         description: {
           entry: { db: newDB },
         },
+        search,
       },
     },
-    { entryDB: oldDB },
+    { entryDB: oldDB, searchTerm },
   ) {
     // componentDidUpdate({customLocation: {description: {entry: {db: oldDB}}}}) {
     //   const {customLocation: {description: {entry: {db: newDB}}}} = this.props;
@@ -210,6 +247,12 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       return {
         focused: '1',
         entryDB: newDB,
+      };
+    }
+    if (search?.search !== searchTerm && !isNaN(search.search)) {
+      return {
+        entryDB: oldDB,
+        searchTerm: search.search,
       };
     }
     return null;
@@ -237,7 +280,10 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   componentWillUnmount() {
     this._CDPMap.clear();
   }
-
+  _handleNewSearchData = (taxID, payload) => {
+    this._handleNewData(taxID, payload);
+    this._handleNewFocus(taxID);
+  };
   _handleNewData = (taxID, payload) => {
     if (payload?.metadata?.children) {
       const c = payload.metadata.children.length;
@@ -257,7 +303,12 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   };
 
   _handleNewFocus = taxID => {
-    if (taxID) this.setState({ focused: taxID });
+    if (taxID) {
+      this.setState({ focused: taxID });
+      if (this.props.onFocusChanged) {
+        this.props.onFocusChanged(taxID);
+      }
+    }
   };
   _handleLabelClick = taxID => {
     this.props.goToCustomLocation({
@@ -282,12 +333,23 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   };
 
   render() {
-    const { focused, data } = this.state;
+    const { focused, data, searchTerm } = this.state;
     let ConnectedDataProvider = this._CDPMap.get(focused);
     if (!ConnectedDataProvider) {
       ConnectedDataProvider = loadData(mapStateToUrlFor(focused))(DataProvider);
       this._CDPMap.set(focused, ConnectedDataProvider);
       this._storeLineageNames(focused, data);
+    }
+    let ConnectedDataProviderSearch = null;
+    if (searchTerm) {
+      ConnectedDataProviderSearch = this._CDPMap.get(searchTerm);
+      if (!ConnectedDataProviderSearch) {
+        ConnectedDataProviderSearch = loadData(mapStateToUrlFor(searchTerm))(
+          DataProvider,
+        );
+        this._CDPMap.set(searchTerm, ConnectedDataProviderSearch);
+        // this._storeLineageNames(searchTerm, data);
+      }
     }
     const currentNode = findNodeWithId(focused, data);
     const {
@@ -423,6 +485,12 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
           </div>
         </div>
         <ConnectedDataProvider sendData={this._handleNewData} taxID={focused} />
+        {ConnectedDataProviderSearch && (
+          <ConnectedDataProviderSearch
+            sendData={this._handleNewSearchData}
+            taxID={searchTerm}
+          />
+        )}
         <Tree
           data={data}
           focused={focused}

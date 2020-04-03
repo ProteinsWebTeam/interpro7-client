@@ -174,7 +174,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
                     <td style={{ width: '200px' }} data-testid="set-memberdb">
                       Member database
                     </td>
-                    <td className={f('text-up')}>{metadata.source_database}</td>
+                    <td>{currentSet?.dbName || metadata.source_database}</td>
                   </tr>
                 </tbody>
               </table>
@@ -212,7 +212,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
                         target="_blank"
                         pattern={currentSet.url_template}
                       >
-                        View {metadata.accession} in {currentSet.name}
+                        View {metadata.accession} in {currentSet.dbName}
                       </BaseLink>
                     </li>
                   </ul>
@@ -257,7 +257,4 @@ const mapStateToProps = createSelector(
   db => ({ db }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(SummarySet);
+export default connect(mapStateToProps, { goToCustomLocation })(SummarySet);

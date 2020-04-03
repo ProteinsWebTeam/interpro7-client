@@ -69,6 +69,9 @@ export const getUrl = createSelector(
             case 'taxonomy':
               _search.extra_fields = 'lineage,counters';
               break;
+            case 'set':
+              _search.extra_fields = 'counters,description';
+              break;
             default:
               _search.extra_fields = 'counters';
               break;
@@ -78,12 +81,17 @@ export const getUrl = createSelector(
           switch (description.main.key) {
             case 'taxonomy':
             case 'proteome':
-            case 'set':
               _search.extra_fields = 'counters';
+              break;
+            case 'set':
+              _search.extra_fields = 'counters,description';
               break;
             default:
               break;
           }
+        }
+        if (hash === 'tree' && _search.search !== undefined) {
+          delete _search.search;
         }
 
         // subpages will get the reverseURL, so its base dataLoader shold only get the accession payload
@@ -122,14 +130,21 @@ export const getReversedUrl = createSelector(
   state => state.settings.navigation.pageSize,
   state => state.customLocation.description,
   state => state.customLocation.search,
+  state => state.customLocation.hash,
   (
     { protocol, hostname, port, root },
     settingsPageSize,
     description,
     search,
+    hash,
   ) => {
     // copy of description, to modify it after
     const newDesc = {};
+    const _search = { ...search };
+    if (hash === 'tree' && _search.search !== undefined) {
+      delete _search.search;
+    }
+
     let newMain;
     for (const [key, value] of Object.entries(description)) {
       newDesc[key] = key === 'other' ? [...value] : { ...value };
@@ -146,7 +161,7 @@ export const getReversedUrl = createSelector(
       port,
       pathname: root + descriptionToPath(newDesc),
       query: {
-        ...search,
+        ..._search,
         extra_fields: 'counters',
         page_size: search.page_size || settingsPageSize,
       },
@@ -160,6 +175,13 @@ export const getReversedUrl = createSelector(
     return url;
   },
 );
+export const includeTaxonFocusedOnURL = (url, focused) => {
+  const hasTaxIdRegex = /taxonomy\/uniprot\/\d+/gi;
+  if (focused && +focused !== 1 && !url.match(hasTaxIdRegex)) {
+    return url.replace(/taxonomy\/uniprot\//, `/taxonomy/uniprot/${focused}/`);
+  }
+  return url;
+};
 
 export const getUrlForApi = (...parameters) =>
   getUrl('api')(...parameters)

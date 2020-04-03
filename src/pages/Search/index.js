@@ -197,7 +197,6 @@ const Wrapper = (
                         // }
                       )}
                       data-icon="&#xf129;"
-                      // data-icon="&#xf137;"
                     />
                   </button>
                 </div>

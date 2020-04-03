@@ -1,4 +1,5 @@
 /* eslint-env node */
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 class LegacyModuleSplitPlugin {
   constructor(options) {
     this._options = options; // Not in use now, but just in case for the future
@@ -7,14 +8,14 @@ class LegacyModuleSplitPlugin {
 
   apply(compiler) {
     compiler.hooks.compilation.tap('LegacyModuleSplitPlugin', compilation => {
-      compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration.tapAsync(
+      HtmlWebpackPlugin.getHooks(compilation).beforeAssetTagGeneration.tapAsync(
         'LegacyModuleSplitPlugin',
-        this.beforeHTMLGeneration.bind(this)
+        this.beforeAssetTagGeneration.bind(this)
       );
     });
   }
 
-  beforeHTMLGeneration(data, callback) {
+  beforeAssetTagGeneration(data, callback) {
     this._code = [...this._code, ...data.assets.js];
     data.plugin.options.moduleScripts = this._code.filter(path =>
       path.includes('.module.')

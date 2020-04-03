@@ -3,143 +3,30 @@
 exports[`<Citation /> should render 1`] = `
 <section>
   <h3>
-    How to cite
+    Recent Publications
   </h3>
+  <div
+    className="flex-column"
+  >
+    <InterPro2019 />
+    <InterProScan2014 />
+  </div>
   <div
     className="row"
   >
-    <div
-      className="columns large-6 margin-bottom-large"
+    <h3
+      className="margin-top-large"
     >
-      <Memo(Loadable)
-        data={
-          Object {
-            "author": "Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, 
-              Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown,
-              Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough,
-              David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez, 
-              Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu Mi, 
-              Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo, 
-              Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien Pesseat, 
-              Simon C Potter, Matloob A Qureshi, Neil D Rawlings, Nicole Redaschi, 
-              Lorna J Richardson, Catherine Rivoire, Gustavo A Salazar, 
-              Amaia Sangrador-Vegas, Christian J A Sigrist, Ian Sillitoe, 
-              Granger G Sutton, Narmada Thanki, Paul D Thomas, Silvio C E Tosatto, 
-              Siew-Yit Yong and Robert D Finn",
-            "identifier": "10.1093/nar/gky1100",
-          }
-        }
-        processData={[Function]}
-      />
-      <div
-        className="cite-box"
-      >
-        <span
-          className="cite-icon icon icon-conceptual"
-          data-icon="l"
-        />
-        <span
-          className="cite-title"
-        >
-          <h5>
-            INTERPRO
-          </h5>
-        </span>
-        <span
-          className="cite-text"
-        >
-          To cite 
-          InterPro
-          , please refer to the following publication:
-          <br />
-          <i>
-            Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt, 
-              Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown,
-              Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough,
-              David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez, 
-              Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu Mi, 
-              Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo, 
-              Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien Pesseat, 
-              Simon C Potter, Matloob A Qureshi, Neil D Rawlings, Nicole Redaschi, 
-              Lorna J Richardson, Catherine Rivoire, Gustavo A Salazar, 
-              Amaia Sangrador-Vegas, Christian J A Sigrist, Ian Sillitoe, 
-              Granger G Sutton, Narmada Thanki, Paul D Thomas, Silvio C E Tosatto, 
-              Siew-Yit Yong and Robert D Finn
-          </i>
-           (
-          2019
-          ). 
-          <strong>
-            InterPro in 2019: improving coverage, classification and access to protein sequence annotations
-          </strong>
-          .
-           
-          Nucleic Acids Research, Jan 2019
-          ; doi: 
-          10.1093/nar/gky1100
-        </span>
-      </div>
-    </div>
-    <div
-      className="columns large-6 margin-bottom-large"
-    >
-      <Memo(Loadable)
-        data={
-          Object {
-            "author": "Philip Jones, David Binns, Hsin-Yu Chang, Matthew
-              Fraser, Weizhong Li, Craig McAnulla, Hamish McWilliam,
-              John Maslen, Alex Mitchell, Gift Nuka, Sebastien
-              Pesseat, Antony F. Quinn, Amaia Sangrador-Vegas, Maxim
-              Scheremetjew, Siew-Yit Yong, Rodrigo Lopez, and Sarah
-              Hunter",
-            "identifier": "doi:10.1093/bioinformatics/btu031",
-          }
-        }
-        processData={[Function]}
-      />
-      <div
-        className="cite-box"
-      >
-        <span
-          className="cite-icon icon icon-conceptual"
-          data-icon="l"
-        />
-        <span
-          className="cite-title"
-        >
-          <h5>
-            INTERPROSCAN
-          </h5>
-        </span>
-        <span
-          className="cite-text"
-        >
-          To cite 
-          InterProScan
-          , please refer to the following publication:
-          <br />
-          <i>
-            Philip Jones, David Binns, Hsin-Yu Chang, Matthew
-              Fraser, Weizhong Li, Craig McAnulla, Hamish McWilliam,
-              John Maslen, Alex Mitchell, Gift Nuka, Sebastien
-              Pesseat, Antony F. Quinn, Amaia Sangrador-Vegas, Maxim
-              Scheremetjew, Siew-Yit Yong, Rodrigo Lopez, and Sarah
-              Hunter
-          </i>
-           (
-          2014
-          ). 
-          <strong>
-            InterProScan 5: genome-scale protein function classification
-          </strong>
-          .
-           
-          Bioinformatics, Jan 2014
-          ; doi: 
-          doi:10.1093/bioinformatics/btu031
-        </span>
-      </div>
-    </div>
+      How to cite
+    </h3>
+    <p>
+      To cite InterPro, please refer to the following publication:
+    </p>
+    <PrintedInterPro2019 />
+    <p>
+      To cite InterProScan, please refer to the following publication:
+    </p>
+    <PrintedInterProScan2014 />
   </div>
 </section>
 `;

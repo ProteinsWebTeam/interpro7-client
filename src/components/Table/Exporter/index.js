@@ -22,6 +22,7 @@ const fPlus = foundationPartial(s, fonts, theme);
   children: any,
   includeSettings: boolean | function,
   left: boolean | function,
+  backgroundColor?: string,
 } */
 
 /*:: type State = {
@@ -33,6 +34,7 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
     children: T.any,
     includeSettings: T.oneOfType([T.bool, T.func]),
     left: T.oneOfType([T.bool, T.func]),
+    backgroundColor: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -46,6 +48,7 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
       entryDB,
       includeSettings = true,
       left = true,
+      backgroundColor,
     } = this.props;
     return (
       <div
@@ -54,7 +57,11 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
       >
         <button
           className={fPlus('button', 'dropdown')}
-          style={{ backgroundColor: config.colors.get(entryDB) }}
+          style={{
+            backgroundColor: entryDB
+              ? config.colors.get(entryDB)
+              : backgroundColor,
+          }}
           onClick={() => {
             this.setState({ isOpen: !this.state.isOpen });
           }}
@@ -84,7 +91,7 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
             left,
           })}
           style={{
-            borderColor: config.colors.get(entryDB),
+            borderColor: entryDB ? config.colors.get(entryDB) : backgroundColor,
             transform: `scaleY(${this.state.isOpen ? 1 : 0})`,
           }}
         >

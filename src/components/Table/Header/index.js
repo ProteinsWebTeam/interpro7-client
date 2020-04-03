@@ -52,10 +52,12 @@ const Header = (
                   </>
                 )}
                 {children || name || dataKey}
-                <ColumnSearchBox
-                  field={dataKey}
-                  forceToShow={showFilter[dataKey]}
-                />
+                {isSearchable && (
+                  <ColumnSearchBox
+                    field={dataKey}
+                    forceToShow={showFilter[dataKey]}
+                  />
+                )}
               </th>
             ),
           )}
