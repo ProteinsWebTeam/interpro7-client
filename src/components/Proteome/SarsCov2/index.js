@@ -13,9 +13,14 @@ import local from 'components/Table/views/Grid/style.css';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts, local);
 
-const SarsCov2 = ({ metadata: { lineage } }) => {
+const SarsCov2 = ({
+  metadata: {
+    lineage,
+    name: { name },
+  },
+}) => {
   // eslint-disable-next-line no-unused-vars
-  const groupBy = accessions => {
+  const groupBy = (accessions) => {
     const n = 5;
     const groups = [];
     for (let i = 0; i < n; i++) groups.push([]);
@@ -35,14 +40,14 @@ const SarsCov2 = ({ metadata: { lineage } }) => {
                 {lineage && <SpeciesIcon lineage={lineage} />}
               </div>
               <div className={f('card-title')}>
-                <h6>InterPro SARS-CoV-2 Update</h6>
+                <h6>InterPro SARS-Cov-2 Update</h6>
               </div>
             </div>
             <div>
               <br />
               <p>
                 This page collates the information within InterPro relating to
-                the SARS-Cov-2 protein sequences.
+                the {name} protein sequences.
               </p>
               <ul>
                 <li>

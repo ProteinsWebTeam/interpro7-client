@@ -162,7 +162,7 @@ const Announcement = () => (
           to={{
             description: {
               main: { key: 'proteome' },
-              proteome: { db: 'uniprot', accession: 'UP000000354' },
+              proteome: { db: 'uniprot', accession: 'UP000464024' },
             },
           }}
         >
@@ -327,8 +327,8 @@ class Home extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.notifications.showSettingsToast,
-  showSettingsToast => ({ showSettingsToast }),
+  (state) => state.settings.notifications.showSettingsToast,
+  (showSettingsToast) => ({ showSettingsToast }),
 );
 
 export default connect(mapStateToProps)(Home);
