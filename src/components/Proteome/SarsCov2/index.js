@@ -75,6 +75,7 @@ SarsCov2.propTypes = {
   metadata: T.shape({
     accession: T.string,
     lineage: T.string,
+    name: T.shape({ name: T.string }),
   }),
 };
 
