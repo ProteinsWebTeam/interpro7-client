@@ -83,7 +83,7 @@ ReleaseNotesSelectorWithData.propTypes = {
 };
 
 const getReleaseNotesListUrl = createSelector(
-  state => state.settings.api,
+  (state) => state.settings.api,
   ({ protocol, hostname, port, root }) =>
     cleanUpMultipleSlashes(
       format({
@@ -174,7 +174,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then(m => m.InterproType),
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
   render() {
@@ -186,7 +186,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
     const newIpro = content.interpro.new_entries.length;
     const lastEntry = content.interpro.latest_entry;
     const updates = Object.values(content.member_databases).filter(
-      db => db.is_updated,
+      (db) => db.is_updated,
     );
     const perType = content.interpro.types;
     const perMemberDB = content.member_databases;
@@ -210,7 +210,9 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
         ],
       },
     ];
-    const sets = Object.values(content.member_databases).filter(db => db.sets);
+    const sets = Object.values(content.member_databases).filter(
+      (db) => db.sets,
+    );
     const dbMap = new Map([
       ['PROSITE patterns', 'prosite'],
       ['PROSITE profiles', 'profile'],
@@ -291,6 +293,20 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                 databases.
               </li>
             </ul>
+            {content.notes && (
+              <div
+                className={f('callout', 'info', 'withicon')}
+                style={{
+                  display: 'flex',
+                }}
+              >
+                <div>
+                  {content.notes.map((note, i) => (
+                    <p key={i}>{note}</p>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <h4>Contents and coverage</h4>
             <p className={f('margin-bottom-small')}>
@@ -340,7 +356,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                         count={perType[key]}
                       />
                       {children &&
-                        children.map(child => (
+                        children.map((child) => (
                           <StatsPerType
                             label={child.label}
                             key={child.key}
@@ -389,7 +405,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               </thead>
               <tbody>
                 {Object.values(perMemberDB)
-                  .filter(db => !db.name.toLowerCase().startsWith('mobidb'))
+                  .filter((db) => !db.name.toLowerCase().startsWith('mobidb'))
                   .map(
                     ({
                       name,
@@ -562,7 +578,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                   ))}
               </tbody>
             </table>
-            {['structures', 'proteomes', 'taxonomy'].map(key => (
+            {['structures', 'proteomes', 'taxonomy'].map((key) => (
               <section key={key}>
                 <h3 style={{ textTransform: 'capitalize' }}>
                   {key} information
@@ -635,8 +651,8 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
   }
 }
 const getReleaseNotesUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.other,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.other,
   ({ protocol, hostname, port, root }, other) =>
     cleanUpMultipleSlashes(
       format({
@@ -651,8 +667,8 @@ const getReleaseNotesUrl = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description,
-  description => ({ description }),
+  (state) => state.customLocation.description,
+  (description) => ({ description }),
 );
 export default connect(mapStateToProps)(
   loadData(getReleaseNotesUrl)(ReleaseNotes),

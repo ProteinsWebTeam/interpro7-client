@@ -102,7 +102,7 @@ const otherPages = new Map([
   ['help', Help],
   ['contact', Contact],
   ['settings', Settings],
-  ['coronavirus', Coronavirus],
+  ['covid-19', Coronavirus],
 ]);
 
 const Null = () => null;
@@ -114,22 +114,22 @@ const Null = () => null;
 
 const childRoutes = new Map([[/^search|result$/, Null]]);
 const locationSelector1 = createSelector(
-  customLocation => {
+  (customLocation) => {
     if (
       customLocation.description.main.key &&
       !customLocation.description[customLocation.description.main.key].accession
     )
       return customLocation.description.main.key;
   },
-  value => value,
+  (value) => value,
 );
 const locationSelector2 = createSelector(
-  customLocation => customLocation.description.main.key,
-  value => value,
+  (customLocation) => customLocation.description.main.key,
+  (value) => value,
 );
 const locationSelectorForOther = createSelector(
-  customLocation => customLocation.description.other[0],
-  value => value,
+  (customLocation) => customLocation.description.other[0],
+  (value) => value,
 );
 
 class HomeOrOther extends PureComponent /*:: <Props> */ {
@@ -183,6 +183,6 @@ export class Pages extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToProps = createSelector(stuckSelector, stuck => ({ stuck }));
+const mapStateToProps = createSelector(stuckSelector, (stuck) => ({ stuck }));
 
 export default connect(mapStateToProps)(Pages);

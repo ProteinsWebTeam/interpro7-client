@@ -1,30 +1,17 @@
 import React from 'react';
 
-import { Helmet } from 'react-helmet-async';
-
-import ProteomeFocus from 'components/Proteome/Focus';
-
-import { foundationPartial } from 'styles/foundation';
-
-import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
+import Redirect from 'components/generic/Redirect';
 
 const Coronavirus = () => {
   return (
-    <div className={f('row')}>
-      <div className={f('columns')}>
-        <section>
-          <Helmet>
-            <title>Coronavirus Update</title>
-          </Helmet>
-          <h3>InterPro Coronavirus Update</h3>
-          <ProteomeFocus accession="UP000000354" />
-        </section>
-      </div>
-    </div>
+    <Redirect
+      to={{
+        description: {
+          main: { key: 'proteome' },
+          proteome: { db: 'uniprot', accession: 'UP000464024' },
+        },
+      }}
+    />
   );
 };
 
