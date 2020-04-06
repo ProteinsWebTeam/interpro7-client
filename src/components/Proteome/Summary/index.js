@@ -90,8 +90,7 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
             </div>
           </div>
         </section>
-        {(metadata.accession === 'UP000000354' ||
-          metadata.accession === 'UP000464024') && (
+        {metadata.accession === 'UP000464024' && (
           <SarsCov2 metadata={metadata} />
         )}
       </div>
