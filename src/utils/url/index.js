@@ -45,10 +45,11 @@ export const getCursor = (url /*: string */) => {
 export const toCanonicalURL = (url /*: string */) => {
   const ulrObj = parse(url);
   if (!ulrObj.search) return ulrObj.pathname;
-  return `${ulrObj.pathname}?${ulrObj.search
+  const path = ulrObj.pathname.split('api/')?.[1] || ulrObj.pathname;
+  return `${path}?${ulrObj.search
     .slice(1)
     .split('&')
-    .filter(arg => arg.toLowerCase() !== 'page_size=20')
+    .filter((arg) => arg.toLowerCase() !== 'page_size=20')
     .sort()
     .join('&')}`;
 };
