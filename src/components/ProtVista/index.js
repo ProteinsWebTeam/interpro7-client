@@ -814,7 +814,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     },
                   }}
                 >
-                  {this.renderSwitch(this.state.label, entry)}
+                  {this.renderSwitch(this.state.label, d)}
                 </Link>
                 {this.renderResidueLabels(d)}
               </div>
