@@ -1,5 +1,6 @@
 @import '../../styles/fonts.css';
 @import '../../styles/colors.css';
+@import '../../styles/timing.css';
 
 .protvista {
   font-size: 12px;
@@ -399,7 +400,7 @@ g:global(.child-location-group.clg-5) path {
 
 .dropdown-container {
   display: flex;
-  margin: 0.5rem 0 0 0;
+  margin: 0.5rem 0 0.5rem 0;
   position: relative;
 
   & .button {
@@ -433,4 +434,29 @@ g:global(.child-location-group.clg-5) path {
 .dropdown-container .dropdown-pane li {
   display: block;
   padding: 0.3rem 1rem;
+}
+
+.conservation-placeholder-component {
+  height: 4em;
+}
+
+.protvista div:global(.zoom-button-div) {
+  display: inline;
+  margin-right: 0.25rem;
+}
+
+.zoom-button {
+  font-size: 2rem;
+  color: #2daec1;
+  margin: 1px;
+}
+
+.option-fullscreen {
+  display: inline;
+
+  & div > button {
+    font-size: 2rem;
+    color: #2daec1;
+    margin: 1px;
+  }
 }

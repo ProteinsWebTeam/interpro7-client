@@ -16,13 +16,14 @@ import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 import ProtvistaTrack from 'protvista-track';
 import ProtvistaSaver from 'protvista-saver';
-import ZoomOverlay from 'components/ZoomOverlay';
+import ProtvistaZoomTool from 'protvista-zoom-tool';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import spinner from 'components/SimpleCommonComponents/Loading/style.css';
 import PopperJS from 'popper.js';
 
 import loadWebComponent from 'utils/load-web-component';
@@ -44,7 +45,7 @@ import localCSSasText from '!!raw-loader!./style.css';
 import ebiGlobalCSS from '!!raw-loader!ebi-framework/css/ebi-global.css';
 import globalCSS from '!!raw-loader!styles/global.css';
 
-const f = foundationPartial(ipro, localCSS, fonts);
+const f = foundationPartial(ipro, localCSS, fonts, spinner);
 
 const webComponents = [];
 
@@ -83,15 +84,19 @@ const loadProtVistaWebComponents = () => {
     );
 
     webComponents.push(
+      loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
+    );
+
+    webComponents.push(
       loadWebComponent(() =>
-        import('interpro-components').then(m => m.InterproType),
+        import('interpro-components').then((m) => m.InterproType),
       ).as('interpro-type'),
     );
   }
   return Promise.all(webComponents);
 };
 
-const removeAllChildrenFromNode = node => {
+const removeAllChildrenFromNode = (node) => {
   if (node.lastChild) {
     node.removeChild(node.lastChild);
     removeAllChildrenFromNode(node);
@@ -129,7 +134,7 @@ const getColorScaleHTML = (
   title: string,
   fixedHighlight: string,
   id: string,
-  handleToggle: function,
+  showConservationButton: boolean,
 }; */
 
 /*:: type State = {
@@ -139,7 +144,7 @@ const getColorScaleHTML = (
   collapsed: boolean,
   label: string,
   addLabelClass: string,
-  showConservationButton: boolean,
+  showConservationButtonButton: boolean,
 }; */
 class ProtVista extends Component /*:: <Props, State> */ {
   static propTypes = {
@@ -151,7 +156,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
     title: T.string,
     fixedHighlight: T.string,
     id: T.string,
-    handleToggle: T.func,
+    showConservationButton: T.bool,
+    handleConservationLoad: T.func,
   };
 
   constructor(props /*: Props */) {
@@ -169,6 +175,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       addLabelClass: '',
       enableTooltip: true,
       dropdownOpen: false,
+      showLoading: false,
     };
 
     this._mainRef = React.createRef();
@@ -176,8 +183,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this._popperContentRef = React.createRef();
     this._webProteinRef = React.createRef();
     this._hydroRef = React.createRef();
-    this._showConservationRef = React.createRef();
     this._labelOptionsRef = React.createRef();
+    this._conservationTrackRef = React.createRef();
     this._isPopperTop = true;
   }
 
@@ -223,7 +230,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     saver.preSave = () => {
       const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
       // Including the styles of interpro-type elements
-      base.querySelectorAll('interpro-type').forEach(el => {
+      base.querySelectorAll('interpro-type').forEach((el) => {
         el.innerHTML = el.shadowRoot.innerHTML;
       });
       const style = document.createElement('style');
@@ -231,8 +238,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
       // TODO it needs to be changed in an efficient way through webpack
       let str = localCSSasText + iproCSSasText + foundationCSSasText;
       const cssStyles = [localCSS, ipro, foundationCSS];
-      cssStyles.forEach(item => {
-        Object.keys(item).forEach(key => {
+      cssStyles.forEach((item) => {
+        Object.keys(item).forEach((key) => {
           str = str.replace(
             new RegExp(`\\.${key}([:,[.\\s])`, 'gm'),
             `.${item[key]}$1`,
@@ -248,7 +255,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     saver.postSave = () => {
       const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
       base.removeChild(document.getElementById('tmp_style'));
-      base.querySelectorAll('interpro-type').forEach(el => {
+      base.querySelectorAll('interpro-type').forEach((el) => {
         el.innerHTML = '';
       });
     };
@@ -287,7 +294,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
     for (const type of data) {
       for (const d of type[1]) {
-        const tmp = (d.entry_protein_locations || d.locations).map(loc => ({
+        const tmp = (d.entry_protein_locations || d.locations).map((loc) => ({
           accession: d.accession,
           name: d.name,
           source_database: d.source_database,
@@ -301,7 +308,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
           confidence: loc.confidence,
         }));
         const children = d.children
-          ? d.children.map(child => ({
+          ? d.children.map((child) => ({
               accession: child.accession,
               chain: d.chain,
               name: child.name,
@@ -311,9 +318,9 @@ class ProtVista extends Component /*:: <Props, State> */ {
               entry_type: child.entry_type,
               type: child.type,
               locations: (child.entry_protein_locations || child.locations).map(
-                loc => ({
+                (loc) => ({
                   ...loc,
-                  fragments: loc.fragments.map(f => ({
+                  fragments: loc.fragments.map((f) => ({
                     shape: b2sh.get(f['dc-status']),
                     ...f,
                   })),
@@ -401,7 +408,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     return sourceDatabase;
   };
 
-  _getMobiDBLiteType = entry => {
+  _getMobiDBLiteType = (entry) => {
     let type = null;
     if (entry.locations && entry.locations.length > 0) {
       if (entry.locations[0].seq_feature) {
@@ -411,7 +418,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     return type;
   };
 
-  _getSecondaryStructureType = entry => {
+  _getSecondaryStructureType = (entry) => {
     let type = null;
     if (entry.locations && entry.locations.length > 0) {
       if (entry.locations[0].fragments && entry.locations[0].fragments[0]) {
@@ -435,7 +442,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     }
     let newLocations = null;
     if (highlightChild) {
-      newLocations = highlightChild.split(',').map(loc => {
+      newLocations = highlightChild.split(',').map((loc) => {
         const [start, end] = loc.split(':');
         return { fragments: [{ start, end }] };
       });
@@ -573,10 +580,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
 
   getConservationScore(highlight, match, scale) {
     const start = parseInt(highlight.split(':')[0], 10);
-    const matchFragment = match.locations[0].fragments.find(fragment => {
+    const matchFragment = match.locations[0].fragments.find((fragment) => {
       return start >= fragment.start && start <= fragment.end;
     });
-    const scaleEntry = scale.find(element => {
+    const scaleEntry = scale.find((element) => {
       return matchFragment.color === element.color;
     });
     return `${scaleEntry.min} - ${scaleEntry.max}`;
@@ -600,16 +607,16 @@ class ProtVista extends Component /*:: <Props, State> */ {
       const endLocation = match.locations[match.locations.length - 1];
       const start = startLocation.fragments[0].start;
       const end = endLocation.fragments[endLocation.fragments.length - 1].end;
-      const matchConservation = this.props.data.find(element => {
+      const matchConservation = this.props.data.find((element) => {
         if (element[0] && element[0].toLowerCase() === 'match conservation') {
           return element[1].find(
-            e => (e.type && e.type.toLowerCase()) === 'sequence_conservation',
+            (e) => (e.type && e.type.toLowerCase()) === 'sequence_conservation',
           );
         }
         return false;
       });
 
-      const scale = matchConservation[1].find(element => {
+      const scale = matchConservation[1].find((element) => {
         return (
           element.type && element.type.toLowerCase() === 'sequence_conservation'
         );
@@ -664,7 +671,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this.setState({ collapsed: !collapsed, expandedTrack });
   };
 
-  handleCollapseLabels = accession => {
+  handleCollapseLabels = (accession) => {
     if (this.web_tracks[accession]) {
       this.setObjectValueInState(
         'expandedTrack',
@@ -694,7 +701,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this.setState({ dropdownOpen: false });
     const items = this._labelOptionsRef.current.childNodes;
     const labels = [];
-    items.forEach(item => {
+    items.forEach((item) => {
       if (item.firstChild.checked) labels.push(item.firstChild.value);
     });
     if (labels.includes('name')) {
@@ -704,7 +711,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
     } else {
       this.setState({ label: 'accession', addLabelClass: '' });
     }
-    if (this.props.handleToggle) this.props.handleToggle(labels);
   };
 
   renderSwitch(label, entry) {
@@ -792,7 +798,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
         >
           {this.renderResidueLabels(entry)}
           {entry.children &&
-            entry.children.map(d => (
+            entry.children.map((d) => (
               <div
                 key={`main_${d.accession}`}
                 className={f('track-accession-child')}
@@ -821,7 +827,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
   renderResidueLabels(entry) {
     if (!entry.residues) return null;
     const { expandedTrack } = this.state;
-    return entry.residues.map(residue =>
+    return entry.residues.map((residue) =>
       residue.locations.map((r, i) => (
         <div
           key={`res_${r.accession || i}`}
@@ -890,14 +896,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
           <div
             className={f('option-fullscreen', 'font-l', 'margin-right-large')}
           >
-            <FullScreenButton
-              element={this._mainRef.current}
-              tooltip="View the domain viewer in full screen mode"
-            />
-          </div>
-          <div
-            className={f('option-fullscreen', 'font-l', 'margin-right-large')}
-          >
             <Tooltip title={'Click to take the snapshot'}>
               <protvista-saver
                 element-id={`${this.props.id}ProtvistaDiv`}
@@ -923,9 +921,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
             >
               <Tooltip
                 title={
-                  'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
-                  'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
-                  'helpful if you can include literature references supporting your annotation suggestion.'
+                  'Customise the Nightingale viewer to show names, accession and tooltips'
                 }
               >
                 Display
@@ -947,7 +943,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                       this.state.label === 'accession' ||
                       this.state.label === 'both'
                     }
-                  />
+                  />{' '}
                   Accession
                 </li>
                 <li key={'name'}>
@@ -979,10 +975,16 @@ class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
+  handleConservationLoad(_this) {
+    _this.setState({ showLoading: true });
+    _this.props.handleConservationLoad();
+  }
+
   render() {
     const {
       protein: { length },
       data,
+      showConservationButton,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
@@ -998,7 +1000,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper__arrow')} />
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
-        <ZoomOverlay elementId={`${this.props.id}ProtvistaDiv`} />
         <div id={`${this.props.id}ProtvistaDiv`}>
           <div className={f('protvista')}>
             <protvista-manager
@@ -1084,7 +1085,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                           })}
                         >
                           {entries &&
-                            entries.map(entry => (
+                            entries.map((entry) => (
                               <div
                                 key={entry.accession}
                                 className={f('track-row')}
@@ -1105,7 +1106,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                       displaystart="1"
                                       displayend={length}
                                       id={`track_${entry.accession}`}
-                                      ref={e =>
+                                      ref={(e) =>
                                         (this.web_tracks[entry.accession] = e)
                                       }
                                       highlight-event="onmouseover"
@@ -1124,7 +1125,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                                       displaystart="1"
                                       displayend={length}
                                       id={`track_${entry.accession}`}
-                                      ref={e =>
+                                      ref={(e) =>
                                         (this.web_tracks[entry.accession] = e)
                                       }
                                       shape="roundRectangle"
@@ -1147,6 +1148,98 @@ class ProtVista extends Component /*:: <Props, State> */ {
                         </div>
                       </div>
                     ))}
+                {showConservationButton ? (
+                  <div className={f('track-container')}>
+                    <div className={f('track-row')}>
+                      <div
+                        className={f(
+                          'track-component',
+                          this.state.addLabelClass,
+                        )}
+                      >
+                        <header>
+                          <button
+                            onClick={() => this.handleConservationLoad(this)}
+                          >
+                            ▸ Match Conservation
+                          </button>
+                        </header>
+                      </div>
+                    </div>
+                    <div className={f('track-group')}>
+                      <div className={f('track-row')}>
+                        <div
+                          className={f(
+                            'track-component',
+                            'conservation-placeholder-component',
+                            this.state.addLabelClass,
+                          )}
+                          ref={this._conservationTrackRef}
+                        >
+                          {this.state.showLoading ? (
+                            <div
+                              className={f('loading-spinner')}
+                              style={{ margin: '10px auto' }}
+                            >
+                              <div />
+                              <div />
+                              <div />
+                            </div>
+                          ) : null}
+                        </div>
+                        <div
+                          className={f(
+                            'track-accession',
+                            this.state.addLabelClass,
+                          )}
+                        >
+                          <button
+                            type="button"
+                            className={f(
+                              'hollow',
+                              'button',
+                              'user-select-none',
+                            )}
+                            onClick={() => this.handleConservationLoad(this)}
+                          >
+                            Fetch Conservation
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              <protvista-zoom-tool
+                length={length}
+                displaystart="1"
+                displayend={length}
+              >
+                <button
+                  id="zoom-in"
+                  className={f('zoom-button', 'icon', 'icon-common')}
+                  data-icon="&#xf0fe;"
+                  title="Click to zoom in      Ctrl+Scroll"
+                />
+                <button
+                  id="zoom-out"
+                  className={f('zoom-button', 'icon', 'icon-common')}
+                  data-icon="&#xf146;"
+                  title="Click to zoom out      Ctrl+Scroll"
+                />
+              </protvista-zoom-tool>
+              <div
+                className={f(
+                  'option-fullscreen',
+                  'font-l',
+                  'margin-right-large',
+                )}
+              >
+                <FullScreenButton
+                  element={this._mainRef.current}
+                  tooltip="View the domain viewer in full screen mode"
+                />
               </div>
             </protvista-manager>
           </div>
@@ -1157,8 +1250,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.ui,
-  ui => ({
+  (state) => state.settings.ui,
+  (ui) => ({
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
   }),
 );

@@ -19,13 +19,10 @@ import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
-import pvista from 'components/ProtVista/style.css';
-import spinner from 'components/SimpleCommonComponents/Loading/style.css';
-import localCSS from './style.css';
 
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
-const f = foundationPartial(localCSS, ipro, pvista, spinner);
+const f = foundationPartial(ipro);
 
 const ProtVista = loadable({
   loader: () =>
@@ -100,7 +97,7 @@ const processConservationData = (entry, match) => {
       // score > 10 = 10. Shouldn't happen as it's a probability * 10
       hit = colourMap[colourMap.length - 1];
     } else {
-      hit = colourMap.find(element => {
+      hit = colourMap.find((element) => {
         return residue.score > element.min && residue.score <= element.max;
       });
     }
@@ -193,12 +190,12 @@ const mergeConservationData = (data, conservationData) => {
 };
 
 const mergeResidues = (data, residues) => {
-  Object.values(data).forEach(group =>
-    group.forEach(entry => {
+  Object.values(data).forEach((group) =>
+    group.forEach((entry) => {
       if (residues[entry.accession])
         entry.residues = [residues[entry.accession]];
       if (entry.children && entry.children.length)
-        entry.children.forEach(child => {
+        entry.children.forEach((child) => {
           if (residues[child.accession])
             child.residues = [residues[child.accession]];
         });
@@ -206,7 +203,7 @@ const mergeResidues = (data, residues) => {
   );
 };
 
-const splitMobiFeatures = feature => {
+const splitMobiFeatures = (feature) => {
   const newFeatures = {};
   for (const loc of feature.locations) {
     const key =
@@ -254,13 +251,13 @@ const mergeExtraFeatures = (data, extraFeatures) => {
 };
 
 const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
-const groupByEntryType = interpro => {
+const groupByEntryType = (interpro) => {
   const groups = {};
   for (const entry of interpro) {
     if (!groups[entry.type]) groups[entry.type] = [];
     groups[entry.type].push(entry);
   }
-  Object.values(groups).forEach(g => g.sort(orderByAccession));
+  Object.values(groups).forEach((g) => g.sort(orderByAccession));
   return groups;
 };
 
@@ -289,10 +286,10 @@ const sortFunction = ([a], [b]) => {
   return a > b ? 1 : 0;
 };
 
-const getExtraURL = query =>
+const getExtraURL = (query) =>
   createSelector(
-    state => state.settings.api,
-    state => state.customLocation.description,
+    (state) => state.settings.api,
+    (state) => state.customLocation.description,
     ({ protocol, hostname, port, root }, description) => {
       const url = format({
         protocol,
@@ -309,18 +306,25 @@ const getExtraURL = query =>
 
 /*:: type Props = {
   mainData: Object,
-  dataMerged: Object
-  handleToggle?: function,
+  dataMerged: Object,
+  showConservationButton: boolean,
+  handleConservationLoad: function,
 }; */
 export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props> */ {
   static propTypes = {
     mainData: T.object.isRequired,
     dataMerged: T.object.isRequired,
-    handleToggle: T.func,
+    showConservationButton: T.bool,
+    handleConservationLoad: T.func,
   };
 
   render() {
-    const { mainData, dataMerged, handleToggle } = this.props;
+    const {
+      mainData,
+      dataMerged,
+      showConservationButton,
+      handleConservationLoad,
+    } = this.props;
     const sortedData = Object.entries(dataMerged)
       .sort(sortFunction)
       // “Binding_site” -> “Binding site”
@@ -335,7 +339,8 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
         data={sortedData}
         title="Entry matches to this protein"
         id={mainData.metadata.accession || mainData.payload.metadata.accession}
-        handleToggle={handleToggle}
+        showConservationButton={showConservationButton}
+        handleConservationLoad={handleConservationLoad}
       />
     );
   }
@@ -382,7 +387,6 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       generateConservationData: false,
       showConservationButton: false,
       dataConservation: null,
-      addLabelClass: '',
     };
   }
   // eslint-disable-next-line no-magic-numbers
@@ -392,7 +396,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     this.setState({ generateConservationData: true });
   };
 
-  isConservationDataAvailable = data => {
+  isConservationDataAvailable = (data) => {
     // check if conservation data has already been generated
     if (this.state.dataConservation) return false;
 
@@ -431,13 +435,6 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     return false;
   };
 
-  // To adjust the Conservation track in ProtVista width when label by name/accession is switched
-  _handleToggleLabel = labels => {
-    if (labels.includes('name'))
-      this.setState({ addLabelClass: 'label-by-name' });
-    else this.setState({ addLabelClass: '' });
-  };
-
   /* eslint-disable complexity  */
   render() {
     const {
@@ -462,7 +459,9 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       data,
       endpoint: 'protein',
     });
-    const interproFamilies = interpro.filter(entry => entry.type === 'family');
+    const interproFamilies = interpro.filter(
+      (entry) => entry.type === 'family',
+    );
     const groups = groupByEntryType(interpro);
     const genome3d = formatGenome3dIntoProtVistaPanels(dataGenome3d);
     unintegrated.sort(orderByAccession);
@@ -494,7 +493,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     return (
       <>
         <ConservationProviderElement
-          handleLoaded={data => this.setState({ dataConservation: data })}
+          handleLoaded={(data) => this.setState({ dataConservation: data })}
         />
         <div className={f('margin-bottom-large')}>
           <h5>Protein family membership</h5>
@@ -508,64 +507,9 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
         <DomainOnProteinWithoutMergedData
           mainData={mainData}
           dataMerged={mergedData}
-          handleToggle={this._handleToggleLabel}
+          showConservationButton={showConservationButton}
+          handleConservationLoad={this.fetchConservationData}
         />
-        {showConservationButton ? (
-          <div className={f('protvista', 'tracks-container')}>
-            <div className={f('track-container', 'conservation-placeholder')}>
-              <div className={f('track-row')}>
-                <div className={f('track-component', this.state.addLabelClass)}>
-                  <header>
-                    <button onClick={this.fetchConservationData}>
-                      ▸ Match Conservation
-                    </button>
-                  </header>
-                </div>
-              </div>
-              <div className={f('track-group')}>
-                <div className={f('track-row')}>
-                  <div
-                    className={f(
-                      'track-component',
-                      'conservation-placeholder-component',
-                      this.state.addLabelClass,
-                    )}
-                  >
-                    {this.state.generateConservationData ? (
-                      <div
-                        className={f('loading-spinner')}
-                        style={{ margin: '10px auto' }}
-                      >
-                        <div />
-                        <div />
-                        <div />
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                  </div>
-                  {this.state.generateConservationData ? (
-                    ''
-                  ) : (
-                    <div
-                      className={f('track-accession', this.state.addLabelClass)}
-                    >
-                      <button
-                        type="button"
-                        className={f('hollow', 'button', 'user-select-none')}
-                        onClick={this.fetchConservationData}
-                      >
-                        Fetch Conservation
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          ''
-        )}
       </>
     );
   }
@@ -573,8 +517,8 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 /* eslint-enable complexity  */
 
 const getRelatedEntriesURL = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.protein.accession,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.protein.accession,
   ({ protocol, hostname, port, root }, accession) => {
     const newDesc = {
       main: { key: 'entry' },
@@ -595,8 +539,8 @@ const getRelatedEntriesURL = createSelector(
 );
 
 const getGenome3dURL = createSelector(
-  state => state.settings.genome3d,
-  state => state.customLocation.description.protein.accession,
+  (state) => state.settings.genome3d,
+  (state) => state.customLocation.description.protein.accession,
   ({ protocol, hostname, port, root }, accession) => {
     return format({
       protocol,
