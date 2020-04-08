@@ -2,10 +2,16 @@
 
 import { parse } from 'url';
 const FINAL_SLASH = /\/*$/;
+const START_SLASH = /^\/*/;
 
 export const removeLastSlash = (str /*: string*/) =>
   str.replace(FINAL_SLASH, '');
 
+export const removeStartSlash = (str /*: string*/) =>
+  str.replace(START_SLASH, '');
+
+export const trimSlashes = (str /*: string*/) =>
+  removeLastSlash(removeStartSlash(str));
 // Builds a new absolute URL from the current one, keeping everything before
 // the 'from' parameter and adding everything that is passed as 'to' parameters.
 export const buildLink = (
@@ -45,7 +51,9 @@ export const getCursor = (url /*: string */) => {
 export const toCanonicalURL = (url /*: string */) => {
   const ulrObj = parse(url);
   if (!ulrObj.search) return ulrObj.pathname;
-  const path = ulrObj.pathname.split('api/')?.[1] || ulrObj.pathname;
+  const path = trimSlashes(
+    ulrObj.pathname.split('api/')?.[1] || ulrObj.pathname,
+  );
   return `${path}?${ulrObj.search
     .slice(1)
     .split('&')
