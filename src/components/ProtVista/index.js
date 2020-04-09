@@ -186,6 +186,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this._labelOptionsRef = React.createRef();
     this._conservationTrackRef = React.createRef();
     this._isPopperTop = true;
+    this._timeoutID = 0;
   }
 
   async componentDidMount() {
@@ -351,12 +352,18 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     this.handleCollapseLabels(detail.feature.accession);
                     break;
                   case 'mouseout':
-                    removeAllChildrenFromNode(this._popperContentRef.current);
-                    this.popper.destroy();
-                    this._popperRef.current.classList.add(f('hide'));
+                    this._timeoutID = setTimeout(() => {
+                      removeAllChildrenFromNode(this._popperContentRef.current);
+                      this.popper.destroy();
+                      this._popperRef.current.classList.add(f('hide'));
+                      this._timeoutID = 0;
+                    }, 5000);
                     break;
                   case 'mouseover':
                     if (this.state.enableTooltip) {
+                      if (this._timeoutID > 0) {
+                        clearTimeout(this._timeoutID);
+                      }
                       this._popperRef.current.classList.remove(f('hide'));
                       removeAllChildrenFromNode(this._popperContentRef.current);
                       this._popperContentRef.current.appendChild(

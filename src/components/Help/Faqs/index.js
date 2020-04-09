@@ -21,7 +21,7 @@ export default class Faqs extends PureComponent /*:: <{}> */ {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then(m => m.InterproType),
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
 
@@ -382,7 +382,13 @@ export default class Faqs extends PureComponent /*:: <{}> */ {
                 <div className={f('accordion-info')}>
                   <p>
                     Please see the online tutorials section on the{' '}
-                    <Link href="/help/tutorial/">Training &amp; tutorials</Link>{' '}
+                    <Link
+                      to={{
+                        description: { other: ['tutorial'] },
+                      }}
+                    >
+                      Training &amp; tutorials
+                    </Link>
                     page.
                   </p>
                 </div>
