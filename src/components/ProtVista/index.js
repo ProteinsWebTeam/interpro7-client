@@ -49,6 +49,8 @@ const f = foundationPartial(ipro, localCSS, fonts, spinner);
 
 const webComponents = [];
 
+const TOOLTIP_DELAY = 5000;
+
 const loadProtVistaWebComponents = () => {
   if (!webComponents.length) {
     webComponents.push(
@@ -357,7 +359,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                       this.popper.destroy();
                       this._popperRef.current.classList.add(f('hide'));
                       this._timeoutID = 0;
-                    }, 5000);
+                    }, TOOLTIP_DELAY);
                     break;
                   case 'mouseover':
                     if (this.state.enableTooltip) {

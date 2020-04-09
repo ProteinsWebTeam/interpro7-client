@@ -381,11 +381,18 @@ exports[`<Faqs /> should render 1`] = `
               Please see the online tutorials section on the
                
               <Memo(Connect(Link))
-                href="/help/tutorial/"
+                to={
+                  Object {
+                    "description": Object {
+                      "other": Array [
+                        "tutorial",
+                      ],
+                    },
+                  }
+                }
               >
                 Training & tutorials
               </Memo(Connect(Link))>
-               
               page.
             </p>
           </div>
