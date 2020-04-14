@@ -21,8 +21,8 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
-const features2protvista = features => {
-  const featArray = Object.values(features);
+const features2protvista = (features) => {
+  const featArray = Object.values(features || {});
   const integrated = [];
   for (const feature of featArray) {
     if (feature.integrated && feature.integrated in features) {
@@ -40,9 +40,12 @@ const features2protvista = features => {
     accession.toLowerCase().startsWith('ipr'),
   );
   const unintegrated = featArray.filter(
-    f => interpro.indexOf(f) === -1 && integrated.indexOf(f) === -1,
+    (f) => interpro.indexOf(f) === -1 && integrated.indexOf(f) === -1,
   );
-  return [['interpro', interpro], ['unintegrated', unintegrated]];
+  return [
+    ['interpro', interpro],
+    ['unintegrated', unintegrated],
+  ];
 };
 
 const Viewer = (
@@ -84,8 +87,8 @@ Viewer.propTypes = {
 };
 
 const getIsoformURL = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
   (_, props) => props.isoform,
   ({ protocol, hostname, port, root }, { protein: { accession } }, isoform) => {
     const description = {
