@@ -160,8 +160,6 @@ exports[`<SummaryStructure /> should render 1`] = `
       </div>
     </Memo(Connect(UnconnectedErrorBoundary))>
   </section>
-  <div>
-    0
-  </div>
+  <div />
 </div>
 `;
