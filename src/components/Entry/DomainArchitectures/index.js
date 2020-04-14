@@ -40,7 +40,7 @@ const SchemaOrgData = loadable({
 const FAKE_PROTEIN_LENGTH = 1000;
 const GAP_BETWEEN_DOMAINS = 5;
 
-const schemaProcessData = data => ({
+const schemaProcessData = (data) => ({
   '@id': '@isContainedIn',
   '@type': [
     'DomainArchitecture',
@@ -83,7 +83,7 @@ export const ida2json = (ida, entry) => {
   const obj = {
     length: FAKE_PROTEIN_LENGTH,
     domains: Object.values(grouped),
-    accessions: domains.map(d => d.accession),
+    accessions: domains.map((d) => d.accession),
   };
   return obj;
 };
@@ -158,7 +158,7 @@ export class IDAProtVista extends ProtVistaMatches {
     const { matches, length, databases, highlight = [] } = this.props;
     return (
       <div>
-        {matches.map(d => (
+        {matches.map((d) => (
           <div key={d.accession} className={f('track-row')}>
             <div
               className={f('track-component', {
@@ -180,7 +180,7 @@ export class IDAProtVista extends ProtVistaMatches {
                   displaystart="1"
                   displayend={length}
                   id={`track_${d.accession}`}
-                  ref={e => (this.web_tracks[d.accession] = e)}
+                  ref={(e) => (this.web_tracks[d.accession] = e)}
                   shape="roundRectangle"
                   expanded
                   use-ctrl-to-zoom
@@ -252,47 +252,64 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     if (!payload.results) return null;
     const toHighlight =
       highlight.length === 0 && mainAccession ? [mainAccession] : highlight;
+
+    let messageContent;
+    if (payload.count === 0) {
+      if (search.ida_search.match(new RegExp('ipr', 'ig'))) {
+        messageContent = (
+          <div className={f('callout', 'info', 'withicon')}>
+            Domain architectures are calculated for InterPro entries of type
+            Domain. There are no Domain architectures for entry{' '}
+            <b>{search.ida_search}</b> as it is of different type.
+          </div>
+        );
+      } else {
+        messageContent = (
+          <div className={f('callout', 'info', 'withicon')}>
+            <b>{search.ida_search}</b> is not a valid entry. Accepted entries
+            are Pfam accession or an InterPro accession if a Pfam entry is
+            integrated with it.
+          </div>
+        );
+      }
+    } else {
+      messageContent = (
+        <>
+          <h4>{payload.count} domain architectures found.</h4>
+          <div className={f('accession-selector-panel')}>
+            <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
+              <div className={f('switch', 'large')}>
+                <input
+                  type="checkbox"
+                  checked={idaAccessionDB === 'pfam'}
+                  className={f('switch-input')}
+                  name="accessionDB"
+                  id="accessionDB-input"
+                  onChange={this.toggleDomainEntry}
+                />
+                <label
+                  className={f('switch-paddle', 'accession-selector')}
+                  htmlFor="accessionDB-input"
+                >
+                  <span className={f('show-for-sr')}>Use accessions from:</span>
+                  <span className={f('switch-active')} aria-hidden="true">
+                    Pfam
+                  </span>
+                  <span className={f('switch-inactive')} aria-hidden="true">
+                    InterPro
+                  </span>
+                </label>
+              </div>
+            </Tooltip>
+          </div>
+        </>
+      );
+    }
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
-          {payload.count === 0 ? (
-            <div className={f('callout', 'info', 'withicon')}>
-              There are no Domain architectures for the current selection.
-            </div>
-          ) : (
-            <>
-              <h4>{payload.count} domain architectures found.</h4>
-              <div className={f('accession-selector-panel')}>
-                <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-                  <div className={f('switch', 'large')}>
-                    <input
-                      type="checkbox"
-                      checked={idaAccessionDB === 'pfam'}
-                      className={f('switch-input')}
-                      name="accessionDB"
-                      id="accessionDB-input"
-                      onChange={this.toggleDomainEntry}
-                    />
-                    <label
-                      className={f('switch-paddle', 'accession-selector')}
-                      htmlFor="accessionDB-input"
-                    >
-                      <span className={f('show-for-sr')}>
-                        Use accessions from:
-                      </span>
-                      <span className={f('switch-active')} aria-hidden="true">
-                        Pfam
-                      </span>
-                      <span className={f('switch-inactive')} aria-hidden="true">
-                        InterPro
-                      </span>
-                    </label>
-                  </div>
-                </Tooltip>
-              </div>
-            </>
-          )}
-          {(payload.results || []).map(obj => {
+          {messageContent}
+          {(payload.results || []).map((obj) => {
             const idaObj = ida2json(obj.ida, idaAccessionDB);
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
@@ -339,9 +356,9 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
 }
 
 const getUrlFor = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     const { type, search: _, ..._search } = search;
@@ -361,12 +378,12 @@ const getUrlFor = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state =>
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  state => state.customLocation.search,
-  state => state.ui.idaAccessionDB,
+  (state) => state.customLocation.search,
+  (state) => state.ui.idaAccessionDB,
   (mainAccession, search, idaAccessionDB) => ({
     mainAccession,
     search,

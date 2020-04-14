@@ -70,7 +70,7 @@ const PanelIDA = (
                     handleMoveMarker={handleMoveMarker(i)}
                     handleMoveEntry={handleMoveEntry(i)}
                     removeEntryHandler={() => removeEntryHandler(i)}
-                    changeEntryHandler={name => changeEntryHandler(i, name)}
+                    changeEntryHandler={(name) => changeEntryHandler(i, name)}
                     mergeResults={mergeResults}
                     options={options}
                   />
@@ -94,7 +94,7 @@ const PanelIDA = (
                 entry={e}
                 active={true}
                 removeEntryHandler={() => removeIgnoreHandler(i)}
-                changeEntryHandler={name => changeIgnoreHandler(i, name)}
+                changeEntryHandler={(name) => changeIgnoreHandler(i, name)}
                 mergeResults={mergeResults}
                 options={options}
               />
@@ -169,7 +169,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
       search,
     });
   };
-  _handleMoveMarker = entries => pos => delta => {
+  _handleMoveMarker = (entries) => (pos) => (delta) => {
     if (delta === null) {
       this.setState({ markerBeforeEntry: null, markerAfterEntry: null });
       return;
@@ -187,7 +187,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
       });
     }
   };
-  _handleMoveEntry = (currentEntries, ignore) => pos => delta => {
+  _handleMoveEntry = (currentEntries, ignore) => (pos) => (delta) => {
     const newPos = Math.max(
       0,
       Math.min(currentEntries.length - 1, pos + delta),
@@ -200,11 +200,17 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
     this._handleSubmit({ entries, order: true, ignore });
   };
 
-  _mergeResults = data => {
+  _mergeResults = (data) => {
     if (!data || !data.ok) return;
     const options = { ...this.state.options };
     for (const e of data.payload.results) {
-      options[e.metadata.accession] = e.metadata;
+      if (
+        e.metadata.source_database === 'interpro' &&
+        e.metadata.type === 'domain'
+      )
+        options[e.metadata.accession] = e.metadata;
+      else if (e.metadata.source_database === 'pfam')
+        options[e.metadata.accession] = e.metadata;
     }
     this.setState({ options });
   };
@@ -261,7 +267,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                     handleMoveEntry={this._handleMoveEntry(entries, ignore)}
                     mergeResults={this._mergeResults}
                     options={this.state.options}
-                    removeEntryHandler={n =>
+                    removeEntryHandler={(n) =>
                       this._handleSubmit({
                         entries: entries
                           .slice(0, n)
@@ -270,7 +276,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                         ignore,
                       })
                     }
-                    removeIgnoreHandler={n =>
+                    removeIgnoreHandler={(n) =>
                       this._handleSubmit({
                         ignore: ignore.slice(0, n).concat(ignore.slice(n + 1)),
                         entries,
@@ -332,7 +338,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                           type="checkbox"
                           id="ordered"
                           checked={order}
-                          onChange={event =>
+                          onChange={(event) =>
                             this._handleSubmit({
                               order: event.target.checked,
                               entries,
@@ -367,7 +373,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                           id="exact"
                           disabled={!order}
                           checked={_exact}
-                          onChange={event =>
+                          onChange={(event) =>
                             this._handleSubmit({
                               exact: event.target.checked,
                               order: true,
@@ -405,7 +411,7 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
 }
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(SearchByIDA);
