@@ -255,7 +255,13 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
 
     let messageContent;
     if (payload.count === 0) {
-      if (search.ida_search.match(new RegExp('ipr', 'ig'))) {
+      if (search.ida_search.split(',')) {
+        messageContent = (
+          <div className={f('callout', 'info', 'withicon')}>
+            There are no Domain architectures for the current selection.
+          </div>
+        );
+      } else if (search.ida_search.match(new RegExp('ipr', 'ig'))) {
         messageContent = (
           <div className={f('callout', 'info', 'withicon')}>
             Domain architectures are calculated for InterPro entries of type

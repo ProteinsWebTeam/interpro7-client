@@ -21,7 +21,7 @@ const helpTopics = {
   },
   IDA: {
     documentation: {
-      to: { description: { other: ['help', 'documentation'] } },
+      to: { description: { other: ['about', 'ida'] } },
     },
   },
   TextSearch: {

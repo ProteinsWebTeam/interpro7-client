@@ -58,6 +58,17 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                         Frequently Asked Questions (FAQs)
                       </Link>
                     </li>
+                    <li>
+                      <Link
+                        to={{
+                          description: {
+                            other: ['about', 'ida'],
+                          },
+                        }}
+                      >
+                        InterPro Domain Architecture
+                      </Link>
+                    </li>
                   </ul>
                 </li>
               </div>
