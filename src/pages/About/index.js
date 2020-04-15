@@ -54,6 +54,7 @@ const Privacy = loadable({
   loader: () =>
     import(/* webpackChunkName: "about-funding" */ 'components/About/Privacy'),
 });
+
 const InterProScan = loadable({
   loader: () =>
     import(
@@ -61,9 +62,14 @@ const InterProScan = loadable({
     ),
 });
 
+const IDA = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "about-interproscan" */ 'components/About/IDA'),
+});
 const routes = new Map([
   ['interpro', AboutInterPro],
   ['interproscan', InterProScan],
+  ['ida', IDA],
   ['consortium', Consortium],
   ['citation', Citation],
   ['funding', Funding],
@@ -71,8 +77,8 @@ const routes = new Map([
 ]);
 
 const locationSelector = createSelector(
-  customLocation => customLocation.description.other[1],
-  value => value,
+  (customLocation) => customLocation.description.other[1],
+  (value) => value,
 );
 
 const RedirectToDefault = () => (
@@ -106,6 +112,14 @@ class About extends PureComponent /*:: <{}> */ {
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 InterProScan
+              </Link>
+            </li>
+            <li className={f('tabs-title')}>
+              <Link
+                to={{ description: { other: ['about', 'ida'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                IDA
               </Link>
             </li>
             <li className={f('tabs-title')}>

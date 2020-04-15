@@ -68,6 +68,22 @@ exports[`<Documentation /> should render 1`] = `
                   Frequently Asked Questions (FAQs)
                 </Memo(Connect(Link))>
               </li>
+              <li>
+                <Memo(Connect(Link))
+                  to={
+                    Object {
+                      "description": Object {
+                        "other": Array [
+                          "about",
+                          "ida",
+                        ],
+                      },
+                    }
+                  }
+                >
+                  InterPro Domain Architecture
+                </Memo(Connect(Link))>
+              </li>
             </ul>
           </li>
         </div>
