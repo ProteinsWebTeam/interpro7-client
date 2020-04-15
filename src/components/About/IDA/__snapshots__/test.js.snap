@@ -47,21 +47,24 @@ exports[`<AboutIDA /> should render with data 1`] = `
             More domains can be added to the search if needed.
           </li>
           <li>
-            If the order in which the domains are added is important, 
+            If the order in which the domains are added is important,
+             
             <b>
               Order of domain matters
             </b>
              checkbox should be checked and it would enable you to drag the domain to the desired position.
           </li>
           <li>
-            To exclude a particular domain in the search query, 
+            To exclude a particular domain in the search query,
+             
             <b>
               Add domain to exclude
             </b>
              button should be clicked to add the domain.
           </li>
           <li>
-            If the search results should match the exact domains given, the 
+            If the search results should match the exact domains given, the
+             
             <b>
               Exact match
             </b>
