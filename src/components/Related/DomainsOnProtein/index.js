@@ -316,6 +316,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
     dataMerged: T.object.isRequired,
     showConservationButton: T.bool,
     handleConservationLoad: T.func,
+    children: T.any,
   };
 
   render() {
@@ -341,7 +342,9 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
         id={mainData.metadata.accession || mainData.payload.metadata.accession}
         showConservationButton={showConservationButton}
         handleConservationLoad={handleConservationLoad}
-      />
+      >
+        {this.props.children}
+      </ProtVista>
     );
   }
 }
@@ -379,6 +382,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     dataResidues: T.object.isRequired,
     dataFeatures: T.object.isRequired,
     dataGenome3d: T.object.isRequired,
+    children: T.any,
   };
 
   constructor(props /*: Props */) {
@@ -509,7 +513,9 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
           dataMerged={mergedData}
           showConservationButton={showConservationButton}
           handleConservationLoad={this.fetchConservationData}
-        />
+        >
+          {this.props.children}
+        </DomainOnProteinWithoutMergedData>
       </>
     );
   }

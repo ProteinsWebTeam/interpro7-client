@@ -58,7 +58,7 @@ const mergeMatch = (match1, match2) => {
   return match1;
 };
 
-const getGoTerms = matches => {
+const getGoTerms = (matches) => {
   const goTerms = new Map();
   for (const match of matches) {
     for (const { id, category, name } of (match.signature.entry || {})
@@ -144,7 +144,7 @@ const mergeData = (matches, sequenceLength) => {
       name: match.signature.name,
       source_database: iproscan2urlDB(library),
       protein_length: sequenceLength,
-      locations: match.locations.map(loc => ({
+      locations: match.locations.map((loc) => ({
         ...loc,
         model_acc: match['model-ac'],
         fragments:
@@ -159,7 +159,7 @@ const mergeData = (matches, sequenceLength) => {
         sites
           ? {
               accession: match.signature.accession,
-              locations: sites.map(site => ({
+              locations: sites.map((site) => ({
                 description: site.description,
                 fragments: site.siteLocations,
               })),
@@ -187,10 +187,10 @@ const mergeData = (matches, sequenceLength) => {
     }
   }
   mergedData.unintegrated = Object.values(mergedData.unintegrated);
-  integrated = Array.from(integrated.values()).map(m => {
+  integrated = Array.from(integrated.values()).map((m) => {
     const locations = flattenDeep(
-      m.children.map(s =>
-        s.locations.map(l => l.fragments.map(f => [f.start, f.end])),
+      m.children.map((s) =>
+        s.locations.map((l) => l.fragments.map((f) => [f.start, f.end])),
       ),
     );
     return {
@@ -246,8 +246,8 @@ const SummaryIPScanJob = ({
       setMergedData(organisedData);
       if (organisedData.family) {
         const families = [];
-        organisedData.family.forEach(entry => {
-          fetchFun(getEntryURL(api, entry.accession)).then(data => {
+        organisedData.family.forEach((entry) => {
+          fetchFun(getEntryURL(api, entry.accession)).then((data) => {
             if (data?.payload?.metadata) {
               families.push(data.payload.metadata);
               setFamilyHierarchyData([...families]);
@@ -261,7 +261,7 @@ const SummaryIPScanJob = ({
   if (remoteID && remoteID !== accession) {
     return (
       <Redirect
-        to={customLocation => ({
+        to={(customLocation) => ({
           ...customLocation,
           description: {
             ...customLocation.description,
@@ -358,7 +358,15 @@ const SummaryIPScanJob = ({
               <p className={f('margin-bottom-medium')}>None predicted</p>
             )}
           </div>
-          <div className={f('medium-3', 'columns', 'margin-bottom-large')}>
+        </div>
+      </section>
+
+      {status === 'finished' && (
+        <>
+          <DomainOnProteinWithoutMergedData
+            mainData={{ metadata }}
+            dataMerged={mergedData}
+          >
             {status === 'finished' && data?.url && (
               <Exporter
                 includeSettings={false}
@@ -367,7 +375,7 @@ const SummaryIPScanJob = ({
               >
                 <ul>
                   {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
-                    type => (
+                    (type) => (
                       <li key={type}>
                         <Link
                           target="_blank"
@@ -382,16 +390,7 @@ const SummaryIPScanJob = ({
                 </ul>
               </Exporter>
             )}
-          </div>
-        </div>
-      </section>
-
-      {status === 'finished' && (
-        <>
-          <DomainOnProteinWithoutMergedData
-            mainData={{ metadata }}
-            dataMerged={mergedData}
-          />
+          </DomainOnProteinWithoutMergedData>
           <GoTerms terms={Array.from(goTerms.values())} type="protein" />
         </>
       )}
@@ -409,8 +408,8 @@ SummaryIPScanJob.propTypes = {
   api: T.object,
 };
 
-const jobMapSelector = state => state.jobs;
-const accessionSelector = state =>
+const jobMapSelector = (state) => state.jobs;
+const accessionSelector = (state) =>
   state.customLocation.description.result.accession;
 
 const jobSelector = createSelector(
@@ -418,7 +417,7 @@ const jobSelector = createSelector(
   jobMapSelector,
   (accession, jobMap) => {
     return Object.values(jobMap || {}).find(
-      job =>
+      (job) =>
         job.metadata.remoteID === accession ||
         job.metadata.localID === accession,
     );
@@ -428,7 +427,7 @@ const jobSelector = createSelector(
 const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
-  state => state.settings.api,
+  (state) => state.settings.api,
   (
     accession,
     { metadata: { localID, remoteID, status, localTitle } },

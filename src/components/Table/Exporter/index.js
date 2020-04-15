@@ -56,7 +56,7 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
         style={{ display: 'flex' }}
       >
         <button
-          className={fPlus('button', 'dropdown')}
+          className={fPlus('button', 'dropdown', 'exporter')}
           style={{
             backgroundColor: entryDB
               ? config.colors.get(entryDB)
@@ -103,8 +103,8 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.entry.db,
-  entryDB => ({ entryDB }),
+  (state) => state.customLocation.description.entry.db,
+  (entryDB) => ({ entryDB }),
 );
 
 export default connect(mapStateToProps)(Exporter);
