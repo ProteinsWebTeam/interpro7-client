@@ -83,7 +83,7 @@ ReleaseNotesSelectorWithData.propTypes = {
 };
 
 const getReleaseNotesListUrl = createSelector(
-  state => state.settings.api,
+  (state) => state.settings.api,
   ({ protocol, hostname, port, root }) =>
     cleanUpMultipleSlashes(
       format({
@@ -147,6 +147,109 @@ StatsPerType.propTypes = {
   child: T.bool,
 };
 
+const ProteinInfo = ({ proteins }) => {
+  if (!proteins) return null;
+  return (
+    <>
+      <h3>Protein information</h3>
+
+      <table className={f('light', 'margin-top-large')}>
+        <thead>
+          <tr>
+            <th>Sequence database</th>
+            <th>Version</th>
+            <th>Count</th>
+            <th colSpan="2" className={f('text-center')}>
+              Count of proteins matching
+            </th>
+          </tr>
+          <tr>
+            <td colSpan="3" />
+            <td>Any signature</td>
+            <td>Integrated signatures</td>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(proteins)
+            .sort(([a], [b]) => (a > b ? 1 : -1))
+            .map(([name, detail]) => (
+              <tr key={name}>
+                <td>{name}</td>
+                <td>{detail.version}</td>
+                <td>
+                  <NumberComponent noTitle>{detail.count}</NumberComponent>
+                </td>
+                <td>
+                  <NumberComponent noTitle>{detail.signatures}</NumberComponent>{' '}
+                  <small>
+                    ({((100 * detail.signatures) / detail.count).toFixed(1)}
+                    %)
+                  </small>
+                </td>
+                <td>
+                  <NumberComponent noTitle>
+                    {detail.integrated_signatures}
+                  </NumberComponent>{' '}
+                  <small>
+                    (
+                    {(
+                      (100 * detail.integrated_signatures) /
+                      detail.count
+                    ).toFixed(1)}
+                    %)
+                  </small>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </>
+  );
+};
+ProteinInfo.propTypes = {
+  proteins: T.object,
+};
+
+const EndpointInfo = ({ endpoint, label, info }) => {
+  if (!info) return null;
+  return (
+    <section>
+      <h3 style={{ textTransform: 'capitalize' }}>{endpoint} information</h3>
+
+      <table className={f('light', 'margin-top-large')}>
+        <thead>
+          <tr>
+            <th>Database</th>
+            <th>Version</th>
+            <th>Count</th>
+            <th>Integrated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{label}</td>
+            <td>{info.version}</td>
+            <td>
+              <NumberComponent noTitle>{info.total}</NumberComponent>
+            </td>
+            <td>
+              <NumberComponent noTitle>{info.integrated}</NumberComponent>{' '}
+              <small>
+                ({((100 * info.integrated) / info.total).toFixed(1)}
+                %)
+              </small>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  );
+};
+EndpointInfo.propTypes = {
+  endpoint: T.string,
+  label: T.string,
+  info: T.object,
+};
 /*:: type Props = {
   data: {
     payload: {
@@ -174,7 +277,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then(m => m.InterproType),
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
   render() {
@@ -186,7 +289,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
     const newIpro = content.interpro.new_entries.length;
     const lastEntry = content.interpro.latest_entry;
     const updates = Object.values(content.member_databases).filter(
-      db => db.is_updated,
+      (db) => db.is_updated,
     );
     const perType = content.interpro.types;
     const perMemberDB = content.member_databases;
@@ -210,7 +313,9 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
         ],
       },
     ];
-    const sets = Object.values(content.member_databases).filter(db => db.sets);
+    const sets = Object.values(content.member_databases).filter(
+      (db) => db.sets,
+    );
     const dbMap = new Map([
       ['PROSITE patterns', 'prosite'],
       ['PROSITE profiles', 'profile'],
@@ -291,6 +396,20 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                 databases.
               </li>
             </ul>
+            {content.notes && (
+              <div
+                className={f('callout', 'info', 'withicon')}
+                style={{
+                  display: 'flex',
+                }}
+              >
+                <div>
+                  {content.notes.map((note, i) => (
+                    <p key={i}>{note}</p>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <h4>Contents and coverage</h4>
             <p className={f('margin-bottom-small')}>
@@ -340,7 +459,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                         count={perType[key]}
                       />
                       {children &&
-                        children.map(child => (
+                        children.map((child) => (
                           <StatsPerType
                             label={child.label}
                             key={child.key}
@@ -389,7 +508,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               </thead>
               <tbody>
                 {Object.values(perMemberDB)
-                  .filter(db => !db.name.toLowerCase().startsWith('mobidb'))
+                  .filter((db) => !db.name.toLowerCase().startsWith('mobidb'))
                   .map(
                     ({
                       name,
@@ -502,107 +621,15 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                 QuickGO
               </Link>
             </p>
+            <ProteinInfo proteins={content.proteins} />
 
-            <h3>Protein information</h3>
-
-            <table className={f('light', 'margin-top-large')}>
-              <thead>
-                <tr>
-                  <th>Sequence database</th>
-                  <th>Version</th>
-                  <th>Count</th>
-                  <th colSpan="2" className={f('text-center')}>
-                    Count of proteins matching
-                  </th>
-                </tr>
-                <tr>
-                  <td colSpan="3" />
-                  <td>Any signature</td>
-                  <td>Integrated signatures</td>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(content.proteins)
-                  .sort(([a], [b]) => (a > b ? 1 : -1))
-                  .map(([name, detail]) => (
-                    <tr key={name}>
-                      <td>{name}</td>
-                      <td>{detail.version}</td>
-                      <td>
-                        <NumberComponent noTitle>
-                          {detail.count}
-                        </NumberComponent>
-                      </td>
-                      <td>
-                        <NumberComponent noTitle>
-                          {detail.signatures}
-                        </NumberComponent>{' '}
-                        <small>
-                          (
-                          {((100 * detail.signatures) / detail.count).toFixed(
-                            1,
-                          )}
-                          %)
-                        </small>
-                      </td>
-                      <td>
-                        <NumberComponent noTitle>
-                          {detail.integrated_signatures}
-                        </NumberComponent>{' '}
-                        <small>
-                          (
-                          {(
-                            (100 * detail.integrated_signatures) /
-                            detail.count
-                          ).toFixed(1)}
-                          %)
-                        </small>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-            {['structures', 'proteomes', 'taxonomy'].map(key => (
-              <section key={key}>
-                <h3 style={{ textTransform: 'capitalize' }}>
-                  {key} information
-                </h3>
-
-                <table className={f('light', 'margin-top-large')}>
-                  <thead>
-                    <tr>
-                      <th>Database</th>
-                      <th>Version</th>
-                      <th>Count</th>
-                      <th>Integrated</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{sourceDB.get(key)}</td>
-                      <td>{content[key].version}</td>
-                      <td>
-                        <NumberComponent noTitle>
-                          {content[key].total}
-                        </NumberComponent>
-                      </td>
-                      <td>
-                        <NumberComponent noTitle>
-                          {content[key].integrated}
-                        </NumberComponent>{' '}
-                        <small>
-                          (
-                          {(
-                            (100 * content[key].integrated) /
-                            content[key].total
-                          ).toFixed(1)}
-                          %)
-                        </small>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </section>
+            {['structures', 'proteomes', 'taxonomy'].map((key) => (
+              <EndpointInfo
+                key={key}
+                label={sourceDB.get(key)}
+                endpoint={key}
+                info={content[key]}
+              />
             ))}
             <section>
               <h3>Sets Information</h3>
@@ -635,8 +662,8 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
   }
 }
 const getReleaseNotesUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.other,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.other,
   ({ protocol, hostname, port, root }, other) =>
     cleanUpMultipleSlashes(
       format({
@@ -651,8 +678,8 @@ const getReleaseNotesUrl = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description,
-  description => ({ description }),
+  (state) => state.customLocation.description,
+  (description) => ({ description }),
 );
 export default connect(mapStateToProps)(
   loadData(getReleaseNotesUrl)(ReleaseNotes),

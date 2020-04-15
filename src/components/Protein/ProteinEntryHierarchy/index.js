@@ -45,6 +45,7 @@ const ProteinEntryHierarchy = ({
   hrefroot,
   goToCustomLocation,
   ready,
+  includeChildren = false,
 }) => {
   const componentRef = useRef();
   useEffect(() => {
@@ -74,7 +75,7 @@ const ProteinEntryHierarchy = ({
       accessions={accessions}
       hrefroot={hrefroot}
       ref={componentRef}
-      displaymode="pruned no-children"
+      displaymode={`pruned${includeChildren ? '' : ' no-children'}`}
     />
   );
 };
@@ -84,9 +85,14 @@ ProteinEntryHierarchy.propTypes = {
   hrefroot: T.string.isRequired,
   goToCustomLocation: T.func.isRequired,
   ready: T.bool.isRequired,
+  includeChildren: T.bool,
 };
 
-const ProteinEntryHierarchies = ({ entries, goToCustomLocation }) => {
+const ProteinEntryHierarchies = ({
+  entries,
+  goToCustomLocation,
+  includeChildren = false,
+}) => {
   const [ready, setReady] = useState(false);
 
   // eslint-disable-next-line func-style,require-jsdoc
@@ -101,6 +107,7 @@ const ProteinEntryHierarchies = ({ entries, goToCustomLocation }) => {
   }, []);
 
   const hierarchies = getUniqueHierarchies(entries.map(e => e.hierarchy));
+  if (!ready) return null;
   return (
     <div>
       {hierarchies.length
@@ -112,6 +119,7 @@ const ProteinEntryHierarchies = ({ entries, goToCustomLocation }) => {
               goToCustomLocation={goToCustomLocation}
               key={h.accession}
               ready={ready}
+              includeChildren={includeChildren}
             />
           ))
         : null}
@@ -127,6 +135,7 @@ ProteinEntryHierarchies.propTypes = {
     }),
   ),
   goToCustomLocation: T.func,
+  includeChildren: T.bool,
 };
 
 const mapStateToProps = createSelector(
@@ -134,7 +143,6 @@ const mapStateToProps = createSelector(
   api => ({ api }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(ProteinEntryHierarchies);
+export default connect(mapStateToProps, { goToCustomLocation })(
+  React.memo(ProteinEntryHierarchies),
+);

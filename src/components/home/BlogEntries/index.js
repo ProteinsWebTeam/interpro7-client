@@ -183,4 +183,10 @@ export class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
 }
 
 // export default loadData(() => `${BLOG_ROOT}/feed-first-of-each.json`)(
-export default loadData(() => `${BLOG_ROOT}/feed.json`)(BlogEntries);
+export default loadData({
+  getUrl: () => `${BLOG_ROOT}/feed.json`,
+  fetchOptions: {
+    responseType: 'json',
+    useCache: false,
+  },
+})(BlogEntries);

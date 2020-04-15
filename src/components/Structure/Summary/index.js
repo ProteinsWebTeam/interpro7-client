@@ -47,12 +47,12 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
       data: { loading, payload },
       dataMatches: { loading: loadingM, payload: payloadM },
     } = this.props;
-    if (loading || loadingM || !payload || !payloadM) return null;
+    if (loading || loadingM || !payload) return null;
     const metadata = payload.metadata;
-    const matches = payloadM.results;
+    const matches = payloadM?.results || [];
     const chains = Array.from(new Set(metadata.chains || []));
     const date = new Date(metadata.release_date);
-    const literature = Object.entries(metadata.literature);
+    const literature = Object.entries(metadata.literature || {});
     return (
       <div className={f('sections')}>
         <section>
@@ -151,7 +151,7 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
           </ErrorBoundary>
         </section>
         <div>
-          {literature.length && (
+          {literature.length ? (
             <section id="references">
               <div className={f('row')}>
                 <div className={f('large-12', 'columns')}>
@@ -161,7 +161,7 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
               {/* $FlowFixMe */}
               <Literature extra={literature} />
             </section>
-          )}
+          ) : null}
         </div>
       </div>
     );
@@ -169,8 +169,8 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
 }
 
 const getURLForMatches = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.structure,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.structure,
   ({ protocol, hostname, port, root }, { accession }) =>
     format({
       protocol,

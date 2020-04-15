@@ -6,6 +6,7 @@ import Accession from 'components/Accession';
 import Species from 'components/Protein/Species';
 import { ProteomeLink } from 'components/ExtLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import SarsCov2 from 'components/Proteome/SarsCov2';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -33,56 +34,65 @@ class SummaryProteome extends PureComponent /*:: <Props> */ {
       data: { metadata },
     } = this.props;
     return (
-      <div className={f('row')}>
-        <div className={f('medium-9', 'columns')}>
-          <table className={f('light', 'table-sum')}>
-            <tbody>
-              <tr>
-                <td>Proteome ID</td>
-                <td data-testid="proteome-accession">
-                  <Accession
-                    accession={metadata.proteomeAccession || metadata.accession}
-                    title="Proteome ID"
-                  />
-                </td>
-              </tr>
-              {metadata.strain && (
-                <tr>
-                  <td>Strain</td>
-                  <td>{metadata.strain}</td>
-                </tr>
-              )}
-              <tr>
-                <td>Species</td>
-                <td data-testid="proteome-species">
-                  <Species
-                    fullName={metadata.name.name}
-                    taxID={metadata.taxonomy}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Proteome type</td>
-                <td data-testid="proteome-type">
-                  {metadata.is_reference ? 'Reference' : 'Non-reference'}{' '}
-                  proteome
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div className={f('medium-3', 'columns')}>
-          <div className={f('panel')}>
-            <h5>External Links</h5>
-            <ul className={f('no-bullet')}>
-              <li data-testid="proteome-external-links">
-                <ProteomeLink id={metadata.accession} className={f('ext')}>
-                  View {metadata.accession} in UniProt
-                </ProteomeLink>
-              </li>
-            </ul>
+      <div className={f('sections')}>
+        <section>
+          <div className={f('row')}>
+            <div className={f('medium-9', 'columns')}>
+              <table className={f('light', 'table-sum')}>
+                <tbody>
+                  <tr>
+                    <td>Proteome ID</td>
+                    <td data-testid="proteome-accession">
+                      <Accession
+                        accession={
+                          metadata.proteomeAccession || metadata.accession
+                        }
+                        title="Proteome ID"
+                      />
+                    </td>
+                  </tr>
+                  {metadata.strain && (
+                    <tr>
+                      <td>Strain</td>
+                      <td>{metadata.strain}</td>
+                    </tr>
+                  )}
+                  <tr>
+                    <td>Species</td>
+                    <td data-testid="proteome-species">
+                      <Species
+                        fullName={metadata.name.name}
+                        taxID={metadata.taxonomy}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Proteome type</td>
+                    <td data-testid="proteome-type">
+                      {metadata.is_reference ? 'Reference' : 'Non-reference'}{' '}
+                      proteome
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className={f('medium-3', 'columns')}>
+              <div className={f('panel')}>
+                <h5>External Links</h5>
+                <ul className={f('no-bullet')}>
+                  <li data-testid="proteome-external-links">
+                    <ProteomeLink id={metadata.accession} className={f('ext')}>
+                      View {metadata.accession} in UniProt
+                    </ProteomeLink>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
+        {metadata.accession === 'UP000464024' && (
+          <SarsCov2 metadata={metadata} />
+        )}
       </div>
     );
   }

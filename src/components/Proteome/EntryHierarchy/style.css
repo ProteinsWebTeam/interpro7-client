@@ -1,0 +1,22 @@
+.family-groups {
+  display: flex;
+  flex-wrap: wrap;
+  & > div {
+    margin: 0.2rem;
+    padding: 1rem 0.2rem;
+    flex-grow: 1;
+    background: #f4f4f4;
+  }
+  /* &>div:nth-child(4n){
+    background: #fff4f4;
+  }
+  &>div:nth-child(4n+1){
+    background: #f4f4f4;
+  }
+  &>div:nth-child(4n+2){
+    background: #fff4ff;
+  }
+  &>div:nth-child(4n+3){
+    background: #f4fff4;
+  } */
+}

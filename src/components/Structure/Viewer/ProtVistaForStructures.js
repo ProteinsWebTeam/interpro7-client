@@ -18,7 +18,7 @@ const ProtVistaForStructure = (
     dataSecondary,
   } /*: { data: { loading: boolean, payload: Object }, dataSecondary: { loading: boolean, payload: Object }} */,
 ) => {
-  if (!data || data.loading || !data.payload) return <Loading />;
+  if (!data || data.loading) return <Loading />;
 
   let secondaryData;
   if (dataSecondary && !dataSecondary.loading && dataSecondary.payload) {
@@ -31,7 +31,7 @@ const ProtVistaForStructure = (
   }
 
   const { interpro, unintegrated } = processData({
-    data,
+    data: data.payload ? data : { payload: { results: [] } },
     endpoint: 'structure',
   });
   return (
@@ -56,8 +56,8 @@ ProtVistaForStructure.propTypes = {
 };
 
 const getInterproRelatedEntriesURL = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.structure.accession,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.structure.accession,
   ({ protocol, hostname, port, root }, accession) => {
     const newDesc = {
       main: { key: 'entry' },
@@ -77,8 +77,8 @@ const getInterproRelatedEntriesURL = createSelector(
 );
 
 const getSecondaryStructureURL = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.structure,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.structure,
   ({ protocol, hostname, port, root }, { db, accession }) => {
     const newDesc = {
       main: { key: 'structure' },

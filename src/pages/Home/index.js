@@ -12,6 +12,7 @@ import CurrentVersion from 'components/home/CurrentVersion';
 import GeneralWarning from 'components/home/GeneralWarning';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
 import Tip from 'components/Tip';
+import Link from 'components/generic/Link';
 
 import { ToolCards } from 'components/home/Tools';
 // Functions
@@ -137,6 +138,42 @@ const description = `
 InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites. To classify proteins in this way, InterPro uses predictive models, known as signatures, provided by several different databases (referred to as member databases) that make up the InterPro consortium. We combine protein signatures from these member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.
 `.trim();
 
+const Announcement = () => (
+  <div className={f('row')}>
+    <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
+      <div
+        className={f('callout', 'info')}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <span
+          style={{
+            fontSize: '2em',
+            color: 'darkblue',
+            paddingRight: '1rem',
+          }}
+          className={f('small', 'icon', 'icon-species')}
+          data-icon="v"
+        />{' '}
+        You can see the special page created to compile all the information for:{' '}
+        <Link
+          to={{
+            description: {
+              main: { key: 'proteome' },
+              proteome: { db: 'uniprot', accession: 'UP000464024' },
+            },
+          }}
+        >
+          {' '}
+          SARS-CoV-2
+        </Link>
+        .
+      </div>
+    </div>
+  </div>
+);
 class Home extends PureComponent {
   static propTypes = {
     showSettingsToast: T.bool.isRequired,
@@ -173,6 +210,9 @@ class Home extends PureComponent {
             </div>
           </div>
         </div>
+
+        <Announcement />
+
         <div className={f('row')}>
           <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
             <Tabs>
@@ -287,8 +327,8 @@ class Home extends PureComponent {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.notifications.showSettingsToast,
-  showSettingsToast => ({ showSettingsToast }),
+  (state) => state.settings.notifications.showSettingsToast,
+  (showSettingsToast) => ({ showSettingsToast }),
 );
 
 export default connect(mapStateToProps)(Home);
