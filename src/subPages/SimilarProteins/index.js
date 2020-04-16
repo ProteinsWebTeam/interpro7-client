@@ -225,32 +225,36 @@ state: Object,
         <PageSizeSelector />
         <Exporter>
           <div className={f('menu-grid')}>
-            <label>FASTA</label>
+            <label htmlFor="fasta">FASTA</label>
             <AllProteinDownload
               description={state.customLocation.description}
               ida={ida}
               count={payload.count}
               fileType="fasta"
+              name="fasta"
             />
-            <label>JSON</label>
+            <label htmlFor="json">JSON</label>
             <AllProteinDownload
               description={state.customLocation.description}
               ida={ida}
               count={payload.count}
+              name="json"
               fileType="json"
             />
-            <label>TSV</label>
+            <label htmlFor="tsv">TSV</label>
             <AllProteinDownload
               description={state.customLocation.description}
               ida={ida}
               count={payload.count}
+              name="tsv"
               fileType="tsv"
             />
-            <label>API</label>
+            <label htmlFor="api">API</label>
             <Link
               target="_blank"
               href={getAPIURLForSimilarProteins(state.settings.api, ida)}
               className={f('button', 'hollow', 'imitate-progress-button')}
+              name="api"
             >
               <span
                 className={f('icon', 'icon-common', 'icon-export')}

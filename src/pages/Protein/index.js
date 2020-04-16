@@ -332,29 +332,33 @@ class List extends PureComponent /*:: <ListProps> */ {
           >
             <Exporter>
               <div className={f('menu-grid')}>
-                <label>FASTA</label>
+                <label htmlFor="fasta">FASTA</label>
                 <AllProteinDownload
                   description={description}
                   search={search}
                   count={_payload.count}
                   fileType="fasta"
+                  name="fasta"
                 />
-                <label>JSON</label>
+                <label htmlFor="json">JSON</label>
                 <AllProteinDownload
+                  name="json"
                   description={description}
                   search={search}
                   count={_payload.count}
                   fileType="json"
                 />
-                <label>TSV</label>
+                <label htmlFor="tsv">TSV</label>
                 <AllProteinDownload
+                  name="tsv"
                   description={description}
                   search={search}
                   count={_payload.count}
                   fileType="tsv"
                 />
-                <label>API</label>
+                <label htmlFor="api">API</label>
                 <Link
+                  name="api"
                   target="_blank"
                   href={url}
                   className={f('button', 'hollow', 'imitate-progress-button')}

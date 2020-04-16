@@ -301,11 +301,12 @@ const Matches = (
           <div className={f('menu-grid')}>
             {primary === 'protein' && (
               <>
-                <label>FASTA</label>
+                <label htmlFor="fasta">FASTA</label>
                 <FileExporter
                   description={description}
                   count={actualSize}
                   search={search}
+                  name="fasta"
                   fileType="fasta"
                   primary={primary}
                   secondary={secondary}
@@ -313,8 +314,9 @@ const Matches = (
                 />
               </>
             )}
-            <label>TSV</label>
+            <label htmlFor="json">TSV</label>
             <FileExporter
+              name="json"
               description={description}
               count={actualSize}
               search={search}
@@ -323,8 +325,9 @@ const Matches = (
               secondary={secondary}
               focused={focused}
             />
-            <label>JSON</label>
+            <label htmlFor="tsv">JSON</label>
             <FileExporter
+              name="tsv"
               description={description}
               count={actualSize}
               search={search}
@@ -333,8 +336,9 @@ const Matches = (
               secondary={secondary}
               focused={focused}
             />
-            <label>API</label>
+            <label htmlFor="api">API</label>
             <Link
+              name="api"
               target="_blank"
               href={toPublicAPI(
                 includeTaxonFocusedOnURL(getReversedUrl(state), focused),

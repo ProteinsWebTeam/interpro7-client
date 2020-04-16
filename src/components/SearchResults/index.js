@@ -99,11 +99,12 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
         >
           <Exporter>
             <div className={f('menu-grid')}>
-              <label>JSON</label>
+              <label htmlFor="json">JSON</label>
               <Link
                 disabled={!url}
                 target="_blank"
                 href={url}
+                name="json"
                 download={`SearchResults-${searchValue}.json`}
                 className={f('button', 'hollow', 'imitate-progress-button')}
               >

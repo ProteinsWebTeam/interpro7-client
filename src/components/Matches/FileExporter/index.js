@@ -25,7 +25,6 @@ const FileExporter = (
     fileType,
     primary,
     secondary,
-    label,
     className,
     focused = null,
   } /*: {description: Object, search: Object, count: number, fileType: string, primary: string, secondary: string, label?: string, className?: string, focused?: string} */,
@@ -68,7 +67,6 @@ FileExporter.propTypes = {
   fileType: T.string,
   primary: T.string,
   secondary: T.string,
-  label: T.string,
   className: T.string,
   focused: T.string,
 };

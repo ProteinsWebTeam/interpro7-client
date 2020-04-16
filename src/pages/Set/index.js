@@ -415,22 +415,25 @@ class List extends PureComponent /*:: <ListProps> */ {
           >
             <Exporter>
               <div className={f('menu-grid')}>
-                <label>JSON</label>
+                <label htmlFor="json">JSON</label>
                 <AllSetDownload
+                  name="json"
                   description={description}
                   search={search}
                   count={_payload.count}
                   fileType="json"
                 />
-                <label>TSV</label>
+                <label htmlFor="tsv">TSV</label>
                 <AllSetDownload
+                  name="tsv"
                   description={description}
                   search={search}
                   count={_payload.count}
                   fileType="tsv"
                 />
-                <label>API</label>
+                <label htmlFor="api">API</label>
                 <Link
+                  name="api"
                   target="_blank"
                   href={url}
                   className={f('button', 'hollow', 'imitate-progress-button')}
