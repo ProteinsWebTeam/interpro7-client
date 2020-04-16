@@ -38,8 +38,9 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
+import exporterStyle from 'components/Table/Exporter/style.css';
 
-const f = foundationPartial(fonts, pageStyle, ebiStyles, ipro);
+const f = foundationPartial(fonts, pageStyle, ebiStyles, ipro, exporterStyle);
 
 import {
   schemaProcessDataTable,
@@ -330,53 +331,44 @@ class List extends PureComponent /*:: <ListProps> */ {
             currentAPICall={url}
           >
             <Exporter>
-              <ul>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllProteinDownload
-                      description={description}
-                      search={search}
-                      count={_payload.count}
-                      fileType="fasta"
-                    />
-                  </div>
-                  <div>FASTA</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllProteinDownload
-                      description={description}
-                      search={search}
-                      count={_payload.count}
-                      fileType="json"
-                    />
-                  </div>
-                  <div>JSON</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllProteinDownload
-                      description={description}
-                      search={search}
-                      count={_payload.count}
-                      fileType="tsv"
-                    />
-                  </div>
-                  <div>TSV</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <Link target="_blank" href={url}>
-                    <span
-                      className={f('icon', 'icon-common', 'icon-export')}
-                      data-icon="&#xf233;"
-                    />
-                  </Link>
-                  <div>API Web View</div>
-                </li>
-              </ul>
+              <div className={f('menu-grid')}>
+                <label>FASTA</label>
+                <AllProteinDownload
+                  description={description}
+                  search={search}
+                  count={_payload.count}
+                  fileType="fasta"
+                />
+                <label>JSON</label>
+                <AllProteinDownload
+                  description={description}
+                  search={search}
+                  count={_payload.count}
+                  fileType="json"
+                />
+                <label>TSV</label>
+                <AllProteinDownload
+                  description={description}
+                  search={search}
+                  count={_payload.count}
+                  fileType="tsv"
+                />
+                <label>API</label>
+                <Link
+                  target="_blank"
+                  href={url}
+                  className={f('button', 'hollow', 'imitate-progress-button')}
+                >
+                  <span
+                    className={f('icon', 'icon-common', 'icon-export')}
+                    data-icon="&#xf233;"
+                  />
+                  <span className={f('file-label')}>Web View</span>
+                </Link>
+              </div>
             </Exporter>
             <Card>
-              {data => (
+              {(data) => (
                 <ProteinCard
                   data={data}
                   search={search.search}
@@ -398,7 +390,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                     processData={schemaProcessDataTableRow}
                   />
                   <Link
-                    to={customLocation => ({
+                    to={(customLocation) => ({
                       ...customLocation,
                       description: {
                         main: { key: 'protein' },
@@ -439,7 +431,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Link
-                  to={customLocation => ({
+                  to={(customLocation) => ({
                     ...customLocation,
                     description: {
                       main: { key: 'protein' },

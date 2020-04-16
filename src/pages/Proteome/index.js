@@ -38,10 +38,17 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import exporterStyle from 'components/Table/Exporter/style.css';
 
-const f = foundationPartial(ebiGlobalStyles, pageStyle, styles, fonts);
+const f = foundationPartial(
+  ebiGlobalStyles,
+  pageStyle,
+  styles,
+  fonts,
+  exporterStyle,
+);
 
-const EntryAccessionsRenderer = entryDB => (accession, _row, extra) => (
+const EntryAccessionsRenderer = (entryDB) => (accession, _row, extra) => (
   <File
     fileType="accession"
     name={`${entryDB || 'all'}-entry-accessions-for-${accession}.txt`}
@@ -54,7 +61,7 @@ const EntryAccessionsRenderer = entryDB => (accession, _row, extra) => (
   />
 );
 
-const ProteinFastasRenderer = entryDB => (accession, _row, extra) => (
+const ProteinFastasRenderer = (entryDB) => (accession, _row, extra) => (
   <File
     fileType="fasta"
     name={`protein-sequences${
@@ -201,43 +208,38 @@ class List extends PureComponent /*:: <Props> */ {
             currentAPICall={url}
           >
             <Exporter>
-              <ul>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllProteomesDownload
-                      description={description}
-                      search={search}
-                      count={_payload.count}
-                      fileType="json"
-                    />
-                  </div>
-                  <div>JSON</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllProteomesDownload
-                      description={description}
-                      search={search}
-                      count={_payload.count}
-                      fileType="tsv"
-                    />
-                  </div>
-                  <div>TSV</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <Link target="_blank" href={url}>
-                    <span
-                      className={f('icon', 'icon-common', 'icon-export')}
-                      data-icon="&#xf233;"
-                    />
-                  </Link>
-                  <div>API Web View</div>
-                </li>
-              </ul>
+              <div className={f('menu-grid')}>
+                <label>JSON</label>
+                <AllProteomesDownload
+                  description={description}
+                  search={search}
+                  count={_payload.count}
+                  fileType="json"
+                />
+                <label>TSV</label>
+                <AllProteomesDownload
+                  description={description}
+                  search={search}
+                  count={_payload.count}
+                  fileType="tsv"
+                />
+                <label>API</label>
+                <Link
+                  target="_blank"
+                  href={url}
+                  className={f('button', 'hollow', 'imitate-progress-button')}
+                >
+                  <span
+                    className={f('icon', 'icon-common', 'icon-export')}
+                    data-icon="&#xf233;"
+                  />
+                  <span className={f('file-label')}>Web View</span>
+                </Link>
+              </div>
             </Exporter>
             <PageSizeSelector />
             <Card>
-              {data => (
+              {(data) => (
                 <ProteomeCard
                   data={data}
                   search={search.search}
@@ -250,7 +252,7 @@ class List extends PureComponent /*:: <Props> */ {
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
                 <Link
-                  to={customLocation => ({
+                  to={(customLocation) => ({
                     description: {
                       main: { key: 'proteome' },
                       proteome: {
@@ -283,7 +285,7 @@ class List extends PureComponent /*:: <Props> */ {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Link
-                  to={customLocation => ({
+                  to={(customLocation) => ({
                     description: {
                       main: { key: 'proteome' },
                       proteome: {

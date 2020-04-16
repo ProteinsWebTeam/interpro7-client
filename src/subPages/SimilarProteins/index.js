@@ -20,6 +20,8 @@ import ProtvistaInterproTrack from 'protvista-interpro-track';
 import { foundationPartial } from 'styles/foundation';
 import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import exporterStyle from 'components/Table/Exporter/style.css';
+
 import File from 'components/File';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -31,7 +33,7 @@ import {
   ida2json,
 } from 'components/Entry/DomainArchitectures';
 
-const f = foundationPartial(fonts, localStyle);
+const f = foundationPartial(fonts, localStyle, exporterStyle);
 const FAKE_PROTEIN_LENGTH = 1000;
 
 const SimilarProteinsHeaderWithData = (
@@ -96,9 +98,9 @@ SimilarProteinsHeaderWithData.propTypes = {
 };
 
 const getUrlForIDA = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     const { type, search: _, ..._search } = search;
@@ -117,8 +119,8 @@ const getUrlForIDA = createSelector(
 );
 
 const mapStateToPropsAccessionDB = createSelector(
-  state => state.ui.idaAccessionDB,
-  idaAccessionDB => ({
+  (state) => state.ui.idaAccessionDB,
+  (idaAccessionDB) => ({
     idaAccessionDB,
   }),
 );
@@ -222,49 +224,41 @@ state: Object,
       >
         <PageSizeSelector />
         <Exporter>
-          <ul>
-            <li style={{ display: 'flex', alignItems: 'center' }}>
-              <div>
-                <AllProteinDownload
-                  description={state.customLocation.description}
-                  ida={ida}
-                  count={payload.count}
-                  fileType="fasta"
-                />
-              </div>
-              <div>FASTA</div>
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center' }}>
-              <div>
-                <AllProteinDownload
-                  description={state.customLocation.description}
-                  ida={ida}
-                  count={payload.count}
-                  fileType="json"
-                />
-              </div>
-              <div>JSON</div>
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center' }}>
-              <div>
-                <AllProteinDownload
-                  description={state.customLocation.description}
-                  ida={ida}
-                  count={payload.count}
-                  fileType="tsv"
-                />
-              </div>
-              <div>TSV</div>
-            </li>
-            <li>
-              <Link
-                target="_blank"
-                href={getAPIURLForSimilarProteins(state.settings.api, ida)}
-              >
-                Open in API web view
-              </Link>
-            </li>
-          </ul>
+          <div className={f('menu-grid')}>
+            <label>FASTA</label>
+            <AllProteinDownload
+              description={state.customLocation.description}
+              ida={ida}
+              count={payload.count}
+              fileType="fasta"
+            />
+            <label>JSON</label>
+            <AllProteinDownload
+              description={state.customLocation.description}
+              ida={ida}
+              count={payload.count}
+              fileType="json"
+            />
+            <label>TSV</label>
+            <AllProteinDownload
+              description={state.customLocation.description}
+              ida={ida}
+              count={payload.count}
+              fileType="tsv"
+            />
+            <label>API</label>
+            <Link
+              target="_blank"
+              href={getAPIURLForSimilarProteins(state.settings.api, ida)}
+              className={f('button', 'hollow', 'imitate-progress-button')}
+            >
+              <span
+                className={f('icon', 'icon-common', 'icon-export')}
+                data-icon="&#xf233;"
+              />
+              <span className={f('file-label')}>Web View</span>
+            </Link>
+          </div>
         </Exporter>
 
         <Column
@@ -314,7 +308,7 @@ state: Object,
         </Column>
         <Column
           dataKey="source_organism"
-          renderer={sourceOrganism =>
+          renderer={(sourceOrganism) =>
             sourceOrganism.taxId ? (
               <Link
                 to={{
@@ -352,7 +346,7 @@ SimilarProteins.propTypes = {
 const mapStateToProps = createSelector(
   searchSelector,
   descriptionSelector,
-  state => state,
+  (state) => state,
   (search, description, state) => ({ search, description, state }),
 );
 

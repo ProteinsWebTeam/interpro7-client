@@ -33,6 +33,7 @@ import subPages from 'subPages';
 import config from 'config';
 
 import { setDBs } from 'utils/processDescription/handlers';
+import { toPlural } from 'utils/pages';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -40,9 +41,15 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
-import { toPlural } from 'utils/pages';
+import exporterStyle from 'components/Table/Exporter/style.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, pageStyle, ipro);
+const f = foundationPartial(
+  ebiGlobalStyles,
+  fonts,
+  pageStyle,
+  ipro,
+  exporterStyle,
+);
 
 /*:: type Props = {
   entryDB: string,
@@ -407,43 +414,38 @@ class List extends PureComponent /*:: <ListProps> */ {
             currentAPICall={url}
           >
             <Exporter>
-              <ul>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllSetDownload
-                      description={description}
-                      search={search}
-                      count={_payload.count}
-                      fileType="json"
-                    />
-                  </div>
-                  <div>JSON</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllSetDownload
-                      description={description}
-                      search={search}
-                      count={_payload.count}
-                      fileType="tsv"
-                    />
-                  </div>
-                  <div>TSV</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <Link target="_blank" href={url}>
-                    <span
-                      className={f('icon', 'icon-common', 'icon-export')}
-                      data-icon="&#xf233;"
-                    />
-                  </Link>
-                  <div>API Web View</div>
-                </li>
-              </ul>
+              <div className={f('menu-grid')}>
+                <label>JSON</label>
+                <AllSetDownload
+                  description={description}
+                  search={search}
+                  count={_payload.count}
+                  fileType="json"
+                />
+                <label>TSV</label>
+                <AllSetDownload
+                  description={description}
+                  search={search}
+                  count={_payload.count}
+                  fileType="tsv"
+                />
+                <label>API</label>
+                <Link
+                  target="_blank"
+                  href={url}
+                  className={f('button', 'hollow', 'imitate-progress-button')}
+                >
+                  <span
+                    className={f('icon', 'icon-common', 'icon-export')}
+                    data-icon="&#xf233;"
+                  />
+                  <span className={f('file-label')}>Web View</span>
+                </Link>
+              </div>
             </Exporter>
             <PageSizeSelector />
             <Card>
-              {data => (
+              {(data) => (
                 <SetCard data={data} search={search.search} entryDB={dbE} />
               )}
             </Card>
@@ -453,7 +455,7 @@ class List extends PureComponent /*:: <ListProps> */ {
               // eslint-disable-next-line camelcase
               renderer={(accession /*: string */, row) => (
                 <Link
-                  to={customLocation => ({
+                  to={(customLocation) => ({
                     ...customLocation,
                     description: {
                       main: { key: 'set' },
@@ -500,7 +502,7 @@ class List extends PureComponent /*:: <ListProps> */ {
 
                 return (
                   <Link
-                    to={customLocation => ({
+                    to={(customLocation) => ({
                       ...customLocation,
                       description: {
                         main: { key: 'set' },
@@ -536,7 +538,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   (extra && extra.counters && extra.counters.entries) || '-';
                 return (
                   <Link
-                    to={customLocation => ({
+                    to={(customLocation) => ({
                       ...customLocation,
                       description: {
                         main: { key: 'set' },
@@ -598,8 +600,8 @@ for (const subPage of config.pages.set.subPages) {
 
 const dbAccs = new RegExp(
   Array.from(setDBs)
-    .map(db => db.re.source)
-    .filter(db => db)
+    .map((db) => db.re.source)
+    .filter((db) => db)
     .join('|'),
   'i',
 );

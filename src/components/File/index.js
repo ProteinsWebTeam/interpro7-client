@@ -75,19 +75,26 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
     const failed = successful === false;
+    let stateLabel = '';
     let title = '';
     if (count > HARD_LIMIT) {
       title += 'Direct download disabled for this';
+      stateLabel = 'Disabled';
     } else if (downloading) {
       title += 'Generating';
+      stateLabel = 'Generating';
     } else if (failed) {
       title += 'Failed generating';
+      stateLabel = 'Failed';
     } else if (successful) {
       title += 'Download';
+      stateLabel = 'Download';
     } else {
       title += 'Click icon to generate';
+      stateLabel = 'Generate';
     }
     title += ` ${fileType} file`;
+    const labelToShow = label || stateLabel;
 
     // if (count === 0) {
     //   title = 'No data available to download';
@@ -118,7 +125,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
                     },
                     hash: `${subpath}|${fileType}`,
                   }}
-                  className={f('button', 'hollow')}
+                  className={f('button', 'hollow', 'in-popup')}
                 >
                   See more download options
                 </Link>
@@ -133,7 +140,10 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
             download={filename}
             href={blobURL || url}
             disabled={downloading || count > HARD_LIMIT || count === 0}
-            className={f('link', className, { downloading, failed })}
+            className={f('button', 'hollow', className, {
+              downloading,
+              failed,
+            })}
             onClick={downloading || successful ? undefined : handleClick}
             data-url={url}
             data-type={fileType}
@@ -144,7 +154,9 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
               failed={failed}
               progress={progress || SMALL}
             />
-            {label && <span className={f('file-label')}>{label}</span>}
+            {labelToShow && (
+              <span className={f('file-label')}>{labelToShow}</span>
+            )}
           </Link>
         </div>
       </Tooltip>
@@ -155,7 +167,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
 const mapStateToPropsFor = (url, fileType, subset) =>
   createSelector(
     downloadSelector,
-    downloads =>
+    (downloads) =>
       downloads[
         [url, fileType, subset && 'subset'].filter(Boolean).join('|')
       ] || {},
@@ -264,8 +276,8 @@ export class File extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.entry,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.entry,
   (api, entryDescription) => ({ api, entryDescription }),
 );
 

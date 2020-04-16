@@ -43,8 +43,9 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import pageStyle from '../style.css';
 import { formatExperimentType } from 'components/Structure/utils';
+import exporterStyle from 'components/Table/Exporter/style.css';
 
-const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts);
+const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts, exporterStyle);
 
 const SummaryAsync = loadable({
   loader: () =>
@@ -240,9 +241,9 @@ class TaxnameStructures extends PureComponent /*:: <TaxnameStructuresProps> */ {
     return (
       // TODO: get values when more than 2 species
       <Tooltip
-        title={`${loading ||
-          payload.results[0].metadata.name} (Tax ID: ${loading ||
-          payload.results[0].metadata.accession})`}
+        title={`${loading || payload.results[0].metadata.name} (Tax ID: ${
+          loading || payload.results[0].metadata.accession
+        })`}
       >
         {loading || payload.results[0].metadata.name}
       </Tooltip>
@@ -250,9 +251,9 @@ class TaxnameStructures extends PureComponent /*:: <TaxnameStructuresProps> */ {
   }
 }
 
-const getUrlForStructTaxname = accession =>
+const getUrlForStructTaxname = (accession) =>
   createSelector(
-    state => state.settings.api,
+    (state) => state.settings.api,
     ({ protocol, hostname, port, root }) =>
       format({
         protocol,
@@ -491,43 +492,38 @@ const List = (
           currentAPICall={url}
         >
           <Exporter>
-            <ul>
-              <li style={{ display: 'flex', alignItems: 'center' }}>
-                <div>
-                  <AllStructuresDownload
-                    description={description}
-                    search={search}
-                    count={_payload.count}
-                    fileType="json"
-                  />
-                </div>
-                <div>JSON</div>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'center' }}>
-                <div>
-                  <AllStructuresDownload
-                    description={description}
-                    search={search}
-                    count={_payload.count}
-                    fileType="tsv"
-                  />
-                </div>
-                <div>TSV</div>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'center' }}>
-                <Link target="_blank" href={url}>
-                  <span
-                    className={f('icon', 'icon-common', 'icon-export')}
-                    data-icon="&#xf233;"
-                  />
-                </Link>
-                <div>API Web View</div>
-              </li>
-            </ul>
+            <div className={f('menu-grid')}>
+              <label>JSON</label>
+              <AllStructuresDownload
+                description={description}
+                search={search}
+                count={_payload.count}
+                fileType="json"
+              />
+              <label>TSV</label>
+              <AllStructuresDownload
+                description={description}
+                search={search}
+                count={_payload.count}
+                fileType="tsv"
+              />
+              <label>API</label>
+              <Link
+                target="_blank"
+                href={url}
+                className={f('button', 'hollow', 'imitate-progress-button')}
+              >
+                <span
+                  className={f('icon', 'icon-common', 'icon-export')}
+                  data-icon="&#xf233;"
+                />
+                <span className={f('file-label')}>Web View</span>
+              </Link>
+            </div>
           </Exporter>
           <PageSizeSelector />
           <Card>
-            {data => (
+            {(data) => (
               <StructureCard
                 data={data}
                 search={search.search}
@@ -542,7 +538,7 @@ const List = (
             cellClassName={f('table-center')}
             renderer={(accession /*: string */, row) => (
               <Link
-                to={customLocation => ({
+                to={(customLocation) => ({
                   ...customLocation,
                   description: {
                     main: { key: 'structure' },
@@ -577,7 +573,7 @@ const List = (
               { accession } /*: {accession: string} */,
             ) => (
               <Link
-                to={customLocation => ({
+                to={(customLocation) => ({
                   ...customLocation,
                   description: {
                     main: { key: 'structure' },
@@ -602,7 +598,7 @@ const List = (
             dataKey="experiment_type"
             headerClassName={f('table-center')}
             cellClassName={f('table-center')}
-            renderer={type => formatExperimentType(type)}
+            renderer={(type) => formatExperimentType(type)}
           >
             Experiment type
           </Column>
@@ -626,7 +622,7 @@ const List = (
             defaultKey="structureAccession"
             renderer={(accession /*: string */) => (
               <Link
-                to={customLocation => ({
+                to={(customLocation) => ({
                   ...customLocation,
                   description: {
                     main: { key: 'structure' },
