@@ -233,7 +233,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
       }
     });
     if (this._popperContentRef.current) {
-      console.log('adding events');
       this._popperContentRef.current.addEventListener('mouseover', () =>
         this.setState({ overPopup: true }),
       );
@@ -727,7 +726,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
     const items = this._labelOptionsRef.current.childNodes;
     const labels = [];
     items.forEach((item) => {
-      if (item.firstChild.checked) labels.push(item.firstChild.value);
+      if (item.tagName === 'LI' && item.firstChild.checked)
+        labels.push(item.firstChild.value);
     });
     if (labels.includes('name')) {
       this.setState({ addLabelClass: 'label-by-name' });
