@@ -21,8 +21,10 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import exporterStyle from 'components/Table/Exporter/style.css';
 
-const f = foundationPartial(ebiGlobalStyles, ipro, local);
+const f = foundationPartial(ebiGlobalStyles, ipro, local, fonts, exporterStyle);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -96,14 +98,23 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
           status={status}
         >
           <Exporter>
-            <Link
-              disabled={!url}
-              target="_blank"
-              href={url}
-              download={`SearchResults-${searchValue}.json`}
-            >
-              JSON
-            </Link>
+            <div className={f('menu-grid')}>
+              <label htmlFor="json">JSON</label>
+              <Link
+                disabled={!url}
+                target="_blank"
+                href={url}
+                name="json"
+                download={`SearchResults-${searchValue}.json`}
+                className={f('button', 'hollow', 'imitate-progress-button')}
+              >
+                <span
+                  className={f('icon', 'icon-common', 'icon-link')}
+                  data-icon="&#xf233;"
+                />{' '}
+                <span className={f('file-label')}>Download</span>
+              </Link>
+            </div>
           </Exporter>
           <Column
             dataKey="id"
@@ -163,7 +174,7 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
           <Column dataKey="fields.source_database">Source database</Column>
           <Column
             dataKey="fields.description"
-            renderer={d => (
+            renderer={(d) => (
               <div>
                 <HighlightedText
                   text={d
@@ -198,21 +209,21 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.search.value,
-  state => state.customLocation.search,
+  (state) => state.customLocation.description.search.value,
+  (state) => state.customLocation.search,
   (searchValue, query) => ({ searchValue, query }),
 );
 
 const getQueryTerm = createSelector(
-  query => query,
-  query => `${query} AND (source_database:interpro%5E2 OR *:*)`,
+  (query) => query,
+  (query) => `${query} AND (source_database:interpro%5E2 OR *:*)`,
 );
 
 const getEbiSearchUrl = createSelector(
-  state => state.settings.ebi,
-  state => state.settings.navigation.pageSize,
-  state => state.customLocation.search,
-  state => state.customLocation.description.search.value,
+  (state) => state.settings.ebi,
+  (state) => state.settings.navigation.pageSize,
+  (state) => state.customLocation.search,
+  (state) => state.customLocation.description.search.value,
   (
     { protocol, hostname, port, root },
     settingsPageSize,

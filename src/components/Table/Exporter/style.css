@@ -1,3 +1,5 @@
+@import '../../../styles/colors.css';
+
 .exporter {
   margin: 0 0 0 0.5rem;
   position: relative;
@@ -30,7 +32,7 @@
 }
 .exporter .dropdown-pane ul li a:hover {
   /*background-color: #85b6d3;*/
-  background-color: #1878ba;
+  background-color: var(--colors-very-white);
   color: white;
 }
 
@@ -63,5 +65,23 @@
   }
   .exporter .dropdown-content.left {
     right: 1px;
+  }
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: 30% auto;
+  align-items: center;
+  & label {
+    text-align: right;
+    padding-right: 1rem;
+  }
+  & .imitate-progress-button {
+    text-align: left;
+    padding: 1em 0.5em;
+
+    & span {
+      color: var(--colors-graydark);
+    }
   }
 }

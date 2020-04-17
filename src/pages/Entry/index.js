@@ -42,8 +42,9 @@ import { foundationPartial } from 'styles/foundation';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import exporterStyle from 'components/Table/Exporter/style.css';
 
-const f = foundationPartial(pageStyle, ebiStyles, fonts);
+const f = foundationPartial(pageStyle, ebiStyles, fonts, exporterStyle);
 
 import {
   schemaProcessDataTable,
@@ -239,8 +240,8 @@ class SummaryCounterEntries extends PureComponent /*:: <SummaryCounterEntriesPro
   }
 }
 
-const description2IDs = description =>
-  (description.match(/"(PUB\d+)"/gi) || []).map(t =>
+const description2IDs = (description) =>
+  (description.match(/"(PUB\d+)"/gi) || []).map((t) =>
     t.replace(/(^")|("$)/g, ''),
   );
 /*:: type DescriptionEntriesProps = {
@@ -455,7 +456,7 @@ class List extends PureComponent /*:: <Props> */ {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then(m => m.InterproType),
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
 
@@ -519,43 +520,41 @@ class List extends PureComponent /*:: <Props> */ {
             currentAPICall={data.url}
           >
             <Exporter>
-              <ul>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllEntriesDownload
-                      description={description}
-                      search={search}
-                      count={_payload.count}
-                      fileType="json"
-                    />
-                  </div>
-                  <div>JSON</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllEntriesDownload
-                      description={description}
-                      search={search}
-                      count={_payload.count}
-                      fileType="tsv"
-                    />
-                  </div>
-                  <div>TSV</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <Link target="_blank" href={data.url}>
-                    <span
-                      className={f('icon', 'icon-common', 'icon-export')}
-                      data-icon="&#xf233;"
-                    />
-                  </Link>
-                  <div>API Web View</div>
-                </li>
-              </ul>
+              <div className={f('menu-grid')}>
+                <label htmlFor="json">JSON</label>
+                <AllEntriesDownload
+                  description={description}
+                  search={search}
+                  count={_payload.count}
+                  fileType="json"
+                  name="json"
+                />
+                <label htmlFor="tsv">TSV</label>
+                <AllEntriesDownload
+                  description={description}
+                  search={search}
+                  count={_payload.count}
+                  fileType="tsv"
+                  name="tsv"
+                />
+                <label htmlFor="api">API</label>
+                <Link
+                  target="_blank"
+                  href={data.url}
+                  name="api"
+                  className={f('button', 'hollow', 'imitate-progress-button')}
+                >
+                  <span
+                    className={f('icon', 'icon-common', 'icon-export')}
+                    data-icon="&#xf233;"
+                  />
+                  <span className={f('file-label')}>Web View</span>
+                </Link>
+              </div>
             </Exporter>
             <PageSizeSelector />
             <Card>
-              {data => (
+              {(data) => (
                 <EntryCard data={data} search={search.search} entryDB={db} />
               )}
             </Card>
@@ -565,7 +564,7 @@ class List extends PureComponent /*:: <Props> */ {
                 dataKey="type"
                 headerClassName={f('col-type', 'table-center')}
                 cellClassName={f('table-center')}
-                renderer={type => {
+                renderer={(type) => {
                   const _type = type.replace('_', ' ');
                   return (
                     <Tooltip title={`${_type} type`}>
@@ -579,7 +578,7 @@ class List extends PureComponent /*:: <Props> */ {
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
                 <Link
-                  to={customLocation => ({
+                  to={(customLocation) => ({
                     description: {
                       ...customLocation.description,
                       entry: {
@@ -615,7 +614,7 @@ class List extends PureComponent /*:: <Props> */ {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Link
-                  to={customLocation => ({
+                  to={(customLocation) => ({
                     description: {
                       ...customLocation.description,
                       entry: {
@@ -641,15 +640,11 @@ class List extends PureComponent /*:: <Props> */ {
                 dataKey="type"
                 headerClassName={f('col-type', 'table-center')}
                 cellClassName={f('table-center')}
-                renderer={type => (
+                renderer={(type) => (
                   <Tooltip
-                    title={`${type.replace(
-                      '_',
-                      ' ',
-                    )} type (as defined by ${(databases &&
-                      databases[db] &&
-                      databases[db].name) ||
-                      db})`}
+                    title={`${type.replace('_', ' ')} type (as defined by ${
+                      (databases && databases[db] && databases[db].name) || db
+                    })`}
                   >
                     {type.replace('_', ' ')}
                   </Tooltip>
@@ -672,10 +667,9 @@ class List extends PureComponent /*:: <Props> */ {
                   if (!externalLinkRenderer) return symbol;
                   return (
                     <Tooltip
-                      title={`link to ${accession} on the ${(databases &&
-                        databases[db] &&
-                        databases[db].name) ||
-                        db} website`}
+                      title={`link to ${accession} on the ${
+                        (databases && databases[db] && databases[db].name) || db
+                      } website`}
                       distance={30}
                     >
                       <Link
@@ -703,10 +697,12 @@ class List extends PureComponent /*:: <Props> */ {
                         Object.entries(entries).map(([accession, id]) => (
                           <Tooltip
                             key={accession}
-                            title={`${id} (${(databases &&
-                              databases[db] &&
-                              databases[db].name) ||
-                              db})`}
+                            title={`${id} (${
+                              (databases &&
+                                databases[db] &&
+                                databases[db].name) ||
+                              db
+                            })`}
                             className={f('signature', {
                               'corresponds-to-filter':
                                 search.signature_in &&
@@ -777,7 +773,7 @@ class List extends PureComponent /*:: <Props> */ {
                           if (a.name > b.name) return 1;
                           return 0;
                         })
-                        .map(go => (
+                        .map((go) => (
                           <span key={go.identifier} className={f('go-list')}>
                             <Tooltip
                               title={`${go.category.name.replace(

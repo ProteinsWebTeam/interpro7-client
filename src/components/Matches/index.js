@@ -6,6 +6,9 @@ import { createSelector } from 'reselect';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import { toPlural } from 'utils/pages';
+import loadable from 'higherOrder/loadable';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import config from 'config';
 
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
@@ -38,11 +41,9 @@ import { foundationPartial } from 'styles/foundation';
 
 import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import loadable from 'higherOrder/loadable';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import config from 'config';
+import exporterStyle from 'components/Table/Exporter/style.css';
 
-const f = foundationPartial(fonts, localStyle);
+const f = foundationPartial(fonts, localStyle, exporterStyle);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -151,7 +152,7 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-export const ProteinDownloadRenderer = description => (accession, row) => (
+export const ProteinDownloadRenderer = (description) => (accession, row) => (
   <File
     fileType="fasta"
     name={`protein-sequences-matching-${
@@ -253,12 +254,12 @@ const Matches = (
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then(m => m.InterproType),
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }, []);
 
   let aggSize = actualSize;
-  const dataTable = matches.map(e => ({
+  const dataTable = matches.map((e) => ({
     ...e[primary],
     accession: String(e[primary].accession),
     match: e,
@@ -286,7 +287,7 @@ const Matches = (
       databases={databases}
       withTree={primary === 'taxonomy'}
       dbCounters={dbCounters}
-      rowClassName={row => f({ exact: row.exact })}
+      rowClassName={(row) => f({ exact: row.exact })}
       nextAPICall={nextAPICall}
       previousAPICall={previousAPICall}
       currentAPICall={currentAPICall}
@@ -297,13 +298,15 @@ const Matches = (
       <SearchBox loading={isStale} />
       {description.main.key !== 'result' && (
         <Exporter>
-          <ul>
+          <div className={f('menu-grid')}>
             {primary === 'protein' && (
               <>
+                <label htmlFor="fasta">FASTA</label>
                 <FileExporter
                   description={description}
                   count={actualSize}
                   search={search}
+                  name="fasta"
                   fileType="fasta"
                   primary={primary}
                   secondary={secondary}
@@ -311,7 +314,9 @@ const Matches = (
                 />
               </>
             )}
+            <label htmlFor="json">TSV</label>
             <FileExporter
+              name="json"
               description={description}
               count={actualSize}
               search={search}
@@ -320,7 +325,9 @@ const Matches = (
               secondary={secondary}
               focused={focused}
             />
+            <label htmlFor="tsv">JSON</label>
             <FileExporter
+              name="tsv"
               description={description}
               count={actualSize}
               search={search}
@@ -329,21 +336,22 @@ const Matches = (
               secondary={secondary}
               focused={focused}
             />
-            <li className={f('exporter-link')}>
-              <Link
-                target="_blank"
-                href={toPublicAPI(
-                  includeTaxonFocusedOnURL(getReversedUrl(state), focused),
-                )}
-              >
-                <span
-                  className={f('icon', 'icon-common', 'icon-export')}
-                  data-icon="&#xf233;"
-                />
-                <span className={f('file-label')}>API Web View</span>
-              </Link>
-            </li>
-          </ul>
+            <label htmlFor="api">API</label>
+            <Link
+              name="api"
+              target="_blank"
+              href={toPublicAPI(
+                includeTaxonFocusedOnURL(getReversedUrl(state), focused),
+              )}
+              className={f('button', 'hollow', 'imitate-progress-button')}
+            >
+              <span
+                className={f('icon', 'icon-common', 'icon-export')}
+                data-icon="&#xf233;"
+              />
+              <span className={f('file-label')}>Web View</span>
+            </Link>
+          </div>
         </Exporter>
       )}
       <Column
@@ -418,7 +426,7 @@ const Matches = (
       <Column
         dataKey="source_organism"
         displayIf={primary === 'protein'}
-        renderer={sourceOrganism =>
+        renderer={(sourceOrganism) =>
           sourceOrganism.taxId ? (
             <Link
               to={{
@@ -479,7 +487,7 @@ const Matches = (
         displayIf={primary === 'structure'}
         renderer={(accession /*: string */) => (
           <Link
-            to={customLocation => ({
+            to={(customLocation) => ({
               ...customLocation,
               description: {
                 main: { key: 'structure' },
@@ -598,7 +606,7 @@ Matches.propTypes = {
 const mapStateToProps = createSelector(
   searchSelector,
   descriptionSelector,
-  state => state,
+  (state) => state,
   (search, description, state) => ({ search, description, state }),
 );
 
