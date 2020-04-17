@@ -7,7 +7,7 @@ exports[`<IPScanStatus /> should render 1`] = `
   <h3
     className="light"
   >
-    Your InterProScan searches
+    Your InterProScan Search Results
   </h3>
   <Memo(Loadable)
     data={

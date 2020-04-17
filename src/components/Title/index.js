@@ -209,7 +209,7 @@ const AccessionTag = (
       {// greyblueish accession: for protein , structure, and proteomes and no accession for tax
       accessionDisplay.has(mainType) &&
         metadata.source_database !== 'taxonomy' &&
-        metadata.name.name !== 'InterProScan Search' && (
+        metadata.name.name !== 'InterProScan Search Result' && (
           // for proteins, structures and proteomes (no accession in title for taxonomy and sets)
           <span className={f('title-id-other')}>{metadata.accession}</span>
         )}
@@ -232,7 +232,7 @@ class Title extends PureComponent /*:: <Props> */ {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then(m => m.InterproType),
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
   // eslint-disable-next-line complexity
@@ -272,9 +272,9 @@ class Title extends PureComponent /*:: <Props> */ {
           )}
         {metadata && (
           <Helmet
-            titleTemplate={`${metadata.name.name ||
-              metadata.name.short ||
-              metadata.accession} (${metadata.accession}) - ${
+            titleTemplate={`${
+              metadata.name.name || metadata.name.short || metadata.accession
+            } (${metadata.accession}) - ${
               isEntry ? dbLabel : ' '
             } ${mainType} - InterPro`}
           >
@@ -284,7 +284,7 @@ class Title extends PureComponent /*:: <Props> */ {
 
         <div className={f('title-name')}>
           {// add margin only for IPSCAN result page
-          metadata.name.name === 'InterProScan Search' ? (
+          metadata.name.name === 'InterProScan Search Result' ? (
             <h3 className={f('margin-bottom-large')}>{metadata.name.name} </h3>
           ) : (
             <h3>{metadata.name.name}</h3>

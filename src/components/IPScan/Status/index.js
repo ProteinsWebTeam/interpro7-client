@@ -27,6 +27,7 @@ import interproTheme from 'styles/theme-interpro.css'; /* needed for custom butt
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 
 const f = foundationPartial(interproTheme, fonts, ipro, local);
 
@@ -96,7 +97,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
     );
     return (
       <div className={f('row', 'columns')}>
-        <h3 className={f('light')}>Your InterProScan searches</h3>
+        <h3 className={f('light')}>Your InterProScan Search Results</h3>
         <SchemaOrgData
           data={{
             name: 'Your InterProScan searches',
@@ -180,13 +181,10 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                 {(status === 'running' ||
                   status === 'created' ||
                   status === 'submitted') && (
-                  <span>In progress</span>
-                  // <span
-                  //   style={{ fontSize: '200%' }}
-                  //   className={f('icon', 'icon-common', 'ico-neutral')}
-                  //   data-icon="&#xf017;"
-                  //   aria-label={`Job ${status}`}
-                  // />
+                  <div>
+                    <SpinningCircle />
+                    <div>Searching</div>
+                  </div>
                 )}
 
                 {status === 'not found' ||
@@ -229,14 +227,14 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
 }
 
 const mapsStateToProps = createSelector(
-  state =>
+  (state) =>
     Object.values(state.jobs || {})
-      .map(j => j.metadata)
+      .map((j) => j.metadata)
       .sort((a, b) =>
         (b.remoteID || b.localID) > (a.remoteID || a.localID) ? 1 : -1,
       ),
-  state => state.customLocation.search,
-  state => state.settings.navigation.pageSize,
+  (state) => state.customLocation.search,
+  (state) => state.settings.navigation.pageSize,
   (jobs, search, defaultPageSize) => ({
     jobs,
     search,

@@ -33,8 +33,10 @@ import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import Link from 'components/generic/Link';
+import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
+import style from './style.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts);
+const f = foundationPartial(ebiGlobalStyles, fonts, style);
 
 const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
@@ -58,7 +60,7 @@ const mergeMatch = (match1, match2) => {
   return match1;
 };
 
-const getGoTerms = matches => {
+const getGoTerms = (matches) => {
   const goTerms = new Map();
   for (const match of matches) {
     for (const { id, category, name } of (match.signature.entry || {})
@@ -96,26 +98,31 @@ const StatusTooltip = React.memo(({ status } /*: string */) => (
       status === 'created' ||
       status === 'importing' ||
       status === 'submitted') && (
-      <span
-        className={f('icon', 'icon-common', 'ico-neutral')}
-        data-icon="&#xf017;"
-        aria-label={`Job ${status}`}
-      />
+      <>
+        <SpinningCircle />
+        <div className={f('status')}>Searching</div>
+      </>
     )}
 
     {status === 'not found' || status === 'failure' || status === 'error' ? (
-      <span
-        className={f('icon', 'icon-common', 'ico-notfound')}
-        data-icon="&#x78;"
-        aria-label="Job failed or not found"
-      />
+      <>
+        <span
+          className={f('icon', 'icon-common', 'ico-notfound')}
+          data-icon="&#x78;"
+          aria-label="Job failed or not found"
+        />{' '}
+        {status}
+      </>
     ) : null}
     {status === 'finished' && (
-      <span
-        className={f('icon', 'icon-common', 'ico-confirmed')}
-        data-icon="&#xf00c;"
-        aria-label="Job finished"
-      />
+      <>
+        <span
+          className={f('icon', 'icon-common', 'ico-confirmed')}
+          data-icon="&#xf00c;"
+          aria-label="Job finished"
+        />{' '}
+        {status}
+      </>
     )}
   </Tooltip>
 ));
@@ -144,7 +151,7 @@ const mergeData = (matches, sequenceLength) => {
       name: match.signature.name,
       source_database: iproscan2urlDB(library),
       protein_length: sequenceLength,
-      locations: match.locations.map(loc => ({
+      locations: match.locations.map((loc) => ({
         ...loc,
         model_acc: match['model-ac'],
         fragments:
@@ -159,7 +166,7 @@ const mergeData = (matches, sequenceLength) => {
         sites
           ? {
               accession: match.signature.accession,
-              locations: sites.map(site => ({
+              locations: sites.map((site) => ({
                 description: site.description,
                 fragments: site.siteLocations,
               })),
@@ -187,10 +194,10 @@ const mergeData = (matches, sequenceLength) => {
     }
   }
   mergedData.unintegrated = Object.values(mergedData.unintegrated);
-  integrated = Array.from(integrated.values()).map(m => {
+  integrated = Array.from(integrated.values()).map((m) => {
     const locations = flattenDeep(
-      m.children.map(s =>
-        s.locations.map(l => l.fragments.map(f => [f.start, f.end])),
+      m.children.map((s) =>
+        s.locations.map((l) => l.fragments.map((f) => [f.start, f.end])),
       ),
     );
     return {
@@ -246,8 +253,8 @@ const SummaryIPScanJob = ({
       setMergedData(organisedData);
       if (organisedData.family) {
         const families = [];
-        organisedData.family.forEach(entry => {
-          fetchFun(getEntryURL(api, entry.accession)).then(data => {
+        organisedData.family.forEach((entry) => {
+          fetchFun(getEntryURL(api, entry.accession)).then((data) => {
             if (data?.payload?.metadata) {
               families.push(data.payload.metadata);
               setFamilyHierarchyData([...families]);
@@ -261,7 +268,7 @@ const SummaryIPScanJob = ({
   if (remoteID && remoteID !== accession) {
     return (
       <Redirect
-        to={customLocation => ({
+        to={(customLocation) => ({
           ...customLocation,
           description: {
             ...customLocation.description,
@@ -284,7 +291,7 @@ const SummaryIPScanJob = ({
     length: payload.sequence.length,
     sequence: payload.sequence,
     name: {
-      name: 'InterProScan Search',
+      name: 'InterProScan Search Result',
       short: payload.xref[0].name,
     },
   };
@@ -343,7 +350,7 @@ const SummaryIPScanJob = ({
             <tr>
               <td>Status</td>
               <td>
-                <StatusTooltip status={status} /> {status}
+                <StatusTooltip status={status} />
               </td>
             </tr>
           </tbody>
@@ -367,7 +374,7 @@ const SummaryIPScanJob = ({
               >
                 <ul>
                   {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
-                    type => (
+                    (type) => (
                       <li key={type}>
                         <Link
                           target="_blank"
@@ -409,8 +416,8 @@ SummaryIPScanJob.propTypes = {
   api: T.object,
 };
 
-const jobMapSelector = state => state.jobs;
-const accessionSelector = state =>
+const jobMapSelector = (state) => state.jobs;
+const accessionSelector = (state) =>
   state.customLocation.description.result.accession;
 
 const jobSelector = createSelector(
@@ -418,7 +425,7 @@ const jobSelector = createSelector(
   jobMapSelector,
   (accession, jobMap) => {
     return Object.values(jobMap || {}).find(
-      job =>
+      (job) =>
         job.metadata.remoteID === accession ||
         job.metadata.localID === accession,
     );
@@ -428,7 +435,7 @@ const jobSelector = createSelector(
 const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
-  state => state.settings.api,
+  (state) => state.settings.api,
   (
     accession,
     { metadata: { localID, remoteID, status, localTitle } },
