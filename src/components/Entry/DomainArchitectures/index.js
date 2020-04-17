@@ -255,29 +255,31 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
 
     let messageContent;
     if (payload.count === 0) {
-      if (search.ida_search.split(',')) {
-        messageContent = (
-          <div className={f('callout', 'info', 'withicon')}>
-            There are no Domain architectures for the current selection.
-          </div>
-        );
-      } else if (search.ida_search.match(new RegExp('ipr', 'ig'))) {
-        messageContent = (
-          <div className={f('callout', 'info', 'withicon')}>
-            Domain architectures are calculated for InterPro entries of type
-            Domain. There are no Domain architectures for entry{' '}
-            <b>{search.ida_search}</b> as it is of different type.
-          </div>
-        );
-      } else {
-        messageContent = (
-          <div className={f('callout', 'info', 'withicon')}>
-            <b>{search.ida_search}</b> is not a valid entry. Accepted entries
-            are Pfam accession or an InterPro accession if a Pfam entry is
-            integrated with it.
-          </div>
-        );
-      }
+      const searchEntries = search.ida_search.split(',');
+      const invalidEntries = [];
+      searchEntries.forEach((entry) => {
+        const matches = entry.match(new RegExp(/(ipr|pf)/, 'ig'));
+        if (!matches) invalidEntries.push(entry);
+      });
+
+      messageContent = (
+        <div className={f('callout', 'info', 'withicon')}>
+          <b>No Domain architectures found</b>. They are calculated for InterPro
+          entries of type <b>Domain</b>. Please make sure the type is Domain for
+          the accessions you are searching for.
+          {invalidEntries.length > 0 ? (
+            <div style={{ margin: '1rem' }}>
+              Please check if the following are valid <b>InterPro</b> or{' '}
+              <b>Pfam</b> accessions:
+              <ul>
+                {invalidEntries.map((e) => (
+                  <li>{e}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </div>
+      );
     } else {
       messageContent = (
         <>
