@@ -273,7 +273,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
               <b>Pfam</b> accessions:
               <ul>
                 {invalidEntries.map((e) => (
-                  <li>{e}</li>
+                  <li key={e}>{e}</li>
                 ))}
               </ul>
             </div>
