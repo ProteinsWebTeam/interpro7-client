@@ -64,7 +64,7 @@ const InterProScan = loadable({
 
 const IDA = loadable({
   loader: () =>
-    import(/* webpackChunkName: "about-interproscan" */ 'components/About/IDA'),
+    import(/* webpackChunkName: "about-ida" */ 'components/About/IDA'),
 });
 const routes = new Map([
   ['interpro', AboutInterPro],
