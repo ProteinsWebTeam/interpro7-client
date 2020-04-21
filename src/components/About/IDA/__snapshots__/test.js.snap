@@ -52,7 +52,22 @@ exports[`<AboutIDA /> should render with data 1`] = `
             <b>
               Order of domain matters
             </b>
-             checkbox should be checked and it would enable you to drag the domain to the desired position.
+             checkbox should be checked.
+            <ol
+              style={
+                Object {
+                  "listStyleType": "lower-alpha",
+                }
+              }
+            >
+              <li>
+                When the 
+                <i>
+                  Order of domains
+                </i>
+                 option is selected you can drag the domain to the desired position.
+              </li>
+            </ol>
           </li>
           <li>
             To exclude a particular domain in the search query,
