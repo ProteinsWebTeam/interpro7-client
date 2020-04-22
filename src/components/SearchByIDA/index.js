@@ -249,11 +249,12 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                 <div className={f('description')}>
                   <p>
                     Domain architectures are derived from matches to Pfam
-                    Entries. The results will show all proteins matching the
-                    criteria selected below. You can select entries which must
-                    be included or excluded from your search results. Entries
-                    can be selected by either entering a Pfam accession, or an
-                    InterPro accession if a Pfam entry is integrated with it.
+                    models. You can select domains to either be included or
+                    excluded from your search results. The results will include
+                    all proteins which match the domain architecture selected
+                    below. Domains can be selected using either a Pfam
+                    accession, or an InterPro accession, where that InterPro
+                    entry includes a Pfam model.
                   </p>
                 </div>
                 <div className={f('ida-workspace')}>
