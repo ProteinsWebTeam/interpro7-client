@@ -1,3 +1,14 @@
+@import '../../../styles/colors.css';
+
+.title-form {
+  margin-left: 0.5rem;
+  display: flex;
+}
+
+.button-space {
+  margin-left: 0.5rem;
+}
+
 .status {
   display: inline;
   position: absolute;

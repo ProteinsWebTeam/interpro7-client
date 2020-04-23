@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -35,6 +35,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import Link from 'components/generic/Link';
 import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 import style from './style.css';
+import { updateJobTitle } from '../../../actions/creators';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, style);
 
@@ -232,6 +233,25 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   });
 };
 
+const changeTitle = (
+  localID,
+  results,
+  updateJobTitle,
+  inputRef,
+  setShowTitleField,
+  setTitle,
+) => {
+  if (inputRef.current.value !== '') {
+    results.xref[0].name = inputRef.current.value;
+    updateJobTitle(
+      { metadata: { localID }, data: { results } },
+      inputRef.current.value,
+    );
+    setTitle(inputRef.current.value);
+  }
+  setShowTitleField(false);
+};
+
 const SummaryIPScanJob = ({
   accession,
   localID,
@@ -241,14 +261,19 @@ const SummaryIPScanJob = ({
   data,
   localPayload,
   api,
+  updateJobTitle,
 }) => {
   const [mergedData, setMergedData] = useState({});
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
+  const [title, setTitle] = useState(localTitle);
+  const [showTitleField, setShowTitleField] = useState(false);
+  const titleInputRef = useRef();
 
   useEffect(() => {
     if (data.payload || localPayload) {
       const payload = data.payload ? data.payload.results[0] : localPayload;
 
+      setTitle(localTitle || payload.xref[0].name);
       const organisedData = mergeData(payload.matches, payload.sequenceLength);
       setMergedData(organisedData);
       if (organisedData.family) {
@@ -264,6 +289,10 @@ const SummaryIPScanJob = ({
       }
     }
   }, [data.payload, localPayload]);
+
+  useEffect(() => {
+    setTitle(localTitle);
+  }, [localTitle]);
 
   if (remoteID && remoteID !== accession) {
     return (
@@ -295,7 +324,8 @@ const SummaryIPScanJob = ({
       short: payload.xref[0].name,
     },
   };
-  const title = localTitle || payload.xref[0].name;
+  // TODO include the following
+  // const title = localTitle || payload.xref[0].name;
 
   const goTerms = getGoTerms(payload.matches);
 
@@ -311,7 +341,46 @@ const SummaryIPScanJob = ({
             {title && (
               <tr>
                 <td>Title</td>
-                <td>{title}</td>
+                <td style={{ display: 'flex' }}>
+                  {title}{' '}
+                  <Tooltip title={'Edit Title'}>
+                    <button
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        'small',
+                        'button-space',
+                      )}
+                      data-icon="&#xf303;"
+                      aria-label={'Edit Title'}
+                      onClick={() => setShowTitleField(!showTitleField)}
+                    />
+                  </Tooltip>
+                  {showTitleField ? (
+                    <div className={f('title-form')}>
+                      <input
+                        type="text"
+                        placeholder={'Enter new title'}
+                        ref={titleInputRef}
+                      />
+                      <button
+                        className={f('button', 'button-space')}
+                        onClick={() =>
+                          changeTitle(
+                            localID,
+                            payload,
+                            updateJobTitle,
+                            titleInputRef,
+                            setShowTitleField,
+                            setTitle,
+                          )
+                        }
+                      >
+                        Update
+                      </button>
+                    </div>
+                  ) : null}
+                </td>
               </tr>
             )}
             <tr>
@@ -414,6 +483,7 @@ SummaryIPScanJob.propTypes = {
   data: dataPropType,
   localPayload: T.object,
   api: T.object,
+  updateJobTitle: T.func,
 };
 
 const jobMapSelector = (state) => state.jobs;
@@ -450,4 +520,4 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(mapStateToProps)(SummaryIPScanJob);
+export default connect(mapStateToProps, { updateJobTitle })(SummaryIPScanJob);
