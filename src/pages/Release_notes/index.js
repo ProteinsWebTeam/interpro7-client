@@ -396,7 +396,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                 databases.
               </li>
             </ul>
-            {content.notes && (
+            {content.notes && content.notes.length && (
               <div
                 className={f('callout', 'info', 'withicon')}
                 style={{
