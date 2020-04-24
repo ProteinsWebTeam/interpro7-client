@@ -107,6 +107,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
     entryDB: T.string,
     localID: T.string,
     job: T.object,
+    localTitle: T.string,
   };
 
   constructor(props /*: Props */) {
