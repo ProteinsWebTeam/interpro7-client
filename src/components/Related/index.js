@@ -85,7 +85,7 @@ class _RelatedSimple extends PureComponent /*:: <RelatedSimpleProps> */ {
           obj={secondaryData}
           component={({ k: db, value }) => (
             <Link
-              to={customLocation => ({
+              to={(customLocation) => ({
                 ...customLocation,
                 description: {
                   main: { key: focusType },
@@ -103,8 +103,8 @@ class _RelatedSimple extends PureComponent /*:: <RelatedSimpleProps> */ {
 }
 
 const mapStateToPropsSimple = createSelector(
-  state => state.customLocation.description.main.key,
-  state =>
+  (state) => state.customLocation.description.main.key,
+  (state) =>
     (Object.entries(state.customLocation.description).find(
       ([_key, value]) => value.isFilter,
     ) || [])[0],
@@ -321,7 +321,7 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
           databases={databases}
         />
 
-        {focusType === 'protein' && secondaryData.length > 1 && (
+        {focusType === 'protein' && (
           <FiltersPanel>
             <CurationFilter label="UniProt Curation" />
           </FiltersPanel>
@@ -346,12 +346,12 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
 }
 
 const mapStateToPropsAdvanced = createSelector(
-  state => state.customLocation.description.main.key,
-  state =>
+  (state) => state.customLocation.description.main.key,
+  (state) =>
     Object.entries(state.customLocation.description).find(
       ([_key, value]) => value.isFilter && value.order === 1,
     ),
-  state =>
+  (state) =>
     Object.entries(state.customLocation.description).filter(
       ([_key, value]) => value.isFilter && value.order !== 1,
     ),
@@ -365,8 +365,8 @@ const mapStateToPropsAdvanced = createSelector(
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
 
 const mapStateToPropsAdvancedQuery = createSelector(
-  state => state.customLocation.description.main.key,
-  mainType => ({ mainType }),
+  (state) => state.customLocation.description.main.key,
+  (mainType) => ({ mainType }),
 );
 const RelatedAdvancedQuery = loadData({
   getUrl: getUrlForMeta,
@@ -380,7 +380,7 @@ const RelatedAdvancedQuery = loadData({
     if (loading) return <Loading />;
     const _secondaryData =
       payload && payload.results
-        ? payload.results.map(x => {
+        ? payload.results.map((x) => {
             const { ...obj } = x.metadata;
             const plural = toPlural(props.mainType);
             obj.counters = omit(x, ['metadata', plural]);
@@ -435,7 +435,7 @@ class Related extends PureComponent /*:: <RelatedProps> */ {
 }
 
 const mapStateToPropsDefault = createSelector(
-  state =>
+  (state) =>
     Object.entries(state.customLocation.description).find(
       ([_key, value]) => value.isFilter && value.order === 1,
     ) || [],

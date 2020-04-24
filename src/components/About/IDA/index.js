@@ -46,8 +46,13 @@ const AboutIDA = () => (
             <li>More domains can be added to the search if needed.</li>
             <li>
               If the order in which the domains are added is important,{' '}
-              <b>Order of domain matters</b> checkbox should be checked and it
-              would enable you to drag the domain to the desired position.
+              <b>Order of domain matters</b> checkbox should be checked.
+              <ol style={{ listStyleType: 'lower-alpha' }}>
+                <li>
+                  When the <i>Order of domains</i> option is selected you can
+                  drag the domain to the desired position.
+                </li>
+              </ol>
             </li>
             <li>
               To exclude a particular domain in the search query,{' '}

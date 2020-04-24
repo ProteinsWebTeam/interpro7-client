@@ -19,25 +19,25 @@ const loadInterProWebComponents = () => {
       );
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproHierarchy),
+        interproComponents().then((m) => m.InterproHierarchy),
       ).as('interpro-hierarchy'),
     );
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproEntry),
+        interproComponents().then((m) => m.InterproEntry),
       ).as('interpro-entry'),
     );
     webComponents.push(
-      loadWebComponent(() => interproComponents().then(m => m.InterproType)).as(
-        'interpro-type',
-      ),
+      loadWebComponent(() =>
+        interproComponents().then((m) => m.InterproType),
+      ).as('interpro-type'),
     );
   }
   return Promise.all(webComponents);
 };
 
-const getUniqueHierarchies = hierarchies =>
-  Array.from(new Map(hierarchies.map(h => [h.accession, h])).values());
+const getUniqueHierarchies = (hierarchies) =>
+  Array.from(new Map(hierarchies.map((h) => [h.accession, h])).values());
 
 const ProteinEntryHierarchy = ({
   hierarchy,
@@ -45,6 +45,7 @@ const ProteinEntryHierarchy = ({
   hrefroot,
   goToCustomLocation,
   ready,
+  includeChildren = false,
 }) => {
   const componentRef = useRef();
   useEffect(() => {
@@ -53,7 +54,7 @@ const ProteinEntryHierarchy = ({
       componentRef.current.hierarchy = hierarchy;
       // Adding the click event so it doesn't refresh the whole page,
       // but instead use the customLocation.
-      componentRef.current.addEventListener('click', e => {
+      componentRef.current.addEventListener('click', (e) => {
         const target = (e.path || e.composedPath())[0];
         if (target.classList.contains('link')) {
           e.preventDefault();
@@ -74,7 +75,7 @@ const ProteinEntryHierarchy = ({
       accessions={accessions}
       hrefroot={hrefroot}
       ref={componentRef}
-      displaymode="pruned no-children"
+      displaymode={`pruned${includeChildren ? '' : ' no-children'}`}
     />
   );
 };
@@ -84,9 +85,14 @@ ProteinEntryHierarchy.propTypes = {
   hrefroot: T.string.isRequired,
   goToCustomLocation: T.func.isRequired,
   ready: T.bool.isRequired,
+  includeChildren: T.bool,
 };
 
-const ProteinEntryHierarchies = ({ entries, goToCustomLocation }) => {
+const ProteinEntryHierarchies = ({
+  entries,
+  goToCustomLocation,
+  includeChildren = false,
+}) => {
   const [ready, setReady] = useState(false);
 
   // eslint-disable-next-line func-style,require-jsdoc
@@ -100,18 +106,20 @@ const ProteinEntryHierarchies = ({ entries, goToCustomLocation }) => {
     });
   }, []);
 
-  const hierarchies = getUniqueHierarchies(entries.map(e => e.hierarchy));
+  const hierarchies = getUniqueHierarchies(entries.map((e) => e.hierarchy));
+  if (!ready) return null;
   return (
     <div>
       {hierarchies.length
-        ? hierarchies.map(h => (
+        ? hierarchies.map((h) => (
             <ProteinEntryHierarchy
               hierarchy={h}
-              accessions={entries.map(e => e.accession)}
+              accessions={entries.map((e) => e.accession)}
               hrefroot={`${config.root.website.path}/entry/interpro`}
               goToCustomLocation={goToCustomLocation}
               key={h.accession}
               ready={ready}
+              includeChildren={includeChildren}
             />
           ))
         : null}
@@ -127,14 +135,14 @@ ProteinEntryHierarchies.propTypes = {
     }),
   ),
   goToCustomLocation: T.func,
+  includeChildren: T.bool,
 };
 
 const mapStateToProps = createSelector(
-  state => state.settings.api,
-  api => ({ api }),
+  (state) => state.settings.api,
+  (api) => ({ api }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(ProteinEntryHierarchies);
+export default connect(mapStateToProps, { goToCustomLocation })(
+  React.memo(ProteinEntryHierarchies),
+);

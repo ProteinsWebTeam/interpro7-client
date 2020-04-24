@@ -16,6 +16,7 @@ import {
 import AdvancedOptions from 'components/IPScan/AdvancedOptions';
 import Redirect from 'components/generic/Redirect';
 import Link from 'components/generic/Link';
+import getId from 'utils/cheap-unique-id';
 
 import { createJob, goToCustomLocation } from 'actions/creators';
 import loadable from 'higherOrder/loadable';
@@ -39,7 +40,7 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const strategy = re => (block, cb) => {
+const strategy = (re) => (block, cb) => {
   const text = block.getText();
   let match;
   while ((match = re.exec(text))) {
@@ -72,7 +73,7 @@ const commentsStrategy = (re, forErrors = false) => (
       offsetKey: string,
       children: any
   }*/
-const classedSpan = className => {
+const classedSpan = (className) => {
   class Span extends PureComponent /*:: <ScanProps> */ {
     static propTypes = {
       offsetKey: T.string.isRequired,
@@ -92,26 +93,26 @@ const classedSpan = className => {
   return Span;
 };
 
-const checkedSelectorFor = x => `input[name="${x}"]:checked`;
+const checkedSelectorFor = (x) => `input[name="${x}"]:checked`;
 
-const getCheckedApplications = form =>
+const getCheckedApplications = (form) =>
   Array.from(
     form.querySelectorAll(checkedSelectorFor('appl')),
-    input => input.value,
+    (input) => input.value,
   );
 
-const getLocalTitle = form =>
+const getLocalTitle = (form) =>
   form.querySelector('input[name="local-title"]').value.trim();
 
-const isXChecked = x => form => !!form.querySelector(checkedSelectorFor(x));
+const isXChecked = (x) => (form) => !!form.querySelector(checkedSelectorFor(x));
 
 const isStayChecked = isXChecked('stay');
 
 const commentRE = /^\s*[>;].*$/m;
 const IUPACProtRE = /^[a-z\s]*$/im;
 
-export const checkValidity = lines => {
-  const trimmedLines = lines.map(l => l.trim()).filter(Boolean);
+export const checkValidity = (lines) => {
+  const trimmedLines = lines.map((l) => l.trim()).filter(Boolean);
   if (!commentRE.test(trimmedLines[0]) && !IUPACProtRE.test(trimmedLines[0]))
     return false;
   for (const line of trimmedLines.slice(1)) {
@@ -122,7 +123,7 @@ export const checkValidity = lines => {
 
 const MIN_LENGTH = 3;
 
-export const isTooShort = lines => {
+export const isTooShort = (lines) => {
   let count = 0;
   for (const line of lines) {
     if (IUPACProtRE.test(line)) count += line.trim().length;
@@ -131,11 +132,11 @@ export const isTooShort = lines => {
   return true;
 };
 
-const hasHeaderIssues = lines => {
-  const trimmedLines = lines.map(l => l.trim()).filter(Boolean);
+const hasHeaderIssues = (lines) => {
+  const trimmedLines = lines.map((l) => l.trim()).filter(Boolean);
   const isFirstLineAComment =
     trimmedLines.length && trimmedLines[0].startsWith('>');
-  const numberOfComments = trimmedLines.filter(l => l.startsWith('>')).length;
+  const numberOfComments = trimmedLines.filter((l) => l.startsWith('>')).length;
   if (numberOfComments === 0) return false;
   if (numberOfComments === 1 && isFirstLineAComment) return false;
   return true;
@@ -155,7 +156,7 @@ const compositeDecorator = new CompositeDecorator([
   },
 ]);
 
-export const cleanUp = blocks => {
+export const cleanUp = (blocks) => {
   let endOfFirstSequence = false;
   return blocks
     .map(({ text }, i, lines) => {
@@ -175,6 +176,49 @@ export const cleanUp = blocks => {
     .join('\n');
 };
 
+const InfoMessages = ({ valid, tooShort, headerIssues }) => {
+  return (
+    <div className={f('text-right')}>
+      {!valid && (
+        <div>
+          The sequence has invalid characters.{' '}
+          <span role="img" aria-label="warning">
+            ⚠️
+          </span>
+        </div>
+      )}
+      {valid && tooShort && (
+        <div>
+          The sequence is too short.{' '}
+          <span role="img" aria-label="warning">
+            ⚠️
+          </span>
+        </div>
+      )}
+      {headerIssues && (
+        <div>
+          There are issues with the header of the sequence.{' '}
+          <span role="img" aria-label="warning">
+            ⚠️
+          </span>
+        </div>
+      )}
+      {valid && !tooShort && !headerIssues && (
+        <div>
+          Valid Sequence.{' '}
+          <span role="img" aria-label="warning">
+            ✅
+          </span>
+        </div>
+      )}
+    </div>
+  );
+};
+InfoMessages.propTypes = {
+  valid: T.bool.isRequired,
+  tooShort: T.bool.isRequired,
+  headerIssues: T.bool.isRequired,
+};
 /*:: type Props = {
   createJob: function,
   goToCustomLocation: function,
@@ -215,7 +259,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
         compositeDecorator,
       );
       const lines = convertToRaw(editorState.getCurrentContent()).blocks.map(
-        block => block.text,
+        (block) => block.text,
       );
       valid = checkValidity(lines);
       tooShort = isTooShort(lines);
@@ -234,7 +278,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     this._editorRef = React.createRef();
   }
 
-  _handleReset = text => {
+  _handleReset = (text) => {
     if (this._formRef.current && typeof text !== 'string') {
       const inputsToReset = Array.from(
         this._formRef.current.querySelectorAll(
@@ -264,12 +308,12 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     );
   };
 
-  _handleSubmit = event => {
+  _handleSubmit = (event) => {
     event.preventDefault();
     if (!this._formRef.current) return;
     const lines = convertToRaw(
       this.state.editorState.getCurrentContent(),
-    ).blocks.map(block => block.text);
+    ).blocks.map((block) => block.text);
     if (!lines.length) return;
     this.props.createJob({
       metadata: {
@@ -296,7 +340,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     }
   };
 
-  _handleFile = file => {
+  _handleFile = (file) => {
     const fr = new FileReader();
     fr.onload = () => {
       this._handleReset(fr.result);
@@ -324,7 +368,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     target.value = null;
   };
 
-  _handlePastedText = pasted => {
+  _handlePastedText = (pasted) => {
     const blockMap = ContentState.createFromText(pasted).getBlockMap();
     const editorState = EditorState.push(
       this.state.editorState,
@@ -343,10 +387,33 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     if (this._editorRef.current) this._editorRef.current.focus();
   };
 
-  _handleChange = editorState => {
+  _addFastAHeaderIfNeeded = (editorState, lines) => {
+    const currentContent = editorState.getCurrentContent();
+    if (currentContent.hasText()) {
+      const firstLine = (lines?.[0] || '').trim();
+      const hasHeader = firstLine.startsWith('>') && firstLine.length > 1;
+      if (!hasHeader) {
+        const header = `> Sequence title ${getId()}`;
+        lines.splice(0, 0, header);
+        const newState = EditorState.createWithContent(
+          ContentState.createFromText(lines.join('\n')),
+          compositeDecorator,
+        );
+        return EditorState.moveFocusToEnd(newState);
+      }
+    }
+    return null;
+  };
+
+  _handleChange = (editorState) => {
     const lines = convertToRaw(editorState.getCurrentContent()).blocks.map(
-      block => block.text,
+      (block) => block.text,
     );
+    const stateWithHeader = this._addFastAHeaderIfNeeded(editorState, lines);
+    if (stateWithHeader) {
+      this._handleChange(stateWithHeader);
+      return;
+    }
     this.setState({
       editorState,
       valid: checkValidity(lines),
@@ -443,7 +510,10 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                     >
                       <div
                         type="text"
-                        className={f('editor', { 'invalid-block': !valid })}
+                        className={f('editor', {
+                          'invalid-block': !valid,
+                          'valid-block': valid && !tooShort && !headerIssues,
+                        })}
                       >
                         <Editor
                           placeholder="Enter your sequence"
@@ -456,35 +526,13 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                       </div>
                     </div>
                     {editorState.getCurrentContent().getPlainText().length >
-                      0 &&
-                      (tooShort || headerIssues) && (
-                        <div className={f('text-right')}>
-                          {!valid && (
-                            <div>
-                              The sequence has invalid characters.{' '}
-                              <span role="img" aria-label="warning">
-                                ⚠️
-                              </span>
-                            </div>
-                          )}
-                          {valid && tooShort && (
-                            <div>
-                              The sequence is too short.{' '}
-                              <span role="img" aria-label="warning">
-                                ⚠️
-                              </span>
-                            </div>
-                          )}
-                          {headerIssues && (
-                            <div>
-                              There are issues with the header of the sequence .{' '}
-                              <span role="img" aria-label="warning">
-                                ⚠️
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      )}
+                      0 && (
+                      <InfoMessages
+                        valid={valid}
+                        tooShort={tooShort}
+                        headerIssues={headerIssues}
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -576,8 +624,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.ipScan,
-  state => state.customLocation.description,
+  (state) => state.settings.ipScan,
+  (state) => state.customLocation.description,
   (ipScan, desc) => ({ ipScan, value: desc.search.value, main: desc.main.key }),
 );
 

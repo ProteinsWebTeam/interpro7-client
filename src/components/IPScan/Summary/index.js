@@ -413,7 +413,15 @@ const SummaryIPScanJob = ({
               <p className={f('margin-bottom-medium')}>None predicted</p>
             )}
           </div>
-          <div className={f('medium-3', 'columns', 'margin-bottom-large')}>
+        </div>
+      </section>
+
+      {status === 'finished' && (
+        <>
+          <DomainOnProteinWithoutMergedData
+            mainData={{ metadata }}
+            dataMerged={mergedData}
+          >
             {status === 'finished' && data?.url && (
               <Exporter
                 includeSettings={false}
@@ -437,16 +445,7 @@ const SummaryIPScanJob = ({
                 </ul>
               </Exporter>
             )}
-          </div>
-        </div>
-      </section>
-
-      {status === 'finished' && (
-        <>
-          <DomainOnProteinWithoutMergedData
-            mainData={{ metadata }}
-            dataMerged={mergedData}
-          />
+          </DomainOnProteinWithoutMergedData>
           <GoTerms terms={Array.from(goTerms.values())} type="protein" />
         </>
       )}

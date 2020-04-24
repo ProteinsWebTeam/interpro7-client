@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Children } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
@@ -26,6 +26,8 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import spinner from 'components/SimpleCommonComponents/Loading/style.css';
 import PopperJS from 'popper.js';
 
+import { Exporter } from 'components/Table';
+
 import loadWebComponent from 'utils/load-web-component';
 
 import loadData from 'higherOrder/loadData';
@@ -49,7 +51,7 @@ const f = foundationPartial(ipro, localCSS, fonts, spinner);
 
 const webComponents = [];
 
-const TOOLTIP_DELAY = 5000;
+const TOOLTIP_DELAY = 500;
 
 const loadProtVistaWebComponents = () => {
   if (!webComponents.length) {
@@ -160,6 +162,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     id: T.string,
     showConservationButton: T.bool,
     handleConservationLoad: T.func,
+    children: T.any,
   };
 
   constructor(props /*: Props */) {
@@ -178,6 +181,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       enableTooltip: true,
       dropdownOpen: false,
       showLoading: false,
+      overPopup: false,
     };
 
     this._mainRef = React.createRef();
@@ -228,6 +232,15 @@ class ProtVista extends Component /*:: <Props, State> */ {
         this._popperRef.current.classList.add(f('hide'));
       }
     });
+    if (this._popperContentRef.current) {
+      this._popperContentRef.current.addEventListener('mouseover', () =>
+        this.setState({ overPopup: true }),
+      );
+      this._popperContentRef.current.addEventListener('mouseout', () =>
+        this.setState({ overPopup: false }),
+      );
+    }
+
     const saver = document.querySelector(`#${this.props.id}Saver`);
 
     saver.preSave = () => {
@@ -354,7 +367,9 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     this.handleCollapseLabels(detail.feature.accession);
                     break;
                   case 'mouseout':
-                    this._timeoutID = setTimeout(() => {
+                    this._timeoutID = setInterval(() => {
+                      if (this.state.overPopup) return;
+                      clearInterval(this._timeoutID);
                       removeAllChildrenFromNode(this._popperContentRef.current);
                       this.popper.destroy();
                       this._popperRef.current.classList.add(f('hide'));
@@ -364,7 +379,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                   case 'mouseover':
                     if (this.state.enableTooltip) {
                       if (this._timeoutID > 0) {
-                        clearTimeout(this._timeoutID);
+                        clearInterval(this._timeoutID);
                       }
                       this._popperRef.current.classList.remove(f('hide'));
                       removeAllChildrenFromNode(this._popperContentRef.current);
@@ -711,7 +726,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
     const items = this._labelOptionsRef.current.childNodes;
     const labels = [];
     items.forEach((item) => {
-      if (item.firstChild.checked) labels.push(item.firstChild.value);
+      if (item.tagName === 'LI' && item.firstChild.checked)
+        labels.push(item.firstChild.value);
     });
     if (labels.includes('name')) {
       this.setState({ addLabelClass: 'label-by-name' });
@@ -863,7 +879,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
-  renderOptions() {
+  renderOptions(ExporterButton) {
     const { collapsed } = this.state;
     const title = this.props.title || 'Domains on protein';
 
@@ -918,10 +934,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
               </protvista-saver>
             </Tooltip>
           </div>
-          <div
-            className={f('button-group', 'dropdown-container')}
-            style={{ display: 'flex' }}
-          >
+          <div className={f('button-group', 'dropdown-container', 'small')}>
             <button
               className={f('button', 'dropdown')}
               onClick={() =>
@@ -963,6 +976,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                   />{' '}
                   Name
                 </li>
+                <hr />
                 <li key={'tooltip'}>
                   <input
                     type="checkbox"
@@ -979,6 +993,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
               </ul>
             </div>
           </div>
+          <div className={f('exporter')}>{ExporterButton}</div>
         </div>
       </div>
     );
@@ -994,17 +1009,26 @@ class ProtVista extends Component /*:: <Props, State> */ {
       protein: { length },
       data,
       showConservationButton,
+      children,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
 
     const { hideCategory } = this.state;
+    let ExporterButton = null;
+    if (children) {
+      ExporterButton = Children.toArray(children).filter(
+        (child) => child.type === Exporter,
+      )?.[0];
+    }
     return (
       <div
         ref={this._mainRef}
         className={f('fullscreenable', 'margin-bottom-large')}
       >
-        <div className={f('track-row')}>{this.renderOptions()}</div>
+        <div className={f('track-row')}>
+          {this.renderOptions(ExporterButton)}
+        </div>
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
           <div className={f('popper-content')} ref={this._popperContentRef} />

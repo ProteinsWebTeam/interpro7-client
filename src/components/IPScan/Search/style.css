@@ -78,6 +78,9 @@
 .invalid-block {
   border-color: var(--colors-alert-main);
 }
+.valid-block {
+  border-color: var(--colors-check);
+}
 
 .comment {
   color: gray;

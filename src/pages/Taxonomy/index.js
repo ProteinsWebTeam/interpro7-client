@@ -52,10 +52,17 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import exporterStyle from 'components/Table/Exporter/style.css';
 
-const f = foundationPartial(ebiGlobalStyles, pageStyle, styles, fonts);
+const f = foundationPartial(
+  ebiGlobalStyles,
+  pageStyle,
+  styles,
+  fonts,
+  exporterStyle,
+);
 
-const EntryAccessionsRenderer = entryDB => (taxId, _row, extra) => (
+const EntryAccessionsRenderer = (entryDB) => (taxId, _row, extra) => (
   <File
     fileType="accession"
     name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
@@ -68,7 +75,7 @@ const EntryAccessionsRenderer = entryDB => (taxId, _row, extra) => (
   />
 );
 
-const ProteinFastasRenderer = entryDB => (taxId, _row, extra) => (
+const ProteinFastasRenderer = (entryDB) => (taxId, _row, extra) => (
   <File
     fileType="fasta"
     name={`protein-sequences${
@@ -530,48 +537,48 @@ class List extends PureComponent /*:: <Props,State> */ {
             nextAPICall={_payload.next}
             previousAPICall={_payload.previous}
             currentAPICall={url}
-            onFocusChanged={focused => this.setState({ focused })}
+            onFocusChanged={(focused) => this.setState({ focused })}
           >
             <Exporter>
-              <ul>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllTaxDownload
-                      description={description}
-                      search={search}
-                      count={size}
-                      focused={this.state.focused}
-                      fileType="json"
-                    />
-                  </div>
-                  <div>JSON</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <div>
-                    <AllTaxDownload
-                      description={description}
-                      search={search}
-                      count={size}
-                      focused={this.state.focused}
-                      fileType="tsv"
-                    />
-                  </div>
-                  <div>TSV</div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'center' }}>
-                  <Link target="_blank" href={urlToExport}>
-                    <span
-                      className={f('icon', 'icon-common', 'icon-export')}
-                      data-icon="&#xf233;"
-                    />
-                  </Link>
-                  <div>API Web View</div>
-                </li>
-              </ul>
+              <div className={f('menu-grid')}>
+                <label htmlFor="json">JSON</label>
+                <AllTaxDownload
+                  description={description}
+                  name="json"
+                  search={search}
+                  count={size}
+                  focused={this.state.focused}
+                  fileType="json"
+                />
+
+                <label htmlFor="tsv">TSV</label>
+                <AllTaxDownload
+                  description={description}
+                  name="tsv"
+                  search={search}
+                  count={size}
+                  focused={this.state.focused}
+                  fileType="tsv"
+                />
+
+                <label htmlFor="api">API</label>
+                <Link
+                  target="_blank"
+                  name="api"
+                  href={urlToExport}
+                  className={f('button', 'hollow', 'imitate-progress-button')}
+                >
+                  <span
+                    className={f('icon', 'icon-common', 'icon-export')}
+                    data-icon="&#xf233;"
+                  />
+                  <span className={f('file-label')}>Web View</span>
+                </Link>
+              </div>
             </Exporter>
             <PageSizeSelector />
             <Card>
-              {data => (
+              {(data) => (
                 <TaxonomyCard
                   data={data}
                   search={search.search}
@@ -584,7 +591,7 @@ class List extends PureComponent /*:: <Props,State> */ {
               dataKey="accession"
               renderer={(accession /*: string */, row) => (
                 <Link
-                  to={customLocation => ({
+                  to={(customLocation) => ({
                     description: {
                       main: { key: 'taxonomy' },
                       taxonomy: {
@@ -617,7 +624,7 @@ class List extends PureComponent /*:: <Props,State> */ {
                 { accession } /*: {accession: string} */,
               ) => (
                 <Link
-                  to={customLocation => ({
+                  to={(customLocation) => ({
                     description: {
                       main: { key: 'taxonomy' },
                       taxonomy: {
@@ -734,9 +741,9 @@ const _AccessionSearch = ({ data, onSearchComplete }) => {
 };
 
 const getURLFromState = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, { search }) => {
     const desc = {
       ...description,
@@ -782,8 +789,8 @@ Taxonomy.propTypes = {
 };
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.search,
-  search => ({ search }),
+  (state) => state.customLocation.search,
+  (search) => ({ search }),
 );
 
 export default connect(mapStateToProps)(Taxonomy);

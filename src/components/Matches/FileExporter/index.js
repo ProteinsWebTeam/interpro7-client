@@ -25,7 +25,6 @@ const FileExporter = (
     fileType,
     primary,
     secondary,
-    label,
     className,
     focused = null,
   } /*: {description: Object, search: Object, count: number, fileType: string, primary: string, secondary: string, label?: string, className?: string, focused?: string} */,
@@ -43,29 +42,22 @@ const FileExporter = (
     customLocationDescription.taxonomy.accession = focused;
   }
   return (
-    <li style={{ display: 'flex', alignItems: 'center' }}>
-      <div>
-        <File
-          className={className}
-          fileType={fileType}
-          name={`${primary}-matching-${
-            description[description.main.key].accession
-          }.${fileType}`}
-          count={count}
-          customLocationDescription={customLocationDescription}
-          search={{
-            ...search,
-            extra_fields: `counters${
-              search.extra_fields ? `,${search.extra_fields}` : ''
-            }`,
-          }}
-          endpoint={
-            (endpoint[primary] && endpoint[primary][secondary]) || primary
-          }
-          label={label || fileType.toUpperCase()}
-        />
-      </div>
-    </li>
+    <File
+      className={className}
+      fileType={fileType}
+      name={`${primary}-matching-${
+        description[description.main.key].accession
+      }.${fileType}`}
+      count={count}
+      customLocationDescription={customLocationDescription}
+      search={{
+        ...search,
+        extra_fields: `counters${
+          search.extra_fields ? `,${search.extra_fields}` : ''
+        }`,
+      }}
+      endpoint={(endpoint[primary] && endpoint[primary][secondary]) || primary}
+    />
   );
 };
 FileExporter.propTypes = {
@@ -75,7 +67,6 @@ FileExporter.propTypes = {
   fileType: T.string,
   primary: T.string,
   secondary: T.string,
-  label: T.string,
   className: T.string,
   focused: T.string,
 };

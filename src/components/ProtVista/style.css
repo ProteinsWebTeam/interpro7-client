@@ -389,7 +389,9 @@ g:global(.child-location-group.clg-5) path {
 .track-in-table .track-row:nth-of-type(2) {
   margin-top: -18px;
 }
-
+.exporter {
+  min-width: 120px;
+}
 .pop-wrapper {
   display: flex;
   justify-content: center;
@@ -400,6 +402,8 @@ g:global(.child-location-group.clg-5) path {
 
 .dropdown-container {
   display: flex;
+  flex-direction: row-reverse;
+  min-width: 120px;
   margin: 0.5rem 0 0.5rem 0;
   position: relative;
 
