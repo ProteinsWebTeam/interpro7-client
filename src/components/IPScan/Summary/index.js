@@ -46,6 +46,7 @@ const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
   localID: string,
   remoteID?: string,
   status: string,
+  localTitle: string,
   data: {
     loading: boolean,
     payload: {
@@ -243,8 +244,9 @@ const changeTitle = (
 ) => {
   if (inputRef.current.value !== '') {
     results.xref[0].name = inputRef.current.value;
+    const input = `>${inputRef.current.value} ${results.sequence}`;
     updateJobTitle(
-      { metadata: { localID }, data: { results } },
+      { metadata: { localID }, data: { input, results } },
       inputRef.current.value,
     );
     setTitle(inputRef.current.value);
@@ -324,8 +326,6 @@ const SummaryIPScanJob = ({
       short: payload.xref[0].name,
     },
   };
-  // TODO include the following
-  // const title = localTitle || payload.xref[0].name;
 
   const goTerms = getGoTerms(payload.matches);
 
@@ -342,20 +342,6 @@ const SummaryIPScanJob = ({
               <tr>
                 <td>Title</td>
                 <td style={{ display: 'flex' }}>
-                  {title}{' '}
-                  <Tooltip title={'Edit Title'}>
-                    <button
-                      className={f(
-                        'icon',
-                        'icon-common',
-                        'small',
-                        'button-space',
-                      )}
-                      data-icon="&#xf303;"
-                      aria-label={'Edit Title'}
-                      onClick={() => setShowTitleField(!showTitleField)}
-                    />
-                  </Tooltip>
                   {showTitleField ? (
                     <div className={f('title-form')}>
                       <input
@@ -379,7 +365,24 @@ const SummaryIPScanJob = ({
                         Update
                       </button>
                     </div>
-                  ) : null}
+                  ) : (
+                    <>
+                      {title}{' '}
+                      <Tooltip title={'Edit Title'}>
+                        <button
+                          className={f(
+                            'icon',
+                            'icon-common',
+                            'small',
+                            'button-space',
+                          )}
+                          data-icon="&#xf303;"
+                          aria-label={'Edit Title'}
+                          onClick={() => setShowTitleField(!showTitleField)}
+                        />
+                      </Tooltip>
+                    </>
+                  )}
                 </td>
               </tr>
             )}
@@ -506,16 +509,11 @@ const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
   (state) => state.settings.api,
-  (
-    accession,
-    { metadata: { localID, remoteID, status, localTitle } },
-    api,
-  ) => ({
+  (accession, { metadata: { localID, remoteID, status } }, api) => ({
     accession,
     localID,
     remoteID,
     status,
-    localTitle,
     api,
   }),
 );
