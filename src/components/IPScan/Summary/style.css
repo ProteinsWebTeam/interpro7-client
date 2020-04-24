@@ -1,12 +1,11 @@
-@import '../../../styles/colors.css';
-
-.title-form {
-  margin-left: 0.5rem;
-  display: flex;
+input.title {
+  margin-right: 0.5rem;
 }
 
-.button-space {
-  margin-left: 0.5rem;
+input.title:read-only {
+  border: 0;
+  background-color: inherit;
+  color: inherit;
 }
 
 .status {

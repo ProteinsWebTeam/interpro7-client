@@ -234,24 +234,19 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   });
 };
 
-const changeTitle = (
-  localID,
-  results,
-  updateJobTitle,
-  inputRef,
-  setShowTitleField,
-  setTitle,
-) => {
-  if (inputRef.current.value !== '') {
-    results.xref[0].name = inputRef.current.value;
-    const input = `>${inputRef.current.value} ${results.sequence}`;
-    updateJobTitle(
-      { metadata: { localID }, data: { input, results } },
-      inputRef.current.value,
-    );
-    setTitle(inputRef.current.value);
+const changeTitle = (localID, results, updateJobTitle, inputRef, setTitle) => {
+  if (!inputRef.current.readOnly) {
+    if (inputRef.current.value !== '') {
+      results.xref[0].name = inputRef.current.value;
+      const input = `>${inputRef.current.value} ${results.sequence}`;
+      updateJobTitle(
+        { metadata: { localID }, data: { input, results } },
+        inputRef.current.value,
+      );
+      setTitle(inputRef.current.value);
+    }
   }
-  setShowTitleField(false);
+  inputRef.current.toggleAttribute('readOnly');
 };
 
 const SummaryIPScanJob = ({
@@ -268,7 +263,6 @@ const SummaryIPScanJob = ({
   const [mergedData, setMergedData] = useState({});
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
   const [title, setTitle] = useState(localTitle);
-  const [showTitleField, setShowTitleField] = useState(false);
   const titleInputRef = useRef();
 
   useEffect(() => {
@@ -342,47 +336,29 @@ const SummaryIPScanJob = ({
               <tr>
                 <td>Title</td>
                 <td style={{ display: 'flex' }}>
-                  {showTitleField ? (
-                    <div className={f('title-form')}>
-                      <input
-                        type="text"
-                        placeholder={'Enter new title'}
-                        ref={titleInputRef}
-                      />
-                      <button
-                        className={f('button', 'button-space')}
-                        onClick={() =>
-                          changeTitle(
-                            localID,
-                            payload,
-                            updateJobTitle,
-                            titleInputRef,
-                            setShowTitleField,
-                            setTitle,
-                          )
-                        }
-                      >
-                        Update
-                      </button>
-                    </div>
-                  ) : (
-                    <>
-                      {title}{' '}
-                      <Tooltip title={'Edit Title'}>
-                        <button
-                          className={f(
-                            'icon',
-                            'icon-common',
-                            'small',
-                            'button-space',
-                          )}
-                          data-icon="&#xf303;"
-                          aria-label={'Edit Title'}
-                          onClick={() => setShowTitleField(!showTitleField)}
-                        />
-                      </Tooltip>
-                    </>
-                  )}
+                  <input
+                    ref={titleInputRef}
+                    className={f('title')}
+                    defaultValue={`${title}`}
+                    readOnly={true}
+                    style={{ width: `${title.length}ch` }}
+                  />
+                  <Tooltip title={'Rename'}>
+                    <button
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#xf303;"
+                      aria-label={'Edit Title'}
+                      onClick={() =>
+                        changeTitle(
+                          localID,
+                          payload,
+                          updateJobTitle,
+                          titleInputRef,
+                          setTitle,
+                        )
+                      }
+                    />
+                  </Tooltip>
                 </td>
               </tr>
             )}
