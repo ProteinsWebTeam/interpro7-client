@@ -66,6 +66,7 @@ def output_list():
   #json header
   sys.stdout.write("{ \"results\": [\n")
   <% } %>
+  attempts = 0
   while next:
     try:
       req = request.Request(next, headers={"Accept": "application/json"})
@@ -81,6 +82,7 @@ def output_list():
         break
       payload = json.loads(res.read().decode())
       next = payload["next"]
+      attempts = 0
       if not next:
         last_page = True
     except HTTPError as e:
@@ -88,7 +90,14 @@ def output_list():
         sleep(61)
         continue
       else:
-        raise e
+        # If there is a different HTTP error, it wil re-try 3 times before failing
+        if attempts < 3:
+          attempts += 1
+          sleep(61)
+          continue
+        else:
+          sys.stderr.write("LAST URL: " + next)
+          raise e
 
     for i, item in enumerate(payload["results"]):
       <% if (fileType === "json") { %>
