@@ -183,6 +183,7 @@ g:global(.child-group) path:global(.feature) {
 
 .aligned-to-track-component.label-by-name {
   width: 70%;
+  line-height: inherit;
 }
 
 .track-accession {

@@ -123,7 +123,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
     this._vis.clear();
   }
 
-  _handleClick = event => {
+  _handleClick = (event) => {
     const g = event.path[1];
     if (g.nodeName === 'g' && g.classList.contains('node')) {
       this.props.goToCustomLocation({
@@ -150,6 +150,8 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       for (const db of setDBs) {
         if (db.name === metadata.source_database) currentSet = db;
       }
+      if (metadata.source_database === 'panther')
+        metadata.description = metadata.name.name;
     }
 
     // const currentSet = setDBs
@@ -189,7 +191,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
               )}
               {metadata.relationships &&
                 metadata.relationships.nodes &&
-                metadata.relationships.nodes.map(m => (
+                metadata.relationships.nodes.map((m) => (
                   <SchemaOrgData
                     key={m.accession}
                     data={{ data: m, db: metadata.source_database }}
@@ -253,8 +255,8 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.set.db,
-  db => ({ db }),
+  (state) => state.customLocation.description.set.db,
+  (db) => ({ db }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(SummarySet);
