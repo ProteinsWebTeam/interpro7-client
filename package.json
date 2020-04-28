@@ -42,6 +42,7 @@
     "release:dev": "npm run release -- -- --mode=development",
     "release:staging": "npm run release -- -- --env.staging",
     "release:production": "npm run release",
+    "create-sitemap": "node scripts/create-sitemap.js",
     "start": "npm run dev"
   },
   "contributors": [
