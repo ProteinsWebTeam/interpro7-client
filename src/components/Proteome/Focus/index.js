@@ -39,7 +39,7 @@ ProteomeFocus.propTypes = {
 };
 
 const getUrlFor = createSelector(
-  state => state.settings.api,
+  (state) => state.settings.api,
   (_, props) => props.accession,
   ({ protocol, hostname, port, root }, accession) => {
     return format({

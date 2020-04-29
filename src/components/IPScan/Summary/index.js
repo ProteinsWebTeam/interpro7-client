@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -33,8 +33,11 @@ import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import Link from 'components/generic/Link';
+import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
+import style from './style.css';
+import { updateJobTitle } from '../../../actions/creators';
 
-const f = foundationPartial(ebiGlobalStyles, fonts);
+const f = foundationPartial(ebiGlobalStyles, fonts, style);
 
 const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
@@ -43,6 +46,7 @@ const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
   localID: string,
   remoteID?: string,
   status: string,
+  localTitle: string,
   data: {
     loading: boolean,
     payload: {
@@ -96,26 +100,31 @@ const StatusTooltip = React.memo(({ status } /*: string */) => (
       status === 'created' ||
       status === 'importing' ||
       status === 'submitted') && (
-      <span
-        className={f('icon', 'icon-common', 'ico-neutral')}
-        data-icon="&#xf017;"
-        aria-label={`Job ${status}`}
-      />
+      <>
+        <SpinningCircle />
+        <div className={f('status')}>Searching</div>
+      </>
     )}
 
     {status === 'not found' || status === 'failure' || status === 'error' ? (
-      <span
-        className={f('icon', 'icon-common', 'ico-notfound')}
-        data-icon="&#x78;"
-        aria-label="Job failed or not found"
-      />
+      <>
+        <span
+          className={f('icon', 'icon-common', 'ico-notfound')}
+          data-icon="&#x78;"
+          aria-label="Job failed or not found"
+        />{' '}
+        {status}
+      </>
     ) : null}
     {status === 'finished' && (
-      <span
-        className={f('icon', 'icon-common', 'ico-confirmed')}
-        data-icon="&#xf00c;"
-        aria-label="Job finished"
-      />
+      <>
+        <span
+          className={f('icon', 'icon-common', 'ico-confirmed')}
+          data-icon="&#xf00c;"
+          aria-label="Job finished"
+        />{' '}
+        {status}
+      </>
     )}
   </Tooltip>
 ));
@@ -225,6 +234,30 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   });
 };
 
+const changeTitle = (
+  localID,
+  results,
+  updateJobTitle,
+  inputRef,
+  setTitle,
+  setReadable,
+) => {
+  if (inputRef.current.readOnly) {
+    inputRef.current.focus();
+  } else {
+    if (inputRef.current.value !== '') {
+      results.xref[0].name = inputRef.current.value;
+      const input = `>${inputRef.current.value} ${results.sequence}`;
+      updateJobTitle(
+        { metadata: { localID }, data: { input, results } },
+        inputRef.current.value,
+      );
+      setTitle(inputRef.current.value);
+    }
+  }
+  setReadable(!inputRef.current.readOnly);
+};
+
 const SummaryIPScanJob = ({
   accession,
   localID,
@@ -234,14 +267,19 @@ const SummaryIPScanJob = ({
   data,
   localPayload,
   api,
+  updateJobTitle,
 }) => {
   const [mergedData, setMergedData] = useState({});
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
+  const [title, setTitle] = useState(localTitle);
+  const [readable, setReadable] = useState(true);
+  const titleInputRef = useRef();
 
   useEffect(() => {
     if (data.payload || localPayload) {
       const payload = data.payload ? data.payload.results[0] : localPayload;
 
+      setTitle(localTitle || payload.xref[0].name);
       const organisedData = mergeData(payload.matches, payload.sequenceLength);
       setMergedData(organisedData);
       if (organisedData.family) {
@@ -257,6 +295,10 @@ const SummaryIPScanJob = ({
       }
     }
   }, [data.payload, localPayload]);
+
+  useEffect(() => {
+    setTitle(localTitle);
+  }, [localTitle]);
 
   if (remoteID && remoteID !== accession) {
     return (
@@ -284,11 +326,10 @@ const SummaryIPScanJob = ({
     length: payload.sequence.length,
     sequence: payload.sequence,
     name: {
-      name: 'InterProScan Search',
+      name: 'InterProScan Search Result',
       short: payload.xref[0].name,
     },
   };
-  const title = localTitle || payload.xref[0].name;
 
   const goTerms = getGoTerms(payload.matches);
 
@@ -304,7 +345,41 @@ const SummaryIPScanJob = ({
             {title && (
               <tr>
                 <td>Title</td>
-                <td>{title}</td>
+                <td style={{ display: 'flex' }}>
+                  <input
+                    ref={titleInputRef}
+                    className={f('title')}
+                    defaultValue={`${title}`}
+                    readOnly={readable}
+                    style={{ width: `${title.length}ch` }}
+                  />
+                  <button
+                    onClick={() =>
+                      changeTitle(
+                        localID,
+                        payload,
+                        updateJobTitle,
+                        titleInputRef,
+                        setTitle,
+                        setReadable,
+                      )
+                    }
+                  >
+                    {readable ? (
+                      <span
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#xf303;"
+                        title={'Rename'}
+                      />
+                    ) : (
+                      <span
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#x53;"
+                        title={'Save'}
+                      />
+                    )}
+                  </button>
+                </td>
               </tr>
             )}
             <tr>
@@ -343,7 +418,7 @@ const SummaryIPScanJob = ({
             <tr>
               <td>Status</td>
               <td>
-                <StatusTooltip status={status} /> {status}
+                <StatusTooltip status={status} />
               </td>
             </tr>
           </tbody>
@@ -406,6 +481,7 @@ SummaryIPScanJob.propTypes = {
   data: dataPropType,
   localPayload: T.object,
   api: T.object,
+  updateJobTitle: T.func,
 };
 
 const jobMapSelector = (state) => state.jobs;
@@ -428,18 +504,13 @@ const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
   (state) => state.settings.api,
-  (
-    accession,
-    { metadata: { localID, remoteID, status, localTitle } },
-    api,
-  ) => ({
+  (accession, { metadata: { localID, remoteID, status } }, api) => ({
     accession,
     localID,
     remoteID,
     status,
-    localTitle,
     api,
   }),
 );
 
-export default connect(mapStateToProps)(SummaryIPScanJob);
+export default connect(mapStateToProps, { updateJobTitle })(SummaryIPScanJob);

@@ -22,14 +22,14 @@ elementMatchesPolyfill();
 // see https://developers.google.com/web/updates/2018/06/a2hs-updates
 // save the event in an exported object to be able to use it wherever we want
 export const installPrompt = {};
-window.addEventListener('beforeinstallprompt', event => {
+window.addEventListener('beforeinstallprompt', (event) => {
   event.preventDefault();
   installPrompt.event = event;
 });
 
 const schemaOrgManager = (...args) =>
   import(/* webpackChunkName: "schemaOrg" */ 'schema_org').then(
-    m => new m.Manager(...args),
+    (m) => new m.Manager(...args),
   );
 
 const main = async () => {
@@ -42,51 +42,101 @@ const main = async () => {
   schemaOrgManager({
     dev: false,
     root: {
-      '@context': [
-        'http://schema.org',
-        {
-          Entry: {
-            '@id': 'http://semanticscience.org/resource/SIO_010471.rdf',
-          },
-          DomainAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_001379.rdf',
-          },
-          FamilyAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_001380.rdf',
-          },
-          RepeatAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_010471.rdf',
-          },
-          UnknownAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_010471.rdf',
-          },
-          ConservedSiteAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_010049.rdf',
-          },
-          BindingSiteAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_010040.rdf',
-          },
-          ActiveSiteAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_010041.rdf',
-          },
-          PTMAnnotation: {
-            '@id': 'http://semanticscience.org/resource/SIO_010049.rdf',
-          },
-          Protein: {
-            '@id': 'http://semanticscience.org/resource/SIO_010043.rdf',
-          },
-          Structure: {
-            '@id': 'http://semanticscience.org/resource/SIO_011119.rdf',
-          },
-          Organism: {
-            '@id': 'http://semanticscience.org/resource/SIO_010000.rdf',
-          },
-        },
-        { '@base': 'http://schema.org' },
-      ],
-      '@type': 'WebSite',
+      '@context': 'http://schema.org',
+      '@type': 'DataCatalog',
+      '@id': config.root.website.protocol + config.root.website.href,
       url: config.root.website.protocol + config.root.website.href,
       mainEntityOfPage: '@mainEntityOfPage',
+      name: 'InterPro',
+      description:
+        'InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites',
+      keywords: [
+        'proteins',
+        'protein families',
+        'protein domains',
+        'protein sites',
+        'protein repeats',
+        'protein models',
+        'homologus superfamily',
+        'entries',
+      ],
+      citation: {
+        '@type': 'ScholarlyArticle',
+        '@id': 'https://doi.org/10.1093/nar/gky1100',
+        name:
+          'InterPro in 2019: improving coverage, classification and access to protein sequence annotations',
+        headline:
+          'InterPro in 2019: improving coverage, classification and access to protein sequence annotations',
+        url: 'https://doi.org/10.1093/nar/gky1100',
+        datePublished: '2019-01',
+        dateModified: '2019-01',
+        publisher: {
+          '@type': 'Organization',
+          '@id': 'https://academic.oup.com/nar',
+          name: 'Nucleic Acids Research',
+          url: 'https://academic.oup.com/nar',
+        },
+        image:
+          'https://proteinswebteam.github.io/interpro-blog/assets/media/images/logo_medium.png',
+        author: [
+          'Mitchell AL',
+          'Attwood TK',
+          'Babbitt PC',
+          'Blum M',
+          'Bork P',
+          'Bridge A',
+          'Brown SD',
+          'Chang HY',
+          'El-Gebali S',
+          'Fraser MI',
+          'Gough J',
+          'Haft DR',
+          'Huang H',
+          'Letunic I',
+          'Lopez R',
+          'Luciani A',
+          'Madeira F',
+          'Marchler-Bauer A',
+          'Mi H',
+          'Natale DA',
+          'Necci M',
+          'Nuka G',
+          'Orengo C',
+          'Pandurangan AP',
+          'Paysan-Lafosse T',
+          'Pesseat S',
+          'Potter SC',
+          'Qureshi MA',
+          'Rawlings ND',
+          'Redaschi N',
+          'Richardson LJ',
+          'Rivoire C',
+          'Salazar GA',
+          'Sangrador-Vegas A',
+          'Sigrist CJA',
+          'Sillitoe I',
+          'Sutton GG',
+          'Thanki N',
+          'Thomas PD',
+          'Tosatto SCE',
+          'Yong SY',
+          'Finn RD',
+        ],
+        sameAs: [
+          'https://academic.oup.com/nar/article/47/D1/D351/5162469',
+          'https://www.ncbi.nlm.nih.gov/pubmed/30398656',
+        ],
+      },
+      sourceOrganization: [
+        {
+          '@type': 'Organization',
+          '@id': 'https://www.ebi.ac.uk',
+          name: 'The European Bioinformatics Institute (EMBL-EBI)',
+          url: 'https://www.ebi.ac.uk/',
+        },
+      ],
+      encodingFormat: 'text/html',
+      license: '@license',
     },
   });
 
@@ -97,7 +147,7 @@ const main = async () => {
   if (DEV) hmr(DOM_ROOT);
 };
 
-const handleError = error => {
+const handleError = (error) => {
   if (DEV) {
     throw error;
   }

@@ -10,6 +10,7 @@ import {
   DELETE_JOB,
   UPDATE_JOB,
   UPDATE_JOB_STATUS,
+  UPDATE_JOB_TITLE,
   NEW_PROCESSED_CUSTOM_LOCATION,
 } from 'actions/types';
 import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
@@ -29,13 +30,13 @@ const MAX_TIME_ON_SERVER = 1000 * 60 * 60 * 24 * 7; // one week
 const metaTA = getTableAccess(IPScanJobsMeta);
 const dataTA = getTableAccess(IPScanJobsData);
 
-const deleteJobInDB = async localID => {
+const deleteJobInDB = async (localID) => {
   const [dataT, metaT] = await Promise.all([dataTA, metaTA]);
   dataT.delete(localID);
   metaT.delete(localID);
 };
 
-const rehydrateStoredJobs = async dispatch => {
+const rehydrateStoredJobs = async (dispatch) => {
   await schedule(DEFAULT_SCHEDULE_DELAY);
   const metaT = await metaTA;
   const meta = await metaT.getAll();
@@ -66,11 +67,11 @@ const createJobInDB = async (metadata, data) => {
   }
 };
 
-const updateJobInDB = async (metadata, data) => {
+const updateJobInDB = async (metadata, data, title) => {
   const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
   if (data) {
-    dataT.update(metadata.localID, prev => ({ ...prev, ...data }));
-    metadata.localTitle = data?.results?.[0]?.xref?.[0]?.name;
+    dataT.update(metadata.localID, (prev) => ({ ...prev, ...data }));
+    metadata.localTitle = title || data?.results?.[0]?.xref?.[0]?.name;
   }
   metaT.set(metadata, metadata.localID);
 };
@@ -223,7 +224,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   rehydrateStoredJobs(dispatch);
   running = loop();
 
-  return next => action => {
+  return (next) => (action) => {
     const previousState = getState();
     const output = next(action);
 
@@ -238,6 +239,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       updateJobInDB(
         getState().jobs[action.job.metadata.localID].metadata,
         action.job.data,
+        null,
       );
     }
 
@@ -247,6 +249,14 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
 
     if (action.type === UPDATE_JOB_STATUS) {
       loop();
+    }
+
+    if (action.type === UPDATE_JOB_TITLE) {
+      updateJobInDB(
+        getState().jobs[action.job.metadata.localID].metadata,
+        action.job.data,
+        action.value,
+      );
     }
 
     if (action.type === NEW_PROCESSED_CUSTOM_LOCATION) {

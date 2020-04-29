@@ -396,7 +396,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                 databases.
               </li>
             </ul>
-            {content.notes && content.notes.length && (
+            {content?.notes?.length ? (
               <div
                 className={f('callout', 'info', 'withicon')}
                 style={{
@@ -409,7 +409,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                   ))}
                 </div>
               </div>
-            )}
+            ) : null}
 
             <h4>Contents and coverage</h4>
             <p className={f('margin-bottom-small')}>

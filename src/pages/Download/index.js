@@ -15,7 +15,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
 class Download extends PureComponent /*:: <{}> */ {
   render() {
-    const IS_UNIPARC_READY = false;
+    const IS_UNIPARC_READY = true;
     const UniparcLink = IS_UNIPARC_READY ? Link : 'span';
     return (
       <div className={f('row')}>

@@ -24,13 +24,15 @@ export const schemaProcessDataForDB = ({
   location,
   releaseDate = null,
   version = null,
+  description = null,
 }) => ({
   '@type': 'Dataset',
   '@id': '@dataset',
   name,
   identifier: name,
   version,
-  releaseDate,
+  description,
+  datePublished: releaseDate,
   url: `${location.href}/entry/${name}`,
 });
 
@@ -49,7 +51,7 @@ export const schemaProcessDataTable = ({ data: { db }, location }) => ({
 });
 
 export const schemaProcessDataTableRow = ({ data: { row, endpoint } }) => ({
-  '@type': 'DataRecord',
+  '@type': 'Dataset',
   '@id': '@hasPart',
   identifier: row.accession,
   name: row.db || row.source_database,
@@ -125,7 +127,7 @@ const mapTypeToOntology = new Map([
 ]);
 
 export const schemaProcessDataRecord = ({ data, endpoint, version }) => ({
-  '@type': 'DataRecord',
+  '@type': 'Dataset',
   '@id': '@mainEntityOfPage',
   identifier: data.metadata.accession,
   isPartOf: isPartOf(endpoint, data.metadata.source_database, version),
@@ -183,4 +185,11 @@ export const schemaProcessDataPageSection = ({ name, description }) => ({
   '@id': '@contains',
   name,
   description,
+});
+
+export const schemaProcessLicense = () => ({
+  '@type': 'CreativeWork',
+  '@id': 'licence',
+  name: 'Creative Commons CC4 Attribution',
+  url: 'https://creativecommons.org/licenses/by/4.0/',
 });
