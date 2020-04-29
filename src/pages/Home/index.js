@@ -21,6 +21,7 @@ import { schedule } from 'timing-functions/src';
 import {
   schemaProcessDataInterpro,
   schemaProcessDataForDB,
+  schemaProcessLicense,
 } from 'schema_org/processors';
 
 // Style
@@ -120,16 +121,19 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
         this.props.data.payload.databases;
       if (!databases) return null;
       return (
-        <SchemaOrgData
-          data={{
-            name: 'InterPro',
-            location: window.location,
-            version: databases && databases.interpro.version,
-            releaseDate: databases && databases.interpro.releaseDate,
-            description: databases && databases.interpro.description,
-          }}
-          processData={schemaProcessDataForDB}
-        />
+        <>
+          <SchemaOrgData
+            data={{
+              name: 'InterPro',
+              location: window.location,
+              version: databases && databases.interpro.version,
+              releaseDate: databases && databases.interpro.releaseDate,
+              description: databases && databases.interpro.description,
+            }}
+            processData={schemaProcessDataForDB}
+          />
+          <SchemaOrgData processData={schemaProcessLicense} />
+        </>
       );
     }
   },

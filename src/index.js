@@ -136,12 +136,7 @@ const main = async () => {
         },
       ],
       encodingFormat: 'text/html',
-      license: {
-        '@type': 'CreativeWork',
-        '@id': 'licence',
-        name: 'Creative Commons CC4 Attribution',
-        url: 'https://creativecommons.org/licenses/by/4.0/',
-      },
+      license: '@license',
     },
   });
 
