@@ -4,7 +4,7 @@
 const fetch = require('node-fetch');
 const sleep = require('timing-functions').sleep;
 const fs = require('fs');
-
+const readline = require('readline');
 const args = process.argv.slice(2);
 
 const PATH = args.length ? args[0] : './dist/sitemap';
@@ -75,8 +75,8 @@ const generateInterProEntriesSiteMap = async function (path, url) {
   const writeStream = fs.createWriteStream(path);
   let processed = 0;
   const interval = setInterval(() => {
-    process.stdout.clearLine(); // clear current text
-    process.stdout.cursorTo(0); // move cursor to beginning of line
+    readline.clearLine(process.stdout); // clear current text
+    readline.cursorTo(process.stdout, 0); // move cursor to beginning of line
     process.stdout.write(`URLs written: ${processed}`);
   }, ONE_SEC);
   writeStream.on('finish', () => {
