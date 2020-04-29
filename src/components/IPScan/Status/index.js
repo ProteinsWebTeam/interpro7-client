@@ -27,6 +27,7 @@ import interproTheme from 'styles/theme-interpro.css'; /* needed for custom butt
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 
 const f = foundationPartial(interproTheme, fonts, ipro, local);
 
@@ -96,7 +97,13 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
     );
     return (
       <div className={f('row', 'columns')}>
-        <h3 className={f('light')}>Your InterProScan searches</h3>
+        <h3 className={f('light')}>Your InterProScan Search Results</h3>
+        <p className={f('info')}>
+          Your InterProScan search results are listed below. Each search may run
+          for different time. You can navigate to other pages if you prefer.
+          Once the job is finished, you will be notified and the results will be
+          available for 7 days.
+        </p>
         <SchemaOrgData
           data={{
             name: 'Your InterProScan searches',
@@ -148,7 +155,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           >
             Results
           </Column>
-          <Column dataKey="localTitle">Title</Column>
+          <Column dataKey="localTitle">Name</Column>
           <Column
             dataKey="times"
             renderer={(
@@ -175,18 +182,15 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
             dataKey="status"
             headerClassName={f('table-center')}
             cellClassName={f('table-center')}
-            renderer={(status /*: string */) => (
+            renderer={(status /*: string */, row /*: Object */) => (
               <Tooltip title={`Job ${status}`}>
                 {(status === 'running' ||
                   status === 'created' ||
                   status === 'submitted') && (
-                  <span>In progress</span>
-                  // <span
-                  //   style={{ fontSize: '200%' }}
-                  //   className={f('icon', 'icon-common', 'ico-neutral')}
-                  //   data-icon="&#xf017;"
-                  //   aria-label={`Job ${status}`}
-                  // />
+                  <div>
+                    <SpinningCircle />
+                    <div>Searching</div>
+                  </div>
                 )}
 
                 {status === 'not found' ||
@@ -201,12 +205,24 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                   />
                 ) : null}
                 {status === 'finished' && (
-                  <span
-                    style={{ fontSize: '160%' }}
-                    className={f('icon', 'icon-common', 'ico-confirmed')}
-                    data-icon="&#xf00c;"
-                    aria-label="Job finished"
-                  />
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'result' },
+                        result: {
+                          type: 'InterProScan',
+                          accession: row.remoteID,
+                        },
+                      },
+                    }}
+                  >
+                    <span
+                      style={{ fontSize: '160%' }}
+                      className={f('icon', 'icon-common', 'ico-confirmed')}
+                      data-icon="&#xf00c;"
+                      aria-label="Job finished"
+                    />
+                  </Link>
                 )}
               </Tooltip>
             )}
@@ -228,15 +244,21 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
   }
 }
 
+const compare = (a, b) => {
+  if (b.remoteID) return b.remoteID > a.remoteID ? 1 : -1;
+  return 1;
+};
+
 const mapsStateToProps = createSelector(
-  state =>
+  (state) =>
     Object.values(state.jobs || {})
-      .map(j => j.metadata)
-      .sort((a, b) =>
-        (b.remoteID || b.localID) > (a.remoteID || a.localID) ? 1 : -1,
+      .map((j) => j.metadata)
+      .sort(
+        compare,
+        // (b.remoteID || b.localID) > (a.remoteID || a.localID) ? 1 : -1,
       ),
-  state => state.customLocation.search,
-  state => state.settings.navigation.pageSize,
+  (state) => state.customLocation.search,
+  (state) => state.settings.navigation.pageSize,
   (jobs, search, defaultPageSize) => ({
     jobs,
     search,

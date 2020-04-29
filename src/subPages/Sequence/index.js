@@ -35,6 +35,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
   static propTypes = {
     data: dataPropType.isRequired,
     localPayload: T.object,
+    localTitle: T.string,
   };
 
   render() {
@@ -53,7 +54,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
       name = payload.metadata.name.name;
     } else {
       accession = payload.xref[0].identifier || '';
-      name = payload.xref[0].name || '';
+      name = this.props.localTitle || payload.xref[0].name || '';
       sequence = payload.sequence;
     }
     return <Sequence accession={accession} sequence={sequence} name={name} />;

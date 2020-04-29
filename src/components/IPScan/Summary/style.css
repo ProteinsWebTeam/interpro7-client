@@ -1,0 +1,16 @@
+input.title {
+  margin-right: 0.5rem;
+  min-width: 10em;
+}
+
+input.title:read-only {
+  border: 0;
+  background-color: inherit;
+  color: inherit;
+}
+
+.status {
+  display: inline;
+  position: absolute;
+  margin-left: 0.5em;
+}
