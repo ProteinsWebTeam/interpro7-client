@@ -1,5 +1,6 @@
 input.title {
   margin-right: 0.5rem;
+  min-width: 10em;
 }
 
 input.title:read-only {

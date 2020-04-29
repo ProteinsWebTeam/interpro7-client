@@ -234,8 +234,17 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   });
 };
 
-const changeTitle = (localID, results, updateJobTitle, inputRef, setTitle) => {
-  if (!inputRef.current.readOnly) {
+const changeTitle = (
+  localID,
+  results,
+  updateJobTitle,
+  inputRef,
+  setTitle,
+  setReadable,
+) => {
+  if (inputRef.current.readOnly) {
+    inputRef.current.focus();
+  } else {
     if (inputRef.current.value !== '') {
       results.xref[0].name = inputRef.current.value;
       const input = `>${inputRef.current.value} ${results.sequence}`;
@@ -246,7 +255,7 @@ const changeTitle = (localID, results, updateJobTitle, inputRef, setTitle) => {
       setTitle(inputRef.current.value);
     }
   }
-  inputRef.current.toggleAttribute('readOnly');
+  setReadable(!inputRef.current.readOnly);
 };
 
 const SummaryIPScanJob = ({
@@ -263,6 +272,7 @@ const SummaryIPScanJob = ({
   const [mergedData, setMergedData] = useState({});
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
   const [title, setTitle] = useState(localTitle);
+  const [readable, setReadable] = useState(true);
   const titleInputRef = useRef();
 
   useEffect(() => {
@@ -340,25 +350,35 @@ const SummaryIPScanJob = ({
                     ref={titleInputRef}
                     className={f('title')}
                     defaultValue={`${title}`}
-                    readOnly={true}
+                    readOnly={readable}
                     style={{ width: `${title.length}ch` }}
                   />
-                  <Tooltip title={'Rename'}>
-                    <button
-                      className={f('icon', 'icon-common')}
-                      data-icon="&#xf303;"
-                      aria-label={'Edit Title'}
-                      onClick={() =>
-                        changeTitle(
-                          localID,
-                          payload,
-                          updateJobTitle,
-                          titleInputRef,
-                          setTitle,
-                        )
-                      }
-                    />
-                  </Tooltip>
+                  <button
+                    onClick={() =>
+                      changeTitle(
+                        localID,
+                        payload,
+                        updateJobTitle,
+                        titleInputRef,
+                        setTitle,
+                        setReadable,
+                      )
+                    }
+                  >
+                    {readable ? (
+                      <span
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#xf303;"
+                        title={'Rename'}
+                      />
+                    ) : (
+                      <span
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#x53;"
+                        title={'Save'}
+                      />
+                    )}
+                  </button>
                 </td>
               </tr>
             )}
