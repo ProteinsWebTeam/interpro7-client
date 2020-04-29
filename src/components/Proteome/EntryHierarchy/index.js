@@ -16,7 +16,7 @@ import local from './style.css';
 
 const f = foundationPartial(ipro, local);
 
-const ProteomeEntryHierarchy = ({ data, groupBy = x => [x] }) => {
+const ProteomeEntryHierarchy = ({ data, groupBy = (x) => [x] }) => {
   if (!data || data.loading) return null;
   const interproFamilies = data.payload.results.map(
     ({ metadata: { accession, type }, extra_fields: { hierarchy } }) => ({
@@ -50,7 +50,7 @@ ProteomeEntryHierarchy.propTypes = {
 };
 
 const getUrlFor = createSelector(
-  state => state.settings.api,
+  (state) => state.settings.api,
   (_, props) => props.accession,
   ({ protocol, hostname, port, root }, accession) => {
     return format({

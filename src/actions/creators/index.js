@@ -147,6 +147,15 @@ export const updateJobStatus = () => ({
   type: types.UPDATE_JOB_STATUS,
 });
 
+export const updateJobTitle = (
+  job /*: { metadata: Object, data: Object } */,
+  value /*: string */,
+) => ({
+  type: types.UPDATE_JOB_TITLE,
+  job,
+  value,
+});
+
 export const rehydrateJobs = (jobs /*: { [key: string]: Object } */) => ({
   type: types.REHYDRATE_JOBS,
   jobs,

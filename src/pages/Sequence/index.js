@@ -50,7 +50,7 @@ const subPagesForSequence = new Map([
 ]);
 
 const locationSelector = createSelector(
-  customLocation => {
+  (customLocation) => {
     const { key } = customLocation.description.main;
     return (
       customLocation.description[key].detail ||
@@ -59,18 +59,18 @@ const locationSelector = createSelector(
       ) || [])[0]
     );
   },
-  value => value,
+  (value) => value,
 );
 const countInterPro = createSelector(
-  payload => payload.results[0].matches,
-  matches =>
+  (payload) => payload.results[0].matches,
+  (matches) =>
     Array.from(
-      new Set(matches.map(m => (m.signature.entry || {}).accession)).values(),
+      new Set(matches.map((m) => (m.signature.entry || {}).accession)).values(),
     ).filter(Boolean).length,
 );
 const countLibraries = createSelector(
-  payload => payload.results[0].matches,
-  matches =>
+  (payload) => payload.results[0].matches,
+  (matches) =>
     matches.reduce((agg, m) => {
       const lib = iproscan2urlDB(m.signature.signatureLibraryRelease.library);
       if (!agg[lib]) agg[lib] = new Set();
@@ -88,6 +88,7 @@ const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
   matched: string,
   entryDB: string,
   localID: string,
+  localTitle: string,
 };*/
 
 /*:: type State = {
@@ -106,6 +107,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
     entryDB: T.string,
     localID: T.string,
     job: T.object,
+    localTitle: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -166,7 +168,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
   };
 
   render() {
-    const { data: { payload } = {}, matched, entryDB } = this.props;
+    const { data: { payload } = {}, matched, entryDB, localTitle } = this.props;
 
     let entries = NaN;
     if (payload && payload.results) {
@@ -209,6 +211,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
             <Switch
               {...this.props}
               localPayload={this.state.localPayload}
+              localTitle={localTitle}
               locationSelector={locationSelector}
               indexRoute={SummaryAsync}
               childRoutes={subPagesForSequence}
@@ -221,13 +224,13 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToUrl = createSelector(
-  state => state.jobs,
-  state => state.settings.ipScan,
-  state => state.customLocation.description.result.accession,
+  (state) => state.jobs,
+  (state) => state.settings.ipScan,
+  (state) => state.customLocation.description.result.accession,
   (jobs, { protocol, hostname, port, root }, accession) => {
     if (!jobs) return;
     const job = Object.values(jobs).find(
-      job =>
+      (job) =>
         job.metadata.localID === accession ||
         job.metadata.remoteID === accession,
     );
@@ -242,18 +245,22 @@ const mapStateToUrl = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  state => state.jobs || {},
-  state => state.customLocation.description.result.accession,
-  state => state.customLocation.description.entry,
+  (state) => state.jobs || {},
+  (state) => state.customLocation.description.result.accession,
+  (state) => state.customLocation.description.entry,
   (jobs, accession, { isFilter, db }) => {
     const job = Object.values(jobs).find(
-      job =>
+      (job) =>
         job.metadata.localID === accession ||
         job.metadata.remoteID === accession,
     );
 
     return job
-      ? { localID: job.metadata.localID, entryDB: isFilter && db }
+      ? {
+          localID: job.metadata.localID,
+          entryDB: isFilter && db,
+          localTitle: job.metadata.localTitle,
+        }
       : null;
   },
 );
