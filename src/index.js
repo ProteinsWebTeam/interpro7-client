@@ -46,6 +46,7 @@ const main = async () => {
       '@type': 'DataCatalog',
       '@id': config.root.website.protocol + config.root.website.href,
       url: config.root.website.protocol + config.root.website.href,
+      mainEntityOfPage: '@mainEntityOfPage',
       name: 'InterPro',
       description:
         'InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites',

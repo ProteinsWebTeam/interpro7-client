@@ -126,6 +126,7 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
             location: window.location,
             version: databases && databases.interpro.version,
             releaseDate: databases && databases.interpro.releaseDate,
+            description: databases && databases.interpro.description,
           }}
           processData={schemaProcessDataForDB}
         />

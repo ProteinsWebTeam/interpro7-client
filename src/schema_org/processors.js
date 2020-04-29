@@ -24,13 +24,15 @@ export const schemaProcessDataForDB = ({
   location,
   releaseDate = null,
   version = null,
+  description = null,
 }) => ({
   '@type': 'Dataset',
   '@id': '@dataset',
   name,
   identifier: name,
   version,
-  releaseDate,
+  description,
+  datePublished: releaseDate,
   url: `${location.href}/entry/${name}`,
 });
 
