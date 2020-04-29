@@ -9,6 +9,11 @@ exports[`<IPScanStatus /> should render 1`] = `
   >
     Your InterProScan Search Results
   </h3>
+  <p
+    className="info"
+  >
+    Your InterProScan search results are listed below. Each search may run for different time. You can navigate to other pages if you prefer. Once the job is finished, you will be notified and the results will be available for 7 days.
+  </p>
   <Memo(Loadable)
     data={
       Object {
@@ -46,7 +51,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     <Column
       dataKey="localTitle"
     >
-      Title
+      Name
     </Column>
     <Column
       dataKey="times"
