@@ -91,13 +91,17 @@ const generateInterProEntriesSiteMap = async function (path, url) {
   writeStream.end();
 };
 const createOrReplaceSymLink = function (target, path) {
+  const createLink = () =>
+    fs.symlink(target, path, () =>
+      process.stdout.write(`🔗 Link created: ${path}\n`)
+    );
   if (fs.existsSync(path)) {
     fs.unlink(path, () => {
       process.stdout.write(`❌ Previous Link deleted: ${path}\n`);
-      fs.symlink(target, path, () =>
-        process.stdout.write(`🔗 Link created: ${path}\n`)
-      );
+      createLink();
     });
+  } else {
+    createLink();
   }
 };
 
