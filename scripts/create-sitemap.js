@@ -106,8 +106,13 @@ if (require.main === module) {
     }
     const newPath = generateFolder(version);
     process.stdout.write(`📁 Folders created ${newPath}\n`);
-    const newSitemap = `${newPath}/entries.interpro.sitemap.txt`;
+    const entryFileName = 'entries.interpro.sitemap.txt';
+    const newSitemap = `${newPath}/${entryFileName}`;
     generateInterProEntriesSiteMap(newSitemap, BASE_URL);
+    const linkPath = `${PATH}/${entryFileName}`;
+    fs.symlink(newSitemap, linkPath, () =>
+      process.stdout.write(`🔗 Link created: ${linkPath}\n`)
+    );
     process.stdout.write(`🌎 Map created: ${newSitemap}\n`);
   };
   mainWriteToStdout();
