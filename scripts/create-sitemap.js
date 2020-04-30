@@ -4,10 +4,12 @@
 const fetch = require('node-fetch');
 const sleep = require('timing-functions').sleep;
 const fs = require('fs');
+const path = require('path');
 const readline = require('readline');
+
 const args = process.argv.slice(2);
 
-const PATH = args.length ? args[0] : './dist/sitemap';
+const PATH = path.resolve(args.length ? args[0] : './dist/sitemap');
 const API_URL = 'https://www.ebi.ac.uk:443/interpro/api/';
 const BASE_URL = `${API_URL}/entry/InterPro/?page_size=200`;
 
@@ -88,6 +90,16 @@ const generateInterProEntriesSiteMap = async function (path, url) {
   }
   writeStream.end();
 };
+const createOrReplaceSymLink = function (target, path) {
+  if (fs.existsSync(path)) {
+    fs.unlink(path, () => {
+      process.stdout.write(`❌ Previous Link deleted: ${path}\n`);
+      fs.symlink(target, path, () =>
+        process.stdout.write(`🔗 Link created: ${path}\n`)
+      );
+    });
+  }
+};
 
 if (require.main === module) {
   // If used from the command line, will write data to stdout asap
@@ -109,10 +121,7 @@ if (require.main === module) {
     const entryFileName = 'entries.interpro.sitemap.txt';
     const newSitemap = `${newPath}/${entryFileName}`;
     generateInterProEntriesSiteMap(newSitemap, BASE_URL);
-    const linkPath = `${PATH}/${entryFileName}`;
-    fs.symlink(newSitemap, linkPath, () =>
-      process.stdout.write(`🔗 Link created: ${linkPath}\n`)
-    );
+    createOrReplaceSymLink(newSitemap, `${PATH}/${entryFileName}`);
     process.stdout.write(`🌎 Map created: ${newSitemap}\n`);
   };
   mainWriteToStdout();
