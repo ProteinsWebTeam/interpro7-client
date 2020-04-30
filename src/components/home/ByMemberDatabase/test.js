@@ -42,6 +42,7 @@ describe('<ByMemberDatabase />', () => {
               pfam: {
                 canonical: 'pfam',
                 name: 'Pfam',
+                description: 'Pfam description',
                 releaseDate: '2018-10-02T00:00:00Z',
                 type: 'entry',
                 version: '32.0',

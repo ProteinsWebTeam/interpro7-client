@@ -15,6 +15,7 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
       <Memo(Loadable)
         data={
           Object {
+            "description": "Pfam description",
             "location": Location {
               "assign": [Function],
               "hash": "",
@@ -62,8 +63,11 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
           Pfam
            
         </span>
-        <Tooltip>
+        <Tooltip
+          title="Pfam description"
+        >
           <span
+            aria-label="Pfam description"
             className="small icon icon-common"
             data-icon=""
           />

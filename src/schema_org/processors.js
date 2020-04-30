@@ -1,10 +1,7 @@
 import config from 'config';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-export const schemaProcessDataInterpro = ({
-  location,
-  description = null,
-}) => ({
+export const schemaProcessDataInterpro = ({ description = null }) => ({
   '@type': 'DataCatalog',
   '@id': '@mainEntityOfPage',
   name: 'InterPro',
@@ -21,7 +18,6 @@ export const schemaProcessDataInterpro = ({
 });
 export const schemaProcessDataForDB = ({
   name,
-  location,
   releaseDate = null,
   version = null,
   description = null,
