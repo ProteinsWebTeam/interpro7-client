@@ -9,7 +9,7 @@ export const schemaProcessDataInterpro = ({
   '@id': '@mainEntityOfPage',
   name: 'InterPro',
   description,
-  url: location.href,
+  url: 'https://www.ebi.ac.uk/interpro/',
   keywords: ['InterPro', 'Domain', 'Family', 'Annotation', 'Protein'],
   provider: {
     '@type': 'Organization',
@@ -32,8 +32,9 @@ export const schemaProcessDataForDB = ({
   identifier: name,
   version,
   description,
+  license: '@license',
   datePublished: releaseDate,
-  url: `${location.href}/entry/${name}`,
+  url: `https://www.ebi.ac.uk/interpro/entry/${name}`,
 });
 
 export const schemaProcessDataTable = ({ data: { db }, location }) => ({
@@ -189,7 +190,7 @@ export const schemaProcessDataPageSection = ({ name, description }) => ({
 
 export const schemaProcessLicense = () => ({
   '@type': 'CreativeWork',
-  '@id': 'licence',
+  '@id': '@license',
   name: 'Creative Commons CC4 Attribution',
   url: 'https://creativecommons.org/licenses/by/4.0/',
 });

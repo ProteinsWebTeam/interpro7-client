@@ -121,19 +121,16 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
         this.props.data.payload.databases;
       if (!databases) return null;
       return (
-        <>
-          <SchemaOrgData
-            data={{
-              name: 'InterPro',
-              location: window.location,
-              version: databases && databases.interpro.version,
-              releaseDate: databases && databases.interpro.releaseDate,
-              description: databases && databases.interpro.description,
-            }}
-            processData={schemaProcessDataForDB}
-          />
-          <SchemaOrgData processData={schemaProcessLicense} />
-        </>
+        <SchemaOrgData
+          data={{
+            name: 'InterPro',
+            location: window.location,
+            version: databases && databases.interpro.version,
+            releaseDate: databases && databases.interpro.releaseDate,
+            description: databases && databases.interpro.description,
+          }}
+          processData={schemaProcessDataForDB}
+        />
       );
     }
   },
@@ -198,10 +195,12 @@ class Home extends PureComponent {
 
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
+            <SchemaOrgData processData={schemaProcessLicense} />
             <SchemaOrgData
               data={{ location: window.location, description }}
               processData={schemaProcessDataInterpro}
             />
+
             <SchemaOrgDataWithData />
             <div className={f('intro-wrapper')}>
               <div className={f('intro-fig')} data-testid="intro-fig">

@@ -40,7 +40,7 @@ const main = async () => {
 
   // Instantiates schema.org manager
   schemaOrgManager({
-    dev: false,
+    dev: true,
     root: {
       '@context': 'http://schema.org',
       '@type': 'DataCatalog',
@@ -63,6 +63,7 @@ const main = async () => {
       citation: {
         '@type': 'ScholarlyArticle',
         '@id': 'https://doi.org/10.1093/nar/gky1100',
+        mainEntityOfPage: 'https://www.ebi.ac.uk/interpro/',
         name:
           'InterPro in 2019: improving coverage, classification and access to protein sequence annotations',
         headline:
@@ -75,6 +76,10 @@ const main = async () => {
           '@id': 'https://academic.oup.com/nar',
           name: 'Nucleic Acids Research',
           url: 'https://academic.oup.com/nar',
+          logo: {
+            '@type': 'imageObject',
+            url: 'https://example.com/logo.png',
+          },
         },
         image:
           'https://proteinswebteam.github.io/interpro-blog/assets/media/images/logo_medium.png',

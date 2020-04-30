@@ -57,7 +57,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
     const counts = payload && payload.entries.member_databases;
     const memberDB = payloadMeta
       ? Object.values(payloadMeta.databases).filter(
-          db => db.type === 'entry' && db.canonical !== 'interpro',
+          (db) => db.type === 'entry' && db.canonical !== 'interpro',
         )
       : [];
     return (
@@ -80,6 +80,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                     name,
                     version,
                     releaseDate,
+                    description,
                     location: window.location,
                   }}
                   processData={schemaProcessDataForDB}
@@ -137,7 +138,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToUrl = createSelector(
-  state => state.settings.api,
+  (state) => state.settings.api,
   ({ protocol, hostname, port, root }) =>
     format({
       protocol,
