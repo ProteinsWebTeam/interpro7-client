@@ -28,7 +28,7 @@ export const schemaProcessDataForDB = ({
   identifier: name,
   version,
   description,
-  license: '@license',
+  license: 'https://creativecommons.org/licenses/by/4.0/',
   datePublished: releaseDate,
   url: `https://www.ebi.ac.uk/interpro/entry/${name}`,
 });
@@ -45,13 +45,21 @@ export const schemaProcessDataTable = ({ data: { db }, location }) => ({
     '@type': 'DataCatalog',
     '@id': config.root.website.protocol + config.root.website.href,
   },
+  description: `Dataset of the type ${db.type || '?'} from the database ${
+    db.name
+  } - version ${db.version}`,
+  license: 'https://creativecommons.org/licenses/by/4.0/',
 });
 
 export const schemaProcessDataTableRow = ({ data: { row, endpoint } }) => ({
   '@type': 'Dataset',
   '@id': '@hasPart',
   identifier: row.accession,
-  name: row.db || row.source_database,
+  name: row.name || row.db || row.source_database,
+  description: `Data item of the type ${row.type || '?'} from the database ${
+    row.db || row.source_database
+  } with accession ${row.accession} and name ${row.name}`,
+  license: 'https://creativecommons.org/licenses/by/4.0/',
   url:
     config.root.website.protocol +
     config.root.website.href +
@@ -143,7 +151,7 @@ export const schemaProcessMainEntity = ({ data, type }) => {
     name: data.name.name || data.accession,
     alternateName: data.name.long || null,
     additionalProperty: '@additionalProperty',
-    contains: '@contains',
+    hasPart: '@hasPart',
     isContainedIn: '@isContainedIn',
     signature: '@signature',
   };
@@ -174,19 +182,85 @@ export const schemaProcessDataWebPage = ({ name, description, location }) => ({
     name: 'European Bioinformatics Institute',
     url: 'https://www.ebi.ac.uk/',
   },
-  contains: '@contains',
+  hasPart: '@hasPart',
 });
 
 export const schemaProcessDataPageSection = ({ name, description }) => ({
   '@type': 'WebPageElement',
-  '@id': '@contains',
+  '@id': '@hasPart',
   name,
   description,
 });
 
-export const schemaProcessLicense = () => ({
-  '@type': 'CreativeWork',
-  '@id': '@license',
-  name: 'Creative Commons CC4 Attribution',
-  url: 'https://creativecommons.org/licenses/by/4.0/',
+export const schemaProcessInterProCitation = () => ({
+  '@type': 'ScholarlyArticle',
+  '@id': '@citation',
+  mainEntityOfPage: 'https://www.ebi.ac.uk/interpro/',
+  name:
+    'InterPro in 2019: improving coverage, classification and access to protein sequence annotations',
+  headline:
+    'InterPro in 2019: improving coverage, classification and access to protein sequence annotations',
+  url: 'https://doi.org/10.1093/nar/gky1100',
+  datePublished: '2019-01',
+  dateModified: '2019-01',
+  publisher: {
+    '@type': 'Organization',
+    '@id': 'https://academic.oup.com/nar',
+    name: 'Nucleic Acids Research',
+    url: 'https://academic.oup.com/nar',
+    logo: {
+      '@type': 'imageObject',
+      url: 'https://example.com/logo.png',
+    },
+  },
+  image:
+    'https://proteinswebteam.github.io/interpro-blog/assets/media/images/logo_medium.png',
+  author: [
+    'Mitchell AL',
+    'Attwood TK',
+    'Babbitt PC',
+    'Blum M',
+    'Bork P',
+    'Bridge A',
+    'Brown SD',
+    'Chang HY',
+    'El-Gebali S',
+    'Fraser MI',
+    'Gough J',
+    'Haft DR',
+    'Huang H',
+    'Letunic I',
+    'Lopez R',
+    'Luciani A',
+    'Madeira F',
+    'Marchler-Bauer A',
+    'Mi H',
+    'Natale DA',
+    'Necci M',
+    'Nuka G',
+    'Orengo C',
+    'Pandurangan AP',
+    'Paysan-Lafosse T',
+    'Pesseat S',
+    'Potter SC',
+    'Qureshi MA',
+    'Rawlings ND',
+    'Redaschi N',
+    'Richardson LJ',
+    'Rivoire C',
+    'Salazar GA',
+    'Sangrador-Vegas A',
+    'Sigrist CJA',
+    'Sillitoe I',
+    'Sutton GG',
+    'Thanki N',
+    'Thomas PD',
+    'Tosatto SCE',
+    'Yong SY',
+    'Finn RD',
+  ],
+  sameAs: [
+    'https://academic.oup.com/nar/article/47/D1/D351/5162469',
+    'https://www.ncbi.nlm.nih.gov/pubmed/30398656',
+  ],
 });

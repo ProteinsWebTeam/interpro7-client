@@ -494,10 +494,10 @@ class List extends PureComponent /*:: <Props> */ {
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           <EntryListFilter />
           <hr className={f('margin-bottom-none')} />
-          {databases && db && databases[db.toUpperCase()] && (
+          {databases && db && databases[db.toLowerCase()] && (
             <SchemaOrgData
               data={{
-                data: { db: databases[db.toUpperCase()] },
+                data: { db: databases[db.toLowerCase()] },
                 location: window.location,
               }}
               processData={schemaProcessDataTable}

@@ -20,6 +20,8 @@ import { EbiSkipToDiv } from 'components/EBIHeader';
 import EBIHeader from 'components/EBIHeader';
 import Header from 'components/Header';
 
+import { schemaProcessInterProCitation } from 'schema_org/processors';
+
 import Pages from 'pages';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -28,6 +30,11 @@ const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
 const NullComponent = () => null;
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const LoadingBarAsync = loadable({
   loader: () =>
@@ -109,6 +116,7 @@ const Root = () => (
   <div id="interpro-root">
     <HelmetProvider>
       <Helmet titleTemplate="%s - InterPro" defaultTitle="InterPro" />
+      <SchemaOrgData processData={schemaProcessInterProCitation} />
       <LoadingBarAsync />
       <Overlay />
       <EMBLDropdownAsync />

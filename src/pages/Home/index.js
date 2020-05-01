@@ -21,7 +21,6 @@ import { schedule } from 'timing-functions/src';
 import {
   schemaProcessDataInterpro,
   schemaProcessDataForDB,
-  schemaProcessLicense,
 } from 'schema_org/processors';
 
 // Style
@@ -195,7 +194,6 @@ class Home extends PureComponent {
 
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
-            <SchemaOrgData processData={schemaProcessLicense} />
             <SchemaOrgData
               data={{ location: window.location, description }}
               processData={schemaProcessDataInterpro}

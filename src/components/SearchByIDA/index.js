@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { goToCustomLocation } from 'actions/creators';
 import { createSelector } from 'reselect';
 import { customLocationSelector } from 'reducers/custom-location';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import DomainButton from './DomainButton';
 import IdaEntry from './IdaEntry';
@@ -18,6 +20,10 @@ import local from './style.css';
 import search from 'components/IPScan/Search/style.css';
 
 /*:: import type { CustomLocation } from 'actions/creators'; */
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const f = foundationPartial(interproTheme, ipro, local, search);
 
@@ -241,6 +247,14 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
               'margin-bottom-none',
             )}
           >
+            <SchemaOrgData
+              data={{
+                name: 'Search By Domain Architecture IDA',
+                description:
+                  'Search proteins which match a domain architecture',
+              }}
+              processData={schemaProcessDataPageSection}
+            />
             <div className={f('row')}>
               <div className={f('large-12', 'columns', 'search-input')}>
                 <h3 className={f('light')}>
