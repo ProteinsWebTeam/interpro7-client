@@ -24,7 +24,7 @@ export const getLiteratureIdsFromDescription = (
   (description || []).reduce(
     (acc, part) => [
       ...acc,
-      ...(part.match(/\[cite:(PUB\d+)\]/gi) || []).map(t =>
+      ...(part.match(/\[cite:(PUB\d+)\]/gi) || []).map((t) =>
         t.replace(/(^\[cite:)|(]$)/g, ''),
       ),
     ],
@@ -59,6 +59,7 @@ const LiteratureItem = (
         data={{
           identifier: `http://identifiers.org/pubmed/${r.PMID}`,
           author: r.authors,
+          name: r.title,
         }}
         processData={schemaProcessCitations}
       />
@@ -66,7 +67,7 @@ const LiteratureItem = (
         <Link
           id={pubID}
           className={f('index')}
-          to={customLocation => ({
+          to={(customLocation) => ({
             ...customLocation,
             hash: `description-${i}`,
           })}
@@ -164,9 +165,6 @@ Literature.propTypes = {
   target: T.string.isRequired,
 };
 
-const mapStateToProps = createSelector(
-  hashSelector,
-  target => ({ target }),
-);
+const mapStateToProps = createSelector(hashSelector, (target) => ({ target }));
 
 export default connect(mapStateToProps)(Literature);

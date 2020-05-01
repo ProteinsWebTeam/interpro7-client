@@ -1,6 +1,9 @@
 import config from 'config';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+const INTERPRO_DESCRIPTION =
+  'InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites';
+
 export const schemaProcessDataInterpro = ({ description = null }) => ({
   '@type': 'DataCatalog',
   '@id': '@mainEntityOfPage',
@@ -72,7 +75,7 @@ export const schemaProcessDataTableRow = ({ data: { row, endpoint } }) => ({
     }),
 });
 
-export const isPartOf = (main, db, version) => ({
+export const isPartOf = (main, db, version, description = undefined) => ({
   '@type': 'Dataset',
   '@id':
     config.root.website.protocol +
@@ -83,11 +86,14 @@ export const isPartOf = (main, db, version) => ({
     }),
   version,
   name: db,
+  description,
+  license: 'https://creativecommons.org/licenses/by/4.0/',
 });
 export const schemaProcessIntegrated = ({ name, version }) => ({
-  '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
+  '@type': ['Dataset'],
+  // '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
   '@id': '@isBasisFor',
-  isPartOf: isPartOf('entry', 'InterPro', version),
+  isPartOf: isPartOf('entry', 'InterPro', version, INTERPRO_DESCRIPTION),
   name,
   url:
     config.root.website.protocol +
@@ -135,17 +141,27 @@ export const schemaProcessDataRecord = ({ data, endpoint, version }) => ({
   '@type': 'Dataset',
   '@id': '@mainEntityOfPage',
   identifier: data.metadata.accession,
-  isPartOf: isPartOf(endpoint, data.metadata.source_database, version),
+  name: data.metadata.name?.name || data.metadata.name,
+  description: data.metadata.description,
+  url: `https://www.ebi.ac.uk/interpro/${endpoint}/${data.metadata.source_database}/${data.metadata.accession}`,
+  isPartOf: isPartOf(
+    endpoint,
+    data.metadata.source_database,
+    version,
+    `The ${endpoint} data from the database ${data.metadata.source_database} - version: ${version}`,
+  ),
   mainEntity: '@mainEntity',
   seeAlso: '@seeAlso',
   isBasedOn: '@isBasedOn',
   isBasisFor: '@isBasisFor',
   citation: '@citation',
+  license: 'https://creativecommons.org/licenses/by/4.0/',
 });
 
 export const schemaProcessMainEntity = ({ data, type }) => {
   const schema = {
-    '@type': [type, 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
+    // '@type': [type, 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
+    '@type': ['Dataset'],
     '@id': '@mainEntity',
     identifier: data.accession,
     name: data.name.name || data.accession,
@@ -154,7 +170,9 @@ export const schemaProcessMainEntity = ({ data, type }) => {
     hasPart: '@hasPart',
     isContainedIn: '@isContainedIn',
     signature: '@signature',
+    license: 'https://creativecommons.org/licenses/by/4.0/',
   };
+  schema.description = `The main entity of this document is a ${type} with accession number ${data.accession}`;
   if (type === 'Entry') {
     schema['@type'].push(
       mapTypeToOntology.get(data.type) || mapTypeToOntology.get('Unknown'),
@@ -163,10 +181,11 @@ export const schemaProcessMainEntity = ({ data, type }) => {
   return schema;
 };
 
-export const schemaProcessCitations = ({ identifier, author }) => ({
-  '@type': 'ScholarlyArticle',
+export const schemaProcessCitations = ({ identifier, author, name }) => ({
+  '@type': 'CreativeWork',
   '@id': '@citation',
   identifier,
+  name,
   author,
 });
 
@@ -194,7 +213,7 @@ export const schemaProcessDataPageSection = ({ name, description }) => ({
 
 export const schemaProcessInterProCitation = () => ({
   '@type': 'ScholarlyArticle',
-  '@id': '@citation',
+  '@id': '@mainCitation',
   mainEntityOfPage: 'https://www.ebi.ac.uk/interpro/',
   name:
     'InterPro in 2019: improving coverage, classification and access to protein sequence annotations',

@@ -22,13 +22,14 @@ const SchemaOrgData = loadable({
 });
 
 const schemaProcessData = ({ db, name }) => ({
-  '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
+  '@type': ['Dataset'],
+  // '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
   '@id': '@isBasedOn',
-  isPartOf: {
-    '@type': 'Dataset',
-    '@id': db,
-  },
+  description: `Model provided by the ${db} database. Name of the model: ${name}`,
   name,
+  url: `https://www.ebi.ac.uk/interpro/entry/${db}/${name}`,
+  isPartOf: `https://www.ebi.ac.uk/interpro/entry/${db}/`,
+  license: 'https://creativecommons.org/licenses/by/4.0/',
 });
 
 const SignatureLink = React.memo((

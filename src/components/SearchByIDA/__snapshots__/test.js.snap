@@ -10,6 +10,15 @@ exports[`<SearchByIDA /> should render 1`] = `
     <div
       className="secondary callout border margin-bottom-none"
     >
+      <Memo(Loadable)
+        data={
+          Object {
+            "description": "Search proteins which match a domain architecture",
+            "name": "Search By Domain Architecture IDA",
+          }
+        }
+        processData={[Function]}
+      />
       <div
         className="row"
       >

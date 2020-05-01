@@ -70,7 +70,7 @@ const main = async () => {
       ],
       encodingFormat: 'text/html',
       license: '@license',
-      citation: '@citation',
+      citation: '@mainCitation',
     },
   });
 
