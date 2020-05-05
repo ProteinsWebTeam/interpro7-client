@@ -40,13 +40,15 @@ const main = async () => {
 
   // Instantiates schema.org manager
   schemaOrgManager({
-    dev: false,
+    dev: true,
     root: {
-      '@context': 'http://schema.org',
+      '@context': [{ bio: 'http://bioschemas.org/' }, 'http://schema.org'],
       '@type': 'DataCatalog',
       '@id': config.root.website.protocol + config.root.website.href,
+      hasPart: '@hasPart',
       url: config.root.website.protocol + config.root.website.href,
-      mainEntityOfPage: '@mainEntityOfPage',
+      // mainEntityOfPage: '@mainEntityOfPage',
+      mainEntity: '@mainEntity',
       name: 'InterPro',
       description:
         'InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites',

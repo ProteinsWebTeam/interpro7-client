@@ -41,15 +41,17 @@ const FAKE_PROTEIN_LENGTH = 1000;
 const GAP_BETWEEN_DOMAINS = 5;
 
 const schemaProcessData = (data) => ({
-  '@id': '@isContainedIn',
-  '@type': [
-    'DomainArchitecture',
-    'StructuredValue',
-    'BioChemEntity',
-    'CreativeWork',
+  '@id': '@additionalProperty',
+  '@type': 'PropertyValue',
+  name: 'isContainedIn',
+  value: [
+    {
+      '@type': 'CreativeWork',
+      additionalType: 'DomainArchitecture',
+      identifier: data.ida_id,
+      name: data.ida,
+    },
   ],
-  identifier: data.ida_id,
-  name: data.ida,
 });
 
 export const ida2json = (ida, entry) => {

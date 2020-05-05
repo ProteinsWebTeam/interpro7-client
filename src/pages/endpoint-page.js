@@ -86,7 +86,7 @@ class SummaryComponent extends PureComponent {
 }
 
 const locationhasDetailOrFilter = createSelector(
-  customLocation => {
+  (customLocation) => {
     const { key } = customLocation.description.main;
     return (
       customLocation.description[key].detail ||
@@ -95,7 +95,7 @@ const locationhasDetailOrFilter = createSelector(
       ) || [])[0]
     );
   },
-  value => value,
+  (value) => value,
 );
 
 const STATUS_GONE = 410;
@@ -128,14 +128,14 @@ class Summary extends PureComponent {
       <>
         {payload?.metadata?.accession && (
           <>
-            <SchemaOrgData
+            {/* <SchemaOrgData
               data={{
                 data: payload,
                 endpoint,
                 version: databases && databases.uniprot.version,
               }}
               processData={schemaProcessDataRecord}
-            />
+            /> */}
             <SchemaOrgData
               data={{
                 data: payload.metadata,
@@ -220,7 +220,7 @@ class Overview extends PureComponent {
 }
 
 const locationHasAccessionOrFilters = createSelector(
-  customLocation => {
+  (customLocation) => {
     const { key } = customLocation.description.main;
     return (
       customLocation.description[key].accession ||
@@ -230,7 +230,7 @@ const locationHasAccessionOrFilters = createSelector(
       ) || [])[0]
     );
   },
-  value => value,
+  (value) => value,
 );
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch

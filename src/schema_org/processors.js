@@ -38,12 +38,12 @@ export const schemaProcessDataForDB = ({
 
 export const schemaProcessDataTable = ({ data: { db }, location }) => ({
   '@type': 'Dataset',
-  '@id': '@mainEntityOfPage',
+  '@id': '@mainEntity',
   identifier: db.canonical,
   name: db.name,
   version: db.version,
   url: location.href,
-  hasPart: '@hasPart',
+  hasPart: '@TableRow',
   includedInDataCatalog: {
     '@type': 'DataCatalog',
     '@id': config.root.website.protocol + config.root.website.href,
@@ -56,7 +56,7 @@ export const schemaProcessDataTable = ({ data: { db }, location }) => ({
 
 export const schemaProcessDataTableRow = ({ data: { row, endpoint } }) => ({
   '@type': 'Dataset',
-  '@id': '@hasPart',
+  '@id': '@TableRow',
   identifier: row.accession,
   name: row.name || row.db || row.source_database,
   description: `Data item of the type ${row.type || '?'} from the database ${
@@ -137,47 +137,52 @@ const mapTypeToOntology = new Map([
   ['PTM', 'PTMAnnotation'],
 ]);
 
-export const schemaProcessDataRecord = ({ data, endpoint, version }) => ({
-  '@type': 'Dataset',
-  '@id': '@mainEntityOfPage',
-  identifier: data.metadata.accession,
-  name: data.metadata.name?.name || data.metadata.name,
-  description: data.metadata.description,
-  url: `https://www.ebi.ac.uk/interpro/${endpoint}/${data.metadata.source_database}/${data.metadata.accession}`,
-  isPartOf: isPartOf(
-    endpoint,
-    data.metadata.source_database,
-    version,
-    `The ${endpoint} data from the database ${data.metadata.source_database} - version: ${version}`,
-  ),
-  mainEntity: '@mainEntity',
-  seeAlso: '@seeAlso',
-  isBasedOn: '@isBasedOn',
-  isBasisFor: '@isBasisFor',
-  citation: '@citation',
-  license: 'https://creativecommons.org/licenses/by/4.0/',
-});
+// export const schemaProcessDataRecord = ({ data, endpoint, version }) => ({
+//   '@type': 'Dataset',
+//   '@id': '@mainEntityOfPage',
+//   identifier: data.metadata.source_database,
+//   name: data.metadata.source_database,
+//   description: data.metadata.description,
+//   url: `https://www.ebi.ac.uk/interpro/${endpoint}/${data.metadata.source_database}/${data.metadata.accession}`,
+//   mainEntity: '@mainEntity',
+//   seeAlso: '@seeAlso',
+//   isBasedOn: '@isBasedOn',
+//   isBasisFor: '@isBasisFor',
+//   citation: '@citation',
+//   license: 'https://creativecommons.org/licenses/by/4.0/',
+// });
+
+export const endpoint2type = {
+  entry: 'bio:ProteinAnnotation',
+  protein: 'bio:Protein',
+  taxonomy: 'bio:Taxon',
+  proteome: 'bio:DataRecord',
+  structure: 'bio:ProteinStructure',
+  set: 'bio:DataRecord',
+};
 
 export const schemaProcessMainEntity = ({ data, type }) => {
   const schema = {
     // '@type': [type, 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
     '@type': ['Dataset'],
     '@id': '@mainEntity',
+    additionalType: endpoint2type[type],
     identifier: data.accession,
+    url: `https://www.ebi.ac.uk/interpro/${type}/${data.source_database}/${data.accession}`,
     name: data.name.name || data.accession,
     alternateName: data.name.long || null,
     additionalProperty: '@additionalProperty',
     hasPart: '@hasPart',
     isContainedIn: '@isContainedIn',
-    signature: '@signature',
+    isPartOf: `https://www.ebi.ac.uk/interpro/${type}/${data.source_database}/`,
     license: 'https://creativecommons.org/licenses/by/4.0/',
   };
   schema.description = `The main entity of this document is a ${type} with accession number ${data.accession}`;
-  if (type === 'Entry') {
-    schema['@type'].push(
-      mapTypeToOntology.get(data.type) || mapTypeToOntology.get('Unknown'),
-    );
-  }
+  // if (type === 'Entry') {
+  //   schema['@type'].push(
+  //     mapTypeToOntology.get(data.type) || mapTypeToOntology.get('Unknown'),
+  //   );
+  // }
   return schema;
 };
 
@@ -206,7 +211,7 @@ export const schemaProcessDataWebPage = ({ name, description, location }) => ({
 
 export const schemaProcessDataPageSection = ({ name, description }) => ({
   '@type': 'WebPageElement',
-  '@id': '@hasPart',
+  '@id': '@mainEntity',
   name,
   description,
 });
