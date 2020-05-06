@@ -126,16 +126,16 @@ export const isTranscribedFrom = ({ gene }) => ({
     name: gene,
   },
 });
-const mapTypeToOntology = new Map([
-  ['Domain', 'DomainAnnotation'],
-  ['Family', 'FamilyAnnotation'],
-  ['Repeat', 'RepeatAnnotation'],
-  ['Unknown', 'UnknownAnnotation'],
-  ['Conserved_site', 'ConservedSiteAnnotation'],
-  ['Binding_site', 'BindingSiteAnnotation'],
-  ['Active_site', 'ActiveSiteAnnotation'],
-  ['PTM', 'PTMAnnotation'],
-]);
+// const mapTypeToOntology = new Map([
+//   ['Domain', 'DomainAnnotation'],
+//   ['Family', 'FamilyAnnotation'],
+//   ['Repeat', 'RepeatAnnotation'],
+//   ['Unknown', 'UnknownAnnotation'],
+//   ['Conserved_site', 'ConservedSiteAnnotation'],
+//   ['Binding_site', 'BindingSiteAnnotation'],
+//   ['Active_site', 'ActiveSiteAnnotation'],
+//   ['PTM', 'PTMAnnotation'],
+// ]);
 
 // export const schemaProcessDataRecord = ({ data, endpoint, version }) => ({
 //   '@type': 'Dataset',

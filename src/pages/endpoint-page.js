@@ -24,7 +24,7 @@ import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 import EdgeCase from 'components/EdgeCase';
 
 import {
-  schemaProcessDataRecord,
+  // schemaProcessDataRecord,
   schemaProcessMainEntity,
 } from 'schema_org/processors';
 import loadable from 'higherOrder/loadable';

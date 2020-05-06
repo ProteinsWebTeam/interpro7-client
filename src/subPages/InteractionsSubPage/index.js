@@ -3,6 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import FullyLoadedTable from 'components/Table/FullyLoadedTable';
+import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -10,6 +11,31 @@ import { foundationPartial } from 'styles/foundation';
 import localStyle from './style.css';
 
 const f = foundationPartial(localStyle);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+const schemaProcessData = (data) => {
+  return {
+    '@id': '@additionalProperty',
+    '@type': 'PropertyValue',
+    name: 'Interactions',
+    value: data.map(({ molecule_1: m1, molecule_2: m2 }) => ({
+      '@type': 'CreativeWork',
+      additionalType: 'Interaction',
+      additionalProperty: {
+        '@type': 'PropertyValue',
+        additionalType: 'bio:Protein',
+        name: 'Interactors',
+        value: [
+          `https://www.ebi.ac.uk/interpro/protein/uniprot/${m1?.accession}`,
+          `https://www.ebi.ac.uk/interpro/protein/uniprot/${m2?.accession}`,
+        ],
+      },
+    })),
+  };
+};
 
 const Molecule = ({ accession, identifier, type }) =>
   type === 'protein' ? (
@@ -47,6 +73,8 @@ const InteractionsSubPage = ({ data } /*: {data: Object}*/) => {
             Proteins matching this entry have been experimentally proven to be
             involved in Protein:Protein interactions.
           </p>
+          <SchemaOrgData data={_data} processData={schemaProcessData} />
+
           <FullyLoadedTable
             data={_data}
             renderers={{

@@ -3,6 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import FullyLoadedTable from 'components/Table/FullyLoadedTable';
+import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -10,11 +11,25 @@ import { foundationPartial } from 'styles/foundation';
 
 const f = foundationPartial();
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 const links = {
   reactome: 'https://reactome.org/content/schema/instance/browser/<id>',
   kegg: 'https://www.genome.jp/dbget-bin/www_bget?map<id>',
   metacyc: 'https://metacyc.org/META/NEW-IMAGE?type=NIL&object=<id>&redirect=T',
 };
+
+const schemaProcessData = (data) => {
+  return {
+    '@id': '@additionalProperty',
+    '@type': 'PropertyValue',
+    name: 'Pathways',
+    value: data.map(({ database, id }) => links[database].replace('<id>', id)),
+  };
+};
+
 const PathwayLink = (id, { database }) => {
   if (links[database]) {
     return (
@@ -54,6 +69,7 @@ const InteractionsAndPathwaysSubPage = (
           <p>
             Proteins matching this entry have been linked to these pathways.
           </p>
+          <SchemaOrgData data={_data} processData={schemaProcessData} />
           <FullyLoadedTable
             data={_data}
             renderers={{
