@@ -7,6 +7,34 @@ exports[`<List /> should render 1`] = `
   <div
     className="columns"
   >
+    <Memo(Loadable)
+      data={
+        Array [
+          Object {
+            "accession": "E0W2I7",
+            "length": 1010,
+            "locations": Array [
+              Object {
+                "fragments": Array [
+                  Object {
+                    "end": 179,
+                    "start": 87,
+                  },
+                ],
+              },
+            ],
+            "metadata": Object {
+              "anno_id": 581570,
+              "confidence": "99",
+              "resource": "Gene3D",
+              "type": "PREDICTED_DOMAIN",
+            },
+            "tooltipContent": "Predicted domain from Genome3D resource 'Gene3D' based on UniProtKB E0W2I7/87-179 matching classification 1nl1A00",
+          },
+        ]
+      }
+      processData={[Function]}
+    />
     <Table
       actualSize={1649}
       dataTable={
