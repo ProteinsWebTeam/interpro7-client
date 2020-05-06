@@ -105,13 +105,21 @@ export const schemaProcessIntegrated = ({ name, version }) => ({
 });
 
 export const isContainedInOrganism = ({ taxId, fullName = null }) => ({
-  '@id': '@isContainedIn',
-  '@type': 'BioChemEntity',
-  additionalType: 'http://semanticscience.org/resource/SIO_010000',
-  identifier: taxId,
-  name: fullName,
-  url: `http://purl.bioontology.org/ontology/NCBITAXON/${taxId}`,
-  sameAs: `http://purl.uniprot.org/taxonomy/${taxId}`,
+  '@id': '@additionalProperty',
+  '@type': 'PropertyValue',
+  name: 'isContainedIn',
+  value: {
+    '@type': 'StructuredValue',
+    additionalType: [
+      'bio:Taxon',
+      'bio:BioChemEntity',
+      'http://semanticscience.org/resource/SIO_010000',
+    ],
+    identifier: taxId,
+    name: fullName,
+    url: `http://purl.bioontology.org/ontology/NCBITAXON/${taxId}`,
+    sameAs: `http://purl.uniprot.org/taxonomy/${taxId}`,
+  },
 });
 
 export const isTranscribedFrom = ({ gene }) => ({
@@ -120,8 +128,12 @@ export const isTranscribedFrom = ({ gene }) => ({
   additionalType: 'http://semanticscience.org/resource/SIO_010081',
   name: 'gene',
   value: {
-    '@type': ['StructuredValue', 'BioChemEntity'],
-    additionalType: 'http://semanticscience.org/resource/SIO_010035',
+    '@type': 'StructuredValue',
+    additionalType: [
+      'bio:Gene',
+      'bio:BioChemEntity',
+      'http://semanticscience.org/resource/SIO_010035',
+    ],
     identifier: gene,
     name: gene,
   },

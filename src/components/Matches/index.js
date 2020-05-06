@@ -98,7 +98,7 @@ const schemaProcessData = ({ data, primary, secondary }) => {
     name: name,
     value: [
       {
-        '@type': 'CreativeWork',
+        '@type': 'StructuredValue',
         additionalType: type,
         '@id':
           config.root.website.protocol +
