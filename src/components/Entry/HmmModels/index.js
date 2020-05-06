@@ -24,11 +24,29 @@ const schemaProcessData = (data) => ({
   value: [
     {
       '@type': 'CreativeWork',
-      alternativeType: 'bio:DataRecord',
-      // maxHeight: data.max_height,
-      // processing: data.processing,
-      // alphabet: data.alphabet,
-      // minHeightObserved: data.min_height_obs,
+      additionalType: ['bio:DataRecord', 'AlignmentLogo'],
+      additionalProperty: [
+        {
+          '@type': 'PropertyValue',
+          name: 'maxHeight',
+          value: data.max_height,
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'processing',
+          value: data.processing,
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'alphabet',
+          value: data.alphabet,
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'minHeightObserved',
+          value: data.min_height_obs,
+        },
+      ],
     },
   ],
 });
