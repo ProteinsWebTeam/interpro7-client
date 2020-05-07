@@ -3,6 +3,9 @@ import React from 'react';
 
 import { foundationPartial } from 'styles/foundation';
 
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
+
 import local from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
@@ -15,9 +18,23 @@ import {
 
 const f = foundationPartial(local, fonts);
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 const Citation = () => (
   <section>
     <h3>Recent Publications</h3>
+    <SchemaOrgData
+      data={{
+        name: 'InterPro Publications Page',
+        description:
+          'Includes the most revelant scientific publications about Interpro',
+      }}
+      processData={schemaProcessDataPageSection}
+    />
+
     <div className={f('flex-column')}>
       <InterPro2019 />
       <InterProScan2014 />

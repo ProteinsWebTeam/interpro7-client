@@ -5,6 +5,16 @@ exports[`<Privacy /> should render 1`] = `
   <h3>
     Privacy
   </h3>
+  <Memo(Loadable)
+    data={
+      Object {
+        "description": "Our privacy policy complies with the changes brought by the GDPR law",
+        "name": "InterPro Privacy Policy",
+      }
+    }
+    processData={[Function]}
+  />
+   
   <p>
     Our privacy policy complies with the changes brought by the European Union data protection law (GDPR). You can find more information on the
      

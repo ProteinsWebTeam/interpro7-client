@@ -2,6 +2,8 @@
 import React, { PureComponent } from 'react';
 
 import { foundationPartial } from 'styles/foundation';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import global from '../../../styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
@@ -14,11 +16,24 @@ import bbsrc from '../../../images/thirdparty/funding/logo_bbsrc.png';
 // Bind css with style object
 const f = foundationPartial(ebiGlobalStyles, style, global);
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 export default class Funding extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <section>
         <h3>Funding</h3>
+        <SchemaOrgData
+          data={{
+            name: 'InterPro Funding Bodies',
+            description:
+              'InterPro is supported by EMBL, with additional funding gratefully received from the Biotechnology and Biological Sciences Research Council and the Wellcome Trust',
+          }}
+          processData={schemaProcessDataPageSection}
+        />
         <img src={embl} className={f('image-funding')} alt="EMBL logo" />
         <img
           src={wellcome}

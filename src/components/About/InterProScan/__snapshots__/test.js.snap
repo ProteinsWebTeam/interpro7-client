@@ -14,6 +14,15 @@ exports[`<InterProScan /> should render with data 1`] = `
       </h3>
       InterProScan is the software package that allows sequences (protein and nucleic) to be scanned against InterPro's signatures. Signatures are predictive models, provided by several different databases, that make up the InterPro consortium.
     </div>
+    <Memo(Loadable)
+      data={
+        Object {
+          "description": "InterProScan is the software package that allows sequencesto be scanned against InterPro",
+          "name": "About InterProScan",
+        }
+      }
+      processData={[Function]}
+    />
   </section>
   <section>
     <h3>

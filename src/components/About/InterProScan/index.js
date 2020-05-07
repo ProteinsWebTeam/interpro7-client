@@ -3,6 +3,8 @@ import React from 'react';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -17,7 +19,12 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 const f = foundationPartial(ipro, style, fonts);
 
-const parseBody = text =>
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+const parseBody = (text) =>
   text
     .trim()
     .split('\n')
@@ -46,6 +53,14 @@ export const InterProScan = (
           Signatures are predictive models, provided by several different
           databases, that make up the InterPro consortium.
         </div>
+        <SchemaOrgData
+          data={{
+            name: 'About InterProScan',
+            description:
+              'InterProScan is the software package that allows sequencesto be scanned against InterPro',
+          }}
+          processData={schemaProcessDataPageSection}
+        />
       </section>
       <section>
         <h3>

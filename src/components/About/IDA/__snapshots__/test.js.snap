@@ -14,6 +14,15 @@ exports[`<AboutIDA /> should render with data 1`] = `
       </h3>
       The InterPro Domain Architecture (IDA) tool allows you to search the InterPro database with a particular set of domains, and returns all of the domain architectures and associated proteins that match the query.
     </div>
+    <Memo(Loadable)
+      data={
+        Object {
+          "description": "he InterPro Domain Architecture (IDA) tool allows to search the InterPro database with a particular set of domains",
+          "name": "About InterPro Domain Architectures",
+        }
+      }
+      processData={[Function]}
+    />
   </section>
   <section>
     <div>

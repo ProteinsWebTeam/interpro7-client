@@ -5,6 +5,15 @@ exports[`<Funding /> should render 1`] = `
   <h3>
     Funding
   </h3>
+  <Memo(Loadable)
+    data={
+      Object {
+        "description": "InterPro is supported by EMBL, with additional funding gratefully received from the Biotechnology and Biological Sciences Research Council and the Wellcome Trust",
+        "name": "InterPro Funding Bodies",
+      }
+    }
+    processData={[Function]}
+  />
   <img
     alt="EMBL logo"
     className="image-funding"
