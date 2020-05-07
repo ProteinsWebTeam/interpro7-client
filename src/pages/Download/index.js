@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet-async';
 
 import Link from 'components/generic/Link';
 import DownloadTable from 'components/IPScan/DownloadTable';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -12,6 +14,11 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 class Download extends PureComponent /*:: <{}> */ {
   render() {
@@ -25,6 +32,15 @@ class Download extends PureComponent /*:: <{}> */ {
               <title>Download</title>
             </Helmet>
             <h3>Download</h3>
+            <SchemaOrgData
+              data={{
+                name: 'InterPro Download Page',
+                description:
+                  'Includes links to pre-generated files for the current version of InterPro',
+              }}
+              processData={schemaProcessDataPageSection}
+            />
+
             <DownloadTable />
             <h4>InterProScan</h4>
 

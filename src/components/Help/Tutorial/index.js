@@ -2,6 +2,8 @@
 import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -11,11 +13,24 @@ import local from './style.css';
 
 const f = foundationPartial(local, fonts, ipro);
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 export default class Tutorial extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <section>
         <h3>Tutorials</h3>
+        <SchemaOrgData
+          data={{
+            name: 'InterPro Help: Tutorials',
+            description:
+              'A number of online tutorials relating to InterPro are available',
+          }}
+          processData={schemaProcessDataPageSection}
+        />{' '}
         <p>A number of online tutorials relating to InterPro are available.</p>
         <div className={f('flex-column')}>
           <div className={f('flex-card')}>
