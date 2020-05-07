@@ -61,11 +61,11 @@ const schemamap = {
   },
   protein: {
     entry: 'contains',
-    structure: '@additionalProperty',
+    structure: 'isContainedIn',
   },
   structure: {
-    entry: '@additionalProperty',
-    protein: 'isContainedIn',
+    entry: 'ProteinAnnotation',
+    protein: 'contains',
     taxonomy: 'isContainedIn',
     proteome: 'isContainedIn',
   },
@@ -81,11 +81,11 @@ const schemamap = {
     structure: 'contains',
   },
   set: {
-    entry: '@additionalProperty',
-    protein: '@additionalProperty',
-    structure: '@additionalProperty',
-    taxonomy: '@additionalProperty',
-    proteome: '@additionalProperty',
+    entry: 'contains',
+    protein: 'contains',
+    structure: 'contains',
+    taxonomy: 'contains',
+    proteome: 'contains',
   },
 };
 
