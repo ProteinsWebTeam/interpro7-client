@@ -24,7 +24,7 @@ import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 import EdgeCase from 'components/EdgeCase';
 
 import {
-  schemaProcessDataRecord,
+  // schemaProcessDataRecord,
   schemaProcessMainEntity,
 } from 'schema_org/processors';
 import loadable from 'higherOrder/loadable';
@@ -86,7 +86,7 @@ class SummaryComponent extends PureComponent {
 }
 
 const locationhasDetailOrFilter = createSelector(
-  customLocation => {
+  (customLocation) => {
     const { key } = customLocation.description.main;
     return (
       customLocation.description[key].detail ||
@@ -95,7 +95,7 @@ const locationhasDetailOrFilter = createSelector(
       ) || [])[0]
     );
   },
-  value => value,
+  (value) => value,
 );
 
 const STATUS_GONE = 410;
@@ -128,14 +128,14 @@ class Summary extends PureComponent {
       <>
         {payload?.metadata?.accession && (
           <>
-            <SchemaOrgData
+            {/* <SchemaOrgData
               data={{
                 data: payload,
                 endpoint,
                 version: databases && databases.uniprot.version,
               }}
               processData={schemaProcessDataRecord}
-            />
+            /> */}
             <SchemaOrgData
               data={{
                 data: payload.metadata,
@@ -220,7 +220,7 @@ class Overview extends PureComponent {
 }
 
 const locationHasAccessionOrFilters = createSelector(
-  customLocation => {
+  (customLocation) => {
     const { key } = customLocation.description.main;
     return (
       customLocation.description[key].accession ||
@@ -230,7 +230,7 @@ const locationHasAccessionOrFilters = createSelector(
       ) || [])[0]
     );
   },
-  value => value,
+  (value) => value,
 );
 
 // Keep outside! Otherwise will be redefined at each render of the outer Switch
@@ -262,13 +262,30 @@ class EndPointPage extends PureComponent {
   static propTypes = {
     data: T.object.isRequired,
     children: T.any,
+    mainEndpoint: T.object,
+    hasFilters: T.bool,
   };
 
   render() {
+    const { mainEndpoint, hasFilters, data } = this.props;
+    // eslint-disable-next-line camelcase
+    const db = data?.payload?.metadata?.source_database;
+    const accession = data?.payload?.metadata?.accession;
+    const hasCanonical =
+      mainEndpoint.accession &&
+      !mainEndpoint.detail &&
+      !hasFilters &&
+      mainEndpoint.db;
     return (
       <ErrorBoundary>
         <Helmet>
           <title>Browse</title>
+          {hasCanonical && (
+            <link
+              rel="canonical"
+              href={`https://www.ebi.ac.uk/interpro/${mainEndpoint.type}/${db}/${accession}`}
+            />
+          )}
         </Helmet>
         <Switch
           {...this.props}
@@ -281,6 +298,24 @@ class EndPointPage extends PureComponent {
   }
 }
 
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  loadData(getUrlForApi)(EndPointPage),
+const mapStateToProps = createSelector(
+  (state) => state.customLocation.description.main.key,
+  (state) =>
+    state.customLocation.description[state.customLocation.description.main.key],
+  (state) =>
+    (
+      Object.entries(state.customLocation.description || {}).find(
+        ([_key, value]) => value.isFilter,
+      ) || []
+    ).length > 0,
+  (key, mainEndpoint, hasFilters) => ({
+    mainEndpoint: { ...mainEndpoint, type: key },
+    hasFilters,
+  }),
 );
+
+export default loadData({
+  getUrl: getUrlForMeta,
+  propNamespace: 'Base',
+  mapStateToProps,
+})(loadData(getUrlForApi)(EndPointPage));

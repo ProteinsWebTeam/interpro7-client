@@ -17,6 +17,15 @@ exports[`<Faqs /> should render 1`] = `
         <h4>
           General questions
         </h4>
+        <Memo(Loadable)
+          data={
+            Object {
+              "description": "Frequently Asked Questions for InterPro",
+              "name": "InterPro FAQ Page",
+            }
+          }
+          processData={[Function]}
+        />
         <details
           className="accordion-style"
         >

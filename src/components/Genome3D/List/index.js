@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+import loadable from 'higherOrder/loadable';
 import Table, { Column } from 'components/Table';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
@@ -14,6 +15,22 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiStyles);
 const HTTP_404 = 404;
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+const schemaProcessData = (data) => {
+  return {
+    '@id': '@additionalProperty',
+    '@type': 'PropertyValue',
+    additionalType: ['bio:SequenceMatchingModel', 'bio:sequenceAnnotation'],
+    name: 'Annotation',
+    value: data.map((g3d) => g3d?.metadata?.evidences?.source?.url),
+  };
+};
+
 const List = (
   {
     data,
@@ -34,6 +51,10 @@ const List = (
   return (
     <div className={f('row')}>
       <div className={f('columns')}>
+        <SchemaOrgData
+          data={data.payload.data}
+          processData={schemaProcessData}
+        />
         <Table
           dataTable={data4table}
           loading={data.loading}
@@ -46,7 +67,7 @@ const List = (
         >
           <Column
             dataKey="accession"
-            renderer={accession => (
+            renderer={(accession) => (
               <Link
                 to={{
                   description: {
@@ -73,7 +94,7 @@ const List = (
           </Column>
           <Column
             dataKey="confidence"
-            renderer={confidence => (
+            renderer={(confidence) => (
               <NumberComponent>{confidence}</NumberComponent>
             )}
           />

@@ -13,6 +13,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import loadable from 'higherOrder/loadable';
 
 import loadWebComponent from 'utils/load-web-component';
 import ProtvistaInterproTrack from 'protvista-interpro-track';
@@ -35,6 +36,23 @@ import {
 
 const f = foundationPartial(fonts, localStyle, exporterStyle);
 const FAKE_PROTEIN_LENGTH = 1000;
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+const schemaProcessData = (data) => {
+  return {
+    '@id': '@additionalProperty',
+    '@type': 'PropertyValue',
+    name: 'SimilarProteins',
+    value: data.map(
+      (p) =>
+        `https://www.ebi.ac.uk/interpro/protein/${p.metadata.source_database}/${p.metadata.accession}/`,
+    ),
+  };
+};
 
 const SimilarProteinsHeaderWithData = (
   {
@@ -212,6 +230,8 @@ state: Object,
         accession={state.customLocation.description.protein.accession}
         databases={(dataBase.payload && dataBase.payload.databases) || {}}
       />
+      <SchemaOrgData data={payload.results} processData={schemaProcessData} />
+
       <Table
         dataTable={payload.results}
         actualSize={payload.count}

@@ -17,13 +17,38 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessData = data => ({
-  '@type': ['Signature', 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-  '@id': '@signature',
-  maxHeight: data.max_height,
-  processing: data.processing,
-  alphabet: data.alphabet,
-  minHeightObserved: data.min_height_obs,
+const schemaProcessData = (data) => ({
+  '@id': '@additionalProperty',
+  '@type': 'PropertyValue',
+  name: 'hasSignature',
+  value: [
+    {
+      '@type': 'CreativeWork',
+      additionalType: ['bio:DataRecord', 'AlignmentLogo'],
+      additionalProperty: [
+        {
+          '@type': 'PropertyValue',
+          name: 'maxHeight',
+          value: data.max_height,
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'processing',
+          value: data.processing,
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'alphabet',
+          value: data.alphabet,
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'minHeightObserved',
+          value: data.min_height_obs,
+        },
+      ],
+    },
+  ],
 });
 /*:: type Props = {
   data: {}

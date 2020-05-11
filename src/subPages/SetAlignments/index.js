@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { format } from 'url';
@@ -22,6 +23,32 @@ import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
 
 const f = foundationPartial(protvista, fonts);
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+const schemaProcessData = (data) => {
+  return {
+    '@id': '@additionalProperty',
+    '@type': 'PropertyValue',
+    name: 'Alignment',
+    value: data.map(({ accession, alignedTo }) => ({
+      '@type': 'StructuredValue',
+      additionalType: 'bio:ProteinAnnotation',
+      id: accession,
+      additionalProperty: {
+        '@type': 'PropertyValue',
+        name: 'AlignedTo',
+        value: Object.keys(alignedTo).map((acc) => ({
+          '@type': 'StructuredValue',
+          additionalType: 'bio:ProteinAnnotation',
+          id: acc,
+        })),
+      },
+    })),
+  };
+};
+
 const MAX_NUMBER_ENTRIES = 20;
 class AlignmentProtvista extends ProtVistaMatches {
   async updateTracksWithData({ matches, length }) {
@@ -29,7 +56,7 @@ class AlignmentProtvista extends ProtVistaMatches {
     for (const [entry, { domains }] of matches) {
       this.web_tracks[entry].data = [
         {
-          locations: domains.map(d => ({ fragments: [d] })),
+          locations: domains.map((d) => ({ fragments: [d] })),
           accession: entry,
           type: 'entry',
           color: getTrackColor({ accession: entry }, EntryColorMode.ACCESSION),
@@ -44,7 +71,7 @@ class AlignmentProtvista extends ProtVistaMatches {
         <div className={f('track-container')}>
           <div className={f('aligned-to-track-component')}>
             <protvista-sequence
-              ref={e => (this._webProteinRef = e)}
+              ref={(e) => (this._webProteinRef = e)}
               length={length}
               displaystart="1"
               displayend={length}
@@ -56,7 +83,7 @@ class AlignmentProtvista extends ProtVistaMatches {
           <div key={entry} className={f('track-component')}>
             <Tooltip
               title={`<b>${entry}</b><p>Score: ${score}</p>Location: ${domains
-                .map(d => `[${d.start}-${d.end}]`)
+                .map((d) => `[${d.start}-${d.end}]`)
                 .join(', ')}`}
             >
               <protvista-interpro-track
@@ -64,7 +91,7 @@ class AlignmentProtvista extends ProtVistaMatches {
                 displaystart="1"
                 displayend={length}
                 id={`track_${accession}_${entry}`}
-                ref={e => (this.web_tracks[entry] = e)}
+                ref={(e) => (this.web_tracks[entry] = e)}
                 shape="roundRectangle"
                 expanded
                 use-ctrl-to-zoom
@@ -97,6 +124,11 @@ class SetAlignmentsSubPage extends PureComponent /*:: <Props, {}> */ {
     if (data.loading) return <Loading />;
     return (
       <div className={f('row', 'column')}>
+        <SchemaOrgData
+          data={data.payload.results}
+          processData={schemaProcessData}
+        />
+
         <Table
           actualSize={data.payload.count}
           dataTable={data.payload.results}
@@ -114,7 +146,7 @@ class SetAlignmentsSubPage extends PureComponent /*:: <Props, {}> */ {
               whiteSpace: 'nowrap',
               verticalAlign: 'top',
             }}
-            renderer={accession => (
+            renderer={(accession) => (
               <button onClick={this.handleClick} value={accession}>
                 {this.state[accession] ? '▾ ' : '▸ '} {accession}
               </button>
@@ -124,7 +156,7 @@ class SetAlignmentsSubPage extends PureComponent /*:: <Props, {}> */ {
             dataKey="alignedTo"
             renderer={(alignedTo, { accession, alignments_count: count }) => {
               const length = Math.max(
-                ...Object.values(alignedTo).map(e => e.length),
+                ...Object.values(alignedTo).map((e) => e.length),
               );
               return this.state[accession] ? (
                 <AlignmentProtvista
@@ -160,9 +192,9 @@ class SetAlignmentsSubPage extends PureComponent /*:: <Props, {}> */ {
   }
 }
 const mapStateToUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     const s = {
       ...search,
@@ -186,8 +218,8 @@ const mapStateToUrl = createSelector(
   },
 );
 const mapStateToProps = createSelector(
-  state => state.customLocation.search,
-  search => ({ search }),
+  (state) => state.customLocation.search,
+  (search) => ({ search }),
 );
 export default loadData({ getUrl: mapStateToUrl, mapStateToProps })(
   SetAlignmentsSubPage,

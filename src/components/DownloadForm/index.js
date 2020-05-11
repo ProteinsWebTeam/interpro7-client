@@ -5,6 +5,9 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import { set } from 'lodash-es';
 
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
+
 import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
 import TextExplanation from './TextExplanation';
@@ -32,7 +35,12 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 const f = foundationPartial(local);
 
-const extractDataFromHash = hash => {
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+const extractDataFromHash = (hash) => {
   const [href, fileType, subset] = hash.split('|');
   const output = { fileType, subset: !!subset };
   try {
@@ -72,7 +80,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
   }
 
   // eslint-disable-next-line complexity
-  _handleChange = e => {
+  _handleChange = (e) => {
     if (!this._ref.current) return;
     const object = {};
     if (e.target instanceof HTMLButtonElement) {
@@ -179,9 +187,9 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
       const parts = path.split('[*]');
       const selector = parts[0]
         .split(/(\[\d\])/)
-        .flatMap(part => part.split('.'))
+        .flatMap((part) => part.split('.'))
         .filter(Boolean)
-        .map(part => (part.startsWith('[') ? part : `["${part}"]`))
+        .map((part) => (part.startsWith('[') ? part : `["${part}"]`))
         .join('');
       if (parts.length > 1) {
         return `[x${parts[1]} for x in ${varName}${selector}]`;
@@ -196,9 +204,9 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
       const parts = path.split('[*]');
       const selector = parts[0]
         .split(/(\[\d\])/)
-        .flatMap(part => part.split('.'))
+        .flatMap((part) => part.split('.'))
         .filter(Boolean)
-        .map(part => (part.startsWith('[') ? part : `->{"${part}"}`))
+        .map((part) => (part.startsWith('[') ? part : `->{"${part}"}`))
         .join('');
       if (parts.length > 1) {
         return `${parts[1]}, ${varName}${selector}`.replace(/[\[\]]/g, '');
@@ -213,6 +221,14 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
         className={f('download-form')}
       >
         <h4>Select data</h4>
+        <SchemaOrgData
+          data={{
+            name: 'Download Web from for the InterPro API',
+            description:
+              'A Webform that allows the user to filter the InterPro dataset to create Download Jobs or scripts',
+          }}
+          processData={schemaProcessDataPageSection}
+        />
         <fieldset className={f('fieldset')}>
           <legend>Main data type</legend>
           <label>
@@ -344,7 +360,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                     url={endpoint}
                     subset={subset}
                     columns={columns[columnKey].map(
-                      c =>
+                      (c) =>
                         `${c.selector}${
                           c.selectorInGroup ? `[*]["${c.selectorInGroup}"]` : ''
                         }`,
@@ -387,8 +403,8 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  state => state.settings.api,
-  state => state.settings.ui.lowGraphics,
+  (state) => state.settings.api,
+  (state) => state.settings.ui.lowGraphics,
   (customLocation, api, lowGraphics) => ({ customLocation, api, lowGraphics }),
 );
 

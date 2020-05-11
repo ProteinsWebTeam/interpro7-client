@@ -2,6 +2,8 @@
 import React, { PureComponent } from 'react';
 
 import Link from 'components/generic/Link';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -14,10 +16,22 @@ import { InterProLogo } from 'components/Header/Title';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, local);
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 export default class Documentation extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <section>
+        <SchemaOrgData
+          data={{
+            name: 'InterPro Documentation Page',
+            description:
+              'Includes links to the documentations for the different parts of our service',
+          }}
+          processData={schemaProcessDataPageSection}
+        />
         <div className={f('row')}>
           <div className={f('columns', 'large-8')}>
             <div className={f('flex-container')}>

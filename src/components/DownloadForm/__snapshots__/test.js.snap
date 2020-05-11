@@ -8,6 +8,15 @@ exports[`<DownloadForm /> should render 1`] = `
   <h4>
     Select data
   </h4>
+  <Memo(Loadable)
+    data={
+      Object {
+        "description": "A Webform that allows the user to filter the InterPro dataset to create Download Jobs or scripts",
+        "name": "Download Web from for the InterPro API",
+      }
+    }
+    processData={[Function]}
+  />
   <fieldset
     className="fieldset"
   >

@@ -8,6 +8,8 @@ import { format } from 'url';
 import { Helmet } from 'react-helmet-async';
 
 import loadData from 'higherOrder/loadData';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
@@ -26,6 +28,11 @@ import { formatISODate } from 'utils/date';
 import VersionBadge from 'components/VersionBadge';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, local, ipro);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const ReleaseNotesSelectorWithData = (
   {
@@ -334,6 +341,14 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               <title>Release notes</title>
             </Helmet>
             <h3>Release notes</h3>
+            <SchemaOrgData
+              data={{
+                name: 'InterPro Release Notes',
+                description:
+                  'Description of the changes included in the most recent version of InterPro',
+              }}
+              processData={schemaProcessDataPageSection}
+            />
             <ReleaseNotesSelector current={version} />
             <hr />
             <div

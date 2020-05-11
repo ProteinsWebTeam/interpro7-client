@@ -2,6 +2,15 @@
 
 exports[`<Documentation /> should render 1`] = `
 <section>
+  <Memo(Loadable)
+    data={
+      Object {
+        "description": "Includes links to the documentations for the different parts of our service",
+        "name": "InterPro Documentation Page",
+      }
+    }
+    processData={[Function]}
+  />
   <div
     className="row"
   >

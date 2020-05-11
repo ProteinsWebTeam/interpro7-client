@@ -6,6 +6,8 @@ import Link from 'components/generic/Link';
 import { detailsTag as detailsTagPolyfill } from 'utils/polyfills';
 
 import { foundationPartial } from 'styles/foundation';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import loadWebComponent from 'utils/load-web-component';
 
@@ -14,6 +16,11 @@ import ipro from 'styles/interpro-new.css';
 import local from './style.css';
 
 const f = foundationPartial(ipro, fonts, local);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 export default class Faqs extends PureComponent /*:: <{}> */ {
   componentDidMount() {
@@ -36,6 +43,13 @@ export default class Faqs extends PureComponent /*:: <{}> */ {
 
             <div>
               <h4>General questions</h4>
+              <SchemaOrgData
+                data={{
+                  name: 'InterPro FAQ Page',
+                  description: 'Frequently Asked Questions for InterPro',
+                }}
+                processData={schemaProcessDataPageSection}
+              />
               <details className={f('accordion-style')}>
                 <summary>
                   What are entry types and why are they important?

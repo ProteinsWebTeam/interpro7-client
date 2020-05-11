@@ -34,9 +34,16 @@ export const schemaProcessData = (length /*: number */) => ({
   additionalType: 'hhttp://semanticscience.org/resource/SIO_000205',
   name: 'protein sequence',
   value: {
-    '@type': ['StructuredValue', 'BioChemEntity'],
-    additionalType: 'http://semanticscience.org/resource/SIO_010015',
-    length,
+    '@type': 'StructuredValue',
+    additionalType: [
+      'bio:BioChemEntity',
+      'http://semanticscience.org/resource/SIO_010015',
+    ],
+    additionalProperty: {
+      '@type': 'PropertyValue',
+      name: 'length',
+      value: length,
+    },
   },
 });
 
@@ -97,7 +104,7 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
     this._ref = React.createRef();
   }
 
-  _isSelectionInSequence = selection => {
+  _isSelectionInSequence = (selection) => {
     if (!this._ref.current) return false;
     // Beginning of selection is in the sequence element
     const selectionIsInSequence = this._ref.current.contains(
@@ -135,12 +142,13 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
     // Prepend metainformation
     const meta = `>${
       this.props.accession
-    } mol:protein subsequence:${start}-${end} length:${end - start + 1} ${this
-      .props.name || ''}`.trim();
+    } mol:protein subsequence:${start}-${end} length:${end - start + 1} ${
+      this.props.name || ''
+    }`.trim();
     return encodeURIComponent(`${meta}\n${sequenceToSearch}`);
   };
 
-  _handleIPSClick = event => {
+  _handleIPSClick = (event) => {
     event.preventDefault();
     this.props.goToCustomLocation({
       description: {
@@ -150,7 +158,7 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
     });
   };
 
-  _handleHmmerClick = event => {
+  _handleHmmerClick = (event) => {
     const { currentTarget } = event;
     const oldHref = currentTarget.href;
     // Add the sequence as querystring to Hmmer link href
@@ -250,7 +258,4 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
   }
 }
 
-export default connect(
-  undefined,
-  { goToCustomLocation },
-)(Sequence);
+export default connect(undefined, { goToCustomLocation })(Sequence);

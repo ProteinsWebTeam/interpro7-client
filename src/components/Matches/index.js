@@ -38,6 +38,7 @@ import { searchSelector } from 'reducers/custom-location/search';
 import { descriptionSelector } from 'reducers/custom-location/description';
 
 import { foundationPartial } from 'styles/foundation';
+import { endpoint2type } from 'schema_org/processors';
 
 import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -52,56 +53,64 @@ const SchemaOrgData = loadable({
 
 const schemamap = {
   entry: {
-    protein: ['@isContainedIn', 'Protein'],
-    taxonomy: ['@isContainedIn', 'Taxonomy'],
-    proteome: ['@isContainedIn', 'Proteome'],
-    structure: ['@isContainedIn', 'Structure'],
-    set: ['@isContainedIn', 'Set'],
+    protein: 'bio:ProteinAnnotation',
+    taxonomy: 'bio:isContainedIn',
+    proteome: 'bio:isContainedIn',
+    structure: 'bio:isContainedIn',
+    set: 'bio:isContainedIn',
   },
   protein: {
-    entry: ['@contains', 'Entry'],
-    structure: ['@additionalProperty', 'Structure'],
+    entry: 'bio:hasProteinAnnotation',
+    structure: 'bio:isContainedIn',
   },
   structure: {
-    entry: ['@additionalProperty', 'Entry'],
-    protein: ['@isContainedIn', 'Protein'],
-    taxonomy: ['@isContainedIn', 'Taxonomy'],
-    proteome: ['@isContainedIn', 'Proteome'],
+    entry: 'bio:ProteinAnnotation',
+    protein: 'bio:contains',
+    taxonomy: 'bio:isContainedIn',
+    proteome: 'bio:isContainedIn',
   },
   taxonomy: {
-    entry: ['@contains', 'Entry'],
-    protein: ['@contains', 'Protein'],
-    structure: ['@contains', 'Structure'],
-    proteome: ['@contains', 'Proteome'],
+    entry: 'bio:contains',
+    protein: 'bio:contains',
+    structure: 'bio:contains',
+    proteome: 'bio:contains',
   },
   proteome: {
-    entry: ['@contains', 'Entry'],
-    protein: ['@contains', 'Protein'],
-    structure: ['@contains', 'Structure'],
+    entry: 'bio:contains',
+    protein: 'bio:contains',
+    structure: 'bio:contains',
   },
   set: {
-    entry: ['@additionalProperty', 'Entry'],
-    protein: ['@additionalProperty', 'Protein'],
-    structure: ['@additionalProperty', 'Structure'],
-    taxonomy: ['@additionalProperty', 'Taxonomy'],
-    proteome: ['@additionalProperty', 'Proteome'],
+    entry: 'bio:contains',
+    protein: 'bio:contains',
+    structure: 'bio:contains',
+    taxonomy: 'bio:contains',
+    proteome: 'bio:contains',
   },
 };
 
 const schemaProcessData = ({ data, primary, secondary }) => {
-  const [id, type] = schemamap[secondary][primary];
+  const name = schemamap[secondary][primary];
+  const type = endpoint2type[primary];
   return {
-    '@id': id,
-    '@type': [type, 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
-    identifier: data.accession,
-    name: data.name,
-    url:
-      config.root.website.protocol +
-      config.root.website.href +
-      descriptionToPath({
-        main: { key: primary },
-        [primary]: { db: data.source_database, accession: data.accession },
-      }),
+    '@id': '@additionalProperty',
+    '@type': 'PropertyValue',
+    name: name,
+    value: [
+      {
+        '@type': 'StructuredValue',
+        additionalType: type,
+        '@id':
+          config.root.website.protocol +
+          config.root.website.href +
+          descriptionToPath({
+            main: { key: primary },
+            [primary]: { db: data.source_database, accession: data.accession },
+          }),
+        name: data.name,
+        identifier: data.accession,
+      },
+    ],
   };
 };
 
