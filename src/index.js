@@ -40,7 +40,7 @@ const main = async () => {
 
   // Instantiates schema.org manager
   schemaOrgManager({
-    dev: true,
+    dev: false,
     root: {
       '@context': [{ bio: 'http://bioschemas.org/' }, 'http://schema.org'],
       '@type': 'DataCatalog',
