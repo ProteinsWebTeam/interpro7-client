@@ -436,4 +436,5 @@ module.exports = {
   plugins,
   env,
   rules,
+  ignorePatterns: ['.eslintrc.js'],
 };
