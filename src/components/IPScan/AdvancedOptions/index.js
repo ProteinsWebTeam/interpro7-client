@@ -94,7 +94,7 @@ const labels = new Map([
   ['PrositeProfiles', 'PROSITE profiles'],
   ['PrositePatterns', 'PROSITE patterns'],
 ]);
-const groupApplications = applications => {
+const groupApplications = (applications) => {
   const mdb1 = [];
   const mdb2 = [];
   const other = [];
@@ -148,7 +148,8 @@ const toggleAll = (toggle, node) => {
     loading: boolean,
     payload: Object,
     ok: boolean
-  }
+  },
+  title: string,
 }*/
 
 export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> */ {
@@ -161,6 +162,8 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
       payload: T.object,
       ok: T.bool,
     }).isRequired,
+    title: T.string,
+    changeTitle: T.func,
   };
 
   constructor(props /*: AdvancedOptionsProps */) {
@@ -173,12 +176,12 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
     detailsTagPolyfill();
   }
 
-  _selectAll = event => {
+  _selectAll = (event) => {
     event.preventDefault();
     toggleAll(true, this._ref.current);
   };
 
-  _unselectAll = event => {
+  _unselectAll = (event) => {
     event.preventDefault();
     toggleAll(false, this._ref.current);
   };
@@ -186,6 +189,7 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
   render() {
     const {
       data: { loading, payload, ok },
+      title,
     } = this.props;
     if (loading) return 'Loading…';
     if (!ok) return 'Failed…';
@@ -222,6 +226,8 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
                   type="text"
                   className={f('input-group-field')}
                   name="local-title"
+                  defaultValue={title}
+                  onChange={this.props.changeTitle}
                 />
               </label>
             </Tooltip>
@@ -272,7 +278,7 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
 }
 
 const getUrlFromState = createSelector(
-  state => state.settings.ipScan,
+  (state) => state.settings.ipScan,
   ({ protocol, hostname, port, root }) =>
     format({
       protocol,

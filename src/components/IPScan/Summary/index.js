@@ -353,32 +353,34 @@ const SummaryIPScanJob = ({
                     readOnly={readable}
                     style={{ width: `${title.length}ch` }}
                   />
-                  <button
-                    onClick={() =>
-                      changeTitle(
-                        localID,
-                        payload,
-                        updateJobTitle,
-                        titleInputRef,
-                        setTitle,
-                        setReadable,
-                      )
-                    }
-                  >
-                    {readable ? (
-                      <span
-                        className={f('icon', 'icon-common')}
-                        data-icon="&#xf303;"
-                        title={'Rename'}
-                      />
-                    ) : (
-                      <span
-                        className={f('icon', 'icon-common')}
-                        data-icon="&#x53;"
-                        title={'Save'}
-                      />
-                    )}
-                  </button>
+                  {status === 'finished' ? (
+                    <button
+                      onClick={() =>
+                        changeTitle(
+                          localID,
+                          payload,
+                          updateJobTitle,
+                          titleInputRef,
+                          setTitle,
+                          setReadable,
+                        )
+                      }
+                    >
+                      {readable ? (
+                        <span
+                          className={f('icon', 'icon-common')}
+                          data-icon="&#xf303;"
+                          title={'Rename'}
+                        />
+                      ) : (
+                        <span
+                          className={f('icon', 'icon-common')}
+                          data-icon="&#x53;"
+                          title={'Save'}
+                        />
+                      )}
+                    </button>
+                  ) : null}
                 </td>
               </tr>
             )}

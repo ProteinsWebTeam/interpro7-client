@@ -101,9 +101,6 @@ const getCheckedApplications = (form) =>
     (input) => input.value,
   );
 
-const getLocalTitle = (form) =>
-  form.querySelector('input[name="local-title"]').value.trim();
-
 const isXChecked = (x) => (form) => !!form.querySelector(checkedSelectorFor(x));
 
 const isStayChecked = isXChecked('stay');
@@ -253,6 +250,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     let valid = true;
     let tooShort = true;
     let headerIssues = false;
+    let title = '';
     if (props.value) {
       editorState = EditorState.createWithContent(
         ContentState.createFromText(decodeURIComponent(props.value)),
@@ -261,6 +259,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       const lines = convertToRaw(editorState.getCurrentContent()).blocks.map(
         (block) => block.text,
       );
+
+      title = this._getTitle(lines);
       valid = checkValidity(lines);
       tooShort = isTooShort(lines);
       headerIssues = hasHeaderIssues(lines);
@@ -272,11 +272,37 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       valid,
       tooShort,
       headerIssues,
+      title,
     };
 
     this._formRef = React.createRef();
     this._editorRef = React.createRef();
   }
+
+  _getTitle = (lines) => {
+    if (lines.length) {
+      if (lines[0].startsWith('>')) {
+        return lines[0].split('>')[1];
+      }
+    }
+    return null;
+  };
+
+  _changeTitle = () => {
+    const newTitle = this._formRef.current
+      .querySelector('input[name="local-title"]')
+      .value.trim();
+    const text = this.state.editorState.getCurrentContent().getPlainText();
+    const lines = text.split(/\n/);
+    lines[0] = `>${newTitle}`;
+    this.setState({
+      title: newTitle,
+      editorState: EditorState.createWithContent(
+        ContentState.createFromText(lines.join('\n')),
+        compositeDecorator,
+      ),
+    });
+  };
 
   _handleReset = (text) => {
     if (this._formRef.current && typeof text !== 'string') {
@@ -289,6 +315,9 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
         input.checked = !!input.dataset.defaultchecked;
       }
     }
+
+    const lines = text.split(/\n/);
+    const fileTitle = this._getTitle(lines);
     this.setState(
       {
         editorState:
@@ -303,6 +332,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
         headerIssues: false,
         dragging: false,
         uploading: false,
+        title: fileTitle,
       },
       this._focusEditor,
     );
@@ -318,7 +348,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     this.props.createJob({
       metadata: {
         localID: id(`internal-${Date.now()}`),
-        localTitle: getLocalTitle(this._formRef.current) || null,
+        localTitle: this.state.title,
         type: 'InterProScan',
       },
       data: {
@@ -393,7 +423,9 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       const firstLine = (lines?.[0] || '').trim();
       const hasHeader = firstLine.startsWith('>') && firstLine.length > 1;
       if (!hasHeader) {
-        const header = `> Sequence title ${getId()}`;
+        const localTitle = `Sequence title ${getId()}`;
+        const header = `> ${localTitle}`;
+        this.setState({ title: localTitle });
         lines.splice(0, 0, header);
         const newState = EditorState.createWithContent(
           ContentState.createFromText(lines.join('\n')),
@@ -419,6 +451,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       valid: checkValidity(lines),
       tooShort: isTooShort(lines),
       headerIssues: hasHeaderIssues(lines),
+      title: this._getTitle(lines),
     });
   };
 
@@ -577,7 +610,10 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                   </div>
                 </div>
 
-                <AdvancedOptions />
+                <AdvancedOptions
+                  title={this.state.title}
+                  changeTitle={this._changeTitle}
+                />
 
                 <div className={f('row')}>
                   <div
