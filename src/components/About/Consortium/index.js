@@ -79,7 +79,6 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
   render() {
     const { loading, payload } = this.props.data;
     if (loading || !payload) return <Loading />;
-    const databases = payload && payload.databases;
     const memberDBs = Object.values(payload.databases).filter(
       (db /*: DB */) => db.type === 'entry' && db.canonical !== 'interpro',
     );
@@ -91,14 +90,26 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
         <table className={f('light', 'responsive')}>
           <tbody>
             {memberDBs
-              .sort(sortFn({ selector: item => item.canonical.toUpperCase() }))
-              .map(db => {
+              .sort(
+                sortFn({ selector: (item) => item.canonical.toUpperCase() }),
+              )
+              .map((db) => {
                 const date = db.releaseDate && new Date(db.releaseDate);
                 const md = db.canonical;
                 const href = lut.get(md);
                 return (
                   <tr id={md} key={md}>
                     <td className={f('sm-inline')}>
+                      <SchemaOrgData
+                        data={{
+                          name: db.name,
+                          version: db.version,
+                          releaseDate: db.releaseDate,
+                          location: window.location,
+                          description: db.description,
+                        }}
+                        processData={schemaProcessDataForDB}
+                      />
                       <MemberSymbol type={md} className={f('md-small')} />
                     </td>
                     <td className={f('sm-inline')}>
@@ -126,17 +137,6 @@ export const Consortium = class extends PureComponent /*:: <Props> */ {
                           <TimeAgo date={date} noUpdate />
                         </small>
                       ) : null}
-                      {databases && databases[db.type.toUpperCase()] && (
-                        <SchemaOrgData
-                          data={{
-                            name: db.name,
-                            version: db.version,
-                            releaseDate: db.releaseDate,
-                            location: window.location,
-                          }}
-                          processData={schemaProcessDataForDB}
-                        />
-                      )}
                     </td>
                   </tr>
                 );

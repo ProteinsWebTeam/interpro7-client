@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import filesize from 'filesize';
 
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
+
 import Link from 'components/generic/Link';
 import Table, { Column } from 'components/Table';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -19,6 +22,11 @@ import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(interproTheme, fonts, ipro);
+
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const GoToNewDownload = () => (
   <Link
@@ -46,6 +54,13 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
           <div className={f('row')}>
+            <SchemaOrgData
+              data={{
+                name: 'Your Download Jobs',
+                description: 'The status of all the download jobs',
+              }}
+              processData={schemaProcessDataPageSection}
+            />
             <h3 className={f('large-10', 'columns', 'light')}>
               Your download jobs
             </h3>
@@ -141,14 +156,11 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
   }
 }
 
-const mapStateToProps = createSelector(
-  downloadSelector,
-  download => ({
-    download: Object.entries(download).map(([localID, download]) => ({
-      localID,
-      ...download,
-    })),
-  }),
-);
+const mapStateToProps = createSelector(downloadSelector, (download) => ({
+  download: Object.entries(download).map(([localID, download]) => ({
+    localID,
+    ...download,
+  })),
+}));
 
 export default connect(mapStateToProps)(Summary);

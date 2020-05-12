@@ -3,14 +3,28 @@ import React from 'react';
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ipro);
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 const AboutInterPro = () => (
   <section>
     <h3>About InterPro</h3>
+    <SchemaOrgData
+      data={{
+        name: 'About InterPro',
+        description: 'Describes the main concepts about InterPro',
+      }}
+      processData={schemaProcessDataPageSection}
+    />{' '}
     <div>
       <h4>What is InterPro?</h4>
       <p>

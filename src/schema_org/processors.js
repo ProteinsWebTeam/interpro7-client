@@ -6,7 +6,7 @@ const INTERPRO_DESCRIPTION =
 
 export const schemaProcessDataInterpro = ({ description = null }) => ({
   '@type': 'DataCatalog',
-  '@id': '@mainEntityOfPage',
+  '@id': '@mainEntity',
   name: 'InterPro',
   description,
   url: 'https://www.ebi.ac.uk/interpro/',

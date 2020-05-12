@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -10,6 +12,10 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import addDomain from '../../../images/ida_screenshot.png';
 
 const f = foundationPartial(style, ipro, fonts);
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
 
 const AboutIDA = () => (
   <>
@@ -21,6 +27,14 @@ const AboutIDA = () => (
         InterPro database with a particular set of domains, and returns all of
         the domain architectures and associated proteins that match the query.
       </div>
+      <SchemaOrgData
+        data={{
+          name: 'About InterPro Domain Architectures',
+          description:
+            'he InterPro Domain Architecture (IDA) tool allows to search the InterPro database with a particular set of domains',
+        }}
+        processData={schemaProcessDataPageSection}
+      />
     </section>
     <section>
       <div>

@@ -33,7 +33,8 @@ export const parentRelationship = (
   additionalType: 'http://semanticscience.org/resource/SIO_000095',
   name: 'is member of',
   value: {
-    '@type': ['Organism', 'StructuredValue', 'BioChemEntity'],
+    '@type': 'StructuredValue',
+    additionalType: ['bio:Taxon', 'bio:BioChemEntity'],
     identifier: taxId,
     name,
   },
@@ -109,7 +110,7 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     }
   }
 
-  _handleFocus = accession => {
+  _handleFocus = (accession) => {
     if (!this.loadingVis)
       this.props.goToCustomLocation({
         description: {
@@ -139,7 +140,7 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     currentNode.hitcount = data?.counters?.proteins;
 
     if (data.children) {
-      currentNode.children = data.children.map(id => ({
+      currentNode.children = data.children.map((id) => ({
         name: names[id].short,
         id,
         hitcount: children?.[id]?.proteins,
@@ -160,7 +161,7 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     });
   };
 
-  _isSelected = currentDB => {
+  _isSelected = (currentDB) => {
     const {
       customLocation: {
         search: { entry_db: db },
@@ -236,7 +237,7 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
             isSelected={this._isSelected}
             hideCounters={true}
           >
-            {open => (
+            {(open) => (
               <span
                 className={f('header-total-results', 'margin-bottom-medium', {
                   selector: typeof open === 'boolean',
@@ -260,13 +261,13 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 }
 
 const getUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     const { entry_db: db, ..._search } = search;
     const hasFilters = Object.values(description).some(
-      endpoint => endpoint.isFilter,
+      (endpoint) => endpoint.isFilter,
     );
     if (hasFilters || !db || db === 'all') _search.with_names = true;
     else _search.filter_by_entry_db = db;

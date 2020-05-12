@@ -5,6 +5,16 @@ exports[`<AboutInterPro /> should render 1`] = `
   <h3>
     About InterPro
   </h3>
+  <Memo(Loadable)
+    data={
+      Object {
+        "description": "Describes the main concepts about InterPro",
+        "name": "About InterPro",
+      }
+    }
+    processData={[Function]}
+  />
+   
   <div>
     <h4>
       What is InterPro?

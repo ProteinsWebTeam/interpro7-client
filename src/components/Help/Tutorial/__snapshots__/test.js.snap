@@ -5,6 +5,16 @@ exports[`<Tutorial /> should render 1`] = `
   <h3>
     Tutorials
   </h3>
+  <Memo(Loadable)
+    data={
+      Object {
+        "description": "A number of online tutorials relating to InterPro are available",
+        "name": "InterPro Help: Tutorials",
+      }
+    }
+    processData={[Function]}
+  />
+   
   <p>
     A number of online tutorials relating to InterPro are available.
   </p>
