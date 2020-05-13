@@ -68,7 +68,7 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
           <React.Fragment key={i}>
             <span
               className={f('sequence_word')}
-              style={{ zIndex: -i }}
+              style={{ zIndex: -i, display: 'inline-block' }}
               data-index={i}
             >
               {e}
