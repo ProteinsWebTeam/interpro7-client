@@ -260,7 +260,10 @@ exports[`<IPScanSearch /> should render 1`] = `
               </div>
             </div>
           </div>
-          <Memo(Connect(loadData(AdvancedOptions))) />
+          <Memo(Connect(loadData(AdvancedOptions)))
+            changeTitle={[Function]}
+            title=""
+          />
           <div
             className="row"
           >

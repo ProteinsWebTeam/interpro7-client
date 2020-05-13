@@ -37,7 +37,7 @@ class EntriesOnProtein extends ProtVistaMatches {
       locations = firstMatch.entry.entry_protein_locations;
     else if (firstMatch.protein && firstMatch.protein.entry_protein_locations)
       locations = firstMatch.protein.entry_protein_locations;
-    this.web_tracks[entry.accession].data = locations.map(loc => ({
+    this.web_tracks[entry.accession].data = locations.map((loc) => ({
       accession: entry.accession,
       name: entry.name,
       source_database: entry.source_database,
@@ -62,7 +62,7 @@ class EntriesOnProtein extends ProtVistaMatches {
         <div className={f('track-container')}>
           <div className={f('aligned-to-track-component')}>
             <protvista-sequence
-              ref={e => (this.web_protein = e)}
+              ref={(e) => (this.web_protein = e)}
               length={protein.length}
               displaystart="1"
               displayend={protein.length}
@@ -75,9 +75,7 @@ class EntriesOnProtein extends ProtVistaMatches {
             title={location2html(
               entry.entry_protein_locations || protein.entry_protein_locations,
               entry.accession,
-              entry.name.name
-                ? entry.name.name
-                : entry.name.short || entry.name,
+              entry?.name?.name || entry?.name?.short || entry.name,
             )}
           >
             <protvista-interpro-track
@@ -85,7 +83,7 @@ class EntriesOnProtein extends ProtVistaMatches {
               displaystart="1"
               displayend={protein.length}
               id={`track_${entry.accession}`}
-              ref={e => (this.web_tracks[entry.accession] = e)}
+              ref={(e) => (this.web_tracks[entry.accession] = e)}
               shape="roundRectangle"
               expanded
               use-ctrl-to-zoom

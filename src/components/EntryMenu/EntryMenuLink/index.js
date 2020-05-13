@@ -18,7 +18,7 @@ import { createSelector } from 'reselect';
 const f = foundationPartial(pages, fonts, local);
 
 const singleEntityNames = new Map(
-  Array.from(singleEntity).map(e => [e[1].name, e[0]]),
+  Array.from(singleEntity).map((e) => [e[1].name, e[0]]),
 );
 
 const whitelist = new Set(['Overview', 'Sequence', 'Alignments']);
@@ -178,7 +178,7 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
       if (whitelist.has(name)) value = NaN;
       // TODO: find a generic way to deal with this:
       if (
-        name === 'Domain Architectures' &&
+        (name === 'Domain Architectures' || name === 'Pathways') &&
         payload.metadata.source_database.toLowerCase() !== 'interpro'
       ) {
         value = null;
@@ -200,8 +200,8 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
   }
 }
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.main.key,
-  state => state.customLocation.description.entry.db,
+  (state) => state.customLocation.description.main.key,
+  (state) => state.customLocation.description.entry.db,
   (mainKey, entryDB) => ({ mainKey, entryDB }),
 );
 
