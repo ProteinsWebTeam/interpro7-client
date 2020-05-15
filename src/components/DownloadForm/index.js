@@ -32,6 +32,7 @@ import { foundationPartial } from 'styles/foundation';
 import local from './style.css';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+import FormatSelector from './FormatSelector';
 
 const f = foundationPartial(local);
 
@@ -338,8 +339,17 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
             </ul>
           </div>
         </fieldset>
+        <h4>Select Output Format</h4>
+        <FormatSelector
+          fileType={fileType}
+          mainEndpoint={description.main.key}
+          hasSelectedDB={!!description?.[description.main.key]?.db}
+          hasSelectedAccession={
+            !!description?.[description.main.key]?.accession
+          }
+        />
 
-        <h5>More info</h5>
+        <h4>Results</h4>
         <ApiLink url={endpoint} />
         <DataPreviewAndProgressProvider
           url={endpoint}
@@ -370,8 +380,8 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                   />
                 )}
 
-                <div className={f('controls')}>
-                  <h3>Download</h3>
+                <div>
+                  <h4>Download</h4>
                   <TextExplanation
                     fileType={fileType}
                     description={description}
