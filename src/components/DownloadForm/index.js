@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import { set } from 'lodash-es';
@@ -16,6 +15,7 @@ import Estimate from './Estimate';
 import Snippet from './Snippet';
 import Controls from './Controls';
 import ProgressAnimation from './ProgressAnimation';
+import URLParameters from './URLParameters';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -26,13 +26,13 @@ import { columns } from 'web-workers/download/object2TSV';
 
 import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+import FormatSelector from './FormatSelector';
+import loadData from 'higherOrder/loadData';
 
 import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
-import loadData from 'higherOrder/loadData';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
-import FormatSelector from './FormatSelector';
 
 const f = foundationPartial(local);
 
@@ -42,10 +42,16 @@ const SchemaOrgData = loadable({
 });
 
 const extractDataFromHash = (hash) => {
-  const [href, fileType, subset] = hash.split('|');
+  const [path, fileType, subset] = hash.split('|');
   const output = { fileType, subset: !!subset };
+  const [href, params] = path.split('?');
   try {
     output.description = pathToDescription(href);
+    if (params) {
+      output.search = Object.fromEntries(
+        params.split('&').map((p) => p.split('=')),
+      );
+    }
   } catch {
     /**/
   }
@@ -116,6 +122,11 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
       e.target.classList.add(f('invalid-accession'));
       return;
     }
+    if (object.search && Object.keys(object.search).length) {
+      path += `?${Object.entries(object.search)
+        .map(([k, v]) => `${k}=${v}`)
+        .join('&')}`;
+    }
     // More specific cases
     // Subset only available for fasta format, for proteins filtered by an entry
     if (
@@ -156,7 +167,9 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
   render() {
     const { matched, api, lowGraphics, data } = this.props;
 
-    const { description, fileType, subset } = extractDataFromHash(matched);
+    const { description, search, fileType, subset } = extractDataFromHash(
+      matched,
+    );
 
     const endpoint = toPublicAPI(
       format({
@@ -167,6 +180,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
           /\/+/g,
           '/',
         ),
+        query: search,
       }),
     );
 
@@ -252,6 +266,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
             onClick={this._handleChange}
             databases={this.memberDB}
           />
+          <URLParameters type={main} />
         </fieldset>
         <fieldset className={f('fieldset')}>
           <legend>Filters</legend>
@@ -417,7 +432,9 @@ const mapStateToProps = createSelector(
   (state) => state.settings.ui.lowGraphics,
   (customLocation, api, lowGraphics) => ({ customLocation, api, lowGraphics }),
 );
-
-export default connect(mapStateToProps, { goToCustomLocation })(
-  loadData(getUrlForMeta)(DownloadForm),
-);
+// ⚠️ use dataSpecs 👇🏽 to generate the arguments
+export default loadData({
+  getUrl: getUrlForMeta,
+  mapStateToProps,
+  mapDispatchToProps: { goToCustomLocation },
+})(DownloadForm);
