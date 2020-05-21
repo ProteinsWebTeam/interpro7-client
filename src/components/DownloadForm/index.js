@@ -117,9 +117,9 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     let path;
     try {
       path = descriptionToPath(object.description);
-      e.target.classList.remove(f('invalid-accession'));
+      // e.target.classList.remove(f('invalid-accession'));
     } catch {
-      e.target.classList.add(f('invalid-accession'));
+      // e.target.classList.add(f('invalid-accession'));
       return;
     }
     if (object.search && Object.keys(object.search).length) {
@@ -266,7 +266,11 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
             onClick={this._handleChange}
             databases={this.memberDB}
           />
-          <URLParameters type={main} />
+          <URLParameters
+            type={main}
+            search={search}
+            onChange={this._handleChange}
+          />
         </fieldset>
         <fieldset className={f('fieldset')}>
           <legend>Filters</legend>

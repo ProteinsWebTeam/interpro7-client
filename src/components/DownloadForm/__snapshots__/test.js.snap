@@ -69,6 +69,7 @@ exports[`<DownloadForm /> should render 1`] = `
       valueIntegration=""
     />
     <Memo(Connect(loadData(URLParameters)))
+      onChange={[Function]}
       type="entry"
     />
   </fieldset>

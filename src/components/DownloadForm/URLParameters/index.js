@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import T from 'prop-types';
 
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
+import { noop } from 'lodash-es';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -14,7 +15,17 @@ const f = foundationPartial(local);
 
 const getTextAfterLastSlash = (text) => text.slice(1 + text.lastIndexOf('/'));
 
-const SelectedParameter = ({ data, dataComponents, onRemove }) => {
+const SelectedParameter = ({
+  data,
+  dataComponents,
+  value,
+  onRemove,
+  onChange,
+}) => {
+  const buttonEl = useRef(null);
+  useEffect(() => {
+    onChange({ target: buttonEl.current });
+  }, []);
   let inputType = 'text';
   let schema = data.schema;
   if (data.schema.$ref) {
@@ -31,20 +42,39 @@ const SelectedParameter = ({ data, dataComponents, onRemove }) => {
     <label className={f('input-group')}>
       <span className={f('input-group-label')}>{data.name}</span>
       {inputType === 'select' && (
-        <select className={f('input-group-field')} name={name}>
+        <select
+          className={f('input-group-field')}
+          name={name}
+          value={value}
+          onChange={noop}
+          onBlur={noop}
+        >
           {schema.enum.map((option) => (
             <option key={option}>{option}</option>
           ))}
         </select>
       )}
       {inputType === 'checkbox' && (
-        <input name={name} type="checkbox" className={f('input-group-field')} />
+        <input
+          name={name}
+          type="text"
+          readOnly
+          className={f('input-group-field')}
+          value={data.name}
+        />
       )}
       {inputType === 'text' && (
-        <input name={name} type="text" className={f('input-group-field')} />
+        <input
+          value={value}
+          onChange={noop}
+          onBlur={noop}
+          name={name}
+          type="text"
+          className={f('input-group-field')}
+        />
       )}
       <div className={f('input-group-button')}>
-        <button onClick={onRemove} className={f('button')}>
+        <button onClick={onRemove} className={f('button')} ref={buttonEl}>
           X
         </button>
       </div>
@@ -55,38 +85,62 @@ SelectedParameter.propTypes = {
   data: T.object,
   dataComponents: T.object,
   onRemove: T.func,
+  onChange: T.func,
+  value: T.string,
 };
-const URLParameters = ({ type, data }) => {
-  const [selectedParameters, setSelectedParameters] = useState([]);
-  useEffect(() => setSelectedParameters([]), [type]);
-
+const URLParameters = ({ type, data, search, onChange }) => {
+  const [toAdd, setToAdd] = useState(null);
+  const [toRemove, setToRemove] = useState(null);
+  useEffect(() => {
+    if (toAdd) setToAdd(null);
+  });
+  useEffect(() => {
+    return () => onChange({ target: null });
+  }, [toRemove]);
+  const selectedParameters = Object.keys(search || {});
+  if (toAdd) {
+    selectedParameters.push(toAdd);
+  }
+  if (toRemove) {
+    const pos = selectedParameters.indexOf(toRemove);
+    if (pos >= 0) {
+      selectedParameters.splice(pos, 1);
+    } else {
+      setToRemove(null);
+    }
+  }
   if (data.loading || !data.ok || !data.payload) return null;
   const parameters = Object.fromEntries(
     (data.payload.paths?.[`/${type}/{sourceDB}`]?.get?.parameters || [])
       .filter((p) => p.$ref)
       .map((p) => {
         const key = getTextAfterLastSlash(p.$ref);
-        return [key, data.payload.components.parameters?.[key]?.name];
+        return [data.payload.components.parameters?.[key]?.name, key];
       }),
   );
   const parametersToChoose = Object.keys(parameters).filter(
     (p) => p && selectedParameters.indexOf(p) === -1,
   );
-  const addParameter = (evt) => {
-    setSelectedParameters([...selectedParameters, evt.target.value]);
+  const handleChange = (evt) => {
+    setToAdd(evt.target.value);
   };
 
   return (
     <div>
       <label>
         Add a modifier:
-        <select value="" onChange={addParameter} onBlur={addParameter}>
+        <select
+          name="add_modifier"
+          value=""
+          onChange={handleChange}
+          onBlur={handleChange}
+        >
           <option value="" disabled hidden style={{ color: 'gray' }}>
             Please Choose...
           </option>
           {parametersToChoose.map((p, i) => (
             <option key={i} value={p}>
-              {parameters[p]}
+              {p}
             </option>
           ))}
         </select>
@@ -97,12 +151,10 @@ const URLParameters = ({ type, data }) => {
           {selectedParameters.map((p) => (
             <SelectedParameter
               key={p}
-              onRemove={() =>
-                setSelectedParameters(
-                  selectedParameters.filter((sp) => sp !== p),
-                )
-              }
-              data={data.payload.components.parameters?.[p]}
+              value={search?.[p]}
+              onChange={onChange}
+              onRemove={() => setToRemove(p)}
+              data={data.payload.components.parameters?.[parameters[p]]}
               dataComponents={data.payload.components}
             />
           ))}
@@ -113,11 +165,13 @@ const URLParameters = ({ type, data }) => {
 };
 URLParameters.propTypes = {
   type: T.string.isRequired,
+  search: T.object,
   data: T.shape({
     loading: T.boolean,
     ok: T.boolean,
     payload: T.object,
   }),
+  onChange: T.func,
 };
 
 const getURLforOpenAPI = createSelector(
