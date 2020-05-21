@@ -68,6 +68,9 @@ exports[`<DownloadForm /> should render 1`] = `
       value="interpro"
       valueIntegration=""
     />
+    <Memo(Connect(loadData(URLParameters)))
+      type="entry"
+    />
   </fieldset>
   <fieldset
     className="fieldset"
