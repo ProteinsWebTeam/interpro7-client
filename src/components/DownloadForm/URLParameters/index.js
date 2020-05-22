@@ -28,8 +28,16 @@ const SelectedParameter = ({
   useEffect(() => {
     onChange({ target: buttonEl.current });
   }, []);
-  let inputType = 'text';
   let schema = data.schema;
+  const isValid = (value) => {
+    if (schema?.pattern) {
+      const regex = RegExp(schema.pattern);
+      return regex.test(value);
+    }
+    return true;
+  };
+  const [valid, setValid] = useState(isValid(value));
+  let inputType = 'text';
   if (data.schema.$ref) {
     const key = getTextAfterLastSlash(data.schema.$ref);
     schema = dataComponents.schemas[key];
@@ -39,6 +47,10 @@ const SelectedParameter = ({
     if (schema.enum.length === 1) inputType = 'checkbox';
     else inputType = 'select';
   }
+  const validatePattern = (event) => {
+    setValid(isValid(event.target.value));
+  };
+
   const name = `search.${data.name}`;
   return (
     <label className={f('input-group')}>
@@ -77,10 +89,13 @@ const SelectedParameter = ({
       {inputType === 'text' && (
         <input
           value={value}
-          onChange={noop}
+          onChange={validatePattern}
           onBlur={noop}
           name={name}
           type="text"
+          style={{
+            backgroundColor: valid ? 'inherit' : '#fa7e6e',
+          }}
           className={f('input-group-field')}
         />
       )}
@@ -179,8 +194,8 @@ URLParameters.propTypes = {
   type: T.string.isRequired,
   search: T.object,
   data: T.shape({
-    loading: T.boolean,
-    ok: T.boolean,
+    loading: T.bool,
+    ok: T.bool,
     payload: T.object,
   }),
   onChange: T.func,

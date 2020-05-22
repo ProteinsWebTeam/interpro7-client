@@ -187,6 +187,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     const { description, search, fileType, subset } = extractDataFromHash(
       matched,
     );
+    if (!description) return null;
 
     const endpoint = toPublicAPI(
       format({
