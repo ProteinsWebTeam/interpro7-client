@@ -6,12 +6,14 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
 import { noop } from 'lodash-es';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import local from '../style.css';
 
-const f = foundationPartial(local);
+const f = foundationPartial(local, fonts);
 
 const getTextAfterLastSlash = (text) => text.slice(1 + text.lastIndexOf('/'));
 
@@ -40,7 +42,16 @@ const SelectedParameter = ({
   const name = `search.${data.name}`;
   return (
     <label className={f('input-group')}>
-      <span className={f('input-group-label')}>{data.name}</span>
+      <span className={f('input-group-label')}>
+        {data.name}{' '}
+        <Tooltip title={`<pre>${data.description}</pre>`}>
+          <span
+            className={f('small', 'icon', 'icon-common')}
+            data-icon="&#xf129;"
+            aria-label={`description for attribute: ${data.name}`}
+          />
+        </Tooltip>
+      </span>
       {inputType === 'select' && (
         <select
           className={f('input-group-field')}
@@ -88,6 +99,7 @@ SelectedParameter.propTypes = {
   onChange: T.func,
   value: T.string,
 };
+
 const URLParameters = ({ type, data, search, onChange }) => {
   const [toAdd, setToAdd] = useState(null);
   const [toRemove, setToRemove] = useState(null);

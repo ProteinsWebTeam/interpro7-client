@@ -86,12 +86,20 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     this.memberDb = {};
   }
 
-  // eslint-disable-next-line complexity
+  /**
+   * This method nadles all the changes of the form in a centralized way.
+   * The value of all the elements of the form is read, and use to create the hash of the current URL.
+   * The URL formed in the hash is the corresponding API call to the selections in the form.
+   * @param {Event} e The triggered event
+   */
+  // eslint-disable-next-line complexity, max-statements
   _handleChange = (e) => {
     if (!this._ref.current) return;
     const object = {};
+    // Only the add filters buttons trigger this method directly
     if (e.target instanceof HTMLButtonElement) {
       set(object, e.target.dataset.key, !!e.target.dataset.value);
+      // To remove a filter
       if (!e.target.dataset.value) {
         for (const input of this._ref.current.querySelectorAll(
           `input[data-reset="${e.target.dataset.reset}"], input[name="${e.target.dataset.key}"], select[name="${e.target.dataset.key}"]`,
@@ -102,8 +110,14 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     }
     for (const { name, value, type, checked } of this._ref.current.elements) {
       if (name) {
+        // Form names use dot notation that correespond to the custom location.
+        // e.g description.main.key => {description: {main: {key: value}}}
         set(object, name, type === 'checkbox' ? checked : value);
       }
+    }
+    if (e.target?.name === 'description.main.key') {
+      // reset the search parameters if there is a change of main type.
+      object.search = {};
     }
     // Specific cases
     if (
@@ -113,16 +127,19 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
       // remove integration from entry if db is InterPro, because it's useless
       object.description.entry.integration = null;
     }
+    // The main cannot be a filter:
     set(object.description, [object.description.main.key, 'isFilter'], null);
     let path;
     try {
+      // create a path based in the constructed object
       path = descriptionToPath(object.description);
-      // e.target.classList.remove(f('invalid-accession'));
+      e?.target?.classList && e.target.classList.remove(f('invalid-accession'));
     } catch {
-      // e.target.classList.add(f('invalid-accession'));
+      e?.target?.classList && e.target.classList.add(f('invalid-accession'));
       return;
     }
     if (object.search && Object.keys(object.search).length) {
+      // If there are search parameters add them to the URL
       path += `?${Object.entries(object.search)
         .map(([k, v]) => `${k}=${v}`)
         .join('&')}`;
@@ -436,7 +453,7 @@ const mapStateToProps = createSelector(
   (state) => state.settings.ui.lowGraphics,
   (customLocation, api, lowGraphics) => ({ customLocation, api, lowGraphics }),
 );
-// ⚠️ use dataSpecs 👇🏽 to generate the arguments
+
 export default loadData({
   getUrl: getUrlForMeta,
   mapStateToProps,
