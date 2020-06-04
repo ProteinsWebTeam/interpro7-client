@@ -6,7 +6,7 @@ from urllib import request
 from urllib.error import HTTPError
 from time import sleep
 
-BASE_URL = "<%= url %>?page_size=100<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>"
+BASE_URL = "<%= url %><%= url.indexOf('?')===-1 ? '?' : '&' %>page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>"
 <% if (fileType === "tsv" && columns.some(x => x.indexOf("extra_fields.counters")>=0)) { 
 %>BASE_URL += "&extra_fields=counters"<% 
 }

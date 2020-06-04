@@ -4,6 +4,7 @@ import fetch from 'isomorphic-fetch';
 import dropCacheIfVersionMismatch from './utils/drop-cache-if-version-mismatch';
 
 import config, { pkg } from 'config';
+import yaml from 'js-yaml';
 
 const SUCCESS_STATUS = 200;
 const TIMEOUT_STATUS = 408;
@@ -28,7 +29,7 @@ const handleProgress = async (
     onProgress(received / total);
   }
 };
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
   const { useCache = true, ...restOfOptions } = options;
@@ -45,7 +46,7 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
     );
   }
 
-  return fetch(url, restOfOptions).then(response => {
+  return fetch(url, restOfOptions).then((response) => {
     if (response.status === TIMEOUT_STATUS) {
       console.log(response.status);
       return wait(A_BIT).then(() => response);
@@ -58,7 +59,7 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
         response
           .clone()
           .text()
-          .then(text => sessionStorage.setItem(key, text));
+          .then((text) => sessionStorage.setItem(key, text));
     }
     return response;
   });
@@ -81,6 +82,9 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   if (responseType === 'json' && !headers.get('Accept')) {
     headers.set('Accept', 'application/json');
   }
+  // if (responseType === 'yaml' && !headers.get('Accept')) {
+  //   headers.set('Accept', 'application/x-yaml');
+  // }
   options.headers = headers;
   // Casting to object to avoid flow error
   const response /*: Object */ = await cachedFetch(url, options);
@@ -90,6 +94,8 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   let payloadP;
   if (responseType && typeof response[responseType] === 'function') {
     payloadP = response[responseType]();
+  } else if (responseType === 'yaml') {
+    payloadP = yaml.safeLoad(await response.text(), { json: true });
   }
   const output /*: FetchOutput */ = {
     status: response.status,
@@ -107,5 +113,6 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
 
 export const cachedFetchText = commonCachedFetch('text');
 export const cachedFetchJSON = commonCachedFetch('json');
+export const cachedFetchYAML = commonCachedFetch('yaml');
 
 export default commonCachedFetch();
