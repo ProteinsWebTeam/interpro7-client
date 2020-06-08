@@ -80,6 +80,23 @@ const Coronavirus = loadable({
     import(/* webpackChunkName: "coronavirus-page" */ './Coronavirus'),
 });
 
+const RedirectToLegacy = ({
+  customLocation: {
+    description: { other },
+  },
+}) => {
+  const href = 'https://www.ebi.ac.uk/interpro/legacy/';
+  window.location.replace(`${href}/${other.join('/')}`);
+  return null;
+};
+RedirectToLegacy.propTypes = {
+  customLocation: T.shape({
+    description: T.shape({
+      other: T.arrayOf(T.string),
+    }),
+  }),
+};
+
 const pages = new Map([
   // pages with data from API
   ['entry', Entry],
@@ -103,6 +120,7 @@ const otherPages = new Map([
   ['contact', Contact],
   ['settings', Settings],
   ['covid-19', Coronavirus],
+  ['potm', RedirectToLegacy],
 ]);
 
 const Null = () => null;
