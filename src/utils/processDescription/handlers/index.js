@@ -101,7 +101,7 @@ const templateHandler /*: Handler */ = {
   // accession key in the description object for this handler
   key: null,
   // return accession key depending on current state of description
-  getKey: _description => null,
+  getKey: (_description) => null,
   // cleaned up version of the value for this handler
   cleanedUp: null,
   // returns cleaned up value
@@ -190,7 +190,7 @@ export const setDBs /*: Set<Object> */ = new Set([
   },
 ]);
 
-const isEmpty = object => !Object.values(object).some(Boolean);
+const isEmpty = (object) => !Object.values(object).some(Boolean);
 
 // Constructors
 // prettier-ignore
@@ -297,7 +297,7 @@ export const interProAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['entry', 'accession'],
   },
   cleanUp: {
-    value: value => value.toUpperCase(),
+    value: (value) => value.toUpperCase(),
   },
   regexp: {
     value: interPro.re,
@@ -315,7 +315,7 @@ export const memberDBAccessionHandler /*: Handler */ = handlerConstructor({
     ],
   },
   cleanUp: {
-    value: value => value.toUpperCase(),
+    value: (value) => value.toUpperCase(),
   },
   match: {
     value(current, { entry: { db, memberDB: mdb } }) {
@@ -339,7 +339,7 @@ export const proteinDBHandler /*: Handler */ = handlerConstructor({
     value: ['protein', 'db'],
   },
   cleanUp: {
-    value: value => value.toLowerCase().replace('uniprot', 'UniProt'),
+    value: (value) => value.toLowerCase().replace('uniprot', 'UniProt'),
   },
   regexp: {
     value: /^((un)?reviewed|uniprot)$/i,
@@ -354,7 +354,7 @@ export const proteinAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['protein', 'accession'],
   },
   cleanUp: {
-    value: value => value.toUpperCase(),
+    value: (value) => value.toUpperCase(),
   },
   regexp: {
     value: /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
@@ -415,7 +415,7 @@ export const structureChainHandler /*: Handler */ = handlerConstructor({
     value: ['structure', 'chain'],
   },
   cleanUp: {
-    value: value => value.toUpperCase(),
+    value: (value) => value.toUpperCase(),
   },
   regexp: {
     value: /^[A-Z0-9]+$/i,
@@ -450,7 +450,7 @@ export const taxonomyAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['taxonomy', 'accession'],
   },
   cleanUp: {
-    value: value => value,
+    value: (value) => value,
   },
   regexp: {
     value: /^[1-9]\d*$/,
@@ -485,7 +485,7 @@ export const proteomeAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['proteome', 'accession'],
   },
   cleanUp: {
-    value: value => value.toUpperCase(),
+    value: (value) => value.toUpperCase(),
   },
   regexp: {
     value: /^UP\d{9}$/i,
@@ -503,7 +503,7 @@ export const setDBHandler /*: Handler */ = handlerConstructor({
     value: ['set', 'db'],
   },
   cleanUp: {
-    value: value => value.toLowerCase().replace('interpro', 'InterPro'),
+    value: (value) => value.toLowerCase().replace('interpro', 'InterPro'),
   },
   match: {
     value(current) {
@@ -524,7 +524,7 @@ export const setAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['set', 'accession'],
   },
   cleanUp: {
-    value: value => value,
+    value: (value) => value,
   },
   match: {
     value(current) {
@@ -559,7 +559,7 @@ export const searchValueHandler /*: Handler */ = handlerConstructor({
     value: ['search', 'value'],
   },
   cleanUp: {
-    value: value => value,
+    value: (value) => value,
   },
 });
 
@@ -574,7 +574,7 @@ export const resultTypeHandler /*: Handler */ = handlerConstructor({
     value: ['result', 'type'],
   },
   cleanUp: {
-    value: value =>
+    value: (value) =>
       /^InterProScan$/i.test(value) ? 'InterProScan' : 'download',
   },
   regexp: {
@@ -590,7 +590,7 @@ export const resultIPScanAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['result', 'accession'],
   },
   cleanUp: {
-    value: value => value,
+    value: (value) => value,
   },
   regexp: {
     value: /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}|internal-[1-9]\d*-[1-9]\d*)$/,
@@ -606,7 +606,7 @@ export const resultDownloadAccessionHandler /*: Handler */ = handlerConstructor(
       value: ['result', 'accession'],
     },
     cleanUp: {
-      value: value => value,
+      value: (value) => value,
     },
     regexp: {
       value: /^download-[1-9]\d*-\d+$/,
@@ -630,6 +630,10 @@ export const otherHandler /*: Handler */ = handlerConstructor({
   },
   getKey: {
     value: ({ other }) => ['other', other.length],
+  },
+  cleanUp: {
+    value: (value, { other }) =>
+      other?.[0] === 'potm' ? value : value.toLowerCase(),
   },
 });
 
