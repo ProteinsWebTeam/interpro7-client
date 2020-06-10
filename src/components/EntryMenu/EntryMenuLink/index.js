@@ -103,6 +103,13 @@ EntryMenuLinkWithoutData.propTypes = {
   usedOnTheSide: T.bool,
 };
 
+const hasAlignments = (name, annotations) => {
+  if (name !== 'Alignment') return false;
+  for (const ann of annotations) {
+    if (ann.startsWith('alignment:')) return true;
+  }
+  return false;
+};
 /*:: type Props = {
   to: Object | function,
   exact?: ?boolean,
@@ -170,7 +177,10 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
       // i.e. only enable the menu item if there is info for it
       if (
         payload.metadata.entry_annotations &&
-        payload.metadata.entry_annotations.includes(singleEntityNames.get(name))
+        (payload.metadata.entry_annotations.includes(
+          singleEntityNames.get(name),
+        ) ||
+          hasAlignments(name, payload.metadata.entry_annotations))
       ) {
         value = NaN;
       }

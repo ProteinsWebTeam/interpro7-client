@@ -32,6 +32,7 @@ pages:
       - proteome
       - set
       - logo
+      - entry_alignments
       - interactions
       - pathways
       - genome3d

@@ -82,6 +82,10 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   if (responseType === 'json' && !headers.get('Accept')) {
     headers.set('Accept', 'application/json');
   }
+  if (responseType === 'gzip' && !headers.get('Accept')) {
+    headers.set('Content-Type', 'application/json');
+    headers.set('Accept-Encoding', 'gzip');
+  }
   // if (responseType === 'yaml' && !headers.get('Accept')) {
   //   headers.set('Accept', 'application/x-yaml');
   // }
@@ -94,6 +98,8 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   let payloadP;
   if (responseType && typeof response[responseType] === 'function') {
     payloadP = response[responseType]();
+  } else if (responseType === 'gzip') {
+    payloadP = response.text();
   } else if (responseType === 'yaml') {
     payloadP = yaml.safeLoad(await response.text(), { json: true });
   }
@@ -114,5 +120,6 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
 export const cachedFetchText = commonCachedFetch('text');
 export const cachedFetchJSON = commonCachedFetch('json');
 export const cachedFetchYAML = commonCachedFetch('yaml');
+export const cachedFetchGZIP = commonCachedFetch('gzip');
 
 export default commonCachedFetch();

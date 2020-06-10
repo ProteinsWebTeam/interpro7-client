@@ -389,6 +389,25 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
+    'entry_alignments',
+    {
+      to(customLocation) {
+        const { key } = customLocation.description.main;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'entry_alignments',
+            },
+          },
+        };
+      },
+      name: 'Alignment',
+    },
+  ],
+  [
     'interactions',
     {
       to(customLocation) {
@@ -608,5 +627,5 @@ const _NOT_MEMBER_DBS = [
   'SMODEL',
 ];
 export const NOT_MEMBER_DBS /*: Set<string> */ = new Set(
-  _NOT_MEMBER_DBS.concat(_NOT_MEMBER_DBS.map(x => x.toLowerCase())),
+  _NOT_MEMBER_DBS.concat(_NOT_MEMBER_DBS.map((x) => x.toLowerCase())),
 );
