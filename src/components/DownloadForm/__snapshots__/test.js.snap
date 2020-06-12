@@ -68,6 +68,10 @@ exports[`<DownloadForm /> should render 1`] = `
       value="interpro"
       valueIntegration=""
     />
+    <Memo(Connect(loadData(URLParameters)))
+      onChange={[Function]}
+      type="entry"
+    />
   </fieldset>
   <fieldset
     className="fieldset"
@@ -136,9 +140,18 @@ exports[`<DownloadForm /> should render 1`] = `
       />
     </div>
   </fieldset>
-  <h5>
-    More info
-  </h5>
+  <h4>
+    Select Output Format
+  </h4>
+  <FormatSelector
+    fileType="accession"
+    hasSelectedAccession={false}
+    hasSelectedDB={true}
+    mainEndpoint="entry"
+  />
+  <h4>
+    Results
+  </h4>
   <ApiLink
     url="https://wwwdev.ebi.ac.uk:443/interpro7/api/entry/InterPro/"
   />

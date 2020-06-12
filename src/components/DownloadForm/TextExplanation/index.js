@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { noop } from 'lodash-es';
-
+import { format2label } from '../FormatSelector';
 import { toPlural } from 'utils/pages';
 import NumberComComponent from 'components/NumberComponent';
 import styles from './style.css';
@@ -133,7 +133,7 @@ const getFilterFragment = (type, { db, integration, accession }) => {
   );
 };
 
-const getFilters = description =>
+const getFilters = (description) =>
   Object.entries(description)
     .filter(([, desc]) => desc.isFilter)
     .map(([type, desc], i, { length }) => (
@@ -190,8 +190,6 @@ export default class TextExplanation extends PureComponent /*:: <textExplanation
       filterText = <> which match with {filters}</>;
     }
 
-    const main = description.main.key;
-
     let explanation;
     if (isStale) {
       explanation = <p>Preparing data...</p>;
@@ -201,36 +199,8 @@ export default class TextExplanation extends PureComponent /*:: <textExplanation
       } else {
         explanation = (
           <p>
-            This{' '}
-            <select
-              name="fileType"
-              value={fileType || 'accession'}
-              className={styles.select}
-              aria-label="Download type"
-              onChange={noop}
-              onBlur={noop}
-            >
-              <option
-                value="accession"
-                disabled={!description[main].db || description[main].accession}
-              >
-                Text
-              </option>
-              <option value="fasta" disabled={main !== 'protein'}>
-                FASTA
-              </option>
-              <option value="json">JSON</option>
-              {/* <option value="ndjson">Newline-delimited JSON</option> */}
-              <option
-                value="tsv"
-                disabled={!description[main].db || description[main].accession}
-              >
-                TSV
-              </option>
-              {/* <option value="xml">XML</option> */}
-            </select>{' '}
-            file will contain {getMainFragment(description, count)}
-            {filterText}.
+            This {format2label[fileType || 'accession']} file will contain{' '}
+            {getMainFragment(description, count)} {filterText}.
           </p>
         );
         fileType === 'fasta' &&

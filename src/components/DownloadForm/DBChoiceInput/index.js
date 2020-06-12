@@ -15,7 +15,7 @@ import f from 'styles/foundation';
 
 const integrationFlags = new Set(['all', 'integrated', 'unintegrated']);
 
-const sortFn = sortFnFor({ selector: tuple => tuple[0] });
+const sortFn = sortFnFor({ selector: (tuple) => tuple[0] });
 
 const payloadToOptions = (payload, isIntegration = false, memberDBs) =>
   Object.entries(payload)
@@ -115,7 +115,7 @@ export class DBChoiceInputWithoutData extends PureComponent /*:: <Props> */ {
                 databases,
               )}
             </select>
-          )) || <input />}
+          )) || <input type="hidden" name={_name} value={_value} />}
           <div className={f('input-group-button')}>
             <button
               type="button"
@@ -134,10 +134,10 @@ export class DBChoiceInputWithoutData extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToUrlFor = createSelector(
-  type => type,
-  type =>
+  (type) => type,
+  (type) =>
     createSelector(
-      state => state.settings.api,
+      (state) => state.settings.api,
       ({ protocol, hostname, port, root }) =>
         cleanUpMultipleSlashes(
           format({
