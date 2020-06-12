@@ -6,42 +6,10 @@ exports[`<TextExplanation /> should render 1`] = `
     Explanation
   </h6>
   <p>
-    This
+    This 
+    Text (List of Accessions)
+     file will contain
      
-    <select
-      aria-label="Download type"
-      className="select"
-      name="fileType"
-      onBlur={[Function]}
-      onChange={[Function]}
-      value="accession"
-    >
-      <option
-        disabled={null}
-        value="accession"
-      >
-        Text
-      </option>
-      <option
-        disabled={true}
-        value="fasta"
-      >
-        FASTA
-      </option>
-      <option
-        value="json"
-      >
-        JSON
-      </option>
-      <option
-        disabled={null}
-        value="tsv"
-      >
-        TSV
-      </option>
-    </select>
-     
-    file will contain 
     <React.Fragment>
       <Highlight>
         a list
@@ -62,6 +30,7 @@ exports[`<TextExplanation /> should render 1`] = `
         entries
       </Highlight>
     </React.Fragment>
+     
     
     .
   </p>

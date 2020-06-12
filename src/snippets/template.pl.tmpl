@@ -9,7 +9,7 @@ use Data::Dumper;
 # Switching off SSL verification
 $ENV{'PERL_LWP_SSL_VERIFY_HOSTNAME'} = 0;
 
-my $BASE_URL = "<%= url %>?page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>";
+my $BASE_URL = "<%= url %><%= url.indexOf('?')===-1 ? '?' : '&' %>page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>";
 <% if (fileType === "tsv" && columns.some(x => x.indexOf("extra_fields.counters")>=0)) { %>
   $BASE_URL .= "&extra_fields=counters"
 <% }  if (fileType === 'fasta') { %>
