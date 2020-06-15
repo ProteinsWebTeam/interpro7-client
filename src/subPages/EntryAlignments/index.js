@@ -40,7 +40,9 @@ const _Alignment = ({ type, data: { payload } }) => {
           </p>
           <p>
             If you still want to display it, press{' '}
-            <button onClick={() => setForceShow(true)}>HERE</button>
+            <button className={f('button')} onClick={() => setForceShow(true)}>
+              HERE
+            </button>
           </p>
         </div>
       )}
@@ -117,7 +119,7 @@ const EntryAlignments = ({
         {alignmentType !== '' && (
           <Link
             className={f('button')}
-            href={`${url}${tag}${alignmentType}`}
+            href={`${url}${tag}${alignmentType}&download`}
             download={`${
               data?.payload?.metadata?.accession || 'download'
             }.alignment.${alignmentType}.gz`}

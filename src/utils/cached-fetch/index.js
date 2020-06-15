@@ -83,7 +83,7 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
     headers.set('Accept', 'application/json');
   }
   if (responseType === 'gzip' && !headers.get('Accept')) {
-    headers.set('Content-Type', 'application/json');
+    headers.set('Content-Type', 'text/plain');
     headers.set('Accept-Encoding', 'gzip');
   }
   // if (responseType === 'yaml' && !headers.get('Accept')) {
