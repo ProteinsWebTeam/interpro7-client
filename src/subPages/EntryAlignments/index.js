@@ -11,6 +11,7 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Link from 'components/generic/Link';
+import Tip from 'components/Tip';
 import AlignmentViewer from './Viewer';
 
 import { foundationPartial } from 'styles/foundation';
@@ -86,6 +87,7 @@ const EntryAlignments = ({
   customLocation,
   type,
   url,
+  showCtrlToZoomToast,
   goToCustomLocation,
 }) => {
   const tag = 'alignment:';
@@ -105,47 +107,50 @@ const EntryAlignments = ({
   };
   const alignmentType = type || '';
   return (
-    <>
-      <div className={f('row', 'column')}>
-        <div
-          className={f('callout', 'info', 'withicon')}
-          style={{
-            display: 'flex',
-          }}
+    <div className={f('row', 'column')}>
+      {alignmentType !== '' && showCtrlToZoomToast ? (
+        <Tip
+          body="You can Zoom in/out by pressing [ctrl] and scroll up/down. Alternatively, you can  drag the borders in the navigation component."
+          toastID="ctrlToZoom"
+          settingsName="showCtrlToZoomToast"
+        />
+      ) : null}
+      <div
+        className={f('callout', 'info', 'withicon')}
+        style={{
+          display: 'flex',
+        }}
+      >
+        <b>BETA</b>: This is a new feature and its under current development.
+      </div>
+      <label className={f('alignment-selector')}>
+        <span>Available alignments:</span>
+        <select
+          value={alignmentType}
+          onChange={handleChange}
+          onBlur={handleChange}
         >
-          <b>BETA</b>: This is a new feature and its under current development.
-        </div>
-      </div>
-      <div className={f('row', 'column')}>
-        <label className={f('alignment-selector')}>
-          <span>Available alignments:</span>
-          <select
-            value={alignmentType}
-            onChange={handleChange}
-            onBlur={handleChange}
+          <option value="" disabled>
+            Choose...
+          </option>
+          {types.map((t) => (
+            <option key={t}>{t}</option>
+          ))}
+        </select>
+        {alignmentType !== '' && (
+          <Link
+            className={f('button')}
+            href={`${url}${tag}${alignmentType}&download`}
+            download={`${
+              data?.payload?.metadata?.accession || 'download'
+            }.alignment.${alignmentType}.gz`}
           >
-            <option value="" disabled>
-              Choose...
-            </option>
-            {types.map((t) => (
-              <option key={t}>{t}</option>
-            ))}
-          </select>
-          {alignmentType !== '' && (
-            <Link
-              className={f('button')}
-              href={`${url}${tag}${alignmentType}&download`}
-              download={`${
-                data?.payload?.metadata?.accession || 'download'
-              }.alignment.${alignmentType}.gz`}
-            >
-              Download
-            </Link>
-          )}
-        </label>
-        {alignmentType !== '' && <Alignment type={`${tag}${type}`} />}
-      </div>
-    </>
+            Download
+          </Link>
+        )}
+      </label>
+      {alignmentType !== '' && <Alignment type={`${tag}${type}`} />}
+    </div>
   );
 };
 EntryAlignments.propTypes = {
@@ -153,6 +158,7 @@ EntryAlignments.propTypes = {
   customLocation: T.object,
   type: T.string,
   url: T.string,
+  showCtrlToZoomToast: T.bool,
   goToCustomLocation: T.func,
 };
 const mapStateToProps = createSelector(
@@ -162,7 +168,13 @@ const mapStateToProps = createSelector(
     mapStateToPropsForAlignment(state)
       .replace(':info', '')
       .replace('%3Ainfo', ''),
-  (customLocation, type, url) => ({ customLocation, type, url }),
+  (state) => state.settings.notifications.showCtrlToZoomToast,
+  (customLocation, type, url, showCtrlToZoomToast) => ({
+    customLocation,
+    type,
+    url,
+    showCtrlToZoomToast,
+  }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(
