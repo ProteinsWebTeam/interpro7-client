@@ -15,8 +15,9 @@ import AlignmentViewer from './Viewer';
 
 import { foundationPartial } from 'styles/foundation';
 import localStyle from './style.css';
+import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(localStyle);
+const f = foundationPartial(localStyle, ipro);
 
 const _Alignment = ({ type, data: { payload } }) => {
   const [forceShow, setForceShow] = useState(false);
@@ -88,10 +89,13 @@ const EntryAlignments = ({
   goToCustomLocation,
 }) => {
   const tag = 'alignment:';
+  const disallowedList = ['ncbi', 'meta'];
+
   // eslint-disable-next-line camelcase
   const types = (data?.payload?.metadata?.entry_annotations || [])
     .filter((ann) => ann.startsWith(tag))
-    .map((ann) => ann.slice(tag.length));
+    .map((ann) => ann.slice(tag.length))
+    .filter((ann) => disallowedList.indexOf(ann) === -1);
   if (!types.length) return null;
   const handleChange = (evt) => {
     goToCustomLocation({
@@ -101,35 +105,47 @@ const EntryAlignments = ({
   };
   const alignmentType = type || '';
   return (
-    <div className={f('row', 'column')}>
-      <label className={f('alignment-selector')}>
-        <span>Available alignments:</span>
-        <select
-          value={alignmentType}
-          onChange={handleChange}
-          onBlur={handleChange}
+    <>
+      <div className={f('row', 'column')}>
+        <div
+          className={f('callout', 'info', 'withicon')}
+          style={{
+            display: 'flex',
+          }}
         >
-          <option value="" disabled>
-            Choose...
-          </option>
-          {types.map((t) => (
-            <option key={t}>{t}</option>
-          ))}
-        </select>
-        {alignmentType !== '' && (
-          <Link
-            className={f('button')}
-            href={`${url}${tag}${alignmentType}&download`}
-            download={`${
-              data?.payload?.metadata?.accession || 'download'
-            }.alignment.${alignmentType}.gz`}
+          <b>BETA</b>: This is a new feature and its under current development.
+        </div>
+      </div>
+      <div className={f('row', 'column')}>
+        <label className={f('alignment-selector')}>
+          <span>Available alignments:</span>
+          <select
+            value={alignmentType}
+            onChange={handleChange}
+            onBlur={handleChange}
           >
-            Download
-          </Link>
-        )}
-      </label>
-      {alignmentType !== '' && <Alignment type={`${tag}${type}`} />}
-    </div>
+            <option value="" disabled>
+              Choose...
+            </option>
+            {types.map((t) => (
+              <option key={t}>{t}</option>
+            ))}
+          </select>
+          {alignmentType !== '' && (
+            <Link
+              className={f('button')}
+              href={`${url}${tag}${alignmentType}&download`}
+              download={`${
+                data?.payload?.metadata?.accession || 'download'
+              }.alignment.${alignmentType}.gz`}
+            >
+              Download
+            </Link>
+          )}
+        </label>
+        {alignmentType !== '' && <Alignment type={`${tag}${type}`} />}
+      </div>
+    </>
   );
 };
 EntryAlignments.propTypes = {
