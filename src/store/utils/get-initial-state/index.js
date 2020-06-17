@@ -3,18 +3,36 @@ import config, { PROD } from 'config';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import parseParamToNumber from 'store/utils/parse-param-to-number';
+import defaultSettingsReducer from 'reducers/settings';
 
 import settingsStorage from 'storage/settings';
 
 const DEFAULT_HTTP_PORT = 80;
 
-export default history => {
+const addNewDefaultSttings = (settings) => {
+  const defaultSettings = defaultSettingsReducer({}, {});
+  Object.keys(defaultSettings).forEach((mainKey) => {
+    if (!(mainKey in settings)) {
+      settings[mainKey] = defaultSettings[mainKey];
+    }
+    Object.keys(defaultSettings[mainKey]).forEach((secondKey) => {
+      if (!(secondKey in settings[mainKey])) {
+        settings[mainKey][secondKey] = defaultSettings[mainKey][secondKey];
+      }
+    });
+  });
+};
+
+export default (history) => {
   const {
     location: { pathname, search, hash },
   } = history;
   let settings;
   if (settingsStorage) {
     settings = settingsStorage.getValue() || undefined;
+    if (settings) {
+      addNewDefaultSttings(settings);
+    }
     if (PROD && settings) {
       settings.ebi = {
         protocol: config.root.EBIsearch.protocol,
