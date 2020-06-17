@@ -37,6 +37,12 @@ const HMMModel = loadable({
   loader: () =>
     import(/* webpackChunkName: "hmm-model-subpage" */ './HMMModel'),
 });
+const EntryAlignments = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "entry-alignments-subpage" */ './EntryAlignments'
+    ),
+});
 const SetAlignments = loadable({
   loader: () =>
     import(/* webpackChunkName: "set-alignments-subpage" */ './SetAlignments'),
@@ -55,10 +61,10 @@ const Genome3d = loadable({
 });
 
 const defaultMapStateToProps = createSelector(
-  state => state.settings.api,
-  state => state.settings.navigation.pageSize,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.settings.navigation.pageSize,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   (
     { protocol, hostname, port, root },
     settingsPageSize,
@@ -88,9 +94,9 @@ const defaultMapStateToProps = createSelector(
 );
 
 const mapStateToPropsForHMMModel = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit elements from search
     const { type, search: _, ...restOfSearch } = search;
@@ -115,8 +121,8 @@ const mapStateToPropsForHMMModel = createSelector(
   },
 );
 const mapStateToPropsForSimilarProteins = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.search,
   (_, props) => props.data,
   ({ protocol, hostname, port, root }, search, data) => {
     // omit elements from search
@@ -145,10 +151,10 @@ const mapStateToPropsForSimilarProteins = createSelector(
 );
 
 const getGenome3dURL = createSelector(
-  state => state.settings.genome3d,
-  state => state.customLocation.search,
-  state => state.settings.navigation.pageSize,
-  state => state.customLocation.description.entry.accession,
+  (state) => state.settings.genome3d,
+  (state) => state.customLocation.search,
+  (state) => state.settings.navigation.pageSize,
+  (state) => state.customLocation.description.entry.accession,
   ({ protocol, hostname, port, root }, search, settingsPageSize, accession) => {
     const query = {
       rows: search.page_size || settingsPageSize,
@@ -163,10 +169,10 @@ const getGenome3dURL = createSelector(
     });
   },
 );
-const getInterProModifierURL = modifier =>
+const getInterProModifierURL = (modifier) =>
   createSelector(
-    state => state.settings.api,
-    state => state.customLocation.description.entry,
+    (state) => state.settings.api,
+    (state) => state.customLocation.description.entry,
     ({ protocol, hostname, port, root }, entry) => {
       const search = {};
       search[modifier] = '';
@@ -201,6 +207,7 @@ const subPages = new Map([
   ],
   ['pathways', loadData(getInterProModifierURL('pathways'))(PathwaysSubPage)],
   ['alignments', SetAlignments],
+  ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
   [

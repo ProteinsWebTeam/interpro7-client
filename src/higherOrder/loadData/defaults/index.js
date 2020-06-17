@@ -11,7 +11,7 @@ export const cleanUpMultipleSlashes = (str = '') =>
   str.replace(MULTIPLE_SLASHES, '$1/');
 
 export const getUrlForMeta = createSelector(
-  state => state.settings.api,
+  (state) => state.settings.api,
   ({ protocol, hostname, port, root }) =>
     cleanUpMultipleSlashes(
       format({
@@ -23,7 +23,7 @@ export const getUrlForMeta = createSelector(
     ),
 );
 
-export const getUrlForRelease = repoKey =>
+export const getUrlForRelease = (repoKey) =>
   createSelector(
     () => config.github[repoKey],
     ({ owner, repo }) =>
@@ -32,14 +32,14 @@ export const getUrlForRelease = repoKey =>
 
 export const getUrl = createSelector(
   // this one is just to memoize it
-  key => key,
-  key =>
+  (key) => key,
+  (key) =>
     createSelector(
-      state => state.settings[key],
-      state => state.settings.navigation.pageSize,
-      state => state.customLocation.description,
-      state => state.customLocation.search,
-      state => state.customLocation.hash,
+      (state) => state.settings[key],
+      (state) => state.settings.navigation.pageSize,
+      (state) => state.customLocation.description,
+      (state) => state.customLocation.search,
+      (state) => state.customLocation.hash,
       // eslint-disable-next-line
       (
         { protocol, hostname, port, root },
@@ -126,11 +126,11 @@ export const getUrl = createSelector(
 );
 
 export const getReversedUrl = createSelector(
-  state => state.settings.api,
-  state => state.settings.navigation.pageSize,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
-  state => state.customLocation.hash,
+  (state) => state.settings.api,
+  (state) => state.settings.navigation.pageSize,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
+  (state) => state.customLocation.hash,
   (
     { protocol, hostname, port, root },
     settingsPageSize,
@@ -186,6 +186,7 @@ export const includeTaxonFocusedOnURL = (url, focused) => {
 export const getUrlForApi = (...parameters) =>
   getUrl('api')(...parameters)
     .replace('/alignments', '/')
+    .replace('/entry_alignments', '/')
     .replace('/logo', '/')
     .replace('/domain_architecture', '/')
     .replace('/interactions', '/')

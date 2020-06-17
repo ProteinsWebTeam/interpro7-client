@@ -114,8 +114,9 @@ const NotificationSettings = (
       showTreeToast,
       showConnectionStatusToast,
       showSettingsToast,
+      showCtrlToZoomToast,
     },
-  } /*: {notifications: {showTreeToast: boolean, showConnectionStatusToast: boolean, showSettingsToast: boolean}} */,
+  } /*: {notifications: {showTreeToast: boolean, showCtrlToZoomToast: boolean, showConnectionStatusToast: boolean, showSettingsToast: boolean}} */,
 ) => (
   <form data-category="notifications">
     <h4>Notification settings</h4>
@@ -167,6 +168,18 @@ const NotificationSettings = (
                   </td>
                 </tr>
                 <tr>
+                  <td>Use CTRL and scroll to zoom</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      name="showCtrlToZoomToast"
+                      id="showCtrlToZoomToast-input"
+                      checked={showCtrlToZoomToast}
+                      onChange={noop}
+                    />
+                  </td>
+                </tr>
+                <tr>
                   <td>Customise Settings</td>
                   <td>
                     <input
@@ -191,6 +204,7 @@ NotificationSettings.propTypes = {
     showTreeToast: T.bool.isRequired,
     showConnectionStatusToast: T.bool.isRequired,
     showSettingsToast: T.bool.isRequired,
+    showCtrlToZoomToast: T.bool.isRequired,
   }).isRequired,
 };
 
@@ -355,7 +369,7 @@ CacheSettings.propTypes = {
   }).isRequired,
 };
 
-const getStatusText = status => {
+const getStatusText = (status) => {
   if (status === null) return 'Unknown';
   return status ? 'Reachable' : 'Unreachable';
 };
@@ -462,10 +476,10 @@ EndpointSettings.propTypes = {
   status: T.bool,
 };
 
-const getStatusForEndpoint = endpoint =>
+const getStatusForEndpoint = (endpoint) =>
   createSelector(
-    state => state.status.servers[endpoint].status,
-    status => ({ status }),
+    (state) => state.status.servers[endpoint].status,
+    (status) => ({ status }),
   );
 
 const APIEndpointSettings = connect(getStatusForEndpoint('api'))(
@@ -509,7 +523,7 @@ class _AddToHomeScreen extends PureComponent /*:: <Props> */ {
     window.removeEventListener('beforeinstallprompt', this.#beforeInstall);
   }
 
-  #beforeInstall = event => {
+  #beforeInstall = (event) => {
     event.preventDefault();
     this.setState({ event });
   };
@@ -677,8 +691,8 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings,
-  settings => ({ settings }),
+  (state) => state.settings,
+  (settings) => ({ settings }),
 );
 
 export default connect(mapStateToProps, { changeSettings, resetSettings })(
