@@ -133,7 +133,7 @@ const addExistingEntiesToConservationResults = (
   conservationDatabases,
 ) => {
   /* eslint-disable max-depth */
-  for (const matches of [data.domain, data.family]) {
+  for (const matches of [data.domain, data.family, data.repeat]) {
     if (matches) {
       for (const entry of matches) {
         for (const child of entry.children) {
