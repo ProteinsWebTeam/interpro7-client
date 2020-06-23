@@ -106,15 +106,15 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   </li>
                   <li>
                     <Link
-                      href="//github.com/ebi-pf-team/interproscan/wiki"
+                      href="https://interproscan-docs.readthedocs.io/"
                       className={f('ext')}
                       target="_blank"
                     >
-                      <span
-                        className={f('icon', 'icon-common')}
-                        data-icon="&#xf09b;"
-                      />{' '}
-                      InterProScan Wiki
+                      {/*<span*/}
+                      {/*  className={f('icon', 'icon-common')}*/}
+                      {/*  data-icon="&#xf09b;"*/}
+                      {/*/>{' '}*/}
+                      InterProScan Documentation
                     </Link>
                   </li>
                 </ul>

@@ -127,15 +127,10 @@ exports[`<Documentation /> should render 1`] = `
             <li>
               <Memo(Connect(Link))
                 className="ext"
-                href="//github.com/ebi-pf-team/interproscan/wiki"
+                href="https://interproscan-docs.readthedocs.io/"
                 target="_blank"
               >
-                <span
-                  className="icon icon-common"
-                  data-icon=""
-                />
-                 
-                InterProScan Wiki
+                InterProScan Documentation
               </Memo(Connect(Link))>
             </li>
           </ul>
