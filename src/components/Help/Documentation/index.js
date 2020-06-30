@@ -110,10 +110,6 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       className={f('ext')}
                       target="_blank"
                     >
-                      {/*<span*/}
-                      {/*  className={f('icon', 'icon-common')}*/}
-                      {/*  data-icon="&#xf09b;"*/}
-                      {/*/>{' '}*/}
                       InterProScan Documentation
                     </Link>
                   </li>
