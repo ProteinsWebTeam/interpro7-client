@@ -217,6 +217,35 @@ g:global(.child-group) path:global(.feature) {
   font-size: 90%;
   color: var(--colors-graydark);
 }
+
+@media print {
+  /*.aligned-to-track-component,*/
+  /*.track-component {*/
+  /*  width: 80%;*/
+  /*}*/
+  /*.track-accession {*/
+  /*  width: 20%;*/
+  /*  border: 1px solid red;*/
+  /*}*/
+  line {
+    stroke-width: 20px !important;
+    stroke: red !important;
+  }
+  protvista-navigation,
+  protvista-sequence,
+  protvista-coloured-sequence,
+  protvista-track,
+  protvista-interpro-track svg {
+    width: 50% !important;
+  }
+  /*svg {*/
+  /*  width: 100%;*/
+  /*}*/
+  a {
+    text-decoration: none;
+  }
+}
+
 /*resize elements for small screens in order to see full IPR number*/
 @media screen and (max-width: 39.9375em) {
   .aligned-to-track-component,
