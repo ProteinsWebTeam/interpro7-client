@@ -80,6 +80,29 @@ const Coronavirus = loadable({
     import(/* webpackChunkName: "coronavirus-page" */ './Coronavirus'),
 });
 
+const RedirectToBlog = ({
+  customLocation: {
+    description: { other },
+  },
+}) => {
+  const href = 'https://proteinswebteam.github.io/interpro-blog/';
+  if (other?.[0] === 'potm') {
+    window.location.replace(`${href}/${other.join('/')}`);
+  } else if ((other?.[2] || '').endsWith('.pdf')) {
+    const parts = other[2].replace('.pdf', '').split('_');
+    const path = `potm/20${parts[2]}_${parts[3]}/${other[2]}`;
+    window.location.replace(`${href}/${path}`);
+  }
+  return null;
+};
+RedirectToBlog.propTypes = {
+  customLocation: T.shape({
+    description: T.shape({
+      other: T.arrayOf(T.string),
+    }),
+  }),
+};
+
 const pages = new Map([
   // pages with data from API
   ['entry', Entry],
@@ -103,6 +126,8 @@ const otherPages = new Map([
   ['contact', Contact],
   ['settings', Settings],
   ['covid-19', Coronavirus],
+  ['potm', RedirectToBlog],
+  ['downloads', RedirectToBlog],
 ]);
 
 const Null = () => null;

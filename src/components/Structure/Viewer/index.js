@@ -57,7 +57,7 @@ const optionsForObserver = {
   /* eslint-disable-next-line prefer-spread */
   threshold: Array.apply(null, { length: NUMBER_OF_CHECKS }).map(
     Number.call,
-    n => (n + 1) / NUMBER_OF_CHECKS,
+    (n) => (n + 1) / NUMBER_OF_CHECKS,
   ),
 };
 const SPLIT_REQUESTER = 1;
@@ -92,7 +92,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     this.stage = null;
 
     this._protein2structureMappers = {};
-    this.name = `${this.props.id}_updated.cif`;
+    this.name = `${this.props.id}`;
 
     this._structurevViewer = React.createRef();
     this._structureSection = React.createRef();
@@ -129,10 +129,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     const pdbid = this.props.id;
     this.stage = new Stage(this._structurevViewer.current);
     this.stage.setParameters({ backgroundColor: 0xfcfcfc });
-
     this.stage
-      .loadFile(`https://www.ebi.ac.uk/pdbe/static/entry/${this.name}`)
-      .then(component => {
+      .loadFile(`rcsb://${this.name}.mmtf`, { defaultRepresentation: false })
+      .then((component) => {
         component.addRepresentation('cartoon', { colorScheme: 'chainname' });
         component.autoView();
       })
@@ -145,7 +144,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       });
 
     // TODO connect onclick to protvista
-    this.stage.signals.clicked.add(picked => {
+    this.stage.signals.clicked.add((picked) => {
       if (picked) {
         // const residue = picked.atom;
         // const index = residue.residueIndex;
@@ -158,7 +157,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     });
 
     // TODO connect hover to protvista
-    this.stage.signals.hovered.add(picked => {
+    this.stage.signals.hovered.add((picked) => {
       if (picked) {
         // const residue = picked.atom;
         // const index = residue.residueIndex;
@@ -170,7 +169,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     });
 
     const threshold = 0.4;
-    this.observer = new IntersectionObserver(entries => {
+    this.observer = new IntersectionObserver((entries) => {
       this.setState({
         isStuck:
           this._structureSection.current.getBoundingClientRect().y < 0 &&
@@ -377,16 +376,16 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
         );
       } else if (chain) {
         Object.keys(this.state.entryMap[database][accession][chain]).forEach(
-          p => {
+          (p) => {
             hits = hits.concat(
               this.state.entryMap[database][accession][chain][p],
             );
           },
         );
       } else {
-        Object.keys(this.state.entryMap[database][accession]).forEach(c => {
+        Object.keys(this.state.entryMap[database][accession]).forEach((c) => {
           Object.keys(this.state.entryMap[database][accession][c]).forEach(
-            p => {
+            (p) => {
               hits = hits.concat(
                 this.state.entryMap[database][accession][c][p],
               );
@@ -397,7 +396,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     }
 
     hits.forEach(
-      hit => (hit.color = getTrackColor(hit, this.props.colorDomainsBy)),
+      (hit) => (hit.color = getTrackColor(hit, this.props.colorDomainsBy)),
     );
     return hits;
   }
@@ -495,9 +494,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       if (this.stage) {
         const components = this.stage.getComponentsByName(this.name);
         if (components) {
-          components.forEach(component => {
+          components.forEach((component) => {
             const selections = [];
-            hits.forEach(hit => {
+            hits.forEach((hit) => {
               selections.push([
                 hit.color,
                 `${hit.start_residue_number}-${hit.end_residue_number}:${hit.struct_asym_id}`,
@@ -515,7 +514,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       // default view when no entry selected
       const components = this.stage.getComponentsByName(this.name);
       if (components) {
-        components.forEach(component => {
+        components.forEach((component) => {
           component.addRepresentation('cartoon', { colorScheme: 'chainname' });
         });
       }
@@ -523,7 +522,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     this.setState({ selectedEntry: acc || '' });
   };
 
-  showSecondaryStructureEntries = feature => {
+  showSecondaryStructureEntries = (feature) => {
     const hits = [];
     if (feature.locations) {
       for (const loc of feature.locations) {
@@ -537,9 +536,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       if (this.stage) {
         const components = this.stage.getComponentsByName(this.name);
         if (components) {
-          components.forEach(component => {
+          components.forEach((component) => {
             const selections = [];
-            hits.forEach(hit => {
+            hits.forEach((hit) => {
               selections.push([
                 hit.color,
                 `${hit.start}-${hit.end}:${feature.chain}`,
@@ -562,7 +561,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
   showRegionInStructure(chain, start, stop) {
     const components = this.stage.getComponentsByName(this.name);
     if (components) {
-      components.forEach(component => {
+      components.forEach((component) => {
         if (chain && start && stop) {
           const selection = `${start}-${stop}:${chain}`;
           const theme = ColormakerRegistry.addSelectionScheme(
@@ -678,8 +677,8 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.ui,
-  ui => ({
+  (state) => state.settings.ui,
+  (ui) => ({
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
   }),
 );

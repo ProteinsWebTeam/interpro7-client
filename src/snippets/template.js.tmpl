@@ -143,7 +143,7 @@ const main = async function* (startURL) {
   }
 };
 
-let BASE_URL = '<%= url %>?page_size=100<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>';
+let BASE_URL = '<%= url %><%= url.indexOf('?')===-1 ? '?' : '&' %>page_size=200<%= fileType === 'fasta' ? '&extra_fields=sequence' : '' %>';
 <% if (fileType === "tsv" && columns.some(x => x.indexOf("extra_fields.counters")>=0)) { 
 %>BASE_URL += "&extra_fields=counters"
 <% } %>

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import { set } from 'lodash-es';
@@ -16,6 +15,7 @@ import Estimate from './Estimate';
 import Snippet from './Snippet';
 import Controls from './Controls';
 import ProgressAnimation from './ProgressAnimation';
+import URLParameters from './URLParameters';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -26,12 +26,13 @@ import { columns } from 'web-workers/download/object2TSV';
 
 import { goToCustomLocation } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+import FormatSelector from './FormatSelector';
+import loadData from 'higherOrder/loadData';
 
 import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
-import loadData from 'higherOrder/loadData';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 const f = foundationPartial(local);
 
@@ -41,10 +42,16 @@ const SchemaOrgData = loadable({
 });
 
 const extractDataFromHash = (hash) => {
-  const [href, fileType, subset] = hash.split('|');
+  const [path, fileType, subset] = hash.split('|');
   const output = { fileType, subset: !!subset };
+  const [href, params] = path.split('?');
   try {
     output.description = pathToDescription(href);
+    if (params) {
+      output.search = Object.fromEntries(
+        params.split('&').map((p) => p.split('=')),
+      );
+    }
   } catch {
     /**/
   }
@@ -79,12 +86,20 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     this.memberDb = {};
   }
 
-  // eslint-disable-next-line complexity
+  /**
+   * This method nadles all the changes of the form in a centralized way.
+   * The value of all the elements of the form is read, and use to create the hash of the current URL.
+   * The URL formed in the hash is the corresponding API call to the selections in the form.
+   * @param {Event} e The triggered event
+   */
+  // eslint-disable-next-line complexity, max-statements
   _handleChange = (e) => {
     if (!this._ref.current) return;
     const object = {};
+    // Only the add filters buttons trigger this method directly
     if (e.target instanceof HTMLButtonElement) {
       set(object, e.target.dataset.key, !!e.target.dataset.value);
+      // To remove a filter
       if (!e.target.dataset.value) {
         for (const input of this._ref.current.querySelectorAll(
           `input[data-reset="${e.target.dataset.reset}"], input[name="${e.target.dataset.key}"], select[name="${e.target.dataset.key}"]`,
@@ -95,8 +110,14 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     }
     for (const { name, value, type, checked } of this._ref.current.elements) {
       if (name) {
+        // Form names use dot notation that correespond to the custom location.
+        // e.g description.main.key => {description: {main: {key: value}}}
         set(object, name, type === 'checkbox' ? checked : value);
       }
+    }
+    if (e.target?.name === 'description.main.key') {
+      // reset the search parameters if there is a change of main type.
+      object.search = {};
     }
     // Specific cases
     if (
@@ -106,14 +127,22 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
       // remove integration from entry if db is InterPro, because it's useless
       object.description.entry.integration = null;
     }
+    // The main cannot be a filter:
     set(object.description, [object.description.main.key, 'isFilter'], null);
     let path;
     try {
+      // create a path based in the constructed object
       path = descriptionToPath(object.description);
-      e.target.classList.remove(f('invalid-accession'));
+      e?.target?.classList && e.target.classList.remove(f('invalid-accession'));
     } catch {
-      e.target.classList.add(f('invalid-accession'));
+      e?.target?.classList && e.target.classList.add(f('invalid-accession'));
       return;
+    }
+    if (object.search && Object.keys(object.search).length) {
+      // If there are search parameters add them to the URL
+      path += `?${Object.entries(object.search)
+        .map(([k, v]) => `${k}=${v}`)
+        .join('&')}`;
     }
     // More specific cases
     // Subset only available for fasta format, for proteins filtered by an entry
@@ -155,7 +184,10 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
   render() {
     const { matched, api, lowGraphics, data } = this.props;
 
-    const { description, fileType, subset } = extractDataFromHash(matched);
+    const { description, search, fileType, subset } = extractDataFromHash(
+      matched,
+    );
+    if (!description) return null;
 
     const endpoint = toPublicAPI(
       format({
@@ -166,6 +198,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
           /\/+/g,
           '/',
         ),
+        query: search,
       }),
     );
 
@@ -250,6 +283,11 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
             name={`description.${main}.db`}
             onClick={this._handleChange}
             databases={this.memberDB}
+          />
+          <URLParameters
+            type={main}
+            search={search}
+            onChange={this._handleChange}
           />
         </fieldset>
         <fieldset className={f('fieldset')}>
@@ -338,8 +376,17 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
             </ul>
           </div>
         </fieldset>
+        <h4>Select Output Format</h4>
+        <FormatSelector
+          fileType={fileType}
+          mainEndpoint={description.main.key}
+          hasSelectedDB={!!description?.[description.main.key]?.db}
+          hasSelectedAccession={
+            !!description?.[description.main.key]?.accession
+          }
+        />
 
-        <h5>More info</h5>
+        <h4>Results</h4>
         <ApiLink url={endpoint} />
         <DataPreviewAndProgressProvider
           url={endpoint}
@@ -370,8 +417,8 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                   />
                 )}
 
-                <div className={f('controls')}>
-                  <h3>Download</h3>
+                <div>
+                  <h4>Download</h4>
                   <TextExplanation
                     fileType={fileType}
                     description={description}
@@ -408,6 +455,8 @@ const mapStateToProps = createSelector(
   (customLocation, api, lowGraphics) => ({ customLocation, api, lowGraphics }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(
-  loadData(getUrlForMeta)(DownloadForm),
-);
+export default loadData({
+  getUrl: getUrlForMeta,
+  mapStateToProps,
+  mapDispatchToProps: { goToCustomLocation },
+})(DownloadForm);

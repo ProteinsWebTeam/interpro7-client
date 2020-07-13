@@ -316,8 +316,12 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       }
     }
 
-    const lines = text.split(/\n/);
-    const fileTitle = this._getTitle(lines);
+    let fileTitle = '';
+    if (typeof text === 'string') {
+      const lines = text.split(/\n/);
+      fileTitle = this._getTitle(lines);
+    }
+
     this.setState(
       {
         editorState:

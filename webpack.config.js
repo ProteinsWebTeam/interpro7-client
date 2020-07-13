@@ -45,7 +45,7 @@ const cssSettings = {
 
 const publicPath = websiteURL.pathname || '/interpro/';
 
-const getHTMLWebpackPlugin = mode =>
+const getHTMLWebpackPlugin = (mode) =>
   new HTMLWebpackPlugin({
     title: iprConfig.title || 'InterPro',
     template: path.join('.', 'src', 'index.template.html'),
@@ -97,6 +97,7 @@ const getConfigFor = (env, mode, module = false) => {
         'EBI-SocialMedia': 'EBI-Icon-fonts/EBI-SocialMedia',
         'EBI-FileFormats': 'EBI-Icon-fonts/EBI-FileFormats',
         'EBI-Chemistry': 'EBI-Icon-fonts/EBI-Chemistry',
+        react: path.resolve('node_modules/react'),
       },
     },
     // MODULE
@@ -125,6 +126,7 @@ const getConfigFor = (env, mode, module = false) => {
             // path.resolve('node_modules', 'color-hash'),
             path.resolve('node_modules', 'timing-functions'),
             /protvista/i,
+            /react-msa-viewer/,
             path.resolve('node_modules', 'd3'),
             path.resolve('node_modules', 'idb'),
             path.resolve('node_modules', 'clanviewer'),
@@ -167,6 +169,10 @@ const getConfigFor = (env, mode, module = false) => {
                       'babel-plugin-transform-react-remove-prop-types',
                       'babel-plugin-transform-react-constant-elements',
                       'babel-plugin-transform-react-inline-elements',
+                      [
+                        'transform-remove-console',
+                        { exclude: ['error', 'warn'] },
+                      ],
                     ],
                   },
                 },

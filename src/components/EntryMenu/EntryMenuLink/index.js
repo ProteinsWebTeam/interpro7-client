@@ -18,7 +18,7 @@ import { createSelector } from 'reselect';
 const f = foundationPartial(pages, fonts, local);
 
 const singleEntityNames = new Map(
-  Array.from(singleEntity).map(e => [e[1].name, e[0]]),
+  Array.from(singleEntity).map((e) => [e[1].name, e[0]]),
 );
 
 const whitelist = new Set(['Overview', 'Sequence', 'Alignments']);
@@ -103,6 +103,13 @@ EntryMenuLinkWithoutData.propTypes = {
   usedOnTheSide: T.bool,
 };
 
+const hasAlignments = (name, annotations) => {
+  if (name !== 'Alignment') return false;
+  for (const ann of annotations) {
+    if (ann.startsWith('alignment:')) return true;
+  }
+  return false;
+};
 /*:: type Props = {
   to: Object | function,
   exact?: ?boolean,
@@ -170,7 +177,10 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
       // i.e. only enable the menu item if there is info for it
       if (
         payload.metadata.entry_annotations &&
-        payload.metadata.entry_annotations.includes(singleEntityNames.get(name))
+        (payload.metadata.entry_annotations.includes(
+          singleEntityNames.get(name),
+        ) ||
+          hasAlignments(name, payload.metadata.entry_annotations))
       ) {
         value = NaN;
       }
@@ -178,7 +188,7 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
       if (whitelist.has(name)) value = NaN;
       // TODO: find a generic way to deal with this:
       if (
-        name === 'Domain Architectures' &&
+        (name === 'Domain Architectures' || name === 'Pathways') &&
         payload.metadata.source_database.toLowerCase() !== 'interpro'
       ) {
         value = null;
@@ -200,8 +210,8 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
   }
 }
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.main.key,
-  state => state.customLocation.description.entry.db,
+  (state) => state.customLocation.description.main.key,
+  (state) => state.customLocation.description.entry.db,
   (mainKey, entryDB) => ({ mainKey, entryDB }),
 );
 

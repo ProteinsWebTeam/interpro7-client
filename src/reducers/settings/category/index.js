@@ -21,6 +21,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         showTreeToast: true,
         showConnectionStatusToast: true,
         showSettingsToast: true,
+        showCtrlToZoomToast: true,
       };
     case 'ui':
       return {

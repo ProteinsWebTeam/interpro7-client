@@ -415,7 +415,12 @@ const rules = {
   // Disallow comparisons with the value NaN
   'use-isnan': 2,
   // Ensure JSDoc comments are valid
-  'valid-jsdoc': 1,
+  'valid-jsdoc': [
+    1,
+    {
+      requireReturn: false,
+    },
+  ],
   // Ensure that the results of typeof are compared against a valid string
   'valid-typeof': 2,
   // Requires to declare all vars on top of their containing scope

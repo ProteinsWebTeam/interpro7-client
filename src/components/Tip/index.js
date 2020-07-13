@@ -1,5 +1,5 @@
 // @flow
-import { PureComponent } from 'react';
+import { useEffect } from 'react';
 import T from 'prop-types';
 
 import { addToast, changeSettingsRaw } from 'actions/creators';
@@ -18,38 +18,42 @@ const TTL = 5000;
   changeSettingsRaw: function,
 };*/
 
-class Tip extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    title: T.string,
-    body: T.string.isRequired,
-    checkBoxLabel: T.string,
-    ttl: T.number,
-    toastID: T.string.isRequired,
-    settingsName: T.string.isRequired,
-    addToast: T.func.isRequired,
-    changeSettingsRaw: T.func.isRequired,
-  };
-
-  updateToastSettings(props /*: Props */) {
-    props.changeSettingsRaw('notifications', props.settingsName, false);
-  }
-
-  render() {
-    const { title, body, checkBoxLabel, ttl, toastID } = this.props;
-    this.props.addToast(
+const Tip = (
+  {
+    title,
+    body,
+    checkBoxLabel,
+    ttl,
+    toastID,
+    addToast,
+    changeSettingsRaw,
+    settingsName,
+  } /*: Props */,
+) => {
+  useEffect(() => {
+    addToast(
       {
         title: title || '💡 Tip',
         body: body,
         checkBox: {
           label: checkBoxLabel || 'Do not show again',
-          fn: () => this.updateToastSettings(this.props),
+          fn: () => changeSettingsRaw('notifications', settingsName, false),
         },
         ttl: ttl || TTL,
       },
       toastID,
     );
-    return null;
-  }
-}
-
+  });
+  return null;
+};
+Tip.propTypes = {
+  title: T.string,
+  body: T.string.isRequired,
+  checkBoxLabel: T.string,
+  ttl: T.number,
+  toastID: T.string.isRequired,
+  settingsName: T.string.isRequired,
+  addToast: T.func.isRequired,
+  changeSettingsRaw: T.func.isRequired,
+};
 export default connect(null, { addToast, changeSettingsRaw })(Tip);
