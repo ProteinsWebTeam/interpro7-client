@@ -6,6 +6,9 @@
   margin: 0.5rem 0 0 0;
   position: relative;
 
+  & .dropdown {
+    background: var(--colors-interpro);
+  }
   & .dropdown-content {
     position: absolute;
     top: 100%;

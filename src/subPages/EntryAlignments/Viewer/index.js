@@ -33,7 +33,12 @@ const loadProtVistaWebComponents = () => {
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-const AlignmentViewer = ({ data: { loading, payload } }) => {
+const AlignmentViewer = ({
+  data: { loading, payload },
+  colorscheme,
+  onConservationProgress,
+  setColorMap,
+}) => {
   const msaTrack = useRef(null);
   const [align, setAlign] = useState(null);
   useEffect(() => {
@@ -50,6 +55,13 @@ const AlignmentViewer = ({ data: { loading, payload } }) => {
         name,
         sequence: align.seqdata[name],
       }));
+      msaTrack.current.addEventListener('conservationProgress', (evt) => {
+        onConservationProgress(evt.detail.progress);
+      });
+      msaTrack.current.addEventListener('drawCompleted', () => {
+        const { map } = msaTrack.current.getColorMap();
+        setColorMap(map);
+      });
     }
   }, [align]);
 
@@ -86,6 +98,8 @@ const AlignmentViewer = ({ data: { loading, payload } }) => {
           use-ctrl-to-zoom
           labelWidth={labelWidth}
           ref={msaTrack}
+          colorscheme={colorscheme}
+          calculate-conservation
         />
       </protvista-manager>
     </>
@@ -93,6 +107,9 @@ const AlignmentViewer = ({ data: { loading, payload } }) => {
 };
 AlignmentViewer.propTypes = {
   type: T.string.isRequired,
+  colorscheme: T.string,
+  onConservationProgress: T.func,
+  setColorMap: T.func,
   data: dataPropType,
 };
 
