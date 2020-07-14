@@ -998,9 +998,14 @@ class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('exporter')}>{ExporterButton}</div>
           <ReactToPrint
             trigger={() => <button>Print</button>}
-            // pageStyle={() => this.protvistaStyle(this)}
-            // copyStyles={false}
+            onBeforeGetContent={() => {
+              this._protvistaRef.current.style = 'width: 1000px;';
+              return new Promise((resolve) => {
+                setTimeout(() => resolve(), 1000);
+              });
+            }}
             content={() => this._protvistaRef.current}
+            onAfterPrint={() => (this._protvistaRef.current.style = '')}
           />
         </div>
       </div>
@@ -1042,11 +1047,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
         <div id={`${this.props.id}ProtvistaDiv`}>
-          <div className={f('protvista')}>
+          <div className={f('protvista')} ref={this._protvistaRef}>
             <protvista-manager
               attributes="length displaystart displayend highlight"
               id="pv-manager"
-              ref={this._protvistaRef}
             >
               <div className={f('track-container')}>
                 <div className={f('track-row')}>

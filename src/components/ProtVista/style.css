@@ -219,28 +219,6 @@ g:global(.child-group) path:global(.feature) {
 }
 
 @media print {
-  /*.aligned-to-track-component,*/
-  /*.track-component {*/
-  /*  width: 80%;*/
-  /*}*/
-  /*.track-accession {*/
-  /*  width: 20%;*/
-  /*  border: 1px solid red;*/
-  /*}*/
-  line {
-    stroke-width: 20px !important;
-    stroke: red !important;
-  }
-  protvista-navigation,
-  protvista-sequence,
-  protvista-coloured-sequence,
-  protvista-track,
-  protvista-interpro-track svg {
-    width: 50% !important;
-  }
-  /*svg {*/
-  /*  width: 100%;*/
-  /*}*/
   a {
     text-decoration: none;
   }
