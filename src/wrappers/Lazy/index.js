@@ -4,7 +4,7 @@ import T from 'prop-types';
 
 import cancelable from 'utils/cancelable/index';
 import getsInView from 'utils/gets-in-view/index';
-import { schedule } from 'timing-functions/src';
+import { schedule } from 'timing-functions';
 
 /* :: type State = {| hasBeenVisible: boolean |}; */
 

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import { sleep } from 'timing-functions/src';
+import { sleep } from 'timing-functions';
 import { noop, get as _get } from 'lodash-es';
 
 import config from 'config';
@@ -199,7 +199,7 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
     if (this._hide) this._hide.cancel();
   }
 
-  _populateDBs = databases => {
+  _populateDBs = (databases) => {
     if (databases.payload && this._dbs.size <= 1) {
       this._dbs.set('interpro', databases.payload.databases.interpro);
       const dbs = Object.values(databases.payload.databases).sort(
@@ -288,7 +288,7 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
     const sub = this.props.filterType || (subL && subL[0]);
     const isSelected =
       this.props.isSelected ||
-      (db =>
+      ((db) =>
         (customLocation.description.entry.db || 'all').toLowerCase() ===
         db.canonical.toLowerCase());
     const selected = Array.from(this._dbs.values()).find(isSelected);
@@ -333,7 +333,7 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
             className={f('db-selector', { 'one-column': !children })}
             onChange={handleChange}
           >
-            {Array.from(this._dbs.values()).map(db => {
+            {Array.from(this._dbs.values()).map((db) => {
               const count = dbCounters
                 ? getStaticCountFor(db.canonical, dbCounters)
                 : getCountFor(
@@ -390,8 +390,8 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
 }
 
 const getUrlForAllCount = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.main.key,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.main.key,
   ({ protocol, hostname, port, root }, mainType) =>
     format({
       protocol,
@@ -402,8 +402,8 @@ const getUrlForAllCount = createSelector(
 );
 
 const getUrlForMemberDBCount = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
   ({ protocol, hostname, port, root }, description) => {
     let output = format({
       protocol,
@@ -412,8 +412,10 @@ const getUrlForMemberDBCount = createSelector(
       pathname: `${root}/entry`,
     });
     if (description.main.key && description.main.key !== 'entry') {
-      output += `/${description.main.key}/${description[description.main.key]
-        .proteomeDB || description[description.main.key].db}`;
+      output += `/${description.main.key}/${
+        description[description.main.key].proteomeDB ||
+        description[description.main.key].db
+      }`;
       if (description.main.key === 'protein') {
         output = output.replace(/(un)?reviewed/i, 'UniProt');
       }
@@ -423,8 +425,8 @@ const getUrlForMemberDBCount = createSelector(
 );
 
 const getUrlForSubPageCount = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
   ({ protocol, hostname, port, root }, description) => {
     const { ..._description } = description;
     if (description.main.key !== 'entry') {
@@ -441,7 +443,7 @@ const getUrlForSubPageCount = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  state => state.settings.ui.lowGraphics,
+  (state) => state.settings.ui.lowGraphics,
   (customLocation, lowGraphics) => ({ customLocation, lowGraphics }),
 );
 
@@ -468,7 +470,7 @@ const SimplyLoadedMemberDBSelector = loadData({
   mapDispatchToProps: { goToCustomLocation },
 })(_MemberDBSelector);
 
-const OptMemberDBSelector = props =>
+const OptMemberDBSelector = (props) =>
   props.dbCounters ? (
     <SimplyLoadedMemberDBSelector {...props} />
   ) : (

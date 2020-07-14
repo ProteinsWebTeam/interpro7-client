@@ -1,6 +1,6 @@
 /*:: import type { Middleware } from 'redux'; */
 import url from 'url';
-import { schedule } from 'timing-functions/src';
+import { schedule } from 'timing-functions';
 
 import { cachedFetchJSON, cachedFetchText } from 'utils/cached-fetch';
 import id from 'utils/cheap-unique-id';

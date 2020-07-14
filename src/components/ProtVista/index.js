@@ -53,6 +53,7 @@ const f = foundationPartial(ipro, localCSS, fonts, spinner);
 const webComponents = [];
 
 const TOOLTIP_DELAY = 500;
+const ONE_SEC = 1000;
 
 const loadProtVistaWebComponents = () => {
   if (!webComponents.length) {
@@ -946,7 +947,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                 onBeforeGetContent={() => {
                   this._protvistaRef.current.style = 'width: 1000px;';
                   return new Promise((resolve) => {
-                    setTimeout(() => resolve(), 1000);
+                    setTimeout(() => resolve(), ONE_SEC);
                   });
                 }}
                 content={() => this._protvistaRef.current}

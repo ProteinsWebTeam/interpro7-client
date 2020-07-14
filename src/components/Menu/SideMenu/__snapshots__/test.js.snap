@@ -5,7 +5,6 @@ exports[`<SideMenu /> should be hidden 1`] = `
   aria-hidden={true}
   className="container"
   inert=""
-  role="menu"
 />
 `;
 
@@ -13,9 +12,10 @@ exports[`<SideMenu /> should render 1`] = `
 <aside
   aria-hidden={false}
   className="container visible"
-  role="menu"
 >
-  <React.Fragment>
+  <div
+    role="menu"
+  >
     <Memo(Connect(Tip))
       body="The green and red signals of the connection status shows the connectivity strength of the URLs"
       settingsName="showConnectionStatusToast"
@@ -65,6 +65,6 @@ exports[`<SideMenu /> should render 1`] = `
         </li>
       </ul>
     </nav>
-  </React.Fragment>
+  </div>
 </aside>
 `;
