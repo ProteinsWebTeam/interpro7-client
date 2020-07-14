@@ -1,3 +1,5 @@
+@import '../../styles/colors.css';
+
 .alignment-selector {
   display: flex;
   margin: 0 0 1rem;
@@ -14,5 +16,36 @@
   & a:focus,
   & a:hover {
     color: white;
+  }
+}
+.controllers {
+  display: flex;
+  justify-content: flex-end;
+  & select {
+    margin-left: 1em;
+  }
+  & label {
+    display: flex;
+    align-items: baseline;
+  }
+  & button,
+  & a {
+    margin-left: 4px;
+    background: var(--colors-interpro);
+  }
+}
+.controllers .dropdown-container {
+  margin: 0 0 1rem 4px;
+  & button span {
+    font-size: 0.9rem;
+  }
+  & .legend-table {
+    & tr {
+      & td {
+        border: 1px solid black;
+        min-width: 2em;
+        text-align: center;
+      }
+    }
   }
 }
