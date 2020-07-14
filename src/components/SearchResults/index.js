@@ -77,7 +77,7 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
     // TODO: Use Improved description component to show summary (with  limit of characters and highlight) as there is a limitation for search starting with "cite..." or "taxon..." in this case
     const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
     const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
-    const regTag = /&lt;\/?p?(ul)?(li)?&gt;/gi;
+    const regTag = /&lt;\/?(p|ul|li)&gt;/gi;
     return (
       <ErrorBoundary>
         <SchemaOrgData

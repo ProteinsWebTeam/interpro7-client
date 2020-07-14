@@ -17,11 +17,18 @@ const DropDownButton = (
     children,
     alignLeft = false,
     fontSize,
-  } /*: {label: string, icon: string, color: ?string, children: any, alignLeft: boolean, fontSize ?: string} */,
+    extraClasses = '',
+  } /*: {label: string, icon: string, color: ?string, children: any, alignLeft: boolean, fontSize ?: string, extraClasses ?: string} */,
 ) => {
   const [isOpen, setOpen] = useState(false);
   return (
-    <div className={fPlus('button-group', 'small', 'dropdown-container')}>
+    <div
+      className={`${fPlus(
+        'button-group',
+        'small',
+        'dropdown-container',
+      )} ${extraClasses}`}
+    >
       <button
         className={fPlus('button', 'dropdown')}
         style={{ backgroundColor: color }}
@@ -55,5 +62,6 @@ DropDownButton.propTypes = {
   children: T.any,
   alignLeft: T.bool,
   fontSize: T.string,
+  extraClasses: T.string,
 };
 export default DropDownButton;
