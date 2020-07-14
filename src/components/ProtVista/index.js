@@ -920,9 +920,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
               </button>
             </Tooltip>
           </div>
-          <div
-            className={f('option-fullscreen', 'font-l', 'margin-right-large')}
-          >
+          <div className={f('viewer-options', 'font-l', 'margin-right-large')}>
             <Tooltip title={'Click to take the snapshot'}>
               <protvista-saver
                 element-id={`${this.props.id}ProtvistaDiv`}
@@ -934,6 +932,26 @@ class ProtVista extends Component /*:: <Props, State> */ {
                   data-icon="&#xf030;"
                 />
               </protvista-saver>
+            </Tooltip>
+          </div>
+          <div className={f('viewer-options', 'font-l', 'margin-right-large')}>
+            <Tooltip title={'Click to print as PDF'}>
+              <ReactToPrint
+                trigger={() => (
+                  <button
+                    className={f('icon', 'icon-common')}
+                    data-icon="&#x50;"
+                  />
+                )}
+                onBeforeGetContent={() => {
+                  this._protvistaRef.current.style = 'width: 1000px;';
+                  return new Promise((resolve) => {
+                    setTimeout(() => resolve(), 1000);
+                  });
+                }}
+                content={() => this._protvistaRef.current}
+                onAfterPrint={() => (this._protvistaRef.current.style = '')}
+              />
             </Tooltip>
           </div>
           <div className={f('button-group', 'dropdown-container', 'small')}>
@@ -996,17 +1014,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
             </div>
           </div>
           <div className={f('exporter')}>{ExporterButton}</div>
-          <ReactToPrint
-            trigger={() => <button>Print</button>}
-            onBeforeGetContent={() => {
-              this._protvistaRef.current.style = 'width: 1000px;';
-              return new Promise((resolve) => {
-                setTimeout(() => resolve(), 1000);
-              });
-            }}
-            content={() => this._protvistaRef.current}
-            onAfterPrint={() => (this._protvistaRef.current.style = '')}
-          />
         </div>
       </div>
     );
@@ -1257,6 +1264,8 @@ class ProtVista extends Component /*:: <Props, State> */ {
                 ) : null}
               </div>
             </protvista-manager>
+          </div>
+          <div className={f('protvista')}>
             <protvista-zoom-tool
               length={length}
               displaystart="1"

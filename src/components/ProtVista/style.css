@@ -54,10 +54,10 @@
 .option-color {
   white-space: nowrap;
 }
-.option-fullscreen button {
+.viewer-options button {
   color: var(--colors-dark);
 }
-.option-fullscreen button:hover {
+.viewer-options button:hover {
   color: var(--colors-nearly-black);
 }
 
