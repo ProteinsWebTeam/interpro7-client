@@ -24,7 +24,7 @@ module.exports = {
   coverageReporters: ['json-summary', 'lcov', 'text-summary'],
   coverageDirectory: 'reports/jest-coverage',
   transformIgnorePatterns: [
-    'node_modules/(?!lodash-es|timing-functions|gsap|taxonomy-visualisation|protvista|react-syntax-highlighter)',
+    'node_modules/(?!lodash-es|timing-functions|taxonomy-visualisation|protvista|react-syntax-highlighter)',
   ],
   testURL: websiteURL.href,
 };
