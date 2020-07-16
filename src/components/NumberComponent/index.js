@@ -3,9 +3,9 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { gsap, Power2 } from 'gsap/all';
+import { Tweenable } from 'shifty';
 
-import random from 'utils/random';
+// import random from 'utils/random';
 import numberToDisplayText from './utils/number-to-display-text';
 
 import { foundationPartial } from 'styles/foundation';
@@ -16,13 +16,9 @@ const f = foundationPartial(style);
 const UNIT_SCALE_MARGIN = 1; // abbr at this level
 // examples: (1: 1000 -> 1k) (10: 1000 -> 1000, 10000 -> 10k)
 
-// Jump ahead if the animation didn't run because it wasn't visible
-// We don't want transitions to stop and resume later
-gsap.ticker.lagSmoothing(0);
-
 export const DEFAULT_DURATION = 1;
 
-const DELAY_RANGE = 0.25;
+// const DELAY_RANGE = 0.25;
 
 /*:: type ComponentProps = {
   children: ?(number | string),
@@ -70,7 +66,6 @@ export class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
 
   constructor(props /*: ComponentProps */) {
     super(props);
-
     this._ref = React.createRef();
   }
 
@@ -84,13 +79,13 @@ export class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
 
   componentWillUnmount() {
     if (this._animation) {
-      this._animation.kill();
+      this._animation.dispose();
       this._animation = null;
     }
   }
 
   _animate = (to, from = 0) => {
-    if (this._animation) this._animation.kill();
+    if (this._animation) this._animation.stop();
 
     if (!this._ref.current) return;
     const finalValue = numberToDisplayText(
@@ -105,8 +100,9 @@ export class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
       finalValue &&
       this._ref.current !== null
     ) {
-      this._ref.current.title = `Approximately ${finalValue} ${this.props
-        .titleType || ''}`.trim();
+      this._ref.current.title = `Approximately ${finalValue} ${
+        this.props.titleType || ''
+      }`.trim();
     }
 
     const canAnimate =
@@ -123,21 +119,24 @@ export class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
       return;
     }
 
-    const animatable = { value: from };
+    // const animatable = { value: from };
     // eslint-disable-next-line no-magic-numbers
-    const duration = this.props.duration + random(-0.5, 0.5) * DELAY_RANGE;
-    this._animation = gsap.to(animatable, duration, {
-      value: to,
-      delay: random() * this.props.duration * DELAY_RANGE,
-      onUpdate: () => {
+    // const duration = this.props.duration + random(-0.5, 0.5) * DELAY_RANGE;
+
+    this._animation = new Tweenable();
+    this._animation.tween({
+      from: { value: from },
+      to: { value: to },
+      // duration,
+      easing: 'easeOutQuart',
+      step: ({ value }) => {
         if (!this._ref.current) return;
-        this._ref.current.textContent = `${numberToDisplayText(
-          animatable.value,
-          this.props.abbr,
-          this.props.scaleMargin,
-        ) || ''}`;
+        console.log(value);
+        this._ref.current.textContent = `${
+          numberToDisplayText(value, this.props.abbr, this.props.scaleMargin) ||
+          ''
+        }`;
       },
-      ease: Power2.easeIn,
     });
   };
 
@@ -170,8 +169,8 @@ export class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.ui.lowGraphics,
-  lowGraphics => ({ lowGraphics }),
+  (state) => state.settings.ui.lowGraphics,
+  (lowGraphics) => ({ lowGraphics }),
 );
 
 export default connect(mapStateToProps)(NumberComponent);
