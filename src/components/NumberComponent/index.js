@@ -79,6 +79,7 @@ export class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
 
   componentWillUnmount() {
     if (this._animation) {
+      this._animation.stop();
       this._animation.dispose();
       this._animation = null;
     }
