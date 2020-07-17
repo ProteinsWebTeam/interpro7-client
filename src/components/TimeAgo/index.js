@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { format } from 'timeago.js';
-import { sleep, schedule } from 'timing-functions/src';
+import { sleep, schedule } from 'timing-functions';
 import { formatShortDate, formatLongDateTime } from 'utils/date';
 
 import random from 'utils/random';

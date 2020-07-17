@@ -1,6 +1,6 @@
 // @flow
 import * as runtime from 'offline-plugin/runtime';
-import { sleep, schedule } from 'timing-functions/src';
+import { sleep, schedule } from 'timing-functions';
 
 import { addToast } from 'actions/creators';
 

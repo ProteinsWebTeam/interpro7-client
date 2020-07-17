@@ -1,7 +1,7 @@
 // @flow
 /*:: import type { Middleware } from 'redux'; */
 import { format } from 'url';
-import { schedule } from 'timing-functions/src';
+import { schedule } from 'timing-functions';
 
 import customFetch from 'utils/cached-fetch';
 
@@ -15,7 +15,7 @@ const BACK_OFF_RATE = 1.5;
 
 let loopTimeoutWithBackOff = DEFAULT_LOOP_TIMEOUT;
 
-const checkStatusesAndDispatch = async function(
+const checkStatusesAndDispatch = async function (
   { status: { servers, browser }, settings },
   dispatch,
 ) {
@@ -77,7 +77,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   window.addEventListener('online', () => dispatch(browserStatus(true)));
   window.addEventListener('offline', () => dispatch(browserStatus(false)));
 
-  return next => action => {
+  return (next) => (action) => {
     switch (action.type) {
       // In case settings changes, update the server statuses
       case CHANGE_SETTINGS:

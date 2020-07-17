@@ -1,4 +1,4 @@
-import { schedule } from 'timing-functions/src';
+import { schedule } from 'timing-functions';
 
 const DEFAULT_ROOT_DATA = {
   '@context': 'http://schema.org',
@@ -38,7 +38,7 @@ const merger = async (
         } else {
           // if multiple data, pass as array
           schema[key] = await Promise.all(
-            data.map(datum => merger(dataMap, deadline, datum)),
+            data.map((datum) => merger(dataMap, deadline, datum)),
           );
         }
       } // else don't add

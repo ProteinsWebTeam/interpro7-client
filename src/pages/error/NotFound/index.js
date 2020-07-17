@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-// import { sleep } from 'timing-functions/src';
+// import { sleep } from 'timing-functions';
 
 import Link from 'components/generic/Link';
 
