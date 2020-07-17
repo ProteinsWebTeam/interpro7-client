@@ -9,6 +9,9 @@
   & .dropdown {
     background: var(--colors-interpro);
   }
+  & button {
+    margin-bottom: 1px;
+  }
   & .dropdown-content {
     position: absolute;
     top: 100%;

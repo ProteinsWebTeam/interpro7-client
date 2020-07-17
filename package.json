@@ -103,7 +103,7 @@
     "protvista-coloured-sequence": "2.12.0",
     "protvista-interpro-track": "2.13.0",
     "protvista-manager": "2.12.0",
-    "protvista-msa": "^2.14.2",
+    "protvista-msa": "2.14.3-alpha.4",
     "protvista-navigation": "2.12.0",
     "protvista-overlay": "2.12.0",
     "protvista-saver": "2.12.0",
