@@ -1100,244 +1100,248 @@ class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
         <div id={`${this.props.id}ProtvistaDiv`}>
-          <div className={f('protvista')} ref={this._protvistaRef}>
+          <div className={f('protvista')}>
             <protvista-manager
               attributes="length displaystart displayend highlight"
               id="pv-manager"
             >
-              <div className={f('track-container')}>
-                <div className={f('track-row')}>
-                  <div
-                    className={f(
-                      'aligned-to-track-component',
-                      `${this.state.addLabelClass}`,
-                    )}
-                  >
-                    <protvista-navigation
-                      length={length}
-                      displaystart="1"
-                      displayend={length}
-                    />
+              <div ref={this._protvistaRef}>
+                <div className={f('track-container')}>
+                  <div className={f('track-row')}>
+                    <div
+                      className={f(
+                        'aligned-to-track-component',
+                        `${this.state.addLabelClass}`,
+                      )}
+                    >
+                      <protvista-navigation
+                        length={length}
+                        displaystart="1"
+                        displayend={length}
+                      />
+                    </div>
+                  </div>
+                  <div className={f('track-row')}>
+                    <div
+                      className={f(
+                        'aligned-to-track-component',
+                        `${this.state.addLabelClass}`,
+                      )}
+                    >
+                      <protvista-sequence
+                        ref={this._webProteinRef}
+                        length={length}
+                        displaystart="1"
+                        displayend={length}
+                        highlight-event="onmouseover"
+                        use-ctrl-to-zoom
+                      />
+                      <protvista-coloured-sequence
+                        ref={this._hydroRef}
+                        length={length}
+                        displaystart="1"
+                        displayend={length}
+                        scale="hydrophobicity-scale"
+                        height="10"
+                        color_range="#ffdd00:-3,#0000FF:3"
+                        highlight-event="onmouseover"
+                        use-ctrl-to-zoom
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className={f('track-row')}>
-                  <div
-                    className={f(
-                      'aligned-to-track-component',
-                      `${this.state.addLabelClass}`,
-                    )}
-                  >
-                    <protvista-sequence
-                      ref={this._webProteinRef}
-                      length={length}
-                      displaystart="1"
-                      displayend={length}
-                      highlight-event="onmouseover"
-                      use-ctrl-to-zoom
-                    />
-                    <protvista-coloured-sequence
-                      ref={this._hydroRef}
-                      length={length}
-                      displaystart="1"
-                      displayend={length}
-                      scale="hydrophobicity-scale"
-                      height="10"
-                      color_range="#ffdd00:-3,#0000FF:3"
-                      highlight-event="onmouseover"
-                      use-ctrl-to-zoom
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className={f('tracks-container')}>
-                {data &&
-                  data
-                    .filter(([_, tracks]) => tracks && tracks.length)
-                    .map(([type, entries]) => (
-                      <div key={type} className={f('track-container')}>
-                        <div className={f('track-row')}>
+                <div className={f('tracks-container')}>
+                  {data &&
+                    data
+                      .filter(([_, tracks]) => tracks && tracks.length)
+                      .map(([type, entries]) => (
+                        <div key={type} className={f('track-container')}>
+                          <div className={f('track-row')}>
+                            <div
+                              className={f(
+                                'track-component',
+                                `${this.state.addLabelClass}`,
+                              )}
+                              style={{ borderBottom: 0 }}
+                            >
+                              <header>
+                                <button
+                                  onClick={() =>
+                                    this.setObjectValueInState(
+                                      'hideCategory',
+                                      type,
+                                      !hideCategory[type],
+                                    )
+                                  }
+                                >
+                                  {hideCategory[type] ? '▸' : '▾'} {type}
+                                </button>
+                              </header>
+                            </div>
+                          </div>
                           <div
-                            className={f(
-                              'track-component',
-                              `${this.state.addLabelClass}`,
-                            )}
-                            style={{ borderBottom: 0 }}
+                            className={f('track-group', {
+                              hideCategory: hideCategory[type],
+                            })}
                           >
-                            <header>
-                              <button
-                                onClick={() =>
-                                  this.setObjectValueInState(
-                                    'hideCategory',
-                                    type,
-                                    !hideCategory[type],
-                                  )
-                                }
-                              >
-                                {hideCategory[type] ? '▸' : '▾'} {type}
-                              </button>
-                            </header>
+                            {entries &&
+                              entries.map((entry) => (
+                                <div
+                                  key={entry.accession}
+                                  className={f('track-row')}
+                                >
+                                  {entry.type === 'secondary_structure' ||
+                                  entry.type === 'sequence_conservation' ? (
+                                    <div
+                                      className={f(
+                                        'track-component',
+                                        entry.type === 'secondary_structure'
+                                          ? 'secondary-structure'
+                                          : 'sequence-conservation',
+                                        `${this.state.addLabelClass}`,
+                                      )}
+                                    >
+                                      <protvista-track
+                                        length={length}
+                                        displaystart="1"
+                                        displayend={length}
+                                        id={`track_${entry.accession}`}
+                                        ref={(e) =>
+                                          (this.web_tracks[entry.accession] = e)
+                                        }
+                                        highlight-event="onmouseover"
+                                        use-ctrl-to-zoom
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div
+                                      className={f(
+                                        'track-component',
+                                        `${this.state.addLabelClass}`,
+                                      )}
+                                    >
+                                      <protvista-interpro-track
+                                        length={length}
+                                        displaystart="1"
+                                        displayend={length}
+                                        id={`track_${entry.accession}`}
+                                        ref={(e) =>
+                                          (this.web_tracks[entry.accession] = e)
+                                        }
+                                        shape="roundRectangle"
+                                        highlight-event="onmouseover"
+                                        use-ctrl-to-zoom
+                                        expanded
+                                      />
+                                    </div>
+                                  )}
+                                  <div
+                                    className={f(
+                                      'track-accession',
+                                      `${this.state.addLabelClass}`,
+                                    )}
+                                  >
+                                    {this.renderLabels(entry)}
+                                  </div>
+                                </div>
+                              ))}
                           </div>
                         </div>
-                        <div
-                          className={f('track-group', {
-                            hideCategory: hideCategory[type],
-                          })}
-                        >
-                          {entries &&
-                            entries.map((entry) => (
-                              <div
-                                key={entry.accession}
-                                className={f('track-row')}
-                              >
-                                {entry.type === 'secondary_structure' ||
-                                entry.type === 'sequence_conservation' ? (
-                                  <div
-                                    className={f(
-                                      'track-component',
-                                      entry.type === 'secondary_structure'
-                                        ? 'secondary-structure'
-                                        : 'sequence-conservation',
-                                      `${this.state.addLabelClass}`,
-                                    )}
-                                  >
-                                    <protvista-track
-                                      length={length}
-                                      displaystart="1"
-                                      displayend={length}
-                                      id={`track_${entry.accession}`}
-                                      ref={(e) =>
-                                        (this.web_tracks[entry.accession] = e)
-                                      }
-                                      highlight-event="onmouseover"
-                                      use-ctrl-to-zoom
-                                    />
-                                  </div>
-                                ) : (
-                                  <div
-                                    className={f(
-                                      'track-component',
-                                      `${this.state.addLabelClass}`,
-                                    )}
-                                  >
-                                    <protvista-interpro-track
-                                      length={length}
-                                      displaystart="1"
-                                      displayend={length}
-                                      id={`track_${entry.accession}`}
-                                      ref={(e) =>
-                                        (this.web_tracks[entry.accession] = e)
-                                      }
-                                      shape="roundRectangle"
-                                      highlight-event="onmouseover"
-                                      use-ctrl-to-zoom
-                                      expanded
-                                    />
-                                  </div>
-                                )}
-                                <div
-                                  className={f(
-                                    'track-accession',
-                                    `${this.state.addLabelClass}`,
-                                  )}
-                                >
-                                  {this.renderLabels(entry)}
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    ))}
-                {showConservationButton ? (
-                  <div className={f('track-container')}>
-                    <div className={f('track-row')}>
-                      <div
-                        className={f(
-                          'track-component',
-                          this.state.addLabelClass,
-                        )}
-                      >
-                        <header>
-                          <button
-                            onClick={() => this.handleConservationLoad(this)}
-                          >
-                            ▸ Match Conservation
-                          </button>
-                        </header>
-                      </div>
-                    </div>
-                    <div className={f('track-group')}>
+                      ))}
+                  {showConservationButton ? (
+                    <div className={f('track-container')}>
                       <div className={f('track-row')}>
                         <div
                           className={f(
                             'track-component',
-                            'conservation-placeholder-component',
                             this.state.addLabelClass,
                           )}
-                          ref={this._conservationTrackRef}
                         >
-                          {this.state.showLoading ? (
-                            <div
-                              className={f('loading-spinner')}
-                              style={{ margin: '10px auto' }}
+                          <header>
+                            <button
+                              onClick={() => this.handleConservationLoad(this)}
                             >
-                              <div />
-                              <div />
-                              <div />
-                            </div>
-                          ) : null}
+                              ▸ Match Conservation
+                            </button>
+                          </header>
                         </div>
-                        <div
-                          className={f(
-                            'track-accession',
-                            this.state.addLabelClass,
-                          )}
-                        >
-                          <button
-                            type="button"
+                      </div>
+                      <div className={f('track-group')}>
+                        <div className={f('track-row')}>
+                          <div
                             className={f(
-                              'hollow',
-                              'button',
-                              'user-select-none',
+                              'track-component',
+                              'conservation-placeholder-component',
+                              this.state.addLabelClass,
                             )}
-                            onClick={() => this.handleConservationLoad(this)}
+                            ref={this._conservationTrackRef}
                           >
-                            Fetch Conservation
-                          </button>
+                            {this.state.showLoading ? (
+                              <div
+                                className={f('loading-spinner')}
+                                style={{ margin: '10px auto' }}
+                              >
+                                <div />
+                                <div />
+                                <div />
+                              </div>
+                            ) : null}
+                          </div>
+                          <div
+                            className={f(
+                              'track-accession',
+                              this.state.addLabelClass,
+                            )}
+                          >
+                            <button
+                              type="button"
+                              className={f(
+                                'hollow',
+                                'button',
+                                'user-select-none',
+                              )}
+                              onClick={() => this.handleConservationLoad(this)}
+                            >
+                              Fetch Conservation
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ) : null}
+                  ) : null}
+                </div>
+              </div>
+              <protvista-zoom-tool
+                length={length}
+                displaystart="1"
+                displayend={length}
+              >
+                <button
+                  id="zoom-in"
+                  className={f('zoom-button', 'icon', 'icon-common')}
+                  data-icon="&#xf0fe;"
+                  title="Click to zoom in      Ctrl+Scroll"
+                />
+                <button
+                  id="zoom-out"
+                  className={f('zoom-button', 'icon', 'icon-common')}
+                  data-icon="&#xf146;"
+                  title="Click to zoom out      Ctrl+Scroll"
+                />
+              </protvista-zoom-tool>
+              <div
+                className={f(
+                  'option-fullscreen',
+                  'font-l',
+                  'margin-right-large',
+                )}
+              >
+                <FullScreenButton
+                  element={this._mainRef.current}
+                  tooltip="View the domain viewer in full screen mode"
+                />
               </div>
             </protvista-manager>
-          </div>
-          <div className={f('protvista')}>
-            <protvista-zoom-tool
-              length={length}
-              displaystart="1"
-              displayend={length}
-            >
-              <button
-                id="zoom-in"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf0fe;"
-                title="Click to zoom in      Ctrl+Scroll"
-              />
-              <button
-                id="zoom-out"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf146;"
-                title="Click to zoom out      Ctrl+Scroll"
-              />
-            </protvista-zoom-tool>
-            <div
-              className={f('option-fullscreen', 'font-l', 'margin-right-large')}
-            >
-              <FullScreenButton
-                element={this._mainRef.current}
-                tooltip="View the domain viewer in full screen mode"
-              />
-            </div>
           </div>
         </div>
       </div>
