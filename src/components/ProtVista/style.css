@@ -408,9 +408,9 @@ g:global(.child-location-group.clg-5) path {
   margin: 0.5rem 0 0.5rem 0;
   position: relative;
 
-  & .button {
-    background-color: #2daec1;
-  }
+  /*& .button {*/
+  /*  background-color: #2daec1;*/
+  /*}*/
 
   & .dropdown-content {
     position: absolute;
@@ -439,6 +439,16 @@ g:global(.child-location-group.clg-5) path {
 .dropdown-container .dropdown-pane li {
   display: block;
   padding: 0.3rem 1rem;
+  white-space: nowrap;
+}
+
+.dropdown-container .dropdown-pane li input {
+  padding: 0 0.5rem;
+  margin: 0;
+  white-space: nowrap;
+}
+.nested-list {
+  font-size: 0.8rem;
 }
 
 .conservation-placeholder-component {

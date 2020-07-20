@@ -893,48 +893,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       >
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
-          <div className={f('option-color', 'margin-right-medium')}>
-            Colour By:{' '}
-            <select
-              className={f('select-inline')}
-              value={this.props.colorDomainsBy}
-              onChange={this.changeColor}
-              onBlur={this.changeColor}
-            >
-              <option value={EntryColorMode.ACCESSION}>Accession</option>
-              <option value={EntryColorMode.MEMBER_DB}>Member Database</option>
-              <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
-                Domain Relationship
-              </option>
-            </select>
-          </div>
-          <div className={f('option-collapse')}>
-            <Tooltip title={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}>
-              <button
-                onClick={this.toggleCollapseAll}
-                aria-label={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}
-              >
-                {collapsed ? 'Expand' : 'Collapse'} All
-              </button>
-            </Tooltip>
-          </div>
-          <div
-            className={f('option-fullscreen', 'font-l', 'margin-right-large')}
-          >
-            <Tooltip title={'Click to take the snapshot'}>
-              <protvista-saver
-                element-id={`${this.props.id}ProtvistaDiv`}
-                background-color={'#e5e5e5'}
-                id={`${this.props.id}Saver`}
-              >
-                <button
-                  className={f('icon', 'icon-common')}
-                  data-icon="&#xf030;"
-                />
-              </protvista-saver>
-            </Tooltip>
-          </div>
-          <div className={f('button-group', 'dropdown-container', 'small')}>
+          <div className={f('button-group', 'dropdown-container')}>
             <button
               className={f('button', 'dropdown')}
               onClick={() =>
@@ -946,7 +905,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
                   'Customise the Nightingale viewer to show names, accession and tooltips'
                 }
               >
-                Display
+                <span
+                  className={f('icon', 'icon-common')}
+                  data-icon="&#xf013;"
+                />
               </Tooltip>
             </button>
             <div
@@ -955,26 +917,110 @@ class ProtVista extends Component /*:: <Props, State> */ {
                 transform: `scaleY(${this.state.dropdownOpen ? 1 : 0})`,
               }}
             >
-              <ul ref={this._labelOptionsRef}>
-                <li key={'accession'}>
-                  <input
-                    type="checkbox"
-                    onChange={this.updateLabel}
-                    value={'accession'}
-                    checked={
-                      this.state.label === 'accession' ||
-                      this.state.label === 'both'
-                    }
-                  />{' '}
-                  Accession
+              <ul>
+                <li>
+                  Colour By
+                  <ul className={f('nested-list')}>
+                    <li>
+                      <input
+                        type="radio"
+                        onChange={this.changeColor}
+                        value={EntryColorMode.ACCESSION}
+                        checked={
+                          this.props.colorDomainsBy === EntryColorMode.ACCESSION
+                        }
+                      />{' '}
+                      Accession
+                    </li>
+                    <li>
+                      <input
+                        type="radio"
+                        onChange={this.changeColor}
+                        value={EntryColorMode.MEMBER_DB}
+                        checked={
+                          this.props.colorDomainsBy === EntryColorMode.MEMBER_DB
+                        }
+                      />{' '}
+                      Member Database
+                    </li>
+                    <li>
+                      <input
+                        type="radio"
+                        onChange={this.changeColor}
+                        value={EntryColorMode.DOMAIN_RELATIONSHIP}
+                        checked={
+                          this.props.colorDomainsBy ===
+                          EntryColorMode.DOMAIN_RELATIONSHIP
+                        }
+                      />{' '}
+                      Domain Relationship
+                    </li>
+                  </ul>
                 </li>
-                <li key={'name'}>
-                  <input
-                    type="checkbox"
-                    onChange={this.updateLabel}
-                    value={'name'}
-                  />{' '}
-                  Name
+                <hr />
+                <li>
+                  Label by
+                  <ul ref={this._labelOptionsRef} className={f('nested-list')}>
+                    <li key={'accession'}>
+                      <input
+                        type="checkbox"
+                        onChange={this.updateLabel}
+                        value={'accession'}
+                        checked={
+                          this.state.label === 'accession' ||
+                          this.state.label === 'both'
+                        }
+                      />{' '}
+                      Accession
+                    </li>
+                    <li key={'name'}>
+                      <input
+                        type="checkbox"
+                        onChange={this.updateLabel}
+                        value={'name'}
+                      />{' '}
+                      Name
+                    </li>
+                  </ul>
+                </li>
+                <hr />
+                <li>
+                  Snapshot
+                  <ul className={f('nested-list')}>
+                    <li>
+                      <protvista-saver
+                        element-id={`${this.props.id}ProtvistaDiv`}
+                        background-color={'#e5e5e5'}
+                        id={`${this.props.id}Saver`}
+                      >
+                        <button>
+                          <span
+                            className={f('icon', 'icon-common')}
+                            data-icon="&#xf030;"
+                          />{' '}
+                          Save as Image
+                        </button>
+                      </protvista-saver>
+                    </li>
+                    <li>
+                      <span
+                        className={f('icon', 'icon-common')}
+                        data-icon="&#x50;"
+                      />{' '}
+                      Print
+                    </li>
+                  </ul>
+                </li>
+                <hr />
+                <li>
+                  <button
+                    onClick={this.toggleCollapseAll}
+                    aria-label={`${
+                      collapsed ? 'Expand' : 'Collapse'
+                    } all tracks`}
+                  >
+                    {collapsed ? 'Expand' : 'Collapse'} All Tracks
+                  </button>
                 </li>
                 <hr />
                 <li key={'tooltip'}>
@@ -983,17 +1029,18 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     onChange={() =>
                       this.setState({
                         enableTooltip: !this.state.enableTooltip,
-                        dropdownOpen: false,
                       })
                     }
                     checked={this.state.enableTooltip}
                   />{' '}
-                  Tooltip
+                  Tooltip {this.state.enableTooltip ? 'Active' : 'Inactive'}
                 </li>
               </ul>
             </div>
           </div>
-          <div className={f('exporter')}>{ExporterButton}</div>
+          {ExporterButton ? (
+            <div className={f('exporter')}>{ExporterButton}</div>
+          ) : null}
         </div>
       </div>
     );
