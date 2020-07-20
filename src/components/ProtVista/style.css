@@ -54,10 +54,10 @@
 .option-color {
   white-space: nowrap;
 }
-.option-fullscreen button {
+.viewer-options button {
   color: var(--colors-dark);
 }
-.option-fullscreen button:hover {
+.viewer-options button:hover {
   color: var(--colors-nearly-black);
 }
 
@@ -217,6 +217,13 @@ g:global(.child-group) path:global(.feature) {
   font-size: 90%;
   color: var(--colors-graydark);
 }
+
+@media print {
+  a {
+    text-decoration: none;
+  }
+}
+
 /*resize elements for small screens in order to see full IPR number*/
 @media screen and (max-width: 39.9375em) {
   .aligned-to-track-component,

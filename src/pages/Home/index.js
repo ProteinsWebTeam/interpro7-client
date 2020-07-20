@@ -16,7 +16,7 @@ import Link from 'components/generic/Link';
 
 import { ToolCards } from 'components/home/Tools';
 // Functions
-import { schedule } from 'timing-functions/src';
+import { schedule } from 'timing-functions';
 
 import {
   schemaProcessDataInterpro,

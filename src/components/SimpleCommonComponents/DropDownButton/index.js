@@ -22,13 +22,7 @@ const DropDownButton = (
 ) => {
   const [isOpen, setOpen] = useState(false);
   return (
-    <div
-      className={`${fPlus(
-        'button-group',
-        'small',
-        'dropdown-container',
-      )} ${extraClasses}`}
-    >
+    <div className={`${fPlus('small', 'dropdown-container')} ${extraClasses}`}>
       <button
         className={fPlus('button', 'dropdown')}
         style={{ backgroundColor: color }}

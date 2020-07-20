@@ -1,27 +1,39 @@
 import React, { PureComponent } from 'react';
 // Animation
-import { gsap, Expo } from 'gsap/all';
+import { Tweenable } from 'shifty';
 
+const applyStyleToSelection = (selection, { opacity, y }) => {
+  selection.forEach((element) => {
+    if (typeof opacity !== undefined) element.style.opacity = opacity;
+    if (typeof y !== undefined) element.style.transform = `translateY(${y}px)`;
+  });
+};
 class InterProGraphicAnim extends PureComponent {
+  t1 = new Tweenable({ opacity: 1, y: 0 });
   _handleMouseOver = () => {
-    // this._tl.play();
-    gsap.to('.blob:not(.high-blob)', 1, {
-      opacity: 0.2,
+    const notHighBlob = document.querySelectorAll('.blob:not(.high-blob)');
+    const lineUp = document.querySelectorAll('.blob.line-up');
+    const lineDown = document.querySelectorAll('.blob.line-down');
+    const highBlob = document.querySelectorAll('.high-blob');
+    this.t1.stop();
+    this.t1.tween({
+      to: { opacity: 0.2, y: 160 },
+      step: ({ opacity, y }) => {
+        applyStyleToSelection(notHighBlob, { opacity });
+        applyStyleToSelection(lineUp, { y });
+        applyStyleToSelection(lineDown, { y: -y });
+        applyStyleToSelection(highBlob, { opacity: 1 });
+      },
     });
-    gsap.to('.blob.line-up', 2, {
-      y: 160,
-      ease: Expo.easeOut,
-    });
-    gsap.to('.blob.line-down', 2, {
-      y: -160,
-      ease: Expo.easeOut,
-    });
-    gsap.to('.high-blob', 1, { opacity: 1, ease: Expo.easeOut });
   };
 
   _handleMouseOut = () => {
-    // this._tl.reverse();
-    gsap.to('.blob', 2, { y: 0, opacity: 1, ease: Expo.easeOut });
+    const blobs = document.querySelectorAll('.blob');
+    this.t1.stop();
+    this.t1.tween({
+      to: { opacity: 1, y: 0 },
+      step: (state) => applyStyleToSelection(blobs, state),
+    });
   };
 
   render() {

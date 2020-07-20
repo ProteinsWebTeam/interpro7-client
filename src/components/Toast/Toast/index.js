@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { sleep } from 'timing-functions/src';
+import { sleep } from 'timing-functions';
 
 import { webAnimations as supportsWebAnimations } from 'utils/support';
 import Link from 'components/generic/Link';
@@ -84,7 +84,7 @@ export default class Toast extends PureComponent /*:: <Props> */ {
     this._timeout = setTimeout(this._loop, GRANULARITY);
   };
 
-  _close = async e => {
+  _close = async (e) => {
     if (supportsWebAnimations && this._ref.current) {
       this._ref.current.animate(
         { transform: ['translateX(0)', 'translateX(150%)'] },

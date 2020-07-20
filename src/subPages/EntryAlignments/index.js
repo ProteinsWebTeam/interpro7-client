@@ -28,6 +28,7 @@ const _Alignment = ({
   onConservationProgress,
   setDisplayingAlignment,
   setColorMap,
+  overlayConservation,
   data: { payload },
 }) => {
   const [forceShow, setForceShow] = useState(false);
@@ -49,6 +50,7 @@ const _Alignment = ({
           type={type}
           num={num}
           colorscheme={colorscheme}
+          overlayConservation={overlayConservation}
         />
       ) : (
         <div>
@@ -74,6 +76,7 @@ _Alignment.propTypes = {
   setDisplayingAlignment: T.func,
   setColorMap: T.func,
   data: dataPropType,
+  overlayConservation: T.bool,
 };
 
 const mapStateToPropsForAlignment = createSelector(
@@ -133,6 +136,7 @@ const EntryAlignments = ({
   // TODO: draw the legend using 👇🏽 the colorMap coming from events in the component.
   const [colorMap, setColorMap] = useState({});
   const [isDisplayingAlignment, setDisplayingAlignment] = useState(false);
+  const [overlayConservation, setOverlayConservation] = useState(false);
 
   // eslint-disable-next-line camelcase
   const types = (data?.payload?.metadata?.entry_annotations || [])
@@ -206,6 +210,17 @@ const EntryAlignments = ({
                     </option>
                   </select>
                 </label>
+                <label className={f({ disabled: conservastionProgress < 1 })}>
+                  Overlay Conservation:
+                  <input
+                    type="checkbox"
+                    value={overlayConservation}
+                    onChange={() =>
+                      setOverlayConservation(!overlayConservation)
+                    }
+                    disabled={conservastionProgress < 1}
+                  />
+                </label>
                 <DropDownButton
                   label="Legends"
                   extraClasses={f('dropdown-container')}
@@ -244,6 +259,7 @@ const EntryAlignments = ({
           onConservationProgress={setConservastionProgress}
           setDisplayingAlignment={setDisplayingAlignment}
           setColorMap={setColorMap}
+          overlayConservation={overlayConservation}
         />
       )}
     </div>

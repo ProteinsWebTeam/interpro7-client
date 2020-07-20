@@ -10,7 +10,7 @@ const _Tooltip = (
     html,
     title,
     interactive,
-    useContext: _uC,
+    useContext,
     children,
     distance,
     ...rest
@@ -32,7 +32,7 @@ const _Tooltip = (
       allowHTML={true}
       className={'tippy-box'}
     >
-      <div {...rest} style={{ display: 'inline' }}>
+      <div {...rest} style={useContext ? {} : { display: 'inline' }}>
         {children}
       </div>
     </Tippy>

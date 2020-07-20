@@ -622,6 +622,11 @@ hr {
 /*TOOLTIP*/
 .tippy-box {
   text-align: left;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.tippy-arrow {
+  position: absolute;
 }
 /*/TOOLTIP*/
 

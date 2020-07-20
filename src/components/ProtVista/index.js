@@ -21,6 +21,7 @@ import ProtvistaZoomTool from 'protvista-zoom-tool';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
+import ReactToPrint from 'react-to-print';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import spinner from 'components/SimpleCommonComponents/Loading/style.css';
@@ -52,6 +53,7 @@ const f = foundationPartial(ipro, localCSS, fonts, spinner);
 const webComponents = [];
 
 const TOOLTIP_DELAY = 500;
+const ONE_SEC = 1000;
 
 const loadProtVistaWebComponents = () => {
   if (!webComponents.length) {
@@ -187,6 +189,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this._mainRef = React.createRef();
     this._popperRef = React.createRef();
     this._popperContentRef = React.createRef();
+    this._protvistaRef = React.createRef();
     this._webProteinRef = React.createRef();
     this._hydroRef = React.createRef();
     this._labelOptionsRef = React.createRef();
@@ -1003,11 +1006,27 @@ class ProtVista extends Component /*:: <Props, State> */ {
                       </protvista-saver>
                     </li>
                     <li>
-                      <span
-                        className={f('icon', 'icon-common')}
-                        data-icon="&#x50;"
-                      />{' '}
-                      Print
+                      <ReactToPrint
+                        trigger={() => (
+                          <button
+                            className={f('icon', 'icon-common')}
+                            data-icon="&#x50;"
+                          >
+                            {' '}
+                            Print
+                          </button>
+                        )}
+                        onBeforeGetContent={() => {
+                          this._protvistaRef.current.style = 'width: 1000px;';
+                          return new Promise((resolve) => {
+                            setTimeout(() => resolve(), ONE_SEC);
+                          });
+                        }}
+                        content={() => this._protvistaRef.current}
+                        onAfterPrint={() =>
+                          (this._protvistaRef.current.style = '')
+                        }
+                      />
                     </li>
                   </ul>
                 </li>
@@ -1081,7 +1100,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
         <div id={`${this.props.id}ProtvistaDiv`}>
-          <div className={f('protvista')}>
+          <div className={f('protvista')} ref={this._protvistaRef}>
             <protvista-manager
               attributes="length displaystart displayend highlight"
               id="pv-manager"
@@ -1290,38 +1309,35 @@ class ProtVista extends Component /*:: <Props, State> */ {
                   </div>
                 ) : null}
               </div>
-
-              <protvista-zoom-tool
-                length={length}
-                displaystart="1"
-                displayend={length}
-              >
-                <button
-                  id="zoom-in"
-                  className={f('zoom-button', 'icon', 'icon-common')}
-                  data-icon="&#xf0fe;"
-                  title="Click to zoom in      Ctrl+Scroll"
-                />
-                <button
-                  id="zoom-out"
-                  className={f('zoom-button', 'icon', 'icon-common')}
-                  data-icon="&#xf146;"
-                  title="Click to zoom out      Ctrl+Scroll"
-                />
-              </protvista-zoom-tool>
-              <div
-                className={f(
-                  'option-fullscreen',
-                  'font-l',
-                  'margin-right-large',
-                )}
-              >
-                <FullScreenButton
-                  element={this._mainRef.current}
-                  tooltip="View the domain viewer in full screen mode"
-                />
-              </div>
             </protvista-manager>
+          </div>
+          <div className={f('protvista')}>
+            <protvista-zoom-tool
+              length={length}
+              displaystart="1"
+              displayend={length}
+            >
+              <button
+                id="zoom-in"
+                className={f('zoom-button', 'icon', 'icon-common')}
+                data-icon="&#xf0fe;"
+                title="Click to zoom in      Ctrl+Scroll"
+              />
+              <button
+                id="zoom-out"
+                className={f('zoom-button', 'icon', 'icon-common')}
+                data-icon="&#xf146;"
+                title="Click to zoom out      Ctrl+Scroll"
+              />
+            </protvista-zoom-tool>
+            <div
+              className={f('option-fullscreen', 'font-l', 'margin-right-large')}
+            >
+              <FullScreenButton
+                element={this._mainRef.current}
+                tooltip="View the domain viewer in full screen mode"
+              />
+            </div>
           </div>
         </div>
       </div>

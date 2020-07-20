@@ -2,7 +2,7 @@
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-import { schedule } from 'timing-functions/src';
+import { schedule } from 'timing-functions';
 
 // Global stylesheets loaded here
 import 'styles/foundation';

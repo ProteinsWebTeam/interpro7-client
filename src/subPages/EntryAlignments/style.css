@@ -21,17 +21,22 @@
 .controllers {
   display: flex;
   justify-content: flex-end;
+  align-items: baseline;
   & select {
     margin-left: 1em;
   }
   & label {
     display: flex;
     align-items: baseline;
+    margin-left: 4px;
   }
   & button,
   & a {
     margin-left: 4px;
     background: var(--colors-interpro);
+  }
+  & .disabled {
+    color: var(--colors-ulightgray);
   }
 }
 .controllers .dropdown-container {
