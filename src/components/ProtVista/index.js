@@ -148,7 +148,7 @@ const getColorScaleHTML = (
   hideCategory: Object,
   expandedTrack: Object,
   collapsed: boolean,
-  label: string,
+  label: Object,
   addLabelClass: string,
   showConservationButtonButton: boolean,
 }; */
@@ -178,7 +178,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
       hideCategory: {},
       expandedTrack: {},
       collapsed: false,
-      label: 'accession',
+      label: {
+        accession: true,
+        name: false,
+      },
       addLabelClass: '',
       enableTooltip: true,
       dropdownOpen: false,
@@ -724,45 +727,44 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
   };
 
-  updateLabel = () => {
-    const items = this._labelOptionsRef.current.childNodes;
-    const labels = [];
-    items.forEach((item) => {
-      if (item.tagName === 'LI' && item.firstChild.checked)
-        labels.push(item.firstChild.value);
-    });
-    if (labels.includes('name')) {
-      this.setState({ addLabelClass: 'label-by-name' });
-      if (labels.includes('accession')) this.setState({ label: 'both' });
-      else this.setState({ label: 'name' });
-    } else {
-      this.setState({ label: 'accession', addLabelClass: '' });
+  updateLabel = (evt) => {
+    const newLabelState = { ...this.state.label };
+    newLabelState[evt.target.value] = !newLabelState[evt.target.value];
+    if (!newLabelState.accession && !newLabelState.name) {
+      newLabelState.accession = true;
     }
+    this.setState({
+      label: newLabelState,
+      addLabelClass: newLabelState.name ? 'label-by-name' : '',
+    });
+    //   console.log(evt.target.value)
+    //   const items = this._labelOptionsRef.current.childNodes;
+    //   const labels = [];
+    //   items.forEach((item) => {
+    //     if (item.tagName === 'LI' && item.firstChild.checked)
+    //       labels.push(item.firstChild.value);
+    //   });
+    //   if (labels.includes('name')) {
+    //     this.setState({ addLabelClass: 'label-by-name' });
+    //     if (labels.includes('accession')) this.setState({ label: 'both' });
+    //     else this.setState({ label: 'name' });
+    //   } else {
+    //     this.setState({ label: 'accession', addLabelClass: '' });
+    //   }
   };
 
   renderSwitch(label, entry) {
     const type = entry.type ? (
       <interpro-type type={entry.type.replace('_', ' ')} dimension="1em" />
     ) : null;
-    switch (label) {
-      case 'name':
-        return (
-          <>
-            {type}
-            {entry.name}
-          </>
-        );
-      case 'both':
-        return (
-          <>
-            {type}
-            {entry.accession}: {entry.name}
-          </>
-        );
-      case 'accession':
-      default:
-        return entry.accession;
-    }
+    return (
+      <>
+        {type}
+        {label.accession && entry.accession}
+        {label.accession && label.name && ': '}
+        {label.name && entry.name}
+      </>
+    );
   }
 
   renderLabels(entry) {
@@ -945,40 +947,46 @@ class ProtVista extends Component /*:: <Props, State> */ {
                       Colour By
                       <ul className={f('nested-list')}>
                         <li>
-                          <input
-                            type="radio"
-                            onChange={this.changeColor}
-                            value={EntryColorMode.ACCESSION}
-                            checked={
-                              this.props.colorDomainsBy ===
-                              EntryColorMode.ACCESSION
-                            }
-                          />{' '}
-                          Accession
+                          <label>
+                            <input
+                              type="radio"
+                              onChange={this.changeColor}
+                              value={EntryColorMode.ACCESSION}
+                              checked={
+                                this.props.colorDomainsBy ===
+                                EntryColorMode.ACCESSION
+                              }
+                            />{' '}
+                            Accession
+                          </label>
                         </li>
                         <li>
-                          <input
-                            type="radio"
-                            onChange={this.changeColor}
-                            value={EntryColorMode.MEMBER_DB}
-                            checked={
-                              this.props.colorDomainsBy ===
-                              EntryColorMode.MEMBER_DB
-                            }
-                          />{' '}
-                          Member Database
+                          <label>
+                            <input
+                              type="radio"
+                              onChange={this.changeColor}
+                              value={EntryColorMode.MEMBER_DB}
+                              checked={
+                                this.props.colorDomainsBy ===
+                                EntryColorMode.MEMBER_DB
+                              }
+                            />{' '}
+                            Member Database
+                          </label>
                         </li>
                         <li>
-                          <input
-                            type="radio"
-                            onChange={this.changeColor}
-                            value={EntryColorMode.DOMAIN_RELATIONSHIP}
-                            checked={
-                              this.props.colorDomainsBy ===
-                              EntryColorMode.DOMAIN_RELATIONSHIP
-                            }
-                          />{' '}
-                          Domain Relationship
+                          <label>
+                            <input
+                              type="radio"
+                              onChange={this.changeColor}
+                              value={EntryColorMode.DOMAIN_RELATIONSHIP}
+                              checked={
+                                this.props.colorDomainsBy ===
+                                EntryColorMode.DOMAIN_RELATIONSHIP
+                              }
+                            />{' '}
+                            Domain Relationship
+                          </label>
                         </li>
                       </ul>
                     </li>
@@ -990,24 +998,26 @@ class ProtVista extends Component /*:: <Props, State> */ {
                         className={f('nested-list')}
                       >
                         <li key={'accession'}>
-                          <input
-                            type="checkbox"
-                            onChange={this.updateLabel}
-                            value={'accession'}
-                            checked={
-                              this.state.label === 'accession' ||
-                              this.state.label === 'both'
-                            }
-                          />{' '}
-                          Accession
+                          <label>
+                            <input
+                              type="checkbox"
+                              onChange={this.updateLabel}
+                              value={'accession'}
+                              checked={this.state.label.accession}
+                            />{' '}
+                            Accession
+                          </label>
                         </li>
                         <li key={'name'}>
-                          <input
-                            type="checkbox"
-                            onChange={this.updateLabel}
-                            value={'name'}
-                          />{' '}
-                          Name
+                          <label>
+                            <input
+                              type="checkbox"
+                              onChange={this.updateLabel}
+                              value={'name'}
+                              checked={this.state.label.name}
+                            />{' '}
+                            Name
+                          </label>
                         </li>
                       </ul>
                     </li>
@@ -1069,16 +1079,19 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     </li>
                     <hr />
                     <li key={'tooltip'}>
-                      <input
-                        type="checkbox"
-                        onChange={() =>
-                          this.setState({
-                            enableTooltip: !this.state.enableTooltip,
-                          })
-                        }
-                        checked={this.state.enableTooltip}
-                      />{' '}
-                      Tooltip {this.state.enableTooltip ? 'Active' : 'Inactive'}
+                      <label>
+                        <input
+                          type="checkbox"
+                          onChange={() =>
+                            this.setState({
+                              enableTooltip: !this.state.enableTooltip,
+                            })
+                          }
+                          checked={this.state.enableTooltip}
+                        />{' '}
+                        Tooltip{' '}
+                        {this.state.enableTooltip ? 'Active' : 'Inactive'}
+                      </label>
                     </li>
                   </ul>
                 </div>
