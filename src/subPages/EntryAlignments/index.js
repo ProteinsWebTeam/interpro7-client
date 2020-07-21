@@ -162,14 +162,6 @@ const EntryAlignments = ({
           settingsName="showCtrlToZoomToast"
         />
       ) : null}
-      <div
-        className={f('callout', 'info', 'withicon')}
-        style={{
-          display: 'flex',
-        }}
-      >
-        <b>BETA</b>: This is a new feature and its under current development.
-      </div>
       <label className={f('alignment-selector')}>
         <span>Available alignments:</span>
         <select
@@ -211,7 +203,7 @@ const EntryAlignments = ({
                   </select>
                 </label>
                 <label className={f({ disabled: conservastionProgress < 1 })}>
-                  Overlay Conservation:
+                  Conservation:
                   <input
                     type="checkbox"
                     value={overlayConservation}
