@@ -449,18 +449,16 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       dataGenome3d,
     } = this.props;
 
-    if (!data || data.loading) return <Loading />;
+    if ((!data || data.loading) && (!dataFeatures || dataFeatures.loading))
+      return <Loading />;
     if (!data.payload || !data.payload.results) {
       const edgeCaseText = edgeCases.get(STATUS_TIMEOUT);
-      return data.payload?.detail === 'Query timed out' ? (
-        <EdgeCase text={edgeCaseText} status={STATUS_TIMEOUT} />
-      ) : (
-        <div className={f('callout')}>No entries match this protein.</div>
-      );
+      if (data.payload?.detail === 'Query timed out')
+        return <EdgeCase text={edgeCaseText} status={STATUS_TIMEOUT} />;
     }
 
     const { interpro, unintegrated, other } = processData({
-      data,
+      data: data?.payload?.results ? data : { payload: { results: [] } },
       endpoint: 'protein',
     });
     const interproFamilies = interpro.filter(
@@ -489,6 +487,14 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       mergeConservationData(mergedData, this.state.dataConservation);
     }
 
+    if (
+      !Object.keys(mergedData).length ||
+      !Object.values(mergedData)
+        .map((x) => x.length)
+        .reduce((agg, v) => agg + v, 0)
+    ) {
+      return <div className={f('callout')}>No entries match this protein.</div>;
+    }
     const showConservationButton = this.isConservationDataAvailable(mergedData);
     const ConservationProviderElement = this.state.generateConservationData
       ? ConservationProviderLoaded

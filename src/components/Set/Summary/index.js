@@ -124,8 +124,11 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
   }
 
   _handleClick = (event) => {
-    const g = event.path[1];
-    if (g.nodeName === 'g' && g.classList.contains('node')) {
+    const g = event
+      .composedPath()
+      .filter((e) => e.nodeName === 'g')
+      .filter((e) => e.classList.contains('node'))?.[0];
+    if (g) {
       this.props.goToCustomLocation({
         description: {
           main: { key: 'entry' },
