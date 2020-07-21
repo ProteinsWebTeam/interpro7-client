@@ -725,7 +725,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
   };
 
   updateLabel = () => {
-    this.setState({ dropdownOpen: false });
     const items = this._labelOptionsRef.current.childNodes;
     const labels = [];
     items.forEach((item) => {
@@ -882,7 +881,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
-  renderOptions(ExporterButton) {
+  renderOptions(ExporterButton, length) {
     const { collapsed } = this.state;
     const title = this.props.title || 'Domains on protein';
 
@@ -896,167 +895,197 @@ class ProtVista extends Component /*:: <Props, State> */ {
       >
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
-          <div className={f('button-group', 'dropdown-container')}>
-            <button
-              className={f('button', 'dropdown')}
-              onClick={() =>
-                this.setState({ dropdownOpen: !this.state.dropdownOpen })
-              }
-            >
-              <Tooltip
-                title={
-                  'Customise the Nightingale viewer to show names, accession and tooltips'
-                }
-              >
-                <span
-                  className={f('icon', 'icon-common')}
-                  data-icon="&#xf013;"
-                />
-              </Tooltip>
-            </button>
-            <div
-              className={f('dropdown-pane', 'dropdown-content', 'left')}
-              style={{
-                transform: `scaleY(${this.state.dropdownOpen ? 1 : 0})`,
-              }}
-            >
-              <ul>
-                <li>
-                  Colour By
-                  <ul className={f('nested-list')}>
-                    <li>
-                      <input
-                        type="radio"
-                        onChange={this.changeColor}
-                        value={EntryColorMode.ACCESSION}
-                        checked={
-                          this.props.colorDomainsBy === EntryColorMode.ACCESSION
-                        }
-                      />{' '}
-                      Accession
-                    </li>
-                    <li>
-                      <input
-                        type="radio"
-                        onChange={this.changeColor}
-                        value={EntryColorMode.MEMBER_DB}
-                        checked={
-                          this.props.colorDomainsBy === EntryColorMode.MEMBER_DB
-                        }
-                      />{' '}
-                      Member Database
-                    </li>
-                    <li>
-                      <input
-                        type="radio"
-                        onChange={this.changeColor}
-                        value={EntryColorMode.DOMAIN_RELATIONSHIP}
-                        checked={
-                          this.props.colorDomainsBy ===
-                          EntryColorMode.DOMAIN_RELATIONSHIP
-                        }
-                      />{' '}
-                      Domain Relationship
-                    </li>
-                  </ul>
-                </li>
-                <hr />
-                <li>
-                  Label by
-                  <ul ref={this._labelOptionsRef} className={f('nested-list')}>
-                    <li key={'accession'}>
-                      <input
-                        type="checkbox"
-                        onChange={this.updateLabel}
-                        value={'accession'}
-                        checked={
-                          this.state.label === 'accession' ||
-                          this.state.label === 'both'
-                        }
-                      />{' '}
-                      Accession
-                    </li>
-                    <li key={'name'}>
-                      <input
-                        type="checkbox"
-                        onChange={this.updateLabel}
-                        value={'name'}
-                      />{' '}
-                      Name
-                    </li>
-                  </ul>
-                </li>
-                <hr />
-                <li>
-                  Snapshot
-                  <ul className={f('nested-list')}>
-                    <li>
-                      <protvista-saver
-                        element-id={`${this.props.id}ProtvistaDiv`}
-                        background-color={'#e5e5e5'}
-                        id={`${this.props.id}Saver`}
-                      >
-                        <button>
-                          <span
-                            className={f('icon', 'icon-common')}
-                            data-icon="&#xf030;"
-                          />{' '}
-                          Save as Image
-                        </button>
-                      </protvista-saver>
-                    </li>
-                    <li>
-                      <ReactToPrint
-                        trigger={() => (
-                          <button
-                            className={f('icon', 'icon-common')}
-                            data-icon="&#x50;"
-                          >
-                            {' '}
-                            Print
-                          </button>
-                        )}
-                        onBeforeGetContent={() => {
-                          this._protvistaRef.current.style = 'width: 1000px;';
-                          return new Promise((resolve) => {
-                            setTimeout(() => resolve(), ONE_SEC);
-                          });
-                        }}
-                        content={() => this._protvistaRef.current}
-                        onAfterPrint={() =>
-                          (this._protvistaRef.current.style = '')
-                        }
-                      />
-                    </li>
-                  </ul>
-                </li>
-                <hr />
-                <li>
-                  <button
-                    onClick={this.toggleCollapseAll}
-                    aria-label={`${
-                      collapsed ? 'Expand' : 'Collapse'
-                    } all tracks`}
-                  >
-                    {collapsed ? 'Expand' : 'Collapse'} All Tracks
-                  </button>
-                </li>
-                <hr />
-                <li key={'tooltip'}>
-                  <input
-                    type="checkbox"
-                    onChange={() =>
-                      this.setState({
-                        enableTooltip: !this.state.enableTooltip,
-                      })
-                    }
-                    checked={this.state.enableTooltip}
-                  />{' '}
-                  Tooltip {this.state.enableTooltip ? 'Active' : 'Inactive'}
-                </li>
-              </ul>
-            </div>
+          <div className={f('option-fullscreen', 'font-l', 'viewer-options')}>
+            <FullScreenButton
+              element={this._mainRef.current}
+              tooltip="View the domain viewer in full screen mode"
+            />
           </div>
+
+          <div className={f('viewer-options')}>
+            <protvista-zoom-tool
+              length={length}
+              displaystart="1"
+              displayend={length}
+            >
+              <button
+                id="zoom-in"
+                className={f('zoom-button', 'icon', 'icon-common')}
+                data-icon="&#xf0fe;"
+                title="Click to zoom in      Ctrl+Scroll"
+              />
+              <button
+                id="zoom-out"
+                className={f('zoom-button', 'icon', 'icon-common')}
+                data-icon="&#xf146;"
+                title="Click to zoom out      Ctrl+Scroll"
+              />
+            </protvista-zoom-tool>
+          </div>
+
+          <div className={f('dropdown-div')}>
+            <Tooltip title={'More options to customise the protein viewer'}>
+              <div className={f('button-group', 'dropdown-container', 'small')}>
+                <button
+                  className={f('button', 'dropdown')}
+                  onClick={() =>
+                    this.setState({ dropdownOpen: !this.state.dropdownOpen })
+                  }
+                >
+                  Options
+                </button>
+                <div
+                  className={f('dropdown-pane', 'dropdown-content', 'left')}
+                  style={{
+                    transform: `scaleY(${this.state.dropdownOpen ? 1 : 0})`,
+                  }}
+                >
+                  <ul>
+                    <li>
+                      Colour By
+                      <ul className={f('nested-list')}>
+                        <li>
+                          <input
+                            type="radio"
+                            onChange={this.changeColor}
+                            value={EntryColorMode.ACCESSION}
+                            checked={
+                              this.props.colorDomainsBy ===
+                              EntryColorMode.ACCESSION
+                            }
+                          />{' '}
+                          Accession
+                        </li>
+                        <li>
+                          <input
+                            type="radio"
+                            onChange={this.changeColor}
+                            value={EntryColorMode.MEMBER_DB}
+                            checked={
+                              this.props.colorDomainsBy ===
+                              EntryColorMode.MEMBER_DB
+                            }
+                          />{' '}
+                          Member Database
+                        </li>
+                        <li>
+                          <input
+                            type="radio"
+                            onChange={this.changeColor}
+                            value={EntryColorMode.DOMAIN_RELATIONSHIP}
+                            checked={
+                              this.props.colorDomainsBy ===
+                              EntryColorMode.DOMAIN_RELATIONSHIP
+                            }
+                          />{' '}
+                          Domain Relationship
+                        </li>
+                      </ul>
+                    </li>
+                    <hr />
+                    <li>
+                      Label by
+                      <ul
+                        ref={this._labelOptionsRef}
+                        className={f('nested-list')}
+                      >
+                        <li key={'accession'}>
+                          <input
+                            type="checkbox"
+                            onChange={this.updateLabel}
+                            value={'accession'}
+                            checked={
+                              this.state.label === 'accession' ||
+                              this.state.label === 'both'
+                            }
+                          />{' '}
+                          Accession
+                        </li>
+                        <li key={'name'}>
+                          <input
+                            type="checkbox"
+                            onChange={this.updateLabel}
+                            value={'name'}
+                          />{' '}
+                          Name
+                        </li>
+                      </ul>
+                    </li>
+                    <hr />
+                    <li>
+                      Snapshot
+                      <ul className={f('nested-list')}>
+                        <li>
+                          <protvista-saver
+                            element-id={`${this.props.id}ProtvistaDiv`}
+                            background-color={'#e5e5e5'}
+                            id={`${this.props.id}Saver`}
+                          >
+                            <button>
+                              <span
+                                className={f('icon', 'icon-common')}
+                                data-icon="&#xf030;"
+                              />{' '}
+                              Save as Image
+                            </button>
+                          </protvista-saver>
+                        </li>
+                        <li>
+                          <ReactToPrint
+                            trigger={() => (
+                              <button
+                                className={f('icon', 'icon-common')}
+                                data-icon="&#x50;"
+                              >
+                                {' '}
+                                Print
+                              </button>
+                            )}
+                            onBeforeGetContent={() => {
+                              this._protvistaRef.current.style =
+                                'width: 1000px;';
+                              return new Promise((resolve) => {
+                                setTimeout(() => resolve(), ONE_SEC);
+                              });
+                            }}
+                            content={() => this._protvistaRef.current}
+                            onAfterPrint={() =>
+                              (this._protvistaRef.current.style = '')
+                            }
+                          />
+                        </li>
+                      </ul>
+                    </li>
+                    <hr />
+                    <li>
+                      <button
+                        onClick={this.toggleCollapseAll}
+                        aria-label={`${
+                          collapsed ? 'Expand' : 'Collapse'
+                        } all tracks`}
+                      >
+                        {collapsed ? 'Expand' : 'Collapse'} All Tracks
+                      </button>
+                    </li>
+                    <hr />
+                    <li key={'tooltip'}>
+                      <input
+                        type="checkbox"
+                        onChange={() =>
+                          this.setState({
+                            enableTooltip: !this.state.enableTooltip,
+                          })
+                        }
+                        checked={this.state.enableTooltip}
+                      />{' '}
+                      Tooltip {this.state.enableTooltip ? 'Active' : 'Inactive'}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </Tooltip>
+          </div>
+
           {ExporterButton ? (
             <div className={f('exporter')}>{ExporterButton}</div>
           ) : null}
@@ -1092,9 +1121,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
         ref={this._mainRef}
         className={f('fullscreenable', 'margin-bottom-large')}
       >
-        <div className={f('track-row')}>
-          {this.renderOptions(ExporterButton)}
-        </div>
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
           <div className={f('popper-content')} ref={this._popperContentRef} />
@@ -1105,6 +1131,9 @@ class ProtVista extends Component /*:: <Props, State> */ {
               attributes="length displaystart displayend highlight"
               id="pv-manager"
             >
+              <div className={f('track-row')}>
+                {this.renderOptions(ExporterButton, length)}
+              </div>
               <div ref={this._protvistaRef}>
                 <div className={f('track-container')}>
                   <div className={f('track-row')}>
@@ -1310,36 +1339,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     </div>
                   ) : null}
                 </div>
-              </div>
-              <protvista-zoom-tool
-                length={length}
-                displaystart="1"
-                displayend={length}
-              >
-                <button
-                  id="zoom-in"
-                  className={f('zoom-button', 'icon', 'icon-common')}
-                  data-icon="&#xf0fe;"
-                  title="Click to zoom in      Ctrl+Scroll"
-                />
-                <button
-                  id="zoom-out"
-                  className={f('zoom-button', 'icon', 'icon-common')}
-                  data-icon="&#xf146;"
-                  title="Click to zoom out      Ctrl+Scroll"
-                />
-              </protvista-zoom-tool>
-              <div
-                className={f(
-                  'option-fullscreen',
-                  'font-l',
-                  'margin-right-large',
-                )}
-              >
-                <FullScreenButton
-                  element={this._mainRef.current}
-                  tooltip="View the domain viewer in full screen mode"
-                />
               </div>
             </protvista-manager>
           </div>
