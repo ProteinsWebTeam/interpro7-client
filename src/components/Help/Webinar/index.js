@@ -75,10 +75,11 @@ export default class Webinar extends PureComponent /*:: <{}> */ {
               <div className={f('card-description')}>
                 This webinar is about InterProScan, the underlying software
                 application that scans both protein and nucleic acid sequences
-                against InterPro's predictive models, which are provided by the
-                InterPro’s member databases. InterPro is a freely available
-                resource used to classify sequences into protein families and to
-                predict the presence of important domains and sites.
+                against InterPro&apos;s predictive models, which are provided by
+                the InterPro&apos;s member databases. InterPro is a freely
+                available resource used to classify sequences into protein
+                families and to predict the presence of important domains and
+                sites.
               </div>
             </div>
 
