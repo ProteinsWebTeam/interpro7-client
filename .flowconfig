@@ -15,6 +15,10 @@
 .*/node_modules/webassemblyjs
 .*/node_modules/@webassemblyjs
 .*/node_modules/flow-coverage-report*
+.*/node_modules/@emotion*
+.*/node_modules/emotion-theming*
+.*/node_modules/react-popper*
+.*/node_modules/react-hotkeys*
 
 [include]
 
@@ -26,8 +30,6 @@
 module.name_mapper='^\(.*\).css$' -> 'empty/object'
 module.name_mapper='^\(.*\).scss$' -> 'empty/object'
 module.name_mapper='^\(.*\).yml$' -> 'empty/object'
-module.name_mapper='^timing-functions/src$' -> 'empty/object'
-module.name_mapper='^litemol$' -> 'empty/object'
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=src
 munge_underscores=true
