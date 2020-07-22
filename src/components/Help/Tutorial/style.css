@@ -29,10 +29,6 @@
   background: url('../../../images/cover/tuto/quicktour.jpg') no-repeat 42% 40%;
   background-size: 190%;
 }
-.image-tuto-g3d {
-  background: url('../../../images/cover/tuto/genome3d.png') no-repeat 45% 43%;
-  background-size: 100%;
-}
 
 .box-add {
   border-left: 4px solid var(--colors-submain);

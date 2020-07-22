@@ -57,7 +57,7 @@ export const InterProScan = (
           data={{
             name: 'About InterProScan',
             description:
-              'InterProScan is the software package that allows sequencesto be scanned against InterPro',
+              'InterProScan is the software package that allows sequences to be scanned against InterPro',
           }}
           processData={schemaProcessDataPageSection}
         />

@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Tutorial /> should render 1`] = `
+exports[`<Webinar /> should render 1`] = `
 <section>
   <h3>
-    Tutorials
+    Webinars
   </h3>
   <Memo(Loadable)
     data={
       Object {
-        "description": "A number of online tutorials relating to InterPro are available",
+        "description": "A number of webinars on InterPro and related tools are available",
         "name": "InterPro Help: Tutorials",
       }
     }
@@ -16,7 +16,7 @@ exports[`<Tutorial /> should render 1`] = `
   />
    
   <p>
-    A number of online tutorials relating to InterPro are available.
+    A number of webinars on InterPro and related tools are available.
   </p>
   <div
     className="flex-column"
@@ -25,12 +25,12 @@ exports[`<Tutorial /> should render 1`] = `
       className="flex-card"
     >
       <div
-        className="card-image image-tuto-method"
+        className="card-image image-webinar-ipscan"
       >
         <div
-          className="card-tag tag-tuto"
+          className="card-tag tag-webinar"
         >
-          Tutorial
+          Webinar
         </div>
       </div>
       <div
@@ -41,10 +41,94 @@ exports[`<Tutorial /> should render 1`] = `
         >
           <h4>
             <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies"
+              href="//www.ebi.ac.uk/training/online/course/interproscan"
               target="_blank"
             >
-              InterPro: A case study of 3 protein family building methodologies
+              Functional analysis of protein sequences using InterProScan
+            </Memo(Connect(Link))>
+          </h4>
+        </div>
+        <div
+          className="card-info"
+        >
+          <div
+            className="card-info-author"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Gift Nuka
+             
+          </div>
+          <div
+            className="card-info-level"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Beginner
+          </div>
+          <div
+            className="card-info-duration"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            1 hour
+          </div>
+        </div>
+        <div
+          className="card-description"
+        >
+          This webinar is about InterProScan, the underlying software application that scans both protein and nucleic acid sequences against InterPro's predictive models, which are provided by the InterPro's member databases. InterPro is a freely available resource used to classify sequences into protein families and to predict the presence of important domains and sites.
+        </div>
+      </div>
+      <div
+        className="card-more"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/training/online/course/interproscan"
+          target="_blank"
+        >
+          <div
+            className="button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Watch it here
+          </div>
+        </Memo(Connect(Link))>
+      </div>
+    </div>
+    <div
+      className="flex-card"
+    >
+      <div
+        className="card-image image-webinar-api"
+      >
+        <div
+          className="card-tag tag-webinar"
+        >
+          Webinar
+        </div>
+      </div>
+      <div
+        className="card-content"
+      >
+        <div
+          className="card-title"
+        >
+          <h4>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/online/course/accessing-interpro-programmatically"
+              target="_blank"
+            >
+              Accessing InterPro programmatically
             </Memo(Connect(Link))>
           </h4>
         </div>
@@ -59,7 +143,7 @@ exports[`<Tutorial /> should render 1`] = `
               data-icon=""
             />
              
-            Lorna Richardson, Shoshana Brown, Paul Thomas, David Haft
+            Gustavo Salazar
              
           </div>
           <div
@@ -86,21 +170,21 @@ exports[`<Tutorial /> should render 1`] = `
         <div
           className="card-description"
         >
-          This course provides an insight into the different protein family building methodologies employed by three InterPro member databases, namely SFLD (Structure Function Linkage Database), TIGRFAMs and PANTHER. It also describes an automated approach to comparing protein signatures and predicting hierarchical relationships between them.
+          This webinar describes how the InterPro data is structured in the Application Programming Interface (API), and how it could be accessed programmatically for further bioinformatics analyses. The InterPro website relies on the API which can also be utilised by users for direct access to the data.
         </div>
       </div>
       <div
         className="card-more"
       >
         <Memo(Connect(Link))
-          href="//www.ebi.ac.uk/training/online/course/interpro-case-study-3-protein-family-building-methodologies"
+          href="//www.ebi.ac.uk/training/online/course/accessing-interpro-programmatically"
           target="_blank"
         >
           <div
             className="button-more icon icon-common icon-right"
             data-icon=""
           >
-            Start the course
+            Watch it here
           </div>
         </Memo(Connect(Link))>
       </div>
@@ -109,12 +193,12 @@ exports[`<Tutorial /> should render 1`] = `
       className="flex-card"
     >
       <div
-        className="card-image image-tuto-what"
+        className="card-image image-webinar-web"
       >
         <div
-          className="card-tag tag-tuto"
+          className="card-tag tag-webinar"
         >
-          Tutorial
+          Webinar
         </div>
       </div>
       <div
@@ -125,10 +209,10 @@ exports[`<Tutorial /> should render 1`] = `
         >
           <h4>
             <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro"
+              href="//www.ebi.ac.uk/training/online/course/using-interpro-website-your-research"
               target="_blank"
             >
-              InterPro: functional and structural analysis of protein sequences
+              Using the InterPro website in your research
             </Memo(Connect(Link))>
           </h4>
         </div>
@@ -138,17 +222,18 @@ exports[`<Tutorial /> should render 1`] = `
           <div
             className="card-info-author"
           >
-            <em
+            <span
               className="icon icon-common"
               data-icon=""
             />
              
-            Alex Mitchell
+            Typhaine Paysan-Lafosse
+             
           </div>
           <div
             className="card-info-level"
           >
-            <em
+            <span
               className="icon icon-common"
               data-icon=""
             />
@@ -158,7 +243,7 @@ exports[`<Tutorial /> should render 1`] = `
           <div
             className="card-info-duration"
           >
-            <em
+            <span
               className="icon icon-common"
               data-icon=""
             />
@@ -169,21 +254,21 @@ exports[`<Tutorial /> should render 1`] = `
         <div
           className="card-description"
         >
-          This course will provide an in-depth guide to InterPro - how to access it, how to search the database and interpret the results.
+          This webinar will guide you through searching and exploring the data available in the InterPro database and will show you how it can help finding data for your research. It also points out the additional features available to be used by the scientific community working on protein sequences.
         </div>
       </div>
       <div
         className="card-more"
       >
         <Memo(Connect(Link))
-          href="//www.ebi.ac.uk/training/online/course/interpro-functional-and-structural-analysis-protei/what-interpro"
+          href="//www.ebi.ac.uk/training/online/course/using-interpro-website-your-research"
           target="_blank"
         >
           <div
             className="button-more icon icon-common icon-right"
             data-icon=""
           >
-            Start the course
+            Watch it here
           </div>
         </Memo(Connect(Link))>
       </div>
@@ -192,12 +277,12 @@ exports[`<Tutorial /> should render 1`] = `
       className="flex-card"
     >
       <div
-        className="card-image image-tuto-intro"
+        className="card-image image-webinar-interpro"
       >
         <div
-          className="card-tag tag-tuto"
+          className="card-tag tag-webinar"
         >
-          Tutorial
+          Webinar
         </div>
       </div>
       <div
@@ -208,10 +293,94 @@ exports[`<Tutorial /> should render 1`] = `
         >
           <h4>
             <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou"
+              href="//www.ebi.ac.uk/training/online/course/understanding-interpro-families-domains-and-functions"
               target="_blank"
             >
-              Protein classification: An introduction to EMBL-EBI resources
+              Understanding InterPro families, domains and functions
+            </Memo(Connect(Link))>
+          </h4>
+        </div>
+        <div
+          className="card-info"
+        >
+          <div
+            className="card-info-author"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Typhaine Paysan-Lafosse
+             
+          </div>
+          <div
+            className="card-info-level"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Beginner
+          </div>
+          <div
+            className="card-info-duration"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            1 hour
+          </div>
+        </div>
+        <div
+          className="card-description"
+        >
+          This webinar defines the basic InterPro notions, concepts of protein classification and describes how InterPro ensures the accuracy of its data. It also explains the different methodologies used by the InterPro member databases in their predictions and how we integrate them into the 5 different InterPro entry types: Homologous superfamily, family, domain, repeat and site.
+        </div>
+      </div>
+      <div
+        className="card-more"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/training/online/course/understanding-interpro-families-domains-and-functions"
+          target="_blank"
+        >
+          <div
+            className="button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Watch it here
+          </div>
+        </Memo(Connect(Link))>
+      </div>
+    </div>
+    <div
+      className="flex-card"
+    >
+      <div
+        className="card-image image-webinar-g3d"
+      >
+        <div
+          className="card-tag tag-webinar"
+        >
+          Webinar
+        </div>
+      </div>
+      <div
+        className="card-content"
+      >
+        <div
+          className="card-title"
+        >
+          <h4>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
+              target="_blank"
+            >
+              Genome 3D annotations in InterPro webinar
             </Memo(Connect(Link))>
           </h4>
         </div>
@@ -226,7 +395,7 @@ exports[`<Tutorial /> should render 1`] = `
               data-icon=""
             />
              
-            Amaia Sangrador
+            Typhaine Paysan-Lafosse
              
           </div>
           <div
@@ -253,159 +422,25 @@ exports[`<Tutorial /> should render 1`] = `
         <div
           className="card-description"
         >
-          This course provides background information on protein signature databases and their use in sequence analysis and protein classification.
+          This webinar presents the new InterPro entry type, Homologous superfamily, as well as describing domain and structure predictions from Genome3D annotations, and how they are integrated in InterPro.
         </div>
       </div>
       <div
         className="card-more"
       >
         <Memo(Connect(Link))
-          href="//www.ebi.ac.uk/training/online/course/protein-classification-introduction-embl-ebi-resou"
+          href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
           target="_blank"
         >
           <div
             className="button-more icon icon-common icon-right"
             data-icon=""
           >
-            Start the course
+            Watch it here
           </div>
         </Memo(Connect(Link))>
       </div>
     </div>
-    <div
-      className="flex-card"
-    >
-      <div
-        className="card-image image-tuto-tour"
-      >
-        <div
-          className="card-tag tag-tuto"
-        >
-          Tutorial
-        </div>
-      </div>
-      <div
-        className="card-content"
-      >
-        <div
-          className="card-title"
-        >
-          <h4>
-            <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour"
-              target="_blank"
-            >
-              A Quick Tour of InterPro
-            </Memo(Connect(Link))>
-          </h4>
-        </div>
-        <div
-          className="card-info"
-        >
-          <div
-            className="card-info-author"
-          >
-            <em
-              className="icon icon-common"
-              data-icon=""
-            />
-             
-            Alex Mitchell
-             
-          </div>
-          <div
-            className="card-info-level"
-          >
-            <em
-              className="icon icon-common"
-              data-icon=""
-            />
-             
-            Beginner
-          </div>
-          <div
-            className="card-info-duration"
-          >
-            <em
-              className="icon icon-common"
-              data-icon=""
-            />
-             
-            0.5 hour
-          </div>
-        </div>
-        <div
-          className="card-description"
-        >
-          This course provides a brief overview of InterPro, including querying the database and visualising the results using the web interface.
-        </div>
-      </div>
-      <div
-        className="card-more"
-      >
-        <Memo(Connect(Link))
-          href="//www.ebi.ac.uk/training/online/course/interpro-quick-tour"
-          target="_blank"
-        >
-          <div
-            className="button-more icon icon-common icon-right"
-            data-icon=""
-          >
-            Start the course
-          </div>
-        </Memo(Connect(Link))>
-      </div>
-    </div>
-  </div>
-  <h3
-    className="margin-top-large"
-  >
-    Training
-  </h3>
-  <p>
-    InterPro hands-on practical sessions feature regularly as part of the EBI training courses and workshops.
-     
-    <Memo(Connect(Link))
-      className="ext"
-      href="//www.ebi.ac.uk/training"
-      target="_blank"
-    >
-      Find out more
-    </Memo(Connect(Link))>
-     
-    about when and where these training courses will run, as well as how to apply to host them.
-  </p>
-  <div
-    className="box-add"
-  >
-    <h3
-      className="margin-top-large"
-    >
-      Additional Help
-    </h3>
-    <ul
-      style={
-        Object {
-          "listStyleType": "none",
-          "margin": 0,
-        }
-      }
-    >
-      <li>
-        <Memo(Connect(Link))
-          href="//www.ebi.ac.uk/support/interpro"
-          target="_blank"
-          withReferrer={true}
-        >
-          <span
-            className="icon icon-common"
-            data-icon="n"
-          />
-           
-          Submit a ticket
-        </Memo(Connect(Link))>
-      </li>
-    </ul>
   </div>
 </section>
 `;
