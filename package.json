@@ -39,13 +39,13 @@
     "deploy:staging": "npm run deploy -- -- --env.staging",
     "deploy:production": "npm run deploy",
     "release": "npm run bundle",
-    "release:dev": "npm run release -- -- --mode=development",
-    "release:staging": "npm run release -- -- --env.staging",
+    "release:dev": "npm run release -- -- --mode=development && npm run build-storybook",
+    "release:staging": "npm run release -- -- --env.staging && npm run build-storybook",
     "release:production": "npm run release",
     "create-sitemap": "node scripts/create-sitemap.js",
     "start": "npm run dev",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook --output-dir dist/storybook"
   },
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)",
