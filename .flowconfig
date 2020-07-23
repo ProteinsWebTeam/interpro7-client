@@ -19,6 +19,7 @@
 .*/node_modules/emotion-theming*
 .*/node_modules/react-popper*
 .*/node_modules/react-hotkeys*
+.*/node_modules/react-select*
 
 [include]
 
