@@ -1,9 +1,8 @@
 import React from 'react';
-import { linkTo } from '@storybook/addon-links';
+
 export default {
   title: 'InterPro7 Storybook',
   id: '0',
-  // key: 'A',
 };
 
 export const ToStorybook = () => (

@@ -34,5 +34,5 @@ export default create({
   brandTitle: 'InterPro 7',
   brandUrl: 'https://www.ebi.ac.uk/interpro',
   brandImage:
-    'https://raw.githubusercontent.com/ProteinsWebTeam/interpro7-client/master/src/images/logo/interpro_blue_offcanvas.png',
+    'https://github.com/ProteinsWebTeam/interpro7-client/raw/storybook/src/images/logo/logo_InterPro.png',
 });

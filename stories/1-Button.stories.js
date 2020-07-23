@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { action } from '@storybook/addon-actions';
-// import { Button } from '@storybook/react/demo';
 
 import { foundationPartial } from '../src/styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
