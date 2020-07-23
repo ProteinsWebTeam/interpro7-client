@@ -448,7 +448,7 @@ const SummaryIPScanJob = ({
               <Exporter
                 includeSettings={false}
                 left={false}
-                backgroundColor={'#2daec1'}
+                backgroundColor={'#007c82'}
               >
                 <ul>
                   {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(

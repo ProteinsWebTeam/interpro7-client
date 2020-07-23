@@ -2,7 +2,7 @@
 import fetch from 'isomorphic-fetch';
 import { format, parse } from 'url';
 import { throttle } from 'lodash-es';
-import { sleep } from 'timing-functions/src';
+import { sleep } from 'timing-functions';
 import { object2TSV, columns } from './object2TSV';
 
 import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';
@@ -44,7 +44,7 @@ const createActionCallerFor = (...args1) => (creator, ...args2) =>
 const DESCRIPTION_SEPARATOR = '|';
 
 const processResultsFor = (fileType, subset, endpoint) =>
-  function*(results) {
+  function* (results) {
     for (const result of results) {
       let content = '';
       if (fileType === 'fasta') {
@@ -198,14 +198,14 @@ const generateFileHandle = (
 };
 
 const postProgress = throttle(
-  progressAction => self.postMessage(progressAction),
+  (progressAction) => self.postMessage(progressAction),
   THROTTLE_TIME,
 );
 
 // Download manager, send messages from there
 const download = async (url, fileType, subset, endpoint) => {
   const action = createActionCallerFor(url, fileType, subset, endpoint);
-  const onError = error => {
+  const onError = (error) => {
     console.error(error);
     postProgress(action(downloadProgress, 1));
     postProgress.flush();

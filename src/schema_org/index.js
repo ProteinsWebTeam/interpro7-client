@@ -1,7 +1,7 @@
 import { PureComponent } from 'react';
 import T from 'prop-types';
 
-import { schedule } from 'timing-functions/src';
+import { schedule } from 'timing-functions';
 
 import merger from './merger';
 
@@ -134,14 +134,14 @@ export class Manager {
   }
 }
 const shallowEquals = (obj1, obj2) =>
-  Object.keys(obj1).every(key => {
+  Object.keys(obj1).every((key) => {
     if (
       obj1[key] !== null &&
       typeof obj1[key] === 'object' &&
       typeof obj2[key] === 'object'
     )
       return Object.keys(obj1[key]).every(
-        k2 => obj1[key][k2] === obj2[key][k2],
+        (k2) => obj1[key][k2] === obj2[key][k2],
       );
     return obj1[key] === obj2[key];
   });
@@ -158,7 +158,7 @@ export default class SchemaOrgData extends PureComponent /*:: <Props> */ {
   };
 
   static defaultProps = {
-    processData: d => d,
+    processData: (d) => d,
   };
 
   componentDidMount() {

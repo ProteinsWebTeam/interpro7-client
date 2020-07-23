@@ -1,0 +1,446 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Webinar /> should render 1`] = `
+<section>
+  <h3>
+    Webinars
+  </h3>
+  <Memo(Loadable)
+    data={
+      Object {
+        "description": "A number of webinars on InterPro and related tools are available",
+        "name": "InterPro Help: Tutorials",
+      }
+    }
+    processData={[Function]}
+  />
+   
+  <p>
+    A number of webinars on InterPro and related tools are available.
+  </p>
+  <div
+    className="flex-column"
+  >
+    <div
+      className="flex-card"
+    >
+      <div
+        className="card-image image-webinar-ipscan"
+      >
+        <div
+          className="card-tag tag-webinar"
+        >
+          Webinar
+        </div>
+      </div>
+      <div
+        className="card-content"
+      >
+        <div
+          className="card-title"
+        >
+          <h4>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/online/course/interproscan"
+              target="_blank"
+            >
+              Functional analysis of protein sequences using InterProScan
+            </Memo(Connect(Link))>
+          </h4>
+        </div>
+        <div
+          className="card-info"
+        >
+          <div
+            className="card-info-author"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Gift Nuka
+             
+          </div>
+          <div
+            className="card-info-level"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Beginner
+          </div>
+          <div
+            className="card-info-duration"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            1 hour
+          </div>
+        </div>
+        <div
+          className="card-description"
+        >
+          This webinar is about InterProScan, the underlying software application that scans both protein and nucleic acid sequences against InterPro's predictive models, which are provided by the InterPro's member databases. InterPro is a freely available resource used to classify sequences into protein families and to predict the presence of important domains and sites.
+        </div>
+      </div>
+      <div
+        className="card-more"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/training/online/course/interproscan"
+          target="_blank"
+        >
+          <div
+            className="button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Watch it here
+          </div>
+        </Memo(Connect(Link))>
+      </div>
+    </div>
+    <div
+      className="flex-card"
+    >
+      <div
+        className="card-image image-webinar-api"
+      >
+        <div
+          className="card-tag tag-webinar"
+        >
+          Webinar
+        </div>
+      </div>
+      <div
+        className="card-content"
+      >
+        <div
+          className="card-title"
+        >
+          <h4>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/online/course/accessing-interpro-programmatically"
+              target="_blank"
+            >
+              Accessing InterPro programmatically
+            </Memo(Connect(Link))>
+          </h4>
+        </div>
+        <div
+          className="card-info"
+        >
+          <div
+            className="card-info-author"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Gustavo Salazar
+             
+          </div>
+          <div
+            className="card-info-level"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Beginner
+          </div>
+          <div
+            className="card-info-duration"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            1 hour
+          </div>
+        </div>
+        <div
+          className="card-description"
+        >
+          This webinar describes how the InterPro data is structured in the Application Programming Interface (API), and how it could be accessed programmatically for further bioinformatics analyses. The InterPro website relies on the API which can also be utilised by users for direct access to the data.
+        </div>
+      </div>
+      <div
+        className="card-more"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/training/online/course/accessing-interpro-programmatically"
+          target="_blank"
+        >
+          <div
+            className="button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Watch it here
+          </div>
+        </Memo(Connect(Link))>
+      </div>
+    </div>
+    <div
+      className="flex-card"
+    >
+      <div
+        className="card-image image-webinar-web"
+      >
+        <div
+          className="card-tag tag-webinar"
+        >
+          Webinar
+        </div>
+      </div>
+      <div
+        className="card-content"
+      >
+        <div
+          className="card-title"
+        >
+          <h4>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/online/course/using-interpro-website-your-research"
+              target="_blank"
+            >
+              Using the InterPro website in your research
+            </Memo(Connect(Link))>
+          </h4>
+        </div>
+        <div
+          className="card-info"
+        >
+          <div
+            className="card-info-author"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Typhaine Paysan-Lafosse
+             
+          </div>
+          <div
+            className="card-info-level"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Beginner
+          </div>
+          <div
+            className="card-info-duration"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            1 hour
+          </div>
+        </div>
+        <div
+          className="card-description"
+        >
+          This webinar will guide you through searching and exploring the data available in the InterPro database and will show you how it can help finding data for your research. It also points out the additional features available to be used by the scientific community working on protein sequences.
+        </div>
+      </div>
+      <div
+        className="card-more"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/training/online/course/using-interpro-website-your-research"
+          target="_blank"
+        >
+          <div
+            className="button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Watch it here
+          </div>
+        </Memo(Connect(Link))>
+      </div>
+    </div>
+    <div
+      className="flex-card"
+    >
+      <div
+        className="card-image image-webinar-interpro"
+      >
+        <div
+          className="card-tag tag-webinar"
+        >
+          Webinar
+        </div>
+      </div>
+      <div
+        className="card-content"
+      >
+        <div
+          className="card-title"
+        >
+          <h4>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/online/course/understanding-interpro-families-domains-and-functions"
+              target="_blank"
+            >
+              Understanding InterPro families, domains and functions
+            </Memo(Connect(Link))>
+          </h4>
+        </div>
+        <div
+          className="card-info"
+        >
+          <div
+            className="card-info-author"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Typhaine Paysan-Lafosse
+             
+          </div>
+          <div
+            className="card-info-level"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Beginner
+          </div>
+          <div
+            className="card-info-duration"
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            1 hour
+          </div>
+        </div>
+        <div
+          className="card-description"
+        >
+          This webinar defines the basic InterPro notions, concepts of protein classification and describes how InterPro ensures the accuracy of its data. It also explains the different methodologies used by the InterPro member databases in their predictions and how we integrate them into the 5 different InterPro entry types: Homologous superfamily, family, domain, repeat and site.
+        </div>
+      </div>
+      <div
+        className="card-more"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/training/online/course/understanding-interpro-families-domains-and-functions"
+          target="_blank"
+        >
+          <div
+            className="button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Watch it here
+          </div>
+        </Memo(Connect(Link))>
+      </div>
+    </div>
+    <div
+      className="flex-card"
+    >
+      <div
+        className="card-image image-webinar-g3d"
+      >
+        <div
+          className="card-tag tag-webinar"
+        >
+          Webinar
+        </div>
+      </div>
+      <div
+        className="card-content"
+      >
+        <div
+          className="card-title"
+        >
+          <h4>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
+              target="_blank"
+            >
+              Genome 3D annotations in InterPro webinar
+            </Memo(Connect(Link))>
+          </h4>
+        </div>
+        <div
+          className="card-info"
+        >
+          <div
+            className="card-info-author"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Typhaine Paysan-Lafosse
+             
+          </div>
+          <div
+            className="card-info-level"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            Beginner
+          </div>
+          <div
+            className="card-info-duration"
+          >
+            <em
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            0.5 hour
+          </div>
+        </div>
+        <div
+          className="card-description"
+        >
+          This webinar presents the new InterPro entry type, Homologous superfamily, as well as describing domain and structure predictions from Genome3D annotations, and how they are integrated in InterPro.
+        </div>
+      </div>
+      <div
+        className="card-more"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
+          target="_blank"
+        >
+          <div
+            className="button-more icon icon-common icon-right"
+            data-icon=""
+          >
+            Watch it here
+          </div>
+        </Memo(Connect(Link))>
+      </div>
+    </div>
+  </div>
+</section>
+`;

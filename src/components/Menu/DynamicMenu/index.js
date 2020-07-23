@@ -3,7 +3,7 @@ import T from 'prop-types';
 
 import MenuItem from 'components/Menu/MenuItem';
 
-import { schedule, sleep } from 'timing-functions/src';
+import { schedule, sleep } from 'timing-functions';
 
 import { InterPro } from 'menuConfig';
 
@@ -28,7 +28,7 @@ const f = foundationPartial(fonts, interproStyles, styles);
 const RECHECK_AFTER_MOUNT = 500; // ms
 const MAX_DELAY_BEFORE_CHECKING_FIT = 200; // ms
 
-const InterProMin = InterPro.filter(item => item.name !== 'Settings');
+const InterProMin = InterPro.filter((item) => item.name !== 'Settings');
 
 class DynamicMenu extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
@@ -79,7 +79,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
     }
   };
 
-  _setMenuItemInMap = node => {
+  _setMenuItemInMap = (node) => {
     if (node instanceof HTMLElement) this._menuItems.add(node);
   };
 

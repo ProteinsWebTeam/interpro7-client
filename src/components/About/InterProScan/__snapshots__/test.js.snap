@@ -17,7 +17,7 @@ exports[`<InterProScan /> should render with data 1`] = `
     <Memo(Loadable)
       data={
         Object {
-          "description": "InterProScan is the software package that allows sequencesto be scanned against InterPro",
+          "description": "InterProScan is the software package that allows sequences to be scanned against InterPro",
           "name": "About InterProScan",
         }
       }
@@ -100,15 +100,18 @@ exports[`<InterProScan /> should render with data 1`] = `
          fc003f262608423ab4c96ec099384ca6
       </div>
     </div>
+    <h3>
+      Documentation
+    </h3>
     <p>
       For more information on downloading, installing and running InterProScan please see the
        
       <Memo(Connect(Link))
         className="ext"
-        href="https://github.com/ebi-pf-team/interproscan/wiki"
+        href="https://interproscan-docs.readthedocs.io/"
         target="_blank"
       >
-        InterProScan wiki
+        InterProScan documentation
       </Memo(Connect(Link))>
       .
     </p>

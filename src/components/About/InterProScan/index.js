@@ -57,7 +57,7 @@ export const InterProScan = (
           data={{
             name: 'About InterProScan',
             description:
-              'InterProScan is the software package that allows sequencesto be scanned against InterPro',
+              'InterProScan is the software package that allows sequences to be scanned against InterPro',
           }}
           processData={schemaProcessDataPageSection}
         />
@@ -115,15 +115,16 @@ export const InterProScan = (
             <div className={f('metadata')}>MD5: {metadata.MD5}</div>
           )}
         </div>
+        <h3>Documentation</h3>
         <p>
           For more information on downloading, installing and running
           InterProScan please see the{' '}
           <Link
-            href="https://github.com/ebi-pf-team/interproscan/wiki"
+            href="https://interproscan-docs.readthedocs.io/"
             target="_blank"
             className={f('ext')}
           >
-            InterProScan wiki
+            InterProScan documentation
           </Link>
           .
         </p>

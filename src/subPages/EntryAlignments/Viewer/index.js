@@ -13,6 +13,13 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import ProtVistaMSA from 'protvista-msa';
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaNavigation from 'protvista-navigation';
+import ProtvistaZoomTool from 'protvista-zoom-tool';
+
+import { foundationPartial } from 'styles/foundation';
+
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
+const f = foundationPartial(fonts);
 
 const webComponents = [];
 
@@ -27,13 +34,22 @@ const loadProtVistaWebComponents = () => {
     webComponents.push(
       loadWebComponent(() => ProtVistaNavigation).as('protvista-navigation'),
     );
+    webComponents.push(
+      loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
+    );
   }
   return Promise.all(webComponents);
 };
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-const AlignmentViewer = ({ data: { loading, payload } }) => {
+const AlignmentViewer = ({
+  data: { loading, payload },
+  colorscheme,
+  onConservationProgress,
+  setColorMap,
+  overlayConservation,
+}) => {
   const msaTrack = useRef(null);
   const [align, setAlign] = useState(null);
   useEffect(() => {
@@ -50,6 +66,13 @@ const AlignmentViewer = ({ data: { loading, payload } }) => {
         name,
         sequence: align.seqdata[name],
       }));
+      msaTrack.current.addEventListener('conservationProgress', (evt) => {
+        onConservationProgress(evt.detail.progress);
+      });
+      msaTrack.current.addEventListener('drawCompleted', () => {
+        const { map } = msaTrack.current.getColorMap();
+        setColorMap(map || {});
+      });
     }
   }, [align]);
 
@@ -60,6 +83,13 @@ const AlignmentViewer = ({ data: { loading, payload } }) => {
   const labelWidth = 200;
   const length = align.columns();
 
+  const conservationOptions = {
+    'calculate-conservation': true,
+    'sample-size-conservation': 100,
+  };
+  if (overlayConservation) {
+    conservationOptions['overlay-conservation'] = true;
+  }
   return (
     <>
       <protvista-manager
@@ -77,15 +107,36 @@ const AlignmentViewer = ({ data: { loading, payload } }) => {
             }}
           >
             {align.rows()} Sequences
+            <protvista-zoom-tool
+              length={length}
+              displaystart="1"
+              displayend="100"
+            >
+              <button
+                id="zoom-in"
+                className={f('zoom-button', 'icon', 'icon-common')}
+                data-icon="&#xf0fe;"
+                title="Click to zoom in      Ctrl+Scroll"
+              />
+              <button
+                id="zoom-out"
+                className={f('zoom-button', 'icon', 'icon-common')}
+                data-icon="&#xf146;"
+                title="Click to zoom out      Ctrl+Scroll"
+              />
+            </protvista-zoom-tool>
           </div>
-          <protvista-navigation length={length} />
+          <protvista-navigation length={length} displayend="100" />
         </div>
         <protvista-msa
           length={length}
           height="400"
+          displayend="100"
           use-ctrl-to-zoom
           labelWidth={labelWidth}
           ref={msaTrack}
+          colorscheme={colorscheme}
+          {...conservationOptions}
         />
       </protvista-manager>
     </>
@@ -93,6 +144,10 @@ const AlignmentViewer = ({ data: { loading, payload } }) => {
 };
 AlignmentViewer.propTypes = {
   type: T.string.isRequired,
+  colorscheme: T.string,
+  onConservationProgress: T.func,
+  setColorMap: T.func,
+  overlayConservation: T.bool,
   data: dataPropType,
 };
 

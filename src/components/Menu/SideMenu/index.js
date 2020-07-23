@@ -50,8 +50,8 @@ class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
 }
 
 const mapStateToPropsForOldLink = createSelector(
-  state => state.customLocation.description,
-  d => {
+  (state) => state.customLocation.description,
+  (d) => {
     const href = 'https://www.ebi.ac.uk/interpro/legacy/';
     const { key } = d.main;
     if (
@@ -128,7 +128,7 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
 
     if (hasRendered || visible) {
       content = (
-        <>
+        <div role="menu">
           {this.props.visible && this.props.showConnectionStatusToast ? (
             <Tip
               body="The green and red signals of the connection status shows the connectivity strength of the URLs"
@@ -184,7 +184,7 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
               </li>
             </ul>
           </nav>
-        </>
+        </div>
       );
     }
     return (
@@ -192,7 +192,6 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
         inert={visible ? undefined : ''}
         aria-hidden={!visible}
         className={f('container', { visible })}
-        role="menu"
       >
         {content}
       </aside>
@@ -202,12 +201,12 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   sideNavSelector,
-  state => state.customLocation.description.main.key,
-  state =>
+  (state) => state.customLocation.description.main.key,
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  state => state.settings.notifications.showConnectionStatusToast,
+  (state) => state.settings.notifications.showConnectionStatusToast,
   (visible, mainType, mainAccession, showConnectionStatusToast) => ({
     visible,
     mainType,
@@ -216,7 +215,4 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(
-  mapStateToProps,
-  { closeSideNav },
-)(SideMenu);
+export default connect(mapStateToProps, { closeSideNav })(SideMenu);

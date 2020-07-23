@@ -1,5 +1,5 @@
 // @flow
-import { schedule, sleep } from 'timing-functions/src';
+import { schedule, sleep } from 'timing-functions';
 
 /*:: type ResizeObserverEntry = {
   target: HTMLElement,
