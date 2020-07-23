@@ -148,7 +148,7 @@ const getColorScaleHTML = (
   hideCategory: Object,
   expandedTrack: Object,
   collapsed: boolean,
-  label: string,
+  label: Object,
   addLabelClass: string,
   showConservationButtonButton: boolean,
 }; */
@@ -178,7 +178,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
       hideCategory: {},
       expandedTrack: {},
       collapsed: false,
-      label: 'accession',
+      label: {
+        accession: true,
+        name: false,
+      },
       addLabelClass: '',
       enableTooltip: true,
       dropdownOpen: false,
@@ -724,46 +727,44 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
   };
 
-  updateLabel = () => {
-    this.setState({ dropdownOpen: false });
-    const items = this._labelOptionsRef.current.childNodes;
-    const labels = [];
-    items.forEach((item) => {
-      if (item.tagName === 'LI' && item.firstChild.checked)
-        labels.push(item.firstChild.value);
-    });
-    if (labels.includes('name')) {
-      this.setState({ addLabelClass: 'label-by-name' });
-      if (labels.includes('accession')) this.setState({ label: 'both' });
-      else this.setState({ label: 'name' });
-    } else {
-      this.setState({ label: 'accession', addLabelClass: '' });
+  updateLabel = (evt) => {
+    const newLabelState = { ...this.state.label };
+    newLabelState[evt.target.value] = !newLabelState[evt.target.value];
+    if (!newLabelState.accession && !newLabelState.name) {
+      newLabelState.accession = true;
     }
+    this.setState({
+      label: newLabelState,
+      addLabelClass: newLabelState.name ? 'label-by-name' : '',
+    });
+    //   console.log(evt.target.value)
+    //   const items = this._labelOptionsRef.current.childNodes;
+    //   const labels = [];
+    //   items.forEach((item) => {
+    //     if (item.tagName === 'LI' && item.firstChild.checked)
+    //       labels.push(item.firstChild.value);
+    //   });
+    //   if (labels.includes('name')) {
+    //     this.setState({ addLabelClass: 'label-by-name' });
+    //     if (labels.includes('accession')) this.setState({ label: 'both' });
+    //     else this.setState({ label: 'name' });
+    //   } else {
+    //     this.setState({ label: 'accession', addLabelClass: '' });
+    //   }
   };
 
   renderSwitch(label, entry) {
     const type = entry.type ? (
       <interpro-type type={entry.type.replace('_', ' ')} dimension="1em" />
     ) : null;
-    switch (label) {
-      case 'name':
-        return (
-          <>
-            {type}
-            {entry.name}
-          </>
-        );
-      case 'both':
-        return (
-          <>
-            {type}
-            {entry.accession}: {entry.name}
-          </>
-        );
-      case 'accession':
-      default:
-        return entry.accession;
-    }
+    return (
+      <>
+        {type}
+        {label.accession && entry.accession}
+        {label.accession && label.name && ': '}
+        {label.name && entry.name}
+      </>
+    );
   }
 
   renderLabels(entry) {
@@ -882,7 +883,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
-  renderOptions(ExporterButton) {
+  renderOptions(ExporterButton, length) {
     const { collapsed } = this.state;
     const title = this.props.title || 'Domains on protein';
 
@@ -896,125 +897,211 @@ class ProtVista extends Component /*:: <Props, State> */ {
       >
         <div className={f('view-options-title')}>{title}</div>
         <div className={f('view-options')}>
-          <div className={f('option-color', 'margin-right-medium')}>
-            Colour By:{' '}
-            <select
-              className={f('select-inline')}
-              value={this.props.colorDomainsBy}
-              onChange={this.changeColor}
-              onBlur={this.changeColor}
-            >
-              <option value={EntryColorMode.ACCESSION}>Accession</option>
-              <option value={EntryColorMode.MEMBER_DB}>Member Database</option>
-              <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
-                Domain Relationship
-              </option>
-            </select>
+          <div className={f('option-fullscreen', 'font-l', 'viewer-options')}>
+            <FullScreenButton
+              element={this._mainRef.current}
+              tooltip="View the domain viewer in full screen mode"
+            />
           </div>
-          <div className={f('option-collapse')}>
-            <Tooltip title={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}>
+
+          <div className={f('viewer-options')}>
+            <protvista-zoom-tool
+              length={length}
+              displaystart="1"
+              displayend={length}
+            >
               <button
-                onClick={this.toggleCollapseAll}
-                aria-label={`${collapsed ? 'Expand' : 'Collapse'} all tracks`}
-              >
-                {collapsed ? 'Expand' : 'Collapse'} All
-              </button>
-            </Tooltip>
-          </div>
-          <div className={f('viewer-options', 'font-l', 'margin-right-large')}>
-            <Tooltip title={'Click to take the snapshot'}>
-              <protvista-saver
-                element-id={`${this.props.id}ProtvistaDiv`}
-                background-color={'#e5e5e5'}
-                id={`${this.props.id}Saver`}
-              >
-                <button
-                  className={f('icon', 'icon-common')}
-                  data-icon="&#xf030;"
-                />
-              </protvista-saver>
-            </Tooltip>
-          </div>
-          <div className={f('viewer-options', 'font-l', 'margin-right-large')}>
-            <Tooltip title={'Click to print as PDF'}>
-              <ReactToPrint
-                trigger={() => (
-                  <button
-                    className={f('icon', 'icon-common')}
-                    data-icon="&#x50;"
-                  />
-                )}
-                onBeforeGetContent={() => {
-                  this._protvistaRef.current.style = 'width: 1000px;';
-                  return new Promise((resolve) => {
-                    setTimeout(() => resolve(), ONE_SEC);
-                  });
-                }}
-                content={() => this._protvistaRef.current}
-                onAfterPrint={() => (this._protvistaRef.current.style = '')}
+                id="zoom-in"
+                className={f('zoom-button', 'icon', 'icon-common')}
+                data-icon="&#xf0fe;"
+                title="Click to zoom in      Ctrl+Scroll"
               />
+              <button
+                id="zoom-out"
+                className={f('zoom-button', 'icon', 'icon-common')}
+                data-icon="&#xf146;"
+                title="Click to zoom out      Ctrl+Scroll"
+              />
+            </protvista-zoom-tool>
+          </div>
+
+          <div className={f('dropdown-div')}>
+            <Tooltip title={'More options to customise the protein viewer'}>
+              <div className={f('button-group', 'dropdown-container', 'small')}>
+                <button
+                  className={f('button', 'dropdown')}
+                  onClick={() =>
+                    this.setState({ dropdownOpen: !this.state.dropdownOpen })
+                  }
+                >
+                  Options
+                </button>
+                <div
+                  className={f('dropdown-pane', 'dropdown-content', 'left')}
+                  style={{
+                    transform: `scaleY(${this.state.dropdownOpen ? 1 : 0})`,
+                  }}
+                >
+                  <ul>
+                    <li>
+                      Colour By
+                      <ul className={f('nested-list')}>
+                        <li>
+                          <label>
+                            <input
+                              type="radio"
+                              onChange={this.changeColor}
+                              value={EntryColorMode.ACCESSION}
+                              checked={
+                                this.props.colorDomainsBy ===
+                                EntryColorMode.ACCESSION
+                              }
+                            />{' '}
+                            Accession
+                          </label>
+                        </li>
+                        <li>
+                          <label>
+                            <input
+                              type="radio"
+                              onChange={this.changeColor}
+                              value={EntryColorMode.MEMBER_DB}
+                              checked={
+                                this.props.colorDomainsBy ===
+                                EntryColorMode.MEMBER_DB
+                              }
+                            />{' '}
+                            Member Database
+                          </label>
+                        </li>
+                        <li>
+                          <label>
+                            <input
+                              type="radio"
+                              onChange={this.changeColor}
+                              value={EntryColorMode.DOMAIN_RELATIONSHIP}
+                              checked={
+                                this.props.colorDomainsBy ===
+                                EntryColorMode.DOMAIN_RELATIONSHIP
+                              }
+                            />{' '}
+                            Domain Relationship
+                          </label>
+                        </li>
+                      </ul>
+                    </li>
+                    <hr />
+                    <li>
+                      Label by
+                      <ul
+                        ref={this._labelOptionsRef}
+                        className={f('nested-list')}
+                      >
+                        <li key={'accession'}>
+                          <label>
+                            <input
+                              type="checkbox"
+                              onChange={this.updateLabel}
+                              value={'accession'}
+                              checked={this.state.label.accession}
+                            />{' '}
+                            Accession
+                          </label>
+                        </li>
+                        <li key={'name'}>
+                          <label>
+                            <input
+                              type="checkbox"
+                              onChange={this.updateLabel}
+                              value={'name'}
+                              checked={this.state.label.name}
+                            />{' '}
+                            Name
+                          </label>
+                        </li>
+                      </ul>
+                    </li>
+                    <hr />
+                    <li>
+                      Snapshot
+                      <ul className={f('nested-list')}>
+                        <li>
+                          <protvista-saver
+                            element-id={`${this.props.id}ProtvistaDiv`}
+                            background-color={'#e5e5e5'}
+                            id={`${this.props.id}Saver`}
+                          >
+                            <button>
+                              <span
+                                className={f('icon', 'icon-common')}
+                                data-icon="&#xf030;"
+                              />{' '}
+                              Save as Image
+                            </button>
+                          </protvista-saver>
+                        </li>
+                        <li>
+                          <ReactToPrint
+                            trigger={() => (
+                              <button
+                                className={f('icon', 'icon-common')}
+                                data-icon="&#x50;"
+                              >
+                                {' '}
+                                Print
+                              </button>
+                            )}
+                            onBeforeGetContent={() => {
+                              this._protvistaRef.current.style =
+                                'width: 1000px;';
+                              return new Promise((resolve) => {
+                                setTimeout(() => resolve(), ONE_SEC);
+                              });
+                            }}
+                            content={() => this._protvistaRef.current}
+                            onAfterPrint={() =>
+                              (this._protvistaRef.current.style = '')
+                            }
+                          />
+                        </li>
+                      </ul>
+                    </li>
+                    <hr />
+                    <li>
+                      <button
+                        onClick={this.toggleCollapseAll}
+                        aria-label={`${
+                          collapsed ? 'Expand' : 'Collapse'
+                        } all tracks`}
+                      >
+                        {collapsed ? 'Expand' : 'Collapse'} All Tracks
+                      </button>
+                    </li>
+                    <hr />
+                    <li key={'tooltip'}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          onChange={() =>
+                            this.setState({
+                              enableTooltip: !this.state.enableTooltip,
+                            })
+                          }
+                          checked={this.state.enableTooltip}
+                        />{' '}
+                        Tooltip{' '}
+                        {this.state.enableTooltip ? 'Active' : 'Inactive'}
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </Tooltip>
           </div>
-          <div className={f('button-group', 'dropdown-container', 'small')}>
-            <button
-              className={f('button', 'dropdown')}
-              onClick={() =>
-                this.setState({ dropdownOpen: !this.state.dropdownOpen })
-              }
-            >
-              <Tooltip
-                title={
-                  'Customise the Nightingale viewer to show names, accession and tooltips'
-                }
-              >
-                Display
-              </Tooltip>
-            </button>
-            <div
-              className={f('dropdown-pane', 'dropdown-content', 'left')}
-              style={{
-                transform: `scaleY(${this.state.dropdownOpen ? 1 : 0})`,
-              }}
-            >
-              <ul ref={this._labelOptionsRef}>
-                <li key={'accession'}>
-                  <input
-                    type="checkbox"
-                    onChange={this.updateLabel}
-                    value={'accession'}
-                    checked={
-                      this.state.label === 'accession' ||
-                      this.state.label === 'both'
-                    }
-                  />{' '}
-                  Accession
-                </li>
-                <li key={'name'}>
-                  <input
-                    type="checkbox"
-                    onChange={this.updateLabel}
-                    value={'name'}
-                  />{' '}
-                  Name
-                </li>
-                <hr />
-                <li key={'tooltip'}>
-                  <input
-                    type="checkbox"
-                    onChange={() =>
-                      this.setState({
-                        enableTooltip: !this.state.enableTooltip,
-                        dropdownOpen: false,
-                      })
-                    }
-                    checked={this.state.enableTooltip}
-                  />{' '}
-                  Tooltip
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className={f('exporter')}>{ExporterButton}</div>
+
+          {ExporterButton ? (
+            <div className={f('exporter')}>{ExporterButton}</div>
+          ) : null}
         </div>
       </div>
     );
@@ -1047,252 +1134,226 @@ class ProtVista extends Component /*:: <Props, State> */ {
         ref={this._mainRef}
         className={f('fullscreenable', 'margin-bottom-large')}
       >
-        <div className={f('track-row')}>
-          {this.renderOptions(ExporterButton)}
-        </div>
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
         <div id={`${this.props.id}ProtvistaDiv`}>
-          <div className={f('protvista')} ref={this._protvistaRef}>
+          <div className={f('protvista')}>
             <protvista-manager
               attributes="length displaystart displayend highlight"
               id="pv-manager"
             >
-              <div className={f('track-container')}>
-                <div className={f('track-row')}>
-                  <div
-                    className={f(
-                      'aligned-to-track-component',
-                      `${this.state.addLabelClass}`,
-                    )}
-                  >
-                    <protvista-navigation
-                      length={length}
-                      displaystart="1"
-                      displayend={length}
-                    />
-                  </div>
-                </div>
-                <div className={f('track-row')}>
-                  <div
-                    className={f(
-                      'aligned-to-track-component',
-                      `${this.state.addLabelClass}`,
-                    )}
-                  >
-                    <protvista-sequence
-                      ref={this._webProteinRef}
-                      length={length}
-                      displaystart="1"
-                      displayend={length}
-                      highlight-event="onmouseover"
-                      use-ctrl-to-zoom
-                    />
-                    <protvista-coloured-sequence
-                      ref={this._hydroRef}
-                      length={length}
-                      displaystart="1"
-                      displayend={length}
-                      scale="hydrophobicity-scale"
-                      height="10"
-                      color_range="#ffdd00:-3,#0000FF:3"
-                      highlight-event="onmouseover"
-                      use-ctrl-to-zoom
-                    />
-                  </div>
-                </div>
+              <div className={f('track-row')}>
+                {this.renderOptions(ExporterButton, length)}
               </div>
-              <div className={f('tracks-container')}>
-                {data &&
-                  data
-                    .filter(([_, tracks]) => tracks && tracks.length)
-                    .map(([type, entries]) => (
-                      <div key={type} className={f('track-container')}>
-                        <div className={f('track-row')}>
+              <div ref={this._protvistaRef}>
+                <div className={f('track-container')}>
+                  <div className={f('track-row')}>
+                    <div
+                      className={f(
+                        'aligned-to-track-component',
+                        `${this.state.addLabelClass}`,
+                      )}
+                    >
+                      <protvista-navigation
+                        length={length}
+                        displaystart="1"
+                        displayend={length}
+                      />
+                    </div>
+                  </div>
+                  <div className={f('track-row')}>
+                    <div
+                      className={f(
+                        'aligned-to-track-component',
+                        `${this.state.addLabelClass}`,
+                      )}
+                    >
+                      <protvista-sequence
+                        ref={this._webProteinRef}
+                        length={length}
+                        displaystart="1"
+                        displayend={length}
+                        highlight-event="onmouseover"
+                        use-ctrl-to-zoom
+                      />
+                      <protvista-coloured-sequence
+                        ref={this._hydroRef}
+                        length={length}
+                        displaystart="1"
+                        displayend={length}
+                        scale="hydrophobicity-scale"
+                        height="10"
+                        color_range="#ffdd00:-3,#0000FF:3"
+                        highlight-event="onmouseover"
+                        use-ctrl-to-zoom
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className={f('tracks-container')}>
+                  {data &&
+                    data
+                      .filter(([_, tracks]) => tracks && tracks.length)
+                      .map(([type, entries]) => (
+                        <div key={type} className={f('track-container')}>
+                          <div className={f('track-row')}>
+                            <div
+                              className={f(
+                                'track-component',
+                                `${this.state.addLabelClass}`,
+                              )}
+                              style={{ borderBottom: 0 }}
+                            >
+                              <header>
+                                <button
+                                  onClick={() =>
+                                    this.setObjectValueInState(
+                                      'hideCategory',
+                                      type,
+                                      !hideCategory[type],
+                                    )
+                                  }
+                                >
+                                  {hideCategory[type] ? '▸' : '▾'} {type}
+                                </button>
+                              </header>
+                            </div>
+                          </div>
                           <div
-                            className={f(
-                              'track-component',
-                              `${this.state.addLabelClass}`,
-                            )}
-                            style={{ borderBottom: 0 }}
+                            className={f('track-group', {
+                              hideCategory: hideCategory[type],
+                            })}
                           >
-                            <header>
-                              <button
-                                onClick={() =>
-                                  this.setObjectValueInState(
-                                    'hideCategory',
-                                    type,
-                                    !hideCategory[type],
-                                  )
-                                }
-                              >
-                                {hideCategory[type] ? '▸' : '▾'} {type}
-                              </button>
-                            </header>
+                            {entries &&
+                              entries.map((entry) => (
+                                <div
+                                  key={entry.accession}
+                                  className={f('track-row')}
+                                >
+                                  {entry.type === 'secondary_structure' ||
+                                  entry.type === 'sequence_conservation' ? (
+                                    <div
+                                      className={f(
+                                        'track-component',
+                                        entry.type === 'secondary_structure'
+                                          ? 'secondary-structure'
+                                          : 'sequence-conservation',
+                                        `${this.state.addLabelClass}`,
+                                      )}
+                                    >
+                                      <protvista-track
+                                        length={length}
+                                        displaystart="1"
+                                        displayend={length}
+                                        id={`track_${entry.accession}`}
+                                        ref={(e) =>
+                                          (this.web_tracks[entry.accession] = e)
+                                        }
+                                        highlight-event="onmouseover"
+                                        use-ctrl-to-zoom
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div
+                                      className={f(
+                                        'track-component',
+                                        `${this.state.addLabelClass}`,
+                                      )}
+                                    >
+                                      <protvista-interpro-track
+                                        length={length}
+                                        displaystart="1"
+                                        displayend={length}
+                                        id={`track_${entry.accession}`}
+                                        ref={(e) =>
+                                          (this.web_tracks[entry.accession] = e)
+                                        }
+                                        shape="roundRectangle"
+                                        highlight-event="onmouseover"
+                                        use-ctrl-to-zoom
+                                        expanded
+                                      />
+                                    </div>
+                                  )}
+                                  <div
+                                    className={f(
+                                      'track-accession',
+                                      `${this.state.addLabelClass}`,
+                                    )}
+                                  >
+                                    {this.renderLabels(entry)}
+                                  </div>
+                                </div>
+                              ))}
                           </div>
                         </div>
-                        <div
-                          className={f('track-group', {
-                            hideCategory: hideCategory[type],
-                          })}
-                        >
-                          {entries &&
-                            entries.map((entry) => (
-                              <div
-                                key={entry.accession}
-                                className={f('track-row')}
-                              >
-                                {entry.type === 'secondary_structure' ||
-                                entry.type === 'sequence_conservation' ? (
-                                  <div
-                                    className={f(
-                                      'track-component',
-                                      entry.type === 'secondary_structure'
-                                        ? 'secondary-structure'
-                                        : 'sequence-conservation',
-                                      `${this.state.addLabelClass}`,
-                                    )}
-                                  >
-                                    <protvista-track
-                                      length={length}
-                                      displaystart="1"
-                                      displayend={length}
-                                      id={`track_${entry.accession}`}
-                                      ref={(e) =>
-                                        (this.web_tracks[entry.accession] = e)
-                                      }
-                                      highlight-event="onmouseover"
-                                      use-ctrl-to-zoom
-                                    />
-                                  </div>
-                                ) : (
-                                  <div
-                                    className={f(
-                                      'track-component',
-                                      `${this.state.addLabelClass}`,
-                                    )}
-                                  >
-                                    <protvista-interpro-track
-                                      length={length}
-                                      displaystart="1"
-                                      displayend={length}
-                                      id={`track_${entry.accession}`}
-                                      ref={(e) =>
-                                        (this.web_tracks[entry.accession] = e)
-                                      }
-                                      shape="roundRectangle"
-                                      highlight-event="onmouseover"
-                                      use-ctrl-to-zoom
-                                      expanded
-                                    />
-                                  </div>
-                                )}
-                                <div
-                                  className={f(
-                                    'track-accession',
-                                    `${this.state.addLabelClass}`,
-                                  )}
-                                >
-                                  {this.renderLabels(entry)}
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    ))}
-                {showConservationButton ? (
-                  <div className={f('track-container')}>
-                    <div className={f('track-row')}>
-                      <div
-                        className={f(
-                          'track-component',
-                          this.state.addLabelClass,
-                        )}
-                      >
-                        <header>
-                          <button
-                            onClick={() => this.handleConservationLoad(this)}
-                          >
-                            ▸ Match Conservation
-                          </button>
-                        </header>
-                      </div>
-                    </div>
-                    <div className={f('track-group')}>
+                      ))}
+                  {showConservationButton ? (
+                    <div className={f('track-container')}>
                       <div className={f('track-row')}>
                         <div
                           className={f(
                             'track-component',
-                            'conservation-placeholder-component',
                             this.state.addLabelClass,
                           )}
-                          ref={this._conservationTrackRef}
                         >
-                          {this.state.showLoading ? (
-                            <div
-                              className={f('loading-spinner')}
-                              style={{ margin: '10px auto' }}
+                          <header>
+                            <button
+                              onClick={() => this.handleConservationLoad(this)}
                             >
-                              <div />
-                              <div />
-                              <div />
-                            </div>
-                          ) : null}
+                              ▸ Match Conservation
+                            </button>
+                          </header>
                         </div>
-                        <div
-                          className={f(
-                            'track-accession',
-                            this.state.addLabelClass,
-                          )}
-                        >
-                          <button
-                            type="button"
+                      </div>
+                      <div className={f('track-group')}>
+                        <div className={f('track-row')}>
+                          <div
                             className={f(
-                              'hollow',
-                              'button',
-                              'user-select-none',
+                              'track-component',
+                              'conservation-placeholder-component',
+                              this.state.addLabelClass,
                             )}
-                            onClick={() => this.handleConservationLoad(this)}
+                            ref={this._conservationTrackRef}
                           >
-                            Fetch Conservation
-                          </button>
+                            {this.state.showLoading ? (
+                              <div
+                                className={f('loading-spinner')}
+                                style={{ margin: '10px auto' }}
+                              >
+                                <div />
+                                <div />
+                                <div />
+                              </div>
+                            ) : null}
+                          </div>
+                          <div
+                            className={f(
+                              'track-accession',
+                              this.state.addLabelClass,
+                            )}
+                          >
+                            <button
+                              type="button"
+                              className={f(
+                                'hollow',
+                                'button',
+                                'user-select-none',
+                              )}
+                              onClick={() => this.handleConservationLoad(this)}
+                            >
+                              Fetch Conservation
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ) : null}
+                  ) : null}
+                </div>
               </div>
             </protvista-manager>
-          </div>
-          <div className={f('protvista')}>
-            <protvista-zoom-tool
-              length={length}
-              displaystart="1"
-              displayend={length}
-            >
-              <button
-                id="zoom-in"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf0fe;"
-                title="Click to zoom in      Ctrl+Scroll"
-              />
-              <button
-                id="zoom-out"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf146;"
-                title="Click to zoom out      Ctrl+Scroll"
-              />
-            </protvista-zoom-tool>
-            <div
-              className={f('option-fullscreen', 'font-l', 'margin-right-large')}
-            >
-              <FullScreenButton
-                element={this._mainRef.current}
-                tooltip="View the domain viewer in full screen mode"
-              />
-            </div>
           </div>
         </div>
       </div>
