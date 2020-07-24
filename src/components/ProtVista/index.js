@@ -1,8 +1,9 @@
-import React, { Component, Children } from 'react';
+import React, { Component } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
 
+import ProtVistaOptions from './Options';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
@@ -15,45 +16,28 @@ import ProtVistaColouredSequence from 'protvista-coloured-sequence';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 import ProtvistaTrack from 'protvista-track';
-import ProtvistaSaver from 'protvista-saver';
 import ProtvistaZoomTool from 'protvista-zoom-tool';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
-import ReactToPrint from 'react-to-print';
-import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
-import fonts from 'EBI-Icon-fonts/fonts.css';
 import spinner from 'components/SimpleCommonComponents/Loading/style.css';
 import PopperJS from 'popper.js';
-
-import { Exporter } from 'components/Table';
 
 import loadWebComponent from 'utils/load-web-component';
 
 import loadData from 'higherOrder/loadData';
-import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
-import { changeSettingsRaw } from 'actions/creators';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
-
-import foundationCSS from 'foundation-sites/dist/css/foundation-float.css';
-import foundationCSSasText from '!!raw-loader!foundation-sites/dist/css/foundation-float.css';
 import ipro from 'styles/interpro-new.css';
-import iproCSSasText from '!!raw-loader!styles/interpro-new.css';
-import fontCSS from '!!raw-loader!styles/fonts.css';
-import colorsCSS from '!!raw-loader!styles/colors.css';
 import localCSS from './style.css';
-import localCSSasText from '!!raw-loader!./style.css';
-import ebiGlobalCSS from '!!raw-loader!ebi-framework/css/ebi-global.css';
-import globalCSS from '!!raw-loader!styles/global.css';
 
-const f = foundationPartial(ipro, localCSS, fonts, spinner);
+const f = foundationPartial(ipro, localCSS, spinner);
 
 const webComponents = [];
 
 const TOOLTIP_DELAY = 500;
-const ONE_SEC = 1000;
 
 const loadProtVistaWebComponents = () => {
   if (!webComponents.length) {
@@ -83,10 +67,6 @@ const loadProtVistaWebComponents = () => {
 
     webComponents.push(
       loadWebComponent(() => ProtvistaTrack).as('protvista-track'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtvistaSaver).as('protvista-saver'),
     );
 
     webComponents.push(
@@ -135,12 +115,13 @@ const getColorScaleHTML = (
   data: Array<Object>,
   dataDB: Object,
   colorDomainsBy: string,
-  changeSettingsRaw: function,
   fetchConservation: function,
   title: string,
   fixedHighlight: string,
   id: string,
   showConservationButton: boolean,
+  handleConservationLoad: function,
+  children: any,
 }; */
 
 /*:: type State = {
@@ -150,7 +131,9 @@ const getColorScaleHTML = (
   collapsed: boolean,
   label: Object,
   addLabelClass: string,
-  showConservationButtonButton: boolean,
+  enableTooltip: boolean,
+  showLoading: boolean,
+  overPopup: boolean,
 }; */
 class ProtVista extends Component /*:: <Props, State> */ {
   static propTypes = {
@@ -158,7 +141,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
     data: T.array,
     dataDB: T.object,
     colorDomainsBy: T.string,
-    changeSettingsRaw: T.func,
     title: T.string,
     fixedHighlight: T.string,
     id: T.string,
@@ -184,7 +166,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
       },
       addLabelClass: '',
       enableTooltip: true,
-      dropdownOpen: false,
       showLoading: false,
       overPopup: false,
     };
@@ -195,7 +176,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this._protvistaRef = React.createRef();
     this._webProteinRef = React.createRef();
     this._hydroRef = React.createRef();
-    this._labelOptionsRef = React.createRef();
     this._conservationTrackRef = React.createRef();
     this._isPopperTop = true;
     this._timeoutID = 0;
@@ -246,41 +226,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
         this.setState({ overPopup: false }),
       );
     }
-
-    const saver = document.querySelector(`#${this.props.id}Saver`);
-
-    saver.preSave = () => {
-      const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
-      // Including the styles of interpro-type elements
-      base.querySelectorAll('interpro-type').forEach((el) => {
-        el.innerHTML = el.shadowRoot.innerHTML;
-      });
-      const style = document.createElement('style');
-      style.setAttribute('id', 'tmp_style');
-      // TODO it needs to be changed in an efficient way through webpack
-      let str = localCSSasText + iproCSSasText + foundationCSSasText;
-      const cssStyles = [localCSS, ipro, foundationCSS];
-      cssStyles.forEach((item) => {
-        Object.keys(item).forEach((key) => {
-          str = str.replace(
-            new RegExp(`\\.${key}([:,[.\\s])`, 'gm'),
-            `.${item[key]}$1`,
-          );
-        });
-      });
-
-      str = str + ebiGlobalCSS + globalCSS + fontCSS + colorsCSS;
-      style.innerHTML = `${str}`;
-      base.appendChild(style);
-    };
-    // removes the added style from the DOM
-    saver.postSave = () => {
-      const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
-      base.removeChild(document.getElementById('tmp_style'));
-      base.querySelectorAll('interpro-type').forEach((el) => {
-        el.innerHTML = '';
-      });
-    };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -688,19 +633,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
       [objectName]: { ...obj, [type]: value },
     }));
 
-  toggleCollapseAll = () => {
-    const { collapsed } = this.state;
-    const expandedTrack = {};
-    for (const track of Object.values(this.web_tracks)) {
-      if (collapsed) track.setAttribute('expanded', true);
-      else track.removeAttribute('expanded');
-    }
-    for (const acc of Object.keys(this.state.expandedTrack)) {
-      expandedTrack[acc] = collapsed;
-    }
-    this.setState({ collapsed: !collapsed, expandedTrack });
-  };
-
   handleCollapseLabels = (accession) => {
     if (this.web_tracks[accession]) {
       this.setObjectValueInState(
@@ -717,41 +649,19 @@ class ProtVista extends Component /*:: <Props, State> */ {
     }
   };
 
-  changeColor = ({ target: { value: colorMode } }) => {
-    for (const track of Object.values(this.web_tracks)) {
-      for (const d of [...track._data, ...(track._contributors || [])]) {
-        d.color = getTrackColor(d, colorMode);
-      }
-      track.refresh();
-    }
-    this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
-  };
-
-  updateLabel = (evt) => {
-    const newLabelState = { ...this.state.label };
-    newLabelState[evt.target.value] = !newLabelState[evt.target.value];
-    if (!newLabelState.accession && !newLabelState.name) {
-      newLabelState.accession = true;
-    }
+  updateLabel = (newLabelState) =>
     this.setState({
       label: newLabelState,
       addLabelClass: newLabelState.name ? 'label-by-name' : '',
     });
-    //   console.log(evt.target.value)
-    //   const items = this._labelOptionsRef.current.childNodes;
-    //   const labels = [];
-    //   items.forEach((item) => {
-    //     if (item.tagName === 'LI' && item.firstChild.checked)
-    //       labels.push(item.firstChild.value);
-    //   });
-    //   if (labels.includes('name')) {
-    //     this.setState({ addLabelClass: 'label-by-name' });
-    //     if (labels.includes('accession')) this.setState({ label: 'both' });
-    //     else this.setState({ label: 'name' });
-    //   } else {
-    //     this.setState({ label: 'accession', addLabelClass: '' });
-    //   }
-  };
+
+  updateTracksCollapseStatus = (expandedTrack) =>
+    this.setState({ expandedTrack });
+
+  toggleTooltipStatus = (status) =>
+    this.setState({
+      enableTooltip: status,
+    });
 
   renderSwitch(label, entry) {
     const type = entry.type ? (
@@ -883,234 +793,19 @@ class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
-  renderOptions(ExporterButton, length) {
-    const { collapsed } = this.state;
-    const title = this.props.title || 'Domains on protein';
-
-    return (
-      <div
-        className={f(
-          'aligned-to-track-component',
-          'view-options-wrap',
-          `${this.state.addLabelClass}`,
-        )}
-      >
-        <div className={f('view-options-title')}>{title}</div>
-        <div className={f('view-options')}>
-          <div className={f('option-fullscreen', 'font-l', 'viewer-options')}>
-            <FullScreenButton
-              element={this._mainRef.current}
-              tooltip="View the domain viewer in full screen mode"
-            />
-          </div>
-
-          <div className={f('viewer-options')}>
-            <protvista-zoom-tool
-              length={length}
-              displaystart="1"
-              displayend={length}
-            >
-              <button
-                id="zoom-in"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf0fe;"
-                title="Click to zoom in      Ctrl+Scroll"
-              />
-              <button
-                id="zoom-out"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf146;"
-                title="Click to zoom out      Ctrl+Scroll"
-              />
-            </protvista-zoom-tool>
-          </div>
-
-          <div className={f('dropdown-div')}>
-            <Tooltip title={'More options to customise the protein viewer'}>
-              <div className={f('button-group', 'dropdown-container', 'small')}>
-                <button
-                  className={f('button', 'dropdown')}
-                  onClick={() =>
-                    this.setState({ dropdownOpen: !this.state.dropdownOpen })
-                  }
-                >
-                  Options
-                </button>
-                <div
-                  className={f('dropdown-pane', 'dropdown-content', 'left')}
-                  style={{
-                    transform: `scaleY(${this.state.dropdownOpen ? 1 : 0})`,
-                  }}
-                >
-                  <ul>
-                    <li>
-                      Colour By
-                      <ul className={f('nested-list')}>
-                        <li>
-                          <label>
-                            <input
-                              type="radio"
-                              onChange={this.changeColor}
-                              value={EntryColorMode.ACCESSION}
-                              checked={
-                                this.props.colorDomainsBy ===
-                                EntryColorMode.ACCESSION
-                              }
-                            />{' '}
-                            Accession
-                          </label>
-                        </li>
-                        <li>
-                          <label>
-                            <input
-                              type="radio"
-                              onChange={this.changeColor}
-                              value={EntryColorMode.MEMBER_DB}
-                              checked={
-                                this.props.colorDomainsBy ===
-                                EntryColorMode.MEMBER_DB
-                              }
-                            />{' '}
-                            Member Database
-                          </label>
-                        </li>
-                        <li>
-                          <label>
-                            <input
-                              type="radio"
-                              onChange={this.changeColor}
-                              value={EntryColorMode.DOMAIN_RELATIONSHIP}
-                              checked={
-                                this.props.colorDomainsBy ===
-                                EntryColorMode.DOMAIN_RELATIONSHIP
-                              }
-                            />{' '}
-                            Domain Relationship
-                          </label>
-                        </li>
-                      </ul>
-                    </li>
-                    <hr />
-                    <li>
-                      Label by
-                      <ul
-                        ref={this._labelOptionsRef}
-                        className={f('nested-list')}
-                      >
-                        <li key={'accession'}>
-                          <label>
-                            <input
-                              type="checkbox"
-                              onChange={this.updateLabel}
-                              value={'accession'}
-                              checked={this.state.label.accession}
-                            />{' '}
-                            Accession
-                          </label>
-                        </li>
-                        <li key={'name'}>
-                          <label>
-                            <input
-                              type="checkbox"
-                              onChange={this.updateLabel}
-                              value={'name'}
-                              checked={this.state.label.name}
-                            />{' '}
-                            Name
-                          </label>
-                        </li>
-                      </ul>
-                    </li>
-                    <hr />
-                    <li>
-                      Snapshot
-                      <ul className={f('nested-list')}>
-                        <li>
-                          <protvista-saver
-                            element-id={`${this.props.id}ProtvistaDiv`}
-                            background-color={'#e5e5e5'}
-                            id={`${this.props.id}Saver`}
-                          >
-                            <button>
-                              <span
-                                className={f('icon', 'icon-common')}
-                                data-icon="&#xf030;"
-                              />{' '}
-                              Save as Image
-                            </button>
-                          </protvista-saver>
-                        </li>
-                        <li>
-                          <ReactToPrint
-                            trigger={() => (
-                              <button
-                                className={f('icon', 'icon-common')}
-                                data-icon="&#x50;"
-                              >
-                                {' '}
-                                Print
-                              </button>
-                            )}
-                            onBeforeGetContent={() => {
-                              this._protvistaRef.current.style =
-                                'width: 1000px;';
-                              return new Promise((resolve) => {
-                                setTimeout(() => resolve(), ONE_SEC);
-                              });
-                            }}
-                            content={() => this._protvistaRef.current}
-                            onAfterPrint={() =>
-                              (this._protvistaRef.current.style = '')
-                            }
-                          />
-                        </li>
-                      </ul>
-                    </li>
-                    <hr />
-                    <li>
-                      <button
-                        onClick={this.toggleCollapseAll}
-                        aria-label={`${
-                          collapsed ? 'Expand' : 'Collapse'
-                        } all tracks`}
-                      >
-                        {collapsed ? 'Expand' : 'Collapse'} All Tracks
-                      </button>
-                    </li>
-                    <hr />
-                    <li key={'tooltip'}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          onChange={() =>
-                            this.setState({
-                              enableTooltip: !this.state.enableTooltip,
-                            })
-                          }
-                          checked={this.state.enableTooltip}
-                        />{' '}
-                        Tooltip{' '}
-                        {this.state.enableTooltip ? 'Active' : 'Inactive'}
-                      </label>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </Tooltip>
-          </div>
-
-          {ExporterButton ? (
-            <div className={f('exporter')}>{ExporterButton}</div>
-          ) : null}
-        </div>
-      </div>
-    );
-  }
-
   handleConservationLoad(_this) {
     _this.setState({ showLoading: true });
     _this.props.handleConservationLoad();
   }
+
+  // Refs to be passed to the child component - <ProtVistaOptions>
+  getProtvistaRefs = () => {
+    const neededRefs = {
+      _mainRef: this._mainRef,
+      _protvistaRef: this._protvistaRef,
+    };
+    return neededRefs;
+  };
 
   render() {
     const {
@@ -1123,12 +818,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     if (!(length && data)) return <Loading />;
 
     const { hideCategory } = this.state;
-    let ExporterButton = null;
-    if (children) {
-      ExporterButton = Children.toArray(children).filter(
-        (child) => child.type === Exporter,
-      )?.[0];
-    }
+
     return (
       <div
         ref={this._mainRef}
@@ -1145,7 +835,27 @@ class ProtVista extends Component /*:: <Props, State> */ {
               id="pv-manager"
             >
               <div className={f('track-row')}>
-                {this.renderOptions(ExporterButton, length)}
+                <div
+                  className={f(
+                    'aligned-to-track-component',
+                    'view-options-wrap',
+                    `${this.state.addLabelClass}`,
+                  )}
+                >
+                  <ProtVistaOptions
+                    title={this.props.title}
+                    length={length}
+                    id={this.props.id}
+                    webTracks={this.web_tracks}
+                    expandedTrack={this.state.expandedTrack}
+                    getParentElem={this.getProtvistaRefs}
+                    updateLabel={this.updateLabel}
+                    updateTracksCollapseStatus={this.updateTracksCollapseStatus}
+                    toggleTooltipStatus={this.toggleTooltipStatus}
+                  >
+                    {children}
+                  </ProtVistaOptions>
+                </div>
               </div>
               <div ref={this._protvistaRef}>
                 <div className={f('track-container')}>
@@ -1372,5 +1082,4 @@ export default loadData({
   getUrl: getUrlForMeta,
   propNamespace: 'DB',
   mapStateToProps,
-  mapDispatchToProps: { changeSettingsRaw },
 })(ProtVista);
