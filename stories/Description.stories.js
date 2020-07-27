@@ -4,9 +4,7 @@ import { withKnobs, number } from '@storybook/addon-knobs';
 import Description, { DescriptionReadMore } from 'components/Description';
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
-import Literature, {
-  getLiteratureIdsFromDescription,
-} from 'components/Entry/Literature';
+import Literature from 'components/Entry/Literature';
 
 const store = configureStore({
   customLocation: {
