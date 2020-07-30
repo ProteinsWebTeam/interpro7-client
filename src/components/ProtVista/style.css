@@ -408,57 +408,35 @@ g:global(.child-location-group.clg-5) path {
   }
 }
 
-.dropdown-div {
-  margin-left: 0.5rem;
-}
-
-.dropdown-container {
-  display: flex;
-  flex-direction: row-reverse;
+.protvista-menu {
   margin: 0.5rem 0 0.5rem 0;
-  position: relative;
-
-  & .dropdown-content {
-    position: absolute;
-    top: 100%;
-    width: auto;
-    padding: 1rem 0.5rem;
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform var(--timing-really-fast) ease-in-out;
-    visibility: visible;
-    display: block;
+  & button {
+    font-size: 0.75rem;
   }
-}
+  & ul.menu-options {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    & li {
+      display: block;
+      padding: 0.3rem 1rem;
+      white-space: nowrap;
+    }
 
-.dropdown-container .dropdown-pane {
-  z-index: 2; /* so sticky header stay on top*/
-}
+    & li input {
+      padding: 0 0.5rem;
+      margin: 0;
+      white-space: nowrap;
+    }
 
-.dropdown-container .dropdown-pane ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
+    & hr {
+      margin: 0;
+    }
+  }
 
-.dropdown-container .dropdown-pane li {
-  display: block;
-  padding: 0.3rem 1rem;
-  white-space: nowrap;
-}
-
-.dropdown-container .dropdown-pane li input {
-  padding: 0 0.5rem;
-  margin: 0;
-  white-space: nowrap;
-}
-
-.dropdown-container .dropdown-pane hr {
-  margin: 0;
-}
-
-.nested-list {
-  font-size: 0.8rem;
+  & .nested-list {
+    font-size: 0.8rem;
+  }
 }
 
 .conservation-placeholder-component {

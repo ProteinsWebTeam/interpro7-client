@@ -3,7 +3,7 @@
 
 .dropdown-container {
   display: flex;
-  margin: 0.5rem 0 0 0;
+  margin: 0;
   position: relative;
 
   & .dropdown {
@@ -11,6 +11,9 @@
   }
   & button {
     margin-bottom: 1px;
+  }
+  & span.icon {
+    padding-right: 0.5em;
   }
   & .dropdown-content {
     position: absolute;

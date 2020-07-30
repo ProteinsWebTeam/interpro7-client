@@ -20,6 +20,7 @@ import ContributingSignatures from 'components/Entry/ContributingSignatures';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 
 import getUrlFor from 'utils/url-patterns';
 
@@ -122,7 +123,6 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
   const url = getUrlFor(metadata.source_database);
   const { protocol, hostname, port, root } = api;
 
-  const [isOpen, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
 
@@ -134,14 +134,14 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
   });
   const entry = `${metadata.name.name} (${metadata.accession})`;
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
     data.append('subject', `Add annotation, ${entry}`);
     fetch(apiUrl, {
       method: 'POST',
       body: data,
-    }).then(response => {
+    }).then((response) => {
       let text;
       // eslint-disable-next-line no-magic-numbers
       if (response.status === 200) {
@@ -161,11 +161,10 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
       );
       setMessage('');
       setEmail('');
-      setOpen(false);
     });
   };
 
-  const handleFields = e => {
+  const handleFields = (e) => {
     if (e.target.name === 'message') setMessage(e.target.value);
     else setEmail(e.target.value);
   };
@@ -178,30 +177,17 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
   return (
     <div className={f('medium-4', 'large-4', 'columns')}>
       <div>
-        <div
-          className={f('button-group', 'dropdown-container')}
-          style={{ display: 'flex' }}
+        <Tooltip
+          title={
+            'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
+            'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
+            'helpful if you can include literature references supporting your annotation suggestion.'
+          }
         >
-          <button
-            className={f('button', 'dropdown')}
-            onClick={() => setOpen(!isOpen)}
-          >
-            <Tooltip
-              title={
-                'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
-                'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
-                'helpful if you can include literature references supporting your annotation suggestion.'
-              }
-            >
-              <i className={f('icon', 'icon-common')} data-icon="&#xf303;" />{' '}
-              Add your annotation
-            </Tooltip>
-          </button>
-          <div
-            className={f('dropdown-pane', 'dropdown-content')}
-            style={{
-              transform: `scaleY(${isOpen ? 1 : 0})`,
-            }}
+          <DropDownButton
+            label="Add your annotation"
+            icon="&#xf303;"
+            extraClasses={f('annotation')}
           >
             <form onSubmit={handleSubmit}>
               <label htmlFor="message">Your annotation</label>
@@ -227,8 +213,8 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
                 Clear
               </button>
             </form>
-          </div>
-        </div>
+          </DropDownButton>
+        </Tooltip>
       </div>
       {metadata.integrated && <Integration intr={metadata.integrated} />}
       {metadata.source_database.toLowerCase() !== 'interpro' && (
@@ -275,8 +261,8 @@ _SidePanel.propTypes = {
 };
 
 const mapStateToProps = createSelector(
-  state => state.settings.api,
-  api => ({
+  (state) => state.settings.api,
+  (api) => ({
     api,
   }),
 );
@@ -364,7 +350,7 @@ const OverlappingEntries = ({ metadata }) => {
           />
         </Tooltip>
       </h4>
-      {_overlaps.map(ov => (
+      {_overlaps.map((ov) => (
         <div key={ov.accession} className={f('list-items')}>
           <interpro-type type={ov.type.replace('_', ' ')} dimension="1.2em" />
           <Link
@@ -490,17 +476,19 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                 type={metadata.type}
               />
 
-              {// doesn't work for some HAMAP as they have enpty <P> tag
-              (metadata.description || []).length ? (
-                <>
-                  <h4>Description</h4>
-                  <Description
-                    textBlocks={metadata.description}
-                    literature={included}
-                    accession={metadata.accession}
-                  />
-                </>
-              ) : null}
+              {
+                // doesn't work for some HAMAP as they have enpty <P> tag
+                (metadata.description || []).length ? (
+                  <>
+                    <h4>Description</h4>
+                    <Description
+                      textBlocks={metadata.description}
+                      literature={included}
+                      accession={metadata.accession}
+                    />
+                  </>
+                ) : null
+              }
             </div>
             <SidePanel metadata={metadata} dbInfo={dbInfo} />
           </div>

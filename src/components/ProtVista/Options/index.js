@@ -8,6 +8,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import ReactToPrint from 'react-to-print';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { Exporter } from 'components/Table';
 
 import loadData from 'higherOrder/loadData';
@@ -50,7 +51,6 @@ const ONE_SEC = 1000;
 /*:: type State = {
   collapsed: boolean,
   label: Object,
-  dropdownOpen: boolean,
   enableTooltip: boolean,
 }; */
 
@@ -74,7 +74,6 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
     super(props);
 
     this.state = {
-      dropdownOpen: false,
       label: {
         accession: true,
         name: false,
@@ -210,176 +209,154 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
               />
             </protvista-zoom-tool>
           </div>
-
-          <div className={f('dropdown-div')}>
-            <Tooltip title={'More options to customise the protein viewer'}>
-              <div className={f('button-group', 'dropdown-container', 'small')}>
-                <button
-                  className={f('button', 'dropdown')}
-                  onClick={() =>
-                    this.setState({ dropdownOpen: !this.state.dropdownOpen })
-                  }
-                >
-                  Options
-                </button>
-                <div
-                  className={f('dropdown-pane', 'dropdown-content', 'left')}
-                  style={{
-                    transform: `scaleY(${this.state.dropdownOpen ? 1 : 0})`,
-                  }}
-                >
-                  <ul>
+          <Tooltip title={'More options to customise the protein viewer'}>
+            <DropDownButton label="Options" extraClasses={f('protvista-menu')}>
+              <ul className={f('menu-options')}>
+                <li>
+                  Colour By
+                  <ul className={f('nested-list')}>
                     <li>
-                      Colour By
-                      <ul className={f('nested-list')}>
-                        <li>
-                          <label>
-                            <input
-                              type="radio"
-                              onChange={this.changeColor}
-                              value={EntryColorMode.ACCESSION}
-                              checked={
-                                this.props.colorDomainsBy ===
-                                EntryColorMode.ACCESSION
-                              }
-                            />{' '}
-                            Accession
-                          </label>
-                        </li>
-                        <li>
-                          <label>
-                            <input
-                              type="radio"
-                              onChange={this.changeColor}
-                              value={EntryColorMode.MEMBER_DB}
-                              checked={
-                                this.props.colorDomainsBy ===
-                                EntryColorMode.MEMBER_DB
-                              }
-                            />{' '}
-                            Member Database
-                          </label>
-                        </li>
-                        <li>
-                          <label>
-                            <input
-                              type="radio"
-                              onChange={this.changeColor}
-                              value={EntryColorMode.DOMAIN_RELATIONSHIP}
-                              checked={
-                                this.props.colorDomainsBy ===
-                                EntryColorMode.DOMAIN_RELATIONSHIP
-                              }
-                            />{' '}
-                            Domain Relationship
-                          </label>
-                        </li>
-                      </ul>
-                    </li>
-                    <hr />
-                    <li>
-                      Label by
-                      <ul className={f('nested-list')}>
-                        <li key={'accession'}>
-                          <label>
-                            <input
-                              type="checkbox"
-                              onChange={this.updateLabel}
-                              value={'accession'}
-                              checked={this.state.label.accession}
-                            />{' '}
-                            Accession
-                          </label>
-                        </li>
-                        <li key={'name'}>
-                          <label>
-                            <input
-                              type="checkbox"
-                              onChange={this.updateLabel}
-                              value={'name'}
-                              checked={this.state.label.name}
-                            />{' '}
-                            Name
-                          </label>
-                        </li>
-                      </ul>
-                    </li>
-                    <hr />
-                    <li>
-                      Snapshot
-                      <ul className={f('nested-list')}>
-                        <li>
-                          <protvista-saver
-                            element-id={`${this.props.id}ProtvistaDiv`}
-                            background-color={'#e5e5e5'}
-                            id={`${this.props.id}Saver`}
-                          >
-                            <button>
-                              <span
-                                className={f('icon', 'icon-common')}
-                                data-icon="&#xf030;"
-                              />{' '}
-                              Save as Image
-                            </button>
-                          </protvista-saver>
-                        </li>
-                        <li>
-                          <ReactToPrint
-                            trigger={() => (
-                              <button
-                                className={f('icon', 'icon-common')}
-                                data-icon="&#x50;"
-                              >
-                                {' '}
-                                Print
-                              </button>
-                            )}
-                            onBeforeGetContent={() => {
-                              this.parentRefs._protvistaRef.current.style =
-                                'width: 1000px;';
-                              return new Promise((resolve) => {
-                                setTimeout(() => resolve(), ONE_SEC);
-                              });
-                            }}
-                            content={() =>
-                              this.parentRefs._protvistaRef.current
-                            }
-                            onAfterPrint={() =>
-                              (this.parentRefs._protvistaRef.current.style = '')
-                            }
-                          />
-                        </li>
-                      </ul>
-                    </li>
-                    <hr />
-                    <li>
-                      <button
-                        onClick={this.toggleCollapseAll}
-                        aria-label={`${
-                          collapsed ? 'Expand' : 'Collapse'
-                        } all tracks`}
-                      >
-                        {collapsed ? 'Expand' : 'Collapse'} All Tracks
-                      </button>
-                    </li>
-                    <hr />
-                    <li key={'tooltip'}>
                       <label>
                         <input
-                          type="checkbox"
-                          onChange={this.toggleTooltipStatus}
-                          checked={this.state.enableTooltip}
+                          type="radio"
+                          onChange={this.changeColor}
+                          value={EntryColorMode.ACCESSION}
+                          checked={
+                            this.props.colorDomainsBy ===
+                            EntryColorMode.ACCESSION
+                          }
                         />{' '}
-                        Tooltip{' '}
-                        {this.state.enableTooltip ? 'Active' : 'Inactive'}
+                        Accession
+                      </label>
+                    </li>
+                    <li>
+                      <label>
+                        <input
+                          type="radio"
+                          onChange={this.changeColor}
+                          value={EntryColorMode.MEMBER_DB}
+                          checked={
+                            this.props.colorDomainsBy ===
+                            EntryColorMode.MEMBER_DB
+                          }
+                        />{' '}
+                        Member Database
+                      </label>
+                    </li>
+                    <li>
+                      <label>
+                        <input
+                          type="radio"
+                          onChange={this.changeColor}
+                          value={EntryColorMode.DOMAIN_RELATIONSHIP}
+                          checked={
+                            this.props.colorDomainsBy ===
+                            EntryColorMode.DOMAIN_RELATIONSHIP
+                          }
+                        />{' '}
+                        Domain Relationship
                       </label>
                     </li>
                   </ul>
-                </div>
-              </div>
-            </Tooltip>
-          </div>
-
+                </li>
+                <hr />
+                <li>
+                  Label by
+                  <ul className={f('nested-list')}>
+                    <li key={'accession'}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          onChange={this.updateLabel}
+                          value={'accession'}
+                          checked={this.state.label.accession}
+                        />{' '}
+                        Accession
+                      </label>
+                    </li>
+                    <li key={'name'}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          onChange={this.updateLabel}
+                          value={'name'}
+                          checked={this.state.label.name}
+                        />{' '}
+                        Name
+                      </label>
+                    </li>
+                  </ul>
+                </li>
+                <hr />
+                <li>
+                  Snapshot
+                  <ul className={f('nested-list')}>
+                    <li>
+                      <protvista-saver
+                        element-id={`${this.props.id}ProtvistaDiv`}
+                        background-color={'#e5e5e5'}
+                        id={`${this.props.id}Saver`}
+                      >
+                        <button>
+                          <span
+                            className={f('icon', 'icon-common')}
+                            data-icon="&#xf030;"
+                          />{' '}
+                          Save as Image
+                        </button>
+                      </protvista-saver>
+                    </li>
+                    <li>
+                      <ReactToPrint
+                        trigger={() => (
+                          <button
+                            className={f('icon', 'icon-common')}
+                            data-icon="&#x50;"
+                          >
+                            {' '}
+                            Print
+                          </button>
+                        )}
+                        onBeforeGetContent={() => {
+                          this.parentRefs._protvistaRef.current.style =
+                            'width: 1000px;';
+                          return new Promise((resolve) => {
+                            setTimeout(() => resolve(), ONE_SEC);
+                          });
+                        }}
+                        content={() => this.parentRefs._protvistaRef.current}
+                        onAfterPrint={() =>
+                          (this.parentRefs._protvistaRef.current.style = '')
+                        }
+                      />
+                    </li>
+                  </ul>
+                </li>
+                <hr />
+                <li>
+                  <button
+                    onClick={this.toggleCollapseAll}
+                    aria-label={`${
+                      collapsed ? 'Expand' : 'Collapse'
+                    } all tracks`}
+                  >
+                    {collapsed ? 'Expand' : 'Collapse'} All Tracks
+                  </button>
+                </li>
+                <hr />
+                <li key={'tooltip'}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      onChange={this.toggleTooltipStatus}
+                      checked={this.state.enableTooltip}
+                    />{' '}
+                    Tooltip {this.state.enableTooltip ? 'Active' : 'Inactive'}
+                  </label>
+                </li>
+              </ul>
+            </DropDownButton>
+          </Tooltip>
           {ExporterButton ? (
             <div className={f('exporter')}>{ExporterButton}</div>
           ) : null}
