@@ -15,11 +15,19 @@ module.exports = {
   webpackFinal: async (config) => {
     // do mutation to the config
     config.resolve.modules.push(path.resolve('.', 'src'));
-    config.module.rules
-      .find(({ test }) => test.toString().includes('.css'))
-      .use.find((x) =>
-        (x.loader || x).includes('postcss-loader')
-      ).options.plugins = [postCSSImport, cssNext()];
+    const cssRule = config.module.rules.find(({ test }) =>
+      test.toString().includes('.css')
+    );
+
+    cssRule.use.find((x) =>
+      (x.loader || x).includes('postcss-loader')
+    ).options.plugins = [postCSSImport, cssNext()];
+    cssRule.exclude = /tippy.css$/i;
+
+    config.module.rules.push({
+      test: /tippy.css$/i,
+      use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+    });
     config.module.rules.push({
       test: /\.yml$/i,
       use: [{ loader: 'json-loader' }, { loader: 'yaml-loader' }],

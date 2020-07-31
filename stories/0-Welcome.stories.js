@@ -24,6 +24,10 @@ export const ToStorybook = () => (
           If the component triggers an event, it will be logged in the actions
           panel.
         </dd>
+        <dt>Knobs</dt>
+        <dd>
+          Some interactive components to manipulate some of the attributes.
+        </dd>
       </dl>
     </div>
   </div>
