@@ -48,3 +48,32 @@
     }
   }
 }
+
+.wiki-article {
+  margin: 0.2rem;
+
+  & .wiki-title {
+    padding-left: 1rem;
+  }
+
+  & .infobox {
+    /*border: 1px solid #a2a9b1;*/
+    /*border-spacing: 3px;*/
+    /*background-color: #f8f9fa;*/
+    /*color: black;*/
+    /*!*padding: 0.2em;*!*/
+    /*float: right;*/
+    /*clear: right;*/
+    font-size: 80%;
+    /*line-height: 1.5em;*/
+    /*padding-bottom: 1rem;*/
+    /*border: 1px solid gray;*/
+    /*background-color: rgba(175, 169, 169, 0.31);*/
+  }
+
+  & .img-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 120%;
+  }
+}
