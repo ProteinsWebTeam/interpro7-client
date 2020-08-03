@@ -5,7 +5,7 @@ import NumberComponent from 'components/NumberComponent';
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
 
-const store = configureStore({ settings: { ui: { lowGraphics: false } } });
+const store = configureStore();
 
 const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
 
