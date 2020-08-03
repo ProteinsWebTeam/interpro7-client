@@ -1,21 +1,12 @@
 import React from 'react';
+
 import { withKnobs, boolean } from '@storybook/addon-knobs';
 
 import { Column } from 'components/Table';
 import SimpleTable from 'components/Table/SimpleTable';
-import FullyLoadedTable from 'components/Table/FullyLoadedTable';
-
-import Provider from './Provider';
-import configureStore from './configuedStore.js';
-
-const store = configureStore({
-  pathname: '/protein/uniprot/',
-  search: '?page_size=2',
-  hash: 'table',
-});
 
 export default {
-  title: 'InterPro UI/Table',
+  title: 'InterPro UI/Table/Simple',
   decorators: [withKnobs],
 };
 
@@ -71,20 +62,4 @@ export const TheSimpleTableWithRenderers = () => (
       Percentage
     </Column>
   </SimpleTable>
-);
-
-export const TheFullyLoadedTable = () => (
-  <Provider store={store}>
-    <FullyLoadedTable
-      data={basicData}
-      renderers={{
-        // eslint-disable-next-line react/display-name
-        extra: (extra) => <span>{extra * 100}%</span>,
-      }}
-      // The top:0 in the headerStyle is added to * all columns reset the sticky that compensates the InterPro header
-      headerStyle={{
-        '*': { top: 0 },
-      }}
-    />
-  </Provider>
 );
