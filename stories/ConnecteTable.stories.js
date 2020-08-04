@@ -1,13 +1,16 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+
+import { goToCustomLocation } from 'actions/creators';
 
 import Table, { Column, Card, PageSizeSelector } from 'components/Table';
 
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
 
-import { foundationPartial } from '../src/styles/foundation';
+import { foundationPartial } from 'styles/foundation';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 const f = foundationPartial(ebiStyles, fonts);
@@ -31,21 +34,6 @@ const basicData = [
   { id: 4, name: 'Fourth', extra: 0.5 },
 ];
 
-// eslint-disable-next-line react/prop-types
-const CardForStory = ({ id, name, extra }) => (
-  <div
-    className={f('flex-card')}
-    style={{ width: '300px', textAlign: 'center' }}
-  >
-    <div className={f('card-title')}>
-      <h6>
-        {id} - {name}
-      </h6>
-    </div>
-    <div>{extra * 100}%</div>
-  </div>
-);
-
 export const TheTable = () => (
   <Table actualSize={basicData.length} dataTable={basicData}>
     <Column dataKey="id" headerStyle={{ top: 0 }}>
@@ -64,27 +52,56 @@ export const TheTable = () => (
   </Table>
 );
 
-export const TheCardTable = () => (
-  <Table actualSize={basicData.length} dataTable={basicData}>
-    <Card>{(data) => <CardForStory {...data} />}</Card>
-    <Column dataKey="id" headerStyle={{ top: 0 }}>
-      ID
-    </Column>
-    <Column dataKey="name" headerStyle={{ top: 0 }}>
-      Name
-    </Column>
-    <Column
-      dataKey="extra"
-      headerStyle={{ top: 0 }}
-      renderer={(extra) => <span>{extra * 100}%</span>}
-    >
-      Percentage
-    </Column>
-  </Table>
-);
+export const TheConnectedCardTable = () => {
+  const CardForStory = ({ id, name, extra }) => (
+    <>
+      <div className={f('card-header')}>
+        {id} - {name}
+      </div>
+      <div className={f('card-content')}>
+        <div className={f('card-info')}>{extra * 100}%</div>
+      </div>
+    </>
+  );
+  const CardTable = ({ description, hash, goToCustomLocation }) => {
+    // Forcing to open the grid view
+    if (hash !== 'grid')
+      goToCustomLocation({
+        description,
+        hash: 'grid',
+      });
+    return (
+      <Table actualSize={basicData.length} dataTable={basicData}>
+        <Card>{(data) => <CardForStory {...data} />}</Card>
+        <Column dataKey="id" headerStyle={{ top: 0 }}>
+          ID
+        </Column>
+        <Column dataKey="name" headerStyle={{ top: 0 }}>
+          Name
+        </Column>
+        <Column
+          dataKey="extra"
+          headerStyle={{ top: 0 }}
+          renderer={(extra) => <span>{extra * 100}%</span>}
+        >
+          Percentage
+        </Column>
+      </Table>
+    );
+  };
+  const mapStateToProps = createSelector(
+    (state) => state.customLocation.description,
+    (state) => state.customLocation.hash,
+    (description, hash) => ({ description, hash })
+  );
+
+  const ConnectedCardTable = connect(mapStateToProps, {
+    goToCustomLocation,
+  })(CardTable);
+  return <ConnectedCardTable />;
+};
 
 export const TheConnectedTable = () => {
-  // eslint-disable-next-line react/prop-types
   const NewTable = ({ data, search, totalLength }) => (
     <Table
       actualSize={totalLength}
@@ -99,13 +116,6 @@ export const TheConnectedTable = () => {
       </Column>
       <Column dataKey="name" headerStyle={{ top: 0 }}>
         Name
-      </Column>
-      <Column
-        dataKey="extra"
-        headerStyle={{ top: 0 }}
-        renderer={(extra) => <span>{extra * 100}%</span>}
-      >
-        Percentage
       </Column>
     </Table>
   );

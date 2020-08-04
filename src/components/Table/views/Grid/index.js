@@ -7,7 +7,10 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 import getStatusMessage from 'utils/server-message';
 
+import { foundationPartial } from 'styles/foundation';
+
 import local from './style.css';
+const f = foundationPartial(local);
 
 /*:: type Props = {
   dataTable: Array<Object>,
@@ -30,14 +33,14 @@ class GridView extends PureComponent /*:: <Props> */ {
     if (card) {
       return (
         <AnimatedEntry
-          className={local['card-wrapper']}
+          className={f('card-wrapper')}
           element="div"
           data-testid="data-grid"
         >
           {dataTable.map((data, i) => (
             <div
               key={data?.metadata?.accession || i}
-              className={local['grid-card']}
+              className={f('grid-card')}
               data-testid="grid-entity"
             >
               <ErrorBoundary>{renderer(data)}</ErrorBoundary>
