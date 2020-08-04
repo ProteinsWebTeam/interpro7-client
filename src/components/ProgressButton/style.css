@@ -14,7 +14,7 @@
   cursor: not-allowed;
 }
 
-@keyframes pulsing {
+@keyframes pulsing-rotate {
   0% {
     transform: rotate(0) scale(1);
   }
@@ -38,7 +38,7 @@
     animation-delay: var(--timing-medium);
     animation-iteration-count: infinite;
     animation-direction: reverse;
-    animation-name: pulsing;
+    animation-name: pulsing-rotate;
   }
 }
 

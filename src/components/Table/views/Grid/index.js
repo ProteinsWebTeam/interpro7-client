@@ -36,7 +36,7 @@ class GridView extends PureComponent /*:: <Props> */ {
         >
           {dataTable.map((data, i) => (
             <div
-              key={data.metadata.accession || i}
+              key={data?.metadata?.accession || i}
               className={local['grid-card']}
               data-testid="grid-entity"
             >

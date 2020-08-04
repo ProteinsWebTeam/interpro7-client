@@ -6,7 +6,7 @@ import { _MemberDBSelector as MemberDBSelector } from '../src/components/MemberD
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
 
-const store = configureStore({ settings: { ui: { lowGraphics: true } } });
+const store = configureStore();
 
 const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
 
