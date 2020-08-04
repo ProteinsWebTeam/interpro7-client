@@ -6,16 +6,7 @@ import Provider from './Provider';
 import configureStore from './configuedStore.js';
 import Literature from 'components/Entry/Literature';
 
-const store = configureStore({
-  customLocation: {
-    description: {
-      main: { key: 'entry' },
-      entry: { accession: 'ipr999999', db: 'interpro' },
-    },
-    search: {},
-    hash: '',
-  },
-});
+const store = configureStore({ pathname: '/entry/interpro/ipr999999' });
 
 const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
 

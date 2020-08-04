@@ -9,6 +9,10 @@ const FullyLoadedTable = ({
   data,
   renderers = {},
   columnToString = {},
+  headerStyle = {},
+  cellStyle = {},
+  headerClassName = {},
+  cellClassName = {},
   search,
   pageSize,
 }) => {
@@ -17,13 +21,13 @@ const FullyLoadedTable = ({
   for (const key of keys) {
     if (search[key]) {
       subset = subset.filter(
-        row =>
+        (row) =>
           JSON.stringify(row[key])
             .toLowerCase()
             .indexOf(search[key].toLowerCase()) !== -1,
       );
     }
-    const str = columnToString[key] || (x => `${x}`);
+    const str = columnToString[key] || ((x) => `${x}`);
     if (search.sort_by === key) {
       subset.sort((a, b) => (str(a[key]) > str(b[key]) ? 1 : -1));
     }
@@ -38,12 +42,26 @@ const FullyLoadedTable = ({
   return (
     <Table actualSize={data.length} dataTable={subset} query={search}>
       <PageSizeSelector />
-      {keys.map(key => (
+      {keys.map((key) => (
         <Column
           key={key}
           dataKey={key}
-          renderer={renderers[key] || (d => d)}
+          renderer={renderers[key] || ((d) => d)}
           isSearchable={true}
+          headerStyle={{
+            ...(headerStyle['*'] || {}),
+            ...(headerStyle[key] || {}),
+          }}
+          cellStyle={{
+            ...(cellStyle['*'] || {}),
+            ...(cellStyle[key] || {}),
+          }}
+          headerClassName={`${headerClassName['*'] || ''} ${
+            headerClassName[key] || ''
+          }`}
+          cellClassName={`${cellClassName['*'] || ''} ${
+            cellClassName[key] || ''
+          }`}
         />
       ))}
     </Table>
@@ -55,11 +73,16 @@ FullyLoadedTable.propTypes = {
   pageSize: T.number,
   renderers: T.object,
   columnToString: T.object,
+
+  headerStyle: T.object,
+  cellStyle: T.object,
+  headerClassName: T.object,
+  cellClassName: T.object,
 };
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.search,
-  state => state.settings.navigation.pageSize,
+  (state) => state.customLocation.search,
+  (state) => state.settings.navigation.pageSize,
   (search, pageSize) => ({ search, pageSize }),
 );
 

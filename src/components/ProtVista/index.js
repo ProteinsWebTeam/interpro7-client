@@ -119,6 +119,7 @@ const getColorScaleHTML = (
   title: string,
   fixedHighlight: string,
   id: string,
+  showOptions: boolean,
   showConservationButton: boolean,
   handleConservationLoad: function,
   children: any,
@@ -135,7 +136,7 @@ const getColorScaleHTML = (
   showLoading: boolean,
   overPopup: boolean,
 }; */
-class ProtVista extends Component /*:: <Props, State> */ {
+export class ProtVista extends Component /*:: <Props, State> */ {
   static propTypes = {
     protein: T.object,
     data: T.array,
@@ -144,6 +145,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     title: T.string,
     fixedHighlight: T.string,
     id: T.string,
+    showOptions: T.bool,
     showConservationButton: T.bool,
     handleConservationLoad: T.func,
     children: T.any,
@@ -813,6 +815,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
       data,
       showConservationButton,
       children,
+      showOptions = true,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
@@ -842,19 +845,23 @@ class ProtVista extends Component /*:: <Props, State> */ {
                     `${this.state.addLabelClass}`,
                   )}
                 >
-                  <ProtVistaOptions
-                    title={this.props.title}
-                    length={length}
-                    id={this.props.id}
-                    webTracks={this.web_tracks}
-                    expandedTrack={this.state.expandedTrack}
-                    getParentElem={this.getProtvistaRefs}
-                    updateLabel={this.updateLabel}
-                    updateTracksCollapseStatus={this.updateTracksCollapseStatus}
-                    toggleTooltipStatus={this.toggleTooltipStatus}
-                  >
-                    {children}
-                  </ProtVistaOptions>
+                  {showOptions && (
+                    <ProtVistaOptions
+                      title={this.props.title}
+                      length={length}
+                      id={this.props.id}
+                      webTracks={this.web_tracks}
+                      expandedTrack={this.state.expandedTrack}
+                      getParentElem={this.getProtvistaRefs}
+                      updateLabel={this.updateLabel}
+                      updateTracksCollapseStatus={
+                        this.updateTracksCollapseStatus
+                      }
+                      toggleTooltipStatus={this.toggleTooltipStatus}
+                    >
+                      {children}
+                    </ProtVistaOptions>
+                  )}
                 </div>
               </div>
               <div ref={this._protvistaRef}>
