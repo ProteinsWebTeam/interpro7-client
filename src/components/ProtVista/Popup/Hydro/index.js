@@ -1,4 +1,5 @@
 import React from 'react';
+import T from 'prop-types';
 
 import ColorScale from '../ColorScale';
 
@@ -18,6 +19,12 @@ const HydroPopup = ({ detail }) => {
       </div>
     </section>
   );
+};
+HydroPopup.propTypes = {
+  detail: T.shape({
+    feature: T.object,
+    target: T.element,
+  }),
 };
 
 export default HydroPopup;

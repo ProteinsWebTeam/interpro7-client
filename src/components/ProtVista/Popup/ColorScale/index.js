@@ -1,4 +1,5 @@
 import React from 'react';
+import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
 import localCSS from '../../style.css';
@@ -27,5 +28,11 @@ const ColorScale = ({
     <span>{domain[1]}</span>
   </div>
 );
+ColorScale.propTypes = {
+  domain: T.arrayOf(T.number),
+  range: T.arrayOf(T.number),
+  width: T.number,
+  height: T.number,
+};
 
 export default ColorScale;

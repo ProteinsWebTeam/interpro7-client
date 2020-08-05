@@ -1,4 +1,5 @@
 import React from 'react';
+import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -116,4 +117,15 @@ const ProtVistaEntryPopup = ({
     </section>
   );
 };
+ProtVistaEntryPopup.propTypes = {
+  detail: T.shape({
+    feature: T.object,
+    highlight: T.string,
+    target: T.element,
+  }),
+  sourceDatabase: T.string,
+  goToCustomLocation: T.func,
+  protein: T.object,
+};
+
 export default ProtVistaEntryPopup;

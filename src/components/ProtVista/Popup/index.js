@@ -1,4 +1,6 @@
 import React from 'react';
+import T from 'prop-types';
+
 import ProtVistaHydroPopup from './Hydro';
 import ProtVistaResiduePopup from './Residue';
 import ProtVistaEntryPopup from './Entry';
@@ -37,6 +39,17 @@ const ProtVistaPopup = ({
       protein={protein}
     />
   );
+};
+ProtVistaPopup.propTypes = {
+  detail: T.shape({
+    feature: T.object,
+    highlight: T.string,
+    target: T.element,
+  }),
+  sourceDatabase: T.string,
+  data: T.array,
+  goToCustomLocation: T.func,
+  protein: T.object,
 };
 
 export default ProtVistaPopup;

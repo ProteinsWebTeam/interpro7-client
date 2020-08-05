@@ -1,4 +1,5 @@
 import React from 'react';
+import T from 'prop-types';
 
 const ProtVistaResiduePopup = ({ detail, sourceDatabase }) => {
   const { accession, type, currentResidue } = detail?.feature || {};
@@ -25,5 +26,10 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase }) => {
     </section>
   );
 };
-
+ProtVistaResiduePopup.propTypes = {
+  detail: T.shape({
+    feature: T.object,
+  }),
+  sourceDatabase: T.string,
+};
 export default ProtVistaResiduePopup;

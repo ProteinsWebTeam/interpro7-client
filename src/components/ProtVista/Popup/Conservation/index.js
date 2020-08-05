@@ -1,4 +1,5 @@
 import React from 'react';
+import T from 'prop-types';
 
 import ColorScale from '../ColorScale';
 
@@ -65,5 +66,12 @@ const ProtVistaConservationPopup = ({ detail, data }) => {
       </div>
     </section>
   );
+};
+ProtVistaConservationPopup.propTypes = {
+  detail: T.shape({
+    feature: T.object,
+    highlight: T.string,
+  }),
+  data: T.array,
 };
 export default ProtVistaConservationPopup;

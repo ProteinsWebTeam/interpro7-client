@@ -96,6 +96,7 @@ const loadProtVistaWebComponents = () => {
   id: string,
   showConservationButton: boolean,
   handleConservationLoad: function,
+  goToCustomLocation: function,
   children: any,
 }; */
 
@@ -121,6 +122,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     id: T.string,
     showConservationButton: T.bool,
     handleConservationLoad: T.func,
+    goToCustomLocation: T.func,
     children: T.any,
   };
 
