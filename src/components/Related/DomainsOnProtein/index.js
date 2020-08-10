@@ -422,7 +422,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 
     // ensure there is a pfam entry somewhere in the matches
     /* eslint-disable max-depth */
-    for (const matches of [data.domain, data.family]) {
+    for (const matches of [data.domain, data.family, data.repeat]) {
       if (matches) {
         for (const entry of matches) {
           for (const memberDatabase of Object.keys(entry.member_databases)) {

@@ -15,17 +15,16 @@ const DropDownButton = (
     icon,
     color = undefined,
     children,
-    alignLeft = false,
-    fontSize,
+    fontSize = undefined,
     extraClasses = '',
-  } /*: {label: string, icon: string, color: ?string, children: any, alignLeft: boolean, fontSize ?: string, extraClasses ?: string} */,
+  } /*: {label: string, icon: string, color ?: string, children: any, fontSize ?: string, extraClasses ?: string} */,
 ) => {
   const [isOpen, setOpen] = useState(false);
   return (
     <div className={`${fPlus('small', 'dropdown-container')} ${extraClasses}`}>
       <button
         className={fPlus('button', 'dropdown')}
-        style={{ backgroundColor: color }}
+        style={{ backgroundColor: color, fontSize }}
         onClick={() => setOpen(!isOpen)}
       >
         {icon ? (
@@ -34,9 +33,7 @@ const DropDownButton = (
         <span className={fPlus('hide-for-small-only')}>{label}</span>{' '}
       </button>
       <div
-        className={fPlus('dropdown-pane', 'dropdown-content', {
-          alignLeft,
-        })}
+        className={fPlus('dropdown-pane', 'dropdown-content')}
         style={{
           borderColor: color,
           transform: `scaleY(${isOpen ? 1 : 0})`,
@@ -54,7 +51,6 @@ DropDownButton.propTypes = {
   icon: T.string,
   color: T.string,
   children: T.any,
-  alignLeft: T.bool,
   fontSize: T.string,
   extraClasses: T.string,
 };

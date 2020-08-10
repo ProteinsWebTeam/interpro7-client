@@ -445,11 +445,7 @@ const SummaryIPScanJob = ({
             dataMerged={mergedData}
           >
             {status === 'finished' && data?.url && (
-              <Exporter
-                includeSettings={false}
-                left={false}
-                backgroundColor={'#007c82'}
-              >
+              <Exporter includeSettings={false}>
                 <ul>
                   {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
                     (type) => (

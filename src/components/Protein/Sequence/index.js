@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 
@@ -95,6 +96,7 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
     sequence: T.string,
     goToCustomLocation: T.func.isRequired,
     accession: T.string.isRequired,
+    customLocation: T.object,
     name: T.string,
   };
 
@@ -103,6 +105,56 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
 
     this._ref = React.createRef();
   }
+  componentDidMount() {
+    document.addEventListener('selectionchange', this._goToSelection);
+    this._selectFromHash();
+  }
+  componentDidUpdate() {
+    this._selectFromHash();
+  }
+  componentWillUnmount() {
+    document.removeEventListener('selectionchange', this._goToSelection);
+  }
+
+  _goToSelection = () => {
+    const { start, end } = this._getSelectionRange();
+    this.props.goToCustomLocation({
+      ...this.props.customLocation,
+      hash: `${start}-${end}`,
+    });
+  };
+  _getPositionFromHash = (hash) => {
+    const re = /^(\d)+-(\d)+$/;
+    if (re.test(hash)) {
+      const [start, end] = hash.split('-').map(Number);
+      if (start < end) {
+        return { start, end };
+      }
+    }
+    return null;
+  };
+  _selectFromHash = () => {
+    const hash = this.props.customLocation.hash;
+    const { start: s, end: e } = this._getSelectionRange();
+    if (hash !== `${s}-${e}`) {
+      const position = this._getPositionFromHash(hash);
+      if (!position) return null;
+      const { start, end } = position;
+      const range = document.createRange();
+      const startNode = document.querySelector(
+        `span[data-index='${Math.floor((start - 1) / CHUNK_SIZE)}']`,
+      );
+      const endNode = document.querySelector(
+        `span[data-index='${Math.floor(end / CHUNK_SIZE)}']`,
+      );
+      if (startNode && endNode) {
+        range.setStart(startNode.firstChild, (start - 1) % CHUNK_SIZE);
+        range.setEnd(endNode.firstChild, end % CHUNK_SIZE);
+        window.getSelection().empty();
+        window.getSelection().addRange(range);
+      }
+    }
+  };
 
   _isSelectionInSequence = (selection) => {
     if (!this._ref.current) return false;
@@ -116,8 +168,7 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
       selectionIsInSequence && this._ref.current.contains(selection.focusNode)
     );
   };
-
-  _getSelection = () => {
+  _getSelectionRange = () => {
     let sequenceToSearch = this.props.sequence;
     let start = 1;
     let end = sequenceToSearch.length;
@@ -128,6 +179,8 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
         const selectionString = selection.toString().trim();
         if (selectionString) {
           sequenceToSearch = selectionString.replace(/\s/gi, '');
+        } else {
+          return { start, end };
         }
         // define start and end value of sequence selection
         start =
@@ -137,6 +190,13 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
         end = sequenceToSearch.length + start - 1;
       }
     }
+    return { start, end };
+  };
+
+  _getSelection = () => {
+    let sequenceToSearch = this.props.sequence;
+    const { start, end } = this._getSelectionRange();
+
     // Split by line of 80 characters
     sequenceToSearch = sequenceToSearch.replace(chunkOfEighty, '$1\n');
     // Prepend metainformation
@@ -257,5 +317,9 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
     );
   }
 }
+const mapStateToProps = createSelector(
+  (state) => state.customLocation,
+  (customLocation) => ({ customLocation }),
+);
 
-export default connect(undefined, { goToCustomLocation })(Sequence);
+export default connect(mapStateToProps, { goToCustomLocation })(Sequence);

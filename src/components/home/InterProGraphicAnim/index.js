@@ -9,30 +9,37 @@ const applyStyleToSelection = (selection, { opacity, y }) => {
   });
 };
 class InterProGraphicAnim extends PureComponent {
+  componentDidMount() {
+    this.notHighBlob = document.querySelectorAll('.blob:not(.high-blob)');
+    this.lineUp = document.querySelectorAll('.blob.line-up');
+    this.lineDown = document.querySelectorAll('.blob.line-down');
+    this.highBlob = document.querySelectorAll('.high-blob');
+  }
+
   t1 = new Tweenable({ opacity: 1, y: 0 });
+
+  _step = ({ opacity, y }) => {
+    applyStyleToSelection(this.notHighBlob, { opacity });
+    applyStyleToSelection(this.lineUp, { y });
+    applyStyleToSelection(this.lineDown, { y: -y });
+    applyStyleToSelection(this.highBlob, { opacity: 1 });
+  };
+
   _handleMouseOver = () => {
-    const notHighBlob = document.querySelectorAll('.blob:not(.high-blob)');
-    const lineUp = document.querySelectorAll('.blob.line-up');
-    const lineDown = document.querySelectorAll('.blob.line-down');
-    const highBlob = document.querySelectorAll('.high-blob');
+    if (!this.notHighBlob) return;
     this.t1.stop();
     this.t1.tween({
       to: { opacity: 0.2, y: 160 },
-      step: ({ opacity, y }) => {
-        applyStyleToSelection(notHighBlob, { opacity });
-        applyStyleToSelection(lineUp, { y });
-        applyStyleToSelection(lineDown, { y: -y });
-        applyStyleToSelection(highBlob, { opacity: 1 });
-      },
+      step: this._step,
     });
   };
 
   _handleMouseOut = () => {
-    const blobs = document.querySelectorAll('.blob');
+    if (!this.notHighBlob) return;
     this.t1.stop();
     this.t1.tween({
       to: { opacity: 1, y: 0 },
-      step: (state) => applyStyleToSelection(blobs, state),
+      step: this._step,
     });
   };
 
