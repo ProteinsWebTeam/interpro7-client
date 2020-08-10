@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 
 import Link from 'components/generic/Link';
 
@@ -21,7 +22,6 @@ const fPlus = foundationPartial(s, fonts, theme);
   entryDB: string,
   children: any,
   includeSettings: boolean | function,
-  left: boolean | function,
   backgroundColor?: string,
 } */
 
@@ -33,21 +33,14 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
     entryDB: T.string,
     children: T.any,
     includeSettings: T.oneOfType([T.bool, T.func]),
-    left: T.oneOfType([T.bool, T.func]),
     backgroundColor: T.string,
   };
-
-  constructor(props /*: Props */) {
-    super(props);
-    this.state = { isOpen: false };
-  }
 
   render() {
     const {
       children,
       entryDB,
       includeSettings = true,
-      left = true,
       backgroundColor,
     } = this.props;
     return (
@@ -55,20 +48,13 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
         className={fPlus('button-group', 'small', 'exporter')}
         style={{ display: 'flex' }}
       >
-        <button
-          className={fPlus('button', 'dropdown', 'exporter')}
-          style={{
-            backgroundColor: entryDB
-              ? config.colors.get(entryDB)
-              : backgroundColor,
-          }}
-          onClick={() => {
-            this.setState({ isOpen: !this.state.isOpen });
-          }}
+        <DropDownButton
+          label="Export"
+          icon="&#x3d;"
+          color={entryDB ? config.colors.get(entryDB) : backgroundColor}
         >
-          <span className={fPlus('icon', 'icon-common')} data-icon="&#x3d;" />{' '}
-          <span className={fPlus('hide-for-small-only')}>Export</span>{' '}
-        </button>
+          {children}
+        </DropDownButton>
         {includeSettings && (
           <Tooltip title="Settings (customise results by page, …)">
             <div style={{ display: 'flex' }}>
@@ -86,17 +72,6 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
             </div>
           </Tooltip>
         )}
-        <div
-          className={fPlus('dropdown-pane', 'dropdown-content', entryDB, {
-            left,
-          })}
-          style={{
-            borderColor: entryDB ? config.colors.get(entryDB) : backgroundColor,
-            transform: `scaleY(${this.state.isOpen ? 1 : 0})`,
-          }}
-        >
-          {children}
-        </div>
       </div>
     );
   }

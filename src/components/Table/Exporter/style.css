@@ -3,37 +3,6 @@
 .exporter {
   margin: 0 0 0 0.5rem;
   position: relative;
-  & .dropdown-content {
-    position: absolute;
-    top: 100%;
-    width: initial;
-    padding: 1rem 0.5rem;
-    /*transform: scaleY(0);*/
-    /*transform-origin: top;*/
-    /*transition: transform 300ms ease-in-out;*/
-    visibility: visible;
-    display: block;
-  }
-  & .left {
-    right: 30px; /*temp value while popup positioning is working better*/
-    min-width: 180%; /*temp value*/
-  }
-}
-.exporter .dropdown-pane {
-  z-index: 2;
-} /* so sticky header stay on top*/
-.exporter .dropdown-pane ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.exporter .dropdown-pane ul li a {
-  padding: 0.3rem 1rem;
-}
-.exporter .dropdown-pane ul li a:hover {
-  /*background-color: #85b6d3;*/
-  background-color: var(--colors-very-white);
-  color: white;
 }
 
 .exporter .icon-settings {
@@ -44,27 +13,6 @@
 
   &::before {
     color: #71818a;
-  }
-}
-
-@media screen and (min-width: 40em) and (max-width: 63.9375em) {
-  .exporter .dropdown-content {
-    width: 212px; /*temp value*/
-  }
-  .exporter .dropdown-content.left {
-    right: 1px;
-  }
-}
-
-@media screen and (max-width: 39.9375em) {
-  .exporter .dropdown::after {
-    border: none; /*remove select arrow for small screens*/
-  }
-  .exporter .dropdown-content {
-    width: 182px; /*temp value*/
-  }
-  .exporter .dropdown-content.left {
-    right: 1px;
   }
 }
 
