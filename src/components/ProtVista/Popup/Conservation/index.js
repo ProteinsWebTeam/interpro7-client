@@ -15,7 +15,6 @@ const getConservationScore = (highlight, match, scale) => {
 };
 
 const ProtVistaConservationPopup = ({ detail, data }) => {
-  // return <div>xxx</div>;
   const match = detail.feature;
   const sourceDatabase = 'Pfam'; // TODO: get it from match.accession;
   const startLocation = match.locations[0];
