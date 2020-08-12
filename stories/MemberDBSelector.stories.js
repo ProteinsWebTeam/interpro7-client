@@ -11,7 +11,7 @@ const store = configureStore();
 const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
 
 export default {
-  title: 'InterPro UI.MemberDBSelector',
+  title: 'InterPro UI/MemberDBSelector',
   decorators: [withProvider, withKnobs],
 };
 
