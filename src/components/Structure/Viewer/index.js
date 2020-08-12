@@ -252,6 +252,26 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       },
     );
   }
+  componentDidUpdate() {
+    if (this.name !== `${this.props.id}`) {
+      this.name = `${this.props.id}`;
+      this.stage.removeAllComponents();
+
+      this.stage
+        .loadFile(`rcsb://${this.name}.mmtf`, { defaultRepresentation: false })
+        .then((component) => {
+          component.addRepresentation('cartoon', { colorScheme: 'chainname' });
+          component.autoView();
+        })
+        .then(() => {
+          this.stage.handleResize();
+          if (this.props.matches) {
+            const entryMap = this.createEntryMap();
+            this.setState({ entryMap });
+          }
+        });
+    }
+  }
 
   componentWillUnmount() {
     this.observer.disconnect();
