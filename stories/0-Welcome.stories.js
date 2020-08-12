@@ -33,6 +33,4 @@ export const ToStorybook = () => (
   </div>
 );
 
-ToStorybook.story = {
-  name: 'Introduction',
-};
+ToStorybook.storyName = 'Introduction';
