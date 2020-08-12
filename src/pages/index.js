@@ -86,7 +86,13 @@ const RedirectToBlog = ({
   },
 }) => {
   const href = 'https://proteinswebteam.github.io/interpro-blog/';
+  const archive =
+    'https://proteinswebteam.github.io/interpro-blog/2013/09/01/Previous-InterPro-protein-focus-articles/';
   if (other?.[0] === 'potm') {
+    if ((other?.[1] || '').toLowerCase() === 'archive.html') {
+      window.location.replace(archive);
+      return null;
+    }
     window.location.replace(`${href}/${other.join('/')}`);
   } else if ((other?.[2] || '').endsWith('.pdf')) {
     const parts = other[2].replace('.pdf', '').split('_');

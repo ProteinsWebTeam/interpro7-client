@@ -5,7 +5,7 @@ const INTERPRO_DESCRIPTION =
   'InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites';
 
 export const schemaProcessDataInterpro = ({ description = null }) => ({
-  '@type': 'DataCatalog',
+  '@type': 'Dataset',
   '@id': '@mainEntity',
   name: 'InterPro',
   description,
@@ -17,7 +17,8 @@ export const schemaProcessDataInterpro = ({ description = null }) => ({
     url: 'https://www.ebi.ac.uk/',
   },
   citation: '@citation',
-  dataset: '@dataset',
+  hasPart: '@dataset',
+  license: 'https://creativecommons.org/licenses/by/4.0/',
 });
 export const schemaProcessDataForDB = ({
   name,
@@ -44,8 +45,8 @@ export const schemaProcessDataTable = ({ data: { db }, location }) => ({
   version: db.version,
   url: location.href,
   hasPart: '@TableRow',
-  includedInDataCatalog: {
-    '@type': 'DataCatalog',
+  isPartOf: {
+    '@type': 'Dataset',
     '@id': config.root.website.protocol + config.root.website.href,
   },
   description: `Dataset of the type ${db.type || '?'} from the database ${
@@ -229,7 +230,7 @@ export const schemaProcessDataPageSection = ({ name, description }) => ({
 });
 
 export const schemaProcessInterProCitation = () => ({
-  '@type': 'ScholarlyArticle',
+  '@type': 'CreativeWork',
   '@id': '@mainCitation',
   mainEntityOfPage: 'https://www.ebi.ac.uk/interpro/',
   name:
