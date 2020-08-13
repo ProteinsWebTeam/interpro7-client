@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import { debounce } from 'lodash-es';
 
 import { customLocationSelector } from 'reducers/custom-location';
-import { goToCustomLocation, changeSettingsRaw } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
 /*:: import type { CustomLocation } from 'actions/creators'; */
 
 import { foundationPartial } from 'styles/foundation';
@@ -20,10 +20,7 @@ const DEBOUNCE_RATE = 500; // In ms
 /*:: type Props = {
   customLocation: CustomLocation,
   goToCustomLocation: goToCustomLocation,
-  changeSettingsRaw: function,
   loading?: ?boolean,
-  highlightToggler?: ?boolean,
-  shouldHighlight?: ?boolean,
   children?: ?string,
   field?: ?string,
 }; */
@@ -35,11 +32,8 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     customLocation: T.object.isRequired,
     goToCustomLocation: T.func.isRequired,
-    changeSettingsRaw: T.func.isRequired,
     children: T.string,
     loading: T.bool,
-    highlightToggler: T.bool,
-    shouldHighlight: T.bool,
     field: T.string,
   };
 
@@ -72,14 +66,6 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
   };
 
   handleReset = () => this.handleChange({ target: { value: null } });
-
-  handleHighlightToggler = () => {
-    this.props.changeSettingsRaw(
-      'ui',
-      'shouldHighlight',
-      !this.props.shouldHighlight,
-    );
-  };
 
   handleChange = (
     { target: { value: search } } /*: {target: {value: ?string}} */,
@@ -126,25 +112,6 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
           >
             <span aria-hidden="true">&times;</span>
           </button>
-          {this.props.highlightToggler && (
-            <button
-              className={f(
-                'icon',
-                'icon-common',
-                'ico-neutral',
-                'highlight-toggler',
-                {
-                  hidden: !text,
-                  on: this.props.shouldHighlight,
-                },
-              )}
-              data-icon="&#xf0fd;"
-              style={{ color: 'yellow' }}
-              type="button"
-              aria-label="Highlight toggler"
-              onClick={this.handleHighlightToggler}
-            />
-          )}
         </div>
       </div>
     );
@@ -153,14 +120,9 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  (state) => state.settings.ui,
-  (customLocation, ui) => ({
-    customLocation,
-    shouldHighlight: ui.shouldHighlight,
-  }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default connect(mapStateToProps, {
   goToCustomLocation,
-  changeSettingsRaw,
 })(SearchBox);

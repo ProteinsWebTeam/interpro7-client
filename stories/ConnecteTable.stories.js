@@ -10,6 +10,7 @@ import Table, {
   Card,
   PageSizeSelector,
   SearchBox,
+  HighlightToggler,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
@@ -149,9 +150,8 @@ export const TheSearchableTable = () => {
       showTableIcon={false}
     >
       <PageSizeSelector />
-      <SearchBox loading={false} highlightToggler={true}>
-        Search
-      </SearchBox>
+      <SearchBox loading={false}>Search</SearchBox>
+      <HighlightToggler />
       <Column dataKey="id" headerStyle={{ top: 0 }}>
         ID
       </Column>

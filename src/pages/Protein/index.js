@@ -18,6 +18,7 @@ import Table, {
   SearchBox,
   PageSizeSelector,
   Exporter,
+  HighlightToggler,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -381,9 +382,8 @@ class List extends PureComponent /*:: <ListProps> */ {
               )}
             </Card>
             <PageSizeSelector />
-            <SearchBox loading={isStale} highlightToggler={true}>
-              Search proteins
-            </SearchBox>
+            <SearchBox loading={isStale}>Search proteins</SearchBox>
+            <HighlightToggler />
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

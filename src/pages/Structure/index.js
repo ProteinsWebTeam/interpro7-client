@@ -15,6 +15,7 @@ import Table, {
   SearchBox,
   PageSizeSelector,
   Exporter,
+  HighlightToggler,
 } from 'components/Table';
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
@@ -538,9 +539,8 @@ const List = (
               />
             )}
           </Card>
-          <SearchBox loading={isStale} highlightToggler={true}>
-            Search structures
-          </SearchBox>
+          <SearchBox loading={isStale}>Search structures</SearchBox>
+          <HighlightToggler />
           <Column
             dataKey="accession"
             headerClassName={f('table-center')}

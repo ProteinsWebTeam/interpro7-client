@@ -21,6 +21,7 @@ import Table, {
   PageSizeSelector,
   SearchBox,
   Exporter,
+  HighlightToggler,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
@@ -304,7 +305,8 @@ const Matches = (
       onFocusChanged={setFocused}
     >
       <PageSizeSelector />
-      <SearchBox loading={isStale} highlightToggler={true} />
+      <SearchBox loading={isStale} />
+      <HighlightToggler />
       {description.main.key !== 'result' && (
         <Exporter>
           <div className={f('menu-grid')}>

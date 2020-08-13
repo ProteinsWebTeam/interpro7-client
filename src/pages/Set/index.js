@@ -14,6 +14,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
   Card,
+  HighlightToggler,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -452,9 +453,8 @@ class List extends PureComponent /*:: <ListProps> */ {
                 <SetCard data={data} search={search.search} entryDB={dbE} />
               )}
             </Card>
-            <SearchBox loading={isStale} highlightToggler={true}>
-              Search entry sets
-            </SearchBox>
+            <SearchBox loading={isStale}>Search entry sets</SearchBox>
+            <HighlightToggler />
             <Column
               dataKey="accession"
               // eslint-disable-next-line camelcase

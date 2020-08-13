@@ -22,6 +22,7 @@ import Table, {
   SearchBox,
   PageSizeSelector,
   Exporter,
+  HighlightToggler,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
@@ -564,9 +565,8 @@ class List extends PureComponent /*:: <Props> */ {
                 <EntryCard data={data} search={search.search} entryDB={db} />
               )}
             </Card>
-            <SearchBox loading={isStale} highlightToggler={true}>
-              Search entries
-            </SearchBox>
+            <SearchBox loading={isStale}>Search entries</SearchBox>
+            <HighlightToggler />
             {db === 'InterPro' && (
               <Column
                 dataKey="type"
