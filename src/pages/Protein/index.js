@@ -381,7 +381,9 @@ class List extends PureComponent /*:: <ListProps> */ {
               )}
             </Card>
             <PageSizeSelector />
-            <SearchBox loading={isStale}>Search proteins</SearchBox>
+            <SearchBox loading={isStale} highlightToggler={true}>
+              Search proteins
+            </SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

@@ -355,22 +355,26 @@ class StructureCard extends PureComponent /*:: <StructureCardProps, StructureCar
           </div>
 
           <div className={f('card-subheader')}>
-            {// INFO RESOLUTION BL - browse structures - Xray
-            data.metadata.experiment_type === 'x-ray' && (
-              <Tooltip
-                title={`X-ray, resolution ${data.metadata.resolution} Å`}
-              >
-                {data.metadata.experiment_type}
-                {': '}
-                {data.metadata.resolution}Å
-              </Tooltip>
-            )}
-            {// INFO TYPE BL - browse structures -NMR
-            data.metadata.experiment_type === 'nmr' && (
-              <Tooltip title="Nuclear Magnetic Resonance">
-                {data.metadata.experiment_type}
-              </Tooltip>
-            )}
+            {
+              // INFO RESOLUTION BL - browse structures - Xray
+              data.metadata.experiment_type === 'x-ray' && (
+                <Tooltip
+                  title={`X-ray, resolution ${data.metadata.resolution} Å`}
+                >
+                  {data.metadata.experiment_type}
+                  {': '}
+                  {data.metadata.resolution}Å
+                </Tooltip>
+              )
+            }
+            {
+              // INFO TYPE BL - browse structures -NMR
+              data.metadata.experiment_type === 'nmr' && (
+                <Tooltip title="Nuclear Magnetic Resonance">
+                  {data.metadata.experiment_type}
+                </Tooltip>
+              )
+            }
           </div>
         </div>
 
@@ -534,7 +538,9 @@ const List = (
               />
             )}
           </Card>
-          <SearchBox loading={isStale}>Search structures</SearchBox>
+          <SearchBox loading={isStale} highlightToggler={true}>
+            Search structures
+          </SearchBox>
           <Column
             dataKey="accession"
             headerClassName={f('table-center')}

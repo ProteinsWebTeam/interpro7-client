@@ -28,6 +28,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         lowGraphics: false,
         colorDomainsBy: EntryColorMode.ACCESSION,
         structureViewer: false,
+        shouldHighlight: true,
       };
     case 'cache':
       return {

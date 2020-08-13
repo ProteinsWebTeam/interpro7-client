@@ -304,7 +304,7 @@ const Matches = (
       onFocusChanged={setFocused}
     >
       <PageSizeSelector />
-      <SearchBox loading={isStale} />
+      <SearchBox loading={isStale} highlightToggler={true} />
       {description.main.key !== 'result' && (
         <Exporter>
           <div className={f('menu-grid')}>

@@ -250,7 +250,9 @@ class List extends PureComponent /*:: <Props> */ {
                 />
               )}
             </Card>
-            <SearchBox loading={isStale}>Search organism</SearchBox>
+            <SearchBox loading={isStale} highlightToggler={true}>
+              Search organism
+            </SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

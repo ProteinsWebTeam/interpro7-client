@@ -25,6 +25,7 @@ describe('<SearchBox />', () => {
           },
         }}
         goToCustomLocation={() => {}}
+        changeSettingsRaw={() => {}}
         loading={false}
       >
         Search organism

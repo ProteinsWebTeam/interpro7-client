@@ -586,7 +586,9 @@ class List extends PureComponent /*:: <Props,State> */ {
                 />
               )}
             </Card>
-            <SearchBox loading={isStale}>Search taxonomy</SearchBox>
+            <SearchBox loading={isStale} highlightToggler={true}>
+              Search taxonomy
+            </SearchBox>
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

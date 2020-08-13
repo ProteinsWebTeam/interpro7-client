@@ -205,36 +205,42 @@ class SummaryCounterEntries extends PureComponent /*:: <SummaryCounterEntriesPro
           </Link>
         </Tooltip>
 
-        {// show sets counter + icon only when available
-        entryDB.toLowerCase() === 'cdd' ||
-        entryDB.toLowerCase() === 'pfam' ||
-        entryDB.toLowerCase() === 'pirsf' ? (
-          <Tooltip
-            title={`${sets} ${toPlural('set', sets)} matching ${metadata.name}`}
-            className={f('count-sets')}
-            style={{ display: 'flex' }}
-          >
-            <Link
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: {
-                    db: entryDB,
-                    accession: metadata.accession,
-                  },
-                  set: { isFilter: true, db: entryDB },
-                },
-              }}
-              className={f(sets ? null : 'ico-disabled')}
+        {
+          // show sets counter + icon only when available
+          entryDB.toLowerCase() === 'cdd' ||
+          entryDB.toLowerCase() === 'pfam' ||
+          entryDB.toLowerCase() === 'pirsf' ? (
+            <Tooltip
+              title={`${sets} ${toPlural('set', sets)} matching ${
+                metadata.name
+              }`}
+              className={f('count-sets')}
+              style={{ display: 'flex' }}
             >
-              <div className={f('icon', 'icon-count-set', 'icon-wrapper')}>
-                {sets !== 0 && <div className={f('icon-over-anim')} />}
-              </div>
-              <NumberComponent abbr>{sets}</NumberComponent>
-              <span className={f('label-number')}>{toPlural('set', sets)}</span>
-            </Link>
-          </Tooltip>
-        ) : null}
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: entryDB,
+                      accession: metadata.accession,
+                    },
+                    set: { isFilter: true, db: entryDB },
+                  },
+                }}
+                className={f(sets ? null : 'ico-disabled')}
+              >
+                <div className={f('icon', 'icon-count-set', 'icon-wrapper')}>
+                  {sets !== 0 && <div className={f('icon-over-anim')} />}
+                </div>
+                <NumberComponent abbr>{sets}</NumberComponent>
+                <span className={f('label-number')}>
+                  {toPlural('set', sets)}
+                </span>
+              </Link>
+            </Tooltip>
+          ) : null
+        }
       </div>
     );
   }
@@ -558,7 +564,9 @@ class List extends PureComponent /*:: <Props> */ {
                 <EntryCard data={data} search={search.search} entryDB={db} />
               )}
             </Card>
-            <SearchBox loading={isStale}>Search entries</SearchBox>
+            <SearchBox loading={isStale} highlightToggler={true}>
+              Search entries
+            </SearchBox>
             {db === 'InterPro' && (
               <Column
                 dataKey="type"

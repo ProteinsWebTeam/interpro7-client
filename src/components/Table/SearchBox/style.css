@@ -72,3 +72,20 @@
     flex-grow: 1;
   }
 }
+
+.highlight-toggler {
+  margin-left: -0.8em;
+  padding: 0.1em;
+  cursor: pointer;
+}
+.highlight-toggler:focus {
+  border: 0;
+  outline-width: 0;
+}
+.highlight-toggler::before {
+  background: var(--colors-graydark);
+  color: var(--colors-nearly-white);
+}
+.highlight-toggler.on::before {
+  color: yellow;
+}
