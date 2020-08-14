@@ -1,6 +1,8 @@
 import React from 'react';
 import T from 'prop-types';
 
+import { cloneDeep } from 'lodash-es';
+
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import localCSS from '../../style.css';
@@ -22,7 +24,7 @@ const ProtVistaEntryPopup = ({
   detail,
   sourceDatabase,
   goToCustomLocation,
-  protein,
+  currentLocation,
 }) => {
   const {
     accession,
@@ -54,17 +56,11 @@ const ProtVistaEntryPopup = ({
     });
   }
   const handleClick = (start, end) => () => {
-    goToCustomLocation({
-      description: {
-        main: { key: 'protein' },
-        protein: {
-          db: protein.source_database,
-          accession: protein.accession,
-          detail: 'sequence',
-        },
-      },
-      hash: `${start}-${end}`,
-    });
+    const newLocation = cloneDeep(currentLocation);
+    newLocation.description[newLocation.description.main.key].detail =
+      'sequence';
+    newLocation.hash = `${start}-${end}`;
+    goToCustomLocation(newLocation);
   };
   return (
     <section>
@@ -125,7 +121,7 @@ ProtVistaEntryPopup.propTypes = {
   }),
   sourceDatabase: T.string,
   goToCustomLocation: T.func,
-  protein: T.object,
+  currentLocation: T.object,
 };
 
 export default ProtVistaEntryPopup;
