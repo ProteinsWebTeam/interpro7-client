@@ -29,23 +29,9 @@ const SchemaOrgData = loadable({
 
 const AboutInterPro = () => <ContentFromRTD page="interpro.rst" />;
 const Consortium = () => <ContentFromRTD page="databases.rst" />;
-
-const Citation = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "about-citation" */ 'components/About/Citation'
-    ),
-});
-
-const Funding = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "about-funding" */ 'components/About/Funding'),
-});
-
-const Privacy = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "about-funding" */ 'components/About/Privacy'),
-});
+const Funding = () => <ContentFromRTD page="funding.rst" />;
+const Privacy = () => <ContentFromRTD page="privacy.rst" />;
+const Team = () => <ContentFromRTD page="team.rst" />;
 
 const InterProScan = loadable({
   loader: () =>
@@ -58,9 +44,9 @@ const routes = new Map([
   ['interpro', AboutInterPro],
   ['interproscan', InterProScan],
   ['consortium', Consortium],
-  ['citation', Citation],
   ['funding', Funding],
   ['privacy', Privacy],
+  ['team', Team],
 ]);
 
 const locationSelector = createSelector(
@@ -111,14 +97,6 @@ class About extends PureComponent /*:: <{}> */ {
             </li>
             <li className={f('tabs-title')}>
               <Link
-                to={{ description: { other: ['about', 'citation'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                How to cite
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
                 to={{ description: { other: ['about', 'funding'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
@@ -131,6 +109,14 @@ class About extends PureComponent /*:: <{}> */ {
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 Privacy
+              </Link>
+            </li>
+            <li className={f('tabs-title')}>
+              <Link
+                to={{ description: { other: ['about', 'team'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                Team
               </Link>
             </li>
           </ul>

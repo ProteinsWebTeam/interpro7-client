@@ -34,6 +34,8 @@ const Switch = ({ type, ...rest }) => {
       break;
     case 'substitution_reference':
       return <Substitution {...rest} />;
+    case 'strong':
+      return <Strong {...rest} />;
     case 'text':
       return rest.value;
     default:
@@ -97,6 +99,14 @@ Image.propTypes = {
   children: T.array,
 };
 
+const Strong = ({ children }) => (
+  <strong>
+    <Children>{children}</Children>
+  </strong>
+);
+Strong.propTypes = {
+  children: T.array,
+};
 const ListItem = ({ children }) => (
   <li>
     <Children>{children}</Children>
@@ -127,32 +137,39 @@ EnumeratedList.propTypes = {
 const INTERPRO_URL = 'www.ebi.ac.uk/interpro';
 const Reference = ({ children }) => {
   if (!children || !children.length) return null;
-
-  if (children.length > 1) {
-    return <Children>{children}</Children>;
-  }
-  const raw = children[0].value;
-  const re = /(.*)<(.+)>/;
-  const matches = re.exec(raw);
-  const EXPECTED_GROUPS = 3;
-  if (matches.length === EXPECTED_GROUPS) {
-    const [_, text, url] = matches;
-    if (url.includes(INTERPRO_URL)) {
-      const path = new RegExp(`.+${INTERPRO_URL}(.*)`).exec(url)?.[1];
-      if (path) {
-        return (
-          <Link to={{ description: pathToDescription(path) }}>
-            {text || url}
-          </Link>
-        );
+  let url = '';
+  let text = '';
+  switch (children.length) {
+    case 1:
+      const raw = children[0].value;
+      const re = /(.*)<(.+)>/;
+      const matches = re.exec(raw);
+      const EXPECTED_GROUPS = 3;
+      if (matches.length === EXPECTED_GROUPS) {
+        text = matches[1];
+        url = matches[2];
       }
-    }
-    return (
-      <a target="_blank" href={url} rel="noreferrer">
-        {text || url}
-      </a>
-    );
+      break;
+    case 2:
+      text = children[0].value;
+      url = children[1].value.trim().slice(1, -1);
+      break;
+    default:
+      return <Children>{children}</Children>;
   }
+  if (url.includes(INTERPRO_URL)) {
+    const path = new RegExp(`.+${INTERPRO_URL}(.*)`).exec(url)?.[1];
+    if (path) {
+      return (
+        <Link to={{ description: pathToDescription(path) }}>{text || url}</Link>
+      );
+    }
+  }
+  return (
+    <a target="_blank" href={url} rel="noreferrer">
+      {text || url}
+    </a>
+  );
 };
 Reference.propTypes = {
   children: T.array,
@@ -208,7 +225,7 @@ const ContentFromRST = ({ rstText }) => {
   const doc = restructured.parse(rstText);
   if (!doc?.type || doc.type !== 'document' || !doc?.children?.length)
     return null;
-  // console.log(doc);
+  console.log(doc);
   return (
     <div>
       <Children>{doc.children}</Children>
