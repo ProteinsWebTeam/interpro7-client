@@ -29,6 +29,12 @@ export const getUrlForRelease = (repoKey) =>
     ({ owner, repo }) =>
       `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
   );
+export const getReadTheDocsURL = (relativePath) =>
+  createSelector(
+    () => config.github.ReadTheDocs,
+    ({ owner, repo }) =>
+      `https://raw.githubusercontent.com/${owner}/${repo}/stable/docs/${relativePath}`,
+  );
 
 export const getUrl = createSelector(
   // this one is just to memoize it

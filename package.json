@@ -124,6 +124,7 @@
     "regenerator-runtime": "0.13.7",
     "reselect": "4.0.0",
     "resize-observer-polyfill": "1.5.1",
+    "restructured": "0.0.11",
     "shifty": "2.9.2",
     "stockholm-js": "^1.0.9",
     "taxonomy-visualisation": "1.2.6",

@@ -7,7 +7,7 @@ import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import ipro from 'styles/interpro-new.css';
-
+import ContentFromRTD from 'components/ContentFromRTD';
 const f = foundationPartial(ipro);
 
 const SchemaOrgData = loadable({
@@ -86,6 +86,8 @@ const AboutInterPro = () => (
         contain information about what has changed in each update.
       </p>
     </div>
+    <hr />
+    <ContentFromRTD page="interpro.rst" />
   </section>
 );
 

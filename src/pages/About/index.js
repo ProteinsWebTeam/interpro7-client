@@ -11,6 +11,8 @@ import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
+import ContentFromRTD from 'components/ContentFromRTD';
+
 import { schemaProcessDataInterpro } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
@@ -25,18 +27,8 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const AboutInterPro = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "about-interpro" */ 'components/About/InterPro'
-    ),
-});
-const Consortium = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "about-consortium" */ 'components/About/Consortium'
-    ),
-});
+const AboutInterPro = () => <ContentFromRTD page="interpro.rst" />;
+const Consortium = () => <ContentFromRTD page="databases.rst" />;
 
 const Citation = loadable({
   loader: () =>
@@ -62,14 +54,9 @@ const InterProScan = loadable({
     ),
 });
 
-const IDA = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "about-ida" */ 'components/About/IDA'),
-});
 const routes = new Map([
   ['interpro', AboutInterPro],
   ['interproscan', InterProScan],
-  ['ida', IDA],
   ['consortium', Consortium],
   ['citation', Citation],
   ['funding', Funding],
@@ -112,14 +99,6 @@ class About extends PureComponent /*:: <{}> */ {
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 InterProScan
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['about', 'ida'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                IDA
               </Link>
             </li>
             <li className={f('tabs-title')}>
