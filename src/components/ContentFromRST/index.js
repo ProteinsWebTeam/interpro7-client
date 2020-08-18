@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import T from 'prop-types';
 import restructured from 'restructured';
+import config from 'config';
 
 import { getReadTheDocsURL } from 'higherOrder/loadData/defaults';
 
@@ -9,6 +10,7 @@ import Link from 'components/generic/Link';
 
 const substitutions = {};
 
+// eslint-disable-next-line complexity
 const Switch = ({ type, ...rest }) => {
   switch (type) {
     case 'section':
@@ -16,15 +18,19 @@ const Switch = ({ type, ...rest }) => {
     case 'title':
       return <Title {...rest} />;
     case 'paragraph':
-      return <Paragraph {...rest} />;
+      return <BasicWrapper {...rest} Element="p" />;
     case 'reference':
       return <Reference {...rest} />;
     case 'bullet_list':
-      return <BulletList {...rest} />;
+      return <BasicWrapper {...rest} Element="ul" />;
     case 'enumerated_list':
-      return <EnumeratedList {...rest} />;
+      return <BasicWrapper {...rest} Element="ol" />;
     case 'list_item':
-      return <ListItem {...rest} />;
+      return <BasicWrapper {...rest} Element="li" />;
+    case 'block_quote':
+      return (
+        <BasicWrapper {...rest} Element="blockquote" respectNewLines={true} />
+      );
     case 'comment':
       return <Comment {...rest} />;
     case 'directive':
@@ -32,11 +38,24 @@ const Switch = ({ type, ...rest }) => {
         return <Image {...rest} />;
       }
       break;
+    case 'interpreted_text':
+      return <Substitution {...rest} />;
     case 'substitution_reference':
       return <Substitution {...rest} />;
     case 'strong':
-      return <Strong {...rest} />;
+      return <BasicWrapper {...rest} Element="strong" />;
     case 'text':
+      if (rest.value.trim() === '|') return null;
+      if (rest.respectNewLines) {
+        return rest.value.endsWith('\n') ? (
+          <>
+            {rest.value}
+            <br />
+          </>
+        ) : (
+          rest.value
+        );
+      }
       return rest.value;
     default:
       return null;
@@ -46,27 +65,52 @@ Switch.propTypes = {
   type: T.string,
 };
 
-const Substitution = ({ children }) => {
+const rstLinkRegexp = /(.+) <(.+)>/;
+const Substitution = ({ children, role }) => {
   const ref = children?.[0]?.value;
   if (ref in substitutions) {
     const Substitute = () => substitutions[ref];
     return <Substitute />;
   }
+  if (role === 'ref') {
+    const matches = rstLinkRegexp.exec(ref);
+    if (matches) {
+      const [_, label, key] = matches;
+      const url = substitutions[key];
+      return url ? (
+        <a
+          target="_blank"
+          href={config.root.readthedocs.href + url}
+          rel="noreferrer"
+        >
+          {label}
+        </a>
+      ) : (
+        label
+      );
+    }
+  }
   return null;
 };
 Substitution.propTypes = {
   children: T.array,
+  role: T.string,
 };
 
 const substitutionRegExp = /\|(.+)\| (.+):: (.+)/;
+const refRegExp = /:ref:(.+) (.+)/;
 const Comment = ({ children }) => {
   const mainComment = children?.[0]?.value || '';
-  const matches = substitutionRegExp.exec(mainComment);
+  let matches = substitutionRegExp.exec(mainComment);
   if (matches) {
     const [_, ref, type, value] = matches;
     if (type === 'image') {
       substitutions[ref] = <Image>{[{ value }, ...children.slice(1)]}</Image>;
     }
+  } else {
+    matches = refRegExp.exec(mainComment);
+    const [_, ref, link] = matches;
+    substitutions[ref] = link;
   }
   return null;
 };
@@ -99,57 +143,34 @@ Image.propTypes = {
   children: T.array,
 };
 
-const Strong = ({ children }) => (
-  <strong>
-    <Children>{children}</Children>
-  </strong>
+const BasicWrapper = ({ children, Element = 'span', ...rest }) => (
+  <Element>
+    <Children {...rest}>{children}</Children>
+  </Element>
 );
-Strong.propTypes = {
+BasicWrapper.propTypes = {
   children: T.array,
-};
-const ListItem = ({ children }) => (
-  <li>
-    <Children>{children}</Children>
-  </li>
-);
-ListItem.propTypes = {
-  children: T.array,
-};
-
-const BulletList = ({ children }) => (
-  <ul>
-    <Children>{children}</Children>
-  </ul>
-);
-BulletList.propTypes = {
-  children: T.array,
-};
-
-const EnumeratedList = ({ children }) => (
-  <ol>
-    <Children>{children}</Children>
-  </ol>
-);
-EnumeratedList.propTypes = {
-  children: T.array,
+  Element: T.string,
 };
 
 const INTERPRO_URL = 'www.ebi.ac.uk/interpro';
+const referenceRegExp = /(.*)<(.+)>/;
 const Reference = ({ children }) => {
   if (!children || !children.length) return null;
+  const EXPECTED_GROUPS = 3;
   let url = '';
   let text = '';
   switch (children.length) {
-    case 1:
+    case 1: {
       const raw = children[0].value;
-      const re = /(.*)<(.+)>/;
-      const matches = re.exec(raw);
-      const EXPECTED_GROUPS = 3;
+      const matches = referenceRegExp.exec(raw);
       if (matches.length === EXPECTED_GROUPS) {
         text = matches[1];
         url = matches[2];
       }
+
       break;
+    }
     case 2:
       text = children[0].value;
       url = children[1].value.trim().slice(1, -1);
@@ -160,8 +181,11 @@ const Reference = ({ children }) => {
   if (url.includes(INTERPRO_URL)) {
     const path = new RegExp(`.+${INTERPRO_URL}(.*)`).exec(url)?.[1];
     if (path) {
+      const [justPath, hash] = path.split('#');
       return (
-        <Link to={{ description: pathToDescription(path) }}>{text || url}</Link>
+        <Link to={{ description: pathToDescription(justPath), hash }}>
+          {text || url}
+        </Link>
       );
     }
   }
@@ -208,15 +232,24 @@ Paragraph.propTypes = {
   depth: T.number,
 };
 
-const Children = ({ children, depth }) =>
+const Children = ({ children, ...rest }) =>
   children?.length
-    ? children.map((child, i) => <Switch key={i} depth={depth} {...child} />)
+    ? children.map((child, i) => <Switch key={i} {...rest} {...child} />)
     : null;
 Children.propTypes = {
   children: T.array,
-  depth: T.number,
 };
+// const rstText =`
+// Can I still view the old InterPro website?
+// ==========================================
+// Yes, for now you can! There two ways to access the old (legacy) website:
 
+// #. Navigate to this URL: \`<https://www.ebi.ac.uk/interpro/legacy/>\`_
+// #. Click on the Settings link from the InterPro Menu section of the sidebar
+
+// - Click on the “hamburger” icon above the magnifying glass icon to open the InterPro Menu sidebar.
+// - Then click the See this page in the old website link to be taken to the nearest matching page in the legacy website.
+// `
 const ContentFromRST = ({ rstText }) => {
   const [_, setHasSubstitutions] = useState(false);
   useEffect(() => {

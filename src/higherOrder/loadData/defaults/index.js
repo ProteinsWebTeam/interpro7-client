@@ -32,8 +32,8 @@ export const getUrlForRelease = (repoKey) =>
 export const getReadTheDocsURL = (relativePath) =>
   createSelector(
     () => config.github.ReadTheDocs,
-    ({ owner, repo }) =>
-      `https://raw.githubusercontent.com/${owner}/${repo}/stable/docs/${relativePath}`,
+    ({ owner, repo, branch = 'master' }) =>
+      `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/docs/${relativePath}`,
   );
 
 export const getUrl = createSelector(

@@ -10,6 +10,8 @@ import Redirect from 'components/generic/Redirect';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import loadable from 'higherOrder/loadable';
 
+import ContentFromRTD from 'components/ContentFromRTD';
+
 import { schemaProcessDataWebPage } from 'schema_org/processors';
 
 const SchemaOrgData = loadable({
@@ -23,27 +25,15 @@ import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
+const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
+const Faqs = () => <ContentFromRTD page="faq.rst" />;
+const Training = () => <ContentFromRTD page="training.rst" />;
 
 const Publication = loadable({
   loader: () =>
     import(
       /* webpackChunkName: "help-publication" */ 'components/Help/Publication'
     ),
-});
-
-const Tutorial = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "help-tutorial" */ 'components/Help/Tutorial'),
-});
-
-const Webinar = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "help-tutorial" */ 'components/Help/Webinar'),
-});
-
-const Faqs = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "help-faqs" */ 'components/Help/Faqs'),
 });
 
 const Documentation = loadable({
@@ -76,8 +66,8 @@ class InnerSwitch extends PureComponent /*:: <{}> */ {
 }
 
 const routes = new Map([
-  ['tutorial', Tutorial],
-  ['webinar', Webinar],
+  ['tutorial', Tutorials],
+  ['training', Training],
   ['faqs', Faqs],
   ['documentation', InnerSwitch],
 ]);
@@ -114,15 +104,15 @@ export default class Help extends PureComponent /*:: <{}> */ {
                 to={{ description: { other: ['help', 'tutorial'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
-                Tutorials &amp; training
+                Tutorials &amp; Webinars
               </Link>
             </li>
             <li className={f('tabs-title')}>
               <Link
-                to={{ description: { other: ['help', 'webinar'] } }}
+                to={{ description: { other: ['help', 'training'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
-                Webinars
+                Training
               </Link>
             </li>
             <li className={f('tabs-title')}>
