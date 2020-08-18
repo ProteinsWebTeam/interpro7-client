@@ -175,6 +175,7 @@
     "file-loader": "6.0.0",
     "flow-bin": "0.131.0",
     "flow-coverage-report": "0.7.0",
+    "fs-extra": "8.1.0",
     "html-webpack-plugin": "4.3.0",
     "husky": "4.2.5",
     "identity-obj-proxy": "3.0.0",
