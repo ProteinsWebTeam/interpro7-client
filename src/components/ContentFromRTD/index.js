@@ -12,9 +12,9 @@ import ContentFromRST from 'components/ContentFromRST';
   payload: Object,
 }; */
 
-const ContentFormReadTheDocs = ({ data /*: DataType */ }) => {
+const ContentFormReadTheDocs = ({ data /*: DataType */, ...rest }) => {
   if (!data || !data.ok || data.loading) return null;
-  return <ContentFromRST rstText={data.payload} />;
+  return <ContentFromRST rstText={data.payload} {...rest} />;
 };
 ContentFormReadTheDocs.propTypes = {
   data: T.shape({

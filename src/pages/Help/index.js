@@ -26,7 +26,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
 const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
-const Faqs = () => <ContentFromRTD page="faq.rst" />;
+const Faqs = () => <ContentFromRTD page="faq.rst" format="faq" />;
 const Training = () => <ContentFromRTD page="training.rst" />;
 
 const Publication = loadable({

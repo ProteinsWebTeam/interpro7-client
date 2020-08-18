@@ -212,22 +212,36 @@ Title.propTypes = {
   children: T.array,
   depth: T.number,
 };
-
-const Section = ({ depth, children }) => (
-  <section>
-    <Children depth={depth}>{children}</Children>
-  </section>
-);
-Section.propTypes = {
-  children: T.array,
-  depth: T.number,
+const Faq = ({ children }) => {
+  const summary = children.find(({ type }) => type === 'title')?.children?.[0]
+    .value;
+  return (
+    <details className="accordion-style">
+      <summary>{summary}</summary>
+      <div className="accordion-info">
+        <Children>{children.filter(({ type }) => type !== 'title')}</Children>
+      </div>
+    </details>
+  );
 };
-const Paragraph = ({ depth, children }) => (
-  <p>
-    <Children depth={depth}>{children}</Children>
-  </p>
-);
-Paragraph.propTypes = {
+Faq.propTypes = {
+  children: T.array,
+};
+
+const LEVEL_FOR_FAQ = 3;
+const Section = ({ depth, children, ...rest }) => {
+  if (rest.format === 'faq' && depth === LEVEL_FOR_FAQ) {
+    return <Faq>{children}</Faq>;
+  }
+  return (
+    <section>
+      <Children {...rest} depth={depth}>
+        {children}
+      </Children>
+    </section>
+  );
+};
+Section.propTypes = {
   children: T.array,
   depth: T.number,
 };
@@ -250,7 +264,7 @@ Children.propTypes = {
 // - Click on the “hamburger” icon above the magnifying glass icon to open the InterPro Menu sidebar.
 // - Then click the See this page in the old website link to be taken to the nearest matching page in the legacy website.
 // `
-const ContentFromRST = ({ rstText }) => {
+const ContentFromRST = ({ rstText, format }) => {
   const [_, setHasSubstitutions] = useState(false);
   useEffect(() => {
     if (Object.keys(substitutions).length) setHasSubstitutions(true);
@@ -261,12 +275,13 @@ const ContentFromRST = ({ rstText }) => {
   console.log(doc);
   return (
     <div>
-      <Children>{doc.children}</Children>
+      <Children format={format}>{doc.children}</Children>
     </div>
   );
 };
 ContentFromRST.propTypes = {
-  rstText: T.string,
+  rstText: T.string.isRequired,
+  format: T.string,
 };
 
 export default React.memo(ContentFromRST);
