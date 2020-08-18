@@ -11,6 +11,8 @@ import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
+import ContentFromRTD from 'components/ContentFromRTD';
+
 import { schemaProcessDataInterpro } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
@@ -25,35 +27,11 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const AboutInterPro = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "about-interpro" */ 'components/About/InterPro'
-    ),
-});
-const Consortium = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "about-consortium" */ 'components/About/Consortium'
-    ),
-});
-
-const Citation = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "about-citation" */ 'components/About/Citation'
-    ),
-});
-
-const Funding = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "about-funding" */ 'components/About/Funding'),
-});
-
-const Privacy = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "about-funding" */ 'components/About/Privacy'),
-});
+const AboutInterPro = () => <ContentFromRTD page="interpro.rst" />;
+const Consortium = () => <ContentFromRTD page="databases.rst" />;
+const Funding = () => <ContentFromRTD page="funding.rst" />;
+const Privacy = () => <ContentFromRTD page="privacy.rst" />;
+const Team = () => <ContentFromRTD page="team.rst" />;
 
 const InterProScan = loadable({
   loader: () =>
@@ -62,18 +40,13 @@ const InterProScan = loadable({
     ),
 });
 
-const IDA = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "about-ida" */ 'components/About/IDA'),
-});
 const routes = new Map([
   ['interpro', AboutInterPro],
   ['interproscan', InterProScan],
-  ['ida', IDA],
   ['consortium', Consortium],
-  ['citation', Citation],
   ['funding', Funding],
   ['privacy', Privacy],
+  ['team', Team],
 ]);
 
 const locationSelector = createSelector(
@@ -116,26 +89,10 @@ class About extends PureComponent /*:: <{}> */ {
             </li>
             <li className={f('tabs-title')}>
               <Link
-                to={{ description: { other: ['about', 'ida'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                IDA
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
                 to={{ description: { other: ['about', 'consortium'] } }}
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 The InterPro Consortium
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['about', 'citation'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                How to cite
               </Link>
             </li>
             <li className={f('tabs-title')}>
@@ -152,6 +109,14 @@ class About extends PureComponent /*:: <{}> */ {
                 activeClass={f('is-active', 'is-active-tab')}
               >
                 Privacy
+              </Link>
+            </li>
+            <li className={f('tabs-title')}>
+              <Link
+                to={{ description: { other: ['about', 'team'] } }}
+                activeClass={f('is-active', 'is-active-tab')}
+              >
+                Team
               </Link>
             </li>
           </ul>

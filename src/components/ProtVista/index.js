@@ -125,6 +125,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     showConservationButton: T.bool,
     handleConservationLoad: T.func,
     goToCustomLocation: T.func,
+    customLocation: T.object,
     children: T.any,
   };
 
@@ -303,7 +304,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                 detail={detail}
                 sourceDatabase={sourceDatabase}
                 data={this.props.data}
-                protein={this.props.protein}
+                currentLocation={this.props.customLocation}
                 // Need to pass it from here because it rendered out of the redux provider
                 goToCustomLocation={this.props.goToCustomLocation}
               />,
@@ -791,8 +792,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
+  (state) => state.customLocation,
   (state) => state.settings.ui,
-  (ui) => ({
+  (customLocation, ui) => ({
+    customLocation,
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
   }),
 );
