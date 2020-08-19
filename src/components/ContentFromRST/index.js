@@ -34,7 +34,7 @@ const Switch = ({ type, ...rest }) => {
     case 'comment':
       return <Comment {...rest} />;
     case 'directive':
-      if (rest.directive === 'image') {
+      if (['image', 'figure'].includes(rest.directive)) {
         return <Image {...rest} />;
       }
       break;
@@ -246,9 +246,30 @@ Section.propTypes = {
   depth: T.number,
 };
 
+class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError(error) {
+    console.error(error);
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      console.log('Element', this.props.element);
+      return <div>[⚠️PARSE ERROR⚠️]</div>;
+    }
+
+    return this.props.children;
+  }
+}
 const Children = ({ children, ...rest }) =>
   children?.length
-    ? children.map((child, i) => <Switch key={i} {...rest} {...child} />)
+    ? children.map((child, i) => (
+        <ErrorBoundary key={i} element={child}>
+          <Switch {...rest} {...child} />
+        </ErrorBoundary>
+      ))
     : null;
 Children.propTypes = {
   children: T.array,
