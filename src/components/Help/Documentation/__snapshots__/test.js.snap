@@ -79,18 +79,11 @@ exports[`<Documentation /> should render 1`] = `
               </li>
               <li>
                 <Memo(Connect(Link))
-                  to={
-                    Object {
-                      "description": Object {
-                        "other": Array [
-                          "about",
-                          "ida",
-                        ],
-                      },
-                    }
-                  }
+                  className="ext"
+                  href="//interpro-documentation.readthedocs.io/en/dev/"
+                  target="_blank"
                 >
-                  InterPro Domain Architecture
+                  Website documentation
                 </Memo(Connect(Link))>
               </li>
             </ul>
@@ -131,6 +124,15 @@ exports[`<Documentation /> should render 1`] = `
                 target="_blank"
               >
                 InterProScan Documentation
+              </Memo(Connect(Link))>
+            </li>
+            <li>
+              <Memo(Connect(Link))
+                className="ext"
+                href="//www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation"
+                target="_blank"
+              >
+                Web services
               </Memo(Connect(Link))>
             </li>
           </ul>
@@ -186,15 +188,6 @@ exports[`<Documentation /> should render 1`] = `
                 }
               >
                 Code snippet generator
-              </Memo(Connect(Link))>
-            </li>
-            <li>
-              <Memo(Connect(Link))
-                className="ext"
-                href="//www.ebi.ac.uk/Tools/webservices/"
-                target="_blank"
-              >
-                Web services
               </Memo(Connect(Link))>
             </li>
             <li>

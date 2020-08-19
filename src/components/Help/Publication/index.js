@@ -384,11 +384,15 @@ const PrintedPublication = (
     title,
     authors,
     source,
-  } /*: { title: string, authors: string, source: string }*/,
+    url,
+  } /*: { title: string, authors: string, source: string , url: string }*/,
 ) => (
   <blockquote className={f('quote')}>
-    {authors}
-    <strong> {title}</strong>. <i>{source}</i>
+    {authors}{' '}
+    <Link href={url} target="_blank">
+      {title}
+    </Link>
+    . <i>{source}</i>
   </blockquote>
 );
 PrintedPublication.propTypes = pubTypes;
@@ -399,6 +403,12 @@ export const InterProScan2014 = () => (
 );
 export const PrintedInterPro2019 = () => (
   <PrintedPublication {...data4InterPro2019} />
+);
+export const PrintedInterProShort2019 = () => (
+  <PrintedPublication
+    {...data4InterPro2019}
+    authors="Mitchell AL, Attwood TK, Babbitt PC, et al."
+  />
 );
 export const PrintedInterProScan2014 = () => (
   <PrintedPublication {...data4InterProScan2014} />
