@@ -78,6 +78,9 @@
   "lighthouse": {
     "threshold": 20
   },
+  "resolutions": {
+    "@storybook/core/fs-extra": "8.1.0"
+  },
   "dependencies": {
     "@tippy.js/react": "3.1.1",
     "@webcomponents/webcomponentsjs": "2.4.4",
