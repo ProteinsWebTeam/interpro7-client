@@ -42,39 +42,6 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   <ul>
                     <li>
                       <Link
-                        to={{
-                          description: {
-                            other: ['about', 'interpro'],
-                          },
-                        }}
-                      >
-                        About InterPro
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to={{
-                          description: {
-                            other: ['release_notes'],
-                          },
-                        }}
-                      >
-                        Release Notes
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to={{
-                          description: {
-                            other: ['help', 'faqs'],
-                          },
-                        }}
-                      >
-                        Frequently Asked Questions (FAQs)
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
                         href={config.root.readthedocs.href}
                         className={f('ext')}
                         target="_blank"
@@ -195,13 +162,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                 <ul>
                   <li>
                     <Link
-                      to={{
-                        description: {
-                          other: ['help', 'documentation', 'publication'],
-                        },
-                      }}
+                      href={`${config.root.readthedocs.href}citing.html`}
+                      className={f('ext')}
+                      target="_blank"
                     >
-                      Show all previous InterPro publications
+                      InterPro Publications
                     </Link>
                   </li>
                 </ul>

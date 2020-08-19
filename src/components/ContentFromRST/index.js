@@ -68,28 +68,38 @@ Switch.propTypes = {
 const rstLinkRegexp = /(.+) <(.+)>/;
 const Substitution = ({ children, role }) => {
   const ref = children?.[0]?.value;
+  if (role === 'ref') {
+    let url = null;
+    let text = null;
+    const matches = rstLinkRegexp.exec(ref);
+    if (matches) {
+      const [_, label, key] = matches;
+      url = substitutions[key];
+      text = label;
+    } else if (ref in substitutions) {
+      url = substitutions[ref];
+      text = ref.replace(/_/g, ' ');
+    }
+    return url ? (
+      <a
+        target="_blank"
+        href={config.root.readthedocs.href + url}
+        rel="noreferrer"
+        style={{
+          textTransform: 'capitalize',
+        }}
+      >
+        {text}
+      </a>
+    ) : (
+      text
+    );
+  }
   if (ref in substitutions) {
     const Substitute = () => substitutions[ref];
     return <Substitute />;
   }
-  if (role === 'ref') {
-    const matches = rstLinkRegexp.exec(ref);
-    if (matches) {
-      const [_, label, key] = matches;
-      const url = substitutions[key];
-      return url ? (
-        <a
-          target="_blank"
-          href={config.root.readthedocs.href + url}
-          rel="noreferrer"
-        >
-          {label}
-        </a>
-      ) : (
-        label
-      );
-    }
-  }
+
   return null;
 };
 Substitution.propTypes = {
@@ -174,6 +184,7 @@ const Reference = ({ children }) => {
     case 2:
       text = children[0].value;
       url = children[1].value.trim().slice(1, -1);
+      console.log({ text, url });
       break;
     default:
       return <Children>{children}</Children>;
