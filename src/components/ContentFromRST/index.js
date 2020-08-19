@@ -247,19 +247,34 @@ Section.propTypes = {
 };
 
 class ErrorBoundary extends React.Component {
-  state = { hasError: false };
-
   static getDerivedStateFromError(error) {
     console.error(error);
     return { hasError: true };
   }
 
+  static propTypes = {
+    element: T.object,
+    children: T.any,
+  };
+
+  state = { hasError: false };
+
   render() {
     if (this.state.hasError) {
       console.log('Element', this.props.element);
-      return <div>[⚠️PARSE ERROR⚠️]</div>;
+      return (
+        <div
+          style={{
+            fontFamily: 'monospace',
+            display: 'inline-block',
+            background: 'lightgray',
+            color: 'chocolate',
+          }}
+        >
+          [ Parse Error ]
+        </div>
+      );
     }
-
     return this.props.children;
   }
 }

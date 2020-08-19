@@ -615,7 +615,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                         displayend={length}
                         scale="hydrophobicity-scale"
                         height="10"
-                        color_range="#ffdd00:-3,#0000FF:3"
+                        color_range="#0000FF:-3,#ffdd00:3"
                         highlight-event="onmouseover"
                         use-ctrl-to-zoom
                       />
