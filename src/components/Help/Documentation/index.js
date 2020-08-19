@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 
+import config from 'config';
 import Link from 'components/generic/Link';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
@@ -74,13 +75,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                     </li>
                     <li>
                       <Link
-                        to={{
-                          description: {
-                            other: ['about', 'ida'],
-                          },
-                        }}
+                        href={config.root.readthedocs.href}
+                        className={f('ext')}
+                        target="_blank"
                       >
-                        InterPro Domain Architecture
+                        Website documentation
                       </Link>
                     </li>
                   </ul>
@@ -111,6 +110,15 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       target="_blank"
                     >
                       InterProScan Documentation
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="//www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      Web services
                     </Link>
                   </li>
                 </ul>
@@ -155,15 +163,6 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       }}
                     >
                       Code snippet generator
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="//www.ebi.ac.uk/Tools/webservices/"
-                      className={f('ext')}
-                      target="_blank"
-                    >
-                      Web services
                     </Link>
                   </li>
                   <li>
