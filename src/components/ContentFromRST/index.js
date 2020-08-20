@@ -2,11 +2,19 @@ import React, { useState, useEffect } from 'react';
 import T from 'prop-types';
 import restructured from 'restructured';
 import config from 'config';
+import loadable from 'higherOrder/loadable';
 
 import { getReadTheDocsURL } from 'higherOrder/loadData/defaults';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import Link from 'components/generic/Link';
+
+const InterProScan = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "about-interproscan" */ 'components/About/InterProScan'
+    ),
+});
 
 const substitutions = {};
 
@@ -240,12 +248,17 @@ Faq.propTypes = {
 };
 
 const LEVEL_FOR_FAQ = 3;
+let numberOfSections = 0;
 const Section = ({ depth, children, ...rest }) => {
+  numberOfSections++;
   if (rest.format === 'faq' && depth === LEVEL_FOR_FAQ) {
     return <Faq>{children}</Faq>;
   }
+  const shouldIncludeIscan =
+    rest.format === 'interproscan' && depth > 1 && numberOfSections === 2;
   return (
     <section>
+      {shouldIncludeIscan && <InterProScan />}
       <Children {...rest} depth={depth}>
         {children}
       </Children>
@@ -319,7 +332,9 @@ const ContentFromRST = ({ rstText, format }) => {
   const doc = restructured.parse(rstText);
   if (!doc?.type || doc.type !== 'document' || !doc?.children?.length)
     return null;
-  console.log(doc);
+
+  numberOfSections = 0;
+  // console.log(doc);
   return (
     <div>
       <Children format={format}>{doc.children}</Children>

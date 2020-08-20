@@ -61,17 +61,6 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                 <ul>
                   <li>
                     <Link
-                      to={{
-                        description: {
-                          other: ['about', 'interproscan'],
-                        },
-                      }}
-                    >
-                      About InterProScan
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="https://interproscan-docs.readthedocs.io/"
                       className={f('ext')}
                       target="_blank"
