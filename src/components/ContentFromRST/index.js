@@ -2,11 +2,19 @@ import React, { useState, useEffect } from 'react';
 import T from 'prop-types';
 import restructured from 'restructured';
 import config from 'config';
+import loadable from 'higherOrder/loadable';
 
 import { getReadTheDocsURL } from 'higherOrder/loadData/defaults';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import Link from 'components/generic/Link';
+
+const InterProScan = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "about-interproscan" */ 'components/About/InterProScan'
+    ),
+});
 
 const substitutions = {};
 
@@ -34,7 +42,7 @@ const Switch = ({ type, ...rest }) => {
     case 'comment':
       return <Comment {...rest} />;
     case 'directive':
-      if (rest.directive === 'image') {
+      if (['image', 'figure'].includes(rest.directive)) {
         return <Image {...rest} />;
       }
       break;
@@ -68,28 +76,38 @@ Switch.propTypes = {
 const rstLinkRegexp = /(.+) <(.+)>/;
 const Substitution = ({ children, role }) => {
   const ref = children?.[0]?.value;
+  if (role === 'ref') {
+    let url = null;
+    let text = null;
+    const matches = rstLinkRegexp.exec(ref);
+    if (matches) {
+      const [_, label, key] = matches;
+      url = substitutions[key];
+      text = label;
+    } else if (ref in substitutions) {
+      url = substitutions[ref];
+      text = ref.replace(/_/g, ' ');
+    }
+    return url ? (
+      <a
+        target="_blank"
+        href={config.root.readthedocs.href + url}
+        rel="noreferrer"
+        style={{
+          textTransform: 'capitalize',
+        }}
+      >
+        {text}
+      </a>
+    ) : (
+      text
+    );
+  }
   if (ref in substitutions) {
     const Substitute = () => substitutions[ref];
     return <Substitute />;
   }
-  if (role === 'ref') {
-    const matches = rstLinkRegexp.exec(ref);
-    if (matches) {
-      const [_, label, key] = matches;
-      const url = substitutions[key];
-      return url ? (
-        <a
-          target="_blank"
-          href={config.root.readthedocs.href + url}
-          rel="noreferrer"
-        >
-          {label}
-        </a>
-      ) : (
-        label
-      );
-    }
-  }
+
   return null;
 };
 Substitution.propTypes = {
@@ -174,6 +192,7 @@ const Reference = ({ children }) => {
     case 2:
       text = children[0].value;
       url = children[1].value.trim().slice(1, -1);
+      console.log({ text, url });
       break;
     default:
       return <Children>{children}</Children>;
@@ -229,12 +248,17 @@ Faq.propTypes = {
 };
 
 const LEVEL_FOR_FAQ = 3;
+let numberOfSections = 0;
 const Section = ({ depth, children, ...rest }) => {
+  numberOfSections++;
   if (rest.format === 'faq' && depth === LEVEL_FOR_FAQ) {
     return <Faq>{children}</Faq>;
   }
+  const shouldIncludeIscan =
+    rest.format === 'interproscan' && depth > 1 && numberOfSections === 2;
   return (
     <section>
+      {shouldIncludeIscan && <InterProScan />}
       <Children {...rest} depth={depth}>
         {children}
       </Children>
@@ -246,9 +270,45 @@ Section.propTypes = {
   depth: T.number,
 };
 
+class ErrorBoundary extends React.Component {
+  static getDerivedStateFromError(error) {
+    console.error(error);
+    return { hasError: true };
+  }
+
+  static propTypes = {
+    element: T.object,
+    children: T.any,
+  };
+
+  state = { hasError: false };
+
+  render() {
+    if (this.state.hasError) {
+      console.log('Element', this.props.element);
+      return (
+        <div
+          style={{
+            fontFamily: 'monospace',
+            display: 'inline-block',
+            background: 'lightgray',
+            color: 'chocolate',
+          }}
+        >
+          [ Parse Error ]
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 const Children = ({ children, ...rest }) =>
   children?.length
-    ? children.map((child, i) => <Switch key={i} {...rest} {...child} />)
+    ? children.map((child, i) => (
+        <ErrorBoundary key={i} element={child}>
+          <Switch {...rest} {...child} />
+        </ErrorBoundary>
+      ))
     : null;
 Children.propTypes = {
   children: T.array,
@@ -272,7 +332,9 @@ const ContentFromRST = ({ rstText, format }) => {
   const doc = restructured.parse(rstText);
   if (!doc?.type || doc.type !== 'document' || !doc?.children?.length)
     return null;
-  console.log(doc);
+
+  numberOfSections = 0;
+  // console.log(doc);
   return (
     <div>
       <Children format={format}>{doc.children}</Children>
