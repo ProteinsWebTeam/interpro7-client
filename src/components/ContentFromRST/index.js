@@ -75,14 +75,16 @@ Switch.propTypes = {
 
 const rstLinkRegexp = /(.+) <(.+)>/;
 const Substitution = ({ children, role }) => {
-  const ref = children?.[0]?.value;
-  if (role === 'ref') {
+  const ref = children
+    ?.filter(({ type }) => type === 'text')
+    .reduce((agg, v) => agg + v?.value?.replace('\n', ''), '');
+  if (['ref', 'doc'].includes(role)) {
     let url = null;
     let text = null;
     const matches = rstLinkRegexp.exec(ref);
     if (matches) {
       const [_, label, key] = matches;
-      url = substitutions[key];
+      url = substitutions[key] || `${key}.html`;
       text = label;
     } else if (ref in substitutions) {
       url = substitutions[ref];
@@ -334,7 +336,7 @@ const ContentFromRST = ({ rstText, format }) => {
     return null;
 
   numberOfSections = 0;
-  // console.log(doc);
+  console.log(doc);
   return (
     <div>
       <Children format={format}>{doc.children}</Children>
