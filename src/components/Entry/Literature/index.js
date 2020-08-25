@@ -63,19 +63,22 @@ const LiteratureItem = (
         }}
         processData={schemaProcessCitations}
       />
-      {included && typeof i !== 'undefined' && (
-        <Link
-          id={pubID}
-          className={f('index')}
-          to={(customLocation) => ({
-            ...customLocation,
-            hash: `description-${i}`,
-          })}
-          aria-label="jump up"
-        >
-          {i}.^
-        </Link>
-      )}
+      {typeof i !== 'undefined' &&
+        (included ? (
+          <Link
+            id={pubID}
+            className={f('index')}
+            to={(customLocation) => ({
+              ...customLocation,
+              hash: `description-${i}`,
+            })}
+            aria-label="jump up"
+          >
+            {i}.^
+          </Link>
+        ) : (
+          <span>[{i}]. </span>
+        ))}
       <span className={f('title')}>{r.title} </span>
       <span className={f('authors')}>{r.authors.join(', ')} </span>{' '}
       {r.ISO_journal && <span className={f('journal')}>{r.ISO_journal} </span>}
@@ -146,12 +149,13 @@ const Literature = (
             'single-entry': extra.length === 1,
           })}
         >
-          {extra.map(([pubID, ref]) => (
+          {extra.map(([pubID, ref], i) => (
             <LiteratureItem
               pubID={pubID}
               key={pubID}
               reference={ref}
               target={target === pubID}
+              i={(included?.length || 0) + i + 1}
             />
           ))}
         </div>
