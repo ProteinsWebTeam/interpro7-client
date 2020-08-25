@@ -494,6 +494,9 @@ const IPScanEndpointSettings = connect(getStatusForEndpoint('ipScan'))(
 const Genome3DEndpointSettings = connect(getStatusForEndpoint('genome3d'))(
   EndpointSettings,
 );
+const WikipediaEndpointSettings = connect(getStatusForEndpoint('wikipedia'))(
+  EndpointSettings,
+);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -607,6 +610,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
       ebi: T.object.isRequired,
       ipScan: T.object.isRequired,
       genome3d: T.object.isRequired,
+      wikipedia: T.object.isRequired,
     }).isRequired,
     changeSettings: T.func.isRequired,
     resetSettings: T.func.isRequired,
@@ -625,6 +629,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
         ebi = {},
         ipScan = {},
         genome3d = {},
+        wikipedia = {},
       },
       changeSettings,
     } = this.props;
@@ -676,6 +681,13 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
                 Genome3D Settings{' '}
                 {!DEV && '(modification temporarily disabled)'}
               </Genome3DEndpointSettings>
+              <WikipediaEndpointSettings
+                category="wikipedia"
+                endpointDetails={wikipedia}
+              >
+                Wikipedia Settings{' '}
+                {!DEV && '(modification temporarily disabled)'}
+              </WikipediaEndpointSettings>
 
               <button onClick={this._handleReset} className={f('button')}>
                 Reset settings to default values

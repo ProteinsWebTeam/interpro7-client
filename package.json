@@ -89,6 +89,7 @@
     "dompurify": "2.0.12",
     "draft-js": "0.11.6",
     "ebi-framework": "1.3.17",
+    "fast-xml-parser": "^3.17.4",
     "filesize": "6.1.0",
     "foundation-sites": "6.6.3",
     "history": "4.10.1",

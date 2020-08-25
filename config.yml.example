@@ -5,6 +5,7 @@ root:
   EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
   IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
   genome3d: //www.genome3d.eu/api/v1/
+  wikipedia: https://en.wikipedia.org/w/
 
 title: InterPro
 

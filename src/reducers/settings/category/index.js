@@ -61,6 +61,13 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
         root: config.root.genome3d.pathname,
       };
+    case 'wikipedia':
+      return {
+        protocol: config.root.wikipedia.protocol,
+        hostname: config.root.wikipedia.hostname,
+        port: config.root.wikipedia.port || DEFAULT_HTTP_PORT,
+        root: config.root.wikipedia.pathname,
+      };
     default:
       return null;
   }
