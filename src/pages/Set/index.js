@@ -496,33 +496,25 @@ class List extends PureComponent /*:: <ListProps> */ {
                   // eslint-disable-next-line camelcase
                   source_database: db,
                 } /*: {accession: string, source_database: string} */,
-                extra,
-              ) => {
-                const preferredName =
-                  db === 'pfam' && extra && extra.description
-                    ? extra.description
-                    : name;
-
-                return (
-                  <Link
-                    to={(customLocation) => ({
-                      ...customLocation,
-                      description: {
-                        main: { key: 'set' },
-                        set: {
-                          db,
-                          accession,
-                        },
+              ) => (
+                <Link
+                  to={(customLocation) => ({
+                    ...customLocation,
+                    description: {
+                      main: { key: 'set' },
+                      set: {
+                        db,
+                        accession,
                       },
-                    })}
-                  >
-                    <HighlightedText
-                      text={preferredName}
-                      textToHighlight={search.search}
-                    />
-                  </Link>
-                );
-              }}
+                    },
+                  })}
+                >
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
+                </Link>
+              )}
             >
               Name
             </Column>
