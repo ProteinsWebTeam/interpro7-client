@@ -242,12 +242,6 @@ const SetCard = (
     entryDB,
   } /*: {data: Object, search: string, entryDB: string} */,
 ) => {
-  const preferredName =
-    data.metadata.source_database === 'pfam' &&
-    data.extra_fields &&
-    data.extra_fields.description
-      ? data.extra_fields.description
-      : data.metadata.name;
   return (
     <>
       <div className={f('card-header')}>
@@ -264,7 +258,10 @@ const SetCard = (
                 },
               }}
             >
-              <HighlightedText text={preferredName} textToHighlight={search} />
+              <HighlightedText
+                text={data.metadata.name}
+                textToHighlight={search}
+              />
             </Link>
           </h6>
         </div>
