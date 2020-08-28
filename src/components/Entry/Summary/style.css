@@ -58,6 +58,7 @@
     text-align: center;
     font-size: 125%;
     font-weight: bold;
+    position: inherit;
   }
   & .td-thumbnail {
     text-align: center;

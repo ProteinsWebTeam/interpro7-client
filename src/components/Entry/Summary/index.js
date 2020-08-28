@@ -56,7 +56,7 @@ const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
         hierarchy?: Object,
         overlaps_with: Object,
         cross_references: Object,
-        wikipedia: string,
+        wikipedia: object,
       }
  */
 const MemberDBSubtitle = (
@@ -442,7 +442,7 @@ Hierarchy.propTypes = {
 };
 
 const _wikipedia = ({ title, extract, thumbnail, data }) => {
-  if (data.loading) return <Loading />;
+  if (data.loading && !data.payload) return <Loading />;
 
   const identifiers = [];
   const article = {};
@@ -454,10 +454,13 @@ const _wikipedia = ({ title, extract, thumbnail, data }) => {
   let infoStatus = false;
   if (json.root.template?.length > 0) {
     json.root.template.forEach((obj) => {
-      if (
-        obj.title === 'Infobox protein family' ||
-        (obj.title === 'Pfam_box' && !infoStatus)
-      ) {
+      const possibleTitles = [
+        'Infobox protein family',
+        'Pfam_box',
+        'Pfam box',
+        'Infobox enzyme',
+      ];
+      if (possibleTitles.includes(obj.title) && !infoStatus) {
         parts = obj.part;
         infoStatus = true;
       }
@@ -480,6 +483,11 @@ const _wikipedia = ({ title, extract, thumbnail, data }) => {
       }
     }
   });
+
+  const imageLink = (
+    <img src={`data:image/png;base64, ${thumbnail}`} alt="Structure image" />
+  );
+
   return (
     <div className={f('wiki-article')}>
       <div className={f('row', 'wiki-content')}>
@@ -507,12 +515,18 @@ const _wikipedia = ({ title, extract, thumbnail, data }) => {
               {thumbnail ? (
                 <tr>
                   <td colSpan="2" className={f('td-thumbnail')}>
-                    {/*<a href="https://en.wikipedia.org/wiki/File:PDB_1z26_EBI.jpg" className="image">*/}
-                    <img
-                      src={`data:image/png;base64, ${thumbnail}`}
-                      alt="Structure image"
-                    />
-                    {/*</a>*/}
+                    {article.image ? (
+                      <a
+                        href={`https://en.wikipedia.org/wiki/File:${article.image}`}
+                        className="image"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {imageLink}
+                      </a>
+                    ) : (
+                      imageLink
+                    )}
                     <div>{article.caption}</div>
                   </td>
                 </tr>
@@ -528,12 +542,13 @@ const _wikipedia = ({ title, extract, thumbnail, data }) => {
                     <th scope="row" className={f('row-header')}>
                       Symbol
                     </th>
-                    <td className={f('row-data')}>{article.Symbol}</td>
+                    <td className={f('row-data')}>
+                      {article.Symbol ? article.Symbol : title}
+                    </td>
                   </tr>
                   {identifiers.map((id) => {
                     return (
                       <tr key={id.name}>
-                        {/*TODO add external links*/}
                         <th scope="row" className={f('row-header')}>
                           <a
                             href={`https://en.wikipedia.org/wiki/${id.name}`}
@@ -543,6 +558,7 @@ const _wikipedia = ({ title, extract, thumbnail, data }) => {
                           </a>
                         </th>
                         <td className={f('row-data')}>
+                          {/*TODO add external links*/}
                           {/*<a rel="nofollow" className="external text" href="http://pfam.xfam.org/family?acc=PF02171">*/}
                           {id.value}
                           {/*</a>*/}
@@ -574,8 +590,9 @@ const getWikiUrl = createSelector(
       protocol,
       hostname,
       port,
-      pathname: `${root}api.php`,
+      pathname: root,
       query: {
+        origin: '*',
         action: 'parse',
         page: title,
         format: 'json',
@@ -584,8 +601,7 @@ const getWikiUrl = createSelector(
     });
   },
 );
-
-const Wikipedia = loadData(getWikiUrl)(_wikipedia);
+const Wikipedia = loadData({ getUrl: getWikiUrl })(_wikipedia);
 
 /*:: type Props = {
     data: {

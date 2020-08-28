@@ -24,13 +24,14 @@ const checkStatusesAndDispatch = async function (
   if (!browser) return;
   for (const endpoint of Object.keys(servers)) {
     const endpointSettings = settings[endpoint];
-    const url = format({
+    let url = format({
       ...endpointSettings,
       pathname: endpointSettings.root,
     });
+    url = endpoint === 'wikipedia' ? `${url}?origin=*` : url;
     try {
       const response = await customFetch(url, {
-        method: 'HEAD',
+        method: endpoint === 'wikipedia' ? 'GET' : 'HEAD',
         useCache: false,
       });
       dispatch(serverStatus(endpoint, response.ok));
