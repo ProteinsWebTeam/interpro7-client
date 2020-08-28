@@ -1,54 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<InterProScan /> should render with data 1`] = `
-<React.Fragment>
-  <section
-    className="banner"
-  >
-    <div
-      className="image-tool-ipscan"
+<section>
+  <h4>
+    Download the latest version 
+    <small>
+      (
+      5.35-74.0
+      )
+    </small>
+  </h4>
+  <div>
+    <span
+      className="icon icon-common"
+      data-icon=""
     />
-    <div>
-      <h3>
-        InterProScan
-      </h3>
-      InterProScan is the software package that allows sequences (protein and nucleic) to be scanned against InterPro's signatures. Signatures are predictive models, provided by several different databases, that make up the InterPro consortium.
-    </div>
-    <Memo(Loadable)
-      data={
+     Linux (64-bit) -
+     
+    <Tooltip
+      style={
         Object {
-          "description": "InterProScan is the software package that allows sequences to be scanned against InterPro",
-          "name": "About InterProScan",
+          "cursor": "help",
+          "textDecoration": "underline",
         }
       }
-      processData={[Function]}
-    />
-  </section>
-  <section>
-    <h3>
-      Download the latest version 
-      <small>
-        (
-        5.35-74.0
-        )
-      </small>
-    </h3>
-    <div>
-      <span
-        className="icon icon-common"
-        data-icon=""
-      />
-       
-      Linux (64-bit) -
-       
-      <Tooltip
-        style={
-          Object {
-            "cursor": "help",
-            "textDecoration": "underline",
-          }
-        }
-        title="
+      title="
               <b>Software</b>:<br/>
               <ul>
                 <li>Linux 64-bit</li>
@@ -56,271 +32,49 @@ exports[`<InterProScan /> should render with data 1`] = `
                 <li>Python 3</li>
                 <li>Java 8</li>
               </ul>"
-      >
-        System requirements
-      </Tooltip>
-      <br />
-      <small>
-        <ul>
-          <li>
-            There are no versions planned for Windows or Apple operating systems. This is due to constraints in the various third-party binaries that InterProScan runs.
-          </li>
-          <li>
-            Older versions of InterProScan are not supported anymore. We highly recommend you to update to the latest version.
-          </li>
-        </ul>
-      </small>
+    >
+      System requirements
+    </Tooltip>
+    <br />
+    <small>
+      <ul>
+        <li>
+          There are no versions planned for Windows or Apple operating systems. This is due to constraints in the various third-party binaries that InterProScan runs.
+        </li>
+        <li>
+          Older versions of InterProScan are not supported anymore. We highly recommend you to update to the latest version.
+        </li>
+      </ul>
+    </small>
+  </div>
+  <div
+    className="download flex-card"
+  >
+    <Memo(Connect(Link))
+      className="button"
+      href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
+      target="_blank"
+    >
+      Download InterProScan
+    </Memo(Connect(Link))>
+    <div
+      className="metadata"
+    >
+      Version 
+      5.35-74.0
+       - 
+       64 bit
+       
+       Linux
+       - 
+       9.0GB
     </div>
     <div
-      className="download flex-card"
+      className="metadata"
     >
-      <Memo(Connect(Link))
-        className="button"
-        href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
-        target="_blank"
-      >
-        Download InterProScan
-      </Memo(Connect(Link))>
-      <div
-        className="metadata"
-      >
-        Version 
-        5.35-74.0
-         - 
-         64 bit
-         
-         Linux
-         - 
-         9.0GB
-      </div>
-      <div
-        className="metadata"
-      >
-        MD5: 
-         fc003f262608423ab4c96ec099384ca6
-      </div>
+      MD5: 
+       fc003f262608423ab4c96ec099384ca6
     </div>
-    <h3>
-      Documentation
-    </h3>
-    <p>
-      For more information on downloading, installing and running InterProScan please see the
-       
-      <Memo(Connect(Link))
-        className="ext"
-        href="https://interproscan-docs.readthedocs.io/"
-        target="_blank"
-      >
-        InterProScan documentation
-      </Memo(Connect(Link))>
-      .
-    </p>
-  </section>
-  <section>
-    <h3>
-      Web services
-    </h3>
-    <p>
-      Programmatic access to InterProScan is possible via a number of different web service protocols, that allow up to 30 sequences to be analysed per request.
-    </p>
-    <div
-      className="cols"
-    >
-      <div
-        className="flex-card"
-      >
-        <header>
-          REST
-        </header>
-        <p>
-          We provide access to InterProScan via RESTful services.
-        </p>
-        <Memo(Connect(Link))
-          className="ext secondary"
-          href="https://www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation#InterProScan5HelpandDocumentation-RESTAPI"
-          target="_blank"
-        >
-          REST API
-        </Memo(Connect(Link))>
-      </div>
-      <div
-        className="flex-card"
-      >
-        <header>
-          SOAP
-        </header>
-        <p>
-          We also provide access to InterProScan via SOAP-based web services.
-        </p>
-        <Memo(Connect(Link))
-          className="ext"
-          href="https://www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation#InterProScan5HelpandDocumentation-SOAPAPIPrivacy"
-          target="_blank"
-        >
-          SOAP API
-        </Memo(Connect(Link))>
-      </div>
-    </div>
-  </section>
-  <section>
-    <h3>
-      Web based tools
-    </h3>
-    <p>
-      Web access using the sequence search box on the InterPro website (
-      <Memo(Connect(Link))
-        to={
-          Object {
-            "description": Object {},
-          }
-        }
-      >
-        homepage
-      </Memo(Connect(Link))>
-       or under
-       
-      <Memo(Connect(Link))
-        to={
-          Object {
-            "description": Object {
-              "main": Object {
-                "key": "search",
-              },
-              "search": Object {
-                "type": "sequence",
-              },
-            },
-          }
-        }
-      >
-        /search/sequence
-      </Memo(Connect(Link))>
-      ), for the analysis of 
-      <b>
-        single protein sequences
-      </b>
-       in FASTA format with a maximum length of 40,000 amino acids.
-    </p>
-  </section>
-  <section>
-    <h3>
-      Source code
-    </h3>
-    <p>
-      You can find, clone, and download the full InterProScan source code on the Github repository, available under
-       
-      <Memo(Connect(Link))
-        className="ext"
-        href="https://github.com/ebi-pf-team/interproscan"
-        target="_blank"
-      >
-        github.com/ebi-pf-team/interproscan
-      </Memo(Connect(Link))>
-      .
-    </p>
-  </section>
-  <section>
-    <h3>
-      Previous releases
-    </h3>
-    <p>
-      To ensure you have the latest data and software enhancements we always recommend you download the latest version of InterProScan. However all previous releases are archived on the
-       
-      <Memo(Connect(Link))
-        className="ext"
-        href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/"
-        target="_blank"
-      >
-        FTP site
-      </Memo(Connect(Link))>
-      .
-    </p>
-  </section>
-  <section>
-    <h3>
-      License
-    </h3>
-    <p>
-      The InterProScan software is distributed under the open source
-       
-      <Memo(Connect(Link))
-        className="ext"
-        href="http://www.apache.org/licenses/LICENSE-2.0.txt"
-        target="_blank"
-      >
-        Apache License
-      </Memo(Connect(Link))>
-      , as are the included scanning tools (except SignalP and TMHMM). Therefore, you do not need a special license for commercial use but please cite the resource and keep the Copyright statement with your installation.
-    </p>
-  </section>
-  <section>
-    <h3>
-      Follow us & reporting bugs
-    </h3>
-    <p>
-      If you want to get updates on InterProScan, you can subscribe to the
-       
-      <Memo(Connect(Link))
-        className="ext"
-        href="http://listserver.ebi.ac.uk/mailman/listinfo/interproscan-announce"
-        target="_blank"
-      >
-        <span
-          className="icon icon-common"
-          data-icon=""
-        />
-         
-        interproscan-announce mailing list
-      </Memo(Connect(Link))>
-       
-      or just follow InterPro on Twitter
-       
-      <Memo(Connect(Link))
-        className="ext"
-        href="https://twitter.com/InterProDB"
-        target="_blank"
-      >
-        <span
-          className="icon icon-common"
-          data-icon=""
-        />
-         
-        @InterProDB
-      </Memo(Connect(Link))>
-      .
-    </p>
-    <p>
-      If you want to submit a question or report a bug, please contact us by
-       
-      <Memo(Connect(Link))
-        className="ext"
-        href="mailto:interhelp@ebi.ac.uk"
-        target="_blank"
-      >
-        <span
-          className="icon icon-common"
-          data-icon=""
-        />
-         
-        email
-      </Memo(Connect(Link))>
-       
-      or contact us using the
-       
-      <Memo(Connect(Link))
-        className="ext"
-        href="http://www.ebi.ac.uk/support/interproscan"
-        target="_blank"
-      >
-        <span
-          className="icon icon-common"
-          data-icon=""
-        />
-         
-        EBI form
-      </Memo(Connect(Link))>
-      , providing as much information as possible so that we can recreate the problem.
-    </p>
-  </section>
-</React.Fragment>
+  </div>
+</section>
 `;

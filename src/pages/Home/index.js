@@ -11,6 +11,7 @@ import Description from 'components/Description';
 import CurrentVersion from 'components/home/CurrentVersion';
 import GeneralWarning from 'components/home/GeneralWarning';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
+import { PrintedInterProShort2019 } from 'components/Help/Publication';
 import Tip from 'components/Tip';
 import Link from 'components/generic/Link';
 
@@ -31,6 +32,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import style from '../style.css';
+import local from './style.css';
 
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -41,7 +43,7 @@ import wellcome from '../../images/thirdparty/funding/logo_wellcome.jpg';
 import bbsrc from '../../images/thirdparty/funding/logo_bbsrc.png';
 
 // Bind css with style object
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style, local);
 
 const MAX_DELAY_FOR_TWITTER = 10000;
 
@@ -135,6 +137,17 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
   },
 );
 
+const CitingInterPro = () => (
+  <details className={f('citing-details')}>
+    <summary>Citing InterPro</summary>
+    <div>
+      If you find InterPro useful, please cite the reference that describes this
+      work:
+      <PrintedInterProShort2019 />
+    </div>
+  </details>
+);
+
 const description = `
 InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites. To classify proteins in this way, InterPro uses predictive models, known as signatures, provided by several different databases (referred to as member databases) that make up the InterPro consortium. We combine protein signatures from these member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.
 `.trim();
@@ -208,6 +221,7 @@ class Home extends PureComponent {
               <div className={f('intro-content')} data-testid="intro-content">
                 <h3>Classification of protein families</h3>
                 <Description textBlocks={[description]} />
+                <CitingInterPro />
               </div>
             </div>
           </div>
