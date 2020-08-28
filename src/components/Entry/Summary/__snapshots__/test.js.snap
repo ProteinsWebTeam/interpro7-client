@@ -214,5 +214,6 @@ exports[`<SummaryEntry /> should render 1`] = `
       }
     }
   />
+  <section />
 </div>
 `;

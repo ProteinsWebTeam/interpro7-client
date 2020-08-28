@@ -56,7 +56,7 @@ const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
         hierarchy?: Object,
         overlaps_with: Object,
         cross_references: Object,
-        wikipedia: object,
+        wikipedia: Object,
       }
  */
 const MemberDBSubtitle = (
@@ -485,7 +485,7 @@ const _wikipedia = ({ title, extract, thumbnail, data }) => {
   });
 
   const imageLink = (
-    <img src={`data:image/png;base64, ${thumbnail}`} alt="Structure image" />
+    <img src={`data:image/png;base64, ${thumbnail}`} alt="Structure" />
   );
 
   return (
@@ -558,10 +558,10 @@ const _wikipedia = ({ title, extract, thumbnail, data }) => {
                           </a>
                         </th>
                         <td className={f('row-data')}>
-                          {/*TODO add external links*/}
-                          {/*<a rel="nofollow" className="external text" href="http://pfam.xfam.org/family?acc=PF02171">*/}
+                          {/* TODO add external links*/}
+                          {/* <a rel="nofollow" className="external text" href="http://pfam.xfam.org/family?acc=PF02171">*/}
                           {id.value}
-                          {/*</a>*/}
+                          {/* </a>*/}
                         </td>
                       </tr>
                     );
