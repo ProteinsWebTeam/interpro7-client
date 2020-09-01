@@ -5,10 +5,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { debounce } from 'lodash-es';
 
-import { ENTRY_DBS } from 'utils/url-patterns';
-
 import { goToCustomLocation } from 'actions/creators';
-import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
+import getURLByAccession from 'utils/processDescription/getURLbyAccession';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -21,21 +19,6 @@ const f = foundationPartial(interproTheme, fonts, local);
 export const DEBOUNCE_RATE = 1000; // 1s
 export const DEBOUNCE_RATE_SLOW = 2000; // 2s
 
-const otherEndpoints = {
-  protein: 'uniprot',
-  structure: 'pdb',
-  proteome: 'uniprot',
-  taxonomy: 'uniprot',
-  set: 'all',
-};
-const isDescriptionValid = description => {
-  try {
-    descriptionToDescription(description);
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
 /*:: type Props = {
   pageSize?: number,
   main: ?string,
@@ -91,53 +74,20 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
       this.setState({ loading: false });
     }
   }
-  routerPush = replace => {
+  routerPush = (replace) => {
     const { pageSize, shouldRedirect } = this.props;
     const query /*: { page: number, page_size?: number } */ = { page: 1 };
     if (pageSize) query.page_size = pageSize;
     const value = this.state.localValue
       ? this.state.localValue.trim()
       : this.state.localValue;
-    const directLinkDescription = {
-      main: { key: 'entry' },
-      entry: {
-        accession: value,
-        db: 'InterPro',
-      },
-    };
     if (shouldRedirect) {
-      // First check for exact match in InterPro
-      if (isDescriptionValid(directLinkDescription)) {
+      const directLinkDescription = getURLByAccession(value);
+      if (directLinkDescription) {
         this.props.goToCustomLocation({
           description: directLinkDescription,
         });
         return;
-      }
-      // Then for exact match in other member DBs
-      for (const db of ENTRY_DBS) {
-        directLinkDescription.entry.db = db;
-        if (isDescriptionValid(directLinkDescription)) {
-          this.props.goToCustomLocation({
-            description: directLinkDescription,
-          });
-          return;
-        }
-      }
-      // Then cehcking other endpoints
-      for (const [ep, db] of Object.entries(otherEndpoints)) {
-        const directEndpointLinkDescription = {
-          main: { key: ep },
-          [ep]: {
-            accession: value,
-            db,
-          },
-        };
-        if (isDescriptionValid(directEndpointLinkDescription)) {
-          this.props.goToCustomLocation({
-            description: directEndpointLinkDescription,
-          });
-          return;
-        }
       }
     }
     // Finally just trigger a search
@@ -156,7 +106,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
     );
   };
 
-  handleKeyPress = target => {
+  handleKeyPress = (target) => {
     const enterKey = 13;
     if (target.charCode === enterKey) {
       this.routerPush();
@@ -192,13 +142,10 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.main.key,
-  state => state.customLocation.description.search.value,
-  state => state.customLocation.search.page_size,
+  (state) => state.customLocation.description.main.key,
+  (state) => state.customLocation.description.search.value,
+  (state) => state.customLocation.search.page_size,
   (main, value, pageSize) => ({ main, value, pageSize }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(TextSearchBox);
+export default connect(mapStateToProps, { goToCustomLocation })(TextSearchBox);
