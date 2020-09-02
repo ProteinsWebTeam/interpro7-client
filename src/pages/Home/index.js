@@ -3,6 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import config from 'config';
+
 import loadable from 'higherOrder/loadable';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
@@ -203,6 +205,37 @@ class Home extends PureComponent {
             settingsName="showSettingsToast"
           />
         ) : null}
+        {this.props.showHelpToast ? (
+          <Tip
+            body={
+              <>
+                <p>
+                  You can find all the documentation of our website in{' '}
+                  <Link
+                    href={config.root.readthedocs.href}
+                    className={f('ext')}
+                    target="_blank"
+                  >
+                    Read The Docs
+                  </Link>
+                </p>
+                <p>
+                  If you need help about the components of the home page you can
+                  visit{' '}
+                  <Link
+                    href={`${config.root.readthedocs.href}homepage.html`}
+                    className={f('ext')}
+                    target="_blank"
+                  >
+                    [this page].
+                  </Link>
+                </p>
+              </>
+            }
+            toastID="rtdhelp"
+            settingsName="showHelpToast"
+          />
+        ) : null}
         <GeneralWarning />
 
         <div className={f('row')}>
@@ -344,7 +377,8 @@ class Home extends PureComponent {
 
 const mapStateToProps = createSelector(
   (state) => state.settings.notifications.showSettingsToast,
-  (showSettingsToast) => ({ showSettingsToast }),
+  (state) => state.settings.notifications.showHelpToast,
+  (showSettingsToast, showHelpToast) => ({ showSettingsToast, showHelpToast }),
 );
 
 export default connect(mapStateToProps)(Home);
