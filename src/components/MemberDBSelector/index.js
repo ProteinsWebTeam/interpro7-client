@@ -8,6 +8,7 @@ import { noop, get as _get } from 'lodash-es';
 import config from 'config';
 
 import NumberComponent from 'components/NumberComponent';
+import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
@@ -328,7 +329,10 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
           {children ? children(visible) : null}
         </span>
         <div className={f('potential-popup', { popup: children, visible })}>
-          <div className={f('filter-label')}>Select your database:</div>
+          <div className={f('filter-label')}>
+            <TooltipAndRTDLink rtdPage="searchways.html#using-browse-feature-to-search-and-filter-interpro" />{' '}
+            Select your database:
+          </div>
           <form
             className={f('db-selector', { 'one-column': !children })}
             onChange={handleChange}

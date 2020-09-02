@@ -2,6 +2,7 @@ import React from 'react';
 import T from 'prop-types';
 import { foundationPartial } from 'styles/foundation';
 
+import config from 'config';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 import Link from 'components/generic/Link';
@@ -11,7 +12,8 @@ const f = foundationPartial(style, fonts);
 const helpTopics = {
   InterProScan: {
     documentation: {
-      to: { description: { other: ['help', 'documentation'] } },
+      href: `${config.root.readthedocs.href}searchways.html#sequence-search`,
+      target: '_blank',
     },
     training: {
       href:
@@ -21,12 +23,13 @@ const helpTopics = {
   },
   IDA: {
     documentation: {
-      to: { description: { other: ['about', 'ida'] } },
+      href: `${config.root.readthedocs.href}searchways.html#domain-architecture-search`,
+      target: '_blank',
     },
   },
   TextSearch: {
     documentation: {
-      href: 'http://www.ebi.ac.uk/ebisearch/documentation.ebi',
+      href: `${config.root.readthedocs.href}searchways.html#text-search`,
       target: '_blank',
     },
   },

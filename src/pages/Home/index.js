@@ -193,6 +193,7 @@ const Announcement = () => (
 class Home extends PureComponent {
   static propTypes = {
     showSettingsToast: T.bool.isRequired,
+    showHelpToast: T.bool.isRequired,
   };
 
   render() {
@@ -210,6 +211,10 @@ class Home extends PureComponent {
             body={
               <>
                 <p>
+                  <span
+                    className={f('icon', 'icon-common', 'font-l')}
+                    data-icon="&#xf02d;"
+                  />{' '}
                   You can find all the documentation of our website in{' '}
                   <Link
                     href={config.root.readthedocs.href}
