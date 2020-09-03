@@ -25,6 +25,10 @@ exports[`<MemberDBSelector /> should render 1`] = `
     <div
       className="filter-label"
     >
+      <TooltipAndRTDLink
+        rtdPage="searchways.html#using-browse-feature-to-search-and-filter-interpro"
+      />
+       
       Select your database:
     </div>
     <form

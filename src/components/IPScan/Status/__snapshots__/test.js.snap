@@ -8,6 +8,10 @@ exports[`<IPScanStatus /> should render 1`] = `
     className="light"
   >
     Your InterProScan Search Results
+     
+    <TooltipAndRTDLink
+      rtdPage="searchways.html#sequence-search-results"
+    />
   </h3>
   <p
     className="info"
