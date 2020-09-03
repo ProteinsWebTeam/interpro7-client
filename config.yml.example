@@ -5,8 +5,8 @@ root:
   EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
   IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
   genome3d: //www.genome3d.eu/api/v1/
-  readthedocs: //interpro-documentation.readthedocs.io/en/dev/
   wikipedia: https://en.wikipedia.org/w/api.php
+  readthedocs: //interpro-documentation.readthedocs.io/en/latest/
 
 title: InterPro
 
@@ -23,7 +23,7 @@ github:
   ReadTheDocs:
     owner: ProteinsWebTeam
     repo: interpro-docs
-    branch: dev
+    branch: latest
 
 IPScan:
   contactEmail: example@example.com
@@ -42,6 +42,7 @@ pages:
       - interactions
       - pathways
       - genome3d
+      - curation
   protein:
     subPages:
       - entry

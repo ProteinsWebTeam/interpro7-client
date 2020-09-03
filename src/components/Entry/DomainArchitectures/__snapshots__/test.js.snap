@@ -75,7 +75,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
               "description": Object {
                 "entry": Object {
                   "accession": "IPR000001",
-                  "db": "InterPro",
+                  "db": "pfam",
                 },
                 "main": Object {
                   "key": "protein",

@@ -6,6 +6,7 @@ import Link from 'components/generic/Link';
 import DownloadTable from 'components/IPScan/DownloadTable';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
+import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -31,7 +32,10 @@ class Download extends PureComponent /*:: <{}> */ {
             <Helmet>
               <title>Download</title>
             </Helmet>
-            <h3>Download</h3>
+            <h3>
+              Download{' '}
+              <TooltipAndRTDLink rtdPage="download.html#download-page" />
+            </h3>
             <SchemaOrgData
               data={{
                 name: 'InterPro Download Page',

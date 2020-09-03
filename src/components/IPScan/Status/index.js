@@ -10,6 +10,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import RefreshButton from 'components/IPScan/RefreshButton';
 import ImportResultSearch from 'components/IPScan/ImportResultSearch';
 import Actions from 'components/IPScan/Actions';
+import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 
 import { format } from 'url';
@@ -97,7 +98,10 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
     );
     return (
       <div className={f('row', 'columns')}>
-        <h3 className={f('light')}>Your InterProScan Search Results</h3>
+        <h3 className={f('light')}>
+          Your InterProScan Search Results{' '}
+          <TooltipAndRTDLink rtdPage="searchways.html#sequence-search-results" />
+        </h3>
         <p className={f('info')}>
           Your InterProScan search results are listed below. Each search may run
           for different time. You can navigate to other pages if you prefer.

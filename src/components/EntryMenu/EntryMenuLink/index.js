@@ -35,6 +35,7 @@ const icons = new Map([
   ['Signature', { icon: undefined, class: 'icon-count-hmm' }],
   ['Alignments', { icon: '\uF1DE', class: 'icon-common' }],
   ['Sequence', { icon: '\uF120', class: 'icon-common' }],
+  ['Curation', { icon: undefined, class: 'icon-common' }],
 ]);
 
 export const EntryMenuLinkWithoutData = (
@@ -192,6 +193,13 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
         payload.metadata.source_database.toLowerCase() !== 'interpro'
       ) {
         value = null;
+      }
+
+      if (
+        name === 'Curation' &&
+        payload.metadata.source_database.toLowerCase() === 'pfam'
+      ) {
+        value = NaN;
       }
     }
 
