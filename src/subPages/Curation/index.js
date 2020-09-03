@@ -2,9 +2,13 @@
 import React from 'react';
 import T from 'prop-types';
 
-import Loading from 'components/SimpleCommonComponents/Loading';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+
+import config from 'config';
+
+import Loading from 'components/SimpleCommonComponents/Loading';
+import Link from 'components/generic/Link';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
@@ -24,6 +28,7 @@ const CurationSubPage = ({ data }) => {
   const { loading, payload } = data;
 
   if (loading) return <Loading />;
+  // eslint-disable-next-line camelcase
   const details = payload?.extra_fields.details;
 
   return (
@@ -93,11 +98,16 @@ const CurationSubPage = ({ data }) => {
           <tr>
             <td>Download</td>
             <td>
-              <a
-                href={`https://pfam.xfam.org/family/${payload.metadata.accession}/hmm`}
+              <Link
+                href={`${config.root.API.href}/entry/pfam/${payload?.metadata?.accession}?annotation=hmm`}
+                download={`${payload?.metadata?.accession || 'download'}.hmm`}
               >
+                <span
+                  className={f('icon', 'icon-common', 'icon-download')}
+                  data-icon="&#xf019;"
+                />{' '}
                 Download
-              </a>{' '}
+              </Link>{' '}
               the raw HMM for this family
             </td>
           </tr>
