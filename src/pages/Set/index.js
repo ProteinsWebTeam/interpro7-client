@@ -14,6 +14,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
   Card,
+  HighlightToggler,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -242,12 +243,6 @@ const SetCard = (
     entryDB,
   } /*: {data: Object, search: string, entryDB: string} */,
 ) => {
-  const preferredName =
-    data.metadata.source_database === 'pfam' &&
-    data.extra_fields &&
-    data.extra_fields.description
-      ? data.extra_fields.description
-      : data.metadata.name;
   return (
     <>
       <div className={f('card-header')}>
@@ -264,7 +259,10 @@ const SetCard = (
                 },
               }}
             >
-              <HighlightedText text={preferredName} textToHighlight={search} />
+              <HighlightedText
+                text={data.metadata.name}
+                textToHighlight={search}
+              />
             </Link>
           </h6>
         </div>
@@ -453,6 +451,7 @@ class List extends PureComponent /*:: <ListProps> */ {
               )}
             </Card>
             <SearchBox loading={isStale}>Search entry sets</SearchBox>
+            <HighlightToggler />
             <Column
               dataKey="accession"
               // eslint-disable-next-line camelcase
@@ -496,33 +495,25 @@ class List extends PureComponent /*:: <ListProps> */ {
                   // eslint-disable-next-line camelcase
                   source_database: db,
                 } /*: {accession: string, source_database: string} */,
-                extra,
-              ) => {
-                const preferredName =
-                  db === 'pfam' && extra && extra.description
-                    ? extra.description
-                    : name;
-
-                return (
-                  <Link
-                    to={(customLocation) => ({
-                      ...customLocation,
-                      description: {
-                        main: { key: 'set' },
-                        set: {
-                          db,
-                          accession,
-                        },
+              ) => (
+                <Link
+                  to={(customLocation) => ({
+                    ...customLocation,
+                    description: {
+                      main: { key: 'set' },
+                      set: {
+                        db,
+                        accession,
                       },
-                    })}
-                  >
-                    <HighlightedText
-                      text={preferredName}
-                      textToHighlight={search.search}
-                    />
-                  </Link>
-                );
-              }}
+                    },
+                  })}
+                >
+                  <HighlightedText
+                    text={name}
+                    textToHighlight={search.search}
+                  />
+                </Link>
+              )}
             >
               Name
             </Column>

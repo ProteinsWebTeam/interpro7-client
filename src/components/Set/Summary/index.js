@@ -9,6 +9,7 @@ import Accession from 'components/Accession';
 import Description from 'components/Description';
 import { BaseLink } from 'components/ExtLink';
 import { setDBs } from 'utils/processDescription/handlers';
+import Literature from 'components/Entry/Literature';
 
 import ClanViewer from 'clanviewer';
 import 'clanviewer/css/clanviewer.css';
@@ -61,6 +62,46 @@ export const schemaProcessData = (
       }),
   },
 });
+
+const SetLiterature = ({ literature }) => {
+  if (!literature) return null;
+  const literatureEntries = literature.map((ref) => [ref.PMID, ref]);
+  return (
+    <>
+      <h4>Literature</h4>
+      <Literature extra={literatureEntries} />
+    </>
+  );
+};
+SetLiterature.propTypes = {
+  literature: T.array,
+};
+
+const SetDescription = ({ accession, description }) => {
+  if (!accession || !description) return null;
+  return (
+    <>
+      <h4>Description</h4>
+      <Description textBlocks={[description]} accession={accession} />
+    </>
+  );
+};
+SetDescription.propTypes = {
+  accession: T.string,
+  description: T.string,
+};
+const SetAuthors = ({ authors }) => {
+  if (!authors) return null;
+  return (
+    <tr>
+      <td>Authors</td>
+      <td data-testid="set-type">{authors.join(', ')}</td>
+    </tr>
+  );
+};
+SetAuthors.propTypes = {
+  authors: T.arrayOf(T.string),
+};
 
 class SummarySet extends PureComponent /*:: <Props, State> */ {
   /*::
@@ -147,7 +188,6 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
             id: '',
           }
         : this.props.data.metadata;
-    // const { currentSet } = this.props;
     let currentSet = null;
     if (metadata.source_database) {
       for (const db of setDBs) {
@@ -157,7 +197,6 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
         metadata.description = metadata.name.name;
     }
 
-    // const currentSet = setDBs
     return (
       <div className={f('sections')}>
         <section>
@@ -181,17 +220,14 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
                     </td>
                     <td>{currentSet?.dbName || metadata.source_database}</td>
                   </tr>
+                  <SetAuthors authors={metadata.authors} />
                 </tbody>
               </table>
-              {metadata.description && (
-                <>
-                  <h4>Description</h4>
-                  <Description
-                    textBlocks={[metadata.description]}
-                    accession={metadata.accession}
-                  />
-                </>
-              )}
+              <SetDescription
+                accession={metadata.accession}
+                description={metadata?.description}
+              />
+              <SetLiterature literature={metadata?.literature} />
               {metadata.relationships &&
                 metadata.relationships.nodes &&
                 metadata.relationships.nodes.map((m) => (

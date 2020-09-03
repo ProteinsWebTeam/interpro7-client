@@ -23,6 +23,7 @@ import ContributingSignatures from 'components/Entry/ContributingSignatures';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 
 import loadData from 'higherOrder/loadData';
 import getUrlFor from 'utils/url-patterns';
@@ -126,7 +127,6 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
   const url = getUrlFor(metadata.source_database);
   const { protocol, hostname, port, root } = api;
 
-  const [isOpen, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
 
@@ -165,7 +165,6 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
       );
       setMessage('');
       setEmail('');
-      setOpen(false);
     });
   };
 
@@ -182,30 +181,17 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
   return (
     <div className={f('medium-4', 'large-4', 'columns')}>
       <div>
-        <div
-          className={f('button-group', 'dropdown-container')}
-          style={{ display: 'flex' }}
+        <Tooltip
+          title={
+            'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
+            'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
+            'helpful if you can include literature references supporting your annotation suggestion.'
+          }
         >
-          <button
-            className={f('button', 'dropdown')}
-            onClick={() => setOpen(!isOpen)}
-          >
-            <Tooltip
-              title={
-                'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
-                'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
-                'helpful if you can include literature references supporting your annotation suggestion.'
-              }
-            >
-              <i className={f('icon', 'icon-common')} data-icon="&#xf303;" />{' '}
-              Add your annotation
-            </Tooltip>
-          </button>
-          <div
-            className={f('dropdown-pane', 'dropdown-content')}
-            style={{
-              transform: `scaleY(${isOpen ? 1 : 0})`,
-            }}
+          <DropDownButton
+            label="Add your annotation"
+            icon="&#xf303;"
+            extraClasses={f('annotation')}
           >
             <form onSubmit={handleSubmit}>
               <label htmlFor="message">Your annotation</label>
@@ -231,8 +217,8 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
                 Clear
               </button>
             </form>
-          </div>
-        </div>
+          </DropDownButton>
+        </Tooltip>
       </div>
       {metadata.integrated && <Integration intr={metadata.integrated} />}
       {metadata.source_database.toLowerCase() !== 'interpro' && (

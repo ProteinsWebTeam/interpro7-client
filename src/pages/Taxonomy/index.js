@@ -23,6 +23,7 @@ import Table, {
   SearchBox,
   PageSizeSelector,
   Exporter,
+  HighlightToggler,
 } from 'components/Table';
 import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -587,6 +588,7 @@ class List extends PureComponent /*:: <Props,State> */ {
               )}
             </Card>
             <SearchBox loading={isStale}>Search taxonomy</SearchBox>
+            <HighlightToggler />
             <Column
               dataKey="accession"
               renderer={(accession /*: string */, row) => (

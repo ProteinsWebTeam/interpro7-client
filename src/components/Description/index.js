@@ -39,13 +39,13 @@ const Citations = (
         return null;
       }
       const pubId = citMatch[1];
-      const refCounter = literature.map(d => d[0]).indexOf(pubId) + 1;
+      const refCounter = literature.map((d) => d[0]).indexOf(pubId) + 1;
       return (
         <Link
           key={cita}
           id={withoutIDs ? null : `description-${refCounter}`}
           className={f('text-high')}
-          to={customLocation => {
+          to={(customLocation) => {
             const key = customLocation.description.main.key;
             return {
               ...customLocation,
@@ -182,7 +182,7 @@ export const Paragraph = (
         // TODO: change the way descriptions work from the backend side.
         return (
           <div
-            className={styles.inline}
+            className={f('inline')}
             key={i}
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
@@ -227,7 +227,7 @@ class Description extends PureComponent /*:: <Props> */ {
   render() {
     const { textBlocks, literature, accession, withoutIDs } = this.props;
     const paragraphs = textBlocks.reduce((acc, e) => {
-      transformFormatted(e).forEach(p => acc.push(p));
+      transformFormatted(e).forEach((p) => acc.push(p));
       return acc;
     }, []);
     return (

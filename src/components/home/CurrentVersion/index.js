@@ -18,9 +18,9 @@ const f = foundationPartial(local);
 export const CurrentVersion = (
   { data } /*: {data: {loading: boolean, payload: Object}} */,
 ) => {
-  if (!data) return <Loading />;
+  if (!data) return <Loading inline={true} />;
   const { loading, payload } = data;
-  if (loading || !payload) return <Loading />;
+  if (loading || !payload) return <Loading inline={true} />;
   const current = Object.entries(payload).sort(([_, dateA], [__, dateB]) =>
     new Date(dateA).getTime() > new Date(dateB).getTime() ? -1 : 1,
   )[0][0];
@@ -49,8 +49,8 @@ CurrentVersion.propTypes = {
 };
 
 const getReleaseNotesUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.other,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.other,
   ({ protocol, hostname, port, root }) =>
     cleanUpMultipleSlashes(
       format({

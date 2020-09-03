@@ -5,6 +5,7 @@ root:
   EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
   IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
   genome3d: //www.genome3d.eu/api/v1/
+  readthedocs: //interpro-documentation.readthedocs.io/en/dev/
   wikipedia: https://en.wikipedia.org/w/api.php
 
 title: InterPro
@@ -19,6 +20,10 @@ github:
   IPScan:
     owner: ebi-pf-team
     repo: interproscan
+  ReadTheDocs:
+    owner: ProteinsWebTeam
+    repo: interpro-docs
+    branch: dev
 
 IPScan:
   contactEmail: example@example.com

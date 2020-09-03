@@ -1,3 +1,5 @@
+@import '../../styles/colors.css';
+
 .ida-logo {
   margin-left: 40px;
   margin-bottom: 10px;
@@ -5,4 +7,12 @@
 
 .ipscan-logo {
   margin-bottom: 2px;
+}
+
+.citing-details {
+  color: var(--colors-dark);
+  & summary {
+    font-size: 1.3em;
+    cursor: pointer;
+  }
 }

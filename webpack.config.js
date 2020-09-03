@@ -109,7 +109,7 @@ const getConfigFor = (env, mode, module = false) => {
             {
               loader: 'worker-loader',
               options: {
-                name: path.join(
+                filename: path.join(
                   'js',
                   'workers',
                   `[folder].${name}.[name].[hash:3].worker.js`

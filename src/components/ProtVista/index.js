@@ -1,8 +1,11 @@
-import React, { Component, Children } from 'react';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
 
+import ProtVistaOptions from './Options';
+import ProtVistaPopup from './Popup';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
@@ -15,45 +18,29 @@ import ProtVistaColouredSequence from 'protvista-coloured-sequence';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 import ProtvistaTrack from 'protvista-track';
-import ProtvistaSaver from 'protvista-saver';
 import ProtvistaZoomTool from 'protvista-zoom-tool';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
-import ReactToPrint from 'react-to-print';
-import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
-import fonts from 'EBI-Icon-fonts/fonts.css';
 import spinner from 'components/SimpleCommonComponents/Loading/style.css';
 import PopperJS from 'popper.js';
-
-import { Exporter } from 'components/Table';
 
 import loadWebComponent from 'utils/load-web-component';
 
 import loadData from 'higherOrder/loadData';
-import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
-import { changeSettingsRaw } from 'actions/creators';
+import { goToCustomLocation } from 'actions/creators';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
-
-import foundationCSS from 'foundation-sites/dist/css/foundation-float.css';
-import foundationCSSasText from '!!raw-loader!foundation-sites/dist/css/foundation-float.css';
 import ipro from 'styles/interpro-new.css';
-import iproCSSasText from '!!raw-loader!styles/interpro-new.css';
-import fontCSS from '!!raw-loader!styles/fonts.css';
-import colorsCSS from '!!raw-loader!styles/colors.css';
 import localCSS from './style.css';
-import localCSSasText from '!!raw-loader!./style.css';
-import ebiGlobalCSS from '!!raw-loader!ebi-framework/css/ebi-global.css';
-import globalCSS from '!!raw-loader!styles/global.css';
 
-const f = foundationPartial(ipro, localCSS, fonts, spinner);
+const f = foundationPartial(ipro, localCSS, spinner);
 
 const webComponents = [];
 
 const TOOLTIP_DELAY = 500;
-const ONE_SEC = 1000;
 
 const loadProtVistaWebComponents = () => {
   if (!webComponents.length) {
@@ -86,10 +73,6 @@ const loadProtVistaWebComponents = () => {
     );
 
     webComponents.push(
-      loadWebComponent(() => ProtvistaSaver).as('protvista-saver'),
-    );
-
-    webComponents.push(
       loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
     );
 
@@ -102,45 +85,20 @@ const loadProtVistaWebComponents = () => {
   return Promise.all(webComponents);
 };
 
-const removeAllChildrenFromNode = (node) => {
-  if (node.lastChild) {
-    node.removeChild(node.lastChild);
-    removeAllChildrenFromNode(node);
-  }
-};
-
-const COLOR_SCALE_WIDTH = 80;
-const COLOR_SCALE_HEIGHT = 20;
-const getColorScaleHTML = (
-  { domain, range },
-  width = COLOR_SCALE_WIDTH,
-  height = COLOR_SCALE_HEIGHT,
-) => `
-<div class="color-scale">
-  <span>${domain[0]}</span>
-  <svg height="${height}" width="${width}">
-  <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:${range[0]};" />
-      <stop offset="100%" style="stop-color:${range[1]};" />
-    </linearGradient>
-  </defs>
-    <rect width="100%" height="${height}" fill="url(#grad1)"/>
-  </svg>
-  <span>${domain[1]}</span>
-</div>`;
-
 /*:: type Props = {
   protein: Object,
   data: Array<Object>,
   dataDB: Object,
   colorDomainsBy: string,
-  changeSettingsRaw: function,
   fetchConservation: function,
   title: string,
   fixedHighlight: string,
   id: string,
+  showOptions: boolean,
   showConservationButton: boolean,
+  handleConservationLoad: function,
+  goToCustomLocation: function,
+  children: any,
 }; */
 
 /*:: type State = {
@@ -150,20 +108,24 @@ const getColorScaleHTML = (
   collapsed: boolean,
   label: Object,
   addLabelClass: string,
-  showConservationButtonButton: boolean,
+  enableTooltip: boolean,
+  showLoading: boolean,
+  overPopup: boolean,
 }; */
-class ProtVista extends Component /*:: <Props, State> */ {
+export class ProtVista extends Component /*:: <Props, State> */ {
   static propTypes = {
     protein: T.object,
     data: T.array,
     dataDB: T.object,
     colorDomainsBy: T.string,
-    changeSettingsRaw: T.func,
     title: T.string,
     fixedHighlight: T.string,
     id: T.string,
+    showOptions: T.bool,
     showConservationButton: T.bool,
     handleConservationLoad: T.func,
+    goToCustomLocation: T.func,
+    customLocation: T.object,
     children: T.any,
   };
 
@@ -184,7 +146,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
       },
       addLabelClass: '',
       enableTooltip: true,
-      dropdownOpen: false,
       showLoading: false,
       overPopup: false,
     };
@@ -195,7 +156,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this._protvistaRef = React.createRef();
     this._webProteinRef = React.createRef();
     this._hydroRef = React.createRef();
-    this._labelOptionsRef = React.createRef();
     this._conservationTrackRef = React.createRef();
     this._isPopperTop = true;
     this._timeoutID = 0;
@@ -207,37 +167,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
     this._webProteinRef.current.data = protein;
     this._hydroRef.current.data = protein;
     this.updateTracksWithData(data);
-    this._hydroRef.current.addEventListener('change', ({ detail }) => {
-      if (detail.feature) {
-        this._popperRef.current.classList.remove(f('hide'));
-        removeAllChildrenFromNode(this._popperContentRef.current);
-        const range = document.createRange();
-        range.selectNode(document.getElementsByTagName('div').item(0));
-        const element = range.createContextualFragment(`
-        <section>
-          <h6>Residue ${detail.feature.start}: ${detail.feature.aa}</h6>
-          <div>
-            <b>Hydrophobicity:</b> ${detail.feature.value}<br/>
-            <b>Scale:</b> ${getColorScaleHTML(
-              this._hydroRef.current.colorScale,
-            )}<br/>
-          </div>
-        </section>
-        `);
-        this._popperContentRef.current.appendChild(element);
-        this._isPopperTop = !this._isPopperTop;
-        const rect = this._hydroRef.current.querySelector(
-          `.base_bg[data-pos="${detail.feature.start}"]`,
-        );
-        this.popper = new PopperJS(rect, this._popperRef.current, {
-          placement: this._isPopperTop ? 'top' : 'bottom',
-          applyStyle: { enabled: false },
-        });
-      } else if (this.popper) {
-        this.popper.destroy();
-        this._popperRef.current.classList.add(f('hide'));
-      }
-    });
+    this._hydroRef.current.addEventListener('change', this._handleTrackChange);
     if (this._popperContentRef.current) {
       this._popperContentRef.current.addEventListener('mouseover', () =>
         this.setState({ overPopup: true }),
@@ -246,41 +176,6 @@ class ProtVista extends Component /*:: <Props, State> */ {
         this.setState({ overPopup: false }),
       );
     }
-
-    const saver = document.querySelector(`#${this.props.id}Saver`);
-
-    saver.preSave = () => {
-      const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
-      // Including the styles of interpro-type elements
-      base.querySelectorAll('interpro-type').forEach((el) => {
-        el.innerHTML = el.shadowRoot.innerHTML;
-      });
-      const style = document.createElement('style');
-      style.setAttribute('id', 'tmp_style');
-      // TODO it needs to be changed in an efficient way through webpack
-      let str = localCSSasText + iproCSSasText + foundationCSSasText;
-      const cssStyles = [localCSS, ipro, foundationCSS];
-      cssStyles.forEach((item) => {
-        Object.keys(item).forEach((key) => {
-          str = str.replace(
-            new RegExp(`\\.${key}([:,[.\\s])`, 'gm'),
-            `.${item[key]}$1`,
-          );
-        });
-      });
-
-      str = str + ebiGlobalCSS + globalCSS + fontCSS + colorsCSS;
-      style.innerHTML = `${str}`;
-      base.appendChild(style);
-    };
-    // removes the added style from the DOM
-    saver.postSave = () => {
-      const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
-      base.removeChild(document.getElementById('tmp_style'));
-      base.querySelectorAll('interpro-type').forEach((el) => {
-        el.innerHTML = '';
-      });
-    };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -366,48 +261,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
         if (isNewElement) {
           this.web_tracks[d.accession].addEventListener(
             'change',
-            ({ detail }) => {
-              if (detail) {
-                switch (detail.eventtype) {
-                  case 'click':
-                    this.handleCollapseLabels(detail.feature.accession);
-                    break;
-                  case 'mouseout':
-                    this._timeoutID = setInterval(() => {
-                      if (this.state.overPopup) return;
-                      clearInterval(this._timeoutID);
-                      removeAllChildrenFromNode(this._popperContentRef.current);
-                      this.popper.destroy();
-                      this._popperRef.current.classList.add(f('hide'));
-                      this._timeoutID = 0;
-                    }, TOOLTIP_DELAY);
-                    break;
-                  case 'mouseover':
-                    if (this.state.enableTooltip) {
-                      if (this._timeoutID > 0) {
-                        clearInterval(this._timeoutID);
-                      }
-                      this._popperRef.current.classList.remove(f('hide'));
-                      removeAllChildrenFromNode(this._popperContentRef.current);
-                      this._popperContentRef.current.appendChild(
-                        this.getElementFromDetail(detail),
-                      );
-                      this._isPopperTop = !this._isPopperTop;
-                      this.popper = new PopperJS(
-                        detail.target,
-                        this._popperRef.current,
-                        {
-                          placement: this._isPopperTop ? 'top' : 'bottom',
-                          applyStyle: { enabled: false },
-                        },
-                      );
-                    }
-                    break;
-                  default:
-                    break;
-                }
-              }
-            },
+            this._handleTrackChange,
           );
         }
         this.setObjectValueInState(
@@ -419,6 +273,56 @@ class ProtVista extends Component /*:: <Props, State> */ {
       this.setObjectValueInState('hideCategory', type[0], false);
     }
   }
+
+  _handleTrackChange = ({ detail }) => {
+    if (detail) {
+      switch (detail.eventtype) {
+        case 'click':
+          this.handleCollapseLabels(detail.feature.accession);
+          break;
+        case 'mouseout':
+          this._timeoutID = setInterval(() => {
+            if (this.state.overPopup) return;
+            clearInterval(this._timeoutID);
+            this.popper.destroy();
+            this._popperRef.current.classList.add(f('hide'));
+            this._timeoutID = 0;
+          }, TOOLTIP_DELAY);
+          break;
+        case 'mouseover':
+          if (this.state.enableTooltip) {
+            if (this._timeoutID > 0) {
+              clearInterval(this._timeoutID);
+            }
+            this._popperRef.current.classList.remove(f('hide'));
+            const sourceDatabase = this._getSourceDatabaseDisplayName(
+              detail.feature,
+              this.props?.dataDB?.payload?.databases,
+            );
+            render(
+              <ProtVistaPopup
+                detail={detail}
+                sourceDatabase={sourceDatabase}
+                data={this.props.data}
+                currentLocation={this.props.customLocation}
+                // Need to pass it from here because it rendered out of the redux provider
+                goToCustomLocation={this.props.goToCustomLocation}
+              />,
+              this._popperContentRef.current,
+            );
+
+            this._isPopperTop = !this._isPopperTop;
+            this.popper = new PopperJS(detail.target, this._popperRef.current, {
+              placement: this._isPopperTop ? 'top' : 'bottom',
+              applyStyle: { enabled: false },
+            });
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  };
 
   _getSourceDatabaseDisplayName = (entry, databases) => {
     let sourceDatabase = '';
@@ -438,268 +342,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
     return sourceDatabase;
   };
 
-  _getMobiDBLiteType = (entry) => {
-    let type = null;
-    if (entry.locations && entry.locations.length > 0) {
-      if (entry.locations[0].seq_feature) {
-        type = entry.locations[0].seq_feature;
-      }
-    }
-    return type;
-  };
-
-  _getSecondaryStructureType = (entry) => {
-    let type = null;
-    if (entry.locations && entry.locations.length > 0) {
-      if (entry.locations[0].fragments && entry.locations[0].fragments[0]) {
-        const shape = entry.locations[0].fragments[0].shape;
-        type = shape.charAt(0).toUpperCase() + shape.slice(1);
-      }
-    }
-    return type;
-  };
-
-  getHTMLStringForEntry(entry, sourceDatabase, highlightChild) {
-    let type = entry.entry_type || entry.type || '';
-    if (sourceDatabase === 'MobiDB Lite') {
-      // Handle MobiDB Lite entries
-      // TODO change how MobiDBLt entries are stored in MySQL
-      type = this._getMobiDBLiteType(entry);
-    }
-
-    if (type === 'secondary_structure') {
-      type = `Secondary Structure: ${this._getSecondaryStructureType(entry)}`;
-    }
-    let newLocations = null;
-    if (highlightChild) {
-      newLocations = highlightChild.split(',').map((loc) => {
-        const [start, end] = loc.split(':');
-        return { fragments: [{ start, end }] };
-      });
-    }
-
-    return this.getHTMLString(
-      {
-        ...entry,
-        locations: newLocations || entry.locations,
-        type,
-        sourceDatabase,
-      },
-      entry.source_database === 'interpro',
-    );
-  }
-
-  getHTMLStringForResidue(entry, sourceDatabase) {
-    const residue = entry.currentResidue;
-    return this.getHTMLString(
-      {
-        ...entry,
-        ...residue,
-        residue: residue.residue || residue.residues,
-        sourceDatabase,
-        description: residue.description || residue.location.description,
-      },
-      false,
-      true,
-    );
-  }
-
-  // eslint-disable-next-line complexity
-  getHTMLString(
-    {
-      accession,
-      sourceDatabase,
-      description,
-      name,
-      entry,
-      locations,
-      type,
-      start,
-      end,
-      residue,
-      score,
-      scale,
-      confidence,
-    },
-    isInterPro = false,
-    isResidue = false,
-  ) {
-    const scaleComponent = scale
-      ? getColorScaleHTML({
-          domain: [scale[0].min, scale[scale.length - 1].max],
-          range: [scale[0].color, scale[scale.length - 1].color],
-        })
-      : '';
-    return `
-      <section>
-        <h6>
-          ${accession}
-          ${description ? `<br/>[${description}]` : ''}
-         </h6>
-
-        ${name && !isResidue ? `<h4>${name}</h4>` : ''}
-
-        <!-- use class as Protvista is not react-->
-        <div class="${f('pop-wrapper')}" >
-          <div>${
-            isInterPro
-              ? `<interpro-type
-                      type="${type.replace('_', ' ')}"
-                      dimension="1.4em"
-                      aria-label="Entry type"
-                    />`
-              : ''
-          }
-          </div>
-          <div>
-            ${isResidue ? 'Residue in ' : ''}
-            ${sourceDatabase} ${type ? type.replace('_', ' ') : ''}
-          </div>
-        </div>
-        <p>
-          <small>
-            ${entry ? `(${entry})` : ''}
-          </small>
-        </p>
-        <ul>
-          ${
-            isResidue
-              ? `
-            <li>Position: ${start}</li>
-            <li>Residue: ${residue}</li>
-            `
-              : ''
-          }
-          ${
-            !isResidue && locations
-              ? locations
-                  .map(({ fragments, model_acc: model }) =>
-                    `
-            <li>
-            <!--location:-->
-              ${model && model !== accession ? `Model: ${model}` : ''}
-              <ul>
-                ${
-                  fragments
-                    ? fragments
-                        .map(({ start, end }) =>
-                          `
-                  <li>${start} - ${end}</li>
-                `.trim(),
-                        )
-                        .join('')
-                    : ''
-                }
-              </ul>
-            </li>
-          `.trim(),
-                  )
-                  .join('')
-              : ''
-          }
-        </ul>
-        <p>
-          ${start && end ? `${start} - ${end}` : ''}
-        </p>
-        ${score ? `<p>Conservation : ${score}</p>` : ''}
-        ${confidence ? `<p>Confidence: ${confidence}</p>` : ''}
-        ${scaleComponent ? `<p>Scale: ${scaleComponent}</p>` : ''}
-        </section>
-`.trim();
-  }
-
-  getConservationScore(highlight, match, scale) {
-    const start = parseInt(highlight.split(':')[0], 10);
-    const matchFragment = match.locations[0].fragments.find((fragment) => {
-      return start >= fragment.start && start <= fragment.end;
-    });
-    const scaleEntry = scale.find((element) => {
-      return matchFragment.color === element.color;
-    });
-    return `${scaleEntry.min} - ${scaleEntry.max}`;
-  }
-
-  getElementFromDetail(detail) {
-    let databases = {};
-    const { dataDB } = this.props;
-    if (!dataDB.loading && dataDB.payload) {
-      databases = dataDB.payload.databases;
-    }
-
-    let tagString;
-    if (detail.feature.type === 'sequence_conservation') {
-      const match = detail.feature;
-      const sourceDatabase =
-        match.accession in databases
-          ? databases[match.accession].name
-          : match.accession;
-      const startLocation = match.locations[0];
-      const endLocation = match.locations[match.locations.length - 1];
-      const start = startLocation.fragments[0].start;
-      const end = endLocation.fragments[endLocation.fragments.length - 1].end;
-      const matchConservation = this.props.data.find((element) => {
-        if (element[0] && element[0].toLowerCase() === 'match conservation') {
-          return element[1].find(
-            (e) => (e.type && e.type.toLowerCase()) === 'sequence_conservation',
-          );
-        }
-        return false;
-      });
-
-      const scale = matchConservation[1].find((element) => {
-        return (
-          element.type && element.type.toLowerCase() === 'sequence_conservation'
-        );
-      }).range;
-      const score = this.getConservationScore(detail.highlight, match, scale);
-      const accession = startLocation.match;
-      tagString = this.getHTMLString({
-        accession,
-        sourceDatabase,
-        start,
-        end,
-        score,
-        scale,
-      });
-    } else {
-      const entry = detail.feature;
-      const sourceDatabase = this._getSourceDatabaseDisplayName(
-        entry,
-        databases,
-      );
-
-      const isResidue =
-        detail.target && detail.target.classList.contains('residue');
-      const highlightChild =
-        detail.target &&
-        detail.target.classList.contains('child-fragment') &&
-        detail.highlight;
-      tagString = isResidue
-        ? this.getHTMLStringForResidue(entry, sourceDatabase)
-        : this.getHTMLStringForEntry(entry, sourceDatabase, highlightChild);
-    }
-    const range = document.createRange();
-    range.selectNode(document.getElementsByTagName('div').item(0));
-    return range.createContextualFragment(tagString);
-  }
-
   setObjectValueInState = (objectName, type, value) =>
     this.setState(({ [objectName]: obj }) => ({
       [objectName]: { ...obj, [type]: value },
     }));
-
-  toggleCollapseAll = () => {
-    const { collapsed } = this.state;
-    const expandedTrack = {};
-    for (const track of Object.values(this.web_tracks)) {
-      if (collapsed) track.setAttribute('expanded', true);
-      else track.removeAttribute('expanded');
-    }
-    for (const acc of Object.keys(this.state.expandedTrack)) {
-      expandedTrack[acc] = collapsed;
-    }
-    this.setState({ collapsed: !collapsed, expandedTrack });
-  };
 
   handleCollapseLabels = (accession) => {
     if (this.web_tracks[accession]) {
@@ -717,46 +363,25 @@ class ProtVista extends Component /*:: <Props, State> */ {
     }
   };
 
-  changeColor = ({ target: { value: colorMode } }) => {
-    for (const track of Object.values(this.web_tracks)) {
-      for (const d of [...track._data, ...(track._contributors || [])]) {
-        d.color = getTrackColor(d, colorMode);
-      }
-      track.refresh();
-    }
-    this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
-  };
-
-  updateLabel = (evt) => {
-    const newLabelState = { ...this.state.label };
-    newLabelState[evt.target.value] = !newLabelState[evt.target.value];
-    if (!newLabelState.accession && !newLabelState.name) {
-      newLabelState.accession = true;
-    }
+  updateLabel = (newLabelState) =>
     this.setState({
       label: newLabelState,
       addLabelClass: newLabelState.name ? 'label-by-name' : '',
     });
-    //   console.log(evt.target.value)
-    //   const items = this._labelOptionsRef.current.childNodes;
-    //   const labels = [];
-    //   items.forEach((item) => {
-    //     if (item.tagName === 'LI' && item.firstChild.checked)
-    //       labels.push(item.firstChild.value);
-    //   });
-    //   if (labels.includes('name')) {
-    //     this.setState({ addLabelClass: 'label-by-name' });
-    //     if (labels.includes('accession')) this.setState({ label: 'both' });
-    //     else this.setState({ label: 'name' });
-    //   } else {
-    //     this.setState({ label: 'accession', addLabelClass: '' });
-    //   }
-  };
+
+  updateTracksCollapseStatus = (expandedTrack) =>
+    this.setState({ expandedTrack });
+
+  toggleTooltipStatus = (status) =>
+    this.setState({
+      enableTooltip: status,
+    });
 
   renderSwitch(label, entry) {
-    const type = entry.type ? (
-      <interpro-type type={entry.type.replace('_', ' ')} dimension="1em" />
-    ) : null;
+    const type =
+      entry.source_database === 'interpro' && entry.type ? (
+        <interpro-type type={entry.type.replace('_', ' ')} dimension="1em" />
+      ) : null;
     return (
       <>
         {type}
@@ -883,234 +508,19 @@ class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
-  renderOptions(ExporterButton, length) {
-    const { collapsed } = this.state;
-    const title = this.props.title || 'Domains on protein';
-
-    return (
-      <div
-        className={f(
-          'aligned-to-track-component',
-          'view-options-wrap',
-          `${this.state.addLabelClass}`,
-        )}
-      >
-        <div className={f('view-options-title')}>{title}</div>
-        <div className={f('view-options')}>
-          <div className={f('option-fullscreen', 'font-l', 'viewer-options')}>
-            <FullScreenButton
-              element={this._mainRef.current}
-              tooltip="View the domain viewer in full screen mode"
-            />
-          </div>
-
-          <div className={f('viewer-options')}>
-            <protvista-zoom-tool
-              length={length}
-              displaystart="1"
-              displayend={length}
-            >
-              <button
-                id="zoom-in"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf0fe;"
-                title="Click to zoom in      Ctrl+Scroll"
-              />
-              <button
-                id="zoom-out"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf146;"
-                title="Click to zoom out      Ctrl+Scroll"
-              />
-            </protvista-zoom-tool>
-          </div>
-
-          <div className={f('dropdown-div')}>
-            <Tooltip title={'More options to customise the protein viewer'}>
-              <div className={f('button-group', 'dropdown-container', 'small')}>
-                <button
-                  className={f('button', 'dropdown')}
-                  onClick={() =>
-                    this.setState({ dropdownOpen: !this.state.dropdownOpen })
-                  }
-                >
-                  Options
-                </button>
-                <div
-                  className={f('dropdown-pane', 'dropdown-content', 'left')}
-                  style={{
-                    transform: `scaleY(${this.state.dropdownOpen ? 1 : 0})`,
-                  }}
-                >
-                  <ul>
-                    <li>
-                      Colour By
-                      <ul className={f('nested-list')}>
-                        <li>
-                          <label>
-                            <input
-                              type="radio"
-                              onChange={this.changeColor}
-                              value={EntryColorMode.ACCESSION}
-                              checked={
-                                this.props.colorDomainsBy ===
-                                EntryColorMode.ACCESSION
-                              }
-                            />{' '}
-                            Accession
-                          </label>
-                        </li>
-                        <li>
-                          <label>
-                            <input
-                              type="radio"
-                              onChange={this.changeColor}
-                              value={EntryColorMode.MEMBER_DB}
-                              checked={
-                                this.props.colorDomainsBy ===
-                                EntryColorMode.MEMBER_DB
-                              }
-                            />{' '}
-                            Member Database
-                          </label>
-                        </li>
-                        <li>
-                          <label>
-                            <input
-                              type="radio"
-                              onChange={this.changeColor}
-                              value={EntryColorMode.DOMAIN_RELATIONSHIP}
-                              checked={
-                                this.props.colorDomainsBy ===
-                                EntryColorMode.DOMAIN_RELATIONSHIP
-                              }
-                            />{' '}
-                            Domain Relationship
-                          </label>
-                        </li>
-                      </ul>
-                    </li>
-                    <hr />
-                    <li>
-                      Label by
-                      <ul
-                        ref={this._labelOptionsRef}
-                        className={f('nested-list')}
-                      >
-                        <li key={'accession'}>
-                          <label>
-                            <input
-                              type="checkbox"
-                              onChange={this.updateLabel}
-                              value={'accession'}
-                              checked={this.state.label.accession}
-                            />{' '}
-                            Accession
-                          </label>
-                        </li>
-                        <li key={'name'}>
-                          <label>
-                            <input
-                              type="checkbox"
-                              onChange={this.updateLabel}
-                              value={'name'}
-                              checked={this.state.label.name}
-                            />{' '}
-                            Name
-                          </label>
-                        </li>
-                      </ul>
-                    </li>
-                    <hr />
-                    <li>
-                      Snapshot
-                      <ul className={f('nested-list')}>
-                        <li>
-                          <protvista-saver
-                            element-id={`${this.props.id}ProtvistaDiv`}
-                            background-color={'#e5e5e5'}
-                            id={`${this.props.id}Saver`}
-                          >
-                            <button>
-                              <span
-                                className={f('icon', 'icon-common')}
-                                data-icon="&#xf030;"
-                              />{' '}
-                              Save as Image
-                            </button>
-                          </protvista-saver>
-                        </li>
-                        <li>
-                          <ReactToPrint
-                            trigger={() => (
-                              <button
-                                className={f('icon', 'icon-common')}
-                                data-icon="&#x50;"
-                              >
-                                {' '}
-                                Print
-                              </button>
-                            )}
-                            onBeforeGetContent={() => {
-                              this._protvistaRef.current.style =
-                                'width: 1000px;';
-                              return new Promise((resolve) => {
-                                setTimeout(() => resolve(), ONE_SEC);
-                              });
-                            }}
-                            content={() => this._protvistaRef.current}
-                            onAfterPrint={() =>
-                              (this._protvistaRef.current.style = '')
-                            }
-                          />
-                        </li>
-                      </ul>
-                    </li>
-                    <hr />
-                    <li>
-                      <button
-                        onClick={this.toggleCollapseAll}
-                        aria-label={`${
-                          collapsed ? 'Expand' : 'Collapse'
-                        } all tracks`}
-                      >
-                        {collapsed ? 'Expand' : 'Collapse'} All Tracks
-                      </button>
-                    </li>
-                    <hr />
-                    <li key={'tooltip'}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          onChange={() =>
-                            this.setState({
-                              enableTooltip: !this.state.enableTooltip,
-                            })
-                          }
-                          checked={this.state.enableTooltip}
-                        />{' '}
-                        Tooltip{' '}
-                        {this.state.enableTooltip ? 'Active' : 'Inactive'}
-                      </label>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </Tooltip>
-          </div>
-
-          {ExporterButton ? (
-            <div className={f('exporter')}>{ExporterButton}</div>
-          ) : null}
-        </div>
-      </div>
-    );
-  }
-
   handleConservationLoad(_this) {
     _this.setState({ showLoading: true });
     _this.props.handleConservationLoad();
   }
+
+  // Refs to be passed to the child component - <ProtVistaOptions>
+  getProtvistaRefs = () => {
+    const neededRefs = {
+      _mainRef: this._mainRef,
+      _protvistaRef: this._protvistaRef,
+    };
+    return neededRefs;
+  };
 
   render() {
     const {
@@ -1118,17 +528,13 @@ class ProtVista extends Component /*:: <Props, State> */ {
       data,
       showConservationButton,
       children,
+      showOptions = true,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
 
     const { hideCategory } = this.state;
-    let ExporterButton = null;
-    if (children) {
-      ExporterButton = Children.toArray(children).filter(
-        (child) => child.type === Exporter,
-      )?.[0];
-    }
+
     return (
       <div
         ref={this._mainRef}
@@ -1145,7 +551,31 @@ class ProtVista extends Component /*:: <Props, State> */ {
               id="pv-manager"
             >
               <div className={f('track-row')}>
-                {this.renderOptions(ExporterButton, length)}
+                <div
+                  className={f(
+                    'aligned-to-track-component',
+                    'view-options-wrap',
+                    `${this.state.addLabelClass}`,
+                  )}
+                >
+                  {showOptions && (
+                    <ProtVistaOptions
+                      title={this.props.title}
+                      length={length}
+                      id={this.props.id}
+                      webTracks={this.web_tracks}
+                      expandedTrack={this.state.expandedTrack}
+                      getParentElem={this.getProtvistaRefs}
+                      updateLabel={this.updateLabel}
+                      updateTracksCollapseStatus={
+                        this.updateTracksCollapseStatus
+                      }
+                      toggleTooltipStatus={this.toggleTooltipStatus}
+                    >
+                      {children}
+                    </ProtVistaOptions>
+                  )}
+                </div>
               </div>
               <div ref={this._protvistaRef}>
                 <div className={f('track-container')}>
@@ -1185,7 +615,7 @@ class ProtVista extends Component /*:: <Props, State> */ {
                         displayend={length}
                         scale="hydrophobicity-scale"
                         height="10"
-                        color_range="#ffdd00:-3,#0000FF:3"
+                        color_range="#0000FF:-3,#ffdd00:3"
                         highlight-event="onmouseover"
                         use-ctrl-to-zoom
                       />
@@ -1362,8 +792,10 @@ class ProtVista extends Component /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
+  (state) => state.customLocation,
   (state) => state.settings.ui,
-  (ui) => ({
+  (customLocation, ui) => ({
+    customLocation,
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
   }),
 );
@@ -1372,5 +804,5 @@ export default loadData({
   getUrl: getUrlForMeta,
   propNamespace: 'DB',
   mapStateToProps,
-  mapDispatchToProps: { changeSettingsRaw },
+  mapDispatchToProps: { goToCustomLocation },
 })(ProtVista);

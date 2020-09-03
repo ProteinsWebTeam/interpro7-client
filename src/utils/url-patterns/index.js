@@ -18,7 +18,7 @@ export const ebiSearch2urlDB = (db /*: string */) =>
   new Map([
     ['TIGRFAM', 'tigrfams'],
     ['PROSITE profiles', 'profile'],
-    ['PROSITE patterns', 'patterns'],
+    ['PROSITE patterns', 'prosite'],
     ['SUPERFAMILY', 'ssf'],
     ['CATH-Gene3D', 'cathgene3d'],
   ]).get(db) || db.toLowerCase();

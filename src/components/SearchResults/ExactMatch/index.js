@@ -5,6 +5,7 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
+import getURLByAccession from 'utils/processDescription/getURLbyAccession';
 
 import loadData from 'higherOrder/loadData';
 
@@ -137,8 +138,8 @@ export class ExactMatch extends PureComponent /*:: <SMProps> */ {
 }
 
 const getQueryTerm = createSelector(
-  query => query,
-  query => {
+  (query) => query,
+  (query) => {
     const number = +query;
     if (!Number.isInteger(number)) return query;
     const stringified = number.toString();
@@ -148,19 +149,22 @@ const getQueryTerm = createSelector(
 );
 
 const getSearchStringUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.search.value,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.search.value,
   ({ protocol, hostname, port, root }, searchValue) => {
     if (!searchValue) return null;
     const query = getQueryTerm(searchValue);
-    const param = `utils/accession/${query}`;
-    return `${protocol}//${hostname}:${port}${root}${param}`;
+    if (getURLByAccession(query)) {
+      const param = `utils/accession/${query}`;
+      return `${protocol}//${hostname}:${port}${root}${param}`;
+    }
+    return '';
   },
 );
 
 const getSearchNumberUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.search.value,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.search.value,
   ({ protocol, hostname, port, root }, searchValue) => {
     if (!searchValue) return null;
     if (Number.isInteger(+searchValue)) {

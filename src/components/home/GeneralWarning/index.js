@@ -8,9 +8,9 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles);
 const STATUS_OK = 200;
-const GeneralWarning = ({ data, status }) => {
+const GeneralWarning = ({ data }) => {
   const message = data?.payload;
-  if (status !== STATUS_OK || (message || '').trim() === '') return null;
+  if (data?.status !== STATUS_OK || (message || '').trim() === '') return null;
   return (
     <div className={f('callout', 'withicon', 'alert')}>
       <b>{message}</b>
@@ -23,8 +23,7 @@ GeneralWarning.propTypes = {
 };
 
 export default loadData({
-  getUrl: () =>
-    'https://www.ebi.ac.uk/interpro/announcement/GENERAL_WARNING.txt',
+  getUrl: () => 'https://www.ebi.ac.uk/interpro/static/GENERAL_WARNING.txt',
   fetchOptions: {
     responseType: 'text',
     useCache: false,

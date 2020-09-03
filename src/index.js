@@ -43,7 +43,7 @@ const main = async () => {
     dev: false,
     root: {
       '@context': [{ bio: 'http://bioschemas.org/' }, 'http://schema.org'],
-      '@type': 'DataCatalog',
+      '@type': 'Dataset',
       '@id': config.root.website.protocol + config.root.website.href,
       hasPart: '@hasPart',
       url: config.root.website.protocol + config.root.website.href,
@@ -71,7 +71,7 @@ const main = async () => {
         },
       ],
       encodingFormat: 'text/html',
-      license: '@license',
+      license: 'https://creativecommons.org/licenses/by/4.0/',
       citation: '@mainCitation',
     },
   });

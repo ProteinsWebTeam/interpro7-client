@@ -6,7 +6,12 @@ import { createSelector } from 'reselect';
 // import Description from 'components/Description';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Link from 'components/generic/Link';
-import Table, { Column, Exporter, PageSizeSelector } from 'components/Table';
+import Table, {
+  Column,
+  Exporter,
+  PageSizeSelector,
+  HighlightToggler,
+} from 'components/Table';
 import ExactMatch from 'components/SearchResults/ExactMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
@@ -98,6 +103,7 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
           ok={ok}
           status={status}
         >
+          <HighlightToggler />
           <Exporter>
             <div className={f('menu-grid')}>
               <label htmlFor="json">JSON</label>

@@ -2,7 +2,9 @@ npm-debug.log
 node_modules/
 dist/
 coverage/
-.*/
+.idea/
+.tmp/
+.vscode/
 config.yml
 reports
 config.json
