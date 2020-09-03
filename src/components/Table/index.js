@@ -12,6 +12,7 @@ import _Header from './Header';
 import _Exporter from './Exporter';
 import _PageSizeSelector from './PageSizeSelector';
 import _SearchBox from './SearchBox';
+import _HighlightToggler from './HighlightToggler';
 import _Body from './Body';
 import _Column from './Column';
 import _Card from './Card';
@@ -68,15 +69,16 @@ const TreeView = loadable({
 });
 
 const RedirectToDefault = () => (
-  <Redirect to={customLocation => ({ ...customLocation, hash: 'table' })} />
+  <Redirect to={(customLocation) => ({ ...customLocation, hash: 'table' })} />
 );
 
 // redirects to default type if the 'withXXXX' type is not in the props
 const safeGuard = (withType, Component) => {
   const SafeGuarded = ({ [withType]: extractedWithType, ...props }) =>
     extractedWithType ? <Component {...props} /> : <RedirectToDefault />;
-  SafeGuarded.displayName = `safeGuard(${withType}, ${Component.name ||
-    Component.displayName})`;
+  SafeGuarded.displayName = `safeGuard(${withType}, ${
+    Component.name || Component.displayName
+  })`;
   return SafeGuarded;
 };
 
@@ -89,8 +91,8 @@ const mainChildRoutes = new Map([
 
 const footerChildRoutes = new Map([['tree', () => null]]);
 const hashSelector = createSelector(
-  customLocation => customLocation.hash,
-  value => value,
+  (customLocation) => customLocation.hash,
+  (value) => value,
 );
 
 export default class Table extends PureComponent /*:: <Props> */ {
@@ -142,17 +144,20 @@ export default class Table extends PureComponent /*:: <Props> */ {
     const _children = Children.toArray(children);
     // Extract prop information out of every Column element's props
     const columns = _children
-      .filter(child => child.type === _Column)
-      .map(child => child.props);
+      .filter((child) => child.type === _Column)
+      .map((child) => child.props);
     // Extract card renderer out of the Card child (child as a function)
-    let card = _children.find(child => child.type === _Card);
+    let card = _children.find((child) => child.type === _Card);
     if (card) card = card.props.children;
     //
-    const search = _children.find(child => child.type === _SearchBox);
-    const withPageSizeSelector = !!_children.find(
-      child => child.type === _PageSizeSelector,
+    const search = _children.find((child) => child.type === _SearchBox);
+    const hToggler = _children.find(
+      (child) => child.type === _HighlightToggler,
     );
-    const exporter = _children.find(child => child.type === _Exporter);
+    const withPageSizeSelector = !!_children.find(
+      (child) => child.type === _PageSizeSelector,
+    );
+    const exporter = _children.find((child) => child.type === _Exporter);
     const tableIcon = showTableIcon === undefined ? true : showTableIcon;
 
     return (
@@ -183,7 +188,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   {tableIcon && (
                     <Tooltip title="View your results as a table">
                       <Link
-                        to={l => ({ ...l, hash: 'table' })}
+                        to={(l) => ({ ...l, hash: 'table' })}
                         className={f('icon-view', 'table-view')}
                         activeClass={f('active')}
                         aria-label="view your results as a table"
@@ -195,7 +200,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     <div className={f('test-support-grid')}>
                       <Tooltip title="View your results in a grid">
                         <Link
-                          to={l => ({ ...l, hash: 'grid' })}
+                          to={(l) => ({ ...l, hash: 'grid' })}
                           className={f('icon-view', 'grid-view', {
                             disabled: !card,
                           })}
@@ -210,7 +215,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   {withTree && (
                     <Tooltip title="View your results as a tree">
                       <Link
-                        to={l => ({ ...l, hash: 'tree' })}
+                        to={(l) => ({ ...l, hash: 'tree' })}
                         className={f('icon-view', 'tree-view', {
                           disabled: !withTree,
                         })}
@@ -224,6 +229,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 </div>
                 <div className={f('filter-wrapper')}>
                   {search}
+                  {hToggler}
                   {exporter}
                 </div>
               </div>
@@ -284,6 +290,7 @@ export const Header = _Header;
 export const PageSizeSelector = _PageSizeSelector;
 export const Exporter = _Exporter;
 export const SearchBox = _SearchBox;
+export const HighlightToggler = _HighlightToggler;
 export const Body = _Body;
 export const Column = _Column;
 export const Card = _Card;

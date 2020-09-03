@@ -5,7 +5,14 @@ import { createSelector } from 'reselect';
 
 import { goToCustomLocation } from 'actions/creators';
 
-import Table, { Column, Card, PageSizeSelector } from 'components/Table';
+import Table, {
+  Column,
+  Card,
+  PageSizeSelector,
+  SearchBox,
+  HighlightToggler,
+} from 'components/Table';
+import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
@@ -126,6 +133,50 @@ export const TheConnectedTable = () => {
       const size = search.page_size || pageSize;
       const page = search?.page || 1;
       const data = basicData.slice((page - 1) * size, page * size);
+      return { data, search, totalLength: basicData.length };
+    }
+  );
+
+  const ConnectedTable = connect(mapStateToProps)(NewTable);
+  return <ConnectedTable />;
+};
+export const TheSearchableTable = () => {
+  const NewTable = ({ data, search, totalLength }) => (
+    <Table
+      actualSize={totalLength}
+      dataTable={data}
+      query={search}
+      title="The Connected Table"
+      showTableIcon={false}
+    >
+      <PageSizeSelector />
+      <SearchBox loading={false}>Search</SearchBox>
+      <HighlightToggler />
+      <Column dataKey="id" headerStyle={{ top: 0 }}>
+        ID
+      </Column>
+      <Column
+        dataKey="name"
+        headerStyle={{ top: 0 }}
+        renderer={(name) => (
+          <HighlightedText text={name} textToHighlight={search.search} />
+        )}
+      >
+        Name
+      </Column>
+    </Table>
+  );
+  const mapStateToProps = createSelector(
+    (state) => state.customLocation.search,
+    (state) => state.settings.navigation.pageSize,
+    (search, pageSize) => {
+      const size = search.page_size || pageSize;
+      const page = search?.page || 1;
+      const filteredData = search?.search
+        ? basicData.filter(({ name }) => name.includes(search.search))
+        : basicData;
+
+      const data = filteredData.slice((page - 1) * size, page * size);
       return { data, search, totalLength: basicData.length };
     }
   );
