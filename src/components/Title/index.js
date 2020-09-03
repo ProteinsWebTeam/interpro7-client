@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet-async';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadWebComponent from 'utils/load-web-component';
+import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -106,6 +107,18 @@ EntryIcon.propTypes = {
   metadata: T.object.isRequired,
 };
 
+const rtdLinks = {
+  entry: {
+    interpro: 'entry-page',
+    dbs: 'member-database-page',
+  },
+  protein: 'protein-entry-page',
+  structure: 'structure-entry-page',
+  taxonomy: 'taxonomy-entry-page',
+  proteome: 'proteome-entry-page',
+  set: 'set-entry-page',
+};
+
 const TitleTag = (
   {
     metadata,
@@ -128,30 +141,38 @@ const TitleTag = (
                      } */,
 ) => {
   const isEntry = mainType === 'entry';
+  const isInterPro = metadata.source_database.toLowerCase() === 'interpro';
+  let rtdLink = '';
+  if (isEntry) {
+    rtdLink = rtdLinks.entry[isInterPro ? 'interpro' : 'dbs'];
+  } else {
+    rtdLink = rtdLinks?.[mainType.toLowerCase()] || '';
+  }
   return (
     <div className={f('title-tag')} data-testid="title">
       {metadata && metadata.source_database && (
         <div
           className={f('tag', {
-            secondary:
-              !isEntry || metadata.source_database.toLowerCase() === 'interpro',
-            'md-p':
-              isEntry && metadata.source_database.toLowerCase() !== 'interpro',
+            secondary: !isEntry || isInterPro,
+            'md-p': isEntry && !isInterPro,
           })}
         >
           {dbLabel} {mainType}
-          {// Set
-          mainType === 'set' && (
-            <Tooltip title="A Set is defined as a group of related entries">
-              {' '}
-              <span
-                className={f('small', 'icon', 'icon-common')}
-                data-icon="&#xf129;"
-              />
-            </Tooltip>
-          )}
+          {
+            // Set
+            mainType === 'set' && (
+              <Tooltip title="A Set is defined as a group of related entries">
+                {' '}
+                <span
+                  className={f('small', 'icon', 'icon-common')}
+                  data-icon="&#xf129;"
+                />
+              </Tooltip>
+            )
+          }
         </div>
-      )}
+      )}{' '}
+      <TooltipAndRTDLink rtdPage={`browse.html#${rtdLink}`} />
     </div>
   );
 };
@@ -183,36 +204,42 @@ const AccessionTag = (
   const isEntry = mainType === 'entry';
   return (
     <div className={f('title-id')} data-testid="accession">
-      {// Red, Green for domains,  Purple for sites, and Blue for Homologous accession: for InterPro page only
-      isEntry &&
-        metadata.type &&
-        metadata.source_database &&
-        metadata.source_database.toLowerCase() === 'interpro' && (
-          <span className={f(mapNameToClass.get(metadata.type))}>
-            {metadata.accession}
-          </span>
-        )}
-      {// Blue accession: for Member Database and Unknown entry-type
-      isEntry &&
-        metadata.type &&
-        metadata.source_database &&
-        metadata.source_database.toLowerCase() !== 'interpro' && (
-          <span
-            style={{
-              backgroundColor: config.colors.get(metadata.source_database),
-            }}
-            className={f('title-id-md')}
-          >
-            {metadata.accession}
-          </span>
-        )}
-      {// greyblueish accession: for protein , structure, and proteomes and no accession for tax
-      accessionDisplay.has(mainType) &&
-        metadata.source_database !== 'taxonomy' &&
-        metadata.name.name !== 'InterProScan Search Result' && (
-          // for proteins, structures and proteomes (no accession in title for taxonomy and sets)
-          <span className={f('title-id-other')}>{metadata.accession}</span>
-        )}
+      {
+        // Red, Green for domains,  Purple for sites, and Blue for Homologous accession: for InterPro page only
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() === 'interpro' && (
+            <span className={f(mapNameToClass.get(metadata.type))}>
+              {metadata.accession}
+            </span>
+          )
+      }
+      {
+        // Blue accession: for Member Database and Unknown entry-type
+        isEntry &&
+          metadata.type &&
+          metadata.source_database &&
+          metadata.source_database.toLowerCase() !== 'interpro' && (
+            <span
+              style={{
+                backgroundColor: config.colors.get(metadata.source_database),
+              }}
+              className={f('title-id-md')}
+            >
+              {metadata.accession}
+            </span>
+          )
+      }
+      {
+        // greyblueish accession: for protein , structure, and proteomes and no accession for tax
+        accessionDisplay.has(mainType) &&
+          metadata.source_database !== 'taxonomy' &&
+          metadata.name.name !== 'InterProScan Search Result' && (
+            // for proteins, structures and proteomes (no accession in title for taxonomy and sets)
+            <span className={f('title-id-other')}>{metadata.accession}</span>
+          )
+      }
     </div>
   );
 };
@@ -261,15 +288,17 @@ class Title extends PureComponent /*:: <Props> */ {
             </>
           )}
 
-        {// MD icon
-        isEntry &&
-          metadata.type &&
-          metadata.source_database &&
-          metadata.source_database.toLowerCase() !== 'interpro' && (
-            <div className={f('icon-container')}>
-              <MemberSymbol type={metadata.source_database} />
-            </div>
-          )}
+        {
+          // MD icon
+          isEntry &&
+            metadata.type &&
+            metadata.source_database &&
+            metadata.source_database.toLowerCase() !== 'interpro' && (
+              <div className={f('icon-container')}>
+                <MemberSymbol type={metadata.source_database} />
+              </div>
+            )
+        }
         {metadata && (
           <Helmet
             titleTemplate={`${
@@ -283,12 +312,16 @@ class Title extends PureComponent /*:: <Props> */ {
         )}
 
         <div className={f('title-name')}>
-          {// add margin only for IPSCAN result page
-          metadata.name.name === 'InterProScan Search Result' ? (
-            <h3 className={f('margin-bottom-large')}>{metadata.name.name} </h3>
-          ) : (
-            <h3>{metadata.name.name}</h3>
-          )}
+          {
+            // add margin only for IPSCAN result page
+            metadata.name.name === 'InterProScan Search Result' ? (
+              <h3 className={f('margin-bottom-large')}>
+                {metadata.name.name}{' '}
+              </h3>
+            ) : (
+              <h3>{metadata.name.name}</h3>
+            )
+          }
           <TitleTag metadata={metadata} mainType={mainType} dbLabel={dbLabel} />
         </div>
         <AccessionTag metadata={metadata} mainType={mainType} />

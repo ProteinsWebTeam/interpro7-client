@@ -3,6 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import config from 'config';
+
 import loadable from 'higherOrder/loadable';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
@@ -191,6 +193,7 @@ const Announcement = () => (
 class Home extends PureComponent {
   static propTypes = {
     showSettingsToast: T.bool.isRequired,
+    showHelpToast: T.bool.isRequired,
   };
 
   render() {
@@ -201,6 +204,41 @@ class Home extends PureComponent {
             body="To customise settings, click on the ☰ icon at the top right corner and select settings from the menu options"
             toastID="settings"
             settingsName="showSettingsToast"
+          />
+        ) : null}
+        {this.props.showHelpToast ? (
+          <Tip
+            body={
+              <>
+                <p>
+                  <span
+                    className={f('icon', 'icon-common', 'font-l')}
+                    data-icon="&#xf02d;"
+                  />{' '}
+                  You can find all the documentation of our website in{' '}
+                  <Link
+                    href={config.root.readthedocs.href}
+                    className={f('ext')}
+                    target="_blank"
+                  >
+                    Read The Docs
+                  </Link>
+                </p>
+                <p>
+                  If you need help about the components of the home page you can
+                  visit{' '}
+                  <Link
+                    href={`${config.root.readthedocs.href}homepage.html`}
+                    className={f('ext')}
+                    target="_blank"
+                  >
+                    [this page].
+                  </Link>
+                </p>
+              </>
+            }
+            toastID="rtdhelp"
+            settingsName="showHelpToast"
           />
         ) : null}
         <GeneralWarning />
@@ -344,7 +382,8 @@ class Home extends PureComponent {
 
 const mapStateToProps = createSelector(
   (state) => state.settings.notifications.showSettingsToast,
-  (showSettingsToast) => ({ showSettingsToast }),
+  (state) => state.settings.notifications.showHelpToast,
+  (showSettingsToast, showHelpToast) => ({ showSettingsToast, showHelpToast }),
 );
 
 export default connect(mapStateToProps)(Home);

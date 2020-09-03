@@ -10,6 +10,7 @@ import ReactToPrint from 'react-to-print';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { Exporter } from 'components/Table';
+import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -180,7 +181,9 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
 
     return (
       <>
-        <div className={f('view-options-title')}>{title}</div>
+        <div className={f('view-options-title')}>
+          {title} <TooltipAndRTDLink rtdPage="protein_viewer.html" />
+        </div>
         <div className={f('view-options')}>
           <div className={f('option-fullscreen', 'font-l', 'viewer-options')}>
             <FullScreenButton

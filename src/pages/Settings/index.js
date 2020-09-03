@@ -114,9 +114,10 @@ const NotificationSettings = (
       showTreeToast,
       showConnectionStatusToast,
       showSettingsToast,
+      showHelpToast,
       showCtrlToZoomToast,
     },
-  } /*: {notifications: {showTreeToast: boolean, showCtrlToZoomToast: boolean, showConnectionStatusToast: boolean, showSettingsToast: boolean}} */,
+  } /*: {notifications: {showTreeToast: boolean, showCtrlToZoomToast: boolean, showConnectionStatusToast: boolean, showSettingsToast: boolean, showHelpToast: boolean}} */,
 ) => (
   <form data-category="notifications">
     <h4>Notification settings</h4>
@@ -191,6 +192,18 @@ const NotificationSettings = (
                     />
                   </td>
                 </tr>
+                <tr>
+                  <td>Help Links</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      name="showHelpToast"
+                      id="showHelpToast-input"
+                      checked={showHelpToast}
+                      onChange={noop}
+                    />
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -204,6 +217,7 @@ NotificationSettings.propTypes = {
     showTreeToast: T.bool.isRequired,
     showConnectionStatusToast: T.bool.isRequired,
     showSettingsToast: T.bool.isRequired,
+    showHelpToast: T.bool.isRequired,
     showCtrlToZoomToast: T.bool.isRequired,
   }).isRequired,
 };
