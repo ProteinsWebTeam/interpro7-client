@@ -18,7 +18,7 @@ const config /*: {
       protocol: string,
       href: string,
     |},
-    API: {| pathname: string, port: string, protocol: string |},
+    API: {| pathname: string, port: string, protocol: string, href: string |},
     EBIsearch: {| pathname: string, port: string, protocol: string |},
     IPScan: {| pathname: string, port: string, protocol: string |},
     readthedocs: {| pathname: string, port: string, protocol: string , href: string |},
