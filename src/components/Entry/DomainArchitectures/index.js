@@ -337,7 +337,10 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                       description: {
                         main: { key: 'protein' },
                         protein: { db: 'UniProt' },
-                        entry: { db: 'InterPro', accession: mainAccession },
+                        entry: {
+                          db: database || idaAccessionDB,
+                          accession: mainAccession,
+                        },
                       },
                       search: { ida: obj.ida_id },
                     }}
