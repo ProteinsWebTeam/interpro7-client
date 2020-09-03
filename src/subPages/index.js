@@ -56,10 +56,12 @@ const SimilarProteins = loadable({
 const Genome3d = loadable({
   loader: () =>
     import(
-      /* webpackChunkName: "similar-proteins-subpage" */ 'components/Genome3D/List'
+      /* webpackChunkName: "genome3d-subpage" */ 'components/Genome3D/List'
     ),
 });
-
+const Curation = loadable({
+  loader: () => import(/* webpackChunkName: "curation-subpage" */ './Curation'),
+});
 const defaultMapStateToProps = createSelector(
   (state) => state.settings.api,
   (state) => state.settings.navigation.pageSize,
@@ -223,6 +225,7 @@ const subPages = new Map([
       propNamespace: 'IDA',
     })(SimilarProteins),
   ],
+  ['curation', Curation],
 ]);
 
 export default subPages;
