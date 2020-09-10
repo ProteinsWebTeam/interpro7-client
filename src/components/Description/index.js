@@ -226,21 +226,30 @@ class Description extends PureComponent /*:: <Props> */ {
 
   render() {
     const { textBlocks, literature, accession, withoutIDs } = this.props;
-    const paragraphs = textBlocks.reduce((acc, e) => {
-      transformFormatted(e).forEach((p) => acc.push(p));
-      return acc;
-    }, []);
+    const sections = textBlocks.map((e) => {
+      return transformFormatted(e);
+    });
+
     return (
-      <div className={f('margin-bottom-large')} data-testid="description">
-        {paragraphs.map((p, i) => (
-          <Paragraph
-            key={i}
-            p={p}
-            literature={literature}
-            accession={accession}
-            withoutIDs={withoutIDs}
-          />
-        ))}
+      <div
+        className={f('margin-bottom-large', 'description')}
+        data-testid="description"
+      >
+        {sections
+          .map((section) =>
+            section
+              .map((p, j) => (
+                <Paragraph
+                  key={j}
+                  p={p}
+                  literature={literature}
+                  accession={accession}
+                  withoutIDs={withoutIDs}
+                />
+              ))
+              .reduce((prev, curr) => [prev, <br key={prev} />, curr]),
+          )
+          .reduce((prev, curr) => [prev, <hr key={prev} />, curr])}
       </div>
     );
   }

@@ -2,15 +2,17 @@
 
 exports[`<Description /> should render 1`] = `
 <div
-  className="margin-bottom-large"
+  className="margin-bottom-large description"
   data-testid="description"
 >
   <Paragraph
     p="a"
   />
+  <hr />
   <Paragraph
     p="b"
   />
+  <hr />
   <Paragraph
     p="c"
   />

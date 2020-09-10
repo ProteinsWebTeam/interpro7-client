@@ -19,3 +19,7 @@ a.text-high:focus {
   background-color: var(--colors-marktext);
   outline: 0;
 }
+
+.description hr {
+  margin: 0.75em;
+}
