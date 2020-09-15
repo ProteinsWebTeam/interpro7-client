@@ -15,6 +15,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 import MemberSymbol from 'components/Entry/MemberSymbol';
+import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -340,7 +341,9 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
             <Helmet>
               <title>Release notes</title>
             </Helmet>
-            <h3>Release notes</h3>
+            <h3>
+              Release notes <TooltipAndRTDLink rtdPage="release_notes.html" />
+            </h3>
             <SchemaOrgData
               data={{
                 name: 'InterPro Release Notes',

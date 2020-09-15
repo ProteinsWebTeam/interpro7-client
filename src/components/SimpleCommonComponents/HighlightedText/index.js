@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { subsetText, findStart } from 'utils/text';
 
@@ -14,16 +16,22 @@ const findStartCentered = findStart(CENTER_OF_HIGHLIGHT);
   maxLength?: number
  } */
 
-class HighlightedText extends PureComponent /*:: <Props> */ {
+export class HighlightedText extends PureComponent /*:: <Props> */ {
   static propTypes = {
     text: T.oneOfType([T.string, T.number]).isRequired,
     textToHighlight: T.string,
     maxLength: T.number,
+    shouldHighlight: T.bool,
   };
 
   render() {
-    const { text, textToHighlight = '', maxLength = +Infinity } = this.props;
-    if (!textToHighlight || !text) return text;
+    const {
+      text,
+      textToHighlight = '',
+      maxLength = +Infinity,
+      shouldHighlight = true,
+    } = this.props;
+    if (!shouldHighlight || !textToHighlight || !text) return text;
     let _text = text.toString();
     _text = subsetText(
       _text,
@@ -44,4 +52,9 @@ class HighlightedText extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default HighlightedText;
+const mapStateToProps = createSelector(
+  (state) => state.settings.ui,
+  (ui) => ({ shouldHighlight: ui.shouldHighlight }),
+);
+
+export default connect(mapStateToProps)(HighlightedText);

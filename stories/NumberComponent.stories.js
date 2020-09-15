@@ -10,7 +10,7 @@ const store = configureStore();
 const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
 
 export default {
-  title: 'InterPro UI.NumberComponent',
+  title: 'InterPro UI/NumberComponent',
   decorators: [withProvider],
 };
 

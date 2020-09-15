@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 
+import config from 'config';
 import Link from 'components/generic/Link';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
@@ -41,46 +42,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   <ul>
                     <li>
                       <Link
-                        to={{
-                          description: {
-                            other: ['about', 'interpro'],
-                          },
-                        }}
+                        href={config.root.readthedocs.href}
+                        className={f('ext')}
+                        target="_blank"
                       >
-                        About InterPro
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to={{
-                          description: {
-                            other: ['release_notes'],
-                          },
-                        }}
-                      >
-                        Release Notes
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to={{
-                          description: {
-                            other: ['help', 'faqs'],
-                          },
-                        }}
-                      >
-                        Frequently Asked Questions (FAQs)
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to={{
-                          description: {
-                            other: ['about', 'ida'],
-                          },
-                        }}
-                      >
-                        InterPro Domain Architecture
+                        Website documentation
                       </Link>
                     </li>
                   </ul>
@@ -95,22 +61,20 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                 <ul>
                   <li>
                     <Link
-                      to={{
-                        description: {
-                          other: ['about', 'interproscan'],
-                        },
-                      }}
-                    >
-                      About InterProScan
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="https://interproscan-docs.readthedocs.io/"
                       className={f('ext')}
                       target="_blank"
                     >
                       InterProScan Documentation
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="//www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      Web services
                     </Link>
                   </li>
                 </ul>
@@ -159,15 +123,6 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   </li>
                   <li>
                     <Link
-                      href="//www.ebi.ac.uk/Tools/webservices/"
-                      className={f('ext')}
-                      target="_blank"
-                    >
-                      Web services
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
                       className={f('ext')}
                       target="_blank"
@@ -196,13 +151,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                 <ul>
                   <li>
                     <Link
-                      to={{
-                        description: {
-                          other: ['help', 'documentation', 'publication'],
-                        },
-                      }}
+                      href={`${config.root.readthedocs.href}citing.html`}
+                      className={f('ext')}
+                      target="_blank"
                     >
-                      Show all previous InterPro publications
+                      InterPro Publications
                     </Link>
                   </li>
                 </ul>

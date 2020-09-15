@@ -151,7 +151,6 @@ const memberDB = new Set([
   { name: 'pirsf', re: /^PIRSF[0-9]{6}$/i },
   { name: 'prints', re: /^PR[0-9]{5}$/i },
   { name: 'prosite', re: /^PS[0-9]{5}$/i },
-  { name: 'patterns', re: /^PS[0-9]{5}$/i },
   { name: 'profile', re: /^PS[0-9]{5}$/i },
   { name: 'sfld', re: /^sfld[gfs]\d{5}$/i },
   { name: 'smart', re: /^SM[0-9]{5}$/i },

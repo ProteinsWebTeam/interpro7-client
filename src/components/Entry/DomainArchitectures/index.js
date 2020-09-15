@@ -220,6 +220,7 @@ export class IDAProtVista extends ProtVistaMatches {
   search: Object,
   highlight: Array<string>,
   idaAccessionDB: string,
+  database: string,
   toggleAccessionDBForIDA: function,
 }
 */
@@ -231,6 +232,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     dataDB: T.object.isRequired,
     highlight: T.arrayOf(T.string),
     idaAccessionDB: T.string,
+    database: T.string,
     toggleAccessionDBForIDA: T.func,
   };
 
@@ -246,6 +248,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       dataDB,
       highlight = [],
       idaAccessionDB,
+      database,
     } = this.props;
     if (loading || dataDB.loading) return <Loading />;
     const edgeCaseText = edgeCases.get(status);
@@ -286,32 +289,36 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       messageContent = (
         <>
           <h4>{payload.count} domain architectures found.</h4>
-          <div className={f('accession-selector-panel')}>
-            <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-              <div className={f('switch', 'large')}>
-                <input
-                  type="checkbox"
-                  checked={idaAccessionDB === 'pfam'}
-                  className={f('switch-input')}
-                  name="accessionDB"
-                  id="accessionDB-input"
-                  onChange={this.toggleDomainEntry}
-                />
-                <label
-                  className={f('switch-paddle', 'accession-selector')}
-                  htmlFor="accessionDB-input"
-                >
-                  <span className={f('show-for-sr')}>Use accessions from:</span>
-                  <span className={f('switch-active')} aria-hidden="true">
-                    Pfam
-                  </span>
-                  <span className={f('switch-inactive')} aria-hidden="true">
-                    InterPro
-                  </span>
-                </label>
-              </div>
-            </Tooltip>
-          </div>
+          {!database && (
+            <div className={f('accession-selector-panel')}>
+              <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
+                <div className={f('switch', 'large')}>
+                  <input
+                    type="checkbox"
+                    checked={idaAccessionDB === 'pfam'}
+                    className={f('switch-input')}
+                    name="accessionDB"
+                    id="accessionDB-input"
+                    onChange={this.toggleDomainEntry}
+                  />
+                  <label
+                    className={f('switch-paddle', 'accession-selector')}
+                    htmlFor="accessionDB-input"
+                  >
+                    <span className={f('show-for-sr')}>
+                      Use accessions from:
+                    </span>
+                    <span className={f('switch-active')} aria-hidden="true">
+                      Pfam
+                    </span>
+                    <span className={f('switch-inactive')} aria-hidden="true">
+                      InterPro
+                    </span>
+                  </label>
+                </div>
+              </Tooltip>
+            </div>
+          )}
         </>
       );
     }
@@ -320,7 +327,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
         <div className={f('columns')}>
           {messageContent}
           {(payload.results || []).map((obj) => {
-            const idaObj = ida2json(obj.ida, idaAccessionDB);
+            const idaObj = ida2json(obj.ida, database || idaAccessionDB);
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
@@ -330,7 +337,10 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                       description: {
                         main: { key: 'protein' },
                         protein: { db: 'UniProt' },
-                        entry: { db: 'InterPro', accession: mainAccession },
+                        entry: {
+                          db: database || idaAccessionDB,
+                          accession: mainAccession,
+                        },
                       },
                       search: { ida: obj.ida_id },
                     }}

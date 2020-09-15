@@ -21,6 +21,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         showTreeToast: true,
         showConnectionStatusToast: true,
         showSettingsToast: true,
+        showHelpToast: true,
         showCtrlToZoomToast: true,
       };
     case 'ui':
@@ -28,6 +29,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         lowGraphics: false,
         colorDomainsBy: EntryColorMode.ACCESSION,
         structureViewer: false,
+        shouldHighlight: true,
       };
     case 'cache':
       return {
@@ -60,6 +62,13 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         hostname: config.root.genome3d.hostname,
         port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
         root: config.root.genome3d.pathname,
+      };
+    case 'wikipedia':
+      return {
+        protocol: config.root.wikipedia.protocol,
+        hostname: config.root.wikipedia.hostname,
+        port: config.root.wikipedia.port || DEFAULT_HTTP_PORT,
+        root: config.root.wikipedia.pathname,
       };
     default:
       return null;

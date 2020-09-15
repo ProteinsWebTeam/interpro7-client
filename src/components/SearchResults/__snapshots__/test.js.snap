@@ -37,6 +37,7 @@ exports[`<SearchResults /> should render 1`] = `
     loading={false}
     query={Object {}}
   >
+    <Memo(Connect(HighlightToggler)) />
     <Memo(Connect(Exporter))>
       <div
         className="menu-grid"

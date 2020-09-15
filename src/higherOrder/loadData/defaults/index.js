@@ -29,6 +29,12 @@ export const getUrlForRelease = (repoKey) =>
     ({ owner, repo }) =>
       `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
   );
+export const getReadTheDocsURL = (relativePath) =>
+  createSelector(
+    () => config.github.ReadTheDocs,
+    ({ owner, repo, branch = 'master' }) =>
+      `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/docs/${relativePath}`,
+  );
 
 export const getUrl = createSelector(
   // this one is just to memoize it
@@ -193,4 +199,5 @@ export const getUrlForApi = (...parameters) =>
     .replace('/pathways', '/')
     .replace('/sequence', '/')
     .replace('/genome3d', '/')
-    .replace('/similar_proteins', '/');
+    .replace('/similar_proteins', '/')
+    .replace('/curation', '/');

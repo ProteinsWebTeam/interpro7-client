@@ -32,65 +32,11 @@ exports[`<Documentation /> should render 1`] = `
             <ul>
               <li>
                 <Memo(Connect(Link))
-                  to={
-                    Object {
-                      "description": Object {
-                        "other": Array [
-                          "about",
-                          "interpro",
-                        ],
-                      },
-                    }
-                  }
+                  className="ext"
+                  href="//interpro-documentation.readthedocs.io/en/latest/"
+                  target="_blank"
                 >
-                  About InterPro
-                </Memo(Connect(Link))>
-              </li>
-              <li>
-                <Memo(Connect(Link))
-                  to={
-                    Object {
-                      "description": Object {
-                        "other": Array [
-                          "release_notes",
-                        ],
-                      },
-                    }
-                  }
-                >
-                  Release Notes
-                </Memo(Connect(Link))>
-              </li>
-              <li>
-                <Memo(Connect(Link))
-                  to={
-                    Object {
-                      "description": Object {
-                        "other": Array [
-                          "help",
-                          "faqs",
-                        ],
-                      },
-                    }
-                  }
-                >
-                  Frequently Asked Questions (FAQs)
-                </Memo(Connect(Link))>
-              </li>
-              <li>
-                <Memo(Connect(Link))
-                  to={
-                    Object {
-                      "description": Object {
-                        "other": Array [
-                          "about",
-                          "ida",
-                        ],
-                      },
-                    }
-                  }
-                >
-                  InterPro Domain Architecture
+                  Website documentation
                 </Memo(Connect(Link))>
               </li>
             </ul>
@@ -110,27 +56,20 @@ exports[`<Documentation /> should render 1`] = `
           <ul>
             <li>
               <Memo(Connect(Link))
-                to={
-                  Object {
-                    "description": Object {
-                      "other": Array [
-                        "about",
-                        "interproscan",
-                      ],
-                    },
-                  }
-                }
-              >
-                About InterProScan
-              </Memo(Connect(Link))>
-            </li>
-            <li>
-              <Memo(Connect(Link))
                 className="ext"
                 href="https://interproscan-docs.readthedocs.io/"
                 target="_blank"
               >
                 InterProScan Documentation
+              </Memo(Connect(Link))>
+            </li>
+            <li>
+              <Memo(Connect(Link))
+                className="ext"
+                href="//www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation"
+                target="_blank"
+              >
+                Web services
               </Memo(Connect(Link))>
             </li>
           </ul>
@@ -191,15 +130,6 @@ exports[`<Documentation /> should render 1`] = `
             <li>
               <Memo(Connect(Link))
                 className="ext"
-                href="//www.ebi.ac.uk/Tools/webservices/"
-                target="_blank"
-              >
-                Web services
-              </Memo(Connect(Link))>
-            </li>
-            <li>
-              <Memo(Connect(Link))
-                className="ext"
                 href="//www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
                 target="_blank"
               >
@@ -231,19 +161,11 @@ exports[`<Documentation /> should render 1`] = `
           <ul>
             <li>
               <Memo(Connect(Link))
-                to={
-                  Object {
-                    "description": Object {
-                      "other": Array [
-                        "help",
-                        "documentation",
-                        "publication",
-                      ],
-                    },
-                  }
-                }
+                className="ext"
+                href="//interpro-documentation.readthedocs.io/en/latest/citing.html"
+                target="_blank"
               >
-                Show all previous InterPro publications
+                InterPro Publications
               </Memo(Connect(Link))>
             </li>
           </ul>

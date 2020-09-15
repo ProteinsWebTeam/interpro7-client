@@ -17,11 +17,11 @@ const TIMEOUT = 408;
 const MS = 1000;
 
 const mapStateToState = createSelector(
-  state => state,
-  appState => ({ appState }),
+  (state) => state,
+  (appState) => ({ appState }),
 );
 
-const newData = url => ({
+const newData = (url) => ({
   loading: !!url,
   progress: 0,
   ok: true,
@@ -30,7 +30,7 @@ const newData = url => ({
   url,
 });
 
-const loadData = params => {
+const loadData = (params) => {
   const {
     getUrl,
     fetchOptions,
@@ -41,7 +41,7 @@ const loadData = params => {
   } = extractParams(params);
   const fetchFun = getFetch(fetchOptions);
 
-  return Wrapped => {
+  return (Wrapped) => {
     class DataWrapper extends PureComponent {
       static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
 
@@ -123,7 +123,7 @@ const loadData = params => {
         }
         // Progress: 0
         this.props.dataProgressInfo(this._id, 0, weight);
-        this._request = cancelable(signal =>
+        this._request = cancelable((signal) =>
           fetchFun(url, { ...fetchOptions, signal }, this._progress),
         );
         // We keep a hold on *this* request, because it might change
@@ -136,6 +136,10 @@ const loadData = params => {
             eventCategory: 'data',
             eventAction: response.status,
             eventLabel: url,
+            // Custom Metric in google analytics as metrics1: From Client Cache
+            metric1: response.headers.has('Client-Cache') ? 1 : 0,
+            // Custom Metric in google analytics as metrics1: From Server Cache
+            metric2: response.headers.has('Cached') ? 1 : 0,
           });
           // We have a response 🎉 set it into the local state
           this.setState(({ data }) => {
@@ -170,6 +174,8 @@ const loadData = params => {
               eventCategory: 'data',
               eventAction: 'fail',
               eventLabel: url,
+              // Custom Metric in google analytics as metrics3: Is Client Online
+              metric3: window.navigator.onLine ? 1 : 0,
             });
             this.setState(({ data }) => ({
               data: { ...data, loading: false, progress: 1, ok: false, error },

@@ -13,19 +13,21 @@ export default (combineReducers({
   ebi: server('ebi'),
   ipScan: server('ipScan'),
   genome3d: server('genome3d'),
+  wikipedia: server('wikipedia'),
 }) /*: (ServerStatuses | void, any) => ServerStatuses */);
 
 export const serverStatusesSelector = (
   state /*: State */,
 ) /*: ServerStatuses*/ => state.status.servers;
 
-const serverStatusSelectorFor = server =>
+const serverStatusSelectorFor = (server) =>
   (createSelector(
     serverStatusesSelector,
-    servers => servers[server],
+    (servers) => servers[server],
   ) /*: (State) => ServerStatus */);
 
 export const apiServerStatus = serverStatusSelectorFor('api');
 export const ebiServerStatus = serverStatusSelectorFor('ebi');
 export const ipScanServerStatus = serverStatusSelectorFor('ipScan');
 export const genome3dServerStatus = serverStatusSelectorFor('genome3d');
+export const wikipediaServerStatus = serverStatusSelectorFor('wikipedia');

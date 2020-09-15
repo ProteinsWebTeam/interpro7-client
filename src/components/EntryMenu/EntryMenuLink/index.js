@@ -35,6 +35,7 @@ const icons = new Map([
   ['Signature', { icon: undefined, class: 'icon-count-hmm' }],
   ['Alignments', { icon: '\uF1DE', class: 'icon-common' }],
   ['Sequence', { icon: '\uF120', class: 'icon-common' }],
+  ['Curation', { icon: undefined, class: 'icon-common' }],
 ]);
 
 export const EntryMenuLinkWithoutData = (
@@ -188,10 +189,17 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
       if (whitelist.has(name)) value = NaN;
       // TODO: find a generic way to deal with this:
       if (
-        (name === 'Domain Architectures' || name === 'Pathways') &&
+        name === 'Pathways' &&
         payload.metadata.source_database.toLowerCase() !== 'interpro'
       ) {
         value = null;
+      }
+
+      if (
+        name === 'Curation' &&
+        payload.metadata.source_database.toLowerCase() === 'pfam'
+      ) {
+        value = NaN;
       }
     }
 

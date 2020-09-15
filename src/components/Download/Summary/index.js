@@ -12,6 +12,7 @@ import Link from 'components/generic/Link';
 import Table, { Column } from 'components/Table';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Actions from 'components/Download/Actions';
+import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import { downloadSelector } from 'reducers/download';
 
@@ -62,7 +63,8 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
               processData={schemaProcessDataPageSection}
             />
             <h3 className={f('large-10', 'columns', 'light')}>
-              Your download jobs
+              Your download jobs{' '}
+              <TooltipAndRTDLink rtdPage="download.html#your-downloads" />
             </h3>
             <div className={f('button-group', 'columns', 'large-2')}>
               <GoToNewDownload />

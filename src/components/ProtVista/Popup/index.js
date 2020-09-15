@@ -10,7 +10,7 @@ const ProtVistaPopup = ({
   detail,
   sourceDatabase,
   data,
-  protein,
+  currentLocation,
   goToCustomLocation,
 }) => {
   // comes from the conservation track
@@ -36,7 +36,7 @@ const ProtVistaPopup = ({
       detail={detail}
       sourceDatabase={sourceDatabase}
       goToCustomLocation={goToCustomLocation}
-      protein={protein}
+      currentLocation={currentLocation}
     />
   );
 };
@@ -49,7 +49,7 @@ ProtVistaPopup.propTypes = {
   sourceDatabase: T.string,
   data: T.array,
   goToCustomLocation: T.func,
-  protein: T.object,
+  currentLocation: T.object,
 };
 
 export default ProtVistaPopup;

@@ -16,3 +16,65 @@
     margin-right: 1px;
   }
 }
+
+.wiki-article {
+  font-family: sans-serif;
+  font-size: 0.875em;
+  /*margin: 0.2rem;*/
+
+  & .th-infobox {
+    text-align: center;
+    font-size: 125%;
+    font-weight: bold;
+    position: inherit;
+  }
+  & .td-thumbnail {
+    text-align: center;
+  }
+  & .th-identifier {
+    text-align: center;
+    background-color: #ddd;
+  }
+  & .row-header {
+    background-color: #e7dcc3;
+  }
+  & .row-data {
+    background-color: #eee;
+  }
+}
+
+.wiki-content {
+  border-left: 4px solid var(--colors-submain);
+  padding: 0.2rem 1rem;
+}
+
+.wiki-article table,
+th,
+td {
+  border-collapse: separate;
+}
+
+.wiki-article tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+
+.infobox {
+  border: 1px solid #a2a9b1;
+  border-spacing: 3px;
+  background-color: #f8f9fa;
+  color: black;
+  margin: 0.5em 0 0.5em 1em;
+  padding: 0.2em;
+  float: right;
+  clear: right;
+  font-size: 88%;
+  line-height: 1.5em;
+}
+
+.infobox td,
+th {
+  vertical-align: top;
+  text-align: left;
+}

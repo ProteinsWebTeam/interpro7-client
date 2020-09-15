@@ -3,6 +3,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import config from 'config';
+
 import loadable from 'higherOrder/loadable';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
@@ -11,6 +13,7 @@ import Description from 'components/Description';
 import CurrentVersion from 'components/home/CurrentVersion';
 import GeneralWarning from 'components/home/GeneralWarning';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
+import { PrintedInterProShort2019 } from 'components/Help/Publication';
 import Tip from 'components/Tip';
 import Link from 'components/generic/Link';
 
@@ -31,6 +34,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import style from '../style.css';
+import local from './style.css';
 
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -41,7 +45,7 @@ import wellcome from '../../images/thirdparty/funding/logo_wellcome.jpg';
 import bbsrc from '../../images/thirdparty/funding/logo_bbsrc.png';
 
 // Bind css with style object
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style);
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style, local);
 
 const MAX_DELAY_FOR_TWITTER = 10000;
 
@@ -135,6 +139,17 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
   },
 );
 
+const CitingInterPro = () => (
+  <details className={f('citing-details')}>
+    <summary>Citing InterPro</summary>
+    <div>
+      If you find InterPro useful, please cite the reference that describes this
+      work:
+      <PrintedInterProShort2019 />
+    </div>
+  </details>
+);
+
 const description = `
 InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites. To classify proteins in this way, InterPro uses predictive models, known as signatures, provided by several different databases (referred to as member databases) that make up the InterPro consortium. We combine protein signatures from these member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.
 `.trim();
@@ -178,6 +193,7 @@ const Announcement = () => (
 class Home extends PureComponent {
   static propTypes = {
     showSettingsToast: T.bool.isRequired,
+    showHelpToast: T.bool.isRequired,
   };
 
   render() {
@@ -188,6 +204,41 @@ class Home extends PureComponent {
             body="To customise settings, click on the ☰ icon at the top right corner and select settings from the menu options"
             toastID="settings"
             settingsName="showSettingsToast"
+          />
+        ) : null}
+        {this.props.showHelpToast ? (
+          <Tip
+            body={
+              <>
+                <p>
+                  <span
+                    className={f('icon', 'icon-common', 'font-l')}
+                    data-icon="&#xf02d;"
+                  />{' '}
+                  You can find all the documentation of our website in{' '}
+                  <Link
+                    href={config.root.readthedocs.href}
+                    className={f('ext')}
+                    target="_blank"
+                  >
+                    Read The Docs
+                  </Link>
+                </p>
+                <p>
+                  If you need help about the components of the home page you can
+                  visit{' '}
+                  <Link
+                    href={`${config.root.readthedocs.href}homepage.html`}
+                    className={f('ext')}
+                    target="_blank"
+                  >
+                    [this page].
+                  </Link>
+                </p>
+              </>
+            }
+            toastID="rtdhelp"
+            settingsName="showHelpToast"
           />
         ) : null}
         <GeneralWarning />
@@ -208,6 +259,7 @@ class Home extends PureComponent {
               <div className={f('intro-content')} data-testid="intro-content">
                 <h3>Classification of protein families</h3>
                 <Description textBlocks={[description]} />
+                <CitingInterPro />
               </div>
             </div>
           </div>
@@ -330,7 +382,8 @@ class Home extends PureComponent {
 
 const mapStateToProps = createSelector(
   (state) => state.settings.notifications.showSettingsToast,
-  (showSettingsToast) => ({ showSettingsToast }),
+  (state) => state.settings.notifications.showHelpToast,
+  (showSettingsToast, showHelpToast) => ({ showSettingsToast, showHelpToast }),
 );
 
 export default connect(mapStateToProps)(Home);

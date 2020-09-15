@@ -18,6 +18,7 @@ const mapEndpointToName = new Map([
   ['ebi', 'EBI Search API'],
   ['ipScan', 'InterProScan API'],
   ['genome3d', 'Genome3D'],
+  ['wikipedia', 'Wikipedia API'],
 ]);
 
 /*:: type StatusProps = {
@@ -115,8 +116,8 @@ class _ServerStatuses extends PureComponent /*:: <StatusesProps> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.status.servers,
-  state => state.status.browser,
+  (state) => state.status.servers,
+  (state) => state.status.browser,
   (statuses, browser) => ({ statuses, browser }),
 );
 

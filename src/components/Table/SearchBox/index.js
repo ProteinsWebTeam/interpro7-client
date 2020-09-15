@@ -12,8 +12,8 @@ import { goToCustomLocation } from 'actions/creators';
 import { foundationPartial } from 'styles/foundation';
 
 import s from './style.css';
-
-const f = foundationPartial(s);
+import fonts from 'EBI-Icon-fonts/fonts.css';
+const f = foundationPartial(fonts, s);
 
 const DEBOUNCE_RATE = 500; // In ms
 
@@ -89,19 +89,18 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
   };
 
   render() {
+    const text =
+      this.state.localSearch === null
+        ? this.props.customLocation.search[this.props.field || 'search'] || ''
+        : this.state.localSearch;
+
     return (
       <div className={f('table-filter')}>
         <div className={f('filter-box', { loading: this.props.loading })}>
           <input
             id="table-filter-text"
             type="text"
-            value={
-              this.state.localSearch === null
-                ? this.props.customLocation.search[
-                    this.props.field || 'search'
-                  ] || ''
-                : this.state.localSearch
-            }
+            value={text}
             onChange={this.handleChange}
             placeholder={this.props.children || 'Search'}
           />
@@ -121,7 +120,9 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(SearchBox);
+export default connect(mapStateToProps, {
+  goToCustomLocation,
+})(SearchBox);
