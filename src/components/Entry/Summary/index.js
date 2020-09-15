@@ -662,7 +662,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
         </section>
         <OtherSections metadata={metadata} citations={{ included, extra }} />
         <section>
-          {metadata.source_database === 'pfam' ? (
+          {metadata.source_database === 'pfam' && metadata.wikipedia ? (
             <Wikipedia
               title={metadata.wikipedia.title}
               extract={metadata.wikipedia.extract}
