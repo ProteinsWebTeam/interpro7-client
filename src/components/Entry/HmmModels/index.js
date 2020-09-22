@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
-import hmmLogo from './hmm_logo';
+import skylign from 'skylign';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -17,39 +17,41 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessData = (data) => ({
-  '@id': '@additionalProperty',
-  '@type': 'PropertyValue',
-  name: 'hasSignature',
-  value: [
-    {
-      '@type': 'CreativeWork',
-      additionalType: ['bio:DataRecord', 'AlignmentLogo'],
-      additionalProperty: [
-        {
-          '@type': 'PropertyValue',
-          name: 'maxHeight',
-          value: data.max_height,
-        },
-        {
-          '@type': 'PropertyValue',
-          name: 'processing',
-          value: data.processing,
-        },
-        {
-          '@type': 'PropertyValue',
-          name: 'alphabet',
-          value: data.alphabet,
-        },
-        {
-          '@type': 'PropertyValue',
-          name: 'minHeightObserved',
-          value: data.min_height_obs,
-        },
-      ],
-    },
-  ],
-});
+const schemaProcessData = (data) => {
+  return {
+    '@id': '@additionalProperty',
+    '@type': 'PropertyValue',
+    name: 'hasSignature',
+    value: [
+      {
+        '@type': 'CreativeWork',
+        additionalType: ['bio:DataRecord', 'AlignmentLogo'],
+        additionalProperty: [
+          {
+            '@type': 'PropertyValue',
+            name: 'maxHeight',
+            value: data.max_height,
+          },
+          {
+            '@type': 'PropertyValue',
+            name: 'processing',
+            value: data.processing,
+          },
+          {
+            '@type': 'PropertyValue',
+            name: 'alphabet',
+            value: data.alphabet,
+          },
+          {
+            '@type': 'PropertyValue',
+            name: 'minHeightObserved',
+            value: data.min_height_obs,
+          },
+        ],
+      },
+    ],
+  };
+};
 /*:: type Props = {
   data: {}
 }; */
@@ -68,11 +70,13 @@ class LogoSection extends Component /*:: <Props> */ {
   }
 
   componentDidMount() {
+    /*
     hmmLogo(this._ref.current, {
       column_info: true,
       data: this.props.data,
       height_toggle: true,
     });
+    */
   }
 
   shouldComponentUpdate() {
@@ -93,8 +97,11 @@ const HmmModelSection = ({ logo } /*: {logo: {}} */) => (
   <div className={f('row')}>
     <div className={f('columns')}>
       <div className={f('logo_wrapper')}>
-        <SchemaOrgData data={logo} processData={schemaProcessData} />
-        <LogoSection data={logo} />
+        <SchemaOrgData
+          data={JSON.stringify(logo)}
+          processData={schemaProcessData}
+        />
+        <skylign-component logo={JSON.stringify(logo)} />
       </div>
     </div>
   </div>

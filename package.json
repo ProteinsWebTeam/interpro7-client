@@ -128,6 +128,7 @@
     "resize-observer-polyfill": "1.5.1",
     "restructured": "0.0.11",
     "shifty": "2.9.2",
+    "skylign": "^1.0.4",
     "stockholm-js": "^1.0.9",
     "taxonomy-visualisation": "1.2.6",
     "timeago.js": "4.0.2",
