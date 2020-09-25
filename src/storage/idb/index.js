@@ -1,6 +1,5 @@
 // @flow
 import { openDB } from 'idb';
-/*:: import type { DB } from 'idb'; */
 
 let initialized = false;
 let dbPromise;
@@ -29,18 +28,15 @@ const init = () => {
 class TableAccess {
   /*::
     _table: string;
-    _db: DB;
+    _db: typeof openDB;
   */
-  constructor(table /*: string */, db /*: DB */) {
+  constructor(table /*: string */, db /*: typeof openDB */) {
     this._table = table;
     this._db = db;
   }
 
   async get(key /*: string */) {
-    return this._db
-      .transaction(this._table)
-      .objectStore(this._table)
-      .get(key);
+    return this._db.transaction(this._table).objectStore(this._table).get(key);
   }
 
   async set(value /*: string */, key /*: string */) {
@@ -97,7 +93,7 @@ class TableAccess {
     const keys = [];
     (objectStore.iterateKeyCursor || objectStore.iterateCursor).call(
       objectStore,
-      cursor => {
+      (cursor) => {
         if (!cursor) return;
         keys.push(cursor.key);
         cursor.continue();

@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -242,8 +243,8 @@ class TaxnameStructures extends PureComponent /*:: <TaxnameStructuresProps> */ {
     return (
       // TODO: get values when more than 2 species
       <Tooltip
-        title={`${loading || payload.results[0].metadata.name} (Tax ID: ${
-          loading || payload.results[0].metadata.accession
+        title={`${loading ? '' : payload.results[0].metadata.name} (Tax ID: ${
+          loading ? '' : payload.results[0].metadata.accession
         })`}
       >
         {loading || payload.results[0].metadata.name}
@@ -406,7 +407,7 @@ const AllStructuresDownload = (
     search,
     count,
     fileType,
-  } /*: {description: Object, count: number} */,
+  } /*: {description: Object, search: Object,count: number, fileType: string} */,
 ) => (
   <File
     fileType={fileType}
@@ -431,7 +432,12 @@ const List = (
     customLocation: { description, search },
     dataBase,
   } /*: { data: {
-   payload: Object,
+   payload: {
+      results: Array<Object>,
+      count: number,
+      next: ?string,
+      previous: ?string,
+   },
    loading: boolean,
    ok: boolean,
    url: string,
@@ -459,6 +465,8 @@ const List = (
     _payload = {
       results: [],
       count: 0,
+      next: null,
+      previous: null,
     };
   }
   const includeGrid = url;

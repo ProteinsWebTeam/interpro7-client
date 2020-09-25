@@ -1,14 +1,15 @@
+// @flow
 import { get } from 'lodash-es';
 
-const mapToString = (selector, serializer) => list =>
+const mapToString = (selector, serializer) => (list) =>
   list
-    .map(item => {
+    .map((item) => {
       const value = selector ? get(item, selector) : item;
       return serializer ? serializer(value) : value;
     })
     .join(';');
 
-const locationsToString = locations =>
+const locationsToString = (locations) =>
   locations
     ? locations
         .map(({ fragments }) =>
@@ -17,7 +18,20 @@ const locationsToString = locations =>
         .join(',')
     : '';
 
-export const columns = {
+export const columns /*: {
+  entry: Object,
+  protein: Object,
+  structure: Object,
+  taxonomy: Object,
+  proteome: Object,
+  set: Object,
+  proteinEntry?: Object,
+  proteinStructure?: Object,
+  structureProtein?: Object,
+  structureEntry?: Object,
+  entryStructure?: Object,
+  entryProtein?: Object,
+} */ = {
   entry: [
     { name: 'Accession', selector: 'metadata.accession' },
     { name: 'Name', selector: 'metadata.name' },
@@ -27,18 +41,18 @@ export const columns = {
     {
       name: 'Integrated Signatures',
       selector: 'metadata.member_databases',
-      serializer: dbs =>
+      serializer: (dbs /*: Object */) =>
         dbs
           ? Object.keys(dbs)
-              .map(db => Object.keys(dbs[db]).join(','))
+              .map((db) => Object.keys(dbs[db]).join(','))
               .join(',')
           : '',
     },
     {
       name: 'GO Terms',
       selector: 'metadata.go_terms',
-      serializer: terms =>
-        terms ? terms.map(t => t.identifier).join(',') : '',
+      serializer: (terms /*: Array<{identifier: string}> */) =>
+        terms ? terms.map((t) => t.identifier).join(',') : '',
     },
   ],
   protein: [
@@ -64,7 +78,8 @@ export const columns = {
     {
       name: 'Children',
       selector: 'metadata.children',
-      serializer: children => (children ? children.join(',') : ''),
+      serializer: (children /*: Array<string> */) =>
+        children ? children.join(',') : '',
     },
     { name: 'Number of Entries', selector: 'extra_fields.counters.entries' },
     { name: 'Number of Proteins', selector: 'extra_fields.counters.proteins' },
@@ -214,7 +229,10 @@ columns.entryProtein = [
   },
 ];
 
-export const object2TSV = (object, selectors) => {
+export const object2TSV = (
+  object /*: Object */,
+  selectors /*: Array<{selector: string, serializer?: function}> */,
+) => {
   return selectors
     .map(({ selector, serializer }) => {
       const value = get(object, selector);

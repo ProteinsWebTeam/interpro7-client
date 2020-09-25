@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -31,11 +32,12 @@ import style from './style.css';
 
 const f = foundationPartial(style, fonts);
 
+/*:: import type { ColorMode } from 'utils/entry-color'; */
 /*:: type Props = {
-  id: string|number,
+  id: string,
   matches: Array<Object>,
   highlight?: string,
-  colorDomainsBy?: string
+  colorDomainsBy: ColorMode
 }; */
 
 /*:: type State = {
@@ -56,6 +58,7 @@ const optionsForObserver = {
   rootMargin: '0px',
   /* eslint-disable-next-line prefer-spread */
   threshold: Array.apply(null, { length: NUMBER_OF_CHECKS }).map(
+    //$FlowFixMe
     Number.call,
     (n) => (n + 1) / NUMBER_OF_CHECKS,
   ),
@@ -66,6 +69,18 @@ const FULL_REQUESTER = 2;
 let fullScreenRequester = null;
 class StructureView extends PureComponent /*:: <Props, State> */ {
   /*:: _structureViewer: { current: ?HTMLElement }; */
+  /*:: stage: Object; */
+  /*:: _protein2structureMappers: Object; */
+  /*:: name: Object; */
+  /*:: _structurevViewer: Object; */
+  /*:: _structureSection: Object; */
+  /*:: _protvista: Object; */
+  /*:: _splitView: Object; */
+  /*:: _viewerControls: Object; */
+  /*:: _poppableViewer: Object; */
+  /*:: splitViewStyle: Object; */
+  /*:: observer: IntersectionObserver; */
+  /*:: handlingSequenceHighlight: bool; */
 
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
