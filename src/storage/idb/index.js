@@ -8,6 +8,7 @@ let tableAccesses;
 
 export const IPScanJobsMeta = 'IPScan-jobs-meta';
 export const IPScanJobsData = 'IPScan-jobs-data';
+export const FavEntries = 'fav-entries';
 
 const init = () => {
   dbPromise = openDB('InterPro', 1, {
@@ -19,6 +20,7 @@ const init = () => {
         case 0:
           db.createObjectStore(IPScanJobsMeta, { autoIncrement: true });
           db.createObjectStore(IPScanJobsData, { autoIncrement: true });
+          db.createObjectStore(FavEntries, { autoIncrement: true });
       }
     },
   });
@@ -37,10 +39,7 @@ class TableAccess {
   }
 
   async get(key /*: string */) {
-    return this._db
-      .transaction(this._table)
-      .objectStore(this._table)
-      .get(key);
+    return this._db.transaction(this._table).objectStore(this._table).get(key);
   }
 
   async set(value /*: string */, key /*: string */) {
@@ -97,7 +96,7 @@ class TableAccess {
     const keys = [];
     (objectStore.iterateKeyCursor || objectStore.iterateCursor).call(
       objectStore,
-      cursor => {
+      (cursor) => {
         if (!cursor) return;
         keys.push(cursor.key);
         cursor.continue();

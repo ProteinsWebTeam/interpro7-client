@@ -16,6 +16,10 @@ import styles from './style.css';
 import loadData from '../../higherOrder/loadData';
 import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 
+import { connect } from 'react-redux';
+import { markFavourite, unmarkFavourite } from 'actions/creators';
+import getTableAccess, { FavEntries } from 'storage/idb';
+
 import config from 'config';
 
 const f = foundationPartial(fonts, ipro, styles);
@@ -46,6 +50,12 @@ const mapNameToClass = new Map([
   },
   mainType: string,
   data?: Object,
+  markFavourite: function,
+  unmarkFavourite: function,
+}; */
+
+/*:: type State = {
+  entries: Array<string>,
 }; */
 
 const accessionDisplay = new Set(['protein', 'structure', 'proteome']);
@@ -248,20 +258,50 @@ AccessionTag.propTypes = {
   mainType: T.string.isRequired,
 };
 
-class Title extends PureComponent /*:: <Props> */ {
+class Title extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     metadata: T.object.isRequired,
     data: T.object.isRequired,
     mainType: T.string.isRequired,
+    markFavourite: T.func.isRequired,
+    unmarkFavourite: T.func.isRequired,
   };
 
+  constructor(props /*: Props */) {
+    super(props);
+
+    this.state = {
+      entries: [],
+    };
+  }
   componentDidMount() {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
       ).then((m) => m.InterproType),
     ).as('interpro-type');
+    this.getFavourites();
   }
+
+  componentDidUpdate() {
+    this.getFavourites();
+  }
+
+  getFavourites = async () => {
+    const favTA = await getTableAccess(FavEntries);
+    const content = await favTA.getAll();
+    const keys = Object.keys(content);
+    this.setState({ entries: keys });
+  };
+
+  manageFavourites(metadata) {
+    if (this.state.entries.includes(metadata.accession)) {
+      this.props.unmarkFavourite(metadata.accession);
+    } else {
+      this.props.markFavourite(metadata.accession, metadata);
+    }
+  }
+
   // eslint-disable-next-line complexity
   render() {
     const { metadata, mainType, data } = this.props;
@@ -323,6 +363,14 @@ class Title extends PureComponent /*:: <Props> */ {
             )
           }
           <TitleTag metadata={metadata} mainType={mainType} dbLabel={dbLabel} />
+          <button
+            className={f('button')}
+            onClick={() => this.manageFavourites(metadata)}
+          >
+            {this.state.entries.includes(metadata.accession)
+              ? 'Remove from Favourites'
+              : 'Mark as Favourite'}
+          </button>
         </div>
         <AccessionTag metadata={metadata} mainType={mainType} />
       </div>
@@ -330,4 +378,6 @@ class Title extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default loadData(getUrlForMeta)(Title);
+export default connect(null, { markFavourite, unmarkFavourite })(
+  loadData(getUrlForMeta)(Title),
+);
