@@ -82,6 +82,8 @@ class LatestEntry extends PureComponent /*:: <Props> */ {
 
   render() {
     const { entry } = this.props;
+    // eslint-disable-next-line camelcase
+    const dbs = entry?.metadata?.member_databases || [];
     return (
       <div
         className={f('grid-card', 'card-shrink')}
@@ -304,23 +306,21 @@ class LatestEntry extends PureComponent /*:: <Props> */ {
             </div>
             {
               // OPTION COUNT SIGNATURES - ICON SVG
-              Object.keys(entry?.metadata?.member_databases || []).map(
-                (key) => (
-                  <div
-                    className={f('icon-count-signatures')}
-                    key={Object.keys(entry.metadata.member_databases[key])[0]}
+              Object.keys(dbs).map((key) => (
+                <div
+                  className={f('icon-count-signatures')}
+                  key={Object.keys(entry.metadata.member_databases[key])[0]}
+                >
+                  <Tooltip
+                    title={`${key} signature:  ${
+                      Object.keys(entry.metadata.member_databases[key])[0]
+                    }`}
                   >
-                    <Tooltip
-                      title={`${key} signature:  ${
-                        Object.keys(entry.metadata.member_databases[key])[0]
-                      }`}
-                    >
-                      {' '}
-                      <MemberSymbol type={key} className={f('md-small')} />
-                    </Tooltip>
-                  </div>
-                ),
-              )
+                    {' '}
+                    <MemberSymbol type={key} className={f('md-small')} />
+                  </Tooltip>
+                </div>
+              ))
             }
           </div>
         </div>

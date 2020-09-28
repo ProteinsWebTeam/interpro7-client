@@ -33,6 +33,8 @@ const CurationSubPage = ({ data }) => {
 
   if (!details) return null;
 
+  // eslint-disable-next-line camelcase
+  const sequenceOntology = details.curation?.sequence_ontology || '';
   return (
     <div className={f('row', 'column')}>
       <h4>Curation</h4>
@@ -72,7 +74,7 @@ const CurationSubPage = ({ data }) => {
                 target="_blank"
                 rel="noreferrer"
               >
-                {details.curation?.sequence_ontology || ''}
+                {sequenceOntology}
               </a>
             </td>
           </tr>

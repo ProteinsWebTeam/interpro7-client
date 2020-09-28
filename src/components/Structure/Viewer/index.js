@@ -58,7 +58,7 @@ const optionsForObserver = {
   rootMargin: '0px',
   /* eslint-disable-next-line prefer-spread */
   threshold: Array.apply(null, { length: NUMBER_OF_CHECKS }).map(
-    //$FlowFixMe
+    // $FlowFixMe
     Number.call,
     (n) => (n + 1) / NUMBER_OF_CHECKS,
   ),
