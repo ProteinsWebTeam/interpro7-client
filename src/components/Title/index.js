@@ -266,6 +266,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
     markFavourite: T.func.isRequired,
     unmarkFavourite: T.func.isRequired,
   };
+  _isMounted = false;
 
   constructor(props /*: Props */) {
     super(props);
@@ -275,6 +276,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
     };
   }
   componentDidMount() {
+    this._isMounted = true;
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
@@ -287,11 +289,17 @@ class Title extends PureComponent /*:: <Props, State> */ {
     this.getFavourites();
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   getFavourites = async () => {
     const favTA = await getTableAccess(FavEntries);
     const content = await favTA.getAll();
     const keys = Object.keys(content);
-    this.setState({ entries: keys });
+    if (this._isMounted) {
+      this.setState({ entries: keys });
+    }
   };
 
   manageFavourites(metadata) {
@@ -352,33 +360,44 @@ class Title extends PureComponent /*:: <Props, State> */ {
         )}
 
         <div className={f('title-name')}>
-          {
-            // add margin only for IPSCAN result page
-            metadata.name.name === 'InterProScan Search Result' ? (
-              <h3 className={f('margin-bottom-large')}>
-                {metadata.name.name}{' '}
-              </h3>
-            ) : (
-              <h3>{metadata.name.name}</h3>
-            )
-          }
-          <TitleTag metadata={metadata} mainType={mainType} dbLabel={dbLabel} />
-          {
-            // Showing Favourites only for InterPro entries for now
-            isEntry &&
-              metadata.type &&
-              metadata.source_database &&
-              metadata.source_database.toLowerCase() === 'interpro' && (
-                <button
-                  className={f('button')}
-                  onClick={() => this.manageFavourites(metadata)}
-                >
-                  {this.state.entries.includes(metadata.accession)
-                    ? 'Remove from Favourites'
-                    : 'Mark as Favourite'}
-                </button>
+          <div className={f('title-fav')}>
+            {
+              // add margin only for IPSCAN result page
+              metadata.name.name === 'InterProScan Search Result' ? (
+                <h3 className={f('margin-bottom-large')}>
+                  {metadata.name.name}{' '}
+                </h3>
+              ) : (
+                <h3>{metadata.name.name}</h3>
               )
-          }
+            }
+            {
+              // Showing Favourites only for InterPro entries for now
+              isEntry &&
+                metadata.type &&
+                metadata.source_database &&
+                metadata.source_database.toLowerCase() === 'interpro' && (
+                  <span
+                    className={f('fav-icon')}
+                    onClick={() => this.manageFavourites(metadata)}
+                  >
+                    {this.state.entries.includes(metadata.accession) ? (
+                      <i
+                        className={f('icon', 'icon-common', 'favourite')}
+                        data-icon="&#xf005;"
+                      />
+                    ) : (
+                      <i
+                        className={f('icon', 'icon-common', 'normal')}
+                        data-icon="&#xf005;"
+                      />
+                    )}
+                  </span>
+                )
+            }
+          </div>
+
+          <TitleTag metadata={metadata} mainType={mainType} dbLabel={dbLabel} />
         </div>
         <AccessionTag metadata={metadata} mainType={mainType} />
       </div>

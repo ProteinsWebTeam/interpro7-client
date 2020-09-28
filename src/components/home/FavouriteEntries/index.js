@@ -13,7 +13,9 @@ import cardStyle from '../ByLatestEntries/styles.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, theme, cardStyle);
 
-export class ByFavouriteEntries extends PureComponent {
+export class FavouriteEntries extends PureComponent {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
 
@@ -23,11 +25,16 @@ export class ByFavouriteEntries extends PureComponent {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.getFavourites();
   }
 
   componentDidUpdate() {
     this.getFavourites();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   getFavourites = async () => {
@@ -40,7 +47,9 @@ export class ByFavouriteEntries extends PureComponent {
       e.extra_fields.counters = e.metadata.counters;
       return e;
     });
-    this.setState({ entries: entryStructureModified });
+    if (this._isMounted) {
+      this.setState({ entries: entryStructureModified });
+    }
   };
 
   render() {
@@ -63,4 +72,4 @@ export class ByFavouriteEntries extends PureComponent {
   }
 }
 
-export default ByFavouriteEntries;
+export default FavouriteEntries;

@@ -96,7 +96,7 @@ const ByLatestEntries = loadable({
 const FavouriteEntries = loadable({
   loader: () =>
     import(
-      /* webpackChunkName: "by-favourite-entries", webpackPreload: true */ 'components/home/FavouriteEntries'
+      /* webpackChunkName: "favourite-entries" */ 'components/home/FavouriteEntries'
     ),
 });
 const BlogEntries = loadable({
