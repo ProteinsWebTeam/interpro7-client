@@ -242,7 +242,7 @@ class Description extends PureComponent /*:: <Props> */ {
                 <Paragraph
                   key={j}
                   p={p}
-                  literature={literature}
+                  literature={literature || []}
                   accession={accession}
                   withoutIDs={withoutIDs}
                 />

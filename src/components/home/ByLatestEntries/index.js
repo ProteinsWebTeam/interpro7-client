@@ -76,7 +76,7 @@ class LatestEntry extends PureComponent /*:: <Props> */ {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then(m => m.InterproType),
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
 
@@ -302,22 +302,26 @@ class LatestEntry extends PureComponent /*:: <Props> */ {
                 </Link>
               </Tooltip>
             </div>
-            {// OPTION COUNT SIGNATURES - ICON SVG
-            Object.keys(entry.metadata.member_databases).map(key => (
-              <div
-                className={f('icon-count-signatures')}
-                key={Object.keys(entry.metadata.member_databases[key])[0]}
-              >
-                <Tooltip
-                  title={`${key} signature:  ${
-                    Object.keys(entry.metadata.member_databases[key])[0]
-                  }`}
-                >
-                  {' '}
-                  <MemberSymbol type={key} className={f('md-small')} />
-                </Tooltip>
-              </div>
-            ))}
+            {
+              // OPTION COUNT SIGNATURES - ICON SVG
+              Object.keys(entry?.metadata?.member_databases || []).map(
+                (key) => (
+                  <div
+                    className={f('icon-count-signatures')}
+                    key={Object.keys(entry.metadata.member_databases[key])[0]}
+                  >
+                    <Tooltip
+                      title={`${key} signature:  ${
+                        Object.keys(entry.metadata.member_databases[key])[0]
+                      }`}
+                    >
+                      {' '}
+                      <MemberSymbol type={key} className={f('md-small')} />
+                    </Tooltip>
+                  </div>
+                ),
+              )
+            }
           </div>
         </div>
       </div>
@@ -350,7 +354,7 @@ export class ByEntriesFeatured extends PureComponent /*:: <EntriesProps> */ {
           <div className={f('row')}>
             <div className={f('columns')}>
               <AnimatedEntry className={f('card-wrapper')} element="div">
-                {newEntries.map(e => (
+                {newEntries.map((e) => (
                   <LatestEntry entry={e} key={e.metadata.accession} />
                 ))}
               </AnimatedEntry>
@@ -376,7 +380,7 @@ export class ByEntriesFeatured extends PureComponent /*:: <EntriesProps> */ {
 }
 
 const getAllLatestEntriesURL = createSelector(
-  state => state.settings.api,
+  (state) => state.settings.api,
   ({ protocol, hostname, port, root }) => {
     const desc = {
       main: { key: 'entry' },
