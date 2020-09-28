@@ -298,7 +298,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
     if (this.state.entries.includes(metadata.accession)) {
       this.props.unmarkFavourite(metadata.accession);
     } else {
-      this.props.markFavourite(metadata.accession, metadata);
+      this.props.markFavourite(metadata.accession, { metadata });
     }
   }
 
@@ -363,14 +363,22 @@ class Title extends PureComponent /*:: <Props, State> */ {
             )
           }
           <TitleTag metadata={metadata} mainType={mainType} dbLabel={dbLabel} />
-          <button
-            className={f('button')}
-            onClick={() => this.manageFavourites(metadata)}
-          >
-            {this.state.entries.includes(metadata.accession)
-              ? 'Remove from Favourites'
-              : 'Mark as Favourite'}
-          </button>
+          {
+            // Showing Favourites only for InterPro entries for now
+            isEntry &&
+              metadata.type &&
+              metadata.source_database &&
+              metadata.source_database.toLowerCase() === 'interpro' && (
+                <button
+                  className={f('button')}
+                  onClick={() => this.manageFavourites(metadata)}
+                >
+                  {this.state.entries.includes(metadata.accession)
+                    ? 'Remove from Favourites'
+                    : 'Mark as Favourite'}
+                </button>
+              )
+          }
         </div>
         <AccessionTag metadata={metadata} mainType={mainType} />
       </div>

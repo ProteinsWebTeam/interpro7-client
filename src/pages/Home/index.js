@@ -93,6 +93,12 @@ const ByLatestEntries = loadable({
       /* webpackChunkName: "by-latest-entries", webpackPreload: true */ 'components/home/ByLatestEntries'
     ),
 });
+const FavouriteEntries = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "by-favourite-entries", webpackPreload: true */ 'components/home/FavouriteEntries'
+    ),
+});
 const BlogEntries = loadable({
   loader: () =>
     import(
@@ -327,6 +333,9 @@ class Home extends PureComponent {
               <Tabs>
                 <div title="Latest entries">
                   <ByLatestEntries />
+                </div>
+                <div title="Favourite entries">
+                  <FavouriteEntries />
                 </div>
               </Tabs>
             </div>
