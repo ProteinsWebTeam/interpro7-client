@@ -141,7 +141,9 @@ const TitleTag = (
                      } */,
 ) => {
   const isEntry = mainType === 'entry';
-  const isInterPro = metadata.source_database.toLowerCase() === 'interpro';
+  // eslint-disable-next-line camelcase
+  const db = metadata?.source_database;
+  const isInterPro = db && db.toLowerCase() === 'interpro';
   let rtdLink = '';
   if (isEntry) {
     rtdLink = rtdLinks.entry[isInterPro ? 'interpro' : 'dbs'];
@@ -150,7 +152,7 @@ const TitleTag = (
   }
   return (
     <div className={f('title-tag')} data-testid="title">
-      {metadata && metadata.source_database && (
+      {db && (
         <div
           className={f('tag', {
             secondary: !isEntry || isInterPro,
