@@ -174,6 +174,14 @@ export const endpoint2type = {
   set: 'bio:DataRecord',
 };
 
+const cleanUpDescription = (description /*: string */) =>
+  (Array.isArray(description) ? description[0] : description)
+    .replace(/\r/g, '')
+    .replace(/\n/g, '')
+    .replace(/<\/?[a-zA-Z]+>/g, '')
+    .replace(/\[(\[cite:[a-zA-Z0-9]+\](, )?)+\]/g, '')
+    .replace(/\[(PMID: [0-9]+(, )?)+\]/g, '');
+
 export const schemaProcessMainEntity = ({ data, type }) => {
   const schema = {
     // '@type': [type, 'StructuredValue', 'BioChemEntity', 'CreativeWork'],
@@ -190,7 +198,10 @@ export const schemaProcessMainEntity = ({ data, type }) => {
     isPartOf: `https://www.ebi.ac.uk/interpro/${type}/${data.source_database}/`,
     license: 'https://creativecommons.org/licenses/by/4.0/',
   };
-  schema.description = `The main entity of this document is a ${type} with accession number ${data.accession}`;
+  if (data.description) {
+    schema.description = cleanUpDescription(data.description);
+  } else
+    schema.description = `The main entity of this document is a ${type} with accession number ${data.accession}`;
   // if (type === 'Entry') {
   //   schema['@type'].push(
   //     mapTypeToOntology.get(data.type) || mapTypeToOntology.get('Unknown'),

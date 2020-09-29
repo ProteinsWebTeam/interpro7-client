@@ -48,7 +48,7 @@ const Tip = (
 };
 Tip.propTypes = {
   title: T.string,
-  body: T.string.isRequired,
+  body: T.oneOfType([T.string, T.object]).isRequired,
   checkBoxLabel: T.string,
   ttl: T.number,
   toastID: T.string.isRequired,
