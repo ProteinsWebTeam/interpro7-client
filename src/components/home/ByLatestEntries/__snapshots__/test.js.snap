@@ -14,7 +14,7 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
         className="card-wrapper"
         element="div"
       >
-        <LatestEntry
+        <EntryCard
           entry={
             Object {
               "extra_fields": Object {

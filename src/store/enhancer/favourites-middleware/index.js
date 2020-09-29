@@ -1,5 +1,4 @@
 import { MARK_FAVOURITE, UNMARK_FAVOURITE } from 'actions/types';
-import { markFavourite, unmarkFavourite } from 'actions/creators';
 import getTableAccess, { FavEntries } from 'storage/idb';
 
 const favTA = getTableAccess(FavEntries);
@@ -20,7 +19,7 @@ const createEntryInDB = async (id, content) => {
   }
 };
 
-const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
+const middleware /*: Middleware<*, *, *> */ = () => {
   return (next) => async (action) => {
     switch (action.type) {
       case MARK_FAVOURITE:

@@ -266,7 +266,6 @@ class Title extends PureComponent /*:: <Props, State> */ {
     markFavourite: T.func.isRequired,
     unmarkFavourite: T.func.isRequired,
   };
-  _isMounted = false;
 
   constructor(props /*: Props */) {
     super(props);
@@ -292,6 +291,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
   componentWillUnmount() {
     this._isMounted = false;
   }
+  _isMounted = false;
 
   getFavourites = async () => {
     const favTA = await getTableAccess(FavEntries);
@@ -379,7 +379,10 @@ class Title extends PureComponent /*:: <Props, State> */ {
                 metadata.source_database.toLowerCase() === 'interpro' && (
                   <span
                     className={f('fav-icon')}
+                    role="button"
                     onClick={() => this.manageFavourites(metadata)}
+                    onKeyDown={() => this.manageFavourites(metadata)}
+                    tabIndex={0}
                   >
                     {this.state.entries.includes(metadata.accession) ? (
                       <i

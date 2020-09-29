@@ -14,8 +14,6 @@ import cardStyle from '../ByLatestEntries/styles.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, theme, cardStyle);
 
 export class FavouriteEntries extends PureComponent {
-  _isMounted = false;
-
   constructor(props) {
     super(props);
 
@@ -36,6 +34,7 @@ export class FavouriteEntries extends PureComponent {
   componentWillUnmount() {
     this._isMounted = false;
   }
+  _isMounted = false;
 
   getFavourites = async () => {
     const favTA = await getTableAccess(FavEntries);
