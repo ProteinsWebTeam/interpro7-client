@@ -236,20 +236,20 @@ class Description extends PureComponent /*:: <Props> */ {
         data-testid="description"
       >
         {sections
-          .map((section) =>
+          .map((section, i) =>
             section
               .map((p, j) => (
                 <Paragraph
-                  key={j}
+                  key={`${i}.${j}`}
                   p={p}
                   literature={literature || []}
                   accession={accession}
                   withoutIDs={withoutIDs}
                 />
               ))
-              .reduce((prev, curr) => [prev, <br key={prev} />, curr]),
+              .reduce((prev, curr, key) => [prev, <br key={key} />, curr]),
           )
-          .reduce((prev, curr) => [prev, <hr key={prev} />, curr])}
+          .reduce((prev, curr, key) => [prev, <hr key={key} />, curr])}
       </div>
     );
   }
