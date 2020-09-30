@@ -9,12 +9,11 @@ import idaAccessionDB from './idaAccessionDB';
 /*:: import type { EMBLMapNav } from './emblMapNav'; */
 /*:: import type { SideNav } from './sideNav'; */
 /*:: import type { Stuck } from './stuck'; */
-/*:: import type { AccessionDB } from './idaAccessionDB'; */
 /*:: export type UI = {|
   emblMapNav: EMBLMapNav,
   sideNav: SideNav,
   stuck: Stuck,
-  idaAccessionDB: AccessionDB,
+  idaAccessionDB: typeof idaAccessionDB,
 |}; */
 /*:: import type { State } from 'reducers'; */
 

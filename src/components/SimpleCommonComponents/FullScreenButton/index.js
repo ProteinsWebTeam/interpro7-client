@@ -18,7 +18,7 @@ const FullScreenButton = (
     tooltip,
     className,
     dataIcon,
-  } /*: {handleFullScreen?: function, element: any, tooltip: string, className?: string, dataIcon?: string} */,
+  } /*: {handleFullScreen?: function, element?: any, tooltip: string, className?: string, dataIcon?: string} */,
 ) => {
   const [isFull, setFull] = useState(false);
   const handleFullscreen = () => setFull(!!document.fullscreenElement);

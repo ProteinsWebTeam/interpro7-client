@@ -204,16 +204,19 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
                 </tr>
               )}
 
-              {// SP: is this still working ?
-              metadata.parent && (
-                <SchemaOrgData
-                  data={{
-                    taxId: metadata.parent,
-                    name: names[metadata.parent] && names[metadata.parent].name,
-                  }}
-                  processData={parentRelationship}
-                />
-              )}
+              {
+                // SP: is this still working ?
+                metadata.parent && (
+                  <SchemaOrgData
+                    data={{
+                      taxId: metadata.parent,
+                      name:
+                        names[metadata.parent] && names[metadata.parent].name,
+                    }}
+                    processData={parentRelationship}
+                  />
+                )
+              }
 
               <tr>
                 <td>Lineage</td>
@@ -224,7 +227,10 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
               <tr>
                 <td>Children</td>
                 <td data-testid="taxonomy-children">
-                  <Children taxChildren={metadata.children} names={names} />
+                  <Children
+                    taxChildren={metadata.children || []}
+                    names={names}
+                  />
                 </td>
               </tr>
             </tbody>

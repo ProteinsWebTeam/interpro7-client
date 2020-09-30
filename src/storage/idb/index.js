@@ -1,6 +1,5 @@
 // @flow
 import { openDB } from 'idb';
-/*:: import type { DB } from 'idb'; */
 
 let initialized = false;
 let dbPromise;
@@ -31,9 +30,9 @@ const init = () => {
 class TableAccess {
   /*::
     _table: string;
-    _db: DB;
+    _db: typeof openDB;
   */
-  constructor(table /*: string */, db /*: DB */) {
+  constructor(table /*: string */, db /*: typeof openDB */) {
     this._table = table;
     this._db = db;
   }

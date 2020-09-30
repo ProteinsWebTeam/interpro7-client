@@ -24,7 +24,7 @@ export const DEBOUNCE_RATE_SLOW = 2000; // 2s
   main: ?string,
   value: ?string,
   className?: string,
-  goToCustomLocation: goToCustomLocation,
+  goToCustomLocation: typeof goToCustomLocation,
   inputRef: function,
   delay?: ?number,
   shouldRedirect?: ?boolean,

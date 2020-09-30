@@ -6,14 +6,17 @@ exports[`<Description /> should render 1`] = `
   data-testid="description"
 >
   <Paragraph
+    literature={Array []}
     p="a"
   />
   <hr />
   <Paragraph
+    literature={Array []}
     p="b"
   />
   <hr />
   <Paragraph
+    literature={Array []}
     p="c"
   />
 </div>

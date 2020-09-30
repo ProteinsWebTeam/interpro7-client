@@ -1,3 +1,5 @@
+@import '../../../styles/colors.css';
+
 .error-msg {
   padding: 5rem 0 5rem;
   text-align: center;
@@ -12,4 +14,28 @@
 .error-msg ul {
   list-style-type: none;
   margin: 0;
+}
+
+.timer {
+  display: flex;
+  justify-content: center;
+}
+.timer > div {
+  width: fit-content;
+}
+.timer > div::after {
+  content: ' ';
+  display: block;
+  border: 1px solid var(--colors-loading-bar);
+  animation-duration: 4s;
+  animation-name: loading;
+}
+@keyframes loading {
+  from {
+    width: 1%;
+  }
+
+  to {
+    width: 100%;
+  }
 }
