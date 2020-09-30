@@ -8,19 +8,18 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadWebComponent from 'utils/load-web-component';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
-import { foundationPartial } from 'styles/foundation';
+import loadData from '../../higherOrder/loadData';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { markFavourite, unmarkFavourite } from 'actions/creators';
 
+import config from 'config';
+
+import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import styles from './style.css';
-import loadData from '../../higherOrder/loadData';
-import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
-
-import { connect } from 'react-redux';
-import { markFavourite, unmarkFavourite } from 'actions/creators';
-import getTableAccess, { FavEntries } from 'storage/idb';
-
-import config from 'config';
 
 const f = foundationPartial(fonts, ipro, styles);
 
@@ -50,6 +49,7 @@ const mapNameToClass = new Map([
   },
   mainType: string,
   data?: Object,
+  entries: Array<string>,
   markFavourite: function,
   unmarkFavourite: function,
 }; */
@@ -263,47 +263,21 @@ class Title extends PureComponent /*:: <Props, State> */ {
     metadata: T.object.isRequired,
     data: T.object.isRequired,
     mainType: T.string.isRequired,
+    entries: T.array.isRequired,
     markFavourite: T.func.isRequired,
     unmarkFavourite: T.func.isRequired,
   };
 
-  constructor(props /*: Props */) {
-    super(props);
-
-    this.state = {
-      entries: [],
-    };
-  }
   componentDidMount() {
-    this._isMounted = true;
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
       ).then((m) => m.InterproType),
     ).as('interpro-type');
-    this.getFavourites();
   }
-
-  componentDidUpdate() {
-    this.getFavourites();
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-  _isMounted = false;
-
-  getFavourites = async () => {
-    const favTA = await getTableAccess(FavEntries);
-    const content = await favTA.getAll();
-    const keys = Object.keys(content);
-    if (this._isMounted) {
-      this.setState({ entries: keys });
-    }
-  };
 
   manageFavourites(metadata) {
-    if (this.state.entries.includes(metadata.accession)) {
+    if (this.props.entries.includes(metadata.accession)) {
       this.props.unmarkFavourite(metadata.accession);
     } else {
       this.props.markFavourite(metadata.accession, { metadata });
@@ -384,7 +358,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
                     onKeyDown={() => this.manageFavourites(metadata)}
                     tabIndex={0}
                   >
-                    {this.state.entries.includes(metadata.accession) ? (
+                    {this.props.entries.includes(metadata.accession) ? (
                       <i
                         className={f('icon', 'icon-common', 'favourite')}
                         data-icon="&#xf005;"
@@ -407,7 +381,11 @@ class Title extends PureComponent /*:: <Props, State> */ {
     );
   }
 }
+const mapStateToProps = createSelector(
+  (state) => state.favourites.entries,
+  (entries) => ({ entries }),
+);
 
-export default connect(null, { markFavourite, unmarkFavourite })(
+export default connect(mapStateToProps, { markFavourite, unmarkFavourite })(
   loadData(getUrlForMeta)(Title),
 );

@@ -5,10 +5,9 @@ import jobs from './jobs-middleware';
 import location from './location-middleware';
 import status from './status-middleware';
 import download from './download-middleware';
-import favourites from './favourites-middleware';
 
 export default (history /*: History */) /*: (any) => any */ => {
-  const middlewares = [jobs, location(history), status, download, favourites];
+  const middlewares = [jobs, location(history), status, download];
 
   return compose(
     applyMiddleware(...middlewares),
