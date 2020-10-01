@@ -35,7 +35,7 @@ SetLinkFromEntry.propTypes = {
   data: T.shape({
     loading: T.bool,
     payload: T.shape({
-      set_subset: T.object,
+      set_subset: T.array,
     }),
   }),
 };
