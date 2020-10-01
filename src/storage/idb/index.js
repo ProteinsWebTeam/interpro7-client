@@ -10,7 +10,7 @@ export const IPScanJobsData = 'IPScan-jobs-data';
 export const FavEntries = 'fav-entries';
 
 const init = () => {
-  dbPromise = openDB('InterPro', 1, {
+  dbPromise = openDB('InterPro', 2, {
     upgrade(db, oldVersion) {
       // do not put 'break;', keep fall-through,
       // it is to apply all the updates, one after the other
@@ -19,6 +19,8 @@ const init = () => {
         case 0:
           db.createObjectStore(IPScanJobsMeta, { autoIncrement: true });
           db.createObjectStore(IPScanJobsData, { autoIncrement: true });
+        // eslint-disable-next-line no-fallthrough
+        case 1:
           db.createObjectStore(FavEntries, { autoIncrement: true });
       }
     },
