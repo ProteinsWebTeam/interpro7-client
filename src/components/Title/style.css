@@ -92,3 +92,19 @@
     font-size: 81%;
   }
 }
+
+.title-fav {
+  display: flex;
+}
+
+.fav-icon {
+  margin: 5px;
+}
+
+.favourite {
+  color: #f37506;
+}
+
+.normal {
+  color: #dddcdc;
+}

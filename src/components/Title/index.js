@@ -8,15 +8,18 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadWebComponent from 'utils/load-web-component';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
-import { foundationPartial } from 'styles/foundation';
+import loadData from '../../higherOrder/loadData';
+import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { markFavourite, unmarkFavourite } from 'actions/creators';
 
+import config from 'config';
+
+import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import styles from './style.css';
-import loadData from '../../higherOrder/loadData';
-import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
-
-import config from 'config';
 
 const f = foundationPartial(fonts, ipro, styles);
 
@@ -46,6 +49,13 @@ const mapNameToClass = new Map([
   },
   mainType: string,
   data?: Object,
+  entries: Array<string>,
+  markFavourite: function,
+  unmarkFavourite: function,
+}; */
+
+/*:: type State = {
+  entries: Array<string>,
 }; */
 
 const accessionDisplay = new Set(['protein', 'structure', 'proteome']);
@@ -250,11 +260,14 @@ AccessionTag.propTypes = {
   mainType: T.string.isRequired,
 };
 
-class Title extends PureComponent /*:: <Props> */ {
+class Title extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     metadata: T.object.isRequired,
     data: T.object.isRequired,
     mainType: T.string.isRequired,
+    entries: T.array.isRequired,
+    markFavourite: T.func.isRequired,
+    unmarkFavourite: T.func.isRequired,
   };
 
   componentDidMount() {
@@ -264,6 +277,15 @@ class Title extends PureComponent /*:: <Props> */ {
       ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
+
+  manageFavourites(metadata) {
+    if (this.props.entries.includes(metadata.accession)) {
+      this.props.unmarkFavourite(metadata.accession);
+    } else {
+      this.props.markFavourite(metadata.accession, { metadata });
+    }
+  }
+
   // eslint-disable-next-line complexity
   render() {
     const { metadata, mainType, data } = this.props;
@@ -314,16 +336,45 @@ class Title extends PureComponent /*:: <Props> */ {
         )}
 
         <div className={f('title-name')}>
-          {
-            // add margin only for IPSCAN result page
-            metadata.name.name === 'InterProScan Search Result' ? (
-              <h3 className={f('margin-bottom-large')}>
-                {metadata.name.name}{' '}
-              </h3>
-            ) : (
-              <h3>{metadata.name.name}</h3>
-            )
-          }
+          <div className={f('title-fav')}>
+            {
+              // add margin only for IPSCAN result page
+              metadata.name.name === 'InterProScan Search Result' ? (
+                <h3 className={f('margin-bottom-large')}>
+                  {metadata.name.name}{' '}
+                </h3>
+              ) : (
+                <h3>{metadata.name.name}</h3>
+              )
+            }
+            {
+              // Showing Favourites only for InterPro entries for now
+              isEntry &&
+                metadata.type &&
+                metadata.source_database &&
+                metadata.source_database.toLowerCase() === 'interpro' && (
+                  <span
+                    className={f('fav-icon')}
+                    role="button"
+                    onClick={() => this.manageFavourites(metadata)}
+                    onKeyDown={() => this.manageFavourites(metadata)}
+                    tabIndex={0}
+                  >
+                    <span
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        this.props.entries.includes(metadata.accession)
+                          ? 'favourite'
+                          : 'normal',
+                      )}
+                      data-icon="&#xf005;"
+                    />
+                  </span>
+                )
+            }
+          </div>
+
           <TitleTag metadata={metadata} mainType={mainType} dbLabel={dbLabel} />
         </div>
         <AccessionTag metadata={metadata} mainType={mainType} />
@@ -331,5 +382,11 @@ class Title extends PureComponent /*:: <Props> */ {
     );
   }
 }
+const mapStateToProps = createSelector(
+  (state) => state.favourites.entries,
+  (entries) => ({ entries }),
+);
 
-export default loadData(getUrlForMeta)(Title);
+export default connect(mapStateToProps, { markFavourite, unmarkFavourite })(
+  loadData(getUrlForMeta)(Title),
+);

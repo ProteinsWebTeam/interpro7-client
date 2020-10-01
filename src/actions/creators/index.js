@@ -274,3 +274,20 @@ export const removeToast = (id /*: string */) => ({
   type: types.REMOVE_TOAST,
   id,
 });
+
+// favourites
+export const setInitialFavourites = (favourites /*: Array<string> */) => ({
+  type: types.SET_INITIAL_FAVOURITES,
+  favourites,
+});
+
+export const markFavourite = (id /*: string */, content /*: Object */) => ({
+  type: types.MARK_FAVOURITE,
+  id,
+  content,
+});
+
+export const unmarkFavourite = (id /*: string */) => ({
+  type: types.UNMARK_FAVOURITE,
+  id,
+});
