@@ -360,17 +360,16 @@ class Title extends PureComponent /*:: <Props, State> */ {
                     onKeyDown={() => this.manageFavourites(metadata)}
                     tabIndex={0}
                   >
-                    {this.props.entries.includes(metadata.accession) ? (
-                      <i
-                        className={f('icon', 'icon-common', 'favourite')}
-                        data-icon="&#xf005;"
-                      />
-                    ) : (
-                      <i
-                        className={f('icon', 'icon-common', 'normal')}
-                        data-icon="&#xf005;"
-                      />
-                    )}
+                    <span
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        this.props.entries.includes(metadata.accession)
+                          ? 'favourite'
+                          : 'normal',
+                      )}
+                      data-icon="&#xf005;"
+                    />
                   </span>
                 )
             }

@@ -75,7 +75,22 @@ export class FavouriteEntries extends PureComponent /*:: <Props> */ {
         </div>
       );
     }
-    return <div>No Favourites are saved.</div>;
+    return (
+      <div className={f('callout', 'info', 'withicon')}>
+        <span style={{ fontWeight: 'bold' }}>
+          You don&apos;t have any entry tagged as favourite.
+        </span>
+        <div>
+          You can tag entries as favorites by clicking on the{' '}
+          <span
+            className={f('icon', 'icon-common')}
+            data-icon="&#xf005;"
+            style={{ color: 'darkgray' }}
+          />{' '}
+          icon in the title of an entry page.
+        </div>
+      </div>
+    );
   }
 }
 const mapStateToProps = createSelector(
