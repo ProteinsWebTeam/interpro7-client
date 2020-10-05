@@ -336,7 +336,7 @@ const ContentFromRST = ({ rstText, format }) => {
     return null;
 
   numberOfSections = 0;
-  console.log(doc);
+  // console.log(doc);
   return (
     <div>
       <Children format={format}>{doc.children}</Children>

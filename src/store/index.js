@@ -3,6 +3,9 @@ import { createStore } from 'redux';
 import rootReducer from 'reducers';
 import settingsStorage from 'storage/settings';
 
+import getTableAccess, { FavEntries } from 'storage/idb';
+import { setInitialFavourites } from 'actions/creators';
+
 import enhancer from 'store/enhancer';
 import hmr from 'store/hmr';
 import getInitialState from 'store/utils/get-initial-state';
@@ -22,12 +25,20 @@ const persist = (store, storage) =>
     };
   })();
 
-export default history => {
+export default (history) => {
   const store = createStore(
     rootReducer,
     getInitialState(history),
     enhancer(history),
   );
+  // Dispatch action to set initial favourite entries stored in IndexedDB to Redux
+  getTableAccess(FavEntries)
+    .then((favT) => favT.getAll())
+    .then((content) => Object.keys(content))
+    .then((keys) => {
+      store.dispatch(setInitialFavourites(keys));
+    });
+
   if (settingsStorage) {
     settingsStorage.linkedStore = store;
     const persistSubscriber = persist(store, settingsStorage);

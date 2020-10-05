@@ -20,6 +20,14 @@ describe('<Sequence />', () => {
         goToCustomLocation={() => {}}
         name={'Glycosyltransferases'}
         accession={'A0A023NCQ6'}
+        customLocation={{
+          description: {
+            entry: { db: 'InterPro' },
+            main: { key: 'entry' },
+          },
+          hash: 'table',
+          search: {},
+        }}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();

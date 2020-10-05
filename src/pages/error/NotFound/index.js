@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-// import { sleep } from 'timing-functions';
+import { sleep } from 'timing-functions';
 
 import Link from 'components/generic/Link';
 
@@ -15,8 +15,8 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, styles);
 
-// const TWO_SECONDS = 2000;
-const BASE_URL_FOR_IP6 = 'https://www.ebi.ac.uk/interpro';
+const A_LITTLE_WHILE = 4000;
+const BASE_URL_FOR_IP6 = '/interpro/legacy';
 
 class NotFound extends PureComponent /*:: <{}> */ {
   async componentDidMount() {
@@ -24,28 +24,41 @@ class NotFound extends PureComponent /*:: <{}> */ {
     // a URL pattern from the previous website
     const newUrlParts = getNewPartsFromOldURL(window.location.pathname);
     if (!newUrlParts) return;
-    // If not coming from previous IP6, await a bit before redirecting
-    if (!document.referrer.startsWith(BASE_URL_FOR_IP6)) {
-      // await sleep(TWO_SECONDS);
-      // Just to give time to the user to realise that something is wrong
-      // (because they might be coming from a bookmark)
-    }
+    // wait a bit before redirecting
+    await sleep(A_LITTLE_WHILE);
+    // Just to give time to the user to realise that something is wrong
+    // (because they might be coming from a bookmark)
     window.location.replace(
       `${config.root.website.pathname}/${newUrlParts.join('/')}/`,
     );
   }
 
   render() {
+    const fromIP6 = document.URL.includes(BASE_URL_FOR_IP6);
+    const newUrlParts = getNewPartsFromOldURL(window.location.pathname);
     return (
       <section className={f('error-msg')}>
         <div className={f('row')}>
           <div className={f('small-12', 'columns', 'small-centered')}>
-            <h5>404: Page Not Found</h5>
+            <h3>404: Page Not Found</h3>
             <h1 className={f('oversized')}>No search results found</h1>
             <h5 className={f('lead')}>
               We are sorry, no data associated with your request could be found
               in InterPro.
             </h5>
+            {fromIP6 && (
+              <div className={f('callout', 'withicon', 'alert')}>
+                <b>Note:</b> The legacy website has been shutdown.
+              </div>
+            )}
+            {newUrlParts && (
+              <div className={f('timer')}>
+                <div>
+                  Searching for a corresponding page. You will be redirected to
+                  it soon.
+                </div>
+              </div>
+            )}
             <br />
             <p>
               {'Double check the URL or go back to the '}

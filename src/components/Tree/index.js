@@ -39,7 +39,7 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
   /* ::
     _ref: { current: null | React$ElementRef<'svg'> };
     _loadingVis: ?boolean;
-    _vis: TaxonomyVisualisation;
+    _vis: typeof TaxonomyVisualisation;
   */
   static propTypes = {
     data: T.object,
@@ -125,7 +125,7 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
   _handleFocus = ({ detail: { id } }) => {
     if (!this._loadingVis && this.props.changeFocus) this.props.changeFocus(id);
   };
-  _handleLabelClick = evt => {
+  _handleLabelClick = (evt) => {
     const {
       detail: { id },
     } = evt;
@@ -190,8 +190,8 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.search.search,
-  search => ({ search }),
+  (state) => state.customLocation.search.search,
+  (search) => ({ search }),
 );
 
 export default connect(mapStateToProps)(Tree);

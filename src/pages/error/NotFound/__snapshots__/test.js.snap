@@ -10,9 +10,9 @@ exports[`<NotFound /> should render 1`] = `
     <div
       className="small-12 columns small-centered"
     >
-      <h5>
+      <h3>
         404: Page Not Found
-      </h5>
+      </h3>
       <h1
         className="oversized"
       >

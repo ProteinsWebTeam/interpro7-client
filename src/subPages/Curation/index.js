@@ -29,8 +29,12 @@ const CurationSubPage = ({ data }) => {
 
   if (loading) return <Loading />;
   // eslint-disable-next-line camelcase
-  const details = payload?.extra_fields.details;
+  const details = payload?.extra_fields?.details;
 
+  if (!details) return null;
+
+  // eslint-disable-next-line camelcase
+  const sequenceOntology = details.curation?.sequence_ontology || '';
   return (
     <div className={f('row', 'column')}>
       <h4>Curation</h4>
@@ -39,7 +43,7 @@ const CurationSubPage = ({ data }) => {
           <tr>
             <td>Author</td>
             <td className={f('first-letter-cap')}>
-              {details.curation.authors
+              {(details.curation?.authors || [])
                 .map((author) => {
                   let preferredName = author.author;
                   if (author.orcid) {
@@ -70,7 +74,7 @@ const CurationSubPage = ({ data }) => {
                 target="_blank"
                 rel="noreferrer"
               >
-                {details.curation.sequence_ontology}
+                {sequenceOntology}
               </a>
             </td>
           </tr>
@@ -82,17 +86,17 @@ const CurationSubPage = ({ data }) => {
           <tr>
             <td>HMM build commands</td>
             <td>
-              Build method: {details.hmm.commands.build}
+              Build method: {details.hmm?.commands?.build || ''}
               <br />
-              Search method: {details.hmm.commands.search}
+              Search method: {details.hmm?.commands?.search || ''}
             </td>
           </tr>
           <tr>
             <td>Gathering threshold</td>
             <td>
-              Sequence: {details.hmm.cutoffs.gathering.sequence}
+              Sequence: {details.hmm?.cutoffs?.gathering?.sequence || ''}
               <br />
-              Domain: {details.hmm.cutoffs.gathering.domain}
+              Domain: {details.hmm?.cutoffs?.gathering?.domain || ''}
             </td>
           </tr>
           <tr>

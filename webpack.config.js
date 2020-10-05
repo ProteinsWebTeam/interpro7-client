@@ -221,11 +221,13 @@ const getConfigFor = (env, mode, module = false) => {
             {
               loader: 'postcss-loader',
               options: {
-                plugins: [
-                  postCSSImport,
-                  cssNext(),
-                  mode === 'production' && cssNano(),
-                ].filter(Boolean),
+                postcssOptions: {
+                  plugins: [
+                    postCSSImport,
+                    cssNext(),
+                    mode === 'production' && cssNano(),
+                  ].filter(Boolean),
+                },
               },
             },
           ],
@@ -267,11 +269,13 @@ const getConfigFor = (env, mode, module = false) => {
             {
               loader: 'postcss-loader',
               options: {
-                plugins: [
-                  postCSSImport,
-                  cssNext(),
-                  mode === 'production' && cssNano(),
-                ].filter(Boolean),
+                postcssOptions: {
+                  plugins: [
+                    postCSSImport,
+                    cssNext(),
+                    mode === 'production' && cssNano(),
+                  ].filter(Boolean),
+                },
               },
             },
           ],

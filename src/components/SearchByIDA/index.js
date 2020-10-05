@@ -19,7 +19,6 @@ import interproTheme from 'styles/theme-interpro.css';
 import local from './style.css';
 import search from 'components/IPScan/Search/style.css';
 
-/*:: import type { CustomLocation } from 'actions/creators'; */
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
@@ -128,8 +127,11 @@ PanelIDA.propTypes = {
 };
 
 /*:: type Props = {
-  customLocation: CustomLocation,
-  goToCustomLocation: goToCustomLocation,
+  customLocation: {
+    description: Object,
+    search: Object
+  },
+  goToCustomLocation: typeof goToCustomLocation,
 }; */
 /*:: type State = {
   markerBeforeEntry: ?string,

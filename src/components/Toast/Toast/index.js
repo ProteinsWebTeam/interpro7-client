@@ -41,7 +41,7 @@ export default class Toast extends PureComponent /*:: <Props> */ {
     paused: T.bool.isRequired,
     className: T.string,
     title: T.string,
-    body: T.string,
+    body: T.oneOfType([T.string, T.object]).isRequired,
     link: T.object,
     action: T.object,
     ttl: T.number,
@@ -120,7 +120,7 @@ export default class Toast extends PureComponent /*:: <Props> */ {
         {...props}
       >
         {title && <strong>{title}</strong>}
-        <p>{body}</p>
+        {typeof body === 'string' ? <p>{body}</p> : body}
         {link ? <Link {...link} /> : null}
         {action ? (
           <button type="button" className={s('button')} onClick={action.fn}>

@@ -153,7 +153,7 @@ const SummaryProtein = (
                     <td>
                       <IsoformSelector
                         value={isoform}
-                        onChange={event => setIsoform(event.target.value)}
+                        onChange={(event) => setIsoform(event.target.value)}
                       />
                     </td>
                   </tr>
@@ -202,7 +202,9 @@ const SummaryProtein = (
           </div>
         </div>
       </section>
-      <GoTerms terms={metadata.go_terms} type="protein" />
+      {metadata.go_terms && (
+        <GoTerms terms={metadata.go_terms} type="protein" />
+      )}
     </div>
   );
 };

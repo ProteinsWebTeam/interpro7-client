@@ -5,7 +5,7 @@ import config from 'config';
 
 const colorHash = new ColorHash();
 
-/*:: type ColorMode = 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP'; */
+/*:: export type ColorMode = 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP'; */
 /*:: type ColorModeMap = {[string]: ColorMode}; */
 
 export const EntryColorMode /*: ColorModeMap */ = {
@@ -28,11 +28,7 @@ export const getTrackColor = (
   // eslint-disable-next-line default-case
   switch (colorMode) {
     case EntryColorMode.ACCESSION:
-      acc = entry.accession
-        .toLowerCase()
-        .split('')
-        .reverse()
-        .join('');
+      acc = entry.accession.toLowerCase().split('').reverse().join('');
       return colorHash.hex(acc);
     case EntryColorMode.MEMBER_DB:
       return config.colors.get(entry.source_database);
@@ -41,17 +37,11 @@ export const getTrackColor = (
         entry.source_database &&
         entry.source_database.toLowerCase() === 'interpro'
       ) {
-        acc = entry.accession
-          .split('')
-          .reverse()
-          .join('');
+        acc = entry.accession.split('').reverse().join('');
         return colorHash.hex(acc);
       }
       if (entry.parent) {
-        acc = entry.parent.accession
-          .split('')
-          .reverse()
-          .join('');
+        acc = entry.parent.accession.split('').reverse().join('');
         return colorHash.hex(acc);
       }
   }

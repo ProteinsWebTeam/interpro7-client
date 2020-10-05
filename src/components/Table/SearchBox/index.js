@@ -7,7 +7,6 @@ import { debounce } from 'lodash-es';
 
 import { customLocationSelector } from 'reducers/custom-location';
 import { goToCustomLocation } from 'actions/creators';
-/*:: import type { CustomLocation } from 'actions/creators'; */
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -18,8 +17,11 @@ const f = foundationPartial(fonts, s);
 const DEBOUNCE_RATE = 500; // In ms
 
 /*:: type Props = {
-  customLocation: CustomLocation,
-  goToCustomLocation: goToCustomLocation,
+  customLocation: {
+    description: Object,
+    search: Object
+  },
+  goToCustomLocation: typeof goToCustomLocation,
   loading?: ?boolean,
   children?: ?string,
   field?: ?string,
