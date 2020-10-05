@@ -68,7 +68,6 @@ const mergeData = (interpro, structures, structureInfo) => {
 
 const PAGE_SIZE = 10;
 const _Pagination = ({ modelPage, length, customLocation }) => {
-  const from = PAGE_SIZE * (modelPage - 1);
   return (
     <nav>
       {modelPage > 1 ? (
@@ -80,12 +79,13 @@ const _Pagination = ({ modelPage, length, customLocation }) => {
               model_page: modelPage - 1,
             },
           }}
+          alt="Previous"
         >
-          ▼
+          Prev ▲
         </Link>
       ) : (
-        '▽'
-      )}
+        'Prev △'
+      )}{' '}
       {modelPage * PAGE_SIZE < length ? (
         <Link
           to={{
@@ -95,14 +95,20 @@ const _Pagination = ({ modelPage, length, customLocation }) => {
               model_page: modelPage + 1,
             },
           }}
+          alt="Next"
         >
-          ▲
+          ▼ Next
         </Link>
       ) : (
-        '△'
+        '▽ Next'
       )}
     </nav>
   );
+};
+_Pagination.propTypes = {
+  modelPage: T.number,
+  length: T.number,
+  customLocation: T.object,
 };
 const mapStateToProps = createSelector(
   (state) => state.customLocation,
@@ -121,7 +127,7 @@ const paginateStructureInfoData = (data, page = 1) => {
     return data;
   const newData = [...data];
   const from = PAGE_SIZE * (page - 1);
-  const to = Math.min(from + 10, data[featureIndex][1].length);
+  const to = Math.min(from + PAGE_SIZE, data[featureIndex][1].length);
   newData[featureIndex] = [
     `features (${from + 1} to ${to} out of ${data[featureIndex][1].length})`,
     data[featureIndex][1].slice(from, to),
