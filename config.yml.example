@@ -36,7 +36,6 @@ pages:
       - structure
       - taxonomy
       - proteome
-      - set
       - logo
       - entry_alignments
       - interactions

@@ -1,6 +1,5 @@
 // @flow
 import { openDB } from 'idb';
-/*:: import type { DB } from 'idb'; */
 
 let initialized = false;
 let dbPromise;
@@ -8,9 +7,10 @@ let tableAccesses;
 
 export const IPScanJobsMeta = 'IPScan-jobs-meta';
 export const IPScanJobsData = 'IPScan-jobs-data';
+export const FavEntries = 'fav-entries';
 
 const init = () => {
-  dbPromise = openDB('InterPro', 1, {
+  dbPromise = openDB('InterPro', 2, {
     upgrade(db, oldVersion) {
       // do not put 'break;', keep fall-through,
       // it is to apply all the updates, one after the other
@@ -19,6 +19,9 @@ const init = () => {
         case 0:
           db.createObjectStore(IPScanJobsMeta, { autoIncrement: true });
           db.createObjectStore(IPScanJobsData, { autoIncrement: true });
+        // eslint-disable-next-line no-fallthrough
+        case 1:
+          db.createObjectStore(FavEntries, { autoIncrement: true });
       }
     },
   });
@@ -29,18 +32,15 @@ const init = () => {
 class TableAccess {
   /*::
     _table: string;
-    _db: DB;
+    _db: typeof openDB;
   */
-  constructor(table /*: string */, db /*: DB */) {
+  constructor(table /*: string */, db /*: typeof openDB */) {
     this._table = table;
     this._db = db;
   }
 
   async get(key /*: string */) {
-    return this._db
-      .transaction(this._table)
-      .objectStore(this._table)
-      .get(key);
+    return this._db.transaction(this._table).objectStore(this._table).get(key);
   }
 
   async set(value /*: string */, key /*: string */) {
@@ -97,7 +97,7 @@ class TableAccess {
     const keys = [];
     (objectStore.iterateKeyCursor || objectStore.iterateCursor).call(
       objectStore,
-      cursor => {
+      (cursor) => {
         if (!cursor) return;
         keys.push(cursor.key);
         cursor.continue();

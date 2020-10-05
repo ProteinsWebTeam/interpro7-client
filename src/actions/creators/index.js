@@ -85,7 +85,11 @@ export const changePageSize = (pageSize /* :number */) => ({
   value: +pageSize,
 });
 
-export const changeSettingsRaw = (category, key, value) => ({
+export const changeSettingsRaw = (
+  category /*: string */,
+  key /*: string */,
+  value /*: string */,
+) => ({
   type: types.CHANGE_SETTINGS,
   category,
   key,
@@ -98,7 +102,7 @@ export const changeSettings = (event /* :Event */) => {
     event.target instanceof HTMLSelectElement
   ) {
     return changeSettingsRaw(
-      event.target.form && event.target.form.dataset.category,
+      event.target.form?.dataset?.category || '',
       event.target.name,
       parseValueFromInput(event.target),
     );
@@ -210,7 +214,7 @@ export const downloadSuccess = (
   fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
   endpoint /*: string */,
-  { blobURL, size } /*: { string, size } */,
+  { blobURL, size } /*: { blobURL:string, size: string } */,
 ) => ({
   type: types.DOWNLOAD_SUCCESS,
   url,
@@ -225,7 +229,7 @@ export const downloadProgress = (
   url /*: string */,
   fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
-  endpoint,
+  endpoint /*: string */,
   progress /*: number */,
 ) => ({
   type: types.DOWNLOAD_PROGRESS,
@@ -268,5 +272,22 @@ export const addToast = (toast /*: Object */, id /*: string */) => ({
 
 export const removeToast = (id /*: string */) => ({
   type: types.REMOVE_TOAST,
+  id,
+});
+
+// favourites
+export const setInitialFavourites = (favourites /*: Array<string> */) => ({
+  type: types.SET_INITIAL_FAVOURITES,
+  favourites,
+});
+
+export const markFavourite = (id /*: string */, content /*: Object */) => ({
+  type: types.MARK_FAVOURITE,
+  id,
+  content,
+});
+
+export const unmarkFavourite = (id /*: string */) => ({
+  type: types.UNMARK_FAVOURITE,
   id,
 });

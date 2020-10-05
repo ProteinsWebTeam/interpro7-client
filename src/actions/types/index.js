@@ -45,5 +45,10 @@ export const TOGGLE_ACCESSION_DB_FOR_IDA = 'TOGGLE_ACCESSION_DB_FOR_IDA';
 export const ADD_TOAST = 'ADD_TOAST';
 export const REMOVE_TOAST = 'REMOVE_TOAST';
 
+// favourites
+export const SET_INITIAL_FAVOURITES = 'SET_INITIAL_FAVOURITES';
+export const MARK_FAVOURITE = 'MARK_FAVOURITE';
+export const UNMARK_FAVOURITE = 'UNMARK_FAVOURITE';
+
 // For use in tests
 export const TEST = '@TEST';

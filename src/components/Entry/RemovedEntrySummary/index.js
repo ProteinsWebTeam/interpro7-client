@@ -14,14 +14,14 @@ const f = foundationPartial(ebiGlobalStyles, fonts);
 const RemovedEntrySummary = ({ detail, accession, date, history, dbInfo }) => {
   const metadata = {
     accession: accession.toUpperCase(),
-    name: { name: history.names?.[0] || '???' },
+    name: { name: history?.names?.[0] || '???' },
     source_database: 'Removed',
     type: 'unknown',
-    member_databases: history.signatures,
+    member_databases: history?.signatures,
     description: [
       `<b>Removed</b>: ${date}`,
       '<b>Used names</b>:',
-      ...(history.names || []).map(n => ` * ${n}`),
+      ...(history?.names || []).map((n) => ` * ${n}`),
     ],
   };
   const regex = /ipr[0-9]{6}/gi;

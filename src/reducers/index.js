@@ -4,6 +4,7 @@ import { combineReducers } from 'redux';
 import customLocation from './custom-location';
 import dataProgress from './data-progress';
 import download from './download';
+import favourites from './favourites';
 import jobs from './jobs';
 import settings from './settings';
 import status from './status';
@@ -21,6 +22,7 @@ import 'utils/global-message';
   customLocation: CustomLocation,
   dataProgress: DataProgress,
   download: Download,
+  favourites: *,
   jobs: *,
   settings: *,
   status: Status,
@@ -32,6 +34,7 @@ export default (combineReducers({
   customLocation,
   dataProgress,
   download,
+  favourites,
   jobs,
   settings,
   status,

@@ -109,7 +109,7 @@ const ProtVistaEntryPopup = ({
           ),
         )}
       </ul>
-      {confidence && <p>Confidence: ${confidence}</p>}
+      {confidence && <p>Confidence: {confidence}</p>}
     </section>
   );
 };

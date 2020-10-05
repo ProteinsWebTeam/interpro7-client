@@ -14,6 +14,6 @@ export default (history /*: History */) /*: (any) => any */ => {
     // Redux devtools
     self.__REDUX_DEVTOOLS_EXTENSION__
       ? self.__REDUX_DEVTOOLS_EXTENSION__()
-      : f => f,
+      : (f) => f,
   );
 };

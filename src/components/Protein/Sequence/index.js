@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -21,6 +22,7 @@ const whiteSpaces = /\s*/g;
 const chunkOfTen = /.{1,10}/g;
 const chunkOfEighty = /(.{1,80})/g;
 const CHUNK_SIZE = 10;
+
 /*:: type InnerProps = {
   sequence: string,
 }; */
@@ -87,6 +89,7 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
   goToCustomLocation: function,
   accession: string,
   name: ?string,
+  customLocation: Object,
 }; */
 
 export class Sequence extends PureComponent /*:: <SequenceProps> */ {
@@ -100,7 +103,7 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
     name: T.string,
   };
 
-  constructor(props) {
+  constructor(props /*: SequenceProps */) {
     super(props);
 
     this._ref = React.createRef();
@@ -148,8 +151,10 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
         `span[data-index='${Math.floor(end / CHUNK_SIZE)}']`,
       );
       if (startNode && endNode) {
-        range.setStart(startNode.firstChild, (start - 1) % CHUNK_SIZE);
-        range.setEnd(endNode.firstChild, end % CHUNK_SIZE);
+        if (startNode.firstChild)
+          range.setStart(startNode.firstChild, (start - 1) % CHUNK_SIZE);
+        if (endNode.firstChild)
+          range.setEnd(endNode.firstChild, end % CHUNK_SIZE);
         window.getSelection().empty();
         window.getSelection().addRange(range);
       }
@@ -198,7 +203,9 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
     const { start, end } = this._getSelectionRange();
 
     // Split by line of 80 characters
-    sequenceToSearch = sequenceToSearch.replace(chunkOfEighty, '$1\n');
+    sequenceToSearch = sequenceToSearch
+      .slice(Math.max(0, start - 1), end)
+      .replace(chunkOfEighty, '$1\n');
     // Prepend metainformation
     const meta = `>${
       this.props.accession

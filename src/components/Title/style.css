@@ -73,6 +73,23 @@
 .tag {
   margin-bottom: 1rem;
 }
+
+.title-fav {
+  display: flex;
+}
+
+.fav-icon {
+  padding: 0.7rem 0.3rem 0.25rem 0.3rem;
+}
+
+.favourite {
+  color: #f37506;
+}
+
+.normal {
+  color: #dddcdc;
+}
+
 @media screen and (max-width: 63.9375em) {
   /*reduce SVG icon*/
   .title interpro-type {
@@ -90,5 +107,8 @@
   .title-id {
     margin-left: 0.5rem;
     font-size: 81%;
+  }
+  .fav-icon {
+    padding: 0.4rem 0.3rem 0.25rem 0.3rem;
   }
 }

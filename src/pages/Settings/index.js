@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -43,7 +44,7 @@ const Advanced = loadable({
 const NavigationSettings = (
   {
     navigation: { pageSize, secondsToRetry },
-  } /*: {navigation: {pageSize: number}, handleChange: function} */,
+  } /*: {navigation: {pageSize: number, secondsToRetry: number}, handleChange: function} */,
 ) => (
   <form data-category="navigation">
     <h4>Navigation settings</h4>
@@ -225,7 +226,7 @@ NotificationSettings.propTypes = {
 const UISettings = (
   {
     ui: { lowGraphics, colorDomainsBy, structureViewer },
-  } /*: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean} */,
+  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean}} */,
 ) => (
   <form data-category="ui">
     <h4>UI settings</h4>
@@ -469,7 +470,7 @@ const EndpointSettings = (
               success: status === true,
               alert: status === false,
             })}
-            title={`Status: ${status}`}
+            title={`Status: ${status ? 'TRUE' : 'FALSE'}`}
           >
             {getStatusText(status)}
           </output>
@@ -519,8 +520,16 @@ const SchemaOrgData = loadable({
 /*:: type Props = {
   addToast: function
 };*/
+/*:: type State= {|
+  event: ?{
+    prompt: function,
+    userChoice: {
+      outcome: string,
+    }
+  },
+|};*/
 
-class _AddToHomeScreen extends PureComponent /*:: <Props> */ {
+class _AddToHomeScreen extends PureComponent /*:: <Props,State> */ {
   static propTypes = {
     addToast: T.func.isRequired,
   };
@@ -608,6 +617,7 @@ const AddToHomeScreen = connect(undefined, { addToast })(_AddToHomeScreen);
     ebi: Object,
     ipScan: Object,
     genome3d: Object,
+    wikipedia: Object,
   },
   changeSettings: function,
   resetSettings: function

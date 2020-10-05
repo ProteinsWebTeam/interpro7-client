@@ -150,6 +150,9 @@
     opacity: 1;
   }
 }
+.track-component rect:global(.outer-rectangle) {
+  cursor: pointer;
+}
 g:global(.residues-group) path:global(.feature),
 g:global(.child-group) path:global(.feature) {
   transition: fill 0.2s ease-out;

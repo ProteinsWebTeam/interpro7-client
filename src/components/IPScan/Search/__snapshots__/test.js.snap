@@ -53,6 +53,7 @@ exports[`<IPScanSearch /> should render 1`] = `
                   type="text"
                 >
                   <DraftEditor
+                    ariaDescribedBy="{{editor_id_placeholder}}"
                     blockRenderMap={
                       Immutable.Map {
                         "ordered-list-item": Object {

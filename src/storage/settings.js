@@ -13,15 +13,15 @@ try {
   console.error(error);
 }
 
-if (self.addEventListener) {
-  self.addEventListener('storage', event => {
-    if (event.storageArea !== storage._engine) return;
-    if (event.key !== storage._internalNamespace) return;
-    // An other tab changed the key this storage manager is handling
-    // Update it to keep in sync
-    // Start an event in redux to keep redux state in sync
-    // storage.linkedStore.dispatch(resetSettings(JSON.parse(event.newValue)));
-  });
-}
+// if (self.addEventListener) {
+//   self.addEventListener('storage', (event) => {
+//     if (event.storageArea !== storage._engine) return;
+//     if (event.key !== storage._internalNamespace) return;
+//     // An other tab changed the key this storage manager is handling
+//     // Update it to keep in sync
+//     // Start an event in redux to keep redux state in sync
+//     // storage.linkedStore.dispatch(resetSettings(JSON.parse(event.newValue)));
+//   });
+// }
 
 export default storage;

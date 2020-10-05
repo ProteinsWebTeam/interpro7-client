@@ -2,3 +2,4 @@ flow-typed/
 package.json
 package-lock.json
 src/snippets/**
+*.cjs
