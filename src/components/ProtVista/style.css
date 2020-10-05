@@ -199,7 +199,12 @@ g:global(.child-group) path:global(.feature) {
     border-bottom: 1px var(--colors-dark) solid;
   }
 }
-
+.track-accession nav {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
 .track-accession.label-by-name {
   width: 30%;
   text-transform: none;
