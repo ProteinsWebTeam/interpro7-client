@@ -222,7 +222,11 @@ const mapStateToProps = createSelector(
 
 const getQueryTerm = createSelector(
   (query) => query,
-  (query) => `${query} AND (source_database:interpro%5E2 OR *:*)`,
+  (query) =>
+    `${query.replace(
+      /([+\-&|!\(\)\{\}\[\]\^\"\~\*\?:\/])/g,
+      '\\$1',
+    )} AND (source_database:interpro OR *:*)`,
 );
 
 const getEbiSearchUrl = createSelector(
@@ -240,7 +244,7 @@ const getEbiSearchUrl = createSelector(
     const fields = 'description,name,source_database';
     const size = search.page_size || settingsPageSize;
     const start = ((search.page || 1) - 1) * size;
-    const query = getQueryTerm(searchValue);
+    const query = encodeURIComponent(getQueryTerm(searchValue));
     const params = `?query=${query}&format=json&fields=${fields}&start=${start}&size=${size}`;
     return `${protocol}//${hostname}:${port}${root}${params}`;
   },
