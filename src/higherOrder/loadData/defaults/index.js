@@ -150,6 +150,9 @@ export const getReversedUrl = createSelector(
     if (hash === 'tree' && _search.search !== undefined) {
       delete _search.search;
     }
+    if (_search.model_page !== undefined) {
+      delete _search.model_page;
+    }
 
     let newMain;
     for (const [key, value] of Object.entries(description)) {
