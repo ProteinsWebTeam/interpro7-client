@@ -247,9 +247,23 @@ class Description extends PureComponent /*:: <Props> */ {
                   withoutIDs={withoutIDs}
                 />
               ))
-              .reduce((prev, curr, key) => [prev, <br key={key} />, curr]),
+              .reduce(
+                (prev, curr, key) => [
+                  ...prev,
+                  prev.length ? <br key={key} /> : null,
+                  curr,
+                ],
+                [],
+              ),
           )
-          .reduce((prev, curr, key) => [prev, <hr key={key} />, curr])}
+          .reduce(
+            (prev, curr, key) => [
+              ...prev,
+              prev.length ? <hr key={key} /> : null,
+              curr,
+            ],
+            [],
+          )}
       </div>
     );
   }
