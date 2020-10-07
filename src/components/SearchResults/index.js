@@ -226,7 +226,7 @@ const getQueryTerm = createSelector(
     `${query.replace(
       /([+\-&|!\(\)\{\}\[\]\^\"\~\*\?:\/])/g,
       '\\$1',
-    )} AND (source_database:interpro OR *:*)`,
+    )} AND (source_database:interpro%5E2 OR *:*)`, // %5E2 => ^2 =>  is to give more priority to that part of the query
 );
 
 const getEbiSearchUrl = createSelector(
