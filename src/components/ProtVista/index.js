@@ -626,100 +626,114 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   {data &&
                     data
                       .filter(([_, tracks]) => tracks && tracks.length)
-                      .map(([type, entries]) => (
-                        <div key={type} className={f('track-container')}>
-                          <div className={f('track-row')}>
+                      .map(([type, entries, component]) => {
+                        const LabelComponent = component?.component;
+                        return (
+                          <div key={type} className={f('track-container')}>
+                            <div className={f('track-row')}>
+                              <div
+                                className={f(
+                                  'track-component',
+                                  `${this.state.addLabelClass}`,
+                                )}
+                                style={{ borderBottom: 0 }}
+                              >
+                                <header>
+                                  <button
+                                    onClick={() =>
+                                      this.setObjectValueInState(
+                                        'hideCategory',
+                                        type,
+                                        !hideCategory[type],
+                                      )
+                                    }
+                                  >
+                                    {hideCategory[type] ? '▸' : '▾'} {type}
+                                  </button>
+                                </header>
+                              </div>
+                              {component && (
+                                <div className={f('track-accession')}>
+                                  <LabelComponent
+                                    {...(component?.attributes || {})}
+                                  />
+                                </div>
+                              )}{' '}
+                            </div>
                             <div
-                              className={f(
-                                'track-component',
-                                `${this.state.addLabelClass}`,
-                              )}
-                              style={{ borderBottom: 0 }}
+                              className={f('track-group', {
+                                hideCategory: hideCategory[type],
+                              })}
                             >
-                              <header>
-                                <button
-                                  onClick={() =>
-                                    this.setObjectValueInState(
-                                      'hideCategory',
-                                      type,
-                                      !hideCategory[type],
-                                    )
-                                  }
-                                >
-                                  {hideCategory[type] ? '▸' : '▾'} {type}
-                                </button>
-                              </header>
+                              {entries &&
+                                entries.map((entry) => (
+                                  <div
+                                    key={entry.accession}
+                                    className={f('track-row')}
+                                  >
+                                    {entry.type === 'secondary_structure' ||
+                                    entry.type === 'sequence_conservation' ? (
+                                      <div
+                                        className={f(
+                                          'track-component',
+                                          entry.type === 'secondary_structure'
+                                            ? 'secondary-structure'
+                                            : 'sequence-conservation',
+                                          `${this.state.addLabelClass}`,
+                                        )}
+                                      >
+                                        <protvista-track
+                                          length={length}
+                                          displaystart="1"
+                                          displayend={length}
+                                          id={`track_${entry.accession}`}
+                                          ref={(e) =>
+                                            (this.web_tracks[
+                                              entry.accession
+                                            ] = e)
+                                          }
+                                          highlight-event="onmouseover"
+                                          use-ctrl-to-zoom
+                                        />
+                                      </div>
+                                    ) : (
+                                      <div
+                                        className={f(
+                                          'track-component',
+                                          `${this.state.addLabelClass}`,
+                                        )}
+                                      >
+                                        <protvista-interpro-track
+                                          length={length}
+                                          displaystart="1"
+                                          displayend={length}
+                                          id={`track_${entry.accession}`}
+                                          ref={(e) =>
+                                            (this.web_tracks[
+                                              entry.accession
+                                            ] = e)
+                                          }
+                                          shape="roundRectangle"
+                                          highlight-event="onmouseover"
+                                          use-ctrl-to-zoom
+                                          expanded
+                                        />
+                                      </div>
+                                    )}
+                                    <div
+                                      className={f(
+                                        'track-accession',
+                                        `${this.state.addLabelClass}`,
+                                      )}
+                                    >
+                                      {this.renderLabels(entry)}
+                                    </div>
+                                  </div>
+                                ))}
                             </div>
                           </div>
-                          <div
-                            className={f('track-group', {
-                              hideCategory: hideCategory[type],
-                            })}
-                          >
-                            {entries &&
-                              entries.map((entry) => (
-                                <div
-                                  key={entry.accession}
-                                  className={f('track-row')}
-                                >
-                                  {entry.type === 'secondary_structure' ||
-                                  entry.type === 'sequence_conservation' ? (
-                                    <div
-                                      className={f(
-                                        'track-component',
-                                        entry.type === 'secondary_structure'
-                                          ? 'secondary-structure'
-                                          : 'sequence-conservation',
-                                        `${this.state.addLabelClass}`,
-                                      )}
-                                    >
-                                      <protvista-track
-                                        length={length}
-                                        displaystart="1"
-                                        displayend={length}
-                                        id={`track_${entry.accession}`}
-                                        ref={(e) =>
-                                          (this.web_tracks[entry.accession] = e)
-                                        }
-                                        highlight-event="onmouseover"
-                                        use-ctrl-to-zoom
-                                      />
-                                    </div>
-                                  ) : (
-                                    <div
-                                      className={f(
-                                        'track-component',
-                                        `${this.state.addLabelClass}`,
-                                      )}
-                                    >
-                                      <protvista-interpro-track
-                                        length={length}
-                                        displaystart="1"
-                                        displayend={length}
-                                        id={`track_${entry.accession}`}
-                                        ref={(e) =>
-                                          (this.web_tracks[entry.accession] = e)
-                                        }
-                                        shape="roundRectangle"
-                                        highlight-event="onmouseover"
-                                        use-ctrl-to-zoom
-                                        expanded
-                                      />
-                                    </div>
-                                  )}
-                                  <div
-                                    className={f(
-                                      'track-accession',
-                                      `${this.state.addLabelClass}`,
-                                    )}
-                                  >
-                                    {this.renderLabels(entry)}
-                                  </div>
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                   {showConservationButton ? (
                     <div className={f('track-container')}>
                       <div className={f('track-row')}>

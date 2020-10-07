@@ -449,7 +449,10 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       dataGenome3d,
     } = this.props;
 
-    if ((!data || data.loading) && (!dataFeatures || dataFeatures.loading))
+    if (
+      (!data || data.loading) &&
+      (!dataFeatures || dataFeatures.loading || !dataFeatures.payload)
+    )
       return <Loading />;
     if (!data.payload || !data.payload.results) {
       const edgeCaseText = edgeCases.get(STATUS_TIMEOUT);

@@ -2,10 +2,12 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
+import Link from 'components/generic/Link';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
@@ -16,10 +18,10 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
-const toArrayStructure = locations =>
-  locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
+const toArrayStructure = (locations) =>
+  locations.map((loc) => loc.fragments.map((fr) => [fr.start, fr.end]));
 
-const formatStructureInfoObj = data => {
+const formatStructureInfoObj = (data) => {
   const features = [];
   for (const key of Object.keys(data)) {
     if (key === 'pdb') continue;
@@ -64,6 +66,81 @@ const mergeData = (interpro, structures, structureInfo) => {
   return out;
 };
 
+const PAGE_SIZE = 10;
+const _Pagination = ({ modelPage, length, customLocation }) => {
+  return (
+    <nav>
+      {modelPage > 1 ? (
+        <Link
+          to={{
+            ...customLocation,
+            search: {
+              ...customLocation.search,
+              model_page: modelPage - 1,
+            },
+          }}
+          alt="Previous"
+        >
+          Prev ▲
+        </Link>
+      ) : (
+        'Prev △'
+      )}{' '}
+      {modelPage * PAGE_SIZE < length ? (
+        <Link
+          to={{
+            ...customLocation,
+            search: {
+              ...customLocation.search,
+              model_page: modelPage + 1,
+            },
+          }}
+          alt="Next"
+        >
+          ▼ Next
+        </Link>
+      ) : (
+        '▽ Next'
+      )}
+    </nav>
+  );
+};
+_Pagination.propTypes = {
+  modelPage: T.number,
+  length: T.number,
+  customLocation: T.object,
+};
+const mapStateToProps = createSelector(
+  (state) => state.customLocation,
+  (state) => state.customLocation.search,
+  (customLocation, { model_page: modelPage }) => ({
+    customLocation,
+    modelPage: +modelPage || 1,
+  }),
+);
+
+const Pagination = connect(mapStateToProps)(_Pagination);
+
+const paginateStructureInfoData = (data, page = 1) => {
+  const featureIndex = data.findIndex(([name]) => name === 'features');
+  if (featureIndex === -1 || data[featureIndex][1].length < PAGE_SIZE)
+    return data;
+  const newData = [...data];
+  const from = PAGE_SIZE * (page - 1);
+  const to = Math.min(from + PAGE_SIZE, data[featureIndex][1].length);
+  newData[featureIndex] = [
+    `features (${from + 1} to ${to} out of ${data[featureIndex][1].length})`,
+    data[featureIndex][1].slice(from, to),
+    {
+      component: Pagination,
+      attributes: {
+        length: data[featureIndex][1].length,
+      },
+    },
+    // ,
+  ];
+  return newData;
+};
 const UNDERSCORE = /_/g;
 
 /*:: type Props = {
@@ -71,6 +148,7 @@ const UNDERSCORE = /_/g;
   dataInterPro: Object,
   protein: Object,
   dataStructureInfo: Object,
+  modelPage?: ?number,
 }; */
 
 class _StructureOnProtein extends PureComponent /*:: <Props> */ {
@@ -79,10 +157,17 @@ class _StructureOnProtein extends PureComponent /*:: <Props> */ {
     dataInterPro: T.object,
     protein: T.object,
     dataStructureInfo: T.object,
+    modelPage: T.number,
   };
 
   render() {
-    const { structures, dataInterPro, dataStructureInfo, protein } = this.props;
+    const {
+      structures,
+      dataInterPro,
+      dataStructureInfo,
+      protein,
+      modelPage,
+    } = this.props;
     if (dataInterPro.loading || dataStructureInfo.loading) {
       return <Loading />;
     }
@@ -93,24 +178,21 @@ class _StructureOnProtein extends PureComponent /*:: <Props> */ {
         dataStructureInfo.payload,
       ),
     ).map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
+    const data = paginateStructureInfoData(mergedData, modelPage);
     return (
-      <ProtVista
-        protein={protein}
-        data={mergedData}
-        title="Structures on protein"
-      />
+      <ProtVista protein={protein} data={data} title="Structures on protein" />
     );
   }
 }
 
 const getUrlForInterPro = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   (
     { protocol, hostname, port, root },
     description,
-    { cursor: _, ...search },
+    { cursor: _, model_page: __, ...search },
   ) => {
     const _description = {
       main: { key: 'entry' },
@@ -136,8 +218,8 @@ const getUrlForInterPro = createSelector(
   },
 );
 const getUrlForStructureInfo = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
   ({ protocol, hostname, port, root }, description) => {
     const _description = {
       main: { key: 'protein' },
@@ -160,6 +242,7 @@ const getUrlForStructureInfo = createSelector(
 export default loadData({
   propNamespace: 'InterPro',
   getUrl: getUrlForInterPro,
+  mapStateToProps,
 })(
   loadData({
     propNamespace: 'StructureInfo',
