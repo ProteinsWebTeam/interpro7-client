@@ -150,7 +150,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
 
       this.setState({
         localPayload: {
-          sequence: (data?.input || '')
+          sequence: (data?.input || data?.results?.[0]?.sequence || '')
             .replace(FASTA_CLEANER, '')
             .toUpperCase(),
           matches: data?.results?.[0]?.matches || [],

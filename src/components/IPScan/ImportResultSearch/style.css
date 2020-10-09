@@ -5,19 +5,36 @@
   font: initial;
   font-family: var(--fonts-ebi);
   display: flex;
+  position: relative;
   flex-wrap: nowrap;
   width: 50%;
   padding: 1px;
-  & label {
+  & label.import-label {
     font-size: 1.1em;
     color: var(--colors-gray);
     padding-right: 0.5em;
   }
+}
 
-  & input {
-    margin: 0;
+.dragging {
+  border: 1px solid var(--colors-interpro);
+
+  @nest & > :not(.dragging-overlay) {
+    filter: blur(2px);
   }
-  & button {
-    margin: 0 0 0 2px;
+
+  @nest & > .dragging-overlay {
+    visibility: visible;
   }
+}
+.dragging-overlay {
+  position: absolute;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  padding-top: 0.5em;
+  font-weight: bold;
+  color: #1779ba;
+  visibility: hidden;
 }

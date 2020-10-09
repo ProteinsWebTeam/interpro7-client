@@ -337,6 +337,12 @@ const SummaryIPScanJob = ({
     <div className={f('sections')}>
       <section>
         <Title metadata={metadata} mainType="protein" />
+        {!data.payload ? (
+          <div className={f('callout', 'info', 'withicon')}>
+            Using data stored in your browser
+          </div>
+        ) : null}
+
         <table
           className={f('light', 'table-sum', 'margin-bottom-none')}
           style={{ width: '70%' }}

@@ -3,8 +3,10 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
+import LoadedFileDialog from './LoadedFileDialog';
 
 import { foundationPartial } from 'styles/foundation';
+import blockEvent from 'utils/block-event';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
@@ -18,6 +20,9 @@ const TITLE = 'Import Result';
 const ImportResultSearch = ({ goToCustomLocation }) => {
   const [id, setId] = useState('');
   const [isValid, setValid] = useState(false);
+  const [isDragging, setDragging] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [fileContent, setFileContent] = useState(null);
   const handleImport = () => {
     goToCustomLocation({
       description: {
@@ -29,7 +34,7 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
       },
     });
   };
-  const handleChange = event => {
+  const handleChange = (event) => {
     try {
       descriptionToDescription({
         main: { key: 'result' },
@@ -44,16 +49,63 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
     }
     setId(event.target.value);
   };
-  const handleKeyPress = event => {
+  const handleKeyPress = (event) => {
     const enterKey = 13;
     if (event.charCode === enterKey) {
       if (isValid) handleImport();
     }
   };
 
+  const _handleContent = (text) => {
+    try {
+      const result = JSON.parse(text);
+      setFileContent(result);
+    } catch {
+      console.error(`File couldn't be parsed as JSON`);
+    }
+    setShowModal(true);
+  };
+
+  const _handleFile = (file) => {
+    setFileContent(null);
+    const fr = new FileReader();
+    fr.onload = () => {
+      _handleContent(fr.result);
+    };
+    fr.readAsText(file);
+  };
+  const _handleFileChange = ({ target }) => {
+    _handleFile(target.files[0]);
+    target.value = null;
+  };
+  const _handleDragging = blockEvent(() => setDragging(true));
+  const _handleUndragging = blockEvent(() => setDragging(false));
+  const _handleDroppedFiles = blockEvent(
+    ({
+      dataTransfer: {
+        files: [file],
+      },
+    }) => {
+      _handleFile(file);
+      setDragging(false);
+    },
+  );
+
   return (
-    <div className={f('import-result')}>
-      <label htmlFor="interproScanId">Import:</label>
+    <div
+      className={f('import-result', { dragging: isDragging })}
+      onDrop={_handleDroppedFiles}
+      onDrag={_handleDragging}
+      onDragStart={_handleDragging}
+      onDragEnd={_handleUndragging}
+      onDragOver={_handleDragging}
+      onDragEnter={_handleDragging}
+      onDragExit={_handleUndragging}
+      onDragLeave={_handleUndragging}
+    >
+      <label className={f('import-label')} htmlFor="interproScanId">
+        Import:
+      </label>
       <input
         name="interproScanId"
         type="text"
@@ -65,18 +117,29 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
       <button
         disabled={!isValid}
         className={f('button')}
-        aria-label={TITLE}
+        aria-label={`${TITLE} from server with ID`}
         onClick={handleImport}
       >
         <span className={f('icon', 'icon-common')} data-icon="&#xf381;" />
       </button>
+      <label
+        aria-label={`${TITLE} from file`}
+        className={f('button', 'icon', 'icon-common')}
+        data-icon="&#xf093;"
+      >
+        {' '}
+        <input type="file" onChange={_handleFileChange} hidden accept=".json" />
+      </label>
+      <div className={f('dragging-overlay')}>Drop your file here</div>
+      <LoadedFileDialog
+        show={showModal}
+        fileContent={fileContent}
+        closeModal={() => setShowModal(false)}
+      />
     </div>
   );
 };
 ImportResultSearch.propTypes = {
   goToCustomLocation: T.func,
 };
-export default connect(
-  undefined,
-  { goToCustomLocation },
-)(ImportResultSearch);
+export default connect(undefined, { goToCustomLocation })(ImportResultSearch);
