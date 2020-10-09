@@ -1,0 +1,39 @@
+.modal-bg {
+  background: rgba(0, 0, 0, 0.45);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1004;
+  left: 0;
+}
+
+.modal {
+  border-radius: 3px;
+  display: block;
+  position: fixed;
+  top: 5%;
+  z-index: 1005;
+  background-color: #ffffff;
+  padding: 1.66667rem;
+  border: solid 1px #666666;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  left: 0;
+  margin: 0 auto;
+  max-width: 55.55556rem;
+  right: 0;
+  width: 80%;
+}
+
+.close-modal {
+  color: #aaaaaa;
+  cursor: pointer;
+  font-size: 2.22222rem;
+  font-weight: bold;
+  line-height: 1;
+  position: absolute;
+  top: 0.55556rem;
+  right: 1.22222rem;
+  text-decoration: none;
+}
