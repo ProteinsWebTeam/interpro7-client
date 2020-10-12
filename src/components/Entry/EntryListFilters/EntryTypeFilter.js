@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -21,7 +22,7 @@ import style from 'components/FiltersPanel/style.css';
 const f = foundationPartial(style);
 
 const allRE = /^all$/i;
-const isAll = string => allRE.test(string);
+const isAll = (string) => allRE.test(string);
 
 /* :: type Props = {
   data: {
@@ -62,7 +63,7 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then(m => m.InterproType),
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
 
@@ -73,7 +74,7 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
-  _formatType = type => {
+  _formatType = (type) => {
     if (type === 'ptm') return 'PTM';
     else if (type === 'unknown') return 'Other';
     return type.replace('_', ' ');
@@ -93,9 +94,13 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
 
     const types = Object.entries(
       getPayloadOrEmpty(payload, loading, isStale),
-    ).sort(([, a], [, b]) => b - a);
+    ) /*: any */
+      .sort(([, a /*: number */], [, b /*: number */]) => b - a);
     if (!loading) {
-      types.unshift(['All', types.reduce((acc, [, count]) => acc + count, 0)]);
+      types.unshift([
+        'All',
+        types.reduce((acc, [, count /*: number */]) => acc + count, 0),
+      ]);
     }
     return (
       <div className={f('list-entries', { stale: isStale })}>
@@ -142,9 +147,9 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
 }
 
 const getUrlFor = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     const { type, search: _, cursor: __, ..._search } = search;
@@ -163,7 +168,7 @@ const getUrlFor = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({
