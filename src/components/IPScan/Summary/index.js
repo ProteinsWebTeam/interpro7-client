@@ -116,7 +116,7 @@ const StatusTooltip = React.memo(({ status } /*: string */) => (
         {status}
       </>
     ) : null}
-    {status === 'finished' && (
+    {['finished', 'imported file'].includes(status) && (
       <>
         <span
           className={f('icon', 'icon-common', 'ico-confirmed')}
@@ -134,6 +134,7 @@ StatusTooltip.propTypes = {
     'running',
     'created',
     'importing',
+    'imported file',
     'submitted',
     'not found',
     'failure',
@@ -337,11 +338,11 @@ const SummaryIPScanJob = ({
     <div className={f('sections')}>
       <section>
         <Title metadata={metadata} mainType="protein" />
-        {!data.payload ? (
+        {data.payload ? null : (
           <div className={f('callout', 'info', 'withicon')}>
             Using data stored in your browser
           </div>
-        ) : null}
+        )}
 
         <table
           className={f('light', 'table-sum', 'margin-bottom-none')}
@@ -359,7 +360,7 @@ const SummaryIPScanJob = ({
                     readOnly={readable}
                     style={{ width: `${title.length}ch` }}
                   />
-                  {status === 'finished' ? (
+                  {['finished', 'imported file'].includes(status) ? (
                     <button
                       onClick={() =>
                         changeTitle(
@@ -444,7 +445,7 @@ const SummaryIPScanJob = ({
         </div>
       </section>
 
-      {status === 'finished' && (
+      {['finished', 'imported file'].includes(status) && (
         <>
           <DomainOnProteinWithoutMergedData
             mainData={{ metadata }}

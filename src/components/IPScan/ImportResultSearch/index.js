@@ -23,6 +23,7 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
   const [isDragging, setDragging] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [fileContent, setFileContent] = useState(null);
+  const [fileName, setFileName] = useState(null);
   const handleImport = () => {
     goToCustomLocation({
       description: {
@@ -61,13 +62,15 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
       const result = JSON.parse(text);
       setFileContent(result);
     } catch {
-      console.error(`File couldn't be parsed as JSON`);
+      setFileName(null);
+      console.error("File couldn't be parsed as JSON");
     }
     setShowModal(true);
   };
 
   const _handleFile = (file) => {
     setFileContent(null);
+    setFileName(file.name);
     const fr = new FileReader();
     fr.onload = () => {
       _handleContent(fr.result);
@@ -134,6 +137,7 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
       <LoadedFileDialog
         show={showModal}
         fileContent={fileContent}
+        fileName={fileName}
         closeModal={() => setShowModal(false)}
       />
     </div>

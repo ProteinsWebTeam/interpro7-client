@@ -18,7 +18,7 @@ import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
 import config from 'config';
 
 import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
-import { IMPORT_JOB } from '../../../actions/types';
+import { IMPORT_JOB, IMPORT_JOB_FROM_DATA } from '../../../actions/types';
 
 // eslint-disable-next-line no-magic-numbers
 const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
@@ -91,6 +91,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
 
       const ipScanInfo = getState().settings.ipScan;
 
+      // Here is where we actually submit the sequence to InterProScan servers
       const { payload: remoteID, ok } = await cachedFetchText(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
@@ -129,6 +130,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       meta.status === 'importing'
     ) {
       const ipScanInfo = getState().settings.ipScan;
+      // Here we check the status of a job in the interProScan servers
       const { payload, ok } = await cachedFetchText(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
@@ -138,6 +140,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       );
       const status = payload.toLowerCase().replace('_', ' ');
       if (ok) {
+        // dispatch action to report status in the redux state
         dispatch(updateJob({ metadata: { ...meta, status } }));
         if (status === 'finished') {
           const currentDesc = getState().customLocation.description;
@@ -147,6 +150,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
               currentDesc.result.accession !== meta.localID &&
               currentDesc.result.accession !== meta.remoteID)
           ) {
+            // Sent notification the job is completed/imported
             dispatch(
               addToast(
                 {
@@ -176,6 +180,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     }
     if (meta.status === 'finished' && !meta.hasResults) {
       const ipScanInfo = getState().settings.ipScan;
+      // Getting the results from the interporScan Server
       const { payload: data, ok } = await cachedFetchJSON(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
@@ -228,7 +233,11 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     const previousState = getState();
     const output = next(action);
 
-    if (action.type === CREATE_JOB || action.type === IMPORT_JOB) {
+    if (
+      action.type === CREATE_JOB ||
+      action.type === IMPORT_JOB ||
+      action.type === IMPORT_JOB_FROM_DATA
+    ) {
       const job = getState().jobs[action.job.metadata.localID];
       createJobInDB(job.metadata, action.job.data);
       if (action.type === IMPORT_JOB)

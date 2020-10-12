@@ -42,11 +42,10 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
     let accession;
     let sequence;
     let name;
-    let payload = this.props.data.payload;
-    if (payload && !payload.metadata)
-      payload = this.props.data.payload.results
-        ? this.props.data.payload.results[0]
-        : this.props.localPayload;
+    let { payload } = this.props.data;
+    const { loading, ok } = this.props.data;
+    if (ok && !loading && !payload?.metadata)
+      payload = payload?.results?.[0] || this.props.localPayload;
     if (!payload) return null;
     if (payload.metadata) {
       accession = payload.metadata.accession;

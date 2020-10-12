@@ -17,7 +17,7 @@ const Modal = ({ show = false, children, closeModal = noop }) => {
 
   const Wrap = (
     <>
-      <div className={f('modal-bg')}></div>
+      <div className={f('modal-bg')} />
       <div
         className={f('modal')}
         data-reveal
@@ -36,5 +36,10 @@ const Modal = ({ show = false, children, closeModal = noop }) => {
     </>
   );
   return createPortal(Wrap, modalRoot);
+};
+Modal.propTypes = {
+  show: T.bool,
+  children: T.any,
+  closeModal: T.funcm,
 };
 export default Modal;
