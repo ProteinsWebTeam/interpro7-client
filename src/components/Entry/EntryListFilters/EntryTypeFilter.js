@@ -92,9 +92,10 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
       },
     } = this.props;
 
-    const types = Object.entries(
+    // prettier-ignore
+    const types = (Object.entries(
       getPayloadOrEmpty(payload, loading, isStale),
-    ) /*: any */
+    ) /*: any */)
       .sort(([, a /*: number */], [, b /*: number */]) => b - a);
     if (!loading) {
       types.unshift([
