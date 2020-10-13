@@ -1,3 +1,4 @@
+// @flow
 import React, { useEffect, useRef, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
@@ -94,7 +95,7 @@ const integrateSignature = (signature, interpro, integrated) => {
   integrated.set(accession, entry);
 };
 
-const StatusTooltip = React.memo(({ status } /*: string */) => (
+const _StatusTooltip = ({ status /*: string */ }) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
       status === 'created' ||
@@ -127,9 +128,8 @@ const StatusTooltip = React.memo(({ status } /*: string */) => (
       </>
     )}
   </Tooltip>
-));
-StatusTooltip.displayName = 'StatusTooltip';
-StatusTooltip.propTypes = {
+);
+_StatusTooltip.propTypes = {
   status: T.oneOf([
     'running',
     'created',
@@ -142,9 +142,15 @@ StatusTooltip.propTypes = {
     'finished',
   ]),
 };
+const StatusTooltip = React.memo(_StatusTooltip);
+StatusTooltip.displayName = 'StatusTooltip';
 
 const mergeData = (matches, sequenceLength) => {
-  const mergedData = { unintegrated: {}, predictions: [] };
+  const mergedData /*: {unintegrated:any[], predictions: any[], family?: any[]} */ = {
+    unintegrated: [],
+    predictions: [],
+  };
+  const unintegrated = {};
   let integrated = new Map();
   const signatures = new Map();
   for (const match of matches) {
@@ -163,6 +169,7 @@ const mergeData = (matches, sequenceLength) => {
             : [{ start: loc.start, end: loc.end }],
       })),
       score: match.score,
+      residues: undefined,
     };
     const residues = match.locations
       .map(({ sites }) =>
@@ -193,15 +200,16 @@ const mergeData = (matches, sequenceLength) => {
     if (match.signature.entry) {
       integrateSignature(mergedMatch, match.signature.entry, integrated);
     } else {
-      mergedData.unintegrated[mergedMatch.accession] = mergedMatch;
+      unintegrated[mergedMatch.accession] = mergedMatch;
     }
   }
-  mergedData.unintegrated = Object.values(mergedData.unintegrated);
+  mergedData.unintegrated = (Object.values(unintegrated) /*: any */);
   integrated = Array.from(integrated.values()).map((m) => {
     const locations = flattenDeep(
-      m.children.map((s) =>
-        s.locations.map((l) => l.fragments.map((f) => [f.start, f.end])),
-      ),
+      (m.children /*: any */)
+        .map((s /*: {locations: Array<{fragments: Array<Object>}>} */) =>
+          s.locations.map((l) => l.fragments.map((f) => [f.start, f.end])),
+        ),
     );
     return {
       ...m,
@@ -214,7 +222,8 @@ const mergeData = (matches, sequenceLength) => {
       ],
     };
   });
-  mergedData.unintegrated.sort((m1, m2) => m2.score - m1.score);
+  (mergedData.unintegrated /*: any[] */)
+    .sort((m1, m2) => m2.score - m1.score);
   for (const entry of integrated) {
     if (!mergedData[entry.type]) mergedData[entry.type] = [];
     mergedData[entry.type].push(entry);
@@ -239,21 +248,24 @@ const changeTitle = (
   localID,
   results,
   updateJobTitle,
-  inputRef,
+  inputRef /*:  { current?:  null | HTMLInputElement } */,
   setTitle,
   setReadable,
 ) => {
+  if (inputRef.current === null) return;
+  if (inputRef.current === undefined) return;
   if (inputRef.current.readOnly) {
     inputRef.current.focus();
   } else {
     if (inputRef.current.value !== '') {
-      results.xref[0].name = inputRef.current.value;
-      const input = `>${inputRef.current.value} ${results.sequence}`;
+      const value = inputRef.current.value;
+      results.xref[0].name = value;
+      const input = `>${value} ${results.sequence}`;
       updateJobTitle(
         { metadata: { localID }, data: { input, results } },
-        inputRef.current.value,
+        value,
       );
-      setTitle(inputRef.current.value);
+      setTitle(value);
     }
   }
   setReadable(!inputRef.current.readOnly);
@@ -274,7 +286,7 @@ const SummaryIPScanJob = ({
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
   const [title, setTitle] = useState(localTitle);
   const [readable, setReadable] = useState(true);
-  const titleInputRef = useRef();
+  const titleInputRef /* { current?: null | HTMLInputElement }*/ = useRef();
 
   useEffect(() => {
     if (data.payload || localPayload) {
@@ -454,19 +466,17 @@ const SummaryIPScanJob = ({
             {status === 'finished' && data?.url && (
               <Exporter includeSettings={false}>
                 <ul>
-                  {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
-                    (type) => (
-                      <li key={type}>
-                        <Link
-                          target="_blank"
-                          href={data.url.replace('json', type)}
-                          download={`InterProScan.${type}`}
-                        >
-                          {type.toUpperCase()}
-                        </Link>
-                      </li>
-                    ),
-                  )}
+                  {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
+                    <li key={type}>
+                      <Link
+                        target="_blank"
+                        href={data.url.replace('json', type)}
+                        download={`InterProScan.${type}`}
+                      >
+                        {type.toUpperCase()}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </Exporter>
             )}
@@ -497,11 +507,14 @@ const jobSelector = createSelector(
   accessionSelector,
   jobMapSelector,
   (accession, jobMap) => {
-    return Object.values(jobMap || {}).find(
-      (job) =>
-        job.metadata.remoteID === accession ||
-        job.metadata.localID === accession,
-    );
+    return Object.values(jobMap || {}) /*: any */
+      .find(
+        (
+          job /*: {metadata:{remoteID: string, localID: string, status: string}} */,
+        ) =>
+          job.metadata.remoteID === accession ||
+          job.metadata.localID === accession,
+      );
   },
 );
 
