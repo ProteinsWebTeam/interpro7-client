@@ -96,12 +96,9 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
     const types = (Object.entries(
       getPayloadOrEmpty(payload, loading, isStale),
     ) /*: any */)
-      .sort(([, a /*: number */], [, b /*: number */]) => b - a);
+      .sort(([, a], [, b]) => b - a);
     if (!loading) {
-      types.unshift([
-        'All',
-        types.reduce((acc, [, count /*: number */]) => acc + count, 0),
-      ]);
+      types.unshift(['All', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (
       <div className={f('list-entries', { stale: isStale })}>
