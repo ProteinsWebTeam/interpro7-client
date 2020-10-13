@@ -176,15 +176,14 @@ class _StructureOnProtein extends PureComponent /*:: <Props> */ {
       return <Loading />;
     }
     // prettier-ignore
-    const mergedData /*: Array<[string, Array<mixed>]> */ = (
-      Object.entries(
+    const mergedData /*: Array<[string, Array<mixed>]> */ = (Object.entries(
       mergeData(
         dataInterPro.payload ? dataInterPro.payload.results : [],
         structures,
         dataStructureInfo.payload,
       ),
     ) /*: any */)
-      .map(([key /*: string */, value /*: Array<mixed> */]) => [
+      .map(([key/*: string */, value/*: Array<mixed> */]) => [
         key.replace(UNDERSCORE, ' '),
         value,
       ]);

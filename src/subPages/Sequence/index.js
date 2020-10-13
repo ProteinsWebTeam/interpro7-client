@@ -14,7 +14,7 @@ import Sequence from 'components/Protein/Sequence';
   data: {
     loading: boolean,
     ok: boolean,
-    payload: 
+    payload:
       {
         metadata: {
           accession: string,
