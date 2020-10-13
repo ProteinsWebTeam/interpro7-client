@@ -507,7 +507,8 @@ const jobSelector = createSelector(
   accessionSelector,
   jobMapSelector,
   (accession, jobMap) => {
-    return Object.values(jobMap || {}) /*: any */
+    // prettier-ignore
+    return (Object.values(jobMap || {}) /*: any */)
       .find(
         (
           job /*: {metadata:{remoteID: string, localID: string, status: string}} */,
