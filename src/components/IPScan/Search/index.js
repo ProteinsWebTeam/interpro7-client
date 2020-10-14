@@ -24,6 +24,7 @@ import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import id from 'utils/cheap-unique-id';
 import blockEvent from 'utils/block-event';
+import { askNotificationPermission } from 'utils/browser-notifications';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -362,6 +363,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
         pathways: true,
       },
     });
+    // Request browser notification
+    askNotificationPermission();
     if (isStayChecked(this._formRef.current)) {
       this._handleReset();
     } else {

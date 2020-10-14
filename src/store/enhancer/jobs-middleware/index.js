@@ -147,6 +147,14 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
               currentDesc.result.accession !== meta.localID &&
               currentDesc.result.accession !== meta.remoteID)
           ) {
+            const img = 'src/images/logo/logo_InterPro.png';
+            const text =
+              'Your InterProScan search results are are ready to view';
+            const notification = new Notification('InterProScan', {
+              body: text,
+              icon: img,
+            });
+            console.log('Inside Job middleware');
             dispatch(
               addToast(
                 {

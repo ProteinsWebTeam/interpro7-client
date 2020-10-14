@@ -15,7 +15,7 @@ import {
 /*:: export type Download = { [string]: DatumProgress }; */
 /*:: import type { State } from 'reducers'; */
 
-const keyFromAction = action =>
+const keyFromAction = (action) =>
   [action.url, action.fileType, action.subset && 'subset']
     .filter(Boolean)
     .join('|');
@@ -41,6 +41,15 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
       };
     case DOWNLOAD_ERROR:
     case DOWNLOAD_SUCCESS:
+      const img = 'src/images/logo/logo_InterPro.png';
+      const text = 'Your files are ready to download';
+      const notification = new Notification('InterPro', {
+        body: text,
+        icon: img,
+      });
+      // notification.onclick = (e) => {
+      //   window.location.href = "http://localhost:8080/interpro/result/download";
+      // };
       return {
         ...state,
         [keyFromAction(action)]: {

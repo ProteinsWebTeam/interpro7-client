@@ -18,6 +18,7 @@ import { installPrompt } from 'index';
 import loadable from 'higherOrder/loadable';
 
 import { changeSettings, resetSettings, addToast } from 'actions/creators';
+import { askNotificationPermission } from 'utils/browser-notifications';
 
 import { EntryColorMode } from 'utils/entry-color';
 
@@ -130,6 +131,32 @@ const NotificationSettings = (
       processData={schemaProcessDataPageSection}
     />
     <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        {Notification.permission === 'granted' ? (
+          <>
+            <p>
+              To disable notifications, please change in the browser settings.
+            </p>
+            <button className={f('button')} disabled>
+              Notifications enabled
+            </button>
+          </>
+        ) : (
+          <>
+            <p>
+              Allow browser to notify when the InterProScan search has completed
+              or the files are ready to download.
+            </p>
+            <button
+              type="button"
+              className={f('button')}
+              onClick={askNotificationPermission}
+            >
+              Enable notifications
+            </button>
+          </>
+        )}
+      </div>
       <div className={f('medium-12', 'column')}>
         <p>
           There are few tips shown in the website on how to use features
