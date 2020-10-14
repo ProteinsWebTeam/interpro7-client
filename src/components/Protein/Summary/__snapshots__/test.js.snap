@@ -197,7 +197,7 @@ exports[`<SummaryProtein /> should render 1`] = `
                 className="shape hmmer blue"
               />
               <span>
-                Search selection with HMMER
+                Search protein with HMMER
               </span>
             </div>
           </Memo(Connect(Link))>
