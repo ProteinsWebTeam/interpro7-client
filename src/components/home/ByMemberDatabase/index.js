@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -56,7 +57,8 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
     } = this.props;
     const counts = payload && payload.entries.member_databases;
     const memberDB = payloadMeta
-      ? Object.values(payloadMeta.databases).filter(
+      ? // prettier-ignore
+        (Object.values(payloadMeta.databases)/*: any */).filter(
           (db) => db.type === 'entry' && db.canonical !== 'interpro',
         )
       : [];
@@ -95,7 +97,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                   }}
                   data-testid={`member-database-${canonical}`}
                 >
-                  <MemberSymbol type={canonical} />
+                  <MemberSymbol type={canonical} svg={false} />
 
                   <span className={f('card-title')}>{name} </span>
                   <Tooltip title={description}>
@@ -105,7 +107,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                       aria-label={description}
                     />
                   </Tooltip>
-                  <br />
+                  <hr className={f('md', canonical)} />
                   <small>{version}</small>
 
                   <p className={f('margin-bottom-medium')}>

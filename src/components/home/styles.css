@@ -75,3 +75,52 @@
     max-width: 100%;
   }
 }
+
+hr.md.interpro {
+  border-bottom: 2px solid var(--colors-interpro);
+}
+hr.md.cathgene3d {
+  border-bottom: 2px solid var(--colors-cathgene3d);
+}
+hr.md.cdd {
+  border-bottom: 2px solid var(--colors-cdd);
+}
+hr.md.hamap {
+  border-bottom: 2px solid var(--colors-hamap);
+}
+hr.md.panther {
+  border-bottom: 2px solid var(--colors-panther);
+}
+hr.md.pfam {
+  border-bottom: 2px solid var(--colors-pfam);
+}
+hr.md.pirsf {
+  border-bottom: 2px solid var(--colors-pirsf);
+}
+hr.md.prints {
+  border-bottom: 2px solid var(--colors-prints);
+}
+hr.md.prodom {
+  border-bottom: 2px solid var(--colors-prodom);
+}
+hr.md.profile {
+  border-bottom: 2px solid var(--colors-profile);
+}
+hr.md.prosite {
+  border-bottom: 2px solid var(--colors-prosite);
+}
+hr.md.sfld {
+  border-bottom: 2px solid var(--colors-sfld);
+}
+hr.md.smart {
+  border-bottom: 2px solid var(--colors-smart);
+}
+hr.md.ssf {
+  border-bottom: 2px solid var(--colors-ssf);
+}
+hr.md.tigrfams {
+  border-bottom: 2px solid var(--colors-tigrfams);
+}
+hr.md {
+  margin: 2px 0 0 0;
+}

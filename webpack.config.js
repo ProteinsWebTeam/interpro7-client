@@ -308,7 +308,7 @@ const getConfigFor = (env, mode, module = false) => {
           ],
         },
         {
-          test: /\.(jpe?g|png|gif|svg)$/i,
+          test: /\.(jpe?g|png|gif|svg|avif)$/i,
           use: [
             {
               loader: 'url-loader',
@@ -384,7 +384,7 @@ const getConfigFor = (env, mode, module = false) => {
                 new RegExp('css/[^/]+.css$', 'i'),
               ],
               additional: [/\.(worker\.js)$/i],
-              optional: [/\.(eot|ttf|woff|svg|ico|png|jpe?g)$/i],
+              optional: [/\.(eot|ttf|woff|svg|ico|png|avif|jpe?g)$/i],
             },
             // TODO: check a way to use it without affecting /api
             // appShell: publicPath,
