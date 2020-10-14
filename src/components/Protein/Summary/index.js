@@ -14,6 +14,8 @@ import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 import { foundationPartial } from 'styles/foundation';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
+import sequenceStyles from '../Sequence/style.css';
+
 import loadable from 'higherOrder/loadable';
 import {
   isTranscribedFrom,
@@ -29,7 +31,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ebiStyles, fonts);
+const f = foundationPartial(ebiStyles, sequenceStyles, fonts);
 
 /*:: type Props = {
   data: {
@@ -48,6 +50,16 @@ const SummaryProtein = (
   const [isoform, setIsoform] = useState('');
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
+
+  const _handleHmmerClick = (event) => {
+    const { currentTarget } = event;
+    const oldHref = currentTarget.href;
+    // Add the sequence as querystring to Hmmer link href
+    currentTarget.href += `?seq=${metadata.sequence}`;
+    // Reset href, but after the click was done
+    setTimeout(() => (currentTarget.href = oldHref));
+  };
+
   return (
     <div className={f('sections')}>
       {metadata.gene && (
@@ -190,6 +202,27 @@ const SummaryProtein = (
                 label="Export Matches [TSV]"
                 className={'button hollow'}
               />
+              <Link
+                href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
+                onClick={_handleHmmerClick}
+                target="_blank"
+              >
+                <div
+                  className={f(
+                    'sequence-link',
+                    'button-more',
+                    'icon',
+                    'icon-right',
+                  )}
+                  data-icon="&#xf061;"
+                  style={{ minWidth: '100px' }}
+                >
+                  <div className={f('shape', 'hmmer', 'yellow')} />
+                  <div className={f('shape', 'hmmer', 'red')} />
+                  <div className={f('shape', 'hmmer', 'blue')} />
+                  <span>Search protein with HMMER</span>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
