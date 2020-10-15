@@ -1,20 +1,34 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
 import ColorScale from '../ColorScale';
 
-const getConservationScore = (highlight, match, scale) => {
+/*::
+  import type {ProtVistaLocation, PopupDetail} from '../index.js';
+  
+  type Locations = Array<ProtVistaLocation>;
+  type Props = {
+    detail: PopupDetail,
+    data: Array<{}>
+  }
+*/
+const getConservationScore = (
+  highlight /*: string */,
+  match /*: {locations: Locations }*/,
+  scale /*: Array<{color:string, min: number, max: number}> */,
+) => {
   const start = parseInt(highlight.split(':')[0], 10);
   const matchFragment = match.locations[0].fragments.find((fragment) => {
     return start >= fragment.start && start <= fragment.end;
   });
   const scaleEntry = scale.find((element) => {
-    return matchFragment.color === element.color;
+    return matchFragment?.color === element.color;
   });
-  return `${scaleEntry.min} - ${scaleEntry.max}`;
+  return `${scaleEntry?.min || 0} - ${scaleEntry?.max || 0}`;
 };
 
-const ProtVistaConservationPopup = ({ detail, data }) => {
+const ProtVistaConservationPopup = ({ detail, data } /*: Props */) => {
   const match = detail.feature;
   const sourceDatabase = 'Pfam'; // TODO: get it from match.accession;
   const startLocation = match.locations[0];
@@ -30,6 +44,7 @@ const ProtVistaConservationPopup = ({ detail, data }) => {
     return false;
   });
 
+  // $FlowFixMe
   const scale = matchConservation[1].find((element) => {
     return (
       element.type && element.type.toLowerCase() === 'sequence_conservation'
