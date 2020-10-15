@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import T from 'prop-types';
@@ -87,11 +88,12 @@ const loadProtVistaWebComponents = () => {
   return Promise.all(webComponents);
 };
 
+/*:: import type { ColorMode } from 'utils/entry-color'; */
 /*:: type Props = {
   protein: Object,
   data: Array<Object>,
   dataDB: Object,
-  colorDomainsBy: string,
+  colorDomainsBy: ColorMode,
   fetchConservation: function,
   title: string,
   fixedHighlight: string,
@@ -100,6 +102,7 @@ const loadProtVistaWebComponents = () => {
   showConservationButton: boolean,
   handleConservationLoad: function,
   goToCustomLocation: function,
+  customLocation: Object,
   children: any,
 }; */
 
@@ -113,8 +116,22 @@ const loadProtVistaWebComponents = () => {
   enableTooltip: boolean,
   showLoading: boolean,
   overPopup: boolean,
+  optionsID: string,
 }; */
 export class ProtVista extends Component /*:: <Props, State> */ {
+  /*:: 
+    web_tracks: {};
+    popper: any;
+    _isPopperTop: boolean;
+    _timeoutID: ?IntervalID;
+    _mainRef: { current: null | React$ElementRef<'div'> }; 
+    _popperRef: { current: null | React$ElementRef<'div'> }; 
+    _popperContentRef: { current: null | React$ElementRef<'div'> }; 
+    _protvistaRef: { current: null | React$ElementRef<'div'> }; 
+    _webProteinRef: { current: null | React$ElementRef<typeof ProtVistaSequence> }; 
+    _hydroRef: { current: null | React$ElementRef<typeof ProtVistaColouredSequence> }; 
+    _conservationTrackRef: { current: null | React$ElementRef<'div'> }; 
+   */
   static propTypes = {
     protein: T.object,
     data: T.array,
@@ -161,23 +178,28 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     this._hydroRef = React.createRef();
     this._conservationTrackRef = React.createRef();
     this._isPopperTop = true;
-    this._timeoutID = 0;
+    this._timeoutID = null;
   }
 
   async componentDidMount() {
     await loadProtVistaWebComponents();
     const { data, protein } = this.props;
-    this._webProteinRef.current.data = protein;
-    this._hydroRef.current.data = protein;
-    this.updateTracksWithData(data);
-    this._hydroRef.current.addEventListener('change', this._handleTrackChange);
-    if (this._popperContentRef.current) {
-      this._popperContentRef.current.addEventListener('mouseover', () =>
-        this.setState({ overPopup: true }),
-      );
-      this._popperContentRef.current.addEventListener('mouseout', () =>
-        this.setState({ overPopup: false }),
-      );
+    if (this._webProteinRef.current && this._hydroRef.current) {
+      const proteinE = this._webProteinRef.current;
+      const hydroE = this._hydroRef.current;
+      proteinE.data = protein;
+      hydroE.data = protein;
+      this.updateTracksWithData(data);
+      hydroE.addEventListener('change', this._handleTrackChange);
+      if (this._popperContentRef.current) {
+        const popperE = this._popperContentRef.current;
+        popperE.addEventListener('mouseover', () =>
+          this.setState({ overPopup: true }),
+        );
+        popperE.addEventListener('mouseout', () =>
+          this.setState({ overPopup: false }),
+        );
+      }
     }
   }
 
@@ -188,8 +210,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.data, this.props.data)) {
       this.updateTracksWithData(this.props.data);
-      this._webProteinRef.current.data = this.props.protein;
-      this._hydroRef.current.data = this.props.protein;
+      if (this._webProteinRef.current && this._hydroRef.current) {
+        this._webProteinRef.current.data = this.props.protein;
+        this._hydroRef.current.data = this.props.protein;
+      }
     }
   }
 
@@ -288,37 +312,46 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             if (this.state.overPopup) return;
             clearInterval(this._timeoutID);
             this.popper.destroy();
-            this._popperRef.current.classList.add(f('hide'));
-            this._timeoutID = 0;
+            if (this._popperRef.current)
+              this._popperRef.current.classList.add(f('hide'));
+            this._timeoutID = null;
           }, TOOLTIP_DELAY);
           break;
         case 'mouseover':
           if (this.state.enableTooltip) {
-            if (this._timeoutID > 0) {
+            if (this._timeoutID !== null) {
               clearInterval(this._timeoutID);
             }
-            this._popperRef.current.classList.remove(f('hide'));
+            if (this._popperRef.current)
+              this._popperRef.current.classList.remove(f('hide'));
             const sourceDatabase = this._getSourceDatabaseDisplayName(
               detail.feature,
               this.props?.dataDB?.payload?.databases,
             );
-            render(
-              <ProtVistaPopup
-                detail={detail}
-                sourceDatabase={sourceDatabase}
-                data={this.props.data}
-                currentLocation={this.props.customLocation}
-                // Need to pass it from here because it rendered out of the redux provider
-                goToCustomLocation={this.props.goToCustomLocation}
-              />,
-              this._popperContentRef.current,
-            );
+            if (this._popperContentRef.current) {
+              render(
+                <ProtVistaPopup
+                  detail={detail}
+                  sourceDatabase={sourceDatabase}
+                  data={this.props.data}
+                  currentLocation={this.props.customLocation}
+                  // Need to pass it from here because it rendered out of the redux provider
+                  goToCustomLocation={this.props.goToCustomLocation}
+                />,
+                this._popperContentRef.current,
+              );
+            }
 
             this._isPopperTop = !this._isPopperTop;
-            this.popper = new PopperJS(detail.target, this._popperRef.current, {
-              placement: this._isPopperTop ? 'top' : 'bottom',
-              applyStyle: { enabled: false },
-            });
+            if (this._popperRef.current)
+              this.popper = new PopperJS(
+                detail.target,
+                this._popperRef.current,
+                {
+                  placement: this._isPopperTop ? 'top' : 'bottom',
+                  applyStyle: { enabled: false },
+                },
+              );
           }
           break;
         default:
@@ -345,7 +378,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     return sourceDatabase;
   };
 
-  setObjectValueInState = (objectName, type, value) =>
+  setObjectValueInState = (
+    objectName /*: string */,
+    type /*: string */,
+    value /*: any */,
+  ) =>
     this.setState(({ [objectName]: obj }) => ({
       [objectName]: { ...obj, [type]: value },
     }));
@@ -430,16 +467,17 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     if (entry.accession && entry.accession.startsWith('G3D:')) {
       return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
     }
-
+    const key /*: string */ =
+      entry.source_database === 'pdb' ? 'structure' : 'entry';
     return (
       <>
         <Link
           to={{
             description: {
               main: {
-                key: entry.source_database === 'pdb' ? 'structure' : 'entry',
+                key,
               },
-              [entry.source_database === 'pdb' ? 'structure' : 'entry']: {
+              [key]: {
                 db: entry.source_database,
                 accession: entry.accession,
               },
