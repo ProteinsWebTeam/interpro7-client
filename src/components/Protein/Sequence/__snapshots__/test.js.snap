@@ -74,34 +74,9 @@ exports[`<Sequence /> should render 1`] = `
           </span>
         </div>
       </Memo(Connect(Link))>
-      <Memo(Connect(Link))
-        href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
-        onClick={[Function]}
-        target="_blank"
-      >
-        <div
-          className="sequence-link button-more icon icon-common icon-right"
-          data-icon=""
-          style={
-            Object {
-              "minWidth": "302px",
-            }
-          }
-        >
-          <div
-            className="shape hmmer yellow"
-          />
-          <div
-            className="shape hmmer red"
-          />
-          <div
-            className="shape hmmer blue"
-          />
-          <span>
-            Search selection with HMMER
-          </span>
-        </div>
-      </Memo(Connect(Link))>
+      <HmmerButton
+        sequence={[Function]}
+      />
     </div>
   </div>
 </section>

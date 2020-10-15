@@ -151,56 +151,49 @@ exports[`<SummaryProtein /> should render 1`] = `
               </UniProtLink>
             </li>
           </ul>
-          <FileExporter
-            className="button hollow"
-            count={13}
-            description={
+          <hr
+            style={
               Object {
-                "entry": Object {
-                  "integration": "all",
-                },
-                "main": Object {
-                  "key": "protein",
-                },
-                "protein": Object {
-                  "accession": "A0A000",
-                  "db": "unreviewed",
-                },
+                "margin": "0.8em",
               }
             }
-            fileType="tsv"
-            label="Export Matches [TSV]"
-            primary="entry"
-            secondary="protein"
           />
-          <Memo(Connect(Link))
-            href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
-            onClick={[Function]}
-            target="_blank"
-          >
-            <div
-              className="sequence-link button-more icon icon-right"
-              data-icon=""
-              style={
+          <label>
+            Export Matches [TSV]
+            <FileExporter
+              className="button hollow"
+              count={13}
+              description={
                 Object {
-                  "minWidth": "100px",
+                  "entry": Object {
+                    "integration": "all",
+                  },
+                  "main": Object {
+                    "key": "protein",
+                  },
+                  "protein": Object {
+                    "accession": "A0A000",
+                    "db": "unreviewed",
+                  },
                 }
               }
-            >
-              <div
-                className="shape hmmer yellow"
-              />
-              <div
-                className="shape hmmer red"
-              />
-              <div
-                className="shape hmmer blue"
-              />
-              <span>
-                Search protein with HMMER
-              </span>
-            </div>
-          </Memo(Connect(Link))>
+              fileType="tsv"
+              label="Export Matches [TSV]"
+              primary="entry"
+              secondary="protein"
+            />
+          </label>
+          <hr
+            style={
+              Object {
+                "margin": "0.8em",
+              }
+            }
+          />
+          <HmmerButton
+            accession="A0A000"
+            sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
+          />
         </div>
       </div>
     </div>
