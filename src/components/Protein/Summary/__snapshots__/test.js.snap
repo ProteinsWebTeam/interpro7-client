@@ -151,27 +151,50 @@ exports[`<SummaryProtein /> should render 1`] = `
               </UniProtLink>
             </li>
           </ul>
-          <FileExporter
-            className="button hollow"
-            count={13}
-            description={
+          <hr
+            style={
               Object {
-                "entry": Object {
-                  "integration": "all",
-                },
-                "main": Object {
-                  "key": "protein",
-                },
-                "protein": Object {
-                  "accession": "A0A000",
-                  "db": "unreviewed",
-                },
+                "margin": "0.8em",
               }
             }
-            fileType="tsv"
-            label="Export Matches [TSV]"
-            primary="entry"
-            secondary="protein"
+          />
+          <label>
+            Export Matches [TSV]
+            <FileExporter
+              className="button hollow"
+              count={13}
+              description={
+                Object {
+                  "entry": Object {
+                    "integration": "all",
+                  },
+                  "main": Object {
+                    "key": "protein",
+                  },
+                  "protein": Object {
+                    "accession": "A0A000",
+                    "db": "unreviewed",
+                  },
+                }
+              }
+              fileType="tsv"
+              label="Export Matches [TSV]"
+              primary="entry"
+              secondary="protein"
+            />
+          </label>
+          <hr
+            style={
+              Object {
+                "margin": "0.8em",
+              }
+            }
+          />
+          <HmmerButton
+            accession="A0A000"
+            minWidth="290px"
+            sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
+            title="Search protein with HMMER"
           />
         </div>
       </div>
