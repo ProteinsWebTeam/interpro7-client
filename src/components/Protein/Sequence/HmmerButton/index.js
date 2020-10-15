@@ -16,7 +16,9 @@ const HmmerButton = (
   {
     sequence,
     accession,
-  } /*: {sequence: string | function, accession?: string} */,
+    title,
+    minWidth,
+  } /*: {sequence: string | function, accession?: string, title: string, minWidth: string} */,
 ) => {
   const _handleHmmerClick = (event) => {
     const seq = typeof sequence === 'function' ? sequence() : sequence;
@@ -42,12 +44,12 @@ const HmmerButton = (
           'icon-right',
         )}
         data-icon="&#xf061;"
-        style={{ minWidth: '302px' }}
+        style={{ minWidth: minWidth }}
       >
         <div className={f('shape', 'hmmer', 'yellow')} />
         <div className={f('shape', 'hmmer', 'red')} />
         <div className={f('shape', 'hmmer', 'blue')} />
-        <span>Search selection with HMMER</span>
+        <span>{title}</span>
       </div>
     </Link>
   );
@@ -55,6 +57,8 @@ const HmmerButton = (
 HmmerButton.propTypes = {
   sequence: T.oneOfType([T.func, T.string]).isRequired,
   accession: T.string,
+  title: T.string,
+  minWidth: T.string,
 };
 
 export default HmmerButton;

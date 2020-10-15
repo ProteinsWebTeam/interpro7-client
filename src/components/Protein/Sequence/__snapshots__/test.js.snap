@@ -75,7 +75,9 @@ exports[`<Sequence /> should render 1`] = `
         </div>
       </Memo(Connect(Link))>
       <HmmerButton
+        minWidth="302px"
         sequence={[Function]}
+        title="Search selection with HMMER"
       />
     </div>
   </div>

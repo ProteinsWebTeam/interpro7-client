@@ -288,7 +288,11 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
                 <span>Search selection with InterProScan</span>
               </div>
             </Link>
-            <HmmerButton sequence={this._getSelection} />
+            <HmmerButton
+              sequence={this._getSelection}
+              title="Search selection with HMMER"
+              minWidth="302px"
+            />
           </div>
         </div>
       </section>

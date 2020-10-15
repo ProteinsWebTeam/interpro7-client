@@ -192,7 +192,9 @@ exports[`<SummaryProtein /> should render 1`] = `
           />
           <HmmerButton
             accession="A0A000"
+            minWidth="100px"
             sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
+            title="Search protein with HMMER"
           />
         </div>
       </div>

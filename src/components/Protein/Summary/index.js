@@ -203,6 +203,8 @@ const SummaryProtein = (
               <HmmerButton
                 sequence={metadata.sequence}
                 accession={metadata.accession}
+                title="Search protein with HMMER"
+                minWidth="100px"
               />
             </div>
           </div>
