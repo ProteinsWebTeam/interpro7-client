@@ -17,7 +17,7 @@ const DropDownButton = (
     children,
     fontSize = undefined,
     extraClasses = '',
-  } /*: {label: string, icon: string, color ?: string, children: any, fontSize ?: string, extraClasses ?: string} */,
+  } /*: {label: string, icon?: string, color ?: string, children: any, fontSize ?: string, extraClasses ?: string} */,
 ) => {
   const [isOpen, setOpen] = useState(false);
   return (
