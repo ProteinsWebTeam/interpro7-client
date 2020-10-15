@@ -1,17 +1,21 @@
+// @flow
 import { createSelector } from 'reselect';
 import { toPlural } from 'utils/pages';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
 export const processData = createSelector(
-  data => data.data.payload.results,
-  data => data.endpoint,
-  (dataResults, endpoint) => {
+  (data) => data.data.payload.results,
+  (data) => data.endpoint,
+  (
+    dataResults /*: Array<{metadata:{}, extra_fields: {}}> */,
+    endpoint /*: string */,
+  ) => {
     const results = [];
     for (const item of dataResults) {
       results.splice(
         0,
         0,
-        ...item[toPlural(endpoint)].map(match => ({
+        ...item[toPlural(endpoint)].map((match) => ({
           ...match,
           ...item.metadata,
           ...(item.extra_fields || {}),
@@ -19,21 +23,21 @@ export const processData = createSelector(
       );
     }
     const interpro = results.filter(
-      entry => entry.source_database.toLowerCase() === 'interpro',
+      (entry) => entry.source_database.toLowerCase() === 'interpro',
     );
     const interproMap = new Map(
-      interpro.map(ipro => [
+      interpro.map((ipro) => [
         `${ipro.accession}-${ipro.chain}-${ipro.protein}`,
         ipro,
       ]),
     );
-    const integrated = results.filter(entry => entry.integrated);
+    const integrated = results.filter((entry) => entry.integrated);
     const unintegrated = results.filter(
-      entry =>
+      (entry) =>
         interpro.concat(integrated).indexOf(entry) === -1 &&
         !NOT_MEMBER_DBS.has(entry.source_database.toLowerCase()),
     );
-    integrated.forEach(entry => {
+    integrated.forEach((entry) => {
       const ipro =
         interproMap.get(
           `${entry.integrated}-${entry.chain}-${entry.protein}`,
