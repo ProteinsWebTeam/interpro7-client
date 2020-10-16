@@ -34,7 +34,7 @@ const LoadedFileDialog = ({
       importJobFromData({
         metadata: {
           localID,
-          localTitle: `Seq ${i + 1} from ${fileName}`,
+          localTitle: result?.xref?.[0]?.id || `Seq ${i + 1} from ${fileName}`,
           type: 'InterProScan',
           remoteID: `imported_file-${fileName}-${i + 1}`,
           hasResults: result.matches.length > 0,
@@ -51,7 +51,7 @@ const LoadedFileDialog = ({
   };
   return (
     <Modal show={show} closeModal={closeModal}>
-      <h2 id="modalT(itle">InterProScan File</h2>
+      <h2 id="modalTitle">InterProScan File</h2>
       {fileContent && isValid(fileContent) ? (
         <>
           <p>
