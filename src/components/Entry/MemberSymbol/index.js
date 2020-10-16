@@ -96,7 +96,7 @@ const MemberSymbol = (
           </text>
         </svg>
       ) : (
-        <div style={{ '--aspect-ratio': '1/1' }}>
+        <div style={{ '--aspect-ratio': '1 / 1' }}>
           <div>
             {avif || png ? (
               <picture>
