@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -7,19 +8,22 @@ import { getReadTheDocsURL } from 'higherOrder/loadData/defaults';
 
 import ContentFromRST from 'components/ContentFromRST';
 
-/*:: type DataType = {
+/*:: type DataType = null | {
   ok: bool,
+  loading: bool,
   payload: Object,
 }; */
 
-const ContentFormReadTheDocs = ({ data /*: DataType */, ...rest }) => {
+const ContentFormReadTheDocs = (
+  { data, ...rest } /*: {data: DataType, rest: Array<mixed>} */,
+) => {
   if (!data || !data.ok || data.loading) return null;
-  return <ContentFromRST rstText={data.payload} {...rest} />;
+  return <ContentFromRST {...rest} rstText={data.payload} />;
 };
 ContentFormReadTheDocs.propTypes = {
   data: T.shape({
-    ok: T.boolean,
-    loading: T.boolean,
+    ok: T.bool,
+    loading: T.bool,
     payload: T.string,
   }),
 };

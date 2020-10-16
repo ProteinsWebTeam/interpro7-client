@@ -103,10 +103,15 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           <TooltipAndRTDLink rtdPage="searchways.html#sequence-search-results" />
         </h3>
         <p className={f('info')}>
-          Your InterProScan search results are listed below. Each search may run
-          for different time. You can navigate to other pages if you prefer.
-          Once the job is finished, you will be notified and the results will be
-          available for 7 days.
+          Your InterProScan search results are shown below. Searches may take
+          varying times to complete. You can navigate to other pages and once
+          the search is finished, you will receive a notification. The results
+          will be available for 7 days.
+        </p>
+        <p className={f('info')}>
+          Alternatively, you can import the results of an InterProScan run (in
+          JSON format) into this page in order to view your search results
+          interactively.
         </p>
         <SchemaOrgData
           data={{
