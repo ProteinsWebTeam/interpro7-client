@@ -6,6 +6,7 @@ import {
   DOWNLOAD_DELETE,
   DOWNLOAD_ERROR,
 } from 'actions/types';
+import { createNotification } from 'utils/browser-notifications';
 
 /*:: export type DatumProgress = {
   progress: number,
@@ -41,15 +42,15 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
       };
     case DOWNLOAD_ERROR:
     case DOWNLOAD_SUCCESS:
-      const img = 'src/images/logo/logo_InterPro.png';
-      const text = 'Your files are ready to download';
-      const notification = new Notification('InterPro', {
-        body: text,
-        icon: img,
-      });
-      // notification.onclick = (e) => {
-      //   window.location.href = "http://localhost:8080/interpro/result/download";
-      // };
+      const text =
+        action.type === 'DOWNLOAD_SUCCESS'
+          ? 'Your files are ready to download'
+          : 'There has been an error generating the file';
+      const notification = createNotification('InterPro', text, null);
+      notification.onclick = () => {
+        window.location.href = `${window.location.origin}/interpro/result/download`;
+        // window.open(`${window.location.origin}/interpro/result/download`, '_blank');
+      };
       return {
         ...state,
         [keyFromAction(action)]: {
