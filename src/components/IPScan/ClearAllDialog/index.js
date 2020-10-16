@@ -13,7 +13,7 @@ const f = foundationPartial(ipro);
 
 const ClearAllDialog = ({ show, closeModal, jobs, from, deleteJob }) => {
   const deleteJobs = () => {
-    for (let job of jobs) {
+    for (const job of jobs) {
       deleteJob({ metadata: { localID: job.localID } });
     }
     closeModal();
@@ -43,6 +43,12 @@ ClearAllDialog.propTypes = {
   show: T.bool,
   closeModal: T.func,
   deleteJob: T.func,
+  jobs: T.arrayOf(
+    T.shape({
+      localID: T.string,
+    }),
+  ),
+  from: T.string,
 };
 
 export default connect(undefined, { deleteJob })(ClearAllDialog);

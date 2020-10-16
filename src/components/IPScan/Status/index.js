@@ -22,7 +22,7 @@ import config from 'config';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
-import { updateJobStatus, deleteJob } from 'actions/creators';
+import { updateJobStatus } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -93,7 +93,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
   state = { show: false, jobsToRemove: null, from: null };
 
   deleteAll = (from = 'file') => {
-    const { jobs, deleteJob } = this.props;
+    const { jobs } = this.props;
     this.setState({
       show: true,
       from,
@@ -308,6 +308,4 @@ const mapsStateToProps = createSelector(
   }),
 );
 
-export default connect(mapsStateToProps, { updateJobStatus, deleteJob })(
-  IPScanStatus,
-);
+export default connect(mapsStateToProps, { updateJobStatus })(IPScanStatus);

@@ -31,6 +31,7 @@ import styles from './style.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, styles);
 
 export const ExtraOptions = ({ children }) => <>{children}</>;
+ExtraOptions.propTypes = { children: T.any };
 /*:: type Props = {
   dataTable: Array<Object>,
   rowKey: string,
