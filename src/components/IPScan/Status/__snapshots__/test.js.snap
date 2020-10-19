@@ -51,6 +51,24 @@ exports[`<IPScanStatus /> should render 1`] = `
     rowKey="localID"
     showTableIcon={false}
   >
+    <ExtraOptions>
+      <DropDownButton
+        icon=""
+        label="Clear All"
+      >
+        <button
+          onClick={[Function]}
+        >
+          Loaded from File
+        </button>
+        <hr />
+        <button
+          onClick={[Function]}
+        >
+          Loaded from Servers
+        </button>
+      </DropDownButton>
+    </ExtraOptions>
     <Column
       dataKey="localID"
       renderer={[Function]}
@@ -86,5 +104,11 @@ exports[`<IPScanStatus /> should render 1`] = `
       Action
     </Column>
   </Table>
+  <Memo(Connect(ClearAllDialog))
+    closeModal={[Function]}
+    from={null}
+    jobs={null}
+    show={false}
+  />
 </div>
 `;

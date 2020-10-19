@@ -6,37 +6,35 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flattenDeep } from 'lodash-es';
-
 import { format } from 'url';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
 import getFetch from 'higherOrder/loadData/getFetch';
+import { NOT_MEMBER_DBS } from 'menuConfig';
+import { iproscan2urlDB } from 'utils/url-patterns';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Redirect from 'components/generic/Redirect';
+import Link from 'components/generic/Link';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
-
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
-
+import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 import GoTerms from 'components/GoTerms';
-import Length from 'components/Protein/Length';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+import Length from 'components/Protein/Length';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
 import Actions from 'components/IPScan/Actions';
 import { getIProScanURL } from 'components/IPScan/Status';
-import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
-
+import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import { Exporter } from 'components/Table';
-import { NOT_MEMBER_DBS } from 'menuConfig';
-import { iproscan2urlDB } from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import Link from 'components/generic/Link';
-import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 import style from './style.css';
-import { updateJobTitle } from '../../../actions/creators';
+import { updateJobTitle } from 'actions/creators';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, style);
 
@@ -330,7 +328,12 @@ const SummaryIPScanJob = ({
     );
   }
 
-  const payload = data.payload ? data.payload.results[0] : localPayload;
+  const payload = data.payload
+    ? {
+        ...data.payload.results[0],
+        'interproscan-version': data.payload?.['interproscan-version'],
+      }
+    : localPayload;
 
   if (!payload) return <Loading />;
 
@@ -355,6 +358,7 @@ const SummaryIPScanJob = ({
             Using data stored in your browser
           </div>
         )}
+        <IPScanVersionCheck ipScanVersion={payload['interproscan-version']} />
 
         <table
           className={f('light', 'table-sum', 'margin-bottom-none')}

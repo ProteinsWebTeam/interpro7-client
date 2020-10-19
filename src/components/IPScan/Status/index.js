@@ -4,14 +4,16 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
-import Table, { Column } from 'components/Table';
+import Table, { Column, ExtraOptions } from 'components/Table';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import RefreshButton from 'components/IPScan/RefreshButton';
+import ClearAllDialog from 'components/IPScan/ClearAllDialog';
 import ImportResultSearch from 'components/IPScan/ImportResultSearch';
 import Actions from 'components/IPScan/Actions';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -88,6 +90,20 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
     defaultPageSize: T.number.isRequired,
     updateJobStatus: T.func.isRequired,
   };
+  state = { show: false, jobsToRemove: null, from: null };
+
+  deleteAll = (from = 'file') => {
+    const { jobs } = this.props;
+    this.setState({
+      show: true,
+      from,
+      jobsToRemove: jobs.filter(
+        (job) =>
+          (from === 'file' && job.status === 'imported file') ||
+          (from === 'server' && job.remoteID.startsWith('iprscan5')),
+      ),
+    });
+  };
 
   render() {
     const { jobs, search, defaultPageSize } = this.props;
@@ -136,6 +152,17 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           query={search}
           showTableIcon={false}
         >
+          <ExtraOptions>
+            <DropDownButton label="Clear All" icon="&#xf1f8;">
+              <button onClick={() => this.deleteAll('file')}>
+                Loaded from File
+              </button>
+              <hr />
+              <button onClick={() => this.deleteAll('server')}>
+                Loaded from Servers
+              </button>
+            </DropDownButton>
+          </ExtraOptions>
           <Column
             dataKey="localID"
             renderer={(localID /*: string */, row /*: Object */) => (
@@ -153,7 +180,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                 >
                   {row.remoteID || localID}{' '}
                 </Link>
-                {row.remoteID && (
+                {row.remoteID && !row.remoteID.startsWith('imported') && (
                   <CopyToClipboard
                     textToCopy={getIProScanURL(row.remoteID)}
                     tooltipText="CopyURL"
@@ -248,6 +275,12 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
             Action
           </Column>
         </Table>
+        <ClearAllDialog
+          show={this.state.show}
+          closeModal={() => this.setState({ show: false })}
+          jobs={this.state.jobsToRemove}
+          from={this.state.from}
+        />
       </div>
     );
   }

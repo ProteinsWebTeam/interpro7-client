@@ -157,6 +157,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
             .replace(FASTA_CLEANER, '')
             .toUpperCase(),
           matches: data?.results?.[0]?.matches || [],
+          'interproscan-version': data?.['interproscan-version'],
           xref: [
             {
               name:

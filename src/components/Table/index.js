@@ -30,6 +30,8 @@ import styles from './style.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, styles);
 
+export const ExtraOptions = ({ children }) => <>{children}</>;
+ExtraOptions.propTypes = { children: T.any };
 /*:: type Props = {
   dataTable: Array<Object>,
   rowKey: string,
@@ -158,6 +160,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       (child) => child.type === _PageSizeSelector,
     );
     const exporter = _children.find((child) => child.type === _Exporter);
+    const extraOptions = _children.find((child) => child.type === ExtraOptions);
     const tableIcon = showTableIcon === undefined ? true : showTableIcon;
 
     return (
@@ -231,6 +234,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   {search}
                   {hToggler}
                   {exporter}
+                  {extraOptions}
                 </div>
               </div>
             </div>
