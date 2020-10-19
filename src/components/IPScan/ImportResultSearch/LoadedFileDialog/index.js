@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -7,6 +8,7 @@ import id from 'utils/cheap-unique-id';
 
 import { countInterProFromMatches } from 'pages/Sequence';
 import Modal from 'components/SimpleCommonComponents/Modal';
+import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -20,13 +22,25 @@ const isValid = (fileObj) => {
     'interproscan-version' in fileObj
   );
 };
-const LoadedFileDialog = ({
-  show,
-  closeModal,
-  fileContent,
-  fileName,
-  importJobFromData,
-}) => {
+/*::
+  type Props = {
+    show: Boolean,
+    closeModal: function,
+    fileContent: {
+      results: Array<{
+        xref: Array<{id: string}>,
+        matches: Array<{signature:{entry: {}}}>,
+        sequence: string,
+      }>,
+      'interproscan-version': string,
+    },
+    fileName: string,
+    importJobFromData: function,
+  }
+*/
+const LoadedFileDialog = (
+  { show, closeModal, fileContent, fileName, importJobFromData } /*: Props */,
+) => {
   const saveFileInIndexDB = () => {
     for (let i = fileContent.results.length - 1; i >= 0; i--) {
       const result = fileContent.results[i];
@@ -62,6 +76,9 @@ const LoadedFileDialog = ({
             <b>{fileContent.results.length} sequences</b> with InterProScan
             version {fileContent['interproscan-version']}
           </p>
+          <IPScanVersionCheck
+            ipScanVersion={fileContent['interproscan-version']}
+          />
           <div style={{ textAlign: 'right' }}>
             <button className={f('button')} onClick={saveFileInIndexDB}>
               OK

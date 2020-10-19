@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import T from 'prop-types';
 
@@ -10,8 +12,19 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ipro);
+/*::
+  type Props = {
+    show: Boolean,
+    closeModal: function,
+    jobs: Array<{ localID: string }>,
+    from: string,
+    deleteJob: function,
+  }
+*/
 
-const ClearAllDialog = ({ show, closeModal, jobs, from, deleteJob }) => {
+const ClearAllDialog = (
+  { show, closeModal, jobs, from, deleteJob } /*: Props */,
+) => {
   const deleteJobs = () => {
     for (const job of jobs) {
       deleteJob({ metadata: { localID: job.localID } });
