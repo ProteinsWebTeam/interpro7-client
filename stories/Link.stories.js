@@ -1,28 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'components/generic/Link';
 
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
 
 import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts);
+const f = foundationPartial(ebiGlobalStyles);
 
-const store = configureStore({
-  pathname: '/entry/interpro/',
-  search: '?page_size=2',
-  hash: 'table',
-});
+const store = configureStore();
 
 const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
 
 export default {
   title: 'InterPro UI/Link',
   decorators: [withProvider],
+};
+
+const initialLocation = {
+  description: {
+    entry: {
+      db: 'InterPro',
+      accession: 'IPR000001',
+    },
+    main: {
+      key: 'entry',
+    },
+  },
+  search: {},
 };
 
 export const Basic = () => (
@@ -36,17 +42,11 @@ export const Basic = () => (
   </>
 );
 
-// export const InternalLink = () => (
-//   <Link
-//     className={f('nolink')}
-//     to={{
-//       description: {
-//         main: { key: 'entry' },
-//         entry: { db: 'interpro'},
-//       },
-//       hash: 'table',
-//     }}
-//   >
-//     Kringle
-//   </Link>
-// );
+export const InternalLink = () => {
+  const [location, setLocation] = useState(initialLocation);
+  return (
+    <Link customLocation={location} to={initialLocation}>
+      Kringle
+    </Link>
+  );
+};
