@@ -140,20 +140,16 @@ const NotificationSettings = (
       <div className={f('row')}>
         <div className={f('medium-12', 'column')}>
           {status === 'answered' ? (
-            <>
-              <p>
-                To change notification preference, please do in the browser
-                settings.
-              </p>
-              <button className={f('button')} disabled>
-                Notifications {Notification.permission}
-              </button>
-            </>
+            <div className={f('callout')}>
+              The browser notification has been {Notification.permission}{' '}
+              permission. If you wish to change the preference, it has to be
+              done in the browser settings.
+            </div>
           ) : (
             <>
               <p>
-                Allow browser to notify when the InterProScan search has
-                completed or the files are ready to download.
+                Allow us to send you browser notifications when one of your Jobs
+                or Downloads finishes.
               </p>
               <button
                 type="button"

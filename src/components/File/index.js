@@ -9,6 +9,7 @@ import ProgressButton from 'components/ProgressButton';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
+import { askNotificationPermission } from 'utils/browser-notifications';
 import { downloadSelector } from 'reducers/download';
 import { downloadURL } from 'actions/creators';
 
@@ -249,14 +250,17 @@ export class File extends PureComponent /*:: <Props, State> */ {
     };
   }
 
-  _handleClick = blockEvent(() =>
+  _handleClick = blockEvent(() => {
+    // Request browser notification
+    askNotificationPermission();
+
     this.props.downloadURL(
       this.state.url,
       this.props.fileType,
       this.props.subset,
       this.props.endpoint,
-    ),
-  );
+    );
+  });
 
   render() {
     const { ConnectedButton, url, subpath } = this.state;

@@ -59,7 +59,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
 
   _handleGenerateClick = blockEvent(() => {
     // Request browser notification
-    askNotificationPermission(() => {});
+    askNotificationPermission();
 
     this.props.downloadURL(
       this.props.url,

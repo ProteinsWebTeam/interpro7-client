@@ -364,7 +364,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       },
     });
     // Request browser notification
-    askNotificationPermission(() => {});
+    askNotificationPermission();
 
     if (isStayChecked(this._formRef.current)) {
       this._handleReset();

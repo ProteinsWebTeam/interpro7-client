@@ -1,6 +1,7 @@
+import { noop } from 'lodash-es';
 import interproLogo from '../../images/logo/logo_1776x1776.png';
 
-export const askNotificationPermission = (setStatus) => {
+export const askNotificationPermission = (setStatus = noop) => {
   if ('Notification' in window) {
     Notification.requestPermission().then((permission) => {
       if (!('permission' in Notification)) {
