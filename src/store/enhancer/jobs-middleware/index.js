@@ -2,6 +2,7 @@
 import url from 'url';
 import { schedule } from 'timing-functions';
 
+import { createNotification } from 'utils/browser-notifications';
 import { cachedFetchJSON, cachedFetchText } from 'utils/cached-fetch';
 import id from 'utils/cheap-unique-id';
 
@@ -147,6 +148,17 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
               currentDesc.result.accession !== meta.localID &&
               currentDesc.result.accession !== meta.remoteID)
           ) {
+            const notification = createNotification(
+              'InterProScan',
+              'Your InterProScan search results are ready to view',
+            );
+            notification.onclick = () => {
+              window.open(
+                `${window.location.origin}/interpro/result/InterProScan/${meta.remoteID}`,
+                '_blank',
+              );
+            };
+            // TODO to be removed
             dispatch(
               addToast(
                 {

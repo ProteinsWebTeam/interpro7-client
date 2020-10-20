@@ -9,6 +9,7 @@ import NumberComponent from 'components/NumberComponent';
 
 import { downloadURL, downloadDelete } from 'actions/creators';
 
+import { askNotificationPermission } from 'utils/browser-notifications';
 import blockEvent from 'utils/block-event';
 import { toPlural } from 'utils/pages';
 
@@ -56,14 +57,17 @@ export class Controls extends PureComponent /*:: <Props> */ {
     noData: T.bool.isRequired,
   };
 
-  _handleGenerateClick = blockEvent(() =>
+  _handleGenerateClick = blockEvent(() => {
+    // Request browser notification
+    askNotificationPermission();
+
     this.props.downloadURL(
       this.props.url,
       this.props.fileType,
       this.props.subset,
       this.props.entityType,
-    ),
-  );
+    );
+  });
 
   _handleCancelClick = blockEvent(() =>
     this.props.downloadDelete(
@@ -145,7 +149,4 @@ export class Controls extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(
-  undefined,
-  { downloadURL, downloadDelete },
-)(Controls);
+export default connect(undefined, { downloadURL, downloadDelete })(Controls);
