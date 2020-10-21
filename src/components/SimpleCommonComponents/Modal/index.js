@@ -40,6 +40,6 @@ const Modal = ({ show = false, children, closeModal = noop }) => {
 Modal.propTypes = {
   show: T.bool,
   children: T.any,
-  closeModal: T.funcm,
+  closeModal: T.func,
 };
 export default Modal;

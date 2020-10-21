@@ -5,7 +5,7 @@ import T from 'prop-types';
 /*::
   import type {PopupDetail} from '../index.js';
   type Props = {
-    detail: PopupDetail, 
+    detail: PopupDetail,
     sourceDatabase: string,
   }
 */

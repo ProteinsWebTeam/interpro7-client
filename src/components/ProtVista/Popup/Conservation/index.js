@@ -6,7 +6,7 @@ import ColorScale from '../ColorScale';
 
 /*::
   import type {ProtVistaLocation, PopupDetail} from '../index.js';
-  
+
   type Locations = Array<ProtVistaLocation>;
   type Props = {
     detail: PopupDetail,

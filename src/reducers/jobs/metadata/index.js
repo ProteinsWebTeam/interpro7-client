@@ -6,13 +6,14 @@ import {
   IMPORT_JOB_FROM_DATA,
 } from 'actions/types';
 
-/*:: type JobStatus = 'created' | 'submitted'; */
+/*:: type JobStatus = 'created' | 'submitted' | 'failed' | 'importing' | 'imported file' | 'running' | 'finished'; */
 
-/*:: type JobMetadata = {|
+/*:: export type JobMetadata = {|
   localID: ?string,
   type: 'InterProScan',
   status: ?JobStatus,
   remoteID: ?string,
+  hasResults?: boolean,
   times: {|
     created?: number,
     submitted?: number,

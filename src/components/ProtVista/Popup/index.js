@@ -9,8 +9,8 @@ import ProtVistaConservationPopup from './Conservation';
 
 /*::
   export type ProtVistaFragment = {
-      start:number, 
-      end: number, 
+      start:number,
+      end: number,
       color?: string,
       shape?: string,
     }

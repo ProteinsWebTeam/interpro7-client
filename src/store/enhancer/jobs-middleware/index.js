@@ -1,4 +1,6 @@
+// @flow
 /*:: import type { Middleware } from 'redux'; */
+/*:: import type { JobMetadata } from 'reducers/jobs/metadata'; */
 import url from 'url';
 import { schedule } from 'timing-functions';
 
@@ -12,13 +14,14 @@ import {
   UPDATE_JOB_STATUS,
   UPDATE_JOB_TITLE,
   NEW_PROCESSED_CUSTOM_LOCATION,
+  IMPORT_JOB,
+  IMPORT_JOB_FROM_DATA,
 } from 'actions/types';
 import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
 
 import config from 'config';
 
 import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
-import { IMPORT_JOB, IMPORT_JOB_FROM_DATA } from '../../../actions/types';
 
 // eslint-disable-next-line no-magic-numbers
 const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
@@ -40,13 +43,14 @@ const rehydrateStoredJobs = async (dispatch) => {
   await schedule(DEFAULT_SCHEDULE_DELAY);
   const metaT = await metaTA;
   const meta = await metaT.getAll();
-  const entries = Object.entries(meta);
+  // prettier-ignore
+  const entries = (Object.entries(meta) /*: any */);
   if (!entries.length) return dispatch(rehydrateJobs({}));
   const jobs = {};
   const now = Date.now();
-  for (const [localID, metadata] of entries) {
+  for (const [localID, metadata] /*: [string, JobMetadata] */ of entries) {
     // if job expired on server, delete it
-    if (now - metadata.times.created > MAX_TIME_ON_SERVER) {
+    if (now - (metadata.times.created || 0) > MAX_TIME_ON_SERVER) {
       deleteJobInDB(localID);
     } else {
       jobs[localID] = { metadata };
@@ -55,7 +59,7 @@ const rehydrateStoredJobs = async (dispatch) => {
   dispatch(rehydrateJobs(jobs));
 };
 
-const createJobInDB = async (metadata, data) => {
+const createJobInDB = async (metadata /*: JobMetadata */, data) => {
   const { localID } = metadata;
   try {
     // add data and metadata to idb
@@ -79,7 +83,7 @@ const updateJobInDB = async (metadata, data, title) => {
 const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   // function definitions
   // eslint-disable-next-line
-  const processJob = async (localID, meta) => {
+  const processJob = async (localID /*: string */, meta /*: JobMetadata */) => {
     // Wait to have some time to do all the maintenance
     await schedule(DEFAULT_SCHEDULE_DELAY);
     if (meta.status === 'failed') return;
@@ -90,6 +94,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       );
 
       const ipScanInfo = getState().settings.ipScan;
+      console.log(config);
 
       // Here is where we actually submit the sequence to InterProScan servers
       const { payload: remoteID, ok } = await cachedFetchText(
@@ -104,7 +109,8 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
           body: url
             .format({
               query: {
-                email: config.IPScan.contactEmail,
+                // prettier-ignore
+                email: (config /*: any */).IPScan.contactEmail,
                 title: localID,
                 sequence: input,
                 appl: applications,
@@ -131,11 +137,14 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     ) {
       const ipScanInfo = getState().settings.ipScan;
       // Here we check the status of a job in the interProScan servers
+
       const { payload, ok } = await cachedFetchText(
-        url.resolve(
-          url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
-          `status/${meta.remoteID}`,
-        ),
+        meta.remoteID
+          ? url.resolve(
+              url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
+              `status/${meta.remoteID || ''}`,
+            )
+          : null,
         { useCache: false },
       );
       const status = payload.toLowerCase().replace('_', ' ');
@@ -155,7 +164,9 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
               addToast(
                 {
                   title: `Job ${status}`,
-                  body: `Your job with id ${meta.remoteID} is in a “${status}” state.`,
+                  body: `Your job with id ${
+                    meta.remoteID || '_'
+                  } is in a “${status}” state.`,
                   ttl: 10000, // eslint-disable-line no-magic-numbers
                   link: {
                     to: {
@@ -182,10 +193,12 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       const ipScanInfo = getState().settings.ipScan;
       // Getting the results from the interporScan Server
       const { payload: data, ok } = await cachedFetchJSON(
-        url.resolve(
-          url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
-          `result/${meta.remoteID}/json`,
-        ),
+        meta.remoteID
+          ? url.resolve(
+              url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
+              `result/${meta.remoteID || ''}/json`,
+            )
+          : null,
       );
       if (ok) {
         dispatch(updateJob({ metadata: { ...meta, hasResults: true }, data }));
@@ -214,7 +227,13 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
 
     try {
       const metaT = await metaTA;
-      for (const [localID, meta] of Object.entries(await metaT.getAll())) {
+      for (const [
+        localID,
+        meta,
+      ] /*: [string, JobMetadata] */ of (Object.entries(
+        await metaT.getAll(),
+        // prettier-ignore
+      ) /*: any */)) {
         await processJob(localID, meta);
       }
     } catch (error) {

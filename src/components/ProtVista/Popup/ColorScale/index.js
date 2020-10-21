@@ -15,7 +15,7 @@ const COLOR_SCALE_HEIGHT = 20;
   range: Array<string>,
   width?: number,
   height?: number,
-    
+
   }
 */
 const ColorScale = (

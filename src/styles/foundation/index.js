@@ -30,9 +30,7 @@ export const foundationPartial = (
 ) => {
   const output = {};
   for (const style of [foundation, ...otherStyles]) {
-    for (const [rule, hash /*: string */] of (Object.entries(
-      style,
-    ) /*: any */)) {
+    for (const [rule, hash] of (Object.entries(style) /*: any */)) {
       if (output[rule]) {
         output[rule] += ` ${hash}`;
       } else {

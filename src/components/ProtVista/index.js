@@ -119,18 +119,18 @@ const loadProtVistaWebComponents = () => {
   optionsID: string,
 }; */
 export class ProtVista extends Component /*:: <Props, State> */ {
-  /*:: 
+  /*::
     web_tracks: {};
     popper: any;
     _isPopperTop: boolean;
     _timeoutID: ?IntervalID;
-    _mainRef: { current: null | React$ElementRef<'div'> }; 
-    _popperRef: { current: null | React$ElementRef<'div'> }; 
-    _popperContentRef: { current: null | React$ElementRef<'div'> }; 
-    _protvistaRef: { current: null | React$ElementRef<'div'> }; 
-    _webProteinRef: { current: null | React$ElementRef<typeof ProtVistaSequence> }; 
-    _hydroRef: { current: null | React$ElementRef<typeof ProtVistaColouredSequence> }; 
-    _conservationTrackRef: { current: null | React$ElementRef<'div'> }; 
+    _mainRef: { current: null | React$ElementRef<'div'> };
+    _popperRef: { current: null | React$ElementRef<'div'> };
+    _popperContentRef: { current: null | React$ElementRef<'div'> };
+    _protvistaRef: { current: null | React$ElementRef<'div'> };
+    _webProteinRef: { current: null | React$ElementRef<typeof ProtVistaSequence> };
+    _hydroRef: { current: null | React$ElementRef<typeof ProtVistaColouredSequence> };
+    _conservationTrackRef: { current: null | React$ElementRef<'div'> };
    */
   static propTypes = {
     protein: T.object,
