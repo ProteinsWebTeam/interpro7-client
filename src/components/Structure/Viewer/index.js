@@ -582,6 +582,15 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
                       this.setState({ isStructureFullScreen: false })
                     }
                   />
+
+                  {this.state.isStuck && (
+                    <button
+                      data-icon={this.state.isMinimized ? '\uF2D0' : '\uF2D1'}
+                      title={'Minimize'}
+                      onClick={this._toggleMinimize}
+                      className={f('structure-icon', 'icon', 'icon-common')}
+                    />
+                  )}
                 </div>
               </div>
             </div>
