@@ -9,6 +9,7 @@ import Link from 'components/generic/Link';
 import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
+import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 
 import local from './style.css';
 import ipro from 'styles/interpro-new.css';
@@ -225,15 +226,6 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
     });
   };
 
-  _handleHmmerClick = (event) => {
-    const { currentTarget } = event;
-    const oldHref = currentTarget.href;
-    // Add the sequence as querystring to Hmmer link href
-    currentTarget.href += `?seq=${this._getSelection()}`;
-    // Reset href, but after the click was done
-    setTimeout(() => (currentTarget.href = oldHref));
-  };
-
   render() {
     const { sequence, accession, name } = this.props;
     const header = accession || name;
@@ -296,28 +288,11 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
                 <span>Search selection with InterProScan</span>
               </div>
             </Link>
-            <Link
-              href="https://www.ebi.ac.uk/Tools/hmmer/search/phmmer"
-              onClick={this._handleHmmerClick}
-              target="_blank"
-            >
-              <div
-                className={f(
-                  'sequence-link',
-                  'button-more',
-                  'icon',
-                  'icon-common',
-                  'icon-right',
-                )}
-                data-icon="&#xf061;"
-                style={{ minWidth: '302px' }}
-              >
-                <div className={f('shape', 'hmmer', 'yellow')} />
-                <div className={f('shape', 'hmmer', 'red')} />
-                <div className={f('shape', 'hmmer', 'blue')} />
-                <span>Search selection with HMMER</span>
-              </div>
-            </Link>
+            <HmmerButton
+              sequence={this._getSelection}
+              title="Search selection with HMMER"
+              minWidth="302px"
+            />
           </div>
         </div>
       </section>
