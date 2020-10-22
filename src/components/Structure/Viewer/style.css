@@ -80,3 +80,22 @@
     }
   }
 }
+
+.split-view {
+  display: flex;
+  background-color: #ffffff;
+  & .protvista-container {
+    overflow: scroll;
+    width: 50vw;
+  }
+  & .structure-wrapper {
+    width: 50vw;
+    height: initial;
+    & .structure-viewer-ref {
+      height: 95vh;
+    }
+    & .viewer-controls {
+      height: 5vh;
+    }
+  }
+}

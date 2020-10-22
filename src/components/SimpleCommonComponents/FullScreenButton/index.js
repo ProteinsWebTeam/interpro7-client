@@ -2,42 +2,49 @@
 import React, { useState, useEffect } from 'react';
 import T from 'prop-types';
 
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import { noop } from 'lodash-es';
 
-import fonts from 'EBI-Icon-fonts/fonts.css';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
 import { requestFullScreen, exitFullScreen } from 'utils/fullscreen';
+
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(fonts);
 
 const FullScreenButton = (
   {
-    handleFullScreen,
     element,
     tooltip,
     className,
     dataIcon,
-  } /*: {handleFullScreen?: function, element?: any, tooltip: string, className?: string, dataIcon?: string} */,
+    onFullScreenHook = noop,
+    onExitFullScreenHook = noop,
+  } /*: {onFullScreenHook?: function,onExitFullScreenHook?: function, element?: any, tooltip: string, className?: string, dataIcon?: string} */,
 ) => {
   const [isFull, setFull] = useState(false);
-  const handleFullscreen = () => setFull(!!document.fullscreenElement);
+  const onFullscreen = () => {
+    if (document.fullscreenElement === null) {
+      setFull(false);
+      onExitFullScreenHook();
+    }
+  };
   useEffect(() => {
-    document.addEventListener('fullscreenchange', handleFullscreen);
-    return () =>
-      document.removeEventListener('fullscreenchange', handleFullscreen);
+    document.addEventListener('fullscreenchange', onFullscreen);
+    return () => document.removeEventListener('fullscreenchange', onFullscreen);
   }, []);
-  if (!handleFullScreen && !element) return null;
-  const _handleFullScreen =
-    handleFullScreen ||
-    (() => {
-      if (isFull) {
-        exitFullScreen();
-      } else {
-        requestFullScreen(element);
-      }
-      setFull(!isFull);
-    });
+  if (!element) return null;
+  const _handleFullScreen = () => {
+    if (isFull) {
+      exitFullScreen();
+      onExitFullScreenHook();
+    } else {
+      requestFullScreen(element);
+      onFullScreenHook();
+    }
+    setFull(!isFull);
+  };
   const _className =
     className || f('margin-bottom-none', 'icon', 'icon-common');
   const icon = dataIcon || (isFull ? 'G' : 'F');
@@ -55,6 +62,8 @@ const FullScreenButton = (
 
 FullScreenButton.propTypes = {
   handleFullScreen: T.func,
+  onFullScreenHook: T.func,
+  onExitFullScreenHook: T.func,
   element: T.any,
   tooltip: T.string,
   className: T.string,
