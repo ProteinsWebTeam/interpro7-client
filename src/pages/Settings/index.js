@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -18,6 +18,7 @@ import { installPrompt } from 'index';
 import loadable from 'higherOrder/loadable';
 
 import { changeSettings, resetSettings, addToast } from 'actions/creators';
+import { askNotificationPermission } from 'utils/browser-notifications';
 
 import { EntryColorMode } from 'utils/entry-color';
 
@@ -119,100 +120,132 @@ const NotificationSettings = (
       showCtrlToZoomToast,
     },
   } /*: {notifications: {showTreeToast: boolean, showCtrlToZoomToast: boolean, showConnectionStatusToast: boolean, showSettingsToast: boolean, showHelpToast: boolean}} */,
-) => (
-  <form data-category="notifications">
-    <h4>Notification settings</h4>
-    <SchemaOrgData
-      data={{
-        name: 'Notification settings',
-        description: 'Notifications in the website can be turned on/off.',
-      }}
-      processData={schemaProcessDataPageSection}
-    />
-    <div className={f('row')}>
-      <div className={f('medium-12', 'column')}>
-        <p>
-          There are few tips shown in the website on how to use features
-          efficiently. It can be turned on/off.
-        </p>
-        <div className={f('row')}>
-          <div className={f('medium-4', 'column')}>
-            <table>
-              <thead>
-                <tr>
-                  <th>Tip</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Taxonomy Tree navigation</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showTreeToast"
-                      id="showTreeToast-input"
-                      checked={showTreeToast}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Check connectivity</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showConnectionStatusToast"
-                      id="showConnectionStatusToast-input"
-                      checked={showConnectionStatusToast}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Use CTRL and scroll to zoom</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showCtrlToZoomToast"
-                      id="showCtrlToZoomToast-input"
-                      checked={showCtrlToZoomToast}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Customise Settings</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showSettingsToast"
-                      id="showSettingsToast-input"
-                      checked={showSettingsToast}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Help Links</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showHelpToast"
-                      id="showHelpToast-input"
-                      checked={showHelpToast}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+) => {
+  const [status /*: string */, setStatus] = useState(
+    Notification.permission === 'granted' ||
+      Notification.permission === 'denied'
+      ? 'answered'
+      : 'not yet',
+  );
+  return (
+    <form data-category="notifications">
+      <h4>Notification settings</h4>
+      <SchemaOrgData
+        data={{
+          name: 'Notification settings',
+          description: 'Notifications in the website can be turned on/off.',
+        }}
+        processData={schemaProcessDataPageSection}
+      />
+      <div className={f('row')}>
+        <div className={f('medium-12', 'column')}>
+          {status === 'answered' ? (
+            <div className={f('callout')}>
+              The browser notification has been {Notification.permission}{' '}
+              permission. If you wish to change the preference, it has to be
+              done in the browser settings.
+            </div>
+          ) : (
+            <>
+              <p>
+                Allow us to send you browser notifications when one of your Jobs
+                or Downloads finishes.
+              </p>
+              <button
+                type="button"
+                className={f('button')}
+                onClick={() => askNotificationPermission(setStatus)}
+              >
+                Enable notifications
+              </button>
+            </>
+          )}
+        </div>
+        <div className={f('medium-12', 'column')}>
+          <p>
+            There are few tips shown in the website on how to use features
+            efficiently. It can be turned on/off.
+          </p>
+          <div className={f('row')}>
+            <div className={f('medium-4', 'column')}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tip</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Taxonomy Tree navigation</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="showTreeToast"
+                        id="showTreeToast-input"
+                        checked={showTreeToast}
+                        onChange={noop}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Check connectivity</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="showConnectionStatusToast"
+                        id="showConnectionStatusToast-input"
+                        checked={showConnectionStatusToast}
+                        onChange={noop}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Use CTRL and scroll to zoom</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="showCtrlToZoomToast"
+                        id="showCtrlToZoomToast-input"
+                        checked={showCtrlToZoomToast}
+                        onChange={noop}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Customise Settings</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="showSettingsToast"
+                        id="showSettingsToast-input"
+                        checked={showSettingsToast}
+                        onChange={noop}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Help Links</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="showHelpToast"
+                        id="showHelpToast-input"
+                        checked={showHelpToast}
+                        onChange={noop}
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </form>
-);
+    </form>
+  );
+};
+
 NotificationSettings.propTypes = {
   notifications: T.shape({
     showTreeToast: T.bool.isRequired,
