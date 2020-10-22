@@ -39,7 +39,9 @@ const _getProtvistaTracksData = ({ annotations, condition, type, protein }) => {
         return agg;
       }, {}),
     );
-    return tracks.sort((a, b) => a.locationEnd - b.locationEnd);
+    return tracks.sort(
+      (a /*:Object*/, b /*:Object*/) => a.locationEnd - b.locationEnd,
+    );
   }
   return null;
 };
@@ -64,7 +66,7 @@ export const formatGenome3dIntoProtVistaPanels = (
       annotations: payload.data.annotations,
       condition: ({ metadata }) =>
         metadata.type === 'PREDICTED_3D_STRUCTURE' &&
-        // Superfamily and gene3d have already beeen integrated in InterPro
+        // Superfamily and gene3d have already been integrated in InterPro
         metadata.resource.toUpperCase() !== 'SUPERFAMILY' &&
         metadata.resource.toUpperCase() !== 'GENE3D',
       type: 'Model',
@@ -76,7 +78,7 @@ export const formatGenome3dIntoProtVistaPanels = (
       annotations: payload.data.annotations,
       condition: ({ metadata }) =>
         metadata.type !== 'PREDICTED_3D_STRUCTURE' &&
-        // Superfamily and gene3d have already beeen integrated in InterPro
+        // Superfamily and gene3d have already been integrated in InterPro
         metadata.resource.toUpperCase() !== 'SUPERFAMILY' &&
         metadata.resource.toUpperCase() !== 'GENE3D',
       type: 'Domain',
