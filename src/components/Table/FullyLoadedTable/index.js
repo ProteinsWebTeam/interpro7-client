@@ -5,18 +5,43 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Table, { Column, PageSizeSelector } from 'components/Table';
+/*:: type Props = {
+  data: Array<Object>,
+  search: {
+    sort_by: string,
+    page_size: number,
+    page: number,
+  },
+  pageSize: number,
+  renderers: {},
+  columnToString: {},
+  headerStyle: {
+    [string]: {}
+  },
+  cellStyle: {
+    [string]: {}
+  },
+  headerClassName: {
+    [string]: string
+  },
+  cellClassName: {
+    [string]: string
+  },
+} */
 
-const FullyLoadedTable = ({
-  data,
-  renderers = {},
-  columnToString = {},
-  headerStyle = {},
-  cellStyle = {},
-  headerClassName = {},
-  cellClassName = {},
-  search,
-  pageSize,
-}) => {
+const FullyLoadedTable = (
+  {
+    data,
+    renderers = {},
+    columnToString = {},
+    headerStyle = {},
+    cellStyle = {},
+    headerClassName = {},
+    cellClassName = {},
+    search,
+    pageSize,
+  } /*: Props */,
+) => {
   const keys = Object.keys(data?.[0] || {});
   let subset = data;
   for (const key of keys) {

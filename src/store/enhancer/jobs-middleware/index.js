@@ -167,7 +167,9 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
             );
             notification.onclick = () => {
               window.open(
-                `${window.location.origin}/interpro/result/InterProScan/${meta.remoteID}`,
+                `${window.location.origin}/interpro/result/InterProScan/${
+                  meta.remoteID || ''
+                }`,
                 '_blank',
               );
             };
