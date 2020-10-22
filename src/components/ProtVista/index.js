@@ -425,7 +425,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       );
     }
     if (entry.accession && entry.accession.startsWith('G3D:')) {
-      return <Genome3dLink id={entry.protein}>{entry.accession}</Genome3dLink>;
+      // entry.accession = G3D:{entry.source_database}-PREDICTED... entry.source_database is what had to be shown
+      return (
+        <Genome3dLink id={entry.protein}>{entry.source_database}</Genome3dLink>
+      );
     }
 
     return (
