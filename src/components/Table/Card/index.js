@@ -1,7 +1,7 @@
 // @flow
 import T from 'prop-types';
 
-const Card = () => null;
+const Card = ({ ..._ /*: Array<any> */ }) => null;
 Card.propTypes = {
   children: T.func.isRequired,
 };

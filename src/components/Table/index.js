@@ -1,3 +1,4 @@
+// @flow
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
@@ -32,19 +33,19 @@ const f = foundationPartial(ebiGlobalStyles, fonts, styles);
 
 /*:: type Props = {
   dataTable: Array<Object>,
-  rowKey: string,
+  rowKey?: string,
   isStale?: boolean,
-  loading: boolean,
-  ok: boolean,
-  status: number,
+  loading?: boolean,
+  ok?: boolean,
+  status?: number,
   actualSize: number,
-  query: Object,
-  title: string,
-  notFound: ?boolean,
+  query?: Object,
+  title?: string,
+  notFound?: ?boolean,
   contentType?: string,
   children?: any,
-  withTree: boolean,
-  withGrid: boolean,
+  withTree?: boolean,
+  withGrid?: boolean,
   rowClassName?: any,
   nextAPICall?: ?string,
   previousAPICall?: ?string,
@@ -73,7 +74,10 @@ const RedirectToDefault = () => (
 );
 
 // redirects to default type if the 'withXXXX' type is not in the props
-const safeGuard = (withType, Component) => {
+const safeGuard = (
+  withType /*: string */,
+  Component /*: typeof GridView | typeof TreeView */,
+) => {
   const SafeGuarded = ({ [withType]: extractedWithType, ...props }) =>
     extractedWithType ? <Component {...props} /> : <RedirectToDefault />;
   SafeGuarded.displayName = `safeGuard(${withType}, ${
@@ -169,13 +173,13 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 <div className={f('pagesize-wrapper')}>
                   {title && <h4>{title}</h4>}
                   <_TotalNb
+                    {...this.props}
                     className={f('hide-for-small-only')}
                     data={dataTable}
                     actualSize={actualSize}
                     pagination={_query}
                     contentType={contentType}
                     notFound={notFound}
-                    {...this.props}
                   />
                 </div>
                 <div

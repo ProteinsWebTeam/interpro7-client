@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -31,7 +32,7 @@ class NoRows extends PureComponent /*:: <Props> */ {
   componentDidMount() {
     if (!(this._ref.current && this._ref.current.animate)) return;
     this._ref.current.animate(
-      { opacity: [0, 1] },
+      { opacity: ([0, 1] /*: Array<number|null> */) },
       { duration: 500, delay: 500, easing: 'ease-in-out', fill: 'both' },
     );
   }
@@ -60,7 +61,8 @@ class NoRows extends PureComponent /*:: <Props> */ {
   rows: Array<Object>,
   rowKey: string,
   columns: Array<string>,
-  notFound: boolean
+  notFound: boolean,
+  rowClassName:string | function,
 } */
 
 class Body extends PureComponent /*:: <BodyProps> */ {
