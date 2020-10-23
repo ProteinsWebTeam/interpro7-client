@@ -151,6 +151,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           actualSize={jobs.length}
           query={search}
           showTableIcon={false}
+          shouldGroup={true}
         >
           <ExtraOptions>
             <DropDownButton label="Clear All" icon="&#xf1f8;">
