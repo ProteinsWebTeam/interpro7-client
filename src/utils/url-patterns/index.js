@@ -46,7 +46,7 @@ export const memberDbURL = new Map([
   ['hamap', '//hamap.expasy.org/'],
   ['panther', 'http://www.pantherdb.org/panther/'],
   ['pfam', '//pfam.xfam.org/'],
-  ['pirsf', '//proteininformationresource.org/pirwww/dbinfo/pirsf.shtml'],
+  ['pirsf', '//proteininformationresource.org/pirsf/'],
   ['profile', '//prosite.expasy.org/'],
   ['prosite', '//prosite.expasy.org/'],
   ['smart', 'http://smart.embl-heidelberg.de/'],
