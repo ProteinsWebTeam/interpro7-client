@@ -36,13 +36,30 @@ export default {
 
 const basicData = [
   { id: 1, name: 'First', extra: 0.25 },
-  { id: 2, name: 'Second', extra: 0.5 },
-  { id: 3, name: 'Third', extra: 0.75 },
-  { id: 4, name: 'Fourth', extra: 0.5 },
+  { id: 2, name: 'Second', extra: 0.5, group: 'A group' },
+  { id: 3, name: 'Third', extra: 0.75, group: 'B group' },
+  { id: 4, name: 'Fourth', extra: 0.5, group: 'B group' },
 ];
 
 export const TheTable = () => (
   <Table actualSize={basicData.length} dataTable={basicData}>
+    <Column dataKey="id" headerStyle={{ top: 0 }}>
+      ID
+    </Column>
+    <Column dataKey="name" headerStyle={{ top: 0 }}>
+      Name
+    </Column>
+    <Column
+      dataKey="extra"
+      headerStyle={{ top: 0 }}
+      renderer={(extra) => <span>{extra * 100}%</span>}
+    >
+      Percentage
+    </Column>
+  </Table>
+);
+export const TheTableWithGroups = () => (
+  <Table actualSize={basicData.length} dataTable={basicData} shouldGroup={true}>
     <Column dataKey="id" headerStyle={{ top: 0 }}>
       ID
     </Column>

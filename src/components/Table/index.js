@@ -52,6 +52,7 @@ ExtraOptions.propTypes = { children: T.any };
   previousAPICall?: ?string,
   showTableIcon?: boolean,
   onFocusChanged?: ?function,
+  shouldGroup?: boolean,
 } */
 
 const TableView = loadable({
@@ -117,6 +118,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     withGrid: T.bool,
     rowClassName: T.oneOfType([T.string, T.func]),
     showTableIcon: T.bool,
+    shouldGroup: T.bool,
     onFocusChanged: T.func,
   };
 
@@ -140,6 +142,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       rowClassName,
       showTableIcon,
       onFocusChanged,
+      shouldGroup,
     } = this.props;
 
     const _query = query || {};
@@ -162,7 +165,17 @@ export default class Table extends PureComponent /*:: <Props> */ {
     const exporter = _children.find((child) => child.type === _Exporter);
     const extraOptions = _children.find((child) => child.type === ExtraOptions);
     const tableIcon = showTableIcon === undefined ? true : showTableIcon;
-
+    let data = [...dataTable];
+    let groups = null;
+    if (shouldGroup) {
+      data = data.sort((a, b) => {
+        if (!a.group) return -1;
+        if (!b.group) return 1;
+        if (a.group === b.group) return 0;
+        return a.group > b.group ? 1 : -1;
+      });
+      groups = Array.from(new Set(data.map(({ group }) => group)));
+    }
     return (
       <div className={f('row')}>
         <div className={f('columns', 'result-page')}>
@@ -173,7 +186,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   {title && <h4>{title}</h4>}
                   <_TotalNb
                     className={f('hide-for-small-only')}
-                    data={dataTable}
+                    data={data}
                     actualSize={actualSize}
                     pagination={_query}
                     contentType={contentType}
@@ -243,7 +256,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
             <div className={f('columns')}>
               <_TotalNb
                 className={f('show-for-small-only')}
-                data={dataTable}
+                data={data}
                 actualSize={actualSize}
                 pagination={_query}
                 notFound={notFound}
@@ -262,12 +275,13 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   columns={columns}
                   card={card}
                   notFound={notFound}
-                  dataTable={dataTable}
+                  dataTable={data}
                   rowKey={rowKey}
                   withTree={withTree}
                   withGrid={!!card}
                   rowClassName={rowClassName}
                   onFocusChanged={onFocusChanged}
+                  groups={groups}
                 />
               </div>
               <Switch
