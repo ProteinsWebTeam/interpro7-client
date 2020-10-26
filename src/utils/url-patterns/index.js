@@ -44,7 +44,7 @@ export const memberDbURL = new Map([
   ['cathgene3d', '//www.cathdb.info/'],
   ['cdd', '//www.ncbi.nlm.nih.gov/cdd/'],
   ['hamap', '//hamap.expasy.org/'],
-  ['panther', 'http://www.pantherdb.org/panther/'],
+  ['panther', '//pantherdb.org/'],
   ['pfam', '//pfam.xfam.org/'],
   ['pirsf', '//proteininformationresource.org/pirsf/'],
   ['profile', '//prosite.expasy.org/'],
