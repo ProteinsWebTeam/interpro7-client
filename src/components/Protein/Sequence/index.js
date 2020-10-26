@@ -26,8 +26,8 @@ const CHUNK_SIZE = 10;
 
 /*:: type InnerProps = {
   sequence: string,
-  start: number,
-  end: number,
+  start?: number,
+  end?: number,
 }; */
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -53,7 +53,15 @@ export const schemaProcessData = (length /*: number */) => ({
   },
 });
 
-const EdgeBlock = ({ segment, position, start, end }) => {
+/*::
+  type EdgeBlockProps = {
+    segment: string ,
+    position: number ,
+    start: number ,
+    end: number ,
+  }
+ */
+const EdgeBlock = ({ segment, position, start, end } /*: EdgeBlockProps */) => {
   const pos = position + 1;
   return (
     <>
@@ -73,6 +81,12 @@ const EdgeBlock = ({ segment, position, start, end }) => {
       ) : null}
     </>
   );
+};
+EdgeBlock.propTypes = {
+  segment: T.string,
+  position: T.number,
+  start: T.number,
+  end: T.number,
 };
 export class InnerSequence extends PureComponent /*:: <InnerProps> */ {
   static propTypes = {
@@ -95,14 +109,20 @@ export class InnerSequence extends PureComponent /*:: <InnerProps> */ {
           processData={schemaProcessData}
         />
         {sequenceWords.map((e, i) => {
-          const isBeforeStart = start > 0 && start > (i + 1) * CHUNK_SIZE;
-          const isAfterEnd = end > 0 && end <= i * CHUNK_SIZE;
-          const isStartBlock =
-            start > 0 &&
-            start + CHUNK_SIZE > 1 + (i + 1) * CHUNK_SIZE &&
-            start <= (i + 1) * CHUNK_SIZE;
-          const isEndBlock =
-            end > 0 && end < (i + 1) * CHUNK_SIZE && end > i * CHUNK_SIZE;
+          let isBeforeStart = false;
+          let isAfterEnd = false;
+          let isStartBlock = false;
+          let isEndBlock = false;
+          if (typeof start !== 'undefined' && typeof end !== 'undefined') {
+            isBeforeStart = start > 0 && start > (i + 1) * CHUNK_SIZE;
+            isAfterEnd = end > 0 && end <= i * CHUNK_SIZE;
+            isStartBlock =
+              start > 0 &&
+              start + CHUNK_SIZE > 1 + (i + 1) * CHUNK_SIZE &&
+              start <= (i + 1) * CHUNK_SIZE;
+            isEndBlock =
+              end > 0 && end < (i + 1) * CHUNK_SIZE && end > i * CHUNK_SIZE;
+          }
           return (
             <React.Fragment key={i}>
               <span
@@ -115,8 +135,8 @@ export class InnerSequence extends PureComponent /*:: <InnerProps> */ {
                 {isStartBlock || isEndBlock ? (
                   <EdgeBlock
                     segment={e}
-                    start={start}
-                    end={end}
+                    start={start || 0}
+                    end={end || (i + 1) * CHUNK_SIZE}
                     position={i * CHUNK_SIZE}
                   />
                 ) : (

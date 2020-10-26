@@ -242,7 +242,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                     aria-label="Job failed or not found"
                   />
                 ) : null}
-                {status === 'finished' && (
+                {['finished', 'imported file'].includes(status) && (
                   <Link
                     to={{
                       description: {
@@ -256,9 +256,15 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                   >
                     <span
                       style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-common', 'ico-confirmed')}
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        status === 'finished'
+                          ? 'ico-confirmed'
+                          : 'icon-reviewed-data',
+                      )}
                       data-icon="&#xf00c;"
-                      aria-label="Job finished"
+                      aria-label="Job ready"
                     />
                   </Link>
                 )}

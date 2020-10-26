@@ -350,7 +350,7 @@ const SummaryIPScanJob = ({
   };
 
   const goTerms = getGoTerms(payload.matches);
-  // TODO: ⚠️ Include changes for nucleotide results
+
   return (
     <div className={f('sections')}>
       <section>

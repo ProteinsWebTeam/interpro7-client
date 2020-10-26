@@ -47,7 +47,7 @@ type NucleotideResult = {
     start: number,
     end: number,
     strand: string,
-    protein: ProteinResult,          
+    protein: ProteinResult,
   }>,
 }
 export type ProteinFile = {

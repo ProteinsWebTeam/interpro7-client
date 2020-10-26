@@ -49,6 +49,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     dataTable={Array []}
     query={Object {}}
     rowKey="localID"
+    shouldGroup={true}
     showTableIcon={false}
   >
     <ExtraOptions>
