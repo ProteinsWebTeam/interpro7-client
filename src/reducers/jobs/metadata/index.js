@@ -1,5 +1,10 @@
 // @flow
-import { CREATE_JOB, UPDATE_JOB, IMPORT_JOB } from 'actions/types';
+import {
+  CREATE_JOB,
+  UPDATE_JOB,
+  IMPORT_JOB,
+  IMPORT_JOB_FROM_DATA,
+} from 'actions/types';
 
 /*:: type JobStatus = 'created' | 'submitted'; */
 
@@ -40,6 +45,8 @@ export default (state /*: JobMetadata */, action /*: Object */) => {
       return updateJob({ ...action.job.metadata, status: 'created' });
     case IMPORT_JOB:
       return updateJob({ ...action.job.metadata, status: 'importing' });
+    case IMPORT_JOB_FROM_DATA:
+      return updateJob({ ...action.job.metadata, status: 'imported file' });
     case UPDATE_JOB:
       return updateJob({ ...action.job.metadata });
     default:

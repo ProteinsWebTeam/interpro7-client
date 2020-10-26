@@ -16,11 +16,12 @@ import { iproscan2urlDB } from 'utils/url-patterns';
 
 /*:: type Props = {
   data: Object,
+  localPayload: Object,
   dataBase: Object,
   entryDB: string,
 }*/
 
-const flatMatchesFromIPScanPayload = function*(ipScanMatches, proteinLength) {
+const flatMatchesFromIPScanPayload = function* (ipScanMatches, proteinLength) {
   const protein = { protein: { length: proteinLength } };
   for (const match of ipScanMatches) {
     if (match.signature.entry) {
@@ -28,7 +29,7 @@ const flatMatchesFromIPScanPayload = function*(ipScanMatches, proteinLength) {
         accession: match.signature.entry.accession,
         name: match.signature.entry.name,
         source_database: 'InterPro',
-        entry_protein_locations: match.locations.map(location => ({
+        entry_protein_locations: match.locations.map((location) => ({
           fragments: [location],
         })),
         match: protein,
@@ -40,7 +41,7 @@ const flatMatchesFromIPScanPayload = function*(ipScanMatches, proteinLength) {
       source_database: iproscan2urlDB(
         match.signature.signatureLibraryRelease.library,
       ),
-      entry_protein_locations: match.locations.map(location => ({
+      entry_protein_locations: match.locations.map((location) => ({
         model_acc: match['model-ac'],
         fragments: [location],
       })),
@@ -49,7 +50,7 @@ const flatMatchesFromIPScanPayload = function*(ipScanMatches, proteinLength) {
   }
 };
 
-const getCountersFromFlatArray = flatArray =>
+const getCountersFromFlatArray = (flatArray) =>
   Array.from(
     new Map(
       flatArray.map(({ accession, source_database: s }) => [accession, s]),
@@ -60,7 +61,7 @@ const getCountersFromFlatArray = flatArray =>
     return agg;
   }, {});
 
-const mergeEntries = matches => {
+const mergeEntries = (matches) => {
   const map = new Map();
   for (const match of matches) {
     const _match = map.get(match.accession);
@@ -80,6 +81,7 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
     data: T.object.isRequired,
     dataBase: T.object.isRequired,
     entryDB: T.string.isRequired,
+    localPayload: T.object,
   };
 
   render() {
@@ -87,11 +89,12 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
       entryDB,
       data: { payload },
       dataBase,
+      localPayload,
     } = this.props;
     if (!entryDB)
       return (
         <Redirect
-          to={customLocation => ({
+          to={(customLocation) => ({
             ...customLocation,
             description: {
               ...customLocation.description,
@@ -100,8 +103,8 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
           })}
         />
       );
-    if (!payload) return <Loading />;
-    const mainData = { ...payload.results[0] };
+    if (!payload && !localPayload) return <Loading />;
+    const mainData = payload ? { ...payload.results[0] } : localPayload;
     mainData.length = mainData.sequence.length;
     const flatArray = Array.from(
       flatMatchesFromIPScanPayload(mainData.matches, mainData.length),
@@ -127,12 +130,9 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToProps = createSelector(
-  descriptionSelector,
-  description => ({
-    entryDB: description.entry.db,
-  }),
-);
+const mapStateToProps = createSelector(descriptionSelector, (description) => ({
+  entryDB: description.entry.db,
+}));
 
 export default loadData({
   getUrl: getUrlForMeta,

@@ -4,6 +4,8 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
 
+import id from 'utils/cheap-unique-id';
+
 import ProtVistaOptions from './Options';
 import ProtVistaPopup from './Popup';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -148,6 +150,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       enableTooltip: true,
       showLoading: false,
       overPopup: false,
+      optionsID: id('protvista-options-'),
     };
 
     this._mainRef = React.createRef();
@@ -544,7 +547,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper__arrow')} />
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
-        <div id={`${this.props.id}ProtvistaDiv`}>
+        <div id={`${this.state.optionsID}ProtvistaDiv`}>
           <div className={f('protvista')}>
             <protvista-manager
               attributes="length displaystart displayend highlight"
@@ -562,7 +565,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                     <ProtVistaOptions
                       title={this.props.title}
                       length={length}
-                      id={this.props.id}
+                      id={this.state.optionsID}
                       webTracks={this.web_tracks}
                       expandedTrack={this.state.expandedTrack}
                       getParentElem={this.getProtvistaRefs}

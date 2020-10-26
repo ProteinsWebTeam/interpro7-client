@@ -61,12 +61,14 @@ const locationSelector = createSelector(
   },
   (value) => value,
 );
+export const countInterProFromMatches = (matches) =>
+  Array.from(
+    new Set(matches.map((m) => (m.signature.entry || {}).accession)).values(),
+  ).filter(Boolean).length;
+
 const countInterPro = createSelector(
   (payload) => payload.results[0].matches,
-  (matches) =>
-    Array.from(
-      new Set(matches.map((m) => (m.signature.entry || {}).accession)).values(),
-    ).filter(Boolean).length,
+  countInterProFromMatches,
 );
 const countLibraries = createSelector(
   (payload) => payload.results[0].matches,
@@ -108,6 +110,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
     localID: T.string,
     job: T.object,
     localTitle: T.string,
+    entries: T.number,
   };
 
   constructor(props /*: Props */) {
@@ -150,10 +153,11 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
 
       this.setState({
         localPayload: {
-          sequence: (data?.input || '')
+          sequence: (data?.input || data?.results?.[0]?.sequence || '')
             .replace(FASTA_CLEANER, '')
             .toUpperCase(),
           matches: data?.results?.[0]?.matches || [],
+          'interproscan-version': data?.['interproscan-version'],
           xref: [
             {
               name:
@@ -168,7 +172,13 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
   };
 
   render() {
-    const { data: { payload } = {}, matched, entryDB, localTitle } = this.props;
+    const {
+      data: { payload } = {},
+      matched,
+      entryDB,
+      localTitle,
+      entries: entriesFromIDB,
+    } = this.props;
 
     let entries = NaN;
     if (payload && payload.results) {
@@ -179,6 +189,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
         entries = dbEntries[entryDB].size;
       }
     }
+    if (!entries && entriesFromIDB) entries = entriesFromIDB;
 
     return (
       <>
@@ -260,6 +271,7 @@ const mapStateToProps = createSelector(
           localID: job.metadata.localID,
           entryDB: isFilter && db,
           localTitle: job.metadata.localTitle,
+          entries: job.metadata.entries,
         }
       : null;
   },
