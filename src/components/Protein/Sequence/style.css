@@ -25,6 +25,9 @@
   margin-right: 1ch;
   background: white;
 }
+.light-sequence {
+  color: var(--colors-ulightgray);
+}
 
 .sequence_word::before {
   counter-increment: sequence 10;

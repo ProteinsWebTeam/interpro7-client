@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
-import Sequence from 'components/Protein/Sequence';
+import Sequence, { InnerSequence } from 'components/Protein/Sequence';
 
 /*:: type Props = {
   localPayload: {
@@ -52,7 +52,24 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
       name = this.props.localTitle || payload.xref[0].name || '';
       sequence = payload.sequence;
     }
-    return <Sequence accession={accession} sequence={sequence} name={name} />;
+    return (
+      <>
+        <Sequence accession={accession} sequence={sequence} name={name} />
+        {payload?.orf?.dnaSequence && (
+          <section>
+            <header>
+              Nucleotide Sequence - {payload.group} [{payload?.orf?.start}-
+              {payload?.orf?.end}]
+            </header>
+            <InnerSequence
+              sequence={payload?.orf?.dnaSequence}
+              start={payload?.orf?.start}
+              end={payload?.orf?.end}
+            />
+          </section>
+        )}
+      </>
+    );
   }
 }
 

@@ -1,0 +1,23 @@
+@import './fonts.css';
+@import './colors.css';
+
+section.summary-row {
+  display: flex;
+  width: 70%;
+  color: var(--colors-dark);
+  font-family: var(--fonts-system);
+  font-size: 0.93em;
+
+  & > header {
+    width: 20%;
+    vertical-align: top;
+    font-size: 110%;
+    font-weight: 600;
+    padding: 0.5rem 0;
+    margin-right: 0.5em;
+  }
+  & > section {
+    width: 80%;
+    padding: 0.5rem 1rem 0.5rem 0;
+  }
+}

@@ -28,6 +28,7 @@ import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnPr
 import Actions from 'components/IPScan/Actions';
 import { getIProScanURL } from 'components/IPScan/Status';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
+import NucleotideSummary from 'components/IPScan/NucleotideSummary';
 import { Exporter } from 'components/Table';
 
 import { foundationPartial } from 'styles/foundation';
@@ -35,8 +36,9 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import style from './style.css';
 import { updateJobTitle } from 'actions/creators';
+import summary from 'styles/summary.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, style);
+const f = foundationPartial(summary, ebiGlobalStyles, fonts, style);
 
 const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
@@ -359,99 +361,100 @@ const SummaryIPScanJob = ({
           </div>
         )}
         <IPScanVersionCheck ipScanVersion={payload['interproscan-version']} />
+        <NucleotideSummary payload={payload} />
 
-        <table
-          className={f('light', 'table-sum', 'margin-bottom-none')}
-          style={{ width: '70%' }}
-        >
-          <tbody>
-            {title && (
-              <tr>
-                <td>Title</td>
-                <td style={{ display: 'flex' }}>
-                  <input
-                    ref={titleInputRef}
-                    className={f('title')}
-                    defaultValue={`${title}`}
-                    readOnly={readable}
-                    style={{ width: `${title.length}ch` }}
-                  />
-                  {['finished', 'imported file'].includes(status) ? (
-                    <button
-                      onClick={() =>
-                        changeTitle(
-                          localID,
-                          payload,
-                          updateJobTitle,
-                          titleInputRef,
-                          setTitle,
-                          setReadable,
-                        )
-                      }
-                    >
-                      {readable ? (
-                        <span
-                          className={f('icon', 'icon-common')}
-                          data-icon="&#xf303;"
-                          title={'Rename'}
-                        />
-                      ) : (
-                        <span
-                          className={f('icon', 'icon-common')}
-                          data-icon="&#x53;"
-                          title={'Save'}
-                        />
-                      )}
-                    </button>
-                  ) : null}
-                </td>
-              </tr>
-            )}
-            <tr>
-              <td>
-                Job ID{' '}
-                <Tooltip title={'Case sensitive'}>
-                  <span
-                    className={f('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                    aria-label={'Case sensitive'}
-                  />
-                </Tooltip>
-              </td>
-              <td style={{ display: 'flex' }}>
-                <Accession accession={accession} title="Job ID" />{' '}
-                <CopyToClipboard
-                  textToCopy={getIProScanURL(accession)}
-                  tooltipText="CopyURL"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Length</td>
-              <td>
-                <Length metadata={metadata} />
-              </td>
-            </tr>
-            {localID && (
-              <tr>
-                <td>Action</td>
-                <td>
-                  <Actions localID={localID} />
-                </td>
-              </tr>
-            )}
-            <tr>
-              <td>Status</td>
-              <td>
-                <StatusTooltip status={status} />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        {title && (
+          <section className={f('summary-row')}>
+            <header>Title</header>
+            <section>
+              <input
+                ref={titleInputRef}
+                className={f('title')}
+                defaultValue={`${title}`}
+                readOnly={readable}
+                style={{ width: `${title.length}ch` }}
+              />
+              {['finished', 'imported file'].includes(status) ? (
+                <button
+                  onClick={() =>
+                    changeTitle(
+                      localID,
+                      payload,
+                      updateJobTitle,
+                      titleInputRef,
+                      setTitle,
+                      setReadable,
+                    )
+                  }
+                >
+                  {readable ? (
+                    <span
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#xf303;"
+                      title={'Rename'}
+                    />
+                  ) : (
+                    <span
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#x53;"
+                      title={'Save'}
+                    />
+                  )}
+                </button>
+              ) : null}
+            </section>
+          </section>
+        )}
+        <section className={f('summary-row')}>
+          <header>
+            Job ID{' '}
+            <Tooltip title={'Case sensitive'}>
+              <span
+                className={f('small', 'icon', 'icon-common')}
+                data-icon="&#xf129;"
+                aria-label={'Case sensitive'}
+              />
+            </Tooltip>
+          </header>
+          <section style={{ display: 'flex' }}>
+            <Accession accession={accession} title="Job ID" />{' '}
+            <CopyToClipboard
+              textToCopy={getIProScanURL(accession)}
+              tooltipText="CopyURL"
+            />
+          </section>
+        </section>
+        <section className={f('summary-row')}>
+          <header>Length</header>
+          <section>
+            <Length metadata={metadata} />
+          </section>
+        </section>
+        {localID && (
+          <section className={f('summary-row')}>
+            <header>Action</header>
+            <section>
+              <Actions localID={localID} />
+            </section>
+          </section>
+        )}
+        <section className={f('summary-row')}>
+          <header>Status</header>
+          <section>
+            <StatusTooltip status={status} />
+          </section>
+        </section>
 
         <div className={'row'}>
-          <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-            <h5>Protein family membership</h5>
+          <div
+            className={f(
+              'medium-9',
+              'columns',
+              'margin-bottom-large',
+              'margin-top-large',
+            )}
+          >
+            <h4>Protein family membership</h4>
             {familyHierarchyData.length ? (
               <ProteinEntryHierarchy entries={familyHierarchyData} />
             ) : (
