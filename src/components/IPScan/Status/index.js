@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
+// TODO: ⚠️ CHANGE for FullyLoadedTable and fix the ordering
 import Table, { Column, ExtraOptions } from 'components/Table';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';

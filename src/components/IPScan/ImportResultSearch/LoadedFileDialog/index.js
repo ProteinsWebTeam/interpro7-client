@@ -58,6 +58,15 @@ export type ProteinFile = {
       results: Array<NucleotideResult>,
       'interproscan-version': string,
     }
+  type JobMetadata = {
+    localID: string,
+    localTitle: string,
+    type: string,
+    remoteID: string,
+    hasResults: boolean,
+    entries: Array<Object>,
+    group?: string,
+  }
   type Props = {
     show: Boolean,
     closeModal: function,
@@ -75,7 +84,7 @@ const saveJobInIDB = (
   importJobFromData /*: function */,
 ) => {
   const localID = id(`internal-${Date.now()}`);
-  const metadata = {
+  const metadata /*: JobMetadata */ = {
     localID,
     localTitle,
     type: 'InterProScan',
@@ -109,7 +118,7 @@ const LoadedFileDialog = (
         for (const orf of result.openReadingFrames) {
           const { protein, ...rest } = orf;
           protein.group = id;
-          protein.orf = { ...rest };
+          protein.orf = { ...rest, dnaSequence: result.sequence };
           if (protein.matches?.length) {
             saveJobInIDB(
               protein,

@@ -166,6 +166,8 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
                   : 'Results are being processed on the InterProScan server',
             },
           ],
+          group: meta?.group,
+          orf: data?.results?.[0]?.orf,
         },
       });
     });
