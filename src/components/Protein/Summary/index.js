@@ -11,9 +11,6 @@ import FileExporter from 'components/Matches/FileExporter';
 import { UniProtLink } from 'components/ExtLink';
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
-import { foundationPartial } from 'styles/foundation';
-
-import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import loadable from 'higherOrder/loadable';
 import {
   isTranscribedFrom,
@@ -27,9 +24,15 @@ import IsoformViewer from 'components/Protein/Isoforms/Viewer';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import HmmerButton from 'components/Protein/Sequence/HmmerButton';
+
+import { foundationPartial } from 'styles/foundation';
+
+import ebiStyles from 'ebi-framework/css/ebi-global.css';
+import sequenceStyles from '../Sequence/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ebiStyles, fonts);
+const f = foundationPartial(ebiStyles, sequenceStyles, fonts);
 
 /*:: type Props = {
   data: {
@@ -48,6 +51,7 @@ const SummaryProtein = (
   const [isoform, setIsoform] = useState('');
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
+
   return (
     <div className={f('sections')}>
       {metadata.gene && (
@@ -174,21 +178,33 @@ const SummaryProtein = (
                   </UniProtLink>
                 </li>
               </ul>
-              <FileExporter
-                description={{
-                  main: { key: 'protein' },
-                  protein: {
-                    db: metadata.source_database,
-                    accession: metadata.accession,
-                  },
-                  entry: { integration: 'all' },
-                }}
-                count={metadata.counters.entries}
-                fileType="tsv"
-                primary="entry"
-                secondary="protein"
-                label="Export Matches [TSV]"
-                className={'button hollow'}
+              <hr style={{ margin: '0.8em' }} />
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label>
+                Export Matches [TSV]
+                <FileExporter
+                  description={{
+                    main: { key: 'protein' },
+                    protein: {
+                      db: metadata.source_database,
+                      accession: metadata.accession,
+                    },
+                    entry: { integration: 'all' },
+                  }}
+                  count={metadata.counters.entries}
+                  fileType="tsv"
+                  primary="entry"
+                  secondary="protein"
+                  label="Export Matches [TSV]"
+                  className={'button hollow'}
+                />
+              </label>
+              <hr style={{ margin: '0.8em' }} />
+              <HmmerButton
+                sequence={metadata.sequence}
+                accession={metadata.accession}
+                title="Search protein with HMMER"
+                minWidth="290px"
               />
             </div>
           </div>

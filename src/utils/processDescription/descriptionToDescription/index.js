@@ -50,6 +50,19 @@ export default (description /*: {[key: string]: string} */ = {}) => {
         _description[endpoint].order || _description.main.numberOfFilters;
     }
   }
+
+  // To clean any leftover from the previous description that should not be used
+  Object.keys(_description).forEach((key) => {
+    if (
+      key !== 'main' && // it's not the block defining the main
+      key !== _description.main.key && // it's not the main block
+      !_description[key].isFilter // it's not a filter
+    ) {
+      Object.keys(_description[key]).forEach(
+        (k) => (_description[key][k] = null),
+      );
+    }
+  });
   // Specific logic for 'other'
   _description.other.push(...(description.other || []));
   Object.seal(_description.other);

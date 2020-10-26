@@ -65,7 +65,23 @@ export const schemaProcessData = (
 
 const SetLiterature = ({ literature }) => {
   if (!literature) return null;
-  const literatureEntries = literature.map((ref) => [ref.PMID, ref]);
+  const literatureEntries = literature.map((ref) => {
+    const journalRegExp = /(.+) (\d{4});(\d+):(\d+-\d+)./;
+    const matches = journalRegExp.exec(ref.journal);
+    if (matches) {
+      return [
+        ref.PMID,
+        {
+          ...ref,
+          ISO_journal: matches[1],
+          year: matches[2],
+          volume: matches[3],
+          raw_pages: matches[4],
+        },
+      ];
+    }
+    return [ref.PMID, ref];
+  });
   return (
     <>
       <h4>Literature</h4>

@@ -9,12 +9,24 @@ exports[`<Description /> should render 1`] = `
     literature={Array []}
     p="a"
   />
-  <hr />
+  <hr
+    style={
+      Object {
+        "border": "1px solid transparent",
+      }
+    }
+  />
   <Paragraph
     literature={Array []}
     p="b"
   />
-  <hr />
+  <hr
+    style={
+      Object {
+        "border": "1px solid transparent",
+      }
+    }
+  />
   <Paragraph
     literature={Array []}
     p="c"
