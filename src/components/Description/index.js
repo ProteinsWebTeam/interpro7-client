@@ -259,7 +259,9 @@ class Description extends PureComponent /*:: <Props> */ {
           .reduce(
             (prev, curr, key) => [
               ...prev,
-              prev.length ? <hr key={key} /> : null,
+              prev.length ? (
+                <hr key={key} style={{ border: '1px solid transparent' }} />
+              ) : null,
               curr,
             ],
             [],

@@ -55,7 +55,13 @@ const Viewer = (
   } /*: {isoform: string, data: {loading: boolean, payload: Object}} */,
 ) => {
   if (!isoform) return null;
-  if (!data || data.loading || !data.payload || !data.payload.accession)
+  if (
+    !data ||
+    data.loading ||
+    !data.payload ||
+    !data.payload.accession ||
+    isoform !== data.payload.accession
+  )
     return <Loading />;
 
   const { accession, length, sequence, features } = data.payload;

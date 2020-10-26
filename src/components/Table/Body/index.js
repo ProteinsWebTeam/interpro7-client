@@ -9,11 +9,14 @@ import Row from '../Row';
 import { edgeCases } from 'utils/server-message';
 import EdgeCase from 'components/EdgeCase';
 
+import ColorHash from 'color-hash/lib/color-hash';
+
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
 
 const f = foundationPartial(styles);
+const colorHash = new ColorHash({ lightness: 0.95 });
 
 /*:: type Props = { children: any} */
 
@@ -61,8 +64,9 @@ class NoRows extends PureComponent /*:: <Props> */ {
   rows: Array<Object>,
   rowKey: string,
   columns: Array<string>,
-  notFound: boolean,
   rowClassName:string | function,
+  groups?: Array<string>,
+  notFound: boolean
 } */
 
 class Body extends PureComponent /*:: <BodyProps> */ {
@@ -75,6 +79,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
     columns: T.array.isRequired,
     notFound: T.bool,
     rowClassName: T.oneOfType([T.string, T.func]),
+    groups: T.arrayOf(T.string),
   };
 
   static defaultProps = {
@@ -91,6 +96,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
       columns,
       notFound,
       rowClassName,
+      groups,
     } = this.props;
     const edgeCaseText = edgeCases.get(status);
     if (edgeCaseText)
@@ -111,19 +117,42 @@ class Body extends PureComponent /*:: <BodyProps> */ {
     if (notFound || !rows.length) {
       return <NoRows>{loading ? <Loading /> : 'No data available'}</NoRows>;
     }
+    let curentGroup = null;
     return (
       <tbody>
         {rows.map((row, index) => {
           const rowData = row.metadata || row;
           const extraData = row.extra_fields;
+          const shouldRenderGroupHeader =
+            groups?.length && row.group && curentGroup !== row.group;
+          if (shouldRenderGroupHeader) {
+            curentGroup = row.group;
+          }
           return (
-            <Row
-              key={rowData[rowKey] || index}
-              row={rowData}
-              columns={columns}
-              extra={extraData}
-              rowClassName={rowClassName}
-            />
+            <React.Fragment key={rowData[rowKey] || index}>
+              {shouldRenderGroupHeader && (
+                <tr>
+                  <th
+                    style={{
+                      textAlign: 'start',
+                      backgroundColor: colorHash.hex(row.group),
+                    }}
+                  >
+                    {row.group}
+                  </th>
+                </tr>
+              )}
+              <Row
+                row={rowData}
+                columns={columns}
+                extra={extraData}
+                rowClassName={rowClassName}
+                group={groups && row.group}
+                backgroundColor={
+                  groups && row.group ? colorHash.hex(row.group) : null
+                }
+              />
+            </React.Fragment>
           );
         })}
       </tbody>

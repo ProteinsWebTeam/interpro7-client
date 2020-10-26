@@ -15,7 +15,9 @@ const DURATION = 250;
   row: Object,
   columns: Array<Object>,
   extra: Object,
-  rowClassName:string | function
+  rowClassName: string | function,
+  group?: string,
+  backgroundColor?: ?string,
 }; */
 class Row extends PureComponent /*:: <Props> */ {
   /*:: _ref: {current: null | React$ElementRef<string>} */
@@ -24,6 +26,8 @@ class Row extends PureComponent /*:: <Props> */ {
     columns: T.array.isRequired,
     extra: T.object,
     rowClassName: T.oneOfType([T.string, T.func]),
+    group: T.string,
+    backgroundColor: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -43,7 +47,14 @@ class Row extends PureComponent /*:: <Props> */ {
   }
 
   render() {
-    const { row, columns, extra, rowClassName } = this.props;
+    const {
+      row,
+      columns,
+      extra,
+      rowClassName,
+      group,
+      backgroundColor,
+    } = this.props;
     const rcn =
       typeof rowClassName === 'function' ? rowClassName(row) : rowClassName;
     return (
@@ -51,20 +62,33 @@ class Row extends PureComponent /*:: <Props> */ {
         {columns
           .filter(({ displayIf = true }) => displayIf)
           .map(
-            ({
-              dataKey,
-              defaultKey,
-              cellStyle,
-              cellClassName,
-              renderer = defaultRenderer,
-            }) => (
+            (
+              {
+                dataKey,
+                defaultKey,
+                cellStyle,
+                cellClassName,
+                renderer = defaultRenderer,
+              },
+              i,
+            ) => (
               <td
                 key={defaultKey || dataKey}
-                style={cellStyle}
+                style={{
+                  backgroundColor,
+                  ...(cellStyle || {}),
+                }}
                 className={cellClassName}
                 data-testid="table-entity"
               >
-                {renderer(lodashGet(row, dataKey, '∅'), row, extra)}
+                {group && i === 0 ? (
+                  <div style={{ display: 'flex' }}>
+                    <span>&emsp;</span>
+                    {renderer(lodashGet(row, dataKey, '∅'), row, extra)}
+                  </div>
+                ) : (
+                  renderer(lodashGet(row, dataKey, '∅'), row, extra)
+                )}
               </td>
             ),
           )}
