@@ -72,17 +72,20 @@ exports[`<IPScanStatus /> should render 1`] = `
     </ExtraOptions>
     <Column
       dataKey="localID"
+      isSearchable={true}
       renderer={[Function]}
     >
       Results
     </Column>
     <Column
       dataKey="localTitle"
+      isSearchable={true}
     >
       Name
     </Column>
     <Column
       dataKey="times"
+      isSearchable={true}
       renderer={[Function]}
     >
       Created

@@ -17,16 +17,17 @@ export const sortSubsetBy = (subset, search, keys, columnToString = {}) => {
   }
 };
 export const filterSubset = (subset, search, keys, columnToString = {}) => {
+  let filteredSubset = [...subset];
   for (const key of keys) {
     if (search[key]) {
       const str =
         columnToString[key] || ((x) => JSON.stringify(x).toLowerCase());
-      subset = subset.filter(
+      filteredSubset = filteredSubset.filter(
         (row) => str(row[key], row).indexOf(search[key].toLowerCase()) !== -1,
       );
     }
   }
-  return subset;
+  return filteredSubset;
 };
 const FullyLoadedTable = ({
   data,
