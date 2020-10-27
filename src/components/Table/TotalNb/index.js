@@ -84,7 +84,7 @@ export const TotalNb = (
   } */,
 ) => {
   const page =
-    (currentAPICall && url2page.get(toCanonicalURL(currentAPICall))) ||
+    (currentAPICall && url2page.get(toCanonicalURL(currentAPICall, true))) ||
     parseInt(pagination.page || 1, 10);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
@@ -121,7 +121,7 @@ export const TotalNb = (
         contentType={contentType}
         dbCounters={dbCounters}
       >
-        {open => (
+        {(open) => (
           <span
             className={s('header-total-results', {
               selector: typeof open === 'boolean',
@@ -167,8 +167,8 @@ TotalNb.propTypes = {
 };
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description,
-  description => ({ description }),
+  (state) => state.customLocation.description,
+  (description) => ({ description }),
 );
 
 export default connect(mapStateToProps)(TotalNb);
