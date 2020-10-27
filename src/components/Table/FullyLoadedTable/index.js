@@ -5,6 +5,29 @@ import { createSelector } from 'reselect';
 
 import Table, { Column, PageSizeSelector } from 'components/Table';
 
+export const sortSubsetBy = (subset, search, keys, columnToString = {}) => {
+  for (const key of keys) {
+    const str = columnToString[key] || ((x) => `${x}`);
+    if (search.sort_by === key) {
+      subset.sort((a, b) => (str(a[key]) > str(b[key]) ? 1 : -1));
+    }
+    if (search.sort_by === `-${key}`) {
+      subset.sort((a, b) => (str(a[key]) > str(b[key]) ? -1 : 1));
+    }
+  }
+};
+export const filterSubset = (subset, search, keys, columnToString = {}) => {
+  for (const key of keys) {
+    if (search[key]) {
+      const str =
+        columnToString[key] || ((x) => JSON.stringify(x).toLowerCase());
+      subset = subset.filter(
+        (row) => str(row[key], row).indexOf(search[key].toLowerCase()) !== -1,
+      );
+    }
+  }
+  return subset;
+};
 const FullyLoadedTable = ({
   data,
   renderers = {},
@@ -18,23 +41,8 @@ const FullyLoadedTable = ({
 }) => {
   const keys = Object.keys(data?.[0] || {});
   let subset = data;
-  for (const key of keys) {
-    if (search[key]) {
-      subset = subset.filter(
-        (row) =>
-          JSON.stringify(row[key])
-            .toLowerCase()
-            .indexOf(search[key].toLowerCase()) !== -1,
-      );
-    }
-    const str = columnToString[key] || ((x) => `${x}`);
-    if (search.sort_by === key) {
-      subset.sort((a, b) => (str(a[key]) > str(b[key]) ? 1 : -1));
-    }
-    if (search.sort_by === `-${key}`) {
-      subset.sort((a, b) => (str(a[key]) > str(b[key]) ? -1 : 1));
-    }
-  }
+  subset = filterSubset(subset, search, keys);
+  sortSubsetBy(subset, search, keys, columnToString);
   const size = search.page_size || pageSize;
   const page = search?.page || 1;
   subset = subset.slice((page - 1) * size, page * size);
