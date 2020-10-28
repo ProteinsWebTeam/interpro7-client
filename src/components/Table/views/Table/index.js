@@ -15,15 +15,15 @@ const f = foundationPartial(styles, ipro, fonts);
 
 /*:: type Props = {
   dataTable: Array<Object>,
-  rowKey: string,
+  rowKey?: string,
   isStale?: boolean,
-  loading: boolean,
-  ok: boolean,
-  status: number,
-  notFound: boolean,
+  loading?: boolean,
+  ok?: boolean,
+  status?: number,
+  notFound?: boolean,
   columns: Array<string>,
-  rowClassName: string | function,
-  groups: Array<string>,
+  rowClassName?: string | function,
+  groups?: Array<string>,
 } */
 
 class TableView extends PureComponent /*:: <Props> */ {

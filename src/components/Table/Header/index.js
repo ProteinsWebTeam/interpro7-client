@@ -9,7 +9,7 @@ import {
 } from 'components/SimpleCommonComponents/ColumnIcons';
 
 const Header = (
-  { columns, notFound } /*: {columns: Array<Object>, notFound: boolean} */,
+  { columns, notFound } /*: {columns: Array<Object>, notFound?: boolean} */,
 ) => {
   const [showFilter, setShowFilter] = useState(
     Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),

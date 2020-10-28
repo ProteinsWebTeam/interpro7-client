@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -9,23 +10,33 @@ import localCSS from '../../style.css';
 
 const f = foundationPartial(ipro, localCSS);
 
-const getSecondaryStructureType = (locations) => {
-  let type = null;
+/*::
+  import type {ProtVistaLocation, PopupDetail} from '../index.js';
+
+  type Props = {
+    detail: PopupDetail,
+    sourceDatabase: string,
+    goToCustomLocation: function,
+    currentLocation: Object,
+
+  }
+*/
+const getSecondaryStructureType = (
+  locations /*: Array<ProtVistaLocation> */,
+) => {
+  let type = '';
   if (locations && locations.length > 0) {
     if (locations[0].fragments && locations[0].fragments[0]) {
-      const shape = locations[0].fragments[0].shape;
+      const shape = locations[0].fragments[0].shape || '';
       type = shape.charAt(0).toUpperCase() + shape.slice(1);
     }
   }
   return type;
 };
 
-const ProtVistaEntryPopup = ({
-  detail,
-  sourceDatabase,
-  goToCustomLocation,
-  currentLocation,
-}) => {
+const ProtVistaEntryPopup = (
+  { detail, sourceDatabase, goToCustomLocation, currentLocation } /*: Props */,
+) => {
   const {
     accession,
     description,
@@ -39,7 +50,7 @@ const ProtVistaEntryPopup = ({
 
   // To include the type of fragment of the secondary structure
   let type = originalType;
-  if (originalType === 'secondary_structure') {
+  if (originalType === 'secondary_structure' && locations) {
     type = `Secondary Structure: ${getSecondaryStructureType(locations)}`;
   }
 
@@ -52,7 +63,7 @@ const ProtVistaEntryPopup = ({
   if (highlightChild) {
     newLocations = highlightChild.split(',').map((loc) => {
       const [start, end] = loc.split(':');
-      return { fragments: [{ start, end }] };
+      return { fragments: [{ start, end }], model_acc: null };
     });
   }
   const handleClick = (start, end) => () => {

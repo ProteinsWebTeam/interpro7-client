@@ -1,9 +1,33 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Table, { Column, PageSizeSelector } from 'components/Table';
+/*:: type Props = {
+  data: Array<Object>,
+  search: {
+    sort_by: string,
+    page_size: number,
+    page: number,
+  },
+  pageSize: number,
+  renderers: {},
+  columnToString: {},
+  headerStyle: {
+    [string]: {}
+  },
+  cellStyle: {
+    [string]: {}
+  },
+  headerClassName: {
+    [string]: string
+  },
+  cellClassName: {
+    [string]: string
+  },
+} */
 
 export const sortSubsetBy = (subset, search, keys, columnToString = {}) => {
   for (const key of keys) {
@@ -29,17 +53,19 @@ export const filterSubset = (subset, search, keys, columnToString = {}) => {
   }
   return filteredSubset;
 };
-const FullyLoadedTable = ({
-  data,
-  renderers = {},
-  columnToString = {},
-  headerStyle = {},
-  cellStyle = {},
-  headerClassName = {},
-  cellClassName = {},
-  search,
-  pageSize,
-}) => {
+const FullyLoadedTable = (
+  {
+    data,
+    renderers = {},
+    columnToString = {},
+    headerStyle = {},
+    cellStyle = {},
+    headerClassName = {},
+    cellClassName = {},
+    search,
+    pageSize,
+  } /*: Props */,
+) => {
   const keys = Object.keys(data?.[0] || {});
   let subset = data;
   subset = filterSubset(subset, search, keys);

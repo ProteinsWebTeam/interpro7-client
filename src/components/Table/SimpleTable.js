@@ -1,3 +1,4 @@
+// @flow
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
@@ -65,8 +66,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
     const _children = Children.toArray(children);
     // Extract prop information out of every Column element's props
     const columns = _children
-      .filter(child => child.type === _Column)
-      .map(child => child.props);
+      .filter((child) => child.type === _Column)
+      .map((child) => child.props);
     return (
       <div className={f('row')}>
         <div className={f('columns', 'result-page')}>

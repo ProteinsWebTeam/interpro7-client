@@ -1,3 +1,4 @@
+// @flow
 import React, { Component, Children } from 'react';
 import T from 'prop-types';
 
@@ -56,6 +57,13 @@ const ONE_SEC = 1000;
 }; */
 
 class ProtVistaOptions extends Component /*:: <Props, State> */ {
+  /*::
+    parentRefs: {
+      _mainRef: { current: null | React$ElementRef<'div'> },
+      _protvistaRef: { current: null | React$ElementRef<'div'> },
+    };
+
+   */
   static propTypes = {
     title: T.string,
     length: T.number,
@@ -88,47 +96,64 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
   async componentDidMount() {
     await loadWebComponent(() => ProtvistaSaver).as('protvista-saver');
 
-    const saver = document.querySelector(`#${this.props.id}Saver`);
+    const saver /*: null | React$ElementRef<typeof ProtvistaSaver> */ = document.querySelector(
+      `#${this.props.id}Saver`,
+    );
 
-    saver.preSave = () => {
-      const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
-      // Including the styles of interpro-type elements
-      base.querySelectorAll('interpro-type').forEach((el) => {
-        el.innerHTML = el.shadowRoot.innerHTML;
-      });
-      const style = document.createElement('style');
-      style.setAttribute('id', 'tmp_style');
-      // TODO it needs to be changed in an efficient way through webpack
-      let str = protvistaCSSasText + iproCSSasText + foundationCSSasText;
-      const cssStyles = [protvistaCSS, ipro, foundationCSS];
-      cssStyles.forEach((item) => {
-        Object.keys(item).forEach((key) => {
-          str = str.replace(
-            new RegExp(`\\.${key}([:,[.\\s])`, 'gm'),
-            `.${item[key]}$1`,
+    if (saver) {
+      saver.preSave = () => {
+        const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
+        if (base) {
+          // Including the styles of interpro-type elements
+          base.querySelectorAll('interpro-type').forEach((el) => {
+            el.innerHTML = (el.shadowRoot || {}).innerHTML;
+          });
+          const style = document.createElement('style');
+          style.setAttribute('id', 'tmp_style');
+          // TODO it needs to be changed in an efficient way through webpack
+          let str = protvistaCSSasText + iproCSSasText + foundationCSSasText;
+          const cssStyles = [protvistaCSS, ipro, foundationCSS];
+          cssStyles.forEach((item) => {
+            Object.keys(item).forEach((key) => {
+              str = str.replace(
+                new RegExp(`\\.${key}([:,[.\\s])`, 'gm'),
+                `.${item[key]}$1`,
+              );
+            });
+          });
+
+          str = str + ebiGlobalCSS + globalCSS + fontCSS + colorsCSS;
+          style.innerHTML = `${str}`;
+          base.appendChild(style);
+        } else
+          console.warn(
+            "Couldn't setups the style for the protvista-saver snapshot ",
           );
-        });
-      });
-
-      str = str + ebiGlobalCSS + globalCSS + fontCSS + colorsCSS;
-      style.innerHTML = `${str}`;
-      base.appendChild(style);
-    };
-    // removes the added style from the DOM
-    saver.postSave = () => {
-      const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
-      base.removeChild(document.getElementById('tmp_style'));
-      base.querySelectorAll('interpro-type').forEach((el) => {
-        el.innerHTML = '';
-      });
-    };
+      };
+      // removes the added style from the DOM
+      saver.postSave = () => {
+        const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
+        const styleElement = document.getElementById('tmp_style');
+        if (base && styleElement) {
+          base.removeChild(styleElement);
+          base.querySelectorAll('interpro-type').forEach((el) => {
+            el.innerHTML = '';
+          });
+        }
+      };
+    } else {
+      console.warn("Couldn't setups hooks for protvista-saver");
+    }
   }
 
   toggleCollapseAll = () => {
     const { collapsed } = this.state;
     const expandedTrack = {};
-    for (const track of Object.values(this.props.webTracks)) {
-      if (collapsed) track.setAttribute('expanded', true);
+    // prettier-ignore
+    for (const track /*: React$ElementRef<'div'>*/ of (Object.values(
+      this.props.webTracks,
+    ) /*: any */)) {
+      if (collapsed) track.setAttribute('expanded', 'true');
       else track.removeAttribute('expanded');
     }
     for (const acc of Object.keys(this.props.expandedTrack)) {
@@ -139,7 +164,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
   };
 
   changeColor = ({ target: { value: colorMode } }) => {
-    for (const track of Object.values(this.props.webTracks)) {
+    for (const track of (Object.values(this.props.webTracks) /*: any */)) {
       for (const d of [...track._data, ...(track._contributors || [])]) {
         d.color = getTrackColor(d, colorMode);
       }
@@ -321,14 +346,16 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
                           </button>
                         )}
                         onBeforeGetContent={() => {
-                          this.parentRefs._protvistaRef.current.style =
-                            'width: 1000px;';
+                          // prettier-ignore
+                          // $FlowFixMe
+                          this.parentRefs._protvistaRef.current.style = 'width: 1000px;';
                           return new Promise((resolve) => {
                             setTimeout(() => resolve(), ONE_SEC);
                           });
                         }}
                         content={() => this.parentRefs._protvistaRef.current}
                         onAfterPrint={() =>
+                          // $FlowFixMe
                           (this.parentRefs._protvistaRef.current.style = '')
                         }
                       />
