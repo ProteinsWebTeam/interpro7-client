@@ -1,3 +1,4 @@
+// @flow
 import React, { Component, PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -32,11 +33,11 @@ const f = foundationPartial(ebiGlobalStyles, styles, fonts);
 const ANIMATION_DURATION = 0.3;
 
 const mapStateToUrlFor = createSelector(
-  taxID => taxID,
-  taxID =>
+  (taxID) => taxID,
+  (taxID) =>
     createSelector(
-      state => state.settings.api,
-      state => state.customLocation.description,
+      (state) => state.settings.api,
+      (state) => state.customLocation.description,
       ({ protocol, hostname, port, root }, description) => {
         if (
           (description.main.key === 'entry' && description.entry.accession) ||
@@ -88,15 +89,31 @@ const mapStateToUrlFor = createSelector(
       },
     ),
 );
-/*:: type Props = {
+/*::
+  type Names = {
+    [string]: {
+      short: string,
+      name: string,
+    }
+  }
+type Payload = {
+  metadata: Object,
+  children: CountersMap,
+  names: Names,
+};
+type Props = {
   taxID: string,
   data: {
     loading: boolean,
     payload: Object
   },
   sendData: function
-};*/
+};
+*/
 class DataProvider extends PureComponent /*:: <Props> */ {
+  /*::
+   _sent: boolean;
+   */
   static propTypes = {
     taxID: T.string.isRequired,
     data: T.shape({
@@ -132,7 +149,36 @@ class DataProvider extends PureComponent /*:: <Props> */ {
   }
 }
 
-const findNodeWithId = (id, node) => {
+/*::
+  type Node =  {
+    id: string,
+    children?: Array<any>,
+    lineage?: string,
+    counters?: Counters;
+    rank?: string;
+    hitcount?: number;
+    name: string
+  };
+  type Counters = {
+    proteins: number,
+    proteoms: number,
+    structures: number,
+  };
+  type CountersMap = {
+    [string]: Counters,
+  }
+  type Metadata = {
+    accession: string,
+    lineage?: string,
+    counters?: Counters;
+    rank?: string;
+    children: Array<string>,
+  }
+ */
+const findNodeWithId = (
+  id /*: string */,
+  node /*: Node */,
+) /*: void | Node */ => {
   if (node.id === id) return node;
   for (const child of node.children || []) {
     const found = findNodeWithId(id, child);
@@ -140,8 +186,12 @@ const findNodeWithId = (id, node) => {
   }
 };
 
-const addNodesFromLineage = (update, root, names) => {
-  const lineage = update.lineage.trim().split(' ');
+const addNodesFromLineage = (
+  update /*: Node */,
+  root /*: Node */,
+  names /*: Names */,
+) => {
+  const lineage = (update.lineage || '').trim().split(' ');
   lineage.splice(-1);
   const parentId = lineage.splice(-1)?.[0];
   let parent = findNodeWithId(parentId, root);
@@ -161,7 +211,13 @@ const addNodesFromLineage = (update, root, names) => {
   parent.children.push(update);
   return update;
 };
-const mergeData = (root, update, names, childrenCounters) => {
+
+const mergeData = (
+  root /*: Node */,
+  update /*: Metadata */,
+  names /*: Names */,
+  childrenCounters /*: CountersMap */,
+) => {
   let toUpdate = findNodeWithId(update.accession, root);
   if (!toUpdate) {
     toUpdate = addNodesFromLineage(
@@ -179,7 +235,7 @@ const mergeData = (root, update, names, childrenCounters) => {
   toUpdate.rank = update.rank;
   toUpdate.hitcount = abbreviateNumber(update?.counters?.proteins, true);
   if (!toUpdate.children || (update.children && update.children.length)) {
-    toUpdate.children = update.children.map(id => ({
+    toUpdate.children = update.children.map((id) => ({
       name: names[id].short || names[id].name,
       id,
       hitcount: abbreviateNumber(childrenCounters?.[id]?.proteins, true),
@@ -195,15 +251,21 @@ const mergeData = (root, update, names, childrenCounters) => {
   showTreeToast: boolean,
   addToast: function,
   changeSettingsRaw: function,
+  onFocusChanged: function,
 };*/
 
 /*:: type State = {
-  data: {name: string, id: string},
+  data: Node,
   focused: string,
   entryDB: Object,
+  searchTerm?: string,
 }; */
 class TreeView extends Component /*:: <TreeViewProps, State> */ {
-  /*:: _CDPMap: Map<string, Object>*/
+  /*::
+  _CDPMap: Map<string, Object>;
+  _lineageNames: Map<string,*>;
+  _initialLoad: boolean;
+  */
   static propTypes = {
     customLocation: T.shape({
       description: T.object,
@@ -240,10 +302,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     },
     { entryDB: oldDB, searchTerm },
   ) {
-    // componentDidUpdate({customLocation: {description: {entry: {db: oldDB}}}}) {
-    //   const {customLocation: {description: {entry: {db: newDB}}}} = this.props;
     if (newDB !== oldDB) {
-      // this._CDPMap.clear();
       return {
         focused: '1',
         entryDB: newDB,
@@ -258,7 +317,10 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     return null;
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(
+    nextProps /*: TreeViewProps */,
+    nextState /*: State */,
+  ) {
     const {
       customLocation: {
         description: {
@@ -280,11 +342,11 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   componentWillUnmount() {
     this._CDPMap.clear();
   }
-  _handleNewSearchData = (taxID, payload) => {
+  _handleNewSearchData = (taxID /*: string */, payload /*: Payload */) => {
     this._handleNewData(taxID, payload);
     this._handleNewFocus(taxID);
   };
-  _handleNewData = (taxID, payload) => {
+  _handleNewData = (taxID /*: string */, payload /*: Payload */) => {
     if (payload?.metadata?.children) {
       const c = payload.metadata.children.length;
       if (c === 1 && this._initialLoad) {
@@ -294,7 +356,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       }
     }
     if (payload.metadata) {
-      this.setState(({ data }) => ({
+      this.setState(({ data } /*: {data: Node} */) => ({
         data: {
           ...mergeData(data, payload.metadata, payload.names, payload.children),
         },
@@ -302,7 +364,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     }
   };
 
-  _handleNewFocus = taxID => {
+  _handleNewFocus = (taxID /*: string */) => {
     if (taxID) {
       this.setState({ focused: taxID });
       if (this.props.onFocusChanged) {
@@ -310,7 +372,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       }
     }
   };
-  _handleLabelClick = taxID => {
+  _handleLabelClick = (taxID /*: string */) => {
     this.props.goToCustomLocation({
       description: {
         main: { key: 'taxonomy' },
@@ -322,11 +384,11 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     });
   };
 
-  _storeLineageNames = (focused, data) => {
+  _storeLineageNames = (focused /*: string */, data /*: Node */) => {
     if (focused === data.id) {
       this._lineageNames.set(focused, data.name);
     } else {
-      data?.children?.forEach(child => {
+      data?.children?.forEach((child) => {
         this._storeLineageNames(focused, child);
       });
     }
@@ -348,7 +410,6 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
           DataProvider,
         );
         this._CDPMap.set(searchTerm, ConnectedDataProviderSearch);
-        // this._storeLineageNames(searchTerm, data);
       }
     }
     const currentNode = findNodeWithId(focused, data);
@@ -389,10 +450,10 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                   },
                 }}
               >
-                {currentNode.id}: {currentNode.name}
+                {currentNode?.id}: {currentNode?.name}
               </Link>
             </header>
-            {currentNode.rank && currentNode.rank.toLowerCase() !== 'no rank' && (
+            {currentNode?.rank?.toLowerCase() !== 'no rank' && (
               <div>
                 <Tooltip title="Rank.">
                   <span
@@ -401,13 +462,13 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                     aria-label="Rank."
                   />
                 </Tooltip>{' '}
-                <i>{currentNode.rank}</i>
+                <i>{currentNode?.rank}</i>
               </div>
             )}
-            {currentNode.lineage && (
+            {currentNode?.lineage && (
               <DropDownButton label="Lineage" fontSize="12px">
                 <ul>
-                  {Array.from(this._lineageNames.keys()).map(key => (
+                  {Array.from(this._lineageNames.keys()).map((key) => (
                     <li key={key}>
                       <Link
                         to={{
@@ -417,10 +478,12 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                           },
                         }}
                       >
-                        {this._lineageNames
-                          .get(key)
-                          .charAt(0)
-                          .toUpperCase() + this._lineageNames.get(key).slice(1)}
+                        {`${
+                          this._lineageNames
+                            ?.get(key)
+                            ?.charAt(0)
+                            ?.toUpperCase() || ''
+                        }${this._lineageNames.get(key)?.slice(1) || ''}`}
                       </Link>
                     </li>
                   ))}
@@ -429,13 +492,15 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
             )}
           </div>
           <div className={f('node-links')}>
-            {currentNode.counters ? (
+            {currentNode?.counters ? (
               <ul>
-                {Object.entries(countersToShow)
-                  .map(([endpoint, [plural, db]]) => {
+                {
+                  // prettier-ignore
+                  (Object.entries(countersToShow)/*: any */)
+                  .map(([endpoint, [plural, db]]/*: [string, [string, number]] */) => {
                     if (
                       endpoint === mainEndpoint ||
-                      typeof currentNode.counters[plural] === 'undefined'
+                      typeof currentNode?.counters?.[plural] === 'undefined'
                     )
                       return null;
                     const to = {
@@ -462,14 +527,14 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                       <li key={endpoint}>
                         <Link
                           className={f('no-decoration', {
-                            disable: !currentNode.counters[plural],
+                            disable: !currentNode?.counters?.[plural],
                           })}
                           to={{
                             description: to,
                           }}
                         >
                           <NumberComponent duration={ANIMATION_DURATION}>
-                            {currentNode.counters[plural]}
+                            {currentNode?.counters?.[plural]}
                           </NumberComponent>{' '}
                           {plural}
                         </Link>{' '}
@@ -477,7 +542,8 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                       </li>
                     );
                   })
-                  .filter(Boolean)}
+                  .filter(Boolean)
+                }
               </ul>
             ) : (
               <Loading inline={true} />
@@ -503,8 +569,8 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.notifications.showTreeToast,
-  showTreeToast => ({ showTreeToast }),
+  (state) => state.settings.notifications.showTreeToast,
+  (showTreeToast) => ({ showTreeToast }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(TreeView);
