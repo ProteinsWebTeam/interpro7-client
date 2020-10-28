@@ -43,6 +43,7 @@ export const Basic = () => (
 );
 
 export const InternalLink = () => {
+  // TODO yet to be fixed
   const [location, setLocation] = useState(initialLocation);
   return (
     <Link customLocation={location} to={initialLocation}>
