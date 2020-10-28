@@ -46,7 +46,8 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
         action.type === 'DOWNLOAD_SUCCESS'
           ? 'Your files are ready to download'
           : 'There has been an error generating the file';
-      const notification = createNotification('InterPro', text);
+      // const notification =
+      createNotification('InterPro', text);
       // notification.onclick = () => {
       //   window.location.href = `${window.location.origin}/interpro/result/download`;
       // };

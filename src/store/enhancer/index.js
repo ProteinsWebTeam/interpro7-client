@@ -1,4 +1,6 @@
 // @flow
+/*:: import type { History } from 'history'; */
+
 import { applyMiddleware, compose } from 'redux';
 
 import jobs from './jobs-middleware';
@@ -6,7 +8,7 @@ import location from './location-middleware';
 import status from './status-middleware';
 import download from './download-middleware';
 
-export default (history /*: History */) /*: (any) => any */ => {
+export default (history /*: History<*> */) /*: (any) => any */ => {
   const middlewares = [jobs, location(history), status, download];
 
   return compose(

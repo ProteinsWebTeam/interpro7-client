@@ -1,3 +1,4 @@
+// @flow
 import classNames from 'classnames/bind';
 // foundation.css is the most up-to date
 // import foundation from 'foundation-sites/dist/css/foundation.css';
@@ -24,10 +25,12 @@ export default classNames.bind(foundation);
  * @param {object} otherStyles other css that have been imported in the file.
  * @returns {object} a classNames object that can be used to define classes
  */
-export const foundationPartial = (...otherStyles) => {
+export const foundationPartial = (
+  ...otherStyles /*: Array<typeof foundation> */
+) => {
   const output = {};
   for (const style of [foundation, ...otherStyles]) {
-    for (const [rule, hash] of Object.entries(style)) {
+    for (const [rule, hash] of (Object.entries(style) /*: any */)) {
       if (output[rule]) {
         output[rule] += ` ${hash}`;
       } else {

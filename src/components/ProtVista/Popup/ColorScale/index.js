@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -8,12 +9,23 @@ const f = foundationPartial(localCSS);
 
 const COLOR_SCALE_WIDTH = 80;
 const COLOR_SCALE_HEIGHT = 20;
-const ColorScale = ({
-  domain,
-  range,
-  width = COLOR_SCALE_WIDTH,
-  height = COLOR_SCALE_HEIGHT,
-}) => (
+/*::
+  type ColorScaleType = {
+  domain: Array<number>,
+  range: Array<string>,
+  width?: number,
+  height?: number,
+
+  }
+*/
+const ColorScale = (
+  {
+    domain,
+    range,
+    width = COLOR_SCALE_WIDTH,
+    height = COLOR_SCALE_HEIGHT,
+  } /*: ColorScaleType */,
+) => (
   <div className={f('color-scale')}>
     <span>{domain[0]}</span>
     <svg height={height} width={width}>
@@ -30,7 +42,7 @@ const ColorScale = ({
 );
 ColorScale.propTypes = {
   domain: T.arrayOf(T.number),
-  range: T.arrayOf(T.number),
+  range: T.arrayOf(T.string),
   width: T.number,
   height: T.number,
 };

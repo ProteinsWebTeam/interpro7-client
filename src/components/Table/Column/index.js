@@ -1,7 +1,7 @@
 // @flow
 import T from 'prop-types';
 
-const Column = () => null;
+const Column = ({ ..._ /*: Array<any> */ }) => null;
 Column.propTypes = {
   dataKey: T.oneOfType([T.string, T.number]).isRequired,
   defaultKey: T.oneOfType([T.string, T.number]),

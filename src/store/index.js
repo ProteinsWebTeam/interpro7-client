@@ -1,3 +1,6 @@
+// @flow
+/*:: import type { Store } from 'redux'; */
+/*:: import type { History } from 'history'; */
 import { createStore } from 'redux';
 
 import rootReducer from 'reducers';
@@ -11,7 +14,10 @@ import hmr from 'store/hmr';
 import getInitialState from 'store/utils/get-initial-state';
 
 // Subscriber Generator
-const persist = (store, storage) =>
+const persist = (
+  store /*: Store<*, *, *> */,
+  storage /*: typeof settingsStorage */,
+) =>
   (() => {
     let settings;
     // Subscriber
@@ -25,7 +31,7 @@ const persist = (store, storage) =>
     };
   })();
 
-export default (history) => {
+export default (history /*: History<*> */) => {
   const store = createStore(
     rootReducer,
     getInitialState(history),
