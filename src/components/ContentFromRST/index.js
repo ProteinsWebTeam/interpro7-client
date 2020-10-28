@@ -1,3 +1,4 @@
+// @flow
 import React, { useState, useEffect } from 'react';
 import T from 'prop-types';
 import restructured from 'restructured';
@@ -68,6 +69,7 @@ const Switch = ({ type, ...rest }) => {
     default:
       return null;
   }
+  return null;
 };
 Switch.propTypes = {
   type: T.string,
@@ -128,7 +130,7 @@ const Comment = ({ children }) => {
       substitutions[ref] = <Image>{[{ value }, ...children.slice(1)]}</Image>;
     }
   } else {
-    matches = refRegExp.exec(mainComment);
+    matches = refRegExp.exec(mainComment) || [];
     const [_, ref, link] = matches;
     substitutions[ref] = link;
   }
@@ -143,21 +145,21 @@ const Image = ({ children }) => {
   const imagePath = children?.[0]?.value;
   if (imagePath) {
     const attributes = Object.fromEntries(
-      children.slice(1).map(({ value }) =>
-        attrRegExp
-          .exec(value)
-          .slice(1)
-          .map((e) => e.trim()),
-      ),
+      children
+        .slice(1)
+        .map(({ value }) =>
+          (attrRegExp.exec(value) || []).slice(1).map((e) => e.trim()),
+        ),
     );
     return (
       <img
+        {...attributes}
         src={getReadTheDocsURL(imagePath)()}
         alt="from RST"
-        {...attributes}
       />
     );
   }
+  return null;
 };
 Image.propTypes = {
   children: T.array,
@@ -183,7 +185,7 @@ const Reference = ({ children }) => {
   switch (children.length) {
     case 1: {
       const raw = children[0].value;
-      const matches = referenceRegExp.exec(raw);
+      const matches = referenceRegExp.exec(raw) || [];
       if (matches.length === EXPECTED_GROUPS) {
         text = matches[1];
         url = matches[2];
@@ -272,7 +274,7 @@ Section.propTypes = {
   depth: T.number,
 };
 
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends React.Component /*:: <{element: {}, children: any}, {hasError: boolean}> */ {
   static getDerivedStateFromError(error) {
     console.error(error);
     return { hasError: true };

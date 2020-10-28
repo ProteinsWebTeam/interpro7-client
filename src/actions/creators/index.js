@@ -174,6 +174,10 @@ export const importJob = (job /*:  Object */) => ({
   type: types.IMPORT_JOB,
   job,
 });
+export const importJobFromData = (job /*:  Object */) => ({
+  type: types.IMPORT_JOB_FROM_DATA,
+  job,
+});
 
 export const unloadDataJob = (
   job /*: { metadata: Object, data: Object } */,

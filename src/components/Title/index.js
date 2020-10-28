@@ -373,9 +373,12 @@ class Title extends PureComponent /*:: <Props, State> */ {
                   </span>
                 )
             }
+            <TitleTag
+              metadata={metadata}
+              mainType={mainType}
+              dbLabel={dbLabel}
+            />
           </div>
-
-          <TitleTag metadata={metadata} mainType={mainType} dbLabel={dbLabel} />
         </div>
         <AccessionTag metadata={metadata} mainType={mainType} />
       </div>

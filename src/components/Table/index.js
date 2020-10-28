@@ -1,3 +1,4 @@
+// @flow
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
@@ -30,26 +31,29 @@ import styles from './style.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, styles);
 
+export const ExtraOptions = ({ children }) => <>{children}</>;
+ExtraOptions.propTypes = { children: T.any };
 /*:: type Props = {
   dataTable: Array<Object>,
-  rowKey: string,
+  rowKey?: string,
   isStale?: boolean,
-  loading: boolean,
-  ok: boolean,
-  status: number,
+  loading?: boolean,
+  ok?: boolean,
+  status?: number,
   actualSize: number,
-  query: Object,
-  title: string,
-  notFound: ?boolean,
+  query?: Object,
+  title?: string,
+  notFound?: ?boolean,
   contentType?: string,
   children?: any,
-  withTree: boolean,
-  withGrid: boolean,
+  withTree?: boolean,
+  withGrid?: boolean,
   rowClassName?: any,
   nextAPICall?: ?string,
   previousAPICall?: ?string,
   showTableIcon?: boolean,
   onFocusChanged?: ?function,
+  shouldGroup?: boolean,
 } */
 
 const TableView = loadable({
@@ -73,7 +77,10 @@ const RedirectToDefault = () => (
 );
 
 // redirects to default type if the 'withXXXX' type is not in the props
-const safeGuard = (withType, Component) => {
+const safeGuard = (
+  withType /*: string */,
+  Component /*: typeof GridView | typeof TreeView */,
+) => {
   const SafeGuarded = ({ [withType]: extractedWithType, ...props }) =>
     extractedWithType ? <Component {...props} /> : <RedirectToDefault />;
   SafeGuarded.displayName = `safeGuard(${withType}, ${
@@ -115,6 +122,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     withGrid: T.bool,
     rowClassName: T.oneOfType([T.string, T.func]),
     showTableIcon: T.bool,
+    shouldGroup: T.bool,
     onFocusChanged: T.func,
   };
 
@@ -138,6 +146,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       rowClassName,
       showTableIcon,
       onFocusChanged,
+      shouldGroup,
     } = this.props;
 
     const _query = query || {};
@@ -158,8 +167,19 @@ export default class Table extends PureComponent /*:: <Props> */ {
       (child) => child.type === _PageSizeSelector,
     );
     const exporter = _children.find((child) => child.type === _Exporter);
+    const extraOptions = _children.find((child) => child.type === ExtraOptions);
     const tableIcon = showTableIcon === undefined ? true : showTableIcon;
-
+    let data = [...dataTable];
+    let groups = null;
+    if (shouldGroup) {
+      data = data.sort((a, b) => {
+        if (!a.group) return -1;
+        if (!b.group) return 1;
+        if (a.group === b.group) return 0;
+        return a.group > b.group ? 1 : -1;
+      });
+      groups = Array.from(new Set(data.map(({ group }) => group)));
+    }
     return (
       <div className={f('row')}>
         <div className={f('columns', 'result-page')}>
@@ -169,13 +189,13 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 <div className={f('pagesize-wrapper')}>
                   {title && <h4>{title}</h4>}
                   <_TotalNb
+                    {...this.props}
                     className={f('hide-for-small-only')}
-                    data={dataTable}
+                    data={data}
                     actualSize={actualSize}
                     pagination={_query}
                     contentType={contentType}
                     notFound={notFound}
-                    {...this.props}
                   />
                 </div>
                 <div
@@ -231,6 +251,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   {search}
                   {hToggler}
                   {exporter}
+                  {extraOptions}
                 </div>
               </div>
             </div>
@@ -239,7 +260,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
             <div className={f('columns')}>
               <_TotalNb
                 className={f('show-for-small-only')}
-                data={dataTable}
+                data={data}
                 actualSize={actualSize}
                 pagination={_query}
                 notFound={notFound}
@@ -258,12 +279,13 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   columns={columns}
                   card={card}
                   notFound={notFound}
-                  dataTable={dataTable}
+                  dataTable={data}
                   rowKey={rowKey}
                   withTree={withTree}
                   withGrid={!!card}
                   rowClassName={rowClassName}
                   onFocusChanged={onFocusChanged}
+                  groups={groups}
                 />
               </div>
               <Switch

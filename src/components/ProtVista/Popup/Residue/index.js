@@ -1,7 +1,16 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
-const ProtVistaResiduePopup = ({ detail, sourceDatabase }) => {
+/*::
+  import type {PopupDetail} from '../index.js';
+  type Props = {
+    detail: PopupDetail,
+    sourceDatabase: string,
+  }
+*/
+
+const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
   const { accession, type, currentResidue } = detail?.feature || {};
 
   const start = currentResidue?.start;

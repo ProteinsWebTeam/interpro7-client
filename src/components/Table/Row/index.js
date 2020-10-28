@@ -1,9 +1,13 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import { get as lodashGet } from 'lodash-es';
 
-const defaultRenderer = (value /*: string | number */) => <div>{value}</div>;
+/*::
+  type Renderer = (string | number, ...rest:Array<any>)=> any
+ */
+const defaultRenderer /*: Renderer */ = (value) => <div>{value}</div>;
 
 const DURATION = 250;
 
@@ -11,7 +15,9 @@ const DURATION = 250;
   row: Object,
   columns: Array<Object>,
   extra: Object,
-  rowClassName:string | function
+  rowClassName: string | function,
+  group?: string,
+  backgroundColor?: ?string,
 }; */
 class Row extends PureComponent /*:: <Props> */ {
   /*:: _ref: {current: null | React$ElementRef<string>} */
@@ -20,6 +26,8 @@ class Row extends PureComponent /*:: <Props> */ {
     columns: T.array.isRequired,
     extra: T.object,
     rowClassName: T.oneOfType([T.string, T.func]),
+    group: T.string,
+    backgroundColor: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -31,19 +39,22 @@ class Row extends PureComponent /*:: <Props> */ {
   // TODO review / fix
   componentDidMount() {
     if (!(this._ref.current && this._ref.current.animate)) return;
-    // onenter for this node
-    // this._ref.current.animate(
-    //   [{transform: 'translateX(100%)'}, {transform: 'translateX(0)'}],
-    //   {duration: 500, delay: Math.random() * 100, fill: 'both'},
-    // );
     this._ref.current.animate(
-      { opacity: [0, 1] },
+      // prettier-ignore
+      { opacity: ([0, 1]/*: Array<number | null> */) },
       { duration: DURATION, easing: 'ease-in-out' },
     );
   }
 
   render() {
-    const { row, columns, extra, rowClassName } = this.props;
+    const {
+      row,
+      columns,
+      extra,
+      rowClassName,
+      group,
+      backgroundColor,
+    } = this.props;
     const rcn =
       typeof rowClassName === 'function' ? rowClassName(row) : rowClassName;
     return (
@@ -51,20 +62,33 @@ class Row extends PureComponent /*:: <Props> */ {
         {columns
           .filter(({ displayIf = true }) => displayIf)
           .map(
-            ({
-              dataKey,
-              defaultKey,
-              cellStyle,
-              cellClassName,
-              renderer = defaultRenderer,
-            }) => (
+            (
+              {
+                dataKey,
+                defaultKey,
+                cellStyle,
+                cellClassName,
+                renderer = defaultRenderer,
+              },
+              i,
+            ) => (
               <td
                 key={defaultKey || dataKey}
-                style={cellStyle}
+                style={{
+                  backgroundColor,
+                  ...(cellStyle || {}),
+                }}
                 className={cellClassName}
                 data-testid="table-entity"
               >
-                {renderer(lodashGet(row, dataKey, '∅'), row, extra)}
+                {group && i === 0 ? (
+                  <div style={{ display: 'flex' }}>
+                    <span>&emsp;</span>
+                    {renderer(lodashGet(row, dataKey, '∅'), row, extra)}
+                  </div>
+                ) : (
+                  renderer(lodashGet(row, dataKey, '∅'), row, extra)
+                )}
               </td>
             ),
           )}

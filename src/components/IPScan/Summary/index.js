@@ -1,3 +1,4 @@
+// @flow
 import React, { useEffect, useRef, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
@@ -5,37 +6,35 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { flattenDeep } from 'lodash-es';
-
 import { format } from 'url';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
 import getFetch from 'higherOrder/loadData/getFetch';
+import { NOT_MEMBER_DBS } from 'menuConfig';
+import { iproscan2urlDB } from 'utils/url-patterns';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Redirect from 'components/generic/Redirect';
+import Link from 'components/generic/Link';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
-
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
-
+import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 import GoTerms from 'components/GoTerms';
-import Length from 'components/Protein/Length';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+import Length from 'components/Protein/Length';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
 import Actions from 'components/IPScan/Actions';
 import { getIProScanURL } from 'components/IPScan/Status';
-import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
-
+import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import { Exporter } from 'components/Table';
-import { NOT_MEMBER_DBS } from 'menuConfig';
-import { iproscan2urlDB } from 'utils/url-patterns';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import Link from 'components/generic/Link';
-import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 import style from './style.css';
-import { updateJobTitle } from '../../../actions/creators';
+import { updateJobTitle } from 'actions/creators';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, style);
 
@@ -94,7 +93,7 @@ const integrateSignature = (signature, interpro, integrated) => {
   integrated.set(accession, entry);
 };
 
-const StatusTooltip = React.memo(({ status } /*: string */) => (
+const _StatusTooltip = ({ status /*: string */ }) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
       status === 'created' ||
@@ -116,7 +115,7 @@ const StatusTooltip = React.memo(({ status } /*: string */) => (
         {status}
       </>
     ) : null}
-    {status === 'finished' && (
+    {['finished', 'imported file'].includes(status) && (
       <>
         <span
           className={f('icon', 'icon-common', 'ico-confirmed')}
@@ -127,13 +126,13 @@ const StatusTooltip = React.memo(({ status } /*: string */) => (
       </>
     )}
   </Tooltip>
-));
-StatusTooltip.displayName = 'StatusTooltip';
-StatusTooltip.propTypes = {
+);
+_StatusTooltip.propTypes = {
   status: T.oneOf([
     'running',
     'created',
     'importing',
+    'imported file',
     'submitted',
     'not found',
     'failure',
@@ -141,9 +140,15 @@ StatusTooltip.propTypes = {
     'finished',
   ]),
 };
+const StatusTooltip = React.memo(_StatusTooltip);
+StatusTooltip.displayName = 'StatusTooltip';
 
 const mergeData = (matches, sequenceLength) => {
-  const mergedData = { unintegrated: {}, predictions: [] };
+  const mergedData /*: {unintegrated:any[], predictions: any[], family?: any[]} */ = {
+    unintegrated: [],
+    predictions: [],
+  };
+  const unintegrated = {};
   let integrated = new Map();
   const signatures = new Map();
   for (const match of matches) {
@@ -162,6 +167,7 @@ const mergeData = (matches, sequenceLength) => {
             : [{ start: loc.start, end: loc.end }],
       })),
       score: match.score,
+      residues: undefined,
     };
     const residues = match.locations
       .map(({ sites }) =>
@@ -192,15 +198,16 @@ const mergeData = (matches, sequenceLength) => {
     if (match.signature.entry) {
       integrateSignature(mergedMatch, match.signature.entry, integrated);
     } else {
-      mergedData.unintegrated[mergedMatch.accession] = mergedMatch;
+      unintegrated[mergedMatch.accession] = mergedMatch;
     }
   }
-  mergedData.unintegrated = Object.values(mergedData.unintegrated);
+  mergedData.unintegrated = (Object.values(unintegrated) /*: any */);
   integrated = Array.from(integrated.values()).map((m) => {
     const locations = flattenDeep(
-      m.children.map((s) =>
-        s.locations.map((l) => l.fragments.map((f) => [f.start, f.end])),
-      ),
+      (m.children /*: any */)
+        .map((s /*: {locations: Array<{fragments: Array<Object>}>} */) =>
+          s.locations.map((l) => l.fragments.map((f) => [f.start, f.end])),
+        ),
     );
     return {
       ...m,
@@ -213,7 +220,8 @@ const mergeData = (matches, sequenceLength) => {
       ],
     };
   });
-  mergedData.unintegrated.sort((m1, m2) => m2.score - m1.score);
+  (mergedData.unintegrated /*: any[] */)
+    .sort((m1, m2) => m2.score - m1.score);
   for (const entry of integrated) {
     if (!mergedData[entry.type]) mergedData[entry.type] = [];
     mergedData[entry.type].push(entry);
@@ -238,21 +246,24 @@ const changeTitle = (
   localID,
   results,
   updateJobTitle,
-  inputRef,
+  inputRef /*:  { current?:  null | HTMLInputElement } */,
   setTitle,
   setReadable,
 ) => {
+  if (inputRef.current === null) return;
+  if (inputRef.current === undefined) return;
   if (inputRef.current.readOnly) {
     inputRef.current.focus();
   } else {
     if (inputRef.current.value !== '') {
-      results.xref[0].name = inputRef.current.value;
-      const input = `>${inputRef.current.value} ${results.sequence}`;
+      const value = inputRef.current.value;
+      results.xref[0].name = value;
+      const input = `>${value} ${results.sequence}`;
       updateJobTitle(
         { metadata: { localID }, data: { input, results } },
-        inputRef.current.value,
+        value,
       );
-      setTitle(inputRef.current.value);
+      setTitle(value);
     }
   }
   setReadable(!inputRef.current.readOnly);
@@ -273,7 +284,7 @@ const SummaryIPScanJob = ({
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
   const [title, setTitle] = useState(localTitle);
   const [readable, setReadable] = useState(true);
-  const titleInputRef = useRef();
+  const titleInputRef /* { current?: null | HTMLInputElement }*/ = useRef();
 
   useEffect(() => {
     if (data.payload || localPayload) {
@@ -317,7 +328,12 @@ const SummaryIPScanJob = ({
     );
   }
 
-  const payload = data.payload ? data.payload.results[0] : localPayload;
+  const payload = data.payload
+    ? {
+        ...data.payload.results[0],
+        'interproscan-version': data.payload?.['interproscan-version'],
+      }
+    : localPayload;
 
   if (!payload) return <Loading />;
 
@@ -337,6 +353,13 @@ const SummaryIPScanJob = ({
     <div className={f('sections')}>
       <section>
         <Title metadata={metadata} mainType="protein" />
+        {data.payload ? null : (
+          <div className={f('callout', 'info', 'withicon')}>
+            Using data stored in your browser
+          </div>
+        )}
+        <IPScanVersionCheck ipScanVersion={payload['interproscan-version']} />
+
         <table
           className={f('light', 'table-sum', 'margin-bottom-none')}
           style={{ width: '70%' }}
@@ -353,7 +376,7 @@ const SummaryIPScanJob = ({
                     readOnly={readable}
                     style={{ width: `${title.length}ch` }}
                   />
-                  {status === 'finished' ? (
+                  {['finished', 'imported file'].includes(status) ? (
                     <button
                       onClick={() =>
                         changeTitle(
@@ -438,7 +461,7 @@ const SummaryIPScanJob = ({
         </div>
       </section>
 
-      {status === 'finished' && (
+      {['finished', 'imported file'].includes(status) && (
         <>
           <DomainOnProteinWithoutMergedData
             mainData={{ metadata }}
@@ -447,19 +470,17 @@ const SummaryIPScanJob = ({
             {status === 'finished' && data?.url && (
               <Exporter includeSettings={false}>
                 <ul>
-                  {['tsv', 'json', 'xml', 'gff', 'svg', 'sequence'].map(
-                    (type) => (
-                      <li key={type}>
-                        <Link
-                          target="_blank"
-                          href={data.url.replace('json', type)}
-                          download={`InterProScan.${type}`}
-                        >
-                          {type.toUpperCase()}
-                        </Link>
-                      </li>
-                    ),
-                  )}
+                  {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
+                    <li key={type}>
+                      <Link
+                        target="_blank"
+                        href={data.url.replace('json', type)}
+                        download={`InterProScan.${type}`}
+                      >
+                        {type.toUpperCase()}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </Exporter>
             )}
@@ -490,11 +511,15 @@ const jobSelector = createSelector(
   accessionSelector,
   jobMapSelector,
   (accession, jobMap) => {
-    return Object.values(jobMap || {}).find(
-      (job) =>
-        job.metadata.remoteID === accession ||
-        job.metadata.localID === accession,
-    );
+    // prettier-ignore
+    return (Object.values(jobMap || {}) /*: any */)
+      .find(
+        (
+          job /*: {metadata:{remoteID: string, localID: string, status: string}} */,
+        ) =>
+          job.metadata.remoteID === accession ||
+          job.metadata.localID === accession,
+      );
   },
 );
 

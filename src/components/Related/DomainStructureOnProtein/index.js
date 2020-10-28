@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-param-reassign */
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
@@ -58,7 +59,7 @@ const mergeData = (interpro, structures, structureInfo) => {
         link: `/structure/${obj.source_database}/${obj.accession}`,
         ...obj,
       }))
-      .sort((a, b) => a.label > b.label);
+      .sort((a, b) => (a.label > b.label ? 1 : -1));
   }
   if (structureInfo) {
     out.features = formatStructureInfoObj(structureInfo);
@@ -121,7 +122,10 @@ const mapStateToProps = createSelector(
 
 const Pagination = connect(mapStateToProps)(_Pagination);
 
-const paginateStructureInfoData = (data, page = 1) => {
+const paginateStructureInfoData = (
+  data /*: Array<[string, Array<mixed>]> */,
+  page /*:: ?: number */ = 1,
+) => {
   const featureIndex = data.findIndex(([name]) => name === 'features');
   if (featureIndex === -1 || data[featureIndex][1].length < PAGE_SIZE)
     return data;
@@ -148,7 +152,7 @@ const UNDERSCORE = /_/g;
   dataInterPro: Object,
   protein: Object,
   dataStructureInfo: Object,
-  modelPage?: ?number,
+  modelPage?: number,
 }; */
 
 class _StructureOnProtein extends PureComponent /*:: <Props> */ {
@@ -171,13 +175,18 @@ class _StructureOnProtein extends PureComponent /*:: <Props> */ {
     if (dataInterPro.loading || dataStructureInfo.loading) {
       return <Loading />;
     }
-    const mergedData = Object.entries(
+    // prettier-ignore
+    const mergedData /*: Array<[string, Array<mixed>]> */ = (Object.entries(
       mergeData(
         dataInterPro.payload ? dataInterPro.payload.results : [],
         structures,
         dataStructureInfo.payload,
       ),
-    ).map(([key, value]) => [key.replace(UNDERSCORE, ' '), value]);
+    ) /*: any */)
+      .map(([key/*: string */, value/*: Array<mixed> */]) => [
+        key.replace(UNDERSCORE, ' '),
+        value,
+      ]);
     const data = paginateStructureInfoData(mergedData, modelPage);
     return (
       <ProtVista protein={protein} data={data} title="Structures on protein" />

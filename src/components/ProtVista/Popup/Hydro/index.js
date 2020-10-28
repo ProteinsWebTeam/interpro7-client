@@ -1,10 +1,13 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
 import ColorScale from '../ColorScale';
-
-const HydroPopup = ({ detail }) => {
-  const element = detail?.target.closest('protvista-coloured-sequence');
+/*::
+  import type {PopupDetail} from '../index.js';
+*/
+const HydroPopup = ({ detail } /*: {detail: PopupDetail} */) => {
+  const element = detail?.target?.closest('protvista-coloured-sequence');
   if (!element) return null;
   return (
     <section>
@@ -14,7 +17,7 @@ const HydroPopup = ({ detail }) => {
       <div>
         <b>Hydrophobicity:</b> {detail.feature.value}
         <br />
-        <b>Scale:</b> <ColorScale {...element.colorScale} />
+        <b>Scale:</b> <ColorScale {...(element /*: any */).colorScale} />
         <br />
       </div>
     </section>
