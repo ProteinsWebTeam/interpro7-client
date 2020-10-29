@@ -26,6 +26,8 @@ const CHUNK_SIZE = 10;
 
 /*:: type InnerProps = {
   sequence: string,
+  start?: number,
+  end?: number,
 }; */
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -51,9 +53,46 @@ export const schemaProcessData = (length /*: number */) => ({
   },
 });
 
-class Inner extends PureComponent /*:: <InnerProps> */ {
+/*::
+  type EdgeBlockProps = {
+    segment: string ,
+    position: number ,
+    start: number ,
+    end: number ,
+  }
+ */
+const EdgeBlock = ({ segment, position, start, end } /*: EdgeBlockProps */) => {
+  const pos = position + 1;
+  return (
+    <>
+      {pos < start ? (
+        <span className={f('light-sequence')}>
+          {segment.slice(0, start - pos)}
+        </span>
+      ) : null}
+      {pos + CHUNK_SIZE > start || pos + CHUNK_SIZE < end ? (
+        <span>{segment.slice(start - pos, end - pos + 1)}</span>
+      ) : null}
+
+      {pos + CHUNK_SIZE > end ? (
+        <span className={f('light-sequence')}>
+          {segment.slice(end - pos + 1)}
+        </span>
+      ) : null}
+    </>
+  );
+};
+EdgeBlock.propTypes = {
+  segment: T.string,
+  position: T.number,
+  start: T.number,
+  end: T.number,
+};
+export class InnerSequence extends PureComponent /*:: <InnerProps> */ {
   static propTypes = {
     sequence: T.string.isRequired,
+    start: T.number,
+    end: T.number,
   };
 
   render() {
@@ -62,24 +101,52 @@ class Inner extends PureComponent /*:: <InnerProps> */ {
         .replace(comment, '')
         .replace(whiteSpaces, '')
         .match(chunkOfTen) || [];
+    const { start, end } = this.props;
     return (
       <div className={f('raw-sequence-viewer', 'row')}>
         <SchemaOrgData
           data={this.props.sequence.length}
           processData={schemaProcessData}
         />
-        {sequenceWords.map((e, i) => (
-          <React.Fragment key={i}>
-            <span
-              className={f('sequence_word')}
-              style={{ zIndex: -i, display: 'inline-block' }}
-              data-index={i}
-            >
-              {e}
-            </span>
-            <div className={f('sequence_word_spacer')} />
-          </React.Fragment>
-        ))}
+        {sequenceWords.map((e, i) => {
+          let isBeforeStart = false;
+          let isAfterEnd = false;
+          let isStartBlock = false;
+          let isEndBlock = false;
+          if (typeof start !== 'undefined' && typeof end !== 'undefined') {
+            isBeforeStart = start > 0 && start > (i + 1) * CHUNK_SIZE;
+            isAfterEnd = end > 0 && end <= i * CHUNK_SIZE;
+            isStartBlock =
+              start > 0 &&
+              start + CHUNK_SIZE > 1 + (i + 1) * CHUNK_SIZE &&
+              start <= (i + 1) * CHUNK_SIZE;
+            isEndBlock =
+              end > 0 && end < (i + 1) * CHUNK_SIZE && end > i * CHUNK_SIZE;
+          }
+          return (
+            <React.Fragment key={i}>
+              <span
+                className={f('sequence_word', {
+                  'light-sequence': isBeforeStart || isAfterEnd,
+                })}
+                style={{ zIndex: -i, display: 'inline-block' }}
+                data-index={i}
+              >
+                {isStartBlock || isEndBlock ? (
+                  <EdgeBlock
+                    segment={e}
+                    start={start || 0}
+                    end={end || (i + 1) * CHUNK_SIZE}
+                    position={i * CHUNK_SIZE}
+                  />
+                ) : (
+                  e
+                )}
+              </span>
+              <div className={f('sequence_word_spacer')} />
+            </React.Fragment>
+          );
+        })}
       </div>
     );
   }
@@ -257,7 +324,7 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
                 {`> ${header}`}
               </div>
             )}
-            <Inner sequence={sequence} />
+            <InnerSequence sequence={sequence} />
           </div>
           <div className={f('small-12', 'medium-12', 'large-4', 'columns')}>
             <Link

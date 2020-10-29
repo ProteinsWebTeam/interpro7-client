@@ -3,12 +3,18 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
-import Sequence from 'components/Protein/Sequence';
+import Sequence, { InnerSequence } from 'components/Protein/Sequence';
 
 /*:: type Props = {
   localPayload: {
     sequence: string,
     xref: [],
+    orf: {
+      dnaSequence: string,
+      start: number,
+      end: number,
+    },
+    group: string,
   },
   localTitle: string,
   data: {
@@ -43,6 +49,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
     if (ok && !loading && !payload?.metadata)
       payload = payload?.results?.[0] || this.props.localPayload;
     if (!payload) return null;
+    const local = this.props.localPayload;
     if (payload.metadata) {
       accession = payload.metadata.accession;
       sequence = payload.metadata.sequence;
@@ -52,7 +59,24 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
       name = this.props.localTitle || payload.xref[0].name || '';
       sequence = payload.sequence;
     }
-    return <Sequence accession={accession} sequence={sequence} name={name} />;
+    return (
+      <>
+        <Sequence accession={accession} sequence={sequence} name={name} />
+        {local?.orf?.dnaSequence && (
+          <section id="nucleotides">
+            <header>
+              Nucleotide Sequence - {local.group} [{local?.orf?.start}-
+              {local?.orf?.end}]
+            </header>
+            <InnerSequence
+              sequence={local?.orf?.dnaSequence}
+              start={local?.orf?.start}
+              end={local?.orf?.end}
+            />
+          </section>
+        )}
+      </>
+    );
   }
 }
 

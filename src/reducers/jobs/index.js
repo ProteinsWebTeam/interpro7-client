@@ -7,6 +7,7 @@ import {
   REHYDRATE_JOBS,
   LOAD_DATA_JOB,
   UNLOAD_DATA_JOB,
+  KEEP_JOB_AS_LOCAL,
 } from 'actions/types';
 import { IMPORT_JOB, IMPORT_JOB_FROM_DATA } from '../../actions/types';
 
@@ -48,6 +49,17 @@ export default (
     case DELETE_JOB:
       const { [action.job.metadata.localID]: _, ...newState } = state;
       return newState;
+    case KEEP_JOB_AS_LOCAL:
+      return {
+        ...state,
+        [action.localID]: {
+          ...state[action.localID],
+          metadata: {
+            ...state[action.localID].metadata,
+            status: 'imported file',
+          },
+        },
+      };
     case REHYDRATE_JOBS:
       // Needs to be run once and only once before any other action
       return action.jobs;

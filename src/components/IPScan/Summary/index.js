@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -12,6 +12,7 @@ import getFetch from 'higherOrder/loadData/getFetch';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { iproscan2urlDB } from 'utils/url-patterns';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
 
 import Redirect from 'components/generic/Redirect';
 import Link from 'components/generic/Link';
@@ -28,15 +29,19 @@ import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnPr
 import Actions from 'components/IPScan/Actions';
 import { getIProScanURL } from 'components/IPScan/Status';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
+import NucleotideSummary from 'components/IPScan/NucleotideSummary';
+import IPScanTitle from './IPScanTitle';
 import { Exporter } from 'components/Table';
+import { updateJobTitle, keepJobAsLocal } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import style from './style.css';
-import { updateJobTitle } from 'actions/creators';
+import summary from 'styles/summary.css';
+import theme from 'styles/theme-interpro.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, style);
+const f = foundationPartial(summary, theme, ebiGlobalStyles, fonts, style);
 
 const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
@@ -242,33 +247,6 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   });
 };
 
-const changeTitle = (
-  localID,
-  results,
-  updateJobTitle,
-  inputRef /*:  { current?:  null | HTMLInputElement } */,
-  setTitle,
-  setReadable,
-) => {
-  if (inputRef.current === null) return;
-  if (inputRef.current === undefined) return;
-  if (inputRef.current.readOnly) {
-    inputRef.current.focus();
-  } else {
-    if (inputRef.current.value !== '') {
-      const value = inputRef.current.value;
-      results.xref[0].name = value;
-      const input = `>${value} ${results.sequence}`;
-      updateJobTitle(
-        { metadata: { localID }, data: { input, results } },
-        value,
-      );
-      setTitle(value);
-    }
-  }
-  setReadable(!inputRef.current.readOnly);
-};
-
 const SummaryIPScanJob = ({
   accession,
   localID,
@@ -279,18 +257,15 @@ const SummaryIPScanJob = ({
   localPayload,
   api,
   updateJobTitle,
+  keepJobAsLocal,
 }) => {
   const [mergedData, setMergedData] = useState({});
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
-  const [title, setTitle] = useState(localTitle);
-  const [readable, setReadable] = useState(true);
-  const titleInputRef /* { current?: null | HTMLInputElement }*/ = useRef();
 
   useEffect(() => {
     if (data.payload || localPayload) {
       const payload = data.payload ? data.payload.results[0] : localPayload;
 
-      setTitle(localTitle || payload.xref[0].name);
       const organisedData = mergeData(payload.matches, payload.sequenceLength);
       setMergedData(organisedData);
       if (organisedData.family) {
@@ -306,10 +281,6 @@ const SummaryIPScanJob = ({
       }
     }
   }, [data.payload, localPayload]);
-
-  useEffect(() => {
-    setTitle(localTitle);
-  }, [localTitle]);
 
   if (remoteID && remoteID !== accession) {
     return (
@@ -337,6 +308,15 @@ const SummaryIPScanJob = ({
 
   if (!payload) return <Loading />;
 
+  let created = payload?.times?.created;
+  if (!created) {
+    const regex = /iprscan5-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
+    const matches = regex.exec(accession);
+    if (matches) {
+      const [_, y, m, d, hh, mm, ss] = matches;
+      created = Date.UTC(+y, +m - 1, +d, +hh, +mm, +ss);
+    }
+  }
   const metadata = {
     accession,
     length: payload.sequence.length,
@@ -359,99 +339,96 @@ const SummaryIPScanJob = ({
           </div>
         )}
         <IPScanVersionCheck ipScanVersion={payload['interproscan-version']} />
+        <NucleotideSummary payload={payload} />
+        <IPScanTitle
+          localTitle={localTitle}
+          localID={localID}
+          payload={payload}
+          updateJobTitle={updateJobTitle}
+          status={status}
+        />
 
-        <table
-          className={f('light', 'table-sum', 'margin-bottom-none')}
-          style={{ width: '70%' }}
-        >
-          <tbody>
-            {title && (
-              <tr>
-                <td>Title</td>
-                <td style={{ display: 'flex' }}>
-                  <input
-                    ref={titleInputRef}
-                    className={f('title')}
-                    defaultValue={`${title}`}
-                    readOnly={readable}
-                    style={{ width: `${title.length}ch` }}
-                  />
-                  {['finished', 'imported file'].includes(status) ? (
-                    <button
-                      onClick={() =>
-                        changeTitle(
-                          localID,
-                          payload,
-                          updateJobTitle,
-                          titleInputRef,
-                          setTitle,
-                          setReadable,
-                        )
-                      }
-                    >
-                      {readable ? (
-                        <span
-                          className={f('icon', 'icon-common')}
-                          data-icon="&#xf303;"
-                          title={'Rename'}
-                        />
-                      ) : (
-                        <span
-                          className={f('icon', 'icon-common')}
-                          data-icon="&#x53;"
-                          title={'Save'}
-                        />
-                      )}
-                    </button>
-                  ) : null}
-                </td>
-              </tr>
-            )}
-            <tr>
-              <td>
-                Job ID{' '}
-                <Tooltip title={'Case sensitive'}>
-                  <span
-                    className={f('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                    aria-label={'Case sensitive'}
-                  />
-                </Tooltip>
-              </td>
-              <td style={{ display: 'flex' }}>
-                <Accession accession={accession} title="Job ID" />{' '}
-                <CopyToClipboard
-                  textToCopy={getIProScanURL(accession)}
-                  tooltipText="CopyURL"
+        <section className={f('summary-row')}>
+          <header>
+            Job ID{' '}
+            <Tooltip title={'Case sensitive'}>
+              <span
+                className={f('small', 'icon', 'icon-common')}
+                data-icon="&#xf129;"
+                aria-label={'Case sensitive'}
+              />
+            </Tooltip>
+          </header>
+          <section style={{ display: 'flex' }}>
+            <Accession accession={accession} title="Job ID" />{' '}
+            <CopyToClipboard
+              textToCopy={getIProScanURL(accession)}
+              tooltipText="CopyURL"
+            />
+          </section>
+        </section>
+        <section className={f('summary-row')}>
+          <header>Length</header>
+          <section>
+            <Length metadata={metadata} />
+          </section>
+        </section>
+        {localID && (
+          <section className={f('summary-row')}>
+            <header>Action</header>
+            <section>
+              <Actions localID={localID} />
+            </section>
+          </section>
+        )}
+        <section className={f('summary-row')}>
+          <header>Status</header>
+          <section>
+            <StatusTooltip status={status} />
+          </section>
+        </section>
+        {status === 'finished' && (
+          <section className={f('summary-row')}>
+            <header>
+              Expires{' '}
+              <Tooltip
+                title={
+                  'InterProScan Jobs are only kept in our servers for 1 week.'
+                }
+              >
+                <span
+                  className={f('small', 'icon', 'icon-common')}
+                  data-icon="&#xf129;"
+                  aria-label={'Case sensitive'}
                 />
-              </td>
-            </tr>
-            <tr>
-              <td>Length</td>
-              <td>
-                <Length metadata={metadata} />
-              </td>
-            </tr>
-            {localID && (
-              <tr>
-                <td>Action</td>
-                <td>
-                  <Actions localID={localID} />
-                </td>
-              </tr>
-            )}
-            <tr>
-              <td>Status</td>
-              <td>
-                <StatusTooltip status={status} />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </Tooltip>
+            </header>
+            <section>
+              {new Date(created + MAX_TIME_ON_SERVER).toDateString()}
+              <div>
+                <button
+                  className={f('button', 'icon', 'icon-common')}
+                  data-icon="&#x53;"
+                  onClick={() => keepJobAsLocal(localID)}
+                >
+                  {' '}
+                  Save in Browser
+                </button>
+              </div>
+            </section>
+          </section>
+        )}
 
         <div className={'row'}>
-          <div className={f('medium-9', 'columns', 'margin-bottom-large')}>
-            <h5>Protein family membership</h5>
+          <div
+            className={f(
+              'medium-9',
+              'columns',
+              'margin-bottom-large',
+              'margin-top-large',
+            )}
+          >
+            <h4>Protein family membership</h4>
             {familyHierarchyData.length ? (
               <ProteinEntryHierarchy entries={familyHierarchyData} />
             ) : (
@@ -501,6 +478,7 @@ SummaryIPScanJob.propTypes = {
   localPayload: T.object,
   api: T.object,
   updateJobTitle: T.func,
+  keepJobAsLocal: T.func,
 };
 
 const jobMapSelector = (state) => state.jobs;
@@ -536,4 +514,6 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(mapStateToProps, { updateJobTitle })(SummaryIPScanJob);
+export default connect(mapStateToProps, { updateJobTitle, keepJobAsLocal })(
+  SummaryIPScanJob,
+);

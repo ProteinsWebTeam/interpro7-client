@@ -2,8 +2,11 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { format as formatTime } from 'timeago.js';
 
 import Link from 'components/generic/Link';
+
+import { filterSubset, sortSubsetBy } from 'components/Table/FullyLoadedTable';
 import Table, { Column, ExtraOptions } from 'components/Table';
 import TimeAgo from 'components/TimeAgo';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -107,8 +110,26 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
 
   render() {
     const { jobs, search, defaultPageSize } = this.props;
+    const keys = ['localID', 'localTitle', 'times'];
+    let paginatedJobs = [...jobs];
+    sortSubsetBy(paginatedJobs, search, keys, {
+      localID: (localID, row) => row.remoteID || localID,
+      times: ({ created, importing, lastUpdate }) =>
+        new Date(created || importing || lastUpdate),
+    });
+    paginatedJobs = filterSubset(paginatedJobs, search, keys, {
+      localID: (localID, row) => row.remoteID || localID,
+      times: ({ created, importing, lastUpdate }) =>
+        formatTime(new Date(created || importing || lastUpdate)),
+    });
+    paginatedJobs.sort((a, b) => {
+      if (!a.group) return -1;
+      if (!b.group) return 1;
+      if (a.group === b.group) return 0;
+      return a.group > b.group ? 1 : -1;
+    });
     const pageSize = search.page_size || defaultPageSize;
-    const paginatedJobs = [...jobs].splice(
+    paginatedJobs = paginatedJobs.splice(
       ((search.page || 1) - 1) * pageSize,
       pageSize,
     );
@@ -151,6 +172,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           actualSize={jobs.length}
           query={search}
           showTableIcon={false}
+          shouldGroup={true}
         >
           <ExtraOptions>
             <DropDownButton label="Clear All" icon="&#xf1f8;">
@@ -165,6 +187,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           </ExtraOptions>
           <Column
             dataKey="localID"
+            isSearchable={true}
             renderer={(localID /*: string */, row /*: Object */) => (
               <>
                 <Link
@@ -191,16 +214,20 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           >
             Results
           </Column>
-          <Column dataKey="localTitle">Name</Column>
+          <Column dataKey="localTitle" isSearchable={true}>
+            Name
+          </Column>
           <Column
             dataKey="times"
+            isSearchable={true}
             renderer={(
               {
                 created,
                 importing,
-              } /*: {created: string, importing: string} */,
+                lastUpdate,
+              } /*: {created: string, importing: string, lastUpdate: string} */,
             ) => {
-              const parsed = new Date(created || importing);
+              const parsed = new Date(created || importing || lastUpdate);
               return (
                 <Tooltip
                   title={`${
@@ -240,7 +267,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                     aria-label="Job failed or not found"
                   />
                 ) : null}
-                {status === 'finished' && (
+                {['finished', 'imported file'].includes(status) && (
                   <Link
                     to={{
                       description: {
@@ -254,9 +281,15 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                   >
                     <span
                       style={{ fontSize: '160%' }}
-                      className={f('icon', 'icon-common', 'ico-confirmed')}
+                      className={f(
+                        'icon',
+                        'icon-common',
+                        status === 'finished'
+                          ? 'ico-confirmed'
+                          : 'icon-reviewed-data',
+                      )}
                       data-icon="&#xf00c;"
-                      aria-label="Job finished"
+                      aria-label="Job ready"
                     />
                   </Link>
                 )}
