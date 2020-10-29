@@ -539,7 +539,11 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
                       return (
                         <tr key={name}>
                           <td className={f('no-lineheight')}>
-                            <MemberSymbol type={db} className={f('md-small')} />
+                            <MemberSymbol
+                              type={db}
+                              className={f('md-small')}
+                              svg={false}
+                            />
                           </td>
                           <td>{name}</td>
                           <td className={f('text-center')}>{version}</td>

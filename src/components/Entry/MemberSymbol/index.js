@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
@@ -38,52 +38,82 @@ const classNames = new Map([
 ]);
 
 const MemberSymbol = (
-  { type, className = '' } /*: { type: string, className?: string } */,
+  {
+    type,
+    className = '',
+    svg = true,
+  } /*: { type: string, className?: string, svg?: boolean } */,
 ) => {
   const id = uniqueId();
+  const [png, setPng] = useState(null);
+  const [avif, setAvif] = useState(null);
+  if (!svg) {
+    // $FlowFixMe
+    import(`../../../images/member_databases/${type}_logo.avif`).then((src) =>
+      setAvif(src.default),
+    );
+    // $FlowFixMe
+    import(`../../../images/member_databases/${type}_logo.png`).then((src) =>
+      setPng(src.default),
+    );
+  }
   return (
     <span data-testid="entry-member-db-icon">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 200 200"
-        id={`md-${type}`}
-        className={cn(className, classNames.get(type.toUpperCase()))}
-      >
-        <defs>
-          <clipPath id={`clip-${id}`}>
-            <rect x="33%" y="38%" width="68" height="68" />
-          </clipPath>
-        </defs>
-
-        <text
-          x="50%"
-          y="50%"
-          textAnchor="middle"
-          dx="-0.01em"
-          dy="0.4em"
-          className={f('md-server')}
+      {svg ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 200 200"
+          id={`md-${type}`}
+          className={cn(className, classNames.get(type.toUpperCase()))}
         >
-          D
-        </text>
+          <defs>
+            <clipPath id={`clip-${id}`}>
+              <rect x="33%" y="38%" width="68" height="68" />
+            </clipPath>
+          </defs>
 
-        <text
-          x="50%"
-          y="50%"
-          textAnchor="middle"
-          dx="-0.01em"
-          dy="0.4em"
-          className={f('md-color')}
-          style={{ clipPath: `url(#clip-${id})` }}
-        >
-          D
-        </text>
-      </svg>
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dx="-0.01em"
+            dy="0.4em"
+            className={f('md-server')}
+          >
+            D
+          </text>
+
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dx="-0.01em"
+            dy="0.4em"
+            className={f('md-color')}
+            style={{ clipPath: `url(#clip-${id})` }}
+          >
+            D
+          </text>
+        </svg>
+      ) : (
+        <div style={{ '--aspect-ratio': '1 / 1' }}>
+          <div>
+            {avif || png ? (
+              <picture>
+                <source type="image/avif" srcSet={avif} />
+                <img alt="Hut in the snow" src={png} />
+              </picture>
+            ) : null}
+          </div>
+        </div>
+      )}
     </span>
   );
 };
 MemberSymbol.propTypes = {
   type: T.string.isRequired,
   className: T.string,
+  svg: T.bool,
 };
 
 export default MemberSymbol;

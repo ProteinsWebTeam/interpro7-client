@@ -50,11 +50,6 @@ exports[`<SideMenu /> should render 1`] = `
           </span>
         </EBIMenu>
         <span />
-        <li
-          className="menu-label cursor-default tertiary"
-        >
-          <Memo(Connect(_OldInterProLink)) />
-        </li>
         <li>
           <span
             className="menu-label cursor-default tertiary"
