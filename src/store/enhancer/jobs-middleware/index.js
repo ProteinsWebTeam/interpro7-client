@@ -14,6 +14,7 @@ import {
   UPDATE_JOB,
   UPDATE_JOB_STATUS,
   UPDATE_JOB_TITLE,
+  KEEP_JOB_AS_LOCAL,
   NEW_PROCESSED_CUSTOM_LOCATION,
   IMPORT_JOB,
   IMPORT_JOB_FROM_DATA,
@@ -29,7 +30,7 @@ const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
 // eslint-disable-next-line no-magic-numbers
 const DEFAULT_LOOP_TIMEOUT = 1000 * 60; // one minute
 // eslint-disable-next-line no-magic-numbers
-const MAX_TIME_ON_SERVER = 1000 * 60 * 60 * 24 * 7; // one week
+export const MAX_TIME_ON_SERVER = 1000 * 60 * 60 * 24 * 7; // one week
 
 const metaTA = getTableAccess(IPScanJobsMeta);
 const dataTA = getTableAccess(IPScanJobsData);
@@ -51,7 +52,10 @@ const rehydrateStoredJobs = async (dispatch) => {
   const now = Date.now();
   for (const [localID, metadata] /*: [string, JobMetadata] */ of entries) {
     // if job expired on server, delete it
-    if (now - (metadata.times.created || 0) > MAX_TIME_ON_SERVER) {
+    if (
+      now - (metadata.times.created || now) > MAX_TIME_ON_SERVER &&
+      metadata.status !== 'imported file'
+    ) {
       deleteJobInDB(localID);
     } else {
       jobs[localID] = { metadata };
@@ -95,7 +99,6 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       );
 
       const ipScanInfo = getState().settings.ipScan;
-      console.log(config);
 
       // Here is where we actually submit the sequence to InterProScan servers
       const { payload: remoteID, ok } = await cachedFetchText(
@@ -299,6 +302,12 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
         action.job.data,
         action.value,
       );
+    }
+    if (action.type === KEEP_JOB_AS_LOCAL) {
+      updateJobInDB({
+        ...getState().jobs[action.localID].metadata,
+        status: 'imported file',
+      });
     }
 
     if (action.type === NEW_PROCESSED_CUSTOM_LOCATION) {

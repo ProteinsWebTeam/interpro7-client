@@ -63,7 +63,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
       <>
         <Sequence accession={accession} sequence={sequence} name={name} />
         {local?.orf?.dnaSequence && (
-          <section>
+          <section id="nucleotides">
             <header>
               Nucleotide Sequence - {local.group} [{local?.orf?.start}-
               {local?.orf?.end}]

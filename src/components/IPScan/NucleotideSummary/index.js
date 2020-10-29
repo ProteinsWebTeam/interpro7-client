@@ -2,6 +2,8 @@
 import React from 'react';
 import T from 'prop-types';
 
+import Link from 'components/generic/Link';
+
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { foundationPartial } from 'styles/foundation';
@@ -49,7 +51,20 @@ const NucleotideSummary = ({ payload } /*: Props */) => {
             <section className={f('summary-row')}>
               <header>Location</header>
               <section>
-                {payload.orf?.start}-{payload.orf?.end}
+                <Link
+                  to={({ description }) => ({
+                    description: {
+                      ...description,
+                      [description.main.key]: {
+                        ...description[description.main.key],
+                        detail: 'sequence',
+                      },
+                    },
+                    hash: 'nucleotides',
+                  })}
+                >
+                  {payload.orf?.start}-{payload.orf?.end}
+                </Link>
               </section>
             </section>
             <section className={f('summary-row')}>

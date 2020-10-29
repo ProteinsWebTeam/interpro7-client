@@ -151,6 +151,11 @@ export const updateJobStatus = () => ({
   type: types.UPDATE_JOB_STATUS,
 });
 
+export const keepJobAsLocal = (localID /*: string */) => ({
+  type: types.KEEP_JOB_AS_LOCAL,
+  localID,
+});
+
 export const updateJobTitle = (
   job /*: { metadata: Object, data: Object } */,
   value /*: string */,
