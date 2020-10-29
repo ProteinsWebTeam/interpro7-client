@@ -27,7 +27,7 @@
   & li {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
     width: 50%;
     padding: 0.5rem;
 

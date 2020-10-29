@@ -17,6 +17,7 @@ exports[`<ContributingSignatures /> should render 1`] = `
       <li>
         <MemberSymbol
           className="md-small"
+          svg={false}
           type="pfam"
         />
         <div>

@@ -319,7 +319,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
             metadata.source_database &&
             metadata.source_database.toLowerCase() !== 'interpro' && (
               <div className={f('icon-container')}>
-                <MemberSymbol type={metadata.source_database} />
+                <MemberSymbol type={metadata.source_database} svg={false} />
               </div>
             )
         }
@@ -373,12 +373,8 @@ class Title extends PureComponent /*:: <Props, State> */ {
                   </span>
                 )
             }
-            <TitleTag
-              metadata={metadata}
-              mainType={mainType}
-              dbLabel={dbLabel}
-            />
           </div>
+          <TitleTag metadata={metadata} mainType={mainType} dbLabel={dbLabel} />
         </div>
         <AccessionTag metadata={metadata} mainType={mainType} />
       </div>
