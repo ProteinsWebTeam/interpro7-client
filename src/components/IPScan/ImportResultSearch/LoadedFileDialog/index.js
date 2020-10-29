@@ -122,7 +122,7 @@ const LoadedFileDialog = (
           if (protein.matches?.length) {
             saveJobInIDB(
               protein,
-              `imported_file-${fileName}-${i + 1}-seq-${id}-orf-${rest.id}`,
+              `imported_file-${fileName}-${i + 1}-orf-${rest.id}`,
               `${id} - ORF:${rest.id}`,
               fileContent['interproscan-version'],
               importJobFromData,
