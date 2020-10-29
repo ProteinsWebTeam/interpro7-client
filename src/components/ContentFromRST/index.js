@@ -317,17 +317,7 @@ const Children = ({ children, ...rest }) =>
 Children.propTypes = {
   children: T.array,
 };
-// const rstText =`
-// Can I still view the old InterPro website?
-// ==========================================
-// Yes, for now you can! There two ways to access the old (legacy) website:
 
-// #. Navigate to this URL: \`<https://www.ebi.ac.uk/interpro/legacy/>\`_
-// #. Click on the Settings link from the InterPro Menu section of the sidebar
-
-// - Click on the “hamburger” icon above the magnifying glass icon to open the InterPro Menu sidebar.
-// - Then click the See this page in the old website link to be taken to the nearest matching page in the legacy website.
-// `
 const ContentFromRST = ({ rstText, format }) => {
   const [_, setHasSubstitutions] = useState(false);
   useEffect(() => {
