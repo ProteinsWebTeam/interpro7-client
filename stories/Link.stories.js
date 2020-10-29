@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+
 import Link, { _Link as RawLink } from 'components/generic/Link';
+import { noop } from 'lodash-es';
 
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
@@ -18,7 +22,7 @@ export default {
   decorators: [withProvider],
 };
 
-const initialLocation = {
+const newLocation = {
   description: {
     entry: {
       db: 'InterPro',
@@ -43,15 +47,51 @@ export const Basic = () => (
   </>
 );
 
-export const InternalLink = () => {
-  const [location, setLocation] = useState(initialLocation);
+export const UnconnectedLink = () => {
+  const [location, setLocation] = useState({});
   return (
-    <RawLink
-      customLocation={location}
-      to={initialLocation}
-      goToCustomLocation={setLocation}
-    >
-      Kringle
-    </RawLink>
+    <>
+      <RawLink
+        closeEverything={noop}
+        to={newLocation}
+        goToCustomLocation={setLocation}
+      >
+        Kringle
+      </RawLink>
+      <hr />
+      <div>
+        <h3>Current Location</h3>
+        <pre>
+          <code>{JSON.stringify(location, null, ' ')}</code>
+        </pre>
+      </div>
+    </>
   );
+};
+
+export const ConnectedLink = () => {
+  const _ConnectedLinkComponent = ({ location }) => {
+    return (
+      <>
+        <Link to={newLocation}>Kringle</Link>
+        <hr />
+        <div>
+          <h3>Current Location</h3>
+          <pre>
+            <code>{JSON.stringify(location, null, ' ')}</code>
+          </pre>
+        </div>
+      </>
+    );
+  };
+  const mapStateToProps = createSelector(
+    (state) => state.customLocation,
+    (location) => ({
+      location,
+    })
+  );
+  const ConnectedLinkComponent = connect(mapStateToProps)(
+    _ConnectedLinkComponent
+  );
+  return <ConnectedLinkComponent />;
 };
