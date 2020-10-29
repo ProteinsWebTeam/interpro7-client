@@ -1,19 +1,21 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { foundationPartial } from 'styles/foundation';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import AnimatedEntry from 'components/AnimatedEntry';
 import NumberComponent from 'components/NumberComponent';
+import { memberDbURL } from 'utils/url-patterns';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
+import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -56,7 +58,8 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
     } = this.props;
     const counts = payload && payload.entries.member_databases;
     const memberDB = payloadMeta
-      ? Object.values(payloadMeta.databases).filter(
+      ? // prettier-ignore
+        (Object.values(payloadMeta.databases)/*: any */).filter(
           (db) => db.type === 'entry' && db.canonical !== 'interpro',
         )
       : [];
@@ -95,28 +98,52 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                   }}
                   data-testid={`member-database-${canonical}`}
                 >
-                  <MemberSymbol type={canonical} />
-
-                  <span className={f('card-title')}>{name} </span>
-                  <Tooltip title={description}>
-                    <span
-                      className={f('small', 'icon', 'icon-common')}
-                      data-icon="&#xf129;"
-                      aria-label={description}
-                    />
-                  </Tooltip>
-                  <br />
-                  <small>{version}</small>
-
-                  <p className={f('margin-bottom-medium')}>
-                    <span className={f('count', { visible: payload })}>
-                      <NumberComponent abbr>
-                        {(counts && counts[canonical.toLowerCase()]) || 0}
-                      </NumberComponent>
-                      {' entries'}
-                    </span>
-                  </p>
+                  <MemberSymbol type={canonical} svg={false} />
                 </Link>
+                <div className={f('name-row')}>
+                  <div>
+                    <Link
+                      className={f('block')}
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: { db: canonical },
+                        },
+                      }}
+                      data-testid={`member-database-${canonical}`}
+                    >
+                      {' '}
+                      <span className={f('card-title')}>{name} </span>
+                    </Link>
+                    <Tooltip title={description}>
+                      <span
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="&#xf129;"
+                        aria-label={description}
+                      />
+                    </Tooltip>
+                  </div>
+                  {memberDbURL.get(canonical) && (
+                    <Link href={memberDbURL.get(canonical)} target="_blank">
+                      <span
+                        className={f('small', 'icon', 'icon-common')}
+                        data-icon="&#xf35d;"
+                        aria-label="link_to_external_site"
+                      />
+                    </Link>
+                  )}
+                </div>
+                <hr className={f('md', canonical)} />
+                <small>{version}</small>
+
+                <p className={f('margin-bottom-medium')}>
+                  <span className={f('count', { visible: payload })}>
+                    <NumberComponent abbr>
+                      {(counts && counts[canonical.toLowerCase()]) || 0}
+                    </NumberComponent>
+                    {' entries'}
+                  </span>
+                </p>
               </div>
             ))}
         </AnimatedEntry>

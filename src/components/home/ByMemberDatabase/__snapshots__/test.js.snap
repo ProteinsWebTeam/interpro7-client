@@ -55,42 +55,79 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
         }
       >
         <MemberSymbol
+          svg={false}
           type="pfam"
         />
-        <span
-          className="card-title"
-        >
-          Pfam
-           
-        </span>
-        <Tooltip
-          title="Pfam description"
-        >
-          <span
-            aria-label="Pfam description"
-            className="small icon icon-common"
-            data-icon=""
-          />
-        </Tooltip>
-        <br />
-        <small>
-          32.0
-        </small>
-        <p
-          className="margin-bottom-medium"
-        >
-          <span
-            className="count visible"
-          >
-            <Memo(Connect(NumberComponent))
-              abbr={true}
-            >
-              17860
-            </Memo(Connect(NumberComponent))>
-             entries
-          </span>
-        </p>
       </Memo(Connect(Link))>
+      <div
+        className="name-row"
+      >
+        <div>
+          <Memo(Connect(Link))
+            className="block"
+            data-testid="member-database-pfam"
+            to={
+              Object {
+                "description": Object {
+                  "entry": Object {
+                    "db": "pfam",
+                  },
+                  "main": Object {
+                    "key": "entry",
+                  },
+                },
+              }
+            }
+          >
+             
+            <span
+              className="card-title"
+            >
+              Pfam
+               
+            </span>
+          </Memo(Connect(Link))>
+          <Tooltip
+            title="Pfam description"
+          >
+            <span
+              aria-label="Pfam description"
+              className="small icon icon-common"
+              data-icon=""
+            />
+          </Tooltip>
+        </div>
+        <Memo(Connect(Link))
+          href="//pfam.xfam.org/"
+          target="_blank"
+        >
+          <span
+            aria-label="link_to_external_site"
+            className="small icon icon-common"
+            data-icon=""
+          />
+        </Memo(Connect(Link))>
+      </div>
+      <hr
+        className="md pfam"
+      />
+      <small>
+        32.0
+      </small>
+      <p
+        className="margin-bottom-medium"
+      >
+        <span
+          className="count visible"
+        >
+          <Memo(Connect(NumberComponent))
+            abbr={true}
+          >
+            17860
+          </Memo(Connect(NumberComponent))>
+           entries
+        </span>
+      </p>
     </div>
   </Memo(Connect(AnimatedEntry))>
   <Memo(Connect(Link))
