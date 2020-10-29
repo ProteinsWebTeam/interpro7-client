@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Link from 'components/generic/Link';
+import Link, { _Link } from 'components/generic/Link';
 
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
@@ -29,6 +29,7 @@ const initialLocation = {
     },
   },
   search: {},
+  hash: '',
 };
 
 export const Basic = () => (
@@ -43,11 +44,14 @@ export const Basic = () => (
 );
 
 export const InternalLink = () => {
-  // TODO yet to be fixed
   const [location, setLocation] = useState(initialLocation);
   return (
-    <Link customLocation={location} to={initialLocation}>
+    <_Link
+      customLocation={location}
+      to={initialLocation}
+      goToCustomLocation={setLocation}
+    >
       Kringle
-    </Link>
+    </_Link>
   );
 };
