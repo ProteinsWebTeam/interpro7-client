@@ -519,8 +519,11 @@ const data = {
       'I:0.222',
     ],
   ],
+  // eslint-disable-next-line no-magic-numbers
   insert_probs: [0.00596056502229412],
+  // eslint-disable-next-line no-magic-numbers
   insert_lengths: [1.8581623400433067],
+  // eslint-disable-next-line no-magic-numbers
   delete_probs: [0.9816169085786339],
   mmline: [0],
   ali_map: [1],

@@ -189,7 +189,7 @@ export class _Link extends PureComponent /*:: <Props> */ {
     );
   }
 }
-
+_Link.displayName = 'Link';
 const mapStateToProps = createSelector(
   customLocationSelector,
   (customLocation) => ({ customLocation }),
