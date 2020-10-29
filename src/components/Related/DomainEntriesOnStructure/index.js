@@ -23,8 +23,8 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
-const toArrayStructure = locations =>
-  locations.map(loc => loc.fragments.map(fr => [fr.start, fr.end]));
+const toArrayStructure = (locations) =>
+  locations.map((loc) => loc.fragments.map((fr) => [fr.start, fr.end]));
 
 const mergeData = (secondaryData, secondaryStructures) => {
   const out = {};
@@ -40,8 +40,8 @@ const mergeData = (secondaryData, secondaryStructures) => {
           // eslint-disable-next-line max-depth
           if (entry.chain === structure.accession) {
             const allFragments = [];
-            structure.locations.forEach(loc => {
-              loc.fragments.forEach(f => {
+            structure.locations.forEach((loc) => {
+              loc.fragments.forEach((f) => {
                 if (f.shape === 'helix') {
                   f.fill = 'transparent';
                   allFragments.push({ ...f });
@@ -125,7 +125,7 @@ const GoToProtVistaMenu = ({ entries } /*: Array<Object> */) => (
           {entries.map((e, i) => (
             <li key={i}>
               <Link
-                to={customLocation => ({
+                to={(customLocation) => ({
                   ...customLocation,
                   hash: `protvista-${e.chain}-${e.protein.accession}`,
                 })}
@@ -163,7 +163,7 @@ const ProtVistaLoaded = (
   const protvistaEl = useRef(null);
   useEffect(() => {
     if (!protvistaEl.current || !protvistaEl.current.addEventListener) return;
-    const handleMouseover = event => {
+    const handleMouseover = (event) => {
       const {
         detail: { eventtype, highlight, feature },
       } = event;
@@ -198,7 +198,7 @@ const ProtVistaLoaded = (
     dataGenome3d.status === HTTP_OK
   ) {
     const domains = dataGenome3d.payload.data
-      .map(d => d.annotations)
+      .map((d) => d.annotations)
       .flat(1)
       .filter(
         ({ uniprot_acc: protein }) =>
@@ -214,17 +214,17 @@ const ProtVistaLoaded = (
       domainsObj[d.resource].accession = `G3D:${d.resource}`;
       domainsObj[d.resource].confidence = d.confidence;
       domainsObj[d.resource].protein = dataprotein.payload.metadata.accession;
-      domainsObj[d.resource].type = 'template annotation';
+      domainsObj[d.resource].type = 'Predicted structural domain';
       domainsObj[d.resource].source_database = d.resource;
       domainsObj[d.resource].locations.push({
-        fragments: d.segments.map(s => ({
+        fragments: d.segments.map((s) => ({
           start: s.uniprot_start,
           end: s.uniprot_stop,
         })),
       });
     }
     enrichedTracks.push([
-      'template_annotations_(Provided_by_genome3D)',
+      'predicted_structural_domains_(Provided_by_genome3D)',
       Object.values(domainsObj),
     ]);
   }
@@ -253,8 +253,8 @@ ProtVistaLoaded.propTypes = {
 };
 
 const getGenome3dURL = createSelector(
-  state => state.settings.genome3d,
-  state => state.customLocation.description.structure.accession,
+  (state) => state.settings.genome3d,
+  (state) => state.customLocation.description.structure.accession,
   ({ protocol, hostname, port, root }, accession) => {
     return format({
       protocol,
@@ -266,14 +266,14 @@ const getGenome3dURL = createSelector(
   },
 );
 
-const includeProtein = accession =>
+const includeProtein = (accession) =>
   loadData({
     getUrl: getGenome3dURL,
     propNamespace: 'Genome3d',
   })(
     loadData({
       getUrl: createSelector(
-        state => state.settings.api,
+        (state) => state.settings.api,
         ({ protocol, hostname, port, root }) =>
           `${protocol}//${hostname}:${port}${root}/protein/uniprot/${accession}`,
       ),
@@ -281,7 +281,7 @@ const includeProtein = accession =>
     })(ProtVistaLoaded),
   );
 
-const tagChimericStructures = data => {
+const tagChimericStructures = (data) => {
   const proteinsPerChain = {};
   for (const e of data) {
     if (!(e.chain in proteinsPerChain)) proteinsPerChain[e.chain] = [];
@@ -360,8 +360,8 @@ const EntriesOnStructure = (
                   e.data.Chain &&
                   e.data.Chain.length &&
                   e.data.Chain[0].locations
-                    .map(l =>
-                      l.fragments.map(f => `${f.start}:${f.end}`).join(','),
+                    .map((l) =>
+                      l.fragments.map((f) => `${f.start}:${f.end}`).join(','),
                     )
                     .join(',')
                 }

@@ -4,7 +4,7 @@ const HTTP_OK = 200;
 const _getProtvistaTracksData = ({ annotations, condition, type, protein }) => {
   const models = annotations.filter(condition);
   if (models.length) {
-    return Object.values(
+    const tracks = Object.values(
       models.reduce((agg, { metadata, locations }) => {
         if (!(metadata.resource in agg)) {
           agg[metadata.resource] = { protein };
@@ -18,6 +18,17 @@ const _getProtvistaTracksData = ({ annotations, condition, type, protein }) => {
           confidence: metadata.confidence,
           fragments: locations[0].fragments,
         };
+
+        // Saving the fragment end to sort for later
+        if (agg[metadata.resource].locationEnd) {
+          agg[metadata.resource].locationEnd =
+            agg[metadata.resource].locationEnd < locations[0].fragments[0].end
+              ? locations[0].fragments[0].end
+              : agg[metadata.resource].locationEnd;
+        } else {
+          agg[metadata.resource].locationEnd = locations[0].fragments[0].end;
+        }
+
         if (agg[metadata.resource].locations) {
           const presentLocations = agg[metadata.resource].locations;
           presentLocations.push(addedInfoLocation);
@@ -27,6 +38,9 @@ const _getProtvistaTracksData = ({ annotations, condition, type, protein }) => {
         }
         return agg;
       }, {}),
+    );
+    return tracks.sort(
+      (a /*:Object*/, b /*:Object*/) => a.locationEnd - b.locationEnd,
     );
   }
   return null;
@@ -52,7 +66,7 @@ export const formatGenome3dIntoProtVistaPanels = (
       annotations: payload.data.annotations,
       condition: ({ metadata }) =>
         metadata.type === 'PREDICTED_3D_STRUCTURE' &&
-        // Superfamily and gene3d have already beeen integrated in InterPro
+        // Superfamily and gene3d have already been integrated in InterPro
         metadata.resource.toUpperCase() !== 'SUPERFAMILY' &&
         metadata.resource.toUpperCase() !== 'GENE3D',
       type: 'Model',
@@ -64,7 +78,7 @@ export const formatGenome3dIntoProtVistaPanels = (
       annotations: payload.data.annotations,
       condition: ({ metadata }) =>
         metadata.type !== 'PREDICTED_3D_STRUCTURE' &&
-        // Superfamily and gene3d have already beeen integrated in InterPro
+        // Superfamily and gene3d have already been integrated in InterPro
         metadata.resource.toUpperCase() !== 'SUPERFAMILY' &&
         metadata.resource.toUpperCase() !== 'GENE3D',
       type: 'Domain',
