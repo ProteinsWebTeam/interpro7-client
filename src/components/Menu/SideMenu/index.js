@@ -10,7 +10,6 @@ import { sideNavSelector } from 'reducers/ui/sideNav';
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterProMenu from 'components/Menu/InterProMenu';
 import EntryMenu from 'components/EntryMenu';
-import Link from 'components/generic/Link';
 import ServerStatus from './ServerStatus';
 import Tip from 'components/Tip';
 
@@ -24,64 +23,6 @@ import helperClasses from 'styles/helper-classes.css';
 import style from './style.css';
 
 const f = foundationPartial(ebiStyles, interproStyles, helperClasses, style);
-
-/*:: type OldIPProps = {
-  href: string,
-}; */
-
-// TODO: eventually remove all of this logic a few releases after initial launch
-class _OldInterProLink extends PureComponent /*:: <OldIPProps> */ {
-  static propTypes = {
-    href: T.string.isRequired,
-  };
-
-  render() {
-    return (
-      <Link
-        className={f('old-interpro-link')}
-        href={this.props.href}
-        target="_blank"
-        onClick={() => window.localStorage.removeItem('redirect_to_interpro7')}
-      >
-        See this page in the old InterPro website
-      </Link>
-    );
-  }
-}
-
-const mapStateToPropsForOldLink = createSelector(
-  (state) => state.customLocation.description,
-  (d) => {
-    const href = 'https://www.ebi.ac.uk/interpro/legacy/';
-    const { key } = d.main;
-    if (
-      key === 'result' &&
-      d.result.type === 'InterProScan' &&
-      d.result.accession
-    ) {
-      return { href: `${href}sequencesearch/${d.result.accession}` };
-    }
-    if (key === 'entry') {
-      if (!d.entry.db) {
-        return { href };
-      } else if (d.entry.db === 'InterPro') {
-        if (d.entry.accession) {
-          return { href: `${href}entry/${d.entry.accession}/` };
-        }
-        return { href: `${href}search/` };
-      }
-      if (d.entry.accession) {
-        return { href: `${href}signature/${d.entry.accession}/` };
-      }
-      return { href: `${href}member-database/${d.entry.db}/` };
-    } else if (key === 'protein' && d.protein.accession) {
-      return { href: `${href}protein/${d.protein.accession}/` };
-    }
-    return { href };
-  },
-);
-
-const OldInterProLink = connect(mapStateToPropsForOldLink)(_OldInterProLink);
 
 /*:: type Props = {
   visible: boolean,
@@ -173,9 +114,6 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
                 </span>
               </EBIMenu>
               <span />
-              <li className={f('menu-label', 'cursor-default', 'tertiary')}>
-                <OldInterProLink />
-              </li>
               <li>
                 <span className={f('menu-label', 'cursor-default', 'tertiary')}>
                   Connection status
