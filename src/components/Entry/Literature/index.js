@@ -46,7 +46,7 @@ const LiteratureItem = (
     included,
     target,
   } /*: {|
-  pubID: string,
+  pubID: number,
   reference: Reference,
   i?: number,
   included?: boolean,
@@ -107,7 +107,7 @@ const LiteratureItem = (
   </div>
 );
 LiteratureItem.propTypes = {
-  pubID: T.string.isRequired,
+  pubID: T.number.isRequired,
   reference: T.object.isRequired,
   i: T.number,
   included: T.bool,
@@ -120,8 +120,8 @@ const Literature = (
     extra = [],
     target,
   } /*: {|
-  included?: Array<[string, Reference]>,
-  extra?: Array<[string, Reference]>,
+  included?: Array<[number, Reference]>,
+  extra?: Array<[number, Reference]>,
   target: string
 |} */,
 ) => (
