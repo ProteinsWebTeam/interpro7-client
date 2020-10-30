@@ -92,7 +92,7 @@ ProtVistaPopup.propTypes = {
   detail: T.shape({
     feature: T.object,
     highlight: T.string,
-    target: T.element,
+    target: T.any,
   }),
   sourceDatabase: T.string,
   data: T.array,
