@@ -121,7 +121,7 @@ const Literature = (
     target,
   } /*: {|
   included?: Array<[number, Reference]>,
-  extra?: Array<[string, Reference]>,
+  extra?: Array<[number, Reference]>,
   target: string
 |} */,
 ) => (

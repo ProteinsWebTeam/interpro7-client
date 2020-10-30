@@ -40,7 +40,7 @@ const _getProtvistaTracksData = ({ annotations, condition, type, protein }) => {
       }, {}),
     );
     return tracks.sort(
-      (a /*:Object*/, b /*:Object*/) => a.locationEnd - b.locationEnd,
+      (a /*: Object*/, b /*: Object*/) => a.locationEnd - b.locationEnd,
     );
   }
   return null;
