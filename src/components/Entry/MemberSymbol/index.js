@@ -42,7 +42,8 @@ const MemberSymbol = (
     type,
     className = '',
     svg = true,
-  } /*: { type: string, className?: string, svg?: boolean } */,
+    filter = true,
+  } /*: { type: string, className?: string, svg?: boolean , filter?: boolean } */,
 ) => {
   const id = uniqueId();
   const [png, setPng] = useState(null);
@@ -96,15 +97,13 @@ const MemberSymbol = (
           </text>
         </svg>
       ) : (
-        <div style={{ '--aspect-ratio': '1 / 1' }}>
-          <div>
-            {avif || png ? (
-              <picture>
-                <source type="image/avif" srcSet={avif} />
-                <img alt="Hut in the snow" src={png} />
-              </picture>
-            ) : null}
-          </div>
+        <div className={f('memberdb-logo', { filter })}>
+          {avif || png ? (
+            <picture>
+              <source type="image/avif" srcSet={avif} />
+              <img alt="Hut in the snow" src={png} />
+            </picture>
+          ) : null}
         </div>
       )}
     </span>
@@ -114,6 +113,7 @@ MemberSymbol.propTypes = {
   type: T.string.isRequired,
   className: T.string,
   svg: T.bool,
+  filter: T.bool,
 };
 
 export default MemberSymbol;

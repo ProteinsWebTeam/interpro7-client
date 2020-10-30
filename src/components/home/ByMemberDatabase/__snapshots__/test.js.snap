@@ -10,7 +10,7 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
     element="div"
   >
     <div
-      className="column text-center"
+      className="memberdb-block text-center"
     >
       <Memo(Loadable)
         data={
@@ -145,7 +145,7 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
       }
     }
   >
-    View all entries
+    View InterPro entries
   </Memo(Connect(Link))>
 </div>
 `;
