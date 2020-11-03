@@ -64,31 +64,24 @@
 :root {
   --aspect-ratio: 1 / 1;
 }
-
-[style*='--aspect-ratio'] > :first-child,
-[style*='--aspect-ratio'] picture {
-  width: 100%;
+.memberdb-logo {
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
-[style*='--aspect-ratio'] img,
-[style*='--aspect-ratio'] picture {
-  height: auto;
-  width: 100%;
+.memberdb-logo.filter {
+  padding: 0.5rem;
+  filter: grayscale(90%);
+  transition: filter 0.7s;
+  justify-content: flex-end;
 }
-@supports (--custom: property) {
-  [style*='--aspect-ratio'] {
-    position: relative;
-  }
-  [style*='--aspect-ratio']::before {
-    content: '';
-    display: block;
-    padding-bottom: calc(100% / (var(--aspect-ratio)));
-  }
-  [style*='--aspect-ratio'] > :first-child {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    display: flex;
-    align-items: flex-end;
-  }
+.memberdb-logo:hover {
+  filter: none;
+}
+.memberdb-logo picture,
+.memberdb-logo img {
+  width: 100%;
+  max-width: 120px;
 }

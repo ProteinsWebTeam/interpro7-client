@@ -13,6 +13,7 @@ import Literature from 'components/Entry/Literature';
 
 import ClanViewer from 'clanviewer';
 import 'clanviewer/css/clanviewer.css';
+import ZoomOverlay from 'components/ZoomOverlay';
 
 import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
@@ -145,7 +146,10 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
 
   componentDidMount() {
     if (!this._ref.current) return;
-    this._vis = new ClanViewer({ element: this._ref.current });
+    this._vis = new ClanViewer({
+      element: this._ref.current,
+      useCtrlToZoom: true,
+    });
     if (
       this.props.data &&
       this.props.data.metadata &&
@@ -301,7 +305,12 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
                   </section>
                 </div>
               )}
-            <div ref={this._ref} style={{ minHeight: 500 }} />
+            <ZoomOverlay elementId="clanViewerContainer" />
+            <div
+              ref={this._ref}
+              style={{ minHeight: 500 }}
+              id="clanViewerContainer"
+            />
           </div>
         </section>
       </div>

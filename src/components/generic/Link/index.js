@@ -16,9 +16,9 @@ import generateClassName from './utils/generate-classname';
 
 import { DEV } from 'config';
 
-const happenedWithModifierKey = event =>
+const happenedWithModifierKey = (event) =>
   !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
-const happenedWithLeftClick = event => event.button === 0;
+const happenedWithLeftClick = (event) => event.button === 0;
 
 const getNextLocation = (customLocation, to) =>
   typeof to === 'function' ? to(customLocation) : to;
@@ -49,7 +49,7 @@ const getNextLocation = (customLocation, to) =>
   withReferrer?: boolean,
 }; */
 
-class Link extends PureComponent /*:: <Props> */ {
+export class _Link extends PureComponent /*:: <Props> */ {
   static propTypes = {
     onClick: T.func,
     customLocation: T.shape({
@@ -78,7 +78,7 @@ class Link extends PureComponent /*:: <Props> */ {
     withReferrer: T.bool,
   };
 
-  handleClick = event => {
+  handleClick = (event) => {
     const {
       disabled,
       onClick,
@@ -189,16 +189,13 @@ class Link extends PureComponent /*:: <Props> */ {
     );
   }
 }
-
+_Link.displayName = 'Link';
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
-export default connect(
-  mapStateToProps,
-  {
-    closeEverything,
-    goToCustomLocation,
-  },
-)(Link);
+export default connect(mapStateToProps, {
+  closeEverything,
+  goToCustomLocation,
+})(_Link);

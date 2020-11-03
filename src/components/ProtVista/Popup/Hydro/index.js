@@ -26,7 +26,7 @@ const HydroPopup = ({ detail } /*: {detail: PopupDetail} */) => {
 HydroPopup.propTypes = {
   detail: T.shape({
     feature: T.object,
-    target: T.element,
+    target: T.any,
   }),
 };
 

@@ -51,18 +51,26 @@
   flex-flow: row wrap;
 }
 
-.md-list .column {
+.md-list .memberdb-block {
   flex: 0 0 25%;
   max-width: 25%;
   transition: all var(--timing-really-fast) ease-out;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-end;
 }
 
-.md-list .column:hover {
+.md-list .memberdb-block:hover {
   box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  & div {
+    filter: none;
+  }
 }
 
 @media screen and (max-width: 40em) {
-  .md-list .column {
+  .md-list .memberdb-block {
     flex: 0 0 50%;
     max-width: 50%;
   }
@@ -70,7 +78,7 @@
 
 /*/temp replace the float css while update to latest foundation*/
 @media screen and (max-width: 20em) {
-  .md-list .column {
+  .md-list .memberdb-block {
     flex: 0 0 100%;
     max-width: 100%;
   }

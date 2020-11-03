@@ -5,9 +5,17 @@
   padding: 0.5rem 1rem;
 }
 
+.db-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
 .db-name {
   font-size: 80%;
   color: #4b555b;
+  padding-right: 0.5em;
 }
 
 .md-icon-list-box {

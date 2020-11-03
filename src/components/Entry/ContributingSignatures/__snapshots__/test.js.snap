@@ -20,7 +20,9 @@ exports[`<ContributingSignatures /> should render 1`] = `
           svg={false}
           type="pfam"
         />
-        <div>
+        <div
+          className="db-label"
+        >
           <span
             className="db-name"
           >

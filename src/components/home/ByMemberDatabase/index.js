@@ -77,7 +77,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
               return 0;
             })
             .map(({ canonical, description, name, version, releaseDate }) => (
-              <div className={f('column', 'text-center')} key={name}>
+              <div className={f('memberdb-block', 'text-center')} key={name}>
                 <SchemaOrgData
                   data={{
                     name,
@@ -157,7 +157,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
           }}
           className={f('button', 'margin-bottom-none', 'margin-top-large')}
         >
-          View all entries
+          View InterPro entries
         </Link>
       </div>
     );

@@ -77,7 +77,7 @@ export const ContributingSignatures = (
           {contrEntries.map(([db, signatures]) => (
             <li key={db}>
               <MemberSymbol type={db} className={f('md-small')} svg={false} />
-              <div>
+              <div className={f('db-label')}>
                 <span className={f('db-name')}>
                   {(metaDB[db] && metaDB[db].name) || db}:{' '}
                 </span>{' '}
