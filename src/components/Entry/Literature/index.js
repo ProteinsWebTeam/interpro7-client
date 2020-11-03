@@ -107,7 +107,7 @@ const LiteratureItem = (
   </div>
 );
 LiteratureItem.propTypes = {
-  pubID: T.number.isRequired,
+  pubID: T.oneOfType([T.string, T.number]).isRequired,
   reference: T.object.isRequired,
   i: T.number,
   included: T.bool,
