@@ -14,6 +14,7 @@ import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadable from 'higherOrder/loadable';
+import ToggleSwitch from 'components/ToggleSwitch';
 
 import loadWebComponent from 'utils/load-web-component';
 import ProtvistaInterproTrack from 'protvista-interpro-track';
@@ -72,28 +73,16 @@ const SimilarProteinsHeaderWithData = (
         the protein with accession <b>{accession}</b>.
         <div className={f('accession-selector-panel')}>
           <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-            <div className={f('switch', 'large')}>
-              <input
-                type="checkbox"
-                checked={idaAccessionDB === 'pfam'}
-                className={f('switch-input')}
-                name="accessionDB"
-                id="accessionDB-input"
-                onChange={toggleAccessionDBForIDA}
-              />
-              <label
-                className={f('switch-paddle', 'accession-selector')}
-                htmlFor="accessionDB-input"
-              >
-                <span className={f('show-for-sr')}>Use accessions from:</span>
-                <span className={f('switch-active')} aria-hidden="true">
-                  Pfam
-                </span>
-                <span className={f('switch-inactive')} aria-hidden="true">
-                  InterPro
-                </span>
-              </label>
-            </div>
+            <ToggleSwitch
+              switchCond={idaAccessionDB === 'pfam'}
+              name={'accessionDB'}
+              id={'accessionDB-input'}
+              SRLabel={'Use accessions from'}
+              onValue={'Pfam'}
+              offValue={'InterPro'}
+              handleChange={toggleAccessionDBForIDA}
+              addAccessionStyle={true}
+            />
           </Tooltip>
         </div>
       </header>
