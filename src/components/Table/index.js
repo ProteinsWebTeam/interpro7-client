@@ -169,7 +169,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     const exporter = _children.find((child) => child.type === _Exporter);
     const extraOptions = _children.find((child) => child.type === ExtraOptions);
     const tableIcon = showTableIcon === undefined ? true : showTableIcon;
-    let data = [...dataTable];
+    let data = dataTable === undefined ? [] : [...dataTable];
     let groups = null;
     if (shouldGroup) {
       data = data.sort((a, b) => {
