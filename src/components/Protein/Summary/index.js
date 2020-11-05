@@ -155,10 +155,7 @@ const SummaryProtein = (
                       </Tooltip>
                     </td>
                     <td>
-                      <IsoformSelector
-                        value={isoform}
-                        onChange={(event) => setIsoform(event.target.value)}
-                      />
+                      <IsoformSelector />
                     </td>
                   </tr>
                 ) : null}

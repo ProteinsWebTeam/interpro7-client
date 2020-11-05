@@ -7,7 +7,6 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
-
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -92,11 +91,20 @@ Viewer.propTypes = {
   }),
 };
 
+const mapStateToProps = createSelector(
+  (state) => state.customLocation.search,
+  ({ isoform }) => ({ isoform }),
+);
+
 const getIsoformURL = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description,
-  (_, props) => props.isoform,
-  ({ protocol, hostname, port, root }, { protein: { accession } }, isoform) => {
+  (state) => state.customLocation.search,
+  (
+    { protocol, hostname, port, root },
+    { protein: { accession } },
+    { isoform },
+  ) => {
     const description = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
@@ -113,4 +121,4 @@ const getIsoformURL = createSelector(
     });
   },
 );
-export default loadData(getIsoformURL)(Viewer);
+export default loadData({ getUrl: getIsoformURL, mapStateToProps })(Viewer);

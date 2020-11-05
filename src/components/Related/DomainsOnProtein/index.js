@@ -251,7 +251,7 @@ const mergeExtraFeatures = (data, extraFeatures) => {
 };
 
 const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
-const groupByEntryType = (interpro) => {
+export const groupByEntryType = (interpro) => {
   const groups = {};
   for (const entry of interpro) {
     if (!groups[entry.type]) groups[entry.type] = [];
