@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -7,6 +8,10 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
+import {
+  groupByEntryType,
+  byEntryType,
+} from 'components/Related/DomainsOnProtein';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -38,13 +43,13 @@ const features2protvista = (features) => {
   const interpro = featArray.filter(({ accession }) =>
     accession.toLowerCase().startsWith('ipr'),
   );
+  const groups = groupByEntryType(interpro);
   const unintegrated = featArray.filter(
     (f) => interpro.indexOf(f) === -1 && integrated.indexOf(f) === -1,
   );
-  return [
-    ['interpro', interpro],
-    ['unintegrated', unintegrated],
-  ];
+  return [...Object.entries(groups), ['unintegrated', unintegrated]].sort(
+    byEntryType,
+  );
 };
 
 const Viewer = (

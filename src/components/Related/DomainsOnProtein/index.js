@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-param-reassign */
 import React, { PureComponent, useEffect } from 'react';
 import T from 'prop-types';
@@ -262,7 +263,7 @@ export const groupByEntryType = (interpro) => {
 };
 
 const UNDERSCORE = /_/g;
-const sortFunction = ([a], [b]) => {
+export const byEntryType = ([a], [b]) => {
   const firsts = [
     'family',
     'domain',
@@ -327,7 +328,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
       handleConservationLoad,
     } = this.props;
     const sortedData = Object.entries(dataMerged)
-      .sort(sortFunction)
+      .sort(byEntryType)
       // “Binding_site” -> “Binding site”
       .map(([key, value]) => [
         key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
