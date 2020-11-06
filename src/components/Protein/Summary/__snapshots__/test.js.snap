@@ -200,74 +200,78 @@ exports[`<SummaryProtein /> should render 1`] = `
       </div>
     </div>
   </section>
-  <Memo(Connect(loadData(Viewer))) />
-  <section>
-    <div
-      className="row"
-    >
+  <section
+    className=""
+  >
+    <Memo(Connect(loadData(Viewer))) />
+    <section>
       <div
-        className="medium-12 columns margin-bottom-large"
+        className="row"
       >
-        <Memo(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(DomainOnProteinWithoutData)))))))))
-          mainData={
-            Object {
-              "metadata": Object {
-                "accession": "A0A000",
-                "counters": Object {
-                  "dbEntries": Object {
-                    "cathgene3d": 2,
-                    "cdd": 1,
-                    "interpro": 5,
-                    "panther": 2,
-                    "pfam": 1,
-                    "ssf": 1,
-                    "tigrfams": 1,
-                  },
-                  "entries": 13,
-                  "idas": 323222,
-                  "isoforms": 0,
-                  "proteome": 0,
-                  "proteomes": 0,
-                  "sets": 3,
-                  "similar_proteins": 323222,
-                  "structures": 0,
-                  "taxa": 1,
-                  "taxonomy": 1,
-                },
-                "description": Array [],
-                "gene": "moeA5",
-                "go_terms": Array [
-                  Object {
-                    "category": Object {
-                      "code": "F",
-                      "name": "molecular_function",
+        <div
+          className="medium-12 columns margin-bottom-large"
+        >
+          <Memo(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(DomainOnProteinWithoutData)))))))))
+            mainData={
+              Object {
+                "metadata": Object {
+                  "accession": "A0A000",
+                  "counters": Object {
+                    "dbEntries": Object {
+                      "cathgene3d": 2,
+                      "cdd": 1,
+                      "interpro": 5,
+                      "panther": 2,
+                      "pfam": 1,
+                      "ssf": 1,
+                      "tigrfams": 1,
                     },
-                    "identifier": "GO:0030170",
-                    "name": "pyridoxal phosphate binding",
+                    "entries": 13,
+                    "idas": 323222,
+                    "isoforms": 0,
+                    "proteome": 0,
+                    "proteomes": 0,
+                    "sets": 3,
+                    "similar_proteins": 323222,
+                    "structures": 0,
+                    "taxa": 1,
+                    "taxonomy": 1,
                   },
-                ],
-                "id": "A0A000_STRVD",
-                "ida_accession": "220d43766bfe69807874ea078bc783ea7854e968",
-                "is_fragment": false,
-                "length": 394,
-                "name": Object {
-                  "name": "MoeA5",
+                  "description": Array [],
+                  "gene": "moeA5",
+                  "go_terms": Array [
+                    Object {
+                      "category": Object {
+                        "code": "F",
+                        "name": "molecular_function",
+                      },
+                      "identifier": "GO:0030170",
+                      "name": "pyridoxal phosphate binding",
+                    },
+                  ],
+                  "id": "A0A000_STRVD",
+                  "ida_accession": "220d43766bfe69807874ea078bc783ea7854e968",
+                  "is_fragment": false,
+                  "length": 394,
+                  "name": Object {
+                    "name": "MoeA5",
+                  },
+                  "protein_evidence": 4,
+                  "proteome": null,
+                  "sequence": "MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN",
+                  "source_database": "unreviewed",
+                  "source_organism": Object {
+                    "fullName": "Streptomyces viridosporus",
+                    "scientificName": "Streptomyces viridosporus",
+                    "taxId": "67581",
+                  },
                 },
-                "protein_evidence": 4,
-                "proteome": null,
-                "sequence": "MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN",
-                "source_database": "unreviewed",
-                "source_organism": Object {
-                  "fullName": "Streptomyces viridosporus",
-                  "scientificName": "Streptomyces viridosporus",
-                  "taxId": "67581",
-                },
-              },
+              }
             }
-          }
-        />
+          />
+        </div>
       </div>
-    </div>
+    </section>
   </section>
   <GoTerms
     terms={

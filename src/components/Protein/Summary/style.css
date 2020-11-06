@@ -1,0 +1,19 @@
+.splitfullscreen {
+  display: flex;
+  background-color: white;
+  overflow: scroll;
+  & > * {
+    width: 50%;
+  }
+}
+.comparison-button {
+  margin-left: 0.3em;
+}
+@media (orientation: portrait) {
+  .splitfullscreen {
+    flex-direction: column;
+    & > * {
+      width: 100%;
+    }
+  }
+}
