@@ -17,11 +17,10 @@ const f = foundationPartial(style);
 const Selector = (
   {
     data,
-    value = '',
     isoform = '',
     goToCustomLocation,
     customLocation,
-  } /*: {data: {loading: boolean, payload: Object}, value: string, onChange: function} */,
+  } /*: {data: {loading: boolean, payload: Object}, isoform?: string, goToCustomLocation: function, customLocation: {}} */,
 ) => {
   if (!data || data.loading || !data.payload) return <Loading />;
   const isoforms = data.payload.results;
@@ -44,6 +43,7 @@ const Selector = (
       {isoforms.map((acc) => (
         <option value={acc} key={acc}>
           {acc}
+          {acc.endsWith('-1') ? ' [canonical]' : ''}
         </option>
       ))}
     </select>
@@ -54,10 +54,9 @@ Selector.propTypes = {
     loading: T.bool,
     payload: T.object,
   }),
-  value: T.string,
   goToCustomLocation: T.func.isRequired,
   customLocation: T.object.isRequired,
-  onChange: T.func,
+  isoform: T.string,
 };
 
 const mapStateToProps = createSelector(

@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React from 'react';
 import T from 'prop-types';
 
 import GoTerms from 'components/GoTerms';
@@ -48,7 +48,6 @@ const SchemaOrgData = loadable({
 const SummaryProtein = (
   { data, loading } /*: {data: Object, loading: boolean} */,
 ) => {
-  const [isoform, setIsoform] = useState('');
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
 
@@ -207,7 +206,7 @@ const SummaryProtein = (
           </div>
         </div>
       </section>
-      <IsoformViewer isoform={isoform} />
+      <IsoformViewer />
       <section>
         <div className={f('row')}>
           <div className={f('medium-12', 'columns', 'margin-bottom-large')}>

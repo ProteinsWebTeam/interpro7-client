@@ -200,9 +200,7 @@ exports[`<SummaryProtein /> should render 1`] = `
       </div>
     </div>
   </section>
-  <Memo(Connect(loadData(Viewer)))
-    isoform=""
-  />
+  <Memo(Connect(loadData(Viewer))) />
   <section>
     <div
       className="row"

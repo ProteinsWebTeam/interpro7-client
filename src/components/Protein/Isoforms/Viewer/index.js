@@ -24,9 +24,31 @@ const ProtVista = loadable({
   loader: () =>
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
+/*::
+  type Feature = {
+    accession: string,
+    name: string,
+    source_database: string,
+    type: string,
+    children: Array<Object>,
+    integrated: ?string,
+    locations: [],
+  }
+  type FeatureMap = {
+    [string]: Feature,
+  }
+  type IsoformPayload = {
+    accession: string,
+    length: number,
+    protein_acc: string,
+    sequence: string,
+    features: FeatureMap,
+  }
+ */
 
-const features2protvista = (features) => {
-  const featArray = Object.values(features || {});
+const features2protvista = (features /*: FeatureMap */) => {
+  // prettier-ignore
+  const featArray /*: Array<Feature> */ = (Object.values(features || {})/*: any */);
   const integrated = [];
   for (const feature of featArray) {
     if (feature.integrated && feature.integrated in features) {
@@ -56,7 +78,7 @@ const Viewer = (
   {
     isoform,
     data,
-  } /*: {isoform: string, data: {loading: boolean, payload: Object}} */,
+  } /*: {isoform: string, data: {loading: boolean, payload: IsoformPayload}} */,
 ) => {
   if (!isoform) return null;
   if (
