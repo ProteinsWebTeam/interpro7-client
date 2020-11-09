@@ -17,7 +17,6 @@ exports[`<Pages /> should render 1`] = `
               "$$typeof": Symbol(react.memo),
               "WrappedComponent": [Function],
               "compare": null,
-              "displayName": "Connect(loadData(BrowseTabsWithoutData))",
               "type": [Function],
             }
           }
