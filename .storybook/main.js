@@ -32,7 +32,19 @@ module.exports = {
       test: /\.yml$/i,
       use: [{ loader: 'json-loader' }, { loader: 'yaml-loader' }],
     });
-    // console.dir(config);
+    config.module.rules.push({
+      test: /\.avif$/i,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            name: 'static/media/[name].[hash:8].[ext]',
+            esModule: false,
+          },
+        },
+      ],
+    });
+    // console.dir(config.module.rules);
     return config;
   },
 };

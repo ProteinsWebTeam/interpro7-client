@@ -552,7 +552,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
-  handleConservationLoad(_this) {
+  handleConservationLoad(_this /*: ProtVista */) {
     _this.setState({ showLoading: true });
     _this.props.handleConservationLoad();
   }
