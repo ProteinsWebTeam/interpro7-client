@@ -1,7 +1,7 @@
 const path = require('path');
 
 const postCSSImport = require('postcss-import');
-const cssNext = require('postcss-cssnext');
+const postcssPresetEnv = require('postcss-preset-env');
 
 module.exports = {
   stories: ['../stories/**/*.stories.js'],
@@ -21,7 +21,7 @@ module.exports = {
 
     cssRule.use.find((x) =>
       (x.loader || x).includes('postcss-loader')
-    ).options.plugins = [postCSSImport, cssNext()];
+    ).options.plugins = [postCSSImport, postcssPresetEnv({ stage: 0 })];
     cssRule.exclude = /tippy.css$/i;
 
     config.module.rules.push({

@@ -1,6 +1,6 @@
 .accession-selector-panel {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: flex-end;
 
   & .switch label.switch-paddle.accession-selector {
