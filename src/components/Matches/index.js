@@ -163,26 +163,57 @@ const MatchesByPrimary = (
 MatchesByPrimary.propTypes = propTypes;
 
 export const ProteinDownloadRenderer = (description) => (accession, row) => (
-  <File
-    fileType="fasta"
-    name={`protein-sequences-matching-${
-      description[description.main.key].accession
-    }-for-${accession}.fasta`}
-    count={row.proteins || row.counters.extra_fields.counters.proteins}
-    customLocationDescription={{
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-        isFilter: true,
-        db: 'UniProt',
-        accession: `${accession}`,
-      },
-      [description.main.key]: {
-        ...description[description.main.key],
-        isFilter: true,
-      },
-    }}
-  />
+  <div className={f('actions')}>
+    <Tooltip title="View matched proteins" useContext>
+      <div className={f('view-icon-div')}>
+        <Link
+          className={f('icon', 'icon-common', 'view-link')}
+          to={{
+            description: {
+              main: { key: description.main.key },
+              [description.main.key]: {
+                ...description[description.main.key],
+              },
+              protein: {
+                db: 'uniprot',
+                order: 1,
+                isFilter: true,
+              },
+              [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
+                accession: accession,
+                db: row.source_database,
+                order: 2,
+                isFilter: true,
+              },
+            },
+          }}
+          aria-label="View proteins"
+          data-icon="&#xf06e;"
+        />
+      </div>
+    </Tooltip>
+    <File
+      fileType="fasta"
+      name={`protein-sequences-matching-${
+        description[description.main.key].accession
+      }-for-${accession}.fasta`}
+      count={row.proteins || row.counters.extra_fields.counters.proteins}
+      customLocationDescription={{
+        main: { key: 'protein' },
+        protein: { db: 'UniProt' },
+        [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
+          isFilter: true,
+          db: 'UniProt',
+          accession: `${accession}`,
+        },
+        [description.main.key]: {
+          ...description[description.main.key],
+          isFilter: true,
+        },
+      }}
+      showIcon={true}
+    />
+  </div>
 );
 
 const includeAccessionSearch = (
@@ -600,7 +631,7 @@ const Matches = (
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
         renderer={ProteinDownloadRenderer(description)}
       >
-        FASTA
+        Actions
       </Column>
     </Table>
   );

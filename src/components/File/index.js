@@ -42,7 +42,8 @@ const extensions = {
   blobURL: string,
   label?: string,
   className?: string,
-  handleClick: function
+  handleClick: function,
+  showIcon?: boolean
 }; */
 
 class Button extends PureComponent /*:: <ButtonProps> */ {
@@ -58,6 +59,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
     label: T.string,
     className: T.string,
     handleClick: T.func.isRequired,
+    showIcon: T.bool,
   };
 
   render() {
@@ -73,6 +75,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
       handleClick,
       label,
       className,
+      showIcon,
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
     const failed = successful === false;
@@ -101,6 +104,8 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
     //   title = 'No data available to download';
     // }
     const filename = name || `${fileType}.${extensions[fileType]}`;
+
+    const buttonClass = showIcon ? [] : ['button', 'hollow'];
     return (
       <Tooltip
         interactive
@@ -141,7 +146,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
             download={filename}
             href={blobURL || url}
             disabled={downloading || count > HARD_LIMIT || count === 0}
-            className={f('button', 'hollow', className, {
+            className={f(...buttonClass, className, {
               downloading,
               failed,
             })}
@@ -155,7 +160,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
               failed={failed}
               progress={progress || SMALL}
             />
-            {labelToShow && (
+            {labelToShow && !showIcon && (
               <span className={f('file-label')}>{labelToShow}</span>
             )}
           </Link>

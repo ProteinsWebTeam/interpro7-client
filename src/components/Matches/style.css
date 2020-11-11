@@ -86,3 +86,19 @@
     color: var(--colors-gray);
   }
 }
+
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.view-icon-div {
+  margin: 0.2rem 0;
+  padding: 0.2em 0;
+}
+
+.view-link {
+  font-size: 160%;
+  border: none;
+  padding: 0.3em;
+}

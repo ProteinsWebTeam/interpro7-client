@@ -265,7 +265,8 @@ InfoFilters.propTypes = {
   dataBase: {
     payload: Object,
     loading: boolean
-  }
+  },
+  secondaryDataLoading: boolean,
 }; */
 export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> */ {
   static propTypes = {
@@ -280,6 +281,7 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       payload: T.object,
       loading: T.bool.isRequired,
     }).isRequired,
+    secondaryDataLoading: T.bool.isRequired,
   };
 
   render() {
@@ -292,6 +294,7 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       actualSize,
       otherFilters,
       dataBase,
+      secondaryDataLoading,
     } = this.props;
     const databases =
       (dataBase &&
@@ -301,45 +304,58 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       {};
     return (
       <div className={f('row', 'column')}>
-        {mainType === 'protein' && focusType === 'structure' ? (
-          <StructureOnProtein structures={secondaryData} protein={mainData} />
-        ) : null}
-        {mainType === 'structure' && focusType === 'entry' ? (
-          <EntriesOnStructure entries={secondaryData} />
-        ) : null}
-
         {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
-        <p>
-          This {mainType} matches
-          {secondaryData.length > 1
-            ? ` these ${toPlural(focusType)}:`
-            : ` this ${focusType}:`}
-        </p>
-        <InfoFilters
-          filters={otherFilters}
-          focusType={focusType}
-          databases={databases}
-        />
 
-        {focusType === 'protein' && (
-          <FiltersPanel>
-            <CurationFilter label="UniProt Curation" />
-          </FiltersPanel>
+        {secondaryDataLoading ? (
+          <Loading />
+        ) : (
+          <>
+            {mainType === 'protein' && focusType === 'structure' ? (
+              <StructureOnProtein
+                structures={secondaryData}
+                protein={mainData}
+              />
+            ) : null}
+            {mainType === 'structure' && focusType === 'entry' ? (
+              <EntriesOnStructure entries={secondaryData} />
+            ) : null}
+            <p>
+              This {mainType} matches
+              {secondaryData.length > 1
+                ? ` these ${toPlural(focusType)}:`
+                : ` this ${focusType}:`}
+            </p>
+            <InfoFilters
+              filters={otherFilters}
+              focusType={focusType}
+              databases={databases}
+            />
+
+            {focusType === 'protein' && (
+              <FiltersPanel>
+                <CurationFilter label="UniProt Curation" />
+              </FiltersPanel>
+            )}
+            <Matches
+              {...this.props}
+              actualSize={actualSize}
+              matches={secondaryData.reduce(
+                (prev, { coordinates, ...secondaryData }) => [
+                  ...prev,
+                  {
+                    [mainType]: mainData,
+                    [focusType]: secondaryData,
+                    coordinates,
+                  },
+                ],
+                [],
+              )}
+              isStale={isStale}
+              databases={databases}
+              {...primariesAndSecondaries[mainType][focusType]}
+            />
+          </>
         )}
-        <Matches
-          {...this.props}
-          actualSize={actualSize}
-          matches={secondaryData.reduce(
-            (prev, { coordinates, ...secondaryData }) => [
-              ...prev,
-              { [mainType]: mainData, [focusType]: secondaryData, coordinates },
-            ],
-            [],
-          )}
-          isStale={isStale}
-          databases={databases}
-          {...primariesAndSecondaries[mainType][focusType]}
-        />
       </div>
     );
   }
@@ -377,7 +393,6 @@ const RelatedAdvancedQuery = loadData({
     mapStateToProps: mapStateToPropsAdvancedQuery,
   })(({ data, ...props }) => {
     const { payload, loading, url, status } = data;
-    if (loading) return <Loading />;
     const _secondaryData =
       payload && payload.results
         ? payload.results.map((x) => {
@@ -400,6 +415,7 @@ const RelatedAdvancedQuery = loadData({
     const c = payload ? payload.count : 0;
     return (
       <RelatedAdvanced
+        secondaryDataLoading={loading}
         secondaryData={_secondaryData}
         actualSize={c}
         nextAPICall={payload?.next}
