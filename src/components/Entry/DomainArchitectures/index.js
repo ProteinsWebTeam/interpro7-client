@@ -15,6 +15,7 @@ import DynamicTooltip from 'components/SimpleCommonComponents/DynamicTooltip';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { edgeCases } from 'utils/server-message';
 import EdgeCase from 'components/EdgeCase';
+import ToggleSwitch from 'components/ToggleSwitch';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -292,30 +293,16 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
           {!database && (
             <div className={f('accession-selector-panel')}>
               <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-                <div className={f('switch', 'large')}>
-                  <input
-                    type="checkbox"
-                    checked={idaAccessionDB === 'pfam'}
-                    className={f('switch-input')}
-                    name="accessionDB"
-                    id="accessionDB-input"
-                    onChange={this.toggleDomainEntry}
-                  />
-                  <label
-                    className={f('switch-paddle', 'accession-selector')}
-                    htmlFor="accessionDB-input"
-                  >
-                    <span className={f('show-for-sr')}>
-                      Use accessions from:
-                    </span>
-                    <span className={f('switch-active')} aria-hidden="true">
-                      Pfam
-                    </span>
-                    <span className={f('switch-inactive')} aria-hidden="true">
-                      InterPro
-                    </span>
-                  </label>
-                </div>
+                <ToggleSwitch
+                  switchCond={idaAccessionDB === 'pfam'}
+                  name={'accessionDB'}
+                  id={'accessionDB-input'}
+                  SRLabel={'Use accessions from'}
+                  onValue={'Pfam'}
+                  offValue={'InterPro'}
+                  handleChange={this.toggleDomainEntry}
+                  addAccessionStyle={true}
+                />
               </Tooltip>
             </div>
           )}

@@ -90,75 +90,27 @@ exports[`<SearchByIDA /> should render 1`] = `
             <div
               className="options"
             >
-              <div
-                className="switch tiny"
-              >
-                <label
-                  htmlFor="ordered"
-                >
-                  <input
-                    checked={false}
-                    className="switch-input"
-                    id="ordered"
-                    onChange={[Function]}
-                    type="checkbox"
-                  />
-                   
-                  Order of domain matters:
-                   
-                  <span
-                    className="switch-paddle"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="switch-active"
-                    >
-                      Yes
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className="switch-inactive"
-                    >
-                      No
-                    </span>
-                  </span>
-                </label>
-              </div>
-              <div
-                className="switch tiny disabled"
-              >
-                <label
-                  htmlFor="exact"
-                >
-                  <input
-                    checked={false}
-                    className="switch-input"
-                    disabled={true}
-                    id="exact"
-                    onChange={[Function]}
-                    type="checkbox"
-                  />
-                   
-                  Exact match:
-                   
-                  <span
-                    className="switch-paddle"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="switch-active"
-                    >
-                      Yes
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className="switch-inactive"
-                    >
-                      No
-                    </span>
-                  </span>
-                </label>
-              </div>
+              <ToggleSwitch
+                handleChange={[Function]}
+                id="ordered"
+                label="Order of domain matters: "
+                name="order"
+                offValue="No"
+                onValue="Yes"
+                size="tiny"
+                switchCond={false}
+              />
+              <ToggleSwitch
+                disabled={true}
+                handleChange={[Function]}
+                id="exact"
+                label="Exact match:"
+                name="exact"
+                offValue="No"
+                onValue="Yes"
+                size="tiny"
+                switchCond={false}
+              />
             </div>
           </div>
         </div>
