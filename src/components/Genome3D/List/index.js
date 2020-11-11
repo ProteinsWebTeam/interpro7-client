@@ -5,15 +5,17 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import loadable from 'higherOrder/loadable';
-import Table, { Column } from 'components/Table';
+import Table, { Column, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 
 import MatchesOnProtein from './MatchesOnProtein';
+import FileExporter from '../FileExporter';
 import { foundationPartial } from 'styles/foundation';
+import exporterStyle from 'components/Table/Exporter/style.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(ebiStyles);
+const f = foundationPartial(ebiStyles, exporterStyle);
 const HTTP_404 = 404;
 
 const SchemaOrgData = loadable({
@@ -65,6 +67,22 @@ const List = (
           rowKey={'id'}
           query={search}
         >
+          <Exporter>
+            <div className={f('menu-grid')}>
+              <label htmlFor="json">JSON</label>
+              <FileExporter
+                fileType="json"
+                name={`genome3d.${data.payload.interpro.ipr_id}.json`}
+                count={data.payload.pager.total_entries}
+              />
+              <label htmlFor="tsv">TSV</label>
+              <FileExporter
+                fileType="tsv"
+                name={`genome3d.${data.payload.interpro.ipr_id}.tsv`}
+                count={data.payload.pager.total_entries}
+              />
+            </div>
+          </Exporter>
           <Column
             dataKey="accession"
             renderer={(accession) => (

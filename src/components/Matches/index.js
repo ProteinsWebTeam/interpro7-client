@@ -325,9 +325,9 @@ const Matches = (
                 />
               </>
             )}
-            <label htmlFor="json">TSV</label>
+            <label htmlFor="tsv">TSV</label>
             <FileExporter
-              name="json"
+              name="tsv"
               description={description}
               count={actualSize}
               search={search}
@@ -336,9 +336,9 @@ const Matches = (
               secondary={secondary}
               focused={focused}
             />
-            <label htmlFor="tsv">JSON</label>
+            <label htmlFor="json">JSON</label>
             <FileExporter
-              name="tsv"
+              name="json"
               description={description}
               count={actualSize}
               search={search}

@@ -119,6 +119,18 @@ const getFirstPage = (url, fileType) => {
   return location;
 };
 
+const mutatePayloadTo3rdPartyAPI = (payload, endpoint, page) => {
+  // Mapping genome3d responses to the InterPro format.
+  if (endpoint === 'genome3d') {
+    page.query.page++;
+    payload.results = payload.data;
+    payload.count = payload.pager.total_entries;
+    payload.next =
+      payload.pager.total_pages > payload.pager.current_page
+        ? format(page)
+        : null;
+  }
+};
 // the `_` is just to make flow happy
 const downloadContent = (onProgress, onSuccess, onError) => async (
   url,
@@ -158,6 +170,7 @@ const downloadContent = (onProgress, onSuccess, onError) => async (
           continue;
         }
         const payload = await response.json();
+        mutatePayloadTo3rdPartyAPI(payload, endpoint, firstPage);
         totalCount = payload.count;
         for (const part of processResults(payload.results)) {
           // Check if it was canceled, if so, stop everything and return
@@ -217,6 +230,7 @@ const download = async (url, fileType, subset, endpoint) => {
     postProgress(action(downloadProgress, 0));
     action(
       downloadContent(
+        // onProgress
         ({ part, progress }) => {
           // store content
           content.push(part);
