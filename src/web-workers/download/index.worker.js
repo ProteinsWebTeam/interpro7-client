@@ -18,6 +18,7 @@ import {
 // Max page size provided by the server
 // to maximise the number of results sent by the server at once
 const MAX_PAGE_SIZE = 200;
+const MAX_EBI_PAGE_SIZE = 100;
 // Time to wait before retrying to get results from API when we have a problem
 const DELAY_WHEN_SOME_KIND_OF_PROBLEM = 60000; // 1 minute
 const REQUEST_TIMEOUT = 408;
@@ -101,7 +102,7 @@ const processResultsFor = (fileType, subset, endpoint) =>
     }
   };
 
-const getFirstPage = (url, fileType) => {
+const getFirstPage = (url, fileType, endpoint) => {
   const location = parse(url, true);
   if (fileType === 'fasta') {
     location.query.extra_fields = [
@@ -115,7 +116,8 @@ const getFirstPage = (url, fileType) => {
   location.path = null;
   location.search = null;
   location.query.page = 1;
-  location.query.page_size = MAX_PAGE_SIZE;
+  if (endpoint === 'ebisearch') location.query.size = MAX_EBI_PAGE_SIZE;
+  else location.query.page_size = MAX_PAGE_SIZE;
   return location;
 };
 
@@ -129,6 +131,14 @@ const mutatePayloadTo3rdPartyAPI = (payload, endpoint, page) => {
       payload.pager.total_pages > payload.pager.current_page
         ? format(page)
         : null;
+  } else if (endpoint === 'ebisearch') {
+    payload.results = payload.entries;
+    payload.count = payload.hitCount;
+    if (page.query.page * MAX_EBI_PAGE_SIZE < payload.hitCount) {
+      page.query.start = 1 + page.query.page * MAX_EBI_PAGE_SIZE;
+      payload.next = format(page);
+    } else payload.next = null;
+    page.query.page++;
   }
 };
 // the `_` is just to make flow happy
@@ -140,7 +150,7 @@ const downloadContent = (onProgress, onSuccess, onError) => async (
   _,
 ) => {
   try {
-    const firstPage = getFirstPage(url, fileType);
+    const firstPage = getFirstPage(url, fileType, endpoint);
     // TSV header
     if (fileType === 'tsv') {
       onProgress({

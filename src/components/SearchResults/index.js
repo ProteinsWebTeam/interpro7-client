@@ -20,6 +20,7 @@ import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { ebiSearch2urlDB } from 'utils/url-patterns';
+import FileExporter from './FileExporter';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -37,6 +38,19 @@ const SchemaOrgData = loadable({
 });
 
 const MAX_LENGTH = 200;
+
+const regTag = /&lt;\/?(p|ul|li)&gt;/gi;
+const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
+const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
+
+export const decodeDescription = (description) =>
+  description
+    .join('\n')
+    .replace(regTag, '')
+    .replace(regtax, '$1')
+    .replace(reg, '$1')
+    .replace('[]', '')
+    .replace('()', '');
 
 /*:: type Props = {
   data: {
@@ -61,7 +75,7 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
 
   render() {
     const {
-      data: { payload, loading, ok, url, status },
+      data: { payload, loading, ok, status },
       isStale,
       searchValue,
       query,
@@ -80,9 +94,6 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
       );
     }
     // TODO: Use Improved description component to show summary (with  limit of characters and highlight) as there is a limitation for search starting with "cite..." or "taxon..." in this case
-    const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
-    const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
-    const regTag = /&lt;\/?(p|ul|li)&gt;/gi;
     return (
       <ErrorBoundary>
         <SchemaOrgData
@@ -107,20 +118,17 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
           <Exporter>
             <div className={f('menu-grid')}>
               <label htmlFor="json">JSON</label>
-              <Link
-                disabled={!url}
-                target="_blank"
-                href={url}
-                name="json"
-                download={`SearchResults-${searchValue}.json`}
-                className={f('button', 'hollow', 'imitate-progress-button')}
-              >
-                <span
-                  className={f('icon', 'icon-common', 'icon-link')}
-                  data-icon="&#xf233;"
-                />{' '}
-                <span className={f('file-label')}>Download</span>
-              </Link>
+              <FileExporter
+                fileType="json"
+                name={`SearchResults-${searchValue}.json`}
+                count={hitCount}
+              />
+              <label htmlFor="tsv">TSV</label>
+              <FileExporter
+                fileType="tsv"
+                name={`SearchResults-${searchValue}.tsv`}
+                count={hitCount}
+              />
             </div>
           </Exporter>
           <Column
@@ -184,13 +192,7 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
             renderer={(d) => (
               <div>
                 <HighlightedText
-                  text={d
-                    .join('\n')
-                    .replace(regTag, '')
-                    .replace(regtax, '$1')
-                    .replace(reg, '$1')
-                    .replace('[]', '')
-                    .replace('()', '')}
+                  text={decodeDescription(d)}
                   maxLength={MAX_LENGTH}
                   textToHighlight={searchValue}
                 />
@@ -220,7 +222,7 @@ const mapStateToProps = createSelector(
   (searchValue, query) => ({ searchValue, query }),
 );
 
-const getQueryTerm = createSelector(
+export const getQueryTerm = createSelector(
   (query) => query,
   (query) =>
     `${query.replace(

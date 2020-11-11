@@ -1,6 +1,19 @@
 // @flow
 import { get } from 'lodash-es';
 
+const regTag = /&lt;\/?(p|ul|li)&gt;/gi;
+const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
+const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
+
+export const decodeDescription = (description) =>
+  description
+    .join('\n')
+    .replace(regTag, '')
+    .replace(regtax, '$1')
+    .replace(reg, '$1')
+    .replace('[]', '')
+    .replace('()', '');
+
 const mapToString = (selector, serializer) => (list) =>
   list
     .map((item) => {
@@ -113,6 +126,16 @@ export const columns /*: {
       selector: 'locations',
       serializer: locationsToString,
     },
+  ],
+  ebisearch: [
+    { name: 'Accession', selector: 'id' },
+    { name: 'Name', selector: 'fields.name[0]' },
+    {
+      name: 'Description',
+      selector: 'fields.description',
+      serializer: decodeDescription,
+    },
+    { name: 'Source Database', selector: 'fields.source_database[0]' },
   ],
 };
 columns.proteinEntry = [

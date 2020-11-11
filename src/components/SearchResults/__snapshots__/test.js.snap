@@ -47,24 +47,19 @@ exports[`<SearchResults /> should render 1`] = `
         >
           JSON
         </label>
-        <Memo(Connect(Link))
-          className="button hollow imitate-progress-button"
-          disabled={true}
-          download="SearchResults-IPR020422.json"
-          name="json"
-          target="_blank"
+        <Memo(Connect(FileExporter))
+          fileType="json"
+          name="SearchResults-IPR020422.json"
+        />
+        <label
+          htmlFor="tsv"
         >
-          <span
-            className="icon icon-common icon-link"
-            data-icon=""
-          />
-           
-          <span
-            className="file-label"
-          >
-            Download
-          </span>
-        </Memo(Connect(Link))>
+          TSV
+        </label>
+        <Memo(Connect(FileExporter))
+          fileType="tsv"
+          name="SearchResults-IPR020422.tsv"
+        />
       </div>
     </Memo(Connect(Exporter))>
     <Column
