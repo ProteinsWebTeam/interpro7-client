@@ -6,6 +6,7 @@ import { format } from 'url';
 import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { goToCustomLocation } from 'actions/creators';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -16,20 +17,33 @@ const f = foundationPartial(style);
 const Selector = (
   {
     data,
-    value = '',
-    onChange = () => null,
-  } /*: {data: {loading: boolean, payload: Object}, value: string, onChange: function} */,
+    isoform = '',
+    goToCustomLocation,
+    customLocation,
+  } /*: {data: {loading: boolean, payload: Object}, isoform?: string, goToCustomLocation: function, customLocation: {}} */,
 ) => {
   if (!data || data.loading || !data.payload) return <Loading />;
-
   const isoforms = data.payload.results;
+  const onChange = (event) => {
+    const newLocation = {
+      ...customLocation,
+      search: {},
+    };
+    if (event.target.value) {
+      newLocation.search.isoform = event.target.value;
+    }
+    goToCustomLocation(newLocation);
+  };
   return (
     // eslint-disable-next-line jsx-a11y/no-onchange
-    <select onChange={onChange} className={f({ placeholder: !value })}>
-      <option value="">Select an Isoform to display...</option>
-      {isoforms.map(acc => (
+    <select onChange={onChange} value={isoform}>
+      <option className={f('placeholder')} value="">
+        Select an Isoform to display...
+      </option>
+      {isoforms.map((acc) => (
         <option value={acc} key={acc}>
           {acc}
+          {acc.endsWith('-1') ? ' [canonical]' : ''}
         </option>
       ))}
     </select>
@@ -40,12 +54,20 @@ Selector.propTypes = {
     loading: T.bool,
     payload: T.object,
   }),
-  value: T.string,
-  onChange: T.func,
+  goToCustomLocation: T.func.isRequired,
+  customLocation: T.object.isRequired,
+  isoform: T.string,
 };
+
+const mapStateToProps = createSelector(
+  (state) => state.customLocation,
+  (state) => state.customLocation.search,
+  (customLocation, { isoform }) => ({ customLocation, isoform }),
+);
+
 const getIsoformURL = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
   ({ protocol, hostname, port, root }, { protein: { accession } }) => {
     const description = {
       main: { key: 'protein' },
@@ -63,4 +85,8 @@ const getIsoformURL = createSelector(
     });
   },
 );
-export default loadData(getIsoformURL)(Selector);
+export default loadData({
+  getUrl: getIsoformURL,
+  mapStateToProps,
+  mapDispatchToProps: { goToCustomLocation },
+})(Selector);

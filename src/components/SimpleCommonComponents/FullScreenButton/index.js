@@ -19,9 +19,10 @@ const FullScreenButton = (
     tooltip,
     className,
     dataIcon,
+    disabled = false,
     onFullScreenHook = noop,
     onExitFullScreenHook = noop,
-  } /*: {onFullScreenHook?: function,onExitFullScreenHook?: function, element?: any, tooltip: string, className?: string, dataIcon?: string} */,
+  } /*: {onFullScreenHook?: function,onExitFullScreenHook?: function, element?: any, tooltip: string, className?: string, dataIcon?: string, disabled?: boolean} */,
 ) => {
   const [isFull, setFull] = useState(false);
   const onFullscreen = () => {
@@ -55,6 +56,7 @@ const FullScreenButton = (
         data-icon={icon}
         title="Full screen"
         className={_className}
+        disabled={disabled}
       />
     </Tooltip>
   );
@@ -68,6 +70,7 @@ FullScreenButton.propTypes = {
   tooltip: T.string,
   className: T.string,
   dataIcon: T.string,
+  disabled: T.bool,
 };
 
 export default FullScreenButton;
