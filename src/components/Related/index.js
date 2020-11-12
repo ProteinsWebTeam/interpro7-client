@@ -267,6 +267,11 @@ InfoFilters.propTypes = {
     loading: boolean
   },
   secondaryDataLoading: boolean,
+  showKeySpecies: boolean,
+  showAllSpecies: boolean,
+}; */
+/*:: type state = {
+  showTaxoInfo: boolean,
 }; */
 export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> */ {
   static propTypes = {
@@ -282,8 +287,16 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       loading: T.bool.isRequired,
     }).isRequired,
     secondaryDataLoading: T.bool.isRequired,
+    showKeySpecies: T.bool.isRequired,
+    showAllSpecies: T.bool.isRequired,
   };
 
+  constructor(props /*: relatedAdvancedProps */) {
+    super(props);
+    this.state = {
+      showTaxoInfo: true,
+    };
+  }
   render() {
     const {
       mainData,
@@ -295,6 +308,8 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       otherFilters,
       dataBase,
       secondaryDataLoading,
+      showKeySpecies,
+      showAllSpecies,
     } = this.props;
     const databases =
       (dataBase &&
@@ -304,12 +319,39 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       {};
     return (
       <div className={f('row', 'column')}>
-        {focusType === 'taxonomy' ? <KeySpeciesTable /> : null}
+        {focusType === 'taxonomy' ? (
+          <>
+            {this.state.showTaxoInfo && (
+              <div className={f('callout', 'info', 'withicon')} data-closable>
+                <button
+                  className={f('close-button')}
+                  aria-label="Close alert"
+                  type="button"
+                  data-close
+                  onClick={() => this.setState({ showTaxoInfo: false })}
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <h5>
+                  The taxonomy information is available for both Key species and
+                  all organisms. The below tables are shown based on the
+                  preference in InterPro settings. If you wish to change it,
+                  please do in the{' '}
+                  <Link to={{ description: { other: ['settings'] } }}>
+                    Settings
+                  </Link>{' '}
+                  page
+                </h5>
+              </div>
+            )}
+            {showKeySpecies && <KeySpeciesTable />}
+          </>
+        ) : null}
 
         {secondaryDataLoading ? (
           <Loading />
         ) : (
-          <>
+          <div>
             {mainType === 'protein' && focusType === 'structure' ? (
               <StructureOnProtein
                 structures={secondaryData}
@@ -319,42 +361,47 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
             {mainType === 'structure' && focusType === 'entry' ? (
               <EntriesOnStructure entries={secondaryData} />
             ) : null}
-            <p>
-              This {mainType} matches
-              {secondaryData.length > 1
-                ? ` these ${toPlural(focusType)}:`
-                : ` this ${focusType}:`}
-            </p>
-            <InfoFilters
-              filters={otherFilters}
-              focusType={focusType}
-              databases={databases}
-            />
+            {(focusType === 'taxonomy' && showAllSpecies) ||
+            focusType !== 'taxonomy' ? (
+              <>
+                <p>
+                  This {mainType} matches
+                  {secondaryData.length > 1
+                    ? ` these ${toPlural(focusType)}:`
+                    : ` this ${focusType}:`}
+                </p>
+                <InfoFilters
+                  filters={otherFilters}
+                  focusType={focusType}
+                  databases={databases}
+                />
 
-            {focusType === 'protein' && (
-              <FiltersPanel>
-                <CurationFilter label="UniProt Curation" />
-              </FiltersPanel>
-            )}
-            <Matches
-              {...this.props}
-              actualSize={actualSize}
-              matches={secondaryData.reduce(
-                (prev, { coordinates, ...secondaryData }) => [
-                  ...prev,
-                  {
-                    [mainType]: mainData,
-                    [focusType]: secondaryData,
-                    coordinates,
-                  },
-                ],
-                [],
-              )}
-              isStale={isStale}
-              databases={databases}
-              {...primariesAndSecondaries[mainType][focusType]}
-            />
-          </>
+                {focusType === 'protein' && (
+                  <FiltersPanel>
+                    <CurationFilter label="UniProt Curation" />
+                  </FiltersPanel>
+                )}
+                <Matches
+                  {...this.props}
+                  actualSize={actualSize}
+                  matches={secondaryData.reduce(
+                    (prev, { coordinates, ...secondaryData }) => [
+                      ...prev,
+                      {
+                        [mainType]: mainData,
+                        [focusType]: secondaryData,
+                        coordinates,
+                      },
+                    ],
+                    [],
+                  )}
+                  isStale={isStale}
+                  databases={databases}
+                  {...primariesAndSecondaries[mainType][focusType]}
+                />
+              </>
+            ) : null}
+          </div>
         )}
       </div>
     );
@@ -371,11 +418,21 @@ const mapStateToPropsAdvanced = createSelector(
     Object.entries(state.customLocation.description).filter(
       ([_key, value]) => value.isFilter && value.order !== 1,
     ),
-  (mainType, [focusType, { db: focusDB }], otherFilters) => ({
+  (state) => state.settings.ui.showKeySpecies,
+  (state) => state.settings.ui.showAllSpecies,
+  (
+    mainType,
+    [focusType, { db: focusDB }],
+    otherFilters,
+    showKeySpecies,
+    showAllSpecies,
+  ) => ({
     mainType,
     focusType,
     focusDB,
     otherFilters,
+    showKeySpecies,
+    showAllSpecies,
   }),
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
