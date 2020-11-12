@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from 'react';
 import T from 'prop-types';
@@ -90,7 +91,21 @@ const schemamap = {
   },
 };
 
-const schemaProcessData = ({ data, primary, secondary }) => {
+const schemaProcessData = (
+  {
+    data,
+    primary,
+    secondary,
+  } /*: {
+    data: {
+      accession: string,
+      source_database: string,
+      name: string,
+    },
+    primary: string,
+    secondary: string
+  }*/,
+) => {
   const name = schemamap[secondary][primary];
   const type = endpoint2type[primary];
   return {
@@ -158,32 +173,42 @@ const MatchesByPrimary = (
 } */,
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
-  return <MatchComponent matches={matches} {...props} />;
+  return <MatchComponent {...props} matches={matches} />;
 };
 MatchesByPrimary.propTypes = propTypes;
 
-export const ProteinDownloadRenderer = (description) => (accession, row) => (
-  <File
-    fileType="fasta"
-    name={`protein-sequences-matching-${
-      description[description.main.key].accession
-    }-for-${accession}.fasta`}
-    count={row.proteins || row.counters.extra_fields.counters.proteins}
-    customLocationDescription={{
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-        isFilter: true,
-        db: 'UniProt',
-        accession: `${accession}`,
-      },
-      [description.main.key]: {
-        ...description[description.main.key],
-        isFilter: true,
-      },
-    }}
-  />
-);
+export const ProteinDownloadRenderer = (
+  description /*: {
+  main: {key:string, ...},
+  taxonomy: {accession: string, isFilter: boolean},
+} */,
+) => (accession, row) => {
+  const filterKey /*: string */ = description?.taxonomy?.isFilter
+    ? 'taxonomy'
+    : 'proteome';
+  return (
+    <File
+      fileType="fasta"
+      name={`protein-sequences-matching-${
+        description[description.main.key].accession
+      }-for-${accession}.fasta`}
+      count={row.proteins || row.counters.extra_fields.counters.proteins}
+      customLocationDescription={{
+        main: { key: 'protein' },
+        protein: { db: 'UniProt' },
+        [filterKey]: {
+          isFilter: true,
+          db: 'UniProt',
+          accession: `${accession}`,
+        },
+        [description.main.key]: {
+          ...description[description.main.key],
+          isFilter: true,
+        },
+      }}
+    />
+  );
+};
 
 const includeAccessionSearch = (
   dataTable,
@@ -256,6 +281,10 @@ const Matches = (
     mainData: Object,
     accessionSearch: Object,
     focusType?: string,
+    currentAPICall: string,
+    nextAPICall: string,
+    previousAPICall: string,
+    status: number,
     props: Array<any>
 } */,
 ) => {
@@ -367,14 +396,12 @@ const Matches = (
       )}
       <Column
         dataKey="accession"
-        renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
+        renderer={(
+          acc /*: string */,
+          obj /*: {source_database: string, type: string} */,
+        ) => {
           const { source_database: sourceDatabase } = obj;
           return (
-            // let reviewed =null;
-            // if (primary === 'protein' && sourceDatabase === 'reviewed')
-            //   reviewed = (
-            //
-            //   )
             <>
               <SchemaOrgData
                 data={{ data: obj, primary, secondary }}
@@ -536,10 +563,10 @@ const Matches = (
             {(hasBeenVisible /*: boolean */) =>
               hasBeenVisible ? (
                 <MatchesByPrimary
+                  {...props}
                   matches={[match]}
                   primary={primary}
                   secondary={secondary}
-                  {...props}
                 />
               ) : null
             }

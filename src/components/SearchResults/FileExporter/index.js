@@ -26,15 +26,17 @@ import blockEvent from 'utils/block-event';
     },
   }
   */
-const FileExporter = ({
-  count = Infinity,
-  fileType,
-  name,
-  className,
-  url,
-  downloadURL,
-  download,
-}) => {
+const FileExporter = (
+  {
+    count = Infinity,
+    fileType,
+    name,
+    className,
+    url,
+    downloadURL,
+    download,
+  } /*: FileExplorerProps */,
+) => {
   const _handleClick = blockEvent(() => {
     downloadURL(url, fileType, null, 'ebisearch');
   });

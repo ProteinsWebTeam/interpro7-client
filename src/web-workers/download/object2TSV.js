@@ -5,7 +5,9 @@ const regTag = /&lt;\/?(p|ul|li)&gt;/gi;
 const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
 const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
 
-export const decodeDescription = (description) =>
+export const decodeDescription = (
+  description /*: Array<string> */,
+) /*: string */ =>
   description
     .join('\n')
     .replace(regTag, '')
@@ -14,7 +16,10 @@ export const decodeDescription = (description) =>
     .replace('[]', '')
     .replace('()', '');
 
-const mapToString = (selector, serializer) => (list) =>
+const mapToString = (
+  selector /*:: ?: string */,
+  serializer /*:: ?: function  */,
+) => (list /*: Array<mixed> */) =>
   list
     .map((item) => {
       const value = selector ? get(item, selector) : item;
@@ -22,7 +27,9 @@ const mapToString = (selector, serializer) => (list) =>
     })
     .join(';');
 
-const locationsToString = (locations) =>
+const locationsToString = (
+  locations /*:: ?: Array<{fragments: Array<{start:number, end:number}>}>  */,
+) =>
   locations
     ? locations
         .map(({ fragments }) =>

@@ -49,10 +49,10 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
   if (loading || !payload) return <Loading />;
   return (
     <Table
-      dataTable={payload.results.map(r => ({
+      dataTable={payload.results.map((r) => ({
         ...r.metadata,
         ...((r.extra_fields && r.extra_fields.counters) || {}),
-        features: speciesFeat.find(f => f.tax_id === r.metadata.accession),
+        features: speciesFeat.find((f) => f.tax_id === r.metadata.accession),
       }))}
       notFound={payload.results.length === 0}
       contentType="taxonomy"
@@ -74,7 +74,7 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
       </Column>
       <Column
         dataKey="accession"
-        renderer={acc => {
+        renderer={(acc) => {
           return (
             <Link
               to={{
@@ -146,7 +146,7 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
         defaultKey="proteinFastas"
         headerClassName={f('table-center')}
         cellClassName={f('table-center')}
-        renderer={ProteinDownloadRenderer(description)}
+        renderer={ProteinDownloadRenderer((description /*: any */))}
       >
         FASTA
       </Column>
@@ -159,8 +159,8 @@ _KeySpeciesTableWithData.propTypes = {
   status: T.number,
 };
 const mapStateToPropsDefault = createSelector(
-  state => state.customLocation.description,
-  description => ({ description }),
+  (state) => state.customLocation.description,
+  (description) => ({ description }),
 );
 const KeySpeciesTableData = connect(mapStateToPropsDefault)(
   loadData({
