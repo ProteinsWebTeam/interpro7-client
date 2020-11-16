@@ -17,7 +17,7 @@ const f = foundationPartial(EBIGlobal, fonts, ipro, helper, local);
 
 const data4InterPro2020 = {
   url: 'https://doi.org/10.1093/nar/gkaa977',
-  title: `The InterPro protein families and domains database: 20 years on`,
+  title: 'The InterPro protein families and domains database: 20 years on',
   authors: `Blum M, Chang H, Chuguransky S, Grego T, Kandasaamy S, Mitchell A,
             Nuka G, Paysan-Lafosse T, Qureshi M, Raj S, RichardsonL, Salazar GA,
             Williams L, Bork P, Bridge A, Gough J, Haft DH, Letunic I, 
@@ -415,10 +415,7 @@ export const InterPro2020 = () => <Publication {...data4InterPro2020} />;
 export const InterProScan2014 = () => (
   <Publication {...data4InterProScan2014} />
 );
-export const PrintedInterPro2019 = () => (
-  <PrintedPublication {...data4InterPro2020} />
-);
-export const PrintedInterProShort2020 = () => (
+export const PrintedInterPro2020 = () => (
   <PrintedPublication {...data4InterPro2020} />
 );
 export const PrintedInterProScan2014 = () => (
@@ -479,7 +476,7 @@ export default class Publications extends PureComponent /*:: <{}> */ {
 
         <h3 className={f('margin-top-large')}>How to cite</h3>
         <p>To cite InterPro, please refer to the following publication:</p>
-        <PrintedInterPro2019 />
+        <PrintedInterPro2020 />
         <p>To cite InterProScan, please refer to the following publication:</p>
         <PrintedInterProScan2014 />
       </section>
