@@ -13,7 +13,7 @@ import Description from 'components/Description';
 import CurrentVersion from 'components/home/CurrentVersion';
 import GeneralWarning from 'components/home/GeneralWarning';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
-import { PrintedInterProShort2019 } from 'components/Help/Publication';
+import { PrintedInterProShort2020 } from 'components/Help/Publication';
 import Tip from 'components/Tip';
 import Link from 'components/generic/Link';
 
@@ -151,7 +151,7 @@ const CitingInterPro = () => (
     <div>
       If you find InterPro useful, please cite the reference that describes this
       work:
-      <PrintedInterProShort2019 />
+      <PrintedInterProShort2020 />
     </div>
   </details>
 );
