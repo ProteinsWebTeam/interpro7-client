@@ -441,6 +441,21 @@ const mapStateToPropsAdvancedQuery = createSelector(
   (state) => state.customLocation.description.main.key,
   (mainType) => ({ mainType }),
 );
+
+const RelatedTaxonomy = loadData({
+  getUrl: getUrlForMeta,
+  propNamespace: 'Base',
+})(({ ...props }) => {
+  return (
+    <RelatedAdvanced
+      secondaryDataLoading={false}
+      secondaryData={[]}
+      isStale={false}
+      {...props}
+    />
+  );
+});
+
 const RelatedAdvancedQuery = loadData({
   getUrl: getUrlForMeta,
   propNamespace: 'Base',
@@ -495,14 +510,25 @@ class Related extends PureComponent /*:: <RelatedProps> */ {
     data: T.object.isRequired,
     focusType: T.string.isRequired,
     hasSecondary: T.bool,
+    showAllSpecies: T.bool.isRequired,
   };
 
   render() {
-    const { data, focusType, hasSecondary, ...props } = this.props;
+    const {
+      data,
+      focusType,
+      hasSecondary,
+      showAllSpecies,
+      ...props
+    } = this.props;
     if (data.loading) return <Loading />;
-    const RelatedComponent = hasSecondary
-      ? RelatedAdvancedQuery
-      : RelatedSimple;
+    let RelatedComponent = RelatedSimple;
+    if (hasSecondary) {
+      RelatedComponent =
+        focusType === 'taxonomy' && !showAllSpecies
+          ? RelatedTaxonomy
+          : RelatedAdvancedQuery;
+    }
     return <RelatedComponent mainData={data.payload.metadata} {...props} />;
   }
 }
@@ -512,7 +538,12 @@ const mapStateToPropsDefault = createSelector(
     Object.entries(state.customLocation.description).find(
       ([_key, value]) => value.isFilter && value.order === 1,
     ) || [],
-  ([focusType, filter]) => ({ focusType, hasSecondary: filter && !!filter.db }),
+  (state) => state.settings.ui.showAllSpecies,
+  ([focusType, filter], showAllSpecies) => ({
+    focusType,
+    hasSecondary: filter && !!filter.db,
+    showAllSpecies,
+  }),
 );
 
 export default connect(mapStateToPropsDefault)(Related);
