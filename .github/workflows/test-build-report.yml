@@ -37,4 +37,4 @@ jobs:
           SLACK_TITLE: "Cliente GitHub Actions CI"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: "#interpro7"
-          SLACK_MESSAGE: "This job has ${{ job.status == 'success' && 'passed!' || 'failed. :(' }}"
+          MSG_MINIMAL: Actions URL
