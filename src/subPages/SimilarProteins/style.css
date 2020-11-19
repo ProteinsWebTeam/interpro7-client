@@ -1,13 +1,5 @@
 .accession-selector-panel {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: flex-end;
-
-  & .switch label.switch-paddle.accession-selector {
-    width: 8em;
-  }
-
-  & .switch input:checked ~ label.switch-paddle.accession-selector::after {
-    left: 5.75rem;
-  }
 }

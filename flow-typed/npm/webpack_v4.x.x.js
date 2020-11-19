@@ -1,5 +1,5 @@
-// flow-typed signature: a11323c6900f44e506402540d33781c2
-// flow-typed version: 7448070196/webpack_v4.x.x/flow_>=v0.104.x
+// flow-typed signature: e3601e9c651a3776c8474a1bec9b8031
+// flow-typed version: 230acf0e5a/webpack_v4.x.x/flow_>=v0.104.x
 
 import * as http from 'http';
 import fs from 'fs';
@@ -572,6 +572,14 @@ declare module 'webpack' {
       | false,
     entry?: Entry,
     externals?: Externals,
+    infrastructureLogging?: {|
+      level?: 'none' | 'error' | 'warn' | 'info' | 'log' | 'verbose',
+      debug?:
+        | string
+        | RegExp
+        | ((string) => boolean)
+        | Array<string | RegExp | ((string) => boolean)>,
+    |},
     loader?: { [k: string]: any, ... },
     mode?: 'development' | 'production' | 'none',
     module?: ModuleOptions,

@@ -11,7 +11,7 @@ exports[`<Publication /> should render 1`] = `
   <div
     className="flex-column"
   >
-    <InterPro2019 />
+    <InterPro2020 />
     <Publication
       authors="Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt,
                       Alex Bateman, Peer Bork, Alan J. Bridge, Hsin-Yu Chang,
@@ -47,6 +47,29 @@ exports[`<Publication /> should render 1`] = `
     <summary>
       All previous InterPro publications
     </summary>
+    <PreviousPublication
+      authors="Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt,
+              Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown,
+              Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough,
+              David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez,
+              Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu
+              Mi, Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo,
+              Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien
+              Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings,
+              Nicole Redaschi, Lorna J Richardson, Catherine Rivoire,
+              Gustavo A Salazar, Amaia Sangrador-Vegas, Christian J A
+              Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul
+              D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn"
+      source={
+        Object {
+          "details": "Jan 2019, (doi: 10.1093/nar/gky1100)",
+          "journal": "Nucleic Acids Research",
+        }
+      }
+      title="InterPro in 2019: improving coverage, classification and
+            access to protein sequence annotations"
+      url="https://doi.org/10.1093/nar/gky1100"
+    />
     <PreviousPublication
       authors="Alex Mitchell, Hsin-Yu Chang, Louise Daugherty, Matthew Fraser,
               Sarah Hunter, Rodrigo Lopez, Craig McAnulla, Conor McMenamin,
@@ -321,7 +344,7 @@ exports[`<Publication /> should render 1`] = `
   <p>
     To cite InterPro, please refer to the following publication:
   </p>
-  <PrintedInterPro2019 />
+  <PrintedInterPro2020 />
   <p>
     To cite InterProScan, please refer to the following publication:
   </p>

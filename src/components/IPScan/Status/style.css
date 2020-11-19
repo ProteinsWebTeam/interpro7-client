@@ -1,6 +1,6 @@
 .button-bar {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 0.3em;
 }
