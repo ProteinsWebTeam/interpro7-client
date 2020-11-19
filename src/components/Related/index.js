@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -254,6 +254,40 @@ InfoFilters.propTypes = {
   filters: T.array,
 };
 
+const KeySpeciesArea = ({ focusType, showKeySpecies }) => {
+  const [showTaxoInfo, setShowTaxoInfo] = useState(true);
+  if (focusType !== 'taxonomy') return null;
+  return (
+    <>
+      {showTaxoInfo && (
+        <div className={f('callout', 'info', 'withicon')} data-closable>
+          <button
+            className={f('close-button')}
+            aria-label="Close alert"
+            type="button"
+            data-close
+            onClick={() => setShowTaxoInfo(false)}
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h5>
+            The taxonomy information is available for both Key species and all
+            organisms. The below tables are shown based on the preference in
+            InterPro settings. If you wish to change it, please do in the{' '}
+            <Link to={{ description: { other: ['settings'] } }}>Settings</Link>{' '}
+            page
+          </h5>
+        </div>
+      )}
+      {showKeySpecies && <KeySpeciesTable />}
+    </>
+  );
+};
+
+KeySpeciesArea.propTypes = {
+  focusType: T.string,
+  showKeySpecies: T.boolean,
+};
 /*:: type relatedAdvancedProps = {
   mainData: Object,
   secondaryData: Array<Object>,
@@ -291,12 +325,6 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
     showAllSpecies: T.bool.isRequired,
   };
 
-  constructor(props /*: relatedAdvancedProps */) {
-    super(props);
-    this.state = {
-      showTaxoInfo: true,
-    };
-  }
   render() {
     const {
       mainData,
@@ -319,34 +347,7 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       {};
     return (
       <div className={f('row', 'column')}>
-        {focusType === 'taxonomy' ? (
-          <>
-            {this.state.showTaxoInfo && (
-              <div className={f('callout', 'info', 'withicon')} data-closable>
-                <button
-                  className={f('close-button')}
-                  aria-label="Close alert"
-                  type="button"
-                  data-close
-                  onClick={() => this.setState({ showTaxoInfo: false })}
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                <h5>
-                  The taxonomy information is available for both Key species and
-                  all organisms. The below tables are shown based on the
-                  preference in InterPro settings. If you wish to change it,
-                  please do in the{' '}
-                  <Link to={{ description: { other: ['settings'] } }}>
-                    Settings
-                  </Link>{' '}
-                  page
-                </h5>
-              </div>
-            )}
-            {showKeySpecies && <KeySpeciesTable />}
-          </>
-        ) : null}
+        <KeySpeciesArea focusType={focusType} showKeySpecies={showKeySpecies} />
 
         {secondaryDataLoading ? (
           <Loading />

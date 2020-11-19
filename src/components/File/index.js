@@ -111,6 +111,7 @@ export class FileButton extends PureComponent /*:: <ButtonProps> */ {
     showIcon: T.bool,
   };
 
+  // eslint-disable-next-line complexity
   render() {
     const {
       fileType,
@@ -129,30 +130,24 @@ export class FileButton extends PureComponent /*:: <ButtonProps> */ {
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
     const failed = successful === false;
-    let stateLabel = '';
-    let title = '';
+    let stateLabel = 'Generate';
+    let title = 'Click icon to generate';
     if (count > HARD_LIMIT) {
-      title += 'Direct download disabled for this';
+      title = 'Direct download disabled for this';
       stateLabel = 'Disabled';
     } else if (downloading) {
-      title += 'Generating';
+      title = 'Generating';
       stateLabel = 'Generating';
     } else if (failed) {
-      title += 'Failed generating';
+      title = 'Failed generating';
       stateLabel = 'Failed';
     } else if (successful) {
-      title += 'Download';
+      title = 'Download';
       stateLabel = 'Download';
-    } else {
-      title += 'Click icon to generate';
-      stateLabel = 'Generate';
     }
     title += ` ${fileType} file`;
     const labelToShow = label || stateLabel;
 
-    // if (count === 0) {
-    //   title = 'No data available to download';
-    // }
     const filename = name || `${fileType}.${extensions[fileType]}`;
 
     const buttonClass = showIcon ? [] : ['button', 'hollow'];
@@ -171,7 +166,6 @@ export class FileButton extends PureComponent /*:: <ButtonProps> */ {
         }
       >
         <div>
-          {/* there to have tooltip go higher than the button */}
           <Link
             download={filename}
             href={blobURL || url}
