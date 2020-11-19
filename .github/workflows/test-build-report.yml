@@ -27,6 +27,3 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: './reports/jest-coverage/lcov.info'
-        # run: |
-        #   export COVERALLS_REPO_TOKEN=nGkRKkUISOiHUfUdepe77nDRyKQBLp5zi
-        #   npm run coveralls
