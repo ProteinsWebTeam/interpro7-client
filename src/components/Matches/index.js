@@ -162,76 +162,81 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-export const ProteinDownloadRenderer = (description) => (accession, row) => (
-  <div className={f('actions')}>
-    <Tooltip title="View matching proteins" useContext>
-      <div className={f('view-icon-div')}>
+export const ProteinDownloadRenderer = (description) => (accession, row) => {
+  const endpointToFilterBy = description.taxonomy.isFilter
+    ? 'taxonomy'
+    : 'proteome';
+  return (
+    <div className={f('actions')}>
+      <Tooltip title="View matching proteins" useContext>
+        <div className={f('view-icon-div')}>
+          <Link
+            className={f('icon', 'icon-conceptual', 'view-link')}
+            to={{
+              description: {
+                main: { key: description.main.key },
+                [description.main.key]: {
+                  ...description[description.main.key],
+                },
+                protein: {
+                  db: 'uniprot',
+                  order: 1,
+                  isFilter: true,
+                },
+                [endpointToFilterBy]: {
+                  accession: accession,
+                  db: row.source_database,
+                  order: 2,
+                  isFilter: true,
+                },
+              },
+            }}
+            aria-label="View proteins"
+            data-icon="&#x50;"
+          />
+        </div>
+      </Tooltip>
+      <File
+        fileType="fasta"
+        name={`protein-sequences-matching-${
+          description[description.main.key].accession
+        }-for-${accession}.fasta`}
+        count={row.proteins || row.counters.extra_fields.counters.proteins}
+        customLocationDescription={{
+          main: { key: 'protein' },
+          protein: { db: 'UniProt' },
+          [endpointToFilterBy]: {
+            isFilter: true,
+            db: 'UniProt',
+            accession: `${accession}`,
+          },
+          [description.main.key]: {
+            ...description[description.main.key],
+            isFilter: true,
+          },
+        }}
+        showIcon={true}
+      />
+      <Tooltip title={`View ${endpointToFilterBy} information`}>
         <Link
-          className={f('icon', 'icon-conceptual', 'view-link')}
           to={{
             description: {
-              main: { key: description.main.key },
-              [description.main.key]: {
-                ...description[description.main.key],
+              main: {
+                key: endpointToFilterBy,
               },
-              protein: {
-                db: 'uniprot',
-                order: 1,
-                isFilter: true,
-              },
-              [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-                accession: accession,
+              [endpointToFilterBy]: {
                 db: row.source_database,
-                order: 2,
-                isFilter: true,
+                accession: accession,
               },
             },
           }}
-          aria-label="View proteins"
-          data-icon="&#x50;"
-        />
-      </div>
-    </Tooltip>
-    <File
-      fileType="fasta"
-      name={`protein-sequences-matching-${
-        description[description.main.key].accession
-      }-for-${accession}.fasta`}
-      count={row.proteins || row.counters.extra_fields.counters.proteins}
-      customLocationDescription={{
-        main: { key: 'protein' },
-        protein: { db: 'UniProt' },
-        [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-          isFilter: true,
-          db: 'UniProt',
-          accession: `${accession}`,
-        },
-        [description.main.key]: {
-          ...description[description.main.key],
-          isFilter: true,
-        },
-      }}
-      showIcon={true}
-    />
-    <Tooltip title="View taxonomy information">
-      <Link
-        to={{
-          description: {
-            main: {
-              key: description.taxonomy.isFilter ? 'taxonomy' : 'proteome',
-            },
-            [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-              db: row.source_database,
-              accession: accession,
-            },
-          },
-        }}
-      >
-        <div className={f('icon', 'icon-count-organisms', 'icon-wrapper')} />
-      </Link>
-    </Tooltip>
-  </div>
-);
+        >
+          <div className={f('icon', 'icon-count-organisms', 'icon-wrapper')} />
+        </Link>
+      </Tooltip>
+    </div>
+  );
+};
 
 const includeAccessionSearch = (
   dataTable,
