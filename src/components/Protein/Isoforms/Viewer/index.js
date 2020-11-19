@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -7,7 +8,10 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
-
+import {
+  groupByEntryType,
+  byEntryType,
+} from 'components/Related/DomainsOnProtein';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -20,9 +24,31 @@ const ProtVista = loadable({
   loader: () =>
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
+/*::
+  type Feature = {
+    accession: string,
+    name: string,
+    source_database: string,
+    type: string,
+    children: Array<Object>,
+    integrated: ?string,
+    locations: [],
+  }
+  type FeatureMap = {
+    [string]: Feature,
+  }
+  type IsoformPayload = {
+    accession: string,
+    length: number,
+    protein_acc: string,
+    sequence: string,
+    features: FeatureMap,
+  }
+ */
 
-const features2protvista = (features) => {
-  const featArray = Object.values(features || {});
+const features2protvista = (features /*: FeatureMap */) => {
+  // prettier-ignore
+  const featArray /*: Array<Feature> */ = (Object.values(features || {})/*: any */);
   const integrated = [];
   for (const feature of featArray) {
     if (feature.integrated && feature.integrated in features) {
@@ -39,20 +65,20 @@ const features2protvista = (features) => {
   const interpro = featArray.filter(({ accession }) =>
     accession.toLowerCase().startsWith('ipr'),
   );
+  const groups = groupByEntryType(interpro);
   const unintegrated = featArray.filter(
     (f) => interpro.indexOf(f) === -1 && integrated.indexOf(f) === -1,
   );
-  return [
-    ['interpro', interpro],
-    ['unintegrated', unintegrated],
-  ];
+  return [...Object.entries(groups), ['unintegrated', unintegrated]].sort(
+    byEntryType,
+  );
 };
 
 const Viewer = (
   {
     isoform,
     data,
-  } /*: {isoform: string, data: {loading: boolean, payload: Object}} */,
+  } /*: {isoform: string, data: {loading: boolean, payload: IsoformPayload}} */,
 ) => {
   if (!isoform) return null;
   if (
@@ -92,11 +118,20 @@ Viewer.propTypes = {
   }),
 };
 
+const mapStateToProps = createSelector(
+  (state) => state.customLocation.search,
+  ({ isoform }) => ({ isoform }),
+);
+
 const getIsoformURL = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description,
-  (_, props) => props.isoform,
-  ({ protocol, hostname, port, root }, { protein: { accession } }, isoform) => {
+  (state) => state.customLocation.search,
+  (
+    { protocol, hostname, port, root },
+    { protein: { accession } },
+    { isoform },
+  ) => {
     const description = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
@@ -113,4 +148,4 @@ const getIsoformURL = createSelector(
     });
   },
 );
-export default loadData(getIsoformURL)(Viewer);
+export default loadData({ getUrl: getIsoformURL, mapStateToProps })(Viewer);

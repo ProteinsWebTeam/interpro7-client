@@ -19,7 +19,6 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import { foundationPartial } from 'styles/foundation';
 
 import { speciesFeat } from 'staticData/home';
-import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 
 const f = foundationPartial(fonts, ebiGlobalStyles);
@@ -72,72 +71,17 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
       >
         {' '}
       </Column>
-      <Column
-        dataKey="accession"
-        renderer={(acc) => {
-          return (
-            <Link
-              to={{
-                description: {
-                  main: { key: 'taxonomy' },
-                  taxonomy: { db: 'uniprot', accession: acc },
-                },
-              }}
-            >
-              {acc}
-            </Link>
-          );
-        }}
-      >
+      <Column dataKey="accession" renderer={(acc) => <span>{acc}</span>}>
         Tax ID
       </Column>
-      <Column
-        dataKey="name"
-        renderer={(name, { accession }) => {
-          return (
-            <>
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'taxonomy' },
-                    taxonomy: { db: 'uniprot', accession },
-                  },
-                }}
-              >
-                {name}
-              </Link>
-            </>
-          );
-        }}
-      >
+      <Column dataKey="name" renderer={(name) => <span>{name}</span>}>
         Name
       </Column>
       <Column
         dataKey="proteins"
         cellClassName={f('table-center')}
         headerClassName={f('table-center')}
-        renderer={(count, { accession }) => (
-          <Link
-            to={{
-              description: {
-                ...description,
-                protein: {
-                  db: 'uniprot',
-                  order: 1,
-                  isFilter: true,
-                },
-                taxonomy: {
-                  db: 'uniprot',
-                  accession,
-                  isFilter: true,
-                  order: 2,
-                },
-              },
-            }}
-          >
-            <NumberComponent abbr>{count}</NumberComponent>
-          </Link>
-        )}
+        renderer={(count) => <NumberComponent abbr>{count}</NumberComponent>}
       >
         protein count
       </Column>
@@ -148,7 +92,7 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
         cellClassName={f('table-center')}
         renderer={ProteinDownloadRenderer((description /*: any */))}
       >
-        FASTA
+        Actions
       </Column>
     </Table>
   );
