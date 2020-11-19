@@ -22,8 +22,19 @@ jobs:
         run: |
           npm run report
       - name: 🧥‍ - Coveralls
-        continue-on-error: true
         uses: coverallsapp/github-action@master
+        continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: './reports/jest-coverage/lcov.info'
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        continue-on-error: true
+        env:
+          SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
+          SLACK_USERNAME: "Github Actions"
+          SLACK_ICON_EMOJI: ":ocotcat:"
+          SLACK_TITLE: "Cliente GitHub Actions CI"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: "#interpro7"
+          SLACK_MESSAGE: "This job has ${{ job.status == 'success' && 'passed!' || 'failed. :(' }}"
