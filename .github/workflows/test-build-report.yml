@@ -1,0 +1,28 @@
+name: Test Build and Report
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - name: 🔧 - Install
+        run: |
+          cp config.yml.example config.yml
+          npm i -g npm@6.7.0
+      - name: 🧪 | 🏗 - Test and Build
+        run: |
+          npm run deploy:production
+      - name: 📈 - Create Reports 
+        run: |
+          npm run report
+      - name: 🧥‍ - Coveralls
+        continue-on-error: true
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        # run: |
+        #   export COVERALLS_REPO_TOKEN=nGkRKkUISOiHUfUdepe77nDRyKQBLp5zi
+        #   npm run coveralls
