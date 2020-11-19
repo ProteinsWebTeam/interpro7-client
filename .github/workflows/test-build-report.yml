@@ -8,6 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+        with:
+          node-version: '10'
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
@@ -24,6 +26,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: './reports/jest-coverage/lcov.info'
         # run: |
         #   export COVERALLS_REPO_TOKEN=nGkRKkUISOiHUfUdepe77nDRyKQBLp5zi
         #   npm run coveralls
