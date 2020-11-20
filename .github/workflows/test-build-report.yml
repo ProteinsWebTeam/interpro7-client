@@ -33,8 +33,8 @@ jobs:
         env:
           SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
           SLACK_USERNAME: "Github Actions"
-          SLACK_ICON_EMOJI: ":ocotcat:"
-          SLACK_TITLE: "Cliente GitHub Actions CI"
+          SLACK_ICON_EMOJI: ":octocat:"
+          SLACK_TITLE: "CI results in GitHub Actions"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: "#interpro7"
           MSG_MINIMAL: Actions URL
