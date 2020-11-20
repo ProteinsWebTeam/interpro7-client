@@ -31,7 +31,11 @@ const handleProgress = async (
 };
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
+const cachedFetch = (
+  url /*: string */,
+  options /*: Object */ = {},
+  versionChanged,
+) => {
   const { useCache = true, ...restOfOptions } = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
   const cached = sessionStorage.getItem(key);
@@ -54,7 +58,10 @@ const cachedFetch = (url /*: string */, options /*: Object */ = {}) => {
     const shouldCache =
       config.cache.enabled && useCache && response.status === SUCCESS_STATUS;
     if (response.clone) {
-      dropCacheIfVersionMismatch(response.headers);
+      const hasVersionChanged = dropCacheIfVersionMismatch(response.headers);
+      if (!hasVersionChanged) {
+        versionChanged();
+      }
       if (shouldCache)
         response
           .clone()
@@ -76,6 +83,7 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   url /*: string */,
   { method = 'GET', headers = new Headers(), ...options } /*: Object */ = {},
   onProgress /*:: ?: (number) => void */,
+  versionChanged /*: function */,
 ) /*: Promise<FetchOutput> */ => {
   // modify options as needed
   options.method = method;
@@ -91,7 +99,11 @@ const commonCachedFetch = (responseType /*: ?string */) => async (
   // }
   options.headers = headers;
   // Casting to object to avoid flow error
-  const response /*: Object */ = await cachedFetch(url, options);
+  const response /*: Object */ = await cachedFetch(
+    url,
+    options,
+    versionChanged,
+  );
   if (onProgress && response.headers.get('Content-Length')) {
     handleProgress(response, onProgress);
   }
