@@ -59,7 +59,7 @@ const cachedFetch = (
       config.cache.enabled && useCache && response.status === SUCCESS_STATUS;
     if (response.clone) {
       const hasVersionChanged = dropCacheIfVersionMismatch(response.headers);
-      if (!hasVersionChanged) {
+      if (hasVersionChanged) {
         versionChanged();
       }
       if (shouldCache)

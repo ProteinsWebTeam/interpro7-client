@@ -5,7 +5,7 @@ import {
   VERSION_CHANGED,
 } from 'actions/types';
 import getTableAccess, { FavEntries } from 'storage/idb';
-import { isEqual, omit } from 'lodash-es';
+import { isEqual, sortBy } from 'lodash-es';
 import { createNotification } from 'utils/browser-notifications';
 
 const favTA = getTableAccess(FavEntries);
@@ -26,6 +26,46 @@ const createEntryInDB = async (id, content) => {
   }
 };
 
+const compare = (stored, fetched) => {
+  const diff = [];
+  const keys = [
+    'type',
+    'name',
+    'description',
+    'member_databases',
+    'literature',
+    'go_terms',
+  ];
+  keys.forEach((k) => {
+    if (
+      ['name', 'type', 'description', 'member_databases'].includes(k) &&
+      !isEqual(stored[k], fetched[k])
+    )
+      diff.push(k);
+
+    if (k === 'literature') {
+      Object.entries(stored[k]).forEach(([key, value]) => {
+        stored[k][key] = { ...value, authors: value.authors.sort() };
+      });
+      Object.entries(fetched[k]).forEach(([key, value]) => {
+        fetched[k][key] = { ...value, authors: value.authors.sort() };
+      });
+      if (!isEqual(stored[k], fetched[k])) diff.push(k);
+    }
+
+    if (k === 'go_terms') {
+      if (
+        !isEqual(
+          sortBy(stored[k], 'identifier'),
+          sortBy(fetched[k], 'identifier'),
+        )
+      )
+        diff.push(k);
+    }
+  });
+  return diff;
+};
+
 const checkContents = async () => {
   const favTable = await favTA;
   const storedContent = await favTable.getAll();
@@ -35,27 +75,25 @@ const checkContents = async () => {
       (response) => {
         if (response.ok) {
           response.json().then((json) => {
-            // TODO exclude counters
-            const check = isEqual(
-              omit(value, ['counters', 'overlaps_with', 'cross_references']),
-              omit(json, ['counters', 'overlaps_with', 'cross_references']),
-            );
-            if (!isEqual(value, json)) {
-              createNotification(
+            const differences = compare(value.metadata, json.metadata);
+            if (differences.length > 0) {
+              const notification = createNotification(
                 'InterPro',
-                `Your favourite entry ${key} has got new changes since the last version`,
+                `There has been changes detected in your favourite entry ${key} in the new version of InterPro data`,
               );
-              // favTable.set(json, key);
 
-              // notification.onclick = () => {
-              //   window.open(
-              //     `${window.location.origin}/interpro/result/InterProScan/${
-              //       meta.remoteID || ''
-              //     }`,
-              //     '_blank',
-              //   );
-              // };
+              notification.onclick = () => {
+                window.open(
+                  `${window.location.origin}/interpro/entry/InterPro/${key}/`,
+                  '_blank',
+                );
+              };
             }
+
+            /* Updating the IndexedDB content anyway because the favourite entries in home page use the IDB data. If there
+            are changes in counters, it will be misleading to show old data from previous version.
+             */
+            favTable.update(key, (prev) => ({ ...prev, ...json }));
           });
         }
       },
