@@ -5,15 +5,17 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import loadable from 'higherOrder/loadable';
-import Table, { Column } from 'components/Table';
+import Table, { Column, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 
 import MatchesOnProtein from './MatchesOnProtein';
+import FileExporter from '../FileExporter';
 import { foundationPartial } from 'styles/foundation';
+import exporterStyle from 'components/Table/Exporter/style.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(ebiStyles);
+const f = foundationPartial(ebiStyles, exporterStyle);
 const HTTP_404 = 404;
 
 const SchemaOrgData = loadable({
@@ -30,22 +32,56 @@ const schemaProcessData = (data) => {
     value: data.map((g3d) => g3d?.metadata?.evidences?.source?.url),
   };
 };
-
+/*::
+  type Genome3DPayload = {
+      data: Array<{
+        accession: string,
+        locations: Array<Object>,
+        metadata: {
+          anno_id: string | number,
+          confidence: string,
+          evidences ?: Object,
+          resource: string,
+          type: string,
+        },
+        tooltipContent: string,
+        length: number,
+      }>,
+      pager: {
+        total_entries: number,
+        current_page: number,
+        entries_per_page: number,
+        entry_from: number,
+        entry_to: number,
+        total_pages: number,
+      },
+      interpro: {
+        ipr_id: string,
+        release_date: string,
+        release_name: string,
+      }
+    }
+  */
 const List = (
   {
     data,
     customLocation: { search },
-  } /*: {data: {loading: boolean, payload: Object, ok?: boolean, status?: number}, customLocation: {search?: Object}} */,
+  } /*: {data: {
+    loading: boolean,
+    payload: Genome3DPayload,
+    ok?: boolean,
+    status?: number
+  }, customLocation: {search?: Object}} */,
 ) => {
   if (data.loading) return <Loading />;
   const data4table = data.payload.data.map(
     ({ accession, locations, metadata, tooltipContent, length }) => ({
+      ...metadata,
       id: metadata.anno_id,
       accession,
       length,
       locations,
       tooltipContent,
-      ...metadata,
     }),
   );
   return (
@@ -65,9 +101,25 @@ const List = (
           rowKey={'id'}
           query={search}
         >
+          <Exporter>
+            <div className={f('menu-grid')}>
+              <label htmlFor="json">JSON</label>
+              <FileExporter
+                fileType="json"
+                name={`genome3d.${data.payload.interpro.ipr_id}.json`}
+                count={data.payload.pager.total_entries}
+              />
+              <label htmlFor="tsv">TSV</label>
+              <FileExporter
+                fileType="tsv"
+                name={`genome3d.${data.payload.interpro.ipr_id}.tsv`}
+                count={data.payload.pager.total_entries}
+              />
+            </div>
+          </Exporter>
           <Column
             dataKey="accession"
-            renderer={(accession) => (
+            renderer={(accession /*: string */) => (
               <Link
                 to={{
                   description: {
@@ -84,7 +136,11 @@ const List = (
           </Column>
           <Column
             dataKey="evidences"
-            renderer={({ source: { url, id, name } }) => (
+            renderer={(
+              {
+                source: { url, id, name },
+              } /*: {source: {url: string, id: string, name: string}} */,
+            ) => (
               <Link href={url} target="_blank" className={f('ext')}>
                 {name}: {id}
               </Link>
@@ -94,13 +150,20 @@ const List = (
           </Column>
           <Column
             dataKey="confidence"
-            renderer={(confidence) => (
+            renderer={(confidence /*: number */) => (
               <NumberComponent>{confidence}</NumberComponent>
             )}
           />
           <Column
             dataKey="locations"
-            renderer={(locations, { tooltipContent, accession, length }) => (
+            renderer={(
+              locations /*: Array<Object> */,
+              {
+                tooltipContent,
+                accession,
+                length,
+              } /*: { tooltipContent: string, accession: string, length: number } */,
+            ) => (
               <MatchesOnProtein
                 matches={locations}
                 tooltip={tooltipContent}

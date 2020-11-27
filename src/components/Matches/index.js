@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from 'react';
 import T from 'prop-types';
@@ -90,7 +91,21 @@ const schemamap = {
   },
 };
 
-const schemaProcessData = ({ data, primary, secondary }) => {
+const schemaProcessData = (
+  {
+    data,
+    primary,
+    secondary,
+  } /*: {
+    data: {
+      accession: string,
+      source_database: string,
+      name: string,
+    },
+    primary: string,
+    secondary: string
+  }*/,
+) => {
   const name = schemamap[secondary][primary];
   const type = endpoint2type[primary];
   return {
@@ -158,12 +173,17 @@ const MatchesByPrimary = (
 } */,
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
-  return <MatchComponent matches={matches} {...props} />;
+  return <MatchComponent {...props} matches={matches} />;
 };
 MatchesByPrimary.propTypes = propTypes;
 
-export const ProteinDownloadRenderer = (description) => (accession, row) => {
-  const endpointToFilterBy = description.taxonomy.isFilter
+export const ProteinDownloadRenderer = (
+  description /*: {
+  main: {key:string, ...},
+  taxonomy: {accession: string, isFilter: boolean},
+} */,
+) => (accession, row) => {
+  const endpointToFilterBy /*: string */ = description.taxonomy.isFilter
     ? 'taxonomy'
     : 'proteome';
   return (
@@ -309,6 +329,10 @@ const Matches = (
     mainData: Object,
     accessionSearch: Object,
     focusType?: string,
+    currentAPICall: string,
+    nextAPICall: string,
+    previousAPICall: string,
+    status: number,
     props: Array<any>
 } */,
 ) => {
@@ -378,9 +402,9 @@ const Matches = (
                 />
               </>
             )}
-            <label htmlFor="json">TSV</label>
+            <label htmlFor="tsv">TSV</label>
             <FileExporter
-              name="json"
+              name="tsv"
               description={description}
               count={actualSize}
               search={search}
@@ -389,9 +413,9 @@ const Matches = (
               secondary={secondary}
               focused={focused}
             />
-            <label htmlFor="tsv">JSON</label>
+            <label htmlFor="json">JSON</label>
             <FileExporter
-              name="tsv"
+              name="json"
               description={description}
               count={actualSize}
               search={search}
@@ -420,7 +444,10 @@ const Matches = (
       )}
       <Column
         dataKey="accession"
-        renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
+        renderer={(
+          acc /*: string */,
+          obj /*: {source_database: string, type: string} */,
+        ) => {
           const { source_database: sourceDatabase } = obj;
           const cellContent = (
             <span className={f('acc-row')}>
@@ -434,11 +461,6 @@ const Matches = (
             </span>
           );
           return (
-            // let reviewed =null;
-            // if (primary === 'protein' && sourceDatabase === 'reviewed')
-            //   reviewed = (
-            //
-            //   )
             <>
               <SchemaOrgData
                 data={{ data: obj, primary, secondary }}
@@ -602,10 +624,10 @@ const Matches = (
             {(hasBeenVisible /*: boolean */) =>
               hasBeenVisible ? (
                 <MatchesByPrimary
+                  {...props}
                   matches={[match]}
                   primary={primary}
                   secondary={secondary}
-                  {...props}
                 />
               ) : null
             }

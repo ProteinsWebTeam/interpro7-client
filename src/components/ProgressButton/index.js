@@ -18,7 +18,7 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 /*:: type Props = {
   downloading: boolean,
-  success: boolean,
+  success?: boolean,
   failed: boolean,
   progress: number,
   showIcon?: ?boolean,

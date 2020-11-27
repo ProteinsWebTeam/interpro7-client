@@ -90,7 +90,7 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
         defaultKey="proteinFastas"
         headerClassName={f('table-center')}
         cellClassName={f('table-center')}
-        renderer={ProteinDownloadRenderer(description)}
+        renderer={ProteinDownloadRenderer((description /*: any */))}
       >
         Actions
       </Column>
