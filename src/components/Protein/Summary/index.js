@@ -1,6 +1,8 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
@@ -25,14 +27,25 @@ import IsoformViewer from 'components/Protein/Isoforms/Viewer';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
+import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import sequenceStyles from '../Sequence/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
+import summary from 'styles/summary.css';
+import theme from 'styles/theme-interpro.css';
 
-const f = foundationPartial(ebiStyles, sequenceStyles, fonts);
+const f = foundationPartial(
+  summary,
+  theme,
+  ebiStyles,
+  sequenceStyles,
+  fonts,
+  local,
+);
 
 /*:: type Props = {
   data: {
@@ -45,10 +58,19 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const SummaryProtein = (
-  { data, loading } /*: {data: Object, loading: boolean} */,
+export const SummaryProtein = (
+  {
+    data,
+    loading,
+    isoform,
+  } /*: {data: Object, loading: boolean, isoform?: string} */,
 ) => {
-  const [isoform, setIsoform] = useState('');
+  const comparisonContainerRef = useRef();
+  const [renderComparisonButton, setRenderComparisonButton] = useState(false);
+  const [comparisonMode, setComparisonMode] = useState(false);
+  useEffect(() => {
+    setRenderComparisonButton(true);
+  }, [comparisonContainerRef]);
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
 
@@ -154,11 +176,24 @@ const SummaryProtein = (
                         />
                       </Tooltip>
                     </td>
-                    <td>
-                      <IsoformSelector
-                        value={isoform}
-                        onChange={(event) => setIsoform(event.target.value)}
-                      />
+                    <td style={{ display: 'flex' }}>
+                      <IsoformSelector />
+                      {renderComparisonButton ? (
+                        <FullScreenButton
+                          element={comparisonContainerRef.current}
+                          className={f(
+                            'button',
+                            'comparison-button',
+                            'icon',
+                            'icon-common',
+                          )}
+                          disabled={!isoform}
+                          dataIcon={'\uF0DB'}
+                          tooltip="View in comparison mode"
+                          onFullScreenHook={() => setComparisonMode(true)}
+                          onExitFullScreenHook={() => setComparisonMode(false)}
+                        />
+                      ) : null}
                     </td>
                   </tr>
                 ) : null}
@@ -210,13 +245,18 @@ const SummaryProtein = (
           </div>
         </div>
       </section>
-      <IsoformViewer isoform={isoform} />
-      <section>
-        <div className={f('row')}>
-          <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
-            <DomainsOnProtein mainData={data} />
+      <section
+        ref={comparisonContainerRef}
+        className={f({ splitfullscreen: comparisonMode })}
+      >
+        <IsoformViewer />
+        <section>
+          <div className={f('row')}>
+            <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
+              <DomainsOnProtein mainData={data} />
+            </div>
           </div>
-        </div>
+        </section>
       </section>
       {metadata.go_terms && (
         <GoTerms terms={metadata.go_terms} type="protein" />
@@ -229,6 +269,12 @@ SummaryProtein.propTypes = {
     metadata: T.object,
   }).isRequired,
   loading: T.bool.isRequired,
+  isoform: T.string,
 };
 
-export default SummaryProtein;
+const mapStateToProps = createSelector(
+  (state) => state.customLocation.search,
+  ({ isoform }) => ({ isoform }),
+);
+
+export default connect(mapStateToProps)(SummaryProtein);

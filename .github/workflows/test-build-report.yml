@@ -1,0 +1,41 @@
+name: Test Build and Report
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10'
+      - name: 🔧 - Install
+        run: |
+          cp config.yml.example config.yml
+          npm i -g npm@6.7.0
+          npm ci
+      - name: 🧪 | 🏗 - Test and Build
+        run: |
+          npm run deploy:production
+      - name: 📈 - Create Reports 
+        run: |
+          npm run report
+      - name: 🧥‍ - Coveralls
+        uses: coverallsapp/github-action@master
+        continue-on-error: true
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: './reports/jest-coverage/lcov.info'
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        continue-on-error: true
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+        env:
+          SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
+          SLACK_USERNAME: "Github Actions"
+          SLACK_ICON_EMOJI: ":octocat:"
+          SLACK_TITLE: "CI results in GitHub Actions"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: "#interpro7"
+          MSG_MINIMAL: Actions URL

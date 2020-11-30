@@ -11,6 +11,7 @@ import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import DomainButton from './DomainButton';
 import IdaEntry from './IdaEntry';
+import ToggleSwitch from 'components/ToggleSwitch';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -348,74 +349,41 @@ export class SearchByIDA extends PureComponent /*:: <Props, State> */ {
                     <span>Add Domain to exclude</span>
                   </button>
                   <div className={f('options')}>
-                    <div className={f('switch', 'tiny')}>
-                      <label htmlFor="ordered">
-                        <input
-                          className={f('switch-input')}
-                          type="checkbox"
-                          id="ordered"
-                          checked={order}
-                          onChange={(event) =>
-                            this._handleSubmit({
-                              order: event.target.checked,
-                              entries,
-                              ignore,
-                            })
-                          }
-                        />{' '}
-                        Order of domain matters:{' '}
-                        <span className={f('switch-paddle')}>
-                          <span
-                            className={f('switch-active')}
-                            aria-hidden="true"
-                          >
-                            Yes
-                          </span>
-                          <span
-                            className={f('switch-inactive')}
-                            aria-hidden="true"
-                          >
-                            No
-                          </span>
-                        </span>
-                      </label>
-                    </div>
-                    <div
-                      className={f('switch', 'tiny', { disabled: !ordered })}
-                    >
-                      <label htmlFor="exact">
-                        <input
-                          className={f('switch-input')}
-                          type="checkbox"
-                          id="exact"
-                          disabled={!order}
-                          checked={_exact}
-                          onChange={(event) =>
-                            this._handleSubmit({
-                              exact: event.target.checked,
-                              order: true,
-                              entries,
-                              ignore,
-                            })
-                          }
-                        />{' '}
-                        Exact match:{' '}
-                        <span className={f('switch-paddle')}>
-                          <span
-                            className={f('switch-active')}
-                            aria-hidden="true"
-                          >
-                            Yes
-                          </span>
-                          <span
-                            className={f('switch-inactive')}
-                            aria-hidden="true"
-                          >
-                            No
-                          </span>
-                        </span>
-                      </label>
-                    </div>
+                    <ToggleSwitch
+                      switchCond={order}
+                      name={'order'}
+                      id={'ordered'}
+                      size={'tiny'}
+                      label={'Order of domain matters: '}
+                      onValue={'Yes'}
+                      offValue={'No'}
+                      handleChange={(event) =>
+                        this._handleSubmit({
+                          order: event.target.checked,
+                          entries,
+                          ignore,
+                        })
+                      }
+                    />
+
+                    <ToggleSwitch
+                      switchCond={_exact}
+                      name={'exact'}
+                      id={'exact'}
+                      disabled={!ordered}
+                      size={'tiny'}
+                      label={'Exact match:'}
+                      onValue={'Yes'}
+                      offValue={'No'}
+                      handleChange={(event) =>
+                        this._handleSubmit({
+                          exact: event.target.checked,
+                          order: true,
+                          entries,
+                          ignore,
+                        })
+                      }
+                    />
                   </div>
                 </div>
               </div>

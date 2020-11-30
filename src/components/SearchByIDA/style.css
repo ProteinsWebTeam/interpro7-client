@@ -64,7 +64,7 @@
   }
   & label {
     display: flex;
-    & > span {
+    & > label {
       margin-left: 1em;
     }
   }

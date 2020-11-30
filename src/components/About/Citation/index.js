@@ -10,9 +10,9 @@ import local from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import {
-  InterPro2019,
+  InterPro2020,
   InterProScan2014,
-  PrintedInterPro2019,
+  PrintedInterPro2020,
   PrintedInterProScan2014,
 } from 'components/Help/Publication';
 
@@ -36,13 +36,13 @@ const Citation = () => (
     />
 
     <div className={f('flex-column')}>
-      <InterPro2019 />
+      <InterPro2020 />
       <InterProScan2014 />
     </div>
     <div className={f('row')}>
       <h3 className={f('margin-top-large')}>How to cite</h3>
       <p>To cite InterPro, please refer to the following publication:</p>
-      <PrintedInterPro2019 />
+      <PrintedInterPro2020 />
       <p>To cite InterProScan, please refer to the following publication:</p>
       <PrintedInterProScan2014 />
     </div>

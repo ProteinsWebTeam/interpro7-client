@@ -12,7 +12,8 @@ const LegacyModuleSplitPlugin = require('./webpack-plugins/legacy-module-split-p
 
 // CSS-related
 const postCSSImport = require('postcss-import');
-const cssNext = require('postcss-cssnext');
+const postcssPresetEnv = require('postcss-preset-env');
+
 const cssNano = require('cssnano');
 
 const buildInfo = require('./scripts/build-info');
@@ -224,7 +225,7 @@ const getConfigFor = (env, mode, module = false) => {
                 postcssOptions: {
                   plugins: [
                     postCSSImport,
-                    cssNext(),
+                    postcssPresetEnv({ stage: 0 }),
                     mode === 'production' && cssNano(),
                   ].filter(Boolean),
                 },
@@ -272,7 +273,7 @@ const getConfigFor = (env, mode, module = false) => {
                 postcssOptions: {
                   plugins: [
                     postCSSImport,
-                    cssNext(),
+                    postcssPresetEnv({ stage: 0 }),
                     mode === 'production' && cssNano(),
                   ].filter(Boolean),
                 },

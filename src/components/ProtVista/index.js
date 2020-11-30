@@ -214,6 +214,13 @@ export class ProtVista extends Component /*:: <Props, State> */ {
         this._webProteinRef.current.data = this.props.protein;
         this._hydroRef.current.data = this.props.protein;
       }
+    } else if (prevProps.colorDomainsBy !== this.props.colorDomainsBy) {
+      for (const track of (Object.values(this.web_tracks) /*: any */)) {
+        for (const d of [...track._data, ...(track._contributors || [])]) {
+          d.color = getTrackColor(d, this.props.colorDomainsBy);
+        }
+        track.refresh();
+      }
     }
   }
 
@@ -552,7 +559,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
-  handleConservationLoad(_this) {
+  handleConservationLoad(_this /*: ProtVista */) {
     _this.setState({ showLoading: true });
     _this.props.handleConservationLoad();
   }

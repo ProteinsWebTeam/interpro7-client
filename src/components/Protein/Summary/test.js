@@ -2,7 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import SummaryProtein from '.';
+import { SummaryProtein } from '.';
 
 const renderer = new ShallowRenderer();
 

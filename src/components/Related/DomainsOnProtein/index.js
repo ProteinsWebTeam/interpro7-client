@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-param-reassign */
 import React, { PureComponent, useEffect } from 'react';
 import T from 'prop-types';
@@ -129,8 +130,8 @@ const processConservationData = (entry, match) => {
 };
 
 const addExistingEntiesToConservationResults = (
-  data,
-  conservationDatabases,
+  data /*: {[string]: Array<Object>} */,
+  conservationDatabases /*: Array<string> */,
 ) => {
   /* eslint-disable max-depth */
   for (const matches of [data.domain, data.family, data.repeat]) {
@@ -153,7 +154,10 @@ const addExistingEntiesToConservationResults = (
   }
 };
 
-const mergeConservationData = (data, conservationData) => {
+const mergeConservationData = (
+  data /*: { match_conservation?: Array<Object>} */,
+  conservationData /*: { [string]: {entries: ?{}}} */,
+) => {
   data.match_conservation = [];
   const conservationDatabases = [];
   for (const db of Object.keys(conservationData)) {
@@ -181,7 +185,7 @@ const mergeConservationData = (data, conservationData) => {
           }
         }
         /* eslint-enable max-depth */
-        data.match_conservation.push(dbConservationScores);
+        data.match_conservation?.push(dbConservationScores);
         // add data from integrated and unintegrated matches to panel for ease of use
         addExistingEntiesToConservationResults(data, conservationDatabases);
       }
@@ -190,7 +194,9 @@ const mergeConservationData = (data, conservationData) => {
 };
 
 const mergeResidues = (data, residues) => {
-  Object.values(data).forEach((group) =>
+  // prettier-ignore
+  (Object.values(data)/*: any */).forEach(
+    (group/*: Array<{accession:string, residues: Array<Object>, children: any}> */) =>
     group.forEach((entry) => {
       if (residues[entry.accession])
         entry.residues = [residues[entry.accession]];
@@ -242,7 +248,8 @@ const mergeExtraFeatures = (data, extraFeatures) => {
     );
   }
   data.other_features = data.other_features.concat(
-    Object.values(extraFeatures).filter(
+    // prettier-ignore
+    (Object.values(extraFeatures)/*: any */).filter(
       ({ source_database: db }) => db !== 'mobidblt',
     ),
   );
@@ -251,18 +258,20 @@ const mergeExtraFeatures = (data, extraFeatures) => {
 };
 
 const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
-const groupByEntryType = (interpro) => {
+export const groupByEntryType = (interpro) => {
   const groups = {};
   for (const entry of interpro) {
     if (!groups[entry.type]) groups[entry.type] = [];
     groups[entry.type].push(entry);
   }
-  Object.values(groups).forEach((g) => g.sort(orderByAccession));
+  // prettier-ignore
+  (Object.values(groups) /*: any */)
+    .forEach((g) => g.sort(orderByAccession));
   return groups;
 };
 
 const UNDERSCORE = /_/g;
-const sortFunction = ([a], [b]) => {
+export const byEntryType = ([a], [b]) => {
   const firsts = [
     'family',
     'domain',
@@ -286,7 +295,7 @@ const sortFunction = ([a], [b]) => {
   return a > b ? 1 : 0;
 };
 
-const getExtraURL = (query) =>
+const getExtraURL = (query /*: string */) =>
   createSelector(
     (state) => state.settings.api,
     (state) => state.customLocation.description,
@@ -307,8 +316,9 @@ const getExtraURL = (query) =>
 /*:: type Props = {
   mainData: Object,
   dataMerged: Object,
-  showConservationButton: boolean,
-  handleConservationLoad: function,
+  showConservationButton?: boolean,
+  handleConservationLoad?: function,
+  children: any,
 }; */
 export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -327,7 +337,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
       handleConservationLoad,
     } = this.props;
     const sortedData = Object.entries(dataMerged)
-      .sort(sortFunction)
+      .sort(byEntryType)
       // “Binding_site” -> “Binding site”
       .map(([key, value]) => [
         key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
@@ -349,7 +359,12 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
   }
 }
 
-const ConservationProvider = ({ handleLoaded, dataConservation }) => {
+const ConservationProvider = (
+  {
+    handleLoaded,
+    dataConservation,
+  } /*: { handleLoaded: function, dataConservation?: { loading: boolean, payload: {}} } */,
+) => {
   useEffect(() => {
     if (
       dataConservation &&
@@ -361,21 +376,37 @@ const ConservationProvider = ({ handleLoaded, dataConservation }) => {
   });
   return null;
 };
+ConservationProvider.propTypes = {
+  handleLoaded: T.func,
+  dataConservation: T.shape({
+    loading: T.bool,
+    payload: T.object,
+  }),
+};
 
 const ConservationProviderLoaded = loadData({
   getUrl: getExtraURL('conservation'),
   propNamespace: 'Conservation',
 })(ConservationProvider);
 
-/*:: type DPWithoutDataProps = {
+/*::
+type DPWithoutDataProps = {
   mainData: Object,
   data: Object,
   dataResidues: Object,
   dataFeatures: Object,
-  dataGenome3d: Object
-}; */
+  dataGenome3d: Object,
+  children: mixed,
+};
+type DPState ={
+  generateConservationData: boolean,
+  showConservationButton: boolean,
+  dataConservation: ?{ [string]: {entries: ?{}}},
 
-export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDataProps> */ {
+}
+*/
+
+export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDataProps, DPState> */ {
   static propTypes = {
     mainData: T.object.isRequired,
     data: T.object.isRequired,
@@ -385,7 +416,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     children: T.any,
   };
 
-  constructor(props /*: Props */) {
+  constructor(props /*: DPWithoutDataProps */) {
     super(props);
     this.state = {
       generateConservationData: false,
@@ -492,8 +523,9 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 
     if (
       !Object.keys(mergedData).length ||
-      !Object.values(mergedData)
-        .map((x) => x.length)
+      // prettier-ignore
+      !(Object.values(mergedData)/*: any */)
+        .map((x/*: Array<Object> */) => x.length)
         .reduce((agg, v) => agg + v, 0)
     ) {
       return <div className={f('callout')}>No entries match this protein.</div>;

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import T from 'prop-types';
 import File from 'components/File';
@@ -27,7 +28,22 @@ const FileExporter = (
     secondary,
     className,
     focused = null,
-  } /*: {description: Object, search: Object, count: number, fileType: string, primary: string, secondary: string, label?: string, className?: string, focused?: string} */,
+  } /*: {
+    description: {
+      main: {key:string},
+      taxonomy?: {accession: string},
+    },
+    search?: {
+      extra_fields: string,
+    },
+    count: number,
+    fileType: string,
+    primary: string,
+    secondary: string,
+    label?: string,
+    className?: string,
+    focused?: ?string
+  } */,
 ) => {
   const customLocationDescription = {
     ...description,
@@ -38,7 +54,7 @@ const FileExporter = (
       isFilter: true,
     },
   };
-  if (focused && +focused !== 1) {
+  if (focused && +focused !== 1 && customLocationDescription.taxonomy) {
     customLocationDescription.taxonomy.accession = focused;
   }
   return (

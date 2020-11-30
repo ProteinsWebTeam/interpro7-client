@@ -31,25 +31,74 @@ const extensions = {
   fasta: 'fasta',
   json: 'json',
 };
+
+const TooltipContent = (
+  {
+    shouldLinkToResults,
+    title,
+    count,
+    subpath,
+    fileType,
+  } /*: {shouldLinkToResults: boolean, title: string, count: number, subpath?: string, fileType: string} */,
+) => {
+  return count === 0 ? (
+    <div>
+      <p className={f('tooltip-paragraph')}>
+        <span>No data available</span>
+      </p>
+    </div>
+  ) : (
+    <div>
+      <p className={f('tooltip-paragraph')}>
+        <span>{title}</span>
+      </p>
+      {shouldLinkToResults && (
+        <p className={f('tooltip-paragraph')}>
+          <Link
+            to={{
+              description: {
+                main: { key: 'result' },
+                result: { type: 'download' },
+              },
+              hash: `${subpath || ''}|${fileType}`,
+            }}
+            className={f('button', 'hollow', 'in-popup')}
+          >
+            See more download options
+          </Link>
+        </p>
+      )}
+    </div>
+  );
+};
+TooltipContent.propTypes = {
+  shouldLinkToResults: T.bool,
+  title: T.string,
+  count: T.number,
+  subpath: T.string,
+  fileType: T.string,
+};
 /*:: type ButtonProps = {
   fileType: string,
   url: string,
-  subpath: string,
+  subpath?: string,
   count: number,
   name: string,
   progress: number,
-  successful: boolean,
-  blobURL: string,
+  successful?: boolean,
+  blobURL?: string,
   label?: string,
   className?: string,
-  handleClick: function
+  handleClick: function,
+  shouldLinkToResults: boolean,
+  showIcon?: boolean,
 }; */
 
-class Button extends PureComponent /*:: <ButtonProps> */ {
+export class FileButton extends PureComponent /*:: <ButtonProps> */ {
   static propTypes = {
     fileType: T.oneOf(['accession', 'fasta', 'json', 'tsv']).isRequired,
     url: T.string.isRequired,
-    subpath: T.string.isRequired,
+    subpath: T.string,
     count: T.number,
     name: T.string,
     progress: T.number,
@@ -58,8 +107,11 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
     label: T.string,
     className: T.string,
     handleClick: T.func.isRequired,
+    shouldLinkToResults: T.bool,
+    showIcon: T.bool,
   };
 
+  // eslint-disable-next-line complexity
   render() {
     const {
       fileType,
@@ -73,75 +125,52 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
       handleClick,
       label,
       className,
+      shouldLinkToResults = true,
+      showIcon,
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
     const failed = successful === false;
-    let stateLabel = '';
-    let title = '';
+    let stateLabel = 'Generate';
+    let title = 'Click icon to generate';
     if (count > HARD_LIMIT) {
-      title += 'Direct download disabled for this';
+      title = 'Direct download disabled for this';
       stateLabel = 'Disabled';
     } else if (downloading) {
-      title += 'Generating';
+      title = 'Generating';
       stateLabel = 'Generating';
     } else if (failed) {
-      title += 'Failed generating';
+      title = 'Failed generating';
       stateLabel = 'Failed';
     } else if (successful) {
-      title += 'Download';
+      title = 'Download';
       stateLabel = 'Download';
-    } else {
-      title += 'Click icon to generate';
-      stateLabel = 'Generate';
     }
     title += ` ${fileType} file`;
     const labelToShow = label || stateLabel;
 
-    // if (count === 0) {
-    //   title = 'No data available to download';
-    // }
     const filename = name || `${fileType}.${extensions[fileType]}`;
+
+    const buttonClass = showIcon ? [] : ['button', 'hollow'];
     return (
       <Tooltip
         interactive
         useContext
         html={
-          count === 0 ? (
-            <div>
-              <p className={f('tooltip-paragraph')}>
-                <span>No data available</span>
-              </p>
-            </div>
-          ) : (
-            <div>
-              <p className={f('tooltip-paragraph')}>
-                <span>{title}</span>
-              </p>
-              <p className={f('tooltip-paragraph')}>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'result' },
-                      result: { type: 'download' },
-                    },
-                    hash: `${subpath}|${fileType}`,
-                  }}
-                  className={f('button', 'hollow', 'in-popup')}
-                >
-                  See more download options
-                </Link>
-              </p>
-            </div>
-          )
+          <TooltipContent
+            title={title}
+            count={count}
+            shouldLinkToResults={shouldLinkToResults}
+            subpath={subpath}
+            fileType={fileType}
+          />
         }
       >
         <div>
-          {/* there to have tooltip go higher than the button */}
           <Link
             download={filename}
             href={blobURL || url}
             disabled={downloading || count > HARD_LIMIT || count === 0}
-            className={f('button', 'hollow', className, {
+            className={f(...buttonClass, className, {
               downloading,
               failed,
             })}
@@ -155,7 +184,7 @@ class Button extends PureComponent /*:: <ButtonProps> */ {
               failed={failed}
               progress={progress || SMALL}
             />
-            {labelToShow && (
+            {labelToShow && !showIcon && (
               <span className={f('file-label')}>{labelToShow}</span>
             )}
           </Link>
@@ -246,7 +275,7 @@ export class File extends PureComponent /*:: <Props, State> */ {
       subset: nextProps.subset,
       ConnectedButton: connect(
         mapStateToPropsFor(url, nextProps.fileType, nextProps.subset),
-      )(Button),
+      )(FileButton),
     };
   }
 

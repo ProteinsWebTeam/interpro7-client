@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import ToggleSwitch from 'components/ToggleSwitch';
 import { DEV } from 'config';
 
 import { noop } from 'lodash-es';
@@ -258,8 +259,14 @@ NotificationSettings.propTypes = {
 
 const UISettings = (
   {
-    ui: { lowGraphics, colorDomainsBy, structureViewer },
-  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean}} */,
+    ui: {
+      lowGraphics,
+      colorDomainsBy,
+      structureViewer,
+      showKeySpecies,
+      showAllSpecies,
+    },
+  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean, showKeySpecies: boolean, showAllSpecies: boolean}} */,
 ) => (
   <form data-category="ui">
     <h4>UI settings</h4>
@@ -276,25 +283,12 @@ const UISettings = (
         <p>
           <small>Recommended for low-end devices</small>
         </p>
-        <div className={f('switch', 'large')}>
-          <input
-            type="checkbox"
-            checked={lowGraphics}
-            className={f('switch-input')}
-            name="lowGraphics"
-            id="lowGraphics-input"
-            onChange={noop}
-          />
-          <label className={f('switch-paddle')} htmlFor="lowGraphics-input">
-            <span className={f('show-for-sr')}>Low graphics mode:</span>
-            <span className={f('switch-active')} aria-hidden="true">
-              On
-            </span>
-            <span className={f('switch-inactive')} aria-hidden="true">
-              Off
-            </span>
-          </label>
-        </div>
+        <ToggleSwitch
+          switchCond={lowGraphics}
+          name={'lowGraphics'}
+          id={'lowGraphics-input'}
+          SRLabel={'Low graphics mode'}
+        />
       </div>
     </div>
     <div className={f('row')}>
@@ -329,26 +323,64 @@ const UISettings = (
             display the viewer all the time?
           </small>
         </p>
-        <div className={f('switch', 'large')}>
-          <input
-            type="checkbox"
-            checked={structureViewer}
-            className={f('switch-input')}
-            name="structureViewer"
-            id="structureViewer-input"
-            onChange={noop}
-          />
-          <label className={f('switch-paddle')} htmlFor="structureViewer-input">
-            <span className={f('show-for-sr')}>
-              Structure viewer always visible:
-            </span>
-            <span className={f('switch-active')} aria-hidden="true">
-              Yes
-            </span>
-            <span className={f('switch-inactive')} aria-hidden="true">
-              No
-            </span>
-          </label>
+        <ToggleSwitch
+          switchCond={structureViewer}
+          name={'structureViewer'}
+          id={'structureViewer-input'}
+          SRLabel={'Structure viewer always visible'}
+          onValue={'Yes'}
+          offValue={'No'}
+        />
+      </div>
+    </div>
+
+    <div className={f('row')}>
+      <div className={f('medium-12', 'column')}>
+        <p>Taxonomy tables:</p>
+        <p>
+          <small>
+            The taxonomy information is available for both key species and all
+            organisms. The key species table is shown by default. If you wish to
+            change it, please select the respective options.
+          </small>
+        </p>
+        <div className={f('row')}>
+          <div className={f('medium-4', 'column')}>
+            <table>
+              <thead>
+                <tr>
+                  <th>Table</th>
+                  <th>Preference</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Key species</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      name="showKeySpecies"
+                      id="keySpecies-input"
+                      checked={showKeySpecies}
+                      onChange={noop}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>All species</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      name="showAllSpecies"
+                      id="allSpecies-input"
+                      checked={showAllSpecies}
+                      onChange={noop}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -359,6 +391,8 @@ UISettings.propTypes = {
     lowGraphics: T.bool.isRequired,
     colorDomainsBy: T.string.isRequired,
     structureViewer: T.bool.isRequired,
+    showKeySpecies: T.bool.isRequired,
+    showAllSpecies: T.bool.isRequired,
   }).isRequired,
 };
 
@@ -377,25 +411,12 @@ const CacheSettings = (
     <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
         <p>Caching:</p>
-        <div className={f('switch', 'large')}>
-          <input
-            type="checkbox"
-            checked={enabled}
-            className={f('switch-input')}
-            name="enabled"
-            id="cache-input"
-            onChange={noop}
-          />
-          <label className={f('switch-paddle')} htmlFor="cache-input">
-            <span className={f('show-for-sr')}>Caching:</span>
-            <span className={f('switch-active')} aria-hidden="true">
-              On
-            </span>
-            <span className={f('switch-inactive')} aria-hidden="true">
-              Off
-            </span>
-          </label>
-        </div>
+        <ToggleSwitch
+          switchCond={enabled}
+          name={'enabled'}
+          id={'cache-input'}
+          SRLabel={'Caching'}
+        />
         <div>
           <button
             type="button"

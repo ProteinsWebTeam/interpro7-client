@@ -6,7 +6,7 @@ import loadWebComponent from 'utils/load-web-component';
 import ProtvistaSaver from 'protvista-saver';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+import { EntryColorMode } from 'utils/entry-color';
 import ReactToPrint from 'react-to-print';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
@@ -164,12 +164,6 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
   };
 
   changeColor = ({ target: { value: colorMode } }) => {
-    for (const track of (Object.values(this.props.webTracks) /*: any */)) {
-      for (const d of [...track._data, ...(track._contributors || [])]) {
-        d.color = getTrackColor(d, colorMode);
-      }
-      track.refresh();
-    }
     this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
   };
 

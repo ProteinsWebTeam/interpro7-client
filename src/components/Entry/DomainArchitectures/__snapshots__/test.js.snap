@@ -18,40 +18,16 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
         <Tooltip
           title="Toogle between domain architectures based on Pfam and InterPro entries"
         >
-          <div
-            className="switch large"
-          >
-            <input
-              checked={true}
-              className="switch-input"
-              id="accessionDB-input"
-              name="accessionDB"
-              onChange={[Function]}
-              type="checkbox"
-            />
-            <label
-              className="switch-paddle accession-selector"
-              htmlFor="accessionDB-input"
-            >
-              <span
-                className="show-for-sr"
-              >
-                Use accessions from:
-              </span>
-              <span
-                aria-hidden="true"
-                className="switch-active"
-              >
-                Pfam
-              </span>
-              <span
-                aria-hidden="true"
-                className="switch-inactive"
-              >
-                InterPro
-              </span>
-            </label>
-          </div>
+          <ToggleSwitch
+            SRLabel="Use accessions from"
+            addAccessionStyle={true}
+            handleChange={[Function]}
+            id="accessionDB-input"
+            name="accessionDB"
+            offValue="InterPro"
+            onValue="Pfam"
+            switchCond={true}
+          />
         </Tooltip>
       </div>
     </React.Fragment>

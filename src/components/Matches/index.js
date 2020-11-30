@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from 'react';
 import T from 'prop-types';
@@ -90,7 +91,21 @@ const schemamap = {
   },
 };
 
-const schemaProcessData = ({ data, primary, secondary }) => {
+const schemaProcessData = (
+  {
+    data,
+    primary,
+    secondary,
+  } /*: {
+    data: {
+      accession: string,
+      source_database: string,
+      name: string,
+    },
+    primary: string,
+    secondary: string
+  }*/,
+) => {
   const name = schemamap[secondary][primary];
   const type = endpoint2type[primary];
   return {
@@ -158,32 +173,90 @@ const MatchesByPrimary = (
 } */,
 ) => {
   const MatchComponent = componentMatch[primary][secondary];
-  return <MatchComponent matches={matches} {...props} />;
+  return <MatchComponent {...props} matches={matches} />;
 };
 MatchesByPrimary.propTypes = propTypes;
 
-export const ProteinDownloadRenderer = (description) => (accession, row) => (
-  <File
-    fileType="fasta"
-    name={`protein-sequences-matching-${
-      description[description.main.key].accession
-    }-for-${accession}.fasta`}
-    count={row.proteins || row.counters.extra_fields.counters.proteins}
-    customLocationDescription={{
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      [description.taxonomy.isFilter ? 'taxonomy' : 'proteome']: {
-        isFilter: true,
-        db: 'UniProt',
-        accession: `${accession}`,
-      },
-      [description.main.key]: {
-        ...description[description.main.key],
-        isFilter: true,
-      },
-    }}
-  />
-);
+export const ProteinDownloadRenderer = (
+  description /*: {
+  main: {key:string, ...},
+  taxonomy: {accession: string, isFilter: boolean},
+} */,
+) => (accession, row) => {
+  const endpointToFilterBy /*: string */ = description.taxonomy.isFilter
+    ? 'taxonomy'
+    : 'proteome';
+  return (
+    <div className={f('actions')}>
+      <Tooltip title="View matching proteins" useContext>
+        <div className={f('view-icon-div')}>
+          <Link
+            className={f('icon', 'icon-conceptual', 'view-link')}
+            to={{
+              description: {
+                main: { key: description.main.key },
+                [description.main.key]: {
+                  ...description[description.main.key],
+                },
+                protein: {
+                  db: 'uniprot',
+                  order: 1,
+                  isFilter: true,
+                },
+                [endpointToFilterBy]: {
+                  accession: accession,
+                  db: row.source_database,
+                  order: 2,
+                  isFilter: true,
+                },
+              },
+            }}
+            aria-label="View proteins"
+            data-icon="&#x50;"
+          />
+        </div>
+      </Tooltip>
+      <File
+        fileType="fasta"
+        name={`protein-sequences-matching-${
+          description[description.main.key].accession
+        }-for-${accession}.fasta`}
+        count={row.proteins || row.counters.extra_fields.counters.proteins}
+        customLocationDescription={{
+          main: { key: 'protein' },
+          protein: { db: 'UniProt' },
+          [endpointToFilterBy]: {
+            isFilter: true,
+            db: 'UniProt',
+            accession: `${accession}`,
+          },
+          [description.main.key]: {
+            ...description[description.main.key],
+            isFilter: true,
+          },
+        }}
+        showIcon={true}
+      />
+      <Tooltip title={`View ${endpointToFilterBy} information`}>
+        <Link
+          to={{
+            description: {
+              main: {
+                key: endpointToFilterBy,
+              },
+              [endpointToFilterBy]: {
+                db: row.source_database,
+                accession: accession,
+              },
+            },
+          }}
+        >
+          <div className={f('icon', 'icon-count-organisms', 'icon-wrapper')} />
+        </Link>
+      </Tooltip>
+    </div>
+  );
+};
 
 const includeAccessionSearch = (
   dataTable,
@@ -256,6 +329,10 @@ const Matches = (
     mainData: Object,
     accessionSearch: Object,
     focusType?: string,
+    currentAPICall: string,
+    nextAPICall: string,
+    previousAPICall: string,
+    status: number,
     props: Array<any>
 } */,
 ) => {
@@ -325,9 +402,9 @@ const Matches = (
                 />
               </>
             )}
-            <label htmlFor="json">TSV</label>
+            <label htmlFor="tsv">TSV</label>
             <FileExporter
-              name="json"
+              name="tsv"
               description={description}
               count={actualSize}
               search={search}
@@ -336,9 +413,9 @@ const Matches = (
               secondary={secondary}
               focused={focused}
             />
-            <label htmlFor="tsv">JSON</label>
+            <label htmlFor="json">JSON</label>
             <FileExporter
-              name="tsv"
+              name="json"
               description={description}
               count={actualSize}
               search={search}
@@ -367,37 +444,42 @@ const Matches = (
       )}
       <Column
         dataKey="accession"
-        renderer={(acc /*: string */, obj /*: {source_database: string} */) => {
+        renderer={(
+          acc /*: string */,
+          obj /*: {source_database: string, type: string} */,
+        ) => {
           const { source_database: sourceDatabase } = obj;
+          const cellContent = (
+            <span className={f('acc-row')}>
+              {obj.source_database === 'interpro' ? (
+                <interpro-type
+                  type={obj.type.replace('_', ' ')}
+                  dimension=".8em"
+                />
+              ) : null}
+              <HighlightedText text={acc} textToHighlight={search.search} />
+            </span>
+          );
           return (
-            // let reviewed =null;
-            // if (primary === 'protein' && sourceDatabase === 'reviewed')
-            //   reviewed = (
-            //
-            //   )
             <>
               <SchemaOrgData
                 data={{ data: obj, primary, secondary }}
                 processData={schemaProcessData}
               />
-              <Link
-                to={{
-                  description: {
-                    main: { key: primary },
-                    [primary]: { db: sourceDatabase, accession: acc },
-                  },
-                }}
-              >
-                <span className={f('acc-row')}>
-                  {obj.source_database === 'interpro' ? (
-                    <interpro-type
-                      type={obj.type.replace('_', ' ')}
-                      dimension=".8em"
-                    />
-                  ) : null}
-                  <HighlightedText text={acc} textToHighlight={search.search} />
-                </span>
-              </Link>{' '}
+              {focusType === 'taxonomy' ? (
+                cellContent
+              ) : (
+                <Link
+                  to={{
+                    description: {
+                      main: { key: primary },
+                      [primary]: { db: sourceDatabase, accession: acc },
+                    },
+                  }}
+                >
+                  {cellContent}
+                </Link>
+              )}
               {primary === 'protein' && sourceDatabase === 'reviewed' ? (
                 <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
                   <span
@@ -422,16 +504,22 @@ const Matches = (
             source_database: sourceDatabase,
           } /*: {accession: string, source_database: string} */,
         ) => (
-          <Link
-            to={{
-              description: {
-                main: { key: primary },
-                [primary]: { db: sourceDatabase, accession },
-              },
-            }}
-          >
-            <HighlightedText text={name} textToHighlight={search.search} />
-          </Link>
+          <>
+            {focusType === 'taxonomy' || focusType === 'proteome' ? (
+              <HighlightedText text={name} textToHighlight={search.search} />
+            ) : (
+              <Link
+                to={{
+                  description: {
+                    main: { key: primary },
+                    [primary]: { db: sourceDatabase, accession },
+                  },
+                }}
+              >
+                <HighlightedText text={name} textToHighlight={search.search} />
+              </Link>
+            )}
+          </>
         )}
       />
       <Column
@@ -536,10 +624,10 @@ const Matches = (
             {(hasBeenVisible /*: boolean */) =>
               hasBeenVisible ? (
                 <MatchesByPrimary
+                  {...props}
                   matches={[match]}
                   primary={primary}
                   secondary={secondary}
-                  {...props}
                 />
               ) : null
             }
@@ -554,41 +642,7 @@ const Matches = (
         headerClassName={f('table-center')}
         cellClassName={f('table-center')}
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
-        renderer={(
-          count,
-          {
-            accession,
-            source_database: sourceDatabase,
-            match: {
-              [secondary]: { accession: acc, source_database: db },
-            },
-          },
-        ) => (
-          <Link
-            to={{
-              description: {
-                main: { key: secondary },
-                [secondary]: {
-                  accession: acc,
-                  db,
-                },
-                protein: {
-                  db: 'uniprot',
-                  order: 1,
-                  isFilter: true,
-                },
-                [primary]: {
-                  db: sourceDatabase,
-                  accession,
-                  order: 2,
-                  isFilter: true,
-                },
-              },
-            }}
-          >
-            <NumberComponent abbr>{count}</NumberComponent>
-          </Link>
-        )}
+        renderer={(count) => <NumberComponent abbr>{count}</NumberComponent>}
       >
         protein count
       </Column>
@@ -600,7 +654,7 @@ const Matches = (
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
         renderer={ProteinDownloadRenderer(description)}
       >
-        FASTA
+        Actions
       </Column>
     </Table>
   );

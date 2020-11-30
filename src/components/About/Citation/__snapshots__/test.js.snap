@@ -17,7 +17,7 @@ exports[`<Citation /> should render 1`] = `
   <div
     className="flex-column"
   >
-    <InterPro2019 />
+    <InterPro2020 />
     <InterProScan2014 />
   </div>
   <div
@@ -31,7 +31,7 @@ exports[`<Citation /> should render 1`] = `
     <p>
       To cite InterPro, please refer to the following publication:
     </p>
-    <PrintedInterPro2019 />
+    <PrintedInterPro2020 />
     <p>
       To cite InterProScan, please refer to the following publication:
     </p>
