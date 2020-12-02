@@ -1,8 +1,9 @@
 @import '../../styles/timing.css';
 
 .filters-panel {
-  max-height: 250px;
-  flex-flow: row nowrap; /*make it work with Firefox*/
+  display: flex;
+  flex-direction: column;
+  background: #e9f1f3;
 
   & label {
     line-height: normal;
@@ -33,6 +34,9 @@
   max-width: 30%;
 } /* so column doesn't expand totally when only 1-2 filters*/
 
+.filter-container {
+  border: 1px lightgray solid;
+}
 .filter-panel {
   max-height: 142px;
   margin-bottom: 0.25rem;

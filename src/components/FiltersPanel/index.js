@@ -30,7 +30,7 @@ export const FilterPanel = (
   } /*: {label: string, collapsed?: boolean, toggle?: function, children?: any} */,
 ) => (
   <div
-    className={f('columns', 'small-12', 'medium-4', 'large-4', 'end')}
+    className={f('filter-container')}
     data-testid={`filterby-${label.toLowerCase().replace(/\s+/g, '_')}`}
   >
     {label && (
@@ -112,7 +112,7 @@ export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
     });
   };
 
-  toggleFilter = i => () => {
+  toggleFilter = (i) => () => {
     const [...filters] = this.state.filters;
     filters[i] = !filters[i];
     this.setState({ filters });
@@ -127,16 +127,8 @@ export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
       true,
     );
     return (
-      <div className={f('row', 'filters-panel')}>
-        <div
-          className={f(
-            'columns',
-            'large-12',
-            'show-for-large',
-            'margin-bottom-medium',
-          )}
-          data-testid="filters-panel"
-        >
+      <div className={f('filters-panel')}>
+        <div data-testid="filters-panel">
           <span>Filter By</span>
           <span className={f('filter-buttons')}>
             <button className={f('but-collapse')} onClick={this.clearAll}>
@@ -173,7 +165,7 @@ export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
 }
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(FiltersPanel);

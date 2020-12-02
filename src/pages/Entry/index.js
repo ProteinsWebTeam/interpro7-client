@@ -497,13 +497,14 @@ class List extends PureComponent /*:: <Props> */ {
       <>
         <MemberDBTabs />
         <div className={f('row')}>
-          <MemberDBSelector
+          {/* <MemberDBSelector
             contentType="entry"
             className="pp-left-side-db-selector"
-          />
-          <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+          /> */}
+          <div className={f('columns', 'small-12', 'medium-3', 'large-2')}>
             <EntryListFilter />
-            <hr className={f('margin-bottom-none')} />
+          </div>
+          <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
             {databases && db && databases[db.toLowerCase()] && (
               <SchemaOrgData
                 data={{

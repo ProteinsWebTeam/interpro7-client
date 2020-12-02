@@ -299,14 +299,14 @@ class List extends PureComponent /*:: <ListProps> */ {
     }
     return (
       <div className={f('row')}>
-        <MemberDBSelector
-          contentType="protein"
-          className="pp-left-side-db-selector"
-        />
-
-        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+        <div className={f('columns', 'small-12', 'medium-3', 'large-2')}>
+          <MemberDBSelector
+            contentType="protein"
+            className="pp-left-side-db-selector"
+          />
           {!search.ida && <ProteinListFilters />}
-          <hr className={f('margin-bottom-none')} />
+        </div>
+        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           {databases && db && databases[db.toLowerCase()] && (
             <SchemaOrgData
               data={{

@@ -312,10 +312,6 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
         onMouseLeave={this._handleExit(true)}
         onBlur={this._handleExit(true)}
         className={f('container', className, {
-          columns: !children,
-          'small-12': !children,
-          'medium-3': !children,
-          'large-2': !children,
           lowGraphics,
         })}
       >
