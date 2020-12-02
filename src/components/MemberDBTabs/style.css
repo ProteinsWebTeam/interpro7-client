@@ -1,0 +1,99 @@
+@import '../../styles/timing.css';
+@import '../../styles/colors.css';
+:root {
+  --colors-tab-border: black;
+  --space-for-scroll: 0.5rem;
+  --margin-bottom: 0.5rem;
+}
+.container {
+  position: relative;
+  overflow: hidden;
+
+  & .scrollbox {
+    overflow: scroll;
+    scrollbar-width: thin;
+
+    & .tabs {
+      border: 0; /*needed to remove foundation style*/
+      margin-bottom: var(--margin-bottom);
+      display: flex;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      padding-bottom: var(--space-for-scroll);
+
+      & .tabs-label {
+        display: flex;
+        align-items: stretch;
+        padding: 0.2em 1em 0 1em;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        border-bottom: 2px solid var(--colors-tab-border);
+        & a {
+          color: grey;
+          display: flex;
+          /* align-content: center; */
+          & .label {
+            color: var(--colors-graydark);
+            padding: 0.2em 0.4em;
+            background: var(--colors-nearly-white);
+            align-self: baseline;
+          }
+          & .db-tag {
+            width: 0.2em;
+            margin: 0.2em 0.1em;
+            opacity: 0.5;
+            transition: all var(--timing-medclose);
+          }
+        }
+      }
+      & .tabs-label:hover {
+        & .label {
+          color: var(--colors-dark);
+        }
+        & .db-tag {
+          opacity: 0.8;
+          width: 0.3em;
+        }
+      }
+
+      & .tabs-label.active {
+        border-bottom: 0;
+        border-top: 2px solid var(--colors-tab-border);
+        border-left: 2px solid var(--colors-tab-border);
+        border-right: 2px solid var(--colors-tab-border);
+        font-weight: bold;
+        & a {
+          color: var(--colors-ebidark);
+          & .label {
+            color: white;
+          }
+          & .db-tag {
+            opacity: 1;
+            width: 0.3em;
+          }
+        }
+      }
+    }
+  }
+  & .shadow {
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: all var(--timing-really-fast) ease-out;
+    height: calc(100% - var(--space-for-scroll) - var(--margin-bottom));
+  }
+  &.off-left {
+    & .shadow-left {
+      box-shadow: 1em 0 1em -1em black inset;
+    }
+  }
+  &.off-right {
+    & .shadow-right {
+      box-shadow: -1em 0 1em -1em black inset;
+    }
+  }
+}

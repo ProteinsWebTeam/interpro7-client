@@ -11,6 +11,7 @@ import Link from 'components/generic/Link';
 import { GoLink } from 'components/ExtLink';
 import Description from 'components/Description';
 import MemberDBSelector from 'components/MemberDBSelector';
+import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -493,335 +494,339 @@ class List extends PureComponent /*:: <Props> */ {
     }
     const includeGrid = data.url;
     return (
-      <div className={f('row')}>
-        <MemberDBSelector
-          contentType="entry"
-          className="pp-left-side-db-selector"
-        />
-        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          <EntryListFilter />
-          <hr className={f('margin-bottom-none')} />
-          {databases && db && databases[db.toLowerCase()] && (
-            <SchemaOrgData
-              data={{
-                data: { db: databases[db.toLowerCase()] },
-                location: window.location,
-              }}
-              processData={schemaProcessDataTable}
-            />
-          )}
-          <Table
-            dataTable={_payload.results}
+      <>
+        <MemberDBTabs />
+        <div className={f('row')}>
+          <MemberDBSelector
             contentType="entry"
-            loading={data.loading}
-            ok={data.ok}
-            status={data.status}
-            isStale={isStale}
-            actualSize={_payload.count}
-            query={search}
-            notFound={notFound}
-            withGrid={!!includeGrid}
-            databases={databases}
-            nextAPICall={_payload.next}
-            previousAPICall={_payload.previous}
-            currentAPICall={data.url}
-          >
-            <Exporter>
-              <div className={f('menu-grid')}>
-                <label htmlFor="json">JSON</label>
-                <AllEntriesDownload
-                  description={description}
-                  search={search}
-                  count={_payload.count}
-                  fileType="json"
-                  name="json"
-                />
-                <label htmlFor="tsv">TSV</label>
-                <AllEntriesDownload
-                  description={description}
-                  search={search}
-                  count={_payload.count}
-                  fileType="tsv"
-                  name="tsv"
-                />
-                <label htmlFor="api">API</label>
-                <Link
-                  target="_blank"
-                  href={data.url}
-                  name="api"
-                  className={f('button', 'hollow', 'imitate-progress-button')}
-                >
-                  <span
-                    className={f('icon', 'icon-common', 'icon-export')}
-                    data-icon="&#xf233;"
-                  />
-                  <span className={f('file-label')}>Web View</span>
-                </Link>
-              </div>
-            </Exporter>
-            <PageSizeSelector />
-            <Card>
-              {(data) => (
-                <EntryCard data={data} search={search.search} entryDB={db} />
-              )}
-            </Card>
-            <SearchBox loading={isStale}>Search entries</SearchBox>
-            <HighlightToggler />
-            {db === 'InterPro' && (
-              <Column
-                dataKey="type"
-                headerClassName={f('col-type', 'table-center')}
-                cellClassName={f('table-center')}
-                renderer={(type) => {
-                  const _type = type.replace('_', ' ');
-                  return (
-                    <Tooltip title={`${_type} type`}>
-                      <interpro-type type={_type} dimension="26px" />
-                    </Tooltip>
-                  );
+            className="pp-left-side-db-selector"
+          />
+          <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+            <EntryListFilter />
+            <hr className={f('margin-bottom-none')} />
+            {databases && db && databases[db.toLowerCase()] && (
+              <SchemaOrgData
+                data={{
+                  data: { db: databases[db.toLowerCase()] },
+                  location: window.location,
                 }}
+                processData={schemaProcessDataTable}
               />
             )}
-            <Column
-              dataKey="accession"
-              renderer={(accession /*: string */, row) => (
-                <Link
-                  to={(customLocation) => ({
-                    description: {
-                      ...customLocation.description,
-                      entry: {
-                        ...customLocation.description.entry,
-                        accession,
-                      },
-                    },
-                  })}
-                >
-                  <SchemaOrgData
-                    data={{
-                      data: { row, endpoint: 'entry' },
-                      location: window.location,
-                    }}
-                    processData={schemaProcessDataTableRow}
+            <Table
+              dataTable={_payload.results}
+              contentType="entry"
+              loading={data.loading}
+              ok={data.ok}
+              status={data.status}
+              isStale={isStale}
+              actualSize={_payload.count}
+              query={search}
+              notFound={notFound}
+              withGrid={!!includeGrid}
+              databases={databases}
+              nextAPICall={_payload.next}
+              previousAPICall={_payload.previous}
+              currentAPICall={data.url}
+            >
+              <Exporter>
+                <div className={f('menu-grid')}>
+                  <label htmlFor="json">JSON</label>
+                  <AllEntriesDownload
+                    description={description}
+                    search={search}
+                    count={_payload.count}
+                    fileType="json"
+                    name="json"
                   />
-                  <span className={f('acc-row')}>
+                  <label htmlFor="tsv">TSV</label>
+                  <AllEntriesDownload
+                    description={description}
+                    search={search}
+                    count={_payload.count}
+                    fileType="tsv"
+                    name="tsv"
+                  />
+                  <label htmlFor="api">API</label>
+                  <Link
+                    target="_blank"
+                    href={data.url}
+                    name="api"
+                    className={f('button', 'hollow', 'imitate-progress-button')}
+                  >
+                    <span
+                      className={f('icon', 'icon-common', 'icon-export')}
+                      data-icon="&#xf233;"
+                    />
+                    <span className={f('file-label')}>Web View</span>
+                  </Link>
+                </div>
+              </Exporter>
+              <PageSizeSelector />
+              <Card>
+                {(data) => (
+                  <EntryCard data={data} search={search.search} entryDB={db} />
+                )}
+              </Card>
+              <SearchBox loading={isStale}>Search entries</SearchBox>
+              <HighlightToggler />
+              {db === 'InterPro' && (
+                <Column
+                  dataKey="type"
+                  headerClassName={f('col-type', 'table-center')}
+                  cellClassName={f('table-center')}
+                  renderer={(type) => {
+                    const _type = type.replace('_', ' ');
+                    return (
+                      <Tooltip title={`${_type} type`}>
+                        <interpro-type type={_type} dimension="26px" />
+                      </Tooltip>
+                    );
+                  }}
+                />
+              )}
+              <Column
+                dataKey="accession"
+                renderer={(accession /*: string */, row) => (
+                  <Link
+                    to={(customLocation) => ({
+                      description: {
+                        ...customLocation.description,
+                        entry: {
+                          ...customLocation.description.entry,
+                          accession,
+                        },
+                      },
+                    })}
+                  >
+                    <SchemaOrgData
+                      data={{
+                        data: { row, endpoint: 'entry' },
+                        location: window.location,
+                      }}
+                      processData={schemaProcessDataTableRow}
+                    />
+                    <span className={f('acc-row')}>
+                      <HighlightedText
+                        text={accession || ''}
+                        textToHighlight={search.search}
+                      />
+                    </span>
+                  </Link>
+                )}
+              >
+                Accession
+              </Column>
+
+              <Column
+                dataKey="name"
+                renderer={(
+                  name /*: string */,
+                  { accession } /*: {accession: string} */,
+                ) => (
+                  <Link
+                    to={(customLocation) => ({
+                      description: {
+                        ...customLocation.description,
+                        entry: {
+                          ...customLocation.description.entry,
+                          accession,
+                        },
+                      },
+                      search: {},
+                    })}
+                  >
                     <HighlightedText
-                      text={accession || ''}
+                      text={name}
                       textToHighlight={search.search}
                     />
-                  </span>
-                </Link>
-              )}
-            >
-              Accession
-            </Column>
-
-            <Column
-              dataKey="name"
-              renderer={(
-                name /*: string */,
-                { accession } /*: {accession: string} */,
-              ) => (
-                <Link
-                  to={(customLocation) => ({
-                    description: {
-                      ...customLocation.description,
-                      entry: {
-                        ...customLocation.description.entry,
-                        accession,
-                      },
-                    },
-                    search: {},
-                  })}
-                >
-                  <HighlightedText
-                    text={name}
-                    textToHighlight={search.search}
-                  />
-                </Link>
-              )}
-            >
-              Name
-            </Column>
-
-            {db !== 'InterPro' && (
-              <Column
-                dataKey="type"
-                headerClassName={f('col-type', 'table-center')}
-                cellClassName={f('table-center')}
-                renderer={(type) => (
-                  <Tooltip
-                    title={`${type.replace('_', ' ')} type (as defined by ${
-                      (databases && databases[db] && databases[db].name) || db
-                    })`}
-                  >
-                    {type.replace('_', ' ')}
-                  </Tooltip>
+                  </Link>
                 )}
               >
-                {`${db} Type`}
+                Name
               </Column>
-            )}
 
-            {db !== 'InterPro' && (
-              <Column
-                dataKey="source_database"
-                headerClassName={f('table-center')}
-                cellClassName={f('table-center')}
-                renderer={(db /*: string */, { accession }) => {
-                  const externalLinkRenderer = getExtUrlFor(db);
-                  const symbol = (
-                    <MemberSymbol type={db} className={f('md-small')} />
-                  );
-                  if (!externalLinkRenderer) return symbol;
-                  return (
+              {db !== 'InterPro' && (
+                <Column
+                  dataKey="type"
+                  headerClassName={f('col-type', 'table-center')}
+                  cellClassName={f('table-center')}
+                  renderer={(type) => (
                     <Tooltip
-                      title={`link to ${accession} on the ${
+                      title={`${type.replace('_', ' ')} type (as defined by ${
                         (databases && databases[db] && databases[db].name) || db
-                      } website`}
-                      distance={30}
+                      })`}
                     >
-                      <Link
-                        target="_blank"
-                        href={externalLinkRenderer(accession)}
-                        style={{ borderBottomWidth: 0 }}
-                      >
-                        {symbol}
-                      </Link>
+                      {type.replace('_', ' ')}
                     </Tooltip>
-                  );
-                }}
-              >
-                DB
-              </Column>
-            )}
-            {db === 'InterPro' ? (
-              <Column
-                dataKey="member_databases"
-                cellClassName={f('col-md')}
-                renderer={(memberDataBases /*: Object */) => (
-                  <div className={f('signature-container')}>
-                    {memberDataBases &&
-                      Object.entries(memberDataBases).map(([db, entries]) =>
-                        Object.entries(entries).map(([accession, id]) => (
-                          <Tooltip
-                            key={accession}
-                            title={`${id} (${
-                              (databases &&
-                                databases[db] &&
-                                databases[db].name) ||
-                              db
-                            })`}
-                            className={f('signature', {
-                              'corresponds-to-filter':
-                                search.signature_in &&
-                                search.signature_in.toLowerCase() ===
-                                  db.toLowerCase(),
-                            })}
-                          >
-                            <Link
-                              to={{
-                                description: {
-                                  main: { key: 'entry' },
-                                  entry: { db, accession },
-                                },
-                              }}
-                            >
-                              {accession}
-                            </Link>
-                          </Tooltip>
-                        )),
-                      )}
-                  </div>
-                )}
-              >
-                Integrated Signature(s)
-              </Column>
-            ) : (
-              <Column
-                dataKey="integrated"
-                headerClassName={f('table-center')}
-                renderer={(accession /*: string */) =>
-                  accession ? (
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: { db: 'InterPro', accession },
-                        },
-                        search: {},
-                      }}
-                    >
-                      <Tooltip title={`${accession}`}>{accession}</Tooltip>
-                    </Link>
-                  ) : (
-                    ''
-                  )
-                }
-              >
-                Integrated Into
-              </Column>
-            )}
+                  )}
+                >
+                  {`${db} Type`}
+                </Column>
+              )}
 
-            {
-              // TODO re-insert GO terms as column in table for Member databases when data available
-            }
-
-            {db === 'InterPro' ? (
-              <Column
-                dataKey="go_terms"
-                headerClassName={f('col-go-head')}
-                cellClassName={f('col-go')}
-                renderer={(goTerms /*: Array<Object> */) => (
-                  <div className={f('go-container')}>
-                    {goTerms &&
-                      Array.from(goTerms)
-                        .sort((a, b) => {
-                          if (a.category.code > b.category.code) return 0;
-                          if (a.category.code < b.category.code) return 1;
-                          if (a.name > b.name) return 1;
-                          return 0;
-                        })
-                        .map((go) => (
-                          <span key={go.identifier} className={f('go-list')}>
+              {db !== 'InterPro' && (
+                <Column
+                  dataKey="source_database"
+                  headerClassName={f('table-center')}
+                  cellClassName={f('table-center')}
+                  renderer={(db /*: string */, { accession }) => {
+                    const externalLinkRenderer = getExtUrlFor(db);
+                    const symbol = (
+                      <MemberSymbol type={db} className={f('md-small')} />
+                    );
+                    if (!externalLinkRenderer) return symbol;
+                    return (
+                      <Tooltip
+                        title={`link to ${accession} on the ${
+                          (databases && databases[db] && databases[db].name) ||
+                          db
+                        } website`}
+                        distance={30}
+                      >
+                        <Link
+                          target="_blank"
+                          href={externalLinkRenderer(accession)}
+                          style={{ borderBottomWidth: 0 }}
+                        >
+                          {symbol}
+                        </Link>
+                      </Tooltip>
+                    );
+                  }}
+                >
+                  DB
+                </Column>
+              )}
+              {db === 'InterPro' ? (
+                <Column
+                  dataKey="member_databases"
+                  cellClassName={f('col-md')}
+                  renderer={(memberDataBases /*: Object */) => (
+                    <div className={f('signature-container')}>
+                      {memberDataBases &&
+                        Object.entries(memberDataBases).map(([db, entries]) =>
+                          Object.entries(entries).map(([accession, id]) => (
                             <Tooltip
-                              title={`${go.category.name.replace(
-                                '_',
-                                ' ',
-                              )} term`}
+                              key={accession}
+                              title={`${id} (${
+                                (databases &&
+                                  databases[db] &&
+                                  databases[db].name) ||
+                                db
+                              })`}
+                              className={f('signature', {
+                                'corresponds-to-filter':
+                                  search.signature_in &&
+                                  search.signature_in.toLowerCase() ===
+                                    db.toLowerCase(),
+                              })}
                             >
-                              <span
-                                className={f('go-circle')}
-                                style={{
-                                  background:
-                                    GO_COLORS.get(go.category.code) || '#ddd',
+                              <Link
+                                to={{
+                                  description: {
+                                    main: { key: 'entry' },
+                                    entry: { db, accession },
+                                  },
                                 }}
-                              />
+                              >
+                                {accession}
+                              </Link>
                             </Tooltip>
-                            <Tooltip title={`${go.name} (${go.identifier})`}>
-                              <GoLink id={go.identifier} className={f('ext')}>
-                                {go.name ? go.name : 'None'}
-                              </GoLink>
-                            </Tooltip>
-                          </span>
-                        ))}
-                  </div>
-                )}
-              >
-                GO Terms{' '}
-                <Tooltip title="Biological process category">
-                  <span className={f('sign-label-head', 'bp')}>BP</span>
-                </Tooltip>{' '}
-                <Tooltip title="Molecular function category">
-                  <span className={f('sign-label-head', 'mf')}>MF</span>
-                </Tooltip>{' '}
-                <Tooltip title="Cellular component category">
-                  <span className={f('sign-label-head', 'cc')}>CC</span>
-                </Tooltip>
-              </Column>
-            ) : null}
-          </Table>
+                          )),
+                        )}
+                    </div>
+                  )}
+                >
+                  Integrated Signature(s)
+                </Column>
+              ) : (
+                <Column
+                  dataKey="integrated"
+                  headerClassName={f('table-center')}
+                  renderer={(accession /*: string */) =>
+                    accession ? (
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'entry' },
+                            entry: { db: 'InterPro', accession },
+                          },
+                          search: {},
+                        }}
+                      >
+                        <Tooltip title={`${accession}`}>{accession}</Tooltip>
+                      </Link>
+                    ) : (
+                      ''
+                    )
+                  }
+                >
+                  Integrated Into
+                </Column>
+              )}
+
+              {
+                // TODO re-insert GO terms as column in table for Member databases when data available
+              }
+
+              {db === 'InterPro' ? (
+                <Column
+                  dataKey="go_terms"
+                  headerClassName={f('col-go-head')}
+                  cellClassName={f('col-go')}
+                  renderer={(goTerms /*: Array<Object> */) => (
+                    <div className={f('go-container')}>
+                      {goTerms &&
+                        Array.from(goTerms)
+                          .sort((a, b) => {
+                            if (a.category.code > b.category.code) return 0;
+                            if (a.category.code < b.category.code) return 1;
+                            if (a.name > b.name) return 1;
+                            return 0;
+                          })
+                          .map((go) => (
+                            <span key={go.identifier} className={f('go-list')}>
+                              <Tooltip
+                                title={`${go.category.name.replace(
+                                  '_',
+                                  ' ',
+                                )} term`}
+                              >
+                                <span
+                                  className={f('go-circle')}
+                                  style={{
+                                    background:
+                                      GO_COLORS.get(go.category.code) || '#ddd',
+                                  }}
+                                />
+                              </Tooltip>
+                              <Tooltip title={`${go.name} (${go.identifier})`}>
+                                <GoLink id={go.identifier} className={f('ext')}>
+                                  {go.name ? go.name : 'None'}
+                                </GoLink>
+                              </Tooltip>
+                            </span>
+                          ))}
+                    </div>
+                  )}
+                >
+                  GO Terms{' '}
+                  <Tooltip title="Biological process category">
+                    <span className={f('sign-label-head', 'bp')}>BP</span>
+                  </Tooltip>{' '}
+                  <Tooltip title="Molecular function category">
+                    <span className={f('sign-label-head', 'mf')}>MF</span>
+                  </Tooltip>{' '}
+                  <Tooltip title="Cellular component category">
+                    <span className={f('sign-label-head', 'cc')}>CC</span>
+                  </Tooltip>
+                </Column>
+              ) : null}
+            </Table>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }
