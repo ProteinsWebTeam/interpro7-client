@@ -414,3 +414,9 @@
     width: 100%;
   }
 }
+
+.db-symbol {
+  vertical-align: middle;
+  height: 2rem;
+  width: 2rem;
+}

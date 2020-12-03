@@ -8,7 +8,16 @@
     width: 50vw;
   }
 }
-
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  .potential-popup.popup {
+    width: 90vw;
+    & form.db-selector {
+      column-count: 2;
+      grid-template-rows: repeat(8, 1fr);
+    }
+  }
+}
 .popup {
   position: absolute;
   width: 70vw;

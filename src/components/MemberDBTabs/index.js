@@ -82,7 +82,6 @@ const MemberDBTabs = ({ dataDB, dataDBCount, entryDB, main }) => {
         event.target.scrollWidth - event.target.offsetWidth,
     );
   };
-  console.log(dataDBCount.payload);
   return (
     <div className={f('row')}>
       <div className={f('column')}>
@@ -93,7 +92,7 @@ const MemberDBTabs = ({ dataDB, dataDBCount, entryDB, main }) => {
           })}
         >
           <div className={f('scrollbox')} onScroll={handleScroll}>
-            <ul
+            <nav
               className={f('tabs', 'main-style')}
               style={{
                 '--colors-tab-border': config.colors.get(
@@ -101,6 +100,7 @@ const MemberDBTabs = ({ dataDB, dataDBCount, entryDB, main }) => {
                 ),
               }}
             >
+              <span className={f('tabs-label')} />
               {Array.from(dbs.values()).map((db) => {
                 const loading = dataDBCount.loading;
                 const count =
@@ -111,45 +111,48 @@ const MemberDBTabs = ({ dataDB, dataDBCount, entryDB, main }) => {
                       ]) || 0;
                 const active = db.canonical === (entryDB || '').toLowerCase();
                 return (
-                  <li
+                  <span
                     className={f('tabs-label', { active })}
                     key={db.canonical}
+                    style={{
+                      background: `${config.colors.get(db.canonical)}${
+                        active ? '' : '22'
+                      }`,
+                    }}
                   >
                     <Link
                       to={(currentLocation) =>
                         getNewLocation(currentLocation, db.canonical)
                       }
                     >
-                      <div
-                        className={f('db-tag')}
-                        style={{
-                          background: config.colors.get(db.canonical),
-                        }}
-                      ></div>
                       {db.name}{' '}
                       <NumberComponent
                         loading={loading}
                         className={f('label')}
                         titleType={toPlural(main, (!loading && count) || 0)}
-                        style={{
-                          background: active && config.colors.get(db.canonical),
-                        }}
                         abbr
                       >
                         {!loading && count}
                       </NumberComponent>
                     </Link>
-                  </li>
+                  </span>
                 );
               })}
-            </ul>
+              <span className={f('tabs-label')} />
+            </nav>
           </div>
-          <div className={f('shadow', 'shadow-left')} aria-hidden="true"></div>
-          <div className={f('shadow', 'shadow-right')} aria-hidden="true"></div>
+          <div className={f('shadow', 'shadow-left')} aria-hidden="true" />
+          <div className={f('shadow', 'shadow-right')} aria-hidden="true" />
         </div>
       </div>
     </div>
   );
+};
+MemberDBTabs.propTypes = {
+  dataDB: T.object,
+  dataDBCount: T.object,
+  entryDB: T.string,
+  main: T.string,
 };
 
 const getUrlForMemberDBCount = createSelector(

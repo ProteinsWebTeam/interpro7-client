@@ -2,7 +2,7 @@
 
 exports[`<MemberDBSelector /> should render 1`] = `
 <div
-  className="container columns small-12 medium-3 large-2"
+  className="container"
   onBlur={[Function]}
   onClick={[Function]}
   onFocus={[Function]}

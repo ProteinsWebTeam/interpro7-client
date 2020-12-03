@@ -479,13 +479,32 @@ const List = (
   const includeGrid = url;
   return (
     <div className={f('row')}>
-      <div className={f('columns', 'small-12', 'medium-3', 'large-2')}>
-        <MemberDBSelector
-          contentType="structure"
-          className="pp-left-side-db-selector"
-        >
-          {() => <button className={'button'}>Database: {entryDB}</button>}
-        </MemberDBSelector>
+      <div
+        className={f('columns', 'small-12', 'medium-3', 'large-2')}
+        style={{
+          backgroundColor: '#e9f1f3',
+        }}
+      >
+        <label>
+          Select DB:
+          <MemberDBSelector
+            contentType="structure"
+            className="pp-left-side-db-selector"
+          >
+            {() => (
+              <button
+                className={f('button', 'hollow')}
+                style={{
+                  width: '100%',
+                  textAlign: 'right',
+                }}
+              >
+                <MemberSymbol type={entryDB} className={f('db-symbol')} />
+                {entryDB} ▼
+              </button>
+            )}
+          </MemberDBSelector>
+        </label>
         <StructureListFilters />
       </div>
 

@@ -10,7 +10,6 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import { GoLink } from 'components/ExtLink';
 import Description from 'components/Description';
-import MemberDBSelector from 'components/MemberDBSelector';
 import MemberDBTabs from 'components/MemberDBTabs';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
