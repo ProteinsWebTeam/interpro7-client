@@ -1,9 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Actions /> should render 1`] = `
-<React.Fragment>
+<nav
+  className="buttons"
+>
   <Tooltip
-    title="Delete job"
+    title={
+      <div>
+        <b>
+          Delete job
+        </b>
+        : This remove this job from your browser. Remember that job's data is only kept in our servers for 7 days
+      </div>
+    }
   >
     <button
       aria-label="Delete job"
@@ -12,5 +21,22 @@ exports[`<Actions /> should render 1`] = `
       onClick={[Function]}
     />
   </Tooltip>
-</React.Fragment>
+  <Tooltip
+    title={
+      <div>
+        <b>
+          Save in Browser
+        </b>
+        : If you save the data of this job in your browser, you will be able to display it here even if it gets deleted in our servers or you lost internet connection.
+      </div>
+    }
+  >
+    <button
+      aria-label="Save in Browser"
+      className="icon icon-common ico-neutral"
+      data-icon="S"
+      onClick={[Function]}
+    />
+  </Tooltip>
+</nav>
 `;

@@ -80,7 +80,8 @@ export class Actions extends PureComponent /*:: <Props> */ {
           title={
             <div>
               <b>Delete job</b>: This remove this job from your browser.
-              Remember that job's data is only keep in our servers for 7 days
+              Remember that job&apos;s data is only kept in our servers for 7
+              days
             </div>
           }
         >

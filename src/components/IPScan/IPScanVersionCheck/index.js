@@ -12,6 +12,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts);
 
+const DAYS_TO_UPDATE_IPSCAN = 5;
 /*::
   type Props = {
     data?: {
@@ -30,6 +31,7 @@ const IPScanVersionCheck = ({ data, ipScanVersion } /*: Props */) => {
   );
   const [_, jobVersion] = (ipScanVersion || '').split('-');
 
+  // eslint-disable-next-line no-magic-numbers
   const msPerDay = 24 * 60 * 60 * 1000; // Number of milliseconds per day
   const daysSinceRelease = Math.round(
     (new Date().getTime() - currentVersionReleaseDate.getTime()) / msPerDay,
@@ -48,7 +50,7 @@ const IPScanVersionCheck = ({ data, ipScanVersion } /*: Props */) => {
           been deleted or changed in the current version{' '}
           <code>{currentVersion}</code>.
         </p>
-        {daysSinceRelease < 5 ? (
+        {daysSinceRelease < DAYS_TO_UPDATE_IPSCAN ? (
           <p>
             <b>Note:</b>
             InterPro version <code>{currentVersion}</code> has been released on{' '}
