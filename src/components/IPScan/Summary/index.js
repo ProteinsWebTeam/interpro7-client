@@ -32,7 +32,7 @@ import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideSummary from 'components/IPScan/NucleotideSummary';
 import IPScanTitle from './IPScanTitle';
 import { Exporter } from 'components/Table';
-import { updateJobTitle, keepJobAsLocal } from 'actions/creators';
+import { updateJobTitle } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -120,7 +120,7 @@ const _StatusTooltip = ({ status /*: string */ }) => (
         {status}
       </>
     ) : null}
-    {['finished', 'imported file'].includes(status) && (
+    {['finished', 'imported file', 'saved in browser'].includes(status) && (
       <>
         <span
           className={f('icon', 'icon-common', 'ico-confirmed')}
@@ -138,6 +138,7 @@ _StatusTooltip.propTypes = {
     'created',
     'importing',
     'imported file',
+    'saved in browser',
     'submitted',
     'not found',
     'failure',
@@ -257,7 +258,6 @@ const SummaryIPScanJob = ({
   localPayload,
   api,
   updateJobTitle,
-  keepJobAsLocal,
 }) => {
   const [mergedData, setMergedData] = useState({});
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
@@ -377,7 +377,7 @@ const SummaryIPScanJob = ({
           <section className={f('summary-row')}>
             <header>Action</header>
             <section>
-              <Actions localID={localID} />
+              <Actions localID={localID} status={status} />
             </section>
           </section>
         )}
@@ -405,16 +405,6 @@ const SummaryIPScanJob = ({
             </header>
             <section>
               {new Date(created + MAX_TIME_ON_SERVER).toDateString()}
-              <div>
-                <button
-                  className={f('button', 'icon', 'icon-common')}
-                  data-icon="&#x53;"
-                  onClick={() => keepJobAsLocal(localID)}
-                >
-                  {' '}
-                  Save in Browser
-                </button>
-              </div>
             </section>
           </section>
         )}
@@ -438,7 +428,7 @@ const SummaryIPScanJob = ({
         </div>
       </section>
 
-      {['finished', 'imported file'].includes(status) && (
+      {['finished', 'imported file', 'saved in browser'].includes(status) && (
         <>
           <DomainOnProteinWithoutMergedData
             mainData={{ metadata }}
@@ -478,7 +468,6 @@ SummaryIPScanJob.propTypes = {
   localPayload: T.object,
   api: T.object,
   updateJobTitle: T.func,
-  keepJobAsLocal: T.func,
 };
 
 const jobMapSelector = (state) => state.jobs;
@@ -514,6 +503,4 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(mapStateToProps, { updateJobTitle, keepJobAsLocal })(
-  SummaryIPScanJob,
-);
+export default connect(mapStateToProps, { updateJobTitle })(SummaryIPScanJob);
