@@ -117,6 +117,7 @@
     "protvista-zoomable": "3.0.0",
     "react": "17.0.1",
     "react-autocomplete": "1.8.1",
+    "react-diff-viewer": "^3.1.1",
     "react-dom": "17.0.1",
     "react-helmet-async": "1.0.7",
     "react-html-parser": "^2.0.2",

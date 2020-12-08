@@ -296,10 +296,6 @@ export const markFavourite = (id /*: string */, content /*: Object */) => ({
   content,
 });
 
-export const versionChanged = () => ({
-  type: types.VERSION_CHANGED,
-});
-
 export const unmarkFavourite = (id /*: string */) => ({
   type: types.UNMARK_FAVOURITE,
   id,

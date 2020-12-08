@@ -51,7 +51,6 @@ export const REMOVE_TOAST = 'REMOVE_TOAST';
 export const SET_INITIAL_FAVOURITES = 'SET_INITIAL_FAVOURITES';
 export const MARK_FAVOURITE = 'MARK_FAVOURITE';
 export const UNMARK_FAVOURITE = 'UNMARK_FAVOURITE';
-export const VERSION_CHANGED = 'VERSION_CHANGED';
 
 // For use in tests
 export const TEST = '@TEST';

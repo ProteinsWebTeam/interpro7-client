@@ -6,6 +6,7 @@ import T from 'prop-types';
 
 import AnimatedEntry from 'components/AnimatedEntry';
 import EntryCard from 'components/home/EntryCard';
+import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -70,6 +71,16 @@ export class FavouriteEntries extends PureComponent /*:: <Props> */ {
                   <EntryCard entry={f} key={f.metadata.accession} />
                 ))}
               </AnimatedEntry>
+              <Link
+                to={{
+                  description: {
+                    other: ['fav-updates'],
+                  },
+                }}
+                className={f('button', 'margin-bottom-none')}
+              >
+                Check for updates
+              </Link>
             </div>
           </div>
         </div>

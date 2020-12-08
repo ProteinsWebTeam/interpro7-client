@@ -9,7 +9,7 @@ import cancelable from 'utils/cancelable';
 import {
   dataProgressInfo,
   dataProgressUnload,
-  versionChanged,
+  addToast,
 } from 'actions/creators';
 
 import extractParams from './extract-params';
@@ -52,7 +52,7 @@ const loadData = (params) => {
       static propTypes = {
         dataProgressInfo: T.func.isRequired,
         dataProgressUnload: T.func.isRequired,
-        versionChanged: T.func.isRequired,
+        addToast: T.func.isRequired,
         appState: T.object.isRequired,
       };
 
@@ -133,7 +133,7 @@ const loadData = (params) => {
             url,
             { ...fetchOptions, signal },
             this._progress,
-            this.props.versionChanged,
+            this.props.addToast,
           ),
         );
         // We keep a hold on *this* request, because it might change
@@ -231,7 +231,7 @@ const loadData = (params) => {
     return connect(mapStateToState, {
       dataProgressInfo,
       dataProgressUnload,
-      versionChanged,
+      addToast,
       ...mapDispatchToProps,
     })(DataWrapper);
   };

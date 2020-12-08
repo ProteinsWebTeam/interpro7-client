@@ -2,6 +2,7 @@
 import fetch from 'isomorphic-fetch';
 
 import dropCacheIfVersionMismatch from './utils/drop-cache-if-version-mismatch';
+import { getMismatchedFavourites } from 'utils/compare-favourites';
 
 import config, { pkg } from 'config';
 import yaml from 'js-yaml';
@@ -34,7 +35,7 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const cachedFetch = (
   url /*: string */,
   options /*: Object */ = {},
-  versionChanged,
+  addToast,
 ) => {
   const { useCache = true, ...restOfOptions } = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
@@ -60,7 +61,7 @@ const cachedFetch = (
     if (response.clone) {
       const hasVersionChanged = dropCacheIfVersionMismatch(response.headers);
       if (hasVersionChanged) {
-        versionChanged();
+        getMismatchedFavourites({ notify: true, addToast: addToast });
       }
       if (shouldCache)
         response
