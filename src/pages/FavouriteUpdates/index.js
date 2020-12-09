@@ -23,15 +23,23 @@ const updateIDB = (id, content, changedFav, setChangedFav) => {
 
 const FavouriteUpdates = () => {
   const [changedFav, setChangedFav] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getMismatchedFavourites({ setChangedFav: setChangedFav });
+    getMismatchedFavourites({
+      setChangedFav: setChangedFav,
+      setLoading: setLoading,
+    });
   }, []);
 
   return (
     <div className={f('row')}>
       <div className={f('columns')}>
         <section>
-          {changedFav.length > 0 ? (
+          {loading && <h2>Looking for changes in your favourite entries</h2>}
+          {!loading && changedFav.length === 0 && (
+            <h2>All your favourites are up to date</h2>
+          )}
+          {changedFav.length > 0 && (
             <>
               {changedFav.map((fav) => (
                 <div key={fav.accession}>
@@ -68,8 +76,6 @@ const FavouriteUpdates = () => {
                 </div>
               ))}
             </>
-          ) : (
-            <h2>All your favourites are up to date</h2>
           )}
         </section>
       </div>
