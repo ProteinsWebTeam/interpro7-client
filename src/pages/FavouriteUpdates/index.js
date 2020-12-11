@@ -66,8 +66,10 @@ const FavouriteUpdates = () => {
                     </div>
                   </div>
                   <ReactDiffViewer
-                    oldValue={JSON.stringify(fav.differences.old)}
-                    newValue={JSON.stringify(fav.differences.newData)}
+                    // oldValue={JSON.stringify(fav.differences.old)}
+                    oldValue={fav.differences.old.join('\n')}
+                    // newValue={JSON.stringify(fav.differences.newData)}
+                    newValue={fav.differences.newData.join('\n')}
                     splitView={true}
                     leftTitle={'Saved'}
                     rightTitle={'Latest'}

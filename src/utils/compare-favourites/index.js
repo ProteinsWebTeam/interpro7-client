@@ -1,9 +1,51 @@
 import getTableAccess, { FavEntries } from 'storage/idb';
 import { createNotification } from 'utils/browser-notifications';
 import id from 'utils/cheap-unique-id';
-import { isEqual, sortBy, noop } from 'lodash-es';
+import { isEqual, sortBy, noop, transform, isObject } from 'lodash-es';
 
 import config from 'config';
+
+const objToString = (obj, depth) => {
+  if (obj === null) return String(obj);
+  switch (typeof obj) {
+    case 'string':
+      return obj;
+    case 'object':
+      // eslint-disable-next-line no-case-declarations
+      const indent = Array(depth || 1).join('\t');
+      return `${Object.keys(obj)
+        .map((key) => {
+          let prop = '';
+          if (isNaN(Number(key)))
+            prop = `${key.charAt(0).toUpperCase() + key.slice(1)}: `;
+          return `\n\t${indent}${prop}${objToString(
+            obj[key],
+            (depth || 1) + 1,
+          )}`;
+        })
+        .join('')}\n${indent}`;
+    default:
+      return obj.toString();
+  }
+};
+
+const difference = (object, base) => {
+  if (
+    typeof object === 'string' &&
+    typeof base === 'string' &&
+    !isEqual(object, base)
+  )
+    return object;
+
+  return transform(object, (result, value, key) => {
+    if (!isEqual(value, base[key])) {
+      result[key] =
+        isObject(value) && isObject(base[key])
+          ? difference(value, base[key])
+          : value;
+    }
+  });
+};
 
 const compare = (stored, fetched) => {
   const keys = [
@@ -14,49 +56,99 @@ const compare = (stored, fetched) => {
     'literature',
     'go_terms',
   ];
-  const oldObj = {};
-  const newObj = {};
+  const old = [];
+  const newData = [];
+
+  // // TODO to be removed. For testing purpose
+  stored.type = 'kjdk';
+  stored.name.name = 'dfidshf';
+  stored.name.short = 'sdf';
+  stored.description[0] = 'dfidshf';
+  stored.member_databases.prints = {
+    PR00545: 'Refu',
+  };
+  stored.literature.PUB00015853 = {
+    PMID: 147476,
+    authors: ['Schwabe JW', 'Teichmann SA.'],
+    volume: '2004',
+    issue: '217',
+    year: 2004,
+    title: 'Nuclear receptors: the evolution of diversity.',
+    URL: null,
+    raw_pages: 'pe4',
+    medline_journal: 'Sci STKE',
+    ISO_journal: 'Sci. STKE',
+    DOI_URL: 'http://dx.doi.org/10.1126/stke.2172004pe4',
+  };
+  stored.go_terms = [
+    {
+      identifier: 'GO:0003677',
+      name: 'DNA binding',
+      category: {
+        code: 'F',
+        name: 'molecular_function',
+      },
+    },
+    {
+      identifier: 'GO:0003707',
+      name: 'steroid hormone receptor activity',
+      category: {
+        code: 'F',
+        name: 'molecular_function',
+      },
+    },
+    {
+      identifier: 'GO:0008270',
+      name: 'zinc ion binding',
+      category: {
+        code: 'F',
+        name: 'molecular_function',
+      },
+    },
+    {
+      identifier: 'GO:0006355',
+      name: 'regulation of transcription, DNA-templated',
+      category: {
+        code: 'P',
+        name: 'biological_process',
+      },
+    },
+    {
+      identifier: 'GO:0005634',
+      name: 'jsdf',
+      category: {
+        code: 'C',
+        name: 'cellular_component',
+      },
+    },
+  ];
+
+  if (stored.literature) {
+    Object.entries(stored.literature).forEach(([key, value]) => {
+      stored.literature[key] = { ...value, authors: value.authors.sort() };
+    });
+  }
+  if (fetched.literature) {
+    Object.entries(fetched.literature).forEach(([key, value]) => {
+      fetched.literature[key] = { ...value, authors: value.authors.sort() };
+    });
+  }
+  if (stored.go_terms) stored.go_terms = sortBy(stored.go_terms, 'identifier');
+  if (fetched.go_terms)
+    fetched.go_terms = sortBy(fetched.go_terms, 'identifier');
+
   keys.forEach((k) => {
-    // TODO to be removed. For testing purpose
-    stored['type'] = 'kjdk';
-    stored['name'].name = 'dfidshf';
-    stored['description'][0] = 'dfidshf';
-    stored['member_databases'].prints = {};
-
-    if (
-      ['name', 'type', 'description', 'member_databases'].includes(k) &&
-      !isEqual(stored[k], fetched[k])
-    ) {
-      oldObj[k] = stored[k];
-      newObj[k] = fetched[k];
-    }
-
-    if (k === 'literature') {
-      Object.entries(stored[k]).forEach(([key, value]) => {
-        stored[k][key] = { ...value, authors: value.authors.sort() };
-      });
-      Object.entries(fetched[k]).forEach(([key, value]) => {
-        fetched[k][key] = { ...value, authors: value.authors.sort() };
-      });
-      if (!isEqual(stored[k], fetched[k])) {
-        oldObj[k] = stored[k];
-        newObj[k] = fetched[k];
-      }
-    }
-
-    if (k === 'go_terms') {
-      if (
-        !isEqual(
-          sortBy(stored[k], 'identifier'),
-          sortBy(fetched[k], 'identifier'),
-        )
-      ) {
-        oldObj[k] = stored[k];
-        newObj[k] = fetched[k];
-      }
-    }
+    const key = k.charAt(0).toUpperCase() + k.slice(1);
+    const diffInSaved = difference(stored[k], fetched[k]);
+    const diffInFetched = difference(fetched[k], stored[k]);
+    if (Object.keys(diffInSaved).length > 0)
+      old.push(`${key}: ${objToString(diffInSaved)}`);
+    if (Object.keys(diffInFetched).length > 0)
+      newData.push(`${key}: ${objToString(diffInFetched)}`);
   });
-  return { old: oldObj, newData: newObj };
+  if (old.length > 0 || newData.length > 0)
+    return { old: old, newData: newData };
+  return {};
 };
 
 export const getMismatchedFavourites = async ({
@@ -81,6 +173,8 @@ export const getMismatchedFavourites = async ({
               differences: differences,
               latest: json,
             });
+          } else {
+            setLoading(false);
           }
 
           if (changedEntries.length > 0 && index === entries.length - 1) {
