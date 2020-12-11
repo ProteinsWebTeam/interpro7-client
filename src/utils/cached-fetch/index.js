@@ -61,7 +61,7 @@ const cachedFetch = (
     if (response.clone) {
       const hasVersionChanged = dropCacheIfVersionMismatch(response.headers);
       if (hasVersionChanged) {
-        getMismatchedFavourites({ notify: true, addToast: addToast });
+        getMismatchedFavourites({ notify: true, addToast });
       }
       if (shouldCache)
         response

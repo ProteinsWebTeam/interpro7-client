@@ -38,9 +38,9 @@ const difference = (object, base) => {
     return object;
 
   return transform(object, (result, value, key) => {
-    if (!isEqual(value, base[key])) {
+    if (!base || !isEqual(value, base[key])) {
       result[key] =
-        isObject(value) && isObject(base[key])
+        isObject(value) && base && isObject(base[key])
           ? difference(value, base[key])
           : value;
     }
@@ -61,7 +61,7 @@ const compare = (stored, fetched) => {
 
   // TODO to be removed. For testing purpose
   // stored.type = 'kjdk';
-  // stored.name.name = 'dfidshf';
+  stored.name.name = 'dfidshf';
   // stored.name.short = 'sdf';
   // stored.description[0] = 'dfidshf';
   // stored.member_databases.prints = {
@@ -161,57 +161,65 @@ export const getMismatchedFavourites = async ({
   const storedContent = await favTable.getAll();
   const entries = Object.entries(storedContent);
   const changedEntries = [];
+  const promises = [];
 
-  entries.forEach(([key, value], index) => {
-    fetch(`${config.root.API.href}entry/interpro/${key}`).then((response) => {
-      if (response.ok) {
-        response.json().then((json) => {
-          const differences = compare(value.metadata, json.metadata);
-          if (Object.keys(differences).length > 0) {
-            changedEntries.push({
-              accession: key,
-              differences: differences,
-              latest: json,
-            });
-          } else {
-            setLoading(false);
-          }
-
-          if (changedEntries.length > 0 && index === entries.length - 1) {
-            setChangedFav(changedEntries);
-            setLoading(false);
-
-            if (notify) {
-              const notification = createNotification(
-                'InterPro',
-                'Changes detected in your favourites',
-              );
-              notification.onclick = () => {
-                window.open(
-                  `${window.location.origin}/interpro/fav-updates/`,
-                  '_blank',
-                );
-              };
-
-              addToast(
-                {
-                  title: 'Favourites update',
-                  body:
-                    'Changed detected in your favourites in the new version',
-                  ttl: 10000, // eslint-disable-line no-magic-numbers
-                  link: {
-                    to: {
-                      description: { other: ['fav-updates'] },
-                    },
-                    children: 'See the difference',
-                  },
-                },
-                id(),
-              );
+  entries.forEach(([key, value]) => {
+    promises.push(
+      new Promise((resolve) => {
+        fetch(`${config.root.API.href}entry/interpro/${key}`).then(
+          (response) => {
+            if (response.ok) {
+              response.json().then((json) => {
+                const differences = compare(value.metadata, json.metadata);
+                if (Object.keys(differences).length > 0) {
+                  changedEntries.push({
+                    accession: key,
+                    differences: differences,
+                    latest: json,
+                  });
+                }
+                resolve();
+              });
+            } else {
+              resolve();
             }
-          }
-        });
+          },
+        );
+      }),
+    );
+  });
+  Promise.all(promises).then(() => {
+    if (changedEntries.length > 0) {
+      setChangedFav(changedEntries);
+
+      if (notify) {
+        const notification = createNotification(
+          'InterPro',
+          'Changes detected in your favourites',
+        );
+        notification.onclick = () => {
+          window.open(
+            `${window.location.origin}/interpro/fav-updates/`,
+            '_blank',
+          );
+        };
+
+        addToast(
+          {
+            title: 'Favourites update',
+            body: 'Changed detected in your favourites in the new version',
+            ttl: 10000, // eslint-disable-line no-magic-numbers
+            link: {
+              to: {
+                description: { other: ['fav-updates'] },
+              },
+              children: 'See the difference',
+            },
+          },
+          id(),
+        );
       }
-    });
+    }
+    setLoading(false);
   });
 };
