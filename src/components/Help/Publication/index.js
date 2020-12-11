@@ -15,23 +15,16 @@ import local from './style.css';
 
 const f = foundationPartial(EBIGlobal, fonts, ipro, helper, local);
 
-const data4InterPro2019 = {
-  url: 'https://doi.org/10.1093/nar/gky1100',
-  title: `InterPro in 2019: improving coverage, classification and
-          access to protein sequence annotations`,
-  authors: `Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt,
-            Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown,
-            Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough,
-            David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez,
-            Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu
-            Mi, Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo,
-            Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien
-            Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings,
-            Nicole Redaschi, Lorna J Richardson, Catherine Rivoire,
-            Gustavo A Salazar, Amaia Sangrador-Vegas, Christian J A
-            Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul
-            D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn`,
-  source: 'Nucleic Acids Research, Jan 2019, (doi: 10.1093/nar/gky1100)',
+const data4InterPro2020 = {
+  url: 'https://doi.org/10.1093/nar/gkaa977',
+  title: 'The InterPro protein families and domains database: 20 years on',
+  authors: `Blum M, Chang H, Chuguransky S, Grego T, Kandasaamy S, Mitchell A,
+            Nuka G, Paysan-Lafosse T, Qureshi M, Raj S, RichardsonL, Salazar GA,
+            Williams L, Bork P, Bridge A, Gough J, Haft DH, Letunic I, 
+            Marchler-Bauer A, Mi H, Natale DA, Necci M, Orengo CA, Pandurangan AP,
+            Rivoire C, Sigrist CJA, Sillitoe I, Thanki N, Thomas PD, Tosatto SCE,
+            Wu CH, Bateman A and Finn RD`,
+  source: 'Nucleic Acids Research, Nov 2020, (doi: 10.1093/nar/gkaa977)',
   imageClass: 'image-nar-default',
 };
 const data4InterProScan2014 = {
@@ -48,6 +41,27 @@ const data4InterProScan2014 = {
 };
 
 const data4previousPublications = [
+  {
+    url: 'https://doi.org/10.1093/nar/gky1100',
+    title: `InterPro in 2019: improving coverage, classification and
+            access to protein sequence annotations`,
+    authors: `Alex L Mitchell, Teresa K Attwood, Patricia C Babbitt,
+              Matthias Blum, Peer Bork, Alan Bridge, Shoshana D Brown,
+              Hsin-Yu Chang, Sara El-Gebali, Matthew I Fraser, Julian Gough,
+              David R Haft, Hongzhan Huang, Ivica Letunic, Rodrigo Lopez,
+              Aurélien Luciani, Fabio Madeira, Aron Marchler-Bauer, Huaiyu
+              Mi, Darren A Natale, Marco Necci, Gift Nuka, Christine Orengo,
+              Arun P Pandurangan, Typhaine Paysan-Lafosse, Sebastien
+              Pesseat, Simon C Potter, Matloob A Qureshi, Neil D Rawlings,
+              Nicole Redaschi, Lorna J Richardson, Catherine Rivoire,
+              Gustavo A Salazar, Amaia Sangrador-Vegas, Christian J A
+              Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul
+              D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn`,
+    source: {
+      journal: 'Nucleic Acids Research',
+      details: 'Jan 2019, (doi: 10.1093/nar/gky1100)',
+    },
+  },
   {
     url: '//nar.oxfordjournals.org/content/43/D1/D213',
     title:
@@ -397,18 +411,12 @@ const PrintedPublication = (
 );
 PrintedPublication.propTypes = pubTypes;
 
-export const InterPro2019 = () => <Publication {...data4InterPro2019} />;
+export const InterPro2020 = () => <Publication {...data4InterPro2020} />;
 export const InterProScan2014 = () => (
   <Publication {...data4InterProScan2014} />
 );
-export const PrintedInterPro2019 = () => (
-  <PrintedPublication {...data4InterPro2019} />
-);
-export const PrintedInterProShort2019 = () => (
-  <PrintedPublication
-    {...data4InterPro2019}
-    authors="Mitchell AL, Attwood TK, Babbitt PC, et al."
-  />
+export const PrintedInterPro2020 = () => (
+  <PrintedPublication {...data4InterPro2020} />
 );
 export const PrintedInterProScan2014 = () => (
   <PrintedPublication {...data4InterProScan2014} />
@@ -423,7 +431,7 @@ export default class Publications extends PureComponent /*:: <{}> */ {
           A number of online Publications relating to InterPro are available.
         </p>
         <div className={f('flex-column')}>
-          <InterPro2019 />
+          <InterPro2020 />
 
           <Publication
             url="http://nar.oxfordjournals.org/content/45/D1/D190"
@@ -468,7 +476,7 @@ export default class Publications extends PureComponent /*:: <{}> */ {
 
         <h3 className={f('margin-top-large')}>How to cite</h3>
         <p>To cite InterPro, please refer to the following publication:</p>
-        <PrintedInterPro2019 />
+        <PrintedInterPro2020 />
         <p>To cite InterProScan, please refer to the following publication:</p>
         <PrintedInterProScan2014 />
       </section>

@@ -65,6 +65,32 @@ exports[`<List /> should render 1`] = `
       notFound={false}
       rowKey="id"
     >
+      <Memo(Connect(Exporter))>
+        <div
+          className="menu-grid"
+        >
+          <label
+            htmlFor="json"
+          >
+            JSON
+          </label>
+          <Memo(Connect(FileExporter))
+            count={1649}
+            fileType="json"
+            name="genome3d.IPR000001.json"
+          />
+          <label
+            htmlFor="tsv"
+          >
+            TSV
+          </label>
+          <Memo(Connect(FileExporter))
+            count={1649}
+            fileType="tsv"
+            name="genome3d.IPR000001.tsv"
+          />
+        </div>
+      </Memo(Connect(Exporter))>
       <Column
         dataKey="accession"
         renderer={[Function]}

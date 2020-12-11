@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ProteinsWebTeam/interpro7-client.svg?branch=master)](https://travis-ci.org/ProteinsWebTeam/interpro7-client)
+[![Build Status](https://github.com/ProteinsWebTeam/interpro7-client/workflows/Test%20Build%20and%20Report/badge.svg)](https://github.com/ProteinsWebTeam/interpro7-client/actions?query=workflow%3A%22Test+Build+and+Report%22)
 [![Coverage Status](https://coveralls.io/repos/github/ProteinsWebTeam/interpro7-client/badge.svg?branch=master)](https://coveralls.io/github/ProteinsWebTeam/interpro7-client?branch=master)
 
 New InterPro Web-Client
