@@ -24,7 +24,7 @@ const DAYS_TO_UPDATE_IPSCAN = 5;
 */
 
 const IPScanVersionCheck = ({ data, ipScanVersion } /*: Props */) => {
-  if (!data || data.loading) return <Loading inline={true} />;
+  if (!data || data.loading || !ipScanVersion) return <Loading inline={true} />;
   const currentVersion = data.payload?.databases?.interpro?.version;
   const currentVersionReleaseDate = new Date(
     data.payload?.databases?.interpro?.releaseDate,
@@ -45,9 +45,9 @@ const IPScanVersionCheck = ({ data, ipScanVersion } /*: Props */) => {
           InterProScan version: <code>{ipScanVersion}</code>.
         </p>
         <p>
-          Some links might not work as they uploaded a result from a previous
-          release of InterPro <code>{jobVersion}</code> and the data might have
-          been deleted or changed in the current version{' '}
+          Some links might not work as the results are from a previous release
+          of InterPro {jobVersion ? <code>{jobVersion}</code> : null} and some
+          of the data might have been deleted or changed in the current version{' '}
           <code>{currentVersion}</code>.
         </p>
         {daysSinceRelease < DAYS_TO_UPDATE_IPSCAN ? (

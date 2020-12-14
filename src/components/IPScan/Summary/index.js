@@ -333,11 +333,11 @@ const SummaryIPScanJob = ({
     <div className={f('sections')}>
       <section>
         <Title metadata={metadata} mainType="protein" />
-        {data.payload ? null : (
+        {!data.payload && payload?.['interproscan-version'] ? (
           <div className={f('callout', 'info', 'withicon')}>
             Using data stored in your browser
           </div>
-        )}
+        ) : null}
         <IPScanVersionCheck ipScanVersion={payload['interproscan-version']} />
         <NucleotideSummary payload={payload} />
         <IPScanTitle
