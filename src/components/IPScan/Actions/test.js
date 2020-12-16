@@ -29,8 +29,10 @@ describe('<Actions />', () => {
         }}
         deleteJob={() => {}}
         goToCustomLocation={() => {}}
+        keepJobAsLocal={() => {}}
         updateJob={() => {}}
         withTitle={false}
+        status="finished"
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();

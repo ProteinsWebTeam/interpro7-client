@@ -267,7 +267,9 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                     aria-label="Job failed or not found"
                   />
                 ) : null}
-                {['finished', 'imported file'].includes(status) && (
+                {['finished', 'imported file', 'saved in browser'].includes(
+                  status,
+                ) && (
                   <Link
                     to={{
                       description: {
