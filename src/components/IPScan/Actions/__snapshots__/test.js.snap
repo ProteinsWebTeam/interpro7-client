@@ -8,14 +8,14 @@ exports[`<Actions /> should render 1`] = `
     title={
       <div>
         <b>
-          Delete job
+          Delete search
         </b>
-        : This remove this job from your browser. Remember that job's data is only kept in our servers for 7 days
+        : This will remove the stored data from your browser. Remember that search results are only retained on our servers for 7 days
       </div>
     }
   >
     <button
-      aria-label="Delete job"
+      aria-label="Delete Results"
       className="icon icon-common ico-neutral"
       data-icon=""
       onClick={[Function]}
@@ -25,14 +25,14 @@ exports[`<Actions /> should render 1`] = `
     title={
       <div>
         <b>
-          Save in Browser
+          Save results in Browser
         </b>
-        : If you save the data of this job in your browser, you will be able to display it here even if it gets deleted in our servers or you lost internet connection.
+        : If you save the results of this search in your browser, you will be able to view it here even after it is deleted from our servers or when you are offline.
       </div>
     }
   >
     <button
-      aria-label="Save in Browser"
+      aria-label="Save results in Browser"
       className="icon icon-common ico-neutral"
       data-icon="S"
       onClick={[Function]}

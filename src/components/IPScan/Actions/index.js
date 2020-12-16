@@ -79,9 +79,9 @@ export class Actions extends PureComponent /*:: <Props> */ {
         <Tooltip
           title={
             <div>
-              <b>Delete job</b>: This remove this job from your browser.
-              Remember that job&apos;s data is only kept in our servers for 7
-              days
+              <b>Delete search</b>: This will remove the stored data from your
+              browser. Remember that search results are only retained on our
+              servers for 7 days
             </div>
           }
         >
@@ -89,16 +89,16 @@ export class Actions extends PureComponent /*:: <Props> */ {
             className={f('icon', 'icon-common', 'ico-neutral')}
             onClick={this._handleDelete}
             data-icon="&#xf1f8;"
-            aria-label="Delete job"
+            aria-label="Delete Results"
           />
         </Tooltip>
         {status === 'finished' && (
           <Tooltip
             title={
               <div>
-                <b>Save in Browser</b>: If you save the data of this job in your
-                browser, you will be able to display it here even if it gets
-                deleted in our servers or you lost internet connection.
+                <b>Save results in Browser</b>: If you save the results of this
+                search in your browser, you will be able to view it here even
+                after it is deleted from our servers or when you are offline.
               </div>
             }
           >
@@ -106,7 +106,7 @@ export class Actions extends PureComponent /*:: <Props> */ {
               className={f('icon', 'icon-common', 'ico-neutral')}
               data-icon="&#x53;"
               onClick={() => keepJobAsLocal(localID)}
-              aria-label="Save in Browser"
+              aria-label="Save results in Browser"
             />
           </Tooltip>
         )}
