@@ -737,7 +737,7 @@ class List extends PureComponent /*:: <Props,State> */ {
 }
 const childRoutes = /(\d+)|(all)/i;
 
-const _AccessionSearch = ({ data, onSearchComplete }) => {
+const _ExactMatchSearch = ({ data, onSearchComplete }) => {
   onSearchComplete(data && !data.loading && data.payload);
   return null;
 };
@@ -766,7 +766,39 @@ const getURLFromState = createSelector(
     }
   },
 );
-const AccessionSearch = loadData(getURLFromState)(_AccessionSearch);
+
+const getURLFromSciName = createSelector(
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
+  ({ protocol, hostname, port, root }, description, { search }) => {
+    if (search && !search.match(/^\d+$/) && description.taxonomy) {
+      const desc = {
+        main: {
+          key: 'taxonomy',
+          numberOfFilters: 0,
+        },
+        taxonomy: {
+          db: 'uniprot',
+        },
+      };
+      try {
+        return format({
+          protocol,
+          hostname,
+          port,
+          pathname: root + descriptionToPath(desc),
+          search: `?scientific_name=${search}`,
+        });
+      } catch {
+        return;
+      }
+    }
+  },
+);
+
+const AccessionSearch = loadData(getURLFromState)(_ExactMatchSearch);
+const SciNameSearch = loadData(getURLFromSciName)(_ExactMatchSearch);
 
 const Taxonomy = ({ search }) => {
   const [accSearch, setAccSearch] = useState(null);
@@ -774,6 +806,7 @@ const Taxonomy = ({ search }) => {
   return (
     <>
       {searchTerm && <AccessionSearch onSearchComplete={setAccSearch} />}
+      {searchTerm && <SciNameSearch onSearchComplete={setAccSearch} />}
       <EndPointPage
         subpagesRoutes={childRoutes}
         listOfEndpointEntities={List}
