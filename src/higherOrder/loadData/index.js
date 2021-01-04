@@ -6,7 +6,11 @@ import { createSelector } from 'reselect';
 
 import uniqueId from 'utils/cheap-unique-id';
 import cancelable from 'utils/cancelable';
-import { dataProgressInfo, dataProgressUnload } from 'actions/creators';
+import {
+  dataProgressInfo,
+  dataProgressUnload,
+  addToast,
+} from 'actions/creators';
 
 import extractParams from './extract-params';
 import getFetch from './getFetch';
@@ -48,6 +52,7 @@ const loadData = (params) => {
       static propTypes = {
         dataProgressInfo: T.func.isRequired,
         dataProgressUnload: T.func.isRequired,
+        addToast: T.func.isRequired,
         appState: T.object.isRequired,
       };
 
@@ -124,7 +129,12 @@ const loadData = (params) => {
         // Progress: 0
         this.props.dataProgressInfo(this._id, 0, weight);
         this._request = cancelable((signal) =>
-          fetchFun(url, { ...fetchOptions, signal }, this._progress),
+          fetchFun(
+            url,
+            { ...fetchOptions, signal },
+            this._progress,
+            this.props.addToast,
+          ),
         );
         // We keep a hold on *this* request, because it might change
         const request = this._request;
@@ -221,6 +231,7 @@ const loadData = (params) => {
     return connect(mapStateToState, {
       dataProgressInfo,
       dataProgressUnload,
+      addToast,
       ...mapDispatchToProps,
     })(DataWrapper);
   };

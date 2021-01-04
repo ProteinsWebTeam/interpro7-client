@@ -74,7 +74,7 @@ const IPScanTitle = (
           readOnly={readable}
           style={{ width: `${title.length}ch` }}
         />
-        {['finished', 'imported file'].includes(status) ? (
+        {['finished', 'imported file', 'saved in browser'].includes(status) ? (
           <button
             onClick={() =>
               changeTitle(

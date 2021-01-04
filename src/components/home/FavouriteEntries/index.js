@@ -6,6 +6,8 @@ import T from 'prop-types';
 
 import AnimatedEntry from 'components/AnimatedEntry';
 import EntryCard from 'components/home/EntryCard';
+import Link from 'components/generic/Link';
+import { getMismatchedFavourites } from 'utils/compare-favourites';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -22,6 +24,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, theme, cardStyle);
 
 /*:: type State = {
   fav: Array<Object>,
+  changedEntries: Array<Object>,
 }; */
 
 export class FavouriteEntries extends PureComponent /*:: <Props> */ {
@@ -34,11 +37,15 @@ export class FavouriteEntries extends PureComponent /*:: <Props> */ {
 
     this.state = {
       fav: [],
+      changedEntries: [],
     };
   }
 
   componentDidMount() {
     this.getFavourites();
+    getMismatchedFavourites({
+      setChangedFav: (entries) => this.setState({ changedEntries: entries }),
+    });
   }
 
   componentDidUpdate(prevProps /*: Props */) {
@@ -70,6 +77,18 @@ export class FavouriteEntries extends PureComponent /*:: <Props> */ {
                   <EntryCard entry={f} key={f.metadata.accession} />
                 ))}
               </AnimatedEntry>
+              {this.state.changedEntries.length > 0 && (
+                <Link
+                  to={{
+                    description: {
+                      other: ['fav-updates'],
+                    },
+                  }}
+                  className={f('button', 'margin-bottom-none')}
+                >
+                  Check for updates
+                </Link>
+              )}
             </div>
           </div>
         </div>
