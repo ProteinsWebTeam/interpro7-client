@@ -21,6 +21,8 @@
 .*/node_modules/react-popper*
 .*/node_modules/react-hotkeys*
 .*/node_modules/react-select*
+.*/node_modules/create-emotion*
+.*/node_modules/emotion*
 
 [include]
 
