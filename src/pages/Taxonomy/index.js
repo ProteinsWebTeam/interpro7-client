@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable react/display-name */
 /* eslint-disable camelcase */
-import React, { PureComponent, useState } from 'react';
+import React, { PureComponent, useEffect, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -740,7 +740,9 @@ class List extends PureComponent /*:: <Props,State> */ {
 const childRoutes = /(\d+)|(all)/i;
 
 const _ExactMatchSearch = ({ data, onSearchComplete }) => {
-  onSearchComplete(data && !data.loading && data.payload);
+  useEffect(() => {
+    onSearchComplete(data && !data.loading && data.payload);
+  });
   return null;
 };
 
@@ -767,7 +769,7 @@ const getURLFromState = createSelector(
       } catch {
         return;
       }
-    } else if (search && search.match(/^\w+$/) && description.taxonomy) {
+    } else if (search && search.match(/^[\w ]+$/) && description.taxonomy) {
       const desc = {
         main: {
           key: 'taxonomy',
