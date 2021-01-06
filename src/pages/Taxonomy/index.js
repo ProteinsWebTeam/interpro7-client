@@ -54,7 +54,6 @@ import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
-import local from './styles.css';
 
 const f = foundationPartial(
   ebiGlobalStyles,
@@ -62,7 +61,6 @@ const f = foundationPartial(
   styles,
   fonts,
   exporterStyle,
-  local,
 );
 
 const EntryAccessionsRenderer = (entryDB) => (taxId, _row, extra) => (
@@ -801,12 +799,7 @@ const Taxonomy = ({ search }) => {
   const searchTerm = search && search.search;
   return (
     <>
-      {searchTerm && (
-        <ExactMatchSearch
-          onSearchComplete={setAccSearch}
-          className={local.exactMatch}
-        />
-      )}
+      {searchTerm && <ExactMatchSearch onSearchComplete={setAccSearch} />}
       <EndPointPage
         subpagesRoutes={childRoutes}
         listOfEndpointEntities={List}
