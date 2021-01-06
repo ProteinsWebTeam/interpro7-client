@@ -27,6 +27,7 @@ import IsoformViewer from 'components/Protein/Isoforms/Viewer';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
+import IPScanButton from 'components/Protein/Sequence/IPScanButton';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import { foundationPartial } from 'styles/foundation';
@@ -239,6 +240,11 @@ export const SummaryProtein = (
                 sequence={metadata.sequence}
                 accession={metadata.accession}
                 title="Search protein with HMMER"
+                minWidth="290px"
+              />
+              <IPScanButton
+                sequence={metadata.sequence}
+                title="Search protein with InterProScan"
                 minWidth="290px"
               />
             </div>
