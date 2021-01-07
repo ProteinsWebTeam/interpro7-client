@@ -54,6 +54,7 @@ import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
+import local from './style.css';
 
 const f = foundationPartial(
   ebiGlobalStyles,
@@ -61,6 +62,7 @@ const f = foundationPartial(
   styles,
   fonts,
   exporterStyle,
+  local,
 );
 
 const EntryAccessionsRenderer = (entryDB) => (taxId, _row, extra) => (
@@ -476,7 +478,6 @@ class List extends PureComponent /*:: <Props,State> */ {
 
       results.splice(0, 1, {
         ...exactMatch,
-        exact: true,
         extra_fields: {
           counters: exactMatch.metadata.counters,
         },
@@ -487,6 +488,7 @@ class List extends PureComponent /*:: <Props,State> */ {
             exactMatch.metadata.name.name ||
             exactMatch.metadata.name,
         },
+        className: f(local.exactMatch),
       });
       size++;
       notFound = false;

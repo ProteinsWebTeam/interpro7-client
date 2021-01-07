@@ -123,6 +123,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
         {rows.map((row, index) => {
           const rowData = row.metadata || row;
           const extraData = row.extra_fields;
+          const rcn = row.className ? row.className : rowClassName;
           const shouldRenderGroupHeader =
             groups?.length && row.group && curentGroup !== row.group;
           if (shouldRenderGroupHeader) {
@@ -146,7 +147,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
                 row={rowData}
                 columns={columns}
                 extra={extraData}
-                rowClassName={rowClassName}
+                rowClassName={rcn}
                 group={groups && row.group}
                 backgroundColor={
                   groups && row.group ? colorHash.hex(row.group) : null
