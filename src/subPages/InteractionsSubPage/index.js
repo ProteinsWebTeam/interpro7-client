@@ -7,10 +7,7 @@ import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import { foundationPartial } from 'styles/foundation';
-import localStyle from './style.css';
-
-const f = foundationPartial(localStyle);
+import f from 'styles/foundation';
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),

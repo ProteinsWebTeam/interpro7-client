@@ -286,7 +286,7 @@ const KeySpeciesArea = ({ focusType, showKeySpecies }) => {
 
 KeySpeciesArea.propTypes = {
   focusType: T.string,
-  showKeySpecies: T.boolean,
+  showKeySpecies: T.bool,
 };
 /*:: type relatedAdvancedProps = {
   mainData: Object,

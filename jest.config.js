@@ -5,7 +5,7 @@ const url = require('url');
 const yaml = require('js-yaml');
 
 // Use config example here for tests, because it's version-controlled
-const iprConfig = yaml.safeLoad(fs.readFileSync('config.yml.example', 'utf8'));
+const iprConfig = yaml.load(fs.readFileSync('config.yml.example', 'utf8'));
 const websiteURL = url.parse(iprConfig.root.website, true, true);
 
 module.exports = {
