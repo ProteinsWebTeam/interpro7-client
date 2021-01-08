@@ -329,6 +329,8 @@ const SummaryIPScanJob = ({
 
   const goTerms = getGoTerms(payload.matches);
 
+  const dataURL = 'https://www.ebi.ac.uk/Tools/services/rest/iprscan5/result/';
+
   return (
     <div className={f('sections')}>
       <section>
@@ -434,23 +436,24 @@ const SummaryIPScanJob = ({
             mainData={{ metadata }}
             dataMerged={mergedData}
           >
-            {status === 'finished' && data?.url && (
-              <Exporter includeSettings={false}>
-                <ul>
-                  {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
-                    <li key={type}>
-                      <Link
-                        target="_blank"
-                        href={data.url.replace('json', type)}
-                        download={`InterProScan.${type}`}
-                      >
-                        {type.toUpperCase()}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </Exporter>
-            )}
+            <Exporter
+              includeSettings={false}
+              disabled={status === 'imported file'}
+            >
+              <ul>
+                {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
+                  <li key={type}>
+                    <Link
+                      target="_blank"
+                      href={`${dataURL}/${accession}/${type}`}
+                      download={`InterProScan.${type}`}
+                    >
+                      {type.toUpperCase()}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Exporter>
           </DomainOnProteinWithoutMergedData>
           <GoTerms terms={Array.from(goTerms.values())} type="protein" />
         </>
