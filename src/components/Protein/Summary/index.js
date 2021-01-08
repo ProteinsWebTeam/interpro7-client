@@ -75,6 +75,17 @@ export const SummaryProtein = (
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
 
+  const splitSequenceByChunks = () => {
+    const start = 1;
+    const end = metadata.sequence.length;
+    // Split lines
+    metadata.sequence = metadata.sequence
+      .slice(Math.max(0, start - 1), end)
+      .replace(/(.{1,80})/g, '$1\n');
+    const meta = `>${metadata.id} ${start}-${end}`.trim();
+    return encodeURIComponent(`${meta}\n${metadata.sequence}`);
+  };
+
   return (
     <div className={f('sections')}>
       {metadata.gene && (
@@ -243,7 +254,7 @@ export const SummaryProtein = (
                 minWidth="290px"
               />
               <IPScanButton
-                sequence={metadata.sequence}
+                sequence={splitSequenceByChunks}
                 title="Search protein with InterProScan"
                 minWidth="290px"
               />
