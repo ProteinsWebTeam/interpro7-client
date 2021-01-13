@@ -329,6 +329,18 @@ const SummaryIPScanJob = ({
 
   const goTerms = getGoTerms(payload.matches);
 
+  let dataURL = 'https://www.ebi.ac.uk/Tools/services/rest/iprscan5/result/';
+  const now = Date.now();
+  const expired =
+    (now - (created || now) > MAX_TIME_ON_SERVER &&
+      status === 'saved in browser') ||
+    status === 'imported file';
+  if (expired) {
+    const downloadContent = JSON.stringify(payload);
+    const blob = new Blob([downloadContent], { type: 'application/json' });
+    dataURL = URL.createObjectURL(blob);
+  }
+
   return (
     <div className={f('sections')}>
       <section>
@@ -434,23 +446,24 @@ const SummaryIPScanJob = ({
             mainData={{ metadata }}
             dataMerged={mergedData}
           >
-            {status === 'finished' && data?.url && (
-              <Exporter includeSettings={false}>
-                <ul>
-                  {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
-                    <li key={type}>
-                      <Link
-                        target="_blank"
-                        href={data.url.replace('json', type)}
-                        download={`InterProScan.${type}`}
-                      >
-                        {type.toUpperCase()}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </Exporter>
-            )}
+            <Exporter includeSettings={false}>
+              <ul>
+                {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
+                  <li key={type}>
+                    <Link
+                      target="_blank"
+                      href={
+                        expired ? dataURL : `${dataURL}/${accession}/${type}`
+                      }
+                      download={`InterProScan.${type}`}
+                      disabled={expired && type !== 'json'}
+                    >
+                      {type.toUpperCase()}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Exporter>
           </DomainOnProteinWithoutMergedData>
           <GoTerms terms={Array.from(goTerms.values())} type="protein" />
         </>
