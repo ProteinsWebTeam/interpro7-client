@@ -17,8 +17,8 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ebiStyles, styles, theme, fonts);
 
-const TAG_REGEX = /(\[\w+:[\w\.]+])/;
-const TAG_REGEX_KV = /\[(\w+):([\w\.]+)]/;
+const TAG_REGEX = /(\[\w+:[\w\.-]+\])/;
+const TAG_REGEX_KV = /\[(\w+):([\w\.-]+)]/;
 const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](,\\s+)?';
 const CITATIONS_REGEX = `(\\[(${CITATION_REGEX})+\\])`;
 const REMOVE_TRAILING_COMMA_REGEX = /,\s*(?=\])/;

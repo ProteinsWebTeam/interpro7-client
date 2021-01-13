@@ -1,3 +1,10 @@
 .button {
   margin-bottom: 0;
 }
+
+.buttons {
+  display: flex;
+  & button {
+    margin-right: 1em;
+  }
+}

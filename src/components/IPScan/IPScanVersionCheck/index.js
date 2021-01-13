@@ -12,6 +12,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts);
 
+const DAYS_TO_UPDATE_IPSCAN = 5;
 /*::
   type Props = {
     data?: {
@@ -22,24 +23,43 @@ const f = foundationPartial(ebiGlobalStyles, fonts);
   }
 */
 
-const IPScanVersionCheck = ({ data, ipScanVersion }) => {
-  if (!data || data.loading) return <Loading inline={true} />;
+const IPScanVersionCheck = ({ data, ipScanVersion } /*: Props */) => {
+  if (!data || data.loading || !ipScanVersion) return <Loading inline={true} />;
   const currentVersion = data.payload?.databases?.interpro?.version;
+  const currentVersionReleaseDate = new Date(
+    data.payload?.databases?.interpro?.releaseDate,
+  );
   const [_, jobVersion] = (ipScanVersion || '').split('-');
+
+  // eslint-disable-next-line no-magic-numbers
+  const msPerDay = 24 * 60 * 60 * 1000; // Number of milliseconds per day
+  const daysSinceRelease = Math.round(
+    (new Date().getTime() - currentVersionReleaseDate.getTime()) / msPerDay,
+  );
 
   if (currentVersion !== jobVersion) {
     return (
       <div className={f('callout', 'info', 'withicon')}>
-        <b>Mismatched Version</b>
+        <h4 style={{ display: 'inline-block' }}>Mismatched Version</h4>
         <p>
           InterProScan version: <code>{ipScanVersion}</code>.
         </p>
         <p>
-          Some links might not work as they uploaded a result from a previous
-          release of InterPro <code>{jobVersion}</code> and the data might have
-          been deleted or changed in the current version{' '}
+          Some links might not work as the results are from a previous release
+          of InterPro {jobVersion ? <code>{jobVersion}</code> : null} and some
+          of the data might have been deleted or changed in the current version{' '}
           <code>{currentVersion}</code>.
         </p>
+        {daysSinceRelease < DAYS_TO_UPDATE_IPSCAN ? (
+          <p>
+            <b>Note:</b>
+            InterPro version <code>{currentVersion}</code> has been released on{' '}
+            <i>{currentVersionReleaseDate.toLocaleDateString()}</i>. We are
+            still in the process of updating the InterProScan web service which
+            might take up to 5 days. This might explain version mismatches of
+            recently submitted jobs.
+          </p>
+        ) : null}
       </div>
     );
   }

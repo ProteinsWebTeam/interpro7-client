@@ -4,6 +4,7 @@ import {
   UNMARK_FAVOURITE,
 } from 'actions/types';
 import getTableAccess, { FavEntries } from 'storage/idb';
+import { askNotificationPermission } from 'utils/browser-notifications';
 
 const favTA = getTableAccess(FavEntries);
 
@@ -39,6 +40,8 @@ export default (
       };
     case MARK_FAVOURITE:
       createEntryInDB(action.id, action.content);
+      askNotificationPermission();
+
       return {
         ...state,
         entries: [...state.entries, action.id],

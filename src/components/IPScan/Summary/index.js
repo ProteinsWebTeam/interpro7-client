@@ -32,7 +32,7 @@ import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideSummary from 'components/IPScan/NucleotideSummary';
 import IPScanTitle from './IPScanTitle';
 import { Exporter } from 'components/Table';
-import { updateJobTitle, keepJobAsLocal } from 'actions/creators';
+import { updateJobTitle } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -120,7 +120,7 @@ const _StatusTooltip = ({ status /*: string */ }) => (
         {status}
       </>
     ) : null}
-    {['finished', 'imported file'].includes(status) && (
+    {['finished', 'imported file', 'saved in browser'].includes(status) && (
       <>
         <span
           className={f('icon', 'icon-common', 'ico-confirmed')}
@@ -138,6 +138,7 @@ _StatusTooltip.propTypes = {
     'created',
     'importing',
     'imported file',
+    'saved in browser',
     'submitted',
     'not found',
     'failure',
@@ -257,7 +258,6 @@ const SummaryIPScanJob = ({
   localPayload,
   api,
   updateJobTitle,
-  keepJobAsLocal,
 }) => {
   const [mergedData, setMergedData] = useState({});
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
@@ -329,15 +329,27 @@ const SummaryIPScanJob = ({
 
   const goTerms = getGoTerms(payload.matches);
 
+  let dataURL = 'https://www.ebi.ac.uk/Tools/services/rest/iprscan5/result/';
+  const now = Date.now();
+  const expired =
+    (now - (created || now) > MAX_TIME_ON_SERVER &&
+      status === 'saved in browser') ||
+    status === 'imported file';
+  if (expired) {
+    const downloadContent = JSON.stringify(payload);
+    const blob = new Blob([downloadContent], { type: 'application/json' });
+    dataURL = URL.createObjectURL(blob);
+  }
+
   return (
     <div className={f('sections')}>
       <section>
         <Title metadata={metadata} mainType="protein" />
-        {data.payload ? null : (
+        {!data.payload && payload?.['interproscan-version'] ? (
           <div className={f('callout', 'info', 'withicon')}>
             Using data stored in your browser
           </div>
-        )}
+        ) : null}
         <IPScanVersionCheck ipScanVersion={payload['interproscan-version']} />
         <NucleotideSummary payload={payload} />
         <IPScanTitle
@@ -377,7 +389,7 @@ const SummaryIPScanJob = ({
           <section className={f('summary-row')}>
             <header>Action</header>
             <section>
-              <Actions localID={localID} />
+              <Actions localID={localID} status={status} />
             </section>
           </section>
         )}
@@ -405,16 +417,6 @@ const SummaryIPScanJob = ({
             </header>
             <section>
               {new Date(created + MAX_TIME_ON_SERVER).toDateString()}
-              <div>
-                <button
-                  className={f('button', 'icon', 'icon-common')}
-                  data-icon="&#x53;"
-                  onClick={() => keepJobAsLocal(localID)}
-                >
-                  {' '}
-                  Save in Browser
-                </button>
-              </div>
             </section>
           </section>
         )}
@@ -438,29 +440,30 @@ const SummaryIPScanJob = ({
         </div>
       </section>
 
-      {['finished', 'imported file'].includes(status) && (
+      {['finished', 'imported file', 'saved in browser'].includes(status) && (
         <>
           <DomainOnProteinWithoutMergedData
             mainData={{ metadata }}
             dataMerged={mergedData}
           >
-            {status === 'finished' && data?.url && (
-              <Exporter includeSettings={false}>
-                <ul>
-                  {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
-                    <li key={type}>
-                      <Link
-                        target="_blank"
-                        href={data.url.replace('json', type)}
-                        download={`InterProScan.${type}`}
-                      >
-                        {type.toUpperCase()}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </Exporter>
-            )}
+            <Exporter includeSettings={false}>
+              <ul>
+                {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
+                  <li key={type}>
+                    <Link
+                      target="_blank"
+                      href={
+                        expired ? dataURL : `${dataURL}/${accession}/${type}`
+                      }
+                      download={`InterProScan.${type}`}
+                      disabled={expired && type !== 'json'}
+                    >
+                      {type.toUpperCase()}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Exporter>
           </DomainOnProteinWithoutMergedData>
           <GoTerms terms={Array.from(goTerms.values())} type="protein" />
         </>
@@ -478,7 +481,6 @@ SummaryIPScanJob.propTypes = {
   localPayload: T.object,
   api: T.object,
   updateJobTitle: T.func,
-  keepJobAsLocal: T.func,
 };
 
 const jobMapSelector = (state) => state.jobs;
@@ -514,6 +516,4 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(mapStateToProps, { updateJobTitle, keepJobAsLocal })(
-  SummaryIPScanJob,
-);
+export default connect(mapStateToProps, { updateJobTitle })(SummaryIPScanJob);

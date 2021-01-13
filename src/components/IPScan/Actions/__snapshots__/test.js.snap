@@ -1,16 +1,42 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Actions /> should render 1`] = `
-<React.Fragment>
+<nav
+  className="buttons"
+>
   <Tooltip
-    title="Delete job"
+    title={
+      <div>
+        <b>
+          Delete search
+        </b>
+        : This will remove the stored data from your browser. Remember that search results are only retained on our servers for 7 days
+      </div>
+    }
   >
     <button
-      aria-label="Delete job"
+      aria-label="Delete Results"
       className="icon icon-common ico-neutral"
       data-icon=""
       onClick={[Function]}
     />
   </Tooltip>
-</React.Fragment>
+  <Tooltip
+    title={
+      <div>
+        <b>
+          Save results in Browser
+        </b>
+        : If you save the results of this search in your browser, you will be able to view it here even after it is deleted from our servers or when you are offline.
+      </div>
+    }
+  >
+    <button
+      aria-label="Save results in Browser"
+      className="icon icon-common ico-neutral"
+      data-icon="S"
+      onClick={[Function]}
+    />
+  </Tooltip>
+</nav>
 `;

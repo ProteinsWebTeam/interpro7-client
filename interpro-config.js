@@ -3,7 +3,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const file = fs.readFileSync('./config.yml', 'utf8');
-const data /*: Object */ = yaml.safeLoad(file, {
+const data /*: Object */ = yaml.load(file, {
   json: true,
 });
 module.exports = data;

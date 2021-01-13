@@ -49,6 +49,13 @@
   }
 }
 
+.disableDropdown {
+  & .dropdown {
+    background: var(--colors-gray);
+    cursor: not-allowed;
+  }
+}
+
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
   .dropdown-container .dropdown-content {
     width: 212px; /*temp value*/

@@ -56,7 +56,7 @@ export default (
           ...state[action.localID],
           metadata: {
             ...state[action.localID].metadata,
-            status: 'imported file',
+            status: 'saved in browser',
           },
         },
       };

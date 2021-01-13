@@ -4,12 +4,11 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Link from 'components/generic/Link';
-
 import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
+import IPScanButton from 'components/Protein/Sequence/IPScanButton';
 
 import local from './style.css';
 import ipro from 'styles/interpro-new.css';
@@ -283,16 +282,6 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
     return encodeURIComponent(`${meta}\n${sequenceToSearch}`);
   };
 
-  _handleIPSClick = (event) => {
-    event.preventDefault();
-    this.props.goToCustomLocation({
-      description: {
-        main: { key: 'search' },
-        search: { type: 'sequence', value: this._getSelection() },
-      },
-    });
-  };
-
   render() {
     const { sequence, accession, name } = this.props;
     const header = accession || name;
@@ -327,34 +316,11 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
             <InnerSequence sequence={sequence} />
           </div>
           <div className={f('small-12', 'medium-12', 'large-4', 'columns')}>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'search' },
-                  search: { type: 'sequence' },
-                },
-              }}
-              onClick={this._handleIPSClick}
-            >
-              <div
-                className={f(
-                  'sequence-link',
-                  'button-more',
-                  'icon',
-                  'icon-common',
-                  'icon-right',
-                )}
-                data-icon="&#xf061;"
-                style={{ minWidth: '302px', marginRight: '1rem' }}
-              >
-                <div className={f('shape', 'ips', 'gray')} />
-                <div className={f('shape', 'ips', 'green')} />
-                <div className={f('shape', 'ips', 'pale-green')} />
-                <div className={f('shape', 'ips', 'red')} />
-                <div className={f('shape', 'ips', 'blue')} />
-                <span>Search selection with InterProScan</span>
-              </div>
-            </Link>
+            <IPScanButton
+              sequence={this._getSelection}
+              title={'Search selection with InterProScan'}
+              minWidth="302px"
+            />
             <HmmerButton
               sequence={this._getSelection}
               title="Search selection with HMMER"

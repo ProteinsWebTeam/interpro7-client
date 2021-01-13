@@ -79,6 +79,10 @@ const Coronavirus = loadable({
   loader: () =>
     import(/* webpackChunkName: "coronavirus-page" */ './Coronavirus'),
 });
+const FavouriteUpdates = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "coronavirus-page" */ './FavouriteUpdates'),
+});
 
 const RedirectToBlog = ({
   customLocation: {
@@ -132,6 +136,7 @@ const otherPages = new Map([
   ['contact', Contact],
   ['settings', Settings],
   ['covid-19', Coronavirus],
+  ['fav-updates', FavouriteUpdates],
   ['potm', RedirectToBlog],
   ['downloads', RedirectToBlog],
 ]);

@@ -54,7 +54,7 @@ const rehydrateStoredJobs = async (dispatch) => {
     // if job expired on server, delete it
     if (
       now - (metadata.times.created || now) > MAX_TIME_ON_SERVER &&
-      metadata.status !== 'imported file'
+      !['saved in browser', 'imported file'].includes(metadata.status)
     ) {
       deleteJobInDB(localID);
     } else {
@@ -306,7 +306,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     if (action.type === KEEP_JOB_AS_LOCAL) {
       updateJobInDB({
         ...getState().jobs[action.localID].metadata,
-        status: 'imported file',
+        status: 'saved in browser',
       });
     }
 
