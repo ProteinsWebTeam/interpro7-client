@@ -332,8 +332,9 @@ const SummaryIPScanJob = ({
   let dataURL = 'https://www.ebi.ac.uk/Tools/services/rest/iprscan5/result/';
   const now = Date.now();
   const expired =
-    now - (created || now) > MAX_TIME_ON_SERVER &&
-    status === 'saved in browser';
+    (now - (created || now) > MAX_TIME_ON_SERVER &&
+      status === 'saved in browser') ||
+    status === 'imported file';
   if (expired) {
     const downloadContent = JSON.stringify(payload);
     const blob = new Blob([downloadContent], { type: 'application/json' });
@@ -445,10 +446,7 @@ const SummaryIPScanJob = ({
             mainData={{ metadata }}
             dataMerged={mergedData}
           >
-            <Exporter
-              includeSettings={false}
-              disabled={status === 'imported file'}
-            >
+            <Exporter includeSettings={false}>
               <ul>
                 {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
                   <li key={type}>
