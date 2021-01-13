@@ -254,7 +254,6 @@ const SummaryIPScanJob = ({
   remoteID,
   localTitle,
   status,
-  times,
   data,
   localPayload,
   api,
@@ -333,7 +332,7 @@ const SummaryIPScanJob = ({
   let dataURL = 'https://www.ebi.ac.uk/Tools/services/rest/iprscan5/result/';
   const now = Date.now();
   const expired =
-    now - (times.created || now) > MAX_TIME_ON_SERVER &&
+    now - (created || now) > MAX_TIME_ON_SERVER &&
     status === 'saved in browser';
   if (expired) {
     const downloadContent = JSON.stringify(payload);
@@ -480,7 +479,6 @@ SummaryIPScanJob.propTypes = {
   remoteID: T.string,
   localTitle: T.string,
   status: T.string.isRequired,
-  times: T.object,
   data: dataPropType,
   localPayload: T.object,
   api: T.object,
@@ -511,13 +509,12 @@ const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
   (state) => state.settings.api,
-  (accession, { metadata: { localID, remoteID, status, times } }, api) => ({
+  (accession, { metadata: { localID, remoteID, status } }, api) => ({
     accession,
     localID,
     remoteID,
     status,
     api,
-    times,
   }),
 );
 
