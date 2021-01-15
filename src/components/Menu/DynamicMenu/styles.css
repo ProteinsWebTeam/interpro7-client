@@ -71,3 +71,42 @@
   pointer-events: auto;
   opacity: 1;
 }
+
+div.dropdown {
+  pointer-events: auto;
+  & ul {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    outline: none;
+    margin: 0;
+    z-index: 10;
+  }
+
+  & .menu-item {
+    background: var(--colors-nearly-white);
+    list-style: none;
+    color: #000;
+    display: block;
+    opacity: 1;
+    & a {
+      pointer-events: auto;
+      display: block;
+      padding: var(--spacing-medium) var(--spacing-big);
+      color: #000;
+      &:hover {
+        background: var(--colors-info);
+      }
+    }
+    & a.reactive {
+      background: var(--colors-vlightgray);
+      font-weight: bold;
+    }
+  }
+
+  &:hover ul,
+  &:focus ul,
+  &:active ul {
+    display: flex;
+  }
+}

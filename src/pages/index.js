@@ -8,7 +8,7 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import loadable from 'higherOrder/loadable';
 
-import BrowseTabs from 'components/BrowseTabs';
+import BreadCrumbs from 'components/BreadCrumbs';
 
 import { stuckSelector } from 'reducers/ui/stuck';
 
@@ -193,16 +193,8 @@ export class Pages extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('main', { stuck })}>
         <ErrorBoundary>
-          <div className={f('row')}>
-            <div className={f('large-12', 'columns')}>
-              <Switch
-                {...props}
-                indexRoute={Null}
-                locationSelector={locationSelector1}
-                childRoutes={childRoutes}
-                catchAll={BrowseTabs}
-              />
-            </div>
+          <div className={f('row', 'large-12', 'columns', 'breadcrumb')}>
+            <BreadCrumbs />
           </div>
         </ErrorBoundary>
         <ErrorBoundary>

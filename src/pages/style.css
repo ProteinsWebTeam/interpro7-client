@@ -415,8 +415,20 @@
   }
 }
 
-.db-symbol {
-  vertical-align: middle;
-  height: 2rem;
-  width: 2rem;
+div.breadcrumb {
+  margin-top: 0;
+}
+
+.browse-side-panel {
+  background: var(--colors-filter-background);
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  & .selector-container {
+    min-height: 40vh;
+    overflow: scroll;
+  }
+}
+.columns {
+  padding: 0;
 }

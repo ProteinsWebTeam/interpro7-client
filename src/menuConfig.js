@@ -70,7 +70,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'Entry',
+    name: 'By Entry',
   },
   {
     to(customLocation) {
@@ -84,7 +84,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'Protein',
+    name: 'By Protein',
   },
   {
     to(customLocation) {
@@ -97,7 +97,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'Structure',
+    name: 'By Structure',
   },
   {
     to(customLocation) {
@@ -112,7 +112,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'Taxonomy',
+    name: 'By Taxonomy',
   },
   {
     to(customLocation) {
@@ -127,7 +127,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'Proteome',
+    name: 'By Proteome',
   },
   {
     to(customLocation) {
@@ -140,7 +140,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'Set',
+    name: 'By Set',
   },
 ];
 
@@ -578,6 +578,7 @@ export const InterPro /*: Array<Object> */ = [
     icon: 'b',
     name: 'Browse',
     iconClass: 'common',
+    entities,
   },
   {
     to({

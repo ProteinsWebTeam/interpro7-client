@@ -1,9 +1,10 @@
 @import '../../styles/timing.css';
+@import '../../styles/colors.css';
 
 .filters-panel {
   display: flex;
   flex-direction: column;
-  background: #e9f1f3;
+  background: var(--colors-filter-background);
 
   & label {
     line-height: normal;
