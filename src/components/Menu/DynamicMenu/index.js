@@ -98,7 +98,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
             {entities ? (
               <div className={f('dropdown')}>
                 <MenuItem to={to} activeClass={activeClass} exact={exact}>
-                  {name}
+                  <span className={f('arrow')}>▾</span> {name}
                 </MenuItem>
                 <ul role="tree" tabIndex="0">
                   {entities.map(({ to, name, exact }) => (
