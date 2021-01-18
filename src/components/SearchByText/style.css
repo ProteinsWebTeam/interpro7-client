@@ -1,5 +1,6 @@
 @import '../../styles/colors.css';
 @import '../../styles/timing.css';
+@import '../../styles/z-index.css';
 
 .input-group {
   display: flex;
@@ -51,7 +52,7 @@
     width: 15px;
     height: 15px;
     position: absolute;
-    z-index: 1;
+    z-index: var(--z-index-deepest);
     right: 6px;
     top: 0;
     bottom: 0;

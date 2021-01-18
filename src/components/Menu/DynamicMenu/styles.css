@@ -1,7 +1,7 @@
 @import '../../../styles/timing.css';
 @import '../../../styles/colors.css';
 @import '../../../styles/spacing.css';
-
+@import '../../../styles/z-index.css';
 .menu {
   display: flex;
 }
@@ -80,7 +80,7 @@ div.dropdown {
     flex-direction: column;
     outline: none;
     margin: 0;
-    z-index: 10;
+    z-index: var(--z-index-main-menu);
   }
 
   & .menu-item {
@@ -104,9 +104,19 @@ div.dropdown {
     }
   }
 
-  &:hover ul,
-  &:focus ul,
-  &:active ul {
-    display: flex;
+  & .arrow {
+    display: inline-block;
+    transform: rotate(-90deg);
+    transition: transform var(--timing-instant) ease-in-out;
+  }
+  &:hover,
+  &:focus,
+  &:active {
+    & ul {
+      display: flex;
+    }
+    & .arrow {
+      transform: rotate(0deg);
+    }
   }
 }

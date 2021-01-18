@@ -2,6 +2,7 @@
 @import '../styles/timing.css';
 @import '../styles/animation.css';
 @import '../styles/fonts.css';
+@import '../styles/z-index.css';
 
 /******************************Overwrite EBI global***************************/
 /*to include more systems fonts for windows machines*/
@@ -1132,7 +1133,7 @@ details.accordion-style > summary {
   padding: 1rem;
   cursor: pointer;
   outline: 0;
-  z-index: 1;
+  z-index: var(--z-index-deepest);
   position: relative; /* for animation */
   list-style: none; /* keep to remove default icon for Firefox */
   &:hover {
@@ -1216,7 +1217,7 @@ details.option-style > summary {
   padding: 1rem;
   cursor: pointer;
   outline: 0;
-  z-index: 1;
+  z-index: var(--z-index-deepest);
   position: relative; /*for animation*/
   list-style: none; /*to keep for Firefox*/
   transition: all var(--timing-medclose) ease-out;
@@ -1261,104 +1262,7 @@ details.option-style > summary {
 .local_footer.masthead {
   background-size: 130%, 110%;
 }
-/* back to top button */
-#back-top {
-  position: fixed;
-  bottom: 0;
-  right: 19px;
-  z-index: 100;
-}
-#back-top span.topicon {
-  font-size: 1.5em;
-  color: white;
-  opacity: 0.18;
-  background-color: black;
-  padding: 6px 7px;
-}
-#back-top:hover span.topicon {
-  opacity: 0.4;
-}
-#back-top a:hover,
-#back-top a:focus,
-#back-top a:active {
-  border-bottom: 0 solid #8c8c8c;
-}
-#back-top span.text {
-  opacity: 0;
-  color: grey;
-  font-size: 0.8em;
-}
-#back-top:hover span.text {
-  opacity: 1;
-}
-#back-top:hover {
-  padding-bottom: 14px;
-}
-/* /back to top button */
-/* LiteMole - Structure page */
-.lm-plugin .lm-btn-link span.lm-icon {
-  font-size: 120%;
-}
-/* update color icons LiteMole */
-.lm-plugin .lm-viewport-controls-buttons button.lm-btn-link {
-  color: #71818a;
-}
-.lm-plugin .lm-viewport-controls-buttons button.lm-btn-link-toggle-off {
-  color: #71818a;
-}
-.lm-plugin .lm-viewport-controls-buttons button.lm-btn-link:hover {
-  color: #646e74;
-}
-/* update color info window that appear on mouse over */
-.lm-plugin div.lm-highlight-info {
-  color: #4b555b;
-  background: #ccc; /* not transparent otherwise can't be read properly */
-  z-index: 2; /* reduce Z-index to stay below sticky banner */
-}
-/* icons LiteMole by EBI icons */
-/* help icon */
-.lm-plugin span.lm-icon-help-circle:before {
-  font-family: EBI-Common;
-  content: '';
-}
-/* settings icon */
-.lm-plugin span.lm-icon-settings:before {
-  font-family: EBI-Common;
-  content: '';
-}
-/* camera icon */
-.lm-plugin span.lm-icon-screenshot:before {
-  font-family: EBI-Common;
-  content: '';
-}
 
-/* full screen icon */
-.lm-plugin span.lm-icon-expand-layout:before {
-  font-family: EBI-Common;
-  content: 'F';
-}
-
-/* refresh icon */
-.lm-plugin span.lm-icon-reset-scene:before {
-  font-family: EBI-Common;
-  content: '';
-}
-/* / icons LiteMole by EBI icons */
-/* change color font in control panel */
-.lm-plugin
-  .lm-entity-tree-entry-current-path
-  button.lm-entity-tree-entry-label {
-  color: #4b555b;
-}
-.lm-plugin .lm-entity-tree-entry-current button.lm-entity-tree-entry-label {
-  color: #4b555b;
-}
-/* z-index so element in the panel goes on top of footer */
-.lm-plugin .lm-layout-standard-outside .lm-layout-left,
-.lm-plugin .lm-layout-standard-outside .lm-layout-right {
-  z-index: 2;
-}
-/* END LiteMole */
 /* custom CLAN-VIEWER node module */
 :global(.clanviewer) {
   width: 100%;

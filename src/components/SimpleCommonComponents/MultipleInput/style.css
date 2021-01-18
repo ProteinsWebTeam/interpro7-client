@@ -1,3 +1,5 @@
+@import '../../../styles/z-index.css';
+
 input[type='range'] {
   -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
   width: 90%;
@@ -141,12 +143,12 @@ input[type='range'].original {
 }
 input[type='range'].original::-webkit-slider-thumb {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-index-just-over);
 }
 
 input[type='range'].original::-moz-range-thumb {
   transform: scale(1); /* FF doesn't apply position it seems */
-  z-index: 1;
+  z-index: var(--z-index-deepest);
 }
 
 input[type='range'].ghost {
@@ -161,7 +163,7 @@ input[type='range'].ghost {
 }
 .label-on div {
   position: absolute;
-  z-index: 3;
+  z-index: var(--z-index-over);
   color: white;
   font-weight: bold;
 }

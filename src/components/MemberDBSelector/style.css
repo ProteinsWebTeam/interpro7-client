@@ -1,5 +1,6 @@
 @import '../../styles/timing.css';
 @import '../../styles/colors.css';
+@import '../../styles/z-index.css';
 
 .potential-popup {
   width: 100%;
@@ -26,7 +27,7 @@
   background: white;
   border: 1px solid var(--colors-vlightgray);
   border-radius: 0.5ch;
-  z-index: 100;
+  z-index: var(--z-index-memberdb);
   /*transition-property: opacity, transform, clip-path;*/
   transition-property: opacity, transform;
   transition-timing-function: var(--timing-fn-spring);
@@ -146,7 +147,7 @@
 
   & > .text {
     margin-left: 0.5rem;
-    z-index: 1; /* IE11: to show text on top of grey bgd */
+    z-index: var(--z-index-deepest); /* IE11: to show text on top of grey bgd */
     color: var(--colors-light-txt);
   }
 
@@ -181,6 +182,11 @@
     line-height: 1.4;
     font-size: 1rem;
     color: var(--colors-light-txt);
+    top: 0;
+    position: sticky;
+    background: var(--colors-filter-background);
+    width: 100%;
+    z-index: var(--z-index-just-over);
   }
 }
 

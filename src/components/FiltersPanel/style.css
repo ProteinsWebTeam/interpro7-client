@@ -36,7 +36,8 @@
 } /* so column doesn't expand totally when only 1-2 filters*/
 
 .filter-container {
-  border: 1px lightgray solid;
+  border-bottom: 1px lightgray solid;
+  padding: 0.5rem 0;
 }
 .filter-panel {
   max-height: 142px;
