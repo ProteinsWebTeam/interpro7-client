@@ -5,9 +5,6 @@ exports[`<EntryListFilter /> should render 1`] = `
   <Memo(Connect(loadData(EntryTypeFilter)))
     label="InterPro Type"
   />
-  <Memo(Connect(loadData(Connect(loadData(SignaturesFilter)))))
-    label="Integrated Database"
-  />
   <Memo(Connect(loadData(GOTermsFilter)))
     label="GO Terms"
   />

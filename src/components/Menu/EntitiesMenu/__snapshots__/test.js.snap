@@ -7,7 +7,7 @@ exports[`<EntitiesMenu /> should render 1`] = `
       activeClass="active"
       to={[Function]}
     >
-      Entry
+      By Entry
     </Memo(Connect(MenuItem))>
   </li>
   <li>
@@ -15,7 +15,7 @@ exports[`<EntitiesMenu /> should render 1`] = `
       activeClass="active"
       to={[Function]}
     >
-      Protein
+      By Protein
     </Memo(Connect(MenuItem))>
   </li>
   <li>
@@ -23,7 +23,7 @@ exports[`<EntitiesMenu /> should render 1`] = `
       activeClass="active"
       to={[Function]}
     >
-      Structure
+      By Structure
     </Memo(Connect(MenuItem))>
   </li>
   <li>
@@ -31,7 +31,7 @@ exports[`<EntitiesMenu /> should render 1`] = `
       activeClass="active"
       to={[Function]}
     >
-      Taxonomy
+      By Taxonomy
     </Memo(Connect(MenuItem))>
   </li>
   <li>
@@ -39,7 +39,7 @@ exports[`<EntitiesMenu /> should render 1`] = `
       activeClass="active"
       to={[Function]}
     >
-      Proteome
+      By Proteome
     </Memo(Connect(MenuItem))>
   </li>
   <li>
@@ -47,7 +47,7 @@ exports[`<EntitiesMenu /> should render 1`] = `
       activeClass="active"
       to={[Function]}
     >
-      Set
+      By Set
     </Memo(Connect(MenuItem))>
   </li>
 </ul>

@@ -101,7 +101,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
                   {name}
                 </MenuItem>
                 <ul role="tree" tabIndex="0">
-                  {entities.map(({ to, name, activeClass, exact }) => (
+                  {entities.map(({ to, name, exact }) => (
                     <li key={name} className={f('menu-item')}>
                       <MenuItem
                         to={to}

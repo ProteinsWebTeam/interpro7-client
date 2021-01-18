@@ -141,24 +141,11 @@ const otherPages = new Map([
   ['downloads', RedirectToBlog],
 ]);
 
-const Null = () => null;
-
 /*:: type Props = {
   stuck: boolean,
   top: number,
 }; */
 
-const childRoutes = new Map([[/^search|result$/, Null]]);
-const locationSelector1 = createSelector(
-  (customLocation) => {
-    if (
-      customLocation.description.main.key &&
-      !customLocation.description[customLocation.description.main.key].accession
-    )
-      return customLocation.description.main.key;
-  },
-  (value) => value,
-);
 const locationSelector2 = createSelector(
   (customLocation) => customLocation.description.main.key,
   (value) => value,

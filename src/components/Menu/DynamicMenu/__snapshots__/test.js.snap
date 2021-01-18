@@ -44,12 +44,81 @@ exports[`<DynamicMenu /> should render 1`] = `
     data-name="Browse"
     data-testid="menu-tab-browse"
   >
-    <Memo(Connect(MenuItem))
-      activeClass={[Function]}
-      to={[Function]}
+    <div
+      className="dropdown"
     >
-      Browse
-    </Memo(Connect(MenuItem))>
+      <Memo(Connect(MenuItem))
+        activeClass={[Function]}
+        to={[Function]}
+      >
+        Browse
+      </Memo(Connect(MenuItem))>
+      <ul
+        role="tree"
+        tabIndex="0"
+      >
+        <li
+          className="menu-item"
+        >
+          <Memo(Connect(MenuItem))
+            activeClass="reactive"
+            to={[Function]}
+          >
+            By Entry
+          </Memo(Connect(MenuItem))>
+        </li>
+        <li
+          className="menu-item"
+        >
+          <Memo(Connect(MenuItem))
+            activeClass="reactive"
+            to={[Function]}
+          >
+            By Protein
+          </Memo(Connect(MenuItem))>
+        </li>
+        <li
+          className="menu-item"
+        >
+          <Memo(Connect(MenuItem))
+            activeClass="reactive"
+            to={[Function]}
+          >
+            By Structure
+          </Memo(Connect(MenuItem))>
+        </li>
+        <li
+          className="menu-item"
+        >
+          <Memo(Connect(MenuItem))
+            activeClass="reactive"
+            to={[Function]}
+          >
+            By Taxonomy
+          </Memo(Connect(MenuItem))>
+        </li>
+        <li
+          className="menu-item"
+        >
+          <Memo(Connect(MenuItem))
+            activeClass="reactive"
+            to={[Function]}
+          >
+            By Proteome
+          </Memo(Connect(MenuItem))>
+        </li>
+        <li
+          className="menu-item"
+        >
+          <Memo(Connect(MenuItem))
+            activeClass="reactive"
+            to={[Function]}
+          >
+            By Set
+          </Memo(Connect(MenuItem))>
+        </li>
+      </ul>
+    </div>
   </li>
   <li
     className="menu-item visible"
