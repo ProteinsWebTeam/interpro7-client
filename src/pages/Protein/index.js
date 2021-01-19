@@ -300,17 +300,15 @@ class List extends PureComponent /*:: <ListProps> */ {
     return (
       <div className={f('row')}>
         <div
-          className={f('columns', 'small-12', 'medium-3', 'large-2')}
-          style={{
-            backgroundColor: '#e9f1f3',
-          }}
+          className={f(
+            'columns',
+            'small-12',
+            'medium-3',
+            'large-2',
+            'browse-side-panel',
+          )}
         >
-          <div
-            style={{
-              maxHeight: '14rem',
-              overflow: 'scroll',
-            }}
-          >
+          <div className={f('selector-container')}>
             <MemberDBSelector
               contentType="protein"
               className="pp-left-side-db-selector"

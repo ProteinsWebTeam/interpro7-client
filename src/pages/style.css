@@ -423,12 +423,10 @@ div.breadcrumb {
   background: var(--colors-filter-background);
   height: 80vh;
   display: flex;
+  padding: 0;
   flex-direction: column;
   & .selector-container {
     min-height: 40vh;
     overflow: scroll;
   }
-}
-.columns {
-  /* padding: 0; */
 }

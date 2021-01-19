@@ -35,7 +35,8 @@ export const FilterPanel = (
   >
     {label && (
       <button className={f('toggle')} onClick={toggle}>
-        {collapsed ? '▸' : '▾'} {label}
+        <span className={f('arrow', { collapsed })}>▸</span>
+        <span className={f('button-label')}>{label}</span>
       </button>
     )}
     <div className={f('filter-panel', { collapsed })}>{children}</div>

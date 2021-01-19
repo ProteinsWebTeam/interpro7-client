@@ -92,18 +92,25 @@ class IntegratedFilter extends PureComponent /*:: <Props, State> */ {
       isStale,
     } = this.props;
     const types = getPayloadOrEmpty(payload, loading, isStale);
-    if (!loading) types.both = payload.integrated + payload.unintegrated;
+    if (!loading)
+      types.both = (types.integrated || 0) + (types.unintegrated || 0);
     return (
       <div className={f('list-integrated', { stale: isStale })}>
-        {Object.keys(types)
-          .sort()
-          .map(type => (
-            <div key={type} className={f('column')}>
-              <label className={f('row', 'filter-button')}>
+        <div className={f('column')}>
+          {Object.keys(types)
+            .sort()
+            .map((type) => (
+              <label
+                key={type}
+                className={f('radio-btn-label', {
+                  checked: this.state.value === type,
+                })}
+              >
                 <input
                   type="radio"
                   name="interpro_state"
                   value={type}
+                  className={f('radio-btn')}
                   disabled={isStale}
                   onChange={this._handleSelection}
                   checked={this.state.value === type}
@@ -114,17 +121,17 @@ class IntegratedFilter extends PureComponent /*:: <Props, State> */ {
                   {types[type]}
                 </NumberComponent>
               </label>
-            </div>
-          ))}
+            ))}
+        </div>
       </div>
     );
   }
 }
 
 const getUrlFor = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from description
     const {
@@ -149,7 +156,7 @@ const getUrlFor = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({

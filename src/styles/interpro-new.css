@@ -1346,3 +1346,38 @@ details.option-style > summary {
     50% 14%;
   background-size: 30%;
 }
+
+.radio-btn {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.radio-btn-label {
+  display: flex;
+  align-items: center;
+  padding: 0.05rem 0;
+  color: var(--colors-submain);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.25s linear;
+  &.checked {
+    font-weight: bold;
+    &::before {
+      margin-right: 1.2rem;
+      border: 0.3rem solid var(--colors-submain);
+      background: var(--colors-loading-bar);
+    }
+  }
+}
+
+.radio-btn-label::before {
+  display: inline-block;
+  content: '';
+  height: 0.8rem;
+  width: 0.8rem;
+  margin-right: 0.4rem;
+  border: 0.2rem solid var(--colors-submain);
+  border-radius: 50%;
+  transition: all 0.25s linear;
+}

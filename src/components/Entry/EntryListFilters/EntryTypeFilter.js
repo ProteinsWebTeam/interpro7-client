@@ -102,43 +102,46 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
     }
     return (
       <div className={f('list-entries', { stale: isStale })}>
-        {types.map(([type, count]) => (
-          <div key={type} className={f('column')}>
-            <label className={f('row', 'filter-button')}>
-              <input
-                type="radio"
-                name="entry_type"
-                value={type.toLowerCase()}
-                onChange={this._handleSelection}
-                disabled={isStale}
-                checked={
-                  (!search.type && isAll(type)) ||
-                  search.type === type.toLowerCase()
-                }
-                style={{ margin: '0.25em' }}
-              />
-              {isAll(type) || db !== 'InterPro' ? (
-                this._formatType(type)
-              ) : (
-                <interpro-type
-                  type={type.replace('_', ' ')}
-                  expanded
-                  dimension="17px"
+        <div className={f('column')}>
+          {types.map(([type, count]) => {
+            const checked =
+              (!search.type && isAll(type)) ||
+              search.type === type.toLowerCase();
+            return (
+              <label key={type} className={f('radio-btn-label', { checked })}>
+                <input
+                  type="radio"
+                  name="entry_type"
+                  className={f('radio-btn')}
+                  value={type.toLowerCase()}
+                  onChange={this._handleSelection}
+                  disabled={isStale}
+                  checked={checked}
+                  style={{ margin: '0.25em' }}
+                />
+                {isAll(type) || db !== 'InterPro' ? (
+                  this._formatType(type)
+                ) : (
+                  <interpro-type
+                    type={type.replace('_', ' ')}
+                    expanded
+                    dimension="17px"
+                  >
+                    {type}
+                  </interpro-type>
+                )}
+                <NumberComponent
+                  label
+                  loading={loading}
+                  className={f('filter-label')}
+                  abbr
                 >
-                  {type}
-                </interpro-type>
-              )}
-              <NumberComponent
-                label
-                loading={loading}
-                className={f('filter-label')}
-                abbr
-              >
-                {count}
-              </NumberComponent>
-            </label>
-          </div>
-        ))}
+                  {count}
+                </NumberComponent>
+              </label>
+            );
+          })}
+        </div>
       </div>
     );
   }

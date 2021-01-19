@@ -52,6 +52,7 @@
 .db-selector {
   column-count: 3;
   padding: 0.5ch;
+  padding-left: 0.7rem;
   column-gap: 0.8rem;
   /*margin: 1ch;*/
 
@@ -179,7 +180,7 @@
 
   & .filter-label {
     margin: 0 1ch 1ch 0.5ch;
-    line-height: 1.4;
+    line-height: 1.5;
     font-size: 1rem;
     color: var(--colors-light-txt);
     top: 0;
