@@ -105,7 +105,10 @@ export const TotalNb = (
 
     const isSubPageButMainIsEntry =
       contentType !== description.main.key && description.main.key === 'entry';
+
+    const isBrowsePage = contentType && contentType === description.main.key;
     const needSelector = !(
+      isBrowsePage ||
       isSubPageButMainIsEntry ||
       description.main.key === 'search' ||
       (description.main.key === 'result' && !description.result.accession) ||
@@ -126,6 +129,7 @@ export const TotalNb = (
             className={s('header-total-results', {
               selector: typeof open === 'boolean',
               open,
+              bordered: needSelector,
             })}
           >
             <NumberComponent noTitle>{index}</NumberComponent>

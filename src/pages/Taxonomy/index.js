@@ -506,13 +506,24 @@ class List extends PureComponent /*:: <Props,State> */ {
     // }
     return (
       <div className={f('row')}>
-        <MemberDBSelector
-          contentType="taxonomy"
-          className="pp-left-side-db-selector"
-        />
+        <div
+          className={f(
+            'columns',
+            'small-12',
+            'medium-3',
+            'large-2',
+            'browse-side-panel',
+          )}
+        >
+          <div className={f('selector-container')}>
+            <MemberDBSelector
+              contentType="taxonomy"
+              className="pp-left-side-db-selector"
+            />
+          </div>
+          <hr style={{ margin: '0.5rem' }} />
+        </div>
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          {/* <OrganismListFilters />*/}
-          <hr className={f('margin-bottom-none')} />
           {databases && (
             <SchemaOrgData
               data={{

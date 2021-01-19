@@ -11,6 +11,7 @@ import Link from 'components/generic/Link';
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './style.css';
+import config from 'config';
 
 const f = foundationPartial(fonts, styles);
 
@@ -247,12 +248,7 @@ BreadCrumbForSecondPart.propTypes = {
 
 const BreadCrumbsForBrowse = ({ location } /*: {location: Location} */) => {
   const endpoint = location?.main?.key;
-  if (
-    !['entry', 'protein', 'structure', 'set', 'taxonomy', 'proteome'].includes(
-      endpoint,
-    )
-  )
-    return null;
+  if (!config.endpoints.includes(endpoint)) return null;
   const { db, accession } = location[location.main.key];
   return (
     <>

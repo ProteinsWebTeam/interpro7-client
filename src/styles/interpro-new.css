@@ -1366,8 +1366,8 @@ details.option-style > summary {
     font-weight: bold;
     &::before {
       margin-right: 0.5rem;
-      border: 0.3rem solid var(--colors-submain);
-      background: var(--colors-loading-bar);
+      border: 0.4rem solid var(--colors-submain);
+      background: var(--colors-submain);
     }
   }
 }

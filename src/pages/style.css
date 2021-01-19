@@ -413,6 +413,9 @@
   .col-md {
     width: 100%;
   }
+  div.browse-side-panel {
+    height: auto;
+  }
 }
 
 div.breadcrumb {

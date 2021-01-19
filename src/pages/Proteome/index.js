@@ -176,10 +176,23 @@ class List extends PureComponent /*:: <Props> */ {
     }
     return (
       <div className={f('row')}>
-        <MemberDBSelector
-          contentType="proteome"
-          className="pp-left-side-db-selector"
-        />
+        <div
+          className={f(
+            'columns',
+            'small-12',
+            'medium-3',
+            'large-2',
+            'browse-side-panel',
+          )}
+        >
+          <div className={f('selector-container')}>
+            <MemberDBSelector
+              contentType="proteome"
+              className="pp-left-side-db-selector"
+            />
+          </div>
+          <hr style={{ margin: '0.5rem' }} />
+        </div>
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           {/* TODO: Re-enable if we include non-reference proteomes in our DB*/}
           {/* <ProteomeListFilters /> */}

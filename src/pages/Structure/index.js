@@ -480,31 +480,21 @@ const List = (
   return (
     <div className={f('row')}>
       <div
-        className={f('columns', 'small-12', 'medium-3', 'large-2')}
-        style={{
-          backgroundColor: '#e9f1f3',
-        }}
+        className={f(
+          'columns',
+          'small-12',
+          'medium-3',
+          'large-2',
+          'browse-side-panel',
+        )}
       >
-        <label>
-          Select DB:
+        <div className={f('selector-container')}>
           <MemberDBSelector
             contentType="structure"
             className="pp-left-side-db-selector"
-          >
-            {() => (
-              <button
-                className={f('button', 'hollow')}
-                style={{
-                  width: '100%',
-                  textAlign: 'right',
-                }}
-              >
-                <MemberSymbol type={entryDB} className={f('db-symbol')} />
-                {entryDB} ▼
-              </button>
-            )}
-          </MemberDBSelector>
-        </label>
+          />
+        </div>
+        <hr style={{ margin: '0.5rem' }} />
         <StructureListFilters />
       </div>
 

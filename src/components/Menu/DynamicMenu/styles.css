@@ -74,6 +74,7 @@
 
 div.dropdown {
   pointer-events: auto;
+  white-space: nowrap;
   & ul {
     position: absolute;
     display: none;

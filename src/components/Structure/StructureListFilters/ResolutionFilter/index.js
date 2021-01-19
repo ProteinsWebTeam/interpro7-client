@@ -72,7 +72,7 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
     this._updateLocation.cancel();
   }
 
-  _updateLocation = debounce(fromMount => {
+  _updateLocation = debounce((fromMount) => {
     const { min, max } = this.state;
     const { goToCustomLocation, customLocation } = this.props;
     const { page, cursor, resolution: _, ...search } = {
@@ -128,26 +128,26 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
     }
     return (
       <div className={f('column')}>
-        <label className={f('row', 'filter-button')}>
+        <label className={f('radio-btn-label', { checked: !resolution })}>
           <input
             type="radio"
             name="resolution"
             value="All"
             onChange={this._handleSelection}
             checked={!resolution}
-            className={f('radio')}
+            className={f('radio-btn')}
             disabled={disable}
           />
           <span>All</span>
         </label>
-        <label className={f('row', 'filter-button')}>
+        <label className={f('radio-btn-label', { checked: !!resolution })}>
           <input
             type="radio"
             name="resolution"
             value="Subset"
+            className={f('radio-btn')}
             onChange={this._handleSelection}
             checked={!!resolution}
-            className={f('radio')}
             disabled={disable}
           />
           <span>
@@ -171,10 +171,9 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(ResolutionFilter);
+export default connect(mapStateToProps, { goToCustomLocation })(
+  ResolutionFilter,
+);
