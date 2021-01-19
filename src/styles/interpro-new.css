@@ -1359,24 +1359,29 @@ details.option-style > summary {
   padding: 0.05rem 0;
   color: var(--colors-submain);
   font-size: 1.25rem;
+  text-transform: capitalize;
   cursor: pointer;
   transition: all 0.25s linear;
   &.checked {
     font-weight: bold;
     &::before {
-      margin-right: 1.2rem;
+      margin-right: 0.5rem;
       border: 0.3rem solid var(--colors-submain);
       background: var(--colors-loading-bar);
     }
   }
 }
-
+.radio-btn-label:not(.checked):hover {
+  &::before {
+    margin-right: 0.8rem;
+  }
+}
 .radio-btn-label::before {
   display: inline-block;
   content: '';
   height: 0.8rem;
   width: 0.8rem;
-  margin-right: 0.4rem;
+  margin-right: 1rem;
   border: 0.2rem solid var(--colors-submain);
   border-radius: 50%;
   transition: all 0.25s linear;
