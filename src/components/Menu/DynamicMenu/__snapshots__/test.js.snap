@@ -51,6 +51,12 @@ exports[`<DynamicMenu /> should render 1`] = `
         activeClass={[Function]}
         to={[Function]}
       >
+        <span
+          className="arrow"
+        >
+          ▾
+        </span>
+         
         Browse
       </Memo(Connect(MenuItem))>
       <ul

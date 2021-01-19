@@ -5,11 +5,11 @@ exports[`<ResolutionFilter /> should render 1`] = `
   className="column"
 >
   <label
-    className="row filter-button"
+    className="radio-btn-label checked"
   >
     <input
       checked={true}
-      className="radio"
+      className="radio-btn"
       disabled={false}
       name="resolution"
       onChange={[Function]}
@@ -21,11 +21,11 @@ exports[`<ResolutionFilter /> should render 1`] = `
     </span>
   </label>
   <label
-    className="row filter-button"
+    className="radio-btn-label"
   >
     <input
       checked={false}
-      className="radio"
+      className="radio-btn"
       disabled={false}
       name="resolution"
       onChange={[Function]}
