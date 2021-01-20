@@ -1380,9 +1380,14 @@ details.option-style > summary {
   display: inline-block;
   content: '';
   height: 0.8rem;
+  min-width: 0.8rem;
   width: 0.8rem;
   margin-right: 1rem;
   border: 0.2rem solid var(--colors-submain);
   border-radius: 50%;
   transition: all 0.25s linear;
+}
+
+.no-padding {
+  padding: 0;
 }

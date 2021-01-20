@@ -182,18 +182,20 @@ class List extends PureComponent /*:: <Props> */ {
             'small-12',
             'medium-3',
             'large-2',
-            'browse-side-panel',
+            'no-padding',
           )}
         >
-          <div className={f('selector-container')}>
-            <MemberDBSelector
-              contentType="proteome"
-              className="pp-left-side-db-selector"
-            />
+          <div className={f('browse-side-panel')}>
+            <div className={f('selector-container')}>
+              <MemberDBSelector
+                contentType="proteome"
+                className="pp-left-side-db-selector"
+              />
+            </div>
+            <hr style={{ paddingTop: '0.5rem' }} />
+            {/* TODO: Re-enable if we include non-reference proteomes in our DB*/}
+            {/* <ProteomeListFilters /> */}
           </div>
-          <hr style={{ margin: '0.5rem' }} />
-          {/* TODO: Re-enable if we include non-reference proteomes in our DB*/}
-          {/* <ProteomeListFilters /> */}
         </div>
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           {databases && (

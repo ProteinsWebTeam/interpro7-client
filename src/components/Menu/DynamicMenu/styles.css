@@ -95,7 +95,8 @@ div.dropdown {
       display: block;
       padding: var(--spacing-medium) var(--spacing-big);
       color: #000;
-      &:hover {
+      &:hover,
+      &:focus {
         background: var(--colors-info);
       }
     }
@@ -112,6 +113,7 @@ div.dropdown {
   }
   &:hover,
   &:focus,
+  &:focus-within,
   &:active {
     & ul {
       display: flex;

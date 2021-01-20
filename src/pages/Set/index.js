@@ -385,16 +385,18 @@ class List extends PureComponent /*:: <ListProps> */ {
             'small-12',
             'medium-3',
             'large-2',
-            'browse-side-panel',
+            'no-padding',
           )}
         >
-          <div className={f('selector-container')}>
-            <MemberDBSelector
-              contentType="set"
-              className="pp-left-side-db-selector"
-            />
+          <div className={f('browse-side-panel')}>
+            <div className={f('selector-container')}>
+              <MemberDBSelector
+                contentType="set"
+                className="pp-left-side-db-selector"
+              />
+            </div>
+            <hr style={{ paddingTop: '0.5rem' }} />
           </div>
-          <hr style={{ margin: '0.5rem' }} />
         </div>
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           {databases && (

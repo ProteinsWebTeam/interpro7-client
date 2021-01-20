@@ -485,17 +485,19 @@ const List = (
           'small-12',
           'medium-3',
           'large-2',
-          'browse-side-panel',
+          'no-padding',
         )}
       >
-        <div className={f('selector-container')}>
-          <MemberDBSelector
-            contentType="structure"
-            className="pp-left-side-db-selector"
-          />
+        <div className={f('browse-side-panel')}>
+          <div className={f('selector-container')}>
+            <MemberDBSelector
+              contentType="structure"
+              className="pp-left-side-db-selector"
+            />
+          </div>
+          <hr style={{ paddingTop: '0.5rem' }} />
+          <StructureListFilters />
         </div>
-        <hr style={{ margin: '0.5rem' }} />
-        <StructureListFilters />
       </div>
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>

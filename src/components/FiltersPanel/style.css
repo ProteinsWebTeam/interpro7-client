@@ -6,6 +6,7 @@
   flex-direction: column;
   background: var(--colors-filter-background);
   padding-left: 0.7rem;
+  padding-top: 0.2rem;
 
   & label {
     line-height: normal;

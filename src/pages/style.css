@@ -423,7 +423,6 @@ div.breadcrumb {
 }
 
 .browse-side-panel {
-  background: var(--colors-filter-background);
   height: 80vh;
   display: flex;
   padding: 0;
@@ -431,5 +430,8 @@ div.breadcrumb {
   & .selector-container {
     min-height: 40vh;
     overflow: scroll;
+  }
+  & > * {
+    background: var(--colors-filter-background);
   }
 }
