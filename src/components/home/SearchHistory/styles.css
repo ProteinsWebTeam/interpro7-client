@@ -1,0 +1,10 @@
+.search-terms-div {
+  display: block;
+  padding: 0.5em;
+  & .card-content {
+    padding: 1rem;
+    & .card-title {
+      margin: 0;
+    }
+  }
+}

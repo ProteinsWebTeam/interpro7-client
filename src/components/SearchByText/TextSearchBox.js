@@ -7,6 +7,7 @@ import { debounce } from 'lodash-es';
 
 import { goToCustomLocation } from 'actions/creators';
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
+import searchStorage from 'storage/searchStorage';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -36,6 +37,9 @@ export const DEBOUNCE_RATE_SLOW = 2000; // 2s
 
 class TextSearchBox extends PureComponent /*:: <Props, State> */ {
   /*:: _debouncedPush: ?boolean => void; */
+  /*:: _debouncedSearch: ?boolean => void; */
+  /*:: searchHistory: Array<any>; */
+
   static propTypes = {
     pageSize: T.number,
     main: T.string,
@@ -56,10 +60,17 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
       this.routerPush,
       +props.delay || DEBOUNCE_RATE,
     );
+
+    this.searchHistory = [];
+    // this._debouncedSearch = debounce(
+    //   this.storeInLocal,
+    //   DEBOUNCE_RATE,
+    // );
   }
 
   componentDidMount() {
     this._updateStateFromProps();
+    if (searchStorage) this.searchHistory = searchStorage.getValue() || [];
   }
 
   componentDidUpdate() {
@@ -90,6 +101,10 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
         return;
       }
     }
+
+    if (!this.searchHistory.includes(value)) this.searchHistory.push(value);
+    searchStorage.setValue(this.searchHistory);
+
     // Finally just trigger a search
     this.props.goToCustomLocation(
       {
