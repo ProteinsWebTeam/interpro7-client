@@ -192,11 +192,10 @@ class List extends PureComponent /*:: <Props> */ {
             />
           </div>
           <hr style={{ margin: '0.5rem' }} />
-        </div>
-        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           {/* TODO: Re-enable if we include non-reference proteomes in our DB*/}
           {/* <ProteomeListFilters /> */}
-          <hr className={f('margin-bottom-none')} />
+        </div>
+        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           {databases && (
             <SchemaOrgData
               data={{
