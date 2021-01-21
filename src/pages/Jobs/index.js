@@ -6,7 +6,6 @@ import { Helmet } from 'react-helmet-async';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Switch from 'components/generic/Switch';
-import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';

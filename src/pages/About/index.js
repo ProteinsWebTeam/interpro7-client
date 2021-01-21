@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import { createSelector } from 'reselect';
 import { Helmet } from 'react-helmet-async';
 
-import Link from 'components/generic/Link';
 import Switch from 'components/generic/Switch';
 import Redirect from 'components/generic/Redirect';
 
