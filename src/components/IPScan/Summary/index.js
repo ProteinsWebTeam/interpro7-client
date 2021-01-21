@@ -257,6 +257,7 @@ const SummaryIPScanJob = ({
   data,
   localPayload,
   api,
+  ipScan,
   updateJobTitle,
 }) => {
   const [mergedData, setMergedData] = useState({});
@@ -329,7 +330,8 @@ const SummaryIPScanJob = ({
 
   const goTerms = getGoTerms(payload.matches);
 
-  let dataURL = 'https://www.ebi.ac.uk/Tools/services/rest/iprscan5/result/';
+  const { protocol, hostname, root } = ipScan;
+  let dataURL = `${protocol}//${hostname}${root}result`;
   const now = Date.now();
   const expired =
     (now - (created || now) > MAX_TIME_ON_SERVER &&
@@ -480,6 +482,7 @@ SummaryIPScanJob.propTypes = {
   data: dataPropType,
   localPayload: T.object,
   api: T.object,
+  ipScan: T.object,
   updateJobTitle: T.func,
 };
 
@@ -507,12 +510,14 @@ const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
   (state) => state.settings.api,
-  (accession, { metadata: { localID, remoteID, status } }, api) => ({
+  (state) => state.settings.ipScan,
+  (accession, { metadata: { localID, remoteID, status } }, api, ipScan) => ({
     accession,
     localID,
     remoteID,
     status,
     api,
+    ipScan,
   }),
 );
 
