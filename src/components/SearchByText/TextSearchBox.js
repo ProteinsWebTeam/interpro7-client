@@ -37,7 +37,6 @@ export const DEBOUNCE_RATE_SLOW = 2000; // 2s
 
 class TextSearchBox extends PureComponent /*:: <Props, State> */ {
   /*:: _debouncedPush: ?boolean => void; */
-  /*:: _debouncedSearch: ?boolean => void; */
   /*:: searchHistory: Array<any>; */
 
   static propTypes = {
@@ -62,10 +61,6 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
     );
 
     this.searchHistory = [];
-    // this._debouncedSearch = debounce(
-    //   this.storeInLocal,
-    //   DEBOUNCE_RATE,
-    // );
   }
 
   componentDidMount() {

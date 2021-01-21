@@ -1,10 +1,28 @@
 .search-terms-div {
   display: block;
   padding: 0.5em;
-  & .card-content {
-    padding: 1rem;
-    & .card-title {
-      margin: 0;
-    }
-  }
+}
+
+.search-term {
+  float: left;
+  margin: 0.5rem 0 0 1rem;
+  font-size: 120%;
+  background: #c3f1c3;
+  border-radius: 0.2em;
+}
+
+.search-term span {
+  color: #444;
+  padding: 0.2rem 0.5rem;
+}
+
+button.close {
+  position: absolute;
+  background: transparent;
+  font-size: 0.8em;
+  margin-top: 0.5em;
+}
+
+.clear-history {
+  margin: 1rem 0 0 1rem;
 }
