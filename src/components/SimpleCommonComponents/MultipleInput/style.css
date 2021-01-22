@@ -8,6 +8,7 @@
   position: relative;
 
   & input[type='range'] {
+    pointer-events: none;
     -webkit-appearance: none;
     position: absolute;
     width: 90%;
@@ -50,6 +51,7 @@
       cursor: pointer;
       -webkit-appearance: none;
       margin-top: -8px;
+      pointer-events: auto;
       &:hover {
         transform: scale(1.1);
       }
@@ -63,17 +65,15 @@
       background: var(--colors-submain);
       cursor: pointer;
       margin-top: -8px;
+      pointer-events: auto;
       &:hover {
-        opacity: 0.8;
+        transform: scale(1.1);
       }
     }
     &.original {
       &::-webkit-slider-thumb {
         position: relative;
         z-index: var(--z-index-just-over);
-      }
-      &::-moz-range-thumb {
-        border: 2px solid var(--colors-submain);
       }
     }
     &.ghost {

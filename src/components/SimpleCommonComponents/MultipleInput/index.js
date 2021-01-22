@@ -54,7 +54,7 @@ class MultipleInput extends PureComponent /*:: <Props> */ {
           )}
         </div>
 
-        <div className={s('small', 'label-max')} style={{ right: 16 }}>
+        <div className={s('small', 'label-max')} style={{ right: 0 }}>
           {arialLabel === 'length range' ? (
             <span>{Math.round(Math.exp(maxValue)) /* AA */}</span>
           ) : (

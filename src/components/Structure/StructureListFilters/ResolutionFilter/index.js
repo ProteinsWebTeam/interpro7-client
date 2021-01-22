@@ -156,6 +156,7 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
     if (this.props.customLocation.search.experiment_type === 'nmr') {
       disable = !disable;
     }
+    const step = 0.05;
     return (
       <div className={f('column')}>
         <label
@@ -196,7 +197,7 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
           max={selectedRange === ALL ? MAX : ranges[selectedRange][1]}
           minValue={min}
           maxValue={max}
-          step={selectedRange > 1 ? 1 : 0.05}
+          step={selectedRange > 1 ? 1 : step}
           onChange={this._handleChange}
           aria-label="resolution range"
           className={f('range')}

@@ -43,7 +43,7 @@ const f = foundationPartial(fonts, styles);
   }
 */
 
-const locationType = {
+const locationType = T.shape({
   main: T.shape({ key: T.string }),
   entry: T.shape({
     detail: T.string,
@@ -52,7 +52,8 @@ const locationType = {
     isFilter: T.bool,
     order: T.number,
   }),
-};
+  other: T.arrayOf(T.string),
+});
 const BreadCrumb = (
   {
     to,
