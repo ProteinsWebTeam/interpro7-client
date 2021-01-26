@@ -52,10 +52,10 @@ export const SearchHistory = () => {
               >
                 <span>{term}</span>
               </Link>
+              <button className={f('close')} onClick={() => removeTerm(term)}>
+                ✖
+              </button>
             </div>
-            <button className={f('close')} onClick={() => removeTerm(term)}>
-              ✖
-            </button>
           </>
         ))}
       </div>

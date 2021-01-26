@@ -17,10 +17,9 @@
 }
 
 button.close {
-  position: absolute;
   background: transparent;
-  font-size: 0.8em;
-  margin-top: 0.5em;
+  font-size: 0.7em;
+  float: right;
 }
 
 .clear-history {
