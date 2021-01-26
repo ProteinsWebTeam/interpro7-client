@@ -248,6 +248,7 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   });
 };
 
+// eslint-disable-next-line complexity
 const SummaryIPScanJob = ({
   accession,
   localID,
