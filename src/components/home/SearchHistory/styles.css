@@ -1,9 +1,34 @@
+@import '../../../styles/colors.css';
+
 .search-terms-div {
-  display: block;
-  padding: 0.5em;
+  display: flex;
+  padding: 0.5em 0;
+  flex-wrap: wrap;
+
+  & .search-term {
+    background: var(--colors-tag);
+    margin: 0.5em 0 0 0.5em;
+    display: flex;
+
+    & .remove-term {
+      color: var(--colors-very-white);
+      &:hover {
+        color: white;
+      }
+    }
+
+    & .search-link {
+      padding-left: 1em;
+      color: var(--colors-nearly-white);
+      &:hover {
+        color: var(--colors-almost-white);
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
-.search-term {
+/* .search-term {
   float: left;
   margin: 0.5rem 0 0 1rem;
   font-size: 120%;
@@ -24,4 +49,4 @@ button.close {
 
 .clear-history {
   margin: 1rem 0 0 1rem;
-}
+} */

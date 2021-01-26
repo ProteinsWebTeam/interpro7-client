@@ -7,11 +7,12 @@ import Link from 'components/generic/Link';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
+import theme from 'styles/theme-interpro.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './styles.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
+const f = foundationPartial(ebiGlobalStyles, theme, fonts, ipro, styles);
 
 export const SearchHistory = () => {
   const [searchTerms, setSearchTerms] = useState([]);
@@ -33,11 +34,17 @@ export const SearchHistory = () => {
     else setSearchTerms([]);
   }, []);
   return (
-    <div className={f('search-terms-div')}>
+    <>
       <div className={f('row')}>
-        {searchTerms.map((term) => (
-          <>
-            <div className={f('search-term')} key={term}>
+        <div className={f('search-terms-div')}>
+          {searchTerms.map((term) => (
+            <div className={f('tag', 'search-term')} key={term}>
+              <button
+                className={f('remove-term')}
+                onClick={() => removeTerm(term)}
+              >
+                ✖
+              </button>
               <Link
                 to={{
                   description: {
@@ -48,25 +55,24 @@ export const SearchHistory = () => {
                     },
                   },
                 }}
-                className={f('columns', 'medium-4', 'text-center', 'block')}
+                className={f('search-link')}
               >
                 <span>{term}</span>
               </Link>
-              <button className={f('close')} onClick={() => removeTerm(term)}>
-                ✖
-              </button>
             </div>
-          </>
-        ))}
+          ))}
+        </div>
       </div>
       {searchTerms.length > 0 ? (
         <div className={f('row')}>
-          <button
-            className={f('button', 'clear-history')}
-            onClick={clearHistory}
-          >
-            Clear History
-          </button>
+          <div className={f('column')}>
+            <button
+              className={f('button', 'margin-bottom-none')}
+              onClick={clearHistory}
+            >
+              Clear History
+            </button>
+          </div>
         </div>
       ) : (
         <div className={f('callout', 'info', 'withicon')}>
@@ -75,7 +81,7 @@ export const SearchHistory = () => {
           </span>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

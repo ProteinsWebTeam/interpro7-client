@@ -163,6 +163,9 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
                 <div style={{ fontWeight: 'bold' }}>{item}</div>
               </div>
             )}
+            shouldItemRender={(item, value) =>
+              item.toLowerCase().indexOf(value.toLowerCase()) > -1
+            }
             onChange={this.handleChange}
             onSelect={(val) => this.setSelection(val)}
             value={this.state.localValue || ''}
