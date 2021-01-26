@@ -636,6 +636,15 @@ hr {
   border-radius: 4px;
 } /*used on protein and proteome page */
 
+a.tag {
+  color: var(--colors-nearly-white);
+  &:visited,
+  &:hover,
+  &:focus {
+    color: var(--colors-almost-white);
+  }
+}
+
 .tag.secondary {
   background-color: var(--colors-tag);
 }
