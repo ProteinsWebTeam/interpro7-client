@@ -93,18 +93,21 @@ exports[`<List /> should render 1`] = `
       </Memo(Connect(Exporter))>
       <Column
         dataKey="accession"
+        isSearchable={true}
         renderer={[Function]}
       >
         Protein
       </Column>
       <Column
         dataKey="evidences"
+        isSearchable={true}
         renderer={[Function]}
       >
         Evidence
       </Column>
       <Column
         dataKey="confidence"
+        isSearchable={true}
         renderer={[Function]}
       />
       <Column
