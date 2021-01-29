@@ -20,9 +20,8 @@
     /*position: relative;*/
   }
 
-  & .dropdown-pane.embl-dropdown {
+  & .embl-bar {
     position: fixed;
-    background-color: #222;
     top: calc(38px + var(--spacing-medium));
     left: initial;
     /*right: var(--spacing-medium);*/
@@ -31,19 +30,9 @@
     /*max-width: 1400px;*/
     visibility: visible;
     border: none;
-
-    & .close-button {
-      font-size: 300%;
-    }
-    & .close-button:hover {
-      color: white;
-    }
-
-    & h3,
-    & h5,
-    & a,
-    & a:visited {
-      color: white;
+    & h5 {
+      font-size: 1.25rem;
+      font-weight: normal;
     }
   }
 }

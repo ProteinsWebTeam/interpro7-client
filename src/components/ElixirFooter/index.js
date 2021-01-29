@@ -23,7 +23,7 @@ class ElixirFooter extends PureComponent /*:: <{}> */ {
               <LazyImage
                 className={f('elixir-logo-kite')}
                 alt="Elixir logo"
-                src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.3/images/logos/ELIXIR/elixir-cdr.gif"
+                src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.4/images/logos/ELIXIR/elixir-cdr.gif"
               />
               {
                 // replace H5 by span as H5 creates a block with link

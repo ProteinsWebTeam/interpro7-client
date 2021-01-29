@@ -185,7 +185,8 @@ const ProtVistaLoaded = (
     protvistaEl.current.addEventListener('change', handleMouseover);
 
     return () => {
-      protvistaEl.current.removeEventListener('change', handleMouseover);
+      if (protvistaEl.current)
+        protvistaEl.current.removeEventListener('change', handleMouseover);
     };
   });
 
