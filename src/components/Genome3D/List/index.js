@@ -131,6 +131,7 @@ const List = (
                 {accession}
               </Link>
             )}
+            isSearchable={true}
           >
             Protein
           </Column>
@@ -145,6 +146,7 @@ const List = (
                 {name}: {id}
               </Link>
             )}
+            isSearchable={true}
           >
             Evidence
           </Column>
@@ -153,6 +155,7 @@ const List = (
             renderer={(confidence /*: number */) => (
               <NumberComponent>{confidence}</NumberComponent>
             )}
+            isSearchable={true}
           />
           <Column
             dataKey="locations"

@@ -58,21 +58,43 @@ const _ConnectedSortButton = ({
   goToCustomLocation,
 }) => {
   let mode = SORT_OFF;
-  const { sort_by: sortBy, ..._search } = search;
-  if (sortBy) {
+  const { sort_by: sortBy } = search;
+
+  // If multiple columns are added to sort
+  if (sortBy?.split(',').length > 1) {
+    if (sortBy.includes(field)) mode = SORT_UP;
+  } else {
     if (sortBy === field) mode = SORT_UP;
     if (sortBy === `-${field}`) mode = SORT_DOWN;
   }
   const handleClick = () => {
     const newLocation = {
       description,
-      search: _search,
+      search: search,
     };
-    const newMode = (mode + 1) % NUMBER_OF_SORT_MODES;
-    if (newMode > 0) {
-      newLocation.search.sort_by = `${
-        newMode === SORT_DOWN ? '-' : ''
-      }${field}`;
+
+    let newMode = (mode + 1) % NUMBER_OF_SORT_MODES;
+
+    // For Genome3D multiple columns can be sorted
+    if (description[description.main.key].detail === 'genome3d') {
+      newMode = (mode + 1) % 2;
+      if (newMode) {
+        newLocation.search.sort_by = newLocation.search.sort_by
+          ? `${newLocation.search.sort_by},${field}`
+          : field;
+      } else {
+        const oldSet = newLocation.search.sort_by.split(',');
+        oldSet.splice(oldSet.indexOf(field), 1);
+        newLocation.search.sort_by = oldSet.join(',');
+      }
+    } else {
+      if (newMode > 0) {
+        newLocation.search.sort_by = `${
+          newMode === SORT_DOWN ? '-' : ''
+        }${field}`;
+      } else {
+        delete newLocation.search.sort_by;
+      }
     }
     goToCustomLocation(newLocation);
   };
@@ -89,8 +111,8 @@ _ConnectedSortButton.propTypes = {
 };
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   (description, search) => ({ description, search }),
 );
 

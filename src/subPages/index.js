@@ -152,6 +152,10 @@ const mapStateToPropsForSimilarProteins = createSelector(
   },
 );
 
+const g3dVariables = {
+  accession: 'uniprot',
+  evidences: 'resource',
+};
 const getGenome3dURL = createSelector(
   (state) => state.settings.genome3d,
   (state) => state.customLocation.search,
@@ -162,6 +166,16 @@ const getGenome3dURL = createSelector(
       rows: search.page_size || settingsPageSize,
     };
     if (search.page) query.page = search.page;
+    if (search.accession) query.filter_uniprot = search.accession;
+    if (search.evidences) query.filter_resource = search.evidences;
+    if (search.confidence) query.filter_min_confidence = search.confidence;
+
+    if (search.sort_by) {
+      const variables = search.sort_by.split(',');
+      query.order_by = variables
+        .map((term) => g3dVariables[term] || term)
+        .join(',');
+    }
     return format({
       protocol,
       hostname,
