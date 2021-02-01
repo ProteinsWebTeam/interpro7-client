@@ -141,8 +141,57 @@ FilterButton.propTypes = {
   onClick: T.func,
 };
 
-const _ColumnSearchBox = ({ field, forceToShow, search }) => {
+export const _ColumnSelectMenu = ({
+  field,
+  options,
+  search,
+  description,
+  goToCustomLocation,
+}) => {
+  const onSelection = ({ target: { value: option } }) => {
+    search[field] = option;
+    goToCustomLocation({ description: description, search: { ...search } });
+  };
+  return (
+    <select
+      className={'inline-select'}
+      name={'column-select'}
+      onChange={onSelection}
+      value={search[field]}
+    >
+      <option className={f('placeholder')} value="">
+        Select
+      </option>
+      {options.map((opt) => (
+        <option key={opt} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+_ColumnSelectMenu.propTypes = {
+  field: T.string.isRequired,
+  options: T.array.isRequired,
+  search: T.object,
+  description: T.object.isRequired,
+  goToCustomLocation: T.func.isRequired,
+};
+
+export const ColumnSelectMenu = connect(mapStateToProps, {
+  goToCustomLocation,
+})(_ColumnSelectMenu);
+
+const _ColumnSearchBox = ({
+  field,
+  forceToShow,
+  search,
+  showOptions,
+  options,
+}) => {
   if (!forceToShow && !(field in search)) return null;
+  if (showOptions) return <ColumnSelectMenu field={field} options={options} />;
   return <SearchBox field={field} />;
 };
 
@@ -150,6 +199,8 @@ _ColumnSearchBox.propTypes = {
   field: T.string.isRequired,
   forceToShow: T.bool,
   search: T.object,
+  showOptions: T.bool,
+  options: T.array,
 };
 
 export const ColumnSearchBox = connect(mapStateToProps)(_ColumnSearchBox);

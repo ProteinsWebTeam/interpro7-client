@@ -31,6 +31,8 @@ const Header = (
               children,
               headerClassName,
               isSearchable = false,
+              showOptions = false,
+              options,
             }) => (
               <th
                 key={defaultKey || dataKey}
@@ -56,6 +58,8 @@ const Header = (
                   <ColumnSearchBox
                     field={dataKey}
                     forceToShow={showFilter[dataKey]}
+                    showOptions={showOptions}
+                    options={options}
                   />
                 )}
               </th>

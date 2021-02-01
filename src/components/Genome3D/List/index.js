@@ -5,6 +5,10 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import loadable from 'higherOrder/loadable';
+import loadData from 'higherOrder/loadData';
+import { createSelector } from 'reselect';
+import { format } from 'url';
+
 import Table, { Column, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
@@ -65,13 +69,19 @@ const schemaProcessData = (data) => {
 const List = (
   {
     data,
+    dataResource,
     customLocation: { search },
   } /*: {data: {
     loading: boolean,
     payload: Genome3DPayload,
     ok?: boolean,
     status?: number
-  }, customLocation: {search?: Object}} */,
+  },
+  dataResource: {
+    loading: boolean,
+    payload: Array<Object>,
+  },
+  customLocation: {search?: Object}} */,
 ) => {
   if (data.loading) return <Loading />;
   const data4table = data.payload.data.map(
@@ -84,6 +94,10 @@ const List = (
       tooltipContent,
     }),
   );
+  let resourceList = [];
+  if (!dataResource.loading)
+    resourceList = dataResource.payload.map(({ name }) => name);
+
   return (
     <div className={f('row')}>
       <div className={f('columns')}>
@@ -147,6 +161,8 @@ const List = (
               </Link>
             )}
             isSearchable={true}
+            showOptions={true}
+            options={resourceList}
           >
             Evidence
           </Column>
@@ -184,8 +200,25 @@ const List = (
 };
 List.propTypes = {
   data: dataPropType,
+  dataResource: T.object,
   customLocation: T.shape({
     search: T.object,
   }),
 };
-export default List;
+
+const getGenome3dResourceURL = createSelector(
+  (state) => state.settings.genome3d,
+  ({ protocol, hostname, port, root }) => {
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}resource/list`,
+    });
+  },
+);
+
+export default loadData({
+  getUrl: getGenome3dResourceURL,
+  propNamespace: 'Resource',
+})(List);
