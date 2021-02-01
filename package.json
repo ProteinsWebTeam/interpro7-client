@@ -122,6 +122,7 @@
     "react-helmet-async": "1.0.7",
     "react-html-parser": "^2.0.2",
     "react-redux": "7.2.2",
+    "react-select": "^4.0.2",
     "react-syntax-highlighter": "15.4.3",
     "react-to-print": "2.11.0",
     "redux": "4.0.5",

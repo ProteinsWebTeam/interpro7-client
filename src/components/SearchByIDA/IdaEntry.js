@@ -5,7 +5,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Autocomplete from 'react-autocomplete';
+import Select from 'react-select';
 import getFetch from 'higherOrder/loadData/getFetch';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -84,13 +84,15 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     this.currentWidth = 1;
   }
   state = {
-    // options: {},
     draggable: false,
   };
   componentDidMount() {
-    if (this.props.entry) this._handleOnChange(null, this.props.entry);
+    if (this.props.entry) this._handleOnChange(this.props.entry);
   }
-  _handleOnChange = (_evt, value) => {
+
+  _handleOnChange = (rawValue /*: {value: string}|string */) => {
+    const value = rawValue?.value || rawValue;
+    if (!value) return;
     this.props.changeEntryHandler(value);
     fetchFun(getUrlForAutocomplete(this.props.api, 'interpro', value)).then((
       data /*: DataType */,
@@ -105,21 +107,21 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     });
   };
 
-  _getDeltaFromDragging = event => {
+  _getDeltaFromDragging = (event) => {
     let delta = Math.floor(
       (event.pageX - (this.startPos || 0)) / this.currentWidth,
     );
     if (delta <= 0) delta++;
     return delta;
   };
-  _handleStartDragging = event => {
+  _handleStartDragging = (event) => {
     this.currentWidth = this.container?.current?.offsetWidth || 1;
     this.startPos = event.pageX;
   };
-  _handleDragging = event => {
+  _handleDragging = (event) => {
     this.props.handleMoveMarker(this._getDeltaFromDragging(event));
   };
-  _handleEndDragging = event => {
+  _handleEndDragging = (event) => {
     let delta = this._getDeltaFromDragging(event);
     this.props.handleMoveMarker(null);
     if (delta > 0) delta--;
@@ -134,7 +136,6 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
       entry,
       changeEntryHandler,
       removeEntryHandler,
-      position,
       draggable = false,
       options = {},
     } = this.props;
@@ -156,46 +157,69 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
         ref={this.container}
         style={style}
       >
-        <Autocomplete
-          inputProps={{ id: 'entries-autocomplete' }}
-          getItemValue={item => item.accession}
-          items={Object.values(options)}
-          renderItem={(item, isHighlighted) => (
-            <div
-              style={{ background: isHighlighted ? 'lightgray' : 'white' }}
-              key={item.accession}
-            >
-              <div style={{ fontWeight: 'bold' }}>{item.accession}</div>
-              <div style={{ fontSize: '0.7em', marginTop: '-0.5em' }}>
-                {item.name}
-              </div>
-            </div>
-          )}
-          value={entry}
+        <Select
+          options={
+            // prettier-ignore
+            (Object.values(options) /*: any */)
+            .map((
+              { accession, name } /*: { accession: string, name: string } */,
+            ) => ({
+              value: accession,
+              label: name,
+            }))
+          }
+          onInputChange={this._handleOnChange}
           onChange={this._handleOnChange}
+          className={f('react-select-container')}
+          value={{
+            value: entry,
+            label: options?.[entry]?.name,
+          }}
+          styles={{
+            menuList: (provided) => ({
+              ...provided,
+              background: 'white',
+            }),
+            menu: (provided) => ({
+              ...provided,
+              top: null,
+              width: 'var(--entry-width)',
+              marginTop: 0,
+            }),
+            control: (provided) => ({
+              ...provided,
+              background: 'transparent',
+              border: 0,
+              boxShadow: null,
+            }),
+          }}
+          formatOptionLabel={({ value, label }, { context }) => {
+            return (
+              <div
+                style={{
+                  color: context === 'menu' ? 'black' : 'white',
+                  cursor: context === 'menu' ? 'pointer' : 'text',
+                }}
+                className={f('react-select-labels')}
+                key={value}
+              >
+                <div className={f('react-select-label-header')}>{value}</div>
+                {label && (
+                  <div className={f('react-select-label-body')}>{label}</div>
+                )}
+              </div>
+            );
+          }}
+        />
+        {/* <Autocomplete
+
           onSelect={val => changeEntryHandler(val)}
           shouldItemRender={({ accession, name }, value) =>
             accession.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
             name.toLowerCase().indexOf(value.toLowerCase()) !== -1
           }
-          renderInput={props => (
-            <>
-              <input
-                {...props}
-                id={props.id + position}
-                placeholder={'Search entry'}
-              />
-              {options[props.value] && (
-                <label
-                  htmlFor={props.id + position}
-                  className={f('entry-name')}
-                >
-                  {options[props.value].name}
-                </label>
-              )}
-            </>
-          )}
-        />
+
+        /> */}
         {draggable && (
           <button
             className={f('drag', { nodata: !options[entry] })}
@@ -214,7 +238,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.api,
-  api => ({ api }),
+  (state) => state.settings.api,
+  (api) => ({ api }),
 );
 export default connect(mapStateToProps)(IdaEntry);
