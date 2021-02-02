@@ -1,0 +1,29 @@
+@import '../../../styles/colors.css';
+
+.search-terms-div {
+  display: flex;
+  padding: 0.5em 0;
+  flex-wrap: wrap;
+
+  & .search-term {
+    background: var(--colors-tag);
+    margin: 0.5em 0 0 0.5em;
+    display: flex;
+
+    & .remove-term {
+      color: var(--colors-very-white);
+      &:hover {
+        color: white;
+      }
+    }
+
+    & .search-link {
+      padding-left: 1em;
+      color: var(--colors-nearly-white);
+      &:hover {
+        color: var(--colors-almost-white);
+        text-decoration: underline;
+      }
+    }
+  }
+}

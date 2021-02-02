@@ -7,6 +7,9 @@ import { debounce } from 'lodash-es';
 
 import { goToCustomLocation } from 'actions/creators';
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
+import searchStorage from 'storage/searchStorage';
+
+import Autocomplete from 'react-autocomplete';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -36,6 +39,8 @@ export const DEBOUNCE_RATE_SLOW = 2000; // 2s
 
 class TextSearchBox extends PureComponent /*:: <Props, State> */ {
   /*:: _debouncedPush: ?boolean => void; */
+  /*:: searchHistory: Array<any>; */
+
   static propTypes = {
     pageSize: T.number,
     main: T.string,
@@ -56,10 +61,13 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
       this.routerPush,
       +props.delay || DEBOUNCE_RATE,
     );
+
+    this.searchHistory = [];
   }
 
   componentDidMount() {
     this._updateStateFromProps();
+    if (searchStorage) this.searchHistory = searchStorage.getValue() || [];
   }
 
   componentDidUpdate() {
@@ -90,6 +98,11 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
         return;
       }
     }
+
+    if (value && !this.searchHistory.includes(value))
+      this.searchHistory.push(value);
+    searchStorage.setValue(this.searchHistory);
+
     // Finally just trigger a search
     this.props.goToCustomLocation(
       {
@@ -120,20 +133,45 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
     );
   };
 
+  setSelection = (value) => {
+    this.setState(
+      { localValue: value, loading: true },
+      this._debouncedPush(true),
+    );
+  };
+
   render() {
     return (
       <div className={f('input-group', 'margin-bottom-small')}>
         <div className={f('search-input-box')}>
-          <input
-            type="text"
-            aria-label="search InterPro"
+          <Autocomplete
+            inputProps={{
+              id: 'search-terms-autocomplete',
+              ref: this.props.inputRef,
+              className: this.props.className,
+              type: 'text',
+              placeholder: 'Enter your search',
+              required: true,
+            }}
+            getItemValue={(item) => item}
+            items={this.searchHistory}
+            renderItem={(item, isHighlighted) => (
+              <div
+                style={{ background: isHighlighted ? 'lightgray' : 'white' }}
+                key={item}
+              >
+                <div style={{ fontWeight: 'bold' }}>{item}</div>
+              </div>
+            )}
+            shouldItemRender={(item, value) =>
+              item.toLowerCase().indexOf(value.toLowerCase()) > -1
+            }
             onChange={this.handleChange}
+            onSelect={(val) => this.setSelection(val)}
             value={this.state.localValue || ''}
-            placeholder="Enter your search"
             onKeyPress={this.handleKeyPress}
-            className={this.props.className}
-            required
-            ref={this.props.inputRef}
+            renderInput={(props) => <input {...props} />}
+            wrapperProps={{ style: { display: 'block' } }}
           />
         </div>
       </div>

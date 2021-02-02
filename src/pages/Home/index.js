@@ -99,6 +99,12 @@ const FavouriteEntries = loadable({
       /* webpackChunkName: "favourite-entries" */ 'components/home/FavouriteEntries'
     ),
 });
+const SearchTerms = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "search-history" */ 'components/home/SearchHistory'
+    ),
+});
 const BlogEntries = loadable({
   loader: () =>
     import(
@@ -336,6 +342,9 @@ class Home extends PureComponent {
                 </div>
                 <div title="Favourite entries">
                   <FavouriteEntries />
+                </div>
+                <div title="Recent Search">
+                  <SearchTerms />
                 </div>
               </Tabs>
             </div>
