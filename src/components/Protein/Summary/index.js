@@ -27,6 +27,7 @@ import IsoformViewer from 'components/Protein/Isoforms/Viewer';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
+import IPScanButton from 'components/Protein/Sequence/IPScanButton';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import { foundationPartial } from 'styles/foundation';
@@ -73,6 +74,17 @@ export const SummaryProtein = (
   }, [comparisonContainerRef]);
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
+
+  const splitSequenceByChunks = () => {
+    const start = 1;
+    const end = metadata.sequence.length;
+    // Split lines
+    metadata.sequence = metadata.sequence
+      .slice(Math.max(0, start - 1), end)
+      .replace(/(.{1,80})/g, '$1\n');
+    const meta = `>${metadata.id} ${start}-${end}`.trim();
+    return encodeURIComponent(`${meta}\n${metadata.sequence}`);
+  };
 
   return (
     <div className={f('sections')}>
@@ -239,6 +251,11 @@ export const SummaryProtein = (
                 sequence={metadata.sequence}
                 accession={metadata.accession}
                 title="Search protein with HMMER"
+                minWidth="290px"
+              />
+              <IPScanButton
+                sequence={splitSequenceByChunks}
+                title="Search protein with InterProScan"
                 minWidth="290px"
               />
             </div>

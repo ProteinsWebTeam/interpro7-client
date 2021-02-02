@@ -23,6 +23,7 @@ const fPlus = foundationPartial(s, fonts, theme);
   children: any,
   includeSettings: boolean | function,
   backgroundColor?: string,
+  disabled?: boolean,
 } */
 
 /*:: type State = {
@@ -34,6 +35,7 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
     children: T.any,
     includeSettings: T.oneOfType([T.bool, T.func]),
     backgroundColor: T.string,
+    disabled: T.bool,
   };
 
   render() {
@@ -42,6 +44,7 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
       entryDB,
       includeSettings = true,
       backgroundColor,
+      disabled = false,
     } = this.props;
     return (
       <div
@@ -52,6 +55,7 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
           label="Export"
           icon="&#x3d;"
           color={entryDB ? config.colors.get(entryDB) : backgroundColor}
+          disabled={disabled}
         >
           {children}
         </DropDownButton>
