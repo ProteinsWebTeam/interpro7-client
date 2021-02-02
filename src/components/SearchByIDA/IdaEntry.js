@@ -41,6 +41,7 @@ const getUrlForAutocomplete = (
 /*:: type Props = {
   entry: string,
   draggable: boolean,
+  changeEntryHandler: function,
   removeEntryHandler: function,
   handleMoveMarker: function,
   handleMoveEntry: function,
@@ -66,6 +67,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
   /*:: currentWidth: number; */
   static propTypes = {
     entry: T.string,
+    changeEntryHandler: T.func,
     removeEntryHandler: T.func,
     handleMoveMarker: T.func,
     handleMoveEntry: T.func,

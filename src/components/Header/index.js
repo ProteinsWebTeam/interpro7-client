@@ -133,6 +133,7 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
               name="search"
               delay={DEBOUNCE_RATE_SLOW}
               shouldRedirect={true}
+              forHeader={true}
             />
             <Link
               to={{
