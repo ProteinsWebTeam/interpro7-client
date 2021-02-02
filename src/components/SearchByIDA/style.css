@@ -143,7 +143,7 @@ ul.ordered {
     background: transparent;
     font-size: 0.8em;
     left: 1.5em;
-    top: 2.2em;
+    top: 1.7em;
     color: var(--colors-ulightgray);
     width: 1em;
     cursor: grabbing;
@@ -179,6 +179,9 @@ ul.ordered {
     }
     & input, & input:focus, & input:active {
       box-shadow: none;
+      caret-color: white;
+      color: white;
+      margin: 0;
     }
   }
 

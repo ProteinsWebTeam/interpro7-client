@@ -5,6 +5,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import Select from 'react-select';
 import getFetch from 'higherOrder/loadData/getFetch';
 import { format } from 'url';
@@ -39,9 +40,7 @@ const getUrlForAutocomplete = (
 
 /*:: type Props = {
   entry: string,
-  position: number,
   draggable: boolean,
-  changeEntryHandler: function,
   removeEntryHandler: function,
   handleMoveMarker: function,
   handleMoveEntry: function,
@@ -67,13 +66,11 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
   /*:: currentWidth: number; */
   static propTypes = {
     entry: T.string,
-    changeEntryHandler: T.func,
     removeEntryHandler: T.func,
     handleMoveMarker: T.func,
     handleMoveEntry: T.func,
     mergeResults: T.func,
     api: T.object,
-    position: T.number,
     draggable: T.bool,
     options: T.object,
   };
@@ -134,7 +131,6 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
   render() {
     const {
       entry,
-      changeEntryHandler,
       removeEntryHandler,
       draggable = false,
       options = {},
@@ -192,6 +188,10 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
               border: 0,
               boxShadow: null,
             }),
+            input: (provided) => ({
+              ...provided,
+              color: 'white',
+            }),
           }}
           formatOptionLabel={({ value, label }, { context }) => {
             return (
@@ -211,15 +211,6 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
             );
           }}
         />
-        {/* <Autocomplete
-
-          onSelect={val => changeEntryHandler(val)}
-          shouldItemRender={({ accession, name }, value) =>
-            accession.toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
-            name.toLowerCase().indexOf(value.toLowerCase()) !== -1
-          }
-
-        /> */}
         {draggable && (
           <button
             className={f('drag', { nodata: !options[entry] })}
