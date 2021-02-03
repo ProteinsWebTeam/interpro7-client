@@ -771,7 +771,6 @@ const getURLFromState = createSelector(
       }
     } else if (search && search.match(/^[\w ]+$/)) {
       try {
-        const p = root + descriptionToPath(description);
         return format({
           protocol,
           hostname,
