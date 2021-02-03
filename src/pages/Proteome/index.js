@@ -5,7 +5,7 @@ import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
-import MemberDBSelector from 'components/MemberDBSelector';
+// import MemberDBSelector from 'components/MemberDBSelector';
 // import ProteomeListFilters from 'components/Proteome/ProteomeListFilters';
 
 import Table, {
@@ -176,7 +176,7 @@ class List extends PureComponent /*:: <Props> */ {
     }
     return (
       <div className={f('row')}>
-        <div
+        {/* <div
           className={f(
             'columns',
             'small-12',
@@ -193,11 +193,9 @@ class List extends PureComponent /*:: <Props> */ {
               />
             </div>
             <hr style={{ paddingTop: '0.5rem' }} />
-            {/* TODO: Re-enable if we include non-reference proteomes in our DB*/}
-            {/* <ProteomeListFilters /> */}
           </div>
-        </div>
-        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+        </div> */}
+        <div className={f('columns')}>
           {databases && (
             <SchemaOrgData
               data={{

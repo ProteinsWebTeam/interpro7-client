@@ -137,7 +137,7 @@ export const entities /*: Array<Object> */ = [
           proteome: {
             db: customLocation.description.proteome.db || 'uniprot',
           },
-          entry: getEntryForFilter(customLocation.description),
+          entry: { db: 'interpro', isFilter: true },
         },
         hash: customLocation.hash,
       };
