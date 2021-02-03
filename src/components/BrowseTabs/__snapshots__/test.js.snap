@@ -15,7 +15,22 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
         }
       }
       isFirstLevel={true}
-      name="By Entry"
+      name="By InterPro"
+      to={[Function]}
+    />
+  </li>
+  <li
+    className="tabs-title"
+  >
+    <BrowseTabsLink
+      data={
+        Object {
+          "loading": false,
+          "payload": null,
+        }
+      }
+      isFirstLevel={true}
+      name="By Member DB"
       to={[Function]}
     />
   </li>

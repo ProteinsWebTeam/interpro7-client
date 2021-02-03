@@ -148,7 +148,17 @@ exports[`<DynamicMenu /> should render 1`] = `
             activeClass="reactive"
             to={[Function]}
           >
-            By Entry
+            By InterPro
+          </Memo(Connect(MenuItem))>
+        </li>
+        <li
+          className="menu-item"
+        >
+          <Memo(Connect(MenuItem))
+            activeClass="reactive"
+            to={[Function]}
+          >
+            By Member DB
           </Memo(Connect(MenuItem))>
         </li>
         <li

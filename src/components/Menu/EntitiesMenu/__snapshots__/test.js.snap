@@ -7,7 +7,15 @@ exports[`<EntitiesMenu /> should render 1`] = `
       activeClass="active"
       to={[Function]}
     >
-      By Entry
+      By InterPro
+    </Memo(Connect(MenuItem))>
+  </li>
+  <li>
+    <Memo(Connect(MenuItem))
+      activeClass="active"
+      to={[Function]}
+    >
+      By Member DB
     </Memo(Connect(MenuItem))>
   </li>
   <li>

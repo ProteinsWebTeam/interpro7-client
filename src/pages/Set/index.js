@@ -365,8 +365,7 @@ class List extends PureComponent /*:: <ListProps> */ {
 
     const HTTP_OK = 200;
     const notFound = !loading && status !== HTTP_OK;
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
+    const databases = dataBase?.payload?.databases;
     const db = (dbE || dbS).toLowerCase();
     const dbAll = { canonical: 'ALL', name: 'All', version: 'N/A' };
     if (loading || notFound) {
@@ -402,7 +401,9 @@ class List extends PureComponent /*:: <ListProps> */ {
           {databases && (
             <SchemaOrgData
               data={{
-                data: { db: db === 'ALL' ? dbAll : databases[db] },
+                data: {
+                  db: db.toLowerCase() === 'all' ? dbAll : databases[db],
+                },
                 location: window.location,
               }}
               processData={schemaProcessDataTable}
@@ -578,7 +579,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   source_database,
                 } /*: {accession: string, source_database: string} */,
               ) => {
-                return <div>{databases[source_database].name}</div>;
+                return <div>{databases?.[source_database]?.name}</div>;
               }}
             >
               Source Database

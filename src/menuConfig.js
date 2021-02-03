@@ -63,14 +63,29 @@ export const entities /*: Array<Object> */ = [
         description: {
           main: { key: 'entry' },
           entry: {
-            db: customLocation.description.entry.db || 'InterPro',
+            db: 'InterPro',
+          },
+        },
+        hash: customLocation.hash,
+      };
+    },
+    name: 'By InterPro',
+  },
+  {
+    to(customLocation) {
+      const db = customLocation.description.entry.db?.toLowerCase();
+      return {
+        description: {
+          main: { key: 'entry' },
+          entry: {
+            db: db === 'interpro' ? 'Pfam' : db || 'Pfam',
             integration: customLocation.description.entry.integration,
           },
         },
         hash: customLocation.hash,
       };
     },
-    name: 'By Entry',
+    name: 'By Member DB',
   },
   {
     to(customLocation) {
@@ -135,7 +150,14 @@ export const entities /*: Array<Object> */ = [
         description: {
           main: { key: 'set' },
           set: { db: 'all' },
-          entry: getEntryForFilter(customLocation.description),
+          entry: {
+            isFilter: true,
+            db: ['cdd', 'panther', 'pfam', 'pirsf'].includes(
+              customLocation.description?.entry?.db?.toLowerCase(),
+            )
+              ? customLocation.description.entry.db
+              : 'All',
+          },
         },
         hash: customLocation.hash,
       };
