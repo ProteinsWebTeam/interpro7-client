@@ -157,6 +157,7 @@ export const _ColumnSelectMenu = ({
       className={'inline-select'}
       name={'column-select'}
       onChange={onSelection}
+      onBlur={onSelection}
       value={search[field]}
     >
       <option className={f('placeholder')} value="">

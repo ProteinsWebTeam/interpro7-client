@@ -58,6 +58,10 @@ describe('<List />', () => {
             },
           },
         }}
+        dataResource={{
+          loading: false,
+          payload: [],
+        }}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
