@@ -751,7 +751,7 @@ const getURLFromState = createSelector(
   (state) => state.customLocation.description,
   (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, { search }) => {
-    if (search && search.match(/^\d+$/) && description.taxonomy) {
+    if (search && search.match(/^\d+$/)) {
       const desc = {
         ...description,
         taxonomy: {
@@ -769,22 +769,14 @@ const getURLFromState = createSelector(
       } catch {
         return;
       }
-    } else if (search && search.match(/^[\w ]+$/) && description.taxonomy) {
-      const desc = {
-        main: {
-          key: 'taxonomy',
-          numberOfFilters: 0,
-        },
-        taxonomy: {
-          db: 'uniprot',
-        },
-      };
+    } else if (search && search.match(/^[\w ]+$/)) {
       try {
+        const p = root + descriptionToPath(description);
         return format({
           protocol,
           hostname,
           port,
-          pathname: root + descriptionToPath(desc),
+          pathname: root + descriptionToPath(description),
           search: `?scientific_name=${search}`,
         });
       } catch {
