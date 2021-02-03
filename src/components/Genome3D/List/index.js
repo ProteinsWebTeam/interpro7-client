@@ -66,7 +66,7 @@ const schemaProcessData = (data) => {
       }
     }
   */
-const List = (
+export const List = (
   {
     data,
     dataResource,

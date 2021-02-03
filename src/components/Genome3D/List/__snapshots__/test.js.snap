@@ -101,7 +101,9 @@ exports[`<List /> should render 1`] = `
       <Column
         dataKey="evidences"
         isSearchable={true}
+        options={Array []}
         renderer={[Function]}
+        showOptions={true}
       >
         Evidence
       </Column>
