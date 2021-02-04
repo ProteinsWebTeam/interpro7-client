@@ -15,6 +15,8 @@ import NumberComponent from 'components/NumberComponent';
 
 import MatchesOnProtein from './MatchesOnProtein';
 import FileExporter from '../FileExporter';
+import EdgeCase from 'components/EdgeCase';
+
 import { foundationPartial } from 'styles/foundation';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
@@ -84,6 +86,15 @@ export const List = (
   customLocation: {search?: Object}} */,
 ) => {
   if (data.loading) return <Loading />;
+  if (!data.payload)
+    return (
+      <div className={f('columns')}>
+        <EdgeCase
+          text={'There is no data associated with this request'}
+          shouldRedirect={false}
+        />
+      </div>
+    );
   const data4table = data.payload.data.map(
     ({ accession, locations, metadata, tooltipContent, length }) => ({
       ...metadata,

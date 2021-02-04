@@ -68,35 +68,26 @@ const _ConnectedSortButton = ({
     if (sortBy === `-${field}`) mode = SORT_DOWN;
   }
   const handleClick = () => {
-    const newLocation = {
-      description,
-      search: search,
-    };
-
     let newMode = (mode + 1) % NUMBER_OF_SORT_MODES;
 
     // For Genome3D multiple columns can be sorted
     if (description[description.main.key].detail === 'genome3d') {
       newMode = (mode + 1) % 2;
       if (newMode) {
-        newLocation.search.sort_by = newLocation.search.sort_by
-          ? `${newLocation.search.sort_by},${field}`
-          : field;
+        search.sort_by = search.sort_by ? `${search.sort_by},${field}` : field;
       } else {
-        const oldSet = newLocation.search.sort_by.split(',');
+        const oldSet = search.sort_by.split(',');
         oldSet.splice(oldSet.indexOf(field), 1);
-        newLocation.search.sort_by = oldSet.join(',');
+        search.sort_by = oldSet.join(',');
       }
     } else {
       if (newMode > 0) {
-        newLocation.search.sort_by = `${
-          newMode === SORT_DOWN ? '-' : ''
-        }${field}`;
+        search.sort_by = `${newMode === SORT_DOWN ? '-' : ''}${field}`;
       } else {
-        delete newLocation.search.sort_by;
+        delete search.sort_by;
       }
     }
-    goToCustomLocation(newLocation);
+    goToCustomLocation({ description: description, search: { ...search } });
   };
 
   return <SortButton mode={mode} onClick={handleClick} />;
