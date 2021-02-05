@@ -65,6 +65,9 @@
 .filter-box input:hover {
   border: 1px #b9d7ef solid;
 }
+.filter-box input.invalid {
+  border: 1px #f11f3a solid;
+}
 @media screen and (max-width: 39.9375em) {
   .filter-box,
   .table-filter {

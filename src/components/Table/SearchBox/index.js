@@ -25,9 +25,15 @@ const DEBOUNCE_RATE = 500; // In ms
   loading?: ?boolean,
   children?: ?string,
   field?: ?string,
+  customiseSearch? : {
+    type: string,
+    validation: RegExp,
+    message: string,
+  },
 }; */
 /*:: type State = {|
-  localSearch: ?string,
+  localSearch: ?string | ?number,
+  valid: boolean,
 |}; */
 
 export class SearchBox extends PureComponent /*:: <Props, State> */ {
@@ -37,6 +43,7 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
     children: T.string,
     loading: T.bool,
     field: T.string,
+    customiseSearch: T.object,
   };
 
   constructor(props /*: Props */) {
@@ -44,7 +51,7 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
 
     this.routerPush = debounce(this.routerPush, DEBOUNCE_RATE);
 
-    this.state = { localSearch: null };
+    this.state = { localSearch: null, message: '' };
   }
 
   componentDidUpdate() {
@@ -78,12 +85,24 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
 
   routerPush = () => {
     const { page, cursor, ...rest } = this.props.customLocation.search;
+    const validation = this.props.customiseSearch?.validation;
     const field = this.props.field || 'search';
     if (this.state.localSearch) {
-      rest[field] = this.state.localSearch;
+      if (validation) {
+        if (validation.test(this.state.localSearch)) {
+          rest[field] = this.state.localSearch;
+          this.setState({ message: '' });
+        } else {
+          this.setState({ message: this.props.customiseSearch.message });
+        }
+      } else {
+        rest[field] = this.state.localSearch;
+      }
     } else {
       delete rest[field];
+      this.setState({ message: '' });
     }
+
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       search: rest,
@@ -101,10 +120,12 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
         <div className={f('filter-box', { loading: this.props.loading })}>
           <input
             id="table-filter-text"
-            type="text"
+            type={this.props.customiseSearch?.type || 'text'}
             value={text}
             onChange={this.handleChange}
             placeholder={this.props.children || 'Search'}
+            className={f({ invalid: this.state.message !== '' })}
+            title={this.state.message}
           />
           <button
             className={f('cancel-button')}

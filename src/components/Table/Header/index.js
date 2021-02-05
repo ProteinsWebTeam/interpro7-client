@@ -33,6 +33,7 @@ const Header = (
               isSearchable = false,
               showOptions = false,
               options,
+              customiseSearch,
             }) => (
               <th
                 key={defaultKey || dataKey}
@@ -60,6 +61,7 @@ const Header = (
                     forceToShow={showFilter[dataKey]}
                     showOptions={showOptions}
                     options={options}
+                    customiseSearch={customiseSearch}
                   />
                 )}
               </th>

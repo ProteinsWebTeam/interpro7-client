@@ -181,10 +181,15 @@ const _ColumnSearchBox = ({
   search,
   showOptions,
   options,
+  customiseSearch,
 }) => {
   if (!forceToShow && !(field in search)) return null;
   if (showOptions) return <ColumnSelectMenu field={field} options={options} />;
-  return <SearchBox field={field} />;
+  return (
+    <SearchBox field={field} customiseSearch={customiseSearch}>
+      {customiseSearch?.placeholder}
+    </SearchBox>
+  );
 };
 
 _ColumnSearchBox.propTypes = {
@@ -193,6 +198,7 @@ _ColumnSearchBox.propTypes = {
   search: T.object,
   showOptions: T.bool,
   options: T.array,
+  customiseSearch: T.object,
 };
 
 export const ColumnSearchBox = connect(mapStateToProps)(_ColumnSearchBox);
