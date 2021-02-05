@@ -26,14 +26,14 @@ const DEBOUNCE_RATE = 500; // In ms
   children?: ?string,
   field?: ?string,
   customiseSearch? : {
-    type: string,
-    validation: RegExp,
-    message: string,
+    type: ?string,
+    validation: ?RegExp,
+    message: ?string,
   },
 }; */
 /*:: type State = {|
   localSearch: ?string | ?number,
-  valid: boolean,
+  message: ?string,
 |}; */
 
 export class SearchBox extends PureComponent /*:: <Props, State> */ {
@@ -89,11 +89,17 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
     const field = this.props.field || 'search';
     if (this.state.localSearch) {
       if (validation) {
-        if (validation.test(this.state.localSearch)) {
+        if (
+          typeof this.state.localSearch === 'string' &&
+          validation.test(this.state.localSearch)
+        ) {
           rest[field] = this.state.localSearch;
           this.setState({ message: '' });
         } else {
-          this.setState({ message: this.props.customiseSearch.message });
+          this.setState({
+            message:
+              this.props.customiseSearch?.message || 'Invalid search term',
+          });
         }
       } else {
         rest[field] = this.state.localSearch;
