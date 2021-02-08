@@ -14,6 +14,7 @@ import ProtVistaMSA from 'protvista-msa';
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtvistaZoomTool from 'protvista-zoom-tool';
+import ProtvistaLinks from 'protvista-links';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -37,6 +38,9 @@ const loadProtVistaWebComponents = () => {
     webComponents.push(
       loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
     );
+    webComponents.push(
+      loadWebComponent(() => ProtvistaLinks).as('protvista-links'),
+    );
   }
   return Promise.all(webComponents);
 };
@@ -49,8 +53,11 @@ const AlignmentViewer = ({
   onConservationProgress,
   setColorMap,
   overlayConservation,
+  contacts = null,
+  contactThreshold = 0.9,
 }) => {
   const msaTrack = useRef(null);
+  const linksTrack = useRef(null);
   const [align, setAlign] = useState(null);
   useEffect(() => {
     (async () => await loadProtVistaWebComponents())();
@@ -73,6 +80,9 @@ const AlignmentViewer = ({
         const { map } = msaTrack.current.getColorMap();
         setColorMap(map || {});
       });
+      if (contacts && linksTrack.current) {
+        linksTrack.current.data = contacts;
+      }
     }
   }, [align]);
 
@@ -128,6 +138,25 @@ const AlignmentViewer = ({
           </div>
           <protvista-navigation length={length} displayend="100" />
         </div>
+        {contacts && (
+          <div style={{ display: 'flex' }}>
+            <div
+              style={{
+                width: labelWidth,
+                flexShrink: 0,
+                fontWeight: 'bold',
+              }}
+            >
+              Contacts
+            </div>
+            <protvista-links
+              id="contacts-track"
+              length={length}
+              ref={linksTrack}
+              threshold={contactThreshold}
+            ></protvista-links>
+          </div>
+        )}
         <protvista-msa
           length={length}
           height="400"
@@ -148,6 +177,8 @@ AlignmentViewer.propTypes = {
   onConservationProgress: T.func,
   setColorMap: T.func,
   overlayConservation: T.bool,
+  contacts: T.array,
+  contactThreshold: T.number,
   data: dataPropType,
 };
 

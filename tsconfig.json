@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "moduleResolution": "Node",
+    "module": "CommonJS",
+    "target": "ES6",
+    "declaration": false
+  },
+  "include": [
+    "src/**/*",
+    "node_modules/protvista-links/src/*"
+  ],
+}

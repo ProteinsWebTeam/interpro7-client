@@ -411,6 +411,26 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
+    'model',
+    {
+      to(customLocation) {
+        const { key } = customLocation.description.main;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'model',
+            },
+          },
+        };
+      },
+      name: 'Structural Model',
+      counter: 'structural_models',
+    },
+  ],
+  [
     'entry_alignments',
     {
       to(customLocation) {
