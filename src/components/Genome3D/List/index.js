@@ -20,8 +20,10 @@ import { foundationPartial } from 'styles/foundation';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
+import { STATUS_NO_CONTENT } from 'utils/server-message';
 const f = foundationPartial(ebiStyles, exporterStyle);
 const HTTP_404 = 404;
+const GENOME3D_500 = 500;
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -85,7 +87,7 @@ export const List = (
   customLocation: {search?: Object}} */,
 ) => {
   if (data.loading) return <Loading />;
-  const data4table = data.payload?.data.map(
+  const data4table = data.payload?.data?.map(
     ({ accession, locations, metadata, tooltipContent, length }) => ({
       ...metadata,
       id: metadata.anno_id,
@@ -110,8 +112,10 @@ export const List = (
           dataTable={data4table}
           loading={data.loading}
           ok={data.ok}
-          status={data.status}
-          actualSize={data.payload?.pager.total_entries}
+          status={
+            data.status === GENOME3D_500 ? STATUS_NO_CONTENT : data.status
+          }
+          actualSize={data.payload?.pager?.total_entries}
           notFound={data.status === HTTP_404}
           rowKey={'id'}
           query={search}
@@ -121,14 +125,14 @@ export const List = (
               <label htmlFor="json">JSON</label>
               <FileExporter
                 fileType="json"
-                name={`genome3d.${data.payload?.interpro.ipr_id}.json`}
-                count={data.payload?.pager.total_entries}
+                name={`genome3d.${data.payload?.interpro?.ipr_id}.json`}
+                count={data.payload?.pager?.total_entries}
               />
               <label htmlFor="tsv">TSV</label>
               <FileExporter
                 fileType="tsv"
-                name={`genome3d.${data.payload?.interpro.ipr_id}.tsv`}
-                count={data.payload?.pager.total_entries}
+                name={`genome3d.${data.payload?.interpro?.ipr_id}.tsv`}
+                count={data.payload?.pager?.total_entries}
               />
             </div>
           </Exporter>
