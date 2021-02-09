@@ -11,10 +11,9 @@ import EntrySelection from './EntrySelection';
 import { NO_SELECTION } from './EntrySelection';
 import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 
-import { intersectionObserver as intersectionObserverPolyfill } from 'utils/polyfills';
-
 import ProtVistaForStructure from './ProtVistaForStructures';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
+import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 
 import getMapper from './proteinToStructureMapper';
 
@@ -39,24 +38,9 @@ const f = foundationPartial(style, fonts);
   entryMap: Object,
   selectedEntry: string,
   selectedEntryToKeep: ?Object,
-  isStuck: boolean,
   isSpinning: boolean,
-  isStructureFullScreen: boolean,
   isSplitScreen: boolean,
-  isMinimized: boolean,
 }; */
-
-const NUMBER_OF_CHECKS = 10;
-const optionsForObserver = {
-  root: null,
-  rootMargin: '0px',
-  /* eslint-disable-next-line prefer-spread */
-  threshold: Array.apply(null, { length: NUMBER_OF_CHECKS }).map(
-    // $FlowFixMe
-    Number.call,
-    (n) => (n + 1) / NUMBER_OF_CHECKS,
-  ),
-};
 
 class StructureView extends PureComponent /*:: <Props, State> */ {
   /*:: _structureViewer: { current: ?HTMLElement }; */
@@ -64,11 +48,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
   /*:: _protein2structureMappers: Object; */
   /*:: name: Object; */
   /*:: _structurevViewer: Object; */
-  /*:: _structureSection: Object; */
   /*:: _protvista: Object; */
   /*:: _splitView: Object; */
   /*:: splitViewStyle: Object; */
-  /*:: observer: IntersectionObserver; */
   /*:: handlingSequenceHighlight: bool; */
 
   static propTypes = {
@@ -86,11 +68,8 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       entryMap: {},
       selectedEntry: '',
       selectedEntryToKeep: null,
-      isStuck: false,
       isSpinning: false,
-      isStructureFullScreen: false,
       isSplitScreen: false,
-      isMinimized: false,
     };
 
     this.stage = null;
@@ -99,14 +78,11 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     this.name = `${this.props.id}`;
 
     this._structurevViewer = React.createRef();
-    this._structureSection = React.createRef();
     this._protvista = React.createRef();
     this._splitView = React.createRef();
     this.splitViewStyle = {};
   }
   async componentDidMount() {
-    await intersectionObserverPolyfill();
-
     const pdbid = this.props.id;
     this.stage = new Stage(this._structurevViewer.current);
     this.stage.setParameters({ backgroundColor: 0xfcfcfc });
@@ -124,18 +100,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
         }
       });
 
-    const threshold = 0.4;
-    this.observer = new IntersectionObserver((entries) => {
-      this.setState({
-        isStuck:
-          this._structureSection.current.getBoundingClientRect().y < 0 &&
-          entries[0].intersectionRatio < threshold,
-      });
-      if (this.stage && this.state.isStuck) {
-        this.stage.handleResize();
-      }
-    }, optionsForObserver);
-    this.observer.observe(this._structureSection.current);
     this._protvista.current.addEventListener(
       'change',
       ({ detail: { eventtype, highlight, feature, chain, protein } }) => {
@@ -227,10 +191,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
           }
         });
     }
-  }
-
-  componentWillUnmount() {
-    this.observer.disconnect();
   }
 
   _toggleStructureSpin = () => {
@@ -468,9 +428,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     }
   };
 
-  _toggleMinimize = () =>
-    this.setState({ isMinimized: !this.state.isMinimized });
-
   showRegionInStructure(chain, start, stop) {
     const components = this.stage.getComponentsByName(this.name);
     if (components) {
@@ -491,110 +448,82 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     }
   }
   render() {
-    const {
-      isStuck,
-      entryMap,
-      selectedEntry,
-      isSpinning,
-      isSplitScreen,
-      isMinimized,
-      isStructureFullScreen,
-    } = this.state;
+    const { entryMap, selectedEntry, isSpinning, isSplitScreen } = this.state;
     return (
       <>
         <div
           ref={this._splitView}
           className={f({ 'split-view': isSplitScreen })}
         >
-          <div ref={this._structureSection} className={f('structure-wrapper')}>
-            <div
-              className={f('structure-viewer', {
-                'is-stuck': isStuck,
-                'is-minimized': isMinimized,
-              })}
-              data-testid="structure-3d-viewer"
+          <PictureInPicturePanel
+            className={f('structure-viewer')}
+            testid="structure-3d-viewer"
+            onChangingMode={() => {
+              if (this.stage) this.stage.handleResize();
+            }}
+            OtherControls={
+              this.props.matches ? (
+                <EntrySelection
+                  entryMap={entryMap}
+                  updateStructure={this.showEntryInStructure}
+                  selectedEntry={selectedEntry}
+                />
+              ) : null
+            }
+            OtherButtons={
+              <>
+                <button
+                  className={f('icon', 'icon-common')}
+                  onClick={this._toggleStructureSpin}
+                  data-icon={isSpinning ? '' : 'v'}
+                  title={isSpinning ? 'Stop spinning' : 'Spin structure'}
+                />
+                <button
+                  className={f('icon', 'icon-common')}
+                  onClick={this._resetStructureView}
+                  data-icon="}"
+                  title="Reset image"
+                />
+                <FullScreenButton
+                  element={this._splitView.current}
+                  className={f('icon', 'icon-common')}
+                  tooltip={
+                    isSplitScreen ? 'Exit full screen' : 'Split full screen'
+                  }
+                  dataIcon={isSplitScreen ? 'G' : '\uF0DB'}
+                  onFullScreenHook={() =>
+                    this.setState({ isSplitScreen: true })
+                  }
+                  onExitFullScreenHook={() =>
+                    this.setState({ isSplitScreen: false })
+                  }
+                />
+                <FullScreenButton
+                  className={f('icon', 'icon-common')}
+                  tooltip="View the structure in full screen mode"
+                  element={this._structurevViewer.current}
+                />
+              </>
+            }
+          >
+            <ResizeObserverComponent
+              element="div"
+              updateCallback={() => {
+                if (this.stage) this.stage.handleResize();
+              }}
+              measurements={['width', 'height']}
+              className={f('viewer-resizer')}
             >
-              <ResizeObserverComponent
-                element="div"
-                updateCallback={() => {
-                  if (this.stage) this.stage.handleResize();
-                }}
-                measurements={['width', 'height']}
-                className={f('viewer-resizer')}
-              >
-                {() => {
-                  return (
-                    <div
-                      ref={this._structurevViewer}
-                      className={f('structure-viewer-ref')}
-                    />
-                  );
-                }}
-              </ResizeObserverComponent>
-              <div
-                className={f('viewer-control-bar', {
-                  hide: isStructureFullScreen,
-                })}
-              >
-                {this.props.matches ? (
-                  <EntrySelection
-                    entryMap={entryMap}
-                    updateStructure={this.showEntryInStructure}
-                    selectedEntry={selectedEntry}
+              {() => {
+                return (
+                  <div
+                    ref={this._structurevViewer}
+                    className={f('structure-viewer-ref')}
                   />
-                ) : null}
-                <div className={f('viewer-controls')}>
-                  <button
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                    onClick={this._toggleStructureSpin}
-                    data-icon={isSpinning ? '' : 'v'}
-                    title={isSpinning ? 'Stop spinning' : 'Spin structure'}
-                  />
-                  <button
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                    onClick={this._resetStructureView}
-                    data-icon="}"
-                    title="Reset image"
-                  />
-                  <FullScreenButton
-                    element={this._splitView.current}
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                    tooltip={
-                      isSplitScreen ? 'Exit full screen' : 'Split full screen'
-                    }
-                    dataIcon={isSplitScreen ? 'G' : '\uF0DB'}
-                    onFullScreenHook={() =>
-                      this.setState({ isSplitScreen: true })
-                    }
-                    onExitFullScreenHook={() =>
-                      this.setState({ isSplitScreen: false })
-                    }
-                  />
-
-                  <FullScreenButton
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                    tooltip="View the structure in full screen mode"
-                    element={this._structureSection.current}
-                    onFullScreenHook={() =>
-                      this.setState({ isStructureFullScreen: true })
-                    }
-                    onExitFullScreenHook={() =>
-                      this.setState({ isStructureFullScreen: false })
-                    }
-                  />
-
-                  {this.state.isStuck && (
-                    <button
-                      data-icon={this.state.isMinimized ? '\uF2D0' : '\uF2D1'}
-                      title={'Minimize'}
-                      onClick={this._toggleMinimize}
-                      className={f('structure-icon', 'icon', 'icon-common')}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+                );
+              }}
+            </ResizeObserverComponent>
+          </PictureInPicturePanel>
           <div
             ref={this._protvista}
             data-testid="structure-protvista"

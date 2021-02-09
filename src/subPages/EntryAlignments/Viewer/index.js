@@ -154,7 +154,7 @@ const AlignmentViewer = ({
               length={length}
               ref={linksTrack}
               threshold={contactThreshold}
-            ></protvista-links>
+            />
           </div>
         )}
         <protvista-msa
