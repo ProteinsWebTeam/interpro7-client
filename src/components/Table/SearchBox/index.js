@@ -8,6 +8,8 @@ import { debounce } from 'lodash-es';
 import { customLocationSelector } from 'reducers/custom-location';
 import { goToCustomLocation } from 'actions/creators';
 
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
 import { foundationPartial } from 'styles/foundation';
 
 import s from './style.css';
@@ -25,9 +27,15 @@ const DEBOUNCE_RATE = 500; // In ms
   loading?: ?boolean,
   children?: ?string,
   field?: ?string,
+  customiseSearch? : {
+    type: ?string,
+    validation: ?RegExp,
+    message: ?string,
+  },
 }; */
 /*:: type State = {|
-  localSearch: ?string,
+  localSearch: ?string | ?number,
+  message: ?string,
 |}; */
 
 export class SearchBox extends PureComponent /*:: <Props, State> */ {
@@ -37,6 +45,7 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
     children: T.string,
     loading: T.bool,
     field: T.string,
+    customiseSearch: T.object,
   };
 
   constructor(props /*: Props */) {
@@ -44,7 +53,7 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
 
     this.routerPush = debounce(this.routerPush, DEBOUNCE_RATE);
 
-    this.state = { localSearch: null };
+    this.state = { localSearch: null, message: '' };
   }
 
   componentDidUpdate() {
@@ -78,12 +87,30 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
 
   routerPush = () => {
     const { page, cursor, ...rest } = this.props.customLocation.search;
+    const validation = this.props.customiseSearch?.validation;
     const field = this.props.field || 'search';
     if (this.state.localSearch) {
-      rest[field] = this.state.localSearch;
+      if (validation) {
+        if (
+          typeof this.state.localSearch === 'string' &&
+          validation.test(this.state.localSearch)
+        ) {
+          rest[field] = this.state.localSearch;
+          this.setState({ message: '' });
+        } else {
+          this.setState({
+            message:
+              this.props.customiseSearch?.message || 'Invalid search term',
+          });
+        }
+      } else {
+        rest[field] = this.state.localSearch;
+      }
     } else {
       delete rest[field];
+      this.setState({ message: '' });
     }
+
     this.props.goToCustomLocation({
       ...this.props.customLocation,
       search: rest,
@@ -99,12 +126,20 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
     return (
       <div className={f('table-filter')}>
         <div className={f('filter-box', { loading: this.props.loading })}>
+          {this.state.message === '' ? null : (
+            <Tooltip title={this.state.message} class={f('validation-message')}>
+              <span role="img" aria-label="warning">
+                ⚠️
+              </span>
+            </Tooltip>
+          )}
           <input
             id="table-filter-text"
-            type="text"
+            type={this.props.customiseSearch?.type || 'text'}
             value={text}
             onChange={this.handleChange}
             placeholder={this.props.children || 'Search'}
+            className={f({ invalid: this.state.message !== '' })}
           />
           <button
             className={f('cancel-button')}
