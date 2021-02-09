@@ -166,7 +166,7 @@ const getGenome3dURL = createSelector(
       rows: search.page_size || settingsPageSize,
     };
     if (search.page) query.page = search.page;
-    if (search.accession) query.filter_uniprot = search.accession;
+    if (search.accession) query.filter_uniprot = search.accession.toUpperCase();
     if (search.evidences) query.filter_resource = search.evidences;
     if (search.confidence) query.filter_min_confidence = search.confidence;
 

@@ -8,6 +8,8 @@ import { debounce } from 'lodash-es';
 import { customLocationSelector } from 'reducers/custom-location';
 import { goToCustomLocation } from 'actions/creators';
 
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
 import { foundationPartial } from 'styles/foundation';
 
 import s from './style.css';
@@ -124,6 +126,11 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
     return (
       <div className={f('table-filter')}>
         <div className={f('filter-box', { loading: this.props.loading })}>
+          {this.state.message === '' ? null : (
+            <Tooltip title={this.state.message} class={f('validation-message')}>
+              ⚠️
+            </Tooltip>
+          )}
           <input
             id="table-filter-text"
             type={this.props.customiseSearch?.type || 'text'}
@@ -131,7 +138,6 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
             onChange={this.handleChange}
             placeholder={this.props.children || 'Search'}
             className={f({ invalid: this.state.message !== '' })}
-            title={this.state.message}
           />
           <button
             className={f('cancel-button')}
