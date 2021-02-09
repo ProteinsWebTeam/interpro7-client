@@ -1,5 +1,6 @@
 @import '../../styles/timing.css';
 @import '../../styles/colors.css';
+@import '../../styles/z-index.css';
 
 .potential-popup {
   width: 100%;
@@ -8,7 +9,16 @@
     width: 50vw;
   }
 }
-
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  .potential-popup.popup {
+    width: 90vw;
+    & form.db-selector {
+      column-count: 2;
+      grid-template-rows: repeat(8, 1fr);
+    }
+  }
+}
 .popup {
   position: absolute;
   width: 70vw;
@@ -17,7 +27,7 @@
   background: white;
   border: 1px solid var(--colors-vlightgray);
   border-radius: 0.5ch;
-  z-index: 100;
+  z-index: var(--z-index-memberdb);
   /*transition-property: opacity, transform, clip-path;*/
   transition-property: opacity, transform;
   transition-timing-function: var(--timing-fn-spring);
@@ -42,6 +52,7 @@
 .db-selector {
   column-count: 3;
   padding: 0.5ch;
+  padding-left: 0.7rem;
   column-gap: 0.8rem;
   /*margin: 1ch;*/
 
@@ -137,7 +148,7 @@
 
   & > .text {
     margin-left: 0.5rem;
-    z-index: 1; /* IE11: to show text on top of grey bgd */
+    z-index: var(--z-index-deepest); /* IE11: to show text on top of grey bgd */
     color: var(--colors-light-txt);
   }
 
@@ -169,9 +180,14 @@
 
   & .filter-label {
     margin: 0 1ch 1ch 0.5ch;
-    line-height: 1.4;
+    line-height: 1.5;
     font-size: 1rem;
     color: var(--colors-light-txt);
+    top: 0;
+    position: sticky;
+    background: var(--colors-filter-background);
+    width: 100%;
+    z-index: var(--z-index-just-over);
   }
 }
 

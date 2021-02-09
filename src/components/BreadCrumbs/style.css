@@ -1,0 +1,29 @@
+@import '../../styles/colors.css';
+
+nav.breadcrumbs {
+  font-size: 0.8rem;
+  display: block;
+  line-height: 0.8rem;
+  text-transform: capitalize;
+  & .icon {
+    background: rgb(240, 240, 240);
+  }
+  & section {
+    display: inline;
+  }
+  & .main {
+    background: rgb(240, 240, 255);
+  }
+  & .secondary {
+    background: rgb(240, 255, 240);
+  }
+  & a.breadcrumb-link,
+  & a.breadcrumb-link:visited {
+    transition: color 1s ease;
+    color: var(--colors-ebidark);
+    &:hover {
+      color: var(--colors-tag);
+      text-decoration: underline;
+    }
+  }
+}

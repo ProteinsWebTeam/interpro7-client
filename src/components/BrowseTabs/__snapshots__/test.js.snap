@@ -15,7 +15,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
         }
       }
       isFirstLevel={true}
-      name="Entry"
+      name="By InterPro"
       to={[Function]}
     />
   </li>
@@ -30,7 +30,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
         }
       }
       isFirstLevel={true}
-      name="Protein"
+      name="By Member DB"
       to={[Function]}
     />
   </li>
@@ -45,7 +45,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
         }
       }
       isFirstLevel={true}
-      name="Structure"
+      name="By Protein"
       to={[Function]}
     />
   </li>
@@ -60,7 +60,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
         }
       }
       isFirstLevel={true}
-      name="Taxonomy"
+      name="By Structure"
       to={[Function]}
     />
   </li>
@@ -75,7 +75,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
         }
       }
       isFirstLevel={true}
-      name="Proteome"
+      name="By Taxonomy"
       to={[Function]}
     />
   </li>
@@ -90,7 +90,22 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
         }
       }
       isFirstLevel={true}
-      name="Set"
+      name="By Proteome"
+      to={[Function]}
+    />
+  </li>
+  <li
+    className="tabs-title"
+  >
+    <BrowseTabsLink
+      data={
+        Object {
+          "loading": false,
+          "payload": null,
+        }
+      }
+      isFirstLevel={true}
+      name="By Set"
       to={[Function]}
     />
   </li>

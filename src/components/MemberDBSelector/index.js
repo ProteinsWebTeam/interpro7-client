@@ -299,6 +299,7 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
         ([_, { isFilter }]) => isFilter,
       ).length > 1;
 
+    const shouldShowInterPro = customLocation.description.main.key !== 'entry';
     return (
       <div
         tabIndex="0"
@@ -312,10 +313,6 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
         onMouseLeave={this._handleExit(true)}
         onBlur={this._handleExit(true)}
         className={f('container', className, {
-          columns: !children,
-          'small-12': !children,
-          'medium-3': !children,
-          'large-2': !children,
           lowGraphics,
         })}
       >
@@ -337,55 +334,60 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
             className={f('db-selector', { 'one-column': !children })}
             onChange={handleChange}
           >
-            {Array.from(this._dbs.values()).map((db) => {
-              const count = dbCounters
-                ? getStaticCountFor(db.canonical, dbCounters)
-                : getCountFor(
-                    db.canonical,
-                    { dataDBCount, dataAllCount, dataSubPageCount },
-                    main,
-                    sub,
-                    hasMoreThanOneFilter,
-                  );
-              const disabled = count === 0;
-              const loading = count === 'loading';
-              const checked = db === selected;
-              return (
-                <label
-                  key={db.canonical}
-                  className={f('db-choice', { disabled, checked })}
-                  style={{ color: config.colors.get(db.canonical) }}
-                  data-testid={`memberdb-filter-${db.canonical
-                    .toLowerCase()
-                    .replace(/\s+/, '_')}`}
-                >
-                  <input
-                    type="radio"
-                    name="db-radio"
-                    value={db.canonical}
-                    disabled={disabled}
-                    checked={checked}
-                    onChange={noop}
-                  />
-                  <span className={f('text')}>
-                    {db.name === 'All' ? `All ${toPlural(main)}` : db.name}
-                  </span>
-                  {!this.props.hideCounters && (
-                    <NumberComponent
-                      loading={loading}
-                      className={f('label')}
-                      titleType={toPlural(main, (!loading && count) || 0)}
-                      style={{
-                        background: checked && config.colors.get(db.canonical),
-                      }}
-                      abbr
-                    >
-                      {(!loading && count) || 0}
-                    </NumberComponent>
-                  )}
-                </label>
-              );
-            })}
+            {Array.from(this._dbs.values())
+              .filter(({ canonical }) =>
+                canonical === 'interpro' ? shouldShowInterPro : true,
+              )
+              .map((db) => {
+                const count = dbCounters
+                  ? getStaticCountFor(db.canonical, dbCounters)
+                  : getCountFor(
+                      db.canonical,
+                      { dataDBCount, dataAllCount, dataSubPageCount },
+                      main,
+                      sub,
+                      hasMoreThanOneFilter,
+                    );
+                const disabled = count === 0;
+                const loading = count === 'loading';
+                const checked = db === selected;
+                return (
+                  <label
+                    key={db.canonical}
+                    className={f('db-choice', { disabled, checked })}
+                    style={{ color: config.colors.get(db.canonical) }}
+                    data-testid={`memberdb-filter-${db.canonical
+                      .toLowerCase()
+                      .replace(/\s+/, '_')}`}
+                  >
+                    <input
+                      type="radio"
+                      name="db-radio"
+                      value={db.canonical}
+                      disabled={disabled}
+                      checked={checked}
+                      onChange={noop}
+                    />
+                    <span className={f('text')}>
+                      {db.name === 'All' ? `All ${toPlural(main)}` : db.name}
+                    </span>
+                    {!this.props.hideCounters && (
+                      <NumberComponent
+                        loading={loading}
+                        className={f('label')}
+                        titleType={toPlural(main, (!loading && count) || 0)}
+                        style={{
+                          background:
+                            checked && config.colors.get(db.canonical),
+                        }}
+                        abbr
+                      >
+                        {(!loading && count) || 0}
+                      </NumberComponent>
+                    )}
+                  </label>
+                );
+              })}
           </form>
         </div>
       </div>

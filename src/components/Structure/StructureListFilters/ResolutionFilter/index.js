@@ -21,7 +21,16 @@ const f = foundationPartial(styles, s);
 const DEBOUNCE_RATE = 500; // In ms
 
 const MIN = 0;
-const MAX = 20;
+const MAX = 100;
+const ALL = -1;
+
+/* eslint-disable no-magic-numbers */
+const ranges = [
+  [0, 2],
+  [2, 4],
+  [4, 100],
+];
+/* eslint-enable */
 
 const RESOLUTION_RANGE_REGEXP = /^(\d*(\.\d+)?)-(\d*(\.\d+)?)$/;
 
@@ -35,7 +44,8 @@ const RESOLUTION_RANGE_REGEXP = /^(\d*(\.\d+)?)-(\d*(\.\d+)?)$/;
 
 /*:: type State = {
   min: number,
-  max: number
+  max: number,
+  selectedRange: number,
 }; */
 
 export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
@@ -54,10 +64,12 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
       (props.customLocation.search.resolution || '').match(
         RESOLUTION_RANGE_REGEXP,
       ) || [];
+    const selectedRange = this._getSelectedRange(min, max);
 
     this.state = {
       min: Math.min(MAX, Math.max(MIN, +min)),
       max: Math.max(MIN, Math.min(MAX, +max)),
+      selectedRange,
     };
   }
 
@@ -72,7 +84,18 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
     this._updateLocation.cancel();
   }
 
-  _updateLocation = debounce(fromMount => {
+  _getSelectedRange(min /*: number */, max /*: number */) {
+    if (min !== MIN || max !== MAX) {
+      for (let i = 0; i < ranges.length; i++) {
+        if (min < ranges[i][1]) {
+          return i;
+        }
+      }
+    }
+    return ALL;
+  }
+
+  _updateLocation = debounce((fromMount) => {
     const { min, max } = this.state;
     const { goToCustomLocation, customLocation } = this.props;
     const { page, cursor, resolution: _, ...search } = {
@@ -95,10 +118,17 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
       resolution: _,
       ...search
     } = this.props.customLocation.search;
-    if (value !== 'All') {
-      search.resolution = `${this.state.min}-${this.state.max}`;
+    if (+value !== ALL && +value < ranges.length) {
+      const [min, max] = ranges[+value];
+      search.resolution = `${min}-${max}`;
+      this.setState({
+        min,
+        max,
+        selectedRange: +value,
+      });
+    } else {
+      this.setState({ min: MIN, max: MAX, selectedRange: ALL });
     }
-    this.setState({ min: MIN, max: MAX });
     this.props.goToCustomLocation({ ...this.props.customLocation, search });
   };
 
@@ -121,48 +151,57 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
         search: { resolution },
       },
     } = this.props;
-    const { min, max } = this.state;
+    const { min, max, selectedRange } = this.state;
     let disable = false;
     if (this.props.customLocation.search.experiment_type === 'nmr') {
       disable = !disable;
     }
+    const step = 0.05;
     return (
       <div className={f('column')}>
-        <label className={f('row', 'filter-button')}>
+        <label
+          className={f('radio-btn-label', { checked: selectedRange === ALL })}
+        >
           <input
             type="radio"
             name="resolution"
-            value="All"
+            value={ALL}
             onChange={this._handleSelection}
-            checked={!resolution}
-            className={f('radio')}
+            checked={selectedRange === ALL}
+            className={f('radio-btn')}
             disabled={disable}
           />
           <span>All</span>
         </label>
-        <label className={f('row', 'filter-button')}>
-          <input
-            type="radio"
-            name="resolution"
-            value="Subset"
-            onChange={this._handleSelection}
-            checked={!!resolution}
-            className={f('radio')}
-            disabled={disable}
-          />
-          <span>
-            {min} - {max} Å
-          </span>
-        </label>
+        {ranges.map((range, i) => (
+          <label
+            key={i}
+            className={f('radio-btn-label', { checked: selectedRange === i })}
+          >
+            <input
+              type="radio"
+              name="resolution"
+              value={i}
+              className={f('radio-btn')}
+              onChange={this._handleSelection}
+              checked={selectedRange === i}
+              disabled={disable}
+            />
+            <span>
+              {range[0]} - {range[1]} Å
+            </span>
+          </label>
+        ))}
         <MultipleInput
-          min={MIN}
-          max={MAX}
+          min={selectedRange === ALL ? MIN : ranges[selectedRange][0]}
+          max={selectedRange === ALL ? MAX : ranges[selectedRange][1]}
           minValue={min}
           maxValue={max}
-          step="0.05"
+          step={selectedRange > 1 ? 1 : step}
           onChange={this._handleChange}
           aria-label="resolution range"
-          className={f('range', 'hideable', { hidden: !resolution })}
+          className={f('range')}
+          disabled={!resolution}
         />
       </div>
     );
@@ -171,10 +210,9 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(ResolutionFilter);
+export default connect(mapStateToProps, { goToCustomLocation })(
+  ResolutionFilter,
+);

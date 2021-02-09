@@ -235,6 +235,18 @@ const mergeData = (matches, sequenceLength) => {
   return mergedData;
 };
 
+const getCreated = (payload, accession) => {
+  let created = payload?.times?.created;
+  if (!created) {
+    const regex = /iprscan5-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
+    const matches = regex.exec(accession);
+    if (matches) {
+      const [_, y, m, d, hh, mm, ss] = matches;
+      created = Date.UTC(+y, +m - 1, +d, +hh, +mm, +ss);
+    }
+  }
+  return created;
+};
 const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   const description = {
     main: { key: 'entry' },
@@ -248,6 +260,7 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   });
 };
 
+// eslint-disable-next-line complexity
 const SummaryIPScanJob = ({
   accession,
   localID,
@@ -257,6 +270,7 @@ const SummaryIPScanJob = ({
   data,
   localPayload,
   api,
+  ipScan,
   updateJobTitle,
 }) => {
   const [mergedData, setMergedData] = useState({});
@@ -308,15 +322,8 @@ const SummaryIPScanJob = ({
 
   if (!payload) return <Loading />;
 
-  let created = payload?.times?.created;
-  if (!created) {
-    const regex = /iprscan5-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
-    const matches = regex.exec(accession);
-    if (matches) {
-      const [_, y, m, d, hh, mm, ss] = matches;
-      created = Date.UTC(+y, +m - 1, +d, +hh, +mm, +ss);
-    }
-  }
+  const created = getCreated(payload, accession);
+
   const metadata = {
     accession,
     length: payload.sequence.length,
@@ -328,6 +335,19 @@ const SummaryIPScanJob = ({
   };
 
   const goTerms = getGoTerms(payload.matches);
+
+  const { protocol, hostname, root } = ipScan;
+  let dataURL = `${protocol}//${hostname}${root}result`;
+  const now = Date.now();
+  const expired =
+    (now - (created || now) > MAX_TIME_ON_SERVER &&
+      status === 'saved in browser') ||
+    status === 'imported file';
+  if (expired) {
+    const downloadContent = JSON.stringify(payload);
+    const blob = new Blob([downloadContent], { type: 'application/json' });
+    dataURL = URL.createObjectURL(blob);
+  }
 
   return (
     <div className={f('sections')}>
@@ -434,23 +454,24 @@ const SummaryIPScanJob = ({
             mainData={{ metadata }}
             dataMerged={mergedData}
           >
-            {status === 'finished' && data?.url && (
-              <Exporter includeSettings={false}>
-                <ul>
-                  {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
-                    <li key={type}>
-                      <Link
-                        target="_blank"
-                        href={data.url.replace('json', type)}
-                        download={`InterProScan.${type}`}
-                      >
-                        {type.toUpperCase()}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </Exporter>
-            )}
+            <Exporter includeSettings={false}>
+              <ul>
+                {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
+                  <li key={type}>
+                    <Link
+                      target="_blank"
+                      href={
+                        expired ? dataURL : `${dataURL}/${accession}/${type}`
+                      }
+                      download={`InterProScan.${type}`}
+                      disabled={expired && type !== 'json'}
+                    >
+                      {type.toUpperCase()}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Exporter>
           </DomainOnProteinWithoutMergedData>
           <GoTerms terms={Array.from(goTerms.values())} type="protein" />
         </>
@@ -467,6 +488,7 @@ SummaryIPScanJob.propTypes = {
   data: dataPropType,
   localPayload: T.object,
   api: T.object,
+  ipScan: T.object,
   updateJobTitle: T.func,
 };
 
@@ -494,12 +516,14 @@ const mapStateToProps = createSelector(
   accessionSelector,
   jobSelector,
   (state) => state.settings.api,
-  (accession, { metadata: { localID, remoteID, status } }, api) => ({
+  (state) => state.settings.ipScan,
+  (accession, { metadata: { localID, remoteID, status } }, api, ipScan) => ({
     accession,
     localID,
     remoteID,
     status,
     api,
+    ipScan,
   }),
 );
 

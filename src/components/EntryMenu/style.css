@@ -1,5 +1,6 @@
 @import '../../styles/colors.css';
 @import '../../styles/timing.css';
+@import '../../styles/z-index.css';
 
 .tabs {
   border: 0; /*needed to remove foundation style*/
@@ -26,7 +27,7 @@
   left: 0;
   transform-origin: left;
   transform: translateX(0) scaleX(0);
-  z-index: 1;
+  z-index: var(--z-index-deepest);
   pointer-events: none;
   transition: background-color var(--timing-fast) ease-in-out;
 

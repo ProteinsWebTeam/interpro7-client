@@ -1,4 +1,5 @@
 @import '../../../styles/colors.css';
+@import '../../../styles/z-index.css';
 
 .container {
   position: fixed;
@@ -7,7 +8,7 @@
   height: 100vh;
   width: 20em;
   max-width: 90vw;
-  z-index: 101;
+  z-index: var(--z-index-side-menu);
   background-color: rgba(59, 59, 59, 1);
   transition: transform 0.3s ease-in-out;
   transform: translateX(0);
@@ -49,7 +50,7 @@
   right: 0.2em;
   width: 1em;
   height: 1em;
-  z-index: 1;
+  z-index: var(--z-index-deepest);
   user-select: none;
   overflow: hidden;
   outline: 0;

@@ -1,8 +1,9 @@
 @import '../../styles/timing.css';
 @import '../../styles/spacing.css';
+@import '../../styles/z-index.css';
 
 .masthead-black-bar {
-  z-index: 101;
+  z-index: var(--z-index-ebi-header);
   transition-property: opacity, transform;
   transition-timing-function: ease-in-out;
   transition-duration: var(--timing-medium);
@@ -15,13 +16,12 @@
     display: block;
     opacity: 1;
     transform: translateY(-10px);
-    z-index: 5;
+    z-index: calc(var(--z-index-ebi-header) - 5);
     /*position: relative;*/
   }
 
-  & .dropdown-pane.embl-dropdown {
+  & .embl-bar {
     position: fixed;
-    background-color: #222;
     top: calc(38px + var(--spacing-medium));
     left: initial;
     /*right: var(--spacing-medium);*/
@@ -30,19 +30,9 @@
     /*max-width: 1400px;*/
     visibility: visible;
     border: none;
-
-    & .close-button {
-      font-size: 300%;
-    }
-    & .close-button:hover {
-      color: white;
-    }
-
-    & h3,
-    & h5,
-    & a,
-    & a:visited {
-      color: white;
+    & h5 {
+      font-size: 1.25rem;
+      font-weight: normal;
     }
   }
 }

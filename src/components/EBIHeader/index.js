@@ -2,8 +2,10 @@
 import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
+import { emblMapNavSelector } from 'reducers/ui/emblMapNav';
 
 import { toggleEMBLMapNav } from 'actions/creators';
 
@@ -26,13 +28,18 @@ const styleBundle = foundationPartial(styles, fonts, ebiGlobalStyles);
 /*
  EMBL-EBI button and hidden div behaviour
  */
-const _EmblButton = ({ toggleEMBLMapNav }) => (
+const _EmblButton = (
+  { toggleEMBLMapNav } /*: {toggleEMBLMapNav: function} */,
+) => (
   <button
     className={styleBundle('button', 'float-right')}
     type="button"
     aria-expanded="false"
     aria-label="EMBL dropdown"
     onClick={toggleEMBLMapNav}
+    style={{
+      outlineStyle: 'none',
+    }}
   >
     &nbsp;
   </button>
@@ -41,12 +48,9 @@ _EmblButton.propTypes = {
   toggleEMBLMapNav: T.func.isRequired,
 };
 
-const EmblButton = connect(
-  null,
-  { toggleEMBLMapNav },
-)(_EmblButton);
+const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 
-const EBIHeader = () => (
+export const EBIHeader = ({ visible = false } /*: {visible?: boolean} */) => (
   <header
     id="masthead-black-bar"
     className={styleBundle('clearfix', 'masthead-black-bar')}
@@ -84,7 +88,7 @@ const EBIHeader = () => (
             <Link href="//www.ebi.ac.uk">EMBL-EBI</Link>
           </li>
 
-          <li className={styleBundle('services', 'active')}>
+          <li className={styleBundle('services')}>
             <Link href="//www.ebi.ac.uk/services">Services</Link>
           </li>
 
@@ -106,6 +110,7 @@ const EBIHeader = () => (
               'show-for-medium',
               'embl-selector',
               'embl-ebi',
+              { active: visible },
             )}
           >
             <EmblButton />
@@ -115,6 +120,9 @@ const EBIHeader = () => (
     </div>
   </header>
 );
+EBIHeader.propTypes = {
+  visible: T.bool,
+};
 
 // Skip to div
 export const EbiSkipToDiv = () => (
@@ -126,5 +134,8 @@ export const EbiSkipToDiv = () => (
     </ul>
   </div>
 );
+const mapStateToProps = createSelector(emblMapNavSelector, (visible) => ({
+  visible,
+}));
 
-export default EBIHeader;
+export default connect(mapStateToProps)(EBIHeader);

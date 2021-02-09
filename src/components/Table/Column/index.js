@@ -14,6 +14,9 @@ Column.propTypes = {
   cellClassName: T.string,
   isSearchable: T.bool,
   children: T.any,
+  showOptions: T.bool,
+  options: T.array,
+  customiseSearch: T.object,
 };
 
 export default Column;

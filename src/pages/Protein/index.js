@@ -7,6 +7,7 @@ import {
 } from 'higherOrder/loadData/dataPropTypes';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -271,13 +272,19 @@ AllProteinDownload.propTypes = {
 
 class List extends PureComponent /*:: <ListProps> */ {
   static propTypes = propTypes;
+  /*::
+    filterPanel: { current: null | React$ElementRef<'div'> };
+  */
+  constructor() {
+    super();
+    this.filterPanel = React.createRef();
+  }
 
   render() {
     const {
       data: { payload, loading, ok, url, status },
       isStale,
       customLocation: { search, description },
-      // customLocation: { description: { protein: { db } }, search },
       dataBase,
     } = this.props;
     const {
@@ -299,14 +306,28 @@ class List extends PureComponent /*:: <ListProps> */ {
     }
     return (
       <div className={f('row')}>
-        <MemberDBSelector
-          contentType="protein"
-          className="pp-left-side-db-selector"
-        />
-
+        <div
+          className={f(
+            'columns',
+            'small-12',
+            'medium-3',
+            'large-2',
+            'no-padding',
+          )}
+        >
+          <div className={f('browse-side-panel')} ref={this.filterPanel}>
+            <div className={f('selector-container')}>
+              <MemberDBSelector
+                contentType="protein"
+                className="pp-left-side-db-selector"
+              />
+            </div>
+            <hr style={{ paddingTop: '0.5rem' }} />
+            {!search.ida && <ProteinListFilters />}
+          </div>
+          <SpaceFiller element={this.filterPanel?.current} />
+        </div>
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          {!search.ida && <ProteinListFilters />}
-          <hr className={f('margin-bottom-none')} />
           {databases && db && databases[db.toLowerCase()] && (
             <SchemaOrgData
               data={{

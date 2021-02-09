@@ -58,23 +58,36 @@ const _ConnectedSortButton = ({
   goToCustomLocation,
 }) => {
   let mode = SORT_OFF;
-  const { sort_by: sortBy, ..._search } = search;
-  if (sortBy) {
+  const { sort_by: sortBy } = search;
+
+  // If multiple columns are added to sort
+  if (sortBy?.split(',').length > 1) {
+    if (sortBy.includes(field)) mode = SORT_UP;
+  } else {
     if (sortBy === field) mode = SORT_UP;
     if (sortBy === `-${field}`) mode = SORT_DOWN;
   }
   const handleClick = () => {
-    const newLocation = {
-      description,
-      search: _search,
-    };
-    const newMode = (mode + 1) % NUMBER_OF_SORT_MODES;
-    if (newMode > 0) {
-      newLocation.search.sort_by = `${
-        newMode === SORT_DOWN ? '-' : ''
-      }${field}`;
+    let newMode = (mode + 1) % NUMBER_OF_SORT_MODES;
+
+    // For Genome3D multiple columns can be sorted
+    if (description[description.main.key].detail === 'genome3d') {
+      newMode = (mode + 1) % 2;
+      if (newMode) {
+        search.sort_by = search.sort_by ? `${search.sort_by},${field}` : field;
+      } else {
+        const oldSet = search.sort_by.split(',');
+        oldSet.splice(oldSet.indexOf(field), 1);
+        search.sort_by = oldSet.join(',');
+      }
+    } else {
+      if (newMode > 0) {
+        search.sort_by = `${newMode === SORT_DOWN ? '-' : ''}${field}`;
+      } else {
+        delete search.sort_by;
+      }
     }
-    goToCustomLocation(newLocation);
+    goToCustomLocation({ description: description, search: { ...search } });
   };
 
   return <SortButton mode={mode} onClick={handleClick} />;
@@ -89,8 +102,8 @@ _ConnectedSortButton.propTypes = {
 };
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   (description, search) => ({ description, search }),
 );
 
@@ -119,15 +132,73 @@ FilterButton.propTypes = {
   onClick: T.func,
 };
 
-const _ColumnSearchBox = ({ field, forceToShow, search }) => {
+export const _ColumnSelectMenu = ({
+  field,
+  options,
+  search,
+  description,
+  goToCustomLocation,
+}) => {
+  const onSelection = ({ target: { value: option } }) => {
+    search[field] = option;
+    goToCustomLocation({ description: description, search: { ...search } });
+  };
+  return (
+    <select
+      className={'inline-select'}
+      name={'column-select'}
+      onChange={onSelection}
+      onBlur={onSelection}
+      value={search[field]}
+    >
+      <option className={f('placeholder')} value="">
+        Select
+      </option>
+      {options.map((opt) => (
+        <option key={opt} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+_ColumnSelectMenu.propTypes = {
+  field: T.string.isRequired,
+  options: T.array.isRequired,
+  search: T.object,
+  description: T.object.isRequired,
+  goToCustomLocation: T.func.isRequired,
+};
+
+export const ColumnSelectMenu = connect(mapStateToProps, {
+  goToCustomLocation,
+})(_ColumnSelectMenu);
+
+const _ColumnSearchBox = ({
+  field,
+  forceToShow,
+  search,
+  showOptions,
+  options,
+  customiseSearch,
+}) => {
   if (!forceToShow && !(field in search)) return null;
-  return <SearchBox field={field} />;
+  if (showOptions) return <ColumnSelectMenu field={field} options={options} />;
+  return (
+    <SearchBox field={field} customiseSearch={customiseSearch}>
+      {customiseSearch?.placeholder}
+    </SearchBox>
+  );
 };
 
 _ColumnSearchBox.propTypes = {
   field: T.string.isRequired,
   forceToShow: T.bool,
   search: T.object,
+  showOptions: T.bool,
+  options: T.array,
+  customiseSearch: T.object,
 };
 
 export const ColumnSearchBox = connect(mapStateToProps)(_ColumnSearchBox);

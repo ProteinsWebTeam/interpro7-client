@@ -92,19 +92,36 @@ exports[`<List /> should render 1`] = `
         </div>
       </Memo(Connect(Exporter))>
       <Column
+        customiseSearch={
+          Object {
+            "message": "Accepts only UniProt accessions",
+            "validation": /\\^\\(\\[OPQ\\]\\[0-9\\]\\[A-Z0-9\\]\\{3\\}\\[0-9\\]\\|\\[A-NR-Z\\]\\[0-9\\]\\(\\[A-Z\\]\\[A-Z0-9\\]\\{2\\}\\[0-9\\]\\)\\{1,2\\}\\)\\$/i,
+          }
+        }
         dataKey="accession"
+        isSearchable={true}
         renderer={[Function]}
       >
         Protein
       </Column>
       <Column
         dataKey="evidences"
+        isSearchable={true}
+        options={Array []}
         renderer={[Function]}
+        showOptions={true}
       >
         Evidence
       </Column>
       <Column
+        customiseSearch={
+          Object {
+            "placeholder": ">=",
+            "type": "number",
+          }
+        }
         dataKey="confidence"
+        isSearchable={true}
         renderer={[Function]}
       />
       <Column

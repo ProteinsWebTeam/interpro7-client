@@ -286,7 +286,7 @@ const KeySpeciesArea = ({ focusType, showKeySpecies }) => {
 
 KeySpeciesArea.propTypes = {
   focusType: T.string,
-  showKeySpecies: T.boolean,
+  showKeySpecies: T.bool,
 };
 /*:: type relatedAdvancedProps = {
   mainData: Object,
@@ -345,6 +345,7 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
         dataBase.payload &&
         dataBase.payload.databases) ||
       {};
+    const hasFilters = focusType === 'protein';
     return (
       <div className={f('row', 'column')}>
         <KeySpeciesArea focusType={focusType} showKeySpecies={showKeySpecies} />
@@ -376,30 +377,52 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
                   focusType={focusType}
                   databases={databases}
                 />
-
-                {focusType === 'protein' && (
-                  <FiltersPanel>
-                    <CurationFilter label="UniProt Curation" />
-                  </FiltersPanel>
-                )}
-                <Matches
-                  {...this.props}
-                  actualSize={actualSize}
-                  matches={secondaryData.reduce(
-                    (prev, { coordinates, ...secondaryData }) => [
-                      ...prev,
-                      {
-                        [mainType]: mainData,
-                        [focusType]: secondaryData,
-                        coordinates,
-                      },
-                    ],
-                    [],
+                <div className={f('row')}>
+                  {hasFilters && (
+                    <div
+                      className={f(
+                        'columns',
+                        'small-12',
+                        'medium-3',
+                        'large-2',
+                        'no-padding',
+                      )}
+                    >
+                      <div className={f('browse-side-panel')}>
+                        <FiltersPanel>
+                          <CurationFilter label="UniProt Curation" />
+                        </FiltersPanel>
+                      </div>
+                    </div>
                   )}
-                  isStale={isStale}
-                  databases={databases}
-                  {...primariesAndSecondaries[mainType][focusType]}
-                />
+                  <div
+                    className={f(
+                      'columns',
+                      'small-12',
+                      hasFilters ? 'medium-9' : 'medium-12',
+                      hasFilters ? 'large-10' : 'large-12',
+                    )}
+                  >
+                    <Matches
+                      {...this.props}
+                      actualSize={actualSize}
+                      matches={secondaryData.reduce(
+                        (prev, { coordinates, ...secondaryData }) => [
+                          ...prev,
+                          {
+                            [mainType]: mainData,
+                            [focusType]: secondaryData,
+                            coordinates,
+                          },
+                        ],
+                        [],
+                      )}
+                      isStale={isStale}
+                      databases={databases}
+                      {...primariesAndSecondaries[mainType][focusType]}
+                    />
+                  </div>
+                </div>
               </>
             ) : null}
           </div>

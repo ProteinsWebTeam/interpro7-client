@@ -196,6 +196,11 @@ exports[`<SummaryProtein /> should render 1`] = `
             sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
             title="Search protein with HMMER"
           />
+          <Memo(Connect(IPScanButton))
+            minWidth="290px"
+            sequence={[Function]}
+            title="Search protein with InterProScan"
+          />
         </div>
       </div>
     </div>

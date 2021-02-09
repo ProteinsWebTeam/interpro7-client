@@ -84,7 +84,7 @@ exports[`<EBIHeader /> should render 1`] = `
           </Memo(Connect(Link))>
         </li>
         <li
-          className="services active"
+          className="services"
         >
           <Memo(Connect(Link))
             href="//www.ebi.ac.uk/services"

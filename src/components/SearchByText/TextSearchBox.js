@@ -7,6 +7,10 @@ import { debounce } from 'lodash-es';
 
 import { goToCustomLocation } from 'actions/creators';
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
+import searchStorage from 'storage/searchStorage';
+
+// $FlowFixMe
+import Select from 'react-select';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -25,41 +29,47 @@ export const DEBOUNCE_RATE_SLOW = 2000; // 2s
   value: ?string,
   className?: string,
   goToCustomLocation: typeof goToCustomLocation,
-  inputRef: function,
   delay?: ?number,
   shouldRedirect?: ?boolean,
+  forHeader?: ?boolean,
 }; */
 /*:: type State = {|
   localValue: ?string,
   loading: ?boolean,
+  searchHistory: Array<string>
 |} */
 
 class TextSearchBox extends PureComponent /*:: <Props, State> */ {
   /*:: _debouncedPush: ?boolean => void; */
+  /*:: _select: { current: null | React$ElementRef<'div'> }; */
+
   static propTypes = {
     pageSize: T.number,
     main: T.string,
     value: T.string,
     className: T.string,
     goToCustomLocation: T.func,
-    inputRef: T.func,
     delay: T.number,
     shouldRedirect: T.bool,
+    forHeader: T.bool,
   };
 
   constructor(props) {
     super(props);
 
-    this.state = { localValue: null, loading: false };
+    this.state = { localValue: null, loading: false, searchHistory: [] };
 
     this._debouncedPush = debounce(
       this.routerPush,
       +props.delay || DEBOUNCE_RATE,
     );
+    this._select = React.createRef();
   }
 
   componentDidMount() {
     this._updateStateFromProps();
+    if (searchStorage)
+      this.setState({ searchHistory: searchStorage.getValue() || [] });
   }
 
   componentDidUpdate() {
@@ -90,6 +100,11 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
         return;
       }
     }
+
+    if (value && !this.state.searchHistory.includes(value))
+      this.setState({ searchHistory: [value, ...this.state.searchHistory] });
+    searchStorage.setValue(this.state.searchHistory);
+
     // Finally just trigger a search
     this.props.goToCustomLocation(
       {
@@ -113,27 +128,60 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
     }
   };
 
-  handleChange = ({ target }) => {
+  handleChange = (term, { action }) => {
+    if (action === 'input-change') {
+      this.setState(
+        { localValue: term, loading: true },
+        this._debouncedPush(true),
+      );
+    }
+  };
+
+  setSelection = (selection) => {
     this.setState(
-      { localValue: target.value, loading: true },
+      { localValue: selection?.value, loading: true },
       this._debouncedPush(true),
     );
   };
+
+  focus() {
+    if (this._select) this._select?.current?.focus();
+  }
 
   render() {
     return (
       <div className={f('input-group', 'margin-bottom-small')}>
         <div className={f('search-input-box')}>
-          <input
-            type="text"
-            aria-label="search InterPro"
-            onChange={this.handleChange}
-            value={this.state.localValue || ''}
+          <Select
+            options={(this.state.searchHistory || []).map((term) => ({
+              value: term,
+              label: term,
+            }))}
+            ref={this._select}
+            className={f(this.props.className, 'select-search', {
+              header: this.props.forHeader,
+            })}
             placeholder="Enter your search"
-            onKeyPress={this.handleKeyPress}
-            className={this.props.className}
-            required
-            ref={this.props.inputRef}
+            onKeyDown={this.handleKeyPress}
+            onInputChange={this.handleChange}
+            onChange={(val) => this.setSelection(val)}
+            value={{
+              value: this.state.localValue || '',
+              label: this.state.localValue || '',
+            }}
+            inputValue={this.state.localValue || ''}
+            inputId="search-terms-autocomplete"
+            isClearable={true}
+            styles={{
+              indicatorsContainer: (provided) => ({
+                ...provided,
+                display: this.props.forHeader ? 'none' : 'flex',
+              }),
+              menu: (provided) => ({
+                ...provided,
+                display: this.props.forHeader ? 'none' : 'flex',
+              }),
+            }}
           />
         </div>
       </div>
@@ -148,4 +196,6 @@ const mapStateToProps = createSelector(
   (main, value, pageSize) => ({ main, value, pageSize }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(TextSearchBox);
+export default connect(mapStateToProps, { goToCustomLocation }, null, {
+  forwardRef: true,
+})(TextSearchBox);

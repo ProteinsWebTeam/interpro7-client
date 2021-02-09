@@ -1,5 +1,6 @@
 @import '../../../styles/timing.css';
 @import '../../../styles/colors.css';
+@import '../../../styles/z-index.css';
 
 :root {
   --height-viewer: 50vh;
@@ -52,7 +53,7 @@
   }
   & .structure-viewer.is-stuck {
     position: fixed;
-    z-index: 10000;
+    z-index: var(--z-index-over-main);
     right: 10px;
     top: auto;
     bottom: 10px;

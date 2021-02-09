@@ -23,6 +23,7 @@
 .*/node_modules/react-select*
 .*/node_modules/create-emotion*
 .*/node_modules/emotion*
+.*/node_modules/polished*
 
 [include]
 

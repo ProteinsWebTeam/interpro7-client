@@ -1,5 +1,6 @@
 @import '../../../styles/timing.css';
 @import '../../../styles/colors.css';
+@import '../../../styles/z-index.css';
 
 .dropdown-container {
   display: flex;
@@ -32,7 +33,7 @@
   }
 
   & .dropdown-pane {
-    z-index: 2; /* so sticky header stay on top*/
+    z-index: var(--z-index-just-over); /* so sticky header stay on top*/
     & ul {
       list-style-type: none;
       margin: 0;
@@ -46,6 +47,13 @@
         color: white;
       }
     }
+  }
+}
+
+.disableDropdown {
+  & .dropdown {
+    background: var(--colors-gray);
+    cursor: not-allowed;
   }
 }
 

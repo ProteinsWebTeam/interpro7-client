@@ -86,39 +86,51 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
     const currentValue = (search.is_fragment || 'both').toLowerCase();
     return (
       <div className={f('list-curation', { stale: isStale })}>
-        {Object.entries(groups).map(([isFragment, value]) => (
-          <div key={isFragment} className={f('column')}>
-            <label className={f('row', 'filter-button')}>
-              <input
-                type="radio"
-                name="fragment_filter"
-                value={isFragment}
-                disabled={isStale}
-                onChange={this._handleSelection}
-                checked={currentValue === isFragment}
-                style={{ margin: '0.25em' }}
-              />
-              <span>{names.get(isFragment)}</span>
-              <NumberComponent
-                label
-                loading={loading}
-                className={f('filter-label')}
-                abbr
+        <div className={f('column')}>
+          {Object.entries(groups)
+            .sort(([x], [y]) => {
+              if (x === 'both') return -1;
+              if (y === 'both') return 1;
+              return x > y ? 1 : -1;
+            })
+            .map(([isFragment, value]) => (
+              <label
+                key={isFragment}
+                className={f('radio-btn-label', {
+                  checked: currentValue === isFragment,
+                })}
               >
-                {value}
-              </NumberComponent>
-            </label>
-          </div>
-        ))}
+                <input
+                  type="radio"
+                  name="fragment_filter"
+                  className={f('radio-btn')}
+                  value={isFragment}
+                  disabled={isStale}
+                  onChange={this._handleSelection}
+                  checked={currentValue === isFragment}
+                  style={{ margin: '0.25em' }}
+                />
+                <span>{names.get(isFragment)}</span>
+                <NumberComponent
+                  label
+                  loading={loading}
+                  className={f('filter-label')}
+                  abbr
+                >
+                  {value}
+                </NumberComponent>
+              </label>
+            ))}
+        </div>
       </div>
     );
   }
 }
 
 const getUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // transform description
     const _description = {
@@ -152,7 +164,7 @@ const getUrl = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({

@@ -1,12 +1,13 @@
 @import '../../styles/colors.css';
 @import '../../styles/spacing.css';
 @import '../../styles/timing.css';
+@import '../../styles/z-index.css';
 
 .loading_bar {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: var(--z-index-ebi-header);
   width: 100%;
   height: var(--spacing-small);
   background-color: var(--colors-loading-bar);

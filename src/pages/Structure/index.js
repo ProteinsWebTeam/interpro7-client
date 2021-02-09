@@ -46,8 +46,15 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import pageStyle from '../style.css';
 import { formatExperimentType } from 'components/Structure/utils';
 import exporterStyle from 'components/Table/Exporter/style.css';
+import theme from 'styles/theme-interpro.css';
 
-const f = foundationPartial(ebiGlobalStyles, pageStyle, fonts, exporterStyle);
+const f = foundationPartial(
+  ebiGlobalStyles,
+  pageStyle,
+  fonts,
+  exporterStyle,
+  theme,
+);
 
 const SummaryAsync = loadable({
   loader: () =>
@@ -472,13 +479,28 @@ const List = (
   const includeGrid = url;
   return (
     <div className={f('row')}>
-      <MemberDBSelector
-        contentType="structure"
-        className="pp-left-side-db-selector"
-      />
+      <div
+        className={f(
+          'columns',
+          'small-12',
+          'medium-3',
+          'large-2',
+          'no-padding',
+        )}
+      >
+        <div className={f('browse-side-panel')}>
+          <div className={f('selector-container')}>
+            <MemberDBSelector
+              contentType="structure"
+              className="pp-left-side-db-selector"
+            />
+          </div>
+          <hr style={{ paddingTop: '0.5rem' }} />
+          <StructureListFilters />
+        </div>
+      </div>
 
       <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-        <StructureListFilters /> <hr className={f('margin-bottom-none')} />
         {databases && db && databases[db.toLowerCase()] && (
           <SchemaOrgData
             data={{

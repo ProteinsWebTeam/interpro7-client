@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import { createSelector } from 'reselect';
 import { Helmet } from 'react-helmet-async';
 
-import Link from 'components/generic/Link';
 import Switch from 'components/generic/Switch';
 import Redirect from 'components/generic/Redirect';
 
@@ -98,40 +97,6 @@ export default class Help extends PureComponent /*:: <{}> */ {
           processData={schemaProcessDataWebPage}
         />
         <div className={f('columns', 'margin-bottom-large')}>
-          <ul className={f('tabs', 'menu-style')}>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['help', 'tutorial'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                Tutorials &amp; Webinars
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['help', 'training'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                Training
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['help', 'faqs'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                FAQs
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['help', 'documentation'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                Documentation
-              </Link>
-            </li>
-          </ul>
           <div className={f('tabs', 'tabs-content')}>
             <div className={f('tabs-panel', 'is-active')}>
               <ErrorBoundary>

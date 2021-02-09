@@ -1,0 +1,16 @@
+:root {
+  /*GAL*/
+  --z-index-zero: 0;
+  --z-index-deepest: 1;
+  --z-index-deep: 2;
+  --z-index-just-over: 5;
+  --z-index-over: 5;
+  --z-index-memberdb: 20;
+  --z-index-main-menu: 50;
+  --z-index-over-main: 80;
+  --z-index-interpro-header: 100;
+  --z-index-ebi-header: 200;
+  --z-index-side-menu: 250;
+  --z-index-toasts: 300;
+  --z-index-modal: 1000;
+}

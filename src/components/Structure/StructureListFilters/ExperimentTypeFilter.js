@@ -80,44 +80,47 @@ class ExperimentTypeFilter extends PureComponent /*:: <Props> */ {
         style={{ overflowX: 'hidden' }}
         className={f('list-experiment', { stale: isStale })}
       >
-        {types.map(([type, count]) => (
-          <div key={type} className={f('column')}>
-            <label className={f('row', 'filter-button')}>
-              <input
-                type="radio"
-                name="experiment_type"
-                value={type}
-                disabled={isStale}
-                onChange={this._handleSelection}
-                checked={
-                  (!search.experiment_type && type === 'All') ||
-                  search.experiment_type === type
-                }
-                style={{ margin: '0.25em' }}
-              />
-              <span>{formatExperimentType(type)}</span>
-              {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberComponent
-                  label
-                  loading={loading}
-                  className={f('filter-label')}
-                  abbr
-                >
-                  {count}
-                </NumberComponent>
-              )}
-            </label>
-          </div>
-        ))}
+        <div className={f('column')}>
+          {types.map(([type, count]) => {
+            const checked =
+              (!search.experiment_type && type === 'All') ||
+              search.experiment_type === type;
+            return (
+              <label key={type} className={f('radio-btn-label', { checked })}>
+                <input
+                  type="radio"
+                  name="experiment_type"
+                  className={f('radio-btn')}
+                  value={type}
+                  disabled={isStale}
+                  onChange={this._handleSelection}
+                  checked={checked}
+                  style={{ margin: '0.25em' }}
+                />
+                <span>{formatExperimentType(type)}</span>
+                {typeof count === 'undefined' || isNaN(count) ? null : (
+                  <NumberComponent
+                    label
+                    loading={loading}
+                    className={f('filter-label')}
+                    abbr
+                  >
+                    {count}
+                  </NumberComponent>
+                )}
+              </label>
+            );
+          })}
+        </div>
       </div>
     );
   }
 }
 
 const getUrlFor = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     // eslint-disable-next-line camelcase
@@ -137,7 +140,7 @@ const getUrlFor = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({

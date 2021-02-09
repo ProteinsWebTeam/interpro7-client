@@ -8,6 +8,7 @@ exports[`<SearchBox /> should render 1`] = `
     className="filter-box"
   >
     <input
+      className=""
       id="table-filter-text"
       onChange={[Function]}
       placeholder="Search organism"

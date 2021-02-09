@@ -492,15 +492,36 @@ class List extends PureComponent /*:: <Props> */ {
       _payload = { results: [] };
     }
     const includeGrid = data.url;
+    const shouldShowMemberDBSelector =
+      description.entry.db.toLowerCase() !== 'interpro';
     return (
       <div className={f('row')}>
-        <MemberDBSelector
-          contentType="entry"
-          className="pp-left-side-db-selector"
-        />
+        <div
+          className={f(
+            'columns',
+            'small-12',
+            'medium-3',
+            'large-2',
+            'no-padding',
+          )}
+        >
+          <div className={f('browse-side-panel')}>
+            {shouldShowMemberDBSelector && (
+              <>
+                <div className={f('selector-container')}>
+                  <MemberDBSelector
+                    contentType="entry"
+                    className="pp-left-side-db-selector"
+                  />
+                </div>
+                <hr style={{ paddingTop: '0.5rem' }} />
+              </>
+            )}
+            <EntryListFilter />
+          </div>
+        </div>
+
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          <EntryListFilter />
-          <hr className={f('margin-bottom-none')} />
           {databases && db && databases[db.toLowerCase()] && (
             <SchemaOrgData
               data={{

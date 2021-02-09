@@ -1,5 +1,6 @@
 @import '../../styles/colors.css';
 @import '../../styles/timing.css';
+@import '../../styles/z-index.css';
 
 .input-group {
   display: flex;
@@ -51,7 +52,7 @@
     width: 15px;
     height: 15px;
     position: absolute;
-    z-index: 1;
+    z-index: var(--z-index-deepest);
     right: 6px;
     top: 0;
     bottom: 0;
@@ -97,5 +98,41 @@
   &,
   &:visited {
     color: var(--colors-interpro);
+  }
+}
+
+.select-search {
+  & input {
+    opacity: 1 !important;
+    box-shadow: none !important;
+  }
+  &.header {
+    & div {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      color: white;
+    }
+    & > div {
+      opacity: 0;
+      transition: opacity 0.25s ease-in-out;
+      &:hover {
+        opacity: 1;
+        -webkit-filter: blur(0); /*remove blur effect on chrome*/
+      }
+    }
+    & input {
+      border-bottom: 2px solid rgba(255, 255, 255, 1) !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      width: 100% !important;
+      margin: 0.25rem 0;
+    }
+  }
+}
+
+label:hover .select-search {
+  &.header > div {
+    opacity: 1;
+    -webkit-filter: blur(0); /*remove blur effect on chrome*/
   }
 }

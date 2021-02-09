@@ -155,7 +155,7 @@ const addExistingEntiesToConservationResults = (
 };
 
 const mergeConservationData = (
-  data /*: { match_conservation?: Array<Object>} */,
+  data /*: {[string]: Array<Object>} */,
   conservationData /*: { [string]: {entries: ?{}}} */,
 ) => {
   data.match_conservation = [];

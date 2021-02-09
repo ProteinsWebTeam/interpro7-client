@@ -1,3 +1,5 @@
+@import '../../../styles/z-index.css';
+
 .modal-bg {
   background: rgba(0, 0, 0, 0.45);
   bottom: 0;
@@ -5,7 +7,7 @@
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 1004;
+  z-index: calc(var(--z-index-modal) - 1);
   left: 0;
 }
 
@@ -14,7 +16,7 @@
   display: block;
   position: fixed;
   top: 5%;
-  z-index: 1005;
+  z-index: var(--z-index-modal);
   background-color: #ffffff;
   padding: 1.66667rem;
   border: solid 1px #666666;

@@ -6,7 +6,6 @@ import { Helmet } from 'react-helmet-async';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Switch from 'components/generic/Switch';
-import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -60,8 +59,8 @@ const RedirectToIPScan = () => (
 );
 
 const jobAccessionSelector = createSelector(
-  customLocation => customLocation.description.result.accession,
-  value => value,
+  (customLocation) => customLocation.description.result.accession,
+  (value) => value,
 );
 
 const _IPScanResultSafeGuardIfNotRehydratedYet = (
@@ -74,14 +73,14 @@ _IPScanResultSafeGuardIfNotRehydratedYet.propTypes = {
   jobs: T.object,
 };
 const jobSelector = createSelector(
-  state => state.jobs,
-  jobs => ({ jobs }),
+  (state) => state.jobs,
+  (jobs) => ({ jobs }),
 );
 const IPScanResultSafeGuardIfNotRehydratedYet = connect(jobSelector)(
   _IPScanResultSafeGuardIfNotRehydratedYet,
 );
 
-const InterProScanInnerSwitch = props => (
+const InterProScanInnerSwitch = (props) => (
   <Wrapper>
     <ErrorBoundary>
       <Switch
@@ -95,13 +94,13 @@ const InterProScanInnerSwitch = props => (
 );
 
 const downloadSelector = createSelector(
-  customLocation => customLocation.hash,
-  hash => hash,
+  (customLocation) => customLocation.hash,
+  (hash) => hash,
 );
 
 const downloadRoutes = new Map([[/^\//, DownloadForm]]);
 
-const Download = props => (
+const Download = (props) => (
   <Wrapper>
     <ErrorBoundary>
       <Switch
@@ -140,44 +139,6 @@ class Wrapper extends PureComponent /*:: <Props> */ {
             }}
             processData={schemaProcessDataWebPage}
           />
-          <ul className={f('tabs', 'menu-style')}>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'result' },
-                    result: { type: 'InterProScan' },
-                  },
-                }}
-                activeClass={({
-                  description: {
-                    result: { type },
-                  },
-                }) =>
-                  type === 'InterProScan' && f('is-active', 'is-active-tab')
-                }
-              >
-                Your InterProScan searches
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'result' },
-                    result: { type: 'download' },
-                  },
-                }}
-                activeClass={({
-                  description: {
-                    result: { type },
-                  },
-                }) => type === 'download' && f('is-active', 'is-active-tab')}
-              >
-                Your downloads
-              </Link>
-            </li>
-          </ul>
           <div className={f('tabs', 'tabs-content')}>
             <div className={f('tabs-panel', 'is-active')}>
               <ErrorBoundary>{this.props.children}</ErrorBoundary>
@@ -190,8 +151,8 @@ class Wrapper extends PureComponent /*:: <Props> */ {
 }
 
 const jobTypeSelector = createSelector(
-  customLocation => customLocation.description.result.type,
-  value => value,
+  (customLocation) => customLocation.description.result.type,
+  (value) => value,
 );
 
 const Jobs = () => (
