@@ -35,7 +35,7 @@ const schemaProcessData = (data) => {
     '@type': 'PropertyValue',
     additionalType: ['bio:SequenceMatchingModel', 'bio:sequenceAnnotation'],
     name: 'Annotation',
-    value: data.map((g3d) => g3d?.metadata?.evidences?.source?.url),
+    value: data?.map((g3d) => g3d?.metadata?.evidences?.source?.url),
   };
 };
 /*::
@@ -86,16 +86,7 @@ export const List = (
   customLocation: {search?: Object}} */,
 ) => {
   if (data.loading) return <Loading />;
-  if (!data.payload)
-    return (
-      <div className={f('columns')}>
-        <EdgeCase
-          text={'There is no data associated with this request'}
-          shouldRedirect={false}
-        />
-      </div>
-    );
-  const data4table = data.payload.data.map(
+  const data4table = data.payload?.data.map(
     ({ accession, locations, metadata, tooltipContent, length }) => ({
       ...metadata,
       id: metadata.anno_id,
@@ -113,7 +104,7 @@ export const List = (
     <div className={f('row')}>
       <div className={f('columns')}>
         <SchemaOrgData
-          data={data.payload.data}
+          data={data.payload?.data}
           processData={schemaProcessData}
         />
         <Table
@@ -121,7 +112,7 @@ export const List = (
           loading={data.loading}
           ok={data.ok}
           status={data.status}
-          actualSize={data.payload.pager.total_entries}
+          actualSize={data.payload?.pager.total_entries}
           notFound={data.status === HTTP_404}
           rowKey={'id'}
           query={search}
@@ -131,14 +122,14 @@ export const List = (
               <label htmlFor="json">JSON</label>
               <FileExporter
                 fileType="json"
-                name={`genome3d.${data.payload.interpro.ipr_id}.json`}
-                count={data.payload.pager.total_entries}
+                name={`genome3d.${data.payload?.interpro.ipr_id}.json`}
+                count={data.payload?.pager.total_entries}
               />
               <label htmlFor="tsv">TSV</label>
               <FileExporter
                 fileType="tsv"
-                name={`genome3d.${data.payload.interpro.ipr_id}.tsv`}
-                count={data.payload.pager.total_entries}
+                name={`genome3d.${data.payload?.interpro.ipr_id}.tsv`}
+                count={data.payload?.pager.total_entries}
               />
             </div>
           </Exporter>
