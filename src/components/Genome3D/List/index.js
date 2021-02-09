@@ -15,7 +15,6 @@ import NumberComponent from 'components/NumberComponent';
 
 import MatchesOnProtein from './MatchesOnProtein';
 import FileExporter from '../FileExporter';
-import EdgeCase from 'components/EdgeCase';
 
 import { foundationPartial } from 'styles/foundation';
 import exporterStyle from 'components/Table/Exporter/style.css';

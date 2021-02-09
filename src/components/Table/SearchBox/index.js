@@ -128,7 +128,9 @@ export class SearchBox extends PureComponent /*:: <Props, State> */ {
         <div className={f('filter-box', { loading: this.props.loading })}>
           {this.state.message === '' ? null : (
             <Tooltip title={this.state.message} class={f('validation-message')}>
-              ⚠️
+              <span role="img" aria-label="warning">
+                ⚠️
+              </span>
             </Tooltip>
           )}
           <input

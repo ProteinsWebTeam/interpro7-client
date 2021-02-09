@@ -12,7 +12,6 @@ exports[`<SearchBox /> should render 1`] = `
       id="table-filter-text"
       onChange={[Function]}
       placeholder="Search organism"
-      title=""
       type="text"
       value="virus"
     />
