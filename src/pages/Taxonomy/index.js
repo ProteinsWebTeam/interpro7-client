@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable react/display-name */
 /* eslint-disable camelcase */
-import React, { PureComponent, useState } from 'react';
+import React, { PureComponent, useEffect, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -54,6 +54,7 @@ import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
+import local from './style.css';
 
 const f = foundationPartial(
   ebiGlobalStyles,
@@ -61,6 +62,7 @@ const f = foundationPartial(
   styles,
   fonts,
   exporterStyle,
+  local,
 );
 
 const EntryAccessionsRenderer = (entryDB) => (taxId, _row, extra) => (
@@ -113,7 +115,7 @@ const propTypes = {
   }).isRequired,
   match: T.string,
   dataBase: dataPropType,
-  accessionSearch: T.shape({
+  exactMatch: T.shape({
     metadata: T.object,
   }),
 };
@@ -421,7 +423,7 @@ AllTaxDownload.propTypes = {
    payload: Object,
    loading: boolean
   },
-  accessionSearch: {
+  exactMatch: {
     metadata: Object,
   },
 };
@@ -442,7 +444,7 @@ class List extends PureComponent /*:: <Props,State> */ {
       isStale,
       customLocation: { description, search },
       dataBase,
-      accessionSearch,
+      exactMatch,
     } = this.props;
     let _payload = payload;
     let _status = status;
@@ -464,10 +466,10 @@ class List extends PureComponent /*:: <Props,State> */ {
     }
     const results = [...(_payload.results || [])];
     let size = _payload.count || 0;
-    if (accessionSearch) {
+    if (exactMatch) {
       const indexInPayload = results.findIndex(
         ({ metadata: { accession } }) =>
-          accession === accessionSearch.metadata.accession,
+          accession === exactMatch.metadata.accession,
       );
       if (indexInPayload >= 0) {
         results.splice(indexInPayload, 1);
@@ -475,18 +477,18 @@ class List extends PureComponent /*:: <Props,State> */ {
       }
 
       results.splice(0, 1, {
-        ...accessionSearch,
-        exact: true,
+        ...exactMatch,
         extra_fields: {
-          counters: accessionSearch.metadata.counters,
+          counters: exactMatch.metadata.counters,
         },
         metadata: {
-          ...accessionSearch.metadata,
+          ...exactMatch.metadata,
           name:
-            accessionSearch.metadata.name.short ||
-            accessionSearch.metadata.name.name ||
-            accessionSearch.metadata.name,
+            exactMatch.metadata.name.short ||
+            exactMatch.metadata.name.name ||
+            exactMatch.metadata.name,
         },
+        className: f(local.exactMatch),
       });
       size++;
       notFound = false;
@@ -750,8 +752,10 @@ class List extends PureComponent /*:: <Props,State> */ {
 }
 const childRoutes = /(\d+)|(all)/i;
 
-const _AccessionSearch = ({ data, onSearchComplete }) => {
-  onSearchComplete(data && !data.loading && data.payload);
+const _ExactMatchSearch = ({ data, onSearchComplete }) => {
+  useEffect(() => {
+    onSearchComplete(data && !data.loading && data.payload);
+  });
   return null;
 };
 
@@ -760,39 +764,54 @@ const getURLFromState = createSelector(
   (state) => state.customLocation.description,
   (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, { search }) => {
-    const desc = {
-      ...description,
-      taxonomy: {
-        db: 'uniprot',
-        accession: search,
-      },
-    };
-    try {
-      return format({
-        protocol,
-        hostname,
-        port,
-        pathname: root + descriptionToPath(desc),
-      });
-    } catch {
-      return;
+    if (search && search.match(/^\d+$/)) {
+      const desc = {
+        ...description,
+        taxonomy: {
+          db: 'uniprot',
+          accession: search,
+        },
+      };
+      try {
+        return format({
+          protocol,
+          hostname,
+          port,
+          pathname: root + descriptionToPath(desc),
+        });
+      } catch {
+        return;
+      }
+    } else if (search && search.match(/^[\w ]+$/)) {
+      try {
+        return format({
+          protocol,
+          hostname,
+          port,
+          pathname: root + descriptionToPath(description),
+          search: `?scientific_name=${search}`,
+        });
+      } catch {
+        return;
+      }
     }
   },
 );
-const AccessionSearch = loadData(getURLFromState)(_AccessionSearch);
+
+const ExactMatchSearch = loadData(getURLFromState)(_ExactMatchSearch);
 
 const Taxonomy = ({ search }) => {
   const [accSearch, setAccSearch] = useState(null);
   const searchTerm = search && search.search;
   return (
     <>
-      {searchTerm && <AccessionSearch onSearchComplete={setAccSearch} />}
+      {searchTerm && <ExactMatchSearch onSearchComplete={setAccSearch} />}
       <EndPointPage
         subpagesRoutes={childRoutes}
         listOfEndpointEntities={List}
         SummaryAsync={SummaryAsync}
         subPagesForEndpoint={subPagesForTaxonomy}
-        accessionSearch={(searchTerm && accSearch) || null}
+        exactMatch={(searchTerm && accSearch) || null}
       />
     </>
   );
