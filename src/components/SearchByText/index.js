@@ -31,16 +31,20 @@ const SchemaOrgData = loadable({
 
 export class SearchByText extends PureComponent /*:: <Props> */ {
   /*:: _input: HTMLInputElement; */
+  /*:: _input: { current: null | React$ElementRef<'div'> }; */
   static propTypes = {
     main: T.string,
   };
 
+  constructor(props) {
+    super(props);
+    this._input = React.createRef();
+  }
+
   componentDidMount() {
     // Only focus if on the search page (not on home page)
     if (this._input && this.props.main === 'search') {
-      const { length } = this._input.value;
-      this._input.focus();
-      this._input.setSelectionRange(length, length);
+      this._input?.current?.focus();
     }
   }
 
@@ -56,7 +60,7 @@ export class SearchByText extends PureComponent /*:: <Props> */ {
           processData={schemaProcessDataPageSection}
         />
         <div className={f('large-12', 'columns', 'margin-bottom-medium')}>
-          <form onSubmit={e => e.preventDefault()} data-category="navigation">
+          <form onSubmit={(e) => e.preventDefault()} data-category="navigation">
             <div
               className={f(
                 'secondary',
@@ -71,7 +75,7 @@ export class SearchByText extends PureComponent /*:: <Props> */ {
                     Search families, domains, proteins, keywords or GO terms
                   </h3>
                   <TextSearchBox
-                    inputRef={node => (this._input = node)}
+                    ref={this._input}
                     delay={
                       this.props.main === 'search'
                         ? DEBOUNCE_RATE
@@ -153,8 +157,8 @@ export class SearchByText extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps2 = createSelector(
-  state => state.customLocation.description.main.key,
-  main => ({ main }),
+  (state) => state.customLocation.description.main.key,
+  (main) => ({ main }),
 );
 
 export default connect(mapStateToProps2)(SearchByText);

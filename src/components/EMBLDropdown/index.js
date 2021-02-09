@@ -62,10 +62,7 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
     let content = null;
     if (visible || wasRendered) {
       content = (
-        <nav
-          id="embl-dropdown"
-          className={styleBundle('dropdown-pane', 'bottom', 'embl-dropdown')}
-        >
+        <nav id="embl-dropdown" className={styleBundle('embl-bar')}>
           <div className={styleBundle('row', 'padding-bottom-medium')}>
             <div className={styleBundle('columns', 'padding-top-medium')}>
               <button
@@ -166,43 +163,62 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
                 <h3 className={styleBundle('inline')}>Six sites</h3>
                 <p>represent EMBL in Europe.</p>
               </div>
-              <div className={styleBundle('row medium-up-2', 'small-up-2')}>
+              <div
+                className={styleBundle(
+                  'row',
+                  'large-up-3',
+                  'medium-up-2',
+                  'small-up-2',
+                  'no-underline',
+                  'medium-11',
+                )}
+              >
                 <div className={styleBundle('column')}>
-                  <h5 className={styleBundle('inline')}>
-                    <Link href="//www.embl-barcelona.es/">Barcelona</Link>
-                  </h5>
+                  <Link href="//www.embl-barcelona.es/">
+                    <h5 className={styleBundle('inline', 'underline')}>
+                      Barcelona
+                    </h5>
+                  </Link>
                   <p>Tissue biology and disease modelling</p>
                 </div>
                 <div className={styleBundle('column')}>
-                  <h5 className={styleBundle('inline')}>
-                    <Link href="//www.embl.fr/">Grenoble</Link>
-                  </h5>
+                  <Link href="//www.embl.fr/">
+                    <h5 className={styleBundle('inline', 'underline')}>
+                      Grenoble
+                    </h5>
+                  </Link>
                   <p>Structural biology</p>
                 </div>
                 <div className={styleBundle('column')}>
-                  <h5 className={styleBundle('inline')}>
-                    <Link href="//www.embl-hamburg.de/">Hamburg</Link>
-                  </h5>
+                  <Link href="//www.embl-hamburg.de/">
+                    <h5 className={styleBundle('inline', 'underline')}>
+                      Hamburg
+                    </h5>
+                  </Link>
                   <p>Structural biology</p>
                 </div>
                 <div className={styleBundle('column')}>
-                  <h5 className={styleBundle('inline')}>
-                    <Link href="//www.embl.de/">Heidelberg</Link>
-                  </h5>
+                  <Link href="//www.embl.de/">
+                    <h5 className={styleBundle('inline', 'underline')}>
+                      Heidelberg
+                    </h5>
+                  </Link>
                   <p>Main laboratory</p>
                 </div>
                 <div className={styleBundle('column')}>
-                  <h5 className={styleBundle('inline')}>
-                    <Link href="//www.ebi.ac.uk/">Hinxton</Link>
-                  </h5>
+                  <Link href="//www.ebi.ac.uk/">
+                    <h5 className={styleBundle('inline', 'underline')}>
+                      Hinxton
+                    </h5>
+                  </Link>
                   <p className={styleBundle('margin-bottom-none')}>
                     EMBL-EBI: European Bioinformatics Institute
                   </p>
                 </div>
                 <div className={styleBundle('column')}>
-                  <h5 className={styleBundle('inline')}>
-                    <Link href="//www.embl.it/">Rome</Link>
-                  </h5>
+                  <Link href="//www.embl.it/">
+                    <h5 className={styleBundle('inline', 'underline')}>Rome</h5>
+                  </Link>
                   <p>Epigenetics and neurobiology</p>
                 </div>
               </div>
@@ -224,11 +240,8 @@ export class EMBLDropdown extends PureComponent /*:: <Props, State> */ {
   }
 }
 
-const mapStateToProps = createSelector(emblMapNavSelector, visible => ({
+const mapStateToProps = createSelector(emblMapNavSelector, (visible) => ({
   visible,
 }));
 
-export default connect(
-  mapStateToProps,
-  { closeEMBLMapNav },
-)(EMBLDropdown);
+export default connect(mapStateToProps, { closeEMBLMapNav })(EMBLDropdown);

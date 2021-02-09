@@ -1,7 +1,7 @@
 @import '../../../styles/timing.css';
 @import '../../../styles/colors.css';
 @import '../../../styles/spacing.css';
-
+@import '../../../styles/z-index.css';
 .menu {
   display: flex;
 }
@@ -70,4 +70,56 @@
 .visible {
   pointer-events: auto;
   opacity: 1;
+}
+
+div.dropdown {
+  pointer-events: auto;
+  white-space: nowrap;
+  & ul {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    outline: none;
+    margin: 0;
+    z-index: var(--z-index-main-menu);
+  }
+
+  & .menu-item {
+    background: var(--colors-nearly-white);
+    list-style: none;
+    color: #000;
+    display: block;
+    opacity: 1;
+    & a {
+      pointer-events: auto;
+      display: block;
+      padding: var(--spacing-medium) var(--spacing-big);
+      color: #000;
+      &:hover,
+      &:focus {
+        background: var(--colors-info);
+      }
+    }
+    & a.reactive {
+      background: var(--colors-vlightgray);
+      font-weight: bold;
+    }
+  }
+
+  & .arrow {
+    display: inline-block;
+    transform: rotate(-90deg);
+    transition: transform var(--timing-instant) ease-in-out;
+  }
+  &:hover,
+  &:focus,
+  &:focus-within,
+  &:active {
+    & ul {
+      display: flex;
+    }
+    & .arrow {
+      transform: rotate(0deg);
+    }
+  }
 }

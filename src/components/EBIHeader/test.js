@@ -2,7 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import EBIHeader from '.';
+import { EBIHeader } from '.';
 
 const renderer = new ShallowRenderer();
 

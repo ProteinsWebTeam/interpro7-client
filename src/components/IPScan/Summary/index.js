@@ -235,6 +235,18 @@ const mergeData = (matches, sequenceLength) => {
   return mergedData;
 };
 
+const getCreated = (payload, accession) => {
+  let created = payload?.times?.created;
+  if (!created) {
+    const regex = /iprscan5-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
+    const matches = regex.exec(accession);
+    if (matches) {
+      const [_, y, m, d, hh, mm, ss] = matches;
+      created = Date.UTC(+y, +m - 1, +d, +hh, +mm, +ss);
+    }
+  }
+  return created;
+};
 const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   const description = {
     main: { key: 'entry' },
@@ -310,15 +322,8 @@ const SummaryIPScanJob = ({
 
   if (!payload) return <Loading />;
 
-  let created = payload?.times?.created;
-  if (!created) {
-    const regex = /iprscan5-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
-    const matches = regex.exec(accession);
-    if (matches) {
-      const [_, y, m, d, hh, mm, ss] = matches;
-      created = Date.UTC(+y, +m - 1, +d, +hh, +mm, +ss);
-    }
-  }
+  const created = getCreated(payload, accession);
+
   const metadata = {
     accession,
     length: payload.sequence.length,

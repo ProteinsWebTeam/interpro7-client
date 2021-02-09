@@ -87,7 +87,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
     const hiddenItems = InterProMin.filter(({ name }) => !this.state[name]);
     return (
       <ul className={f('menu')}>
-        {InterProMin.map(({ to, name, activeClass, exact }) => (
+        {InterProMin.map(({ to, name, activeClass, exact, entities }) => (
           <li
             key={name}
             ref={this._setMenuItemInMap}
@@ -95,9 +95,30 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
             className={f('menu-item', { visible: this.state[name] || false })}
             data-testid={`menu-tab-${name.toLowerCase().replace(/\s+/g, '_')}`}
           >
-            <MenuItem to={to} activeClass={activeClass} exact={exact}>
-              {name}
-            </MenuItem>
+            {entities ? (
+              <div className={f('dropdown')}>
+                <MenuItem to={to} activeClass={activeClass} exact={exact}>
+                  <span className={f('arrow')}>▾</span> {name}
+                </MenuItem>
+                <ul role="tree" tabIndex="0">
+                  {entities.map(({ to, name, exact }) => (
+                    <li key={name} className={f('menu-item')}>
+                      <MenuItem
+                        to={to}
+                        activeClass={f('reactive')}
+                        exact={exact}
+                      >
+                        {name}
+                      </MenuItem>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <MenuItem to={to} activeClass={activeClass} exact={exact}>
+                {name}
+              </MenuItem>
+            )}
           </li>
         ))}
         <ul

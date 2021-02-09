@@ -28,30 +28,29 @@ const TaxonomyOption = ({
   onChange,
   loading,
 }) => (
-  <div key={taxId} className={f('column')}>
-    <label className={f('row', 'filter-button')}>
-      <input
-        type="radio"
-        name="entry_type"
-        value={taxId}
-        disabled={isStale}
-        onChange={onChange}
-        checked={checked}
-        style={{ margin: '0.25em' }}
-      />
-      {taxId === 'ALL' ? <div>All</div> : title}
-      {typeof count === 'undefined' || isNaN(count) ? null : (
-        <NumberComponent
-          label
-          loading={loading}
-          className={f('filter-label')}
-          abbr
-        >
-          {count}
-        </NumberComponent>
-      )}
-    </label>
-  </div>
+  <label className={f('radio-btn-label', { checked })}>
+    <input
+      type="radio"
+      name="entry_type"
+      value={taxId}
+      disabled={isStale}
+      className={f('radio-btn')}
+      onChange={onChange}
+      checked={checked}
+      style={{ margin: '0.25em' }}
+    />
+    {taxId === 'ALL' ? <div>All</div> : title}
+    {typeof count === 'undefined' || isNaN(count) ? null : (
+      <NumberComponent
+        label
+        loading={loading}
+        className={f('filter-label')}
+        abbr
+      >
+        {count}
+      </NumberComponent>
+    )}
+  </label>
 );
 TaxonomyOption.propTypes = {
   checked: T.bool,
@@ -160,18 +159,20 @@ class TaxonomyFilter extends PureComponent /*:: <Props> */ {
             onChange={this._handleSelection}
           />
         )}
-        {this.state.taxes.map(([taxId, { value: count, title }]) => (
-          <TaxonomyOption
-            key={taxId}
-            taxId={taxId}
-            checked={(!accession && taxId === 'ALL') || accession === taxId}
-            loading={loading}
-            count={count}
-            title={title}
-            isStale={isStale}
-            onChange={this._handleSelection}
-          />
-        ))}
+        <div className={f('column')}>
+          {this.state.taxes.map(([taxId, { value: count, title }]) => (
+            <TaxonomyOption
+              key={taxId}
+              taxId={taxId}
+              checked={(!accession && taxId === 'ALL') || accession === taxId}
+              loading={loading}
+              count={count}
+              title={title}
+              isStale={isStale}
+              onChange={this._handleSelection}
+            />
+          ))}
+        </div>
       </div>
     );
   }
@@ -193,7 +194,7 @@ _ExtraTaxonomyOption.propTypes = {
   onChange: T.func,
 };
 const getUrlForMetadata = createSelector(
-  state => state.settings.api,
+  (state) => state.settings.api,
   (_, props) => props.taxId,
   ({ protocol, hostname, port, root }, accession) =>
     format({
@@ -211,9 +212,9 @@ const getUrlForMetadata = createSelector(
 const ExtraTaxonomyOption = loadData(getUrlForMetadata)(_ExtraTaxonomyOption);
 
 const getUrlFor = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     // eslint-disable-next-line camelcase
@@ -240,7 +241,7 @@ const getUrlFor = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({

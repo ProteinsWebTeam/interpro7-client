@@ -1,3 +1,5 @@
+@import '../../../styles/z-index.css';
+
 .toast-display {
   position: fixed;
   display: flex;
@@ -7,5 +9,5 @@
   list-style: none;
   margin: 0;
   pointer-events: none;
-  z-index: 102;
+  z-index: var(--z-index-toasts);
 }

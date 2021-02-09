@@ -63,14 +63,29 @@ export const entities /*: Array<Object> */ = [
         description: {
           main: { key: 'entry' },
           entry: {
-            db: customLocation.description.entry.db || 'InterPro',
+            db: 'InterPro',
+          },
+        },
+        hash: customLocation.hash,
+      };
+    },
+    name: 'By InterPro',
+  },
+  {
+    to(customLocation) {
+      const db = customLocation.description.entry.db?.toLowerCase();
+      return {
+        description: {
+          main: { key: 'entry' },
+          entry: {
+            db: db === 'interpro' ? 'Pfam' : db || 'Pfam',
             integration: customLocation.description.entry.integration,
           },
         },
         hash: customLocation.hash,
       };
     },
-    name: 'Entry',
+    name: 'By Member DB',
   },
   {
     to(customLocation) {
@@ -84,7 +99,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'Protein',
+    name: 'By Protein',
   },
   {
     to(customLocation) {
@@ -97,7 +112,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'Structure',
+    name: 'By Structure',
   },
   {
     to(customLocation) {
@@ -112,7 +127,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'Taxonomy',
+    name: 'By Taxonomy',
   },
   {
     to(customLocation) {
@@ -122,12 +137,12 @@ export const entities /*: Array<Object> */ = [
           proteome: {
             db: customLocation.description.proteome.db || 'uniprot',
           },
-          entry: getEntryForFilter(customLocation.description),
+          entry: { db: 'interpro', isFilter: true },
         },
         hash: customLocation.hash,
       };
     },
-    name: 'Proteome',
+    name: 'By Proteome',
   },
   {
     to(customLocation) {
@@ -135,12 +150,19 @@ export const entities /*: Array<Object> */ = [
         description: {
           main: { key: 'set' },
           set: { db: 'all' },
-          entry: getEntryForFilter(customLocation.description),
+          entry: {
+            isFilter: true,
+            db: ['cdd', 'panther', 'pfam', 'pirsf'].includes(
+              customLocation.description?.entry?.db?.toLowerCase(),
+            )
+              ? customLocation.description.entry.db
+              : 'All',
+          },
         },
         hash: customLocation.hash,
       };
     },
-    name: 'Set',
+    name: 'By Set',
   },
 ];
 
@@ -501,28 +523,148 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
       name: 'Curation',
     },
   ],
-  // [
-  //   'proteome',
-  //   {
-  //     to(customLocation) {
-  //       const { key } = customLocation.description.main;
-  //       return {
-  //         description: {
-  //           ...getEmptyDescription(),
-  //           main: { key },
-  //           [key]: {
-  //             ...customLocation.description[key],
-  //             proteomeDB: 'proteome',
-  //           },
-  //         },
-  //       };
-  //     },
-  //     name: 'Proteomes',
-  //     counter: 'proteomes',
-  //   },
-  // ],
 ]);
 
+const search = [
+  {
+    name: 'By Sequence',
+    to: {
+      description: {
+        main: { key: 'search' },
+        search: { type: 'sequence' },
+      },
+    },
+    activeClass({
+      description: {
+        search: { type },
+      },
+    }) {
+      return type === 'InterProScan' && f('is-active');
+    },
+  },
+  {
+    name: 'By Text',
+    to: {
+      description: {
+        main: { key: 'search' },
+        search: { type: 'text' },
+      },
+    },
+    activeClass({
+      description: {
+        search: { type },
+      },
+    }) {
+      return type === 'download' && f('is-active');
+    },
+  },
+  {
+    name: 'By Domain Architecture',
+    to: {
+      description: {
+        main: { key: 'search' },
+        search: { type: 'ida' },
+      },
+    },
+    activeClass({
+      description: {
+        search: { type },
+      },
+    }) {
+      return type === 'download' && f('is-active');
+    },
+  },
+];
+
+const results = [
+  {
+    to: {
+      description: {
+        main: { key: 'result' },
+        result: { type: 'InterProScan' },
+      },
+    },
+    activeClass({
+      description: {
+        result: { type },
+      },
+    }) {
+      return type === 'InterProScan' && f('is-active');
+    },
+    name: 'Your InterProScan searches',
+  },
+  {
+    name: 'Your downloads',
+    to: {
+      description: {
+        main: { key: 'result' },
+        result: { type: 'download' },
+      },
+    },
+    activeClass({
+      description: {
+        result: { type },
+      },
+    }) {
+      return type === 'download' && f('is-active');
+    },
+  },
+];
+
+const help = [
+  {
+    name: 'Tutorials & Webinars',
+    to: { description: { other: ['help', 'tutorial'] } },
+    activeClass: f('is-active'),
+  },
+  {
+    name: 'Training',
+    to: { description: { other: ['help', 'training'] } },
+    activeClass: f('is-active'),
+  },
+  {
+    name: 'FAQs',
+    to: { description: { other: ['help', 'faqs'] } },
+    activeClass: f('is-active'),
+  },
+  {
+    name: 'Documentation',
+    to: { description: { other: ['help', 'documentation'] } },
+    activeClass: f('is-active'),
+  },
+];
+const about = [
+  {
+    name: 'InterPro',
+    to: { description: { other: ['about', 'interpro'] } },
+    activeClass: f('is-active'),
+  },
+  {
+    name: 'InterProScan',
+    to: { description: { other: ['about', 'interproscan'] } },
+    activeClass: f('is-active'),
+  },
+  {
+    name: 'The InterPro Consortium',
+    to: { description: { other: ['about', 'consortium'] } },
+    activeClass: f('is-active'),
+  },
+  {
+    name: 'Funding',
+    to: { description: { other: ['about', 'funding'] } },
+    activeClass: f('is-active'),
+  },
+  {
+    name: 'Privacy',
+    to: { description: { other: ['about', 'privacy'] } },
+    activeClass: f('is-active'),
+  },
+  {
+    name: 'Team',
+    to: { description: { other: ['about', 'team'] } },
+    activeClass: f('is-active'),
+  },
+];
 export const InterPro /*: Array<Object> */ = [
   {
     to: { description: {} },
@@ -535,6 +677,7 @@ export const InterPro /*: Array<Object> */ = [
     icon: '',
     name: 'Search',
     iconClass: 'common',
+    entities: search,
   },
   {
     to(customLocation) {
@@ -578,6 +721,7 @@ export const InterPro /*: Array<Object> */ = [
     icon: 'b',
     name: 'Browse',
     iconClass: 'common',
+    entities,
   },
   {
     to({
@@ -590,6 +734,7 @@ export const InterPro /*: Array<Object> */ = [
     icon: '*',
     name: 'Results',
     iconClass: 'common',
+    entities: results,
   },
   {
     to: { description: { other: ['release_notes'] } },
@@ -608,12 +753,14 @@ export const InterPro /*: Array<Object> */ = [
     icon: '',
     name: 'Help',
     iconClass: 'common',
+    entities: help,
   },
   {
     to: { description: { other: ['about'] } },
     icon: '',
     name: 'About',
     iconClass: 'common',
+    entities: about,
   },
   {
     to: { description: { other: ['settings'] } },

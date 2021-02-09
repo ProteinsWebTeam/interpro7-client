@@ -2,7 +2,7 @@
 
 exports[`<MemberDBSelector /> should render 1`] = `
 <div
-  className="container columns small-12 medium-3 large-2"
+  className="container"
   onBlur={[Function]}
   onClick={[Function]}
   onFocus={[Function]}
@@ -35,42 +35,6 @@ exports[`<MemberDBSelector /> should render 1`] = `
       className="db-selector one-column"
       onChange={[Function]}
     >
-      <label
-        className="db-choice checked"
-        data-testid="memberdb-filter-interpro"
-        style={
-          Object {
-            "color": "#2daec1",
-          }
-        }
-      >
-        <input
-          checked={true}
-          disabled={false}
-          name="db-radio"
-          onChange={[Function]}
-          type="radio"
-          value="interpro"
-        />
-        <span
-          className="text"
-        >
-          InterPro
-        </span>
-        <Memo(Connect(NumberComponent))
-          abbr={true}
-          className="label"
-          loading={false}
-          style={
-            Object {
-              "background": "#2daec1",
-            }
-          }
-          titleType="entry"
-        >
-          0
-        </Memo(Connect(NumberComponent))>
-      </label>
       <label
         className="db-choice"
         data-testid="memberdb-filter-cdd"

@@ -6,29 +6,9 @@ exports[`<Pages /> should render 1`] = `
 >
   <Memo(Connect(UnconnectedErrorBoundary))>
     <div
-      className="row"
+      className="row large-12 columns breadcrumb"
     >
-      <div
-        className="large-12 columns"
-      >
-        <Memo(Connect(_Switch))
-          catchAll={
-            Object {
-              "$$typeof": Symbol(react.memo),
-              "WrappedComponent": [Function],
-              "compare": null,
-              "type": [Function],
-            }
-          }
-          childRoutes={
-            Map {
-              /\\^search\\|result\\$/ => [Function],
-            }
-          }
-          indexRoute={[Function]}
-          locationSelector={[Function]}
-        />
-      </div>
+      <Memo(Connect(BreadCrumbs)) />
     </div>
   </Memo(Connect(UnconnectedErrorBoundary))>
   <Memo(Connect(UnconnectedErrorBoundary))>

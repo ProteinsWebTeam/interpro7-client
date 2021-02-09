@@ -301,8 +301,9 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
     <label
       className="side-search stuck"
     >
-      <Memo(Connect(TextSearchBox))
+      <Connect(TextSearchBox)
         delay={2000}
+        forHeader={true}
         name="search"
         shouldRedirect={true}
       />
@@ -360,8 +361,9 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
     <label
       className="side-search stuck"
     >
-      <Memo(Connect(TextSearchBox))
+      <Connect(TextSearchBox)
         delay={2000}
+        forHeader={true}
         name="search"
         shouldRedirect={true}
       />
@@ -419,8 +421,9 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
     <label
       className="side-search"
     >
-      <Memo(Connect(TextSearchBox))
+      <Connect(TextSearchBox)
         delay={2000}
+        forHeader={true}
         name="search"
         shouldRedirect={true}
       />
@@ -478,8 +481,9 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
     <label
       className="side-search"
     >
-      <Memo(Connect(TextSearchBox))
+      <Connect(TextSearchBox)
         delay={2000}
+        forHeader={true}
         name="search"
         shouldRedirect={true}
       />
@@ -537,8 +541,9 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
     <label
       className="side-search stuck"
     >
-      <Memo(Connect(TextSearchBox))
+      <Connect(TextSearchBox)
         delay={2000}
+        forHeader={true}
         name="search"
         shouldRedirect={true}
       />
@@ -596,8 +601,9 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
     <label
       className="side-search stuck"
     >
-      <Memo(Connect(TextSearchBox))
+      <Connect(TextSearchBox)
         delay={2000}
+        forHeader={true}
         name="search"
         shouldRedirect={true}
       />
@@ -655,8 +661,9 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
     <label
       className="side-search"
     >
-      <Memo(Connect(TextSearchBox))
+      <Connect(TextSearchBox)
         delay={2000}
+        forHeader={true}
         name="search"
         shouldRedirect={true}
       />
@@ -714,8 +721,9 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
     <label
       className="side-search"
     >
-      <Memo(Connect(TextSearchBox))
+      <Connect(TextSearchBox)
         delay={2000}
+        forHeader={true}
         name="search"
         shouldRedirect={true}
       />

@@ -57,7 +57,7 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
           position: 'fixed',
           bottom: 0,
           width: '100vw',
-          background: 'rgba(0, 0, 0, 0.85)',
+          background: 'rgb(112, 115, 114)',
           color: '#eee',
           padding: '0.75em',
           zIndex: 101,
@@ -68,7 +68,14 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
           style={{ display: 'flex', alignItems: 'baseline' }}
           ref={this._ref}
         >
-          <span style={{ marginRight: '2em', flex: 1 }}>
+          <div
+            className={foundation(
+              'columns',
+              'medium-8',
+              'large-9',
+              'white-color',
+            )}
+          >
             This website requires cookies, and the limited processing of your
             personal data in order to function. By using the site you are
             agreeing to this as outlined in our{' '}
@@ -88,10 +95,20 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
               Terms of Use
             </Link>
             .
-          </span>
-          <button style={{ color: '#fff' }} onClick={this.handleClick}>
-            I agree, dismiss this banner
-          </button>
+          </div>
+          <div
+            className={foundation(
+              'columns',
+              'medium-4',
+              'large-3',
+              'text-right',
+              'white-color',
+            )}
+          >
+            <button style={{ color: '#fff' }} onClick={this.handleClick}>
+              I agree, dismiss this banner
+            </button>
+          </div>
         </div>
       </AnimatedEntry>
     );

@@ -17,7 +17,7 @@ exports[`<ElixirFooter /> should render 1`] = `
         <LazyImage
           alt="Elixir logo"
           className="elixir-logo-kite"
-          src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.3/images/logos/ELIXIR/elixir-cdr.gif"
+          src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.4/images/logos/ELIXIR/elixir-cdr.gif"
         />
         <span
           className="elixir-title"

@@ -413,4 +413,25 @@
   .col-md {
     width: 100%;
   }
+  div.browse-side-panel {
+    height: auto;
+  }
+}
+
+div.breadcrumb {
+  margin-top: 0;
+}
+
+.browse-side-panel {
+  height: 80vh;
+  display: flex;
+  padding: 0;
+  flex-direction: column;
+  & .selector-container {
+    min-height: 40vh;
+    overflow: scroll;
+  }
+  & > * {
+    background: var(--colors-filter-background);
+  }
 }

@@ -17,7 +17,8 @@ const type = T.oneOfType([T.number, T.string]);
   maxValue: number,
   'aria-label'?: string,
   style?: Object,
-  className?: string
+  className?: string,
+  disabled?: boolean,
 }; */
 class MultipleInput extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -28,6 +29,7 @@ class MultipleInput extends PureComponent /*:: <Props> */ {
     'aria-label': T.string,
     style: T.object,
     className: T.string,
+    disabled: T.bool,
   };
 
   render() {
@@ -39,43 +41,24 @@ class MultipleInput extends PureComponent /*:: <Props> */ {
       ['aria-label']: arialLabel,
       style,
       className,
+      disabled,
       ...props
     } = this.props;
     return (
       <div className={s('multirange-wrapper', 'label-off', className)}>
         <div className={s('small', 'label-min')} style={{ left: 20 }}>
           {arialLabel === 'length range' ? (
-            <span>
-              {Math.round(Math.exp(minValue))}
-              {
-                // AA
-              }
-            </span>
+            <span>{Math.round(Math.exp(minValue)) /* AA */}</span>
           ) : (
-            <span>
-              {minValue}
-              {
-                // Å
-              }
-            </span>
+            <span>{minValue /* Å */}</span>
           )}
         </div>
 
-        <div className={s('small', 'label-max')} style={{ right: 16 }}>
+        <div className={s('small', 'label-max')} style={{ right: 0 }}>
           {arialLabel === 'length range' ? (
-            <span>
-              {Math.round(Math.exp(maxValue))}
-              {
-                // AA
-              }
-            </span>
+            <span>{Math.round(Math.exp(maxValue)) /* AA */}</span>
           ) : (
-            <span>
-              {maxValue}
-              {
-                // Å
-              }
-            </span>
+            <span>{maxValue /* Å */}</span>
           )}
         </div>
         <input
@@ -87,6 +70,7 @@ class MultipleInput extends PureComponent /*:: <Props> */ {
           value={minValue}
           className={s('original')}
           aria-label={arialLabel && `${arialLabel} lower bound`}
+          disabled={disabled}
         />
         <input
           {...props}
@@ -97,6 +81,7 @@ class MultipleInput extends PureComponent /*:: <Props> */ {
           value={maxValue}
           className={s('ghost')}
           aria-label={arialLabel && `${arialLabel} higher bound`}
+          disabled={disabled}
         />
       </div>
     );

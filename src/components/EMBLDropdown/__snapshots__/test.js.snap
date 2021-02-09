@@ -7,7 +7,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
   inert=""
 >
   <nav
-    className="dropdown-pane bottom embl-dropdown"
+    className="embl-bar"
     id="embl-dropdown"
   >
     <div
@@ -171,20 +171,20 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
           </p>
         </div>
         <div
-          className="row medium-up-2 small-up-2"
+          className="row large-up-3 medium-up-2 small-up-2 no-underline medium-11"
         >
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl-barcelona.es/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl-barcelona.es/"
+              <h5
+                className="inline underline"
               >
                 Barcelona
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Tissue biology and disease modelling
             </p>
@@ -192,15 +192,15 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl.fr/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl.fr/"
+              <h5
+                className="inline underline"
               >
                 Grenoble
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Structural biology
             </p>
@@ -208,15 +208,15 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl-hamburg.de/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl-hamburg.de/"
+              <h5
+                className="inline underline"
               >
                 Hamburg
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Structural biology
             </p>
@@ -224,15 +224,15 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl.de/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl.de/"
+              <h5
+                className="inline underline"
               >
                 Heidelberg
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Main laboratory
             </p>
@@ -240,15 +240,15 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/"
             >
-              <Memo(Connect(Link))
-                href="//www.ebi.ac.uk/"
+              <h5
+                className="inline underline"
               >
                 Hinxton
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p
               className="margin-bottom-none"
             >
@@ -258,15 +258,15 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl.it/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl.it/"
+              <h5
+                className="inline underline"
               >
                 Rome
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Epigenetics and neurobiology
             </p>
@@ -284,7 +284,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
   className="masthead-black-bar visible"
 >
   <nav
-    className="dropdown-pane bottom embl-dropdown"
+    className="embl-bar"
     id="embl-dropdown"
   >
     <div
@@ -448,20 +448,20 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
           </p>
         </div>
         <div
-          className="row medium-up-2 small-up-2"
+          className="row large-up-3 medium-up-2 small-up-2 no-underline medium-11"
         >
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl-barcelona.es/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl-barcelona.es/"
+              <h5
+                className="inline underline"
               >
                 Barcelona
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Tissue biology and disease modelling
             </p>
@@ -469,15 +469,15 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl.fr/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl.fr/"
+              <h5
+                className="inline underline"
               >
                 Grenoble
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Structural biology
             </p>
@@ -485,15 +485,15 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl-hamburg.de/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl-hamburg.de/"
+              <h5
+                className="inline underline"
               >
                 Hamburg
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Structural biology
             </p>
@@ -501,15 +501,15 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl.de/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl.de/"
+              <h5
+                className="inline underline"
               >
                 Heidelberg
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Main laboratory
             </p>
@@ -517,15 +517,15 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/"
             >
-              <Memo(Connect(Link))
-                href="//www.ebi.ac.uk/"
+              <h5
+                className="inline underline"
               >
                 Hinxton
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p
               className="margin-bottom-none"
             >
@@ -535,15 +535,15 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
           <div
             className="column"
           >
-            <h5
-              className="inline"
+            <Memo(Connect(Link))
+              href="//www.embl.it/"
             >
-              <Memo(Connect(Link))
-                href="//www.embl.it/"
+              <h5
+                className="inline underline"
               >
                 Rome
-              </Memo(Connect(Link))>
-            </h5>
+              </h5>
+            </Memo(Connect(Link))>
             <p>
               Epigenetics and neurobiology
             </p>

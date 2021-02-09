@@ -26,7 +26,8 @@ const config /*: {
   pages: {| [key: string]: {| plural?: string, subPages: Array<string> |} |},
   pagination: {| pageSize: number |},
   cache: {| enabled: boolean |},
-  colors: {| get: (?string, ?string) => string |}
+  colors: {| get: (?string, ?string) => string |},
+  endpoints : Array<string>,
 } */ = {
   ..._config,
 };
@@ -53,6 +54,15 @@ config.colors = {
     return _config.colors[_key] || _fallback;
   },
 };
+
+config.endpoints = [
+  'entry',
+  'protein',
+  'structure',
+  'set',
+  'taxonomy',
+  'proteome',
+];
 
 export default config;
 

@@ -10,252 +10,265 @@ exports[`<EBIFooter /> should render 1`] = `
     id="global-nav-expanded"
   >
     <div
-      className="columns small-6 medium-2"
+      className="columns small-12"
     >
-      <Memo(Connect(Link))
-        href="//www.ebi.ac.uk"
-        title="EMBL-EBI"
-      >
-        <span
-          className="ebi-logo"
-        />
-      </Memo(Connect(Link))>
-      <ul />
-    </div>
-    <div
-      className="columns small-6 medium-2"
-    >
-      <h5
-        className="services"
+      <h4
+        className="inline-block"
       >
         <Memo(Connect(Link))
-          className="services-color"
-          href="//www.ebi.ac.uk/services"
+          href="//www.ebi.ac.uk"
+          title="EMBL-EBI"
         >
-          Services
+          EMBL-EBI
         </Memo(Connect(Link))>
-      </h5>
-      <ul>
-        <li
-          className="first"
+      </h4>
+      <span
+        className="small inline-block padding-left-large"
+      >
+        <Memo(Connect(Link))
+          className="readmore"
+          href="//intranet.ebi.ac.uk"
+        >
+          <span
+            className="icon icon-functional"
+            data-icon="L"
+          />
+           
+          Intranet for staff
+        </Memo(Connect(Link))>
+      </span>
+    </div>
+    <div
+      className="medium-up-5 small-up-2"
+    >
+      <div
+        className="column"
+      >
+        <h5
+          className="research"
         >
           <Memo(Connect(Link))
             href="//www.ebi.ac.uk/services"
           >
-            By topic
+            Services
           </Memo(Connect(Link))>
-        </li>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/services/all"
+        </h5>
+        <ul>
+          <li
+            className="first"
           >
-            By name (A-Z)
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="last"
-        >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/support"
-          >
-            Help & Support
-          </Memo(Connect(Link))>
-        </li>
-      </ul>
-    </div>
-    <div
-      className="columns small-6 medium-2"
-    >
-      <h5
-        className="research"
-      >
-        <Memo(Connect(Link))
-          className="research-color"
-          href="//www.ebi.ac.uk/research"
-        >
-          Research
-        </Memo(Connect(Link))>
-      </h5>
-      <ul>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/research/publications"
-          >
-            Publications
-          </Memo(Connect(Link))>
-        </li>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/research/groups"
-          >
-            Research groups
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="last"
-        >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/research/postdocs"
-          >
-            Postdocs
-          </Memo(Connect(Link))>
-           & 
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/research/eipp"
-          >
-            PhDs
-          </Memo(Connect(Link))>
-        </li>
-      </ul>
-    </div>
-    <div
-      className="columns small-6 medium-2"
-    >
-      <h5
-        className="training"
-      >
-        <Memo(Connect(Link))
-          className="training-color"
-          href="//www.ebi.ac.uk/training"
-        >
-          Training
-        </Memo(Connect(Link))>
-      </h5>
-      <ul>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/training/handson"
-          >
-            Train at EBI
-          </Memo(Connect(Link))>
-        </li>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/training/roadshow"
-          >
-            Train outside EBI
-          </Memo(Connect(Link))>
-        </li>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/training/online"
-          >
-            Train online
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="last"
-        >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/training/contact-us"
-          >
-            Contact organisers
-          </Memo(Connect(Link))>
-        </li>
-      </ul>
-    </div>
-    <div
-      className="columns small-6 medium-2"
-    >
-      <h5
-        className="industry"
-      >
-        <Memo(Connect(Link))
-          className="industry-color"
-          href="//www.ebi.ac.uk/industry"
-        >
-          Industry
-        </Memo(Connect(Link))>
-      </h5>
-      <ul>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/industry/private"
-          >
-            Members Area
-          </Memo(Connect(Link))>
-        </li>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/industry/workshops"
-          >
-            Workshops
-          </Memo(Connect(Link))>
-        </li>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/industry/sme-forum"
-          >
-            <abbr
-              title="Small Medium Enterprise"
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/services"
             >
-              SME
-            </abbr>
-             Forum
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="last"
-        >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/industry/contact"
+              By topic
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/services/all"
+            >
+              By name (A-Z)
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="last"
           >
-            Contact Industry programme
-          </Memo(Connect(Link))>
-        </li>
-      </ul>
-    </div>
-    <div
-      className="columns small-6 medium-2"
-    >
-      <h5
-        className="about"
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/support"
+            >
+              Help & Support
+            </Memo(Connect(Link))>
+          </li>
+        </ul>
+      </div>
+      <div
+        className="column"
       >
-        <Memo(Connect(Link))
-          className="ebi-color"
-          href="//www.ebi.ac.uk/about"
+        <h5
+          className="research"
         >
-          About EMBL-EBI
-        </Memo(Connect(Link))>
-      </h5>
-      <ul>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/about/contact"
+          <a
+            href="//www.ebi.ac.uk/research"
           >
-            Contact us
-          </Memo(Connect(Link))>
-        </li>
-        <li>
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/about/events"
+            Research
+          </a>
+        </h5>
+        <ul>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/research/publications"
+            >
+              Publications
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/research/groups"
+            >
+              Research groups
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="last"
           >
-            Events
-          </Memo(Connect(Link))>
-        </li>
-        <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/research/postdocs"
+            >
+              Postdocs
+            </Memo(Connect(Link))>
+             
+            & 
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/research/eipp"
+            >
+              PhDs
+            </Memo(Connect(Link))>
+          </li>
+        </ul>
+      </div>
+      <div
+        className="column"
+      >
+        <h5
+          className="training"
+        >
           <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/about/jobs"
-            title="Jobs, postdocs, PhDs…"
+            href="//www.ebi.ac.uk/training"
           >
-            Jobs
+            Training
           </Memo(Connect(Link))>
-        </li>
-        <li>
+        </h5>
+        <ul>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/handson"
+            >
+              Train at EBI
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/roadshow"
+            >
+              Train outside EBI
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/online"
+            >
+              Train online
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="last"
+          >
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/training/contact-us"
+            >
+              Contact organisers
+            </Memo(Connect(Link))>
+          </li>
+        </ul>
+      </div>
+      <div
+        className="column"
+      >
+        <h5
+          className="industry"
+        >
           <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/about/news"
+            href="//www.ebi.ac.uk/industry"
           >
-            News
+            Industry
           </Memo(Connect(Link))>
-        </li>
-        <li>
+        </h5>
+        <ul>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/industry/private"
+            >
+              Members Area
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/industry/workshops"
+            >
+              Workshops
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/industry/sme-forum"
+            >
+              SME Forum
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="last"
+          >
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/industry/contact"
+            >
+              Contact Industry programme
+            </Memo(Connect(Link))>
+          </li>
+        </ul>
+      </div>
+      <div
+        className="column"
+      >
+        <h5
+          className="about"
+        >
           <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/about/people"
+            href="//www.ebi.ac.uk/about"
           >
-            People & groups
+            About
           </Memo(Connect(Link))>
-        </li>
-      </ul>
+        </h5>
+        <ul>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/about/contact"
+            >
+              Contact us
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/about/events"
+            >
+              Events
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/about/jobs"
+              title="Jobs, postdocs, PhDs..."
+            >
+              Jobs
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="first"
+          >
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/about/news"
+            >
+              News
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              href="//www.ebi.ac.uk/about/people"
+            >
+              People & groups
+            </Memo(Connect(Link))>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
   <section
@@ -273,7 +286,9 @@ exports[`<EBIFooter /> should render 1`] = `
       <p
         className="legal"
       >
-        Copyright © EMBL-EBI 2017 | EMBL-EBI is 
+        Copyright © EMBL-EBI 
+        2021
+         | EMBL-EBI is 
         <Memo(Connect(Link))
           href="//www.embl.org/"
           rel="noopener"
@@ -287,12 +302,6 @@ exports[`<EBIFooter /> should render 1`] = `
           href="//www.ebi.ac.uk/about/terms-of-use"
         >
           Terms of use
-        </Memo(Connect(Link))>
-        <Memo(Connect(Link))
-          className="readmore float-right"
-          href="http://intranet.ebi.ac.uk"
-        >
-          Intranet
         </Memo(Connect(Link))>
       </p>
     </div>

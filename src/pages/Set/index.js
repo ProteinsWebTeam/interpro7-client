@@ -365,8 +365,7 @@ class List extends PureComponent /*:: <ListProps> */ {
 
     const HTTP_OK = 200;
     const notFound = !loading && status !== HTTP_OK;
-    const databases =
-      dataBase && dataBase.payload && dataBase.payload.databases;
+    const databases = dataBase?.payload?.databases;
     const db = (dbE || dbS).toLowerCase();
     const dbAll = { canonical: 'ALL', name: 'All', version: 'N/A' };
     if (loading || notFound) {
@@ -379,17 +378,32 @@ class List extends PureComponent /*:: <ListProps> */ {
     }
     return (
       <div className={f('row')}>
-        <MemberDBSelector
-          contentType="set"
-          className="pp-left-side-db-selector"
-        />
-
+        <div
+          className={f(
+            'columns',
+            'small-12',
+            'medium-3',
+            'large-2',
+            'no-padding',
+          )}
+        >
+          <div className={f('browse-side-panel')}>
+            <div className={f('selector-container')}>
+              <MemberDBSelector
+                contentType="set"
+                className="pp-left-side-db-selector"
+              />
+            </div>
+            <hr style={{ paddingTop: '0.5rem' }} />
+          </div>
+        </div>
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
-          <hr className={f('margin-bottom-none')} />
           {databases && (
             <SchemaOrgData
               data={{
-                data: { db: db === 'ALL' ? dbAll : databases[db] },
+                data: {
+                  db: db.toLowerCase() === 'all' ? dbAll : databases[db],
+                },
                 location: window.location,
               }}
               processData={schemaProcessDataTable}
@@ -565,7 +579,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   source_database,
                 } /*: {accession: string, source_database: string} */,
               ) => {
-                return <div>{databases[source_database].name}</div>;
+                return <div>{databases?.[source_database]?.name}</div>;
               }}
             >
               Source Database

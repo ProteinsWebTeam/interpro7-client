@@ -1,5 +1,6 @@
 @import '../../../styles/colors.css';
 @import '../../../styles/timing.css';
+@import '../../../styles/z-index.css';
 
 .reference {
   /*padding-top: 0.2rem;*/
@@ -32,7 +33,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: -1;
+    z-index: calc(var(--z-index-deepest) - 2);
     background-color: var(--colors-warning-bgd);
     opacity: 0;
     transition: opacity var(--timing-slow) ease-in-out;

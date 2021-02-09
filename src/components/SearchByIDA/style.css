@@ -105,15 +105,17 @@ ul.ordered {
 }
 
 .ida-entry {
-  padding: 0 var(--entry-padding) 0 var(--entry-padding);
+  padding: 0 0 0 var(--entry-padding);
   margin: 0 var(--entry-padding) 0 var(--entry-padding);
   background: #75bf40;
-  //border: black solid 2px;
   border-radius: var(--entry-padding);
-
-  & > div {
-    padding-left: 0.3em;
+  &:focus-within {
+    box-shadow: 0 0 2px 1px var(--colors-tag);
   }
+
+  /* & > div {
+    padding-left: 0.3em;
+  } */
 
   @nest & button.close {
     position: absolute;
@@ -140,11 +142,12 @@ ul.ordered {
     position: absolute;
     background: transparent;
     font-size: 0.8em;
-    left: 1.3em;
-    top: 1em;
+    left: 1.5em;
+    top: 1.7em;
     color: var(--colors-ulightgray);
     width: 1em;
     cursor: grabbing;
+    text-shadow: 1px 1px slategrey;
   }
   @nest & button.nodata {
     top: 0.5em;
@@ -152,21 +155,36 @@ ul.ordered {
   @nest & button.drag {
     color: var(--colors-nearly-white);
   }
-  @nest & input {
+  @nest & .react-select-container {
     width: var(--entry-width);
     background: transparent;
     border: none;
-    color: #ffffff;
+    /* color: #ffffff; */
     transition: color 0.5s ease-in-out;
     font-weight: bold;
+
+    & .react-select-labels {
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      & .react-select-label-header {
+        font-weight: bold;
+      }
+      & .react-select-label-body {
+        font-size: 0.7em;
+        line-height: 1em;
+        white-space: normal;
+        font-weight: normal;
+      }
+    }
+    & input, & input:focus, & input:active {
+      box-shadow: none;
+      caret-color: white;
+      color: white;
+      margin: 0;
+    }
   }
-  @nest & input:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-  @nest & input:focus {
-    background: rgba(255, 255, 255, 0.4);
-    color: #444444;
-  }
+
   @nest & .entry-name {
     font-size: 0.7em;
     color: #ffffff;

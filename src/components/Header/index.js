@@ -96,16 +96,12 @@ export class _HamburgerBtn extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToPropsHamburger = createSelector(
-  sideNavSelector,
-  open => ({
-    open,
-  }),
+const mapStateToPropsHamburger = createSelector(sideNavSelector, (open) => ({
+  open,
+}));
+const HamburgerBtn = connect(mapStateToPropsHamburger, { openSideNav })(
+  _HamburgerBtn,
 );
-const HamburgerBtn = connect(
-  mapStateToPropsHamburger,
-  { openSideNav },
-)(_HamburgerBtn);
 
 /*:: type SideIconsProps = {
   movedAway: boolean,
@@ -137,6 +133,7 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
               name="search"
               delay={DEBOUNCE_RATE_SLOW}
               shouldRedirect={true}
+              forHeader={true}
             />
             <Link
               to={{
@@ -176,35 +173,11 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
 
 const mapStateToPropsSideIcons = createSelector(
   sideNavSelector,
-  state => state.settings.ui.lowGraphics,
-  state => state.customLocation.description.search,
+  (state) => state.settings.ui.lowGraphics,
+  (state) => state.customLocation.description.search,
   (movedAway, lowGraphics, search) => ({ movedAway, lowGraphics, search }),
 );
 const SideIcons = connect(mapStateToPropsSideIcons)(_SideIcons);
-
-// const SubMediumLevel = ({pages, pageType}) => (
-//   <span>
-//     {pages.map(page => (
-//       <MenuItem key={page}>
-//         {page}
-//       </MenuItem>
-//     ))}
-//   </span>
-// );
-// SubMediumLevel.propTypes = {
-//   pages: T.arrayOf(T.string).isRequired,
-//   pageType: T.string,
-// };
-
-// const MediumLevel = ({pageType}) => (
-//   <div className={styles.medium_level}>
-//     <SubMediumLevel pages={menuItems.dynamicPages} pageType={pageType} />
-//     <SubMediumLevel pages={menuItems.staticPages} pageType={pageType} />
-//   </div>
-// );
-// MediumLevel.propTypes = {
-//   pageType: T.string,
-// };
 
 const styleForHeader = (supportsSticky, offset, stuck) => {
   const style = { top: `-${offset}px` };
@@ -255,10 +228,10 @@ export class Header extends PureComponent /*:: <HeaderProps> */ {
 
 const mapStateToProps = createSelector(
   stuckSelector,
-  state => state.customLocation.description.main.key,
-  state => state.customLocation.description.entry.db,
-  state => state.customLocation.description.entry.accession,
-  state => state.customLocation.description,
+  (state) => state.customLocation.description.main.key,
+  (state) => state.customLocation.description.entry.db,
+  (state) => state.customLocation.description.entry.accession,
+  (state) => state.customLocation.description,
   (stuck, mainType, entryDB, entryAccession, description) => ({
     stuck,
     isSignature: !!(

@@ -8,7 +8,7 @@ import { createSelector } from 'reselect';
 import FiltersPanel from 'components/FiltersPanel';
 import EntryTypeFilter from './EntryTypeFilter';
 import IntegratedFilter from './IntegratedFilter';
-import SignaturesFilter from './SignaturesFilter';
+// import SignaturesFilter from './SignaturesFilter';
 import GOTermsFilter from './GOTermsFilter';
 
 export const EntryListFilter = ({ mainDB } /*: {mainDB: string} */) => (
@@ -18,19 +18,8 @@ export const EntryListFilter = ({ mainDB } /*: {mainDB: string} */) => (
         mainDB === 'InterPro' ? 'InterPro' : 'Member Database Entry'
       } Type`}
     />
-    {mainDB === 'InterPro' ? (
-      <SignaturesFilter label="Integrated Database" />
-    ) : (
-      <IntegratedFilter label="InterPro State" />
-    )}
-    {
-      // TODO re-insert GO terms - filter for Member databases when data available
-    }
-    {mainDB === 'InterPro' ? (
-      <GOTermsFilter label="GO Terms" />
-    ) : (
-      <span label="" />
-    )}
+    {mainDB !== 'InterPro' && <IntegratedFilter label="InterPro State" />}
+    {mainDB === 'InterPro' && <GOTermsFilter label="GO Terms" />}
   </FiltersPanel>
 );
 EntryListFilter.propTypes = {
@@ -38,11 +27,11 @@ EntryListFilter.propTypes = {
 };
 
 const mapStateToProps = createSelector(
-  state =>
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .db,
-  mainDB => ({ mainDB }),
+  (mainDB) => ({ mainDB }),
 );
 
 export default connect(mapStateToProps)(EntryListFilter);

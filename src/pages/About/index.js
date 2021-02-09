@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import { createSelector } from 'reselect';
 import { Helmet } from 'react-helmet-async';
 
-import Link from 'components/generic/Link';
 import Switch from 'components/generic/Switch';
 import Redirect from 'components/generic/Redirect';
 
@@ -73,56 +72,6 @@ class About extends PureComponent /*:: <{}> */ {
           processData={schemaProcessDataInterpro}
         />
         <div className={f('columns', 'margin-bottom-large')}>
-          <ul className={f('tabs', 'menu-style')}>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['about', 'interpro'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                InterPro
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['about', 'interproscan'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                InterProScan
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['about', 'consortium'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                The InterPro Consortium
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['about', 'funding'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                Funding
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['about', 'privacy'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                Privacy
-              </Link>
-            </li>
-            <li className={f('tabs-title')}>
-              <Link
-                to={{ description: { other: ['about', 'team'] } }}
-                activeClass={f('is-active', 'is-active-tab')}
-              >
-                Team
-              </Link>
-            </li>
-          </ul>
           <div className={f('tabs', 'tabs-content')}>
             <div className={f('tabs-panel', 'is-active')}>
               <Switch

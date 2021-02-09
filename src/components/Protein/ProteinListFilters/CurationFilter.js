@@ -74,39 +74,49 @@ class CurationFilter extends PureComponent /*:: <Props> */ {
     }
     return (
       <div className={f('list-curation', { stale: isStale })}>
-        {Object.entries(databases).map(([db, value]) => (
-          <div key={db} className={f('column')}>
-            <label className={f('row', 'filter-button')}>
-              <input
-                type="radio"
-                name="curated_filter"
-                value={db}
-                disabled={isStale}
-                onChange={this._handleSelection}
-                checked={description.protein.db.toLowerCase() === db}
-                style={{ margin: '0.25em' }}
-              />
-              <span>{db === 'uniprot' ? 'both' : db}</span>
-              <NumberComponent
-                label
-                loading={loading}
-                className={f('filter-label')}
-                abbr
-              >
-                {value}
-              </NumberComponent>
-            </label>
-          </div>
-        ))}
+        <div className={f('column')}>
+          {Object.entries(databases)
+            .sort(([x], [y]) => {
+              if (x === 'uniprot') return -1;
+              if (y === 'uniprot') return 1;
+              return x > y ? 1 : -1;
+            })
+            .map(([db, value]) => {
+              const checked = description.protein.db.toLowerCase() === db;
+              return (
+                <label key={db} className={f('radio-btn-label', { checked })}>
+                  <input
+                    type="radio"
+                    name="curated_filter"
+                    className={f('radio-btn')}
+                    value={db}
+                    disabled={isStale}
+                    onChange={this._handleSelection}
+                    checked={checked}
+                    style={{ margin: '0.25em' }}
+                  />
+                  <span>{db === 'uniprot' ? 'both' : db}</span>
+                  <NumberComponent
+                    label
+                    loading={loading}
+                    className={f('filter-label')}
+                    abbr
+                  >
+                    {value}
+                  </NumberComponent>
+                </label>
+              );
+            })}
+        </div>
       </div>
     );
   }
 }
 
 const getUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // transform description
     const _description = {
@@ -139,7 +149,7 @@ const getUrl = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({

@@ -77,91 +77,98 @@ class GOTermsFilter extends PureComponent /*:: <Props> */ {
     }
     return (
       <div className={f('list-go', { stale: isStale })}>
-        {terms.map(([term, count]) => (
-          <div key={term} className={f('column')}>
-            <label className={f('row', 'filter-button')}>
-              <input
-                type="radio"
-                name="go_category"
-                value={categories[term] || 'All'}
-                disabled={isStale}
-                onChange={this._handleSelection}
-                checked={
-                  (term === 'All' && !search.go_category) ||
-                  search.go_category === categories[term]
-                }
-                style={{ margin: '0.25em' }}
-              />
-              <span>{term}</span>
+        <div className={f('column')}>
+          {terms.map(([term, count]) => {
+            const checked =
+              (term === 'All' && !search.go_category) ||
+              search.go_category === categories[term];
+            return (
+              <label key={term} className={f('radio-btn-label', { checked })}>
+                <input
+                  type="radio"
+                  name="go_category"
+                  className={f('radio-btn')}
+                  value={categories[term] || 'All'}
+                  disabled={isStale}
+                  onChange={this._handleSelection}
+                  checked={checked}
+                  style={{ margin: '0.25em' }}
+                />
+                <span>{term}</span>
 
-              {term === 'Biological Process' ? (
-                <Tooltip title="Biological process category">
-                  <small
-                    className={f('margin-left-medium', 'sign-label-head', 'bp')}
+                {term === 'Biological Process' ? (
+                  <Tooltip title="Biological process category">
+                    <small
+                      className={f(
+                        'margin-left-medium',
+                        'sign-label-head',
+                        'bp',
+                      )}
+                    >
+                      BP
+                    </small>
+                  </Tooltip>
+                ) : (
+                  ''
+                )}
+
+                {term === 'Molecular Function' ? (
+                  <Tooltip title="Molecular function category">
+                    <small
+                      className={f(
+                        'small',
+                        'margin-left-medium',
+                        'sign-label-head',
+                        'mf',
+                      )}
+                    >
+                      MF
+                    </small>
+                  </Tooltip>
+                ) : (
+                  ''
+                )}
+
+                {term === 'Cellular Component' ? (
+                  <Tooltip title="Cellular component category">
+                    <small
+                      className={f(
+                        'small',
+                        'margin-left-medium',
+                        'sign-label-head',
+                        'cc',
+                      )}
+                    >
+                      CC
+                    </small>
+                  </Tooltip>
+                ) : (
+                  ''
+                )}
+
+                {typeof count === 'undefined' || isNaN(count) ? null : (
+                  <NumberComponent
+                    label
+                    loading={loading}
+                    className={f('filter-label')}
+                    abbr
                   >
-                    BP
-                  </small>
-                </Tooltip>
-              ) : (
-                ''
-              )}
-
-              {term === 'Molecular Function' ? (
-                <Tooltip title="Molecular function category">
-                  <small
-                    className={f(
-                      'small',
-                      'margin-left-medium',
-                      'sign-label-head',
-                      'mf',
-                    )}
-                  >
-                    MF
-                  </small>
-                </Tooltip>
-              ) : (
-                ''
-              )}
-
-              {term === 'Cellular Component' ? (
-                <Tooltip title="Cellular component category">
-                  <small
-                    className={f(
-                      'small',
-                      'margin-left-medium',
-                      'sign-label-head',
-                      'cc',
-                    )}
-                  >
-                    CC
-                  </small>
-                </Tooltip>
-              ) : (
-                ''
-              )}
-
-              {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberComponent
-                  label
-                  loading={loading}
-                  className={f('filter-label')}
-                  abbr
-                >
-                  {count}
-                </NumberComponent>
-              )}
-            </label>
-          </div>
-        ))}
+                    {count}
+                  </NumberComponent>
+                )}
+              </label>
+            );
+          })}
+        </div>
       </div>
     );
   }
 }
 
 const getUrlFor = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // omit from search
     const {
@@ -188,7 +195,7 @@ const getUrlFor = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({

@@ -2,10 +2,9 @@
 
 exports[`<FiltersPanel /> should render 1`] = `
 <div
-  className="row filters-panel"
+  className="filters-panel"
 >
   <div
-    className="columns large-12 show-for-large margin-bottom-medium"
     data-testid="filters-panel"
   >
     <span>
