@@ -63,7 +63,7 @@ BaseLink.propTypes = {
 };
 BaseLink.displayName = 'BaseLink';
 
-const patternLinkWrapper = pattern => {
+const patternLinkWrapper = (pattern) => {
   const Wrapped = (
     {
       id,
@@ -171,7 +171,7 @@ export const UniProtLink = patternLinkWrapper(
 UniProtLink.displayName = 'UniProtLink';
 
 export const Genome3dLink = patternLinkWrapper(
-  'http://www.genome3d.eu/uniprot/id/{id}/annotations',
+  'http://www.genome3d.net/uniprot/id/{id}/annotations',
 );
 Genome3dLink.displayName = 'Genome3DLink';
 
