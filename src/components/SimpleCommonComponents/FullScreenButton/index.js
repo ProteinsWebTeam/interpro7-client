@@ -36,12 +36,14 @@ const FullScreenButton = (
     return () => document.removeEventListener('fullscreenchange', onFullscreen);
   }, []);
   if (!element) return null;
+  const elementInDOM =
+    typeof element === 'string' ? document.getElementById(element) : element;
   const _handleFullScreen = () => {
     if (isFull) {
       exitFullScreen();
       onExitFullScreenHook();
     } else {
-      requestFullScreen(element);
+      requestFullScreen(elementInDOM);
       onFullScreenHook();
     }
     setFull(!isFull);

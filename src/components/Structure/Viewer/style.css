@@ -1,52 +1,8 @@
-@import '../../../styles/timing.css';
-@import '../../../styles/colors.css';
-@import '../../../styles/z-index.css';
-
-:root {
-  --height-viewer: 50vh;
-  --height-bar: 2.3em;
-}
-.structure-viewer {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: white;
-  transition: height var(--timing-really-fast) ease-in-out;
-  & .viewer-resizer {
-    height: calc(100% - var(--height-bar));
-    & .structure-viewer-ref {
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    }
-  }
-
-  & .structure-viewer-select {
-    max-width: 400px;
-    bottom: 0.5rem;
-    font-size: 90%;
-    left: 0;
-    margin: 0;
-  }
-}
-
-.split-view {
-  display: flex;
-  background-color: #ffffff;
-  & > div {
-    width: 50vw;
-  }
-  & .protvista-container {
-    overflow: scroll;
-  }
-  & .structure-viewer {
-    height: initial;
-    & .structure-viewer-ref {
-      height: 95vh;
-    }
-    & .viewer-controls {
-      height: 5vh;
-    }
+.viewer-resizer {
+  height: calc(100% - var(--height-bar));
+  & .structure-viewer-ref {
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
 }

@@ -94,7 +94,7 @@ PictureInPicturePanel.propTypes = {
   hideBar: T.bool,
   OtherControls: T.any,
   OtherButtons: T.any,
-  onChangingMode: T.function,
+  onChangingMode: T.func,
   children: T.any,
 };
 

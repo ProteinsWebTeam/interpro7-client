@@ -1,0 +1,44 @@
+@import '../../../styles/timing.css';
+@import '../../../styles/colors.css';
+@import '../../../styles/z-index.css';
+
+:root {
+  --height-viewer: 50vh;
+  --height-bar: 2.3em;
+}
+.structure-viewer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+  transition: height var(--timing-really-fast) ease-in-out;
+
+  & .structure-viewer-select {
+    max-width: 400px;
+    bottom: 0.5rem;
+    font-size: 90%;
+    left: 0;
+    margin: 0;
+  }
+}
+
+.split-view {
+  display: flex;
+  background-color: #ffffff;
+  & > div {
+    width: 50vw;
+  }
+  & .protvista-container {
+    overflow: scroll;
+  }
+  & .structure-viewer {
+    height: initial;
+    & > div:first-child div {
+      height: 95vh;
+    }
+    & div:last-child {
+      height: 5vh;
+    }
+  }
+}

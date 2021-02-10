@@ -1,6 +1,6 @@
 import { scaleLinear } from 'd3';
 
-export default mapCoordinates => {
+export default (mapCoordinates) => {
   const protein2structure = scaleLinear();
   const coord = mapCoordinates
     .sort(({ protein_start: a }, { protein_start: b }) => a - b)
