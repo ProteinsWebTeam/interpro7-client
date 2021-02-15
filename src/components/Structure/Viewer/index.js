@@ -14,11 +14,19 @@ const f = foundationPartial(style, fonts);
   id: string,
   url?: string,
   elementId: string,
+  ext?: string,
+  name?: string,
   onStructureLoaded?: function,
   isSpinning?: boolean,
   shouldResetViewer?: boolean,
   selections: Array<Array<string>>,
-}; */
+};
+  type SettingsForNGL ={
+    defaultRepresentation: boolean,
+    ext?: string,
+    name?: string,
+  }
+ */
 
 class StructureView extends PureComponent /*:: <Props> */ {
   /*:: _structureViewer: { current: ?HTMLElement }; */
@@ -28,12 +36,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
     url: T.string,
-    ext: T.string,
     elementId: T.string,
     onStructureLoaded: T.func,
     isSpinning: T.bool,
     shouldResetViewer: T.bool,
     selections: T.array,
+    ext: T.string,
+    name: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -69,8 +78,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     }
   }
-  loadURLInStage(url) {
-    const settings = { defaultRepresentation: false };
+  loadURLInStage(url /*: string */) {
+    const settings /*: SettingsForNGL */ = { defaultRepresentation: false };
     if (this.props.ext) {
       settings.ext = this.props.ext;
       settings.name = this.props.id;
@@ -87,7 +96,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       });
   }
 
-  highlightSelections(selections) {
+  highlightSelections(selections /*: Array<Array<string>> */) {
     if (!this.stage) return;
     const components = this.stage.getComponentsByName(this.name);
     if (components) {

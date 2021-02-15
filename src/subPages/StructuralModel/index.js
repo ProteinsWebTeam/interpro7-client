@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import T from 'prop-types';
 
 import loadData from 'higherOrder/loadData';
@@ -17,9 +16,10 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ipro);
+const DEFAULT_TRESHOLD = 0.9;
 
 const StructuralModel = ({ data, urlForModel }) => {
-  const [threshold, setThreshold] = useState(0.9);
+  const [threshold, setThreshold] = useState(DEFAULT_TRESHOLD);
   const [selections, setSelections] = useState(null);
   const container = useRef();
   useEffect(() => {
@@ -33,7 +33,7 @@ const StructuralModel = ({ data, urlForModel }) => {
               .map((sel) => sel.split(':').map(Number))
               .map(([x]) => x)
               .sort((a, b) => a - b)
-              .filter((x) => x != selected)
+              .filter((x) => x !== selected)
               .map((x) => ['blue', `${x}-${x}:A`]);
             const selections = [
               ['red', `${selected}-${selected}:A`],
@@ -51,11 +51,8 @@ const StructuralModel = ({ data, urlForModel }) => {
   const elementId = 'structure-model-viewer';
 
   const handleThresholdChange = (evt) => {
-    // console.log('handleThresholdChange BEFORE');
     setThreshold(+evt.target.value);
-    // console.log('handleThresholdChange AFTER');
   };
-  // console.log('Render BEFORE', thresholdLabel, threshold);
   return (
     <div className={f('row', 'column')} ref={container}>
       <h3>Predicted Model</h3>
@@ -108,7 +105,13 @@ const StructuralModel = ({ data, urlForModel }) => {
     </div>
   );
 };
-StructuralModel.propTypes = {};
+StructuralModel.propTypes = {
+  data: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.object,
+  }),
+  urlForModel: T.string,
+};
 const mapStateToPropsForModel = (typeOfData /*: 'contacts'|'structure' */) =>
   createSelector(
     (state) => state.settings.api,
