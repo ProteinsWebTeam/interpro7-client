@@ -325,6 +325,7 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
     showAllSpecies: T.bool.isRequired,
   };
 
+  // eslint-disable-next-line complexity
   render() {
     const {
       mainData,

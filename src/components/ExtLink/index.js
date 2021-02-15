@@ -1,8 +1,16 @@
 /* eslint no-magic-numbers: [1, {ignore: [3]}] */
 import React from 'react';
 import T from 'prop-types';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
+import { foundationPartial } from 'styles/foundation';
+
+import ipro from 'styles/interpro-new.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
+const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
 const types = {
   id: T.oneOfType([T.string, T.number]).isRequired,
@@ -195,5 +203,28 @@ const ExtLink = (
 };
 ExtLink.propTypes = types;
 ExtLink.displayName = 'ExtLink';
+
+export const FTPLink = (
+  { href, children } /*: { href: string, children: any } */,
+) => (
+  <Tooltip
+    title={
+      'FTP support has been reduced in some browsers. You might need a FTP client in order to use this link.'
+    }
+  >
+    <Link
+      href={href}
+      target="_blank"
+      className={f('tag', 'secondary', 'ftp-link')}
+    >
+      <span className={f('icon', 'icon-common')} data-icon="&#xf233;" />{' '}
+      {children}
+    </Link>
+  </Tooltip>
+);
+FTPLink.propTypes = {
+  href: T.string,
+  children: T.any,
+};
 
 export default ExtLink;

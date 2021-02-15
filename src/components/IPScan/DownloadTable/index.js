@@ -3,6 +3,7 @@ import React from 'react';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
+import { FTPLink } from 'components/ExtLink';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -40,11 +41,18 @@ export const DownloadTable = (
         <tr>
           <td>
             <Link
-              href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+              href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
               target="_blank"
+              style={{ whiteSpace: 'nowrap' }}
             >
               InterProScan {version}
             </Link>
+            <br />
+            <FTPLink
+              href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+            >
+              FTP Site
+            </FTPLink>
           </td>
           <td>
             Download and install the latest version of InterProScan (64-bit
@@ -55,7 +63,7 @@ export const DownloadTable = (
           <td className={f('xs-hide')}>gzipped</td>
           <td>
             <Link
-              href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+              href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
               target="_blank"
             >
               {' '}
@@ -65,6 +73,12 @@ export const DownloadTable = (
               />{' '}
               64-bit
             </Link>
+            <br />
+            <FTPLink
+              href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+            >
+              FTP Site
+            </FTPLink>
           </td>
         </tr>
       </tbody>
