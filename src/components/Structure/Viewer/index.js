@@ -12,6 +12,7 @@ import style from './style.css';
 const f = foundationPartial(style, fonts);
 /*:: type Props = {
   id: string,
+  url?: string,
   elementId: string,
   onStructureLoaded?: function,
   isSpinning?: boolean,
@@ -26,6 +27,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
+    url: T.string,
+    ext: T.string,
     elementId: T.string,
     onStructureLoaded: T.func,
     isSpinning: T.bool,
@@ -44,13 +47,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
   async componentDidMount() {
     this.stage = new Stage(this._structureViewer.current);
     this.stage.setParameters({ backgroundColor: 0xfcfcfc });
-    this.loadURLInStage(`rcsb://${this.name}.mmtf`);
+    const url = this.props.url || `rcsb://${this.name}.mmtf`;
+    this.loadURLInStage(url);
   }
   componentDidUpdate() {
     if (this.name !== `${this.props.id}`) {
       this.name = `${this.props.id}`;
       this.stage.removeAllComponents();
-      this.loadURLInStage(`rcsb://${this.name}.mmtf`);
+      const url = this.props.url || `rcsb://${this.name}.mmtf`;
+      this.loadURLInStage(url);
     }
     if (this.stage) {
       this.stage.setSpin(this.props.isSpinning);
@@ -65,8 +70,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
   loadURLInStage(url) {
+    const settings = { defaultRepresentation: false };
+    if (this.props.ext) {
+      settings.ext = this.props.ext;
+      settings.name = this.props.id;
+    }
     this.stage
-      .loadFile(url, { defaultRepresentation: false })
+      .loadFile(url, settings)
       .then((component) => {
         component.addRepresentation('cartoon', { colorScheme: 'chainname' });
         component.autoView();

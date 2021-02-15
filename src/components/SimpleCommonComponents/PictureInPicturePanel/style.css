@@ -10,6 +10,13 @@
 .wrapper {
   height: var(--height-viewer);
   width: 100%;
+  & .content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: height var(--timing-really-fast) ease-in-out;
+  }
 
   & .control-bar {
     width: auto;

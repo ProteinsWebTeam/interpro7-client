@@ -58,7 +58,7 @@ const PictureInPicturePanel = ({
   return (
     <div ref={wrapperRef} className={f('wrapper')}>
       <div
-        className={f(className, {
+        className={f(className, 'content', {
           'is-stuck': isStuck,
           'is-minimized': isMinimized,
         })}

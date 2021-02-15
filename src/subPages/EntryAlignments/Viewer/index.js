@@ -47,6 +47,8 @@ const loadProtVistaWebComponents = () => {
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+const defaultContactThreshold = 0.9;
+
 const AlignmentViewer = ({
   data: { loading, payload },
   colorscheme,
@@ -54,7 +56,7 @@ const AlignmentViewer = ({
   setColorMap,
   overlayConservation,
   contacts = null,
-  contactThreshold = 0.9,
+  contactThreshold = defaultContactThreshold,
 }) => {
   const msaTrack = useRef(null);
   const linksTrack = useRef(null);
@@ -159,7 +161,7 @@ const AlignmentViewer = ({
         )}
         <protvista-msa
           length={length}
-          height="400"
+          height="800"
           displayend="100"
           use-ctrl-to-zoom
           labelWidth={labelWidth}
