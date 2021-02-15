@@ -1,14 +1,13 @@
 // @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 
 import Link from 'components/generic/Link';
+import { FTPLink } from 'components/ExtLink';
 import DownloadTable from 'components/IPScan/DownloadTable';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -23,26 +22,6 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const FTPLink = ({ href, children } /*: { href: string, children: any } */) => (
-  <Tooltip
-    title={
-      'FTP support has been reduced in some browsers. You might need a FTP client in order to use this link.'
-    }
-  >
-    <Link
-      href={href}
-      target="_blank"
-      className={f('tag', 'secondary', 'ftp-link')}
-    >
-      <span className={f('icon', 'icon-common')} data-icon="&#xf233;" />{' '}
-      {children}
-    </Link>
-  </Tooltip>
-);
-FTPLink.propTypes = {
-  href: T.string,
-  children: T.any,
-};
 class Download extends PureComponent /*:: <{}> */ {
   render() {
     const IS_UNIPARC_READY = true;

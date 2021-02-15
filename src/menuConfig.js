@@ -46,7 +46,7 @@ export const EBI /*: Array<Object> */ = [
 
 const getEntryForFilter = ({ entry }) => {
   if (entry.db) {
-    return { ...entry, integration: null, isFilter: true };
+    return { db: entry.db, isFilter: true };
   }
 };
 const getTaxonomyForFilter = ({ taxonomy, main }) => {
