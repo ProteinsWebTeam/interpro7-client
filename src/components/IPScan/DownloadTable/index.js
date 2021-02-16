@@ -34,7 +34,7 @@ export const DownloadTable = (
           <th>Data</th>
           <th className={f('xs-hide')}>File name</th>
           <th className={f('xs-hide')}>Format</th>
-          <th />
+          <th className={f('xs-hide')}>Links</th>
         </tr>
       </thead>
       <tbody>
@@ -47,12 +47,6 @@ export const DownloadTable = (
             >
               InterProScan {version}
             </Link>
-            <br />
-            <FTPLink
-              href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
-            >
-              FTP Site
-            </FTPLink>
           </td>
           <td>
             Download and install the latest version of InterProScan (64-bit
@@ -66,12 +60,10 @@ export const DownloadTable = (
               href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
               target="_blank"
             >
-              {' '}
               <span
                 className={f('icon', 'icon-common', 'font-l')}
                 data-icon="&#x3d;"
-              />{' '}
-              64-bit
+              />
             </Link>
             <br />
             <FTPLink

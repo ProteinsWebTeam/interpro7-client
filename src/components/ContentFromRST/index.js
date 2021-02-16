@@ -252,14 +252,13 @@ Faq.propTypes = {
 };
 
 const LEVEL_FOR_FAQ = 3;
-let numberOfSections = 0;
 const Section = ({ depth, children, ...rest }) => {
-  numberOfSections++;
   if (rest.format === 'faq' && depth === LEVEL_FOR_FAQ) {
     return <Faq>{children}</Faq>;
   }
   const shouldIncludeIscan =
-    rest.format === 'interproscan' && depth > 1 && numberOfSections === 2;
+    rest.format === 'interproscan' &&
+    children?.[0]?.children?.[0]?.value === 'Documentation';
   return (
     <section>
       {shouldIncludeIscan && <InterProScan />}
@@ -327,7 +326,6 @@ const ContentFromRST = ({ rstText, format }) => {
   if (!doc?.type || doc.type !== 'document' || !doc?.children?.length)
     return null;
 
-  numberOfSections = 0;
   // console.log(doc);
   return (
     <div>
