@@ -57,6 +57,7 @@ const AlignmentViewer = ({
   overlayConservation,
   contacts = null,
   contactThreshold = defaultContactThreshold,
+  onAlignmentLoaded = () => null,
 }) => {
   const msaTrack = useRef(null);
   const linksTrack = useRef(null);
@@ -66,7 +67,9 @@ const AlignmentViewer = ({
   }, []);
   useEffect(() => {
     if (payload) {
-      setAlign(Stockholm.parse(payload));
+      const aln = Stockholm.parse(payload);
+      setAlign(aln);
+      onAlignmentLoaded(aln);
     }
   }, [payload]);
   useEffect(() => {
@@ -182,6 +185,7 @@ AlignmentViewer.propTypes = {
   contacts: T.array,
   contactThreshold: T.number,
   data: dataPropType,
+  onAlignmentLoaded: T.func,
 };
 
 const mapStateToPropsForAlignment = createSelector(
