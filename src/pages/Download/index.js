@@ -100,7 +100,8 @@ class Download extends PureComponent /*:: <{}> */ {
                         className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
-                    </Link>{' '}
+                    </Link>
+                    <br />
                     <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/entry.list">
                       FTP
                     </FTPLink>
@@ -131,7 +132,8 @@ class Download extends PureComponent /*:: <{}> */ {
                         className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
-                    </Link>{' '}
+                    </Link>
+                    <br />
                     <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz">
                       FTP
                     </FTPLink>
@@ -162,7 +164,8 @@ class Download extends PureComponent /*:: <{}> */ {
                         className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
-                    </Link>{' '}
+                    </Link>
+                    <br />
                     <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/match_complete.xml.gz">
                       FTP
                     </FTPLink>
@@ -194,7 +197,8 @@ class Download extends PureComponent /*:: <{}> */ {
                         className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
-                    </UniparcLink>{' '}
+                    </UniparcLink>
+                    <br />
                     <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.xml.gz">
                       FTP
                     </FTPLink>
@@ -219,7 +223,8 @@ class Download extends PureComponent /*:: <{}> */ {
                         className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
-                    </Link>{' '}
+                    </Link>
+                    <br />
                     <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz">
                       FTP
                     </FTPLink>
@@ -245,7 +250,8 @@ class Download extends PureComponent /*:: <{}> */ {
                         className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
-                    </Link>{' '}
+                    </Link>
+                    <br />
                     <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt">
                       FTP
                     </FTPLink>
@@ -270,7 +276,8 @@ class Download extends PureComponent /*:: <{}> */ {
                         className={f('icon', 'icon-common', 'font-l')}
                         data-icon="&#x3d;"
                       />
-                    </Link>{' '}
+                    </Link>
+                    <br />
                     <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
                       FTP
                     </FTPLink>
@@ -293,7 +300,8 @@ class Download extends PureComponent /*:: <{}> */ {
                           className={f('icon', 'icon-common', 'font-l')}
                           data-icon="&#x3d;"
                         />
-                      </Link>{' '}
+                      </Link>
+                      <br />
                       <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
                         FTP
                       </FTPLink>
