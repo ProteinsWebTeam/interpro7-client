@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import Link from 'components/generic/Link';
 import AlignmentViewer from '../EntryAlignments/Viewer';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
@@ -14,11 +15,12 @@ import StructureViewer from 'components/Structure/ViewerOnDemand';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ipro);
+const f = foundationPartial(ipro, fonts);
 const DEFAULT_TRESHOLD = 0.7;
 
-const StructuralModel = ({ data, urlForModel }) => {
+const StructuralModel = ({ data, urlForModel, accession }) => {
   const [threshold, setThreshold] = useState(DEFAULT_TRESHOLD);
   const [selections, setSelections] = useState(null);
   const [aln2str, setAln2str] = useState(null);
@@ -83,6 +85,17 @@ const StructuralModel = ({ data, urlForModel }) => {
   return (
     <div className={f('row', 'column')} ref={container}>
       <h3>Predicted Model</h3>
+      <Link
+        className={f('button')}
+        href={`${urlForModel}`}
+        download={`${accession || 'download'}.model.pdb`}
+      >
+        <span
+          className={f('icon', 'icon-common', 'icon-download')}
+          data-icon="&#xf019;"
+        />{' '}
+        Download
+      </Link>
       <PictureInPicturePanel
         className={f('structure-viewer')}
         testid="structure-3d-viewer"
@@ -139,6 +152,7 @@ StructuralModel.propTypes = {
     payload: T.arrayOf(T.arrayOf(T.number)),
   }),
   urlForModel: T.string,
+  accession: T.string,
 };
 const mapStateToPropsForModel = (typeOfData /*: 'contacts'|'structure' */) =>
   createSelector(
@@ -161,7 +175,7 @@ const mapStateToPropsForModel = (typeOfData /*: 'contacts'|'structure' */) =>
         query: { [key]: null },
       });
       if (typeOfData === 'contacts') return urlForModel;
-      return { urlForModel };
+      return { urlForModel, accession: description.entry.accession };
     },
   );
 

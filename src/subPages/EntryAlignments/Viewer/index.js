@@ -9,6 +9,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import ProtVistaMSA from 'protvista-msa';
 import ProtVistaManager from 'protvista-manager';
@@ -152,7 +153,22 @@ const AlignmentViewer = ({
                 fontWeight: 'bold',
               }}
             >
-              Contacts
+              Contacts{' '}
+              <Tooltip
+                title={`<p>
+                  Hover over the nodes to display their predicted contacts. This will be reflected in the 3D structure.
+                  </p>
+                  <p>
+                    The color of the nodes indicates if there are less <span style="color:orange; background:white;">●</span> 
+                    or more <span style="color:blue; background:white;">●</span> predicted contacts.
+                  </p>`}
+              >
+                <span
+                  className={f('small', 'icon', 'icon-common')}
+                  data-icon="&#xf129;"
+                  aria-label={`description for contact track`}
+                />
+              </Tooltip>
             </div>
             <protvista-links
               id="contacts-track"
