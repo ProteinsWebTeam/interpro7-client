@@ -18,7 +18,7 @@ import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(ipro, fonts);
-const DEFAULT_TRESHOLD = 0.7;
+const DEFAULT_TRESHOLD = 0.3;
 
 const StructuralModel = ({ data, urlForModel, accession }) => {
   const [threshold, setThreshold] = useState(DEFAULT_TRESHOLD);
@@ -125,7 +125,7 @@ const StructuralModel = ({ data, urlForModel, accession }) => {
         Probability threshold:
         <input
           type="range"
-          min="0.5"
+          min="0.1"
           max="1"
           step="0.01"
           value={threshold}
