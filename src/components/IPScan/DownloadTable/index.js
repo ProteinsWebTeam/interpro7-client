@@ -41,7 +41,7 @@ export const DownloadTable = (
         <tr>
           <td>
             <Link
-              href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+              href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
               target="_blank"
               style={{ whiteSpace: 'nowrap' }}
             >
@@ -57,7 +57,7 @@ export const DownloadTable = (
           <td className={f('xs-hide')}>gzipped</td>
           <td>
             <Link
-              href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+              href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
               target="_blank"
             >
               <span
