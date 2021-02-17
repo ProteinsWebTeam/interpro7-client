@@ -155,9 +155,7 @@ const AlignmentViewer = ({
             >
               Contacts{' '}
               <Tooltip
-                title={`<p>
-                  Hover over the nodes to display their predicted contacts. This will be reflected in the 3D structure.
-                  </p>
+                title={`
                   <p>
                     The color of the nodes indicates if there are less <span style="color:orange; background:white;">●</span> 
                     or more <span style="color:blue; background:white;">●</span> predicted contacts.
@@ -166,7 +164,7 @@ const AlignmentViewer = ({
                 <span
                   className={f('small', 'icon', 'icon-common')}
                   data-icon="&#xf129;"
-                  aria-label={`description for contact track`}
+                  aria-label={'description for contact track'}
                 />
               </Tooltip>
             </div>
@@ -180,7 +178,7 @@ const AlignmentViewer = ({
         )}
         <protvista-msa
           length={length}
-          height="800"
+          height="600"
           displayend="100"
           use-ctrl-to-zoom
           labelWidth={labelWidth}

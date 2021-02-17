@@ -23,3 +23,11 @@
     no-repeat 50% 90%;
   background-size: 100%;
 }
+
+.dark {
+  color: white;
+  & a {
+    color: skyblue;
+    font-weight: bold;
+  }
+}

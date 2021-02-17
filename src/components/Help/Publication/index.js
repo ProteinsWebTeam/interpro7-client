@@ -368,6 +368,7 @@ const pubTypes = {
     }),
   ]),
   imageClass: T.string,
+  dark: T.bool,
 };
 Publication.propTypes = pubTypes;
 const PreviousPublication = (
@@ -393,15 +394,16 @@ const PreviousPublication = (
 );
 PreviousPublication.propTypes = pubTypes;
 
-const PrintedPublication = (
+export const PrintedPublication = (
   {
     title,
     authors,
     source,
     url,
-  } /*: { title: string, authors: string, source: string , url: string }*/,
+    dark = false,
+  } /*: { title: string, authors: string, source: string , url: string, dark?: boolean }*/,
 ) => (
-  <blockquote className={f('quote')}>
+  <blockquote className={f('quote', { dark })}>
     {authors}{' '}
     <Link href={url} target="_blank">
       {title}
