@@ -18,9 +18,10 @@ import StructureViewer from 'components/Structure/ViewerOnDemand';
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import style from './style.css';
 
-const f = foundationPartial(ipro, fonts);
-const DEFAULT_TRESHOLD = 0.3;
+const f = foundationPartial(style, ipro, fonts);
+const DEFAULT_TRESHOLD = 0.9;
 
 const StructuralModel = ({ data, urlForModel, accession }) => {
   const [threshold, setThreshold] = useState(DEFAULT_TRESHOLD);
@@ -111,26 +112,29 @@ const StructuralModel = ({ data, urlForModel, accession }) => {
         </Tooltip>{' '}
         using the Pfam UniProt multiple sequence alignment.
       </div>
-      <Link
-        className={f('button')}
-        href={`${urlForModel}`}
-        download={`${accession || 'download'}.model.pdb`}
-      >
-        <span
-          className={f('icon', 'icon-common', 'icon-download')}
-          data-icon="&#xf019;"
-        />{' '}
-        Download
-      </Link>
+
       <PictureInPicturePanel
         className={f('structure-viewer')}
         testid="structure-3d-viewer"
         OtherButtons={
-          <FullScreenButton
-            className={f('icon', 'icon-common')}
-            tooltip="View the structure in full screen mode"
-            element={elementId}
-          />
+          <>
+            <Link
+              className={f('control')}
+              href={`${urlForModel}`}
+              download={`${accession || 'download'}.model.pdb`}
+            >
+              <span
+                className={f('icon', 'icon-common', 'icon-download')}
+                data-icon="&#xf019;"
+              />{' '}
+              Download
+            </Link>
+            <FullScreenButton
+              className={f('icon', 'icon-common', 'control')}
+              tooltip="View the structure in full screen mode"
+              element={elementId}
+            />{' '}
+          </>
         }
       >
         <StructureViewer
@@ -149,7 +153,17 @@ const StructuralModel = ({ data, urlForModel, accession }) => {
         model.
       </p>
       <label>
-        Probability threshold:
+        Probability threshold
+        <Tooltip title="Filter the contacts below, only including those which probability of being closer than 8A is higher than the threshold">
+          <sup>
+            <span
+              className={f('small', 'icon', 'icon-common')}
+              data-icon="&#xf129;"
+              aria-label={'description for probability threshold input'}
+            />
+          </sup>
+        </Tooltip>
+        :{' '}
         <input
           type="range"
           min="0.1"

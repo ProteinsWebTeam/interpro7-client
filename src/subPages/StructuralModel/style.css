@@ -1,0 +1,6 @@
+@import '../../styles/colors.css';
+
+.control {
+  color: var(--colors-tag);
+  margin: 0 1em 0 0;
+}

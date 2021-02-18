@@ -161,11 +161,13 @@ const AlignmentViewer = ({
                     or more <span style="color:blue; background:white;">●</span> predicted contacts.
                   </p>`}
               >
-                <span
-                  className={f('small', 'icon', 'icon-common')}
-                  data-icon="&#xf129;"
-                  aria-label={'description for contact track'}
-                />
+                <sup>
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                    aria-label={'description for contact track'}
+                  />
+                </sup>
               </Tooltip>
             </div>
             <protvista-links
