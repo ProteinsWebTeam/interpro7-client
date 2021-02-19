@@ -65,6 +65,13 @@
 .filter-box input:hover {
   border: 1px #b9d7ef solid;
 }
+.filter-box input.invalid {
+  border: 1px #f11f3a solid;
+}
+.filter-box .validation-message {
+  padding: 1rem 0.2rem 0 0;
+  cursor: default;
+}
 @media screen and (max-width: 39.9375em) {
   .filter-box,
   .table-filter {

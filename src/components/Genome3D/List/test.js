@@ -2,7 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import List from '.';
+import { List } from '.';
 
 const renderer = new ShallowRenderer();
 
@@ -57,6 +57,10 @@ describe('<List />', () => {
               ket: 'entry',
             },
           },
+        }}
+        dataResource={{
+          loading: false,
+          payload: [],
         }}
       />,
     );

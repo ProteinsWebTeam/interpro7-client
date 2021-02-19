@@ -75,7 +75,7 @@ export const InterProScan = (
       <div className={f('download', 'flex-card')}>
         <Link
           className={f('button')}
-          href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+          href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
           target="_blank"
         >
           Download InterProScan

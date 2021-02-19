@@ -5,18 +5,25 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import loadable from 'higherOrder/loadable';
+import loadData from 'higherOrder/loadData';
+import { createSelector } from 'reselect';
+import { format } from 'url';
+
 import Table, { Column, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 
 import MatchesOnProtein from './MatchesOnProtein';
 import FileExporter from '../FileExporter';
+
 import { foundationPartial } from 'styles/foundation';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
+import { STATUS_NO_CONTENT } from 'utils/server-message';
 const f = foundationPartial(ebiStyles, exporterStyle);
 const HTTP_404 = 404;
+const GENOME3D_500 = 500;
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -29,7 +36,7 @@ const schemaProcessData = (data) => {
     '@type': 'PropertyValue',
     additionalType: ['bio:SequenceMatchingModel', 'bio:sequenceAnnotation'],
     name: 'Annotation',
-    value: data.map((g3d) => g3d?.metadata?.evidences?.source?.url),
+    value: data?.map((g3d) => g3d?.metadata?.evidences?.source?.url),
   };
 };
 /*::
@@ -62,19 +69,25 @@ const schemaProcessData = (data) => {
       }
     }
   */
-const List = (
+export const List = (
   {
     data,
+    dataResource,
     customLocation: { search },
   } /*: {data: {
     loading: boolean,
     payload: Genome3DPayload,
     ok?: boolean,
     status?: number
-  }, customLocation: {search?: Object}} */,
+  },
+  dataResource: {
+    loading: boolean,
+    payload: Array<Object>,
+  },
+  customLocation: {search?: Object}} */,
 ) => {
   if (data.loading) return <Loading />;
-  const data4table = data.payload.data.map(
+  const data4table = data.payload?.data?.map(
     ({ accession, locations, metadata, tooltipContent, length }) => ({
       ...metadata,
       id: metadata.anno_id,
@@ -84,19 +97,25 @@ const List = (
       tooltipContent,
     }),
   );
+  let resourceList = [];
+  if (!dataResource.loading)
+    resourceList = dataResource.payload.map(({ name }) => name);
+
   return (
     <div className={f('row')}>
       <div className={f('columns')}>
         <SchemaOrgData
-          data={data.payload.data}
+          data={data.payload?.data}
           processData={schemaProcessData}
         />
         <Table
           dataTable={data4table}
           loading={data.loading}
           ok={data.ok}
-          status={data.status}
-          actualSize={data.payload.pager.total_entries}
+          status={
+            data.status === GENOME3D_500 ? STATUS_NO_CONTENT : data.status
+          }
+          actualSize={data.payload?.pager?.total_entries}
           notFound={data.status === HTTP_404}
           rowKey={'id'}
           query={search}
@@ -106,14 +125,14 @@ const List = (
               <label htmlFor="json">JSON</label>
               <FileExporter
                 fileType="json"
-                name={`genome3d.${data.payload.interpro.ipr_id}.json`}
-                count={data.payload.pager.total_entries}
+                name={`genome3d.${data.payload?.interpro?.ipr_id}.json`}
+                count={data.payload?.pager?.total_entries}
               />
               <label htmlFor="tsv">TSV</label>
               <FileExporter
                 fileType="tsv"
-                name={`genome3d.${data.payload.interpro.ipr_id}.tsv`}
-                count={data.payload.pager.total_entries}
+                name={`genome3d.${data.payload?.interpro?.ipr_id}.tsv`}
+                count={data.payload?.pager?.total_entries}
               />
             </div>
           </Exporter>
@@ -131,6 +150,11 @@ const List = (
                 {accession}
               </Link>
             )}
+            isSearchable={true}
+            customiseSearch={{
+              validation: /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
+              message: 'Accepts only UniProt accessions',
+            }}
           >
             Protein
           </Column>
@@ -145,6 +169,9 @@ const List = (
                 {name}: {id}
               </Link>
             )}
+            isSearchable={true}
+            showOptions={true}
+            options={resourceList}
           >
             Evidence
           </Column>
@@ -153,6 +180,11 @@ const List = (
             renderer={(confidence /*: number */) => (
               <NumberComponent>{confidence}</NumberComponent>
             )}
+            isSearchable={true}
+            customiseSearch={{
+              type: 'number',
+              placeholder: '>=',
+            }}
           />
           <Column
             dataKey="locations"
@@ -181,8 +213,25 @@ const List = (
 };
 List.propTypes = {
   data: dataPropType,
+  dataResource: T.object,
   customLocation: T.shape({
     search: T.object,
   }),
 };
-export default List;
+
+const getGenome3dResourceURL = createSelector(
+  (state) => state.settings.genome3d,
+  ({ protocol, hostname, port, root }) => {
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}resource/list`,
+    });
+  },
+);
+
+export default loadData({
+  getUrl: getGenome3dResourceURL,
+  propNamespace: 'Resource',
+})(List);

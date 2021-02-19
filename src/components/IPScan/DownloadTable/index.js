@@ -3,6 +3,7 @@ import React from 'react';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
+import { FTPLink } from 'components/ExtLink';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -33,15 +34,16 @@ export const DownloadTable = (
           <th>Data</th>
           <th className={f('xs-hide')}>File name</th>
           <th className={f('xs-hide')}>Format</th>
-          <th />
+          <th className={f('xs-hide')}>Links</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
             <Link
-              href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+              href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
               target="_blank"
+              style={{ whiteSpace: 'nowrap' }}
             >
               InterProScan {version}
             </Link>
@@ -55,16 +57,20 @@ export const DownloadTable = (
           <td className={f('xs-hide')}>gzipped</td>
           <td>
             <Link
-              href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+              href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
               target="_blank"
             >
-              {' '}
               <span
                 className={f('icon', 'icon-common', 'font-l')}
                 data-icon="&#x3d;"
-              />{' '}
-              64-bit
+              />
             </Link>
+            <br />
+            <FTPLink
+              href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+            >
+              FTP Site
+            </FTPLink>
           </td>
         </tr>
       </tbody>
