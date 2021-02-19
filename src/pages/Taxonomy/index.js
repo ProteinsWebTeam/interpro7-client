@@ -487,6 +487,7 @@ class List extends PureComponent /*:: <Props,State> */ {
             exactMatch.metadata.name.short ||
             exactMatch.metadata.name.name ||
             exactMatch.metadata.name,
+          exact_match: true,
         },
         className: f(local.exactMatch),
       });
