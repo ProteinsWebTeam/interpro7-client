@@ -16,6 +16,8 @@ const postcssPresetEnv = require('postcss-preset-env');
 
 const cssNano = require('cssnano');
 
+const WorkboxPlugin = require('workbox-webpack-plugin');
+
 const buildInfo = require('./scripts/build-info');
 const pkg = require('./package.json');
 
@@ -378,28 +380,31 @@ const getConfigFor = (env, mode, module = false) => {
       }),
       mode === 'production' ? miniCssExtractPlugin : null,
       mode === 'production'
-        ? new (require('offline-plugin'))({
-            caches: {
-              main: [
-                new RegExp(`js/[^/]*${name}[^/]*.js$`, 'i'),
-                new RegExp('css/[^/]+.css$', 'i'),
-              ],
-              additional: [/\.(worker\.js)$/i],
-              optional: [/\.(eot|ttf|woff|svg|ico|png|avif|jpe?g)$/i],
-            },
-            // TODO: check a way to use it without affecting /api
-            // appShell: publicPath,
-            AppCache: false,
-            // TODO: Check whats the best way to do this autoupdate.
-            // autoUpdate: 60000,
-            ServiceWorker: {
-              output: `sw.${name}.js`,
-              events: true,
-            },
-            safeToUseOptionalCaches: true,
-            excludes: ['**/.*', '**/*.{map,br,gz}'],
+        ? new WorkboxPlugin.GenerateSW({
+            skipWaiting: false,
+            swDest: `sw.${name}.js`,
+            exclude: ['**/.*', '**/*.{map,br,gz}'],
           })
         : null,
+      //   TODO: Remove if workbox works wellfor a few releases.
+      //   This is the configuration of previous service worker plugin. Left here as reference in
+      //   ? new (require('offline-plugin'))({
+      //       caches: {
+      //         main: [
+      //           new RegExp(`js/[^/]*${name}[^/]*.js$`, 'i'),
+      //           new RegExp('css/[^/]+.css$', 'i'),
+      //         ],
+      //         additional: [/\.(worker\.js)$/i],
+      //         optional: [/\.(eot|ttf|woff|svg|ico|png|avif|jpe?g)$/i],
+      //       },
+      //       AppCache: false,
+      //       ServiceWorker: {
+      //         output: `sw.${name}.js`,
+      //         events: true,
+      //       },
+      //       safeToUseOptionalCaches: true,
+      //     })
+
       // Custom plugin to split codebase into legacy/modern bundles,
       // depends on HTMLWebpackPlugin
       legacyModuleSplitPlugin,
