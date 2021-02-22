@@ -19,6 +19,7 @@ exports[`<SideMenu /> should render 1`] = `
     <Memo(Connect(Tip))
       body="The green and red signals of the connection status shows the connectivity strength of the URLs"
       settingsName="showConnectionStatusToast"
+      title="💡 How strong are the connections?"
       toastID="connectivity"
     />
     <button
