@@ -4,7 +4,7 @@ import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
 
-import Skylign from 'skylign';
+import Skylign from 'skylign/src/index';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import styles from './logo.css';

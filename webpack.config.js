@@ -39,11 +39,10 @@ const getCompressionPlugin = (() => {
 const cssSettings = {
   modules: {
     mode: 'local',
-    localIdentName: '[folder]_[name]__[local]___[hash:2]',
+    localIdentName: '[folder]_[name]__[local]___[fullhash:2]',
   },
   importLoaders: 1,
   sourceMap: true,
-  // localIdentName: '[folder]_[name]__[local]___[hash:2]',
 };
 
 const publicPath = websiteURL.pathname || '/interpro/';
@@ -59,6 +58,10 @@ const getHTMLWebpackPlugin = (mode) =>
       htmlWebpackPlugin: {
         files: assets,
         options: options,
+        faviconTags: assetTags.headTags.filter(
+          (tag) =>
+            tag && tag.meta && tag.meta.plugin === 'favicons-webpack-plugin'
+        ),
       },
     }),
   });
@@ -66,8 +69,9 @@ const getHTMLWebpackPlugin = (mode) =>
 const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
-  filename: path.join('css', '[name].[contenthash:3].css'),
-  chunkFilename: path.join('css', '[id].[contenthash:3].css'),
+  filename: path.join('css', '[name].[fullhash:3].css'),
+  chunkFilename: path.join('css', '[id].[chunkhash:3].css'),
+  ignoreOrder: true,
 });
 
 const getConfigFor = (env, mode, module = false) => {
@@ -80,9 +84,9 @@ const getConfigFor = (env, mode, module = false) => {
     mode,
     // OUTPUT
     output: {
-      path: path.resolve('dist'),
+      // path: path.resolve('dist'),
       publicPath,
-      filename: path.join('js', `[id].${name}.[name].[hash:3].js`),
+      filename: path.join('js', `[id].${name}.[name].[fullhash:3].js`),
       chunkFilename: path.join('js', `[id].${name}.[name].[chunkhash:3].js`),
       globalObject: 'self',
     },
@@ -115,7 +119,7 @@ const getConfigFor = (env, mode, module = false) => {
                 filename: path.join(
                   'js',
                   'workers',
-                  `[folder].${name}.[name].[hash:3].worker.js`
+                  `${name}.[name].[chunkhash:3].worker.js`
                 ),
               },
             },
@@ -126,7 +130,6 @@ const getConfigFor = (env, mode, module = false) => {
           include: [
             path.resolve('src'),
             path.resolve('node_modules', 'lodash-es'),
-            // path.resolve('node_modules', 'color-hash'),
             path.resolve('node_modules', 'timing-functions'),
             /protvista/i,
             /react-msa-viewer/,
@@ -203,7 +206,7 @@ const getConfigFor = (env, mode, module = false) => {
           ],
         },
         {
-          test: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          test: /((clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
           use: [
             {
               loader:
@@ -211,6 +214,7 @@ const getConfigFor = (env, mode, module = false) => {
                   ? MiniCssExtractPlugin.loader
                   : 'style-loader',
             },
+            // 'style-loader',
             {
               loader: 'css-loader',
               options: {
@@ -244,6 +248,7 @@ const getConfigFor = (env, mode, module = false) => {
                   ? MiniCssExtractPlugin.loader
                   : 'style-loader',
             },
+            // 'style-loader',
             {
               loader: 'css-loader',
               options: {
@@ -265,6 +270,7 @@ const getConfigFor = (env, mode, module = false) => {
                   ? MiniCssExtractPlugin.loader
                   : 'style-loader',
             },
+            // 'style-loader',
             {
               loader: 'css-loader',
               options: cssSettings,
@@ -282,12 +288,12 @@ const getConfigFor = (env, mode, module = false) => {
               },
             },
           ],
-          exclude: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          exclude: /((tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
         },
         {
           test: /\.css\?string$/i,
           use: [{ loader: 'raw-loader' }],
-          exclude: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          exclude: /((tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
         },
         {
           test: /\.scss$/i,
@@ -298,6 +304,7 @@ const getConfigFor = (env, mode, module = false) => {
                   ? MiniCssExtractPlugin.loader
                   : 'style-loader',
             },
+            // 'style-loader',
             {
               loader: 'css-loader',
               options: Object.assign({}, cssSettings, {
@@ -319,7 +326,7 @@ const getConfigFor = (env, mode, module = false) => {
                 name: path.join(
                   'assets',
                   'images',
-                  '[name].[hash:base62:3].[ext]'
+                  '[name].[contenthash:base62:3].[ext]'
                 ),
                 limit: 1 * kB,
               },
@@ -341,7 +348,7 @@ const getConfigFor = (env, mode, module = false) => {
                 name: path.join(
                   'assets',
                   'fonts',
-                  '[name].[hash:base62:3].[ext]'
+                  '[name].[contenthash:base62:3].[ext]'
                 ),
                 limit: 1 * kB,
                 mimetype: 'application/font-woff',
@@ -358,7 +365,7 @@ const getConfigFor = (env, mode, module = false) => {
                 name: path.join(
                   'assets',
                   'fonts',
-                  '[name].[hash:base62:3].[ext]'
+                  '[name].[contenthash:base62:3].[ext]'
                 ),
               },
             },
@@ -411,9 +418,8 @@ const getConfigFor = (env, mode, module = false) => {
       // GZIP compression
       mode === 'production'
         ? new (getCompressionPlugin())({
-            filename: '[path].gz[query]',
+            filename: '[path][base].gz[query]',
             test: /\.(js|css|html|svg)$/i,
-            cache: true,
             algorithm(buffer, options, callback) {
               require('node-zopfli-es').gzip(buffer, options, callback);
             },
@@ -422,9 +428,8 @@ const getConfigFor = (env, mode, module = false) => {
       // Brotli compression
       mode === 'production'
         ? new (getCompressionPlugin())({
-            filename: '[path].br[query]',
+            filename: '[path][base].br[query]',
             test: /\.(js|css|html|svg)$/i,
-            cache: true,
             algorithm(buffer, _, callback) {
               require('iltorb').compress(
                 buffer,
@@ -458,10 +463,11 @@ module.exports = (
   // Add plugins needed only once
   configModule.plugins = [
     mode === 'production'
-      ? new (require('webapp-webpack-plugin'))({
-          logo: path.join('.', 'images', 'logo', 'logo_1776x1776.png'),
-          prefix: path.join('assets', 'icons-and-manifests', '[hash:base62:3]'),
-          inject: 'force',
+      ? new (require('favicons-webpack-plugin'))({
+          logo: path.join('.', 'src', 'images', 'logo', 'logo_1776x1776.png'),
+          prefix:
+            path.join('assets', 'icons-and-manifests', '[chunkhash:3]') + '/',
+          inject: true,
           favicons: {
             background: '#007c82',
             theme_color: '#007c82',
