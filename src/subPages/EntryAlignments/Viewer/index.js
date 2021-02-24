@@ -90,7 +90,7 @@ const AlignmentViewer = ({
         linksTrack.current.data = contacts;
       }
     }
-  }, [align]);
+  }, [align, contacts]);
 
   if (loading || !payload || !align) {
     return <Loading />;

@@ -23,7 +23,7 @@ import style from './style.css';
 const f = foundationPartial(style, ipro, fonts);
 const DEFAULT_TRESHOLD = 0.9;
 
-const StructuralModel = ({ data, urlForModel, accession }) => {
+const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
   const [threshold, setThreshold] = useState(DEFAULT_TRESHOLD);
   const [selections, setSelections] = useState(null);
   const [aln2str, setAln2str] = useState(null);
@@ -78,7 +78,8 @@ const StructuralModel = ({ data, urlForModel, accession }) => {
     setAln2str(a2s);
   };
 
-  if (!data || data.loading || !data.payload) return null;
+  if (!data || data.loading || !data.payload || !dataContacts?.payload)
+    return null;
   const elementId = 'structure-model-viewer';
 
   const handleThresholdChange = (evt) => {
@@ -116,6 +117,24 @@ const StructuralModel = ({ data, urlForModel, accession }) => {
       <PictureInPicturePanel
         className={f('structure-viewer')}
         testid="structure-3d-viewer"
+        OtherControls={
+          <section className={f('lddt')}>
+            <header>
+              lDDT{' '}
+              <Tooltip title="Quality score lDDT: Local Distance Difference Test">
+                <sup>
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                    aria-label={'Citation to trRosetta paper'}
+                  />
+                </sup>
+              </Tooltip>
+              :{' '}
+            </header>
+            <code>{data.payload.lddt}</code>
+          </section>
+        }
         OtherButtons={
           <>
             <Link
@@ -180,7 +199,7 @@ const StructuralModel = ({ data, urlForModel, accession }) => {
         onConservationProgress={() => null}
         type="alignment:seed"
         colorscheme="clustal2"
-        contacts={data.payload}
+        contacts={dataContacts?.payload || []}
         contactThreshold={threshold}
         onAlignmentLoaded={getAlignmentToStructureMap}
       />
@@ -189,6 +208,10 @@ const StructuralModel = ({ data, urlForModel, accession }) => {
 };
 StructuralModel.propTypes = {
   data: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.object,
+  }),
+  dataContacts: T.shape({
     loading: T.bool.isRequired,
     payload: T.arrayOf(T.arrayOf(T.number)),
   }),
@@ -215,12 +238,17 @@ const mapStateToPropsForModel = (typeOfData /*: 'contacts'|'structure' */) =>
         pathname: root + descriptionToPath(newDescription),
         query: { [key]: null },
       });
-      if (typeOfData === 'contacts') return urlForModel;
+      if (['contacts', 'info'].includes(typeOfData)) return urlForModel;
       return { urlForModel, accession: description.entry.accession };
     },
   );
 
 export default loadData({
-  getUrl: mapStateToPropsForModel('contacts'),
+  getUrl: mapStateToPropsForModel('info'),
   mapStateToProps: mapStateToPropsForModel('structure'),
-})(StructuralModel);
+})(
+  loadData({
+    getUrl: mapStateToPropsForModel('contacts'),
+    propNamespace: 'Contacts',
+  })(StructuralModel),
+);
