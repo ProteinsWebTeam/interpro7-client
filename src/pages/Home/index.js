@@ -220,9 +220,9 @@ const Announcement = () => (
         />{' '}
         We need your help!
         <br />
-        If you've ever found our data helpful, please take our impact survey (15
-        min). Your replies will help keep the data flowing to the scientific
-        community.
+        If you&apos;ve ever found our data helpful, please take our impact
+        survey (15 min). Your replies will help keep the data flowing to the
+        scientific community.
         <a
           href="https://www.surveymonkey.co.uk/r/EMBL-EBI_Impact_DR"
           className={f('button')}
@@ -232,6 +232,7 @@ const Announcement = () => (
             borderRadius: '5px',
           }}
           target="_blank"
+          rel="noreferrer"
         >
           Take survey
         </a>
