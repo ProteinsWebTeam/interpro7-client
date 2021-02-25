@@ -62,6 +62,10 @@ const Genome3d = loadable({
 const Curation = loadable({
   loader: () => import(/* webpackChunkName: "curation-subpage" */ './Curation'),
 });
+const StructuralModel = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "model-subpage" */ './StructuralModel'),
+});
 const defaultMapStateToProps = createSelector(
   (state) => state.settings.api,
   (state) => state.settings.navigation.pageSize,
@@ -222,6 +226,7 @@ const subPages = new Map([
     loadData(getInterProModifierURL('interactions'))(InteractionsSubPage),
   ],
   ['pathways', loadData(getInterProModifierURL('pathways'))(PathwaysSubPage)],
+  ['model', StructuralModel],
   ['alignments', SetAlignments],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],

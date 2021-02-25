@@ -132,7 +132,7 @@ exports[`<SummaryStructure /> should render 1`] = `
         <div
           className="columns"
         >
-          <Memo(Connect(ViewerOnDemand))
+          <Memo(Connect(StructureView))
             id="102m"
             matches={
               Array [

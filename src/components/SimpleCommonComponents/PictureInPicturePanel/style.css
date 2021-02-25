@@ -1,0 +1,73 @@
+@import '../../../styles/timing.css';
+@import '../../../styles/colors.css';
+@import '../../../styles/z-index.css';
+
+:root {
+  --height-viewer: 50vh;
+  --height-bar: 2.3em;
+}
+
+.wrapper {
+  height: var(--height-viewer);
+  width: 100%;
+  & .content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: height var(--timing-really-fast) ease-in-out;
+  }
+
+  & .control-bar {
+    width: auto;
+    height: var(--height-bar);
+    margin-top: calc(0 - var(--height-bar));
+    display: flex;
+    justify-content: space-between;
+    background: white;
+
+    & .controls {
+      white-space: nowrap;
+      overflow: visible;
+      flex-grow: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      & button {
+        font-size: 1.5em;
+        margin: 4px;
+      }
+    }
+  }
+  & .is-stuck {
+    position: fixed;
+    z-index: var(--z-index-over-main);
+    right: 10px;
+    top: auto;
+    bottom: 10px;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    border-radius: 0;
+    display: block;
+    -webkit-box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.3);
+    width: 40%;
+    height: calc(var(--height-viewer) - var(--height-bar));
+
+    & .structure-viewer-select {
+      left: 1rem;
+    }
+
+    &.structure-icon {
+      font-size: 1em;
+    }
+
+    &.is-minimized {
+      height: var(--height-bar);
+      & .structure-viewer-ref {
+        display: none;
+      }
+    }
+  }
+}

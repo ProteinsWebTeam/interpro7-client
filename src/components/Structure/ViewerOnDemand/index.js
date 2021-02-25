@@ -24,7 +24,6 @@ const StructureViewAsync = loadable({
 
 /*:: type Props = {
   id: string,
-  matches: Array<Object>,
   userActivatedVisible: boolean,
   changeSettingsRaw: function,
 }; */
@@ -36,7 +35,6 @@ export class ViewerOnDemand extends PureComponent /*:: <Props, State> */ {
 
   static propTypes = {
     id: T.string.isRequired,
-    matches: T.array.isRequired,
     userActivatedVisible: T.bool.isRequired,
     changeSettingsRaw: T.func.isRequired,
   };
@@ -53,7 +51,7 @@ export class ViewerOnDemand extends PureComponent /*:: <Props, State> */ {
     this.setState({ visible: !(await isResourceRestricted()) });
   }
 
-  _handleCheckboxClick = e => e.stopPropagation();
+  _handleCheckboxClick = (e) => e.stopPropagation();
 
   _handleClick = () => {
     if (this._ref.current && this._ref.current.checked) {
@@ -63,9 +61,9 @@ export class ViewerOnDemand extends PureComponent /*:: <Props, State> */ {
   };
 
   render() {
-    const { id, matches } = this.props;
+    const { id } = this.props;
     if (this.state.visible) {
-      return <StructureViewAsync id={id} matches={matches} />;
+      return <StructureViewAsync {...this.props} />;
     }
     return (
       <div className={styles.wrapper}>
@@ -106,10 +104,12 @@ export class ViewerOnDemand extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.ui.structureViewer,
-  userActivatedVisible => ({
+  (state) => state.settings.ui.structureViewer,
+  (userActivatedVisible) => ({
     userActivatedVisible: userActivatedVisible || false,
   }),
 );
 
-export default connect(mapStateToProps, { changeSettingsRaw })(ViewerOnDemand);
+export default connect(mapStateToProps, { changeSettingsRaw }, null, {
+  forwardRef: true,
+})(ViewerOnDemand);
