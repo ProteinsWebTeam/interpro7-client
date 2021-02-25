@@ -1,40 +1,34 @@
 // @flow
-import * as runtime from 'offline-plugin/runtime';
+import { Workbox, messageSW } from 'workbox-window';
+
 import { sleep, schedule } from 'timing-functions';
 
 import { addToast } from 'actions/creators';
 
 // eslint-disable-next-line no-magic-numbers
 const DELAY_BEFORE_CHECKING_NEW_VERSION = 1000 * 60 * 30; // 30 minutes
-// eslint-disable-next-line no-magic-numbers
-const DELAY_BEFORE_UNSAFE_TO_RELOAD = 2 * 1000; // 2 seconds
 
 /*:: import type { Store } from 'redux'; */
 
+const hasDynamicImport = () => {
+  try {
+    // eslint-disable-next-line no-new-func
+    return new Function(
+      "return import('data:text/javascript;base64,Cg==').then(r => true)",
+    )();
+  } catch (e) {
+    return Promise.resolve(false);
+  }
+};
+
 export default async ({ dispatch } /*: Store<*, *, *> */) => {
-  let safeToReload = true;
+  if ('serviceWorker' in navigator) {
+    const useModule = await hasDynamicImport();
+    const wb = new Workbox(`sw.${useModule ? 'module' : 'legacy'}.js`);
 
-  runtime.install({
-    onInstalled() {
-      console.log('SW Event:', 'onInstalled');
-    },
-    onUpdating() {
-      console.log('SW Event:', 'onUpdating');
-    },
-    onUpdateReady() {
-      console.log('SW Event:', 'onUpdateReady');
-      // Tells to new SW to take control immediately
-      runtime.applyUpdate();
-    },
-    onUpdated() {
-      console.log('SW Event:', 'onUpdated');
-      // If we are within a small timeframe after the page has loaded
-      if (safeToReload) {
-        // Just reload the page directly
-        return window.location.reload();
-      }
-      // Reload the page to load the new version only if user wants it
+    let registration;
 
+    const showSkipWaitingPrompt = () => {
       dispatch(
         addToast(
           {
@@ -44,27 +38,30 @@ export default async ({ dispatch } /*: Store<*, *, *> */) => {
             action: {
               text: 'Load new version',
               fn() {
-                window.location.reload();
+                console.log('fn');
+                if (registration && registration.waiting) {
+                  messageSW(registration.waiting, { type: 'SKIP_WAITING' });
+                }
               },
             },
           },
           'new-version-toast',
         ),
       );
-    },
-    onUpdateFailed() {
-      console.log('SW Event:', 'onUpdateFailed');
-    },
-  });
+    };
 
-  await sleep(DELAY_BEFORE_UNSAFE_TO_RELOAD);
-  safeToReload = false;
+    wb.addEventListener('waiting', showSkipWaitingPrompt);
+    wb.addEventListener('externalwaiting', showSkipWaitingPrompt);
+    wb.addEventListener('controlling', () => window.location.reload());
+    wb.addEventListener('activated', () => window.location.reload());
 
-  // Infinite loop to check if new version available every once in a while
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    await sleep(DELAY_BEFORE_CHECKING_NEW_VERSION);
-    await schedule();
-    runtime.update();
+    wb.register().then((r) => (registration = r));
+
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      await sleep(DELAY_BEFORE_CHECKING_NEW_VERSION);
+      await schedule();
+      if (registration) registration.update();
+    }
   }
 };
