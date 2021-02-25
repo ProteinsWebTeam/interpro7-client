@@ -7,7 +7,7 @@ class LegacyModuleSplitPlugin {
   }
 
   apply(compiler) {
-    compiler.hooks.compilation.tap('LegacyModuleSplitPlugin', compilation => {
+    compiler.hooks.compilation.tap('LegacyModuleSplitPlugin', (compilation) => {
       HtmlWebpackPlugin.getHooks(compilation).beforeAssetTagGeneration.tapAsync(
         'LegacyModuleSplitPlugin',
         this.beforeAssetTagGeneration.bind(this)
@@ -17,10 +17,10 @@ class LegacyModuleSplitPlugin {
 
   beforeAssetTagGeneration(data, callback) {
     this._code = [...this._code, ...data.assets.js];
-    data.plugin.options.moduleScripts = this._code.filter(path =>
+    data.assets.moduleScripts = this._code.filter((path) =>
       path.includes('.module.')
     );
-    data.plugin.options.legacyScripts = this._code.filter(path =>
+    data.assets.legacyScripts = this._code.filter((path) =>
       path.includes('.legacy.')
     );
     callback(null, data);
