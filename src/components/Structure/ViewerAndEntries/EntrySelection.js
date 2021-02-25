@@ -36,7 +36,7 @@ class EntrySelection extends PureComponent /*:: <Props, State> */ {
     };
   }
 
-  onSelectionChange = e => {
+  onSelectionChange = (e) => {
     // extract memberDB and entry from component
     const entry = e.target.value;
     let memberDB = null;

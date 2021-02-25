@@ -11,7 +11,7 @@ import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
 import TimeAgo from 'components/TimeAgo';
-import ViewerOnDemand from 'components/Structure/ViewerOnDemand';
+import ViewerOnDemand from 'components/Structure/ViewerAndEntries';
 
 import { foundationPartial } from 'styles/foundation';
 
