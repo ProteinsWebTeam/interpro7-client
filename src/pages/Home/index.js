@@ -227,6 +227,7 @@ const Announcement = () => (
           href="https://www.surveymonkey.co.uk/r/EMBL-EBI_Impact_DR"
           className={f('button')}
           style={{
+            marginLeft: '0.5em',
             background: 'darkgreen',
             whiteSpace: 'nowrap',
             borderRadius: '5px',
