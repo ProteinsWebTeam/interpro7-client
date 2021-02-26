@@ -20,8 +20,6 @@ const extending = [
   'plugin:react/recommended',
   'plugin:jsx-a11y/recommended',
   'prettier',
-  'prettier/flowtype',
-  'prettier/react',
 ];
 
 const plugins = ['react', 'jsx-a11y'];

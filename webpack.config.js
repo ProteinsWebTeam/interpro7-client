@@ -465,8 +465,11 @@ module.exports = (
     mode === 'production'
       ? new (require('favicons-webpack-plugin'))({
           logo: path.join('.', 'src', 'images', 'logo', 'logo_1776x1776.png'),
-          prefix:
-            path.join('assets', 'icons-and-manifests', '[chunkhash:3]') + '/',
+          prefix: `${path.join(
+            'assets',
+            'icons-and-manifests',
+            '[chunkhash:3]'
+          )}/`,
           inject: true,
           favicons: {
             background: '#007c82',
