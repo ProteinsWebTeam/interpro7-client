@@ -456,9 +456,14 @@ g:global(.child-location-group.clg-5) path {
   margin-right: 0.25rem;
 }
 
+protvista-zoom-tool {
+  --button-padding-v: 0;
+  --button-padding-h: 0;
+  --button-background: white;
+}
+
 .zoom-button {
   font-size: 2rem;
-  /*color: #2daec1;*/
   margin: 1px;
 }
 
