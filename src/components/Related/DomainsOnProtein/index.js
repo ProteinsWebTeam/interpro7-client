@@ -25,6 +25,7 @@ import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 const f = foundationPartial(ipro);
 
+const CONSERVATION_WINDOW = 25;
 const ProtVista = loadable({
   loader: () =>
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
@@ -129,6 +130,37 @@ const processConservationData = (entry, match) => {
   return fragments;
 };
 
+const processConservationData2 = (entry, match) => {
+  const halfWindow = Math.trunc(CONSERVATION_WINDOW / 2);
+  const scores = [];
+
+  let window = [];
+  for (let i = 0; i < match.length; i++) {
+    if (i < halfWindow) {
+      // First half of first window [0-11] -> window length varies from 13 to 24
+      window = match.slice(0, i + halfWindow + 1);
+    } else if (i >= halfWindow && i < match.length - halfWindow) {
+      // Rest takes fixed length of 25. [-12--element--12]
+      window = match.slice(i - halfWindow, i + halfWindow + 1);
+    } else {
+      // Last half of last window [seqLength-12 to seqLength] -> window length varies from 24 to 13
+      window = match.slice(i - halfWindow, match.length);
+    }
+    scores.push({
+      ...match[i],
+      score:
+        window.reduce((acc, residue) => {
+          let score = residue.score;
+          if (score < 0)
+            // In case of negative score, treat it as 0
+            score = 0;
+          return acc + score;
+        }, 0) / window.length,
+    });
+  }
+  return scores;
+};
+
 const addExistingEntiesToConservationResults = (
   data /*: {[string]: Array<Object>} */,
   conservationDatabases /*: Array<string> */,
@@ -178,6 +210,8 @@ const mergeConservationData = (
           // eslint-disable-next-line max-depth
           for (const match of matches) {
             const fragments = processConservationData(entry, match);
+            const conservationAverage = processConservationData2(entry, match);
+            // TODO add conservationAverage to the new line graph
             dbConservationScores.locations.push({
               fragments: fragments,
               match: entry,
