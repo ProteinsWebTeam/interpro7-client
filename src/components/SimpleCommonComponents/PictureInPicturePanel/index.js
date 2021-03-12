@@ -64,14 +64,15 @@ const PictureInPicturePanel = ({
         })}
         data-testid={testId}
       >
+        {!isStuck && <div className={f('controls')}>{OtherControls}</div>}
         {children}
         <div
           className={f('control-bar', {
             hide: hideBar,
           })}
         >
-          {OtherControls}
           <div className={f('controls')}>
+            {isStuck && OtherControls}
             {OtherButtons}
             {isStuck && (
               <button
