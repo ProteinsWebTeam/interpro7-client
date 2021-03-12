@@ -142,7 +142,7 @@ export const getMismatchedFavourites = async ({
 
         addToast(
           {
-            title: 'Favourites update',
+            title: '⭐ Favourites update',
             body: 'Changed detected in your favourites in the new version',
             ttl: 10000, // eslint-disable-line no-magic-numbers
             link: {
