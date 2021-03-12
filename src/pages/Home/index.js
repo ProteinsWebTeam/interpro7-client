@@ -213,7 +213,7 @@ class Home extends PureComponent {
       <>
         {this.props.showSettingsToast ? (
           <Tip
-            title="💡 Where to find the website settings?"
+            title="💡 How to edit the website settings?"
             body="To customise settings, click on the ☰ icon at the top right corner and select settings from the menu options"
             toastID="settings"
             settingsName="showSettingsToast"
