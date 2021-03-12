@@ -134,7 +134,7 @@ PMCLink.propTypes = {
 };
 PMCLink.displayName = 'PMCLink';
 
-export const DOILink = patternLinkWrapper('{id}');
+export const DOILink = patternLinkWrapper('https://pubs.acs.org/doi/{id}');
 DOILink.displayName = 'DOILink';
 
 export const GoLink = (

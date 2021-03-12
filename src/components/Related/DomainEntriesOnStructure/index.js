@@ -333,6 +333,10 @@ const EntriesOnStructure = (
                       },
                     }}
                   >
+                    <span
+                      className={f('icon', 'icon-conceptual')}
+                      data-icon="&#x50;"
+                    />{' '}
                     {(e.protein.accession || '').toUpperCase()}
                   </Link>
                   )

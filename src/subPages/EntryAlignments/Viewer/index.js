@@ -9,17 +9,20 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import ProtVistaMSA from 'protvista-msa';
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaNavigation from 'protvista-navigation';
 import ProtvistaZoomTool from 'protvista-zoom-tool';
+import ProtvistaLinks from 'protvista-links';
 
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
 
-const f = foundationPartial(fonts);
+const f = foundationPartial(fonts, local);
 
 const webComponents = [];
 
@@ -37,11 +40,16 @@ const loadProtVistaWebComponents = () => {
     webComponents.push(
       loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
     );
+    webComponents.push(
+      loadWebComponent(() => ProtvistaLinks).as('protvista-links'),
+    );
   }
   return Promise.all(webComponents);
 };
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+
+const defaultContactThreshold = 0.9;
 
 const AlignmentViewer = ({
   data: { loading, payload },
@@ -49,15 +57,21 @@ const AlignmentViewer = ({
   onConservationProgress,
   setColorMap,
   overlayConservation,
+  contacts = null,
+  contactThreshold = defaultContactThreshold,
+  onAlignmentLoaded = () => null,
 }) => {
   const msaTrack = useRef(null);
+  const linksTrack = useRef(null);
   const [align, setAlign] = useState(null);
   useEffect(() => {
     (async () => await loadProtVistaWebComponents())();
   }, []);
   useEffect(() => {
     if (payload) {
-      setAlign(Stockholm.parse(payload));
+      const aln = Stockholm.parse(payload);
+      setAlign(aln);
+      onAlignmentLoaded(aln);
     }
   }, [payload]);
   useEffect(() => {
@@ -73,8 +87,11 @@ const AlignmentViewer = ({
         const { map } = msaTrack.current.getColorMap();
         setColorMap(map || {});
       });
+      if (contacts && linksTrack.current) {
+        linksTrack.current.data = contacts;
+      }
     }
-  }, [align]);
+  }, [align, contacts]);
 
   if (loading || !payload || !align) {
     return <Loading />;
@@ -112,25 +129,60 @@ const AlignmentViewer = ({
               displaystart="1"
               displayend="100"
             >
-              <button
-                id="zoom-in"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf0fe;"
-                title="Click to zoom in      Ctrl+Scroll"
-              />
-              <button
-                id="zoom-out"
-                className={f('zoom-button', 'icon', 'icon-common')}
+              <span
+                slot="zoom-out"
+                className={f('icon', 'icon-common', 'zoom-button')}
                 data-icon="&#xf146;"
-                title="Click to zoom out      Ctrl+Scroll"
+                title={'Click to zoom out      Ctrl+Scroll'}
+              />
+              <span
+                slot="zoom-in"
+                className={f('icon', 'icon-common', 'zoom-button')}
+                data-icon="&#xf0fe;"
+                title={'Click to zoom in      Ctrl+Scroll'}
+                // style={{ marginRight: '0.4rem' }}
               />
             </protvista-zoom-tool>
           </div>
           <protvista-navigation length={length} displayend="100" />
         </div>
+        {contacts && (
+          <div style={{ display: 'flex' }}>
+            <div
+              style={{
+                width: labelWidth,
+                flexShrink: 0,
+                fontWeight: 'bold',
+              }}
+            >
+              Contacts{' '}
+              <Tooltip
+                title={`
+                  <p>
+                    The color of the nodes indicates if there are less <span style="color:orange; background:white;">●</span>
+                    or more <span style="color:blue; background:white;">●</span> predicted contacts.
+                  </p>`}
+              >
+                <sup>
+                  <span
+                    className={f('small', 'icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                    aria-label={'description for contact track'}
+                  />
+                </sup>
+              </Tooltip>
+            </div>
+            <protvista-links
+              id="contacts-track"
+              length={length}
+              ref={linksTrack}
+              threshold={contactThreshold}
+            />
+          </div>
+        )}
         <protvista-msa
           length={length}
-          height="400"
+          height="600"
           displayend="100"
           use-ctrl-to-zoom
           labelWidth={labelWidth}
@@ -148,7 +200,10 @@ AlignmentViewer.propTypes = {
   onConservationProgress: T.func,
   setColorMap: T.func,
   overlayConservation: T.bool,
+  contacts: T.array,
+  contactThreshold: T.number,
   data: dataPropType,
+  onAlignmentLoaded: T.func,
 };
 
 const mapStateToPropsForAlignment = createSelector(

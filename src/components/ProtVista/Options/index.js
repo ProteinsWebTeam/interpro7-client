@@ -217,17 +217,18 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
               displaystart="1"
               displayend={length}
             >
-              <button
-                id="zoom-in"
-                className={f('zoom-button', 'icon', 'icon-common')}
-                data-icon="&#xf0fe;"
-                title="Click to zoom in      Ctrl+Scroll"
-              />
-              <button
-                id="zoom-out"
-                className={f('zoom-button', 'icon', 'icon-common')}
+              <span
+                slot="zoom-out"
+                className={f('icon', 'icon-common', 'zoom-button')}
                 data-icon="&#xf146;"
-                title="Click to zoom out      Ctrl+Scroll"
+                title={'Click to zoom out      Ctrl+Scroll'}
+              />
+              <span
+                slot="zoom-in"
+                className={f('icon', 'icon-common', 'zoom-button')}
+                data-icon="&#xf0fe;"
+                title={'Click to zoom in      Ctrl+Scroll'}
+                style={{ marginRight: '0.4rem' }}
               />
             </protvista-zoom-tool>
           </div>

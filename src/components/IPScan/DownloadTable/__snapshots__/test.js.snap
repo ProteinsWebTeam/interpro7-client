@@ -38,7 +38,7 @@ exports[`<DownloadTable /> should render 1`] = `
     <tr>
       <td>
         <Memo(Connect(Link))
-          href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
+          href="http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
           style={
             Object {
               "whiteSpace": "nowrap",
@@ -71,7 +71,7 @@ exports[`<DownloadTable /> should render 1`] = `
       </td>
       <td>
         <Memo(Connect(Link))
-          href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
+          href="http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
           target="_blank"
         >
           <span

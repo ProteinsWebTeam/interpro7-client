@@ -1,0 +1,17 @@
+@import '../../styles/colors.css';
+
+.control {
+  color: var(--colors-tag);
+  margin: 0 1em 0 0;
+}
+.lddt {
+  display: flex;
+  & header {
+    font-weight: bold;
+  }
+  & code {
+    border: 0;
+    line-height: 1em;
+    height: 1.3em;
+  }
+}

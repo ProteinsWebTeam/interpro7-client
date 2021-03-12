@@ -8,6 +8,7 @@ import { createSelector } from 'reselect';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import NumberComponent from 'components/NumberComponent';
+import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import cn from 'classnames/bind';
 
@@ -40,7 +41,17 @@ const dbText = (
       <span className={s('total-text-bold')}>
         {(databases && databases[entryDB] && databases[entryDB].name) ||
           entryDB}
-      </span>
+      </span>{' '}
+      <TooltipAndRTDLink
+        rtdPage={`databases.html#${entryDB}`}
+        label={`Visit our documentation for more information about
+                         ${
+                           (databases &&
+                             databases[entryDB] &&
+                             databases[entryDB].name) ||
+                           entryDB
+                         }`}
+      />
       <MemberSymbol type={entryDB} className={s('db-symbol')} />
     </span>
   );

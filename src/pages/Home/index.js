@@ -168,7 +168,7 @@ InterPro provides functional analysis of proteins by classifying them into famil
 
 const Announcement = () => (
   <div className={f('row')}>
-    <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
+    <div className={f('columns', 'large-12')}>
       <div
         className={f('callout', 'info')}
         style={{
@@ -198,6 +198,45 @@ const Announcement = () => (
           SARS-CoV-2
         </Link>
         .
+      </div>
+    </div>
+
+    <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
+      <div
+        className={f('callout', 'info')}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <span
+          style={{
+            fontSize: '2em',
+            color: 'darkblue',
+            paddingRight: '1rem',
+          }}
+          className={f('small', 'icon', 'icon-common')}
+          data-icon="&#xf230;"
+        />{' '}
+        We need your help!
+        <br />
+        If you&apos;ve ever found our data helpful, please take our impact
+        survey (15 min). Your replies will help keep the data flowing to the
+        scientific community.
+        <a
+          href="https://www.surveymonkey.co.uk/r/EMBL-EBI_Impact_DR"
+          className={f('button')}
+          style={{
+            marginLeft: '0.5em',
+            background: 'darkgreen',
+            whiteSpace: 'nowrap',
+            borderRadius: '5px',
+          }}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Take survey
+        </a>
       </div>
     </div>
   </div>
