@@ -2,8 +2,8 @@
 
 .toast-display {
   position: fixed;
-  display: flex;
-  flex-direction: column-reverse;
+  /*display: flex;*/
+  /*flex-direction: column-reverse;*/
   bottom: 1rem;
   right: 1rem;
   list-style: none;
