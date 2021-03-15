@@ -181,6 +181,18 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
                 ...provided,
                 display: this.props.forHeader ? 'none' : 'flex',
               }),
+              input: (css) => ({
+                ...css,
+                // For the paste option on right click to work, the input div has to be 100%
+                flex: '1 1 auto',
+                '> div': {
+                  width: '100%',
+                },
+                input: {
+                  width: '100% !important',
+                  textAlign: 'left',
+                },
+              }),
             }}
           />
         </div>
