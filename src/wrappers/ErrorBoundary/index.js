@@ -1,3 +1,4 @@
+// @flow
 /* global gtag: false */
 
 import React, { PureComponent } from 'react';

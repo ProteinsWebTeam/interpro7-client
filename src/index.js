@@ -1,7 +1,5 @@
-// @flow
-/* global gtag: false */
-/*:: declare var gtag: (str: string, str: string, obj: {}) => void; */
 // Polyfills
+/* global gtag: false */
 // import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 
 import 'core-js/stable';
