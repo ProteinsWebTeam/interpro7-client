@@ -1,4 +1,7 @@
-/* global ga: false */
+// @flow
+/* global gtag: false */
+/*:: declare var gtag: (str: string, str: string, obj: {}) => void; */
+
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';

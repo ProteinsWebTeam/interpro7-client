@@ -1,7 +1,7 @@
 // @flow
-/* global ga: false */
+/* global gtag: false */
 /*:: import type { Middleware } from 'redux'; */
-/*:: declare var ga: (...args: Array<string>) => void; */
+/*:: declare var gtag: (str: string, str: string, obj: {}) => void; */
 import { format } from 'url';
 
 import { NEW_CUSTOM_LOCATION } from 'actions/types';
