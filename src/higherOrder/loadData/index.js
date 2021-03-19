@@ -1,4 +1,5 @@
-/* global ga: false */
+/* global gtag: false */
+
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -141,15 +142,14 @@ const loadData = (params) => {
         try {
           const response = await request.promise;
           // Analytics
-          ga('send', {
-            hitType: 'event',
-            eventCategory: 'data',
-            eventAction: response.status,
-            eventLabel: url,
+          gtag('event', 'data', {
+            event_category: 'data',
+            event_response: response.status,
+            event_label: url,
             // Custom Metric in google analytics as metrics1: From Client Cache
-            metric1: response.headers.has('Client-Cache') ? 1 : 0,
+            event_clientcache: response.headers.has('Client-Cache') ? 1 : 0,
             // Custom Metric in google analytics as metrics1: From Server Cache
-            metric2: response.headers.has('Cached') ? 1 : 0,
+            event_cache: response.headers.has('Cached') ? 1 : 0,
           });
           // We have a response 🎉 set it into the local state
           this.setState(({ data }) => {
@@ -179,13 +179,12 @@ const loadData = (params) => {
           if (!request.canceled) {
             // we have a problem, something bad happened
             // Analytics
-            ga('send', {
-              hitType: 'event',
-              eventCategory: 'data',
-              eventAction: 'fail',
-              eventLabel: url,
+            gtag('event', 'error', {
+              event_category: 'data',
+              event_status: 'fail',
+              event_label: url,
               // Custom Metric in google analytics as metrics3: Is Client Online
-              metric3: window.navigator.onLine ? 1 : 0,
+              event_online: window.navigator.onLine ? 1 : 0,
             });
             this.setState(({ data }) => ({
               data: { ...data, loading: false, progress: 1, ok: false, error },

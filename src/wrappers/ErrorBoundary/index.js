@@ -1,5 +1,6 @@
 // @flow
-/* global ga: false */
+/* global gtag: false */
+
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -11,7 +12,7 @@ import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
 /*:: import typeof CustomLocation from 'reducers/custom-location/index.js'; */
 
-const defaultRenderOnError = _ => <ErrorMessage />;
+const defaultRenderOnError = (_) => <ErrorMessage />;
 
 /*:: type ReactError = {|
   error: Error,
@@ -60,7 +61,10 @@ export class UnconnectedErrorBoundary extends PureComponent /*:: <Props, State> 
     console.error(error);
     console.warn(info);
     // $FlowFixMe
-    ga('send', 'exception', { exDescription: error.message, exFatal: false });
+    gtag('event', 'exception', {
+      event_label: error.message,
+      event_fatal: false,
+    });
     this.setState({ error: { error, info } });
   }
 
@@ -76,7 +80,7 @@ export class UnconnectedErrorBoundary extends PureComponent /*:: <Props, State> 
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default connect(mapStateToProps)(UnconnectedErrorBoundary);
