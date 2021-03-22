@@ -120,24 +120,26 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
       <PictureInPicturePanel
         className={f('structure-viewer')}
         testid="structure-3d-viewer"
-        OtherControls={
-          <section className={f('lddt')}>
-            <header>
-              lDDT{' '}
-              <Tooltip title="Quality score lDDT: Local Distance Difference Test">
-                <sup>
-                  <span
-                    className={f('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                    aria-label={'Citation to trRosetta paper'}
-                  />
-                </sup>
-              </Tooltip>
-              :{' '}
-            </header>
-            <code>{data.payload.lddt}</code>
-          </section>
-        }
+        OtherControls={{
+          bottom: (
+            <section className={f('lddt')}>
+              <header>
+                lDDT{' '}
+                <Tooltip title="Quality score lDDT: Local Distance Difference Test">
+                  <sup>
+                    <span
+                      className={f('small', 'icon', 'icon-common')}
+                      data-icon="&#xf129;"
+                      aria-label={'Citation to trRosetta paper'}
+                    />
+                  </sup>
+                </Tooltip>
+                :{' '}
+              </header>
+              <code>{data.payload.lddt}</code>
+            </section>
+          ),
+        }}
         OtherButtons={
           <>
             <Link

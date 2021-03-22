@@ -375,15 +375,15 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
         <PictureInPicturePanel
           className={f('structure-viewer')}
           testid="structure-3d-viewer"
-          OtherControls={
-            this.props.matches ? (
+          OtherControls={{
+            top: this.props.matches ? (
               <EntrySelection
                 entryMap={entryMap}
                 updateStructure={this.showEntryInStructure}
                 selectedEntry={selectedEntry}
               />
-            ) : null
-          }
+            ) : null,
+          }}
           OtherButtons={
             <>
               <button

@@ -26,7 +26,7 @@ const PictureInPicturePanel = ({
   className,
   testId,
   hideBar = false,
-  OtherControls = null,
+  OtherControls = {},
   OtherButtons = null,
   onChangingMode = () => null,
   children,
@@ -64,15 +64,16 @@ const PictureInPicturePanel = ({
         })}
         data-testid={testId}
       >
-        {!isStuck && <div className={f('controls')}>{OtherControls}</div>}
+        {!isStuck && <div className={f('controls')}>{OtherControls.top}</div>}
         {children}
         <div
           className={f('control-bar', {
             hide: hideBar,
           })}
         >
+          {OtherControls.bottom}
           <div className={f('controls')}>
-            {isStuck && OtherControls}
+            {isStuck && OtherControls.top}
             {OtherButtons}
             {isStuck && (
               <button
@@ -93,7 +94,7 @@ PictureInPicturePanel.propTypes = {
   className: T.string,
   testId: T.string,
   hideBar: T.bool,
-  OtherControls: T.any,
+  OtherControls: T.object,
   OtherButtons: T.any,
   onChangingMode: T.func,
   children: T.any,
