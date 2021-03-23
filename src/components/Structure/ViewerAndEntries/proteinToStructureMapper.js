@@ -8,8 +8,14 @@ export default (mapCoordinates) => {
       (agg, v) => {
         agg.domain.push(v.protein_start);
         agg.domain.push(v.protein_end);
-        agg.range.push(v.author_structure_start || v.structure_start);
-        agg.range.push(v.author_structure_end || v.structure_end);
+        if (!v.author_structure_start && v.author_structure_end) {
+          agg.range.push(
+            v.author_structure_end - (v.structure_end - v.structure_start),
+          );
+        } else {
+          agg.range.push(v.author_structure_start);
+        }
+        agg.range.push(v.author_structure_end);
         return agg;
       },
       { domain: [], range: [] },
