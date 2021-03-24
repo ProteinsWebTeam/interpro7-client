@@ -8,14 +8,24 @@ export default (mapCoordinates) => {
       (agg, v) => {
         agg.domain.push(v.protein_start);
         agg.domain.push(v.protein_end);
+        let start;
+        let end;
         if (!v.author_structure_start && v.author_structure_end) {
-          agg.range.push(
-            v.author_structure_end - (v.structure_end - v.structure_start),
-          );
+          start =
+            v.author_structure_end - (v.structure_end - v.structure_start);
+          end = v.author_structure_end;
+          // agg.range.push(
+          //   v.author_structure_end - (v.structure_end - v.structure_start),
+          // );
+        } else if (!v.author_structure_start && !v.author_structure_end) {
+          start = v.structure_start;
+          end = v.structure_end;
         } else {
-          agg.range.push(v.author_structure_start);
+          start = v.author_structure_start;
+          end = v.author_structure_end;
         }
-        agg.range.push(v.author_structure_end);
+        agg.range.push(start);
+        agg.range.push(end);
         return agg;
       },
       { domain: [], range: [] },
