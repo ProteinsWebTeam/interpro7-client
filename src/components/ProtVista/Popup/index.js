@@ -40,6 +40,7 @@ import ProtVistaConservationPopup from './Conservation';
     },
     target?: HTMLElement,
     highlight: string,
+    type?: string,
   }
   type Props = {
     sourceDatabase: string,
@@ -59,7 +60,7 @@ const ProtVistaPopup = (
   } /*: Props */,
 ) => {
   // comes from the conservation track
-  if (detail.feature.type === 'sequence_conservation') {
+  if (detail.type === 'conservation') {
     return <ProtVistaConservationPopup detail={detail} data={data} />;
   }
 
@@ -93,6 +94,7 @@ ProtVistaPopup.propTypes = {
     feature: T.object,
     highlight: T.string,
     target: T.any,
+    type: T.string,
   }),
   sourceDatabase: T.string,
   data: T.array,

@@ -22,6 +22,7 @@ import ProtVistaNavigation from 'protvista-navigation';
 import ProtVistaInterProTrack from 'protvista-interpro-track';
 import ProtvistaTrack from 'protvista-track';
 import ProtvistaZoomTool from 'protvista-zoom-tool';
+import NightingaleLinegraphTrack from 'nightingale-linegraph-track';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
@@ -77,6 +78,12 @@ const loadProtVistaWebComponents = () => {
 
     webComponents.push(
       loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
+    );
+
+    webComponents.push(
+      loadWebComponent(() => NightingaleLinegraphTrack).as(
+        'nightingale-linegraph-track',
+      ),
     );
 
     webComponents.push(
@@ -245,19 +252,22 @@ export class ProtVista extends Component /*:: <Props, State> */ {
 
     for (const type of data) {
       for (const d of type[1]) {
-        const tmp = (d.entry_protein_locations || d.locations).map((loc) => ({
-          accession: d.accession,
-          name: d.name,
-          source_database: d.source_database,
-          locations: [loc],
-          color: getTrackColor(d, this.props.colorDomainsBy),
-          entry_type: d.entry_type,
-          type: d.type || 'entry',
-          residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
-          chain: d.chain,
-          protein: d.protein,
-          confidence: loc.confidence,
-        }));
+        const tmp =
+          d.type === 'sequence_conservation'
+            ? d.data
+            : (d.entry_protein_locations || d.locations).map((loc) => ({
+                accession: d.accession,
+                name: d.name,
+                source_database: d.source_database,
+                locations: [loc],
+                color: getTrackColor(d, this.props.colorDomainsBy),
+                entry_type: d.entry_type,
+                type: d.type || 'entry',
+                residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
+                chain: d.chain,
+                protein: d.protein,
+                confidence: loc.confidence,
+              }));
         const children = d.children
           ? d.children.map((child) => ({
               accession: child.accession,
@@ -733,19 +743,39 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                           `${this.state.addLabelClass}`,
                                         )}
                                       >
-                                        <protvista-track
-                                          length={length}
-                                          displaystart="1"
-                                          displayend={length}
-                                          id={`track_${entry.accession}`}
-                                          ref={(e) =>
-                                            (this.web_tracks[
-                                              entry.accession
-                                            ] = e)
-                                          }
-                                          highlight-event="onmouseover"
-                                          use-ctrl-to-zoom
-                                        />
+                                        {entry.type ===
+                                          'sequence_conservation' && (
+                                          <nightingale-linegraph-track
+                                            length={length}
+                                            displaystart="1"
+                                            displayend={length}
+                                            type="conservation"
+                                            id={`track_${entry.accession}`}
+                                            ref={(e) =>
+                                              (this.web_tracks[
+                                                entry.accession
+                                              ] = e)
+                                            }
+                                            highlight-event="onmouseover"
+                                            use-ctrl-to-zoom
+                                          />
+                                        )}
+                                        {entry.type ===
+                                          'secondary_structure' && (
+                                          <protvista-track
+                                            length={length}
+                                            displaystart="1"
+                                            displayend={length}
+                                            id={`track_${entry.accession}`}
+                                            ref={(e) =>
+                                              (this.web_tracks[
+                                                entry.accession
+                                              ] = e)
+                                            }
+                                            highlight-event="onmouseover"
+                                            use-ctrl-to-zoom
+                                          />
+                                        )}
                                       </div>
                                     ) : (
                                       <div

@@ -163,16 +163,14 @@ g:global(.child-group) path:global(.feature) {
 }
 
 .sequence-conservation {
-  stroke-width: 0px;
-  opacity: 1;
   cursor: pointer;
 }
 
-.sequence-conservation path:global(.feature) {
-  stroke-width: 0px;
-  opacity: 1;
-  cursor: pointer;
-}
+/*.sequence-conservation path:global(.feature) {*/
+/*  stroke-width: 0px;*/
+/*  opacity: 1;*/
+/*  cursor: pointer;*/
+/*}*/
 
 .track-component path:global(.helix) {
   stroke: red;
