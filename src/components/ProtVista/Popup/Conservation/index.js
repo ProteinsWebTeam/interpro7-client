@@ -1,12 +1,16 @@
-// @flow
 import React from 'react';
 import T from 'prop-types';
 
 /*::
-  import type {PopupDetail} from '../index.js';
-
   type Props = {
-    detail: PopupDetail,
+    detail: {
+      feature: {
+        [string]: {
+          position: number,
+          value?: number
+        }
+      },
+    },
   }
 */
 
