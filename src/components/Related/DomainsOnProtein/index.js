@@ -25,120 +25,58 @@ import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 const f = foundationPartial(ipro);
 
+const CONSERVATION_WINDOW = 25;
 const ProtVista = loadable({
   loader: () =>
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
-const colourMap = [
-  {
-    color: '#dff9e1',
-    min: 0,
-    max: 1,
-  },
-  {
-    color: '#bce7dd',
-    min: 1,
-    max: 2,
-  },
-  {
-    color: '#a2d2d7',
-    min: 2,
-    max: 3,
-  },
-  {
-    color: '#8cbdd0',
-    min: 3,
-    max: 4,
-  },
-  {
-    color: '#78a8c8',
-    min: 4,
-    max: 5,
-  },
-  {
-    color: '#6593c0',
-    min: 5,
-    max: 6,
-  },
-  {
-    color: '#537eb8',
-    min: 6,
-    max: 7,
-  },
-  {
-    color: '#4069af',
-    min: 7,
-    max: 8,
-  },
-  {
-    color: '#2955a6',
-    min: 8,
-    max: 9,
-  },
-  {
-    color: '#00429d',
-    min: 9,
-    max: 10,
-  },
-];
-
 const processConservationData = (entry, match) => {
-  const fragments = [];
-  // applying run-length-encoding style compression
+  const halfWindow = Math.trunc(CONSERVATION_WINDOW / 2);
+  const scores = [];
 
-  let currentFragment;
-  for (const residue of match) {
-    let hit;
-    // handle out-of-range values
-    if (residue.score < colourMap[0].min) {
-      // score < 0 = 0. Insertion
-      hit = colourMap[0];
-    } else if (residue.score > colourMap[colourMap.length - 1].max) {
-      // score > 10 = 10. Shouldn't happen as it's a probability * 10
-      hit = colourMap[colourMap.length - 1];
+  let window = [];
+  for (let i = 0; i < match.length; i++) {
+    if (i < halfWindow) {
+      // First half of first window [0-11] -> window length varies from 13 to 24
+      window = match.slice(0, i + halfWindow + 1);
+    } else if (i >= halfWindow && i < match.length - halfWindow) {
+      // Rest takes fixed length of 25. [-12--element--12]
+      window = match.slice(i - halfWindow, i + halfWindow + 1);
     } else {
-      hit = colourMap.find((element) => {
-        return residue.score > element.min && residue.score <= element.max;
-      });
+      // Last half of last window [seqLength-12 to seqLength] -> window length varies from 24 to 13
+      window = match.slice(i - halfWindow, match.length);
     }
-
-    if (hit) {
-      const color = hit.color;
-      if (!currentFragment) {
-        currentFragment = {
-          start: residue.position,
-          end: residue.position,
-          color: color,
-        };
-      }
-      currentFragment.end = residue.position - 1;
-      if (color !== currentFragment.color) {
-        fragments.push(currentFragment);
-        currentFragment = {
-          start: residue.position,
-          end: residue.position,
-          color: color,
-        };
-      }
-    } else {
-      console.log(`Failed to find score ${residue.score}`);
-    }
+    scores.push({
+      ...match[i],
+      value: (
+        window.reduce((acc, residue) => {
+          let score = residue.score;
+          if (score < 0)
+            // In case of negative score, treat it as 0
+            score = 0;
+          return acc + score;
+        }, 0) / window.length
+      ).toFixed(2),
+    });
   }
-  if (currentFragment) fragments.push(currentFragment);
-  return fragments;
+  return scores;
 };
 
-const addExistingEntiesToConservationResults = (
+const addExistingEntryToConservationResults = (
   data /*: {[string]: Array<Object>} */,
   conservationDatabases /*: Array<string> */,
+  entryWithMostCoverage /*: string */,
 ) => {
   /* eslint-disable max-depth */
   for (const matches of [data.domain, data.family, data.repeat]) {
     if (matches) {
       for (const entry of matches) {
         for (const child of entry.children) {
-          if (conservationDatabases.includes(child.source_database)) {
+          if (
+            conservationDatabases.includes(child.source_database) &&
+            child.accession === entryWithMostCoverage
+          ) {
             data.match_conservation.push(child);
           }
         }
@@ -148,18 +86,24 @@ const addExistingEntiesToConservationResults = (
   /* eslint-enable max-depth */
 
   for (const entry of data.unintegrated) {
-    if (entry && conservationDatabases.includes(entry.source_database)) {
+    if (
+      entry &&
+      conservationDatabases.includes(entry.source_database) &&
+      entry.accession === entryWithMostCoverage
+    ) {
       data.match_conservation.push(entry);
     }
   }
 };
 
+// eslint-disable-next-line max-statements
 const mergeConservationData = (
   data /*: {[string]: Array<Object>} */,
-  conservationData /*: { [string]: {entries: ?{}}} */,
+  conservationData /*: { [string]: {entries: ?{}, warnings: Array<string>}} */,
 ) => {
   data.match_conservation = [];
   const conservationDatabases = [];
+  let entryWithMostCoverage = '';
   for (const db of Object.keys(conservationData)) {
     if (db.toLowerCase() !== 'sequence') {
       conservationDatabases.push(db);
@@ -167,27 +111,62 @@ const mergeConservationData = (
         category: 'Sequence conservation',
         type: 'sequence_conservation',
         accession: db,
-        locations: [],
-        range: colourMap,
+        data: [],
+        warnings: [],
       };
       const entries = conservationData[db].entries;
       /* eslint-disable max-depth */
       if (entries) {
+        let coverage = 0;
+        // Add only the entry match that covers the most (longest)
         for (const entry of Object.keys(entries)) {
           const matches = entries[entry];
-          // eslint-disable-next-line max-depth
-          for (const match of matches) {
-            const fragments = processConservationData(entry, match);
-            dbConservationScores.locations.push({
-              fragments: fragments,
-              match: entry,
+          const length = matches.reduce((sum, array) => sum + array.length, 0);
+          if (length > coverage) {
+            coverage = length;
+            entryWithMostCoverage = entry;
+          }
+        }
+
+        for (const entry of Object.keys(entries)) {
+          if (entry === entryWithMostCoverage) {
+            const values = [];
+            let end = 0;
+            for (const match of entries[entry]) {
+              if (values.length === 0) {
+                end = match[match.length - 1].position;
+              } else {
+                // Fill with empty values to render gaps in between in the line graph
+                if (match[0].position - end > 1) {
+                  for (let i = end; i < match[0].position; i++) {
+                    const nextPosition = i + 1;
+                    values.push({ position: nextPosition, value: null });
+                  }
+                }
+              }
+              const conservationAverage = processConservationData(entry, match);
+              values.push(...conservationAverage);
+            }
+            dbConservationScores.data.push({
+              name: entry,
+              range: [0, 2],
+              colour: '#006400',
+              values: values,
             });
           }
         }
-        /* eslint-enable max-depth */
+        const warnings = conservationData[db].warnings;
+        if (warnings) {
+          dbConservationScores.warnings = warnings;
+        }
         data.match_conservation?.push(dbConservationScores);
+
         // add data from integrated and unintegrated matches to panel for ease of use
-        addExistingEntiesToConservationResults(data, conservationDatabases);
+        addExistingEntryToConservationResults(
+          data,
+          conservationDatabases,
+          entryWithMostCoverage,
+        );
       }
     }
   }
@@ -384,8 +363,25 @@ ConservationProvider.propTypes = {
   }),
 };
 
+const getConservationURL = createSelector(
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  ({ protocol, hostname, port, root }, description) => {
+    const url = format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(description),
+      query: {
+        conservation: 'panther',
+      },
+    });
+    return url;
+  },
+);
+
 const ConservationProviderLoaded = loadData({
-  getUrl: getExtraURL('conservation'),
+  getUrl: getConservationURL,
   propNamespace: 'Conservation',
 })(ConservationProvider);
 
@@ -401,8 +397,7 @@ type DPWithoutDataProps = {
 type DPState ={
   generateConservationData: boolean,
   showConservationButton: boolean,
-  dataConservation: ?{ [string]: {entries: ?{}}},
-
+  dataConservation: ?{ [string]: {entries: ?{}, warnings: Array<string>}},
 }
 */
 
@@ -431,7 +426,10 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     this.setState({ generateConservationData: true });
   };
 
-  isConservationDataAvailable = (data) => {
+  isConservationDataAvailable = (data, proteinData) => {
+    // HMMER can't generate conservation data for unreviewed proteins
+    if (proteinData.source_database === 'unreviewed') return false;
+
     // check if conservation data has already been generated
     if (this.state.dataConservation) return false;
 
@@ -451,20 +449,20 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
         return false;
     }
 
-    // ensure there is a pfam entry somewhere in the matches
+    // ensure there is a panther entry somewhere in the matches
     /* eslint-disable max-depth */
     for (const matches of [data.domain, data.family, data.repeat]) {
       if (matches) {
         for (const entry of matches) {
           for (const memberDatabase of Object.keys(entry.member_databases)) {
-            if (memberDatabase.toLowerCase() === 'pfam') return true;
+            if (memberDatabase.toLowerCase() === 'panther') return true;
           }
         }
       }
     }
     /* eslint-enable max-depth */
     for (const entry of data.unintegrated) {
-      if (entry.source_database.toLowerCase() === 'pfam') return true;
+      if (entry.source_database.toLowerCase() === 'panther') return true;
     }
 
     return false;
@@ -530,7 +528,10 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     ) {
       return <div className={f('callout')}>No entries match this protein.</div>;
     }
-    const showConservationButton = this.isConservationDataAvailable(mergedData);
+    const showConservationButton = this.isConservationDataAvailable(
+      mergedData,
+      mainData.metadata,
+    );
     const ConservationProviderElement = this.state.generateConservationData
       ? ConservationProviderLoaded
       : ConservationProvider;
