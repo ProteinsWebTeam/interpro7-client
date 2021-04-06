@@ -426,7 +426,10 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     this.setState({ generateConservationData: true });
   };
 
-  isConservationDataAvailable = (data) => {
+  isConservationDataAvailable = (data, proteinData) => {
+    // HMMER can't generate conservation data for unreviewed proteins
+    if (proteinData.source_database === 'unreviewed') return false;
+
     // check if conservation data has already been generated
     if (this.state.dataConservation) return false;
 
@@ -525,7 +528,10 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     ) {
       return <div className={f('callout')}>No entries match this protein.</div>;
     }
-    const showConservationButton = this.isConservationDataAvailable(mergedData);
+    const showConservationButton = this.isConservationDataAvailable(
+      mergedData,
+      mainData.metadata,
+    );
     const ConservationProviderElement = this.state.generateConservationData
       ? ConservationProviderLoaded
       : ConservationProvider;
