@@ -99,7 +99,7 @@ const addExistingEntryToConservationResults = (
 // eslint-disable-next-line max-statements
 const mergeConservationData = (
   data /*: {[string]: Array<Object>} */,
-  conservationData /*: { [string]: {entries: ?{}}} */,
+  conservationData /*: { [string]: {entries: ?{}, warnings: Array<string>}} */,
 ) => {
   data.match_conservation = [];
   const conservationDatabases = [];
@@ -112,6 +112,7 @@ const mergeConservationData = (
         type: 'sequence_conservation',
         accession: db,
         data: [],
+        warnings: [],
       };
       const entries = conservationData[db].entries;
       /* eslint-disable max-depth */
@@ -154,7 +155,12 @@ const mergeConservationData = (
             });
           }
         }
+        const warnings = conservationData[db].warnings;
+        if (warnings) {
+          dbConservationScores.warnings = warnings;
+        }
         data.match_conservation?.push(dbConservationScores);
+
         // add data from integrated and unintegrated matches to panel for ease of use
         addExistingEntryToConservationResults(
           data,
@@ -391,8 +397,7 @@ type DPWithoutDataProps = {
 type DPState ={
   generateConservationData: boolean,
   showConservationButton: boolean,
-  dataConservation: ?{ [string]: {entries: ?{}}},
-
+  dataConservation: ?{ [string]: {entries: ?{}, warnings: Array<string>}},
 }
 */
 

@@ -295,24 +295,26 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               location2residue: child.location2residue,
             }))
           : null;
-        const isNewElement = !this.web_tracks[d.accession]._data;
-        this.web_tracks[d.accession].data = tmp;
-        if (this.props.fixedHighlight)
-          this.web_tracks[
-            d.accession
-          ].fixedHighlight = this.props.fixedHighlight;
-        this._setResiduesInState(children, d.accession);
-        if (isNewElement) {
-          this.web_tracks[d.accession].addEventListener(
-            'change',
-            this._handleTrackChange,
+        if (tmp.length > 0) {
+          const isNewElement = !this.web_tracks[d.accession]._data;
+          this.web_tracks[d.accession].data = tmp;
+          if (this.props.fixedHighlight)
+            this.web_tracks[
+              d.accession
+            ].fixedHighlight = this.props.fixedHighlight;
+          this._setResiduesInState(children, d.accession);
+          if (isNewElement) {
+            this.web_tracks[d.accession].addEventListener(
+              'change',
+              this._handleTrackChange,
+            );
+          }
+          this.setObjectValueInState(
+            'expandedTrack',
+            d.accession,
+            this.web_tracks[d.accession]._expanded,
           );
         }
-        this.setObjectValueInState(
-          'expandedTrack',
-          d.accession,
-          this.web_tracks[d.accession]._expanded,
-        );
       }
       this.setObjectValueInState('hideCategory', type[0], false);
     }
@@ -744,22 +746,38 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         )}
                                       >
                                         {entry.type ===
-                                          'sequence_conservation' && (
-                                          <nightingale-linegraph-track
-                                            length={length}
-                                            displaystart="1"
-                                            displayend={length}
-                                            type="conservation"
-                                            id={`track_${entry.accession}`}
-                                            ref={(e) =>
-                                              (this.web_tracks[
-                                                entry.accession
-                                              ] = e)
-                                            }
-                                            highlight-event="onmouseover"
-                                            use-ctrl-to-zoom
-                                          />
-                                        )}
+                                          'sequence_conservation' &&
+                                          entry.warnings.length > 0 && (
+                                            <div
+                                              className={f(
+                                                'conservation-warning',
+                                              )}
+                                            >
+                                              {entry.warnings.map((message) => (
+                                                <div key={message}>
+                                                  {message}
+                                                </div>
+                                              ))}
+                                            </div>
+                                          )}
+                                        {entry.type ===
+                                          'sequence_conservation' &&
+                                          entry.warnings.length === 0 && (
+                                            <nightingale-linegraph-track
+                                              length={length}
+                                              displaystart="1"
+                                              displayend={length}
+                                              type="conservation"
+                                              id={`track_${entry.accession}`}
+                                              ref={(e) =>
+                                                (this.web_tracks[
+                                                  entry.accession
+                                                ] = e)
+                                              }
+                                              highlight-event="onmouseover"
+                                              use-ctrl-to-zoom
+                                            />
+                                          )}
                                         {entry.type ===
                                           'secondary_structure' && (
                                           <protvista-track

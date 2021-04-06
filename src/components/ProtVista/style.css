@@ -166,11 +166,10 @@ g:global(.child-group) path:global(.feature) {
   cursor: pointer;
 }
 
-/*.sequence-conservation path:global(.feature) {*/
-/*  stroke-width: 0px;*/
-/*  opacity: 1;*/
-/*  cursor: pointer;*/
-/*}*/
+.conservation-warning {
+  text-align: center;
+  cursor: default;
+}
 
 .track-component path:global(.helix) {
   stroke: red;
