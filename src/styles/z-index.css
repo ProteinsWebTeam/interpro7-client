@@ -12,5 +12,6 @@
   --z-index-ebi-header: 200;
   --z-index-side-menu: 250;
   --z-index-toasts: 300;
+  --z-index-toasts-on-hover: 350;
   --z-index-modal: 1000;
 }

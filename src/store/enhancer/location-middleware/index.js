@@ -1,7 +1,7 @@
 // @flow
-/* global ga: false */
+/* global gtag: false */
 /*:: import type { Middleware } from 'redux'; */
-/*:: declare var ga: (...args: Array<string>) => void; */
+/*:: declare var gtag: (str: string, str: string, obj: {}) => void; */
 import { format } from 'url';
 
 import { NEW_CUSTOM_LOCATION } from 'actions/types';
@@ -32,8 +32,9 @@ const middleware = (history /*: any */) /*: Middleware<*, *, *> */ => ({
 
   // Analytics
   history.listen(() => {
-    ga('set', 'location', window.location.href);
-    ga('send', 'pageview');
+    gtag('event', 'page_view', {
+      event_label: window.location.href,
+    });
   });
 
   const historyDispatch = ({ customLocation, replace, state }) => {
@@ -55,7 +56,7 @@ const middleware = (history /*: any */) /*: Middleware<*, *, *> */ => ({
   autoScroll(history.location);
 
   // Hijack normal Redux flow
-  return next => action => {
+  return (next) => (action) => {
     // if NEW_CUSTOM_LOCATION don't process and update history, it will
     // eventually result in another NEW_PROCESSED_CUSTOM_LOCATION action being
     // dispatched through callback

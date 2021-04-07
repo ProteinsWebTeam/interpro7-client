@@ -1,14 +1,20 @@
-// flow-typed signature: e484579841f3cb1e8f57a768abc4642d
-// flow-typed version: c6154227d1/@storybook/react_v5.x.x/flow_>=v0.104.x
+// flow-typed signature: ffbe262652c2690829aaf72cb827a910
+// flow-typed version: 9d326d4ede/@storybook/react_v6.x.x/flow_>=v0.142.x
 
 type NodeModule = typeof module;
 
 declare module '@storybook/react' {
-  declare type Context = {
-    kind: string,
-    story: string,
-    ...
-  };
+  declare type Context = {|
+    +argTypes: { [key: string]: any, ... },
+    +args: { [key: string]: any, ... },
+    +globals: { [key: string]: any, ... },
+    +hooks: { [key: string]: any, ... },
+    +id: string,
+    +kind: string,
+    +name: string,
+    +parameters: { [key: string]: any, ... },
+    +story: string,
+  |};
   declare type Renderable =
     | string
     | number
@@ -52,7 +58,7 @@ declare module '@storybook/react' {
   declare function addParameters(parameters: DecoratorParameters): void;
   declare function clearDecorators(): void;
   declare function configure(fn: () => void, module: NodeModule): void;
-  declare function setAddon(addon: Object): void;
+  declare function setAddon(addon: { [key: string]: any, ... }): void;
   declare function storiesOf(name: string, module: NodeModule): Story;
   declare function storiesOf<T>(name: string, module: NodeModule): Story & T;
   declare function forceReRender(): void;

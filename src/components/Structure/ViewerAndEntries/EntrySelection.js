@@ -54,7 +54,7 @@ class EntrySelection extends PureComponent /*:: <Props, State> */ {
     const selectionGroups = [];
     selectionGroups.push(
       <option key="{NO_SELECTION}" value={NO_SELECTION}>
-        Select Entry
+        Highlight Entry in the 3D structure
       </option>,
     );
 

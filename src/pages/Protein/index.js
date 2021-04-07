@@ -325,7 +325,10 @@ class List extends PureComponent /*:: <ListProps> */ {
             <hr style={{ paddingTop: '0.5rem' }} />
             {!search.ida && <ProteinListFilters />}
           </div>
-          <SpaceFiller element={this.filterPanel?.current} />
+          <SpaceFiller
+            element={this.filterPanel?.current}
+            refresh={entryDB === null}
+          />
         </div>
         <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
           {databases && db && databases[db.toLowerCase()] && (
