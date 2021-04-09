@@ -149,7 +149,8 @@ const mergeConservationData = (
             }
             dbConservationScores.data.push({
               name: entry,
-              range: [0, 2],
+              // eslint-disable-next-line no-magic-numbers
+              range: [0, 2.5],
               colour: '#006400',
               values: values,
             });
@@ -170,22 +171,6 @@ const mergeConservationData = (
       }
     }
   }
-};
-
-const mergeResidues = (data, residues) => {
-  // prettier-ignore
-  (Object.values(data)/*: any */).forEach(
-    (group/*: Array<{accession:string, residues: Array<Object>, children: any}> */) =>
-    group.forEach((entry) => {
-      if (residues[entry.accession])
-        entry.residues = [residues[entry.accession]];
-      if (entry.children && entry.children.length)
-        entry.children.forEach((child) => {
-          if (residues[child.accession])
-            child.residues = [residues[child.accession]];
-        });
-    }),
-  );
 };
 
 const splitMobiFeatures = (feature) => {
@@ -234,6 +219,30 @@ const mergeExtraFeatures = (data, extraFeatures) => {
   );
 
   return data;
+};
+
+const mergeResidues = (data, residues) => {
+  // prettier-ignore
+  (Object.values(data)/*: any */).forEach(
+    (group/*: Array<{accession:string, residues: Array<Object>, children: any}> */) =>
+    group.forEach((entry) => {
+      if (residues[entry.accession])
+        entry.residues = [residues[entry.accession]];
+      if (entry.children && entry.children.length)
+        entry.children.forEach((child) => {
+          if (residues[child.accession])
+            child.residues = [residues[child.accession]];
+        });
+    }),
+  );
+  // TODO: to be removed. Yet to decide where the PIRSR residues are going to be shown
+  const pirsrResidues = {};
+  Object.keys(residues).forEach((entry) => {
+    if (entry.startsWith('PIRSR')) pirsrResidues[entry] = residues[entry];
+  });
+  if (Object.keys(pirsrResidues).length > 0) {
+    mergeExtraFeatures(data, pirsrResidues);
+  }
 };
 
 const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
