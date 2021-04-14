@@ -3,7 +3,10 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
-import { Stage, ColormakerRegistry } from 'ngl';
+import { ColormakerRegistry } from 'ngl';
+import { DefaultPluginSpec, PluginSpec } from 'molstar/lib/mol-plugin/spec';
+import { PluginConfig } from 'molstar/lib/mol-plugin/config';
+import { PluginContext } from 'molstar/lib/mol-plugin/context';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -48,22 +51,52 @@ class StructureView extends PureComponent /*:: <Props> */ {
   constructor(props /*: Props */) {
     super(props);
 
+    this.viewer = null;
     this.stage = null;
     this.name = `${this.props.id}`;
     this._structureViewer = React.createRef();
+    this._structureViewerCanvas = React.createRef();
   }
 
   async componentDidMount() {
-    this.stage = new Stage(this._structureViewer.current);
-    this.stage.setParameters({ backgroundColor: 0xfcfcfc });
-    const url = this.props.url || `rcsb://${this.name}.mmtf`;
-    this.loadURLInStage(url);
+    if (!this.viewer) {
+      const MySpec = {
+        ...DefaultPluginSpec(),
+        config: [[PluginConfig.VolumeStreaming.Enabled, false]],
+      };
+      this.viewer = new PluginContext(MySpec);
+      console.log(this._structureViewerCanvas.current);
+      console.log(this._structureViewer.current);
+
+      await this.viewer.init();
+      this.viewer.initViewer(
+        this._structureViewerCanvas.current,
+        this._structureViewer.current,
+      );
+    }
+    const url =
+      this.props.url ||
+      `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
+    const data = await this.viewer.builders.data.download(
+      { url: url },
+      { state: { isGhost: false } },
+    );
+    const trajectory = await this.viewer.builders.structure.parseTrajectory(
+      data,
+      'mmcif',
+    );
+    await this.viewer.builders.structure.hierarchy.applyPreset(
+      trajectory,
+      'default',
+    );
   }
   componentDidUpdate() {
     if (this.name !== `${this.props.id}`) {
       this.name = `${this.props.id}`;
       this.stage.removeAllComponents();
-      const url = this.props.url || `rcsb://${this.name}.mmtf`;
+      const url =
+        this.props.url ||
+        `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
       this.loadURLInStage(url);
     }
     if (this.stage) {
@@ -78,6 +111,21 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     }
   }
+  async loadStructureInViewer(url /*: string */) {
+    const data = await this.viewer.builders.data.download(
+      { url: url },
+      { state: { isGhost: false } },
+    );
+    const trajectory = await this.viewer.builders.structure.parseTrajectory(
+      data,
+      'mmcif',
+    );
+    await this.viewer.builders.structure.hierarchy.applyPreset(
+      trajectory,
+      'default',
+    );
+  }
+
   loadURLInStage(url /*: string */) {
     const settings /*: SettingsForNGL */ = { defaultRepresentation: false };
     if (this.props.ext) {
@@ -137,7 +185,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
               id={this.props.elementId || 'structure-viewer'}
               ref={this._structureViewer}
               className={f('structure-viewer-ref')}
-            />
+              style={{ height: '800px', overflow: 'block' }}
+            >
+              <canvas ref={this._structureViewerCanvas} />
+            </div>
           );
         }}
       </ResizeObserverComponent>
