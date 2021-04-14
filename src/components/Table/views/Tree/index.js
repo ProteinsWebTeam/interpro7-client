@@ -1,6 +1,5 @@
 // @flow
 import React, { Component, PureComponent } from 'react';
-import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -114,14 +113,6 @@ class DataProvider extends PureComponent /*:: <Props> */ {
   /*::
    _sent: boolean;
    */
-  static propTypes = {
-    taxID: T.string.isRequired,
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.object,
-    }).isRequired,
-    sendData: T.func.isRequired,
-  };
 
   componentDidMount() {
     this._sendDataUpIfAny();
@@ -267,20 +258,6 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   _lineageNames: Map<string,*>;
   _initialLoad: boolean;
   */
-  static propTypes = {
-    customLocation: T.shape({
-      description: T.object,
-      search: T.shape({
-        search: T.string,
-      }),
-    }).isRequired,
-    goToCustomLocation: T.func.isRequired,
-    showTreeToast: T.bool.isRequired,
-    onFocusChanged: T.func,
-    dataTable: T.shape({
-      find: T.func.isRequired,
-    }),
-  };
 
   constructor(props /*: TreeViewProps */) {
     super(props);
@@ -288,7 +265,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       data: { name: 'root', id: '1' },
       focused: '1',
       entryDB: props.customLocation.description.entry.db,
-      exactMatch: props.dataTable.find((x) => x.metadata.exact_match),
+      exactMatch: props.dataTable.find((x) => x?.metadata?.exact_match),
     };
     this._CDPMap = new Map();
     this._lineageNames = new Map();
@@ -312,7 +289,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
         entryDB: newDB,
       };
     }
-    const newMatch = dataTable?.find((x) => x.metadata.exact_match);
+    const newMatch = dataTable?.find((x) => x?.metadata?.exact_match);
     if (exactMatch?.metadata.accession !== newMatch?.metadata.accession) {
       return {
         entryDB: oldDB,
