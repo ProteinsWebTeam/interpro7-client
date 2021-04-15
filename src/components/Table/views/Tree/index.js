@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { Component, PureComponent } from 'react';
 import { createSelector } from 'reselect';
