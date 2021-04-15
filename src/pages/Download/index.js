@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import Link from 'components/generic/Link';
-import { FTPLink } from 'components/ExtLink';
 import DownloadTable from 'components/IPScan/DownloadTable';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
@@ -53,9 +52,9 @@ class Download extends PureComponent /*:: <{}> */ {
               To ensure you have the latest data and software enhancements we
               always recommend you download the latest version of InterProScan.
               However all previous releases are archived on the{' '}
-              <FTPLink href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/">
+              <Link href="http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/">
                 FTP Site
-              </FTPLink>
+              </Link>
               . You can find, clone, and download the full InterProScan source
               code on the{' '}
               <Link
@@ -102,9 +101,6 @@ class Download extends PureComponent /*:: <{}> */ {
                       />
                     </Link>
                     <br />
-                    <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/entry.list">
-                      FTP
-                    </FTPLink>
                   </td>
                 </tr>
 
@@ -134,9 +130,6 @@ class Download extends PureComponent /*:: <{}> */ {
                       />
                     </Link>
                     <br />
-                    <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz">
-                      FTP
-                    </FTPLink>
                   </td>
                 </tr>
 
@@ -166,9 +159,6 @@ class Download extends PureComponent /*:: <{}> */ {
                       />
                     </Link>
                     <br />
-                    <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/match_complete.xml.gz">
-                      FTP
-                    </FTPLink>
                   </td>
                 </tr>
 
@@ -199,9 +189,6 @@ class Download extends PureComponent /*:: <{}> */ {
                       />
                     </UniparcLink>
                     <br />
-                    <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.xml.gz">
-                      FTP
-                    </FTPLink>
                   </td>
                 </tr>
 
@@ -225,9 +212,6 @@ class Download extends PureComponent /*:: <{}> */ {
                       />
                     </Link>
                     <br />
-                    <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz">
-                      FTP
-                    </FTPLink>
                   </td>
                 </tr>
 
@@ -252,9 +236,6 @@ class Download extends PureComponent /*:: <{}> */ {
                       />
                     </Link>
                     <br />
-                    <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt">
-                      FTP
-                    </FTPLink>
                   </td>
                 </tr>
 
@@ -278,9 +259,6 @@ class Download extends PureComponent /*:: <{}> */ {
                       />
                     </Link>
                     <br />
-                    <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
-                      FTP
-                    </FTPLink>
                   </td>
                 </tr>
 
@@ -302,9 +280,6 @@ class Download extends PureComponent /*:: <{}> */ {
                         />
                       </Link>
                       <br />
-                      <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
-                        FTP
-                      </FTPLink>
                     </td>
                   </tr>
                 }
@@ -313,9 +288,9 @@ class Download extends PureComponent /*:: <{}> */ {
 
             <p className={f('small', 'margin-top-small')}>
               See all downloads available on the{' '}
-              <FTPLink href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/">
+              <Link href="http://ftp.ebi.ac.uk/pub/databases/interpro/">
                 FTP Site
-              </FTPLink>
+              </Link>
             </p>
 
             <h5>From individual web pages</h5>
