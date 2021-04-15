@@ -25,6 +25,9 @@
 .*/node_modules/emotion*
 .*/node_modules/polished*
 
+[untyped]
+.*/node_modules/molstar/**/.*
+
 [include]
 
 

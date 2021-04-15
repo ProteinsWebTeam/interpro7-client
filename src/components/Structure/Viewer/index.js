@@ -33,7 +33,8 @@ const f = foundationPartial(style, fonts);
 
 class StructureView extends PureComponent /*:: <Props> */ {
   /*:: _structureViewer: { current: ?HTMLElement }; */
-  /*:: stage: Object; */
+  /*:: _structureViewerCanvas: { current: ?HTMLElement }; */
+  /*:: viewer: Object; */
   /*:: name: Object; */
 
   static propTypes = {
@@ -52,7 +53,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
     super(props);
 
     this.viewer = null;
-    this.stage = null;
     this.name = `${this.props.id}`;
     this._structureViewer = React.createRef();
     this._structureViewerCanvas = React.createRef();
@@ -65,8 +65,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
         config: [[PluginConfig.VolumeStreaming.Enabled, false]],
       };
       this.viewer = new PluginContext(MySpec);
-      console.log(this._structureViewerCanvas.current);
-      console.log(this._structureViewer.current);
 
       await this.viewer.init();
       this.viewer.initViewer(
@@ -93,16 +91,16 @@ class StructureView extends PureComponent /*:: <Props> */ {
   componentDidUpdate() {
     if (this.name !== `${this.props.id}`) {
       this.name = `${this.props.id}`;
-      this.stage.removeAllComponents();
+      this.viewer.removeAllComponents();
       const url =
         this.props.url ||
         `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
-      this.loadURLInStage(url);
+      this.loadURLInViewer(url);
     }
-    if (this.stage) {
-      this.stage.setSpin(this.props.isSpinning);
+    if (this.viewer) {
+      this.viewer.setSpin(this.props.isSpinning);
       if (this.props.shouldResetViewer) {
-        this.stage.autoView();
+        this.viewer.autoView();
       }
       if (this.props.selections?.length) {
         this.highlightSelections(this.props.selections);
@@ -126,27 +124,27 @@ class StructureView extends PureComponent /*:: <Props> */ {
     );
   }
 
-  loadURLInStage(url /*: string */) {
+  loadURLInViewer(url /*: string */) {
     const settings /*: SettingsForNGL */ = { defaultRepresentation: false };
     if (this.props.ext) {
       settings.ext = this.props.ext;
       settings.name = this.props.id;
     }
-    this.stage
+    this.viewer
       .loadFile(url, settings)
       .then((component) => {
         component.addRepresentation('cartoon', { colorScheme: 'chainname' });
         component.autoView();
       })
       .then(() => {
-        this.stage.handleResize();
+        this.viewer.handleResize();
         if (this.props?.onStructureLoaded) this.props?.onStructureLoaded();
       });
   }
 
   highlightSelections(selections /*: Array<Array<string>> */) {
-    if (!this.stage) return;
-    const components = this.stage.getComponentsByName(this.name);
+    if (!this.viewer) return;
+    const components = this.viewer.getComponentsByName(this.name);
     if (components) {
       components.forEach((component) => {
         const theme = ColormakerRegistry.addSelectionScheme(
@@ -158,8 +156,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
   clearSelections() {
-    if (!this.stage) return;
-    const components = this.stage.getComponentsByName(this.name);
+    if (!this.viewer) return;
+    const components = this.viewer.getComponentsByName(this.name);
     if (components) {
       components.forEach((component) => {
         component.addRepresentation('cartoon', {
@@ -174,7 +172,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       <ResizeObserverComponent
         element="div"
         updateCallback={() => {
-          if (this.stage) this.stage.handleResize();
+          if (this.viewer) this.viewer.handleResize();
         }}
         measurements={['width', 'height']}
         className={f('viewer-resizer')}
