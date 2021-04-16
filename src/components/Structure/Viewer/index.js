@@ -183,7 +183,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
               id={this.props.elementId || 'structure-viewer'}
               ref={this._structureViewer}
               className={f('structure-viewer-ref')}
-              style={{ height: '800px', overflow: 'block' }}
             >
               <canvas ref={this._structureViewerCanvas} />
             </div>
