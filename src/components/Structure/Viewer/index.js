@@ -7,6 +7,7 @@ import { ColormakerRegistry } from 'ngl';
 import { DefaultPluginSpec, PluginSpec } from 'molstar/lib/mol-plugin/spec';
 import { PluginConfig } from 'molstar/lib/mol-plugin/config';
 import { PluginContext } from 'molstar/lib/mol-plugin/context';
+import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -56,12 +57,17 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.name = `${this.props.id}`;
     this._structureViewer = React.createRef();
     this._structureViewerCanvas = React.createRef();
+    this.isSpinning = this.props.isSpinning;
   }
 
   async componentDidMount() {
     if (!this.viewer) {
       const MySpec = {
         ...DefaultPluginSpec(),
+        layout: {
+          isExpanded: true,
+          showControls: true,
+        },
         config: [[PluginConfig.VolumeStreaming.Enabled, false]],
       };
       this.viewer = new PluginContext(MySpec);
@@ -75,23 +81,13 @@ class StructureView extends PureComponent /*:: <Props> */ {
     const url =
       this.props.url ||
       `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
-    const data = await this.viewer.builders.data.download(
-      { url: url },
-      { state: { isGhost: false } },
-    );
-    const trajectory = await this.viewer.builders.structure.parseTrajectory(
-      data,
-      'mmcif',
-    );
-    await this.viewer.builders.structure.hierarchy.applyPreset(
-      trajectory,
-      'default',
-    );
+    this.loadStructureInViewer(url);
   }
+
   componentDidUpdate() {
     if (this.name !== `${this.props.id}`) {
       this.name = `${this.props.id}`;
-      this.viewer.removeAllComponents();
+      this.viewer.clear();
       const url =
         this.props.url ||
         `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
@@ -109,6 +105,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
     }
   }
+
   async loadStructureInViewer(url /*: string */) {
     const data = await this.viewer.builders.data.download(
       { url: url },
@@ -118,28 +115,41 @@ class StructureView extends PureComponent /*:: <Props> */ {
       data,
       'mmcif',
     );
-    await this.viewer.builders.structure.hierarchy.applyPreset(
-      trajectory,
-      'default',
-    );
+    this.viewer.builders.structure.hierarchy
+      .applyPreset(trajectory, 'default')
+      .then(() => {
+        this.toggleStructureSpin();
+      });
+  }
+
+  toggleStructureSpin() {
+    if (this.viewer.canvas3d) {
+      this.viewer.canvas3d.props.trackball.spin = this.isSpinning;
+      const trackball = this.viewer.canvas3d.props.trackball;
+      PluginCommands.Canvas3D.SetSettings(this.viewer, {
+        settings: { trackball: { ...trackball, spin: !trackball.spin } },
+      });
+    }
   }
 
   loadURLInViewer(url /*: string */) {
-    const settings /*: SettingsForNGL */ = { defaultRepresentation: false };
-    if (this.props.ext) {
-      settings.ext = this.props.ext;
-      settings.name = this.props.id;
-    }
-    this.viewer
-      .loadFile(url, settings)
-      .then((component) => {
-        component.addRepresentation('cartoon', { colorScheme: 'chainname' });
-        component.autoView();
-      })
-      .then(() => {
-        this.viewer.handleResize();
-        if (this.props?.onStructureLoaded) this.props?.onStructureLoaded();
-      });
+    console.log('MAQ loadURLInViewer');
+    // const settings /*: SettingsForNGL */ = { defaultRepresentation: false };
+    // if (this.props.ext) {
+    //   settings.ext = this.props.ext;
+    //   settings.name = this.props.id;
+    // }
+    // this.viewer
+    //   .loadFile(url, settings)
+    //   .then((component) => {
+    //     console.log("MAQ loaded file");
+    //     component.addRepresentation('cartoon', { colorScheme: 'chainname' });
+    //     component.autoView();
+    //   })
+    //   .then(() => {
+    //     this.viewer.handleResize();
+    //     if (this.props?.onStructureLoaded) this.props?.onStructureLoaded();
+    //   });
   }
 
   highlightSelections(selections /*: Array<Array<string>> */) {
