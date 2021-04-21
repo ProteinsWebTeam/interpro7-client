@@ -96,7 +96,25 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
     const types = (Object.entries(
       getPayloadOrEmpty(payload, loading, isStale),
     ) /*: any */)
-      .sort(([, a], [, b]) => b - a);
+      .sort(([aType,], [bType,]) => {
+        const typeOrder = [
+          'family',
+          'domain',
+          'homologous_superfamily',
+          'repeat',
+          'conserved_site',
+          'active_site',
+          'binding_site',
+          'ptm'
+        ];
+        const i = typeOrder.indexOf(aType.toLowerCase());
+        const j = typeOrder.indexOf(bType.toLowerCase());
+        if (i === -1 && j === -1)
+          return aType.localeCompare(bType); // both types unknown
+        else if (i === -1)
+          return 1; // aType unknown: place after bType
+        return i - j; // both types known: use predefined order
+      });
     if (!loading) {
       types.unshift(['All', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
