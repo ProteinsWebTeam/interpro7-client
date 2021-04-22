@@ -122,7 +122,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   setSpin(spinState) {
-    console.log(`MAQ spin = ${this.props.isSpinning}`);
     if (this.viewer.canvas3d) {
       // this.viewer.canvas3d.props.trackball.spin = this.props.isSpinning;
       const trackball = this.viewer.canvas3d.props.trackball;
