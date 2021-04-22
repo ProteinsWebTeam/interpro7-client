@@ -57,7 +57,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.name = `${this.props.id}`;
     this._structureViewer = React.createRef();
     this._structureViewerCanvas = React.createRef();
-    this.isSpinning = this.props.isSpinning;
   }
 
   async componentDidMount() {
@@ -94,14 +93,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.loadURLInViewer(url);
     }
     if (this.viewer) {
-      this.viewer.setSpin(this.props.isSpinning);
+      this.setSpin(this.props.isSpinning);
       if (this.props.shouldResetViewer) {
-        this.viewer.autoView();
+        PluginCommands.Camera.Reset(this.viewer, {});
       }
       if (this.props.selections?.length) {
-        this.highlightSelections(this.props.selections);
+        //this.highlightSelections(this.props.selections);
       } else {
-        this.clearSelections();
+        //this.clearSelections();
       }
     }
   }
@@ -118,16 +117,17 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.viewer.builders.structure.hierarchy
       .applyPreset(trajectory, 'default')
       .then(() => {
-        this.toggleStructureSpin();
+        this.setSpin(this.props.isSpinning);
       });
   }
 
-  toggleStructureSpin() {
+  setSpin(spinState) {
+    console.log(`MAQ spin = ${this.props.isSpinning}`);
     if (this.viewer.canvas3d) {
-      this.viewer.canvas3d.props.trackball.spin = this.isSpinning;
+      // this.viewer.canvas3d.props.trackball.spin = this.props.isSpinning;
       const trackball = this.viewer.canvas3d.props.trackball;
       PluginCommands.Canvas3D.SetSettings(this.viewer, {
-        settings: { trackball: { ...trackball, spin: !trackball.spin } },
+        settings: { trackball: { ...trackball, spin: spinState } },
       });
     }
   }
