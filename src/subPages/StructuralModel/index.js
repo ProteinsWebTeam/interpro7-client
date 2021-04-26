@@ -204,7 +204,7 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
       </p>
       <div className={f('nightingale-components')}>
         <div className={f('heatmap')}>
-          <label>Distance matrix</label>
+          <label htmlFor={'contact-map'}>Distance matrix</label>
           <nightingale-heatmap
             id="contact-map"
             ref={heatmap}
