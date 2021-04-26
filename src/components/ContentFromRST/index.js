@@ -58,7 +58,7 @@ const Switch = ({ type, ...rest }) => {
       return <Substitution {...rest} />;
     case 'strong':
       return <BasicWrapper {...rest} Element="strong" />;
-    case 'text':
+    case 'text': {
       if (rest.value.trim() === '|') return null;
       if (rest.respectNewLines && rest.value.endsWith('\n')) {
         return (
@@ -69,20 +69,21 @@ const Switch = ({ type, ...rest }) => {
         );
       }
 
-      if (rstembeddedLink.test(rest.value)) {
-        const [_, text, link] = rstembeddedLink.exec(rest.value);
-        return (
-          <a
-            target="_blank"
-            href={link}
-            rel="noreferrer"
-          >
-            {text}
-          </a>
-        );
-      }
+      const matches = rstembeddedLink.exec(rest.value);
+      if (matches === null)
+        return rest.value;
 
-      return rest.value;
+      const [_, text, link] = matches;
+      return (
+        <a
+          target="_blank"
+          href={link}
+          rel="noreferrer"
+        >
+          {text}
+        </a>
+      );
+    }
     default:
       return null;
   }
