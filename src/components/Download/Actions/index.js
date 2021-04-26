@@ -41,7 +41,10 @@ class Actions extends PureComponent /*:: <Props> */ {
     // Attempts to remove the host and the port
     const matches = localID.match(/.+:\d+\/(.+)$/);
 
-    // Replaces slashes by underscores, and
+    /**
+     * Replaces slashes by underscores,
+     * and pipe by period (so the file has a correct extension)
+     */
     const fileName = (matches === null ? localID : matches[1])
       .replace(/[\/?]+/g, '_')
       .replace(/\|(.+)$/, '.$1');
