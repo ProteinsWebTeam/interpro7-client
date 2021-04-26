@@ -14,6 +14,8 @@ import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPi
 import { PrintedPublication } from 'components/Help/Publication';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
+import loadWebComponent from 'utils/load-web-component';
+import NightingaleHeatmap from 'nightingale-heatmap';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -29,6 +31,16 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
   const [aln2str, setAln2str] = useState(null);
 
   const container = useRef();
+  const heatmap = useRef(null);
+
+  useEffect(() => {
+    loadWebComponent(() => NightingaleHeatmap).as('nightingale-heatmap');
+  }, []);
+
+  useEffect(() => {
+    if (dataContacts.payload && heatmap.current)
+      heatmap.current.data = dataContacts.payload;
+  }, [heatmap.current]);
 
   useEffect(() => {
     if (container.current && aln2str) {
@@ -54,6 +66,19 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
                 }:A`,
               ],
               ...linkedSelections,
+            ];
+            setSelections(selections);
+          } else if (evt.detail.type === 'mouseout') {
+            setSelections(null);
+          }
+        }
+        if (evt?.target?.id === 'contact-map') {
+          if (evt.detail.type === 'mousemove') {
+            const x = evt.detail.point.xPoint;
+            const y = evt.detail.point.yPoint;
+            const selections = [
+              ['red', `${aln2str?.get(x) || x}-${aln2str?.get(x) || x}:A`],
+              ['blue', `${aln2str?.get(y) || x}-${aln2str?.get(y) || y}:A`],
             ];
             setSelections(selections);
           } else if (evt.detail.type === 'mouseout') {
@@ -169,6 +194,7 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
           selections={selections}
         />
       </PictureInPicturePanel>
+
       <h3>SEED alignment with Contact Predictions</h3>
       <p>
         This visualization shows the contacts predicted with trRosetta upon the
@@ -176,38 +202,52 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
         to view contact positions highlighted in the alignment and structural
         model.
       </p>
-      <label>
-        Probability threshold
-        <Tooltip title="Probability threshold of residues being closer than 8Å. Use the slider to change the threshold.">
-          <sup>
-            <span
-              className={f('small', 'icon', 'icon-common')}
-              data-icon="&#xf129;"
-              aria-label={'description for probability threshold input'}
+      <div className={f('nightingale-components')}>
+        <div className={f('heatmap')}>
+          <label htmlFor={'contact-map'}>Distance matrix</label>
+          <nightingale-heatmap
+            id="contact-map"
+            ref={heatmap}
+            width={500}
+            height={500}
+            symmetric={true}
+          />
+        </div>
+        <div className={f('alignment')}>
+          <label>
+            Probability threshold
+            <Tooltip title="Probability threshold of residues being closer than 8Å. Use the slider to change the threshold.">
+              <sup>
+                <span
+                  className={f('small', 'icon', 'icon-common')}
+                  data-icon="&#xf129;"
+                  aria-label={'description for probability threshold input'}
+                />
+              </sup>
+            </Tooltip>
+            :{' '}
+            <input
+              type="range"
+              min="0.1"
+              max="1"
+              step="0.01"
+              value={threshold}
+              name="threshold"
+              onChange={handleThresholdChange}
             />
-          </sup>
-        </Tooltip>
-        :{' '}
-        <input
-          type="range"
-          min="0.1"
-          max="1"
-          step="0.01"
-          value={threshold}
-          name="threshold"
-          onChange={handleThresholdChange}
-        />
-        <span>{threshold}</span>
-      </label>
-      <AlignmentViewer
-        setColorMap={() => null}
-        onConservationProgress={() => null}
-        type="alignment:seed"
-        colorscheme="clustal2"
-        contacts={dataContacts?.payload || []}
-        contactThreshold={threshold}
-        onAlignmentLoaded={getAlignmentToStructureMap}
-      />
+            <span>{threshold}</span>
+          </label>
+          <AlignmentViewer
+            setColorMap={() => null}
+            onConservationProgress={() => null}
+            type="alignment:seed"
+            colorscheme="clustal2"
+            contacts={dataContacts?.payload || []}
+            contactThreshold={threshold}
+            onAlignmentLoaded={getAlignmentToStructureMap}
+          />
+        </div>
+      </div>
     </div>
   );
 };
