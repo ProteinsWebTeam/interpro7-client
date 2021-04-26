@@ -43,7 +43,7 @@ class Actions extends PureComponent /*:: <Props> */ {
 
     // Replaces slashes by underscores, and
     const fileName = (matches === null ? localID : matches[1])
-      .replaceAll(/[\/?]+/g, '_')
+      .replace(/[\/?]+/g, '_')
       .replace(/\|(.+)$/, '.$1');
 
     return (
