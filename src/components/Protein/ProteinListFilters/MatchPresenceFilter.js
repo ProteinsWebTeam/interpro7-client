@@ -78,8 +78,12 @@ class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
     )));
 
     if (!loading) {
-      const value = (hasMatches.get('true') || 0) + (hasMatches.get('false') || 0);
-      hasMatches.set('both', value);
+      let totalCount = 0;
+      hasMatches.forEach((value) => {
+        if (typeof value === 'number')
+          totalCount += value;
+      });
+      hasMatches.set('both', totalCount);
     }
     const selectedValue = search.match_presence || 'both';
 
