@@ -461,8 +461,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     // const databases = dataDB.payload.databases;
     if (entry.source_database === 'mobidblt')
       return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
-    if (entry.source_database === 'pirsr')
-      return <span>{entry.locations[0].description}</span>;
+    // if (entry.source_database === 'pirsr')
+    //   return <span>{entry.locations[0].description}</span>;
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
       entry.type === 'chain' ||
@@ -495,21 +495,25 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       entry.source_database === 'pdb' ? 'structure' : 'entry';
     return (
       <>
-        <Link
-          to={{
-            description: {
-              main: {
-                key,
+        {entry.source_database === 'pirsr' ? (
+          <span>{entry.accession}</span>
+        ) : (
+          <Link
+            to={{
+              description: {
+                main: {
+                  key,
+                },
+                [key]: {
+                  db: entry.source_database,
+                  accession: entry.accession,
+                },
               },
-              [key]: {
-                db: entry.source_database,
-                accession: entry.accession,
-              },
-            },
-          }}
-        >
-          {this.renderSwitch(this.state.label, entry)}
-        </Link>
+            }}
+          >
+            {this.renderSwitch(this.state.label, entry)}
+          </Link>
+        )}
         <div
           className={f({
             hide: !expandedTrack[entry.accession],
@@ -554,20 +558,24 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             hide: !expandedTrack[entry.accession],
           })}
         >
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: entry.source_database,
-                  accession: entry.accession,
+          {entry.source_database === 'pirsr' ? (
+            <span>{entry.locations[0].description}</span>
+          ) : (
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: entry.source_database,
+                    accession: entry.accession,
+                  },
                 },
-              },
-            }}
-          >
-            {r.accession ||
-              r.description.charAt(0).toUpperCase() + r.description.slice(1)}
-          </Link>
+              }}
+            >
+              {r.accession ||
+                r.description.charAt(0).toUpperCase() + r.description.slice(1)}
+            </Link>
+          )}
         </div>
       )),
     );

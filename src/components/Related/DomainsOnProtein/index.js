@@ -221,31 +221,50 @@ const mergeExtraFeatures = (data, extraFeatures) => {
   return data;
 };
 
+const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
 const mergeResidues = (data, residues) => {
+  const residuesWithEntryDetails = [];
   // prettier-ignore
   (Object.values(data)/*: any */).forEach(
     (group/*: Array<{accession:string, residues: Array<Object>, children: any}> */) =>
     group.forEach((entry) => {
-      if (residues[entry.accession])
-        entry.residues = [residues[entry.accession]];
+      if (residues[entry.accession]) {
+        const matchedEntry = {...entry};
+        // matchedEntry.accession = `residue:${entry.accession}`;
+        matchedEntry.residues = [residues[entry.accession]];
+        residuesWithEntryDetails.push(matchedEntry);
+        // entry.residues = [residues[entry.accession]];
+      }
+
       if (entry.children && entry.children.length)
         entry.children.forEach((child) => {
-          if (residues[child.accession])
-            child.residues = [residues[child.accession]];
+          if (residues[child.accession]) {
+            const matchedEntry = {...child};
+            // matchedEntry.accession = `residue:${child.accession}`;
+            matchedEntry.residues = [residues[child.accession]];
+            residuesWithEntryDetails.push(matchedEntry);
+            // child.residues = [residues[child.accession]];
+          }
         });
     }),
   );
-  // TODO: to be removed. Yet to decide where the PIRSR residues are going to be shown
-  const pirsrResidues = {};
+
+  // PIRSR doesn't have any entry integrated in InterPro
+  const pirsrResidues = [];
   Object.keys(residues).forEach((entry) => {
-    if (entry.startsWith('PIRSR')) pirsrResidues[entry] = residues[entry];
+    if (entry.startsWith('PIRSR')) {
+      const residueEntry = { ...residues[entry] };
+      residueEntry.residues = [residues[entry]];
+      pirsrResidues.push(residueEntry);
+      // pirsrResidues[entry] = residues[entry];
+    }
   });
-  if (Object.keys(pirsrResidues).length > 0) {
-    mergeExtraFeatures(data, pirsrResidues);
-  }
+  pirsrResidues.sort(orderByAccession);
+
+  residuesWithEntryDetails.push(...pirsrResidues);
+  data.residues = residuesWithEntryDetails;
 };
 
-const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
 export const groupByEntryType = (interpro) => {
   const groups = {};
   for (const entry of interpro) {
