@@ -230,20 +230,16 @@ const mergeResidues = (data, residues) => {
     group.forEach((entry) => {
       if (residues[entry.accession]) {
         const matchedEntry = {...entry};
-        // matchedEntry.accession = `residue:${entry.accession}`;
         matchedEntry.residues = [residues[entry.accession]];
         residuesWithEntryDetails.push(matchedEntry);
-        // entry.residues = [residues[entry.accession]];
       }
 
       if (entry.children && entry.children.length)
         entry.children.forEach((child) => {
           if (residues[child.accession]) {
             const matchedEntry = {...child};
-            // matchedEntry.accession = `residue:${child.accession}`;
             matchedEntry.residues = [residues[child.accession]];
             residuesWithEntryDetails.push(matchedEntry);
-            // child.residues = [residues[child.accession]];
           }
         });
     }),
@@ -254,9 +250,8 @@ const mergeResidues = (data, residues) => {
   Object.keys(residues).forEach((entry) => {
     if (entry.startsWith('PIRSR')) {
       const residueEntry = { ...residues[entry] };
-      residueEntry.residues = [residues[entry]];
+      residueEntry.type = 'residue';
       pirsrResidues.push(residueEntry);
-      // pirsrResidues[entry] = residues[entry];
     }
   });
   pirsrResidues.sort(orderByAccession);

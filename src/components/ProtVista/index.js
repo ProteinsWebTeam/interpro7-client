@@ -461,8 +461,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     // const databases = dataDB.payload.databases;
     if (entry.source_database === 'mobidblt')
       return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
-    // if (entry.source_database === 'pirsr')
-    //   return <span>{entry.locations[0].description}</span>;
+    if (entry.source_database === 'pirsr')
+      return <span>{entry.locations[0].description}</span>;
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
       entry.type === 'chain' ||
@@ -495,25 +495,21 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       entry.source_database === 'pdb' ? 'structure' : 'entry';
     return (
       <>
-        {entry.source_database === 'pirsr' ? (
-          <span>{entry.accession}</span>
-        ) : (
-          <Link
-            to={{
-              description: {
-                main: {
-                  key,
-                },
-                [key]: {
-                  db: entry.source_database,
-                  accession: entry.accession,
-                },
+        <Link
+          to={{
+            description: {
+              main: {
+                key,
               },
-            }}
-          >
-            {this.renderSwitch(this.state.label, entry)}
-          </Link>
-        )}
+              [key]: {
+                db: entry.source_database,
+                accession: entry.accession,
+              },
+            },
+          }}
+        >
+          {this.renderSwitch(this.state.label, entry)}
+        </Link>
         <div
           className={f({
             hide: !expandedTrack[entry.accession],
@@ -745,13 +741,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     className={f('track-row')}
                                   >
                                     {entry.type === 'secondary_structure' ||
-                                    entry.type === 'sequence_conservation' ? (
+                                    entry.type === 'sequence_conservation' ||
+                                    entry.type === 'residue' ? (
                                       <div
                                         className={f(
                                           'track-component',
-                                          entry.type === 'secondary_structure'
-                                            ? 'secondary-structure'
-                                            : 'sequence-conservation',
+                                          entry.type.replace('_', '-'),
                                           `${this.state.addLabelClass}`,
                                         )}
                                       >
@@ -788,12 +783,18 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                               use-ctrl-to-zoom
                                             />
                                           )}
-                                        {entry.type ===
-                                          'secondary_structure' && (
+                                        {(entry.type ===
+                                          'secondary_structure' ||
+                                          entry.type === 'residue') && (
                                           <protvista-track
                                             length={length}
                                             displaystart="1"
                                             displayend={length}
+                                            height={
+                                              entry.type === 'residue'
+                                                ? '15'
+                                                : null
+                                            }
                                             id={`track_${entry.accession}`}
                                             ref={(e) =>
                                               (this.web_tracks[
