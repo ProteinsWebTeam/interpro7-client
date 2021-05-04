@@ -444,7 +444,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     return (
       <>
         {type}
-        {label.accession && entry.accession}
+        {label.accession && entry.accession.startsWith('residue:')
+          ? entry.accession.split('residue:')[1]
+          : entry.accession}
         {label.accession && label.name && ': '}
         {label.name && entry.name}
       </>
@@ -503,7 +505,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               },
               [key]: {
                 db: entry.source_database,
-                accession: entry.accession,
+                accession: entry.accession.startsWith('residue:')
+                  ? entry.accession.split('residue:')[1]
+                  : entry.accession,
               },
             },
           }}
@@ -563,7 +567,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   main: { key: 'entry' },
                   entry: {
                     db: entry.source_database,
-                    accession: entry.accession,
+                    accession: entry.accession.startsWith('residue:')
+                      ? entry.accession.split('residue:')[1]
+                      : entry.accession,
                   },
                 },
               }}

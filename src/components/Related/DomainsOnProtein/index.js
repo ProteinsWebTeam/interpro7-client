@@ -230,6 +230,7 @@ const mergeResidues = (data, residues) => {
     group.forEach((entry) => {
       if (residues[entry.accession]) {
         const matchedEntry = {...entry};
+        matchedEntry.accession = `residue:${entry.accession}`;
         matchedEntry.residues = [residues[entry.accession]];
         residuesWithEntryDetails.push(matchedEntry);
       }
@@ -238,6 +239,7 @@ const mergeResidues = (data, residues) => {
         entry.children.forEach((child) => {
           if (residues[child.accession]) {
             const matchedEntry = {...child};
+            matchedEntry.accession = `residue:${child.accession}`;
             matchedEntry.residues = [residues[child.accession]];
             residuesWithEntryDetails.push(matchedEntry);
           }
