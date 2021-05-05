@@ -175,36 +175,31 @@ class StructureView extends PureComponent /*:: <Props> */ {
       );
     }
 
-    const indices = [];
-    for (const selection of selections) {
-      // const colour = parseInt(selection[0], 16);
-      PluginCommands.Canvas3D.SetSettings(this.viewer, {
-        settings: (props) => {
-          props.renderer.highlightColor = Color(0xffff00);
-        },
-      });
-      const [, start, end, chain] = selection[1].match(/(\d+)-(\d+)\:(\w+)/);
-      console.log(`MAQ ${chain}: ${start} - ${end}`);
-      const molSelection = Script.getStructureSelection((MS) => {
-        console.log(`MAQ ${chain}: ${start} - ${end}`);
-        const _proteinEntityTest = MS.core.logic.and([
-          MS.core.rel.eq([MS.ammp('entityType'), 'polymer']),
-          MS.core.str.match([
-            MS.re('(polypeptide|cyclic-pseudo-peptide|peptide-like)', 'i'),
-            MS.ammp('entitySubtype'),
-          ]),
-        ]);
-        return MS.struct.generator.atomGroups({
-          'entity-test': _proteinEntityTest,
-        });
-        // return MS.struct.generator.atomGroups({
-        //   'chain-test': MS.core.rel.eq([chain, MS.ammp('label_asym_id')]),
-        //   'residue-test': MS.core.rel.inRange([MS.ammp('auth_seq_id'), start, end]),
-        // });
-      }, data);
-      const loci = StructureSelection.toLociWithSourceUnits(molSelection);
-      this.viewer.managers.interactivity.lociHighlights.highlightOnly({ loci });
-    }
+    // const colour = parseInt(selection[0], 16);
+    PluginCommands.Canvas3D.SetSettings(this.viewer, {
+      settings: (props) => {
+        props.renderer.highlightColor = Color(0xffff00);
+      },
+    });
+    const molSelection = Script.getStructureSelection((MS) => {
+      const atomGroups = [];
+      for (const selection of selections) {
+        const [, start, end, chain] = selection[1].match(/(\d+)-(\d+)\:(\w+)/);
+        atomGroups.push(
+          MS.struct.generator.atomGroups({
+            'chain-test': MS.core.rel.eq([chain, MS.ammp('label_asym_id')]),
+            'residue-test': MS.core.rel.inRange([
+              MS.ammp('auth_seq_id'),
+              start,
+              end,
+            ]),
+          }),
+        );
+      }
+      return MS.struct.combinator.merge(atomGroups);
+    }, data);
+    const loci = StructureSelection.toLociWithSourceUnits(molSelection);
+    this.viewer.managers.interactivity.lociHighlights.highlightOnly({ loci });
 
     PluginCommands.Toast.Show(this.viewer, {
       title: 'Custom Message',
