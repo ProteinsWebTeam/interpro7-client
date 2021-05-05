@@ -3,11 +3,21 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
-import { ColormakerRegistry } from 'ngl';
 import { DefaultPluginSpec, PluginSpec } from 'molstar/lib/mol-plugin/spec';
 import { PluginConfig } from 'molstar/lib/mol-plugin/config';
 import { PluginContext } from 'molstar/lib/mol-plugin/context';
 import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
+import { StructureSelection } from 'molstar/lib/mol-model/structure';
+import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
+import { HydrophobicityColorThemeProvider } from 'molstar/lib/mol-theme/color/hydrophobicity';
+import { ElementIndexColorThemeProvider } from 'molstar/lib/mol-theme/color/element-index';
+import { IllustrativeColorThemeProvider } from 'molstar/lib/mol-theme/color/illustrative';
+import { PolymerIdColorThemeProvider } from 'molstar/lib/mol-theme/color/polymer-id';
+import { ModelIndexColorThemeProvider } from 'molstar/lib/mol-theme/color/model-index';
+import { Script } from 'molstar/lib/mol-script/script';
+import { Type } from 'molstar/lib/mol-script/language/type';
+import { EmptyLoci } from 'molstar/lib/mol-model/loci';
+import { Color } from 'molstar/lib/mol-util/color';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -77,6 +87,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
         this._structureViewer.current,
       );
     }
+
+    // this.viewer.representation.structure.themes
+    //  .colorThemeRegistry.add(ChainIdColorThemeProvider);
+
     const url =
       this.props.url ||
       `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
@@ -90,7 +104,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       const url =
         this.props.url ||
         `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
-      this.loadURLInViewer(url);
+      this.loadStructureInViewer(url);
     }
     if (this.viewer) {
       this.setSpin(this.props.isSpinning);
@@ -98,9 +112,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
         PluginCommands.Camera.Reset(this.viewer, {});
       }
       if (this.props.selections?.length) {
-        //this.highlightSelections(this.props.selections);
+        this.highlightSelections(this.props.selections);
       } else {
-        //this.clearSelections();
+        this.clearSelections();
       }
     }
   }
@@ -117,13 +131,27 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.viewer.builders.structure.hierarchy
       .applyPreset(trajectory, 'default')
       .then(() => {
+        // populate the entry map object used for entry highlighting
+        this.props?.onStructureLoaded();
+        // spin/stop spinning the structure
         this.setSpin(this.props.isSpinning);
+        // apply colouring
+        this.viewer.dataTransaction(async () => {
+          for (const s of this.viewer.managers.structure.hierarchy.current
+            .structures) {
+            await this.viewer.managers.structure.component.updateRepresentationsTheme(
+              s.components,
+              {
+                color: ChainIdColorThemeProvider.name,
+              },
+            );
+          }
+        });
       });
   }
 
-  setSpin(spinState) {
+  setSpin(spinState = false) {
     if (this.viewer.canvas3d) {
-      // this.viewer.canvas3d.props.trackball.spin = this.props.isSpinning;
       const trackball = this.viewer.canvas3d.props.trackball;
       PluginCommands.Canvas3D.SetSettings(this.viewer, {
         settings: { trackball: { ...trackball, spin: spinState } },
@@ -131,49 +159,69 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
-  loadURLInViewer(url /*: string */) {
-    console.log('MAQ loadURLInViewer');
-    // const settings /*: SettingsForNGL */ = { defaultRepresentation: false };
-    // if (this.props.ext) {
-    //   settings.ext = this.props.ext;
-    //   settings.name = this.props.id;
-    // }
-    // this.viewer
-    //   .loadFile(url, settings)
-    //   .then((component) => {
-    //     console.log("MAQ loaded file");
-    //     component.addRepresentation('cartoon', { colorScheme: 'chainname' });
-    //     component.autoView();
-    //   })
-    //   .then(() => {
-    //     this.viewer.handleResize();
-    //     if (this.props?.onStructureLoaded) this.props?.onStructureLoaded();
-    //   });
-  }
-
   highlightSelections(selections /*: Array<Array<string>> */) {
     if (!this.viewer) return;
-    const components = this.viewer.getComponentsByName(this.name);
-    if (components) {
-      components.forEach((component) => {
-        const theme = ColormakerRegistry.addSelectionScheme(
-          selections,
-          'highlight',
-        );
-        component.addRepresentation('cartoon', { color: theme });
-      });
+    const data = this.viewer.managers.structure.hierarchy.current.structures[0]
+      ?.cell.obj?.data;
+    if (!data) return;
+
+    for (const s of this.viewer.managers.structure.hierarchy.current
+      .structures) {
+      this.viewer.managers.structure.component.updateRepresentationsTheme(
+        s.components,
+        {
+          color: ModelIndexColorThemeProvider.name,
+        },
+      );
     }
+
+    const indices = [];
+    for (const selection of selections) {
+      // const colour = parseInt(selection[0], 16);
+      PluginCommands.Canvas3D.SetSettings(this.viewer, {
+        settings: (props) => {
+          props.renderer.highlightColor = Color(0xffff00);
+        },
+      });
+      const [, start, end, chain] = selection[1].match(/(\d+)-(\d+)\:(\w+)/);
+      console.log(`MAQ ${chain}: ${start} - ${end}`);
+      const molSelection = Script.getStructureSelection((MS) => {
+        console.log(`MAQ ${chain}: ${start} - ${end}`);
+        const _proteinEntityTest = MS.core.logic.and([
+          MS.core.rel.eq([MS.ammp('entityType'), 'polymer']),
+          MS.core.str.match([
+            MS.re('(polypeptide|cyclic-pseudo-peptide|peptide-like)', 'i'),
+            MS.ammp('entitySubtype'),
+          ]),
+        ]);
+        return MS.struct.generator.atomGroups({
+          'entity-test': _proteinEntityTest,
+        });
+        // return MS.struct.generator.atomGroups({
+        //   'chain-test': MS.core.rel.eq([chain, MS.ammp('label_asym_id')]),
+        //   'residue-test': MS.core.rel.inRange([MS.ammp('auth_seq_id'), start, end]),
+        // });
+      }, data);
+      const loci = StructureSelection.toLociWithSourceUnits(molSelection);
+      this.viewer.managers.interactivity.lociHighlights.highlightOnly({ loci });
+    }
+
+    PluginCommands.Toast.Show(this.viewer, {
+      title: 'Custom Message',
+      message: 'A custom toast message that will disappear after 2 seconds.',
+      key: 'toast-custom',
+      timeoutMs: 2000,
+    });
   }
+
   clearSelections() {
     if (!this.viewer) return;
-    const components = this.viewer.getComponentsByName(this.name);
-    if (components) {
-      components.forEach((component) => {
-        component.addRepresentation('cartoon', {
-          colorScheme: 'chainname',
-        });
-      });
-    }
+    const data = this.viewer.managers.structure.hierarchy.current.structures[0]
+      ?.cell.obj?.data;
+    if (!data) return;
+    this.viewer.managers.interactivity.lociHighlights.highlightOnly({
+      loci: EmptyLoci,
+    });
   }
 
   render() {
