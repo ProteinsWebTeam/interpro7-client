@@ -110,11 +110,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.setSpin(this.props.isSpinning);
       if (this.props.shouldResetViewer) {
         PluginCommands.Camera.Reset(this.viewer, {});
+        this.clearSelections();
       }
       if (this.props.selections?.length) {
         this.highlightSelections(this.props.selections);
       } else {
-        this.clearSelections();
+        // this.clearSelections();
       }
     }
   }
@@ -132,7 +133,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
       .applyPreset(trajectory, 'default')
       .then(() => {
         // populate the entry map object used for entry highlighting
-        this.props?.onStructureLoaded();
+        if (this.props.onStructureLoaded) {
+          this.props.onStructureLoaded();
+        }
         // spin/stop spinning the structure
         this.setSpin(this.props.isSpinning);
         // apply colouring
@@ -165,16 +168,16 @@ class StructureView extends PureComponent /*:: <Props> */ {
       ?.cell.obj?.data;
     if (!data) return;
 
-    for (const s of this.viewer.managers.structure.hierarchy.current
-      .structures) {
-      this.viewer.managers.structure.component.updateRepresentationsTheme(
-        s.components,
-        {
-          color: ModelIndexColorThemeProvider.name,
-        },
-      );
-    }
-
+    // for (const s of this.viewer.managers.structure.hierarchy.current
+    //   .structures) {
+    //   this.viewer.managers.structure.component.updateRepresentationsTheme(
+    //     s.components,
+    //     {
+    //       color: ModelIndexColorThemeProvider.name,
+    //     },
+    //   );
+    // }
+    this.clearSelections();
     // const colour = parseInt(selection[0], 16);
     PluginCommands.Canvas3D.SetSettings(this.viewer, {
       settings: (props) => {
@@ -184,22 +187,29 @@ class StructureView extends PureComponent /*:: <Props> */ {
     const molSelection = Script.getStructureSelection((MS) => {
       const atomGroups = [];
       for (const selection of selections) {
-        const [, start, end, chain] = selection[1].match(/(\d+)-(\d+)\:(\w+)/);
-        atomGroups.push(
-          MS.struct.generator.atomGroups({
-            'chain-test': MS.core.rel.eq([chain, MS.ammp('label_asym_id')]),
-            'residue-test': MS.core.rel.inRange([
-              MS.ammp('auth_seq_id'),
-              start,
-              end,
-            ]),
-          }),
-        );
+        if (selection.length > 1) {
+          // $FlowFixMe
+          const [, start, end, chain] = selection[1].match(
+            /(\d+)-(\d+)\:(\w+)/,
+          );
+          if (start && end && chain) {
+            atomGroups.push(
+              MS.struct.generator.atomGroups({
+                'chain-test': MS.core.rel.eq([chain, MS.ammp('label_asym_id')]),
+                'residue-test': MS.core.rel.inRange([
+                  MS.ammp('auth_seq_id'),
+                  start,
+                  end,
+                ]),
+              }),
+            );
+          }
+        }
       }
       return MS.struct.combinator.merge(atomGroups);
     }, data);
     const loci = StructureSelection.toLociWithSourceUnits(molSelection);
-    this.viewer.managers.interactivity.lociHighlights.highlightOnly({ loci });
+    this.viewer.managers.interactivity.lociSelects.select({ loci });
 
     PluginCommands.Toast.Show(this.viewer, {
       title: 'Custom Message',
@@ -214,9 +224,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     const data = this.viewer.managers.structure.hierarchy.current.structures[0]
       ?.cell.obj?.data;
     if (!data) return;
-    this.viewer.managers.interactivity.lociHighlights.highlightOnly({
-      loci: EmptyLoci,
-    });
+    this.viewer.managers.interactivity.lociSelects.deselectAll();
   }
 
   render() {
