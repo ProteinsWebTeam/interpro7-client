@@ -9,19 +9,24 @@ import { PluginContext } from 'molstar/lib/mol-plugin/context';
 import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
 import { StructureSelection } from 'molstar/lib/mol-model/structure';
 import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
-import { HydrophobicityColorThemeProvider } from 'molstar/lib/mol-theme/color/hydrophobicity';
-import { ElementIndexColorThemeProvider } from 'molstar/lib/mol-theme/color/element-index';
-import { IllustrativeColorThemeProvider } from 'molstar/lib/mol-theme/color/illustrative';
-import { PolymerIdColorThemeProvider } from 'molstar/lib/mol-theme/color/polymer-id';
-import { ModelIndexColorThemeProvider } from 'molstar/lib/mol-theme/color/model-index';
+// import { HydrophobicityColorThemeProvider } from 'molstar/lib/mol-theme/color/hydrophobicity';
+// import { ElementIndexColorThemeProvider } from 'molstar/lib/mol-theme/color/element-index';
+// import { IllustrativeColorThemeProvider } from 'molstar/lib/mol-theme/color/illustrative';
+// import { PolymerIdColorThemeProvider } from 'molstar/lib/mol-theme/color/polymer-id';
+// import { ModelIndexColorThemeProvider } from 'molstar/lib/mol-theme/color/model-index';
+import {
+  UniformColorThemeProvider,
+  UniformColorThemeParams,
+} from 'molstar/lib/mol-theme/color/uniform';
+import { ParamDefinition } from 'molstar/lib/mol-util/param-definition';
 import { Script } from 'molstar/lib/mol-script/script';
-import { Type } from 'molstar/lib/mol-script/language/type';
-import { EmptyLoci } from 'molstar/lib/mol-model/loci';
 import { Color } from 'molstar/lib/mol-util/color';
+import { ColorNames } from 'molstar/lib/mol-util/color/names';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
+// import SelectionTheme from './InterProTheme';
 
 const f = foundationPartial(style, fonts);
 /*:: type Props = {
@@ -88,9 +93,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
       );
     }
 
-    // this.viewer.representation.structure.themes
-    //  .colorThemeRegistry.add(ChainIdColorThemeProvider);
-
     const url =
       this.props.url ||
       `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
@@ -111,6 +113,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       if (this.props.shouldResetViewer) {
         PluginCommands.Camera.Reset(this.viewer, {});
         this.clearSelections();
+        this.applyChainIdTheme();
       }
       if (this.props.selections?.length) {
         this.highlightSelections(this.props.selections);
@@ -138,18 +141,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         }
         // spin/stop spinning the structure
         this.setSpin(this.props.isSpinning);
-        // apply colouring
-        this.viewer.dataTransaction(async () => {
-          for (const s of this.viewer.managers.structure.hierarchy.current
-            .structures) {
-            await this.viewer.managers.structure.component.updateRepresentationsTheme(
-              s.components,
-              {
-                color: ChainIdColorThemeProvider.name,
-              },
-            );
-          }
-        });
+        this.applyChainIdTheme();
       });
   }
 
@@ -168,24 +160,30 @@ class StructureView extends PureComponent /*:: <Props> */ {
       ?.cell.obj?.data;
     if (!data) return;
 
-    // for (const s of this.viewer.managers.structure.hierarchy.current
-    //   .structures) {
-    //   this.viewer.managers.structure.component.updateRepresentationsTheme(
-    //     s.components,
-    //     {
-    //       color: ModelIndexColorThemeProvider.name,
-    //     },
-    //   );
-    // }
     this.clearSelections();
-    // const colour = parseInt(selection[0], 16);
-    PluginCommands.Canvas3D.SetSettings(this.viewer, {
-      settings: (props) => {
-        props.renderer.highlightColor = Color(0xffff00);
-      },
+    this.viewer.dataTransaction(async () => {
+      UniformColorThemeParams.value = ParamDefinition.Color(ColorNames.white);
+      for (const s of this.viewer.managers.structure.hierarchy.current
+        .structures) {
+        await this.viewer.managers.structure.component.updateRepresentationsTheme(
+          s.components,
+          {
+            color: UniformColorThemeProvider.name,
+          },
+        );
+      }
     });
     const molSelection = Script.getStructureSelection((MS) => {
       const atomGroups = [];
+
+      if (selections.length > 0 && selections[0].length > 1) {
+        const hexColour = parseInt(selections[0][0].substring(1), 16);
+        PluginCommands.Canvas3D.SetSettings(this.viewer, {
+          settings: (props) => {
+            props.renderer.selectColor = Color(hexColour);
+          },
+        });
+      }
       for (const selection of selections) {
         if (selection.length > 1) {
           // $FlowFixMe
@@ -216,6 +214,21 @@ class StructureView extends PureComponent /*:: <Props> */ {
       message: 'A custom toast message that will disappear after 2 seconds.',
       key: 'toast-custom',
       timeoutMs: 2000,
+    });
+  }
+
+  applyChainIdTheme() {
+    // apply colouring
+    this.viewer.dataTransaction(async () => {
+      for (const s of this.viewer.managers.structure.hierarchy.current
+        .structures) {
+        await this.viewer.managers.structure.component.updateRepresentationsTheme(
+          s.components,
+          {
+            color: ChainIdColorThemeProvider.name,
+          },
+        );
+      }
     });
   }
 
