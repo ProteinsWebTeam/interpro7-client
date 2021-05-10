@@ -184,20 +184,27 @@ class StructureView extends PureComponent /*:: <Props> */ {
           },
         });
       }
+      console.log(`MAQ starting sections`);
       for (const selection of selections) {
         if (selection.length > 1) {
           // $FlowFixMe
-          const [, start, end, chain] = selection[1].match(
+          const [, startMatch, endMatch, chain] = selection[1].match(
             /(\d+)-(\d+)\:(\w+)/,
           );
+          const start = parseInt(startMatch, 10);
+          const end = parseInt(endMatch, 10);
+          const positions = [];
+          for (let i = start; i <= end; i++) {
+            positions.push(i);
+          }
+          console.log(`MAQ ${chain}:${start}-${end} ${positions}`);
           if (start && end && chain) {
             atomGroups.push(
               MS.struct.generator.atomGroups({
                 'chain-test': MS.core.rel.eq([chain, MS.ammp('label_asym_id')]),
-                'residue-test': MS.core.rel.inRange([
+                'residue-test': MS.core.set.has([
+                  MS.set(...positions),
                   MS.ammp('auth_seq_id'),
-                  start,
-                  end,
                 ]),
               }),
             );
