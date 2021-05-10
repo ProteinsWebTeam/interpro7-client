@@ -96,7 +96,7 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
     const types = (Object.entries(
       getPayloadOrEmpty(payload, loading, isStale),
     ) /*: any */)
-      .sort(([aType,], [bType,]) => {
+      .sort(([aType], [bType]) => {
         const typeOrder = [
           'family',
           'domain',
