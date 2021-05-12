@@ -7,6 +7,7 @@ import { DefaultPluginSpec, PluginSpec } from 'molstar/lib/mol-plugin/spec';
 import { PluginConfig } from 'molstar/lib/mol-plugin/config';
 import { PluginContext } from 'molstar/lib/mol-plugin/context';
 import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
+import { PluginUIComponent } from 'molstar/lib/mol-plugin-ui/base';
 import { StructureSelection } from 'molstar/lib/mol-model/structure';
 import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
 // import { HydrophobicityColorThemeProvider } from 'molstar/lib/mol-theme/color/hydrophobicity';
@@ -93,20 +94,28 @@ class StructureView extends PureComponent /*:: <Props> */ {
       );
     }
 
-    const url =
-      this.props.url ||
-      `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
-    this.loadStructureInViewer(url);
+    if (this.props.url) {
+      this.loadStructureInViewer(this.props.url, 'pdb');
+    } else {
+      this.loadStructureInViewer(
+        `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
+        'mmcif',
+      );
+    }
   }
 
   componentDidUpdate() {
     if (this.name !== `${this.props.id}`) {
       this.name = `${this.props.id}`;
       this.viewer.clear();
-      const url =
-        this.props.url ||
-        `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`;
-      this.loadStructureInViewer(url);
+      if (this.props.url) {
+        this.loadStructureInViewer(this.props.url, 'pdb');
+      } else {
+        this.loadStructureInViewer(
+          `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
+          'mmcif',
+        );
+      }
     }
     if (this.viewer) {
       this.setSpin(this.props.isSpinning);
@@ -123,14 +132,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
-  async loadStructureInViewer(url /*: string */) {
+  async loadStructureInViewer(url /*: string */, format /*: string */) {
     const data = await this.viewer.builders.data.download(
       { url: url },
       { state: { isGhost: false } },
     );
     const trajectory = await this.viewer.builders.structure.parseTrajectory(
       data,
-      'mmcif',
+      format,
     );
     this.viewer.builders.structure.hierarchy
       .applyPreset(trajectory, 'default')
@@ -184,7 +193,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
           },
         });
       }
-      console.log(`MAQ starting sections`);
       for (const selection of selections) {
         if (selection.length > 1) {
           // $FlowFixMe
@@ -197,7 +205,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
           for (let i = start; i <= end; i++) {
             positions.push(i);
           }
-          console.log(`MAQ ${chain}:${start}-${end} ${positions}`);
+          // console.log(`MAQ ${chain}:${start}-${end} ${positions}`);
           if (start && end && chain) {
             atomGroups.push(
               MS.struct.generator.atomGroups({
@@ -219,8 +227,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
     PluginCommands.Toast.Show(this.viewer, {
       title: 'Custom Message',
       message: 'A custom toast message that will disappear after 2 seconds.',
-      key: 'toast-custom',
-      timeoutMs: 2000,
+      key: 'toast-1',
+      timeoutMs: 30000,
     });
   }
 
