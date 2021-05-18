@@ -7,8 +7,11 @@ import { DefaultPluginSpec, PluginSpec } from 'molstar/lib/mol-plugin/spec';
 import { PluginConfig } from 'molstar/lib/mol-plugin/config';
 import { PluginContext } from 'molstar/lib/mol-plugin/context';
 import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
-import { PluginUIComponent } from 'molstar/lib/mol-plugin-ui/base';
-import { StructureSelection } from 'molstar/lib/mol-model/structure';
+import { PluginBehavior } from 'molstar/lib/mol-plugin/behavior/behavior';
+import {
+  StructureSelection,
+  StructureElement,
+} from 'molstar/lib/mol-model/structure';
 import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
 // import { HydrophobicityColorThemeProvider } from 'molstar/lib/mol-theme/color/hydrophobicity';
 // import { ElementIndexColorThemeProvider } from 'molstar/lib/mol-theme/color/element-index';
@@ -23,6 +26,10 @@ import { ParamDefinition } from 'molstar/lib/mol-util/param-definition';
 import { Script } from 'molstar/lib/mol-script/script';
 import { Color } from 'molstar/lib/mol-util/color';
 import { ColorNames } from 'molstar/lib/mol-util/color/names';
+import { InteractionsProvider } from 'molstar/lib/mol-model-props/computed/interactions';
+import { PropertyWrapper } from 'molstar/lib/mol-model-props/common/wrapper';
+import { useBehavior } from 'molstar/lib/mol-plugin-ui/hooks/use-behavior';
+import { LociLabels } from 'molstar/lib/mol-plugin-ui/controls';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -30,6 +37,23 @@ import style from './style.css';
 // import SelectionTheme from './InterProTheme';
 
 const f = foundationPartial(style, fonts);
+
+/*:: type Props = {
+  viewer = {}
+}
+*/
+function Labels(props) {
+  if (props.viewer) {
+    const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
+    if (highlighted) {
+      const text = highlighted.labels[0];
+      // eslint-disable-next-line react/no-danger
+      return <div dangerouslySetInnerHTML={{ __html: text }} />;
+    }
+  }
+  return null;
+}
+
 /*:: type Props = {
   id: string,
   url?: string,
@@ -133,29 +157,32 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   async loadStructureInViewer(url /*: string */, format /*: string */) {
-    const data = await this.viewer.builders.data.download(
-      { url: url },
-      { state: { isGhost: false } },
-    );
-    const trajectory = await this.viewer.builders.structure.parseTrajectory(
-      data,
-      format,
-    );
-    this.viewer.builders.structure.hierarchy
-      .applyPreset(trajectory, 'default')
-      .then(() => {
-        // populate the entry map object used for entry highlighting
-        if (this.props.onStructureLoaded) {
-          this.props.onStructureLoaded();
-        }
-        // spin/stop spinning the structure
-        this.setSpin(this.props.isSpinning);
-        this.applyChainIdTheme();
-      });
+    if (this.viewer) {
+      await this.viewer.clear();
+      const data = await this.viewer.builders.data.download(
+        { url: url },
+        { state: { isGhost: false } },
+      );
+      const trajectory = await this.viewer.builders.structure.parseTrajectory(
+        data,
+        format,
+      );
+      this.viewer.builders.structure.hierarchy
+        .applyPreset(trajectory, 'default')
+        .then(() => {
+          // populate the entry map object used for entry highlighting
+          if (this.props.onStructureLoaded) {
+            this.props.onStructureLoaded();
+          }
+          // spin/stop spinning the structure
+          this.setSpin(this.props.isSpinning);
+          this.applyChainIdTheme();
+        });
+    }
   }
 
   setSpin(spinState = false) {
-    if (this.viewer.canvas3d) {
+    if (this.viewer && this.viewer.canvas3d) {
       const trackball = this.viewer.canvas3d.props.trackball;
       PluginCommands.Canvas3D.SetSettings(this.viewer, {
         settings: { trackball: { ...trackball, spin: spinState } },
@@ -170,66 +197,72 @@ class StructureView extends PureComponent /*:: <Props> */ {
     if (!data) return;
 
     this.clearSelections();
-    this.viewer.dataTransaction(async () => {
-      UniformColorThemeParams.value = ParamDefinition.Color(ColorNames.white);
-      for (const s of this.viewer.managers.structure.hierarchy.current
-        .structures) {
-        await this.viewer.managers.structure.component.updateRepresentationsTheme(
-          s.components,
-          {
-            color: UniformColorThemeProvider.name,
-          },
-        );
-      }
-    });
-    const molSelection = Script.getStructureSelection((MS) => {
-      const atomGroups = [];
-
-      if (selections.length > 0 && selections[0].length > 1) {
-        const hexColour = parseInt(selections[0][0].substring(1), 16);
-        PluginCommands.Canvas3D.SetSettings(this.viewer, {
-          settings: (props) => {
-            props.renderer.selectColor = Color(hexColour);
-          },
-        });
-      }
-      for (const selection of selections) {
-        if (selection.length > 1) {
-          // $FlowFixMe
-          const [, startMatch, endMatch, chain] = selection[1].match(
-            /(\d+)-(\d+)\:(\w+)/,
+    this.viewer
+      .dataTransaction(async () => {
+        UniformColorThemeParams.value = ParamDefinition.Color(ColorNames.white);
+        for (const s of this.viewer.managers.structure.hierarchy.current
+          .structures) {
+          await this.viewer.managers.structure.component.updateRepresentationsTheme(
+            s.components,
+            {
+              color: UniformColorThemeProvider.name,
+            },
           );
-          const start = parseInt(startMatch, 10);
-          const end = parseInt(endMatch, 10);
-          const positions = [];
-          for (let i = start; i <= end; i++) {
-            positions.push(i);
-          }
-          // console.log(`MAQ ${chain}:${start}-${end} ${positions}`);
-          if (start && end && chain) {
-            atomGroups.push(
-              MS.struct.generator.atomGroups({
-                'chain-test': MS.core.rel.eq([chain, MS.ammp('label_asym_id')]),
-                'residue-test': MS.core.set.has([
-                  MS.set(...positions),
-                  MS.ammp('auth_seq_id'),
-                ]),
-              }),
-            );
-          }
         }
-      }
-      return MS.struct.combinator.merge(atomGroups);
-    }, data);
-    const loci = StructureSelection.toLociWithSourceUnits(molSelection);
-    this.viewer.managers.interactivity.lociSelects.select({ loci });
+      })
+      .then(() => {
+        const molSelection = Script.getStructureSelection((MS) => {
+          const atomGroups = [];
 
-    PluginCommands.Toast.Show(this.viewer, {
-      title: 'Custom Message',
-      message: 'A custom toast message that will disappear after 2 seconds.',
-      key: 'toast-1',
-      timeoutMs: 30000,
-    });
+          if (selections.length > 0 && selections[0].length > 1) {
+            const hexColour = parseInt(selections[0][0].substring(1), 16);
+            PluginCommands.Canvas3D.SetSettings(this.viewer, {
+              settings: (props) => {
+                props.renderer.selectColor = Color(hexColour);
+              },
+            });
+          }
+          for (const selection of selections) {
+            if (selection.length > 1) {
+              // $FlowFixMe
+              const [, startMatch, endMatch, chain] = selection[1].match(
+                /(\d+)-(\d+)\:(\w+)/,
+              );
+              const start = parseInt(startMatch, 10);
+              const end = parseInt(endMatch, 10);
+              const positions = [];
+              for (let i = start; i <= end; i++) {
+                positions.push(i);
+              }
+              // console.log(`MAQ ${chain}:${start}-${end} ${positions}`);
+              if (start && end && chain) {
+                atomGroups.push(
+                  MS.struct.generator.atomGroups({
+                    'chain-test': MS.core.rel.eq([
+                      chain,
+                      MS.ammp('label_asym_id'),
+                    ]),
+                    'residue-test': MS.core.set.has([
+                      MS.set(...positions),
+                      MS.ammp('auth_seq_id'),
+                    ]),
+                  }),
+                );
+              }
+            }
+          }
+          return MS.struct.combinator.merge(atomGroups);
+        }, data);
+        const loci = StructureSelection.toLociWithSourceUnits(molSelection);
+        this.viewer.managers.interactivity.lociSelects.select({ loci });
+      });
+
+    // PluginCommands.Toast.Show(this.viewer, {
+    //   title: 'Custom Message',
+    //   message: 'A custom toast message that will disappear after 2 seconds.',
+    //   key: 'toast-1',
+    //   timeoutMs: 30000,
+    // });
   }
 
   applyChainIdTheme() {
@@ -267,12 +300,15 @@ class StructureView extends PureComponent /*:: <Props> */ {
       >
         {() => {
           return (
-            <div
-              id={this.props.elementId || 'structure-viewer'}
-              ref={this._structureViewer}
-              className={f('structure-viewer-ref')}
-            >
-              <canvas ref={this._structureViewerCanvas} />
+            <div>
+              <div
+                id={this.props.elementId || 'structure-viewer'}
+                ref={this._structureViewer}
+                className={f('structure-viewer-ref')}
+              >
+                <canvas ref={this._structureViewerCanvas} />
+              </div>
+              <Labels viewer={this.viewer} />
             </div>
           );
         }}
