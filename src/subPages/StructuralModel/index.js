@@ -136,7 +136,10 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
                 </Tooltip>
                 :{' '}
               </header>
-              <code>{data.payload.lddt}</code>
+              <code>{
+                // eslint-disable-next-line no-magic-numbers
+                (data.payload.reduce((acc, cur) => acc + cur, 0) / data.payload.length).toFixed(6)
+              }</code>
             </section>
           ),
         }}
@@ -214,7 +217,7 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
 StructuralModel.propTypes = {
   data: T.shape({
     loading: T.bool.isRequired,
-    payload: T.object,
+    payload: T.arrayOf(T.number),
   }),
   dataContacts: T.shape({
     loading: T.bool.isRequired,
@@ -223,7 +226,7 @@ StructuralModel.propTypes = {
   urlForModel: T.string,
   accession: T.string,
 };
-const mapStateToPropsForModel = (typeOfData /*: 'contacts'|'structure' */) =>
+const mapStateToPropsForModel = (typeOfData /*: 'contacts'|'lddt'|'structure' */) =>
   createSelector(
     (state) => state.settings.api,
     (state) => state.customLocation.description,
@@ -243,13 +246,13 @@ const mapStateToPropsForModel = (typeOfData /*: 'contacts'|'structure' */) =>
         pathname: root + descriptionToPath(newDescription),
         query: { [key]: null },
       });
-      if (['contacts', 'info'].includes(typeOfData)) return urlForModel;
+      if (['contacts', 'lddt'].includes(typeOfData)) return urlForModel;
       return { urlForModel, accession: description.entry.accession };
     },
   );
 
 export default loadData({
-  getUrl: mapStateToPropsForModel('info'),
+  getUrl: mapStateToPropsForModel('lddt'),
   mapStateToProps: mapStateToPropsForModel('structure'),
 })(
   loadData({
