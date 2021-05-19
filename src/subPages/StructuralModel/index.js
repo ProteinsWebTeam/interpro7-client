@@ -21,10 +21,11 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 
 const f = foundationPartial(style, ipro, fonts);
-const DEFAULT_TRESHOLD = 0.9;
+const DEFAULT_MIN_PROBABILITY = 0.9;
+const DEFAULT_MIN_DISTANCE = 5;
 
 const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
-  const [threshold, setThreshold] = useState(DEFAULT_TRESHOLD);
+  const [minProbability, setMinProbability] = useState(DEFAULT_MIN_PROBABILITY);
   const [selections, setSelections] = useState(null);
   const [aln2str, setAln2str] = useState(null);
 
@@ -82,8 +83,8 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
     return null;
   const elementId = 'structure-model-viewer';
 
-  const handleThresholdChange = (evt) => {
-    setThreshold(+evt.target.value);
+  const handleProbabilityChange = (evt) => {
+    setMinProbability(+evt.target.value);
   };
 
   return (
@@ -196,11 +197,11 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
           min="0.1"
           max="1"
           step="0.01"
-          value={threshold}
+          value={minProbability}
           name="threshold"
-          onChange={handleThresholdChange}
+          onChange={handleProbabilityChange}
         />
-        <span>{threshold}</span>
+        <span>{minProbability}</span>
       </label>
       <AlignmentViewer
         setColorMap={() => null}
@@ -208,7 +209,8 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
         type="alignment:seed"
         colorscheme="clustal2"
         contacts={dataContacts?.payload || []}
-        contactThreshold={threshold}
+        contactMinDistance={DEFAULT_MIN_DISTANCE}
+        contactMinProbability={minProbability}
         onAlignmentLoaded={getAlignmentToStructureMap}
       />
     </div>
