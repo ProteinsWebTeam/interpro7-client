@@ -197,14 +197,14 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
 
       <h3>SEED alignment with Contact Predictions</h3>
       <p>
-        This visualization shows the contacts predicted with trRosetta upon the
-        Pfam SEED alignment. Click on the coloured circles above the alignment
-        to view contact positions highlighted in the alignment and structural
-        model.
+        The visualizations show the contacts predicted with trRosetta upon the
+        Pfam SEED alignment. In the alignment viewer, click on the coloured
+        circles above the alignment to view contact positions highlighted in the
+        alignment and structural model. Hovering on the heatmap highlights the
+        contacts in the 3D structural model.
       </p>
       <div className={f('nightingale-components')}>
         <div className={f('heatmap')}>
-          <label htmlFor={'contact-map'}>Distance matrix</label>
           <nightingale-heatmap
             id="contact-map"
             ref={heatmap}
