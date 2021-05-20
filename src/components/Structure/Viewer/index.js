@@ -3,21 +3,12 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
-import { DefaultPluginSpec, PluginSpec } from 'molstar/lib/mol-plugin/spec';
+import { DefaultPluginSpec } from 'molstar/lib/mol-plugin/spec';
 import { PluginConfig } from 'molstar/lib/mol-plugin/config';
 import { PluginContext } from 'molstar/lib/mol-plugin/context';
 import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
-import { PluginBehavior } from 'molstar/lib/mol-plugin/behavior/behavior';
-import {
-  StructureSelection,
-  StructureElement,
-} from 'molstar/lib/mol-model/structure';
+import { StructureSelection } from 'molstar/lib/mol-model/structure';
 import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
-// import { HydrophobicityColorThemeProvider } from 'molstar/lib/mol-theme/color/hydrophobicity';
-// import { ElementIndexColorThemeProvider } from 'molstar/lib/mol-theme/color/element-index';
-// import { IllustrativeColorThemeProvider } from 'molstar/lib/mol-theme/color/illustrative';
-// import { PolymerIdColorThemeProvider } from 'molstar/lib/mol-theme/color/polymer-id';
-// import { ModelIndexColorThemeProvider } from 'molstar/lib/mol-theme/color/model-index';
 import {
   UniformColorThemeProvider,
   UniformColorThemeParams,
@@ -26,10 +17,7 @@ import { ParamDefinition } from 'molstar/lib/mol-util/param-definition';
 import { Script } from 'molstar/lib/mol-script/script';
 import { Color } from 'molstar/lib/mol-util/color';
 import { ColorNames } from 'molstar/lib/mol-util/color/names';
-import { InteractionsProvider } from 'molstar/lib/mol-model-props/computed/interactions';
-import { PropertyWrapper } from 'molstar/lib/mol-model-props/common/wrapper';
 import { useBehavior } from 'molstar/lib/mol-plugin-ui/hooks/use-behavior';
-import { LociLabels } from 'molstar/lib/mol-plugin-ui/controls';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -38,21 +26,29 @@ import style from './style.css';
 
 const f = foundationPartial(style, fonts);
 
-/*:: type Props = {
-  viewer = {}
-}
-*/
-function Labels(props) {
+const newLocal = (props /*: <P> */) => {
   if (props.viewer) {
     const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
     if (highlighted) {
       const text = highlighted.labels[0];
       // eslint-disable-next-line react/no-danger
-      return <div dangerouslySetInnerHTML={{ __html: text }} />;
+      return (
+        <div
+          className={f('structure-label')}
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
+      );
     }
   }
-  return null;
-}
+  return <div />;
+};
+/**
+ * Function hook for 3D model labels
+ * returns information on residue highlighted on 3D structure
+ * @param {Object} props - react props
+ * @returns {Object} react element8
+ */
+const Labels = newLocal;
 
 /*:: type Props = {
   id: string,
@@ -256,13 +252,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const loci = StructureSelection.toLociWithSourceUnits(molSelection);
         this.viewer.managers.interactivity.lociSelects.select({ loci });
       });
-
-    // PluginCommands.Toast.Show(this.viewer, {
-    //   title: 'Custom Message',
-    //   message: 'A custom toast message that will disappear after 2 seconds.',
-    //   key: 'toast-1',
-    //   timeoutMs: 30000,
-    // });
   }
 
   applyChainIdTheme() {
@@ -300,7 +289,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       >
         {() => {
           return (
-            <div>
+            <div className={f('structure-and-label')}>
               <div
                 id={this.props.elementId || 'structure-viewer'}
                 ref={this._structureViewer}

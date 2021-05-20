@@ -1,9 +1,15 @@
 import { ColorTheme } from 'molstar/lib/mol-theme/color';
 import { ColorNames } from 'molstar/lib/mol-util/color/names';
 
-export function SelectionTheme(ctx, props) {
+/**
+ *
+ * @param {*} ctx
+ * @param {*} props
+ * @returns
+ */
+export const ResidueTheme = (ctx, props) => {
   const theme = {
-    factory: SelectionTheme,
+    factory: ResidueTheme,
     palette: {
       colors: [ColorNames.white],
     },
@@ -11,13 +17,13 @@ export function SelectionTheme(ctx, props) {
     description: 'White theme for highlighting InterPro entries',
   };
   return theme;
-}
+};
 
-export const SelectionThemeProvider = {
+export const ResidueThemeProvider = {
   name: 'basic-wrapper-custom-color-theme',
-  label: 'InterPro Color Theme',
+  label: 'InterPro REsidue Color Theme',
   category: ColorTheme.Category.Misc,
-  factory: SelectionTheme,
+  factory: ResidueTheme,
   getParams: () => ({}),
   defaultValues: {},
   isApplicable: (ctx) => true,
