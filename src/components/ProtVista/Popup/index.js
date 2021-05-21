@@ -66,8 +66,9 @@ const ProtVistaPopup = (
 
   // comes from a residue
   if (
-    detail?.target?.classList &&
-    detail.target.classList.contains('residue')
+    (detail?.target?.classList &&
+      detail.target.classList.contains('residue')) ||
+    sourceDatabase === 'PIRSR'
   ) {
     return (
       <ProtVistaResiduePopup detail={detail} sourceDatabase={sourceDatabase} />

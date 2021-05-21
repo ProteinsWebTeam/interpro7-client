@@ -444,7 +444,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     return (
       <>
         {type}
-        {label.accession && entry.accession}
+        {label.accession && entry.accession.startsWith('residue:')
+          ? entry.accession.split('residue:')[1]
+          : entry.accession}
         {label.accession && label.name && ': '}
         {label.name && entry.name}
       </>
@@ -503,7 +505,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               },
               [key]: {
                 db: entry.source_database,
-                accession: entry.accession,
+                accession: entry.accession.startsWith('residue:')
+                  ? entry.accession.split('residue:')[1]
+                  : entry.accession,
               },
             },
           }}
@@ -554,20 +558,26 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             hide: !expandedTrack[entry.accession],
           })}
         >
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: entry.source_database,
-                  accession: entry.accession,
+          {entry.source_database === 'pirsr' ? (
+            <span>{entry.locations[0].description}</span>
+          ) : (
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: entry.source_database,
+                    accession: entry.accession.startsWith('residue:')
+                      ? entry.accession.split('residue:')[1]
+                      : entry.accession,
+                  },
                 },
-              },
-            }}
-          >
-            {r.accession ||
-              r.description.charAt(0).toUpperCase() + r.description.slice(1)}
-          </Link>
+              }}
+            >
+              {r.accession ||
+                r.description.charAt(0).toUpperCase() + r.description.slice(1)}
+            </Link>
+          )}
         </div>
       )),
     );
@@ -737,13 +747,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     className={f('track-row')}
                                   >
                                     {entry.type === 'secondary_structure' ||
-                                    entry.type === 'sequence_conservation' ? (
+                                    entry.type === 'sequence_conservation' ||
+                                    entry.type === 'residue' ? (
                                       <div
                                         className={f(
                                           'track-component',
-                                          entry.type === 'secondary_structure'
-                                            ? 'secondary-structure'
-                                            : 'sequence-conservation',
+                                          entry.type.replace('_', '-'),
                                           `${this.state.addLabelClass}`,
                                         )}
                                       >
@@ -780,12 +789,18 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                               use-ctrl-to-zoom
                                             />
                                           )}
-                                        {entry.type ===
-                                          'secondary_structure' && (
+                                        {(entry.type ===
+                                          'secondary_structure' ||
+                                          entry.type === 'residue') && (
                                           <protvista-track
                                             length={length}
                                             displaystart="1"
                                             displayend={length}
+                                            height={
+                                              entry.type === 'residue'
+                                                ? '15'
+                                                : null
+                                            }
                                             id={`track_${entry.accession}`}
                                             ref={(e) =>
                                               (this.web_tracks[

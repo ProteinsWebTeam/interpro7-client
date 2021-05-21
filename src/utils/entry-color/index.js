@@ -28,7 +28,14 @@ export const getTrackColor = (
   // eslint-disable-next-line default-case
   switch (colorMode) {
     case EntryColorMode.ACCESSION:
-      acc = entry.accession.toLowerCase().split('').reverse().join('');
+      acc = entry.accession.startsWith('residue:')
+        ? entry.accession
+            .split('residue:')[1]
+            .toLowerCase()
+            .split('')
+            .reverse()
+            .join('')
+        : entry.accession.toLowerCase().split('').reverse().join('');
       return colorHash.hex(acc);
     case EntryColorMode.MEMBER_DB:
       return config.colors.get(entry.source_database);
