@@ -15,3 +15,27 @@
     height: 1.3em;
   }
 }
+
+.heatmap {
+  display: block;
+  margin: 0 0 2em 0;
+  width: 500px;
+  height: 500px;
+}
+
+.alignment {
+  display: block;
+}
+
+/* Large screen */
+@media screen and (min-width: 1800px) {
+  .heatmap {
+    width: 40%;
+    float: left;
+  }
+
+  .alignment {
+    width: 50%;
+    float: right;
+  }
+}
