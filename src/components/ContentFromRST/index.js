@@ -19,6 +19,7 @@ const InterProScan = loadable({
 
 const substitutions = {};
 
+const rstembeddedLink = /^`(.+)\s*<(.+)>`_{1,2}$/;
 // eslint-disable-next-line complexity
 const Switch = ({ type, ...rest }) => {
   switch (type) {
@@ -34,6 +35,10 @@ const Switch = ({ type, ...rest }) => {
       return <BasicWrapper {...rest} Element="ul" />;
     case 'enumerated_list':
       return <BasicWrapper {...rest} Element="ol" />;
+    case 'line_block':
+      return <BasicWrapper {...rest} Element="div" />;
+    case 'line':
+      return <BasicWrapper {...rest} Element="div" />;
     case 'list_item':
       return <BasicWrapper {...rest} Element="li" />;
     case 'block_quote':
@@ -53,19 +58,32 @@ const Switch = ({ type, ...rest }) => {
       return <Substitution {...rest} />;
     case 'strong':
       return <BasicWrapper {...rest} Element="strong" />;
-    case 'text':
+    case 'text': {
       if (rest.value.trim() === '|') return null;
-      if (rest.respectNewLines) {
-        return rest.value.endsWith('\n') ? (
+      if (rest.respectNewLines && rest.value.endsWith('\n')) {
+        return (
           <>
             {rest.value}
             <br />
           </>
-        ) : (
-          rest.value
         );
       }
-      return rest.value;
+
+      const matches = rstembeddedLink.exec(rest.value);
+      if (matches === null)
+        return rest.value;
+
+      const [_, text, link] = matches;
+      return (
+        <a
+          target="_blank"
+          href={link}
+          rel="noreferrer"
+        >
+          {text}
+        </a>
+      );
+    }
     default:
       return null;
   }
