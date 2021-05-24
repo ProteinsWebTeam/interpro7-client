@@ -13,6 +13,7 @@ import {
   UniformColorThemeProvider,
   UniformColorThemeParams,
 } from 'molstar/lib/mol-theme/color/uniform';
+import { ColorByResidueLddtTheme } from './ColourByResidueLddtTheme';
 import { ParamDefinition } from 'molstar/lib/mol-util/param-definition';
 import { Script } from 'molstar/lib/mol-script/script';
 import { Color } from 'molstar/lib/mol-util/color';
@@ -26,7 +27,7 @@ import style from './style.css';
 
 const f = foundationPartial(style, fonts);
 
-const newLocal = (props /*: <P> */) => {
+const newLocal = (props /*: Props */) => {
   if (props.viewer) {
     const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
     if (highlighted) {
@@ -111,6 +112,16 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.viewer.initViewer(
         this._structureViewerCanvas.current,
         this._structureViewer.current,
+      );
+      this.viewer.representation.structure.themes.colorThemeRegistry.add(
+        ColorByResidueLddtTheme.colorThemeProvider,
+      );
+      this.viewer.managers.lociLabels.addProvider(
+        ColorByResidueLddtTheme.labelProvider,
+      );
+      this.viewer.customModelProperties.register(
+        ColorByResidueLddtTheme.propertyProvider,
+        true,
       );
     }
 
@@ -262,7 +273,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
         await this.viewer.managers.structure.component.updateRepresentationsTheme(
           s.components,
           {
-            color: ChainIdColorThemeProvider.name,
+            // color: ChainIdColorThemeProvider.name,
+            color: ColorByResidueLddtTheme.propertyProvider.descriptor.name,
           },
         );
       }
