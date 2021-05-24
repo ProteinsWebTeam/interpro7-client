@@ -26,7 +26,7 @@ import style from './style.css';
 
 const f = foundationPartial(style, fonts);
 
-const newLocal = (props /*: <P> */) => {
+const newLocal = (props /*: Props */) => {
   if (props.viewer) {
     const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
     if (highlighted) {

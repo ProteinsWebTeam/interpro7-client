@@ -1,18 +1,17 @@
 .viewer-resizer {
-  height: calc(100% - var(--height-bar));
-  & .structure-viewer-ref {
-    align-items: center;
-    justify-content: center;
+  height: calc(92% - var(--height-bar));
+
+  & .structure-and-label {
     height: 100%;
+
+    & .structure-viewer-ref {
+      align-items: center;
+      justify-content: center;
+      height: 88%;
+    }
+
+    & .structure-label {
+      height: 12%;
+    }
   }
-}
-
-.structure-label {
-  /* border: 1px dotted black; */
-  height: 100%;
-}
-
-.structure-and-label {
-  /* border: 1px solid red; */
-  height: 100%;
 }
