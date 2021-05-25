@@ -70,10 +70,9 @@ class CurationFilter extends PureComponent /*:: <Props> */ {
       uniprot: 0,
       reviewed: 0,
       unreviewed: 0,
-      ...getPayloadOrEmpty(payload, loading, isStale)
+      ...getPayloadOrEmpty(payload, loading, isStale),
     };
-    if (!loading)
-      databases.uniprot = databases.reviewed + databases.unreviewed;
+    if (!loading) databases.uniprot = databases.reviewed + databases.unreviewed;
     return (
       <div className={f('list-curation', { stale: isStale })}>
         <div className={f('column')}>

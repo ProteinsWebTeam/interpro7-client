@@ -76,7 +76,7 @@ export default (db /*: string */) => {
     ['ssf', 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid={}'],
     [
       'tigrfams',
-      'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/{}/'
+      'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/{}/',
     ],
   ]);
   const pattern = patterns.get(db.toLowerCase()) || '';

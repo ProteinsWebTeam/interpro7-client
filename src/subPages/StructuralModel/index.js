@@ -23,10 +23,11 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 
 const f = foundationPartial(style, ipro, fonts);
-const DEFAULT_TRESHOLD = 0.9;
+const DEFAULT_MIN_PROBABILITY = 0.9;
+const DEFAULT_MIN_DISTANCE = 5;
 
 const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
-  const [threshold, setThreshold] = useState(DEFAULT_TRESHOLD);
+  const [minProbability, setMinProbability] = useState(DEFAULT_MIN_PROBABILITY);
   const [selections, setSelections] = useState(null);
   const [aln2str, setAln2str] = useState(null);
 
@@ -107,8 +108,8 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
     return null;
   const elementId = 'structure-model-viewer';
 
-  const handleThresholdChange = (evt) => {
-    setThreshold(+evt.target.value);
+  const handleProbabilityChange = (evt) => {
+    setMinProbability(+evt.target.value);
   };
 
   return (
@@ -161,7 +162,15 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
                 </Tooltip>
                 :{' '}
               </header>
-              <code>{data.payload.lddt}</code>
+              <code>
+                {
+                  // eslint-disable-next-line no-magic-numbers
+                  (
+                    data.payload.reduce((acc, cur) => acc + cur, 0) /
+                    data.payload.length
+                  ).toFixed(6)
+                }
+              </code>
             </section>
           ),
         }}
@@ -231,11 +240,11 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
               min="0.1"
               max="1"
               step="0.01"
-              value={threshold}
+              value={minProbability}
               name="threshold"
-              onChange={handleThresholdChange}
+              onChange={handleProbabilityChange}
             />
-            <span>{threshold}</span>
+            <span>{minProbability}</span>
           </label>
           <AlignmentViewer
             setColorMap={() => null}
@@ -243,7 +252,8 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
             type="alignment:seed"
             colorscheme="clustal2"
             contacts={dataContacts?.payload || []}
-            contactThreshold={threshold}
+            contactMinDistance={DEFAULT_MIN_DISTANCE}
+            contactMinProbability={minProbability}
             onAlignmentLoaded={getAlignmentToStructureMap}
           />
         </div>
@@ -254,7 +264,7 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
 StructuralModel.propTypes = {
   data: T.shape({
     loading: T.bool.isRequired,
-    payload: T.object,
+    payload: T.arrayOf(T.number),
   }),
   dataContacts: T.shape({
     loading: T.bool.isRequired,
@@ -263,7 +273,9 @@ StructuralModel.propTypes = {
   urlForModel: T.string,
   accession: T.string,
 };
-const mapStateToPropsForModel = (typeOfData /*: 'contacts'|'structure' */) =>
+const mapStateToPropsForModel = (
+  typeOfData /*: 'contacts'|'lddt'|'structure' */,
+) =>
   createSelector(
     (state) => state.settings.api,
     (state) => state.customLocation.description,
@@ -283,13 +295,13 @@ const mapStateToPropsForModel = (typeOfData /*: 'contacts'|'structure' */) =>
         pathname: root + descriptionToPath(newDescription),
         query: { [key]: null },
       });
-      if (['contacts', 'info'].includes(typeOfData)) return urlForModel;
+      if (['contacts', 'lddt'].includes(typeOfData)) return urlForModel;
       return { urlForModel, accession: description.entry.accession };
     },
   );
 
 export default loadData({
-  getUrl: mapStateToPropsForModel('info'),
+  getUrl: mapStateToPropsForModel('lddt'),
   mapStateToProps: mapStateToPropsForModel('structure'),
 })(
   loadData({

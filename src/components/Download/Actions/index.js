@@ -81,7 +81,4 @@ class Actions extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(
-  undefined,
-  { downloadDelete },
-)(Actions);
+export default connect(undefined, { downloadDelete })(Actions);
