@@ -594,7 +594,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
             <p className={f('small', 'margin-top-small')}>
               We use{' '}
               <Link
-                href="http://protein.bio.unipd.it/mobidblite/"
+                href="http://old.protein.bio.unipd.it/mobidblite/"
                 className={f('ext')}
                 target="_blank"
               >
@@ -631,12 +631,12 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
             </p>
 
             <p>
-              <Link href="ftp://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
                 List of InterPro2GO mappings
               </Link>
               . These are also available through the EBI GO browser{' '}
               <Link
-                href="http://www.ebi.ac.uk/QuickGO/"
+                href="https://www.ebi.ac.uk/QuickGO/"
                 className={f('ext')}
                 target="_blank"
               >
