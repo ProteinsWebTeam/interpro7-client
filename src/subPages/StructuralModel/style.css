@@ -28,14 +28,14 @@
 }
 
 /* Large screen */
-@media screen and (min-width: 1800px) {
-  .heatmap {
-    width: 40%;
-    float: left;
-  }
+/*@media screen and (min-width: 1800px) {*/
+/*  .heatmap {*/
+/*    width: 40%;*/
+/*    float: left;*/
+/*  }*/
 
-  .alignment {
-    width: 50%;
-    float: right;
-  }
-}
+/*  .alignment {*/
+/*    width: 50%;*/
+/*    float: right;*/
+/*  }*/
+/*}*/
