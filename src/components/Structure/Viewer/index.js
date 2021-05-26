@@ -273,8 +273,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
         await this.viewer.managers.structure.component.updateRepresentationsTheme(
           s.components,
           {
-            // color: ChainIdColorThemeProvider.name,
-            color: ColorByResidueLddtTheme.propertyProvider.descriptor.name,
+            color: this.props.url
+              ? ColorByResidueLddtTheme.propertyProvider.descriptor.name
+              : ChainIdColorThemeProvider.name,
           },
         );
       }
