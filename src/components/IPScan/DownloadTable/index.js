@@ -3,7 +3,6 @@ import React from 'react';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
-import { FTPLink } from 'components/ExtLink';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -66,11 +65,6 @@ export const DownloadTable = (
               />
             </Link>
             <br />
-            <FTPLink
-              href={`ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
-            >
-              FTP Site
-            </FTPLink>
           </td>
         </tr>
       </tbody>

@@ -49,7 +49,10 @@
   },
   "contributors": [
     "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)",
-    "Gustavo A. Salazar <gsalazar@ebi.ac.uk> (https://github.com/4ndr01d3/)"
+    "Gustavo A. Salazar <gsalazar@ebi.ac.uk> (https://github.com/4ndr01d3/)",
+    "Matloob Qureshi <maq@ebi.ac.uk> (https://github.com/CodeGit/)",
+    "Sebastien Pesseat (https://github.com/sebpca)",
+    "Swaathi Kandasaamy <swaathik@ebi.ac.uk> (https://github.com/Swaathik/)"
   ],
   "husky": {
     "hooks": {
@@ -102,9 +105,10 @@
     "lodash-es": "4.17.20",
     "molstar": "^2.0.2",
     "ngl": "2.0.0-dev.37",
+    "nightingale-heatmap": "^3.2.11",
     "nightingale-linegraph-track": "3.2.5",
     "popper.js": "1.16.1",
-    "postcss": "8.2.6",
+    "postcss": "8.2.10",
     "prop-types": "15.7.2",
     "protvista-coloured-sequence": "3.0.0",
     "protvista-interpro-track": "3.2.1",

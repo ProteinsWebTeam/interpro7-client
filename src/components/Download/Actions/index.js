@@ -37,13 +37,25 @@ class Actions extends PureComponent /*:: <Props> */ {
 
   render() {
     const { localID, blobURL } = this.props;
+
+    // Attempts to remove the host and the port
+    const matches = localID.match(/.+:\d+\/(.+)$/);
+
+    /**
+     * Replaces slashes by underscores,
+     * and pipe by period (so the file has a correct extension)
+     */
+    const fileName = (matches === null ? localID : matches[1])
+      .replace(/[\/?]+/g, '_')
+      .replace(/\|(.+)$/, '.$1');
+
     return (
       <div>
         <Tooltip title="Download job">
           <Link
             className={f('icon', 'icon-common', 'ico-neutral')}
             href={blobURL}
-            download={localID}
+            download={fileName}
             disabled={!blobURL}
             aria-label="Download job"
             data-icon="&#x3d;"

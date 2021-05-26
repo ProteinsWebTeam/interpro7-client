@@ -114,7 +114,7 @@ exports[`External links <BaseLink /> should render simple links 9`] = `
 exports[`External links <DOILink /> should render simple links 1`] = `
 <BaseLink
   id="1.2.a.b"
-  pattern="https://pubs.acs.org/doi/{id}"
+  pattern="{id}"
   target="_blank"
 >
   1.2.a.b

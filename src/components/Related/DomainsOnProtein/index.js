@@ -149,7 +149,8 @@ const mergeConservationData = (
             }
             dbConservationScores.data.push({
               name: entry,
-              range: [0, 2],
+              // eslint-disable-next-line no-magic-numbers
+              range: [0, 2.5],
               colour: '#006400',
               values: values,
             });
@@ -170,22 +171,6 @@ const mergeConservationData = (
       }
     }
   }
-};
-
-const mergeResidues = (data, residues) => {
-  // prettier-ignore
-  (Object.values(data)/*: any */).forEach(
-    (group/*: Array<{accession:string, residues: Array<Object>, children: any}> */) =>
-    group.forEach((entry) => {
-      if (residues[entry.accession])
-        entry.residues = [residues[entry.accession]];
-      if (entry.children && entry.children.length)
-        entry.children.forEach((child) => {
-          if (residues[child.accession])
-            child.residues = [residues[child.accession]];
-        });
-    }),
-  );
 };
 
 const splitMobiFeatures = (feature) => {
@@ -237,6 +222,46 @@ const mergeExtraFeatures = (data, extraFeatures) => {
 };
 
 const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
+const mergeResidues = (data, residues) => {
+  const residuesWithEntryDetails = [];
+  // prettier-ignore
+  (Object.values(data)/*: any */).forEach(
+    (group/*: Array<{accession:string, residues: Array<Object>, children: any}> */) =>
+    group.forEach((entry) => {
+      if (residues[entry.accession]) {
+        const matchedEntry = {...entry};
+        matchedEntry.accession = `residue:${entry.accession}`;
+        matchedEntry.residues = [residues[entry.accession]];
+        residuesWithEntryDetails.push(matchedEntry);
+      }
+
+      if (entry.children && entry.children.length)
+        entry.children.forEach((child) => {
+          if (residues[child.accession]) {
+            const matchedEntry = {...child};
+            matchedEntry.accession = `residue:${child.accession}`;
+            matchedEntry.residues = [residues[child.accession]];
+            residuesWithEntryDetails.push(matchedEntry);
+          }
+        });
+    }),
+  );
+
+  // PIRSR doesn't have any entry integrated in InterPro
+  const pirsrResidues = [];
+  Object.keys(residues).forEach((entry) => {
+    if (entry.startsWith('PIRSR')) {
+      const residueEntry = { ...residues[entry] };
+      residueEntry.type = 'residue';
+      pirsrResidues.push(residueEntry);
+    }
+  });
+  pirsrResidues.sort(orderByAccession);
+
+  residuesWithEntryDetails.push(...pirsrResidues);
+  data.residues = residuesWithEntryDetails;
+};
+
 export const groupByEntryType = (interpro) => {
   const groups = {};
   for (const entry of interpro) {

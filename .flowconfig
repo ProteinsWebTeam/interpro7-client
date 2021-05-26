@@ -24,6 +24,7 @@
 .*/node_modules/create-emotion*
 .*/node_modules/emotion*
 .*/node_modules/polished*
+.*/node_modules/molstar*
 
 [untyped]
 .*/node_modules/molstar/**/.*

@@ -18,9 +18,9 @@ import style from 'components/FiltersPanel/style.css';
 const f = foundationPartial(style);
 
 const labels = new Map([
+  ['both', 'All'],
   ['true', 'With Matches'],
   ['false', 'Without Matches'],
-  ['both', 'All proteins'],
 ]);
 
 /*:: type Props = {
@@ -69,43 +69,56 @@ class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
       isStale,
       customLocation: { search },
     } = this.props;
-    const hasMatches = getPayloadOrEmpty(
+
+    const hasMatches = new Map(Object.entries(getPayloadOrEmpty(
       // eslint-disable-next-line camelcase
       payload?.match_presence,
       loading,
       isStale,
-    );
+    )));
+
     if (!loading) {
-      hasMatches.both = hasMatches.true + hasMatches.false;
+      let totalCount = 0;
+      hasMatches.forEach((value) => {
+        if (typeof value === 'number')
+          totalCount += value;
+      });
+      hasMatches.set('both', totalCount);
     }
     const selectedValue = search.match_presence || 'both';
 
     return (
       <div className={f('list-match-presence', { stale: isStale })}>
-        {Object.entries(hasMatches).map(([key, value]) => (
-          <div key={key} className={f('column')}>
-            <label className={f('row', 'filter-button')}>
-              <input
-                type="radio"
-                name="match_presence_filter"
-                value={key}
-                disabled={isStale}
-                checked={selectedValue === key}
-                onChange={this._handleSelection}
-                style={{ margin: '0.25em' }}
-              />
-              <span>{labels.get(key)}</span>
-              <NumberComponent
-                label
-                loading={loading}
-                className={f('filter-label')}
-                abbr
-              >
-                {value}
-              </NumberComponent>
-            </label>
-          </div>
-        ))}
+        {
+          [...labels.entries()].map(([key, label]) => {
+            const checked = key === selectedValue;
+            return (
+              <div key={key} className={f('column')}>
+                <label className={f('radio-btn-label', { checked })}>
+                  <input
+                    type="radio"
+                    name="match_presence_filter"
+                    className={f('radio-btn')}
+                    value={key}
+                    disabled={isStale}
+                    checked={checked}
+                    onChange={this._handleSelection}
+                    style={{ margin: '0.25em' }}
+                  />
+                  <span>{label}</span>
+                  <NumberComponent
+                    label
+                    loading={loading}
+                    className={f('filter-label')}
+                    abbr
+                  >
+                    {hasMatches.get(key) || 0}
+                  </NumberComponent>
+                </label>
+              </div>
+            );
+          })
+        }
       </div>
     );
   }

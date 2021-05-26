@@ -80,11 +80,6 @@ exports[`<DownloadTable /> should render 1`] = `
           />
         </Memo(Connect(Link))>
         <br />
-        <FTPLink
-          href="ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
-        >
-          FTP Site
-        </FTPLink>
       </td>
     </tr>
   </tbody>

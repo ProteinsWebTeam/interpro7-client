@@ -126,35 +126,6 @@ const mapStateToPropsForHMMModel = createSelector(
     });
   },
 );
-const mapStateToPropsForSimilarProteins = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.search,
-  (_, props) => props.data,
-  ({ protocol, hostname, port, root }, search, data) => {
-    // omit elements from search
-    const { type, search: _, ...restOfSearch } = search;
-    // modify search
-    restOfSearch.ida =
-      data &&
-      data.payload &&
-      data.payload &&
-      data.payload.metadata &&
-      data.payload.metadata.ida_accession;
-
-    const description = {
-      main: { key: 'protein' },
-      protein: { db: 'uniprot' },
-    };
-    // build URL
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + descriptionToPath(description),
-      query: restOfSearch,
-    });
-  },
-);
 
 const g3dVariables = {
   accession: 'uniprot',
@@ -237,13 +208,7 @@ const subPages = new Map([
       getUrl: getGenome3dURL,
     })(Genome3d),
   ],
-  [
-    'similar_proteins',
-    loadData({
-      getUrl: mapStateToPropsForSimilarProteins,
-      propNamespace: 'IDA',
-    })(SimilarProteins),
-  ],
+  ['similar_proteins', SimilarProteins],
   ['curation', Curation],
 ]);
 
