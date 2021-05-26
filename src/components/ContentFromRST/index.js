@@ -70,16 +70,11 @@ const Switch = ({ type, ...rest }) => {
       }
 
       const matches = rstembeddedLink.exec(rest.value);
-      if (matches === null)
-        return rest.value;
+      if (matches === null) return rest.value;
 
       const [_, text, link] = matches;
       return (
-        <a
-          target="_blank"
-          href={link}
-          rel="noreferrer"
-        >
+        <a target="_blank" href={link} rel="noreferrer">
           {text}
         </a>
       );

@@ -70,18 +70,21 @@ class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
       customLocation: { search },
     } = this.props;
 
-    const hasMatches = new Map(Object.entries(getPayloadOrEmpty(
-      // eslint-disable-next-line camelcase
-      payload?.match_presence,
-      loading,
-      isStale,
-    )));
+    const hasMatches = new Map(
+      Object.entries(
+        getPayloadOrEmpty(
+          // eslint-disable-next-line camelcase
+          payload?.match_presence,
+          loading,
+          isStale,
+        ),
+      ),
+    );
 
     if (!loading) {
       let totalCount = 0;
       hasMatches.forEach((value) => {
-        if (typeof value === 'number')
-          totalCount += value;
+        if (typeof value === 'number') totalCount += value;
       });
       hasMatches.set('both', totalCount);
     }
@@ -89,45 +92,43 @@ class MatchPresenceFilter extends PureComponent /*:: <Props> */ {
 
     return (
       <div className={f('list-match-presence', { stale: isStale })}>
-        {
-          [...labels.entries()].map(([key, label]) => {
-            const checked = key === selectedValue;
-            return (
-              <div key={key} className={f('column')}>
-                <label className={f('radio-btn-label', { checked })}>
-                  <input
-                    type="radio"
-                    name="match_presence_filter"
-                    className={f('radio-btn')}
-                    value={key}
-                    disabled={isStale}
-                    checked={checked}
-                    onChange={this._handleSelection}
-                    style={{ margin: '0.25em' }}
-                  />
-                  <span>{label}</span>
-                  <NumberComponent
-                    label
-                    loading={loading}
-                    className={f('filter-label')}
-                    abbr
-                  >
-                    {hasMatches.get(key) || 0}
-                  </NumberComponent>
-                </label>
-              </div>
-            );
-          })
-        }
+        {[...labels.entries()].map(([key, label]) => {
+          const checked = key === selectedValue;
+          return (
+            <div key={key} className={f('column')}>
+              <label className={f('radio-btn-label', { checked })}>
+                <input
+                  type="radio"
+                  name="match_presence_filter"
+                  className={f('radio-btn')}
+                  value={key}
+                  disabled={isStale}
+                  checked={checked}
+                  onChange={this._handleSelection}
+                  style={{ margin: '0.25em' }}
+                />
+                <span>{label}</span>
+                <NumberComponent
+                  label
+                  loading={loading}
+                  className={f('filter-label')}
+                  abbr
+                >
+                  {hasMatches.get(key) || 0}
+                </NumberComponent>
+              </label>
+            </div>
+          );
+        })}
       </div>
     );
   }
 }
 
 const getUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // transform description
     const _description = {
@@ -150,7 +151,7 @@ const getUrl = createSelector(
 );
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({
