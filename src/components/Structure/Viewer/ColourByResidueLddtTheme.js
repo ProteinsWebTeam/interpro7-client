@@ -1,6 +1,7 @@
 import { CustomElementProperty } from 'molstar/lib/mol-model-props/common/custom-element-property';
 import { Color, ColorScale } from 'molstar/lib/mol-util/color';
 
+// eslint-disable-next-line no-magic-numbers
 const defaultColor = Color(0x777777);
 const scale = ColorScale.create({
   listOrName: 'turbo',

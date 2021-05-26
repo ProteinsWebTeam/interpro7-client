@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
@@ -32,10 +31,10 @@ const newLocal = (props /*: Props */) => {
     const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
     if (highlighted) {
       const text = highlighted.labels[0];
-      // eslint-disable-next-line react/no-danger
       return (
         <div
           className={f('structure-label')}
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: text }}
         />
       );
