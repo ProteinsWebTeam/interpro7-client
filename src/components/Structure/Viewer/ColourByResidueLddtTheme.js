@@ -4,7 +4,7 @@ import { Color, ColorScale } from 'molstar/lib/mol-util/color';
 const defaultColor = Color(0x777777);
 const scale = ColorScale.create({
   listOrName: 'turbo',
-  domain: [0, 1],
+  domain: [1, 0],
 });
 
 export const ColorByResidueLddtTheme = CustomElementProperty.create({
