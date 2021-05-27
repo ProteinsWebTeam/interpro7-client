@@ -25,6 +25,8 @@ import style from './style.css';
 const f = foundationPartial(style, ipro, fonts);
 const DEFAULT_MIN_PROBABILITY = 0.9;
 const DEFAULT_MIN_DISTANCE = 5;
+const RED = '#FF0000';
+const BLUE = '#0000FF';
 
 const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
   const [minProbability, setMinProbability] = useState(DEFAULT_MIN_PROBABILITY);
@@ -55,13 +57,17 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
               .map(([x]) => +x)
               .sort((a, b) => a - b)
               .filter((x) => x !== selected)
-              .map((x) => [
-                'blue',
-                `${aln2str?.get(x) || x}-${aln2str?.get(x) || x}:A`,
-              ]);
+              .map((x) => {
+                return {
+                  colour: BLUE,
+                  start: aln2str?.get(x) || x,
+                  end: aln2str?.get(x),
+                  chain: 'A',
+                };
+              });
             const selections = [
               {
-                colour: 'red',
+                colour: RED,
                 start: aln2str?.get(selected) || selected,
                 end: aln2str?.get(selected) || selected,
                 chain: 'A',
@@ -261,18 +267,18 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
     </div>
   );
 };
-StructuralModel.propTypes = {
-  data: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.arrayOf(T.number),
-  }),
-  dataContacts: T.shape({
-    loading: T.bool.isRequired,
-    payload: T.arrayOf(T.arrayOf(T.number)),
-  }),
-  urlForModel: T.string,
-  accession: T.string,
-};
+// StructuralModel.propTypes = {
+//   data: T.shape({
+//     loading: T.bool.isRequired,
+//     payload: T.arrayOf(T.number),
+//   }),
+//   dataContacts: T.shape({
+//     loading: T.bool.isRequired,
+//     payload: T.arrayOf(T.arrayOf(T.number)),
+//   }),
+//   urlForModel: T.string,
+//   accession: T.string,
+// };
 const mapStateToPropsForModel = (
   typeOfData /*: 'contacts'|'lddt'|'structure' */,
 ) =>
