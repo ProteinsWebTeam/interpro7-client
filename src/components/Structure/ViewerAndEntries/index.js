@@ -347,10 +347,12 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     if (hits.length > 0) {
       const selections = [];
       hits.forEach((hit) => {
-        selections.push([
-          hit.color,
-          `${hit.start_residue_number}-${hit.end_residue_number}:${hit.struct_asym_id}`,
-        ]);
+        selections.push({
+          colour: hit.color,
+          start: hit.start_residue_number,
+          end: hit.end_residue_number,
+          chain: hit.struct_asym_id,
+        });
       });
 
       this.setState({ selectionsInStructure: selections });

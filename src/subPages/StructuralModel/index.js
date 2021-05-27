@@ -60,12 +60,12 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
                 `${aln2str?.get(x) || x}-${aln2str?.get(x) || x}:A`,
               ]);
             const selections = [
-              [
-                'red',
-                `${aln2str?.get(selected) || selected}-${
-                  aln2str?.get(selected) || selected
-                }:A`,
-              ],
+              {
+                colour: 'red',
+                start: aln2str?.get(selected) || selected,
+                end: aln2str?.get(selected) || selected,
+                chain: 'A',
+              },
               ...linkedSelections,
             ];
             setSelections(selections);

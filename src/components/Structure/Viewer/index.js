@@ -94,6 +94,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
     this.name = `${this.props.id}`;
     this._structureViewer = React.createRef();
     this._structureViewerCanvas = React.createRef();
+    this.highlightColour = null;
+    this.selections = null;
   }
 
   async componentDidMount() {
@@ -154,11 +156,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
         PluginCommands.Camera.Reset(this.viewer, {});
         this.clearSelections();
         this.applyChainIdTheme();
-      }
-      if (this.props.selections?.length) {
+      } else if (this.props.selections?.length > 0) {
         this.highlightSelections(this.props.selections);
-      } else {
-        // this.clearSelections();
       }
     }
   }
@@ -221,42 +220,44 @@ class StructureView extends PureComponent /*:: <Props> */ {
         const molSelection = Script.getStructureSelection((MS) => {
           const atomGroups = [];
 
-          if (selections.length > 0 && selections[0].length > 1) {
-            const hexColour = parseInt(selections[0][0].substring(1), 16);
-            PluginCommands.Canvas3D.SetSettings(this.viewer, {
-              settings: (props) => {
-                props.renderer.selectColor = Color(hexColour);
-              },
-            });
-          }
+          let ShouldColourChange = true;
           for (const selection of selections) {
-            if (selection.length > 1) {
-              // $FlowFixMe
-              const [, startMatch, endMatch, chain] = selection[1].match(
-                /(\d+)-(\d+)\:(\w+)/,
-              );
-              const start = parseInt(startMatch, 10);
-              const end = parseInt(endMatch, 10);
-              const positions = [];
-              for (let i = start; i <= end; i++) {
-                positions.push(i);
+            if (ShouldColourChange) {
+              const hexColour = parseInt(selections[0].colour.substring(1), 16);
+              if (this.highlightColour !== hexColour) {
+                this.highlightColour = hexColour;
+                PluginCommands.Canvas3D.SetSettings(this.viewer, {
+                  settings: (props) => {
+                    props.renderer.selectColor = Color(hexColour);
+                  },
+                });
               }
-              // console.log(`MAQ ${chain}:${start}-${end} ${positions}`);
-              if (start && end && chain) {
-                atomGroups.push(
-                  MS.struct.generator.atomGroups({
-                    'chain-test': MS.core.rel.eq([
-                      chain,
-                      MS.ammp('label_asym_id'),
-                    ]),
-                    'residue-test': MS.core.set.has([
-                      MS.set(...positions),
-                      MS.ammp('auth_seq_id'),
-                    ]),
-                  }),
-                );
-              }
+              ShouldColourChange = false;
             }
+            const positions = [];
+            for (let i = selection.start; i <= selection.end; i++) {
+              positions.push(i);
+            }
+            console.log(
+              `MAQ: ${parseInt(
+                selections[0].colour.substring(1),
+                16,
+              )} == ${selection.colour.substring(1)} => ${selection.chain}: ${
+                selection.start
+              }-${selection.end}`,
+            );
+            atomGroups.push(
+              MS.struct.generator.atomGroups({
+                'chain-test': MS.core.rel.eq([
+                  selection.chain,
+                  MS.ammp('label_asym_id'),
+                ]),
+                'residue-test': MS.core.set.has([
+                  MS.set(...positions),
+                  MS.ammp('auth_seq_id'),
+                ]),
+              }),
+            );
           }
           return MS.struct.combinator.merge(atomGroups);
         }, data);
@@ -267,6 +268,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   applyChainIdTheme() {
     // apply colouring
+    console.log(`MAQ applying chain ID theme`);
     this.viewer.dataTransaction(async () => {
       for (const s of this.viewer.managers.structure.hierarchy.current
         .structures) {
