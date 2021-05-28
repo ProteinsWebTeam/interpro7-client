@@ -223,12 +223,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
           let ShouldColourChange = true;
           for (const selection of selections) {
             if (ShouldColourChange) {
-              const hexColour = parseInt(selections[0].colour.substring(1), 16);
-              if (this.highlightColour !== hexColour) {
-                this.highlightColour = hexColour;
+              // const hexColour = parseInt(selections[0].colour.substring(1), 16);
+              if (this.highlightColour !== selection.colour) {
+                this.highlightColour = selection.colour;
                 PluginCommands.Canvas3D.SetSettings(this.viewer, {
                   settings: (props) => {
-                    props.renderer.selectColor = Color(hexColour);
+                    props.renderer.selectColor = Color(selection.colour);
                   },
                 });
               }
@@ -239,12 +239,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
               positions.push(i);
             }
             console.log(
-              `MAQ: ${parseInt(
-                selections[0].colour.substring(1),
-                16,
-              )} == ${selection.colour.substring(1)} => ${selection.chain}: ${
-                selection.start
-              }-${selection.end}`,
+              `MAQ: ${selection.colour} => ${selection.chain}: ${selection.start}-${selection.end}`,
             );
             atomGroups.push(
               MS.struct.generator.atomGroups({

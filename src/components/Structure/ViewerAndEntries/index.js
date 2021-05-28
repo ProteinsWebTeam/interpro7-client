@@ -24,6 +24,8 @@ import style from './style.css';
 
 const f = foundationPartial(style, fonts);
 
+const RED = 0xff0000;
+
 /*:: import type { ColorMode } from 'utils/entry-color'; */
 /*:: type Props = {
   id: string,
@@ -103,12 +105,12 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
               ];
               this.setState({
                 selectionsInStructure: [
-                  [
-                    'red',
-                    `${Math.round(p2s(start))}-${Math.round(
-                      p2s(stop),
-                    )}:${chain}`,
-                  ],
+                  {
+                    colour: RED,
+                    start: Math.round(p2s(start)),
+                    end: Math.round(p2s(stop)),
+                    chain: chain,
+                  },
                 ],
               });
               this.handlingSequenceHighlight = true;
@@ -170,7 +172,12 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     if (feature.locations) {
       for (const loc of feature.locations) {
         for (const frag of loc.fragments) {
-          hits.push({ color: feature.color, start: frag.start, end: frag.end });
+          hits.push({
+            color: feature.color,
+            start: frag.start,
+            end: frag.end,
+            chain: feature.chain,
+          });
         }
       }
     }
@@ -178,10 +185,13 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     if (hits.length > 0) {
       const selections = [];
       hits.forEach((hit) => {
-        selections.push([
-          hit.color,
-          `${hit.start}-${hit.end}:${feature.chain}`,
-        ]);
+        const hexColour = parseInt(hit.color.substring(1), 16);
+        selections.push({
+          colour: hexColour,
+          start: hit.start,
+          end: hit.end,
+          chain: feature.chain,
+        });
       });
       this.setState({ selectionsInStructure: selections });
     } else {
@@ -347,8 +357,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     if (hits.length > 0) {
       const selections = [];
       hits.forEach((hit) => {
+        const hexColour = parseInt(hit.color.substring(1), 16);
         selections.push({
-          colour: hit.color,
+          colour: hexColour,
           start: hit.start_residue_number,
           end: hit.end_residue_number,
           chain: hit.struct_asym_id,

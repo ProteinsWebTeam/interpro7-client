@@ -25,8 +25,8 @@ import style from './style.css';
 const f = foundationPartial(style, ipro, fonts);
 const DEFAULT_MIN_PROBABILITY = 0.9;
 const DEFAULT_MIN_DISTANCE = 5;
-const RED = '#FF0000';
-const BLUE = '#0000FF';
+const RED = 0xff0000;
+const BLUE = 0x0000ff;
 
 const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
   const [minProbability, setMinProbability] = useState(DEFAULT_MIN_PROBABILITY);
@@ -84,8 +84,18 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
             const x = evt.detail.point.xPoint;
             const y = evt.detail.point.yPoint;
             const selections = [
-              ['red', `${aln2str?.get(x) || x}-${aln2str?.get(x) || x}:A`],
-              ['blue', `${aln2str?.get(y) || x}-${aln2str?.get(y) || y}:A`],
+              {
+                colour: RED,
+                start: aln2str?.get(x) || x,
+                end: aln2str?.get(x) || x,
+                chain: 'A',
+              },
+              {
+                colour: BLUE,
+                start: aln2str?.get(y) || x,
+                end: aln2str?.get(y) || y,
+                chain: 'A',
+              },
             ];
             setSelections(selections);
           } else if (evt.detail.type === 'mouseout') {
