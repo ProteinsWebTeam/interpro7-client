@@ -80,6 +80,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     url: T.string,
     elementId: T.string,
     onStructureLoaded: T.func,
+    onReset: T.func,
     isSpinning: T.bool,
     shouldResetViewer: T.bool,
     selections: T.array,
@@ -156,7 +157,11 @@ class StructureView extends PureComponent /*:: <Props> */ {
         PluginCommands.Camera.Reset(this.viewer, {});
         this.clearSelections();
         this.applyChainIdTheme();
-      } else if (this.props.selections?.length > 0) {
+        if (this.props.onReset) {
+          this.props.onReset();
+        }
+      }
+      if (this.props.selections?.length > 0) {
         this.highlightSelections(this.props.selections);
       }
     }

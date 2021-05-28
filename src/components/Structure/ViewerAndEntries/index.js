@@ -176,7 +176,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
             color: feature.color,
             start: frag.start,
             end: frag.end,
-            chain: feature.chain,
           });
         }
       }
@@ -186,6 +185,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       const selections = [];
       hits.forEach((hit) => {
         const hexColour = parseInt(hit.color.substring(1), 16);
+        console.log(
+          `MAQ[setSelectionsForSecondaryStructure] ${feature.chain} ${hit.start} ${hit.end}`,
+        );
         selections.push({
           colour: hexColour,
           start: hit.start,
@@ -203,6 +205,11 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     const chainMap = [];
     for (const location of locations) {
       for (const { start, end } of location.fragments) {
+        console.log(
+          `MAQ[_getChainMap] ${chain} => ${start} = ${p2s(
+            start,
+          )} ${end} = ${p2s(end)}`,
+        );
         chainMap.push({
           struct_asym_id: chain,
           start_residue_number: p2s(start),
@@ -233,6 +240,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
   }
 
   _collateHits(database, accession, chain, protein) {
+    console.log(`MAQ[_collateHits] ${protein}`);
     let hits = [];
     if (database && accession) {
       if (chain && protein) {
@@ -267,6 +275,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
   }
 
   createEntryMap() {
+    console.log(`MAQ[createEntryMap]`);
     const memberDBMap = { pdb: {} };
 
     if (this.props.matches) {
@@ -322,6 +331,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
   }
 
   showEntryInStructure = (memberDB, entry, chain, protein) => {
+    console.log(
+      `MAQ[showEntryInStructure] Protein ${protein} Chain ${chain} DB ${memberDB} Entry ${entry}`,
+    );
     const keep = this.state.selectedEntryToKeep;
     let db;
     let acc;
@@ -358,6 +370,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       const selections = [];
       hits.forEach((hit) => {
         const hexColour = parseInt(hit.color.substring(1), 16);
+        console.log(
+          `MAQ[showEntryInStructure] ${hexColour}:${hit.start_residue_number}-${hit.end_residue_number}`,
+        );
         selections.push({
           colour: hexColour,
           start: hit.start_residue_number,
@@ -445,6 +460,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
             isSpinning={isSpinning}
             shouldResetViewer={shouldResetViewer}
             selections={this.state.selectionsInStructure}
+            onReset={() => {
+              this.setState({ selectionsInStructure: null });
+            }}
           />
         </PictureInPicturePanel>
         <div
