@@ -179,13 +179,12 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
                 :{' '}
               </header>
               <code>
-                {
+                {(
+                  data.payload.reduce((acc, cur) => acc + cur, 0) /
+                  data.payload.length
+                )
                   // eslint-disable-next-line no-magic-numbers
-                  (
-                    data.payload.reduce((acc, cur) => acc + cur, 0) /
-                    data.payload.length
-                  ).toFixed(6)
-                }
+                  .toFixed(6)}
               </code>
             </section>
           ),
