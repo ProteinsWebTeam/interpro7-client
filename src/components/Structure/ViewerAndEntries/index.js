@@ -146,7 +146,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
               return;
             }
             if (type === 'chain')
-              this.showEntryInStructure('pdb', pdbid, accession, protein);
+              this.showEntryInStructure('pdb', pdbid, accession, proteinD);
             else if (type === 'secondary_structure')
               this.setSelectionsForSecondaryStructure(feature);
             else if (!accession.startsWith('G3D:'))
@@ -185,9 +185,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       const selections = [];
       hits.forEach((hit) => {
         const hexColour = parseInt(hit.color.substring(1), 16);
-        console.log(
-          `MAQ[setSelectionsForSecondaryStructure] ${feature.chain} ${hit.start} ${hit.end}`,
-        );
         selections.push({
           colour: hexColour,
           start: hit.start,
