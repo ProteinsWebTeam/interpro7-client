@@ -29,11 +29,5 @@
   }
   & .structure-viewer {
     height: initial;
-    & > div:first-child div {
-      height: 95vh;
-    }
-    & div:last-child {
-      height: 5vh;
-    }
   }
 }
