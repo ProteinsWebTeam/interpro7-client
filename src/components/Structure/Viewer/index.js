@@ -242,9 +242,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
             for (let i = selection.start; i <= selection.end; i++) {
               positions.push(i);
             }
-            console.log(
-              `MAQ: ${selection.colour} => ${selection.chain}: ${selection.start}-${selection.end}`,
-            );
             atomGroups.push(
               MS.struct.generator.atomGroups({
                 'chain-test': MS.core.rel.eq([
@@ -267,7 +264,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   applyChainIdTheme() {
     // apply colouring
-    console.log(`MAQ applying chain ID theme`);
     this.viewer.dataTransaction(async () => {
       for (const s of this.viewer.managers.structure.hierarchy.current
         .structures) {

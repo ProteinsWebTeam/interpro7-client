@@ -276,18 +276,20 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
     </div>
   );
 };
-// StructuralModel.propTypes = {
-//   data: T.shape({
-//     loading: T.bool.isRequired,
-//     payload: T.arrayOf(T.number),
-//   }),
-//   dataContacts: T.shape({
-//     loading: T.bool.isRequired,
-//     payload: T.arrayOf(T.arrayOf(T.number)),
-//   }),
-//   urlForModel: T.string,
-//   accession: T.string,
-// };
+
+StructuralModel.propTypes = {
+  data: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.arrayOf(T.number),
+  }),
+  dataContacts: T.shape({
+    loading: T.bool.isRequired,
+    payload: T.arrayOf(T.arrayOf(T.number)),
+  }),
+  urlForModel: T.string,
+  accession: T.string,
+};
+
 const mapStateToPropsForModel = (
   typeOfData /*: 'contacts'|'lddt'|'structure' */,
 ) =>

@@ -34,6 +34,13 @@ const RED = 0xff0000;
   colorDomainsBy: ColorMode
 }; */
 
+/*:: type Selection = {
+  colour: number,
+  start: number,
+  end: number,
+  chain: string
+}; */
+
 /*:: type State = {
   entryMap: Object,
   selectedEntry: string,
@@ -41,7 +48,7 @@ const RED = 0xff0000;
   isSplitScreen: boolean,
   isSpinning: boolean,
   shouldResetViewer: boolean,
-  selectionsInStructure: ?Array<Array<string>>
+  selectionsInStructure: ?Array<Selection>
 }; */
 
 class StructureView extends PureComponent /*:: <Props, State> */ {
@@ -202,11 +209,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     const chainMap = [];
     for (const location of locations) {
       for (const { start, end } of location.fragments) {
-        console.log(
-          `MAQ[_getChainMap] ${chain} => ${start} = ${p2s(
-            start,
-          )} ${end} = ${p2s(end)}`,
-        );
         chainMap.push({
           struct_asym_id: chain,
           start_residue_number: p2s(start),
@@ -237,7 +239,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
   }
 
   _collateHits(database, accession, chain, protein) {
-    console.log(`MAQ[_collateHits] ${protein}`);
     let hits = [];
     if (database && accession) {
       if (chain && protein) {
@@ -272,7 +273,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
   }
 
   createEntryMap() {
-    console.log(`MAQ[createEntryMap]`);
     const memberDBMap = { pdb: {} };
 
     if (this.props.matches) {
@@ -328,9 +328,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
   }
 
   showEntryInStructure = (memberDB, entry, chain, protein) => {
-    console.log(
-      `MAQ[showEntryInStructure] Protein ${protein} Chain ${chain} DB ${memberDB} Entry ${entry}`,
-    );
     const keep = this.state.selectedEntryToKeep;
     let db;
     let acc;
@@ -367,9 +364,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       const selections = [];
       hits.forEach((hit) => {
         const hexColour = parseInt(hit.color.substring(1), 16);
-        console.log(
-          `MAQ[showEntryInStructure] ${hexColour}:${hit.start_residue_number}-${hit.end_residue_number}`,
-        );
         selections.push({
           colour: hexColour,
           start: hit.start_residue_number,
