@@ -166,6 +166,11 @@ g:global(.child-group) path:global(.feature) {
   cursor: pointer;
 }
 
+.residue.track-component path:global(.feature) {
+  stroke: transparent;
+  transition: fill 0.2s ease-out;
+}
+
 .conservation-warning {
   text-align: center;
   cursor: default;

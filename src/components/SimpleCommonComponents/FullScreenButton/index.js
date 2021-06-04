@@ -56,7 +56,7 @@ const FullScreenButton = (
       <button
         onClick={_handleFullScreen}
         data-icon={icon}
-        title="Full screen"
+        title={tooltip}
         className={_className}
         disabled={disabled}
       />
