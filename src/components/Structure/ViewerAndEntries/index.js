@@ -431,11 +431,13 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
                   this.setState({ isSplitScreen: false })
                 }
               />
-              <FullScreenButton
-                className={f('icon', 'icon-common')}
-                tooltip="View the structure in full screen mode"
-                element={elementId}
-              />
+              {isSplitScreen ? null : (
+                <FullScreenButton
+                  className={f('icon', 'icon-common')}
+                  tooltip="View the structure in full screen mode"
+                  element={elementId}
+                />
+              )}
             </>
           }
         >
