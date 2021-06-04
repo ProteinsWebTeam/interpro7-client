@@ -24,12 +24,21 @@ import style from './style.css';
 
 const f = foundationPartial(style, fonts);
 
+const RED = 0xff0000;
+
 /*:: import type { ColorMode } from 'utils/entry-color'; */
 /*:: type Props = {
   id: string,
   matches: Array<Object>,
   highlight?: string,
   colorDomainsBy: ColorMode
+}; */
+
+/*:: type Selection = {
+  colour: number,
+  start: number,
+  end: number,
+  chain: string
 }; */
 
 /*:: type State = {
@@ -39,7 +48,7 @@ const f = foundationPartial(style, fonts);
   isSplitScreen: boolean,
   isSpinning: boolean,
   shouldResetViewer: boolean,
-  selectionsInStructure: ?Array<Array<string>>
+  selectionsInStructure: ?Array<Selection>
 }; */
 
 class StructureView extends PureComponent /*:: <Props, State> */ {
@@ -103,12 +112,12 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
               ];
               this.setState({
                 selectionsInStructure: [
-                  [
-                    'red',
-                    `${Math.round(p2s(start))}-${Math.round(
-                      p2s(stop),
-                    )}:${chain}`,
-                  ],
+                  {
+                    colour: RED,
+                    start: Math.round(p2s(start)),
+                    end: Math.round(p2s(stop)),
+                    chain: chain,
+                  },
                 ],
               });
               this.handlingSequenceHighlight = true;
@@ -144,7 +153,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
               return;
             }
             if (type === 'chain')
-              this.showEntryInStructure('pdb', pdbid, accession, protein);
+              this.showEntryInStructure('pdb', pdbid, accession, proteinD);
             else if (type === 'secondary_structure')
               this.setSelectionsForSecondaryStructure(feature);
             else if (!accession.startsWith('G3D:'))
@@ -170,7 +179,11 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     if (feature.locations) {
       for (const loc of feature.locations) {
         for (const frag of loc.fragments) {
-          hits.push({ color: feature.color, start: frag.start, end: frag.end });
+          hits.push({
+            color: feature.color,
+            start: frag.start,
+            end: frag.end,
+          });
         }
       }
     }
@@ -178,10 +191,13 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     if (hits.length > 0) {
       const selections = [];
       hits.forEach((hit) => {
-        selections.push([
-          hit.color,
-          `${hit.start}-${hit.end}:${feature.chain}`,
-        ]);
+        const hexColour = parseInt(hit.color.substring(1), 16);
+        selections.push({
+          colour: hexColour,
+          start: hit.start,
+          end: hit.end,
+          chain: feature.chain,
+        });
       });
       this.setState({ selectionsInStructure: selections });
     } else {
@@ -347,10 +363,13 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
     if (hits.length > 0) {
       const selections = [];
       hits.forEach((hit) => {
-        selections.push([
-          hit.color,
-          `${hit.start_residue_number}-${hit.end_residue_number}:${hit.struct_asym_id}`,
-        ]);
+        const hexColour = parseInt(hit.color.substring(1), 16);
+        selections.push({
+          colour: hexColour,
+          start: hit.start_residue_number,
+          end: hit.end_residue_number,
+          chain: hit.struct_asym_id,
+        });
       });
 
       this.setState({ selectionsInStructure: selections });
@@ -432,6 +451,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
             isSpinning={isSpinning}
             shouldResetViewer={shouldResetViewer}
             selections={this.state.selectionsInStructure}
+            onReset={() => {
+              this.setState({ selectionsInStructure: null });
+            }}
           />
         </PictureInPicturePanel>
         <div

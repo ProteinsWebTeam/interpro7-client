@@ -77,6 +77,9 @@ const getConfigFor = (env, mode, module = false) => {
     // MODE
     mode,
     // OUTPUT
+    node: {
+      fs: 'empty',
+    },
     output: {
       path: path.resolve('dist'),
       publicPath,

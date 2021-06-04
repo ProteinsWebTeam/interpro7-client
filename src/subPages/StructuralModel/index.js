@@ -25,6 +25,8 @@ import style from './style.css';
 const f = foundationPartial(style, ipro, fonts);
 const DEFAULT_MIN_PROBABILITY = 0.9;
 const DEFAULT_MIN_DISTANCE = 5;
+const RED = 0xff0000;
+const BLUE = 0x0000ff;
 
 const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
   const [minProbability, setMinProbability] = useState(DEFAULT_MIN_PROBABILITY);
@@ -55,17 +57,21 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
               .map(([x]) => +x)
               .sort((a, b) => a - b)
               .filter((x) => x !== selected)
-              .map((x) => [
-                'blue',
-                `${aln2str?.get(x) || x}-${aln2str?.get(x) || x}:A`,
-              ]);
+              .map((x) => {
+                return {
+                  colour: BLUE,
+                  start: aln2str?.get(x) || x,
+                  end: aln2str?.get(x),
+                  chain: 'A',
+                };
+              });
             const selections = [
-              [
-                'red',
-                `${aln2str?.get(selected) || selected}-${
-                  aln2str?.get(selected) || selected
-                }:A`,
-              ],
+              {
+                colour: RED,
+                start: aln2str?.get(selected) || selected,
+                end: aln2str?.get(selected) || selected,
+                chain: 'A',
+              },
               ...linkedSelections,
             ];
             setSelections(selections);
@@ -78,8 +84,18 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
             const x = evt.detail.point.xPoint;
             const y = evt.detail.point.yPoint;
             const selections = [
-              ['red', `${aln2str?.get(x) || x}-${aln2str?.get(x) || x}:A`],
-              ['blue', `${aln2str?.get(y) || x}-${aln2str?.get(y) || y}:A`],
+              {
+                colour: RED,
+                start: aln2str?.get(x) || x,
+                end: aln2str?.get(x) || x,
+                chain: 'A',
+              },
+              {
+                colour: BLUE,
+                start: aln2str?.get(y) || x,
+                end: aln2str?.get(y) || y,
+                chain: 'A',
+              },
             ];
             setSelections(selections);
           } else if (evt.detail.type === 'mouseout') {
@@ -163,13 +179,12 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
                 :{' '}
               </header>
               <code>
-                {
+                {(
+                  data.payload.reduce((acc, cur) => acc + cur, 0) /
+                  data.payload.length
+                )
                   // eslint-disable-next-line no-magic-numbers
-                  (
-                    data.payload.reduce((acc, cur) => acc + cur, 0) /
-                    data.payload.length
-                  ).toFixed(6)
-                }
+                  .toFixed(6)}
               </code>
             </section>
           ),
@@ -261,6 +276,7 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
     </div>
   );
 };
+
 StructuralModel.propTypes = {
   data: T.shape({
     loading: T.bool.isRequired,
@@ -273,6 +289,7 @@ StructuralModel.propTypes = {
   urlForModel: T.string,
   accession: T.string,
 };
+
 const mapStateToPropsForModel = (
   typeOfData /*: 'contacts'|'lddt'|'structure' */,
 ) =>

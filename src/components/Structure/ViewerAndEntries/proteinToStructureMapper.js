@@ -14,15 +14,12 @@ export default (mapCoordinates) => {
           start =
             v.author_structure_end - (v.structure_end - v.structure_start);
           end = v.author_structure_end;
-          // agg.range.push(
-          //   v.author_structure_end - (v.structure_end - v.structure_start),
-          // );
         } else if (!v.author_structure_start && !v.author_structure_end) {
           start = v.structure_start;
           end = v.structure_end;
         } else {
           start = v.author_structure_start;
-          end = v.author_structure_end;
+          end = v.author_structure_end || v.structure_end;
         }
         agg.range.push(start);
         agg.range.push(end);
