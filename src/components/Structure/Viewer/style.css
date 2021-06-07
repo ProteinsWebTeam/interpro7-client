@@ -3,6 +3,7 @@
 
   & .structure-and-label {
     height: 100%;
+    background: white;
 
     & .structure-viewer-ref {
       align-items: center;
@@ -12,7 +13,6 @@
 
     & .structure-label {
       height: 1em;
-      background: white;
     }
   }
 }
