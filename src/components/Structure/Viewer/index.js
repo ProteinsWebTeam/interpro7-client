@@ -56,6 +56,7 @@ const Labels = newLocal;
   elementId: string,
   ext?: string,
   name?: string,
+  theme?: string,
   onStructureLoaded?: function,
   isSpinning?: boolean,
   shouldResetViewer?: boolean,
@@ -85,6 +86,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     selections: T.array,
     ext: T.string,
     name: T.string,
+    theme: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -128,7 +130,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
 
     if (this.props.url) {
-      this.loadStructureInViewer(this.props.url, 'pdb');
+      this.loadStructureInViewer(this.props.url, this.props.ext);
     } else {
       this.loadStructureInViewer(
         `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
@@ -142,7 +144,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.name = `${this.props.id}`;
       this.viewer.clear();
       if (this.props.url) {
-        this.loadStructureInViewer(this.props.url, 'pdb');
+        this.loadStructureInViewer(this.props.url, this.props.ext);
       } else {
         this.loadStructureInViewer(
           `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
@@ -169,6 +171,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
   async loadStructureInViewer(url /*: string */, format /*: string */) {
     if (this.viewer) {
       await this.viewer.clear();
+      // TODO replace with example /Users/swaathik/Desktop/example/Q9SSD2-F1-model_v1.cif'
       const data = await this.viewer.builders.data.download(
         { url: url },
         { state: { isGhost: false } },
@@ -270,9 +273,10 @@ class StructureView extends PureComponent /*:: <Props> */ {
         await this.viewer.managers.structure.component.updateRepresentationsTheme(
           s.components,
           {
-            color: this.props.url
-              ? ColorByResidueLddtTheme.propertyProvider.descriptor.name
-              : ChainIdColorThemeProvider.name,
+            color:
+              this.props.theme === 'residue'
+                ? ColorByResidueLddtTheme.propertyProvider.descriptor.name
+                : ChainIdColorThemeProvider.name,
           },
         );
       }

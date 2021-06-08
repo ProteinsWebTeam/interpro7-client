@@ -216,6 +216,7 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
           elementId={elementId}
           ext="pdb"
           selections={selections}
+          theme={'residue'}
         />
       </PictureInPicturePanel>
 
