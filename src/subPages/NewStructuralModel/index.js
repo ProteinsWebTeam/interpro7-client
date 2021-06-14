@@ -7,6 +7,7 @@ import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPi
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
+import modelQuality from 'images/structural_model_quality.jpeg';
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -27,10 +28,14 @@ const NewStructuralModel = ({ urlForModel, accession }) => {
         <Link href="https://www.bakerlab.org/" target="_blank">
           XXX
         </Link>{' '}
-        using the yyy software . The model represents the entire sequence from
-        UniProtKB: {accession} from Homo sapiens.
+        using the mysterious software . The model represents the entire sequence
+        from UniProtKB: {accession} from Homo sapiens.
       </div>
-
+      <div className={f('legend')}>
+        <picture>
+          <img alt="model quality" src={modelQuality} />
+        </picture>
+      </div>
       <PictureInPicturePanel
         className={f('structure-viewer')}
         testid="structure-3d-viewer"
