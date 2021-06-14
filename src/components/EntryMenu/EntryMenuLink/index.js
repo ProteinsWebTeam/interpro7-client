@@ -36,6 +36,7 @@ const icons = new Map([
   ['Alignments', { icon: '\uF1DE', class: 'icon-common' }],
   ['Sequence', { icon: '\uF120', class: 'icon-common' }],
   ['Curation', { icon: undefined, class: 'icon-common' }],
+  ['New Structural Model', { icon: undefined, class: 'icon-common' }],
 ]);
 
 export const EntryMenuLinkWithoutData = (
@@ -200,6 +201,16 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
         payload.metadata.source_database.toLowerCase() === 'pfam'
       ) {
         value = NaN;
+      }
+
+      if (name === 'New Structural Model') {
+        // TODO Add condition to display if there are structural models available for UniProt proteins that match InterPro entry
+        if (payload.metadata.source_database.toLowerCase() === 'interpro') {
+          value = NaN;
+        } else if (mainKey && mainKey.toLowerCase() === 'protein') {
+          // TODO display if the Uniprot accession has structural models
+          value = NaN;
+        }
       }
     }
 

@@ -37,6 +37,7 @@ pages:
       - taxonomy
       - proteome
       - model
+      - new_model
       - logo
       - entry_alignments
       - interactions
@@ -47,6 +48,7 @@ pages:
     subPages:
       - entry
       - structure
+      - new_model
       - sequence
       - similar_proteins
   structure:

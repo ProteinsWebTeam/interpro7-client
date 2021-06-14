@@ -66,6 +66,11 @@ const StructuralModel = loadable({
   loader: () =>
     import(/* webpackChunkName: "model-subpage" */ './StructuralModel'),
 });
+const NewStructuralModel = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "new-model-subpage" */ './NewStructuralModel'),
+});
+
 const defaultMapStateToProps = createSelector(
   (state) => state.settings.api,
   (state) => state.settings.navigation.pageSize,
@@ -198,6 +203,7 @@ const subPages = new Map([
   ],
   ['pathways', loadData(getInterProModifierURL('pathways'))(PathwaysSubPage)],
   ['model', StructuralModel],
+  ['new_model', NewStructuralModel],
   ['alignments', SetAlignments],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],

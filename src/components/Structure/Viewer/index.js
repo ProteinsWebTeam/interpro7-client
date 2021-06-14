@@ -171,7 +171,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
   async loadStructureInViewer(url /*: string */, format /*: string */) {
     if (this.viewer) {
       await this.viewer.clear();
-      // TODO replace with example /Users/swaathik/Desktop/example/Q9SSD2-F1-model_v1.cif'
       const data = await this.viewer.builders.data.download(
         { url: url },
         { state: { isGhost: false } },
