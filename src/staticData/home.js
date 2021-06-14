@@ -11,7 +11,7 @@ export const memberDBAccessions = [
   'PD[A-Z0-9]{6}',
   'PS[0-9]{5}',
   'PS[0-9]{5}',
-  'sfld[gf]\\d{5}',
+  'sfld[gfs]\\d{5}',
   'SM[0-9]{5}',
   'SSF[0-9]{5,6}',
   'TIGR[0-9]{5}',

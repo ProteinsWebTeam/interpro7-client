@@ -5,6 +5,6 @@ exports[`<TimeAgo /> should render 1`] = `
   dateTime="17-06-1998 01:00:00"
   title="17/06/1998"
 >
-  22 years ago
+  23 years ago
 </time>
 `;

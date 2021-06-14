@@ -1,7 +1,12 @@
 // @flow
 
 const ACCESSION_PATTERN = /{}/;
-const ACCESSION_CLEANUP = /^(G3DSA:|SFLDF0*)/i;
+const ACCESSION_CLEANUP = [
+  [/^G3DSA:/i, ''],
+  [/^SFLDF0*(\d+)$/i, 'family/$1'],
+  [/^SFLDS0*(\d+)$/i, 'superfamily/$1'],
+  [/^SFLDG0*(\d+)$/i, 'subgroup/$1'],
+];
 
 // TODO: have consistent data to eventually remove this
 
@@ -68,7 +73,7 @@ export default (db /*: string */) => {
     ],
     ['profile', '//prosite.expasy.org/{}'],
     ['prosite', '//prosite.expasy.org/{}'],
-    ['sfld', 'http://sfld.rbvi.ucsf.edu/django/family/{}/'],
+    ['sfld', 'http://sfld.rbvi.ucsf.edu/archive/django/{}'],
     [
       'smart',
       'http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN={}',
@@ -84,6 +89,6 @@ export default (db /*: string */) => {
   return (accession /*: string */) =>
     pattern.replace(
       ACCESSION_PATTERN,
-      accession.replace(ACCESSION_CLEANUP, ''),
+      ACCESSION_CLEANUP.reduce((result, [regexp, newSubstr]) => result.replace(regexp, newSubstr), accession)
     );
 };
