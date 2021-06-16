@@ -139,8 +139,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
-  componentDidUpdate() {
-    if (this.name !== `${this.props.id}`) {
+  componentDidUpdate(prevProps) {
+    if (this.name !== `${this.props.id}` || prevProps.url !== this.props.url) {
       this.name = `${this.props.id}`;
       this.viewer.clear();
       if (this.props.url) {
