@@ -82,7 +82,8 @@ const _NewStructuralModel = ({ protein, data }) => {
           <>
             <Link
               className={f('control')}
-              href={`${modelInfo.cifUrl}`}
+              // href={`${modelInfo.cifUrl}`}
+              href={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
               download={`${protein || 'download'}.model.cif`}
             >
               <span
@@ -101,7 +102,8 @@ const _NewStructuralModel = ({ protein, data }) => {
       >
         <StructureViewer
           id={'fullSequence'}
-          url={`${modelInfo.cifUrl}`}
+          // url={`${modelInfo.cifUrl}`}
+          url={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
           elementId={elementId}
           ext="mmcif"
           theme={'residue'}
