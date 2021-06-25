@@ -675,6 +675,7 @@ const AddToHomeScreen = connect(undefined, { addToast })(_AddToHomeScreen);
     ipScan: Object,
     genome3d: Object,
     wikipedia: Object,
+    modelAPI: Object,
   },
   changeSettings: function,
   resetSettings: function
