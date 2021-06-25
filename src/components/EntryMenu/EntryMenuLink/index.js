@@ -161,11 +161,11 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
       if (payload.metadata.counters) {
         if (counter) {
           // Some tabs (e.g. Set > Alignments) do not have counter
-          let counterValue = null;
+          let counterValue;
           counter.split('.').forEach((key, index) => {
             if (index === 0)
               counterValue = payload.metadata.counters[key];
-            else if (counterValue !== undefined)
+            else if (typeof counterValue === 'object')
               counterValue = counterValue[key];
           });
 
