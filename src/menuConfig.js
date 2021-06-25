@@ -446,8 +446,8 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'New Structural Model',
-      // counter: 'new_structural_models',
+      name: 'Full Length models',
+      counter: 'structural_models.full_length',
     },
   ],
   [
