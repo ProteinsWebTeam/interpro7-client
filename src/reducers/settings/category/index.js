@@ -78,6 +78,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         hostname: config.root.modelAPI.hostname,
         port: config.root.modelAPI.port || DEFAULT_HTTP_PORT,
         root: config.root.modelAPI.pathname,
+        query: config.root.modelAPI.query
       };
     default:
       return null;
