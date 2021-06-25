@@ -120,14 +120,14 @@ _NewStructuralModel.propTypes = {
 const getModelInfoUrl = createSelector(
   (state) => state.settings.modelAPI,
   (_, props) => props.protein,
-  ({ protocol, hostname, port, root }, protein) => {
-    return `${protocol}//${hostname}${root}${protein}?key=AIzaSyCeurAJz7ZGjPQUtEaerUkBZ3TaBkXrY94`;
-    // return format({
-    //   protocol,
-    //   hostname,
-    //   port,
-    //   pathname: `${root}${protein}?key=AIzaSyCeurAJz7ZGjPQUtEaerUkBZ3TaBkXrY94`,
-    // });
+  ({ protocol, hostname, port, root, query }, accession) => {
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}api/prediction/${accession}`,
+      query: query
+    });
   },
 );
 
