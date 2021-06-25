@@ -82,8 +82,7 @@ const _NewStructuralModel = ({ protein, data }) => {
           <>
             <Link
               className={f('control')}
-              // href={`${modelInfo.cifUrl}`}
-              href={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
+              href={`${modelInfo.cifUrl}`}
               download={`${protein || 'download'}.model.cif`}
             >
               <span
@@ -126,7 +125,7 @@ const getModelInfoUrl = createSelector(
       hostname,
       port,
       pathname: `${root}api/prediction/${accession}`,
-      query: query
+      query: query,
     });
   },
 );
@@ -142,8 +141,7 @@ const NewStructuralModelSubPage = ({ accession, data }) => {
       // Take the list of matched UniProt matches and assign the first one to protein accession
       if (data?.payload?.count > 0)
         setProteinAcc(data.payload.results[0].metadata.accession);
-    } else
-      setProteinAcc(accession);
+    } else setProteinAcc(accession);
   }, [accession, data]);
 
   return (
@@ -159,7 +157,9 @@ const NewStructuralModelSubPage = ({ accession, data }) => {
             onBlur={() => setProteinAcc(event.target.value)}
           >
             {data.payload.results.map((protein) => (
-              <option key={protein.metadata.accession}>{protein.metadata.accession}</option>
+              <option key={protein.metadata.accession}>
+                {protein.metadata.accession}
+              </option>
             ))}
           </select>
         </div>
@@ -186,7 +186,7 @@ const mapStateToPropsForModel = (typeOfData /*: 'match'|'structure' */) =>
         const newDescription = {
           main: {
             key: 'protein',
-            numberOfFilters: 2
+            numberOfFilters: 2,
           },
           protein: { db: 'UniProt' },
           entry: {
@@ -194,11 +194,12 @@ const mapStateToPropsForModel = (typeOfData /*: 'match'|'structure' */) =>
             db: description.entry.db || 'interpro',
             accession: description.entry.accession,
           },
-          taxonomy: { // todo: remove
+          taxonomy: {
+            // todo: remove
             isFilter: true,
             db: 'UniProt',
-            accession: '3702'
-          }
+            accession: '3702',
+          },
         };
 
         if (typeOfData === 'match') {
@@ -207,7 +208,7 @@ const mapStateToPropsForModel = (typeOfData /*: 'match'|'structure' */) =>
             hostname,
             port,
             pathname: root + descriptionToPath(newDescription),
-            query: { hasModel: null }
+            query: { hasModel: null },
           });
         }
       }
