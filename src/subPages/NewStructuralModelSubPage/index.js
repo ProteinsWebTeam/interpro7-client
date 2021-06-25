@@ -159,6 +159,7 @@ const NewStructuralModelSubPage = ({ accession, data }) => {
           proteins
           <select
             value={proteinAcc}
+            className={f('protein-list')}
             onChange={() => setProteinAcc(event.target.value)}
             onBlur={() => setProteinAcc(event.target.value)}
           >
