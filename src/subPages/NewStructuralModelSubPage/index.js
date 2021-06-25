@@ -13,7 +13,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
-import modelQuality from 'images/structural_model_quality.jpeg';
+// import modelQuality from 'images/structural_model_quality.jpeg';
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -43,11 +43,11 @@ const _NewStructuralModel = ({ protein, data }) => {
         from UniProtKB: {protein} from <i>{modelInfo.organismScientificName}</i>
         .
       </div>
-      {/*<div className={f('legend')}>*/}
-      {/*  <picture>*/}
-      {/*    <img alt="model quality" src={modelQuality} />*/}
-      {/*  </picture>*/}
-      {/*</div>*/}
+      {/* <div className={f('legend')}> */}
+      {/*  <picture> */}
+      {/*    <img alt="model quality" src={modelQuality} /> */}
+      {/*  </picture> */}
+      {/* </div> */}
       <PictureInPicturePanel
         className={f('structure-viewer')}
         testid="structure-3d-viewer"
@@ -102,7 +102,7 @@ const _NewStructuralModel = ({ protein, data }) => {
         <StructureViewer
           id={'fullSequence'}
           url={`${modelInfo.cifUrl}`}
-          //url={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
+          //  url={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
           elementId={elementId}
           ext="mmcif"
           theme={'af'}
