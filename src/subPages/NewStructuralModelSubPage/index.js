@@ -43,11 +43,11 @@ const _NewStructuralModel = ({ protein, data }) => {
         from UniProtKB: {protein} from <i>{modelInfo.organismScientificName}</i>
         .
       </div>
-      <div className={f('legend')}>
-        <picture>
-          <img alt="model quality" src={modelQuality} />
-        </picture>
-      </div>
+      {/*<div className={f('legend')}>*/}
+      {/*  <picture>*/}
+      {/*    <img alt="model quality" src={modelQuality} />*/}
+      {/*  </picture>*/}
+      {/*</div>*/}
       <PictureInPicturePanel
         className={f('structure-viewer')}
         testid="structure-3d-viewer"
@@ -106,7 +106,7 @@ const _NewStructuralModel = ({ protein, data }) => {
           url={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
           elementId={elementId}
           ext="mmcif"
-          theme={'residue'}
+          theme={'af'}
         />
       </PictureInPicturePanel>
     </div>
