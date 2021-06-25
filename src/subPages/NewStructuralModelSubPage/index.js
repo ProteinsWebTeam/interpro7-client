@@ -102,8 +102,8 @@ const _NewStructuralModel = ({ protein, data }) => {
       >
         <StructureViewer
           id={'fullSequence'}
-          // url={`${modelInfo.cifUrl}`}
-          url={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
+          url={`${modelInfo.cifUrl}`}
+          //url={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
           elementId={elementId}
           ext="mmcif"
           theme={'af'}
@@ -120,14 +120,14 @@ _NewStructuralModel.propTypes = {
 const getModelInfoUrl = createSelector(
   (state) => state.settings.modelAPI,
   (_, props) => props.protein,
-  ({ protocol, hostname, port, root }, protein) => {
-    return `${protocol}//${hostname}${root}${protein}?key=AIzaSyCeurAJz7ZGjPQUtEaerUkBZ3TaBkXrY94`;
-    // return format({
-    //   protocol,
-    //   hostname,
-    //   port,
-    //   pathname: `${root}${protein}?key=AIzaSyCeurAJz7ZGjPQUtEaerUkBZ3TaBkXrY94`,
-    // });
+  ({ protocol, hostname, port, root, query }, accession) => {
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}api/prediction/${accession}`,
+      query: query
+    });
   },
 );
 
@@ -137,23 +137,18 @@ const NewStructuralModelSubPage = ({ accession, data }) => {
   const [proteinAcc, setProteinAcc] = useState('');
   const container = useRef();
 
-  const mockProteins = ['Q9SSD2', 'Q9T0I6', 'Q9FR53']; // To be removed
-
   useEffect(() => {
     if (accession.toLowerCase().startsWith('ipr')) {
       // Take the list of matched UniProt matches and assign the first one to protein accession
-      if (data.payload) {
-        setProteinAcc(data.payload[0]);
-      }
-      setProteinAcc(mockProteins[0]); // To be removed
-    } else {
+      if (data?.payload?.count > 0)
+        setProteinAcc(data.payload.results[0].metadata.accession);
+    } else
       setProteinAcc(accession);
-    }
   }, [accession, data]);
 
   return (
     <div className={f('row', 'column')} ref={container}>
-      {accession.toLowerCase().startsWith('ipr') && mockProteins.length > 1 ? (
+      {accession.toLowerCase().startsWith('ipr') && data?.payload?.count > 1 ? (
         <div>
           The InterPro entry {accession} has matched the following UniProt
           proteins
@@ -163,9 +158,8 @@ const NewStructuralModelSubPage = ({ accession, data }) => {
             onChange={() => setProteinAcc(event.target.value)}
             onBlur={() => setProteinAcc(event.target.value)}
           >
-            {/*{data?.payload.map((protein) => (*/}
-            {mockProteins.map((protein) => (
-              <option key={protein}>{protein}</option>
+            {data.payload.results.map((protein) => (
+              <option key={protein.metadata.accession}>{protein.metadata.accession}</option>
             ))}
           </select>
         </div>
@@ -187,24 +181,33 @@ const mapStateToPropsForModel = (typeOfData /*: 'match'|'structure' */) =>
     ({ protocol, hostname, port, root }, description) => {
       if (
         description.main.key === 'entry' &&
-        description[description.main.key].db === 'interpro'
+        description[description.main.key].db.toLowerCase() === 'interpro'
       ) {
         const newDescription = {
-          main: { key: 'entry' },
+          main: {
+            key: 'protein',
+            numberOfFilters: 2
+          },
+          protein: { db: 'UniProt' },
           entry: {
+            isFilter: true,
             db: description.entry.db || 'interpro',
             accession: description.entry.accession,
           },
+          taxonomy: { // todo: remove
+            isFilter: true,
+            db: 'UniProt',
+            accession: '3702'
+          }
         };
-        // TODO Add appropriate interpro api query params
-        // const key = `model:${typeOfData}`;
+
         if (typeOfData === 'match') {
           return format({
             protocol,
             hostname,
             port,
             pathname: root + descriptionToPath(newDescription),
-            // query: {[key]: null},
+            query: { hasModel: null }
           });
         }
       }

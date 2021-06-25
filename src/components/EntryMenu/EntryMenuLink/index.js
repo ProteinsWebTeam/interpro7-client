@@ -158,11 +158,20 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
     } = this.props;
     let value = null;
     if (!loading && payload && payload.metadata) {
-      if (
-        payload.metadata.counters &&
-        Number.isFinite(payload.metadata.counters[counter])
-      ) {
-        value = payload.metadata.counters[counter];
+      if (payload.metadata.counters) {
+        if (counter) {
+          // Some tabs (e.g. Set > Alignments) do not have counter
+          let counterValue = null;
+          counter.split('.').forEach((key, index) => {
+            if (index === 0)
+              counterValue = payload.metadata.counters[key];
+            else if (counterValue !== undefined)
+              counterValue = counterValue[key];
+          });
+
+          if (Number.isFinite(counterValue))
+            value = counterValue;
+        }
         if (
           name.toLowerCase() === 'entries' &&
           mainKey &&
@@ -175,8 +184,12 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
             value = payload.metadata.counters.dbEntries[entryDB.toLowerCase()];
           }
         }
-      } // Enabling the menuitems that appear in the entry_annotations array.
-      // i.e. only enable the menu item if there is info for it
+      }
+
+      /**
+       * Enabling the menuitems that appear in the entry_annotations array,
+       * i.e. only enable the menu item if there is info for it.
+       */
       if (
         payload.metadata.entry_annotations &&
         (payload.metadata.entry_annotations.includes(
@@ -201,16 +214,6 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
         payload.metadata.source_database.toLowerCase() === 'pfam'
       ) {
         value = NaN;
-      }
-
-      if (name === 'New Structural Model') {
-        // TODO Add condition to display if there are structural models available for UniProt proteins that match InterPro entry
-        if (payload.metadata.source_database.toLowerCase() === 'interpro') {
-          value = NaN;
-        } else if (mainKey && mainKey.toLowerCase() === 'protein') {
-          // TODO display if the Uniprot accession has structural models
-          value = NaN;
-        }
       }
     }
 
