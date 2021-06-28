@@ -6,14 +6,22 @@
 }
 
 .legend {
-  min-height: fit-content;
   display: flex;
   justify-content: flex-end;
+  & sup {
+    top: 0.5em;
+  }
 }
-.legend picture,
-.legend img {
-  width: 100%;
-  max-width: 300px;
+
+.score-box {
+  height: 0.5em;
+  width: 0.7em;
+  margin: 0.5em 0.2em 0.5em 0.5em;
+  clear: both;
+}
+
+.legend-tooltip {
+  display: inline-flex;
 }
 
 .protein-list {

@@ -10,6 +10,7 @@ import Link from 'components/generic/Link';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
@@ -20,6 +21,29 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 
 const f = foundationPartial(style, ipro, fonts);
+
+const confidenceColors = [
+  {
+    category: 'Very High',
+    range: 'pLDDT > 90',
+    color: '#0053d6',
+  },
+  {
+    category: 'Confident',
+    range: '90 > pLDDT > 70',
+    color: '#65cbf3',
+  },
+  {
+    category: 'Low',
+    range: '70 > pLDDT > 50',
+    color: '#ffdb13',
+  },
+  {
+    category: 'Very Low',
+    range: 'pLDDT < 50',
+    color: '#ff7d45',
+  },
+];
 
 const _NewStructuralModel = ({ protein, data }) => {
   const elementId = 'new-structure-model-viewer';
@@ -48,11 +72,37 @@ const _NewStructuralModel = ({ protein, data }) => {
         from UniProtKB: {protein} from <i>{modelInfo.organismScientificName}</i>
         .
       </div>
-      {/* <div className={f('legend')}> */}
-      {/*  <picture> */}
-      {/*    <img alt="model quality" src={modelQuality} /> */}
-      {/*  </picture> */}
-      {/* </div> */}
+      <div className={f('legend')}>
+        Model confidence
+        <sup>
+          <Tooltip
+            title={
+              'XXX’s per-residue confidence corresponds to the model’s prediction of its score on the local Distance ' +
+              'Difference Test (LDDT-Cα). The viewer summarises this as confidence bands, but the exact pLDDT for each ' +
+              'residue can be found in the B factors of the downloadable coordinate files.'
+            }
+          >
+            <span
+              className={f('small', 'icon', 'icon-common')}
+              data-icon="&#xf129;"
+            />
+          </Tooltip>
+        </sup>
+        :
+        {confidenceColors.map((item) => (
+          <>
+            <Tooltip title={item.range}>
+              <div className={f('legend-tooltip')}>
+                <div
+                  className={f('score-box')}
+                  style={{ backgroundColor: item.color }}
+                />{' '}
+                {item.category}
+              </div>
+            </Tooltip>
+          </>
+        ))}
+      </div>
       <PictureInPicturePanel
         className={f('structure-viewer')}
         testid="structure-3d-viewer"
