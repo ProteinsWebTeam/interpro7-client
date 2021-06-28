@@ -26,7 +26,12 @@ const _NewStructuralModel = ({ protein, data }) => {
   if (data.loading) return <Loading />;
 
   if (!data.loading && Object.keys(data.payload).length === 0) {
-    return <p>There is no structural model associated with {protein}</p>;
+    return (
+      <div>
+        <h3>Predicted Model</h3>
+        <p>There is no structural model associated with {protein}</p>
+      </div>
+    );
   }
 
   const [modelInfo] = data.payload;
@@ -101,8 +106,8 @@ const _NewStructuralModel = ({ protein, data }) => {
       >
         <StructureViewer
           id={'fullSequence'}
-          url={`${modelInfo.cifUrl}`}
-          //url={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
+          // url={`${modelInfo.cifUrl}`}
+          url={`http://localhost/example/AF-${protein}-F1-model_v1.cif`}
           elementId={elementId}
           ext="mmcif"
           theme={'af'}
@@ -143,6 +148,10 @@ const NewStructuralModelSubPage = ({ accession, data }) => {
         setProteinAcc(data.payload.results[0].metadata.accession);
     } else setProteinAcc(accession);
   }, [accession, data]);
+
+  if (data?.loading) {
+    return <Loading />;
+  }
 
   return (
     <div className={f('row', 'column')} ref={container}>
