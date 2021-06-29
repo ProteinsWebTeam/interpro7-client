@@ -245,20 +245,14 @@ const mapStateToPropsForModel = (typeOfData /*: 'match'|'structure' */) =>
         const newDescription = {
           main: {
             key: 'protein',
-            numberOfFilters: 2,
+            numberOfFilters: 1,
           },
           protein: { db: 'UniProt' },
           entry: {
             isFilter: true,
             db: description.entry.db || 'interpro',
             accession: description.entry.accession,
-          },
-          taxonomy: {
-            // todo: remove
-            isFilter: true,
-            db: 'UniProt',
-            accession: '3702',
-          },
+          }
         };
 
         if (typeOfData === 'match') {
