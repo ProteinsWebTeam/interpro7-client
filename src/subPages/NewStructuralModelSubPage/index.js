@@ -205,8 +205,6 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
   const mainAccession = description[description.main.key].accession;
   const mainDB = description[description.main.key].db;
 
-  console.log(description);
-
   const [proteinAcc, setProteinAcc] = useState('');
   const container = useRef();
 
@@ -220,11 +218,11 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
 
   if (data?.loading) return <Loading />;
 
-  const hasMultipleProteins = mainDB.toLowerCase() === 'interpro' && data.payload.count > 1;
+  const hasMultipleProteins = mainDB.toLowerCase() === 'interpro' && data.payload.count > 0;
   return (
     <div className={f('row', 'column')} ref={container}>
       {proteinAcc && <NewStructuralModel protein={proteinAcc} hasMultipleProteins={hasMultipleProteins} />}
-      {hasMultipleProteins ? (
+      {mainDB.toLowerCase() === 'interpro' ? (
         <div>
           {/* The InterPro entry {mainAccession} has matched the following UniProt */}
           {/* proteins. */}
