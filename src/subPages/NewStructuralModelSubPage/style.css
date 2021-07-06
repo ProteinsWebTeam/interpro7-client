@@ -5,13 +5,13 @@
   margin: 0 1em 0 0;
 }
 
-.legend {
-  display: flex;
-  justify-content: flex-end;
-  & sup {
-    top: 0.5em;
-  }
-}
+/*.legend {*/
+/*  display: flex;*/
+/*  justify-content: flex-end;*/
+/*  & sup {*/
+/*    top: 0.5em;*/
+/*  }*/
+/*}*/
 
 .score-box {
   height: 0.5em;
@@ -28,4 +28,55 @@
 .protein-list {
   display: block;
   max-width: 15em;
+}
+
+.button, .button:focus, .button:hover {
+  font-weight: bold;
+  color: #2185d0;
+  border: 2px solid #2185d0;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 5px 10px;
+}
+
+h5 {
+  font-weight: normal;
+  margin: .5em 0;
+}
+
+ul.information, ul.legend {
+  margin: 0;
+  padding: 0;
+}
+
+ul.information > li, ul.legend > li {
+  list-style: none;
+}
+
+ul.legend > li {
+  display: flex;
+  align-items: center;
+}
+
+ul.legend > li > span {
+  height: 1em;
+  width: 1em;
+  margin-right: .5em;
+}
+
+ul.information > li > .header {
+  display: block;
+  font-weight: bold;
+}
+
+.callout.info {
+  color: #0D3C61;
+}
+
+.callout.info .icon:first-child {
+  margin-right: .5em;
+}
+
+select {
+  max-width: 100% !important;
 }
