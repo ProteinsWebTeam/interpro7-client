@@ -51,7 +51,7 @@ const confidenceColors = [
   },
 ];
 
-const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, data }) => {
+const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, modelId, data }) => {
   if (data?.loading) return <Loading />;
   if (!data.loading && Object.keys(data.payload).length === 0) {
     return (
@@ -63,7 +63,7 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, data }) => {
   }
 
   const models = data.payload;
-  const [modelInfo] = models.slice(0, 1);
+  const [modelInfo] = modelId === null ? models.slice(0, 1) : models.filter(x => x.entryId === modelId);
   const elementId = 'new-structure-model-viewer';
   return (
     <div>
@@ -95,14 +95,30 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, data }) => {
                 }}
                 className={f('acc-row')}
               >
-                {modelInfo.uniprotAccession}
+                {modelInfo.uniprotId}
               </Link>
             </li>
             <li>
               <span className={f('header')}>Organism</span>
               <i>{modelInfo.organismScientificName}</i>
             </li>
-
+            {models.length > 1 ? (
+              <li>
+                <span className={f('header')}>Prediction</span>
+                <select
+                  value={modelId}
+                  className={f('protein-list')}
+                  onChange={() => onModelChange(event.target.value)}
+                  onBlur={() => onModelChange(event.target.value)}
+                >
+                  {models.map((model) => (
+                    <option key={model.entryId}>
+                      {model.entryId}
+                    </option>
+                  ))}
+                </select>
+              </li>
+            ) : '' }
           </ul>
           <h5>Model confidence</h5>
           <ul className={f('legend')}>
@@ -182,12 +198,14 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, data }) => {
 _NewStructuralModel.propTypes = {
   proteinAcc: T.string,
   hasMultipleProteins: T.bool,
+  onModelChange: T.func,
+  modelId: T.string,
   data: T.object,
 };
 
 const getModelInfoUrl = createSelector(
   (state) => state.settings.modelAPI,
-  (_, props) => props.protein,
+  (_, props) => props.proteinAcc,
   ({ protocol, hostname, port, root, query }, accession) => {
     return format({
       protocol,
@@ -206,6 +224,15 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
   const mainDB = description[description.main.key].db;
 
   const [proteinAcc, setProteinAcc] = useState('');
+  const [modelId, setModelId] = useState(null);
+  const handleProteinChange = (value) => {
+    setProteinAcc(value);
+    setModelId(null);
+  };
+  const handleModelChange = (value) => {
+    setModelId(value);
+  };
+
   const container = useRef();
 
   useEffect(() => {
@@ -221,7 +248,7 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
   const hasMultipleProteins = mainDB.toLowerCase() === 'interpro' && data.payload.count > 0;
   return (
     <div className={f('row', 'column')} ref={container}>
-      {proteinAcc && <NewStructuralModel protein={proteinAcc} hasMultipleProteins={hasMultipleProteins} />}
+      {proteinAcc && <NewStructuralModel proteinAcc={proteinAcc} hasMultipleProteins={hasMultipleProteins} onModelChange={handleModelChange} modelId={modelId} />}
       {mainDB.toLowerCase() === 'interpro' ? (
         <div>
           {/* The InterPro entry {mainAccession} has matched the following UniProt */}
@@ -351,7 +378,7 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
                 return (
                   <button
                     className={f('button')}
-                    onClick={() => setProteinAcc(row.accession)}
+                    onClick={() => handleProteinChange(row.accession)}
                   >
                     Show structure
                   </button>);
