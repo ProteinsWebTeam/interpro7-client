@@ -204,7 +204,7 @@ const subPages = new Map([
     loadData(getInterProModifierURL('interactions'))(InteractionsSubPage),
   ],
   ['pathways', loadData(getInterProModifierURL('pathways'))(PathwaysSubPage)],
-  ['trrosetta_model', StructuralModel],
+  ['model', StructuralModel],
   ['new_model', NewStructuralModelSubPage],
   ['alignments', SetAlignments],
   ['entry_alignments', EntryAlignments],
