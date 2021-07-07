@@ -53,7 +53,7 @@ const confidenceColors = [
 
 const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, modelId, data }) => {
   if (data?.loading) return <Loading />;
-  if (!data.loading && Object.keys(data.payload).length === 0) {
+  if (!data.loading && Object.keys(data.payload).length !== 1) {
     return (
       <div>
         <h3>Structure prediction</h3>
@@ -63,7 +63,8 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, m
   }
 
   const models = data.payload;
-  const [modelInfo] = modelId === null ? models.slice(0, 1) : models.filter(x => x.entryId === modelId);
+  // const [modelInfo] = modelId === null ? models.slice(0, 1) : models.filter(x => x.entryId === modelId);
+  const [modelInfo] = models.slice(0, 1);
   const elementId = 'new-structure-model-viewer';
   return (
     <div>

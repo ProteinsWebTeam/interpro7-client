@@ -17,7 +17,7 @@ const NewModelMenuLink = (
     data: { loading, payload },
   } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Object}} */,
 ) => {
-  if (Array.isArray(payload)) {
+  if (Array.isArray(payload) && payload.length === 1) {
     const value = payload.length;
     const attrs = { name, value, loading, to, exact, usedOnTheSide };
     return <EntryMenuLinkWithoutData {...attrs} />;
