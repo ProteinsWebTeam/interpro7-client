@@ -96,7 +96,7 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, m
                 }}
                 className={f('acc-row')}
               >
-                {modelInfo.uniprotId}
+                {modelInfo.uniprotAccession}
               </Link>
             </li>
             <li>
