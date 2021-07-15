@@ -241,7 +241,6 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
 
   if (data?.loading) return <Loading />;
 
-  console.log(proteinAcc);
   const hasMultipleProteins = mainDB.toLowerCase() === 'interpro' && data.payload.count > 0;
   return (
     <div className={f('row', 'column')} ref={container}>
