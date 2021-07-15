@@ -19,6 +19,7 @@ const mapEndpointToName = new Map([
   ['ipScan', 'InterProScan API'],
   ['genome3d', 'Genome3D'],
   ['wikipedia', 'Wikipedia API'],
+  ['modelAPI', 'Model API'],
 ]);
 
 /*:: type StatusProps = {
