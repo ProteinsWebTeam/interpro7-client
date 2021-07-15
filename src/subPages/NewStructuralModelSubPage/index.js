@@ -15,7 +15,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Table, {
   Column,
   PageSizeSelector,
-  SearchBox,
+  // SearchBox,
 } from 'components/Table';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
@@ -263,7 +263,7 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
             isStale={isStale}
           >
             <PageSizeSelector />
-            <SearchBox loading={false}>Search proteins</SearchBox>
+            {/* <SearchBox loading={false}>Search proteins</SearchBox> */}
             <Column
               dataKey="accession"
               cellClassName={'nowrap'}
@@ -383,7 +383,7 @@ const getUrl = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description,
   (state) => state.customLocation.search,
-  ({ protocol, hostname, port, root }, description, search) => {
+  ({ protocol, hostname, port, root }, description) => {
     if (
       description.main.key === 'entry' &&
       description[description.main.key].db.toLowerCase() === 'interpro'
@@ -407,7 +407,7 @@ const getUrl = createSelector(
         port,
         pathname: root + descriptionToPath(_description),
         query: {
-          ...search,
+          // ...search,
           has_model: null,
         },
       });
