@@ -51,7 +51,55 @@ const confidenceColors = [
   },
 ];
 
-const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, modelId, data }) => {
+const getUrl = (includeSearch) =>
+  createSelector(
+    (state) => state.settings.api,
+    (state) => state.customLocation.description,
+    (state) => state.customLocation.search,
+    ({ protocol, hostname, port, root }, description, search) => {
+      if (
+        description.main.key === 'entry' &&
+        description[description.main.key].db.toLowerCase() === 'interpro'
+      ) {
+        const _description = {
+          main: {
+            key: 'protein',
+            numberOfFilters: 1,
+          },
+          protein: { db: description.protein.db || 'UniProt' },
+          entry: {
+            isFilter: true,
+            db: description.entry.db || 'interpro',
+            accession: description.entry.accession,
+          }
+        };
+        let query;
+        if (includeSearch)
+          query = { ...search, has_model: true };
+        else
+          query = { has_model: true };
+        return format({
+          protocol,
+          hostname,
+          port,
+          pathname: root + descriptionToPath(_description),
+          query: query,
+        });
+      }
+
+      return {
+        accession: description[description.main.key].accession,
+      };
+    }
+  );
+
+const mapStateToPropsForModels = createSelector(
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
+  (description, search) => ({ description, search }),
+);
+
+const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, modelId, data}) => {
   if (data?.loading) return <Loading />;
   if (!data.loading && Object.keys(data.payload).length !== 1) {
     return (
@@ -178,47 +226,175 @@ _NewStructuralModel.propTypes = {
   hasMultipleProteins: T.bool,
   onModelChange: T.func,
   modelId: T.string,
-  modelURL: T.string,
+  modelUrl: T.string,
   data: T.object,
 };
 
-const getModelInfoUrl = createSelector(
-  (state) => state.settings.modelAPI,
-  (_, props) => props.proteinAcc,
-  ({ protocol, hostname, port, root, query }, accession) => {
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}api/prediction/${accession}`,
-      query: query,
-    });
-  },
-);
-
-const mapStateToProps = createSelector(
-  (state) => state.settings.modelAPI,
-  (_, props) => props.proteinAcc,
-  ({ protocol, hostname, port, root }, accession) => {
-    return {
-      modelURL: format({
+const getModelInfoUrl = (isUrlToApi) =>
+  createSelector(
+    (state) => state.settings.modelAPI,
+    (_, props) => props.proteinAcc,
+    ({ protocol, hostname, port, root, query }, accession) => {
+      const modelUrl = format({
         protocol,
         hostname,
         port,
-        pathname: `${root}entry/${accession}`,
-      })};
-  },
-);
+        pathname: isUrlToApi ? `${root}api/prediction/${accession}` : `${root}entry/${accession}`,
+        query: query,
+      });
+      if (isUrlToApi) return modelUrl;
+      return { modelUrl };
+    },
+  );
 
 const NewStructuralModel = loadData({
-  getUrl: getModelInfoUrl,
-  mapStateToProps: mapStateToProps
+  getUrl: getModelInfoUrl(true),
+  mapStateToProps: getModelInfoUrl(false)
 })(_NewStructuralModel);
 
-const NewStructuralModelSubPage = ({ data, isStale, description }) => {
+const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
+  if (data?.loading) return <Loading />;
+
+  return (
+    <div>
+      <Table
+        dataTable={data.payload.results.map(e => e.metadata)}
+        contentType="protein"
+        loading={data.loading}
+        ok={data.ok}
+        status={data.status}
+        actualSize={data.payload.count}
+        query={search}
+        // notFound={notFound}
+        // databases={databases}
+        nextAPICall={data.payload.next}
+        previousAPICall={data.payload.previous}
+        currentAPICall={data.url}
+        isStale={isStale}
+      >
+        <PageSizeSelector />
+        {/* <SearchBox loading={false}>Search proteins</SearchBox> */}
+        <Column
+          dataKey="accession"
+          cellClassName={'nowrap'}
+          renderer={(accession, row) => (
+            <>
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'protein' },
+                    protein: {
+                      db: row.source_database,
+                      accession,
+                    },
+                  },
+                  search: {},
+                }}
+                className={f('acc-row')}
+              >
+                {accession}
+              </Link>
+              {row.source_database === 'reviewed' ? (
+                <>
+                  {'\u00A0' /* non-breakable space */}
+                  <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                        <span
+                          className={f('icon', 'icon-common')}
+                          data-icon="&#xf00c;"
+                          aria-label="reviewed"
+                        />
+                  </Tooltip>
+                </>
+              ) : null}
+            </>
+          )}
+        />
+        <Column
+          dataKey="name"
+          renderer={(name, row) => {
+            return (
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'protein' },
+                    protein: {
+                      db: row.source_database,
+                      accession: row.accession,
+                    },
+                  },
+                  search: {},
+                }}
+                className={f('acc-row')}
+              >
+                {name}
+              </Link>
+            );
+          }
+          }
+        >
+          Name
+        </Column>
+        <Column
+          dataKey="source_organism"
+          renderer={({ fullName, taxId }) => (
+            <Link
+              to={{
+                description: {
+                  main: { key: 'taxonomy' },
+                  taxonomy: {
+                    db: 'uniprot',
+                    accession: `${taxId}`,
+                  },
+                },
+              }}
+            >
+              {fullName}
+            </Link>
+          )}
+        >
+          Species
+        </Column>
+        <Column
+          dataKey="length"
+          headerClassName={f('text-right')}
+          cellClassName={f('text-right')}
+          renderer={(length) => length.toLocaleString()}
+        >
+          Length
+        </Column>
+        <Column
+          headerClassName={f('text-right')}
+          cellClassName={f('text-right')}
+          renderer={(_, row) => {
+            return (
+              <button
+                className={f('button')}
+                onClick={() => onProteinChange(row.accession)}
+              >
+                Show prediction
+              </button>);
+          }}
+        />
+      </Table>
+    </div>
+  );
+};
+_ProteinTable.propTypes = {
+  data: T.object,
+  isStale: T.bool,
+  search: T.object,
+  onProteinChange: T.func,
+};
+
+const ProteinTable = loadData({
+  getUrl: getUrl(true),
+  mapStateToProps: mapStateToPropsForModels
+})(_ProteinTable);
+
+const NewStructuralModelSubPage = ({ data, description }) => {
   const mainAccession = description[description.main.key].accession;
   const mainDB = description[description.main.key].db;
-
+  const container = useRef();
   const [proteinAcc, setProteinAcc] = useState('');
   const [modelId, setModelId] = useState(null);
   const handleProteinChange = (value) => {
@@ -229,8 +405,6 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
     setModelId(value);
   };
 
-  const container = useRef();
-
   useEffect(() => {
     if (mainDB.toLowerCase() === 'interpro') {
       // Take the list of matched UniProt matches and assign the first one to protein accession
@@ -240,191 +414,23 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
   }, [mainAccession, data]);
 
   if (data?.loading) return <Loading />;
-
   const hasMultipleProteins = mainDB.toLowerCase() === 'interpro' && data.payload.count > 0;
   return (
     <div className={f('row', 'column')} ref={container}>
       {proteinAcc && <NewStructuralModel proteinAcc={proteinAcc} hasMultipleProteins={hasMultipleProteins} onModelChange={handleModelChange} modelId={modelId} />}
       {mainDB.toLowerCase() === 'interpro' ? (
-        <div>
-          <Table
-            dataTable={data.payload.results.map(e => e.metadata)}
-            contentType="protein"
-            loading={data.loading}
-            ok={data.ok}
-            status={data.status}
-            actualSize={data.payload.count}
-            // query={search}
-            // notFound={notFound}
-            // databases={databases}
-            nextAPICall={data.payload.next}
-            previousAPICall={data.payload.previous}
-            currentAPICall={data.url}
-            isStale={isStale}
-          >
-            <PageSizeSelector />
-            {/* <SearchBox loading={false}>Search proteins</SearchBox> */}
-            <Column
-              dataKey="accession"
-              cellClassName={'nowrap'}
-              renderer={(accession, row) => (
-                <>
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'protein' },
-                        protein: {
-                          db: row.source_database,
-                          accession,
-                        },
-                      },
-                      search: {},
-                    }}
-                    className={f('acc-row')}
-                  >
-                    {accession}
-                  </Link>
-                  {row.source_database === 'reviewed' ? (
-                    <>
-                      {'\u00A0' /* non-breakable space */}
-                      <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-                        <span
-                          className={f('icon', 'icon-common')}
-                          data-icon="&#xf00c;"
-                          aria-label="reviewed"
-                        />
-                      </Tooltip>
-                    </>
-                  ) : null}
-                </>
-              )}
-            />
-            <Column
-              dataKey="name"
-              renderer={(name, row) => {
-                return (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'protein' },
-                        protein: {
-                          db: row.source_database,
-                          accession: row.accession,
-                        },
-                      },
-                      search: {},
-                    }}
-                    className={f('acc-row')}
-                  >
-                    {name}
-                  </Link>
-                );
-              }
-              }
-            >
-              Name
-            </Column>
-            <Column
-              dataKey="source_organism"
-              renderer={({ fullName, taxId }) => (
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'taxonomy' },
-                      taxonomy: {
-                        db: 'uniprot',
-                        accession: `${taxId}`,
-                      },
-                    },
-                  }}
-                >
-                  {fullName}
-                </Link>
-              )}
-            >
-              Species
-            </Column>
-            <Column
-              dataKey="length"
-              headerClassName={f('text-right')}
-              cellClassName={f('text-right')}
-              renderer={(length) => length.toLocaleString()}
-            >
-              Length
-            </Column>
-            <Column
-              headerClassName={f('text-right')}
-              cellClassName={f('text-right')}
-              renderer={(_, row) => {
-                return (
-                  <button
-                    className={f('button')}
-                    onClick={() => handleProteinChange(row.accession)}
-                  >
-                    Show prediction
-                  </button>);
-              }}
-            />
-          </Table>
-        </div>
+        <ProteinTable onProteinChange={handleProteinChange} />
       ) : null}
     </div>
   );
 };
-
 NewStructuralModelSubPage.propTypes = {
-  accession: T.string,
   data: T.object,
   isStale: T.bool,
   description: T.object,
 };
 
-const getUrl = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.description,
-  (state) => state.customLocation.search,
-  ({ protocol, hostname, port, root }, description) => {
-    if (
-      description.main.key === 'entry' &&
-      description[description.main.key].db.toLowerCase() === 'interpro'
-    ) {
-      const _description = {
-        main: {
-          key: 'protein',
-          numberOfFilters: 1,
-        },
-        protein: { db: description.protein.db || 'UniProt' },
-        entry: {
-          isFilter: true,
-          db: description.entry.db || 'interpro',
-          accession: description.entry.accession,
-        }
-      };
-
-      return format({
-        protocol,
-        hostname,
-        port,
-        pathname: root + descriptionToPath(_description),
-        query: {
-          // ...search,
-          has_model: null,
-        },
-      });
-    }
-
-    return {
-      accession: description[description.main.key].accession,
-    };
-  }
-);
-
-const subPageMapStateToProps = createSelector(
-  (state) => state.customLocation.description,
-  (description) => ({ description }),
-);
-
 export default loadData({
-  getUrl,
-  mapStateToProps: subPageMapStateToProps,
+  getUrl: getUrl(false),
+  mapStateToProps: mapStateToPropsForModels,
 })(NewStructuralModelSubPage);
