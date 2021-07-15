@@ -404,7 +404,7 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
                     className={f('button')}
                     onClick={() => handleProteinChange(row.accession)}
                   >
-                    Show structure
+                    Show prediction
                   </button>);
               }}
             />
