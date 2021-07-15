@@ -15,7 +15,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Table, {
   Column,
   PageSizeSelector,
-  // SearchBox,
+  SearchBox,
 } from 'components/Table';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
@@ -258,22 +258,20 @@ const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
   return (
     <div>
       <Table
-        dataTable={data.payload.results.map(e => e.metadata)}
+        dataTable={data.payload?.results.map(e => e.metadata)}
         contentType="protein"
         loading={data.loading}
         ok={data.ok}
         status={data.status}
-        actualSize={data.payload.count}
+        actualSize={data.payload?.count}
         query={search}
-        // notFound={notFound}
-        // databases={databases}
-        nextAPICall={data.payload.next}
-        previousAPICall={data.payload.previous}
+        nextAPICall={data.payload?.next}
+        previousAPICall={data.payload?.previous}
         currentAPICall={data.url}
         isStale={isStale}
       >
         <PageSizeSelector />
-        {/* <SearchBox loading={false}>Search proteins</SearchBox> */}
+        <SearchBox loading={data.loading}>Search proteins</SearchBox>
         <Column
           dataKey="accession"
           cellClassName={'nowrap'}
