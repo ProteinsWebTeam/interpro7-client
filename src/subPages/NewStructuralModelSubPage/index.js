@@ -7,6 +7,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
+import { UniProtLink } from 'components/ExtLink';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -84,20 +85,13 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, m
           <ul className={f('information')}>
             <li>
               <span className={f('header')}>Protein</span>
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'protein' },
-                    protein: {
-                      db: 'UniProt',
-                      accession: modelInfo.uniprotAccession,
-                    },
-                  }
-                }}
-                className={f('acc-row')}
-              >
-                {modelInfo.uniprotAccession}
-              </Link>
+              {modelInfo.uniprotAccession}
+              <span className={f('footer')}>
+                View on{' '}
+                <UniProtLink id={modelInfo.uniprotAccession} className={f('ext')}>
+                    UniProtKB
+                </UniProtLink>
+              </span>
             </li>
             <li>
               <span className={f('header')}>Organism</span>
