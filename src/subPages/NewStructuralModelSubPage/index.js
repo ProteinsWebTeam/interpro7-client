@@ -400,6 +400,7 @@ const NewStructuralModelSubPage = ({ data, description }) => {
   const handleProteinChange = (value) => {
     setProteinAcc(value);
     setModelId(null);
+    container.current.scrollIntoView();
   };
   const handleModelChange = (value) => {
     setModelId(value);
