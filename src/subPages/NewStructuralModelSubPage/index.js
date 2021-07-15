@@ -159,6 +159,17 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, m
               <>
                 <Link
                   className={f('control')}
+                  href={modelInfo.pdbUrl}
+                  download={`${proteinAcc || 'download'}.model.pdb`}
+                >
+                  <span
+                    className={f('icon', 'icon-common', 'icon-download')}
+                    data-icon="&#xf019;"
+                  />
+                  &nbsp;PDB file
+                </Link>
+                <Link
+                  className={f('control')}
                   href={modelInfo.cifUrl}
                   download={`${proteinAcc || 'download'}.model.cif`}
                 >
@@ -166,7 +177,7 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, m
                     className={f('icon', 'icon-common', 'icon-download')}
                     data-icon="&#xf019;"
                   />
-                  &nbsp;Download
+                  &nbsp;mmCIF file
                 </Link>
                 <FullScreenButton
                   className={f('icon', 'icon-common', 'control')}
