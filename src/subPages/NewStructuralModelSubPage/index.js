@@ -16,7 +16,6 @@ import Table, {
   Column,
   PageSizeSelector,
   SearchBox,
-  HighlightToggler,
 } from 'components/Table';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
@@ -128,33 +127,6 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, m
           <PictureInPicturePanel
             className={f('structure-viewer')}
             testid="structure-3d-viewer"
-            // OtherControls={{
-            //   bottom: (
-            //     <section className={f('lddt')}>
-            //       <header>
-            //         lDDT{' '}
-            //         <Tooltip title="Quality score lDDT: Local Distance Difference Test">
-            //           <sup>
-            //             <span
-            //               className={f('small', 'icon', 'icon-common')}
-            //               data-icon="&#xf129;"
-            //               aria-label={'Citation to trRosetta paper'}
-            //             />
-            //           </sup>
-            //         </Tooltip>
-            //         :{' '}
-            //       </header>
-            //       <code>
-            //         {(
-            //           data.payload.reduce((acc, cur) => acc + cur, 0) /
-            //           data.payload.length
-            //         )
-            //           // eslint-disable-next-line no-magic-numbers
-            //           .toFixed(6)}
-            //       </code>
-            //     </section>
-            //   ),
-            // }}
             OtherButtons={
               <>
                 <Link
@@ -269,26 +241,13 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
 
   if (data?.loading) return <Loading />;
 
+  console.log(proteinAcc);
   const hasMultipleProteins = mainDB.toLowerCase() === 'interpro' && data.payload.count > 0;
   return (
     <div className={f('row', 'column')} ref={container}>
       {proteinAcc && <NewStructuralModel proteinAcc={proteinAcc} hasMultipleProteins={hasMultipleProteins} onModelChange={handleModelChange} modelId={modelId} />}
       {mainDB.toLowerCase() === 'interpro' ? (
         <div>
-          {/* The InterPro entry {mainAccession} has matched the following UniProt */}
-          {/* proteins. */}
-          {/* <select */}
-          {/*  value={proteinAcc}*/}
-          {/*  className={f('protein-list')}*/}
-          {/*  onChange={() => setProteinAcc(event.target.value)}*/}
-          {/*  onBlur={() => setProteinAcc(event.target.value)}*/}
-          {/* > */}
-          {/*  {data.payload.results.map((protein) => (*/}
-          {/*    <option key={protein.metadata.accession}>*/}
-          {/*      {protein.metadata.accession}*/}
-          {/*    </option>*/}
-          {/*  ))}*/}
-          {/* </select> */}
           <Table
             dataTable={data.payload.results.map(e => e.metadata)}
             contentType="protein"
@@ -306,7 +265,6 @@ const NewStructuralModelSubPage = ({ data, isStale, description }) => {
           >
             <PageSizeSelector />
             <SearchBox loading={false}>Search proteins</SearchBox>
-            <HighlightToggler />
             <Column
               dataKey="accession"
               cellClassName={'nowrap'}
