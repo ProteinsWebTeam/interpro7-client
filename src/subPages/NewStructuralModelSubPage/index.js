@@ -195,6 +195,7 @@ _NewStructuralModel.propTypes = {
   hasMultipleProteins: T.bool,
   onModelChange: T.func,
   modelId: T.string,
+  modelURL: T.string,
   data: T.object,
 };
 
@@ -212,7 +213,24 @@ const getModelInfoUrl = createSelector(
   },
 );
 
-const NewStructuralModel = loadData(getModelInfoUrl)(_NewStructuralModel);
+const mapStateToProps = createSelector(
+  (state) => state.settings.modelAPI,
+  (_, props) => props.proteinAcc,
+  ({ protocol, hostname, port, root }, accession) => {
+    return {
+      modelURL: format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}entry/${accession}`,
+      })};
+  },
+);
+
+const NewStructuralModel = loadData({
+  getUrl: getModelInfoUrl,
+  mapStateToProps: mapStateToProps
+})(_NewStructuralModel);
 
 const NewStructuralModelSubPage = ({ data, isStale, description }) => {
   const mainAccession = description[description.main.key].accession;
@@ -433,12 +451,12 @@ const getUrl = createSelector(
   }
 );
 
-const mapStateToProps = createSelector(
+const subPageMapStateToProps = createSelector(
   (state) => state.customLocation.description,
   (description) => ({ description }),
 );
 
 export default loadData({
   getUrl,
-  mapStateToProps,
+  mapStateToProps: subPageMapStateToProps,
 })(NewStructuralModelSubPage);
