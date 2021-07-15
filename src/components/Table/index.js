@@ -116,6 +116,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     previousAPICall: T.string,
     title: T.string,
     notFound: T.bool,
+    noScroll: T.bool,
     contentType: T.string,
     children: T.any,
     withTree: T.bool,
@@ -125,6 +126,16 @@ export default class Table extends PureComponent /*:: <Props> */ {
     shouldGroup: T.bool,
     onFocusChanged: T.func,
   };
+
+  constructor(props) {
+    super(props);
+    this.ref = React.createRef();
+    this.scrollTop = this.scrollTop.bind(this);
+  }
+
+  scrollTop() {
+    if (!this.props.noScroll) window.scrollTo(0, 0);
+  }
 
   render() {
     const {
@@ -181,7 +192,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       groups = Array.from(new Set(data.map(({ group }) => group)));
     }
     return (
-      <div className={f('row')}>
+      <div className={f('row')} ref={this.ref}>
         <div className={f('columns', 'result-page')}>
           <div className={f('row')}>
             <div className={f('columns')}>
@@ -293,6 +304,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                 indexRoute={_Footer}
                 childRoutes={footerChildRoutes}
                 catchAll={_Footer}
+                onPageChange={this.scrollTop}
                 // passed down props
                 withPageSizeSelector={withPageSizeSelector}
                 actualSize={actualSize}

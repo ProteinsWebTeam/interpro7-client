@@ -22,9 +22,6 @@ const toFunctionFor = (value, key = 'page') => customLocation => ({
   search: { ...customLocation.search, [key]: value },
 });
 
-const scrollToTop = () => {
-  window.scrollTo(0, 0);
-};
 /*:: type Props = {
   className?: string,
   value?: number | string,
@@ -38,6 +35,7 @@ class PaginationItem extends PureComponent /*:: <Props> */ {
     attributeName: T.string,
     value: T.oneOfType([T.number, T.string]),
     noLink: T.bool,
+    onPageChange: T.func,
     children: T.oneOfType([T.number, T.string]),
   };
 
@@ -47,6 +45,7 @@ class PaginationItem extends PureComponent /*:: <Props> */ {
       attributeName = 'page',
       value,
       noLink,
+      onPageChange,
       children,
     } = this.props;
     const LinkOrSpan = !value || noLink ? 'span' : Link;
@@ -60,7 +59,7 @@ class PaginationItem extends PureComponent /*:: <Props> */ {
     }
     return (
       <li className={className}>
-        <LinkOrSpan {...props} onClick={() => !noLink && scrollToTop()}>
+        <LinkOrSpan {...props} onClick={() => !noLink && onPageChange && onPageChange()}>
           {children || value}
         </LinkOrSpan>
       </li>
@@ -70,17 +69,23 @@ class PaginationItem extends PureComponent /*:: <Props> */ {
 /*:: type PreviousTextProps = {
   previous: number,
   current: number,
+  onPageChange: func,
 }; */
 class PreviousText extends PureComponent /*:: <PreviousTextProps> */ {
   static propTypes = {
     previous: T.number.isRequired,
     current: T.number.isRequired,
+    onPageChange: T.func,
   };
 
   render() {
-    const { previous, current } = this.props;
+    const { previous, current, onPageChange } = this.props;
     return (
-      <PaginationItem value={previous} noLink={previous === current}>
+      <PaginationItem
+        value={previous}
+        noLink={previous === current}
+        onPageChange={onPageChange}
+      >
         Previous
       </PaginationItem>
     );
@@ -89,17 +94,19 @@ class PreviousText extends PureComponent /*:: <PreviousTextProps> */ {
 /*:: type FirstProps = {
   first: number,
   current: number,
+  onPageChange: func,
 }; */
 class First extends PureComponent /*:: <FirstProps> */ {
   static propTypes = {
     first: T.number.isRequired,
     current: T.number.isRequired,
+    onPageChange: T.func,
   };
 
   render() {
-    const { first, current } = this.props;
+    const { first, current, onPageChange } = this.props;
     if (first === current) return null;
-    return <PaginationItem value={first} />;
+    return <PaginationItem value={first} onPageChange={onPageChange} />;
   }
 }
 /*:: type PreviousDotDotProps = {
@@ -121,18 +128,20 @@ class PreviousDotDotDot extends PureComponent /*:: <PreviousDotDotProps> */ {
   first: number,
   previous: number,
   current: number,
+  onPageChange: func,
 }; */
 class Previous extends PureComponent /*:: <PreviousProps> */ {
   static propTypes = {
     first: T.number.isRequired,
     previous: T.number.isRequired,
     current: T.number.isRequired,
+    onPageChange: T.func,
   };
 
   render() {
-    const { first, previous, current } = this.props;
+    const { first, previous, current, onPageChange } = this.props;
     if (previous === current || previous === first) return null;
-    return <PaginationItem value={previous} />;
+    return <PaginationItem value={previous} onPageChange={onPageChange} />;
   }
 }
 
@@ -154,19 +163,21 @@ class Current extends PureComponent /*:: <{current: number}> */ {
 /*:: type NextProps = {
   current: number,
   next: number,
-  last: number
+  last: number,
+  onPageChange: func,
 }; */
 class Next extends PureComponent /*:: <NextProps> */ {
   static propTypes = {
     current: T.number.isRequired,
     next: T.number.isRequired,
     last: T.number.isRequired,
+    onPageChange: T.func,
   };
 
   render() {
-    const { current, next, last } = this.props;
+    const { current, next, last, onPageChange } = this.props;
     if (next === current || last <= current) return null;
-    return <PaginationItem value={next} />;
+    return <PaginationItem value={next} onPageChange={onPageChange} />;
   }
 }
 /*:: type NextDotDotDotProps = {
@@ -187,24 +198,30 @@ class NextDotDotDot extends PureComponent /*:: <NextDotDotDotProps> */ {
 /*:: type NextTextProps = {
   current: number,
   next: number,
+  onPageChange: func,
 }; */
 class NextText extends PureComponent /*:: <NextTextProps> */ {
   static propTypes = {
     current: T.number.isRequired,
     next: T.number.isRequired,
+    onPageChange: T.func,
   };
 
   render() {
-    const { current, next } = this.props;
+    const { current, next, onPageChange } = this.props;
     return (
-      <PaginationItem value={next} noLink={current === next}>
+      <PaginationItem
+        value={next}
+        noLink={current === next}
+        onPageChange={onPageChange}
+      >
         Next
       </PaginationItem>
     );
   }
 }
 
-const NumberedPaginationLinks = ({ pagination, actualSize }) => {
+const NumberedPaginationLinks = ({ pagination, actualSize, onPageChange }) => {
   const first = 1;
   const current = parseInt(pagination.page || first, 10);
   const pageSize = parseInt(
@@ -217,41 +234,49 @@ const NumberedPaginationLinks = ({ pagination, actualSize }) => {
 
   return (
     <>
-      <PreviousText previous={previous} current={current} />
-      <First first={first} current={current} />
-      <PreviousDotDotDot first={first} previous={previous} />
-      <Previous first={first} previous={previous} current={current} />
-      <Current current={current} />
-      <Next current={current} next={next} last={last} />
-      <NextDotDotDot next={next} last={last} />
-      <NextText current={current} next={next} />
+      <PreviousText previous={previous} current={current} onPageChange={onPageChange} />
+      <First first={first} current={current} onPageChange={onPageChange} />
+      <PreviousDotDotDot first={first} previous={previous} onPageChange={onPageChange} />
+      <Previous first={first} previous={previous} current={current} onPageChange={onPageChange} />
+      <Current current={current} onPageChange={onPageChange} />
+      <Next current={current} next={next} last={last} onPageChange={onPageChange} />
+      <NextDotDotDot next={next} last={last} onPageChange={onPageChange} />
+      <NextText current={current} next={next} onPageChange={onPageChange} />
     </>
   );
 };
 NumberedPaginationLinks.propTypes = {
   actualSize: T.number,
   pagination: T.object.isRequired,
+  onPageChange: T.func,
 };
 
-const CursorPaginationItem = ({ cursor, label }) => (
-  <PaginationItem value={cursor || '_'} noLink={!cursor} attributeName="cursor">
+const CursorPaginationItem = ({ cursor, label, onPageChange }) => (
+  <PaginationItem
+    value={cursor || '_'}
+    noLink={!cursor}
+    attributeName="cursor"
+    onPageChange={onPageChange}
+  >
     {label}
   </PaginationItem>
 );
 CursorPaginationItem.propTypes = {
   cursor: T.string,
   label: T.string,
+  onPageChange: T.func,
 };
 
-const CursorPaginationLinks = ({ next, previous }) => (
+const CursorPaginationLinks = ({ next, previous, onPageChange }) => (
   <>
-    <CursorPaginationItem cursor={previous} label="Previous" />
-    <CursorPaginationItem cursor={next} label="Next" />
+    <CursorPaginationItem cursor={previous} label="Previous" onPageChange={onPageChange} />
+    <CursorPaginationItem cursor={next} label="Next" onPageChange={onPageChange} />
   </>
 );
 CursorPaginationLinks.propTypes = {
   next: T.string,
   previous: T.string,
+  onPageChange: T.func,
 };
 
 const Footer = (
@@ -262,7 +287,8 @@ const Footer = (
     notFound,
     nextAPICall,
     previousAPICall,
-  } /*: {withPageSizeSelector: boolean, actualSize: number, pagination: Object, notFound: boolean, nextAPICall: string, previousAPICall: string } */,
+    onPageChange,
+  } /*: {withPageSizeSelector: boolean, actualSize: number, pagination: Object, notFound: boolean, nextAPICall: string, previousAPICall: string, onPageChange: func } */,
 ) => {
   if (notFound) return null;
 
@@ -286,11 +312,13 @@ const Footer = (
               <CursorPaginationLinks
                 next={nextCursor}
                 previous={previousCursor}
+                onPageChange={onPageChange}
               />
             ) : (
               <NumberedPaginationLinks
                 pagination={pagination}
                 actualSize={actualSize}
+                onPageChange={onPageChange}
               />
             )}
           </ul>
@@ -306,6 +334,7 @@ Footer.propTypes = {
   notFound: T.bool,
   nextAPICall: T.string,
   previousAPICall: T.string,
+  onPageChange: T.func,
 };
 
 export default Footer;
