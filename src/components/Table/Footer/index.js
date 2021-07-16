@@ -28,6 +28,7 @@ const toFunctionFor = (value, key = 'page') => customLocation => ({
   noLink?: boolean,
   children?: number| string,
   attributeName?: string,
+  onPageChange?: () => void
 }; */
 class PaginationItem extends PureComponent /*:: <Props> */ {
   static propTypes = {
@@ -69,7 +70,7 @@ class PaginationItem extends PureComponent /*:: <Props> */ {
 /*:: type PreviousTextProps = {
   previous: number,
   current: number,
-  onPageChange: func,
+  onPageChange?: () => void,
 }; */
 class PreviousText extends PureComponent /*:: <PreviousTextProps> */ {
   static propTypes = {
@@ -94,7 +95,7 @@ class PreviousText extends PureComponent /*:: <PreviousTextProps> */ {
 /*:: type FirstProps = {
   first: number,
   current: number,
-  onPageChange: func,
+  onPageChange?: () => void,
 }; */
 class First extends PureComponent /*:: <FirstProps> */ {
   static propTypes = {
@@ -128,7 +129,7 @@ class PreviousDotDotDot extends PureComponent /*:: <PreviousDotDotProps> */ {
   first: number,
   previous: number,
   current: number,
-  onPageChange: func,
+  onPageChange?: () => void,
 }; */
 class Previous extends PureComponent /*:: <PreviousProps> */ {
   static propTypes = {
@@ -164,7 +165,7 @@ class Current extends PureComponent /*:: <{current: number}> */ {
   current: number,
   next: number,
   last: number,
-  onPageChange: func,
+  onPageChange?: () => void,
 }; */
 class Next extends PureComponent /*:: <NextProps> */ {
   static propTypes = {
@@ -198,7 +199,7 @@ class NextDotDotDot extends PureComponent /*:: <NextDotDotDotProps> */ {
 /*:: type NextTextProps = {
   current: number,
   next: number,
-  onPageChange: func,
+  onPageChange?: () => void,
 }; */
 class NextText extends PureComponent /*:: <NextTextProps> */ {
   static propTypes = {
@@ -288,7 +289,7 @@ const Footer = (
     nextAPICall,
     previousAPICall,
     onPageChange,
-  } /*: {withPageSizeSelector: boolean, actualSize: number, pagination: Object, notFound: boolean, nextAPICall: string, previousAPICall: string, onPageChange: func } */,
+  } /*: {withPageSizeSelector: boolean, actualSize: number, pagination: Object, notFound: boolean, nextAPICall: string, previousAPICall: string, onPageChange: () => void } */,
 ) => {
   if (notFound) return null;
 

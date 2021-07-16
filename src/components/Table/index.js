@@ -44,6 +44,7 @@ ExtraOptions.propTypes = { children: T.any };
   query?: Object,
   title?: string,
   notFound?: ?boolean,
+  noScroll?: boolean,
   contentType?: string,
   children?: any,
   withTree?: boolean,
@@ -125,7 +126,15 @@ export default class Table extends PureComponent /*:: <Props> */ {
     showTableIcon: T.bool,
     shouldGroup: T.bool,
     onFocusChanged: T.func,
+    ref: T.oneOfType([
+      T.func,
+      T.shape({ current: T.elementType})
+    ])
   };
+
+  // eslint-disable-next-line react/sort-comp
+  ref: { current: null | HTMLDivElement };
+  scrollTop: () => void;
 
   constructor(props) {
     super(props);
