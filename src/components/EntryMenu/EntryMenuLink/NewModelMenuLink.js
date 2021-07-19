@@ -15,7 +15,7 @@ const NewModelMenuLink = (
     name,
     usedOnTheSide,
     data: { loading, payload },
-  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Array}} */,
+  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Array<Object>}} */,
 ) => {
   if (Array.isArray(payload) && payload.length === 1) {
     const value = payload.length;
