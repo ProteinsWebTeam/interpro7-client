@@ -15,7 +15,7 @@ const NewModelMenuLink = (
     name,
     usedOnTheSide,
     data: { loading, payload },
-  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Object}} */,
+  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Array}} */,
 ) => {
   if (Array.isArray(payload) && payload.length === 1) {
     const value = payload.length;
@@ -31,7 +31,7 @@ NewModelMenuLink.propTypes = {
   usedOnTheSide: T.bool,
   data: T.shape({
     loading: T.bool,
-    payload: T.object,
+    payload: T.array,
   }),
 };
 const getNewModelURL = createSelector(
