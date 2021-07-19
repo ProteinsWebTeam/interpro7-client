@@ -72,6 +72,14 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         port: config.root.wikipedia.port || DEFAULT_HTTP_PORT,
         root: config.root.wikipedia.pathname,
       };
+    case 'modelAPI':
+      return {
+        protocol: config.root.modelAPI.protocol,
+        hostname: config.root.modelAPI.hostname,
+        port: config.root.modelAPI.port || DEFAULT_HTTP_PORT,
+        root: config.root.modelAPI.pathname,
+        query: config.root.modelAPI.query
+      };
     default:
       return null;
   }

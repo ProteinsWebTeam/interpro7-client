@@ -26,12 +26,12 @@ const checkStatusesAndDispatch = async function (
     const endpointSettings = settings[endpoint];
     let url = format({
       ...endpointSettings,
-      pathname: endpointSettings.root,
+      pathname: endpointSettings.root + (endpoint === 'modelAPI' ? 'api/prediction/Q5VSL9' : ''),
     });
     url = endpoint === 'wikipedia' ? `${url}?origin=*` : url;
     try {
       const response = await customFetch(url, {
-        method: endpoint === 'wikipedia' ? 'GET' : 'HEAD',
+        method: ['modelAPI', 'wikipedia'].includes(endpoint) ? 'GET' : 'HEAD',
         useCache: false,
       });
       dispatch(serverStatus(endpoint, response.ok));

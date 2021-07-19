@@ -10,6 +10,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import AlignmentViewer from '../EntryAlignments/Viewer';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
+import Loading from 'components/SimpleCommonComponents/Loading';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import { PrintedPublication } from 'components/Help/Publication';
 
@@ -121,7 +122,8 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
   };
 
   if (!data || data.loading || !data.payload || !dataContacts?.payload)
-    return null;
+    return <Loading />;
+
   const elementId = 'structure-model-viewer';
 
   const handleProbabilityChange = (evt) => {
@@ -216,6 +218,7 @@ const StructuralModel = ({ data, dataContacts, urlForModel, accession }) => {
           elementId={elementId}
           ext="pdb"
           selections={selections}
+          theme={'residue'}
         />
       </PictureInPicturePanel>
 

@@ -426,8 +426,28 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
           },
         };
       },
-      name: 'Structural Model',
-      counter: 'structural_models',
+      name: 'trRosetta',
+      counter: 'structural_models.trRosetta',
+    },
+  ],
+  [
+    'new_model',
+    {
+      to(customLocation) {
+        const { key } = customLocation.description.main;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'new_model',
+            },
+          },
+        };
+      },
+      name: 'Full Length models',
+      counter: 'structural_models.full_length',
     },
   ],
   [
