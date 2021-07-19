@@ -8,7 +8,6 @@ import customFetch from 'utils/cached-fetch';
 import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 import { serverStatus, browserStatus } from 'actions/creators';
 
-const HTTP_NOT_FOUND = 404;
 const DEFAULT_SCHEDULE_DELAY = 2000; // 2 seconds
 const DEFAULT_LOOP_TIMEOUT = 60000; // one minute
 const MAX_LOOP_TIMEOUT = 360000; // 10 minutes
@@ -27,15 +26,15 @@ const checkStatusesAndDispatch = async function (
     const endpointSettings = settings[endpoint];
     let url = format({
       ...endpointSettings,
-      pathname: endpointSettings.root + (endpoint === 'modelAPI' ? 'api/hello/' : ''),
+      pathname: endpointSettings.root + (endpoint === 'modelAPI' ? 'api/prediction/Q5VSL9' : ''),
     });
     url = endpoint === 'wikipedia' ? `${url}?origin=*` : url;
     try {
       const response = await customFetch(url, {
-        method: endpoint === 'wikipedia' ? 'GET' : 'HEAD',
+        method: ['modelAPI', 'wikipedia'].includes(endpoint) ? 'GET' : 'HEAD',
         useCache: false,
       });
-      dispatch(serverStatus(endpoint, endpoint === 'modelAPI' ? response.status === HTTP_NOT_FOUND : response.ok));
+      dispatch(serverStatus(endpoint, response.ok));
     } catch {
       dispatch(serverStatus(endpoint, false));
       // Something bad happened, reduce the loop timeout
