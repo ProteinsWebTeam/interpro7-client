@@ -566,7 +566,7 @@ const Genome3DEndpointSettings = connect(getStatusForEndpoint('genome3d'))(
 const WikipediaEndpointSettings = connect(getStatusForEndpoint('wikipedia'))(
   EndpointSettings,
 );
-const ModelAPIEndpointSettings = connect(getStatusForEndpoint('modelAPI'))(
+const AlphaFoldEndpointSettings = connect(getStatusForEndpoint('alphafold'))(
   EndpointSettings,
 );
 
@@ -675,7 +675,7 @@ const AddToHomeScreen = connect(undefined, { addToast })(_AddToHomeScreen);
     ipScan: Object,
     genome3d: Object,
     wikipedia: Object,
-    modelAPI: Object,
+    alphafold: Object,
   },
   changeSettings: function,
   resetSettings: function
@@ -693,7 +693,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
       ipScan: T.object.isRequired,
       genome3d: T.object.isRequired,
       wikipedia: T.object.isRequired,
-      modelAPI: T.object.isRequired,
+      alphafold: T.object.isRequired,
     }).isRequired,
     changeSettings: T.func.isRequired,
     resetSettings: T.func.isRequired,
@@ -713,7 +713,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
         ipScan = {},
         genome3d = {},
         wikipedia = {},
-        modelAPI = {},
+        alphafold = {},
       },
       changeSettings,
     } = this.props;
@@ -772,13 +772,13 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
                 Wikipedia Settings{' '}
                 {!DEV && '(modification temporarily disabled)'}
               </WikipediaEndpointSettings>
-              <ModelAPIEndpointSettings
-                category="modelAPI"
-                endpointDetails={modelAPI}
+              <AlphaFoldEndpointSettings
+                category="alphafold"
+                endpointDetails={alphafold}
               >
                 AlphaFold API Settings{' '}
                 {!DEV && '(modification temporarily disabled)'}
-              </ModelAPIEndpointSettings>
+              </AlphaFoldEndpointSettings>
 
               <button onClick={this._handleReset} className={f('button')}>
                 Reset settings to default values

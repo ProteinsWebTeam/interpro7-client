@@ -72,13 +72,13 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         port: config.root.wikipedia.port || DEFAULT_HTTP_PORT,
         root: config.root.wikipedia.pathname,
       };
-    case 'modelAPI':
+    case 'alphafold':
       return {
-        protocol: config.root.modelAPI.protocol,
-        hostname: config.root.modelAPI.hostname,
-        port: config.root.modelAPI.port || DEFAULT_HTTP_PORT,
-        root: config.root.modelAPI.pathname,
-        query: config.root.modelAPI.query
+        protocol: config.root.alphafold.protocol,
+        hostname: config.root.alphafold.hostname,
+        port: config.root.alphafold.port || DEFAULT_HTTP_PORT,
+        root: config.root.alphafold.pathname,
+        query: config.root.alphafold.query
       };
     default:
       return null;

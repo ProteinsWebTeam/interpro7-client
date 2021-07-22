@@ -35,7 +35,7 @@ AlphaFoldMenuLink.propTypes = {
   }),
 };
 const getAlphaFoldURL = createSelector(
-  state => state.settings.modelAPI,
+  state => state.settings.alphafold,
   state => state.customLocation.description.protein.accession,
   ({ protocol, hostname, port, root, query }, accession) => {
     return format({

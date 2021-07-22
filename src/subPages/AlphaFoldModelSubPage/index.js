@@ -241,7 +241,7 @@ _AlphaFoldModel.propTypes = {
 
 const getModelInfoUrl = (isUrlToApi) =>
   createSelector(
-    (state) => state.settings.modelAPI,
+    (state) => state.settings.alphafold,
     (_, props) => props.proteinAcc,
     ({ protocol, hostname, port, root, query }, accession) => {
       const modelUrl = format({
