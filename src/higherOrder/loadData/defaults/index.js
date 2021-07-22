@@ -197,7 +197,7 @@ export const getUrlForApi = (...parameters) =>
     .replace('/alignments', '/')
     .replace('/entry_alignments', '/')
     .replace('/logo', '/')
-    .replace('/model', '/')
+    .replace('/trrosetta', '/')
     .replace('/alphafold', '/')
     .replace('/domain_architecture', '/')
     .replace('/interactions', '/')
