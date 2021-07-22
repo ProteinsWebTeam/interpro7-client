@@ -8,7 +8,7 @@ import { format } from 'url';
 
 import { EntryMenuLinkWithoutData } from '.';
 
-const NewModelMenuLink = (
+const AlphaFoldMenuLink = (
   {
     to,
     exact,
@@ -24,7 +24,7 @@ const NewModelMenuLink = (
   }
   return null;
 };
-NewModelMenuLink.propTypes = {
+AlphaFoldMenuLink.propTypes = {
   to: T.oneOfType([T.object, T.func]).isRequired,
   exact: T.bool,
   name: T.string.isRequired,
@@ -34,7 +34,7 @@ NewModelMenuLink.propTypes = {
     payload: T.array,
   }),
 };
-const getNewModelURL = createSelector(
+const getAlphaFoldURL = createSelector(
   state => state.settings.modelAPI,
   state => state.customLocation.description.protein.accession,
   ({ protocol, hostname, port, root, query }, accession) => {
@@ -47,4 +47,4 @@ const getNewModelURL = createSelector(
     });
   },
 );
-export default loadData(getNewModelURL)(NewModelMenuLink);
+export default loadData(getAlphaFoldURL)(AlphaFoldMenuLink);

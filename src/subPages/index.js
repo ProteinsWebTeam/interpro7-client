@@ -66,10 +66,10 @@ const StructuralModel = loadable({
   loader: () =>
     import(/* webpackChunkName: "model-subpage" */ './StructuralModel'),
 });
-const NewStructuralModelSubPage = loadable({
+const AlphaFoldModelSubPage = loadable({
   loader: () =>
     import(
-      /* webpackChunkName: "new-model-subpage" */ './NewStructuralModelSubPage'
+      /* webpackChunkName: "alphafold-model-subpage" */ './AlphaFoldModelSubPage'
     ),
 });
 
@@ -205,7 +205,7 @@ const subPages = new Map([
   ],
   ['pathways', loadData(getInterProModifierURL('pathways'))(PathwaysSubPage)],
   ['model', StructuralModel],
-  ['alphafold', NewStructuralModelSubPage],
+  ['alphafold', AlphaFoldModelSubPage],
   ['alignments', SetAlignments],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],

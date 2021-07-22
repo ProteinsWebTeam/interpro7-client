@@ -99,7 +99,7 @@ const mapStateToPropsForModels = createSelector(
   (description, search) => ({ description, search }),
 );
 
-const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, modelId, modelUrl, data}) => {
+const _AlphaFoldModel = ({ proteinAcc, hasMultipleProteins, onModelChange, modelId, modelUrl, data}) => {
   if (data?.loading) return <Loading />;
   if (!data.loading && Object.keys(data.payload).length !== 1) {
     return (
@@ -230,7 +230,7 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, m
     </div>
   );
 };
-_NewStructuralModel.propTypes = {
+_AlphaFoldModel.propTypes = {
   proteinAcc: T.string,
   hasMultipleProteins: T.bool,
   onModelChange: T.func,
@@ -256,10 +256,10 @@ const getModelInfoUrl = (isUrlToApi) =>
     },
   );
 
-const NewStructuralModel = loadData({
+const AlphaFoldModel = loadData({
   getUrl: getModelInfoUrl(true),
   mapStateToProps: getModelInfoUrl(false)
-})(_NewStructuralModel);
+})(_AlphaFoldModel);
 
 const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
   if (data?.loading) return <Loading />;
@@ -399,7 +399,7 @@ const ProteinTable = loadData({
   mapStateToProps: mapStateToPropsForModels
 })(_ProteinTable);
 
-const NewStructuralModelSubPage = ({ data, description }) => {
+const AlphaFoldModelSubPage = ({ data, description }) => {
   const mainAccession = description[description.main.key].accession;
   const mainDB = description[description.main.key].db;
   const container = useRef();
@@ -426,14 +426,14 @@ const NewStructuralModelSubPage = ({ data, description }) => {
   const hasMultipleProteins = mainDB.toLowerCase() === 'interpro' && data.payload.count > 0;
   return (
     <div className={f('row', 'column')} ref={container}>
-      {proteinAcc && <NewStructuralModel proteinAcc={proteinAcc} hasMultipleProteins={hasMultipleProteins} onModelChange={handleModelChange} modelId={modelId} />}
+      {proteinAcc && <AlphaFoldModel proteinAcc={proteinAcc} hasMultipleProteins={hasMultipleProteins} onModelChange={handleModelChange} modelId={modelId} />}
       {mainDB.toLowerCase() === 'interpro' ? (
         <ProteinTable onProteinChange={handleProteinChange} />
       ) : null}
     </div>
   );
 };
-NewStructuralModelSubPage.propTypes = {
+AlphaFoldModelSubPage.propTypes = {
   data: T.object,
   isStale: T.bool,
   description: T.object,
@@ -442,4 +442,4 @@ NewStructuralModelSubPage.propTypes = {
 export default loadData({
   getUrl: getUrl(false),
   mapStateToProps: mapStateToPropsForModels,
-})(NewStructuralModelSubPage);
+})(AlphaFoldModelSubPage);

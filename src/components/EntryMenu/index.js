@@ -11,7 +11,7 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Genome3dMenuLink from './EntryMenuLink/Genome3dMenuLink';
-import NewModelMenuLink from './EntryMenuLink/NewModelMenuLink';
+import AlphaFoldMenuLink from './EntryMenuLink/AlphaFoldMenuLink';
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
@@ -174,7 +174,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       return <Loading />;
     }
     const genome3d = singleEntity.get('genome3d');
-    const newModel = singleEntity.get('alphafold');
+    const alphafold = singleEntity.get('alphafold');
     return (
       <ul
         className={f('tabs', className, { sign: isSignature })}
@@ -214,11 +214,11 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             usedOnTheSide={usedOnTheSide}
           />
         )}
-        {mainType === 'protein' && newModel && (
-          <NewModelMenuLink
-            to={newModel.to}
-            exact={newModel.exact}
-            name={newModel.name}
+        {mainType === 'protein' && alphafold && (
+          <AlphaFoldMenuLink
+            to={alphafold.to}
+            exact={alphafold.exact}
+            name={alphafold.name}
             usedOnTheSide={usedOnTheSide}
           />
         )}
