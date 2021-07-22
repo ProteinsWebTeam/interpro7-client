@@ -99,7 +99,7 @@ const mapStateToPropsForModels = createSelector(
   (description, search) => ({ description, search }),
 );
 
-const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, modelId, data}) => {
+const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, modelId, modelUrl, data}) => {
   if (data?.loading) return <Loading />;
   if (!data.loading && Object.keys(data.payload).length !== 1) {
     return (
@@ -116,7 +116,13 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, m
   const elementId = 'new-structure-model-viewer';
   return (
     <div>
-      <h3>Structure prediction{models.length > 1 || hasMultipleProteins ? 's' : ''}</h3>
+      <h3>AlphaFold structure prediction{models.length > 1 || hasMultipleProteins ? 's' : ''}</h3>
+      <p>
+        The protein structure below has been predicted by <Link href={'//deepmind.com/'}>DeepMind</Link>{' '}
+        with AlphaFold (<Link href={'//www.nature.com/articles/s41586-021-03819-2'}>Jumper, J et al. 2021</Link>).{' '}
+        For more information and additional features,{' '}
+        please visit this sequence&apos;s page at <Link href={modelUrl}>AlphaFold DB</Link>.
+      </p>
       {hasMultipleProteins ? (
         <div className={f('callout', 'primary', 'info')}>
           <p>
@@ -135,6 +141,9 @@ const _NewStructuralModel = ({ proteinAcc, hasMultipleProteins, onModelChange, m
               {modelInfo.uniprotAccession}
               <span className={f('footer')}>
                 View on{' '}
+                <Link href={modelUrl} className={f('ext')}>
+                  AlphaFold DB
+                </Link> or {' '}
                 <UniProtLink id={modelInfo.uniprotAccession} className={f('ext')}>
                     UniProtKB
                 </UniProtLink>
@@ -361,6 +370,7 @@ const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
           Length
         </Column>
         <Column
+          dataKey={''}
           headerClassName={f('text-right')}
           cellClassName={f('text-right')}
           renderer={(_, row) => {

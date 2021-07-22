@@ -174,7 +174,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       return <Loading />;
     }
     const genome3d = singleEntity.get('genome3d');
-    const newModel = singleEntity.get('new_model');
+    const newModel = singleEntity.get('alphafold');
     return (
       <ul
         className={f('tabs', className, { sign: isSignature })}

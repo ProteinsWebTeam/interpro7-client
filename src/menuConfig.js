@@ -431,7 +431,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
-    'new_model',
+    'alphafold',
     {
       to(customLocation) {
         const { key } = customLocation.description.main;
@@ -441,12 +441,12 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             main: { key },
             [key]: {
               ...customLocation.description[key],
-              detail: 'new_model',
+              detail: 'alphafold',
             },
           },
         };
       },
-      name: 'Full Length models',
+      name: 'AlphaFold',
       counter: 'structural_models.full_length',
     },
   ],

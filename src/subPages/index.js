@@ -205,7 +205,7 @@ const subPages = new Map([
   ],
   ['pathways', loadData(getInterProModifierURL('pathways'))(PathwaysSubPage)],
   ['model', StructuralModel],
-  ['new_model', NewStructuralModelSubPage],
+  ['alphafold', NewStructuralModelSubPage],
   ['alignments', SetAlignments],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],

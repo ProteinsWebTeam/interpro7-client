@@ -776,7 +776,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
                 category="modelAPI"
                 endpointDetails={modelAPI}
               >
-                Model API Settings{' '}
+                AlphaFold API Settings{' '}
                 {!DEV && '(modification temporarily disabled)'}
               </ModelAPIEndpointSettings>
 
