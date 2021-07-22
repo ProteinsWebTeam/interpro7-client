@@ -7,13 +7,17 @@ import { PluginConfig } from 'molstar/lib/mol-plugin/config';
 import { PluginContext } from 'molstar/lib/mol-plugin/context';
 import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
 import { StructureSelection } from 'molstar/lib/mol-model/structure';
+
 import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
 import {
   UniformColorThemeProvider,
   UniformColorThemeParams,
 } from 'molstar/lib/mol-theme/color/uniform';
 import { ColorByResidueLddtTheme } from './ColourByResidueLddtTheme';
+import { AfConfidenceProvider } from './af-confidence/prop';
+import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { ParamDefinition } from 'molstar/lib/mol-util/param-definition';
+
 import { Script } from 'molstar/lib/mol-script/script';
 import { Color } from 'molstar/lib/mol-util/color';
 import { ColorNames } from 'molstar/lib/mol-util/color/names';
@@ -56,6 +60,7 @@ const Labels = newLocal;
   elementId: string,
   ext?: string,
   name?: string,
+  theme?: string,
   onStructureLoaded?: function,
   isSpinning?: boolean,
   shouldResetViewer?: boolean,
@@ -85,6 +90,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
     selections: T.array,
     ext: T.string,
     name: T.string,
+    theme: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -125,10 +131,16 @@ class StructureView extends PureComponent /*:: <Props> */ {
         ColorByResidueLddtTheme.propertyProvider,
         true,
       );
+
+      this.viewer.customModelProperties.register(AfConfidenceProvider, true);
+      // this.viewer.managers.lociLabels.addProvider(this.labelAfConfScore);
+      this.viewer.representation.structure.themes.colorThemeRegistry.add(
+        AfConfidenceColorThemeProvider,
+      );
     }
 
     if (this.props.url) {
-      this.loadStructureInViewer(this.props.url, 'pdb');
+      this.loadStructureInViewer(this.props.url, this.props.ext);
     } else {
       this.loadStructureInViewer(
         `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
@@ -137,12 +149,12 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
-  componentDidUpdate() {
-    if (this.name !== `${this.props.id}`) {
+  componentDidUpdate(prevProps) {
+    if (this.name !== `${this.props.id}` || prevProps.url !== this.props.url) {
       this.name = `${this.props.id}`;
       this.viewer.clear();
       if (this.props.url) {
-        this.loadStructureInViewer(this.props.url, 'pdb');
+        this.loadStructureInViewer(this.props.url, this.props.ext);
       } else {
         this.loadStructureInViewer(
           `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
@@ -263,6 +275,19 @@ class StructureView extends PureComponent /*:: <Props> */ {
   }
 
   applyChainIdTheme() {
+    let colouringTheme;
+    switch (this.props.theme) {
+      case 'residue':
+        colouringTheme =
+          ColorByResidueLddtTheme.propertyProvider.descriptor.name;
+        break;
+      case 'af':
+        colouringTheme = AfConfidenceColorThemeProvider.name;
+        break;
+      default:
+        colouringTheme = ChainIdColorThemeProvider.name;
+    }
+
     // apply colouring
     this.viewer.dataTransaction(async () => {
       for (const s of this.viewer.managers.structure.hierarchy.current
@@ -270,9 +295,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         await this.viewer.managers.structure.component.updateRepresentationsTheme(
           s.components,
           {
-            color: this.props.url
-              ? ColorByResidueLddtTheme.propertyProvider.descriptor.name
-              : ChainIdColorThemeProvider.name,
+            color: colouringTheme,
           },
         );
       }
