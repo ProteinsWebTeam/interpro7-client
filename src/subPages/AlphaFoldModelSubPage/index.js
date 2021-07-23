@@ -261,8 +261,11 @@ const AlphaFoldModel = loadData({
   mapStateToProps: getModelInfoUrl(false)
 })(_AlphaFoldModel);
 
-const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
+const _ProteinTable = ({ proteinAcc, data, isStale, search, onProteinChange }) => {
   if (data?.loading) return <Loading />;
+
+  const getRowClassName = (row) =>
+    row.accession === proteinAcc ? f('active') : '';
 
   return (
     <div>
@@ -278,6 +281,7 @@ const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
         previousAPICall={data.payload?.previous}
         currentAPICall={data.url}
         isStale={isStale}
+        rowClassName={getRowClassName}
       >
         <PageSizeSelector />
         <SearchBox loading={data.loading}>Search proteins</SearchBox>
@@ -388,6 +392,7 @@ const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
   );
 };
 _ProteinTable.propTypes = {
+  proteinAcc: T.string,
   data: T.object,
   isStale: T.bool,
   search: T.object,
@@ -428,7 +433,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
     <div className={f('row', 'column')} ref={container}>
       {proteinAcc && <AlphaFoldModel proteinAcc={proteinAcc} hasMultipleProteins={hasMultipleProteins} onModelChange={handleModelChange} modelId={modelId} />}
       {mainDB.toLowerCase() === 'interpro' ? (
-        <ProteinTable onProteinChange={handleProteinChange} />
+        <ProteinTable proteinAcc={proteinAcc} onProteinChange={handleProteinChange} />
       ) : null}
     </div>
   );
