@@ -89,11 +89,3 @@ ul.information > li > .footer {
 select {
   max-width: 100% !important;
 }
-
-table > tbody > tr {
-  background-color: #fff !important;
-}
-
-table > tbody tr.active {
-  background-color: rgba(25, 118, 210, 0.1) !important;
-}
