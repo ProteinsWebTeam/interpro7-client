@@ -190,7 +190,14 @@ class StructureView extends PureComponent /*:: <Props> */ {
         format,
       );
       this.viewer.builders.structure.hierarchy
-        .applyPreset(trajectory, 'default')
+        .applyPreset(trajectory, 'default', {
+          structure: {
+            name: 'model',
+            params: {},
+          },
+          showUnitcell: false,
+          representationPreset: 'auto',
+        })
         .then(() => {
           // populate the entry map object used for entry highlighting
           if (this.props.onStructureLoaded) {
@@ -258,7 +265,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
               MS.struct.generator.atomGroups({
                 'chain-test': MS.core.rel.eq([
                   selection.chain,
-                  MS.ammp('label_asym_id'),
+                  MS.ammp('auth_asym_id'),
                 ]),
                 'residue-test': MS.core.set.has([
                   MS.set(...positions),
