@@ -218,8 +218,7 @@ const _AlphaFoldModel = ({ proteinAcc, hasMultipleProteins, onModelChange, model
           >
             <StructureViewer
               id={'fullSequence'}
-              url={`${modelInfo.cifUrl}`}
-              //  url={`http://localhost/example/AF-${proteinAcc}-F1-model_v1.cif`}
+              url={modelInfo.cifUrl}
               elementId={elementId}
               ext="mmcif"
               theme={'af'}
