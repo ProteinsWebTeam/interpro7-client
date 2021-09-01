@@ -28,7 +28,7 @@ const DEFAULT_MIN_DISTANCE = 5;
 const RED = 0xff0000;
 const BLUE = 0x0000ff;
 
-const TrRosettaModel = ({ data, dataContacts, urlForModel, accession }) => {
+const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
   const [minProbability, setMinProbability] = useState(DEFAULT_MIN_PROBABILITY);
   const [selections, setSelections] = useState(null);
   const [aln2str, setAln2str] = useState(null);
@@ -257,7 +257,7 @@ const TrRosettaModel = ({ data, dataContacts, urlForModel, accession }) => {
   );
 };
 
-TrRosettaModel.propTypes = {
+RoseTTAFoldModel.propTypes = {
   data: T.shape({
     loading: T.bool.isRequired,
     payload: T.arrayOf(T.number),
@@ -304,5 +304,5 @@ export default loadData({
   loadData({
     getUrl: mapStateToPropsForModel('contacts'),
     propNamespace: 'Contacts',
-  })(TrRosettaModel),
+  })(RoseTTAFoldModel),
 );
