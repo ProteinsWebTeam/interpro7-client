@@ -141,33 +141,6 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
       <PictureInPicturePanel
         className={f('structure-viewer')}
         testid="structure-3d-viewer"
-        OtherControls={{
-          bottom: (
-            <section className={f('lddt')}>
-              <header>
-                lDDT{' '}
-                <Tooltip title="Quality score lDDT: Local Distance Difference Test">
-                  <sup>
-                    <span
-                      className={f('small', 'icon', 'icon-common')}
-                      data-icon="&#xf129;"
-                      aria-label={'Citation to trRosetta paper'}
-                    />
-                  </sup>
-                </Tooltip>
-                :{' '}
-              </header>
-              <code>
-                {(
-                  data.payload.reduce((acc, cur) => acc + cur, 0) /
-                  data.payload.length
-                )
-                  // eslint-disable-next-line no-magic-numbers
-                  .toFixed(6)}
-              </code>
-            </section>
-          ),
-        }}
         OtherButtons={
           <>
             <Link
