@@ -42,7 +42,7 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
 
   useEffect(() => {
     if (dataContacts.payload && heatmap.current)
-      heatmap.current.data = dataContacts.payload;
+      heatmap.current.data = dataContacts.payload.map((p) => [p[0], p[1], p[4]]);
   }, [heatmap.current]);
 
   useEffect(() => {
