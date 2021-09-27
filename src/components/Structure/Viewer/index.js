@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState, useEffect } from 'react';
 import T from 'prop-types';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
@@ -6,7 +6,11 @@ import { DefaultPluginSpec } from 'molstar/lib/mol-plugin/spec';
 import { PluginConfig } from 'molstar/lib/mol-plugin/config';
 import { PluginContext } from 'molstar/lib/mol-plugin/context';
 import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
-import { StructureSelection } from 'molstar/lib/mol-model/structure';
+import {
+  StructureSelection,
+  StructureElement,
+  StructureProperties as Props,
+} from 'molstar/lib/mol-model/structure';
 
 import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
 import {
@@ -30,29 +34,94 @@ import style from './style.css';
 
 const f = foundationPartial(style, fonts);
 
-const newLocal = (props /*: Props */) => {
-  if (props.viewer) {
-    const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
-    if (highlighted) {
-      const text = highlighted.labels[0];
-      return (
-        <div
-          className={f('structure-label')}
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: text }}
-        />
-      );
-    }
-  }
-  return <div />;
-};
 /**
  * Function hook for 3D model labels
  * returns information on residue highlighted on 3D structure
  * @param {Object} props - react props
- * @returns {Object} react element8
+ * @returns {Object} react element
  */
-const Labels = newLocal;
+const Labels = (props /*: Props */) => {
+  const [labelData, setLabelData] = useState();
+
+  if (props.viewer) {
+    props.viewer.behaviors.interaction.hover.subscribe((arg) => {
+      const loci = arg.current.loci;
+      if (loci.kind === 'element-loci' && loci.elements.length === 1) {
+        const stats = StructureElement.Stats.ofLoci(loci);
+        const { residueCount } = stats;
+        if (residueCount > 0) {
+          const data = {};
+          const location = stats.firstResidueLoc;
+          data.accession = location.unit.model.entryId;
+          if (data.accession.length > 20) {
+            data.accession = props.accession;
+          }
+          data.residue = Props.atom.label_comp_id(location);
+          data.location = Props.residue.auth_seq_id(location);
+          data.chain = Props.chain.auth_asym_id(location);
+          data.seq_location = Props.residue.label_seq_id(location);
+          data.seq_chain = Props.chain.label_asym_id(location);
+          if (labelData === undefined || data.location !== labelData.location) {
+            setLabelData(data);
+          }
+        }
+      }
+    });
+  }
+
+  if (labelData && labelData.location !== undefined) {
+    return (
+      <div className={f('structure-label')}>
+        <small>{labelData.accession} </small>
+        Chain: <b>{labelData.chain} </b>
+        Residue: <b>{labelData.residue} </b>
+        {labelData.location}
+      </div>
+    );
+  }
+  return <div className={f('structure-label')} />;
+};
+
+// const Labels = (props /*: Props */) => {
+//   if (props.viewer) {
+//     const data = {};
+//     props.viewer.behaviors.interaction.hover.subscribe(
+//       (arg) => {
+//         const loci = arg.current.loci;
+//         if (loci.kind === 'element-loci' && loci.elements.length === 1) {
+//           const stats = StructureElement.Stats.ofLoci(loci);
+//           const { residueCount } = stats;
+//           if (residueCount > 0) {
+//             const location = stats.firstResidueLoc;
+//             data.accession = location.unit.model.entryId;
+//             if (data.accession.length > 20) {
+//                 data.accession = props.accession;
+//             }
+//             data.residue = Props.atom.label_comp_id(location);
+//             data.location = Props.residue.auth_seq_id(location);
+//             data.chain = Props.chain.auth_asym_id(location);
+//             data.seq_location = Props.residue.label_seq_id(location);
+//             data.seq_chain = Props.chain.label_asym_id(location);
+//           }
+//         }
+//       }
+//   );
+//   const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
+//   if (highlighted && data.residue !== undefined) {
+//     // console.log(data);
+//     console.log(props.accession);
+//     const text = `<small>${data.accession}</small> Chain:<b>${data.chain}</b> Residue:<b>${data.location} ${data.residue}</b>`;
+//     return (
+//       <div
+//         className={f('structure-label')}
+//         // eslint-disable-next-line react/no-danger
+//         dangerouslySetInnerHTML={{ __html: text }}
+//       />
+//     );
+//   }
+// }
+// return <div />;
+// };
 
 /*:: type Props = {
   id: string,
@@ -137,6 +206,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.viewer.representation.structure.themes.colorThemeRegistry.add(
         AfConfidenceColorThemeProvider,
       );
+      // mouseover
     }
 
     if (this.props.url) {
@@ -337,7 +407,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
               >
                 <canvas ref={this._structureViewerCanvas} />
               </div>
-              <Labels viewer={this.viewer} />
+              <Labels viewer={this.viewer} accession={this.name} />
             </div>
           );
         }}
