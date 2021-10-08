@@ -1,12 +1,13 @@
 googleAnalytics: UA-XXXXXXXX-X
 root:
   website: http://localhost:8080/interpro/
-  API: https://wwwdev.ebi.ac.uk/interpro7/api/
+  API: https://www.ebi.ac.uk/interpro/api/
   EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
   IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
-  genome3d: //www.genome3d.eu/api/v1/
+  genome3d: https://www.genome3d.eu/api/v1/
   wikipedia: https://en.wikipedia.org/w/api.php
-  readthedocs: //interpro-documentation.readthedocs.io/en/latest/
+  readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
+  alphafold: https://alphafold.ebi.ac.uk/
 
 title: InterPro
 
@@ -36,7 +37,8 @@ pages:
       - structure
       - taxonomy
       - proteome
-      - model
+      - trrosetta
+      - alphafold
       - logo
       - entry_alignments
       - interactions
@@ -47,6 +49,7 @@ pages:
     subPages:
       - entry
       - structure
+      - alphafold
       - sequence
       - similar_proteins
   structure:

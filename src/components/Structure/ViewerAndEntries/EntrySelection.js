@@ -36,7 +36,7 @@ class EntrySelection extends PureComponent /*:: <Props, State> */ {
     };
   }
 
-  onSelectionChange = e => {
+  onSelectionChange = (e) => {
     // extract memberDB and entry from component
     const entry = e.target.value;
     let memberDB = null;
@@ -54,7 +54,7 @@ class EntrySelection extends PureComponent /*:: <Props, State> */ {
     const selectionGroups = [];
     selectionGroups.push(
       <option key="{NO_SELECTION}" value={NO_SELECTION}>
-        Select Entry
+        Highlight Entry in the 3D structure
       </option>,
     );
 

@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -11,21 +10,30 @@ import T from 'prop-types';
 */
 
 const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
-  const { accession, type, currentResidue } = detail?.feature || {};
+  const { accession, type } = detail?.feature || {};
+  let { currentResidue } = detail?.feature;
 
+  // PIRSR is not integrated as entry in InterPro
+  if (sourceDatabase === 'PIRSR') {
+    currentResidue = detail?.feature.locations[0].fragments[0];
+    currentResidue.description = detail?.feature.locations[0].description;
+  }
   const start = currentResidue?.start;
   const description = currentResidue?.description || '';
   const residue = currentResidue?.residue || currentResidue?.residues || '';
   return (
     <section>
       <h6>
-        {accession}
+        {accession.startsWith('residue:')
+          ? accession.split('residue:')[1]
+          : accession}
         {description && <p>[{description}]</p>}
       </h6>
 
       <div>
         <div>
-          Residue in {sourceDatabase} {type && type.replace('_', ' ')}
+          Residue in {sourceDatabase}{' '}
+          {type && type !== 'residue' && type.replace('_', ' ')}
         </div>
         <ul>
           <li>Position: {start}</li>

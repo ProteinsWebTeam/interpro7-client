@@ -79,6 +79,9 @@ const getConfigFor = (env, mode, module = false) => {
     // MODE
     mode,
     // OUTPUT
+    node: {
+      fs: 'empty',
+    },
     output: {
       path: path.resolve('dist'),
       publicPath,
@@ -89,7 +92,7 @@ const getConfigFor = (env, mode, module = false) => {
     // RESOLVE
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
-      extensions: ['.js', '.json', '.worker.js'],
+      extensions: ['.js', '.ts', '.json', '.worker.js'],
       alias: {
         '../libraries': 'ebi-framework/libraries',
         'EBI-Common': 'EBI-Icon-fonts/EBI-Common',
@@ -179,6 +182,17 @@ const getConfigFor = (env, mode, module = false) => {
                     ],
                   },
                 },
+              },
+            },
+          ],
+        },
+        {
+          test: /\.ts$/,
+          use: [
+            {
+              loader: 'ts-loader',
+              options: {
+                transpileOnly: true,
               },
             },
           ],

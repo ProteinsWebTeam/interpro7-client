@@ -33,7 +33,7 @@ exports[`<Documentation /> should render 1`] = `
               <li>
                 <Memo(Connect(Link))
                   className="ext"
-                  href="//interpro-documentation.readthedocs.io/en/latest/"
+                  href="https://interpro-documentation.readthedocs.io/en/latest/"
                   target="_blank"
                 >
                   Website documentation
@@ -162,7 +162,7 @@ exports[`<Documentation /> should render 1`] = `
             <li>
               <Memo(Connect(Link))
                 className="ext"
-                href="//interpro-documentation.readthedocs.io/en/latest/citing.html"
+                href="https://interpro-documentation.readthedocs.io/en/latest/citing.html"
                 target="_blank"
               >
                 InterPro Publications

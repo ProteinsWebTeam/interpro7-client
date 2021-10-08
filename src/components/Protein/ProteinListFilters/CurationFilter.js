@@ -66,12 +66,13 @@ class CurationFilter extends PureComponent /*:: <Props> */ {
       isStale,
       customLocation: { description },
     } = this.props;
-    const databases = getPayloadOrEmpty(payload, loading, isStale);
-    if (!loading) {
-      databases.uniprot = databases
-        ? (databases.reviewed || 0) + (databases.unreviewed || 0)
-        : 0;
-    }
+    const databases = {
+      uniprot: 0,
+      reviewed: 0,
+      unreviewed: 0,
+      ...getPayloadOrEmpty(payload, loading, isStale),
+    };
+    if (!loading) databases.uniprot = databases.reviewed + databases.unreviewed;
     return (
       <div className={f('list-curation', { stale: isStale })}>
         <div className={f('column')}>
@@ -90,12 +91,12 @@ class CurationFilter extends PureComponent /*:: <Props> */ {
                     name="curated_filter"
                     className={f('radio-btn')}
                     value={db}
-                    disabled={isStale}
+                    disabled={isStale || value === 0}
                     onChange={this._handleSelection}
                     checked={checked}
                     style={{ margin: '0.25em' }}
                   />
-                  <span>{db === 'uniprot' ? 'both' : db}</span>
+                  <span>{db === 'uniprot' ? 'all' : db}</span>
                   <NumberComponent
                     label
                     loading={loading}

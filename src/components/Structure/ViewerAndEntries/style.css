@@ -1,0 +1,36 @@
+@import '../../../styles/timing.css';
+@import '../../../styles/colors.css';
+@import '../../../styles/z-index.css';
+
+:root {
+  --height-viewer: 50vh;
+  --height-bar: 2.3em;
+}
+.structure-viewer {
+  background: white;
+
+  & .structure-viewer-select {
+    max-width: 400px;
+    bottom: 0.5rem;
+    font-size: 90%;
+    left: 0;
+    margin: 0;
+  }
+}
+
+.split-view {
+  display: flex;
+  background-color: #ffffff;
+  & > div {
+    width: 50vw;
+  }
+  & .protvista-container {
+    overflow: scroll;
+  }
+  & .structure-viewer {
+    height: initial;
+    & .wrapper {
+      height: 95vh;
+    }
+  }
+}

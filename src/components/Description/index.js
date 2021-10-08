@@ -143,7 +143,7 @@ export const Paragraph = (
                 to={{
                   description: {
                     main: { key: 'protein' },
-                    protein: { db: 'reviewed', accession: value },
+                    protein: { db: 'uniprot', accession: value },
                   },
                 }}
               >

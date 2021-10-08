@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -11,7 +10,7 @@ import { PDBeLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
 import TimeAgo from 'components/TimeAgo';
-import ViewerOnDemand from 'components/Structure/ViewerOnDemand';
+import ViewerOnDemand from 'components/Structure/ViewerAndEntries';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -52,7 +51,18 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
     const matches = payloadM?.results || [];
     const chains = Array.from(new Set(metadata.chains || []));
     const date = new Date(metadata.release_date);
-    const literature = Object.entries(metadata.literature || {});
+    const literature = Object.entries(metadata.literature || {}).map((item) => {
+      // DOI_URL for structure URL is not complete. It contains only the ID
+      if (
+        item.length === 2 &&
+        item[1]?.DOI_URL !== null &&
+        !item[1]?.DOI_URL?.startsWith('http')
+      ) {
+        const id = item[1].DOI_URL;
+        item[1].DOI_URL = `https://www.doi.org/${id}`;
+      }
+      return item;
+    });
     return (
       <div className={f('sections')}>
         <section>

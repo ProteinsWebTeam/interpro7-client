@@ -36,6 +36,7 @@ export const dataPropType = T.shape({
     resultsPropType,
     interProScanPropType,
     interProScanUnitPropType,
+    T.string,
   ]),
   status: T.number,
   ok: T.bool,

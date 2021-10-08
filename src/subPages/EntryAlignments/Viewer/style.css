@@ -1,0 +1,11 @@
+protvista-zoom-tool {
+  display: block;
+  --button-padding-v: 0;
+  --button-padding-h: 0;
+  --button-background: white;
+}
+
+.zoom-button {
+  font-size: 1rem;
+  margin: 1px;
+}

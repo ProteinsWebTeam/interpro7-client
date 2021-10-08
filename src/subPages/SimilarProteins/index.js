@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -138,7 +138,11 @@ const SimilarProteinsHeader = loadData({
   mapDispatchToProps: { toggleAccessionDBForIDA },
 })(SimilarProteinsHeaderWithData);
 
-const getAPIURLForSimilarProteins = ({ protocol, hostname, port, root }, ida) =>
+const getAPIURLForSimilarProteins = (
+  { protocol, hostname, port, root },
+  ida,
+  db,
+) =>
   format({
     protocol,
     hostname,
@@ -147,7 +151,7 @@ const getAPIURLForSimilarProteins = ({ protocol, hostname, port, root }, ida) =>
       root +
       descriptionToPath({
         main: { key: 'protein' },
-        protein: { db: 'uniprot' },
+        protein: { db: db },
       }),
     query: { ida },
   });
@@ -158,7 +162,8 @@ const AllProteinDownload = (
     count,
     ida,
     fileType,
-  } /*: {description: Object, count: number, ida: string, fileType: string} */,
+    db,
+  } /*: {description: Object, count: number, ida: string, fileType: string, db: string} */,
 ) => (
   <File
     fileType={fileType}
@@ -168,7 +173,7 @@ const AllProteinDownload = (
     count={count}
     customLocationDescription={{
       main: { key: 'protein' },
-      protein: { db: 'UniProt' },
+      protein: { db: db },
     }}
     search={{ ida }}
     endpoint="protein"
@@ -179,48 +184,34 @@ AllProteinDownload.propTypes = {
   count: T.number,
   ida: T.string,
   fileType: T.string,
+  db: T.string,
 };
 
-const SimilarProteins = (
+const _SimilarProteinTable = (
   {
-    data: {
-      loading: loadingData,
-      payload: {
-        metadata: { ida_accession: ida },
-      },
-    },
     dataIDA: { loading, payload, isStale, url },
-    dataBase,
-    search,
+    db,
+    ida,
     state,
+    search,
   } /*: {
-data: {
-  loading: boolean,
-  payload: Object,
-},
 dataIDA: {
   loading: boolean,
   isStale: boolean,
   payload: Object,
   url: string,
 },
-dataBase: {
-  payload: Object,
-},
-search: Object,
+db: string,
+ida: string,
 state: Object,
-}*/,
+search: Object,
+}
+*/,
 ) => {
-  if (loading || loadingData || !payload) return <Loading />;
-  loadWebComponent(() => ProtvistaInterproTrack).as('protvista-interpro-track');
+  if (loading || !payload) return <Loading />;
   return (
-    <div className={f('row', 'column')}>
-      <SimilarProteinsHeader
-        accession={state.customLocation.description.protein.accession}
-        databases={(dataBase.payload && dataBase.payload.databases) || {}}
-      />
+    <>
       <SchemaOrgData data={payload.results} processData={schemaProcessData} />
-
       <Table
         dataTable={payload.results}
         actualSize={payload.count}
@@ -238,6 +229,7 @@ state: Object,
             <AllProteinDownload
               description={state.customLocation.description}
               ida={ida}
+              db={db}
               count={payload.count}
               fileType="fasta"
               name="fasta"
@@ -246,6 +238,7 @@ state: Object,
             <AllProteinDownload
               description={state.customLocation.description}
               ida={ida}
+              db={db}
               count={payload.count}
               name="json"
               fileType="json"
@@ -254,6 +247,7 @@ state: Object,
             <AllProteinDownload
               description={state.customLocation.description}
               ida={ida}
+              db={db}
               count={payload.count}
               name="tsv"
               fileType="tsv"
@@ -261,7 +255,7 @@ state: Object,
             <label htmlFor="api">API</label>
             <Link
               target="_blank"
-              href={getAPIURLForSimilarProteins(state.settings.api, ida)}
+              href={getAPIURLForSimilarProteins(state.settings.api, ida, db)}
               className={f('button', 'hollow', 'imitate-progress-button')}
               name="api"
             >
@@ -345,12 +339,113 @@ state: Object,
         </Column>
         <Column dataKey="length">Length</Column>
       </Table>
+    </>
+  );
+};
+_SimilarProteinTable.propTypes = {
+  dataIDA: dataPropType.isRequired,
+  db: T.string.isRequired,
+  ida: T.string.isRequired,
+  search: T.object.isRequired,
+  state: T.object.isRequired,
+};
+
+const mapStateToPropsForIDA = createSelector(
+  (state) => state.settings.api,
+  (state) => state.customLocation.search,
+  (_, props) => props.ida,
+  (_, props) => props.db,
+  ({ protocol, hostname, port, root }, search, ida, db) => {
+    // omit elements from search
+    const { type, search: _, ...restOfSearch } = search;
+
+    // modify search
+    restOfSearch.ida = ida;
+
+    const description = {
+      main: { key: 'protein' },
+      protein: { db: db },
+    };
+    // build URL
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(description),
+      query: restOfSearch,
+    });
+  },
+);
+const SimilarProteinsTable = loadData({
+  getUrl: mapStateToPropsForIDA,
+  propNamespace: 'IDA',
+})(_SimilarProteinTable);
+
+const SimilarProteins = (
+  {
+    data: {
+      loading: loadingData,
+      payload: {
+        metadata: { ida_accession: ida },
+      },
+    },
+    dataBase,
+    search,
+    state,
+  } /*: {
+data: {
+  loading: boolean,
+  payload: Object,
+},
+dataBase: {
+  payload: Object,
+},
+search: Object,
+state: Object,
+}*/,
+) => {
+  const [similarProtDb, setSimilarProtDb] = useState('uniprot');
+  if (loadingData) return <Loading />;
+
+  loadWebComponent(() => ProtvistaInterproTrack).as('protvista-interpro-track');
+  return (
+    <div className={f('row', 'column')}>
+      <SimilarProteinsHeader
+        accession={state.customLocation.description.protein.accession}
+        databases={(dataBase.payload && dataBase.payload.databases) || {}}
+      />
+
+      <div className={f('similar-proteins-selector-panel')}>
+        <p>The below table lists the similar proteins from</p>
+        <Tooltip title="Switch to view similar proteins from UniProt or Reviewed databases">
+          <ToggleSwitch
+            switchCond={similarProtDb === 'uniprot'}
+            name={'proteinDB'}
+            id={'proteinDB-input'}
+            SRLabel={'View proteins from'}
+            onValue={'UniProt'}
+            offValue={'Reviewed'}
+            handleChange={() =>
+              setSimilarProtDb(
+                similarProtDb === 'uniprot' ? 'reviewed' : 'uniprot',
+              )
+            }
+            addAccessionStyle={true}
+          />
+        </Tooltip>
+      </div>
+
+      <SimilarProteinsTable
+        state={state}
+        search={search}
+        ida={ida}
+        db={similarProtDb}
+      />
     </div>
   );
 };
 SimilarProteins.propTypes = {
   data: dataPropType.isRequired,
-  dataIDA: dataPropType.isRequired,
   dataBase: dataPropType,
   search: T.object.isRequired,
   state: T.object.isRequired,

@@ -76,7 +76,9 @@ const ProtVistaEntryPopup = (
   return (
     <section>
       <h6>
-        {accession}
+        {accession.startsWith('residue:')
+          ? accession.split('residue:')[1]
+          : accession}
         {description && <p>[{description}]</p>}
       </h6>
 
