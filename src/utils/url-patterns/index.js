@@ -89,6 +89,9 @@ export default (db /*: string */) => {
   return (accession /*: string */) =>
     pattern.replace(
       ACCESSION_PATTERN,
-      ACCESSION_CLEANUP.reduce((result, [regexp, newSubstr]) => result.replace(regexp, newSubstr), accession)
+      ACCESSION_CLEANUP.reduce(
+        (result, [regexp, newSubstr]) => result.replace(regexp, newSubstr),
+        accession,
+      ),
     );
 };

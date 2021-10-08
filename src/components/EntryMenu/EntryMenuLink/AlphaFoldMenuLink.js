@@ -35,15 +35,15 @@ AlphaFoldMenuLink.propTypes = {
   }),
 };
 const getAlphaFoldURL = createSelector(
-  state => state.settings.alphafold,
-  state => state.customLocation.description.protein.accession,
+  (state) => state.settings.alphafold,
+  (state) => state.customLocation.description.protein.accession,
   ({ protocol, hostname, port, root, query }, accession) => {
     return format({
       protocol,
       hostname,
       port,
       pathname: `${root}api/prediction/${accession}`,
-      query: query
+      query: query,
     });
   },
 );

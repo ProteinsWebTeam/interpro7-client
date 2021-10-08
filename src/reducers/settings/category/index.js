@@ -78,7 +78,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         hostname: config.root.alphafold.hostname,
         port: config.root.alphafold.port || DEFAULT_HTTP_PORT,
         root: config.root.alphafold.pathname,
-        query: config.root.alphafold.query
+        query: config.root.alphafold.query,
       };
     default:
       return null;
