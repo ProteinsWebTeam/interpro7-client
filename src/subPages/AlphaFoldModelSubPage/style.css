@@ -1,0 +1,95 @@
+@import '../../styles/colors.css';
+
+.control {
+  color: var(--colors-tag);
+  margin: 0 1em 0 0;
+}
+
+/*.legend {*/
+/*  display: flex;*/
+/*  justify-content: flex-end;*/
+/*  & sup {*/
+/*    top: 0.5em;*/
+/*  }*/
+/*}*/
+
+.score-box {
+  height: 0.5em;
+  width: 0.7em;
+  margin: 0.5em 0.2em 0.5em 0.5em;
+  clear: both;
+}
+
+.legend-tooltip {
+  display: inline-flex;
+  cursor: default;
+}
+
+.protein-list {
+  display: block;
+  max-width: 15em;
+}
+
+.button,
+.button:focus,
+.button:hover {
+  font-weight: bold;
+  color: #2185d0;
+  border: 2px solid #2185d0;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 5px 10px;
+}
+
+h5 {
+  font-weight: normal;
+  margin: 0.5em 0;
+}
+
+ul.information,
+ul.legend {
+  margin: 0;
+  padding: 0;
+}
+
+ul.information > li:nth-child(n + 2) {
+  padding-top: 3px;
+}
+
+ul.information > li,
+ul.legend > li {
+  list-style: none;
+}
+
+ul.legend > li {
+  display: flex;
+  align-items: center;
+}
+
+ul.legend > li > span {
+  height: 1em;
+  width: 1em;
+  margin-right: 0.5em;
+}
+
+ul.information > li > .header {
+  display: block;
+  font-weight: bold;
+}
+
+ul.information > li > .footer {
+  display: block;
+  font-size: 0.85em;
+}
+
+.callout.info {
+  color: #0d3c61;
+}
+
+.callout.info .icon:first-child {
+  margin-right: 0.5em;
+}
+
+select {
+  max-width: 100% !important;
+}

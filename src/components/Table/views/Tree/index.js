@@ -1,6 +1,6 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { Component, PureComponent } from 'react';
-import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -114,14 +114,6 @@ class DataProvider extends PureComponent /*:: <Props> */ {
   /*::
    _sent: boolean;
    */
-  static propTypes = {
-    taxID: T.string.isRequired,
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.object,
-    }).isRequired,
-    sendData: T.func.isRequired,
-  };
 
   componentDidMount() {
     this._sendDataUpIfAny();
@@ -247,6 +239,7 @@ const mergeData = (
   customLocation: {
     description: Object,
   },
+  dataTable: Array<Object>,
   goToCustomLocation: function,
   showTreeToast: boolean,
   addToast: function,
@@ -258,7 +251,7 @@ const mergeData = (
   data: Node,
   focused: string,
   entryDB: Object,
-  searchTerm?: string,
+  exactMatch: Object,
 }; */
 class TreeView extends Component /*:: <TreeViewProps, State> */ {
   /*::
@@ -266,25 +259,14 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   _lineageNames: Map<string,*>;
   _initialLoad: boolean;
   */
-  static propTypes = {
-    customLocation: T.shape({
-      description: T.object,
-      search: T.shape({
-        search: T.string,
-      }),
-    }).isRequired,
-    goToCustomLocation: T.func.isRequired,
-    showTreeToast: T.bool.isRequired,
-    onFocusChanged: T.func,
-  };
 
   constructor(props /*: TreeViewProps */) {
     super(props);
-
     this.state = {
       data: { name: 'root', id: '1' },
       focused: '1',
       entryDB: props.customLocation.description.entry.db,
+      exactMatch: props.dataTable.find((x) => x?.metadata?.exact_match),
     };
     this._CDPMap = new Map();
     this._lineageNames = new Map();
@@ -297,10 +279,10 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
         description: {
           entry: { db: newDB },
         },
-        search,
       },
+      dataTable,
     },
-    { entryDB: oldDB, searchTerm },
+    { entryDB: oldDB, exactMatch },
   ) {
     if (newDB !== oldDB) {
       return {
@@ -308,10 +290,11 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
         entryDB: newDB,
       };
     }
-    if (search?.search !== searchTerm && !isNaN(search.search)) {
+    const newMatch = dataTable?.find((x) => x?.metadata?.exact_match);
+    if (exactMatch?.metadata.accession !== newMatch?.metadata.accession) {
       return {
         entryDB: oldDB,
-        searchTerm: search.search,
+        exactMatch: newMatch,
       };
     }
     return null;
@@ -395,7 +378,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   };
 
   render() {
-    const { focused, data, searchTerm } = this.state;
+    const { focused, data, exactMatch } = this.state;
     let ConnectedDataProvider = this._CDPMap.get(focused);
     if (!ConnectedDataProvider) {
       ConnectedDataProvider = loadData(mapStateToUrlFor(focused))(DataProvider);
@@ -403,13 +386,18 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       this._storeLineageNames(focused, data);
     }
     let ConnectedDataProviderSearch = null;
-    if (searchTerm) {
-      ConnectedDataProviderSearch = this._CDPMap.get(searchTerm);
+    if (exactMatch) {
+      ConnectedDataProviderSearch = this._CDPMap.get(
+        exactMatch.metadata.accession,
+      );
       if (!ConnectedDataProviderSearch) {
-        ConnectedDataProviderSearch = loadData(mapStateToUrlFor(searchTerm))(
-          DataProvider,
+        ConnectedDataProviderSearch = loadData(
+          mapStateToUrlFor(exactMatch.metadata.accession),
+        )(DataProvider);
+        this._CDPMap.set(
+          exactMatch.metadata.accession,
+          ConnectedDataProviderSearch,
         );
-        this._CDPMap.set(searchTerm, ConnectedDataProviderSearch);
       }
     }
     const currentNode = findNodeWithId(focused, data);
@@ -554,7 +542,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
         {ConnectedDataProviderSearch && (
           <ConnectedDataProviderSearch
             sendData={this._handleNewSearchData}
-            taxID={searchTerm}
+            taxID={exactMatch.metadata.accession}
           />
         )}
         <Tree

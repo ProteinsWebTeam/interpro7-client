@@ -1,6 +1,7 @@
 // Polyfills
-/* global ga: false */
+/* global gtag: false */
 // import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
+
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
@@ -92,7 +93,10 @@ const handleError = (error) => {
   } catch {
     /**/
   }
-  ga('send', 'exception', { exDescription: error.message, exFatal: true });
+  gtag('event', 'error', {
+    event_label: error.message,
+    event_fatal: true,
+  });
 };
 
 window.addEventListener('unhandledrejection', handleError);

@@ -62,6 +62,17 @@ const Genome3d = loadable({
 const Curation = loadable({
   loader: () => import(/* webpackChunkName: "curation-subpage" */ './Curation'),
 });
+const TrRosettaModel = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "model-subpage" */ './TrRosettaModel'),
+});
+const AlphaFoldModelSubPage = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "alphafold-model-subpage" */ './AlphaFoldModelSubPage'
+    ),
+});
+
 const defaultMapStateToProps = createSelector(
   (state) => state.settings.api,
   (state) => state.settings.navigation.pageSize,
@@ -118,35 +129,6 @@ const mapStateToPropsForHMMModel = createSelector(
       hostname,
       port,
       pathname: root + descriptionToPath(copyOfDescription),
-      query: restOfSearch,
-    });
-  },
-);
-const mapStateToPropsForSimilarProteins = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.search,
-  (_, props) => props.data,
-  ({ protocol, hostname, port, root }, search, data) => {
-    // omit elements from search
-    const { type, search: _, ...restOfSearch } = search;
-    // modify search
-    restOfSearch.ida =
-      data &&
-      data.payload &&
-      data.payload &&
-      data.payload.metadata &&
-      data.payload.metadata.ida_accession;
-
-    const description = {
-      main: { key: 'protein' },
-      protein: { db: 'uniprot' },
-    };
-    // build URL
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + descriptionToPath(description),
       query: restOfSearch,
     });
   },
@@ -222,6 +204,8 @@ const subPages = new Map([
     loadData(getInterProModifierURL('interactions'))(InteractionsSubPage),
   ],
   ['pathways', loadData(getInterProModifierURL('pathways'))(PathwaysSubPage)],
+  ['trrosetta', TrRosettaModel],
+  ['alphafold', AlphaFoldModelSubPage],
   ['alignments', SetAlignments],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
@@ -232,13 +216,7 @@ const subPages = new Map([
       getUrl: getGenome3dURL,
     })(Genome3d),
   ],
-  [
-    'similar_proteins',
-    loadData({
-      getUrl: mapStateToPropsForSimilarProteins,
-      propNamespace: 'IDA',
-    })(SimilarProteins),
-  ],
+  ['similar_proteins', SimilarProteins],
   ['curation', Curation],
 ]);
 

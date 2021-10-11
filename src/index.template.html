@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-GB">
   <head>
+    <!-- gtag Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= require("../interpro-config.js").googleAnalytics %>"></script>
+
     <!-- Google Analytics -->
     <script>
-      window.ga =
-        window.ga ||
-        function () {
-          (ga.q = ga.q || []).push(arguments);
-        };
-      ga.l = +new Date();
-      ga('create', '<%= require("../interpro-config.js").googleAnalytics %>', {
-        // see https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference
-        siteSpeedSampleRate: 25,
-        alwaysSendReferrer: true,
-        cookieExpiration: 5184000, // 2 months
-      });
-      ga('set', 'anonymizeIp', true);
-      ga('send', 'pageview');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '<%= require("../interpro-config.js").googleAnalytics %>');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
     <!-- End Google Analytics -->
     <meta charset="utf-8" />
     <meta lang="en-GB" />
@@ -180,6 +173,7 @@
     <% } %> <% for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
     %>
     <script nomodule defer type="text/javascript" src="<%= file %>"></script>
+<<<<<<< HEAD
     <% } %> <% } %> <% if (!htmlWebpackPlugin.options.inject) { %>
     <script>
       function forceRefreshIfNotloaded() {
@@ -189,6 +183,20 @@
             exFatal: true,
           });
           window.location.reload();
+=======
+    <% } %>
+    <% } %>
+    <% if (!htmlWebpackPlugin.options.inject) { %>
+      <script>
+        function forceRefreshIfNotloaded(){
+          if (!document.getElementById('interpro-root')) {
+            gtag('event', 'exception', { 
+                event_label: 'Issue with the first load', 
+                event_fatal: true 
+              });
+            window.location.reload();
+          }
+>>>>>>> dev
         }
       }
       //If in 5 seconds it hasn't render the root of the page thne reload the page.

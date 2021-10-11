@@ -80,13 +80,14 @@ class ToastDisplay extends PureComponent /*:: <Props, State> */ {
         onMouseLeave={this._handleMouseLeave}
         ref={this._ref}
       >
-        {Object.entries(toasts).map(([id, toast]) => (
+        {Object.entries(toasts).map(([id, toast], i) => (
           <Toast
             key={id}
             toastId={id}
             paused={over}
             handleClose={this._handleClose}
             {...toast}
+            style={{ right: `${i}rem` }}
           />
         ))}
       </ul>
@@ -95,11 +96,8 @@ class ToastDisplay extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.toasts,
-  toasts => ({ toasts }),
+  (state) => state.toasts,
+  (toasts) => ({ toasts }),
 );
 
-export default connect(
-  mapStateToProps,
-  { removeToast },
-)(ToastDisplay);
+export default connect(mapStateToProps, { removeToast })(ToastDisplay);

@@ -1,6 +1,9 @@
+@import '../../../styles/z-index.css';
+
 .toast {
-  float: right;
-  margin: 1rem 0;
+  position: relative;
+  /*float: right;*/
+  margin: -8.5em 0 0 0;
   pointer-events: auto;
   border-radius: 0.2em;
   max-width: calc(50vw - 2rem);
@@ -10,7 +13,7 @@
 
   &:hover {
     opacity: 1;
-
+    z-index: var(--z-index-toasts-on-hover);
     &::after {
       color: darkred;
     }

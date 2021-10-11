@@ -1,618 +1,349 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
-import { Stage, ColormakerRegistry } from 'ngl';
+import { DefaultPluginSpec } from 'molstar/lib/mol-plugin/spec';
+import { PluginConfig } from 'molstar/lib/mol-plugin/config';
+import { PluginContext } from 'molstar/lib/mol-plugin/context';
+import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
+import { StructureSelection } from 'molstar/lib/mol-model/structure';
 
-import EntrySelection from './EntrySelection';
-import { NO_SELECTION } from './EntrySelection';
-import { EntryColorMode, getTrackColor } from 'utils/entry-color';
+import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
+import {
+  UniformColorThemeProvider,
+  UniformColorThemeParams,
+} from 'molstar/lib/mol-theme/color/uniform';
+import { ColorByResidueLddtTheme } from './ColourByResidueLddtTheme';
+import { AfConfidenceProvider } from './af-confidence/prop';
+import { AfConfidenceColorThemeProvider } from './af-confidence/color';
+import { ParamDefinition } from 'molstar/lib/mol-util/param-definition';
 
-import { intersectionObserver as intersectionObserverPolyfill } from 'utils/polyfills';
-
-import ProtVistaForStructure from './ProtVistaForStructures';
-import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
-
-import getMapper from './proteinToStructureMapper';
-
-import fonts from 'EBI-Icon-fonts/fonts.css';
+import { Script } from 'molstar/lib/mol-script/script';
+import { Color } from 'molstar/lib/mol-util/color';
+import { ColorNames } from 'molstar/lib/mol-util/color/names';
+import { useBehavior } from 'molstar/lib/mol-plugin-ui/hooks/use-behavior';
 
 import { foundationPartial } from 'styles/foundation';
-
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
+// import SelectionTheme from './InterProTheme';
 
 const f = foundationPartial(style, fonts);
 
-/*:: import type { ColorMode } from 'utils/entry-color'; */
+const newLocal = (props /*: Props */) => {
+  if (props.viewer) {
+    const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
+    if (highlighted) {
+      const text = highlighted.labels[0];
+      return (
+        <div
+          className={f('structure-label')}
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
+      );
+    }
+  }
+  return <div />;
+};
+/**
+ * Function hook for 3D model labels
+ * returns information on residue highlighted on 3D structure
+ * @param {Object} props - react props
+ * @returns {Object} react element8
+ */
+const Labels = newLocal;
+
 /*:: type Props = {
   id: string,
-  matches: Array<Object>,
-  highlight?: string,
-  colorDomainsBy: ColorMode
-}; */
-
-/*:: type State = {
-  plugin: ?Object,
-  entryMap: Object,
-  selectedEntry: string,
-  selectedEntryToKeep: ?Object,
-  isStuck: boolean,
-  isSpinning: boolean,
-  isStructureFullScreen: boolean,
-  isSplitScreen: boolean,
-  isMinimized: boolean,
-}; */
-
-const NUMBER_OF_CHECKS = 10;
-const optionsForObserver = {
-  root: null,
-  rootMargin: '0px',
-  /* eslint-disable-next-line prefer-spread */
-  threshold: Array.apply(null, { length: NUMBER_OF_CHECKS }).map(
-    // $FlowFixMe
-    Number.call,
-    (n) => (n + 1) / NUMBER_OF_CHECKS,
-  ),
+  url?: string,
+  elementId: string,
+  ext?: string,
+  name?: string,
+  theme?: string,
+  onStructureLoaded?: function,
+  isSpinning?: boolean,
+  shouldResetViewer?: boolean,
+  selections: Array<Array<string>>,
 };
+  type SettingsForNGL ={
+    defaultRepresentation: boolean,
+    ext?: string,
+    name?: string,
+  }
+ */
 
-class StructureView extends PureComponent /*:: <Props, State> */ {
+class StructureView extends PureComponent /*:: <Props> */ {
   /*:: _structureViewer: { current: ?HTMLElement }; */
-  /*:: stage: Object; */
-  /*:: _protein2structureMappers: Object; */
+  /*:: _structureViewerCanvas: { current: ?HTMLElement }; */
+  /*:: viewer: Object; */
   /*:: name: Object; */
-  /*:: _structurevViewer: Object; */
-  /*:: _structureSection: Object; */
-  /*:: _protvista: Object; */
-  /*:: _splitView: Object; */
-  /*:: splitViewStyle: Object; */
-  /*:: observer: IntersectionObserver; */
-  /*:: handlingSequenceHighlight: bool; */
 
   static propTypes = {
     id: T.oneOfType([T.string, T.number]).isRequired,
-    matches: T.array,
-    highlight: T.string,
-    colorDomainsBy: T.string,
+    url: T.string,
+    elementId: T.string,
+    onStructureLoaded: T.func,
+    onReset: T.func,
+    isSpinning: T.bool,
+    shouldResetViewer: T.bool,
+    selections: T.array,
+    ext: T.string,
+    name: T.string,
+    theme: T.string,
   };
 
   constructor(props /*: Props */) {
     super(props);
 
-    this.state = {
-      plugin: null,
-      entryMap: {},
-      selectedEntry: '',
-      selectedEntryToKeep: null,
-      isStuck: false,
-      isSpinning: false,
-      isStructureFullScreen: false,
-      isSplitScreen: false,
-      isMinimized: false,
-    };
-
-    this.stage = null;
-
-    this._protein2structureMappers = {};
+    this.viewer = null;
     this.name = `${this.props.id}`;
-
-    this._structurevViewer = React.createRef();
-    this._structureSection = React.createRef();
-    this._protvista = React.createRef();
-    this._splitView = React.createRef();
-    this.splitViewStyle = {};
+    this._structureViewer = React.createRef();
+    this._structureViewerCanvas = React.createRef();
+    this.highlightColour = null;
+    this.selections = null;
   }
+
   async componentDidMount() {
-    await intersectionObserverPolyfill();
+    if (!this.viewer) {
+      const MySpec = {
+        ...DefaultPluginSpec(),
+        layout: {
+          isExpanded: true,
+          showControls: true,
+        },
+        config: [[PluginConfig.VolumeStreaming.Enabled, false]],
+      };
+      this.viewer = new PluginContext(MySpec);
 
-    const pdbid = this.props.id;
-    this.stage = new Stage(this._structurevViewer.current);
-    this.stage.setParameters({ backgroundColor: 0xfcfcfc });
-    this.stage
-      .loadFile(`rcsb://${this.name}.mmtf`, { defaultRepresentation: false })
-      .then((component) => {
-        component.addRepresentation('cartoon', { colorScheme: 'chainname' });
-        component.autoView();
-      })
-      .then(() => {
-        this.stage.handleResize();
-        if (this.props.matches) {
-          const entryMap = this.createEntryMap();
-          this.setState({ entryMap });
-        }
-      });
+      await this.viewer.init();
+      this.viewer.initViewer(
+        this._structureViewerCanvas.current,
+        this._structureViewer.current,
+      );
+      this.viewer.representation.structure.themes.colorThemeRegistry.add(
+        ColorByResidueLddtTheme.colorThemeProvider,
+      );
+      this.viewer.managers.lociLabels.addProvider(
+        ColorByResidueLddtTheme.labelProvider,
+      );
+      this.viewer.customModelProperties.register(
+        ColorByResidueLddtTheme.propertyProvider,
+        true,
+      );
 
-    const threshold = 0.4;
-    this.observer = new IntersectionObserver((entries) => {
-      this.setState({
-        isStuck:
-          this._structureSection.current.getBoundingClientRect().y < 0 &&
-          entries[0].intersectionRatio < threshold,
-      });
-      if (this.stage && this.state.isStuck) {
-        this.stage.handleResize();
-      }
-    }, optionsForObserver);
-    this.observer.observe(this._structureSection.current);
-    this._protvista.current.addEventListener(
-      'change',
-      ({ detail: { eventtype, highlight, feature, chain, protein } }) => {
-        const {
-          accession,
-          source_database: sourceDB,
-          type,
-          chain: chainF,
-          protein: proteinF,
-          parent,
-        } = feature || {};
-        let proteinD = proteinF;
+      this.viewer.customModelProperties.register(AfConfidenceProvider, true);
+      // this.viewer.managers.lociLabels.addProvider(this.labelAfConfScore);
+      this.viewer.representation.structure.themes.colorThemeRegistry.add(
+        AfConfidenceColorThemeProvider,
+      );
+    }
 
-        switch (eventtype) {
-          case 'sequence-chain':
-            if (highlight) {
-              const [start, stop] = highlight.split(':');
-              const p2s = this._protein2structureMappers[
-                `${protein}->${chain}`.toUpperCase()
-              ];
-              this.showRegionInStructure(
-                chain,
-                Math.round(p2s(start)),
-                Math.round(p2s(stop)),
-              );
-              this.handlingSequenceHighlight = true;
-            } else this.showRegionInStructure();
-            break;
-          case 'click':
-            // bit of a hack to handle missing data in some entries
-            if (!proteinD && parent) {
-              proteinD = parent.protein;
-            }
-            this.setState({
-              selectedEntryToKeep:
-                type === 'chain'
-                  ? {
-                      accession: pdbid,
-                      db: 'pdb',
-                      chain: accession,
-                      protein: proteinD,
-                    }
-                  : {
-                      accession: accession,
-                      db: sourceDB,
-                      chain: chainF,
-                      protein: proteinD,
-                    },
-            });
-            break;
-          case 'mouseover':
-            if (this.handlingSequenceHighlight) {
-              this.handlingSequenceHighlight = false;
-              return;
-            }
-            if (type === 'chain')
-              this.showEntryInStructure('pdb', pdbid, accession, protein);
-            else if (type === 'secondary_structure')
-              this.showSecondaryStructureEntries(feature);
-            else if (!accession.startsWith('G3D:'))
-              // TODO: Needs refactoring
-              this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
-            break;
-          case 'mouseout':
-            if (type !== 'secondary_structure') this.showEntryInStructure();
-            break;
-          default:
-            break;
-        }
-      },
-    );
+    if (this.props.url) {
+      this.loadStructureInViewer(this.props.url, this.props.ext);
+    } else {
+      this.loadStructureInViewer(
+        `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
+        'mmcif',
+      );
+    }
   }
-  componentDidUpdate() {
-    if (this.name !== `${this.props.id}`) {
-      this.name = `${this.props.id}`;
-      this.stage.removeAllComponents();
 
-      this.stage
-        .loadFile(`rcsb://${this.name}.mmtf`, { defaultRepresentation: false })
-        .then((component) => {
-          component.addRepresentation('cartoon', { colorScheme: 'chainname' });
-          component.autoView();
+  componentDidUpdate(prevProps) {
+    if (this.name !== `${this.props.id}` || prevProps.url !== this.props.url) {
+      this.name = `${this.props.id}`;
+      this.viewer.clear();
+      if (this.props.url) {
+        this.loadStructureInViewer(this.props.url, this.props.ext);
+      } else {
+        this.loadStructureInViewer(
+          `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
+          'mmcif',
+        );
+      }
+    }
+    if (this.viewer) {
+      this.setSpin(this.props.isSpinning);
+      if (this.props.shouldResetViewer) {
+        PluginCommands.Camera.Reset(this.viewer, {});
+        this.clearSelections();
+        this.applyChainIdTheme();
+        if (this.props.onReset) {
+          this.props.onReset();
+        }
+      }
+      if (this.props.selections?.length > 0) {
+        this.highlightSelections(this.props.selections);
+      }
+    }
+  }
+
+  async loadStructureInViewer(url /*: string */, format /*: string */) {
+    if (this.viewer) {
+      await this.viewer.clear();
+      const data = await this.viewer.builders.data.download(
+        { url: url },
+        { state: { isGhost: false } },
+      );
+      const trajectory = await this.viewer.builders.structure.parseTrajectory(
+        data,
+        format,
+      );
+      this.viewer.builders.structure.hierarchy
+        .applyPreset(trajectory, 'default', {
+          structure: {
+            name: 'model',
+            params: {},
+          },
+          showUnitcell: false,
+          representationPreset: 'auto',
         })
         .then(() => {
-          this.stage.handleResize();
-          if (this.props.matches) {
-            const entryMap = this.createEntryMap();
-            this.setState({ entryMap });
+          // populate the entry map object used for entry highlighting
+          if (this.props.onStructureLoaded) {
+            this.props.onStructureLoaded();
           }
+          // spin/stop spinning the structure
+          this.setSpin(this.props.isSpinning);
+          this.applyChainIdTheme();
         });
     }
   }
 
-  componentWillUnmount() {
-    this.observer.disconnect();
-  }
-
-  _toggleStructureSpin = () => {
-    if (this.stage) {
-      const isSpinning = !this.state.isSpinning;
-      this.stage.setSpin(isSpinning);
-      this.setState({ isSpinning });
-    }
-  };
-
-  _resetStructureView = () => {
-    if (this.stage) {
-      this.stage.autoView();
-    }
-  };
-
-  _getChainMap(chain, locations, p2s) {
-    const chainMap = [];
-    for (const location of locations) {
-      for (const { start, end } of location.fragments) {
-        chainMap.push({
-          struct_asym_id: chain,
-          start_residue_number: p2s(start),
-          end_residue_number: p2s(end),
-          accession: chain,
-          source_database: 'pdb',
-        });
-      }
-    }
-    return chainMap;
-  }
-
-  _mapLocations(map, { chain, protein, locations, entry, db, match }, p2s) {
-    for (const location of locations) {
-      for (const fragment of location.fragments) {
-        map[chain][protein].push({
-          struct_asym_id: chain,
-          start_residue_number: Math.round(p2s(fragment.start)),
-          end_residue_number: Math.round(p2s(fragment.end)),
-          accession: entry,
-          source_database: db,
-          parent: match.metadata.integrated
-            ? { accession: match.metadata.integrated }
-            : null,
-        });
-      }
-    }
-  }
-
-  _collateHits(database, accession, chain, protein) {
-    let hits = [];
-    if (database && accession) {
-      if (chain && protein) {
-        hits = hits.concat(
-          this.state.entryMap[database][accession][chain][protein],
-        );
-      } else if (chain) {
-        Object.keys(this.state.entryMap[database][accession][chain]).forEach(
-          (p) => {
-            hits = hits.concat(
-              this.state.entryMap[database][accession][chain][p],
-            );
-          },
-        );
-      } else {
-        Object.keys(this.state.entryMap[database][accession]).forEach((c) => {
-          Object.keys(this.state.entryMap[database][accession][c]).forEach(
-            (p) => {
-              hits = hits.concat(
-                this.state.entryMap[database][accession][c][p],
-              );
-            },
-          );
-        });
-      }
-    }
-
-    hits.forEach(
-      (hit) => (hit.color = getTrackColor(hit, this.props.colorDomainsBy)),
-    );
-    return hits;
-  }
-
-  createEntryMap() {
-    const memberDBMap = { pdb: {} };
-
-    if (this.props.matches) {
-      // create matches in structure hierarchy
-      for (const match of this.props.matches) {
-        const entry = match.metadata.accession;
-        const db = match.metadata.source_database;
-        if (!memberDBMap[db]) memberDBMap[db] = {};
-        if (!memberDBMap[db][entry]) memberDBMap[db][entry] = {};
-
-        for (const structure of match.structures) {
-          const chain = structure.chain;
-          const protein = structure.protein;
-          const p2s = getMapper(structure.protein_structure_mapping[chain]);
-          this._protein2structureMappers[
-            `${protein}->${chain}`.toUpperCase()
-          ] = p2s;
-          if (!memberDBMap[db][entry][chain])
-            memberDBMap[db][entry][chain] = {};
-          if (!memberDBMap[db][entry][chain][protein])
-            memberDBMap[db][entry][chain][protein] = [];
-          this._mapLocations(
-            memberDBMap[db][entry],
-            {
-              chain,
-              protein,
-              locations: structure.entry_protein_locations,
-              entry,
-              db,
-              match,
-            },
-            p2s,
-          );
-          // create PDB chain mapping
-          if (!memberDBMap.pdb[structure.accession])
-            memberDBMap.pdb[structure.accession] = {};
-          if (!memberDBMap.pdb[structure.accession][chain]) {
-            memberDBMap.pdb[structure.accession][chain] = {};
-          }
-          if (!memberDBMap.pdb[structure.accession][chain][structure.protein]) {
-            memberDBMap.pdb[structure.accession][chain][
-              structure.protein
-            ] = this._getChainMap(
-              chain,
-              structure.structure_protein_locations,
-              p2s,
-            );
-          }
-        }
-      }
-    }
-    return memberDBMap;
-  }
-
-  // eslint-disable-next-line complexity
-  showEntryInStructure = (memberDB, entry, chain, protein) => {
-    const keep = this.state.selectedEntryToKeep;
-    let db;
-    let acc;
-    let ch;
-    let prot;
-
-    // reset keep when 'no entry' is selected via selection input
-    if (entry === NO_SELECTION && keep) {
-      keep.db = null;
-      keep.accession = null;
-      keep.chain = null;
-      keep.protein = null;
-    } else if (memberDB !== undefined && entry !== undefined) {
-      db = memberDB;
-      acc = entry;
-      ch = chain;
-      prot = protein;
-    } else if (
-      keep &&
-      keep.db !== null &&
-      keep.accession !== null &&
-      keep.chain !== null &&
-      keep.protein !== null
-    ) {
-      db = keep.db;
-      acc = keep.accession;
-      ch = keep.chain;
-      prot = keep.protein;
-    }
-
-    if (acc && acc.startsWith('Chain')) return; // Skip the keep procedure for secondary structure
-    const hits = this._collateHits(db, acc, ch, prot);
-    if (hits.length > 0) {
-      if (this.stage) {
-        const components = this.stage.getComponentsByName(this.name);
-        if (components) {
-          components.forEach((component) => {
-            const selections = [];
-            hits.forEach((hit) => {
-              selections.push([
-                hit.color,
-                `${hit.start_residue_number}-${hit.end_residue_number}:${hit.struct_asym_id}`,
-              ]);
-            });
-            const theme = ColormakerRegistry.addSelectionScheme(
-              selections,
-              acc,
-            );
-            component.addRepresentation('cartoon', { color: theme });
-          });
-        }
-      }
-    } else {
-      // default view when no entry selected
-      const components = this.stage.getComponentsByName(this.name);
-      if (components) {
-        components.forEach((component) => {
-          component.addRepresentation('cartoon', { colorScheme: 'chainname' });
-        });
-      }
-    }
-    this.setState({ selectedEntry: acc || '' });
-  };
-
-  showSecondaryStructureEntries = (feature) => {
-    const hits = [];
-    if (feature.locations) {
-      for (const loc of feature.locations) {
-        for (const frag of loc.fragments) {
-          hits.push({ color: feature.color, start: frag.start, end: frag.end });
-        }
-      }
-    }
-
-    if (hits.length > 0) {
-      if (this.stage) {
-        const components = this.stage.getComponentsByName(this.name);
-        if (components) {
-          components.forEach((component) => {
-            const selections = [];
-            hits.forEach((hit) => {
-              selections.push([
-                hit.color,
-                `${hit.start}-${hit.end}:${feature.chain}`,
-              ]);
-            });
-            const theme = ColormakerRegistry.addSelectionScheme(
-              selections,
-              feature.accession,
-            );
-            component.addRepresentation('cartoon', { color: theme });
-          });
-        }
-      }
-    }
-  };
-
-  _toggleMinimize = () =>
-    this.setState({ isMinimized: !this.state.isMinimized });
-
-  showRegionInStructure(chain, start, stop) {
-    const components = this.stage.getComponentsByName(this.name);
-    if (components) {
-      components.forEach((component) => {
-        if (chain && start && stop) {
-          const selection = `${start}-${stop}:${chain}`;
-          const theme = ColormakerRegistry.addSelectionScheme(
-            [['red', selection]],
-            selection,
-          );
-          component.addRepresentation('cartoon', { color: theme });
-        } else {
-          component.addRepresentation('cartoon', {
-            colorScheme: 'chainname',
-          });
-        }
+  setSpin(spinState = false) {
+    if (this.viewer && this.viewer.canvas3d) {
+      const trackball = this.viewer.canvas3d.props.trackball;
+      PluginCommands.Canvas3D.SetSettings(this.viewer, {
+        settings: { trackball: { ...trackball, spin: spinState } },
       });
     }
   }
+
+  highlightSelections(selections /*: Array<Array<string>> */) {
+    if (!this.viewer) return;
+    const data = this.viewer.managers.structure.hierarchy.current.structures[0]
+      ?.cell.obj?.data;
+    if (!data) return;
+
+    this.clearSelections();
+    this.viewer
+      .dataTransaction(async () => {
+        UniformColorThemeParams.value = ParamDefinition.Color(ColorNames.white);
+        for (const s of this.viewer.managers.structure.hierarchy.current
+          .structures) {
+          await this.viewer.managers.structure.component.updateRepresentationsTheme(
+            s.components,
+            {
+              color: UniformColorThemeProvider.name,
+            },
+          );
+        }
+      })
+      .then(() => {
+        const molSelection = Script.getStructureSelection((MS) => {
+          const atomGroups = [];
+
+          let ShouldColourChange = true;
+          for (const selection of selections) {
+            if (ShouldColourChange) {
+              // const hexColour = parseInt(selections[0].colour.substring(1), 16);
+              if (this.highlightColour !== selection.colour) {
+                this.highlightColour = selection.colour;
+                PluginCommands.Canvas3D.SetSettings(this.viewer, {
+                  settings: (props) => {
+                    props.renderer.selectColor = Color(selection.colour);
+                  },
+                });
+              }
+              ShouldColourChange = false;
+            }
+            const positions = [];
+            for (let i = selection.start; i <= selection.end; i++) {
+              positions.push(i);
+            }
+            atomGroups.push(
+              MS.struct.generator.atomGroups({
+                'chain-test': MS.core.rel.eq([
+                  selection.chain,
+                  MS.ammp('auth_asym_id'),
+                ]),
+                'residue-test': MS.core.set.has([
+                  MS.set(...positions),
+                  MS.ammp('auth_seq_id'),
+                ]),
+              }),
+            );
+          }
+          return MS.struct.combinator.merge(atomGroups);
+        }, data);
+        const loci = StructureSelection.toLociWithSourceUnits(molSelection);
+        this.viewer.managers.interactivity.lociSelects.select({ loci });
+      });
+  }
+
+  applyChainIdTheme() {
+    let colouringTheme;
+    switch (this.props.theme) {
+      case 'residue':
+        colouringTheme =
+          ColorByResidueLddtTheme.propertyProvider.descriptor.name;
+        break;
+      case 'af':
+        colouringTheme = AfConfidenceColorThemeProvider.name;
+        break;
+      default:
+        colouringTheme = ChainIdColorThemeProvider.name;
+    }
+
+    // apply colouring
+    this.viewer.dataTransaction(async () => {
+      for (const s of this.viewer.managers.structure.hierarchy.current
+        .structures) {
+        await this.viewer.managers.structure.component.updateRepresentationsTheme(
+          s.components,
+          {
+            color: colouringTheme,
+          },
+        );
+      }
+    });
+  }
+
+  clearSelections() {
+    if (!this.viewer) return;
+    const data = this.viewer.managers.structure.hierarchy.current.structures[0]
+      ?.cell.obj?.data;
+    if (!data) return;
+    this.viewer.managers.interactivity.lociSelects.deselectAll();
+  }
+
   render() {
-    const {
-      isStuck,
-      entryMap,
-      selectedEntry,
-      isSpinning,
-      isSplitScreen,
-      isMinimized,
-      isStructureFullScreen,
-    } = this.state;
     return (
-      <>
-        <div
-          ref={this._splitView}
-          className={f({ 'split-view': isSplitScreen })}
-        >
-          <div ref={this._structureSection} className={f('structure-wrapper')}>
-            <div
-              className={f('structure-viewer', {
-                'is-stuck': isStuck,
-                'is-minimized': isMinimized,
-              })}
-              data-testid="structure-3d-viewer"
-            >
-              <ResizeObserverComponent
-                element="div"
-                updateCallback={() => {
-                  if (this.stage) this.stage.handleResize();
-                }}
-                measurements={['width', 'height']}
-                className={f('viewer-resizer')}
-              >
-                {() => {
-                  return (
-                    <div
-                      ref={this._structurevViewer}
-                      className={f('structure-viewer-ref')}
-                    />
-                  );
-                }}
-              </ResizeObserverComponent>
+      <ResizeObserverComponent
+        element="div"
+        updateCallback={() => {
+          if (this.viewer) this.viewer.handleResize();
+        }}
+        measurements={['width', 'height']}
+        className={f('viewer-resizer')}
+      >
+        {() => {
+          return (
+            <div className={f('structure-and-label')}>
               <div
-                className={f('viewer-control-bar', {
-                  hide: isStructureFullScreen,
-                })}
+                id={this.props.elementId || 'structure-viewer'}
+                ref={this._structureViewer}
+                className={f('structure-viewer-ref')}
               >
-                {this.props.matches ? (
-                  <EntrySelection
-                    entryMap={entryMap}
-                    updateStructure={this.showEntryInStructure}
-                    selectedEntry={selectedEntry}
-                  />
-                ) : null}
-                <div className={f('viewer-controls')}>
-                  <button
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                    onClick={this._toggleStructureSpin}
-                    data-icon={isSpinning ? '' : 'v'}
-                    title={isSpinning ? 'Stop spinning' : 'Spin structure'}
-                  />
-                  <button
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                    onClick={this._resetStructureView}
-                    data-icon="}"
-                    title="Reset image"
-                  />
-                  <FullScreenButton
-                    element={this._splitView.current}
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                    tooltip={
-                      isSplitScreen ? 'Exit full screen' : 'Split full screen'
-                    }
-                    dataIcon={isSplitScreen ? 'G' : '\uF0DB'}
-                    onFullScreenHook={() =>
-                      this.setState({ isSplitScreen: true })
-                    }
-                    onExitFullScreenHook={() =>
-                      this.setState({ isSplitScreen: false })
-                    }
-                  />
-
-                  <FullScreenButton
-                    className={f('structure-icon', 'icon', 'icon-common')}
-                    tooltip="View the structure in full screen mode"
-                    element={this._structureSection.current}
-                    onFullScreenHook={() =>
-                      this.setState({ isStructureFullScreen: true })
-                    }
-                    onExitFullScreenHook={() =>
-                      this.setState({ isStructureFullScreen: false })
-                    }
-                  />
-
-                  {this.state.isStuck && (
-                    <button
-                      data-icon={this.state.isMinimized ? '\uF2D0' : '\uF2D1'}
-                      title={'Minimize'}
-                      onClick={this._toggleMinimize}
-                      className={f('structure-icon', 'icon', 'icon-common')}
-                    />
-                  )}
-                </div>
+                <canvas ref={this._structureViewerCanvas} />
               </div>
+              <Labels viewer={this.viewer} />
             </div>
-          </div>
-          <div
-            ref={this._protvista}
-            data-testid="structure-protvista"
-            className={f('protvista-container')}
-          >
-            <ProtVistaForStructure />
-          </div>
-        </div>
-      </>
+          );
+        }}
+      </ResizeObserverComponent>
     );
   }
 }
 
-const mapStateToProps = createSelector(
-  (state) => state.settings.ui,
-  (ui) => ({
-    colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
-  }),
-);
-
-export default connect(mapStateToProps)(StructureView);
+export default StructureView;
