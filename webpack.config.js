@@ -82,10 +82,10 @@ const getConfigFor = (env, mode, module = false) => {
     name,
     // MODE
     mode,
-    // OUTPUT
-    node: {
-      fs: 'empty',
-    },
+    // // OUTPUT
+    // node: {
+    //   fs: 'empty',
+    // },
     output: {
       // path: path.resolve('dist'),
       publicPath,
