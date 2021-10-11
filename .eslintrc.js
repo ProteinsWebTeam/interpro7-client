@@ -1,10 +1,8 @@
-const path = require('path');
-
-const parser = 'babel-eslint';
+const parser = '@babel/eslint-parser';
 
 const settings = {
   react: {
-    version: '16.9.0',
+    version: 'detect',
   },
 };
 const parserOptions = {
@@ -14,10 +12,14 @@ const parserOptions = {
     jsx: true,
     modules: true,
   },
+  babelOptions: {
+    presets: ['@babel/preset-react'],
+  },
 };
 
 const extending = [
   'plugin:react/recommended',
+  'plugin:react/jsx-runtime',
   'plugin:jsx-a11y/recommended',
   'prettier',
 ];
@@ -27,6 +29,7 @@ const plugins = ['react', 'jsx-a11y'];
 const env = {
   browser: true,
   es6: true,
+  es2021: true,
   jest: true,
 };
 

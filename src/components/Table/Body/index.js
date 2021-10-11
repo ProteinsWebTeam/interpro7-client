@@ -17,11 +17,13 @@ import styles from './style.css';
 
 const f = foundationPartial(styles);
 // default values for version 1.X of colorhash
+/* eslint-disable no-magic-numbers */
 const colorHash = new ColorHash({
   hash: 'bkdr',
   saturation: [0.65, 0.35, 0.5],
   lightness: 0.95,
 });
+/* eslint-enable no-magic-numbers */
 
 /*:: type Props = { children: any} */
 
