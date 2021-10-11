@@ -9,14 +9,19 @@ import Row from '../Row';
 import { edgeCases } from 'utils/server-message';
 import EdgeCase from 'components/EdgeCase';
 
-import ColorHash from 'color-hash/lib/color-hash';
+import ColorHash from 'color-hash';
 
 import { foundationPartial } from 'styles/foundation';
 
 import styles from './style.css';
 
 const f = foundationPartial(styles);
-const colorHash = new ColorHash({ lightness: 0.95 });
+// default values for version 1.X of colorhash
+const colorHash = new ColorHash({
+  hash: 'bkdr',
+  saturation: [0.65, 0.35, 0.5],
+  lightness: 0.95,
+});
 
 /*:: type Props = { children: any} */
 

@@ -1,9 +1,14 @@
 // @flow
-import ColorHash from 'color-hash/lib/color-hash';
+import ColorHash from 'color-hash';
 
 import config from 'config';
 
-const colorHash = new ColorHash();
+// default values for version 1.X of colorhash
+const colorHash = new ColorHash({
+  hash: 'bkdr',
+  saturation: [0.65, 0.35, 0.5],
+  lightness: [0.65, 0.35, 0.5],
+});
 
 /*:: export type ColorMode = 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP'; */
 /*:: type ColorModeMap = {[string]: ColorMode}; */
