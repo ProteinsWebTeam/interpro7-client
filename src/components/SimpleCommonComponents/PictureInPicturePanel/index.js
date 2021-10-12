@@ -33,7 +33,8 @@ const PictureInPicturePanel = ({
 }) => {
   const [isStuck, setStuck] = useState(false);
   const [isMinimized, setMinimized] = useState(false);
-  const wrapperRef /*: { current: null | HTMLElement } */ = useRef(null);
+  const wrapperRef /*: { current: null | React$ElementRef<'div'> } */ =
+    useRef(null);
   let observer = null;
   const threshold = 0.4;
   useEffect(() => {
@@ -42,14 +43,15 @@ const PictureInPicturePanel = ({
   }, []);
   useEffect(() => {
     if (wrapperRef?.current) {
+      const current = wrapperRef.current;
       observer = new IntersectionObserver((entries) => {
         setStuck(
-          ((wrapperRef?.current?.getBoundingClientRect() /*: any */)?.y || 0) <
-            0 && entries[0].intersectionRatio < threshold,
+          ((current?.getBoundingClientRect() /*: any */)?.y || 0) < 0 &&
+            entries[0].intersectionRatio < threshold,
         );
         onChangingMode();
       }, optionsForObserver);
-      observer.observe(wrapperRef.current);
+      observer.observe(current);
     }
     return () => {
       if (observer) observer.disconnect();
