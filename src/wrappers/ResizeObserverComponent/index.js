@@ -38,6 +38,7 @@ class ResizeObserverComponent extends PureComponent /*:: <Props, State> */ {
 
     this.state = {};
     this._resizeObserver = new ResizeObserver(
+      // $FlowFixMe method-unbinding
       this._handleResizeEvent.bind(this),
     );
 

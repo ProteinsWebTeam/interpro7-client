@@ -40,6 +40,7 @@ class NoRows extends PureComponent /*:: <Props> */ {
   }
 
   componentDidMount() {
+    // $FlowFixMe method-unbinding
     if (!(this._ref.current && this._ref.current.animate)) return;
     this._ref.current.animate(
       { opacity: ([0, 1] /*: Array<number|null> */) },
