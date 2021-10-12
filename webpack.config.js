@@ -495,29 +495,54 @@ module.exports = (
           },
         })
       : null,
-    mode === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
+    // mode === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
     htmlWebpackPlugin,
     ...configModule.plugins,
   ].filter(Boolean);
+
+  // // devServer
+  // if (mode === 'development') {
+  //   configModule.devServer = {
+  //     host: '0.0.0.0',
+  //     stats: 'errors-only',
+  //     contentBase: publicPath,
+  //     publicPath,
+  //     overlay: true,
+  //     port: websiteURL.port || DEFAULT_PORT,
+  //     hot: true,
+  //     historyApiFallback: {
+  //       index: publicPath,
+  //       disableDotRule: true,
+  //     },
+  //     watchOptions: {
+  //       ignored: /node_modules/,
+  //     },
+  //   };
+  // }
 
   // devServer
   if (mode === 'development') {
     configModule.devServer = {
       host: '0.0.0.0',
-      stats: 'errors-only',
-      contentBase: publicPath,
-      publicPath,
-      overlay: true,
       port: websiteURL.port || DEFAULT_PORT,
+      static: {
+        directory: path.join(__dirname, 'dist'),
+        publicPath,
+        watch: {
+          ignored: /node_modules/,
+        },
+      },
+
+      client: {
+        overlay: true,
+      },
       hot: true,
       historyApiFallback: {
         index: publicPath,
         disableDotRule: true,
       },
-      watchOptions: {
-        ignored: /node_modules/,
-      },
     };
+    configModule.stats = 'errors-only';
   }
 
   if (mode === 'production') {
