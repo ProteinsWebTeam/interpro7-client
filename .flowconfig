@@ -44,9 +44,6 @@ module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=src
 munge_underscores=true
 emoji=true
-esproposal.class_static_fields=enable
-esproposal.class_instance_fields=enable
-esproposal.optional_chaining=enable
 
 [lints]
 deprecated-utility=off
