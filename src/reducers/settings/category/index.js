@@ -7,6 +7,7 @@ const DEFAULT_HTTP_PORT = 80;
 const DEFAULT_SECONDS_TO_RETRY = 10;
 
 /*:: type Category = 'navigation' | 'notifications' | 'ui' | 'cache' | 'ebi' | 'api' | 'ipScan'; */
+
 // eslint-disable-next-line complexity
 export const getDefaultSettingsFor = (category /*: Category */) => {
   switch (category) {
@@ -16,6 +17,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         secondsToRetry:
           config?.timeout?.secondsToRetry || DEFAULT_SECONDS_TO_RETRY,
       };
+
     case 'notifications':
       return {
         showTreeToast: true,

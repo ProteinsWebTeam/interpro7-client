@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '10'
+          node-version: '14'
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
@@ -18,7 +18,7 @@ jobs:
       - name: 🧪 | 🏗 - Test and Build
         run: |
           npm run deploy:production
-      - name: 📈 - Create Reports 
+      - name: 📈 - Create Reports
         run: |
           npm run report
       - name: 🧥‍ - Coveralls
@@ -33,9 +33,9 @@ jobs:
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
         env:
           SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
-          SLACK_USERNAME: "Github Actions"
-          SLACK_ICON_EMOJI: ":octocat:"
-          SLACK_TITLE: "CI results in GitHub Actions"
+          SLACK_USERNAME: 'Github Actions'
+          SLACK_ICON_EMOJI: ':octocat:'
+          SLACK_TITLE: 'CI results in GitHub Actions'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: "#interpro7"
+          SLACK_CHANNEL: '#interpro7'
           MSG_MINIMAL: Actions URL

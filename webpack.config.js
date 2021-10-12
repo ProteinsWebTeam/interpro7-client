@@ -500,26 +500,6 @@ module.exports = (
     ...configModule.plugins,
   ].filter(Boolean);
 
-  // // devServer
-  // if (mode === 'development') {
-  //   configModule.devServer = {
-  //     host: '0.0.0.0',
-  //     stats: 'errors-only',
-  //     contentBase: publicPath,
-  //     publicPath,
-  //     overlay: true,
-  //     port: websiteURL.port || DEFAULT_PORT,
-  //     hot: true,
-  //     historyApiFallback: {
-  //       index: publicPath,
-  //       disableDotRule: true,
-  //     },
-  //     watchOptions: {
-  //       ignored: /node_modules/,
-  //     },
-  //   };
-  // }
-
   // devServer
   if (mode === 'development') {
     configModule.devServer = {
