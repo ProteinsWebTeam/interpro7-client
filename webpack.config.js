@@ -39,7 +39,7 @@ const getCompressionPlugin = (() => {
 const cssSettings = {
   modules: {
     mode: 'local',
-    localIdentName: '[folder]_[name]__[local]___[fullhash:2]',
+    localIdentName: '[folder]_[name]__[local]___[hash:2]',
   },
   importLoaders: 1,
   sourceMap: true,
