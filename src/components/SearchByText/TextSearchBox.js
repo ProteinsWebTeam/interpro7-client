@@ -193,7 +193,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
                   width: '100%',
                 },
                 input: {
-                  width: '100% !important',
+                  minWidth: '7rem !important',
                   textAlign: 'left',
                 },
               }),

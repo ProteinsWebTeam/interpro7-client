@@ -13,16 +13,15 @@ const LegacyModuleSplitPlugin = require('./webpack-plugins/legacy-module-split-p
 // CSS-related
 const postCSSImport = require('postcss-import');
 const postcssPresetEnv = require('postcss-preset-env');
-
 const cssNano = require('cssnano');
 
+// Web service plugin
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const buildInfo = require('./scripts/build-info');
 const pkg = require('./package.json');
 
 const DEFAULT_PORT = 80;
-const kB = 1024;
 
 const iprConfig = require('./interpro-config.js');
 
@@ -73,27 +72,27 @@ const miniCssExtractPlugin = new MiniCssExtractPlugin({
   chunkFilename: path.join('css', '[id].[chunkhash:3].css'),
   ignoreOrder: true,
 });
-
+const getAssetModuleFilename = (pathData) => {
+  const ext = pathData.filename.split('.')?.[1].toLowerCase();
+  let subfolder = 'other';
+  if (['jpeg', 'jpg', 'png', 'gif', 'svg', 'avif'].includes(ext))
+    subfolder = 'images';
+  else if (['woff', 'woff2', 'ttf', 'eot'].includes(ext)) subfolder = 'fonts';
+  return path.join('assets', subfolder, '[name].[hash:3][ext]');
+};
 const getConfigFor = (env, mode, module = false) => {
   const name = module ? 'module' : 'legacy';
 
   return {
-    // NAME
     name,
-    // MODE
     mode,
-    // // OUTPUT
-    // node: {
-    //   fs: 'empty',
-    // },
     output: {
-      // path: path.resolve('dist'),
       publicPath,
       filename: path.join('js', `[id].${name}.[name].[fullhash:3].js`),
       chunkFilename: path.join('js', `[id].${name}.[name].[chunkhash:3].js`),
       globalObject: 'self',
+      assetModuleFilename: getAssetModuleFilename,
     },
-    // RESOLVE
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
       extensions: ['.js', '.ts', '.json', '.worker.js'],
@@ -110,7 +109,6 @@ const getConfigFor = (env, mode, module = false) => {
         react: path.resolve('node_modules/react'),
       },
     },
-    // MODULE
     module: {
       rules: [
         {
@@ -141,7 +139,6 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('node_modules', 'clanviewer'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
-            // path.resolve('node_modules', 'taxonomy-visualisation'),
           ],
           use: [
             {
@@ -202,11 +199,7 @@ const getConfigFor = (env, mode, module = false) => {
         },
         {
           test: /\.(txt|fast[aq])/i,
-          use: [
-            {
-              loader: 'raw-loader',
-            },
-          ],
+          type: 'asset/source',
         },
         {
           test: /\.yml$/i,
@@ -228,7 +221,6 @@ const getConfigFor = (env, mode, module = false) => {
                   ? MiniCssExtractPlugin.loader
                   : 'style-loader',
             },
-            // 'style-loader',
             {
               loader: 'css-loader',
               options: {
@@ -262,7 +254,6 @@ const getConfigFor = (env, mode, module = false) => {
                   ? MiniCssExtractPlugin.loader
                   : 'style-loader',
             },
-            // 'style-loader',
             {
               loader: 'css-loader',
               options: {
@@ -284,7 +275,6 @@ const getConfigFor = (env, mode, module = false) => {
                   ? MiniCssExtractPlugin.loader
                   : 'style-loader',
             },
-            // 'style-loader',
             {
               loader: 'css-loader',
               options: cssSettings,
@@ -305,11 +295,6 @@ const getConfigFor = (env, mode, module = false) => {
           exclude: /((tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
         },
         {
-          test: /\.css\?string$/i,
-          use: [{ loader: 'raw-loader' }],
-          exclude: /((tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
-        },
-        {
           test: /\.scss$/i,
           use: [
             {
@@ -318,7 +303,6 @@ const getConfigFor = (env, mode, module = false) => {
                   ? MiniCssExtractPlugin.loader
                   : 'style-loader',
             },
-            // 'style-loader',
             {
               loader: 'css-loader',
               options: Object.assign({}, cssSettings, {
@@ -331,59 +315,20 @@ const getConfigFor = (env, mode, module = false) => {
             },
           ],
         },
+        // Images
         {
           test: /\.(jpe?g|png|gif|svg|avif)$/i,
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                name: path.join(
-                  'assets',
-                  'images',
-                  '[name].[contenthash:base62:3].[ext]'
-                ),
-                limit: 1 * kB,
-              },
-            },
-            {
-              loader: 'img-loader',
-              options: {
-                enabled: mode === 'production',
-              },
-            },
-          ],
+          type: 'asset/resource',
         },
+        // fonts
         {
           test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                name: path.join(
-                  'assets',
-                  'fonts',
-                  '[name].[contenthash:base62:3].[ext]'
-                ),
-                limit: 1 * kB,
-                mimetype: 'application/font-woff',
-              },
-            },
-          ],
+          type: 'asset/resource',
         },
+        // fonts
         {
           test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: path.join(
-                  'assets',
-                  'fonts',
-                  '[name].[contenthash:base62:3].[ext]'
-                ),
-              },
-            },
-          ],
+          type: 'asset/resource',
         },
       ],
     },
@@ -457,7 +402,6 @@ const getConfigFor = (env, mode, module = false) => {
           })
         : null,
     ].filter(Boolean),
-    // optimization.minimize: mode === 'production',
     devtool: ((mode, env) => {
       if (mode === 'development') return 'cheap-module-source-map';
       if (env.staging) return 'source-map';
@@ -495,7 +439,6 @@ module.exports = (
           },
         })
       : null,
-    // mode === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
     htmlWebpackPlugin,
     ...configModule.plugins,
   ].filter(Boolean);
