@@ -14,7 +14,7 @@ const KeySpeciesArea = (
   {
     focusType,
     showKeySpecies,
-  } /*: {focusType: string, showKeySpecies: Boolean} */,
+  } /*: {focusType: string, showKeySpecies: boolean} */,
 ) => {
   const [showTaxoInfo, setShowTaxoInfo] = useState(true);
   if (focusType !== 'taxonomy') return null;

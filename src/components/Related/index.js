@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -22,6 +23,14 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles);
+
+const findIn = (
+  description /*: {} */,
+  fn /*: ({isFilter:boolean, order:number})=> boolean*/,
+) =>
+  // prettier-ignore
+  (Object.entries(description) /*: any */)
+    .find(([_key, value]) => fn(value)) || [];
 
 /*:: type ObjectToListProps = {
   obj: Object,
@@ -102,9 +111,10 @@ class _RelatedSimple extends PureComponent /*:: <RelatedSimpleProps> */ {
 const mapStateToPropsSimple = createSelector(
   (state) => state.customLocation.description.main.key,
   (state) =>
-    (Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0],
+    findIn(
+      state.customLocation.description,
+      (value /*: {isFilter:boolean, order:number} */) => value.isFilter,
+    ),
   (mainType, focusType) => ({ mainType, focusType }),
 );
 const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
@@ -201,12 +211,16 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
 const mapStateToPropsAdvanced = createSelector(
   (state) => state.customLocation.description.main.key,
   (state) =>
-    Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter && value.order === 1,
+    findIn(
+      state.customLocation.description,
+      (value /*: {isFilter:boolean, order:number} */) =>
+        value.isFilter && value.order === 1,
     ),
   (state) =>
-    Object.entries(state.customLocation.description).filter(
-      ([_key, value]) => value.isFilter && value.order !== 1,
+    findIn(
+      state.customLocation.description,
+      (value /*: {isFilter:boolean, order:number} */) =>
+        value.isFilter && value.order !== 1,
     ),
   (state) => state.settings.ui.showKeySpecies,
   (state) => state.settings.ui.showAllSpecies,
@@ -294,6 +308,7 @@ const RelatedAdvancedQuery = loadData({
   data: Object,
   focusType: string,
   hasSecondary: boolean,
+  showAllSpecies: boolean,
 }; */
 class Related extends PureComponent /*:: <RelatedProps> */ {
   static propTypes = {
@@ -314,15 +329,17 @@ class Related extends PureComponent /*:: <RelatedProps> */ {
           ? RelatedTaxonomy
           : RelatedAdvancedQuery;
     }
+    // $FlowFixMe
     return <RelatedComponent mainData={data.payload.metadata} {...props} />;
   }
 }
-
 const mapStateToPropsDefault = createSelector(
   (state) =>
-    Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter && value.order === 1,
-    ) || [],
+    findIn(
+      state.customLocation.description,
+      (value /*: {isFilter:boolean, order:number} */) =>
+        value.isFilter && value.order === 1,
+    ),
   (state) => state.settings.ui.showAllSpecies,
   ([focusType, filter], showAllSpecies) => ({
     focusType,
