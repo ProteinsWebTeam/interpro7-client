@@ -4,17 +4,19 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 import KeySpeciesTable from 'components/Taxonomy/KeySpeciesTable';
+import Sunburst from 'components/Related/Taxonomy/Sunburst';
 
 import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles);
 
-const KeySpeciesArea = (
+const TaxonomyExtraComponents = (
   {
     focusType,
     showKeySpecies,
-  } /*: {focusType: string, showKeySpecies: boolean} */,
+    showSunburst,
+  } /*: {focusType: string, showKeySpecies: boolean, showSunburst: boolean} */,
 ) => {
   const [showTaxoInfo, setShowTaxoInfo] = useState(true);
   if (focusType !== 'taxonomy') return null;
@@ -40,14 +42,16 @@ const KeySpeciesArea = (
           </h5>
         </div>
       )}
+      {showSunburst && <Sunburst />}
       {showKeySpecies && <KeySpeciesTable />}
     </>
   );
 };
 
-KeySpeciesArea.propTypes = {
+TaxonomyExtraComponents.propTypes = {
   focusType: T.string,
   showKeySpecies: T.bool,
+  showSunburst: T.bool,
 };
 
-export default KeySpeciesArea;
+export default TaxonomyExtraComponents;

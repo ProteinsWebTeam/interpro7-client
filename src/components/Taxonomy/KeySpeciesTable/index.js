@@ -55,6 +55,7 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
       }))}
       notFound={payload.results.length === 0}
       contentType="taxonomy"
+      title="Key Species"
     >
       <Column
         dataKey="accession"
@@ -138,4 +139,4 @@ class KeySpeciesTable extends PureComponent /*:: <Props, State> */ {
   }
 }
 
-export default KeySpeciesTable;
+export default KeySpeciesTableData;

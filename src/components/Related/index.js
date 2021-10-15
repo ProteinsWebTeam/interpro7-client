@@ -15,7 +15,7 @@ import { toPlural } from 'utils/pages';
 import RelatedTable from 'components/Related/RelatedTable';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
-import KeySpeciesArea from 'components/Related/Taxonomy/KeySpecies';
+import TaxonomyExtraComponents from 'components/Related/Taxonomy/TaxonomyExtraComponents';
 import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
@@ -31,6 +31,14 @@ const findIn = (
   // prettier-ignore
   (Object.entries(description) /*: any */)
     .find(([_key, value]) => fn(value)) || [];
+
+const filterIn = (
+  description /*: {} */,
+  fn /*: ({isFilter:boolean, order:number})=> boolean*/,
+) =>
+  // prettier-ignore
+  (Object.entries(description) /*: any */)
+    .filter(([_key, value]) => fn(value)) || [];
 
 /*:: type ObjectToListProps = {
   obj: Object,
@@ -134,6 +142,7 @@ const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
   secondaryDataLoading: boolean,
   showKeySpecies: boolean,
   showAllSpecies: boolean,
+  showSunburst: boolean,
 }; */
 /*:: type state = {
   showTaxoInfo: boolean,
@@ -154,6 +163,7 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
     secondaryDataLoading: T.bool.isRequired,
     showKeySpecies: T.bool.isRequired,
     showAllSpecies: T.bool.isRequired,
+    showSunburst: T.bool.isRequired,
   };
 
   render() {
@@ -169,10 +179,15 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       secondaryDataLoading,
       showKeySpecies,
       showAllSpecies,
+      showSunburst,
     } = this.props;
     return (
       <div className={f('row', 'column')}>
-        <KeySpeciesArea focusType={focusType} showKeySpecies={showKeySpecies} />
+        <TaxonomyExtraComponents
+          focusType={focusType}
+          showKeySpecies={showKeySpecies}
+          showSunburst={showSunburst}
+        />
 
         {secondaryDataLoading ? (
           <Loading />
@@ -217,19 +232,21 @@ const mapStateToPropsAdvanced = createSelector(
         value.isFilter && value.order === 1,
     ),
   (state) =>
-    findIn(
+    filterIn(
       state.customLocation.description,
       (value /*: {isFilter:boolean, order:number} */) =>
         value.isFilter && value.order !== 1,
     ),
   (state) => state.settings.ui.showKeySpecies,
   (state) => state.settings.ui.showAllSpecies,
+  (state) => state.settings.ui.showSunburst,
   (
     mainType,
     [focusType, { db: focusDB }],
     otherFilters,
     showKeySpecies,
     showAllSpecies,
+    showSunburst,
   ) => ({
     mainType,
     focusType,
@@ -237,6 +254,7 @@ const mapStateToPropsAdvanced = createSelector(
     otherFilters,
     showKeySpecies,
     showAllSpecies,
+    showSunburst,
   }),
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);

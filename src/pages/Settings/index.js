@@ -265,8 +265,9 @@ const UISettings = (
       structureViewer,
       showKeySpecies,
       showAllSpecies,
+      showSunburst,
     },
-  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean, showKeySpecies: boolean, showAllSpecies: boolean}} */,
+  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean, showKeySpecies: boolean, showAllSpecies: boolean, showSunburst: boolean}} */,
 ) => (
   <form data-category="ui">
     <h4>UI settings</h4>
@@ -355,6 +356,18 @@ const UISettings = (
               </thead>
               <tbody>
                 <tr>
+                  <td>Taxonomy Sunburst</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      name="showSunburst"
+                      id="sunburst-input"
+                      checked={showSunburst}
+                      onChange={noop}
+                    />
+                  </td>
+                </tr>
+                <tr>
                   <td>Key species</td>
                   <td>
                     <input
@@ -393,6 +406,7 @@ UISettings.propTypes = {
     structureViewer: T.bool.isRequired,
     showKeySpecies: T.bool.isRequired,
     showAllSpecies: T.bool.isRequired,
+    showSunburst: T.bool.isRequired,
   }).isRequired,
 };
 
@@ -621,8 +635,7 @@ class _AddToHomeScreen extends PureComponent /*:: <Props,State> */ {
       this.props.addToast(
         {
           title: 'Added to homescreen or desktop',
-          body:
-            'Keep in mind that you still need to be online to browse our data',
+          body: 'Keep in mind that you still need to be online to browse our data',
           ttl: 5000, // eslint-disable-line no-magic-numbers
         },
         'add-to-homescreen-banner',
@@ -632,8 +645,7 @@ class _AddToHomeScreen extends PureComponent /*:: <Props,State> */ {
       this.props.addToast(
         {
           title: 'Failed to add to homescreen or desktop',
-          body:
-            'It looks like you refused to add this website to the homescreen or desktop after all',
+          body: 'It looks like you refused to add this website to the homescreen or desktop after all',
           ttl: 5000, // eslint-disable-line no-magic-numbers
         },
         'add-to-homescreen-banner',
