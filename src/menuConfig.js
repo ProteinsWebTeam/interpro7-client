@@ -447,7 +447,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'AlphaFold',
-      counter: 'structural_models.full_length',
+      counter: 'structural_models.alphafold',
     },
   ],
   [
