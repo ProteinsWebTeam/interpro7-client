@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import T from 'prop-types';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+
 import { format } from 'url';
 import { createSelector } from 'reselect';
 import NightingaleSunburst from 'nightingale-sunburst';
@@ -18,7 +21,7 @@ import style from './style.css';
 
 const f = foundationPartial(style, ipro, fonts);
 
-const LinkOrText = ({ id, name }) => (
+const LinkOrText = ({ id, name } /*: { id: string, name: string } */) => (
   <i>
     {isNaN(id) ? (
       <span>{name}</span>
@@ -39,15 +42,22 @@ const LinkOrText = ({ id, name }) => (
     )}
   </i>
 );
+LinkOrText.propTypes = {
+  id: T.string,
+  name: T.string,
+};
 
 const weigthOptions = {
   proteins: 'Number of sequences',
   species: 'Number of species',
 };
 
-const Sunbust = ({ data, description }) => {
+const Sunburst = ({ data, description }) => {
   const { loading, payload } = data;
-  const sunburst = useRef(null);
+  const sunburst =
+    /* { current?: null | React$ElementRef<'nightingale-sunburst'>  }*/ useRef(
+      null,
+    );
   const [legends, setLegends] = useState(null);
   const [weightOption, setWeightOption] = useState('proteins');
   const [currentNode, setCurrentNode] = useState(null);
@@ -56,7 +66,7 @@ const Sunbust = ({ data, description }) => {
     loadWebComponent(() => NightingaleSunburst).as('nightingale-sunburst');
   }, []);
   useEffect(() => {
-    if (loading || !payload) return;
+    if (loading || !payload || !sunburst.current) return;
     sunburst.current.data = payload.taxa;
     setLegends(
       sunburst.current.superkingdoms.map((name) => [
@@ -81,7 +91,6 @@ const Sunbust = ({ data, description }) => {
         <div className={f('column', 'small-12', 'medium-9')}>
           <ResizeObserverComponent measurements={['width']} element="div">
             {({ width }) => {
-              console.log(width);
               return (
                 <nightingale-sunburst
                   side={width}
@@ -121,7 +130,7 @@ const Sunbust = ({ data, description }) => {
           )}
           <div>
             <h5>Weight Segments by</h5>
-            <select onChange={(evt) => setWeightOption(evt.target.value)}>
+            <select onBlur={(evt) => setWeightOption(evt.target.value)}>
               {Object.keys(weigthOptions).map((option) => (
                 <option key={option} value={option}>
                   {weigthOptions[option]}
@@ -229,6 +238,12 @@ const getUrl = createSelector(
     });
   },
 );
+
+Sunburst.propTypes = {
+  data: dataPropType.isRequired,
+  description: T.object,
+};
+
 const mapStateToProps = createSelector(
   (state) => state.customLocation.description,
   (description) => ({
@@ -239,4 +254,4 @@ const mapStateToProps = createSelector(
 export default loadData({
   getUrl,
   mapStateToProps,
-})(Sunbust);
+})(Sunburst);

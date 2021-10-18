@@ -22,6 +22,7 @@ const TaxonomyExtraComponents = (
   if (focusType !== 'taxonomy') return null;
   return (
     <>
+      {showSunburst && <Sunburst />}
       {showTaxoInfo && (
         <div className={f('callout', 'info', 'withicon')} data-closable>
           <button
@@ -42,7 +43,6 @@ const TaxonomyExtraComponents = (
           </h5>
         </div>
       )}
-      {showSunburst && <Sunburst />}
       {showKeySpecies && <KeySpeciesTable />}
     </>
   );
