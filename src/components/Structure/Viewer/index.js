@@ -43,31 +43,38 @@ const f = foundationPartial(style, fonts);
 const Labels = (props /*: Props */) => {
   const [labelData, setLabelData] = useState();
 
-  if (props.viewer) {
-    props.viewer.behaviors.interaction.hover.subscribe((arg) => {
-      const loci = arg.current.loci;
-      if (loci.kind === 'element-loci' && loci.elements.length === 1) {
-        const stats = StructureElement.Stats.ofLoci(loci);
-        const { residueCount } = stats;
-        if (residueCount > 0) {
-          const data = {};
-          const location = stats.firstResidueLoc;
-          data.accession = location.unit.model.entryId;
-          if (data.accession.length > 20) {
-            data.accession = props.accession;
+  useEffect(() => {
+    if (props.viewer) {
+      props.viewer.behaviors.interaction.hover.subscribe((arg) => {
+        const loci = arg.current.loci;
+        if (loci.kind === 'element-loci' && loci.elements.length === 1) {
+          const stats = StructureElement.Stats.ofLoci(loci);
+          const { residueCount } = stats;
+          if (residueCount > 0) {
+            const data = {};
+            const location = stats.firstResidueLoc;
+            data.accession = location.unit.model.entryId;
+            if (data.accession.length > 20) {
+              data.accession = props.accession;
+            }
+            data.residue = Props.atom.label_comp_id(location);
+            data.location = Props.residue.auth_seq_id(location);
+            data.chain = Props.chain.auth_asym_id(location);
+            data.seq_location = Props.residue.label_seq_id(location);
+            data.seq_chain = Props.chain.label_asym_id(location);
+            if (
+              labelData === undefined ||
+              data.location !== labelData.location
+            ) {
+              setLabelData(data);
+            }
           }
-          data.residue = Props.atom.label_comp_id(location);
-          data.location = Props.residue.auth_seq_id(location);
-          data.chain = Props.chain.auth_asym_id(location);
-          data.seq_location = Props.residue.label_seq_id(location);
-          data.seq_chain = Props.chain.label_asym_id(location);
-          if (labelData === undefined || data.location !== labelData.location) {
-            setLabelData(data);
-          }
+        } else {
+          setLabelData(undefined);
         }
-      }
-    });
-  }
+      });
+    }
+  }, [props.viewer]);
 
   if (labelData && labelData.location !== undefined) {
     return (
@@ -291,8 +298,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   highlightSelections(selections /*: Array<Array<string>> */) {
     if (!this.viewer) return;
-    const data = this.viewer.managers.structure.hierarchy.current.structures[0]
-      ?.cell.obj?.data;
+    const data =
+      this.viewer.managers.structure.hierarchy.current.structures[0]?.cell.obj
+        ?.data;
     if (!data) return;
 
     this.clearSelections();
@@ -381,8 +389,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   clearSelections() {
     if (!this.viewer) return;
-    const data = this.viewer.managers.structure.hierarchy.current.structures[0]
-      ?.cell.obj?.data;
+    const data =
+      this.viewer.managers.structure.hierarchy.current.structures[0]?.cell.obj
+        ?.data;
     if (!data) return;
     this.viewer.managers.interactivity.lociSelects.deselectAll();
   }
