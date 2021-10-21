@@ -76,7 +76,7 @@ const TreeView = loadable({
 const KeySpecies = loadable({
   loader: () =>
     import(
-      /* webpackChunkName: "keyspecies-view" */ 'components/taxonomy/KeySpeciesTable'
+      /* webpackChunkName: "keyspecies-view" */ 'components/Taxonomy/KeySpeciesTable'
     ),
 });
 const Sunburst = loadable({
