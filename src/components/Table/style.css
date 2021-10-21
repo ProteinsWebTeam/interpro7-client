@@ -56,6 +56,13 @@ table th {
 .result-page .table-results-filtering .icon-view.grid-view {
   background: url(../../images/icons/ico-view-grid.svg) no-repeat;
 }
+.result-page .table-results-filtering .icon-view.sunburst-view {
+  background: url(../../images/icons/ico-view-sunburst.svg) no-repeat;
+}
+.result-page .table-results-filtering .icon-view.keyspecies-view {
+  background: url(../../images/icons/ico-species.svg) no-repeat;
+  background-size: 100%;
+}
 .result-page .table-results-filtering .icon-view.tree-view {
   background: url(../../images/icons/ico-view-tree.svg) no-repeat;
 }

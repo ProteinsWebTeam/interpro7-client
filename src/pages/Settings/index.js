@@ -335,7 +335,7 @@ const UISettings = (
       </div>
     </div>
 
-    <div className={f('row')}>
+    {/* <div className={f('row')}>
       <div className={f('medium-12', 'column')}>
         <p>Taxonomy tables:</p>
         <p>
@@ -394,9 +394,9 @@ const UISettings = (
               </tbody>
             </table>
           </div>
-        </div>
+        </div> 
       </div>
-    </div>
+    </div>*/}
   </form>
 );
 UISettings.propTypes = {

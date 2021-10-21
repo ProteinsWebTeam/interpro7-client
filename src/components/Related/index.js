@@ -15,7 +15,7 @@ import { toPlural } from 'utils/pages';
 import RelatedTable from 'components/Related/RelatedTable';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
-import TaxonomyExtraComponents from 'components/Related/Taxonomy/TaxonomyExtraComponents';
+// import TaxonomyExtraComponents from 'components/Related/Taxonomy/TaxonomyExtraComponents';
 import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
@@ -177,17 +177,17 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       otherFilters,
       dataBase,
       secondaryDataLoading,
-      showKeySpecies,
+      // showKeySpecies,
       showAllSpecies,
-      showSunburst,
+      // showSunburst,
     } = this.props;
     return (
       <div className={f('row', 'column')}>
-        <TaxonomyExtraComponents
+        {/* <TaxonomyExtraComponents
           focusType={focusType}
           showKeySpecies={showKeySpecies}
           showSunburst={showSunburst}
-        />
+        /> */}
 
         {secondaryDataLoading ? (
           <Loading />

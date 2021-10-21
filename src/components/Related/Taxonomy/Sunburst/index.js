@@ -21,7 +21,9 @@ import style from './style.css';
 
 const f = foundationPartial(style, ipro, fonts);
 
+// eslint-disable-next-line no-magic-numbers
 const FONT_SIZES = [10, 12, 14, 16, 18];
+const DEFAULT_FONT_SIZE = 14;
 
 const LinkOrText = ({ id, name } /*: { id: string, name: string } */) => (
   <i>
@@ -62,7 +64,7 @@ const Sunburst = ({ data, description }) => {
     );
   const [legends, setLegends] = useState(null);
   const [weightOption, setWeightOption] = useState('proteins');
-  const [fontSize, setFontSize] = useState(14);
+  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
   const [currentNode, setCurrentNode] = useState(null);
 
   useEffect(() => {
@@ -135,6 +137,7 @@ const Sunburst = ({ data, description }) => {
             <select
               onChange={(evt) => setWeightOption(evt.target.value)}
               onBlur={(evt) => setWeightOption(evt.target.value)}
+              value={weightOption}
             >
               {Object.keys(weigthOptions).map((option) => (
                 <option key={option} value={option}>
@@ -148,6 +151,7 @@ const Sunburst = ({ data, description }) => {
             <select
               onChange={(evt) => setFontSize(evt.target.value)}
               onBlur={(evt) => setFontSize(evt.target.value)}
+              value={fontSize}
             >
               {FONT_SIZES.map((size) => (
                 <option key={size} value={size}>

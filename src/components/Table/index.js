@@ -48,6 +48,8 @@ ExtraOptions.propTypes = { children: T.any };
   children?: any,
   withTree?: boolean,
   withGrid?: boolean,
+  withSunburst?: boolean,
+  withKeySpecies?: boolean,
   rowClassName?: any,
   nextAPICall?: ?string,
   previousAPICall?: ?string,
@@ -71,9 +73,33 @@ const GridView = loadable({
 const TreeView = loadable({
   loader: () => import(/* webpackChunkName: "tree-view" */ './views/Tree'),
 });
+const KeySpecies = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "keyspecies-view" */ 'components/taxonomy/KeySpeciestable'
+    ),
+});
+const Sunburst = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "sunburst-view" */ 'components/Related/Taxonomy/Sunburst'
+    ),
+});
+
+const isTaxaInEntry = ({ description }) =>
+  description.main.key === 'entry' &&
+  description.taxonomy.isFilter &&
+  description.taxonomy.order === 1;
 
 const RedirectToDefault = () => (
-  <Redirect to={(customLocation) => ({ ...customLocation, hash: 'table' })} />
+  <Redirect
+    to={(customLocation) => ({
+      ...customLocation,
+      hash:
+        // The default view fro taxonomy in entries is the sunburst
+        isTaxaInEntry(customLocation) ? 'sunburst' : 'table',
+    })}
+  />
 );
 
 // redirects to default type if the 'withXXXX' type is not in the props
@@ -94,6 +120,8 @@ const mainChildRoutes = new Map([
   // ['list', () => 'LIST!'],
   ['grid', safeGuard('withGrid', GridView)],
   ['tree', safeGuard('withTree', TreeView)],
+  ['sunburst', safeGuard('withSunburst', Sunburst)],
+  ['keyspecies', safeGuard('withKeySpecies', KeySpecies)],
 ]);
 
 const footerChildRoutes = new Map([['tree', () => null]]);
@@ -102,6 +130,94 @@ const hashSelector = createSelector(
   (value) => value,
 );
 
+const TableViewButtons = (
+  { tableIcon, card, withTree, withSunburst, withKeySpecies } /*: {
+    tableIcon: boolean,
+    card: boolean,
+    withTree: boolean,
+    withSunburst: boolean,
+    withKeySpecies: boolean,
+  } */,
+) => (
+  <div className={f('type-selector', 'pp-table-options')}>
+    {tableIcon && (
+      <Tooltip title="View your results as a table">
+        <Link
+          to={(l) => ({ ...l, hash: 'table' })}
+          className={f('icon-view', 'table-view')}
+          activeClass={f('active')}
+          aria-label="view your results as a table"
+          data-testid="view-table-button"
+        />
+      </Tooltip>
+    )}
+    {card && (
+      <div className={f('test-support-grid')}>
+        <Tooltip title="View your results in a grid">
+          <Link
+            to={(l) => ({ ...l, hash: 'grid' })}
+            className={f('icon-view', 'grid-view', {
+              disabled: !card,
+            })}
+            activeClass={f('active')}
+            aria-disabled={card ? 'false' : 'true'}
+            aria-label="view your results in a grid"
+            data-testid="view-grid-button"
+          />
+        </Tooltip>
+      </div>
+    )}
+    {withTree && (
+      <Tooltip title="View your results as a tree">
+        <Link
+          to={(l) => ({ ...l, hash: 'tree' })}
+          className={f('icon-view', 'tree-view', {
+            disabled: !withTree,
+          })}
+          activeClass={f('active')}
+          aria-disabled={withTree ? 'false' : 'true'}
+          aria-label="view your results as a tree"
+          data-testid="view-tree-button"
+        />
+      </Tooltip>
+    )}
+    {withSunburst && (
+      <Tooltip title="Display a sunburst view">
+        <Link
+          to={(l) => ({ ...l, hash: 'sunburst' })}
+          className={f('icon-view', 'sunburst-view', {
+            disabled: !withSunburst,
+          })}
+          activeClass={f('active')}
+          aria-disabled={withSunburst ? 'false' : 'true'}
+          aria-label="view your results as a sunburst"
+          data-testid="view-sunburst-button"
+        />
+      </Tooltip>
+    )}
+    {withKeySpecies && (
+      <Tooltip title="View only key species">
+        <Link
+          to={(l) => ({ ...l, hash: 'keyspecies' })}
+          className={f('icon-view', 'keyspecies-view', {
+            disabled: !withKeySpecies,
+          })}
+          activeClass={f('active')}
+          aria-disabled={withKeySpecies ? 'false' : 'true'}
+          aria-label="view only key species"
+          data-testid="view-keyspecies-button"
+        />
+      </Tooltip>
+    )}
+  </div>
+);
+TableViewButtons.propTypes = {
+  tableIcon: T.bool,
+  card: T.bool,
+  withTree: T.bool,
+  withSunburst: T.bool,
+  withKeySpecies: T.bool,
+};
 export default class Table extends PureComponent /*:: <Props> */ {
   static propTypes = {
     dataTable: T.array,
@@ -120,6 +236,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
     children: T.any,
     withTree: T.bool,
     withGrid: T.bool,
+    withKeySpecies: T.bool,
+    withSunburst: T.bool,
     rowClassName: T.oneOfType([T.string, T.func]),
     showTableIcon: T.bool,
     shouldGroup: T.bool,
@@ -143,6 +261,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
       contentType,
       children,
       withTree,
+      withSunburst,
+      withKeySpecies,
       rowClassName,
       showTableIcon,
       onFocusChanged,
@@ -198,55 +318,13 @@ export default class Table extends PureComponent /*:: <Props> */ {
                     notFound={notFound}
                   />
                 </div>
-                <div
-                  className={f(
-                    'type-selector',
-                    'show-for-large',
-                    'pp-table-options',
-                  )}
-                >
-                  {tableIcon && (
-                    <Tooltip title="View your results as a table">
-                      <Link
-                        to={(l) => ({ ...l, hash: 'table' })}
-                        className={f('icon-view', 'table-view')}
-                        activeClass={f('active')}
-                        aria-label="view your results as a table"
-                        data-testid="view-table-button"
-                      />
-                    </Tooltip>
-                  )}
-                  {card && (
-                    <div className={f('test-support-grid')}>
-                      <Tooltip title="View your results in a grid">
-                        <Link
-                          to={(l) => ({ ...l, hash: 'grid' })}
-                          className={f('icon-view', 'grid-view', {
-                            disabled: !card,
-                          })}
-                          activeClass={f('active')}
-                          aria-disabled={card ? 'false' : 'true'}
-                          aria-label="view your results in a grid"
-                          data-testid="view-grid-button"
-                        />
-                      </Tooltip>
-                    </div>
-                  )}
-                  {withTree && (
-                    <Tooltip title="View your results as a tree">
-                      <Link
-                        to={(l) => ({ ...l, hash: 'tree' })}
-                        className={f('icon-view', 'tree-view', {
-                          disabled: !withTree,
-                        })}
-                        activeClass={f('active')}
-                        aria-disabled={withTree ? 'false' : 'true'}
-                        aria-label="view your results as a tree"
-                        data-testid="view-tree-button"
-                      />
-                    </Tooltip>
-                  )}
-                </div>
+                <TableViewButtons
+                  tableIcon={tableIcon}
+                  card={!!card}
+                  withTree={!!withTree}
+                  withSunburst={!!withSunburst}
+                  withKeySpecies={!!withKeySpecies}
+                />
                 <div className={f('filter-wrapper')}>
                   {search}
                   {hToggler}
@@ -282,6 +360,8 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   dataTable={data}
                   rowKey={rowKey}
                   withTree={withTree}
+                  withSunburst={withSunburst}
+                  withKeySpecies={withKeySpecies}
                   withGrid={!!card}
                   rowClassName={rowClassName}
                   onFocusChanged={onFocusChanged}

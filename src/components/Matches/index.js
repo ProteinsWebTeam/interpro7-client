@@ -92,11 +92,7 @@ const schemamap = {
 };
 
 const schemaProcessData = (
-  {
-    data,
-    primary,
-    secondary,
-  } /*: {
+  { data, primary, secondary } /*: {
     data: {
       accession: string,
       source_database: string,
@@ -160,12 +156,7 @@ const componentMatch = {
 
 // List of all matches for one `primary`, one to many
 const MatchesByPrimary = (
-  {
-    matches,
-    primary,
-    secondary,
-    ...props
-  } /*: {
+  { matches, primary, secondary, ...props } /*: {
   matches: Array<Object>,
   primary: string,
   secondary: string,
@@ -177,86 +168,90 @@ const MatchesByPrimary = (
 };
 MatchesByPrimary.propTypes = propTypes;
 
-export const ProteinDownloadRenderer = (
-  description /*: {
+export const ProteinDownloadRenderer =
+  (
+    description /*: {
   main: {key:string, ...},
   taxonomy: {accession: string, isFilter: boolean},
 } */,
-) => (accession, row) => {
-  const endpointToFilterBy /*: string */ = description.taxonomy.isFilter
-    ? 'taxonomy'
-    : 'proteome';
-  return (
-    <div className={f('actions')}>
-      <Tooltip title="View matching proteins" useContext>
-        <div className={f('view-icon-div')}>
+  ) =>
+  (accession, row) => {
+    const endpointToFilterBy /*: string */ = description.taxonomy.isFilter
+      ? 'taxonomy'
+      : 'proteome';
+    return (
+      <div className={f('actions')}>
+        <Tooltip title="View matching proteins" useContext>
+          <div className={f('view-icon-div')}>
+            <Link
+              className={f('icon', 'icon-conceptual', 'view-link')}
+              to={{
+                description: {
+                  main: { key: description.main.key },
+                  [description.main.key]: {
+                    ...description[description.main.key],
+                  },
+                  protein: {
+                    db: 'uniprot',
+                    order: 1,
+                    isFilter: true,
+                  },
+                  [endpointToFilterBy]: {
+                    accession: accession,
+                    db: row.source_database,
+                    order: 2,
+                    isFilter: true,
+                  },
+                },
+              }}
+              aria-label="View proteins"
+              data-icon="&#x50;"
+            />
+          </div>
+        </Tooltip>
+        <File
+          fileType="fasta"
+          name={`protein-sequences-matching-${
+            description[description.main.key].accession
+          }-for-${accession}.fasta`}
+          count={row.proteins || row.counters.extra_fields.counters.proteins}
+          customLocationDescription={{
+            main: { key: 'protein' },
+            protein: { db: 'UniProt' },
+            [endpointToFilterBy]: {
+              isFilter: true,
+              db: 'UniProt',
+              accession: `${accession}`,
+            },
+            [description.main.key]: {
+              ...description[description.main.key],
+              isFilter: true,
+            },
+          }}
+          showIcon={true}
+        />
+        <Tooltip title={`View ${endpointToFilterBy} information`}>
           <Link
-            className={f('icon', 'icon-conceptual', 'view-link')}
             to={{
               description: {
-                main: { key: description.main.key },
-                [description.main.key]: {
-                  ...description[description.main.key],
-                },
-                protein: {
-                  db: 'uniprot',
-                  order: 1,
-                  isFilter: true,
+                main: {
+                  key: endpointToFilterBy,
                 },
                 [endpointToFilterBy]: {
-                  accession: accession,
                   db: row.source_database,
-                  order: 2,
-                  isFilter: true,
+                  accession: accession,
                 },
               },
             }}
-            aria-label="View proteins"
-            data-icon="&#x50;"
-          />
-        </div>
-      </Tooltip>
-      <File
-        fileType="fasta"
-        name={`protein-sequences-matching-${
-          description[description.main.key].accession
-        }-for-${accession}.fasta`}
-        count={row.proteins || row.counters.extra_fields.counters.proteins}
-        customLocationDescription={{
-          main: { key: 'protein' },
-          protein: { db: 'UniProt' },
-          [endpointToFilterBy]: {
-            isFilter: true,
-            db: 'UniProt',
-            accession: `${accession}`,
-          },
-          [description.main.key]: {
-            ...description[description.main.key],
-            isFilter: true,
-          },
-        }}
-        showIcon={true}
-      />
-      <Tooltip title={`View ${endpointToFilterBy} information`}>
-        <Link
-          to={{
-            description: {
-              main: {
-                key: endpointToFilterBy,
-              },
-              [endpointToFilterBy]: {
-                db: row.source_database,
-                accession: accession,
-              },
-            },
-          }}
-        >
-          <div className={f('icon', 'icon-count-organisms', 'icon-wrapper')} />
-        </Link>
-      </Tooltip>
-    </div>
-  );
-};
+          >
+            <div
+              className={f('icon', 'icon-count-organisms', 'icon-wrapper')}
+            />
+          </Link>
+        </Tooltip>
+      </div>
+    );
+  };
 
 const includeAccessionSearch = (
   dataTable,
@@ -363,6 +358,7 @@ const Matches = (
     aggSize += prevSize - dataTable.length;
   }
 
+  const isTaxonomySubpage = primary === 'taxonomy' && secondary === 'entry';
   return (
     <Table
       dataTable={dataTable}
@@ -373,6 +369,8 @@ const Matches = (
       contentType={primary}
       databases={databases}
       withTree={primary === 'taxonomy'}
+      withSunburst={isTaxonomySubpage}
+      withKeySpecies={isTaxonomySubpage}
       dbCounters={dbCounters}
       rowClassName={(row) => f({ exact: row.exact })}
       nextAPICall={nextAPICall}
