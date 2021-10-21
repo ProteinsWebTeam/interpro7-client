@@ -21,6 +21,8 @@ import style from './style.css';
 
 const f = foundationPartial(style, ipro, fonts);
 
+const FONT_SIZES = [10, 12, 14, 16, 18];
+
 const LinkOrText = ({ id, name } /*: { id: string, name: string } */) => (
   <i>
     {isNaN(id) ? (
@@ -60,6 +62,7 @@ const Sunburst = ({ data, description }) => {
     );
   const [legends, setLegends] = useState(null);
   const [weightOption, setWeightOption] = useState('proteins');
+  const [fontSize, setFontSize] = useState(14);
   const [currentNode, setCurrentNode] = useState(null);
 
   useEffect(() => {
@@ -86,7 +89,6 @@ const Sunburst = ({ data, description }) => {
 
   return (
     <div>
-      <h4>SunBurst</h4>
       <div className={f('row', 'sunburst')}>
         <div className={f('column', 'small-12', 'medium-9')}>
           <ResizeObserverComponent measurements={['width']} element="div">
@@ -100,7 +102,7 @@ const Sunburst = ({ data, description }) => {
                   id-attribute="id"
                   ref={sunburst}
                   max-depth={8}
-                  // show-label
+                  font-size={fontSize}
                 />
               );
             }}
@@ -130,10 +132,26 @@ const Sunburst = ({ data, description }) => {
           )}
           <div>
             <h5>Weight Segments by</h5>
-            <select onBlur={(evt) => setWeightOption(evt.target.value)}>
+            <select
+              onChange={(evt) => setWeightOption(evt.target.value)}
+              onBlur={(evt) => setWeightOption(evt.target.value)}
+            >
               {Object.keys(weigthOptions).map((option) => (
                 <option key={option} value={option}>
                   {weigthOptions[option]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <h5>Font Size</h5>
+            <select
+              onChange={(evt) => setFontSize(evt.target.value)}
+              onBlur={(evt) => setFontSize(evt.target.value)}
+            >
+              {FONT_SIZES.map((size) => (
+                <option key={size} value={size}>
+                  {size}
                 </option>
               ))}
             </select>
