@@ -76,7 +76,7 @@ const TreeView = loadable({
 const KeySpecies = loadable({
   loader: () =>
     import(
-      /* webpackChunkName: "keyspecies-view" */ 'components/taxonomy/KeySpeciestable'
+      /* webpackChunkName: "keyspecies-view" */ 'components/taxonomy/KeySpeciesTable'
     ),
 });
 const Sunburst = loadable({
@@ -96,7 +96,7 @@ const RedirectToDefault = () => (
     to={(customLocation) => ({
       ...customLocation,
       hash:
-        // The default view fro taxonomy in entries is the sunburst
+        // The default view for taxonomy in entries is the sunburst
         isTaxaInEntry(customLocation) ? 'sunburst' : 'table',
     })}
   />
@@ -117,14 +117,17 @@ const safeGuard = (
 
 const mainChildRoutes = new Map([
   ['table', TableView],
-  // ['list', () => 'LIST!'],
   ['grid', safeGuard('withGrid', GridView)],
   ['tree', safeGuard('withTree', TreeView)],
   ['sunburst', safeGuard('withSunburst', Sunburst)],
   ['keyspecies', safeGuard('withKeySpecies', KeySpecies)],
 ]);
 
-const footerChildRoutes = new Map([['tree', () => null]]);
+const footerChildRoutes = new Map([
+  ['tree', () => null],
+  ['sunburst', () => null],
+  ['keyspecies', () => null],
+]);
 const hashSelector = createSelector(
   (customLocation) => customLocation.hash,
   (value) => value,

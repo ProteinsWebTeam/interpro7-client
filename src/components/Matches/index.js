@@ -38,6 +38,7 @@ import {
 
 import { searchSelector } from 'reducers/custom-location/search';
 import { descriptionSelector } from 'reducers/custom-location/description';
+import { hashSelector } from 'reducers/custom-location/hash';
 
 import { foundationPartial } from 'styles/foundation';
 import { endpoint2type } from 'schema_org/processors';
@@ -299,6 +300,7 @@ const Matches = (
     isStale,
     search,
     description,
+    hash,
     state,
     databases,
     dbCounters,
@@ -318,6 +320,7 @@ const Matches = (
     isStale: boolean,
     search: Object,
     description: Object,
+    hash?: string,
     state: Object,
     databases: Object,
     dbCounters ?: Object,
@@ -380,66 +383,69 @@ const Matches = (
       onFocusChanged={setFocused}
     >
       <PageSizeSelector />
-      <SearchBox loading={isStale} />
-      <HighlightToggler />
-      {description.main.key !== 'result' && (
-        <Exporter>
-          <div className={f('menu-grid')}>
-            {primary === 'protein' && (
-              <>
-                <label htmlFor="fasta">FASTA</label>
-                <FileExporter
-                  description={description}
-                  count={actualSize}
-                  search={search}
-                  name="fasta"
-                  fileType="fasta"
-                  primary={primary}
-                  secondary={secondary}
-                  focused={focused}
-                />
-              </>
-            )}
-            <label htmlFor="tsv">TSV</label>
-            <FileExporter
-              name="tsv"
-              description={description}
-              count={actualSize}
-              search={search}
-              fileType="tsv"
-              primary={primary}
-              secondary={secondary}
-              focused={focused}
-            />
-            <label htmlFor="json">JSON</label>
-            <FileExporter
-              name="json"
-              description={description}
-              count={actualSize}
-              search={search}
-              fileType="json"
-              primary={primary}
-              secondary={secondary}
-              focused={focused}
-            />
-            <label htmlFor="api">API</label>
-            <Link
-              name="api"
-              target="_blank"
-              href={toPublicAPI(
-                includeTaxonFocusedOnURL(getReversedUrl(state), focused),
-              )}
-              className={f('button', 'hollow', 'imitate-progress-button')}
-            >
-              <span
-                className={f('icon', 'icon-common', 'icon-export')}
-                data-icon="&#xf233;"
-              />
-              <span className={f('file-label')}>Web View</span>
-            </Link>
-          </div>
-        </Exporter>
+      {!(isTaxonomySubpage && ['sunburst', 'keyspecies'].includes(hash)) && (
+        <SearchBox loading={isStale} />
       )}
+      <HighlightToggler />
+      {description.main.key !== 'result' &&
+        !(isTaxonomySubpage && ['sunburst', 'keyspecies'].includes(hash)) && (
+          <Exporter>
+            <div className={f('menu-grid')}>
+              {primary === 'protein' && (
+                <>
+                  <label htmlFor="fasta">FASTA</label>
+                  <FileExporter
+                    description={description}
+                    count={actualSize}
+                    search={search}
+                    name="fasta"
+                    fileType="fasta"
+                    primary={primary}
+                    secondary={secondary}
+                    focused={focused}
+                  />
+                </>
+              )}
+              <label htmlFor="tsv">TSV</label>
+              <FileExporter
+                name="tsv"
+                description={description}
+                count={actualSize}
+                search={search}
+                fileType="tsv"
+                primary={primary}
+                secondary={secondary}
+                focused={focused}
+              />
+              <label htmlFor="json">JSON</label>
+              <FileExporter
+                name="json"
+                description={description}
+                count={actualSize}
+                search={search}
+                fileType="json"
+                primary={primary}
+                secondary={secondary}
+                focused={focused}
+              />
+              <label htmlFor="api">API</label>
+              <Link
+                name="api"
+                target="_blank"
+                href={toPublicAPI(
+                  includeTaxonFocusedOnURL(getReversedUrl(state), focused),
+                )}
+                className={f('button', 'hollow', 'imitate-progress-button')}
+              >
+                <span
+                  className={f('icon', 'icon-common', 'icon-export')}
+                  data-icon="&#xf233;"
+                />
+                <span className={f('file-label')}>Web View</span>
+              </Link>
+            </div>
+          </Exporter>
+        )}
       <Column
         dataKey="accession"
         renderer={(
@@ -669,8 +675,9 @@ Matches.propTypes = {
 const mapStateToProps = createSelector(
   searchSelector,
   descriptionSelector,
+  hashSelector,
   (state) => state,
-  (search, description, state) => ({ search, description, state }),
+  (search, description, hash, state) => ({ search, description, hash, state }),
 );
 
 export default connect(mapStateToProps)(Matches);
