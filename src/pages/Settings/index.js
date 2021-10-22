@@ -259,15 +259,8 @@ NotificationSettings.propTypes = {
 
 const UISettings = (
   {
-    ui: {
-      lowGraphics,
-      colorDomainsBy,
-      structureViewer,
-      showKeySpecies,
-      showAllSpecies,
-      showSunburst,
-    },
-  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean, showKeySpecies: boolean, showAllSpecies: boolean, showSunburst: boolean}} */,
+    ui: { lowGraphics, colorDomainsBy, structureViewer },
+  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean}} */,
 ) => (
   <form data-category="ui">
     <h4>UI settings</h4>
@@ -334,69 +327,6 @@ const UISettings = (
         />
       </div>
     </div>
-
-    {/* <div className={f('row')}>
-      <div className={f('medium-12', 'column')}>
-        <p>Taxonomy tables:</p>
-        <p>
-          <small>
-            The taxonomy information is available for both key species and all
-            organisms. The key species table is shown by default. If you wish to
-            change it, please select the respective options.
-          </small>
-        </p>
-        <div className={f('row')}>
-          <div className={f('medium-4', 'column')}>
-            <table>
-              <thead>
-                <tr>
-                  <th>Table</th>
-                  <th>Preference</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Taxonomy Sunburst</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showSunburst"
-                      id="sunburst-input"
-                      checked={showSunburst}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Key species</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showKeySpecies"
-                      id="keySpecies-input"
-                      checked={showKeySpecies}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>All species</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showAllSpecies"
-                      id="allSpecies-input"
-                      checked={showAllSpecies}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>*/}
   </form>
 );
 UISettings.propTypes = {
@@ -404,9 +334,6 @@ UISettings.propTypes = {
     lowGraphics: T.bool.isRequired,
     colorDomainsBy: T.string.isRequired,
     structureViewer: T.bool.isRequired,
-    showKeySpecies: T.bool.isRequired,
-    showAllSpecies: T.bool.isRequired,
-    showSunburst: T.bool.isRequired,
   }).isRequired,
 };
 

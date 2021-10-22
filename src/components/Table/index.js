@@ -309,7 +309,11 @@ export default class Table extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('columns')}>
               <div className={f('table-results-filtering')}>
-                <div className={f('pagesize-wrapper')}>
+                <div
+                  className={f({
+                    'pagesize-wrapper': !!title || !!data?.length,
+                  })}
+                >
                   {title && <h4>{title}</h4>}
                   <_TotalNb
                     {...this.props}

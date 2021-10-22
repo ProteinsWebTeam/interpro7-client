@@ -32,9 +32,6 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         colorDomainsBy: EntryColorMode.ACCESSION,
         structureViewer: false,
         shouldHighlight: true,
-        showSunburst: true,
-        showKeySpecies: true,
-        showAllSpecies: true,
       };
     case 'cache':
       return {

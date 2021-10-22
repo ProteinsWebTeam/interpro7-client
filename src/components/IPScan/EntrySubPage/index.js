@@ -119,9 +119,6 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
         mainData={mainData}
         secondaryData={unique}
         secondaryDataLoading={false}
-        showAllSpecies={false}
-        showKeySpecies={false}
-        showSunburst={false}
         isStale={false}
         mainType="protein"
         focusType="entry"

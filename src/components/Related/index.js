@@ -15,7 +15,6 @@ import { toPlural } from 'utils/pages';
 import RelatedTable from 'components/Related/RelatedTable';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
-// import TaxonomyExtraComponents from 'components/Related/Taxonomy/TaxonomyExtraComponents';
 import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
@@ -140,9 +139,6 @@ const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
     loading: boolean
   },
   secondaryDataLoading: boolean,
-  showKeySpecies: boolean,
-  showAllSpecies: boolean,
-  showSunburst: boolean,
 }; */
 /*:: type state = {
   showTaxoInfo: boolean,
@@ -161,9 +157,6 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       loading: T.bool.isRequired,
     }).isRequired,
     secondaryDataLoading: T.bool.isRequired,
-    showKeySpecies: T.bool.isRequired,
-    showAllSpecies: T.bool.isRequired,
-    showSunburst: T.bool.isRequired,
   };
 
   render() {
@@ -177,18 +170,9 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       otherFilters,
       dataBase,
       secondaryDataLoading,
-      // showKeySpecies,
-      // showAllSpecies,
-      // showSunburst,
     } = this.props;
     return (
       <div className={f('row', 'column')}>
-        {/* <TaxonomyExtraComponents
-          focusType={focusType}
-          showKeySpecies={showKeySpecies}
-          showSunburst={showSunburst}
-        /> */}
-
         {secondaryDataLoading ? (
           <Loading />
         ) : (
@@ -202,8 +186,6 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
             {mainType === 'structure' && focusType === 'entry' ? (
               <EntriesOnStructure entries={secondaryData} />
             ) : null}
-            {/* {(focusType === 'taxonomy' && showAllSpecies) ||
-            focusType !== 'taxonomy' ? ( */}
             <RelatedTable
               mainType={mainType}
               mainData={mainData}
@@ -215,7 +197,6 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
               actualSize={actualSize}
               otherProps={{ ...this.props }}
             />
-            {/* ) : null} */}
           </div>
         )}
       </div>
@@ -237,24 +218,11 @@ const mapStateToPropsAdvanced = createSelector(
       (value /*: {isFilter:boolean, order:number} */) =>
         value.isFilter && value.order !== 1,
     ),
-  (state) => state.settings.ui.showKeySpecies,
-  (state) => state.settings.ui.showAllSpecies,
-  (state) => state.settings.ui.showSunburst,
-  (
-    mainType,
-    [focusType, { db: focusDB }],
-    otherFilters,
-    showKeySpecies,
-    showAllSpecies,
-    showSunburst,
-  ) => ({
+  (mainType, [focusType, { db: focusDB }], otherFilters) => ({
     mainType,
     focusType,
     focusDB,
     otherFilters,
-    showKeySpecies,
-    showAllSpecies,
-    showSunburst,
   }),
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
@@ -327,14 +295,12 @@ const RelatedAdvancedQuery = loadData({
   focusType: string,
   hash?: string,
   hasSecondary: boolean,
-  showAllSpecies: boolean,
 }; */
 class Related extends PureComponent /*:: <RelatedProps> */ {
   static propTypes = {
     data: T.object.isRequired,
     focusType: T.string.isRequired,
     hasSecondary: T.bool,
-    showAllSpecies: T.bool.isRequired,
     hash: T.string,
   };
 
@@ -344,7 +310,7 @@ class Related extends PureComponent /*:: <RelatedProps> */ {
     let RelatedComponent = RelatedSimple;
     if (hasSecondary) {
       RelatedComponent =
-        focusType === 'taxonomy' && hash !== 'table' // && !showAllSpecies
+        focusType === 'taxonomy' && hash !== 'table'
           ? RelatedTaxonomy
           : RelatedAdvancedQuery;
     }
@@ -359,12 +325,10 @@ const mapStateToPropsDefault = createSelector(
       (value /*: {isFilter:boolean, order:number} */) =>
         value.isFilter && value.order === 1,
     ),
-  (state) => state.settings.ui.showAllSpecies,
   (state) => state.customLocation.hash,
-  ([focusType, filter], showAllSpecies, hash) => ({
+  ([focusType, filter], hash) => ({
     focusType,
     hasSecondary: filter && !!filter.db,
-    showAllSpecies,
     hash,
   }),
 );
