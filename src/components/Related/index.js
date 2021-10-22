@@ -178,7 +178,7 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       dataBase,
       secondaryDataLoading,
       // showKeySpecies,
-      showAllSpecies,
+      // showAllSpecies,
       // showSunburst,
     } = this.props;
     return (
@@ -202,20 +202,20 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
             {mainType === 'structure' && focusType === 'entry' ? (
               <EntriesOnStructure entries={secondaryData} />
             ) : null}
-            {(focusType === 'taxonomy' && showAllSpecies) ||
-            focusType !== 'taxonomy' ? (
-              <RelatedTable
-                mainType={mainType}
-                mainData={mainData}
-                secondaryData={secondaryData}
-                focusType={focusType}
-                otherFilters={otherFilters}
-                dataBase={dataBase}
-                isStale={isStale}
-                actualSize={actualSize}
-                otherProps={{ ...this.props }}
-              />
-            ) : null}
+            {/* {(focusType === 'taxonomy' && showAllSpecies) ||
+            focusType !== 'taxonomy' ? ( */}
+            <RelatedTable
+              mainType={mainType}
+              mainData={mainData}
+              secondaryData={secondaryData}
+              focusType={focusType}
+              otherFilters={otherFilters}
+              dataBase={dataBase}
+              isStale={isStale}
+              actualSize={actualSize}
+              otherProps={{ ...this.props }}
+            />
+            {/* ) : null} */}
           </div>
         )}
       </div>
@@ -343,7 +343,7 @@ class Related extends PureComponent /*:: <RelatedProps> */ {
     let RelatedComponent = RelatedSimple;
     if (hasSecondary) {
       RelatedComponent =
-        focusType === 'taxonomy' && !showAllSpecies
+        focusType === 'taxonomy' // && !showAllSpecies
           ? RelatedTaxonomy
           : RelatedAdvancedQuery;
     }

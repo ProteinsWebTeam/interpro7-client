@@ -34,7 +34,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         shouldHighlight: true,
         showSunburst: true,
         showKeySpecies: true,
-        showAllSpecies: false,
+        showAllSpecies: true,
       };
     case 'cache':
       return {
