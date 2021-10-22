@@ -325,6 +325,7 @@ const RelatedAdvancedQuery = loadData({
 /*:: type RelatedProps = {
   data: Object,
   focusType: string,
+  hash?: string,
   hasSecondary: boolean,
   showAllSpecies: boolean,
 }; */
@@ -334,16 +335,16 @@ class Related extends PureComponent /*:: <RelatedProps> */ {
     focusType: T.string.isRequired,
     hasSecondary: T.bool,
     showAllSpecies: T.bool.isRequired,
+    hash: T.string,
   };
 
   render() {
-    const { data, focusType, hasSecondary, showAllSpecies, ...props } =
-      this.props;
+    const { data, focusType, hasSecondary, hash, ...props } = this.props;
     if (data.loading) return <Loading />;
     let RelatedComponent = RelatedSimple;
     if (hasSecondary) {
       RelatedComponent =
-        focusType === 'taxonomy' // && !showAllSpecies
+        focusType === 'taxonomy' && hash !== 'table' // && !showAllSpecies
           ? RelatedTaxonomy
           : RelatedAdvancedQuery;
     }
@@ -359,10 +360,12 @@ const mapStateToPropsDefault = createSelector(
         value.isFilter && value.order === 1,
     ),
   (state) => state.settings.ui.showAllSpecies,
-  ([focusType, filter], showAllSpecies) => ({
+  (state) => state.customLocation.hash,
+  ([focusType, filter], showAllSpecies, hash) => ({
     focusType,
     hasSecondary: filter && !!filter.db,
     showAllSpecies,
+    hash,
   }),
 );
 
