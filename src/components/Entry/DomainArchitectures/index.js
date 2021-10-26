@@ -314,7 +314,28 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
         <div className={f('columns')}>
           {messageContent}
           {(payload.results || []).map((obj) => {
-            const idaObj = ida2json(obj.ida, database || idaAccessionDB);
+            const currentDB = (database || idaAccessionDB).toLowerCase();
+            let idaObj = null;
+            if (obj.representative) {
+              const domains = obj.representative.domains
+                .filter(
+                  ({ entry }) =>
+                    (currentDB === 'pfam' && entry.startsWith('pf')) ||
+                    (currentDB === 'interpro' && entry.startsWith('ipr')),
+                )
+                .map(({ entry, coordinates }) => ({
+                  accession: entry.toUpperCase(),
+                  locations: coordinates,
+                }));
+              const accessions = domains.map(({ accession }) => accession);
+              idaObj = {
+                accessions,
+                domains,
+                length: Number(obj.representative.length),
+              };
+            } else {
+              idaObj = ida2json(obj.ida, currentDB);
+            }
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
@@ -341,7 +362,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                 <TextIDA accessions={idaObj.accessions} />
                 <IDAProtVista
                   matches={idaObj.domains}
-                  length={FAKE_PROTEIN_LENGTH}
+                  length={idaObj.length}
                   databases={dataDB.payload.databases}
                   highlight={toHighlight}
                 />
