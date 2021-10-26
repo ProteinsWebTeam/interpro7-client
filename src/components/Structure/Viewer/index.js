@@ -25,14 +25,14 @@ import { ParamDefinition } from 'molstar/lib/mol-util/param-definition';
 import { Script } from 'molstar/lib/mol-script/script';
 import { Color } from 'molstar/lib/mol-util/color';
 import { ColorNames } from 'molstar/lib/mol-util/color/names';
-import { useBehavior } from 'molstar/lib/mol-plugin-ui/hooks/use-behavior';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
-// import SelectionTheme from './InterProTheme';
 
 const f = foundationPartial(style, fonts);
+
+const MAX_ACCESSION_LENGTH = 20;
 
 /**
  * Function hook for 3D model labels
@@ -40,7 +40,12 @@ const f = foundationPartial(style, fonts);
  * @param {Object} props - react props
  * @returns {Object} react element
  */
-const Labels = (props /*: Props */) => {
+const Labels = (
+  props /*: {
+  viewer: object,
+  accession: string,
+} */,
+) => {
   const [labelData, setLabelData] = useState();
 
   useEffect(() => {
@@ -54,7 +59,7 @@ const Labels = (props /*: Props */) => {
             const data = {};
             const location = stats.firstResidueLoc;
             data.accession = location.unit.model.entryId;
-            if (data.accession.length > 20) {
+            if (data.accession.length > MAX_ACCESSION_LENGTH) {
               data.accession = props.accession;
             }
             data.residue = Props.atom.label_comp_id(location);
@@ -88,47 +93,10 @@ const Labels = (props /*: Props */) => {
   }
   return <div className={f('structure-label')} />;
 };
-
-// const Labels = (props /*: Props */) => {
-//   if (props.viewer) {
-//     const data = {};
-//     props.viewer.behaviors.interaction.hover.subscribe(
-//       (arg) => {
-//         const loci = arg.current.loci;
-//         if (loci.kind === 'element-loci' && loci.elements.length === 1) {
-//           const stats = StructureElement.Stats.ofLoci(loci);
-//           const { residueCount } = stats;
-//           if (residueCount > 0) {
-//             const location = stats.firstResidueLoc;
-//             data.accession = location.unit.model.entryId;
-//             if (data.accession.length > 20) {
-//                 data.accession = props.accession;
-//             }
-//             data.residue = Props.atom.label_comp_id(location);
-//             data.location = Props.residue.auth_seq_id(location);
-//             data.chain = Props.chain.auth_asym_id(location);
-//             data.seq_location = Props.residue.label_seq_id(location);
-//             data.seq_chain = Props.chain.label_asym_id(location);
-//           }
-//         }
-//       }
-//   );
-//   const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
-//   if (highlighted && data.residue !== undefined) {
-//     // console.log(data);
-//     console.log(props.accession);
-//     const text = `<small>${data.accession}</small> Chain:<b>${data.chain}</b> Residue:<b>${data.location} ${data.residue}</b>`;
-//     return (
-//       <div
-//         className={f('structure-label')}
-//         // eslint-disable-next-line react/no-danger
-//         dangerouslySetInnerHTML={{ __html: text }}
-//       />
-//     );
-//   }
-// }
-// return <div />;
-// };
+Labels.propTypes = {
+  viewer: T.object,
+  accession: T.string,
+};
 
 /*:: type Props = {
   id: string,
