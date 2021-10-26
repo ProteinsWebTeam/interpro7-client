@@ -8,6 +8,7 @@ const DEFAULT_SECONDS_TO_RETRY = 10;
 
 /*:: type Category = 'navigation' | 'notifications' | 'ui' | 'cache' | 'ebi' | 'api' | 'ipScan'; */
 
+// eslint-disable-next-line complexity
 export const getDefaultSettingsFor = (category /*: Category */) => {
   switch (category) {
     case 'navigation':
@@ -16,6 +17,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         secondsToRetry:
           config?.timeout?.secondsToRetry || DEFAULT_SECONDS_TO_RETRY,
       };
+
     case 'notifications':
       return {
         showTreeToast: true,
@@ -85,20 +87,21 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
   }
 };
 
-export default (category /*: Category */) => (
-  state /*: Object */ = getDefaultSettingsFor(category),
-  action /*: Object */,
-) => {
-  switch (action.type) {
-    case CHANGE_SETTINGS:
-      if (action.category !== category) return state;
-      return {
-        ...state,
-        [action.key]: action.value,
-      };
-    case RESET_SETTINGS:
-      return action.value || getDefaultSettingsFor(category);
-    default:
-      return state;
-  }
-};
+export default (category /*: Category */) =>
+  (
+    state /*: Object */ = getDefaultSettingsFor(category),
+    action /*: Object */,
+  ) => {
+    switch (action.type) {
+      case CHANGE_SETTINGS:
+        if (action.category !== category) return state;
+        return {
+          ...state,
+          [action.key]: action.value,
+        };
+      case RESET_SETTINGS:
+        return action.value || getDefaultSettingsFor(category);
+      default:
+        return state;
+    }
+  };

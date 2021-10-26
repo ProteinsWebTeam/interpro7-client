@@ -85,6 +85,7 @@ export const inert = () /*: Promise<boolean> */ => {
 };
 
 export const elementMatches = () => {
+  // $FlowFixMe method-unbinding
   if (!Element.prototype.matches) {
     // $FlowIgnore
     Element.prototype.matches = Element.prototype.msMatchesSelector;

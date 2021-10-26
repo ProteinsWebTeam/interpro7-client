@@ -14,11 +14,8 @@ const NUMBER_OF_CHECKS = 10;
 const optionsForObserver = {
   root: null,
   rootMargin: '0px',
-  /* eslint-disable-next-line prefer-spread */
-  threshold: Array.apply(null, { length: NUMBER_OF_CHECKS }).map(
-    // $FlowFixMe
-    Number.call,
-    (n) => (n + 1) / NUMBER_OF_CHECKS,
+  threshold: Array.from(Array(NUMBER_OF_CHECKS)).map(
+    (_, n) => (n + 1) / NUMBER_OF_CHECKS,
   ),
 };
 
@@ -33,7 +30,8 @@ const PictureInPicturePanel = ({
 }) => {
   const [isStuck, setStuck] = useState(false);
   const [isMinimized, setMinimized] = useState(false);
-  const wrapperRef /*: { current: null | HTMLElement } */ = useRef(null);
+  const wrapperRef /*: { current: null | React$ElementRef<'div'> } */ =
+    useRef(null);
   let observer = null;
   const threshold = 0.4;
   useEffect(() => {
@@ -42,14 +40,15 @@ const PictureInPicturePanel = ({
   }, []);
   useEffect(() => {
     if (wrapperRef?.current) {
+      const current = wrapperRef.current;
       observer = new IntersectionObserver((entries) => {
         setStuck(
-          ((wrapperRef?.current?.getBoundingClientRect() /*: any */)?.y || 0) <
-            0 && entries[0].intersectionRatio < threshold,
+          ((current?.getBoundingClientRect() /*: any */)?.y || 0) < 0 &&
+            entries[0].intersectionRatio < threshold,
         );
         onChangingMode();
       }, optionsForObserver);
-      observer.observe(wrapperRef.current);
+      observer.observe(current);
     }
     return () => {
       if (observer) observer.disconnect();
