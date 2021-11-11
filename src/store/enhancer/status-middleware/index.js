@@ -26,7 +26,9 @@ const checkStatusesAndDispatch = async function (
     const endpointSettings = settings[endpoint];
     let url = format({
       ...endpointSettings,
-      pathname: endpointSettings.root + (endpoint === 'alphafold' ? 'api/prediction/Q5VSL9' : ''),
+      pathname:
+        endpointSettings.root +
+        (endpoint === 'alphafold' ? 'api/prediction/Q5VSL9' : ''),
     });
     url = endpoint === 'wikipedia' ? `${url}?origin=*` : url;
     try {

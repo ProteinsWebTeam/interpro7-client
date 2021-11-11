@@ -111,16 +111,19 @@ const templateHandler /*: Handler */ = {
   // used after processing parent handler to choose which child
   // can handle the next value
   match(current, _description) {
+    // $FlowFixMe object-this-reference
     return this.regexp.test(current);
   },
   // main handle function, mutates description object, setting the cleaned up
   // value to the key in description
   handle(description, current, next, ...rest) {
+    // $FlowFixMe object-this-reference
     const key = this.key || this.getKey(description);
     if (key && current) {
       set(
         description,
         key,
+        // $FlowFixMe object-this-reference
         this.cleanedUp || this.cleanUp(current, description),
       );
       if (key[1] && key[1] === 'isFilter') {
@@ -129,6 +132,7 @@ const templateHandler /*: Handler */ = {
       }
     }
     if (!next) return description;
+    // $FlowFixMe object-this-reference
     for (const child of this.children) {
       if (child.match(next, description)) {
         return child.handle(description, next, ...rest);
@@ -265,6 +269,7 @@ export const memberDBHandler /*: Handler */ = handlerConstructor({
   },
   match: {
     value(current) {
+      // $FlowFixMe object-this-reference
       const _current = this.cleanUp(current);
       for (const { name } of memberDB) {
         if (name === _current) return true;
@@ -319,6 +324,7 @@ export const memberDBAccessionHandler /*: Handler */ = handlerConstructor({
   match: {
     value(current, { entry: { db, memberDB: mdb } }) {
       const _mdb = db === 'InterPro' ? mdb : db;
+      // $FlowFixMe object-this-reference
       const _current = this.cleanUp(current);
       for (const { name, re } of memberDB) {
         if (name === _mdb && re.test(_current)) return true;
@@ -356,7 +362,8 @@ export const proteinAccessionHandler /*: Handler */ = handlerConstructor({
     value: (value) => value.toUpperCase(),
   },
   regexp: {
-    value: /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
+    value:
+      /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
   },
 });
 export const orderHandler /*: Handler */ = handlerConstructor({
@@ -389,6 +396,7 @@ export const structureDBHandler /*: Handler */ = handlerConstructor({
   },
   match: {
     value(current) {
+      // $FlowFixMe object-this-reference
       return current.toUpperCase() === this.cleanedUp;
     },
   },
@@ -436,6 +444,7 @@ export const taxonomyDBHandler /*: Handler */ = handlerConstructor({
   },
   match: {
     value(current) {
+      // $FlowFixMe object-this-reference
       return current.toLowerCase() === this.cleanedUp;
     },
   },
@@ -471,6 +480,7 @@ export const proteomeDBHandler /*: Handler */ = handlerConstructor({
   },
   match: {
     value(current) {
+      // $FlowFixMe object-this-reference
       return current.toLowerCase() === this.cleanedUp;
     },
   },
@@ -506,6 +516,7 @@ export const setDBHandler /*: Handler */ = handlerConstructor({
   },
   match: {
     value(current) {
+      // $FlowFixMe object-this-reference
       const _current = this.cleanUp(current);
       for (const { name } of setDBs) {
         if (name === _current) return true;
@@ -527,6 +538,7 @@ export const setAccessionHandler /*: Handler */ = handlerConstructor({
   },
   match: {
     value(current) {
+      // $FlowFixMe object-this-reference
       const _current = this.cleanUp(current);
       for (const { re } of setDBs) {
         if (re.test(_current)) return true;
@@ -592,7 +604,8 @@ export const resultIPScanAccessionHandler /*: Handler */ = handlerConstructor({
     value: (value) => value,
   },
   regexp: {
-    value: /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}|internal-[1-9]\d*-[1-9]\d*)|imported_file-.+-\d+$/,
+    value:
+      /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}|internal-[1-9]\d*-[1-9]\d*)|imported_file-.+-\d+$/,
   },
 });
 
@@ -642,6 +655,7 @@ export const rootHandler /*: Handler */ = handlerConstructor({
   },
   handle: {
     value(description /*: Description */, ...rest /*: Array<string> */) {
+      // $FlowFixMe object-this-reference
       return templateHandler.handle.call(this, description, null, ...rest);
     },
   },

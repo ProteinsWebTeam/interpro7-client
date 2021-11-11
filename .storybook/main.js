@@ -1,15 +1,16 @@
 const path = require('path');
 
-const postCSSImport = require('postcss-import');
-const postcssPresetEnv = require('postcss-preset-env');
-
 module.exports = {
+  core: {
+    builder: 'webpack5',
+  },
   stories: ['../stories/**/*.stories.js'],
   addons: [
     '@storybook/addon-storysource',
     '@storybook/addon-actions',
     '@storybook/addon-links',
-    '@storybook/addon-knobs/register',
+    '@storybook/addon-knobs',
+    '@storybook/addon-postcss',
   ],
 
   webpackFinal: async (config) => {
@@ -19,9 +20,6 @@ module.exports = {
       test.toString().includes('.css')
     );
 
-    cssRule.use.find((x) =>
-      (x.loader || x).includes('postcss-loader')
-    ).options.plugins = [postCSSImport, postcssPresetEnv({ stage: 0 })];
     cssRule.exclude = /tippy.css$/i;
 
     config.module.rules.push({

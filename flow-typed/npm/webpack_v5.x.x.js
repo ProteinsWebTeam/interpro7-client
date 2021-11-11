@@ -1,5 +1,5 @@
-// flow-typed signature: d389a5ff07fdd7c2d87c081248b3c93b
-// flow-typed version: ba379f9a63/webpack_v4.x.x/flow_>=v0.104.x
+// flow-typed signature: 95d8f53ba64c3048c18517b2c631d593
+// flow-typed version: 25001cfe9c/webpack_v5.x.x/flow_>=v0.104.x
 
 declare module 'webpack' {
   import typeof { Server } from 'http';

@@ -181,6 +181,10 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
                 ...provided,
                 display: this.props.forHeader ? 'none' : 'flex',
               }),
+              menuList: (provided) => ({
+                ...provided,
+                width: '100%',
+              }),
               input: (css) => ({
                 ...css,
                 // For the paste option on right click to work, the input div has to be 100%
@@ -189,7 +193,7 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
                   width: '100%',
                 },
                 input: {
-                  width: '100% !important',
+                  minWidth: '7rem !important',
                   textAlign: 'left',
                 },
               }),

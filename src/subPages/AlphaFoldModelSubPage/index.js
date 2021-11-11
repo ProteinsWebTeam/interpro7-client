@@ -12,11 +12,7 @@ import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-import Table, {
-  Column,
-  PageSizeSelector,
-  SearchBox,
-} from 'components/Table';
+import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
@@ -71,13 +67,11 @@ const getUrl = (includeSearch) =>
             isFilter: true,
             db: description.entry.db || 'interpro',
             accession: description.entry.accession,
-          }
+          },
         };
         let query;
-        if (includeSearch)
-          query = { ...search, has_model: true };
-        else
-          query = { has_model: true };
+        if (includeSearch) query = { ...search, has_model: true };
+        else query = { has_model: true };
         return format({
           protocol,
           hostname,
@@ -90,7 +84,7 @@ const getUrl = (includeSearch) =>
       return {
         accession: description[description.main.key].accession,
       };
-    }
+    },
   );
 
 const mapStateToPropsForModels = createSelector(
@@ -99,7 +93,14 @@ const mapStateToPropsForModels = createSelector(
   (description, search) => ({ description, search }),
 );
 
-const _AlphaFoldModel = ({ proteinAcc, hasMultipleProteins, onModelChange, modelId, modelUrl, data}) => {
+const _AlphaFoldModel = ({
+  proteinAcc,
+  hasMultipleProteins,
+  onModelChange,
+  modelId,
+  modelUrl,
+  data,
+}) => {
   if (data?.loading) return <Loading />;
   if (!data.loading && Object.keys(data.payload).length !== 1) {
     return (
@@ -116,22 +117,33 @@ const _AlphaFoldModel = ({ proteinAcc, hasMultipleProteins, onModelChange, model
   const elementId = 'new-structure-model-viewer';
   return (
     <div>
-      <h3>AlphaFold structure prediction{models.length > 1 || hasMultipleProteins ? 's' : ''}</h3>
+      <h3>
+        AlphaFold structure prediction
+        {models.length > 1 || hasMultipleProteins ? 's' : ''}
+      </h3>
       <p>
-        The protein structure below has been predicted by <Link href={'//deepmind.com/'}>DeepMind</Link>{' '}
-        with AlphaFold (<Link href={'//www.nature.com/articles/s41586-021-03819-2'}>Jumper, J et al. 2021</Link>).{' '}
-        For more information and additional features,{' '}
-        please visit this sequence&apos;s page at <Link href={modelUrl}>AlphaFold DB</Link>.
+        The protein structure below has been predicted by{' '}
+        <Link href={'//deepmind.com/'}>DeepMind</Link> with AlphaFold (
+        <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
+          Jumper, J et al. 2021
+        </Link>
+        ). For more information and additional features, please visit this
+        sequence&apos;s page at <Link href={modelUrl}>AlphaFold DB</Link>.
       </p>
       {hasMultipleProteins ? (
         <div className={f('callout', 'primary', 'info')}>
           <p>
-            <i className={f('icon', 'icon-common', 'icon-info')} data-icon="&#xf129;"/>
-            This entry matches several proteins with structure predictions.
-            Use the table below the structure viewer to select another protein.
+            <i
+              className={f('icon', 'icon-common', 'icon-info')}
+              data-icon="&#xf129;"
+            />
+            This entry matches several proteins with structure predictions. Use
+            the table below the structure viewer to select another protein.
           </p>
         </div>
-      ) : ''}
+      ) : (
+        ''
+      )}
       <div className={f('row')}>
         <div className={f('column', 'small-12', 'medium-3')}>
           <h5>Information</h5>
@@ -143,9 +155,13 @@ const _AlphaFoldModel = ({ proteinAcc, hasMultipleProteins, onModelChange, model
                 View on{' '}
                 <Link href={modelUrl} className={f('ext')}>
                   AlphaFold DB
-                </Link> or {' '}
-                <UniProtLink id={modelInfo.uniprotAccession} className={f('ext')}>
-                    UniProtKB
+                </Link>{' '}
+                or{' '}
+                <UniProtLink
+                  id={modelInfo.uniprotAccession}
+                  className={f('ext')}
+                >
+                  UniProtKB
                 </UniProtLink>
               </span>
             </li>
@@ -163,19 +179,20 @@ const _AlphaFoldModel = ({ proteinAcc, hasMultipleProteins, onModelChange, model
                   onBlur={() => onModelChange(event.target.value)}
                 >
                   {models.map((model) => (
-                    <option key={model.entryId}>
-                      {model.entryId}
-                    </option>
+                    <option key={model.entryId}>{model.entryId}</option>
                   ))}
                 </select>
               </li>
-            ) : '' }
+            ) : (
+              ''
+            )}
           </ul>
           <h5>Model confidence</h5>
           <ul className={f('legend')}>
             {confidenceColors.map((item) => (
               <li key={item.category}>
-                <span style={{backgroundColor: item.color}}>&nbsp;</span> {item.category} ({item.range})
+                <span style={{ backgroundColor: item.color }}>&nbsp;</span>{' '}
+                {item.category} ({item.range})
               </li>
             ))}
           </ul>
@@ -247,7 +264,9 @@ const getModelInfoUrl = (isUrlToApi) =>
         protocol,
         hostname,
         port,
-        pathname: isUrlToApi ? `${root}api/prediction/${accession}` : `${root}entry/${accession}`,
+        pathname: isUrlToApi
+          ? `${root}api/prediction/${accession}`
+          : `${root}entry/${accession}`,
         query: query,
       });
       if (isUrlToApi) return modelUrl;
@@ -257,7 +276,7 @@ const getModelInfoUrl = (isUrlToApi) =>
 
 const AlphaFoldModel = loadData({
   getUrl: getModelInfoUrl(true),
-  mapStateToProps: getModelInfoUrl(false)
+  mapStateToProps: getModelInfoUrl(false),
 })(_AlphaFoldModel);
 
 const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
@@ -266,7 +285,7 @@ const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
   return (
     <div>
       <Table
-        dataTable={data.payload?.results.map(e => e.metadata)}
+        dataTable={data.payload?.results.map((e) => e.metadata)}
         contentType="protein"
         loading={data.loading}
         ok={data.ok}
@@ -304,11 +323,11 @@ const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
                 <>
                   {'\u00A0' /* non-breakable space */}
                   <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-                        <span
-                          className={f('icon', 'icon-common')}
-                          data-icon="&#xf00c;"
-                          aria-label="reviewed"
-                        />
+                    <span
+                      className={f('icon', 'icon-common')}
+                      data-icon="&#xf00c;"
+                      aria-label="reviewed"
+                    />
                   </Tooltip>
                 </>
               ) : null}
@@ -335,8 +354,7 @@ const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
                 {name}
               </Link>
             );
-          }
-          }
+          }}
         >
           Name
         </Column>
@@ -379,7 +397,8 @@ const _ProteinTable = ({ data, isStale, search, onProteinChange }) => {
                 onClick={() => onProteinChange(row.accession)}
               >
                 Show prediction
-              </button>);
+              </button>
+            );
           }}
         />
       </Table>
@@ -395,7 +414,7 @@ _ProteinTable.propTypes = {
 
 const ProteinTable = loadData({
   getUrl: getUrl(true),
-  mapStateToProps: mapStateToPropsForModels
+  mapStateToProps: mapStateToPropsForModels,
 })(_ProteinTable);
 
 const AlphaFoldModelSubPage = ({ data, description }) => {
@@ -422,10 +441,18 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
   }, [mainAccession, data]);
 
   if (data?.loading) return <Loading />;
-  const hasMultipleProteins = mainDB.toLowerCase() === 'interpro' && data.payload.count > 0;
+  const hasMultipleProteins =
+    mainDB.toLowerCase() === 'interpro' && data.payload.count > 0;
   return (
     <div className={f('row', 'column')} ref={container}>
-      {proteinAcc && <AlphaFoldModel proteinAcc={proteinAcc} hasMultipleProteins={hasMultipleProteins} onModelChange={handleModelChange} modelId={modelId} />}
+      {proteinAcc && (
+        <AlphaFoldModel
+          proteinAcc={proteinAcc}
+          hasMultipleProteins={hasMultipleProteins}
+          onModelChange={handleModelChange}
+          modelId={modelId}
+        />
+      )}
       {mainDB.toLowerCase() === 'interpro' ? (
         <ProteinTable onProteinChange={handleProteinChange} />
       ) : null}

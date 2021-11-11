@@ -27,4 +27,5 @@ module.exports = {
     'node_modules/(?!lodash-es|timing-functions|taxonomy-visualisation|protvista|react-syntax-highlighter)',
   ],
   testURL: websiteURL.href,
+  testEnvironment: 'jsdom',
 };

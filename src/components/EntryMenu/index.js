@@ -192,7 +192,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
           )}
         />
         {children}
-        {tabs.map(e => (
+        {tabs.map((e) => (
           <EntryMenuLink
             key={e.name}
             metadata={payload.metadata}
@@ -228,23 +228,23 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.main.key,
-  state =>
+  (state) => state.customLocation.description.main.key,
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .db,
-  state =>
+  (state) =>
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  state =>
+  (state) =>
     state.customLocation.description[state.customLocation.description.main.key]
       .detail,
-  state =>
+  (state) =>
     Object.entries(state.customLocation.description)
       .filter(([_, { isFilter }]) => isFilter)
       .map(([f]) => f),
 
-  state => state.settings.ui.lowGraphics,
+  (state) => state.settings.ui.lowGraphics,
   (mainType, mainDB, mainAccession, mainDetail, filters, lowGraphics) => ({
     mainType,
     mainDB,
@@ -261,13 +261,13 @@ const mapStateToProps = createSelector(
 );
 
 const mapStateToUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.main.key,
-  state =>
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.main.key,
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .db,
-  state =>
+  (state) =>
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
   ({ protocol, hostname, port, root }, mainType, db, accession) => {

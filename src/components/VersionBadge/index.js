@@ -1,9 +1,16 @@
 import React from 'react';
 import T from 'prop-types';
 
-import ColorHash from 'color-hash/lib/color-hash';
+import ColorHash from 'color-hash';
 
-const colorHash = new ColorHash();
+// default values for version 1.X of colorhash
+/* eslint-disable no-magic-numbers */
+const colorHash = new ColorHash({
+  hash: 'bkdr',
+  saturation: [0.65, 0.35, 0.5],
+  lightness: [0.65, 0.35, 0.5],
+});
+/* eslint-enable no-magic-numbers */
 
 const DEFAULT_SIDE = 30;
 const CHANGE_FIGURE_EVERY = 10;

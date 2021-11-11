@@ -13,14 +13,15 @@ const LegacyModuleSplitPlugin = require('./webpack-plugins/legacy-module-split-p
 // CSS-related
 const postCSSImport = require('postcss-import');
 const postcssPresetEnv = require('postcss-preset-env');
-
 const cssNano = require('cssnano');
+
+// Web service plugin
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const buildInfo = require('./scripts/build-info');
 const pkg = require('./package.json');
 
 const DEFAULT_PORT = 80;
-const kB = 1024;
 
 const iprConfig = require('./interpro-config.js');
 
@@ -41,7 +42,6 @@ const cssSettings = {
   },
   importLoaders: 1,
   sourceMap: true,
-  // localIdentName: '[folder]_[name]__[local]___[hash:2]',
 };
 
 const publicPath = websiteURL.pathname || '/interpro/';
@@ -57,6 +57,10 @@ const getHTMLWebpackPlugin = (mode) =>
       htmlWebpackPlugin: {
         files: assets,
         options: options,
+        faviconTags: assetTags.headTags.filter(
+          (tag) =>
+            tag && tag.meta && tag.meta.plugin === 'favicons-webpack-plugin'
+        ),
       },
     }),
   });
@@ -64,30 +68,31 @@ const getHTMLWebpackPlugin = (mode) =>
 const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
-  filename: path.join('css', '[name].[contenthash:3].css'),
-  chunkFilename: path.join('css', '[id].[contenthash:3].css'),
+  filename: path.join('css', '[name].[fullhash:3].css'),
+  chunkFilename: path.join('css', '[id].[chunkhash:3].css'),
+  ignoreOrder: true,
 });
-
+const getAssetModuleFilename = (pathData) => {
+  const ext = pathData.filename.split('.')?.[1].toLowerCase();
+  let subfolder = 'other';
+  if (['jpeg', 'jpg', 'png', 'gif', 'svg', 'avif'].includes(ext))
+    subfolder = 'images';
+  else if (['woff', 'woff2', 'ttf', 'eot'].includes(ext)) subfolder = 'fonts';
+  return path.join('assets', subfolder, '[name].[hash:3][ext]');
+};
 const getConfigFor = (env, mode, module = false) => {
   const name = module ? 'module' : 'legacy';
 
   return {
-    // NAME
     name,
-    // MODE
     mode,
-    // OUTPUT
-    node: {
-      fs: 'empty',
-    },
     output: {
-      path: path.resolve('dist'),
       publicPath,
-      filename: path.join('js', `[id].${name}.[name].[hash:3].js`),
+      filename: path.join('js', `[id].${name}.[name].[fullhash:3].js`),
       chunkFilename: path.join('js', `[id].${name}.[name].[chunkhash:3].js`),
       globalObject: 'self',
+      assetModuleFilename: getAssetModuleFilename,
     },
-    // RESOLVE
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
       extensions: ['.js', '.ts', '.json', '.worker.js'],
@@ -104,7 +109,6 @@ const getConfigFor = (env, mode, module = false) => {
         react: path.resolve('node_modules/react'),
       },
     },
-    // MODULE
     module: {
       rules: [
         {
@@ -116,7 +120,7 @@ const getConfigFor = (env, mode, module = false) => {
                 filename: path.join(
                   'js',
                   'workers',
-                  `[folder].${name}.[name].[hash:3].worker.js`
+                  `${name}.[name].[chunkhash:3].worker.js`
                 ),
               },
             },
@@ -127,7 +131,6 @@ const getConfigFor = (env, mode, module = false) => {
           include: [
             path.resolve('src'),
             path.resolve('node_modules', 'lodash-es'),
-            // path.resolve('node_modules', 'color-hash'),
             path.resolve('node_modules', 'timing-functions'),
             /protvista/i,
             /react-msa-viewer/,
@@ -136,7 +139,6 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('node_modules', 'clanviewer'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
-            // path.resolve('node_modules', 'taxonomy-visualisation'),
           ],
           use: [
             {
@@ -197,11 +199,7 @@ const getConfigFor = (env, mode, module = false) => {
         },
         {
           test: /\.(txt|fast[aq])/i,
-          use: [
-            {
-              loader: 'raw-loader',
-            },
-          ],
+          type: 'asset/source',
         },
         {
           test: /\.yml$/i,
@@ -215,7 +213,7 @@ const getConfigFor = (env, mode, module = false) => {
           ],
         },
         {
-          test: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          test: /((clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
           use: [
             {
               loader:
@@ -294,12 +292,7 @@ const getConfigFor = (env, mode, module = false) => {
               },
             },
           ],
-          exclude: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
-        },
-        {
-          test: /\.css\?string$/i,
-          use: [{ loader: 'raw-loader' }],
-          exclude: /((LiteMol-plugin-blue)|(LiteMol-plugin-light)|(LiteMol-plugin)|(tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          exclude: /((tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
         },
         {
           test: /\.scss$/i,
@@ -322,59 +315,20 @@ const getConfigFor = (env, mode, module = false) => {
             },
           ],
         },
+        // Images
         {
           test: /\.(jpe?g|png|gif|svg|avif)$/i,
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                name: path.join(
-                  'assets',
-                  'images',
-                  '[name].[hash:base62:3].[ext]'
-                ),
-                limit: 1 * kB,
-              },
-            },
-            {
-              loader: 'img-loader',
-              options: {
-                enabled: mode === 'production',
-              },
-            },
-          ],
+          type: 'asset/resource',
         },
+        // fonts
         {
           test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                name: path.join(
-                  'assets',
-                  'fonts',
-                  '[name].[hash:base62:3].[ext]'
-                ),
-                limit: 1 * kB,
-                mimetype: 'application/font-woff',
-              },
-            },
-          ],
+          type: 'asset/resource',
         },
+        // fonts
         {
           test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: path.join(
-                  'assets',
-                  'fonts',
-                  '[name].[hash:base62:3].[ext]'
-                ),
-              },
-            },
-          ],
+          type: 'asset/resource',
         },
       ],
     },
@@ -392,37 +346,39 @@ const getConfigFor = (env, mode, module = false) => {
       }),
       mode === 'production' ? miniCssExtractPlugin : null,
       mode === 'production'
-        ? new (require('offline-plugin'))({
-            caches: {
-              main: [
-                new RegExp(`js/[^/]*${name}[^/]*.js$`, 'i'),
-                new RegExp('css/[^/]+.css$', 'i'),
-              ],
-              additional: [/\.(worker\.js)$/i],
-              optional: [/\.(eot|ttf|woff|svg|ico|png|avif|jpe?g)$/i],
-            },
-            // TODO: check a way to use it without affecting /api
-            // appShell: publicPath,
-            AppCache: false,
-            // TODO: Check whats the best way to do this autoupdate.
-            // autoUpdate: 60000,
-            ServiceWorker: {
-              output: `sw.${name}.js`,
-              events: true,
-            },
-            safeToUseOptionalCaches: true,
-            excludes: ['**/.*', '**/*.{map,br,gz}'],
+        ? new WorkboxPlugin.GenerateSW({
+            skipWaiting: false,
+            swDest: `sw.${name}.js`,
+            exclude: ['**/.*', '**/*.{map,br,gz}'],
           })
         : null,
+      //   TODO: Remove if workbox works wellfor a few releases.
+      //   This is the configuration of previous service worker plugin. Left here as reference in
+      //   ? new (require('offline-plugin'))({
+      //       caches: {
+      //         main: [
+      //           new RegExp(`js/[^/]*${name}[^/]*.js$`, 'i'),
+      //           new RegExp('css/[^/]+.css$', 'i'),
+      //         ],
+      //         additional: [/\.(worker\.js)$/i],
+      //         optional: [/\.(eot|ttf|woff|svg|ico|png|avif|jpe?g)$/i],
+      //       },
+      //       AppCache: false,
+      //       ServiceWorker: {
+      //         output: `sw.${name}.js`,
+      //         events: true,
+      //       },
+      //       safeToUseOptionalCaches: true,
+      //     })
+
       // Custom plugin to split codebase into legacy/modern bundles,
       // depends on HTMLWebpackPlugin
       legacyModuleSplitPlugin,
       // GZIP compression
       mode === 'production'
         ? new (getCompressionPlugin())({
-            filename: '[path].gz[query]',
+            filename: '[path][base].gz[query]',
             test: /\.(js|css|html|svg)$/i,
-            cache: true,
             algorithm(buffer, options, callback) {
               require('node-zopfli-es').gzip(buffer, options, callback);
             },
@@ -431,9 +387,8 @@ const getConfigFor = (env, mode, module = false) => {
       // Brotli compression
       mode === 'production'
         ? new (getCompressionPlugin())({
-            filename: '[path].br[query]',
+            filename: '[path][base].br[query]',
             test: /\.(js|css|html|svg)$/i,
-            cache: true,
             algorithm(buffer, _, callback) {
               require('iltorb').compress(
                 buffer,
@@ -447,7 +402,6 @@ const getConfigFor = (env, mode, module = false) => {
           })
         : null,
     ].filter(Boolean),
-    // optimization.minimize: mode === 'production',
     devtool: ((mode, env) => {
       if (mode === 'development') return 'cheap-module-source-map';
       if (env.staging) return 'source-map';
@@ -467,10 +421,14 @@ module.exports = (
   // Add plugins needed only once
   configModule.plugins = [
     mode === 'production'
-      ? new (require('webapp-webpack-plugin'))({
-          logo: path.join('.', 'images', 'logo', 'logo_1776x1776.png'),
-          prefix: path.join('assets', 'icons-and-manifests', '[hash:base62:3]'),
-          inject: 'force',
+      ? new (require('favicons-webpack-plugin'))({
+          logo: path.join('.', 'src', 'images', 'logo', 'logo_1776x1776.png'),
+          prefix: `${path.join(
+            'assets',
+            'icons-and-manifests',
+            '[chunkhash:3]'
+          )}/`,
+          inject: true,
           favicons: {
             background: '#007c82',
             theme_color: '#007c82',
@@ -481,7 +439,6 @@ module.exports = (
           },
         })
       : null,
-    mode === 'development' ? new webpack.HotModuleReplacementPlugin() : null,
     htmlWebpackPlugin,
     ...configModule.plugins,
   ].filter(Boolean);
@@ -490,20 +447,25 @@ module.exports = (
   if (mode === 'development') {
     configModule.devServer = {
       host: '0.0.0.0',
-      stats: 'errors-only',
-      contentBase: publicPath,
-      publicPath,
-      overlay: true,
       port: websiteURL.port || DEFAULT_PORT,
+      static: {
+        directory: path.join(__dirname, 'dist'),
+        publicPath,
+        watch: {
+          ignored: /node_modules/,
+        },
+      },
+
+      client: {
+        overlay: true,
+      },
       hot: true,
       historyApiFallback: {
         index: publicPath,
         disableDotRule: true,
       },
-      watchOptions: {
-        ignored: /node_modules/,
-      },
     };
+    configModule.stats = 'errors-only';
   }
 
   if (mode === 'production') {

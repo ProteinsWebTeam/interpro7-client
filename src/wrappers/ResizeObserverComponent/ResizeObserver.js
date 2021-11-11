@@ -27,6 +27,7 @@ export default (() => {
       this._onResizeEvent([
         {
           target: this._node,
+          // $FlowFixMe class-object-subtyping
           contentRect: this._node.getBoundingClientRect(),
         },
       ]);
