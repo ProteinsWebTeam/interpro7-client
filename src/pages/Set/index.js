@@ -537,8 +537,7 @@ class List extends PureComponent /*:: <ListProps> */ {
               renderer={(
                 accession /*: string */,
                 {
-                  // eslint-disable-next-line camelcase
-                  source_database,
+                  source_database: sourceDB,
                 } /*: {accession: string, source_database: string} */,
                 extra,
               ) => {
@@ -551,12 +550,12 @@ class List extends PureComponent /*:: <ListProps> */ {
                       description: {
                         main: { key: 'set' },
                         set: {
-                          db: source_database,
+                          db: sourceDB,
                           accession,
                         },
                         entry: {
                           isFilter: true,
-                          db: source_database,
+                          db: sourceDB,
                         },
                       },
                     })}
@@ -575,11 +574,10 @@ class List extends PureComponent /*:: <ListProps> */ {
               renderer={(
                 accession /*: string */,
                 {
-                  // eslint-disable-next-line camelcase
-                  source_database,
+                  source_database: sourceDB,
                 } /*: {accession: string, source_database: string} */,
               ) => {
-                return <div>{databases?.[source_database]?.name}</div>;
+                return <div>{databases?.[sourceDB]?.name}</div>;
               }}
             >
               Source Database

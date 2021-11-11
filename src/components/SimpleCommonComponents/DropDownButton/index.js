@@ -13,12 +13,12 @@ const DropDownButton = (
   {
     label,
     icon,
-    color = undefined,
+    color = null,
     children,
-    fontSize = undefined,
+    fontSize = null,
     extraClasses = '',
     disabled = false,
-  } /*: {label: string, icon?: string, color ?: string, children: any, fontSize ?: string, extraClasses ?: string, disabled?: boolean} */,
+  } /*: {label: string, icon?: string, color ?: ?string, children: any, fontSize ?: ?string, extraClasses ?: string, disabled?: boolean} */,
 ) => {
   const [isOpen, setOpen] = useState(false);
   const handleClick = () => {

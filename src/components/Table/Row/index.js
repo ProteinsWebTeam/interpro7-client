@@ -38,6 +38,7 @@ class Row extends PureComponent /*:: <Props> */ {
 
   // TODO review / fix
   componentDidMount() {
+    // $FlowFixMe method-unbinding
     if (!(this._ref.current && this._ref.current.animate)) return;
     this._ref.current.animate(
       // prettier-ignore
@@ -47,14 +48,8 @@ class Row extends PureComponent /*:: <Props> */ {
   }
 
   render() {
-    const {
-      row,
-      columns,
-      extra,
-      rowClassName,
-      group,
-      backgroundColor,
-    } = this.props;
+    const { row, columns, extra, rowClassName, group, backgroundColor } =
+      this.props;
     const rcn =
       typeof rowClassName === 'function' ? rowClassName(row) : rowClassName;
     return (

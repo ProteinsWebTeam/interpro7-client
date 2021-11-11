@@ -1,5 +1,5 @@
-// flow-typed signature: 9d34662c5787141eac86b223d34a2dd5
-// flow-typed version: 396e08d508/react-redux_v7.x.x/flow_>=v0.142.x
+// flow-typed signature: 7e27199b61fbb510d3c849101ee9c26a
+// flow-typed version: cbfc4e71b7/react-redux_v7.x.x/flow_>=v0.142.x
 
 /**
 The order of type arguments for connect() is as follows:
@@ -203,7 +203,15 @@ declare module "react-redux" {
   // Typings for Hooks
   // ------------------------------------------------------------
 
-  declare export function useDispatch<D>(): D;
+  declare export function useDispatch<D>(): (
+    & (<T: { [key: string]: any }>(T) => T)
+    // Supports thunks at their various lengths and use cases depending if user has typed them as tuple vs array
+    & (<T>((...args: [any]) => T) => T)
+    & (<T>((...args: [any, any]) => T) => T)
+    & (<T>((...args: [any, any, any]) => T) => T)
+    & (<T>((...args: Array<any>) => T) => T)
+    & D
+  );
 
   declare export function useSelector<S, SS>(
     selector: (state: S) => SS,
@@ -285,6 +293,8 @@ declare module "react-redux" {
   ): (component: Com) => React$ComponentType<OP> & $Shape<ST>;
 
   declare export function batch(() => void): void
+
+  declare export function shallowEqual<T>(left: T, right: any): boolean
 
   declare export default {
     Provider: typeof Provider,

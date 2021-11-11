@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState, useEffect } from 'react';
 import T from 'prop-types';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
@@ -6,7 +6,11 @@ import { DefaultPluginSpec } from 'molstar/lib/mol-plugin/spec';
 import { PluginConfig } from 'molstar/lib/mol-plugin/config';
 import { PluginContext } from 'molstar/lib/mol-plugin/context';
 import { PluginCommands } from 'molstar/lib/mol-plugin/commands';
-import { StructureSelection } from 'molstar/lib/mol-model/structure';
+import {
+  StructureSelection,
+  StructureElement,
+  StructureProperties as Props,
+} from 'molstar/lib/mol-model/structure';
 
 import { ChainIdColorThemeProvider } from 'molstar/lib/mol-theme/color/chain-id';
 import {
@@ -21,38 +25,78 @@ import { ParamDefinition } from 'molstar/lib/mol-util/param-definition';
 import { Script } from 'molstar/lib/mol-script/script';
 import { Color } from 'molstar/lib/mol-util/color';
 import { ColorNames } from 'molstar/lib/mol-util/color/names';
-import { useBehavior } from 'molstar/lib/mol-plugin-ui/hooks/use-behavior';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
-// import SelectionTheme from './InterProTheme';
 
 const f = foundationPartial(style, fonts);
 
-const newLocal = (props /*: Props */) => {
-  if (props.viewer) {
-    const highlighted = useBehavior(props.viewer.behaviors.labels.highlight);
-    if (highlighted) {
-      const text = highlighted.labels[0];
-      return (
-        <div
-          className={f('structure-label')}
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: text }}
-        />
-      );
-    }
-  }
-  return <div />;
-};
+const MAX_ACCESSION_LENGTH = 20;
+
 /**
  * Function hook for 3D model labels
  * returns information on residue highlighted on 3D structure
  * @param {Object} props - react props
- * @returns {Object} react element8
+ * @returns {Object} react element
  */
-const Labels = newLocal;
+const Labels = (
+  props /*: {
+  viewer: object,
+  accession: string,
+} */,
+) => {
+  const [labelData, setLabelData] = useState();
+
+  useEffect(() => {
+    if (props.viewer) {
+      props.viewer.behaviors.interaction.hover.subscribe((arg) => {
+        const loci = arg.current.loci;
+        if (loci.kind === 'element-loci' && loci.elements.length === 1) {
+          const stats = StructureElement.Stats.ofLoci(loci);
+          const { residueCount } = stats;
+          if (residueCount > 0) {
+            const data = {};
+            const location = stats.firstResidueLoc;
+            data.accession = location.unit.model.entryId;
+            if (data.accession.length > MAX_ACCESSION_LENGTH) {
+              data.accession = props.accession;
+            }
+            data.residue = Props.atom.label_comp_id(location);
+            data.location = Props.residue.auth_seq_id(location);
+            data.chain = Props.chain.auth_asym_id(location);
+            data.seq_location = Props.residue.label_seq_id(location);
+            data.seq_chain = Props.chain.label_asym_id(location);
+            if (
+              labelData === undefined ||
+              data.location !== labelData.location
+            ) {
+              setLabelData(data);
+            }
+          }
+        } else {
+          setLabelData(undefined);
+        }
+      });
+    }
+  }, [props.viewer]);
+
+  if (labelData && labelData.location !== undefined) {
+    return (
+      <div className={f('structure-label')}>
+        <small>{labelData.accession} </small>
+        Chain: <b>{labelData.chain} </b>
+        Residue: <b>{labelData.residue} </b>
+        {labelData.location}
+      </div>
+    );
+  }
+  return <div className={f('structure-label')} />;
+};
+Labels.propTypes = {
+  viewer: T.object,
+  accession: T.string,
+};
 
 /*:: type Props = {
   id: string,
@@ -137,6 +181,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
       this.viewer.representation.structure.themes.colorThemeRegistry.add(
         AfConfidenceColorThemeProvider,
       );
+      // mouseover
     }
 
     if (this.props.url) {
@@ -221,8 +266,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   highlightSelections(selections /*: Array<Array<string>> */) {
     if (!this.viewer) return;
-    const data = this.viewer.managers.structure.hierarchy.current.structures[0]
-      ?.cell.obj?.data;
+    const data =
+      this.viewer.managers.structure.hierarchy.current.structures[0]?.cell.obj
+        ?.data;
     if (!data) return;
 
     this.clearSelections();
@@ -311,8 +357,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
 
   clearSelections() {
     if (!this.viewer) return;
-    const data = this.viewer.managers.structure.hierarchy.current.structures[0]
-      ?.cell.obj?.data;
+    const data =
+      this.viewer.managers.structure.hierarchy.current.structures[0]?.cell.obj
+        ?.data;
     if (!data) return;
     this.viewer.managers.interactivity.lociSelects.deselectAll();
   }
@@ -337,7 +384,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
               >
                 <canvas ref={this._structureViewerCanvas} />
               </div>
-              <Labels viewer={this.viewer} />
+              <Labels viewer={this.viewer} accession={this.name} />
             </div>
           );
         }}

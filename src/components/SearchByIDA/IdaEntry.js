@@ -56,6 +56,8 @@ const getUrlForAutocomplete = (
 }; */
 /*:: type State = {
   draggable: boolean,
+  loadingPfamOptions: boolean,
+  loadingInterProOptions: boolean,
 }; */
 /*:: type DataType = {
   ok: bool,
@@ -84,6 +86,8 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
   }
   state = {
     draggable: false,
+    loadingPfamOptions: false,
+    loadingInterProOptions: false,
   };
   componentDidMount() {
     if (this.props.entry) this._handleOnChange(this.props.entry);
@@ -93,17 +97,27 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     const value = rawValue?.value || rawValue;
     if (!value) return;
     this.props.changeEntryHandler(value);
-    fetchFun(getUrlForAutocomplete(this.props.api, 'interpro', value)).then((
-      data /*: DataType */,
-    ) => {
-      this.props.mergeResults(data);
+    this.setState({
+      loadingPfamOptions: true,
+      loadingInterProOptions: true,
     });
+    fetchFun(getUrlForAutocomplete(this.props.api, 'interpro', value)).then(
+      (data /*: DataType */) => {
+        this.props.mergeResults(data);
+        this.setState({
+          loadingInterProOptions: false,
+        });
+      },
+    );
 
-    fetchFun(getUrlForAutocomplete(this.props.api, 'pfam', value)).then((
-      data /*: DataType */,
-    ) => {
-      this.props.mergeResults(data);
-    });
+    fetchFun(getUrlForAutocomplete(this.props.api, 'pfam', value)).then(
+      (data /*: DataType */) => {
+        this.props.mergeResults(data);
+        this.setState({
+          loadingPfamOptions: false,
+        });
+      },
+    );
   };
 
   _getDeltaFromDragging = (event) => {
@@ -165,6 +179,9 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
               value: accession,
               label: name,
             }))
+          }
+          isLoading={
+            this.state.loadingInterProOptions || this.state.loadingPfamOptions
           }
           onInputChange={this._handleOnChange}
           onChange={this._handleOnChange}

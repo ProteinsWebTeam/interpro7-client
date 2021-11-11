@@ -20,8 +20,9 @@ const autoScroll = async (
       /**/
     }
     if (target) {
-      window.scrollTo(target.getBoundingClientRect());
-      target.focus();
+      const targetTmp = target;
+      window.scrollTo(targetTmp.getBoundingClientRect());
+      targetTmp.focus();
     } else {
       // Might not have been mounted yet, wait a bit and retry, only once
       if (!isRetry) {

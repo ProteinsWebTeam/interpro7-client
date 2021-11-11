@@ -1,5 +1,5 @@
-// flow-typed signature: 7e46c8fddb9d601f9b5b405919c74216
-// flow-typed version: 72a1136f77/express_v4.17.x/flow_>=v0.104.x
+// flow-typed signature: b7d2ab903e09911c82af9bd300893dc7
+// flow-typed version: 56d59f6e77/express_v4.17.x/flow_>=v0.104.x
 
 declare type express$RouterOptions = {
   caseSensitive?: boolean,
@@ -12,6 +12,15 @@ declare class express$RequestResponseBase {
   app: express$Application<any, any>;
   get(field: string): string | void;
 }
+
+declare type express$RangeParserOptions = {|
+  +combine?: boolean,
+|};
+
+declare type express$RangeParserRange = {|
+  +start: number,
+  +end: number,
+|};
 
 declare type express$RequestParams = { [param: string]: string, ... };
 
@@ -71,6 +80,7 @@ declare class express$Request extends http$IncomingMessage mixins express$Reques
   header(field: string): string | void;
   is(type: string): string | false;
   param(name: string, defaultValue?: string): string | void;
+  range(size: number, options?: express$RangeParserOptions): Array<express$RangeParserRange> | number | void;
 }
 
 declare type express$CookieOptions = {
