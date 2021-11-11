@@ -90,7 +90,7 @@ const AlignmentViewer = ({
         setColorMap(map || {});
       });
       if (contacts && linksTrack.current) {
-        linksTrack.current.data = contacts;
+        linksTrack.current.data = contacts.map((p) => [p[2], p[3], p[4]]);
       }
     }
   }, [align, contacts]);
