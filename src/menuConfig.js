@@ -411,7 +411,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
-    'trrosetta',
+    'rosettafold',
     {
       to(customLocation) {
         const { key } = customLocation.description.main;
@@ -421,13 +421,13 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             main: { key },
             [key]: {
               ...customLocation.description[key],
-              detail: 'trrosetta',
+              detail: 'rosettafold',
             },
           },
         };
       },
-      name: 'trRosetta',
-      counter: 'structural_models.trRosetta',
+      name: 'RoseTTAFold',
+      counter: 'structural_models.RoseTTAFold',
     },
   ],
   [

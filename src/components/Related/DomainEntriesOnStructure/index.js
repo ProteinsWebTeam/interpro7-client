@@ -117,41 +117,42 @@ const mergeData = (secondaryData, secondaryStructures) => {
   return entries;
 };
 
+const scrollToElementByID = (id) => {
+  document.getElementById(id)?.scrollIntoView();
+};
 const GoToProtVistaMenu = ({ entries } /*: Array<Object> */) => (
   <div className={f('row')}>
     <div className={f('column')}>
       <DropDownButton label="Jump To" icon="&#xf124;">
         <ul>
-          {entries.map((e, i) => (
-            <li key={i}>
-              <Link
-                to={(customLocation) => ({
-                  ...customLocation,
-                  hash: `protvista-${e.chain}-${e.protein.accession}`,
-                })}
-              >
-                Chain {e.chain} ({e.protein.accession})
-              </Link>
-            </li>
-          ))}
+          {entries.map((e, i) => {
+            const elementID = `protvista-${e.chain}-${e.protein.accession}`;
+            return (
+              <li key={i}>
+                <Link
+                  to={(customLocation) => ({
+                    ...customLocation,
+                    hash: elementID,
+                  })}
+                  onClick={() => scrollToElementByID(elementID)}
+                >
+                  Chain {e.chain} ({e.protein.accession})
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </DropDownButton>
     </div>
   </div>
 );
+
 GoToProtVistaMenu.propTypes = {
   entries: T.arrayOf(T.object).isRequired,
 };
 
 const ProtVistaLoaded = (
-  {
-    dataprotein,
-    tracks,
-    dataGenome3d,
-    chain,
-    fixedHighlight,
-    id,
-  } /*: {
+  { dataprotein, tracks, dataGenome3d, chain, fixedHighlight, id } /*: {
   dataprotein: {loading: boolean, payload: {metadata: Object}},
   tracks: Object | Array<Object>,
   dataGenome3d: {loading: boolean, payload: {metadata: Object}, status: number},
@@ -311,9 +312,8 @@ const EntriesOnStructure = (
       <div className={f('row')}>
         {merged.map((e, i) => {
           if (!protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`])
-            protvistaPerChainProtein[
-              `${e.chain}-${e.protein.accession}`
-            ] = includeProtein(e.protein.accession);
+            protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`] =
+              includeProtein(e.protein.accession);
           const ProtVistaPlusProtein =
             protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`];
           return (
