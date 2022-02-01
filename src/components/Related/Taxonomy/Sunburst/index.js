@@ -21,6 +21,13 @@ import style from './style.css';
 
 const f = foundationPartial(style, ipro, fonts);
 
+const getDefaultMaxDepth = (numSpecies /*: number */) => {
+  if (numSpecies < 2000) return 8;
+  if (numSpecies < 10000) return 7;
+  if (numSpecies < 25000) return 6;
+  if (numSpecies < 40000) return 5;
+  return 4;
+};
 // eslint-disable-next-line no-magic-numbers
 const FONT_SIZES = [10, 12, 14, 16, 18];
 const DEFAULT_FONT_SIZE = 14;
@@ -66,6 +73,7 @@ const Sunburst = ({ data, description }) => {
   const [weightOption, setWeightOption] = useState('proteins');
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
   const [currentNode, setCurrentNode] = useState(null);
+  const [maxDepth, setMaxDepth] = useState(4);
 
   useEffect(() => {
     loadWebComponent(() => NightingaleSunburst).as('nightingale-sunburst');
@@ -73,6 +81,7 @@ const Sunburst = ({ data, description }) => {
   useEffect(() => {
     if (loading || !payload || !sunburst.current) return;
     sunburst.current.data = payload.taxa;
+    setMaxDepth(getDefaultMaxDepth(payload.taxa.species));
     setLegends(
       sunburst.current.superkingdoms.map((name) => [
         name,
@@ -93,6 +102,16 @@ const Sunburst = ({ data, description }) => {
     <div>
       <div className={f('row', 'sunburst')}>
         <div className={f('column', 'small-12', 'medium-9')}>
+          {(payload?.taxa?.species || 0) > 2000 && (
+            <div className={f('callout', 'info', 'withicon')}>
+              The number of species for this sunburst is{' '}
+              {payload?.taxa?.species}. The depth of the visualisation has been
+              limited. You can modify this with the controller in the right
+              side. however, please note this might affect the performance in
+              your browser.
+            </div>
+          )}
+
           <ResizeObserverComponent measurements={['width']} element="div">
             {({ width }) => {
               return (
@@ -103,7 +122,7 @@ const Sunburst = ({ data, description }) => {
                   name-attribute="name"
                   id-attribute="id"
                   ref={sunburst}
-                  max-depth={8}
+                  max-depth={maxDepth}
                   font-size={fontSize}
                 />
               );
@@ -160,6 +179,21 @@ const Sunburst = ({ data, description }) => {
               ))}
             </select>
           </div>
+          <div>
+            <h5>Sunburst Depth</h5>
+            <div className={f('sunburst-depth')}>
+              4
+              <input
+                type="range"
+                value={maxDepth}
+                min="4"
+                max="8"
+                onChange={(event) => setMaxDepth(event.target.value)}
+              />
+              8
+            </div>
+          </div>
+          <hr />
           <div>
             <h5>Selected Taxon</h5>
             {currentNode && (
