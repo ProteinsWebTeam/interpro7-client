@@ -83,7 +83,7 @@ const Sunburst = ({ data, description }) => {
     sunburst.current.data = payload.taxa;
     setMaxDepth(getDefaultMaxDepth(payload.taxa.species));
     setLegends(
-      sunburst.current.superkingdoms.map((name) => [
+      sunburst.current.topOptions.map((name) => [
         name,
         sunburst.current.getColorBySuperKingdom(name),
       ]),
@@ -180,13 +180,16 @@ const Sunburst = ({ data, description }) => {
             </select>
           </div>
           <div>
-            <h5>Sunburst Depth</h5>
+            <h5>
+              Sunburst Depth{' '}
+              <span className={f('small')}>({maxDepth} rings)</span>
+            </h5>
             <div className={f('sunburst-depth')}>
-              4
+              2
               <input
                 type="range"
                 value={maxDepth}
-                min="4"
+                min="2"
                 max="8"
                 onChange={(event) => setMaxDepth(event.target.value)}
               />

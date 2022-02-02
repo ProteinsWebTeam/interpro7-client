@@ -23,5 +23,11 @@
   & .sunburst-depth {
     display: flex;
     align-items: center;
+    word-break: keep-all;
+
+    & input {
+      margin-left: 0.7em;
+      margin-right: 0.7em;
+    }
   }
 }

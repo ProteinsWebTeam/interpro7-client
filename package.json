@@ -109,7 +109,7 @@
     "ngl": "2.0.0-dev.37",
     "nightingale-heatmap": "^3.2.11",
     "nightingale-linegraph-track": "3.4.0",
-    "nightingale-sunburst": "3.5.0-alpha.6",
+    "nightingale-sunburst": "3.5.7",
     "popper.js": "1.16.1",
     "postcss": "8.3.9",
     "prop-types": "15.7.2",
