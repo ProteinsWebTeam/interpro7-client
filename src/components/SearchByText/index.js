@@ -30,7 +30,6 @@ const SchemaOrgData = loadable({
 /*:: type Props = { main: string }; */
 
 export class SearchByText extends PureComponent /*:: <Props> */ {
-  /*:: _input: HTMLInputElement; */
   /*:: _input: { current: null | React$ElementRef<'div'> }; */
   static propTypes = {
     main: T.string,
