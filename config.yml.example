@@ -37,7 +37,7 @@ pages:
       - structure
       - taxonomy
       - proteome
-      - trrosetta
+      - rosettafold
       - alphafold
       - logo
       - entry_alignments
