@@ -329,7 +329,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
           {messageContent}
           {(payload.results || []).map((obj) => {
             const currentDB = (database || idaAccessionDB).toLowerCase();
-            let idaObj = ida2json(obj.ida, obj.representative, currentDB);
+            const idaObj = ida2json(obj.ida, obj.representative, currentDB);
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />

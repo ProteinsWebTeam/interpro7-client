@@ -91,11 +91,11 @@ const SimilarProteinsHeaderWithData = (
     idaAccessionDB,
     toggleAccessionDBForIDA,
   } /*: {
-      accession: string, 
-      data: {payload: Object, loading: boolean}, 
-      dataDomain: {payload: Object, loading: boolean}, 
-      databases: Object, 
-      idaAccessionDB: string, 
+      accession: string,
+      data: {payload: Object, loading: boolean},
+      dataDomain: {payload: Object, loading: boolean},
+      databases: Object,
+      idaAccessionDB: string,
       toggleAccessionDBForIDA: function
     } */,
 ) => {
@@ -170,7 +170,7 @@ const getUrlForPfamDomains = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description,
   (state) => state.customLocation.search,
-  ({ protocol, hostname, port, root }, description, search) => {
+  ({ protocol, hostname, port, root }, description) => {
     const newDescription = {
       main: { key: 'entry' },
       entry: { db: 'pfam' },
