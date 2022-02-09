@@ -24,7 +24,6 @@
     "report:build": "node scripts/report-build-info.js",
     "report-disabled:coverage:flow": "flow-coverage-report --threshold 45",
     "report:coverage:jest": "npm run test:unit -- --coverage",
-    "report:lighthouse": "node scripts/lighthouse.js",
     "coveralls": "cat reports/jest-coverage/lcov.info | coveralls",
     "dev": "webpack serve --mode=development",
     "flow-typed:install": "npx flow-typed install",

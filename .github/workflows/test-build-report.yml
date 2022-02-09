@@ -21,6 +21,10 @@ jobs:
       - name: 📈 - Create Reports
         run: |
           npm run report
+      - name: 💡 run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.8.x
+          lhci autorun      
       - name: 🧥‍ - Coveralls
         uses: coverallsapp/github-action@master
         continue-on-error: true
