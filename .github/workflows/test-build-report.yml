@@ -24,7 +24,8 @@ jobs:
       - name: 💡 run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.8.x
-          lhci autorun      
+          npm install -g http-server
+          lhci autorun
       - name: 🧥‍ - Coveralls
         uses: coverallsapp/github-action@master
         continue-on-error: true
