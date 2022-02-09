@@ -17,10 +17,7 @@ jobs:
           npm ci
       - name: 🧪 | 🏗 - Test and Build
         run: |
-          npm run deploy:production
-      - name: 📈 - Create Reports
-        run: |
-          npm run report
+          npm run bundle
       - name: 💡 run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.8.x
