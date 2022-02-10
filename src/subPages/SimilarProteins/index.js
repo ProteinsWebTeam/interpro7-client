@@ -55,17 +55,58 @@ const schemaProcessData = (data) => {
   };
 };
 
+const formatDomainsPayload = (payload, loading, ida) => {
+  if (loading || !payload) return null;
+  const domainsMap = {};
+  payload.results.forEach((result) => {
+    domainsMap[result.metadata.accession.toLowerCase()] = [
+      ...result.proteins[0].entry_protein_locations,
+    ];
+    if (result.metadata.integrated) {
+      domainsMap[result.metadata.integrated.toLowerCase()] = [
+        ...result.proteins[0].entry_protein_locations,
+      ];
+    }
+  });
+  const domains = [];
+  ida.split(/[:-]/).forEach((domain) => {
+    domains.push({
+      entry: domain.toUpperCase(),
+      coordinates: domainsMap[domain.toLowerCase()].splice(0, 1),
+    });
+  });
+  return {
+    accession: payload.results?.[0]?.proteins?.[0]?.accession,
+    length: payload.results?.[0]?.proteins?.[0]?.protein_length,
+    domains,
+  };
+};
+
 const SimilarProteinsHeaderWithData = (
   {
     accession,
     data: { payload, loading },
+    dataDomain: { payload: payloadDomain, loading: loadingDomain },
     databases,
     idaAccessionDB,
     toggleAccessionDBForIDA,
-  } /*: {accession: string, data: {payload: Object, loading: boolean}, databases: Object, idaAccessionDB: string, toggleAccessionDBForIDA: function} */,
+  } /*: {
+      accession: string,
+      data: {payload: Object, loading: boolean},
+      dataDomain: {payload: Object, loading: boolean},
+      databases: Object,
+      idaAccessionDB: string,
+      toggleAccessionDBForIDA: function
+    } */,
 ) => {
   if (loading || !payload) return <Loading />;
-  const idaObj = ida2json(payload.ida, idaAccessionDB);
+  const representative = formatDomainsPayload(
+    payloadDomain,
+    loadingDomain,
+    payload.ida,
+  );
+  console.count('representative');
+  const idaObj = ida2json(payload.ida, representative, idaAccessionDB);
   return (
     <div>
       <header>
@@ -99,6 +140,7 @@ const SimilarProteinsHeaderWithData = (
 SimilarProteinsHeaderWithData.propTypes = {
   accession: T.string,
   data: dataPropType,
+  dataDomain: dataPropType,
   databases: T.object,
   idaAccessionDB: T.string,
   toggleAccessionDBForIDA: T.func,
@@ -124,6 +166,29 @@ const getUrlForIDA = createSelector(
     });
   },
 );
+const getUrlForPfamDomains = createSelector(
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
+  ({ protocol, hostname, port, root }, description) => {
+    const newDescription = {
+      main: { key: 'entry' },
+      entry: { db: 'pfam' },
+      protein: {
+        accession: description.protein.accession,
+        db: 'uniprot',
+        isFilter: true,
+      },
+    };
+
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(newDescription),
+    });
+  },
+);
 
 const mapStateToPropsAccessionDB = createSelector(
   (state) => state.ui.idaAccessionDB,
@@ -133,10 +198,15 @@ const mapStateToPropsAccessionDB = createSelector(
 );
 
 const SimilarProteinsHeader = loadData({
-  getUrl: getUrlForIDA,
-  mapStateToProps: mapStateToPropsAccessionDB,
-  mapDispatchToProps: { toggleAccessionDBForIDA },
-})(SimilarProteinsHeaderWithData);
+  getUrl: getUrlForPfamDomains,
+  propNamespace: 'Domain',
+})(
+  loadData({
+    getUrl: getUrlForIDA,
+    mapStateToProps: mapStateToPropsAccessionDB,
+    mapDispatchToProps: { toggleAccessionDBForIDA },
+  })(React.memo(SimilarProteinsHeaderWithData)),
+);
 
 const getAPIURLForSimilarProteins = (
   { protocol, hostname, port, root },
@@ -188,13 +258,7 @@ AllProteinDownload.propTypes = {
 };
 
 const _SimilarProteinTable = (
-  {
-    dataIDA: { loading, payload, isStale, url },
-    db,
-    ida,
-    state,
-    search,
-  } /*: {
+  { dataIDA: { loading, payload, isStale, url }, db, ida, state, search } /*: {
 dataIDA: {
   loading: boolean,
   isStale: boolean,

@@ -406,7 +406,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     } = this.props;
     const mainEndpoint = description.main.key;
     const countersToShow = {
-      entry: ['entries', 'all'],
+      entry: ['entries', description.entry?.db || 'all'],
       protein: ['proteins', 'uniprot'],
       structure: ['structures', 'pdb'],
       proteome: ['proteomes', 'uniprot'],
@@ -502,7 +502,8 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 
                     if (description.main.key === 'taxonomy') {
                       to.taxonomy.accession = this.state.focused;
-                      to.entry.order = 2;
+                      if (endpoint!=='entry')
+                        to.entry.order = 2;
                     } else {
                       to.taxonomy = {
                         db: 'uniprot',
