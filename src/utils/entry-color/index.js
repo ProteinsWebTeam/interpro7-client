@@ -1,9 +1,16 @@
 // @flow
-import ColorHash from 'color-hash/lib/color-hash';
+import ColorHash from 'color-hash';
 
 import config from 'config';
 
-const colorHash = new ColorHash();
+// default values for version 1.X of colorhash
+/* eslint-disable no-magic-numbers */
+const colorHash = new ColorHash({
+  hash: 'bkdr',
+  saturation: [0.65, 0.35, 0.5],
+  lightness: [0.65, 0.35, 0.5],
+});
+/* eslint-enable no-magic-numbers */
 
 /*:: export type ColorMode = 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP'; */
 /*:: type ColorModeMap = {[string]: ColorMode}; */
@@ -28,7 +35,14 @@ export const getTrackColor = (
   // eslint-disable-next-line default-case
   switch (colorMode) {
     case EntryColorMode.ACCESSION:
-      acc = entry.accession.toLowerCase().split('').reverse().join('');
+      acc = entry.accession.startsWith('residue:')
+        ? entry.accession
+            .split('residue:')[1]
+            .toLowerCase()
+            .split('')
+            .reverse()
+            .join('')
+        : entry.accession.toLowerCase().split('').reverse().join('');
       return colorHash.hex(acc);
     case EntryColorMode.MEMBER_DB:
       return config.colors.get(entry.source_database);

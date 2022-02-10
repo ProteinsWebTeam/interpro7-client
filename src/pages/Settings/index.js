@@ -566,6 +566,9 @@ const Genome3DEndpointSettings = connect(getStatusForEndpoint('genome3d'))(
 const WikipediaEndpointSettings = connect(getStatusForEndpoint('wikipedia'))(
   EndpointSettings,
 );
+const AlphaFoldEndpointSettings = connect(getStatusForEndpoint('alphafold'))(
+  EndpointSettings,
+);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -672,6 +675,7 @@ const AddToHomeScreen = connect(undefined, { addToast })(_AddToHomeScreen);
     ipScan: Object,
     genome3d: Object,
     wikipedia: Object,
+    alphafold: Object,
   },
   changeSettings: function,
   resetSettings: function
@@ -689,6 +693,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
       ipScan: T.object.isRequired,
       genome3d: T.object.isRequired,
       wikipedia: T.object.isRequired,
+      alphafold: T.object.isRequired,
     }).isRequired,
     changeSettings: T.func.isRequired,
     resetSettings: T.func.isRequired,
@@ -708,6 +713,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
         ipScan = {},
         genome3d = {},
         wikipedia = {},
+        alphafold = {},
       },
       changeSettings,
     } = this.props;
@@ -766,6 +772,13 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
                 Wikipedia Settings{' '}
                 {!DEV && '(modification temporarily disabled)'}
               </WikipediaEndpointSettings>
+              <AlphaFoldEndpointSettings
+                category="alphafold"
+                endpointDetails={alphafold}
+              >
+                AlphaFold API Settings{' '}
+                {!DEV && '(modification temporarily disabled)'}
+              </AlphaFoldEndpointSettings>
 
               <button onClick={this._handleReset} className={f('button')}>
                 Reset settings to default values

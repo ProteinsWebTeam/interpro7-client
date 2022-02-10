@@ -25,6 +25,11 @@
 .*/node_modules/emotion*
 .*/node_modules/polished*
 .*/node_modules/molstar*
+.*/node_modules/dotenv*
+.*/node_modules/shallowequal*
+
+[untyped]
+.*/node_modules/molstar/**/.*
 
 [include]
 
@@ -41,9 +46,6 @@ module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=src
 munge_underscores=true
 emoji=true
-esproposal.class_static_fields=enable
-esproposal.class_instance_fields=enable
-esproposal.optional_chaining=enable
 
 [lints]
 deprecated-utility=off

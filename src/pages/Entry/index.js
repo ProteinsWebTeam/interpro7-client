@@ -699,7 +699,8 @@ class List extends PureComponent /*:: <Props> */ {
                       title={`link to ${accession} on the ${
                         (databases && databases[db] && databases[db].name) || db
                       } website`}
-                      distance={30}
+                      distance={-5}
+                      useContext={true}
                     >
                       <Link
                         target="_blank"

@@ -411,7 +411,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
-    'model',
+    'rosettafold',
     {
       to(customLocation) {
         const { key } = customLocation.description.main;
@@ -421,13 +421,33 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             main: { key },
             [key]: {
               ...customLocation.description[key],
-              detail: 'model',
+              detail: 'rosettafold',
             },
           },
         };
       },
-      name: 'Structural Model',
-      counter: 'structural_models',
+      name: 'RoseTTAFold',
+      counter: 'structural_models.RoseTTAFold',
+    },
+  ],
+  [
+    'alphafold',
+    {
+      to(customLocation) {
+        const { key } = customLocation.description.main;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'alphafold',
+            },
+          },
+        };
+      },
+      name: 'AlphaFold',
+      counter: 'structural_models.alphafold',
     },
   ],
   [

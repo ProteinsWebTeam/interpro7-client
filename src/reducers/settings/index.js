@@ -12,4 +12,5 @@ export default combineReducers({
   ipScan: category('ipScan'),
   genome3d: category('genome3d'),
   wikipedia: category('wikipedia'),
+  alphafold: category('alphafold'),
 });

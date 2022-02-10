@@ -3,7 +3,7 @@
 @import '../../../styles/z-index.css';
 
 :root {
-  --height-viewer: 50vh;
+  --height-viewer: 55vh;
   --height-bar: 2.3em;
 }
 

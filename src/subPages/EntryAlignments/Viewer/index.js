@@ -49,7 +49,8 @@ const loadProtVistaWebComponents = () => {
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-const defaultContactThreshold = 0.9;
+const defaultContactMinDistance = 5;
+const defaultContactMinProbability = 0.9;
 
 const AlignmentViewer = ({
   data: { loading, payload },
@@ -58,7 +59,8 @@ const AlignmentViewer = ({
   setColorMap,
   overlayConservation,
   contacts = null,
-  contactThreshold = defaultContactThreshold,
+  contactMinDistance = defaultContactMinDistance,
+  contactMinProbability = defaultContactMinProbability,
   onAlignmentLoaded = () => null,
 }) => {
   const msaTrack = useRef(null);
@@ -88,7 +90,7 @@ const AlignmentViewer = ({
         setColorMap(map || {});
       });
       if (contacts && linksTrack.current) {
-        linksTrack.current.data = contacts;
+        linksTrack.current.data = contacts.map((p) => [p[2], p[3], p[4]]);
       }
     }
   }, [align, contacts]);
@@ -176,7 +178,8 @@ const AlignmentViewer = ({
               id="contacts-track"
               length={length}
               ref={linksTrack}
-              threshold={contactThreshold}
+              minprobability={contactMinProbability}
+              mindistance={contactMinDistance}
             />
           </div>
         )}
@@ -201,7 +204,8 @@ AlignmentViewer.propTypes = {
   setColorMap: T.func,
   overlayConservation: T.bool,
   contacts: T.array,
-  contactThreshold: T.number,
+  contactMinDistance: T.number,
+  contactMinProbability: T.number,
   data: dataPropType,
   onAlignmentLoaded: T.func,
 };

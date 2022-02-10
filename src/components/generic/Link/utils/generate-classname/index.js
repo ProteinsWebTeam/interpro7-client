@@ -28,9 +28,8 @@ export default (
   // Not running in browser, so, for now, ignore active class
   // TODO: if we start doing server-side rendering we need to re-enable this
   if (!pathname) return;
-  const { pathname: generatedPathname, hash: generatedHash } = parse(
-    generatedHref,
-  );
+  const { pathname: generatedPathname, hash: generatedHash } =
+    parse(generatedHref);
   const generatedCleanHash = getHashPartWithoutHashSign(generatedHash);
   if (hash && generatedCleanHash && hash !== generatedCleanHash) return;
   if (exact) {
@@ -38,6 +37,6 @@ export default (
     // We check strict equality
     if (pathname === generatedPathname) return activeClass;
   } else {
-    if (pathname.startsWith(generatedPathname)) return activeClass;
+    if ((pathname || '').startsWith(generatedPathname)) return activeClass;
   }
 };

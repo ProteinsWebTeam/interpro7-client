@@ -17,6 +17,7 @@ const handleProgress = async (
 ) => {
   const total = +response.headers.get('Content-Length');
   let received = 0;
+  // $FlowFixMe method-unbinding
   if (!response.clone) return; // bail
   // Need to clone to create another independent ReadableStream
   const clone = response.clone();
@@ -80,55 +81,57 @@ const cachedFetch = (
   payload?: Object,
 |}; */
 
-const commonCachedFetch = (responseType /*: ?string */) => async (
-  url /*: string */,
-  { method = 'GET', headers = new Headers(), ...options } /*: Object */ = {},
-  onProgress /*:: ?: (number) => void */,
-  versionChanged /*: function */,
-) /*: Promise<FetchOutput> */ => {
-  // modify options as needed
-  options.method = method;
-  if (responseType === 'json' && !headers.get('Accept')) {
-    headers.set('Accept', 'application/json');
-  }
-  if (responseType === 'gzip' && !headers.get('Accept')) {
-    headers.set('Content-Type', 'text/plain');
-    headers.set('Accept-Encoding', 'gzip');
-  }
-  // if (responseType === 'yaml' && !headers.get('Accept')) {
-  //   headers.set('Accept', 'application/x-yaml');
-  // }
-  options.headers = headers;
-  // Casting to object to avoid flow error
-  const response /*: Object */ = await cachedFetch(
-    url,
-    options,
-    versionChanged,
-  );
-  if (onProgress && response.headers.get('Content-Length')) {
-    handleProgress(response, onProgress);
-  }
-  let payloadP;
-  if (responseType && typeof response[responseType] === 'function') {
-    payloadP = response[responseType]();
-  } else if (responseType === 'gzip') {
-    payloadP = response.text();
-  } else if (responseType === 'yaml') {
-    payloadP = yaml.safeLoad(await response.text(), { json: true });
-  }
-  const output /*: FetchOutput */ = {
-    status: response.status,
-    ok: response.ok,
-    headers: response.headers,
+const commonCachedFetch =
+  (responseType /*: ?string */) =>
+  async (
+    url /*: string */,
+    { method = 'GET', headers = new Headers(), ...options } /*: Object */ = {},
+    onProgress /*:: ?: (number) => void */,
+    versionChanged /*: function */,
+  ) /*: Promise<FetchOutput> */ => {
+    // modify options as needed
+    options.method = method;
+    if (responseType === 'json' && !headers.get('Accept')) {
+      headers.set('Accept', 'application/json');
+    }
+    if (responseType === 'gzip' && !headers.get('Accept')) {
+      headers.set('Content-Type', 'text/plain');
+      headers.set('Accept-Encoding', 'gzip');
+    }
+    // if (responseType === 'yaml' && !headers.get('Accept')) {
+    //   headers.set('Accept', 'application/x-yaml');
+    // }
+    options.headers = headers;
+    // Casting to object to avoid flow error
+    const response /*: Object */ = await cachedFetch(
+      url,
+      options,
+      versionChanged,
+    );
+    if (onProgress && response.headers.get('Content-Length')) {
+      handleProgress(response, onProgress);
+    }
+    let payloadP;
+    if (responseType && typeof response[responseType] === 'function') {
+      payloadP = response[responseType]();
+    } else if (responseType === 'gzip') {
+      payloadP = response.text();
+    } else if (responseType === 'yaml') {
+      payloadP = yaml.safeLoad(await response.text(), { json: true });
+    }
+    const output /*: FetchOutput */ = {
+      status: response.status,
+      ok: response.ok,
+      headers: response.headers,
+    };
+    try {
+      output.payload = await payloadP;
+    } catch {
+      /**/
+    } finally {
+      return output;
+    }
   };
-  try {
-    output.payload = await payloadP;
-  } catch {
-    /**/
-  } finally {
-    return output;
-  }
-};
 
 export const cachedFetchText = commonCachedFetch('text');
 export const cachedFetchJSON = commonCachedFetch('json');

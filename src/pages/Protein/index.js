@@ -410,6 +410,7 @@ class List extends PureComponent /*:: <ListProps> */ {
             <HighlightToggler />
             <Column
               dataKey="accession"
+              cellClassName={'nowrap'}
               renderer={(accession /*: string */, row) => (
                 <>
                   <SchemaOrgData
