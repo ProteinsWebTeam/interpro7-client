@@ -23,6 +23,8 @@ jobs:
           npm install -g @lhci/cli@0.8.x
           npm install -g http-server
           lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
       - name: 🧥‍ - Coveralls
         uses: coverallsapp/github-action@master
         continue-on-error: true
