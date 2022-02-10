@@ -137,7 +137,7 @@ const commonCachedFetch =
     } else if (responseType === 'gzip') {
       payloadP = response.text();
     } else if (responseType === 'yaml') {
-      payloadP = yaml.safeLoad(await response.text(), { json: true });
+      payloadP = yaml.load(await response.text(), { json: true });
     }
     const output /*: FetchOutput */ = {
       status: response.status,

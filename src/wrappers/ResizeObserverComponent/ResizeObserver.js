@@ -13,7 +13,7 @@ export default (() => {
   return class ResizeObserver {
     /*:: _node: ?HTMLElement; */
     /*:: _onResizeEvent: Array<ResizeObserverEntry> => any; */
-    /*:: _handleResize: Promise<void>; */
+
     constructor(onResizeEvent /*: Array<ResizeObserverEntry> => any */) {
       if (typeof onResizeEvent !== 'function') {
         throw new Error('missing resize handler');

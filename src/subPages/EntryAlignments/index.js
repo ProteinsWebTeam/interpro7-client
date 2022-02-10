@@ -36,11 +36,14 @@ const _Alignment = ({
   // eslint-disable-next-line camelcase
   const num = payload?.num_sequences || Infinity;
   const show = forceShow || num < threshold;
-  setDisplayingAlignment(show);
+  useEffect(() => {
+    setDisplayingAlignment(show);
+  }, [show]);
   useEffect(() => {
     setForceShow(false);
   }, [payload]);
   if (!payload) return null;
+
   return (
     <div>
       {show ? (

@@ -21,16 +21,21 @@ import style from './style.css';
 
 const f = foundationPartial(style, ipro, fonts);
 
+const MAX_NUM_SPECIES_FOR_FULL_DEPTH = 2000;
+
+/* eslint-disable no-magic-numbers */
 const getDefaultMaxDepth = (numSpecies /*: number */) => {
-  if (numSpecies < 2000) return 8;
+  if (numSpecies < MAX_NUM_SPECIES_FOR_FULL_DEPTH) return 8;
   if (numSpecies < 10000) return 7;
   if (numSpecies < 25000) return 6;
   if (numSpecies < 40000) return 5;
   return 4;
 };
-// eslint-disable-next-line no-magic-numbers
+
 const FONT_SIZES = [10, 12, 14, 16, 18];
 const DEFAULT_FONT_SIZE = 14;
+const DEFAULT_DEPTH = 4;
+/* eslint-enable no-magic-numbers */
 
 const LinkOrText = ({ id, name } /*: { id: string, name: string } */) => (
   <i>
@@ -73,7 +78,7 @@ const Sunburst = ({ data, description }) => {
   const [weightOption, setWeightOption] = useState('proteins');
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
   const [currentNode, setCurrentNode] = useState(null);
-  const [maxDepth, setMaxDepth] = useState(4);
+  const [maxDepth, setMaxDepth] = useState(DEFAULT_DEPTH);
 
   useEffect(() => {
     loadWebComponent(() => NightingaleSunburst).as('nightingale-sunburst');
@@ -102,7 +107,7 @@ const Sunburst = ({ data, description }) => {
     <div>
       <div className={f('row', 'sunburst')}>
         <div className={f('column', 'small-12', 'medium-9')}>
-          {(payload?.taxa?.species || 0) > 2000 && (
+          {(payload?.taxa?.species || 0) > MAX_NUM_SPECIES_FOR_FULL_DEPTH && (
             <div className={f('callout', 'info', 'withicon')}>
               The number of species for this sunburst is{' '}
               {payload?.taxa?.species}. The depth of the visualisation has been

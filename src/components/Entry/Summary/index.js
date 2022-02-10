@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { partition } from 'lodash-es';
 
 import ReactHtmlParser from 'react-html-parser';
-import xmlParser from 'fast-xml-parser';
+import { XMLParser } from 'fast-xml-parser';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -326,9 +326,8 @@ OtherSections.propTypes = {
 };
 
 const OverlappingEntries = ({ metadata }) => {
-  const [showAllOverlappingEntries, setShowAllOverlappingEntries] = useState(
-    false,
-  );
+  const [showAllOverlappingEntries, setShowAllOverlappingEntries] =
+    useState(false);
   const overlaps = metadata.overlaps_with;
   if (!overlaps || Object.keys(overlaps).length === 0) return null;
   if (overlaps) {
@@ -446,6 +445,7 @@ const _wikipedia = ({ title, extract, thumbnail, data }) => {
   const properties = ['symbol', 'name', 'image', 'width', 'caption', 'pdb'];
 
   const result = data.payload;
+  const xmlParser = new XMLParser();
   const json = xmlParser.parse(result.parse.parsetree['*']);
   let parts = [];
   let infoStatus = false;
