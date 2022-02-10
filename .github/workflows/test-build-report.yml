@@ -18,11 +18,9 @@ jobs:
       - name: 🧪 | 🏗 - Test and Build
         run: |
           npm run bundle
-      - name: 💡 run Lighthouse CI
+      - name: 📈 - Create Reports
         run: |
-          npm install -g @lhci/cli@0.8.x
-          npm install -g http-server
-          lhci autorun
+          npm run report
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
       - name: 🧥‍ - Coveralls
