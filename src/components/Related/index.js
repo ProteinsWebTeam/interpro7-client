@@ -305,8 +305,7 @@ class Related extends PureComponent /*:: <RelatedProps> */ {
   };
 
   render() {
-    const { data, focusType, hasSecondary, hash, showAllSpecies, ...props } =
-      this.props;
+    const { data, focusType, hasSecondary, hash, ...props } = this.props;
     if (data.loading) return <Loading />;
     let RelatedComponent = RelatedSimple;
     if (hasSecondary) {
@@ -331,7 +330,6 @@ const mapStateToPropsDefault = createSelector(
     focusType,
     hash,
     hasSecondary: filter && (!!filter.db || !!filter.integration),
-    showAllSpecies,
   }),
 );
 
