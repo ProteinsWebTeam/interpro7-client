@@ -23,6 +23,13 @@ jobs:
           npm run report
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      - name: 💾 Archive reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: |
+            reports/
+            .lighthouse/
       - name: 🧥‍ - Coveralls
         uses: coverallsapp/github-action@master
         continue-on-error: true
