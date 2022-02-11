@@ -502,7 +502,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 
                     if (description.main.key === 'taxonomy') {
                       to.taxonomy.accession = this.state.focused;
-                      if (endpoint!=='entry')
+                      if (endpoint !== 'entry')
                         to.entry.order = 2;
                     } else {
                       to.taxonomy = {

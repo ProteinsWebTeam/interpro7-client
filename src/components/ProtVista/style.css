@@ -2,6 +2,9 @@
 @import '../../styles/colors.css';
 @import '../../styles/timing.css';
 
+:root {
+  --track-space: 85%;
+}
 .protvista {
   font-size: 12px;
 }
@@ -126,13 +129,22 @@
   display: flex;
 }
 .track-component {
-  width: 85%;
+  width: var(--track-space, 85%);
   background: rgba(0, 0, 0, 0.02);
   cursor: move;
+  border-right: 1px dashed gray;
 }
 
 .track-component.label-by-name {
   width: 70%;
+}
+.track-length {
+  width: var(--track-space, 85%);
+  text-align: right;
+  & > div {
+    font-family: monospace;
+    margin-right: -0.5rem;
+  }
 }
 
 /*can't use highlight class*/
@@ -182,7 +194,7 @@ g:global(.child-group) path:global(.feature) {
 }
 
 .aligned-to-track-component {
-  width: 85%;
+  width: var(-track-space, 85%);
   line-height: 0;
 }
 

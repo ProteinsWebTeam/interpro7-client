@@ -11,6 +11,7 @@ import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Footer from 'components/Table/Footer';
 import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
+import NumberComponent from 'components/NumberComponent';
 import DynamicTooltip from 'components/SimpleCommonComponents/DynamicTooltip';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { edgeCases } from 'utils/server-message';
@@ -103,36 +104,56 @@ export const ida2json = (
   return obj;
 };
 
-export const TextIDA = ({ accessions } /*: {accessions: Array<string>} */) => (
-  <div>
-    {accessions.map((accession, i) => (
-      <React.Fragment key={i}>
-        {i !== 0 && ' - '}
-        <span>
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: accession.toLowerCase().startsWith('ipr')
-                    ? 'InterPro'
-                    : 'pfam',
-                  accession,
+export const TextIDA = (
+  {
+    accessions,
+    representative = null,
+  } /*: {accessions: Array<string>, representative?: string} */,
+) => (
+  <div style={{ display: 'flex' }}>
+    {representative && (
+      <Tooltip title={`Using protein ${representative} as a reference`}>
+        <sup>
+          <span
+            className={f('small', 'icon', 'icon-common')}
+            data-icon="&#xf129;"
+            aria-label={`Using protein ${representative} as a reference`}
+          />
+        </sup>
+        <span>&nbsp;</span>
+      </Tooltip>
+    )}
+    <div>
+      {accessions.map((accession, i) => (
+        <React.Fragment key={i}>
+          {i !== 0 && ' - '}
+          <span>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: accession.toLowerCase().startsWith('ipr')
+                      ? 'InterPro'
+                      : 'pfam',
+                    accession,
+                  },
                 },
-              },
-            }}
-          >
-            {' '}
-            {accession}{' '}
-          </Link>
-        </span>
-      </React.Fragment>
-    ))}
+              }}
+            >
+              {' '}
+              {accession}{' '}
+            </Link>
+          </span>
+        </React.Fragment>
+      ))}
+    </div>
   </div>
 );
 
 TextIDA.propTypes = {
   accessions: T.arrayOf(T.string),
+  representative: T.string,
 };
 /* :: type Props = {
   matches: Array<Object>,
@@ -223,6 +244,14 @@ export class IDAProtVista extends ProtVistaMatches {
             </div>
           </div>
         ))}
+        <div className={f('track-row')}>
+          <div className={f('track-length')}>
+            <div>
+              {' '}
+              <NumberComponent noTitle>{length}</NumberComponent>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -353,7 +382,10 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                   </Link>
                   with this architecture:
                 </div>
-                <TextIDA accessions={idaObj.accessions} />
+                <TextIDA
+                  accessions={idaObj.accessions}
+                  representative={obj?.representative?.accession}
+                />
                 <IDAProtVista
                   matches={idaObj.domains}
                   length={idaObj.length}
