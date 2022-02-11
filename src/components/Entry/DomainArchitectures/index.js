@@ -93,7 +93,8 @@ export const ida2json = (
   const grouped = domains.reduce((obj, domain) => {
     if (obj[domain.accession])
       obj[domain.accession].locations.push(domain.locations[0]);
-    else obj[domain.accession] = domain;
+    else
+      obj[domain.accession] = { ...domain, locations: [...domain.locations] };
     return obj;
   }, {});
   const obj = {
@@ -210,6 +211,7 @@ export class IDAProtVista extends ProtVistaMatches {
                 }
                 accession={`${d.accession}`}
                 databases={databases}
+                locations={d.locations}
               >
                 <protvista-interpro-track
                   length={length}

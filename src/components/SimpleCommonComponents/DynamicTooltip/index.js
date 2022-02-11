@@ -18,6 +18,7 @@ const _DataProvider = (
     data,
     onLoad,
     databases,
+    locations,
   } /*: {data?: {loading: boolean, payload: Object}, onLoad: function, databases: Object} */,
 ) => {
   useEffect(() => {
@@ -35,6 +36,20 @@ const _DataProvider = (
           <br />
           {name} <br />
           <small>{databases[db].name}</small>
+          {locations?.length && (
+            <div>
+              <header>Locations:</header>
+              <ul>
+                {locations.map((l, i) => (
+                  <li key={i}>
+                    {l.fragments
+                      .map(({ start, end }) => `${start}-${end}`)
+                      .join(',')}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <br />
         </>
       );
@@ -81,8 +96,9 @@ const DynamicTooltip = (
     accession,
     children,
     databases,
+    locations,
     ...rest
-  } /*: {type: string, source: string, accession: string, children: Object, databases: Object} */,
+  } /*: {type: string, source: string, accession: string, children: Object, databases: Object, locations: Array<{}>} */,
 ) => {
   const [shouldLoad, setShouldLoad] = useState(false);
   const [message, setMessage] = useState(() => <b>{accession}</b>);
@@ -119,6 +135,7 @@ const DynamicTooltip = (
           source={source}
           onLoad={setMessage}
           databases={databases}
+          locations={locations}
         />
       )}
       <div
@@ -146,6 +163,7 @@ DynamicTooltip.propTypes = {
   source: T.string.isRequired,
   accession: T.string.isRequired,
   databases: T.object.isRequired,
+  locations: T.arrayOf(T.object),
   children: T.object,
 };
 
