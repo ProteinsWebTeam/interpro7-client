@@ -127,10 +127,10 @@ const SimilarProteinsHeaderWithData = (
           </Tooltip>
         </div>
       </header>
-      <TextIDA accessions={idaObj.accessions} />
+      <TextIDA accessions={idaObj.accessions} representative={accession} />
       <IDAProtVista
         matches={idaObj.domains}
-        length={FAKE_PROTEIN_LENGTH}
+        length={idaObj?.length || FAKE_PROTEIN_LENGTH}
         databases={databases}
       />
       <br />

@@ -133,7 +133,7 @@ const _AlphaFoldModel = ({
       {hasMultipleProteins ? (
         <div className={f('callout', 'primary', 'info')}>
           <p>
-            <i
+            <span
               className={f('icon', 'icon-common', 'icon-info')}
               data-icon="&#xf129;"
             />
