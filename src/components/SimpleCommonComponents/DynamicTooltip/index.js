@@ -106,6 +106,7 @@ const DynamicTooltip = (
   const [showTooltip, setShowTooltip] = useState(false);
   const popupTargetClass = 'feature';
   const [DataProvider, setDataProvider] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(locations);
   useEffect(() => {
     if (shouldLoad) {
       if (!(accession in dataProviders)) {
@@ -117,6 +118,10 @@ const DynamicTooltip = (
   const _handleMouseOver = (e) => {
     if (e.target.classList.contains(popupTargetClass)) {
       const _popper = new PopperJS(e.target, popperContainer.current);
+      // d3 sets the data of an elemen in __data__ - This needs to be check on major updates of d3
+      if (e?.target?.__data__) {
+        setCurrentLocation([e.target.__data__]);
+      }
       setShowTooltip(true);
     }
     setShouldLoad(true);
@@ -135,7 +140,7 @@ const DynamicTooltip = (
           source={source}
           onLoad={setMessage}
           databases={databases}
-          locations={locations}
+          locations={currentLocation}
         />
       )}
       <div
