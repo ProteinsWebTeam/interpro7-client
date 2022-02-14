@@ -245,8 +245,10 @@ export class IDAProtVista extends ProtVistaMatches {
                   * Using protein{' '}
                   <Link
                     to={{
-                      main: { key: 'protein' },
-                      protein: { db: 'uniprot', accession: representative },
+                      description: {
+                        main: { key: 'protein' },
+                        protein: { db: 'uniprot', accession: representative },
+                      },
                     }}
                   >
                     {representative}
