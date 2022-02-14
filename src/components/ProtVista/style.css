@@ -140,8 +140,13 @@
 }
 .track-length {
   width: var(--track-space, 85%);
-  text-align: right;
-  & > div {
+  display: flex;
+  justify-content: space-between;
+  & > .note {
+    font-size: 0.75rem;
+  }
+
+  & > .length {
     font-family: monospace;
     margin-right: -0.5rem;
   }
