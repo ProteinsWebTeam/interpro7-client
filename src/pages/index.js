@@ -9,6 +9,7 @@ import Switch from 'components/generic/Switch';
 import loadable from 'higherOrder/loadable';
 
 import BreadCrumbs from 'components/BreadCrumbs';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { stuckSelector } from 'reducers/ui/stuck';
 
@@ -139,6 +140,7 @@ const otherPages = new Map([
   ['fav-updates', FavouriteUpdates],
   ['potm', RedirectToBlog],
   ['downloads', RedirectToBlog],
+  ['loading', Loading],
 ]);
 
 /*:: type Props = {

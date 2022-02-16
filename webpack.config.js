@@ -51,12 +51,14 @@ const getHTMLWebpackPlugin = (mode) =>
     title: iprConfig.title || 'InterPro',
     template: path.join('.', 'src', 'index.template.html'),
     inject: mode === 'development',
+    filename: '[name].html',
     templateParameters: (compilation, assets, assetTags, options) => ({
       webpack: compilation.getStats().toJson(),
       webpackConfig: compilation.options,
       htmlWebpackPlugin: {
         files: assets,
         options: options,
+        entry: options.filename.replace('.html', ''),
         faviconTags: assetTags.headTags.filter(
           (tag) =>
             tag && tag.meta && tag.meta.plugin === 'favicons-webpack-plugin'
@@ -85,6 +87,9 @@ const getConfigFor = (env, mode, module = false) => {
 
   return {
     name,
+    entry: {
+      index: './src/index.js',
+    },
     mode,
     output: {
       publicPath,
@@ -402,11 +407,7 @@ const getConfigFor = (env, mode, module = false) => {
           })
         : null,
     ].filter(Boolean),
-    devtool: ((mode, env) => {
-      if (mode === 'development') return 'cheap-module-source-map';
-      if (env.staging) return 'source-map';
-      return false;
-    })(mode, env),
+    devtool: mode === 'development' ? 'cheap-module-source-map' : 'source-map',
   };
 };
 
@@ -472,6 +473,11 @@ module.exports = (
     // also, generate a bundle for legacy browsers
     const configLegacy = getConfigFor(env, mode);
     configLegacy.plugins = [htmlWebpackPlugin, ...configLegacy.plugins];
+
+    // generate the hydration entrypoint
+    configModule.entry.hydrate = './src/index-hydrate.js';
+    configLegacy.entry.hydrate = './src/index-hydrate.js';
+
     return [configLegacy, configModule];
   }
   // just generate for modern browsers

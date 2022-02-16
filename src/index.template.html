@@ -113,11 +113,15 @@
         }
       </style>
     </noscript>
-    <% if (!htmlWebpackPlugin.options.inject) { %> <%=
-    htmlWebpackPlugin.faviconTags %> <% } %> <% for (const css of
-    htmlWebpackPlugin.files.css) { %>
-    <link rel="stylesheet" href="<%= css %>" />
-    <% } %>
+    <% if (!htmlWebpackPlugin.options.inject) { %> 
+      <%= htmlWebpackPlugin.faviconTags %> 
+    <% } %> 
+    <% for (const css of htmlWebpackPlugin.files.css) { 
+         if (file.indexOf(htmlWebpackPlugin.entry)!==-1) { %>
+           <link rel="stylesheet" href="<%= css %>" />
+    <%   } 
+       }
+    %>
   </head>
   <body class="ebi-black-bar-loaded">
     <noscript>
@@ -135,45 +139,55 @@
     </div>
     <div id="modal-root"></div>
     <% if (!htmlWebpackPlugin.options.inject) { %> <% if (
-    htmlWebpackPlugin.files.moduleScripts &&
-    htmlWebpackPlugin.files.moduleScripts.length &&
-    htmlWebpackPlugin.files.legacyScripts &&
-    htmlWebpackPlugin.files.legacyScripts.length ) { %>
-    <script nomodule type="text/javascript">
-      // workaround for Safari 10.1 supporting module but ignoring nomodule
-      // From https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
-      (function () {
-        var d = document;
-        var c = d.createElement('script');
-        if (!('noModule' in c) && 'onbeforeload' in c) {
-          var s = false;
-          d.addEventListener(
-            'beforeload',
-            function (e) {
-              if (e.target === c) {
-                s = true;
-              } else if (!e.target.hasAttribute('nomodule') || !s) {
-                return;
-              }
-              e.preventDefault();
-            },
-            true
-          );
+      htmlWebpackPlugin.files.moduleScripts &&
+      htmlWebpackPlugin.files.moduleScripts.length &&
+      htmlWebpackPlugin.files.legacyScripts &&
+      htmlWebpackPlugin.files.legacyScripts.length ) { %>
+        <script nomodule type="text/javascript">
+          // workaround for Safari 10.1 supporting module but ignoring nomodule
+          // From https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
+          (function () {
+            var d = document;
+            var c = d.createElement('script');
+            if (!('noModule' in c) && 'onbeforeload' in c) {
+              var s = false;
+              d.addEventListener(
+                'beforeload',
+                function (e) {
+                  if (e.target === c) {
+                    s = true;
+                  } else if (!e.target.hasAttribute('nomodule') || !s) {
+                    return;
+                  }
+                  e.preventDefault();
+                },
+                true
+              );
 
-          c.type = 'module';
-          c.src = '.';
-          d.head.appendChild(c);
-          c.remove();
-        }
-      })();
-    </script>
-    <% } %> <% for (const file of htmlWebpackPlugin.files.moduleScripts || []) {
-    %>
-    <script type="module" src="<%= file %>"></script>
-    <% } %> <% for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
-    %>
-    <script nomodule defer type="text/javascript" src="<%= file %>"></script>
-    <% } %>
+              c.type = 'module';
+              c.src = '.';
+              d.head.appendChild(c);
+              c.remove();
+            }
+          })();
+        </script>
+      <% } %> 
+      <% for (const file of htmlWebpackPlugin.files.moduleScripts || []) {
+           if (file.indexOf(htmlWebpackPlugin.entry)!==-1){
+      %>
+        <script type="module" src="<%= file %>"></script>
+      <%   } 
+         } 
+      %> 
+      
+      <% for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
+        %>  <meta file="<%= file %>" entry="<%= htmlWebpackPlugin.entry %>"></meta><%
+           if (file.indexOf(htmlWebpackPlugin.entry)!==-1) {
+      %>
+        <script nomodule defer type="text/javascript" src="<%= file %>"></script>
+      <%   }
+         } 
+      %>
     <% } %>
     <% if (!htmlWebpackPlugin.options.inject) { %>
       <script>

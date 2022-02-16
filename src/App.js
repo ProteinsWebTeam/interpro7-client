@@ -15,7 +15,7 @@ const history = createBrowserHistory({
 });
 const store = createStore(history);
 
-class App extends PureComponent /*:: <{||}> */ {
+class App extends PureComponent /*:: <{loading?: boolean}> */ {
   async componentDidMount() {
     if (PROD || STAGING) {
       const module = await import(

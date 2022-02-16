@@ -14,7 +14,7 @@ import {
   schemaProcessDataPageSection,
 } from 'schema_org/processors';
 
-import { installPrompt } from 'index';
+import { installPrompt } from 'main';
 
 import loadable from 'higherOrder/loadable';
 
