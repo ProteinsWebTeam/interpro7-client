@@ -117,7 +117,7 @@
       <%= htmlWebpackPlugin.faviconTags %> 
     <% } %> 
     <% for (const css of htmlWebpackPlugin.files.css) { 
-         if (file.indexOf(htmlWebpackPlugin.entry)!==-1) { %>
+         if (css.indexOf(htmlWebpackPlugin.entry)!==-1) { %>
            <link rel="stylesheet" href="<%= css %>" />
     <%   } 
        }
@@ -181,7 +181,6 @@
       %> 
       
       <% for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
-        %>  <meta file="<%= file %>" entry="<%= htmlWebpackPlugin.entry %>"></meta><%
            if (file.indexOf(htmlWebpackPlugin.entry)!==-1) {
       %>
         <script nomodule defer type="text/javascript" src="<%= file %>"></script>
