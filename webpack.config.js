@@ -159,7 +159,7 @@ const getConfigFor = (env, mode, module = false) => {
                       corejs: 3,
                       targets: module
                         ? { esmodules: true }
-                        : { browsers: '> 0.25%' },
+                        : { browsers: '> 0.1%, not dead' },
                     },
                   ],
                   ['@babel/react', { development: mode === 'development' }],
@@ -478,7 +478,14 @@ module.exports = (
     configModule.entry.hydrate = './src/index-hydrate.js';
     configLegacy.entry.hydrate = './src/index-hydrate.js';
 
-    return [configLegacy, configModule];
+    // configModule.optimization = {
+    //   splitChunks: {
+    //     // include all types of chunks
+    //     chunks: 'all',
+    //   },
+    // };
+
+    // return [configLegacy, configModule];
   }
   // just generate for modern browsers
   return configModule;

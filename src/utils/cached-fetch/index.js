@@ -5,7 +5,7 @@ import dropCacheIfVersionMismatch from './utils/drop-cache-if-version-mismatch';
 import { getMismatchedFavourites } from 'utils/compare-favourites';
 
 import config, { pkg } from 'config';
-import yaml from 'js-yaml';
+// import yaml from 'js-yaml';
 
 const SUCCESS_STATUS = 200;
 const TIMEOUT_STATUS = 408;
@@ -117,6 +117,7 @@ const commonCachedFetch =
     } else if (responseType === 'gzip') {
       payloadP = response.text();
     } else if (responseType === 'yaml') {
+      const yaml = await import(/* webpackChunkName: "js-yaml" */ 'js-yaml');
       payloadP = yaml.safeLoad(await response.text(), { json: true });
     }
     const output /*: FetchOutput */ = {

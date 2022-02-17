@@ -16,9 +16,7 @@ import loadable from 'higherOrder/loadable';
 import Overlay from 'components/Overlay';
 
 import Sentinel from 'components/Sentinel';
-import { EbiSkipToDiv } from 'components/EBIHeader';
-import EBIHeader from 'components/EBIHeader';
-import Header from 'components/Header';
+import EbiSkipToDiv from 'components/EBIHeader/EbiSkipToDiv';
 
 import { schemaProcessInterProCitation } from 'schema_org/processors';
 
@@ -30,6 +28,15 @@ const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
 const NullComponent = () => null;
+
+const EBIHeader = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
+});
+const Header = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "main-header" */ 'components/Header'),
+});
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
