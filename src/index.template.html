@@ -117,7 +117,7 @@
       <%= htmlWebpackPlugin.faviconTags %> 
     <% } %> 
     <% for (const css of htmlWebpackPlugin.files.css) { 
-         if (css.indexOf(htmlWebpackPlugin.entry)!==-1) { %>
+         if (css.indexOf(htmlWebpackPlugin.entry)!==-1 || (css.indexOf('.hydrate.')===-1 && css.indexOf('.index.')===-1)) { %>
            <link rel="stylesheet" href="<%= css %>" />
     <%   } 
        }
@@ -171,23 +171,27 @@
             }
           })();
         </script>
-      <% } %> 
-      <% for (const file of htmlWebpackPlugin.files.moduleScripts || []) {
-           if (file.indexOf(htmlWebpackPlugin.entry)!==-1){
-      %>
-        <script type="module" src="<%= file %>"></script>
-      <%   } 
-         } 
-      %> 
-      
-      <% for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
-           if (file.indexOf(htmlWebpackPlugin.entry)!==-1) {
-      %>
-        <script nomodule defer type="text/javascript" src="<%= file %>"></script>
-      <%   }
-         } 
-      %>
-    <% } %>
+      <% 
+        } 
+        for (const file of htmlWebpackPlugin.files.moduleScripts || []) {
+          if (file.indexOf(htmlWebpackPlugin.entry)!==-1){
+            %> <script type="module" src="<%= file %>"></script> <%   
+          } 
+        }
+        for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
+          if (file.indexOf(htmlWebpackPlugin.entry)!==-1) {
+            %> <script nomodule defer type="text/javascript" src="<%= file %>"></script> <%   
+          }
+        }
+        for (const file of (
+            (htmlWebpackPlugin.files.moduleScripts || [])
+              .concat(htmlWebpackPlugin.files.legacyScripts || [])
+          )) {
+            if (file.indexOf('.hydrate.')===-1 && file.indexOf('.index.')===-1){
+              %> <script type="module" src="<%= file %>"></script> <% 
+            } 
+        } 
+      } %>
     <% if (!htmlWebpackPlugin.options.inject) { %>
       <script>
         function forceRefreshIfNotloaded(){

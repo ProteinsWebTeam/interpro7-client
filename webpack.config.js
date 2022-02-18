@@ -98,6 +98,15 @@ const getConfigFor = (env, mode, module = false) => {
       globalObject: 'self',
       assetModuleFilename: getAssetModuleFilename,
     },
+    optimization:
+      mode === 'production'
+        ? {
+            splitChunks: {
+              // include all types of chunks
+              chunks: 'all',
+            },
+          }
+        : undefined,
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
       extensions: ['.js', '.ts', '.json', '.worker.js'],
@@ -478,14 +487,7 @@ module.exports = (
     configModule.entry.hydrate = './src/index-hydrate.js';
     configLegacy.entry.hydrate = './src/index-hydrate.js';
 
-    // configModule.optimization = {
-    //   splitChunks: {
-    //     // include all types of chunks
-    //     chunks: 'all',
-    //   },
-    // };
-
-    // return [configLegacy, configModule];
+    return [configLegacy, configModule];
   }
   // just generate for modern browsers
   return configModule;
