@@ -23,13 +23,17 @@ async function compress(input) {
 }
 
 const URL = process.env.URL || 'http://localhost:8888/interpro/loading/';
+// const URL = process.env.URL || 'http://localhost:8888/interpro/';
+// const URL_LOADING =
+//   process.env.URL || 'http://localhost:8888/interpro/loading/';
 
 puppeteer
   .launch()
   .then(async (browser) => {
     const page = await browser.newPage();
-    let innerHTML;
+    let innerHTML, innerLoadingHTML;
     try {
+      // Getting the innerHTML of the home page
       await Promise.all([page.waitForNavigation(), page.goto(URL)]);
       await page.waitForSelector('#interpro-root', {
         timeout: 3000,
@@ -38,22 +42,31 @@ puppeteer
         return element.innerHTML;
       });
 
-      // console.log(html);
+      // // Getting the innerHTML of the loading page
+      // await Promise.all([page.waitForNavigation(), page.goto(URL_LOADING)]);
+      // await page.waitForSelector('#interpro-root', {
+      //   timeout: 3000,
+      // });
+      // innerLoadingHTML = await page.$eval('#root', (element) => {
+      //   return element.innerHTML;
+      // });
     } catch (e) {
       console.error("Couldn't load content of the page", e);
     }
     await browser.close();
+
+    const indexHTML = fs.readFileSync(
+      path.resolve('.', 'dist', 'hydrate.html'),
+      {
+        encoding: 'utf8',
+      }
+    );
     if (innerHTML?.length) {
-      let indexHTML = fs.readFileSync(
-        path.resolve('.', 'dist', 'hydrate.html'),
-        {
-          encoding: 'utf8',
-        }
-      );
-      indexHTML = indexHTML.replace(
+      const newIndexHTML = indexHTML.replace(
         '<div id="root"><div class="loading"><div></div>',
         `<div id="root">${innerHTML}</div>`
       );
+      // Moving the Original files index=>render
       ['', '.gz', '.br'].forEach((ext) => {
         const source = `index.html${ext}`;
         const target = `render.html${ext}`;
@@ -66,9 +79,10 @@ puppeteer
           }
         );
       });
+
       fs.writeFile(
         path.resolve('.', 'dist', 'index.html'),
-        indexHTML,
+        newIndexHTML,
         (err) => {
           if (err) throw err;
           console.log(`New index.html created`);
@@ -79,6 +93,26 @@ puppeteer
         process.exitCode = 1;
       });
     }
+
+    // if (innerLoadingHTML?.length) {
+    //   const newIndexHTML = indexHTML.replace(
+    //     '<div id="root"><div class="loading"><div></div>',
+    //     `<div id="root">${innerLoadingHTML}</div>`
+    //   );
+
+    //   fs.writeFile(
+    //     path.resolve('.', 'dist', 'index.loading.html'),
+    //     newIndexHTML,
+    //     (err) => {
+    //       if (err) throw err;
+    //       console.log(`New index.loading.html created`);
+    //     }
+    //   );
+    //   compress(path.resolve('.', 'dist', 'index.loading.html')).catch((err) => {
+    //     console.error('An error occurred:', err);
+    //     process.exitCode = 1;
+    //   });
+    // }
   })
   .finally(() => {
     server.close();

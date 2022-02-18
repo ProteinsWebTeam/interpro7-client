@@ -24,19 +24,21 @@ import Pages from 'pages';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
+import EBIHeader from 'components/EBIHeader';
+import Header from 'components/Header';
 const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
 const NullComponent = () => null;
 
-const EBIHeader = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
-});
-const Header = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "main-header" */ 'components/Header'),
-});
+// const EBIHeader = loadable({
+//   loader: () =>
+//     import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
+// });
+// const Header = loadable({
+//   loader: () =>
+//     import(/* webpackChunkName: "main-header" */ 'components/Header'),
+// });
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
