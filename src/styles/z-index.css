@@ -13,5 +13,6 @@
   --z-index-side-menu: 250;
   --z-index-toasts: 300;
   --z-index-toasts-on-hover: 350;
+  --z-index-tooltips: 350;
   --z-index-modal: 1000;
 }

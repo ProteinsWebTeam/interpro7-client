@@ -74,7 +74,8 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
           proteins
            
         </Memo(Connect(Link))>
-        with this architecture:
+        with this architecture
+        :
       </div>
       <TextIDA
         accessions={
