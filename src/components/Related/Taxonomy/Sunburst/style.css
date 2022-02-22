@@ -1,0 +1,33 @@
+.sunburst {
+  & h5 {
+    font-weight: normal;
+    margin: 0.5em 0;
+  }
+
+  & .legends {
+    list-style: none;
+    margin: 0;
+  }
+  & dl {
+    & dt {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0;
+    }
+    & dd {
+      display: block;
+      font-size: 0.85em;
+      padding-bottom: 0.2rem;
+    }
+  }
+  & .sunburst-depth {
+    display: flex;
+    align-items: center;
+    word-break: keep-all;
+
+    & input {
+      margin-left: 0.7em;
+      margin-right: 0.7em;
+    }
+  }
+}

@@ -465,7 +465,7 @@ module.exports = (
         disableDotRule: true,
       },
     };
-    configModule.stats = 'errors-only';
+    configModule.stats = 'minimal';
   }
 
   if (mode === 'production') {
