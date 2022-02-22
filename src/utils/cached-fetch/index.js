@@ -1,5 +1,6 @@
 // @flow
 import fetch from 'isomorphic-fetch';
+import pako from 'pako';
 
 import dropCacheIfVersionMismatch from './utils/drop-cache-if-version-mismatch';
 import { getMismatchedFavourites } from 'utils/compare-favourites';
@@ -10,6 +11,8 @@ import yaml from 'js-yaml';
 const SUCCESS_STATUS = 200;
 const TIMEOUT_STATUS = 408;
 const A_BIT = 2000;
+
+const MIN_LENGTH_TO_COMPRESS = 40000;
 
 const handleProgress = async (
   response /*: Response */,
@@ -40,7 +43,17 @@ const cachedFetch = (
 ) => {
   const { useCache = true, ...restOfOptions } = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
-  const cached = sessionStorage.getItem(key);
+  const zipKey = `zip-${pkg.name}-cachedFetch-${url}`;
+
+  let cached = sessionStorage.getItem(key);
+  if (!cached) {
+    const zipCached = sessionStorage.getItem(zipKey);
+    if (useCache && zipCached) {
+      const strArray = zipCached.split(',');
+      const intArray = Uint8Array.from(strArray.map(Number));
+      cached = pako.inflate(intArray, { to: 'string' });
+    }
+  }
 
   if (useCache && cached) {
     return Promise.resolve(
@@ -68,7 +81,14 @@ const cachedFetch = (
         response
           .clone()
           .text()
-          .then((text) => sessionStorage.setItem(key, text));
+          .then((text) => {
+            if (text.length < MIN_LENGTH_TO_COMPRESS) {
+              sessionStorage.setItem(key, text);
+            } else {
+              const compressed = pako.deflate(text);
+              sessionStorage.setItem(zipKey, compressed);
+            }
+          });
     }
     return response;
   });
