@@ -3,6 +3,7 @@ const path = require('path');
 
 const webpack = require('webpack');
 const url = require('url');
+const zlib = require('zlib');
 
 // Webpack plugins
 const HTMLWebpackPlugin = require('html-webpack-plugin');
@@ -54,7 +55,7 @@ const getHTMLWebpackPlugin = (mode) =>
     filename: '[name].html',
     templateParameters: (compilation, assets, assetTags, options) => {
       // Leaving this here for easy debugging of the assets
-      // console.log('****assets****', assets);
+      console.log('****assets****', assets);
       return {
         webpack: compilation.getStats().toJson(),
         webpackConfig: compilation.options,
@@ -386,9 +387,7 @@ const getConfigFor = (env, mode, module = false) => {
         ? new (getCompressionPlugin())({
             filename: '[path][base].gz[query]',
             test: /\.(js|css|html|svg)$/i,
-            algorithm(buffer, options, callback) {
-              require('node-zopfli-es').gzip(buffer, options, callback);
-            },
+            algorithm: 'gzip',
           })
         : null,
       // Brotli compression
@@ -396,15 +395,11 @@ const getConfigFor = (env, mode, module = false) => {
         ? new (getCompressionPlugin())({
             filename: '[path][base].br[query]',
             test: /\.(js|css|html|svg)$/i,
-            algorithm(buffer, _, callback) {
-              require('iltorb').compress(
-                buffer,
-                {
-                  mode: 1, // text
-                  quality: 11, // goes from 1 (but quick) to 11 (but slow)
-                },
-                callback
-              );
+            algorithm: 'brotliCompress',
+            compressionOptions: {
+              params: {
+                [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+              },
             },
           })
         : null,
