@@ -52,19 +52,23 @@ const getHTMLWebpackPlugin = (mode) =>
     template: path.join('.', 'src', 'index.template.html'),
     inject: mode === 'development',
     filename: '[name].html',
-    templateParameters: (compilation, assets, assetTags, options) => ({
-      webpack: compilation.getStats().toJson(),
-      webpackConfig: compilation.options,
-      htmlWebpackPlugin: {
-        files: assets,
-        options: options,
-        entry: options.filename.replace('.html', ''),
-        faviconTags: assetTags.headTags.filter(
-          (tag) =>
-            tag && tag.meta && tag.meta.plugin === 'favicons-webpack-plugin'
-        ),
-      },
-    }),
+    templateParameters: (compilation, assets, assetTags, options) => {
+      // Leaving this here for easy debugging of the assets
+      // console.log('****assets****', assets);
+      return {
+        webpack: compilation.getStats().toJson(),
+        webpackConfig: compilation.options,
+        htmlWebpackPlugin: {
+          files: assets,
+          options: options,
+          entry: options.filename.replace('.html', ''),
+          faviconTags: assetTags.headTags.filter(
+            (tag) =>
+              tag && tag.meta && tag.meta.plugin === 'favicons-webpack-plugin'
+          ),
+        },
+      };
+    },
   });
 
 const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();
@@ -167,8 +171,15 @@ const getConfigFor = (env, mode, module = false) => {
                       useBuiltIns: 'usage',
                       corejs: 3,
                       targets: module
-                        ? { esmodules: true }
-                        : { browsers: '> 0.1%, not dead' },
+                        ? {
+                            esmodules: true,
+                            browsers: 'last 2 versions, not dead',
+                          }
+                        : {
+                            esmodules: false,
+                            browsers:
+                              '> 0.1% and not last 2 versions, not dead',
+                          },
                     },
                   ],
                   ['@babel/react', { development: mode === 'development' }],
@@ -366,24 +377,6 @@ const getConfigFor = (env, mode, module = false) => {
             exclude: ['**/.*', '**/*.{map,br,gz}'],
           })
         : null,
-      //   TODO: Remove if workbox works wellfor a few releases.
-      //   This is the configuration of previous service worker plugin. Left here as reference in
-      //   ? new (require('offline-plugin'))({
-      //       caches: {
-      //         main: [
-      //           new RegExp(`js/[^/]*${name}[^/]*.js$`, 'i'),
-      //           new RegExp('css/[^/]+.css$', 'i'),
-      //         ],
-      //         additional: [/\.(worker\.js)$/i],
-      //         optional: [/\.(eot|ttf|woff|svg|ico|png|avif|jpe?g)$/i],
-      //       },
-      //       AppCache: false,
-      //       ServiceWorker: {
-      //         output: `sw.${name}.js`,
-      //         events: true,
-      //       },
-      //       safeToUseOptionalCaches: true,
-      //     })
 
       // Custom plugin to split codebase into legacy/modern bundles,
       // depends on HTMLWebpackPlugin
@@ -483,9 +476,9 @@ module.exports = (
     const configLegacy = getConfigFor(env, mode);
     configLegacy.plugins = [htmlWebpackPlugin, ...configLegacy.plugins];
 
-    // generate the hydration entrypoint
-    configModule.entry.hydrate = './src/index-hydrate.js';
-    configLegacy.entry.hydrate = './src/index-hydrate.js';
+    // generate the hydration entrypoint - disabled as it didn;t offer much improvement
+    // configModule.entry.hydrate = './src/index-hydrate.js';
+    // configLegacy.entry.hydrate = './src/index-hydrate.js';
 
     return [configLegacy, configModule];
   }

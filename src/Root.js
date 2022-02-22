@@ -5,40 +5,48 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { schedule } from 'timing-functions';
 
 // Global stylesheets loaded here
-import 'styles/foundation';
-import 'ebi-framework/css/ebi-global.css';
-import 'styles/global.css';
-// import 'styles/theme-interpro.css';
-import 'styles/interpro-new.css';
+// import 'styles/foundation';
+// import 'ebi-framework/css/ebi-global.css';
+// import 'styles/global.css';
+// // import 'styles/theme-interpro.css';
+// import 'styles/interpro-new.css';
 
 import loadable from 'higherOrder/loadable';
 
 import Overlay from 'components/Overlay';
 
 import Sentinel from 'components/Sentinel';
-import EbiSkipToDiv from 'components/EBIHeader/EbiSkipToDiv';
 
 import { schemaProcessInterProCitation } from 'schema_org/processors';
 
-import Pages from 'pages';
+// import Pages from 'pages';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 
-import EBIHeader from 'components/EBIHeader';
-import Header from 'components/Header';
+// import EBIHeader from 'components/EBIHeader';
+// import Header from 'components/Header';
 const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
 const NullComponent = () => null;
 
-// const EBIHeader = loadable({
-//   loader: () =>
-//     import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
-// });
-// const Header = loadable({
-//   loader: () =>
-//     import(/* webpackChunkName: "main-header" */ 'components/Header'),
-// });
+const EBIHeader = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
+  loading: () => <div className="tmp-ebi-header"></div>,
+});
+const Header = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "main-header" */ 'components/Header'),
+  loading: () => (
+    <div className="tmp-interpro-header">
+      <h1>InterPro</h1>
+    </div>
+  ),
+});
+const Pages = loadable({
+  loader: () => import(/* webpackChunkName: "pages" */ 'pages'),
+});
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -130,7 +138,6 @@ const Root = () => (
       <Overlay />
       <EMBLDropdownAsync />
       <SideMenuAsync />
-      <EbiSkipToDiv />
       <header>
         <EBIHeader />
         <Header stickyMenuOffset={STICKY_MENU_OFFSET} />

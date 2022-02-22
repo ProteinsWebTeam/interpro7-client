@@ -35,7 +35,7 @@
     "predeploy": "npm-run-all test clean",
     "COMMENTED:postdeploy": "npm run test:functional",
     "deploy": "npm run bundle",
-    "postdeploy": "node scripts/inject-first-content.js",
+    "inject-first-content": "node scripts/inject-first-content.js",
     "deploy:dev": "npm run deploy -- -- --mode=development",
     "deploy:staging": "npm run deploy -- -- --env staging",
     "deploy:production": "npm run deploy",

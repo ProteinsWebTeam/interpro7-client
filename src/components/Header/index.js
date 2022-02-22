@@ -211,7 +211,7 @@ export class Header extends PureComponent /*:: <HeaderProps> */ {
     return (
       <div
         id={ebiGlobalStyles.masthead}
-        className={styleBundle('masthead', { sign: isSignature })}
+        className={styleBundle('masthead', 'tmp-header', { sign: isSignature })}
         style={styleForHeader(false && supportsSticky, offset, shouldStuck)}
       >
         <div className={styleBundle('masthead-inner', 'row')}>

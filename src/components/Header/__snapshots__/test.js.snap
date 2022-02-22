@@ -178,7 +178,7 @@ exports[`<HamburgerBtn /> open, svg, unstuck 1`] = `
 
 exports[`<Header /> stuck, not signature 1`] = `
 <div
-  className="masthead"
+  className="masthead tmp-header"
   id="masthead"
   style={
     Object {
@@ -206,7 +206,7 @@ exports[`<Header /> stuck, not signature 1`] = `
 
 exports[`<Header /> stuck, signature 1`] = `
 <div
-  className="masthead sign"
+  className="masthead tmp-header sign"
   id="masthead"
   style={
     Object {
@@ -234,7 +234,7 @@ exports[`<Header /> stuck, signature 1`] = `
 
 exports[`<Header /> unstuck, not signature 1`] = `
 <div
-  className="masthead"
+  className="masthead tmp-header"
   id="masthead"
   style={
     Object {
@@ -261,7 +261,7 @@ exports[`<Header /> unstuck, not signature 1`] = `
 
 exports[`<Header /> unstuck, signature 1`] = `
 <div
-  className="masthead sign"
+  className="masthead tmp-header sign"
   id="masthead"
   style={
     Object {

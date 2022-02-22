@@ -53,7 +53,7 @@ const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 export const EBIHeader = ({ visible = false } /*: {visible?: boolean} */) => (
   <header
     id="masthead-black-bar"
-    className={styleBundle('clearfix', 'masthead-black-bar')}
+    className={styleBundle('clearfix', 'masthead-black-bar', 'tmp-ebi-header')}
   >
     <div>
       <nav className={styleBundle('row')}>

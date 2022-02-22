@@ -1,3 +1,15 @@
+/**
+ * It uses puppetter to open the webpage and the loading page; gets the innerHTML
+ * of the root element and injects it in the static hydrate.html to create a new
+ * index.html with precalcualted content (A la SSR), and should use React hydrate
+ * to reuse it when JS takes over.
+ *
+ * The content generation worked OK, but React hydrate discarded it.
+ *
+ * If we manage to make the hydration part works, this could rally impact the
+ * web vital LCP score of the home page.
+ *
+ */
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
@@ -22,10 +34,10 @@ async function compress(input) {
   console.log('BROTLY:', input + '.br');
 }
 
-const URL = process.env.URL || 'http://localhost:8888/interpro/loading/';
-// const URL = process.env.URL || 'http://localhost:8888/interpro/';
-// const URL_LOADING =
-//   process.env.URL || 'http://localhost:8888/interpro/loading/';
+// const URL = process.env.URL || 'http://localhost:8888/interpro/loading/';
+const URL = process.env.URL || 'http://localhost:8888/interpro/';
+const URL_LOADING =
+  process.env.URL || 'http://localhost:8888/interpro/loading/';
 
 puppeteer
   .launch()
@@ -42,14 +54,14 @@ puppeteer
         return element.innerHTML;
       });
 
-      // // Getting the innerHTML of the loading page
-      // await Promise.all([page.waitForNavigation(), page.goto(URL_LOADING)]);
-      // await page.waitForSelector('#interpro-root', {
-      //   timeout: 3000,
-      // });
-      // innerLoadingHTML = await page.$eval('#root', (element) => {
-      //   return element.innerHTML;
-      // });
+      // Getting the innerHTML of the loading page
+      await Promise.all([page.waitForNavigation(), page.goto(URL_LOADING)]);
+      await page.waitForSelector('#interpro-root', {
+        timeout: 3000,
+      });
+      innerLoadingHTML = await page.$eval('#root', (element) => {
+        return element.innerHTML;
+      });
     } catch (e) {
       console.error("Couldn't load content of the page", e);
     }
@@ -94,25 +106,25 @@ puppeteer
       });
     }
 
-    // if (innerLoadingHTML?.length) {
-    //   const newIndexHTML = indexHTML.replace(
-    //     '<div id="root"><div class="loading"><div></div>',
-    //     `<div id="root">${innerLoadingHTML}</div>`
-    //   );
+    if (innerLoadingHTML?.length) {
+      const newIndexLoadingHTML = indexHTML.replace(
+        '<div id="root"><div class="loading"><div></div>',
+        `<div id="root">${innerLoadingHTML}</div>`
+      );
 
-    //   fs.writeFile(
-    //     path.resolve('.', 'dist', 'index.loading.html'),
-    //     newIndexHTML,
-    //     (err) => {
-    //       if (err) throw err;
-    //       console.log(`New index.loading.html created`);
-    //     }
-    //   );
-    //   compress(path.resolve('.', 'dist', 'index.loading.html')).catch((err) => {
-    //     console.error('An error occurred:', err);
-    //     process.exitCode = 1;
-    //   });
-    // }
+      fs.writeFile(
+        path.resolve('.', 'dist', 'index.loading.html'),
+        newIndexLoadingHTML,
+        (err) => {
+          if (err) throw err;
+          console.log(`New index.loading.html created`);
+        }
+      );
+      compress(path.resolve('.', 'dist', 'index.loading.html')).catch((err) => {
+        console.error('An error occurred:', err);
+        process.exitCode = 1;
+      });
+    }
   })
   .finally(() => {
     server.close();

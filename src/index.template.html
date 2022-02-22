@@ -44,6 +44,39 @@
     />
     <% } %>
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .tmp-layout {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        background-color: white;
+        font-family: Arial, sans-serif;
+        font-weight: normal;
+      }
+      .tmp-layout h1 {
+        color: #f7f7f7;
+      }
+      .tmp-layout p {
+        line-height: 1.5;
+        color: #0a0a0a;
+      }
+      .tmp-ebi-header {
+        background-color: #373a36;
+        height: 37.289px;
+      }
+      .tmp-interpro-header {
+        background-image: linear-gradient(
+          to right,
+          rgba(0, 85, 158, 0.9),
+          rgba(45, 174, 193, 0.5),
+          rgba(0, 85, 158, 0.9)
+        );
+        height: 210.984px;
+      }
       .loading {
         margin: 100px auto;
         width: 200px;
@@ -137,10 +170,15 @@
       </p>
     </noscript>
     <div id="root">
-      <div class="loading">
-        <div></div>
-        <div></div>
-        <div></div>
+      <div class="tmp-layout">
+        <div class="tmp-ebi-header"></div>
+        <div class="tmp-interpro-header"><h1>InterPro</h1></div>
+        <p>Loading the InterPro website, please wait.</p>
+        <div class="loading">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     </div>
     <div id="modal-root"></div>
@@ -183,20 +221,18 @@
           if (file.indexOf(htmlWebpackPlugin.entry)!==-1){
             %> <script async type="module" src="<%= file %>"></script> <%   
           } 
+          if (file.indexOf('.hydrate.')===-1 && file.indexOf('.index.')===-1){
+            %> <script async type="module" src="<%= file %>"></script> <% 
+          } 
         }
         for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
           if (file.indexOf(htmlWebpackPlugin.entry)!==-1) {
             %> <script nomodule defer type="text/javascript" src="<%= file %>"></script> <%   
           }
+          if (file.indexOf('.hydrate.')===-1 && file.indexOf('.index.')===-1){
+            %> <script nomodule async type="module" src="<%= file %>"></script> <% 
+          } 
         }
-        for (const file of (
-            (htmlWebpackPlugin.files.moduleScripts || [])
-              .concat(htmlWebpackPlugin.files.legacyScripts || [])
-          )) {
-            if (file.indexOf('.hydrate.')===-1 && file.indexOf('.index.')===-1){
-              %> <script async type="module" src="<%= file %>"></script> <% 
-            } 
-        } 
       } %>
     <% if (!htmlWebpackPlugin.options.inject) { %>
       <script>
