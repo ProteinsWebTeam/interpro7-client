@@ -11,6 +11,7 @@ import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Footer from 'components/Table/Footer';
 import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
+import NumberComponent from 'components/NumberComponent';
 import DynamicTooltip from 'components/SimpleCommonComponents/DynamicTooltip';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { edgeCases } from 'utils/server-message';
@@ -54,37 +55,50 @@ const schemaProcessData = (data) => ({
     },
   ],
 });
-
-export const ida2json = (ida, entry) => {
+export const ida2json = (
+  ida /*: string */,
+  representative /*: {domains:Array<{}>, length: number}|undefined */,
+  entry /*: string */,
+) /*: {    length: number,    domains: [],    accessions: Array<string>  } */ => {
   const idaParts = ida.split('-');
   const n = idaParts.length;
   const feature = (FAKE_PROTEIN_LENGTH - GAP_BETWEEN_DOMAINS * (n + 1)) / n;
+  const repDomains = representative ? [...representative.domains] : null;
   const domains = idaParts.map((p, i) => {
     const [pf, ipr] = p.split(':');
+    let locations = [
+      {
+        fragments: [
+          {
+            start: GAP_BETWEEN_DOMAINS + i * (GAP_BETWEEN_DOMAINS + feature),
+            end: (i + 1) * (GAP_BETWEEN_DOMAINS + feature),
+          },
+        ],
+      },
+    ];
+    if (representative) {
+      const [pfLocation, iprLocation] = repDomains.splice(0, ipr ? 2 : 1);
+      locations =
+        entry === 'pfam'
+          ? pfLocation?.coordinates
+          : iprLocation?.coordinates || pfLocation?.coordinates;
+    }
     return {
       // accession: ipr || pf,
       accession: entry === 'pfam' ? pf : ipr || pf,
       unintegrated: !ipr,
-      locations: [
-        {
-          fragments: [
-            {
-              start: GAP_BETWEEN_DOMAINS + i * (GAP_BETWEEN_DOMAINS + feature),
-              end: (i + 1) * (GAP_BETWEEN_DOMAINS + feature),
-            },
-          ],
-        },
-      ],
+      locations,
     };
   });
   const grouped = domains.reduce((obj, domain) => {
     if (obj[domain.accession])
       obj[domain.accession].locations.push(domain.locations[0]);
-    else obj[domain.accession] = domain;
+    else
+      obj[domain.accession] = { ...domain, locations: [...domain.locations] };
     return obj;
   }, {});
   const obj = {
-    length: FAKE_PROTEIN_LENGTH,
+    length: representative?.length || FAKE_PROTEIN_LENGTH,
     domains: Object.values(grouped),
     accessions: domains.map((d) => d.accession),
   };
@@ -92,40 +106,43 @@ export const ida2json = (ida, entry) => {
 };
 
 export const TextIDA = ({ accessions } /*: {accessions: Array<string>} */) => (
-  <div>
-    {accessions.map((accession, i) => (
-      <React.Fragment key={i}>
-        {i !== 0 && ' - '}
-        <span>
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: accession.toLowerCase().startsWith('ipr')
-                    ? 'InterPro'
-                    : 'pfam',
-                  accession,
+  <div style={{ display: 'flex' }}>
+    <div>
+      {accessions.map((accession, i) => (
+        <React.Fragment key={i}>
+          {i !== 0 && ' - '}
+          <span className={f('ida-text-domain')}>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: accession.toLowerCase().startsWith('ipr')
+                      ? 'InterPro'
+                      : 'pfam',
+                    accession,
+                  },
                 },
-              },
-            }}
-          >
-            {' '}
-            {accession}{' '}
-          </Link>
-        </span>
-      </React.Fragment>
-    ))}
+              }}
+            >
+              {' '}
+              {accession}
+            </Link>
+          </span>
+        </React.Fragment>
+      ))}
+    </div>
   </div>
 );
 
 TextIDA.propTypes = {
   accessions: T.arrayOf(T.string),
 };
+
 /* :: type Props = {
   matches: Array<Object>,
   highlight: Array<string>,
-  databases: Object
+  databases: Object,
 }
 */
 export class IDAProtVista extends ProtVistaMatches {
@@ -138,7 +155,7 @@ export class IDAProtVista extends ProtVistaMatches {
   updateTracksWithData(props /*: Props */) {
     const { matches } = props;
 
-    for (const domain of matches) {
+    matches.forEach((domain, i) => {
       const isIPR = domain.accession.toLowerCase().startsWith('ipr');
       const sourceDatabase = isIPR ? 'interpro' : 'pfam';
       const tmp = [
@@ -153,16 +170,16 @@ export class IDAProtVista extends ProtVistaMatches {
           ...domain,
         },
       ];
-      this.web_tracks[domain.accession].data = tmp;
-    }
+      this.web_tracks[`track_${domain.accession}_${i}`].data = tmp;
+    });
   }
 
   render() {
     const { matches, length, databases, highlight = [] } = this.props;
     return (
       <div>
-        {matches.map((d) => (
-          <div key={d.accession} className={f('track-row')}>
+        {matches.map((d, i) => (
+          <div key={`${d.accession}-${i}`} className={f('track-row')}>
             <div
               className={f('track-component', {
                 highlight: highlight.indexOf(d.accession) >= 0,
@@ -177,13 +194,16 @@ export class IDAProtVista extends ProtVistaMatches {
                 }
                 accession={`${d.accession}`}
                 databases={databases}
+                locations={d.locations}
               >
                 <protvista-interpro-track
                   length={length}
                   displaystart="1"
                   displayend={length}
-                  id={`track_${d.accession}`}
-                  ref={(e) => (this.web_tracks[d.accession] = e)}
+                  id={`track_${d.accession}_${i}`}
+                  ref={(e) =>
+                    (this.web_tracks[`track_${d.accession}_${i}`] = e)
+                  }
                   shape="roundRectangle"
                   expanded
                   use-ctrl-to-zoom
@@ -209,6 +229,14 @@ export class IDAProtVista extends ProtVistaMatches {
             </div>
           </div>
         ))}
+        <div className={f('track-row')}>
+          <div className={f('track-length')}>
+            <div className={f('note')}></div>
+            <div className={f('length')}>
+              <NumberComponent noTitle>{length}</NumberComponent>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -314,7 +342,9 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
         <div className={f('columns')}>
           {messageContent}
           {(payload.results || []).map((obj) => {
-            const idaObj = ida2json(obj.ida, database || idaAccessionDB);
+            const currentDB = (database || idaAccessionDB).toLowerCase();
+            const idaObj = ida2json(obj.ida, obj.representative, currentDB);
+            const representativeAcc = obj?.representative?.accession;
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
@@ -336,12 +366,33 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                     {obj.unique_proteins}{' '}
                     {toPlural('protein', obj.unique_proteins)}{' '}
                   </Link>
-                  with this architecture:
+                  with this architecture
+                  {representativeAcc && (
+                    <>
+                      {' '}
+                      (represented by{' '}
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'protein' },
+                            protein: {
+                              db: 'uniprot',
+                              accession: representativeAcc,
+                            },
+                          },
+                        }}
+                      >
+                        {representativeAcc}
+                      </Link>
+                      )
+                    </>
+                  )}
+                  :
                 </div>
                 <TextIDA accessions={idaObj.accessions} />
                 <IDAProtVista
                   matches={idaObj.domains}
-                  length={FAKE_PROTEIN_LENGTH}
+                  length={idaObj.length}
                   databases={dataDB.payload.databases}
                   highlight={toHighlight}
                 />

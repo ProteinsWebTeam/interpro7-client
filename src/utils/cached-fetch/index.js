@@ -5,11 +5,12 @@ import dropCacheIfVersionMismatch from './utils/drop-cache-if-version-mismatch';
 import { getMismatchedFavourites } from 'utils/compare-favourites';
 
 import config, { pkg } from 'config';
-// import yaml from 'js-yaml';
 
 const SUCCESS_STATUS = 200;
 const TIMEOUT_STATUS = 408;
 const A_BIT = 2000;
+
+const MIN_LENGTH_TO_COMPRESS = 40000;
 
 const handleProgress = async (
   response /*: Response */,
@@ -33,14 +34,25 @@ const handleProgress = async (
 };
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const cachedFetch = (
+const cachedFetch = async (
   url /*: string */,
   options /*: Object */ = {},
   addToast,
 ) => {
   const { useCache = true, ...restOfOptions } = options;
   const key = `${pkg.name}-cachedFetch-${url}`;
-  const cached = sessionStorage.getItem(key);
+  const zipKey = `zip-${pkg.name}-cachedFetch-${url}`;
+
+  let cached = sessionStorage.getItem(key);
+  if (!cached) {
+    const zipCached = sessionStorage.getItem(zipKey);
+    if (useCache && zipCached) {
+      const pako = await import(/* webpackChunkName: "pako" */ 'pako');
+      const strArray = zipCached.split(',');
+      const intArray = Uint8Array.from(strArray.map(Number));
+      cached = pako.inflate(intArray, { to: 'string' });
+    }
+  }
 
   if (useCache && cached) {
     return Promise.resolve(
@@ -68,7 +80,15 @@ const cachedFetch = (
         response
           .clone()
           .text()
-          .then((text) => sessionStorage.setItem(key, text));
+          .then(async (text) => {
+            if (text.length < MIN_LENGTH_TO_COMPRESS) {
+              sessionStorage.setItem(key, text);
+            } else {
+              const pako = await import(/* webpackChunkName: "pako" */ 'pako');
+              const compressed = pako.deflate(text);
+              sessionStorage.setItem(zipKey, compressed);
+            }
+          });
     }
     return response;
   });
@@ -118,7 +138,7 @@ const commonCachedFetch =
       payloadP = response.text();
     } else if (responseType === 'yaml') {
       const yaml = await import(/* webpackChunkName: "js-yaml" */ 'js-yaml');
-      payloadP = yaml.safeLoad(await response.text(), { json: true });
+      payloadP = yaml.load(await response.text(), { json: true });
     }
     const output /*: FetchOutput */ = {
       status: response.status,
