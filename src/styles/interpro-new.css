@@ -232,7 +232,7 @@ div#local-title {
 }
 
 /*remove border for menu items  - can't be "menu" css component specific as defined from .masthead */
-.masthead nav ul.menu li {
+body .masthead nav ul.menu li {
   border-right-width: 0;
 }
 /**** END BANNER MENU ****/
@@ -632,11 +632,11 @@ hr {
 /*/TOOLTIP*/
 
 /*TAG block*/
-.tag {
+body .tag {
   border-radius: 4px;
 } /*used on protein and proteome page */
 
-a.tag {
+body a.tag {
   color: var(--colors-nearly-white);
   &:visited,
   &:hover,
@@ -645,17 +645,17 @@ a.tag {
   }
 }
 
-.tag.secondary {
+body .tag.secondary {
   background-color: var(--colors-tag);
 }
 
 /* tag used on md signature page */
-.tag.md-p {
+body .tag.md-p {
   background-color: var(--colors-md-sub);
 }
 
 /*used on ipscan search result*/
-.tag-sqc {
+body .tag-sqc {
   background-color: var(--colors-other-main);
   padding: 0.3rem 0.5rem;
   color: var(--colors-light-title);

@@ -55,7 +55,7 @@ const getHTMLWebpackPlugin = (mode) =>
     filename: '[name].html',
     templateParameters: (compilation, assets, assetTags, options) => {
       // Leaving this here for easy debugging of the assets
-      console.log('****assets****', assets);
+      // console.log('****assets****', assets);
       return {
         webpack: compilation.getStats().toJson(),
         webpackConfig: compilation.options,
@@ -174,7 +174,6 @@ const getConfigFor = (env, mode, module = false) => {
                       targets: module
                         ? {
                             esmodules: true,
-                            browsers: 'last 2 versions, not dead',
                           }
                         : {
                             esmodules: false,
