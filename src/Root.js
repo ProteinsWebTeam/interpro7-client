@@ -4,31 +4,25 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { schedule } from 'timing-functions';
 
-// Global stylesheets loaded here
-// import 'styles/foundation';
-// import 'ebi-framework/css/ebi-global.css';
-// import 'styles/global.css';
-// // import 'styles/theme-interpro.css';
-// import 'styles/interpro-new.css';
-
 import loadable from 'higherOrder/loadable';
-
 import Overlay from 'components/Overlay';
-
 import Sentinel from 'components/Sentinel';
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 import { schemaProcessInterProCitation } from 'schema_org/processors';
 
-// import Pages from 'pages';
-
-import ErrorBoundary from 'wrappers/ErrorBoundary';
-
-// import EBIHeader from 'components/EBIHeader';
-// import Header from 'components/Header';
 const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
 const NullComponent = () => null;
+
+const Pages = loadable({
+  loader: () =>
+    import(
+      /* webpackPreload: true */
+      /* webpackChunkName: "pages" */ 'pages'
+    ),
+});
 
 const EBIHeader = loadable({
   loader: () =>
@@ -43,9 +37,6 @@ const Header = loadable({
       <h1>InterPro</h1>
     </div>
   ),
-});
-const Pages = loadable({
-  loader: () => import(/* webpackChunkName: "pages" */ 'pages'),
 });
 
 const SchemaOrgData = loadable({

@@ -35,7 +35,7 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
 
     <% for (const font of webpack.assets.map(({name}) => name).filter(name =>
-    name.endsWith('woff') && !name.includes('fontello'))) { %>
+    name.endsWith('woff2') && !name.includes('fontello'))) { %>
     <link
       rel="preload"
       as="font"
@@ -216,7 +216,8 @@
           })();
         </script>
       <% 
-        } 
+        }
+        // Adding js files for module entry point
         for (const file of htmlWebpackPlugin.files.moduleScripts || []) {
           if (file.indexOf(htmlWebpackPlugin.entry)!==-1){
             %> <script async type="module" src="<%= file %>"></script> <%   
@@ -225,12 +226,13 @@
             %> <script async type="module" src="<%= file %>"></script> <% 
           } 
         }
+        // Adding js files for legacy entry point
         for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
           if (file.indexOf(htmlWebpackPlugin.entry)!==-1) {
             %> <script nomodule defer type="text/javascript" src="<%= file %>"></script> <%   
           }
           if (file.indexOf('.hydrate.')===-1 && file.indexOf('.index.')===-1){
-            %> <script nomodule async type="module" src="<%= file %>"></script> <% 
+            %> <script nomodule async src="<%= file %>"></script> <% 
           } 
         }
       } %>

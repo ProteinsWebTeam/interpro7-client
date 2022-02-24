@@ -23,7 +23,11 @@ const f = foundationPartial(ebiGlobalStyles, ipro, style);
 
 // Main pages
 const Home = loadable({
-  loader: () => import(/* webpackChunkName: "home-page" */ './Home'),
+  loader: () =>
+    import(
+      /* webpackPreload: true */
+      /* webpackChunkName: "home-page" */ './Home'
+    ),
 });
 const Entry = loadable({
   loader: () => import(/* webpackChunkName: "entry-page" */ './Entry'),
@@ -64,9 +68,6 @@ const About = loadable({
 });
 const Help = loadable({
   loader: () => import(/* webpackChunkName: "help-page" */ './Help'),
-});
-const Contact = loadable({
-  loader: () => import(/* webpackChunkName: "contact-page" */ './Contact'),
 });
 const Settings = loadable({
   loader: () => import(/* webpackChunkName: "settings-page" */ './Settings'),
@@ -134,7 +135,6 @@ const otherPages = new Map([
   ['download', Download],
   ['about', About],
   ['help', Help],
-  ['contact', Contact],
   ['settings', Settings],
   ['covid-19', Coronavirus],
   ['fav-updates', FavouriteUpdates],

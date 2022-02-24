@@ -4,13 +4,11 @@ import { format } from 'url';
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+// Too small to be split.
+import Proteome from './Proteome';
 
 const List = loadable({
   loader: () => import(/* webpackChunkName: "list-subpage" */ './ListSubPage'),
-});
-
-const Proteome = loadable({
-  loader: () => import(/* webpackChunkName: "proteome-subpage" */ './Proteome'),
 });
 
 const Sequence = loadable({

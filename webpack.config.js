@@ -109,6 +109,7 @@ const getConfigFor = (env, mode, module = false) => {
             splitChunks: {
               // include all types of chunks
               chunks: 'all',
+              minSize: 30 * 1024,
             },
           }
         : undefined,

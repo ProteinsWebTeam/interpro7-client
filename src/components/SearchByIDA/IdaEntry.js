@@ -5,7 +5,6 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-// $FlowFixMe
 import Select from 'react-select';
 
 import getFetch from 'higherOrder/loadData/getFetch';
@@ -16,11 +15,6 @@ import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
 import local from './style.css';
-
-// const Select = loadable({
-//   loader: () => import(/* webpackChunkName: "react-select" */ 'react-select'),
-//   loading: () => null,
-// });
 
 const f = foundationPartial(local);
 
