@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -55,6 +55,7 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
       }))}
       notFound={payload.results.length === 0}
       contentType="taxonomy"
+      title="Key Species"
     >
       <Column
         dataKey="accession"
@@ -120,22 +121,22 @@ const KeySpeciesTableData = connect(mapStateToPropsDefault)(
     open: boolean,
 }; */
 
-class KeySpeciesTable extends PureComponent /*:: <Props, State> */ {
-  constructor(props /*: Props */) {
-    super(props);
-    this.state = { open: true };
-  }
-  render() {
-    const { open } = this.state;
-    return (
-      <>
-        <button onClick={() => this.setState({ open: !open })}>
-          <h4>{open ? '▾ Hide' : '▸ Show'} Key Species</h4>
-        </button>
-        {open && <KeySpeciesTableData />}
-      </>
-    );
-  }
-}
+// class KeySpeciesTable extends PureComponent /*:: <Props, State> */ {
+//   constructor(props /*: Props */) {
+//     super(props);
+//     this.state = { open: true };
+//   }
+//   render() {
+//     const { open } = this.state;
+//     return (
+//       <>
+//         <button onClick={() => this.setState({ open: !open })}>
+//           <h4>{open ? '▾ Hide' : '▸ Show'} Key Species</h4>
+//         </button>
+//         {open && <KeySpeciesTableData />}
+//       </>
+//     );
+//   }
+// }
 
-export default KeySpeciesTable;
+export default KeySpeciesTableData;

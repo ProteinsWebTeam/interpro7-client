@@ -19,7 +19,6 @@ const ONE_MINUTE = 60000;
 class TimeAgo extends PureComponent /*:: <Props> */ {
   /* ::
     _ref: { current: HTMLElement | null };
-    _delay: () => number;
     __delay: number;
   */
   static propTypes = {

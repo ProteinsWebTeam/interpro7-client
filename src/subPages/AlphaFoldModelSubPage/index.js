@@ -133,7 +133,7 @@ const _AlphaFoldModel = ({
       {hasMultipleProteins ? (
         <div className={f('callout', 'primary', 'info')}>
           <p>
-            <i
+            <span
               className={f('icon', 'icon-common', 'icon-info')}
               data-icon="&#xf129;"
             />
@@ -442,7 +442,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
 
   if (data?.loading) return <Loading />;
   const hasMultipleProteins =
-    mainDB.toLowerCase() === 'interpro' && data.payload.count > 0;
+    mainDB.toLowerCase() === 'interpro' && data.payload.count > 1;
   return (
     <div className={f('row', 'column')} ref={container}>
       {proteinAcc && (

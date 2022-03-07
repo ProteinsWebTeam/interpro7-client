@@ -1,4 +1,5 @@
-import React, { PureComponent, useState } from 'react';
+// @flow
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -7,17 +8,13 @@ import { omit } from 'lodash-es';
 import Link from 'components/generic/Link';
 import loadData from 'higherOrder/loadData';
 
-import Matches from 'components/Matches';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { toPlural } from 'utils/pages';
 
+import RelatedTable from 'components/Related/RelatedTable';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
-import KeySpeciesTable from 'components/Taxonomy/KeySpeciesTable';
-
-import FiltersPanel from 'components/FiltersPanel';
-import CurationFilter from 'components/Protein/ProteinListFilters/CurationFilter';
 import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
@@ -25,6 +22,22 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles);
+
+const findIn = (
+  description /*: {} */,
+  fn /*: ({isFilter:boolean, order:number})=> boolean*/,
+) =>
+  // prettier-ignore
+  (Object.entries(description) /*: any */)
+    .find(([_key, value]) => fn(value)) || [];
+
+const filterIn = (
+  description /*: {} */,
+  fn /*: ({isFilter:boolean, order:number})=> boolean*/,
+) =>
+  // prettier-ignore
+  (Object.entries(description) /*: any */)
+    .filter(([_key, value]) => fn(value)) || [];
 
 /*:: type ObjectToListProps = {
   obj: Object,
@@ -105,189 +118,14 @@ class _RelatedSimple extends PureComponent /*:: <RelatedSimpleProps> */ {
 const mapStateToPropsSimple = createSelector(
   (state) => state.customLocation.description.main.key,
   (state) =>
-    (Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter,
-    ) || [])[0],
+    findIn(
+      state.customLocation.description,
+      (value /*: {isFilter:boolean, order:number} */) => value.isFilter,
+    ),
   (mainType, focusType) => ({ mainType, focusType }),
 );
 const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
 
-const primariesAndSecondaries = {
-  entry: {
-    protein: {
-      primary: 'protein',
-      secondary: 'entry',
-    },
-    structure: {
-      primary: 'structure',
-      secondary: 'entry',
-    },
-    taxonomy: {
-      primary: 'taxonomy',
-      secondary: 'entry',
-    },
-    proteome: {
-      primary: 'proteome',
-      secondary: 'entry',
-    },
-    set: {
-      primary: 'set',
-      secondary: 'entry',
-    },
-  },
-  protein: {
-    entry: {
-      primary: 'entry',
-      secondary: 'protein',
-    },
-    structure: {
-      primary: 'structure',
-      secondary: 'protein',
-    },
-  },
-  structure: {
-    entry: {
-      primary: 'entry',
-      secondary: 'structure',
-    },
-    protein: {
-      primary: 'protein',
-      secondary: 'structure',
-    },
-  },
-  taxonomy: {
-    entry: {
-      primary: 'entry',
-      secondary: 'taxonomy',
-    },
-    protein: {
-      primary: 'protein',
-      secondary: 'taxonomy',
-    },
-    structure: {
-      primary: 'structure',
-      secondary: 'taxonomy',
-    },
-    proteome: {
-      primary: 'proteome',
-      secondary: 'taxonomy',
-    },
-  },
-  proteome: {
-    entry: {
-      primary: 'entry',
-      secondary: 'proteome',
-    },
-    protein: {
-      primary: 'protein',
-      secondary: 'proteome',
-    },
-    structure: {
-      primary: 'structure',
-      secondary: 'proteome',
-    },
-  },
-  set: {
-    entry: {
-      primary: 'entry',
-      secondary: 'set',
-    },
-    protein: {
-      primary: 'protein',
-      secondary: 'set',
-    },
-    structure: {
-      primary: 'structure',
-      secondary: 'set',
-    },
-    taxonomy: {
-      primary: 'taxonomy',
-      secondary: 'set',
-    },
-    proteome: {
-      primary: 'proteome',
-      secondary: 'set',
-    },
-  },
-};
-const InfoFilters = (
-  {
-    filters,
-    focusType,
-    databases,
-  } /*: {filters: Array<Object>, focusType: string, databases: Object} */,
-) => {
-  if (!filters || filters.length === 0) return null;
-  return (
-    <div className={f('callout', 'info', 'withicon')}>
-      This list shows only:
-      <ul>
-        {filters.map(([endpoint, { db, accession }]) => (
-          <li key={endpoint}>
-            {toPlural(focusType)} associated with{' '}
-            <b>{accession ? endpoint : toPlural(endpoint)}</b>
-            {accession && (
-              <span>
-                {' '}
-                accession <b>{accession}</b>
-              </span>
-            )}
-            {db && (
-              <span>
-                {' '}
-                from the <b>
-                  {(databases[db] && databases[db].name) || db}
-                </b>{' '}
-                database
-              </span>
-            )}
-            .
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-InfoFilters.propTypes = {
-  databases: T.object.isRequired,
-  focusType: T.string.isRequired,
-  filters: T.array,
-};
-
-const KeySpeciesArea = ({ focusType, showKeySpecies }) => {
-  const [showTaxoInfo, setShowTaxoInfo] = useState(true);
-  if (focusType !== 'taxonomy') return null;
-  return (
-    <>
-      {showTaxoInfo && (
-        <div className={f('callout', 'info', 'withicon')} data-closable>
-          <button
-            className={f('close-button')}
-            aria-label="Close alert"
-            type="button"
-            data-close
-            onClick={() => setShowTaxoInfo(false)}
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h5>
-            The taxonomy information is available for both Key species and all
-            organisms. The below tables are shown based on the preference in
-            InterPro settings. If you wish to change it, please do in the{' '}
-            <Link to={{ description: { other: ['settings'] } }}>Settings</Link>{' '}
-            page
-          </h5>
-        </div>
-      )}
-      {showKeySpecies && <KeySpeciesTable />}
-    </>
-  );
-};
-
-KeySpeciesArea.propTypes = {
-  focusType: T.string,
-  showKeySpecies: T.bool,
-};
 /*:: type relatedAdvancedProps = {
   mainData: Object,
   secondaryData: Array<Object>,
@@ -301,8 +139,6 @@ KeySpeciesArea.propTypes = {
     loading: boolean
   },
   secondaryDataLoading: boolean,
-  showKeySpecies: boolean,
-  showAllSpecies: boolean,
 }; */
 /*:: type state = {
   showTaxoInfo: boolean,
@@ -321,11 +157,8 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       loading: T.bool.isRequired,
     }).isRequired,
     secondaryDataLoading: T.bool.isRequired,
-    showKeySpecies: T.bool.isRequired,
-    showAllSpecies: T.bool.isRequired,
   };
 
-  // eslint-disable-next-line complexity
   render() {
     const {
       mainData,
@@ -337,20 +170,9 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
       otherFilters,
       dataBase,
       secondaryDataLoading,
-      showKeySpecies,
-      showAllSpecies,
     } = this.props;
-    const databases =
-      (dataBase &&
-        !dataBase.loading &&
-        dataBase.payload &&
-        dataBase.payload.databases) ||
-      {};
-    const hasFilters = focusType === 'protein';
     return (
       <div className={f('row', 'column')}>
-        <KeySpeciesArea focusType={focusType} showKeySpecies={showKeySpecies} />
-
         {secondaryDataLoading ? (
           <Loading />
         ) : (
@@ -364,68 +186,17 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
             {mainType === 'structure' && focusType === 'entry' ? (
               <EntriesOnStructure entries={secondaryData} />
             ) : null}
-            {(focusType === 'taxonomy' && showAllSpecies) ||
-            focusType !== 'taxonomy' ? (
-              <>
-                <p>
-                  This {mainType} matches
-                  {secondaryData.length > 1
-                    ? ` these ${toPlural(focusType)}:`
-                    : ` this ${focusType}:`}
-                </p>
-                <InfoFilters
-                  filters={otherFilters}
-                  focusType={focusType}
-                  databases={databases}
-                />
-                <div className={f('row')}>
-                  {hasFilters && (
-                    <div
-                      className={f(
-                        'columns',
-                        'small-12',
-                        'medium-3',
-                        'large-2',
-                        'no-padding',
-                      )}
-                    >
-                      <div className={f('browse-side-panel')}>
-                        <FiltersPanel>
-                          <CurationFilter label="UniProt Curation" />
-                        </FiltersPanel>
-                      </div>
-                    </div>
-                  )}
-                  <div
-                    className={f(
-                      'columns',
-                      'small-12',
-                      hasFilters ? 'medium-9' : 'medium-12',
-                      hasFilters ? 'large-10' : 'large-12',
-                    )}
-                  >
-                    <Matches
-                      {...this.props}
-                      actualSize={actualSize}
-                      matches={secondaryData.reduce(
-                        (prev, { coordinates, ...secondaryData }) => [
-                          ...prev,
-                          {
-                            [mainType]: mainData,
-                            [focusType]: secondaryData,
-                            coordinates,
-                          },
-                        ],
-                        [],
-                      )}
-                      isStale={isStale}
-                      databases={databases}
-                      {...primariesAndSecondaries[mainType][focusType]}
-                    />
-                  </div>
-                </div>
-              </>
-            ) : null}
+            <RelatedTable
+              mainType={mainType}
+              mainData={mainData}
+              secondaryData={secondaryData}
+              focusType={focusType}
+              otherFilters={otherFilters}
+              dataBase={dataBase}
+              isStale={isStale}
+              actualSize={actualSize}
+              otherProps={{ ...this.props }}
+            />
           </div>
         )}
       </div>
@@ -436,28 +207,22 @@ export class _RelatedAdvanced extends PureComponent /*:: <relatedAdvancedProps> 
 const mapStateToPropsAdvanced = createSelector(
   (state) => state.customLocation.description.main.key,
   (state) =>
-    Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter && value.order === 1,
+    findIn(
+      state.customLocation.description,
+      (value /*: {isFilter:boolean, order:number} */) =>
+        value.isFilter && value.order === 1,
     ),
   (state) =>
-    Object.entries(state.customLocation.description).filter(
-      ([_key, value]) => value.isFilter && value.order !== 1,
+    filterIn(
+      state.customLocation.description,
+      (value /*: {isFilter:boolean, order:number} */) =>
+        value.isFilter && value.order !== 1,
     ),
-  (state) => state.settings.ui.showKeySpecies,
-  (state) => state.settings.ui.showAllSpecies,
-  (
-    mainType,
-    [focusType, { db: focusDB }],
-    otherFilters,
-    showKeySpecies,
-    showAllSpecies,
-  ) => ({
+  (mainType, [focusType, { db: focusDB }], otherFilters) => ({
     mainType,
     focusType,
     focusDB,
     otherFilters,
-    showKeySpecies,
-    showAllSpecies,
   }),
 );
 const RelatedAdvanced = connect(mapStateToPropsAdvanced)(_RelatedAdvanced);
@@ -528,6 +293,7 @@ const RelatedAdvancedQuery = loadData({
 /*:: type RelatedProps = {
   data: Object,
   focusType: string,
+  hash?: string,
   hasSecondary: boolean,
 }; */
 class Related extends PureComponent /*:: <RelatedProps> */ {
@@ -535,39 +301,35 @@ class Related extends PureComponent /*:: <RelatedProps> */ {
     data: T.object.isRequired,
     focusType: T.string.isRequired,
     hasSecondary: T.bool,
-    showAllSpecies: T.bool.isRequired,
+    hash: T.string,
   };
 
   render() {
-    const {
-      data,
-      focusType,
-      hasSecondary,
-      showAllSpecies,
-      ...props
-    } = this.props;
+    const { data, focusType, hasSecondary, hash, ...props } = this.props;
     if (data.loading) return <Loading />;
     let RelatedComponent = RelatedSimple;
     if (hasSecondary) {
       RelatedComponent =
-        focusType === 'taxonomy' && !showAllSpecies
+        focusType === 'taxonomy' && hash !== 'table'
           ? RelatedTaxonomy
           : RelatedAdvancedQuery;
     }
+    // $FlowFixMe
     return <RelatedComponent mainData={data.payload.metadata} {...props} />;
   }
 }
-
 const mapStateToPropsDefault = createSelector(
   (state) =>
-    Object.entries(state.customLocation.description).find(
-      ([_key, value]) => value.isFilter && value.order === 1,
-    ) || [],
-  (state) => state.settings.ui.showAllSpecies,
-  ([focusType, filter], showAllSpecies) => ({
+    findIn(
+      state.customLocation.description,
+      (value /*: {isFilter:boolean, order:number} */) =>
+        value.isFilter && value.order === 1,
+    ),
+  (state) => state.customLocation.hash,
+  ([focusType, filter], hash) => ({
     focusType,
-    hasSecondary: filter && !!filter.db,
-    showAllSpecies,
+    hasSecondary: filter && (!!filter.db || !!filter.integration),
+    hash,
   }),
 );
 

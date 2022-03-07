@@ -1,5 +1,6 @@
 @import '../../../styles/fonts.css';
 @import '../../../styles/colors.css';
+@import '../../../styles/z-index.css';
 
 .popper {
   position: absolute;
@@ -12,6 +13,7 @@
   text-align: left;
   margin: 6px;
   border: 1px #dedede solid;
+  z-index: var(--z-index-tooltips, 350);
 }
 .popper .popper__arrow {
   width: 0;

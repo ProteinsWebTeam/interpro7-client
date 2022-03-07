@@ -137,5 +137,25 @@ describe('pathToDescription()', () => {
         ).not.toEqual(d);
       });
     });
+    describe('main taxonomy', () => {
+      beforeEach(() => {
+        d.main.key = 'taxonomy';
+      });
+      test('taxonomy with entries', () => {
+        expect(pathToDescription('/taxonomy/')).toEqual(d);
+        d.taxonomy.db = 'uniprot';
+        expect(pathToDescription('/taxonomy/uniprot')).toEqual(d);
+        d.taxonomy.accession = '2387';
+        expect(pathToDescription('/taxonomy/uniprot/2387')).toEqual(d);
+        d.main.numberOfFilters = 1;
+        d.entry.isFilter = true;
+        d.entry.order = 1;
+        expect(pathToDescription('/taxonomy/uniprot/2387/entry')).toEqual(d);
+        d.entry.integration = 'all';
+        expect(pathToDescription('/taxonomy/uniprot/2387/entry/all/')).toEqual(
+          d,
+        );
+      });
+    });
   });
 });

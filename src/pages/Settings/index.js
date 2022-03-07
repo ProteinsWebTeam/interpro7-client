@@ -259,14 +259,8 @@ NotificationSettings.propTypes = {
 
 const UISettings = (
   {
-    ui: {
-      lowGraphics,
-      colorDomainsBy,
-      structureViewer,
-      showKeySpecies,
-      showAllSpecies,
-    },
-  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean, showKeySpecies: boolean, showAllSpecies: boolean}} */,
+    ui: { lowGraphics, colorDomainsBy, structureViewer },
+  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean}} */,
 ) => (
   <form data-category="ui">
     <h4>UI settings</h4>
@@ -333,57 +327,6 @@ const UISettings = (
         />
       </div>
     </div>
-
-    <div className={f('row')}>
-      <div className={f('medium-12', 'column')}>
-        <p>Taxonomy tables:</p>
-        <p>
-          <small>
-            The taxonomy information is available for both key species and all
-            organisms. The key species table is shown by default. If you wish to
-            change it, please select the respective options.
-          </small>
-        </p>
-        <div className={f('row')}>
-          <div className={f('medium-4', 'column')}>
-            <table>
-              <thead>
-                <tr>
-                  <th>Table</th>
-                  <th>Preference</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Key species</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showKeySpecies"
-                      id="keySpecies-input"
-                      checked={showKeySpecies}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>All species</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="showAllSpecies"
-                      id="allSpecies-input"
-                      checked={showAllSpecies}
-                      onChange={noop}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
   </form>
 );
 UISettings.propTypes = {
@@ -391,8 +334,6 @@ UISettings.propTypes = {
     lowGraphics: T.bool.isRequired,
     colorDomainsBy: T.string.isRequired,
     structureViewer: T.bool.isRequired,
-    showKeySpecies: T.bool.isRequired,
-    showAllSpecies: T.bool.isRequired,
   }).isRequired,
 };
 
@@ -621,8 +562,7 @@ class _AddToHomeScreen extends PureComponent /*:: <Props,State> */ {
       this.props.addToast(
         {
           title: 'Added to homescreen or desktop',
-          body:
-            'Keep in mind that you still need to be online to browse our data',
+          body: 'Keep in mind that you still need to be online to browse our data',
           ttl: 5000, // eslint-disable-line no-magic-numbers
         },
         'add-to-homescreen-banner',
@@ -632,8 +572,7 @@ class _AddToHomeScreen extends PureComponent /*:: <Props,State> */ {
       this.props.addToast(
         {
           title: 'Failed to add to homescreen or desktop',
-          body:
-            'It looks like you refused to add this website to the homescreen or desktop after all',
+          body: 'It looks like you refused to add this website to the homescreen or desktop after all',
           ttl: 5000, // eslint-disable-line no-magic-numbers
         },
         'add-to-homescreen-banner',
