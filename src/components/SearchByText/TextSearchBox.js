@@ -4,7 +4,6 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { debounce } from 'lodash-es';
-import loadable from 'higherOrder/loadable';
 
 import { goToCustomLocation } from 'actions/creators';
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
@@ -19,11 +18,6 @@ import interproTheme from 'styles/theme-interpro.css';
 import local from './style.css';
 
 const f = foundationPartial(interproTheme, fonts, local);
-
-// const Select = loadable({
-//   loader: () => import(/* webpackChunkName: "react-select" */ 'react-select'),
-//   loading: () => null,
-// });
 
 export const DEBOUNCE_RATE = 1000; // 1s
 export const DEBOUNCE_RATE_SLOW = 2000; // 2s
