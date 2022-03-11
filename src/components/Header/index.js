@@ -146,7 +146,7 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
                 },
               }}
             >
-              <div aria-label="Search InterPro">
+              <div role="button" aria-label="Search InterPro">
                 <svg
                   width="2.2em"
                   height="2.2em"
