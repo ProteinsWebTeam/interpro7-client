@@ -484,7 +484,7 @@ button {
 }
 
 /* buttons - Ipscan search */
-.button.hollow.secondary {
+body .button.hollow.secondary {
   border-color: #9f9f9f;
   color: var(--colors-lightgray);
   &:hover {
@@ -944,7 +944,7 @@ body .tag-sqc {
 .card-info {
   color: var(--colors-nearly-black);
   font-size: 90%;
-  opacity: 0.5;
+  opacity: 0.8;
   display: flex;
   flex-wrap: wrap;
   transition: opacity var(--timing-really-fast) ease-out;
