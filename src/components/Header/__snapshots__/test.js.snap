@@ -323,6 +323,7 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
       >
         <div
           aria-label="Search InterPro"
+          role="button"
         >
           <svg
             className="icon icon--search"
@@ -383,6 +384,7 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
       >
         <div
           aria-label="Search InterPro"
+          role="button"
         >
           <svg
             className="icon icon--search"
@@ -443,6 +445,7 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
       >
         <div
           aria-label="Search InterPro"
+          role="button"
         >
           <svg
             className="icon icon--search"
@@ -503,6 +506,7 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
       >
         <div
           aria-label="Search InterPro"
+          role="button"
         >
           <svg
             className="icon icon--search"
@@ -563,6 +567,7 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
       >
         <div
           aria-label="Search InterPro"
+          role="button"
         >
           <svg
             className="icon icon--search"
@@ -623,6 +628,7 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
       >
         <div
           aria-label="Search InterPro"
+          role="button"
         >
           <svg
             className="icon icon--search"
@@ -683,6 +689,7 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
       >
         <div
           aria-label="Search InterPro"
+          role="button"
         >
           <svg
             className="icon icon--search"
@@ -743,6 +750,7 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
       >
         <div
           aria-label="Search InterPro"
+          role="button"
         >
           <svg
             className="icon icon--search"

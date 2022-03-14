@@ -38,6 +38,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <interpro-type
           aria-label="Entry type"
           dimension="4em"
+          role="listitem"
           style={
             Object {
               "display": "block",
@@ -101,6 +102,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <interpro-type
           aria-label="Entry type"
           dimension="4em"
+          role="listitem"
           style={
             Object {
               "display": "block",
@@ -159,6 +161,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <interpro-type
           aria-label="Entry type"
           dimension="4em"
+          role="listitem"
           style={
             Object {
               "display": "block",
@@ -220,6 +223,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <interpro-type
           aria-label="Entry type"
           dimension="4em"
+          role="listitem"
           style={
             Object {
               "display": "block",
@@ -280,6 +284,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <interpro-type
           aria-label="Entry type"
           dimension="4em"
+          role="listitem"
           style={
             Object {
               "display": "block",
@@ -340,6 +345,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <interpro-type
           aria-label="Entry type"
           dimension="4em"
+          role="listitem"
           style={
             Object {
               "display": "block",
@@ -400,6 +406,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <interpro-type
           aria-label="Entry type"
           dimension="4em"
+          role="listitem"
           style={
             Object {
               "display": "block",
@@ -461,6 +468,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
         <interpro-type
           aria-label="Entry type"
           dimension="4em"
+          role="listitem"
           style={
             Object {
               "display": "block",
