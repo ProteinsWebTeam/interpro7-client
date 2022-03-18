@@ -2,14 +2,14 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { ByEntriesFeatured } from '.';
+import { ByLatestEntries } from '.';
 
 const renderer = new ShallowRenderer();
 
 describe('<ByEntriesFeatured />', () => {
   test('By Entries Featured', () => {
     renderer.render(
-      <ByEntriesFeatured
+      <ByLatestEntries
         data={{
           payload: {
             results: [

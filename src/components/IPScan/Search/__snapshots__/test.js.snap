@@ -21,7 +21,7 @@ exports[`<IPScanSearch /> should render 1`] = `
     >
       <div>
         <div
-          className="secondary callout border margin-bottom-none"
+          className="secondary callout border margin-bottom-none ipscan-block"
         >
           <div
             className="row"

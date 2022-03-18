@@ -24,7 +24,7 @@ const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
   }
 }*/
 
-export class ByEntriesFeatured extends PureComponent /*:: <EntriesProps> */ {
+export class ByLatestEntries extends PureComponent /*:: <EntriesProps> */ {
   static propTypes = {
     data: T.shape({
       payload: T.object,
@@ -88,4 +88,4 @@ const getAllLatestEntriesURL = createSelector(
   },
 );
 
-export default loadData(getAllLatestEntriesURL)(ByEntriesFeatured);
+export default loadData(getAllLatestEntriesURL)(ByLatestEntries);

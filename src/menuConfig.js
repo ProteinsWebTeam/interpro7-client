@@ -44,10 +44,12 @@ export const EBI /*: Array<Object> */ = [
   },
 ];
 
-const getEntryForFilter = ({ entry }) => {
+const getEntryForFilter = ({ main, entry }) => {
   if (entry.db) {
     return { db: entry.db, isFilter: true };
   }
+  // Default to selecting the InterPro DB, making ALl proteins a manual chioce.
+  return { db: 'InterPro', isFilter: true };
 };
 const getTaxonomyForFilter = ({ taxonomy, main }) => {
   if (main.key !== 'taxonomy' && taxonomy.db) {

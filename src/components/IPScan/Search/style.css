@@ -48,6 +48,9 @@
       visibility: visible;
     }
   }
+  & .ipscan-block {
+    background-color: #fafafa;
+  }
 }
 .description {
   color: var(--colors-graydark);
