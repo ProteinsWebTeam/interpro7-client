@@ -5,6 +5,7 @@ coverage/
 .idea/
 .tmp/
 .vscode/
+.lighthouseci/
 config.yml
 reports
 config.json

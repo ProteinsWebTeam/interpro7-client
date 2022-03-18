@@ -4,7 +4,6 @@ import { StructureElement } from 'molstar/lib/mol-model/structure';
 import { ColorTheme, LocationColor } from 'molstar/lib/mol-theme/color';
 import { ThemeDataContext } from 'molstar/lib/mol-theme/theme';
 import { Color } from 'molstar/lib/mol-util/color';
-// import { TableLegend } from 'molstar/lib/mol-util/legend';
 import { ParamDefinition as PD } from 'molstar/lib/mol-util/param-definition';
 import { CustomProperty } from 'molstar/lib/mol-model-props/common/custom-property';
 
@@ -29,7 +28,6 @@ type Params = typeof AfConfidenceColorThemeParams
 
 export function AfConfidenceColorTheme(ctx: ThemeDataContext, props: PD.Values<Params>): ColorTheme<Params> {
     let color: LocationColor;
-
     if (ctx.structure && !ctx.structure.isEmpty && ctx.structure.models[0].customProperties.has(AfConfidenceProvider.descriptor)) {
         const getConfidenceScore = AfConfidence.getConfidenceScore;
 

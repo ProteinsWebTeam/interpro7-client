@@ -1,4 +1,3 @@
-// @flow
 import React, { useState } from 'react';
 import T from 'prop-types';
 
@@ -9,6 +8,121 @@ import uniqueId from 'utils/cheap-unique-id';
 import cn from 'classnames';
 
 import styles from './style.css';
+
+const images = {
+  cathgene3d: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/cathgene3d_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/cathgene3d_logo.png`
+    ),
+  ],
+  cdd: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/cdd_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/cdd_logo.png`
+    ),
+  ],
+  hamap: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/hamap_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/hamap_logo.png`
+    ),
+  ],
+  panther: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/panther_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/panther_logo.png`
+    ),
+  ],
+  pfam: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/pfam_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/pfam_logo.png`
+    ),
+  ],
+  pirsf: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/pirsf_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/pirsf_logo.png`
+    ),
+  ],
+  prints: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/prints_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/prints_logo.png`
+    ),
+  ],
+  prosite: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/prosite_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/prosite_logo.png`
+    ),
+  ],
+  profile: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/profile_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/profile_logo.png`
+    ),
+  ],
+  profile: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/profile_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/profile_logo.png`
+    ),
+  ],
+  sfld: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/sfld_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/sfld_logo.png`
+    ),
+  ],
+  smart: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/smart_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/smart_logo.png`
+    ),
+  ],
+  ssf: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/ssf_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/ssf_logo.png`
+    ),
+  ],
+  tigrfams: [
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/tigrfams_logo.avif`
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/tigrfams_logo.png`
+    ),
+  ],
+};
 
 const f = foundationPartial(styles);
 
@@ -49,14 +163,8 @@ const MemberSymbol = (
   const [png, setPng] = useState(null);
   const [avif, setAvif] = useState(null);
   if (!svg) {
-    // $FlowFixMe
-    import(`../../../images/member_databases/${type}_logo.avif`).then((src) =>
-      setAvif(src.default),
-    );
-    // $FlowFixMe
-    import(`../../../images/member_databases/${type}_logo.png`).then((src) =>
-      setPng(src.default),
-    );
+    images[type][0].then((src) => setAvif(src.default));
+    images[type][1].then((src) => setPng(src.default));
   }
   return (
     <span data-testid="entry-member-db-icon">

@@ -55,21 +55,19 @@ const isFirstBlockWithContent = (block, contentState) => {
     return isFirstBlockWithContent(before, contentState);
   return false;
 };
-const commentsStrategy = (re, forErrors = false) => (
-  block,
-  cb,
-  contentState,
-) => {
-  const text = block.getText();
-  let match;
-  while ((match = re.exec(text))) {
-    const isFirstComment = isFirstBlockWithContent(block, contentState);
-    if (!forErrors && isFirstComment)
-      cb(match.index, match.index + match[0].length);
-    if (forErrors && !isFirstComment)
-      cb(match.index, match.index + match[0].length);
-  }
-};
+const commentsStrategy =
+  (re, forErrors = false) =>
+  (block, cb, contentState) => {
+    const text = block.getText();
+    let match;
+    while ((match = re.exec(text))) {
+      const isFirstComment = isFirstBlockWithContent(block, contentState);
+      if (!forErrors && isFirstComment)
+        cb(match.index, match.index + match[0].length);
+      if (forErrors && !isFirstComment)
+        cb(match.index, match.index + match[0].length);
+    }
+  };
 /*:: type ScanProps = {
       offsetKey: string,
       children: any
@@ -393,8 +391,12 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       cleanUp(convertToRaw(this.state.editorState.getCurrentContent()).blocks),
     );
 
-  _handleDroppedFiles = blockEvent(({ dataTransfer: { files: [file] } }) =>
-    this._handleFile(file),
+  _handleDroppedFiles = blockEvent(
+    ({
+      dataTransfer: {
+        files: [file],
+      },
+    }) => this._handleFile(file),
   );
 
   _handleDragging = blockEvent(() => this.setState({ dragging: true }));
@@ -501,6 +503,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                   'callout',
                   'border',
                   'margin-bottom-none',
+                  'ipscan-block',
                 )}
               >
                 <div className={f('row')}>

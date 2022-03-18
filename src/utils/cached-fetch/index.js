@@ -1,12 +1,10 @@
 // @flow
 import fetch from 'isomorphic-fetch';
-import pako from 'pako';
 
 import dropCacheIfVersionMismatch from './utils/drop-cache-if-version-mismatch';
 import { getMismatchedFavourites } from 'utils/compare-favourites';
 
 import config, { pkg } from 'config';
-import yaml from 'js-yaml';
 
 const SUCCESS_STATUS = 200;
 const TIMEOUT_STATUS = 408;
@@ -36,7 +34,7 @@ const handleProgress = async (
 };
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const cachedFetch = (
+const cachedFetch = async (
   url /*: string */,
   options /*: Object */ = {},
   addToast,
@@ -49,6 +47,7 @@ const cachedFetch = (
   if (!cached) {
     const zipCached = sessionStorage.getItem(zipKey);
     if (useCache && zipCached) {
+      const pako = await import(/* webpackChunkName: "pako" */ 'pako');
       const strArray = zipCached.split(',');
       const intArray = Uint8Array.from(strArray.map(Number));
       cached = pako.inflate(intArray, { to: 'string' });
@@ -81,10 +80,11 @@ const cachedFetch = (
         response
           .clone()
           .text()
-          .then((text) => {
+          .then(async (text) => {
             if (text.length < MIN_LENGTH_TO_COMPRESS) {
               sessionStorage.setItem(key, text);
             } else {
+              const pako = await import(/* webpackChunkName: "pako" */ 'pako');
               const compressed = pako.deflate(text);
               sessionStorage.setItem(zipKey, compressed);
             }
@@ -137,6 +137,7 @@ const commonCachedFetch =
     } else if (responseType === 'gzip') {
       payloadP = response.text();
     } else if (responseType === 'yaml') {
+      const yaml = await import(/* webpackChunkName: "js-yaml" */ 'js-yaml');
       payloadP = yaml.load(await response.text(), { json: true });
     }
     const output /*: FetchOutput */ = {

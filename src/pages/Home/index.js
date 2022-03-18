@@ -193,6 +193,9 @@ const Announcement = () => (
               proteome: { db: 'uniprot', accession: 'UP000464024' },
             },
           }}
+          style={{
+            color: '#003457',
+          }}
         >
           {' '}
           SARS-CoV-2

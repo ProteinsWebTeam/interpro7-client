@@ -6,16 +6,16 @@
 
 /******************************Overwrite EBI global***************************/
 /*to include more systems fonts for windows machines*/
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
   font-family: var(--fonts-system);
 }
 
-h5 {
+body h5 {
   font-weight: 600;
 }
 
@@ -27,25 +27,25 @@ h5 {
   }
 }
 /* remove the dotted line for links to make the page look better*/
-a,
-a:visited {
+body a,
+body a:visited {
   border-bottom-width: 0;
 }
 
 /* remove the shadow defined by default on focus as it doesn't work with tabs */
-a:focus {
+body a:focus {
   box-shadow: 0 0 0 rgba(100, 100, 100, 0.5);
 }
 
 /* links color - should be in EBI-GLobal*/
-.main a,
-.main a:visited,
-.main a:focus {
+body .main a,
+body .main a:visited,
+body .main a:focus {
   color: rgb(0, 112, 187);
 }
 
 /* button LINKS */
-.main a.button {
+body .main a.button {
   color: white;
   white-space: inherit; /* default is nowrap in ebi css - bug for small screens*/
 }
@@ -232,7 +232,7 @@ div#local-title {
 }
 
 /*remove border for menu items  - can't be "menu" css component specific as defined from .masthead */
-.masthead nav ul.menu li {
+body .masthead nav ul.menu li {
   border-right-width: 0;
 }
 /**** END BANNER MENU ****/
@@ -484,7 +484,7 @@ button {
 }
 
 /* buttons - Ipscan search */
-.button.hollow.secondary {
+body .button.hollow.secondary {
   border-color: #9f9f9f;
   color: var(--colors-lightgray);
   &:hover {
@@ -519,7 +519,7 @@ button {
 }
 
 /* TITLE used for box like search box*/
-h3.light {
+body h3.light {
   font-weight: 300;
 }
 
@@ -632,11 +632,11 @@ hr {
 /*/TOOLTIP*/
 
 /*TAG block*/
-.tag {
+body .tag {
   border-radius: 4px;
 } /*used on protein and proteome page */
 
-a.tag {
+body a.tag {
   color: var(--colors-nearly-white);
   &:visited,
   &:hover,
@@ -645,17 +645,17 @@ a.tag {
   }
 }
 
-.tag.secondary {
+body .tag.secondary {
   background-color: var(--colors-tag);
 }
 
 /* tag used on md signature page */
-.tag.md-p {
+body .tag.md-p {
   background-color: var(--colors-md-sub);
 }
 
 /*used on ipscan search result*/
-.tag-sqc {
+body .tag-sqc {
   background-color: var(--colors-other-main);
   padding: 0.3rem 0.5rem;
   color: var(--colors-light-title);
@@ -944,7 +944,7 @@ a.tag {
 .card-info {
   color: var(--colors-nearly-black);
   font-size: 90%;
-  opacity: 0.5;
+  opacity: 0.8;
   display: flex;
   flex-wrap: wrap;
   transition: opacity var(--timing-really-fast) ease-out;

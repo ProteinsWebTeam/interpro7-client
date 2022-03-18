@@ -51,6 +51,7 @@ export class LoadingBar extends PureComponent /*:: <Props> */ {
         ref={this._ref}
         className={styles.loading_bar}
         role="progressbar"
+        aria-label="Progress for API requests"
         aria-valuenow={progress}
         aria-valuemin="0"
         aria-valuemax="1"
@@ -61,7 +62,7 @@ export class LoadingBar extends PureComponent /*:: <Props> */ {
 
 const mapStateToProps = createSelector(
   overallDataProgressSelector,
-  progress => ({ progress }),
+  (progress) => ({ progress }),
 );
 
 export default connect(mapStateToProps)(LoadingBar);

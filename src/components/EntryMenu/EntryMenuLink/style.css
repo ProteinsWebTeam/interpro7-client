@@ -1,87 +1,89 @@
-a.browse-tabs-link {
-  &,
-  &:focus,
-  &:hover,
-  &:visited {
-    font-size: 0.9rem; /* same size as submenu */
-    padding: 1rem 0.5rem 0.7rem 0.5rem;
-    color: black;
-    line-height: inherit;
-    background-color: transparent; /* keep! */
-    position: relative; /*to avoid bug when resize menu on small screens*/
+body {
+  & a.browse-tabs-link {
+    &,
+    &:focus,
+    &:hover,
+    &:visited {
+      font-size: 0.9rem; /* same size as submenu */
+      padding: 1rem 0.5rem 0.7rem 0.5rem;
+      color: black;
+      line-height: inherit;
+      background-color: transparent; /* keep! */
+      position: relative; /*to avoid bug when resize menu on small screens*/
 
-    & > .name {
-      display: inline-block;
-      margin-right: 0.5ch;
+      & > .name {
+        display: inline-block;
+        margin-right: 0.5ch;
 
-      &::after {
-        display: block;
-        padding-top: 1rem;
-        content: attr(data-content);
-        position: absolute;
-        top: 0;
-        font-weight: bold;
-        color: black;
-        opacity: 0;
+        &::after {
+          display: block;
+          padding-top: 1rem;
+          content: attr(data-content);
+          position: absolute;
+          top: 0;
+          font-weight: bold;
+          color: black;
+          opacity: 0;
+        }
       }
     }
   }
-}
 
-/* custom menu color bottom (Protein, structure, Organism , taxon, set) */
-a.is-active-tab {
-  &,
-  &:focus,
-  &:hover,
-  &:visited {
-    & > .name {
-      color: transparent;
-
-      &::after {
-        opacity: 1;
-      }
-    }
-  }
-}
-
-.used-on-the-side {
-  &,
+  /* custom menu color bottom (Protein, structure, Organism , taxon, set) */
   & a.is-active-tab {
-    & .name {
-      color: #ccc;
+    &,
+    &:focus,
+    &:hover,
+    &:visited {
+      & > .name {
+        color: transparent;
 
-      &::after {
-        content: initial;
+        &::after {
+          opacity: 1;
+        }
       }
     }
   }
 
-  & a.is-active-tab .name {
-    font-weight: bold;
+  & .used-on-the-side {
+    &,
+    & a.is-active-tab {
+      & .name {
+        color: #ccc;
+
+        &::after {
+          content: initial;
+        }
+      }
+    }
+
+    & a.is-active-tab .name {
+      font-weight: bold;
+    }
   }
-}
 
-.tabs-title {
-  display: flex;
-  align-items: stretch;
-  margin-right: 0.5rem;
-}
+  & .tabs-title {
+    display: flex;
+    align-items: stretch;
+    margin-right: 0.5rem;
+  }
 
-/* hide icons on main menu - show them only on sidemenu and revert color from black to white */
-.icon-count-sm {
-  display: none;
-  width: 18px;
-  height: 16px;
-  filter: invert(100%);
-  color: black;
-}
-
-.used-on-the-side {
+  /* hide icons on main menu - show them only on sidemenu and revert color from black to white */
   & .icon-count-sm {
-    display: inline-block;
+    display: none;
+    width: 18px;
+    height: 16px;
+    filter: invert(100%);
+    color: black;
   }
 
-  & .counter {
-    color: white;
+  & .used-on-the-side {
+    & .icon-count-sm {
+      display: inline-block;
+    }
+
+    & .counter {
+      color: white;
+    }
   }
 }
