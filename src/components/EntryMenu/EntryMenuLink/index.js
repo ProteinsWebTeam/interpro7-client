@@ -40,14 +40,7 @@ const icons = new Map([
 ]);
 
 export const EntryMenuLinkWithoutData = (
-  {
-    name,
-    value,
-    loading,
-    to,
-    exact,
-    usedOnTheSide,
-  } /*: {
+  { name, value, loading, to, exact, usedOnTheSide } /*: {
     name: string,
     value: ?number,
     loading: boolean,
@@ -105,8 +98,8 @@ EntryMenuLinkWithoutData.propTypes = {
   usedOnTheSide: T.bool,
 };
 
-const hasAlignments = (name, annotations) => {
-  if (name !== 'Alignment') return false;
+const hasAlignments = (name, db, annotations) => {
+  if (name !== 'Alignment' || db === 'InterPro') return false;
   for (const ann of annotations) {
     if (ann.startsWith('alignment:')) return true;
   }
@@ -193,7 +186,7 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
         (payload.metadata.entry_annotations.includes(
           singleEntityNames.get(name),
         ) ||
-          hasAlignments(name, payload.metadata.entry_annotations))
+          hasAlignments(name, entryDB, payload.metadata.entry_annotations))
       ) {
         value = NaN;
       }
