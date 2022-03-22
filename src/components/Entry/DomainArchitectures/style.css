@@ -37,3 +37,7 @@
   border-radius: 0.5rem;
   padding: 0 0.5rem;
 }
+
+.ida-protvista .track-component {
+  border-right: 1px dashed gray;
+}

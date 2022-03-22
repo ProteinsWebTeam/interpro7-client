@@ -177,7 +177,7 @@ export class IDAProtVista extends ProtVistaMatches {
   render() {
     const { matches, length, databases, highlight = [] } = this.props;
     return (
-      <div>
+      <div className={f('ida-protvista')}>
         {matches.map((d, i) => (
           <div key={`${d.accession}-${i}`} className={f('track-row')}>
             <div

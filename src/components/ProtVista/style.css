@@ -132,7 +132,6 @@
   width: var(--track-space, 85%);
   background: rgba(0, 0, 0, 0.02);
   cursor: move;
-  border-right: 1px dashed gray;
 }
 
 .track-component.label-by-name {
