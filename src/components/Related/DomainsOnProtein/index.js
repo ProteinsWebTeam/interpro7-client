@@ -221,7 +221,10 @@ const mergeExtraFeatures = (data, extraFeatures) => {
   return data;
 };
 
-const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
+const orderByAccession = (
+  a /*: {accession: string} */,
+  b /*: {accession: string} */,
+) => (a.accession > b.accession ? 1 : -1);
 
 const mergeResidues = (data, residues) => {
   const residuesWithEntryDetails = [];
@@ -253,8 +256,9 @@ const mergeResidues = (data, residues) => {
   // PIRSR doesn't have any entry integrated in InterPro
   const unlinkedResidues = [];
 
-  Object.values(residues)
-    .filter(({ linked }) => !linked)
+  // prettier-ignore
+  (Object.values(residues)/*: any */)
+    .filter(({ linked }/*: {linked?: boolean} */) => !linked)
     .forEach((residue) => {
       const residueEntry = { ...residue };
       residueEntry.type = 'residue';
@@ -263,7 +267,7 @@ const mergeResidues = (data, residues) => {
   unlinkedResidues.sort(orderByAccession);
 
   data.residues = residuesWithEntryDetails;
-  data.unlinked_residues = unlinkedResidues;
+  data.other_residues = unlinkedResidues;
 };
 
 export const groupByEntryType = (interpro) => {
@@ -292,7 +296,7 @@ export const byEntryType = ([a], [b]) => {
     'unintegrated',
   ];
   const lasts = [
-    'unlinked_residues',
+    'other_residues',
     'residues',
     'features',
     'predictions',
