@@ -107,19 +107,86 @@ exports[`<SummaryStructure /> should render 1`] = `
           <h5>
             External Links
           </h5>
+          <p>
+            View 
+            <code>
+              102m
+            </code>
+             in:
+          </p>
           <ul
             className="no-bullet"
             data-testid="structure-external-links"
           >
             <li>
-              <PDBeLink
+              <BaseLink
                 className="ext"
                 id="102m"
+                pattern="https://www.ebi.ac.uk/pdbe/entry/pdb/{id}"
+                target="_blank"
               >
-                View 
-                102m
-                 in PDBe
-              </PDBeLink>
+                PDBe
+              </BaseLink>
+            </li>
+            <li>
+              <BaseLink
+                className="ext"
+                id="102m"
+                pattern="https://www.rcsb.org/structure/{id}"
+                target="_blank"
+              >
+                RCSB PDB
+              </BaseLink>
+            </li>
+            <li>
+              <BaseLink
+                className="ext"
+                id="102m"
+                pattern="http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode={id}"
+                target="_blank"
+              >
+                PDBsum
+              </BaseLink>
+            </li>
+            <li>
+              <BaseLink
+                className="ext"
+                id="102m"
+                pattern="https://www.cathdb.info/search?q={id}"
+                target="_blank"
+              >
+                CATH
+              </BaseLink>
+            </li>
+            <li>
+              <BaseLink
+                className="ext"
+                id="102m"
+                pattern="http://scop.mrc-lmb.cam.ac.uk/search?t=txt;q={id}"
+                target="_blank"
+              >
+                SCOP
+              </BaseLink>
+            </li>
+            <li>
+              <BaseLink
+                className="ext"
+                id="102m"
+                pattern="http://prodata.swmed.edu/ecod/complete/search?kw={id}"
+                target="_blank"
+              >
+                ECOD
+              </BaseLink>
+            </li>
+            <li>
+              <BaseLink
+                className="ext"
+                id="102m"
+                pattern="https://proteopedia.org/wiki/index.php/{id}"
+                target="_blank"
+              >
+                Proteopedia
+              </BaseLink>
             </li>
           </ul>
         </div>

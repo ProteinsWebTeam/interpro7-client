@@ -6,7 +6,7 @@ import { format } from 'url';
 
 import Accession from 'components/Accession';
 import Link from 'components/generic/Link';
-import { PDBeLink } from 'components/ExtLink';
+import { BaseLink } from 'components/ExtLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
 import TimeAgo from 'components/TimeAgo';
@@ -25,6 +25,28 @@ import { formatShortDate } from 'utils/date';
 
 const f = foundationPartial(ebiStyles);
 
+const EXTERNAL_LINKS = [
+  { pattern: 'https://www.ebi.ac.uk/pdbe/entry/pdb/{id}', label: 'PDBe' },
+  { pattern: 'https://www.rcsb.org/structure/{id}', label: 'RCSB PDB' },
+  {
+    pattern:
+      'http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode={id}',
+    label: 'PDBsum',
+  },
+  { pattern: 'https://www.cathdb.info/search?q={id}', label: 'CATH' },
+  {
+    pattern: 'http://scop.mrc-lmb.cam.ac.uk/search?t=txt;q={id}',
+    label: 'SCOP',
+  },
+  {
+    pattern: 'http://prodata.swmed.edu/ecod/complete/search?kw={id}',
+    label: 'ECOD',
+  },
+  {
+    pattern: 'https://proteopedia.org/wiki/index.php/{id}',
+    label: 'Proteopedia',
+  },
+];
 /*:: type Data = {
   loading: boolean,
   payload?: Object,
@@ -130,24 +152,25 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
             <div className={f('medium-3', 'columns')}>
               <div className={f('panel')}>
                 <h5>External Links</h5>
+                <p>
+                  View <code>{metadata.accession}</code> in:
+                </p>
                 <ul
                   className={f('no-bullet')}
                   data-testid="structure-external-links"
                 >
-                  <li>
-                    <PDBeLink
-                      id={metadata.accession || ''}
-                      className={f('ext')}
-                    >
-                      View {metadata.accession} in PDBe
-                    </PDBeLink>
-                    {
-                      // remove the PDB viewer as we already show info on page (duplication)
-                      // <pdb-prints size="36">
-                      // <pdb-data-loader pdbid={metadata.accession} />
-                      // </pdb-prints>
-                    }
-                  </li>
+                  {EXTERNAL_LINKS.map(({ label, pattern }) => (
+                    <li key={label}>
+                      <BaseLink
+                        id={metadata.accession}
+                        target="_blank"
+                        pattern={pattern}
+                        className={f('ext')}
+                      >
+                        {label}
+                      </BaseLink>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
