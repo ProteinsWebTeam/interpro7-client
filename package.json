@@ -112,6 +112,7 @@
     "nightingale-linegraph-track": "3.4.0",
     "nightingale-sunburst": "3.5.7",
     "pako": "2.0.4",
+    "papaparse": "5.3.2",
     "popper.js": "1.16.1",
     "postcss": "8.4.6",
     "prop-types": "15.7.2",
