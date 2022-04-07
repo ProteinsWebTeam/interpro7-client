@@ -33,7 +33,7 @@ const EXTERNAL_LINKS = [
       'http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode={id}',
     label: 'PDBsum',
   },
-  { pattern: 'https://www.cathdb.info/search?q={id}', label: 'CATH' },
+  { pattern: 'https://www.cathdb.info/pdb/{id}', label: 'CATH' },
   {
     pattern: 'http://scop.mrc-lmb.cam.ac.uk/search?t=txt;q={id}',
     label: 'SCOP',
@@ -152,9 +152,6 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
             <div className={f('medium-3', 'columns')}>
               <div className={f('panel')}>
                 <h5>External Links</h5>
-                <p>
-                  View <code>{metadata.accession}</code> in:
-                </p>
                 <ul
                   className={f('no-bullet')}
                   data-testid="structure-external-links"

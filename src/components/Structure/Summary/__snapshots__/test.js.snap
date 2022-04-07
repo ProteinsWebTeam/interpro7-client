@@ -107,13 +107,6 @@ exports[`<SummaryStructure /> should render 1`] = `
           <h5>
             External Links
           </h5>
-          <p>
-            View 
-            <code>
-              102m
-            </code>
-             in:
-          </p>
           <ul
             className="no-bullet"
             data-testid="structure-external-links"
@@ -152,7 +145,7 @@ exports[`<SummaryStructure /> should render 1`] = `
               <BaseLink
                 className="ext"
                 id="102m"
-                pattern="https://www.cathdb.info/search?q={id}"
+                pattern="https://www.cathdb.info/pdb/{id}"
                 target="_blank"
               >
                 CATH
