@@ -6,9 +6,14 @@
   border: 0; /*needed to remove foundation style*/
   margin-bottom: 2rem;
   display: flex;
-  align-items: stretch;
+  position: relative;
+  align-items: flex-end;
   flex-wrap: wrap;
   position: relative;
+  flex-direction: column;
+  min-width: 10rem;
+  border-right: 1px solid var(--colors-very-white);
+  margin-right: 0.5rem;
 
   &:hover > .fake-border {
     will-change: transform;
@@ -16,20 +21,54 @@
   &:before {
     display: none; /*remove foundation empty space defined by default on the before element*/
   }
+  & .collapse-bar {
+    width: 100%;
+    text-align: right;
+    padding-right: 1rem;
+    line-height: 0;
+    & > button {
+      border: 1px solid var(--colors-very-white);
+      color: var(--colors-ulightgray);
+      padding: 2px;
+      cursor: pointer;
+      transition: transform var(--timing-fast) ease-in-out;
+    }
+    & > button:hover {
+      color: var(--colors-slightgray);
+    }
+  }
+  &.onside {
+    border-right: 0;
+    margin-right: 0;
+    & .fake-border {
+      width: 100%;
+    }
+  }
+
+  &.collapsed {
+    min-width: 0;
+    & .collapse-bar {
+      & > button {
+        transform: rotate(180deg);
+      }
+    }
+    & .fake-border {
+      display: none;
+    }
+  }
 }
 
 .fake-border {
-  width: 100%;
+  width: calc(100% - 1rem);
   height: 3px;
   background-color: var(--colors-submain);
   position: absolute;
-  /* bottom: 0; */
   left: 0;
   transform-origin: left;
-  transform: translateX(0) scaleX(0);
   z-index: var(--z-index-deepest);
   pointer-events: none;
-  transition: background-color var(--timing-fast) ease-in-out;
+  transition: background-color var(--timing-fast) ease-in-out,
+    top var(--timing-fast) ease-in-out;
 
   &.menu-family {
     background-color: var(--colors-family-main);

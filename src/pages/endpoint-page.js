@@ -146,38 +146,37 @@ class Summary extends PureComponent {
           </>
         )}
 
-        <UnconnectedErrorBoundary customLocation={customLocation}>
-          <div className={f('row')}>
-            <div className={f('medium-12', 'large-12', 'columns')}>
+        <div className={f('row')}>
+          <div className={f('medium-12', 'large-12', 'columns')}>
+            <UnconnectedErrorBoundary customLocation={customLocation}>
               {loading ? <Loading /> : null}
               {!loading && (!payload || !payload.metadata) ? null : (
-                <>
-                  <Title metadata={payload.metadata} mainType={endpoint} />
-                  <ResizeObserverComponent
-                    measurements={['width', 'height']}
-                    className={f('entry-menu')}
-                  >
-                    {({ width, height }) => (
-                      <EntryMenu
-                        metadata={payload.metadata}
-                        width={width}
-                        height={height}
-                      />
-                    )}
-                  </ResizeObserverComponent>
-                </>
+                <Title metadata={payload.metadata} mainType={endpoint} />
               )}
-            </div>
+            </UnconnectedErrorBoundary>
           </div>
-        </UnconnectedErrorBoundary>
-        <UnconnectedErrorBoundary customLocation={customLocation}>
-          <Switch
-            {...this.props}
-            locationSelector={locationhasDetailOrFilter}
-            indexRoute={SummaryComponent}
-            childRoutes={subPagesForEndpoint}
-          />
-        </UnconnectedErrorBoundary>
+        </div>
+        <div className={f('row')}>
+          <div className={f('medium-12', 'large-12', 'columns')}>
+            <section className={f('menu-and-content')}>
+              <nav>
+                <UnconnectedErrorBoundary customLocation={customLocation}>
+                  <EntryMenu metadata={payload.metadata} />
+                </UnconnectedErrorBoundary>
+              </nav>
+              <section>
+                <UnconnectedErrorBoundary customLocation={customLocation}>
+                  <Switch
+                    {...this.props}
+                    locationSelector={locationhasDetailOrFilter}
+                    indexRoute={SummaryComponent}
+                    childRoutes={subPagesForEndpoint}
+                  />
+                </UnconnectedErrorBoundary>
+              </section>
+            </section>
+          </div>
+        </div>
       </>
     );
   }

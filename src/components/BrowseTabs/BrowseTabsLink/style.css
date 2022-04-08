@@ -1,4 +1,4 @@
-a.browse-tabs-link {
+body a.browse-tabs-link {
   &,
   &:visited {
     font-size: 0.9rem; /*same size as submenu*/
@@ -16,7 +16,7 @@ a.browse-tabs-link {
   }
 }
 
-a.is-active-tab {
+body a.is-active-tab {
   &,
   &:focus,
   &:hover,

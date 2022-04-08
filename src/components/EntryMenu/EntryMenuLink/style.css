@@ -1,11 +1,19 @@
+@import '../../../styles/timing.css';
+
+:root {
+  /*GAL*/
+  --menuitem-padding: 0.4rem;
+}
 body {
   & a.browse-tabs-link {
+    white-space: nowrap;
+
     &,
     &:focus,
     &:hover,
     &:visited {
       font-size: 0.9rem; /* same size as submenu */
-      padding: 1rem 0.5rem 0.7rem 0.5rem;
+      padding: var(--menuitem-padding, 0.4rem);
       color: black;
       line-height: inherit;
       background-color: transparent; /* keep! */
@@ -17,7 +25,7 @@ body {
 
         &::after {
           display: block;
-          padding-top: 1rem;
+          padding-top: var(--menuitem-padding);
           content: attr(data-content);
           position: absolute;
           top: 0;
@@ -48,6 +56,7 @@ body {
   & .used-on-the-side {
     &,
     & a.is-active-tab {
+      width: 100%;
       & .name {
         color: #ccc;
 
@@ -66,8 +75,20 @@ body {
     display: flex;
     align-items: stretch;
     margin-right: 0.5rem;
+    transition: all var(--timing-fast) ease-in-out;
   }
-
+  & .tabs-title.collapsed {
+    transform: rotate(-90deg);
+    transform-origin: right bottom;
+    position: absolute;
+    top: 1rem;
+    & a {
+      opacity: 0;
+    }
+    & a.is-active-tab {
+      opacity: 1;
+    }
+  }
   /* hide icons on main menu - show them only on sidemenu and revert color from black to white */
   & .icon-count-sm {
     display: none;
