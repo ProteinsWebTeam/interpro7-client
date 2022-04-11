@@ -129,22 +129,23 @@ export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
     );
     return (
       <div className={f('filters-panel')}>
-        <div data-testid="filters-panel">
-          <span>Filter By</span>
-          <span className={f('filter-buttons')}>
-            <button className={f('but-collapse')} onClick={this.clearAll}>
-              Clear
-            </button>
-            &nbsp;|&nbsp;
-            <button className={f('but-collapse')} onClick={this.toggleAll}>
-              {toCollapse ? 'Show All' : 'Collapse All'}
-              <span className={f('filter-title-arrow')}>
-                {toCollapse ? ' ▸' : ' ▾'}
-              </span>
-            </button>
-          </span>
-        </div>
-
+        <header>Filter By</header>
+        {children.length > 1 && (
+          <nav data-testid="filters-panel">
+            <span className={f('filter-buttons')}>
+              <button className={f('but-collapse')} onClick={this.clearAll}>
+                Clear
+              </button>
+              &nbsp;|&nbsp;
+              <button className={f('but-collapse')} onClick={this.toggleAll}>
+                {toCollapse ? 'Show All' : 'Collapse All'}
+                <span className={f('filter-title-arrow')}>
+                  {toCollapse ? ' ▸' : ' ▾'}
+                </span>
+              </button>
+            </span>
+          </nav>
+        )}
         <UnconnectedErrorBoundary customLocation={this.props.customLocation}>
           {children.map(
             (child, i) =>

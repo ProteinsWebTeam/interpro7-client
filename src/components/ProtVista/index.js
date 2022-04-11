@@ -299,9 +299,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           const isNewElement = !this.web_tracks[d.accession]._data;
           this.web_tracks[d.accession].data = tmp;
           if (this.props.fixedHighlight)
-            this.web_tracks[
-              d.accession
-            ].fixedHighlight = this.props.fixedHighlight;
+            this.web_tracks[d.accession].fixedHighlight =
+              this.props.fixedHighlight;
           this._setResiduesInState(children, d.accession);
           if (isNewElement) {
             this.web_tracks[d.accession].addEventListener(
@@ -825,9 +824,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                           displayend={length}
                                           id={`track_${entry.accession}`}
                                           ref={(e) =>
-                                            (this.web_tracks[
-                                              entry.accession
-                                            ] = e)
+                                            (this.web_tracks[entry.accession] =
+                                              e)
                                           }
                                           shape="roundRectangle"
                                           highlight-event="onmouseover"

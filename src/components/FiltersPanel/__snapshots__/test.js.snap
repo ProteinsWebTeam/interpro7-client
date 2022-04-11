@@ -4,35 +4,9 @@ exports[`<FiltersPanel /> should render 1`] = `
 <div
   className="filters-panel"
 >
-  <div
-    data-testid="filters-panel"
-  >
-    <span>
-      Filter By
-    </span>
-    <span
-      className="filter-buttons"
-    >
-      <button
-        className="but-collapse"
-        onClick={[Function]}
-      >
-        Clear
-      </button>
-       | 
-      <button
-        className="but-collapse"
-        onClick={[Function]}
-      >
-        Collapse All
-        <span
-          className="filter-title-arrow"
-        >
-           ▾
-        </span>
-      </button>
-    </span>
-  </div>
+  <header>
+    Filter By
+  </header>
   <UnconnectedErrorBoundary
     customLocation={
       Object {
