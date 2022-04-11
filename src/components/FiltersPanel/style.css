@@ -2,12 +2,22 @@
 @import '../../styles/colors.css';
 
 .filters-panel {
+  --left-gap: 0.7rem;
   display: flex;
   flex-direction: column;
   background: var(--colors-filter-background);
-  padding-left: 0.7rem;
-  padding-top: 0.2rem;
+  padding-left: var(--left-gap);
 
+  & > header {
+    width: calc(100% + var(--left-gap));
+    background-color: #d9e1e3;
+    font-weight: 600;
+    margin-left: calc(0px - var(--left-gap));
+    padding-left: var(--left-gap);
+  }
+  & > nav {
+    text-align: right;
+  }
   & label {
     line-height: normal;
     margin-top: 0.1em;
@@ -47,6 +57,9 @@
   font-size: 80%;
   outline: 0;
   cursor: pointer;
+}
+.filters-panel .list-curation label span:first-of-type {
+  overflow: hidden;
 }
 .filter-title-arrow {
   font-size: 150%;
