@@ -22,7 +22,10 @@ body {
       & > .name {
         display: inline-block;
         margin-right: 0.5ch;
-
+        & + span {
+          min-width: 3em;
+          text-align: right;
+        }
         &::after {
           display: block;
           padding-top: var(--menuitem-padding);
@@ -34,6 +37,9 @@ body {
           opacity: 0;
         }
       }
+    }
+    &.withuot-counter .name {
+      margin-right: 3rem;
     }
   }
 

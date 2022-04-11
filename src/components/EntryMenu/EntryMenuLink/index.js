@@ -60,7 +60,9 @@ export const EntryMenuLinkWithoutData = (
     <Link
       to={to}
       exact={exact}
-      className={f('browse-tabs-link')}
+      className={f('browse-tabs-link', {
+        'withuot-counter': value === null || isNaN(value),
+      })}
       activeClass={f('is-active', 'is-active-tab')}
     >
       <span data-content={name} className={f('name')}>

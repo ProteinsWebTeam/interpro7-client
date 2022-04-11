@@ -57,6 +57,11 @@
     }
   }
 }
+@media screen and (max-width: 39.9375em) {
+  .collapse-bar {
+    display: none;
+  }
+}
 
 .fake-border {
   width: calc(100% - 1rem);
