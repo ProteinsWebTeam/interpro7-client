@@ -24,10 +24,14 @@
   background-size: 100%;
 }
 
-.dark {
+blockquote.quote.dark {
   color: white;
   & a {
     color: skyblue;
     font-weight: bold;
   }
+}
+blockquote.quote {
+  color: #6a6a6a;
+  background: white;
 }

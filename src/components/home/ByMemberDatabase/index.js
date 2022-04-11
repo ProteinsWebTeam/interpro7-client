@@ -119,6 +119,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                       <span
                         className={f('small', 'icon', 'icon-common')}
                         data-icon="&#xf129;"
+                        role="definition"
                         aria-label={description}
                       />
                     </Tooltip>
@@ -126,9 +127,10 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                   {memberDbURL.get(canonical) && (
                     <Link href={memberDbURL.get(canonical)} target="_blank">
                       <span
+                        role="link"
                         className={f('small', 'icon', 'icon-common')}
                         data-icon="&#xf35d;"
-                        aria-label="link_to_external_site"
+                        aria-label="link to external site"
                       />
                     </Link>
                   )}

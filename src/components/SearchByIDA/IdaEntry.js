@@ -5,8 +5,8 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-// $FlowFixMe
 import Select from 'react-select';
+
 import getFetch from 'higherOrder/loadData/getFetch';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';

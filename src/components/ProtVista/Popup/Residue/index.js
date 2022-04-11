@@ -19,6 +19,7 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
     currentResidue.description = detail?.feature.locations[0].description;
   }
   const start = currentResidue?.start;
+  const end = currentResidue?.end;
   const description = currentResidue?.description || '';
   const residue = currentResidue?.residue || currentResidue?.residues || '';
   return (
@@ -36,7 +37,10 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
           {type && type !== 'residue' && type.replace('_', ' ')}
         </div>
         <ul>
-          <li>Position: {start}</li>
+          <li>
+            Position: {start}
+            {end && end !== start ? <>-{end}</> : null}
+          </li>
           <li>Residue: {residue}</li>
         </ul>
       </div>

@@ -146,7 +146,7 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
                 },
               }}
             >
-              <div aria-label="Search InterPro">
+              <div role="button" aria-label="Search InterPro">
                 <svg
                   width="2.2em"
                   height="2.2em"
@@ -211,7 +211,7 @@ export class Header extends PureComponent /*:: <HeaderProps> */ {
     return (
       <div
         id={ebiGlobalStyles.masthead}
-        className={styleBundle('masthead', { sign: isSignature })}
+        className={styleBundle('masthead', 'tmp-header', { sign: isSignature })}
         style={styleForHeader(false && supportsSticky, offset, shouldStuck)}
       >
         <div className={styleBundle('masthead-inner', 'row')}>

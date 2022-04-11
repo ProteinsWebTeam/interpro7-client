@@ -221,7 +221,11 @@ const mergeExtraFeatures = (data, extraFeatures) => {
   return data;
 };
 
-const orderByAccession = (a, b) => (a.accession > b.accession ? 1 : -1);
+const orderByAccession = (
+  a /*: {accession: string} */,
+  b /*: {accession: string} */,
+) => (a.accession > b.accession ? 1 : -1);
+
 const mergeResidues = (data, residues) => {
   const residuesWithEntryDetails = [];
   // prettier-ignore
@@ -233,6 +237,7 @@ const mergeResidues = (data, residues) => {
         matchedEntry.accession = `residue:${entry.accession}`;
         matchedEntry.residues = [residues[entry.accession]];
         residuesWithEntryDetails.push(matchedEntry);
+        residues[entry.accession].linked=true;
       }
 
       if (entry.children && entry.children.length)
@@ -242,24 +247,27 @@ const mergeResidues = (data, residues) => {
             matchedEntry.accession = `residue:${child.accession}`;
             matchedEntry.residues = [residues[child.accession]];
             residuesWithEntryDetails.push(matchedEntry);
+            residues[child.accession].linked=true;
           }
         });
     }),
   );
 
   // PIRSR doesn't have any entry integrated in InterPro
-  const pirsrResidues = [];
-  Object.keys(residues).forEach((entry) => {
-    if (entry.startsWith('PIRSR')) {
-      const residueEntry = { ...residues[entry] };
-      residueEntry.type = 'residue';
-      pirsrResidues.push(residueEntry);
-    }
-  });
-  pirsrResidues.sort(orderByAccession);
+  const unlinkedResidues = [];
 
-  residuesWithEntryDetails.push(...pirsrResidues);
+  // prettier-ignore
+  (Object.values(residues)/*: any */)
+    .filter(({ linked }/*: {linked?: boolean} */) => !linked)
+    .forEach((residue) => {
+      const residueEntry = { ...residue };
+      residueEntry.type = 'residue';
+      unlinkedResidues.push(residueEntry);
+    });
+  unlinkedResidues.sort(orderByAccession);
+
   data.residues = residuesWithEntryDetails;
+  data.other_residues = unlinkedResidues;
 };
 
 export const groupByEntryType = (interpro) => {
@@ -287,7 +295,13 @@ export const byEntryType = ([a], [b]) => {
     'ptm',
     'unintegrated',
   ];
-  const lasts = ['residues', 'features', 'predictions', 'match_conservation'];
+  const lasts = [
+    'other_residues',
+    'residues',
+    'features',
+    'predictions',
+    'match_conservation',
+  ];
   for (const label of firsts) {
     if (a.toLowerCase() === label) return -1;
     if (b.toLowerCase() === label) return 1;
@@ -495,13 +509,8 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 
   /* eslint-disable complexity  */
   render() {
-    const {
-      data,
-      mainData,
-      dataResidues,
-      dataFeatures,
-      dataGenome3d,
-    } = this.props;
+    const { data, mainData, dataResidues, dataFeatures, dataGenome3d } =
+      this.props;
 
     if (
       (!data || data.loading) &&

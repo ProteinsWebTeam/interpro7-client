@@ -162,11 +162,6 @@ export const GoLink = (
 GoLink.propTypes = types;
 GoLink.displayName = 'GoLink';
 
-export const PDBeLink = patternLinkWrapper(
-  'https://www.ebi.ac.uk/pdbe/entry/pdb/{id}',
-);
-PDBeLink.displayName = 'PDBeLink';
-
 export const PDBe3DLink = patternLinkWrapper(
   'https://www.ebi.ac.uk/pdbe/entry/view3D/{id}/' +
     '?view=entry_index&viewer=jmol&controls=codename_hero',

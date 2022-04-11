@@ -17,11 +17,11 @@ class LegacyModuleSplitPlugin {
 
   beforeAssetTagGeneration(data, callback) {
     this._code = [...this._code, ...data.assets.js];
-    data.assets.moduleScripts = this._code.filter((path) =>
-      path.includes('.module.')
+    data.assets.moduleScripts = Array.from(
+      new Set(this._code.filter((path) => path.includes('.module.')))
     );
-    data.assets.legacyScripts = this._code.filter((path) =>
-      path.includes('.legacy.')
+    data.assets.legacyScripts = Array.from(
+      new Set(this._code.filter((path) => path.includes('.legacy.')))
     );
     callback(null, data);
   }

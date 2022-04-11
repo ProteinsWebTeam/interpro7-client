@@ -141,16 +141,6 @@ exports[`External links <GoLink /> should render simple links 2`] = `
 </BaseLink>
 `;
 
-exports[`External links <PDBeLink /> should render simple links 1`] = `
-<BaseLink
-  id="101m"
-  pattern="https://www.ebi.ac.uk/pdbe/entry/pdb/{id}"
-  target="_blank"
->
-  101m
-</BaseLink>
-`;
-
 exports[`External links <PMCLink /> should render simple links 1`] = `
 <BaseLink
   id="12345"

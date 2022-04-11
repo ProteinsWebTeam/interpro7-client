@@ -26,10 +26,16 @@
       content="InterPro, interpro, InterProScan, protein, signatures, entry, family, sequence, database, proteins, entries, families, domain, domains, sites, repeats, sequences, annotation, signature, functional, analysis, databases, function, type, types, research, pathways, resource, match, download, GO, relationships, hierarchies, Go terms, sequence analysis, function prediction, Gene Ontology, protein family, protein families, sequence features, automatic annotation, annotation tools, InterPro2GO, UniProt, PROSITE, HAMAP, Pfam, PRINTS, ProDom, SMART, TIGRFAMs, PIRSF, SUPERFAMILY, Gene3D, CATH-Gene3D, CDD, SFLD, MobiDB,  PANTHER, ebi, EBI, bioinformatics, bioinformatic, europe, institute"
     />
 
+    <link rel="preconnect" href="https://www.ebi.ac.uk">
+    <link rel="preconnect" href="https://proteinswebteam.github.io">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://www.google-analytics.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
     <title><%= htmlWebpackPlugin.options.title %></title>
 
     <% for (const font of webpack.assets.map(({name}) => name).filter(name =>
-    name.endsWith('woff') && !name.includes('fontello'))) { %>
+    name.endsWith('woff2') && !name.includes('fontello'))) { %>
     <link
       rel="preload"
       as="font"
@@ -38,6 +44,39 @@
     />
     <% } %>
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .tmp-layout {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        background-color: white;
+        font-family: Arial, sans-serif;
+        font-weight: normal;
+      }
+      .tmp-layout h1 {
+        color: #f7f7f7;
+      }
+      .tmp-layout p {
+        line-height: 1.5;
+        color: #0a0a0a;
+      }
+      .tmp-ebi-header {
+        background-color: #373a36;
+        height: 37.289px;
+      }
+      .tmp-interpro-header {
+        background-image: linear-gradient(
+          to right,
+          rgba(0, 85, 158, 0.9),
+          rgba(45, 174, 193, 0.5),
+          rgba(0, 85, 158, 0.9)
+        );
+        height: 210.984px;
+      }
       .loading {
         margin: 100px auto;
         width: 200px;
@@ -113,11 +152,15 @@
         }
       </style>
     </noscript>
-    <% if (!htmlWebpackPlugin.options.inject) { %> <%=
-    htmlWebpackPlugin.faviconTags %> <% } %> <% for (const css of
-    htmlWebpackPlugin.files.css) { %>
-    <link rel="stylesheet" href="<%= css %>" />
-    <% } %>
+    <% if (!htmlWebpackPlugin.options.inject) { %> 
+      <%= htmlWebpackPlugin.faviconTags %> 
+    <% } %> 
+    <% for (const css of htmlWebpackPlugin.files.css) { 
+         if (css.indexOf(htmlWebpackPlugin.entry)!==-1 || (css.indexOf('.hydrate.')===-1 && css.indexOf('.index.')===-1)) { %>
+           <link rel="stylesheet" href="<%= css %>" />
+    <%   } 
+       }
+    %>
   </head>
   <body class="ebi-black-bar-loaded">
     <noscript>
@@ -127,54 +170,72 @@
       </p>
     </noscript>
     <div id="root">
-      <div class="loading">
-        <div></div>
-        <div></div>
-        <div></div>
+      <div class="tmp-layout">
+        <div class="tmp-ebi-header"></div>
+        <div class="tmp-interpro-header"><h1>InterPro</h1></div>
+        <p>Loading the InterPro website, please wait.</p>
+        <div class="loading">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     </div>
     <div id="modal-root"></div>
     <% if (!htmlWebpackPlugin.options.inject) { %> <% if (
-    htmlWebpackPlugin.files.moduleScripts &&
-    htmlWebpackPlugin.files.moduleScripts.length &&
-    htmlWebpackPlugin.files.legacyScripts &&
-    htmlWebpackPlugin.files.legacyScripts.length ) { %>
-    <script nomodule type="text/javascript">
-      // workaround for Safari 10.1 supporting module but ignoring nomodule
-      // From https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
-      (function () {
-        var d = document;
-        var c = d.createElement('script');
-        if (!('noModule' in c) && 'onbeforeload' in c) {
-          var s = false;
-          d.addEventListener(
-            'beforeload',
-            function (e) {
-              if (e.target === c) {
-                s = true;
-              } else if (!e.target.hasAttribute('nomodule') || !s) {
-                return;
-              }
-              e.preventDefault();
-            },
-            true
-          );
+      htmlWebpackPlugin.files.moduleScripts &&
+      htmlWebpackPlugin.files.moduleScripts.length &&
+      htmlWebpackPlugin.files.legacyScripts &&
+      htmlWebpackPlugin.files.legacyScripts.length ) { %>
+        <script nomodule type="text/javascript">
+          // workaround for Safari 10.1 supporting module but ignoring nomodule
+          // From https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
+          (function () {
+            var d = document;
+            var c = d.createElement('script');
+            if (!('noModule' in c) && 'onbeforeload' in c) {
+              var s = false;
+              d.addEventListener(
+                'beforeload',
+                function (e) {
+                  if (e.target === c) {
+                    s = true;
+                  } else if (!e.target.hasAttribute('nomodule') || !s) {
+                    return;
+                  }
+                  e.preventDefault();
+                },
+                true
+              );
 
-          c.type = 'module';
-          c.src = '.';
-          d.head.appendChild(c);
-          c.remove();
+              c.type = 'module';
+              c.src = '.';
+              d.head.appendChild(c);
+              c.remove();
+            }
+          })();
+        </script>
+      <% 
         }
-      })();
-    </script>
-    <% } %> <% for (const file of htmlWebpackPlugin.files.moduleScripts || []) {
-    %>
-    <script type="module" src="<%= file %>"></script>
-    <% } %> <% for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
-    %>
-    <script nomodule defer type="text/javascript" src="<%= file %>"></script>
-    <% } %>
-    <% } %>
+        // Adding js files for module entry point
+        for (const file of htmlWebpackPlugin.files.moduleScripts || []) {
+          if (file.indexOf(htmlWebpackPlugin.entry)!==-1){
+            %> <script async type="module" src="<%= file %>"></script> <%   
+          } 
+          if (file.indexOf('.hydrate.')===-1 && file.indexOf('.index.')===-1){
+            %> <script async type="module" src="<%= file %>"></script> <% 
+          } 
+        }
+        // Adding js files for legacy entry point
+        for (const file of htmlWebpackPlugin.files.legacyScripts || []) {
+          if (file.indexOf(htmlWebpackPlugin.entry)!==-1) {
+            %> <script nomodule defer type="text/javascript" src="<%= file %>"></script> <%   
+          }
+          if (file.indexOf('.hydrate.')===-1 && file.indexOf('.index.')===-1){
+            %> <script nomodule async src="<%= file %>"></script> <% 
+          } 
+        }
+      } %>
     <% if (!htmlWebpackPlugin.options.inject) { %>
       <script>
         function forceRefreshIfNotloaded(){

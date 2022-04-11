@@ -29,7 +29,7 @@ namespace AfConfidence {
     export const DefaultServerUrl = '';
 
     export function isApplicable(model?: Model): boolean {
-        return !!model && Model.isFromPdbArchive(model);
+        return !!model;// && Model.isFromPdbArchive(model);
     }
 
     export interface Info {

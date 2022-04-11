@@ -4,32 +4,40 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { schedule } from 'timing-functions';
 
-// Global stylesheets loaded here
-import 'styles/foundation';
-import 'ebi-framework/css/ebi-global.css';
-import 'styles/global.css';
-// import 'styles/theme-interpro.css';
-import 'styles/interpro-new.css';
-
 import loadable from 'higherOrder/loadable';
-
 import Overlay from 'components/Overlay';
-
 import Sentinel from 'components/Sentinel';
-import { EbiSkipToDiv } from 'components/EBIHeader';
-import EBIHeader from 'components/EBIHeader';
-import Header from 'components/Header';
+import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 import { schemaProcessInterProCitation } from 'schema_org/processors';
-
-import Pages from 'pages';
-
-import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 
 const NullComponent = () => null;
+
+const Pages = loadable({
+  loader: () =>
+    import(
+      /* webpackPreload: true */
+      /* webpackChunkName: "pages" */ 'pages'
+    ),
+});
+
+const EBIHeader = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
+  loading: () => <div className="tmp-ebi-header"></div>,
+});
+const Header = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "main-header" */ 'components/Header'),
+  loading: () => (
+    <div className="tmp-interpro-header">
+      <h1>InterPro</h1>
+    </div>
+  ),
+});
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -121,7 +129,6 @@ const Root = () => (
       <Overlay />
       <EMBLDropdownAsync />
       <SideMenuAsync />
-      <EbiSkipToDiv />
       <header>
         <EBIHeader />
         <Header stickyMenuOffset={STICKY_MENU_OFFSET} />

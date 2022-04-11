@@ -3,6 +3,7 @@ const path = require('path');
 
 const webpack = require('webpack');
 const url = require('url');
+const zlib = require('zlib');
 
 // Webpack plugins
 const HTMLWebpackPlugin = require('html-webpack-plugin');
@@ -51,18 +52,24 @@ const getHTMLWebpackPlugin = (mode) =>
     title: iprConfig.title || 'InterPro',
     template: path.join('.', 'src', 'index.template.html'),
     inject: mode === 'development',
-    templateParameters: (compilation, assets, assetTags, options) => ({
-      webpack: compilation.getStats().toJson(),
-      webpackConfig: compilation.options,
-      htmlWebpackPlugin: {
-        files: assets,
-        options: options,
-        faviconTags: assetTags.headTags.filter(
-          (tag) =>
-            tag && tag.meta && tag.meta.plugin === 'favicons-webpack-plugin'
-        ),
-      },
-    }),
+    filename: '[name].html',
+    templateParameters: (compilation, assets, assetTags, options) => {
+      // Leaving this here for easy debugging of the assets
+      // console.log('****assets****', assets);
+      return {
+        webpack: compilation.getStats().toJson(),
+        webpackConfig: compilation.options,
+        htmlWebpackPlugin: {
+          files: assets,
+          options: options,
+          entry: options.filename.replace('.html', ''),
+          faviconTags: assetTags.headTags.filter(
+            (tag) =>
+              tag && tag.meta && tag.meta.plugin === 'favicons-webpack-plugin'
+          ),
+        },
+      };
+    },
   });
 
 const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();
@@ -85,6 +92,9 @@ const getConfigFor = (env, mode, module = false) => {
 
   return {
     name,
+    entry: {
+      index: './src/index.js',
+    },
     mode,
     output: {
       publicPath,
@@ -93,6 +103,16 @@ const getConfigFor = (env, mode, module = false) => {
       globalObject: 'self',
       assetModuleFilename: getAssetModuleFilename,
     },
+    optimization:
+      mode === 'production'
+        ? {
+            splitChunks: {
+              // include all types of chunks
+              chunks: 'all',
+              minSize: 30 * 1024,
+            },
+          }
+        : undefined,
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
       extensions: ['.js', '.ts', '.json', '.worker.js'],
@@ -153,8 +173,14 @@ const getConfigFor = (env, mode, module = false) => {
                       useBuiltIns: 'usage',
                       corejs: 3,
                       targets: module
-                        ? { esmodules: true }
-                        : { browsers: '> 0.25%' },
+                        ? {
+                            esmodules: true,
+                          }
+                        : {
+                            esmodules: false,
+                            browsers:
+                              '> 0.1% and not last 2 versions, not dead',
+                          },
                     },
                   ],
                   ['@babel/react', { development: mode === 'development' }],
@@ -352,24 +378,6 @@ const getConfigFor = (env, mode, module = false) => {
             exclude: ['**/.*', '**/*.{map,br,gz}'],
           })
         : null,
-      //   TODO: Remove if workbox works wellfor a few releases.
-      //   This is the configuration of previous service worker plugin. Left here as reference in
-      //   ? new (require('offline-plugin'))({
-      //       caches: {
-      //         main: [
-      //           new RegExp(`js/[^/]*${name}[^/]*.js$`, 'i'),
-      //           new RegExp('css/[^/]+.css$', 'i'),
-      //         ],
-      //         additional: [/\.(worker\.js)$/i],
-      //         optional: [/\.(eot|ttf|woff|svg|ico|png|avif|jpe?g)$/i],
-      //       },
-      //       AppCache: false,
-      //       ServiceWorker: {
-      //         output: `sw.${name}.js`,
-      //         events: true,
-      //       },
-      //       safeToUseOptionalCaches: true,
-      //     })
 
       // Custom plugin to split codebase into legacy/modern bundles,
       // depends on HTMLWebpackPlugin
@@ -379,9 +387,7 @@ const getConfigFor = (env, mode, module = false) => {
         ? new (getCompressionPlugin())({
             filename: '[path][base].gz[query]',
             test: /\.(js|css|html|svg)$/i,
-            algorithm(buffer, options, callback) {
-              require('node-zopfli-es').gzip(buffer, options, callback);
-            },
+            algorithm: 'gzip',
           })
         : null,
       // Brotli compression
@@ -389,24 +395,16 @@ const getConfigFor = (env, mode, module = false) => {
         ? new (getCompressionPlugin())({
             filename: '[path][base].br[query]',
             test: /\.(js|css|html|svg)$/i,
-            algorithm(buffer, _, callback) {
-              require('iltorb').compress(
-                buffer,
-                {
-                  mode: 1, // text
-                  quality: 11, // goes from 1 (but quick) to 11 (but slow)
-                },
-                callback
-              );
+            algorithm: 'brotliCompress',
+            compressionOptions: {
+              params: {
+                [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+              },
             },
           })
         : null,
     ].filter(Boolean),
-    devtool: ((mode, env) => {
-      if (mode === 'development') return 'cheap-module-source-map';
-      if (env.staging) return 'source-map';
-      return false;
-    })(mode, env),
+    devtool: mode === 'development' ? 'cheap-module-source-map' : 'source-map',
   };
 };
 
@@ -472,6 +470,11 @@ module.exports = (
     // also, generate a bundle for legacy browsers
     const configLegacy = getConfigFor(env, mode);
     configLegacy.plugins = [htmlWebpackPlugin, ...configLegacy.plugins];
+
+    // generate the hydration entrypoint - disabled as it didn;t offer much improvement
+    // configModule.entry.hydrate = './src/index-hydrate.js';
+    // configLegacy.entry.hydrate = './src/index-hydrate.js';
+
     return [configLegacy, configModule];
   }
   // just generate for modern browsers

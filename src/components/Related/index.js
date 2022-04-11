@@ -328,8 +328,8 @@ const mapStateToPropsDefault = createSelector(
   (state) => state.customLocation.hash,
   ([focusType, filter], hash) => ({
     focusType,
-    hash,
     hasSecondary: filter && (!!filter.db || !!filter.integration),
+    hash,
   }),
 );
 

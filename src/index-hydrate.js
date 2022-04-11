@@ -2,4 +2,4 @@ import { main, handleError } from 'main';
 
 window.addEventListener('unhandledrejection', handleError);
 
-main().catch(handleError);
+main(true).catch(handleError);

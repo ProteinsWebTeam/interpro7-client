@@ -2,7 +2,7 @@
 
 exports[`<EBIHeader /> should render 1`] = `
 <header
-  className="clearfix masthead-black-bar"
+  className="clearfix masthead-black-bar tmp-ebi-header"
   id="masthead-black-bar"
 >
   <div>

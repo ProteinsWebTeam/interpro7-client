@@ -43,7 +43,7 @@ export class ByEntryType extends PureComponent /*:: <Props> */ {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then(m => m.InterproType),
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
 
@@ -81,6 +81,7 @@ export class ByEntryType extends PureComponent /*:: <Props> */ {
                 <interpro-type
                   type={type}
                   dimension="4em"
+                  role="listitem"
                   aria-label="Entry type"
                   style={{ display: 'block', paddingTop: '1rem' }}
                 >
@@ -147,7 +148,7 @@ export class ByEntryType extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToUrl = createSelector(
-  state => state.settings.api,
+  (state) => state.settings.api,
   ({ protocol, hostname, port, root }) =>
     format({
       protocol,

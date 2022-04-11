@@ -9,7 +9,6 @@ import { goToCustomLocation } from 'actions/creators';
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
 import searchStorage from 'storage/searchStorage';
 
-// $FlowFixMe
 import Select from 'react-select';
 
 import { foundationPartial } from 'styles/foundation';

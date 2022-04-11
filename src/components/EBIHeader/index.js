@@ -53,7 +53,7 @@ const EmblButton = connect(null, { toggleEMBLMapNav })(_EmblButton);
 export const EBIHeader = ({ visible = false } /*: {visible?: boolean} */) => (
   <header
     id="masthead-black-bar"
-    className={styleBundle('clearfix', 'masthead-black-bar')}
+    className={styleBundle('clearfix', 'masthead-black-bar', 'tmp-ebi-header')}
   >
     <div>
       <nav className={styleBundle('row')}>
@@ -124,16 +124,6 @@ EBIHeader.propTypes = {
   visible: T.bool,
 };
 
-// Skip to div
-export const EbiSkipToDiv = () => (
-  <div id="skip-to">
-    <ul>
-      <li>
-        <a href="#content">Skip to main content</a>
-      </li>
-    </ul>
-  </div>
-);
 const mapStateToProps = createSelector(emblMapNavSelector, (visible) => ({
   visible,
 }));

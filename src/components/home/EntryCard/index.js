@@ -98,7 +98,8 @@ export class EntryCard extends PureComponent /*:: <Props> */ {
                 <interpro-type
                   dimension="1.5em"
                   type={entry.metadata.type.replace('_', ' ')}
-                  aria-label="Entry type"
+                  role="link"
+                  aria-label={`Entry type ${entry.metadata.type}`}
                 >
                   {
                     // IE11 fallback for icons

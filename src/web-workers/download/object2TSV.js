@@ -1,9 +1,12 @@
 // @flow
 import { get } from 'lodash-es';
+import Papa from 'papaparse';
 
 const regTag = /&lt;\/?(p|ul|li)&gt;/gi;
-const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
-const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
+const regtax =
+  /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
+const reg =
+  /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
 
 export const decodeDescription = (
   description /*: Array<string> */,
@@ -14,18 +17,18 @@ export const decodeDescription = (
     .replace(regtax, '$1')
     .replace(reg, '$1')
     .replace('[]', '')
+    .replace(/[\n\r]/g, '\n')
     .replace('()', '');
 
-const mapToString = (
-  selector /*:: ?: string */,
-  serializer /*:: ?: function  */,
-) => (list /*: Array<mixed> */) =>
-  list
-    .map((item) => {
-      const value = selector ? get(item, selector) : item;
-      return serializer ? serializer(value) : value;
-    })
-    .join(';');
+const mapToString =
+  (selector /*:: ?: string */, serializer /*:: ?: function  */) =>
+  (list /*: Array<mixed> */) =>
+    list
+      .map((item) => {
+        const value = selector ? get(item, selector) : item;
+        return serializer ? serializer(value) : value;
+      })
+      .join(';');
 
 const locationsToString = (
   locations /*:: ?: Array<{fragments: Array<{start:number, end:number}>}>  */,
@@ -274,17 +277,26 @@ columns.entryProtein = [
   },
 ];
 
+const addQuotesIfNotANumber = (value /*: number | string */) => {
+  if (isNaN(Number(value))) {
+    return `"${String(value).replace(/"/g, '\\"')}"`;
+  }
+  return value;
+};
+
 export const object2TSV = (
   object /*: Object */,
   selectors /*: Array<{selector: string, serializer?: function}> */,
 ) => {
-  return selectors
-    .map(({ selector, serializer }) => {
-      const value = get(object, selector);
-      if (typeof serializer === 'function') {
-        return serializer(value);
-      }
-      return value;
-    })
-    .join('\t');
+  const arr = selectors.map(({ selector, serializer }) => {
+    const value = get(object, selector);
+    if (typeof serializer === 'function') {
+      return serializer(value);
+    }
+    return value;
+  });
+  const text = Papa.unparse([arr], {
+    delimiter: '\t',
+  });
+  return text;
 };

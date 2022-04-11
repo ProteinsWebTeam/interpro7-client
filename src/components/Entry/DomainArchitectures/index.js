@@ -143,7 +143,6 @@ TextIDA.propTypes = {
   matches: Array<Object>,
   highlight: Array<string>,
   databases: Object,
-  representative?: string
 }
 */
 export class IDAProtVista extends ProtVistaMatches {
@@ -151,7 +150,6 @@ export class IDAProtVista extends ProtVistaMatches {
     matches: T.arrayOf(T.object).isRequired,
     databases: T.object.isRequired,
     highlight: T.arrayOf(T.string),
-    representative: T.string,
   };
 
   updateTracksWithData(props /*: Props */) {
@@ -177,15 +175,9 @@ export class IDAProtVista extends ProtVistaMatches {
   }
 
   render() {
-    const {
-      matches,
-      length,
-      databases,
-      highlight = [],
-      representative,
-    } = this.props;
+    const { matches, length, databases, highlight = [] } = this.props;
     return (
-      <div>
+      <div className={f('ida-protvista')}>
         {matches.map((d, i) => (
           <div key={`${d.accession}-${i}`} className={f('track-row')}>
             <div
@@ -239,24 +231,7 @@ export class IDAProtVista extends ProtVistaMatches {
         ))}
         <div className={f('track-row')}>
           <div className={f('track-length')}>
-            <div className={f('note')}>
-              {representative && (
-                <>
-                  * Using protein{' '}
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'protein' },
-                        protein: { db: 'uniprot', accession: representative },
-                      },
-                    }}
-                  >
-                    {representative}
-                  </Link>{' '}
-                  as a reference
-                </>
-              )}
-            </div>
+            <div className={f('note')}></div>
             <div className={f('length')}>
               <NumberComponent noTitle>{length}</NumberComponent>
             </div>
@@ -369,6 +344,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
           {(payload.results || []).map((obj) => {
             const currentDB = (database || idaAccessionDB).toLowerCase();
             const idaObj = ida2json(obj.ida, obj.representative, currentDB);
+            const representativeAcc = obj?.representative?.accession;
             return (
               <div key={obj.ida_id} className={f('margin-bottom-large')}>
                 <SchemaOrgData data={obj} processData={schemaProcessData} />
@@ -390,7 +366,28 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                     {obj.unique_proteins}{' '}
                     {toPlural('protein', obj.unique_proteins)}{' '}
                   </Link>
-                  with this architecture:
+                  with this architecture
+                  {representativeAcc && (
+                    <>
+                      {' '}
+                      (represented by{' '}
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'protein' },
+                            protein: {
+                              db: 'uniprot',
+                              accession: representativeAcc,
+                            },
+                          },
+                        }}
+                      >
+                        {representativeAcc}
+                      </Link>
+                      )
+                    </>
+                  )}
+                  :
                 </div>
                 <TextIDA accessions={idaObj.accessions} />
                 <IDAProtVista
@@ -398,7 +395,6 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                   length={idaObj.length}
                   databases={dataDB.payload.databases}
                   highlight={toHighlight}
-                  representative={obj?.representative?.accession}
                 />
                 {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
               </div>
