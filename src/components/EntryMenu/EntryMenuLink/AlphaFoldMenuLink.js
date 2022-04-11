@@ -14,12 +14,13 @@ const AlphaFoldMenuLink = (
     exact,
     name,
     usedOnTheSide,
+    collapsed,
     data: { loading, payload },
-  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Array<Object>}} */,
+  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, collapsed: boolean, data: {loading: boolean, payload: Array<Object>}} */,
 ) => {
   if (Array.isArray(payload) && payload.length === 1) {
     const value = payload.length;
-    const attrs = { name, value, loading, to, exact, usedOnTheSide };
+    const attrs = { name, value, loading, to, exact, usedOnTheSide, collapsed };
     return <EntryMenuLinkWithoutData {...attrs} />;
   }
   return null;
