@@ -179,7 +179,7 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
                 className={styles.container}
                 ref={this._ref}
                 style={{ flex: '1' }}
-                width={width}
+                width={100 * Math.floor((width || 600) / 100)}
               />
             </div>
           )}
