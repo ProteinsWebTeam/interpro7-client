@@ -38,9 +38,10 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import localCSS from './style.css';
 
-const f = foundationPartial(ipro, localCSS, spinner);
+const f = foundationPartial(ipro, localCSS, spinner, fonts);
 
 const webComponents = [];
 
@@ -315,7 +316,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           );
         }
       }
-      this.setObjectValueInState('hideCategory', type[0], false);
+      this.setObjectValueInState(
+        'hideCategory',
+        type[0],
+        type[0] === 'other residues',
+      );
     }
   }
 
@@ -722,7 +727,16 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                       )
                                     }
                                   >
-                                    {hideCategory[type] ? '▸' : '▾'} {type}
+                                    <span
+                                      className={f(
+                                        'icon',
+                                        'icon-common',
+                                        hideCategory[type]
+                                          ? 'icon-caret-right'
+                                          : 'icon-caret-down',
+                                      )}
+                                    />{' '}
+                                    {type}
                                   </button>
                                 </header>
                               </div>
@@ -861,7 +875,14 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                             <button
                               onClick={() => this.handleConservationLoad(this)}
                             >
-                              ▸ Match Conservation
+                              <span
+                                className={f(
+                                  'icon',
+                                  'icon-common',
+                                  'icon-caret-right',
+                                )}
+                              />{' '}
+                              Match Conservation
                             </button>
                           </header>
                         </div>
