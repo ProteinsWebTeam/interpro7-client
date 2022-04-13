@@ -38,9 +38,10 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import localCSS from './style.css';
 
-const f = foundationPartial(ipro, localCSS, spinner);
+const f = foundationPartial(ipro, localCSS, spinner, fonts);
 
 const webComponents = [];
 
@@ -299,9 +300,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           const isNewElement = !this.web_tracks[d.accession]._data;
           this.web_tracks[d.accession].data = tmp;
           if (this.props.fixedHighlight)
-            this.web_tracks[
-              d.accession
-            ].fixedHighlight = this.props.fixedHighlight;
+            this.web_tracks[d.accession].fixedHighlight =
+              this.props.fixedHighlight;
           this._setResiduesInState(children, d.accession);
           if (isNewElement) {
             this.web_tracks[d.accession].addEventListener(
@@ -316,7 +316,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           );
         }
       }
-      this.setObjectValueInState('hideCategory', type[0], false);
+      this.setObjectValueInState(
+        'hideCategory',
+        type[0],
+        type[0] === 'other residues',
+      );
     }
   }
 
@@ -723,7 +727,16 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                       )
                                     }
                                   >
-                                    {hideCategory[type] ? '▸' : '▾'} {type}
+                                    <span
+                                      className={f(
+                                        'icon',
+                                        'icon-common',
+                                        hideCategory[type]
+                                          ? 'icon-caret-right'
+                                          : 'icon-caret-down',
+                                      )}
+                                    />{' '}
+                                    {type}
                                   </button>
                                 </header>
                               </div>
@@ -825,9 +838,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                           displayend={length}
                                           id={`track_${entry.accession}`}
                                           ref={(e) =>
-                                            (this.web_tracks[
-                                              entry.accession
-                                            ] = e)
+                                            (this.web_tracks[entry.accession] =
+                                              e)
                                           }
                                           shape="roundRectangle"
                                           highlight-event="onmouseover"
@@ -863,7 +875,14 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                             <button
                               onClick={() => this.handleConservationLoad(this)}
                             >
-                              ▸ Match Conservation
+                              <span
+                                className={f(
+                                  'icon',
+                                  'icon-common',
+                                  'icon-caret-right',
+                                )}
+                              />{' '}
+                              Match Conservation
                             </button>
                           </header>
                         </div>
