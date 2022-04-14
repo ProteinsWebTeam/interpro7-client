@@ -221,6 +221,11 @@ const mergeExtraFeatures = (data, extraFeatures) => {
   return data;
 };
 
+/**
+ * PIRSR residues associated with the same family can come from several models
+ * which accession correspond to the family followed by the model. e.g. PIRSR000001-1 and PIRSR000001-2
+ * This function groups those two model into a single residue with multiple locations.
+ */
 const mergePIRSFRResidues = (
   residues /*: {[string]: any} */,
 ) /*: {[string]: any} */ => {
@@ -228,15 +233,16 @@ const mergePIRSFRResidues = (
   Object.keys(residues).forEach((acc) => {
     if (acc.startsWith('PIRSR')) {
       const newAcc = acc.substring(0, 11);
-      if (newResidues[newAcc]?.locations) {
-        newResidues[newAcc].locations.push(...residues[acc].locations);
-      } else {
+
+      if (!newResidues[newAcc]) {
         newResidues[newAcc] = {
           ...residues[acc],
-          locations: [...residues[acc].locations],
+          accession: newAcc,
+          locations: [],
         };
-        newResidues[newAcc].accession = newAcc;
       }
+      residues[acc].locations.forEach((location) => (location.accession = acc));
+      newResidues[newAcc].locations.push(...residues[acc].locations);
     } else {
       newResidues[acc] = { ...residues[acc] };
     }
@@ -286,16 +292,19 @@ const mergeResidues = (data, residuesPayload) => {
       }),
   );
 
-  // PIRSR doesn't have any entry integrated in InterPro
   const unlinkedResidues = [];
 
   // prettier-ignore
   (Object.values(residues)/*: any */)
     .filter(({ linked }/*: {linked?: boolean} */) => !linked)
     .forEach((residue) => {
-      const residueEntry = { ...residue };
-      residueEntry.type = 'residue';
-      unlinkedResidues.push(residueEntry);
+      residue.locations.forEach((location, i) => {
+        const residueEntry = { ...residue };
+        residueEntry.accession = `${location.accession || residue.accession}.${i}`;
+        residueEntry.type = 'residue';
+        residueEntry.locations = [location];
+        unlinkedResidues.push(residueEntry);
+      });
     });
   unlinkedResidues.sort(orderByAccession);
 
