@@ -557,13 +557,17 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     return entry.residues.map((residue) =>
       residue.locations.map((r, i) => (
         <div
-          key={`res_${r.accession || i}`}
+          key={`res_${r.accession}_${i}`}
           className={f('track-accession-child', {
             hide: !expandedTrack[entry.accession],
           })}
         >
-          {entry.source_database === 'pirsr' ? (
-            <span>{entry.locations[0].description}</span>
+          {entry.source_database === 'pirsf' ? (
+            <span>
+              {r.description
+                ? r.description.charAt(0).toUpperCase() + r.description.slice(1)
+                : r.accession}
+            </span>
           ) : (
             <Link
               to={{
