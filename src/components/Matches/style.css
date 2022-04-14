@@ -66,7 +66,9 @@
 }
 
 .acc-row {
-  display: flex;
+  /* This seems to send the tick to the next row, and I don't see it been used anywere, un comment if it breaks something else*/
+  /* display: flex; */
+  margin-right: 0.5rem;
   font-size: 0.8rem;
 }
 
