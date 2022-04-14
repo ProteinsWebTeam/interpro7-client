@@ -467,7 +467,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     // const databases = dataDB.payload.databases;
     if (entry.source_database === 'mobidblt')
       return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
-    if (entry.source_database === 'pirsr')
+    if (entry.type === 'residue')
       return <span>{entry.locations[0].description}</span>;
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
@@ -562,30 +562,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             hide: !expandedTrack[entry.accession],
           })}
         >
-          {entry.source_database === 'pirsf' ? (
-            <span>
-              {r.description
-                ? r.description.charAt(0).toUpperCase() + r.description.slice(1)
-                : r.accession}
-            </span>
-          ) : (
-            <Link
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: {
-                    db: entry.source_database,
-                    accession: entry.accession.startsWith('residue:')
-                      ? entry.accession.split('residue:')[1]
-                      : entry.accession,
-                  },
-                },
-              }}
-            >
-              {r.accession ||
-                r.description.charAt(0).toUpperCase() + r.description.slice(1)}
-            </Link>
-          )}
+          <span>
+            {r.description
+              ? r.description.charAt(0).toUpperCase() + r.description.slice(1)
+              : r.accession}
+          </span>
         </div>
       )),
     );
