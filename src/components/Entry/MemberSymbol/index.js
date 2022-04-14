@@ -12,114 +12,106 @@ import styles from './style.css';
 const images = {
   cathgene3d: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/cathgene3d_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/cathgene3d_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/cathgene3d_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/cathgene3d_logo.png'
     ),
   ],
   cdd: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/cdd_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/cdd_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/cdd_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/cdd_logo.png'
     ),
   ],
   hamap: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/hamap_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/hamap_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/hamap_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/hamap_logo.png'
     ),
   ],
   panther: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/panther_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/panther_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/panther_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/panther_logo.png'
     ),
   ],
   pfam: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/pfam_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/pfam_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/pfam_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/pfam_logo.png'
     ),
   ],
   pirsf: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/pirsf_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/pirsf_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/pirsf_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/pirsf_logo.png'
     ),
   ],
   prints: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/prints_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/prints_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/prints_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/prints_logo.png'
     ),
   ],
   prosite: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/prosite_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/prosite_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/prosite_logo.png`
-    ),
-  ],
-  profile: [
-    import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/profile_logo.avif`
-    ),
-    import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/profile_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/prosite_logo.png'
     ),
   ],
   profile: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/profile_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/profile_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/profile_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/profile_logo.png'
     ),
   ],
   sfld: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/sfld_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/sfld_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/sfld_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/sfld_logo.png'
     ),
   ],
   smart: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/smart_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/smart_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/smart_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/smart_logo.png'
     ),
   ],
   ssf: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/ssf_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/ssf_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/ssf_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/ssf_logo.png'
     ),
   ],
   tigrfams: [
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/tigrfams_logo.avif`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/tigrfams_logo.avif'
     ),
     import(
-      /* webpackChunkName: "member-logos" */ `../../../images/member_databases/tigrfams_logo.png`
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/tigrfams_logo.png'
     ),
   ],
 };

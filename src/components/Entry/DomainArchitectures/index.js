@@ -231,7 +231,7 @@ export class IDAProtVista extends ProtVistaMatches {
         ))}
         <div className={f('track-row')}>
           <div className={f('track-length')}>
-            <div className={f('note')}></div>
+            <div className={f('note')} />
             <div className={f('length')}>
               <NumberComponent noTitle>{length}</NumberComponent>
             </div>

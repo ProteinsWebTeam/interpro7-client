@@ -237,7 +237,7 @@ const mergeResidues = (data, residues) => {
         matchedEntry.accession = `residue:${entry.accession}`;
         matchedEntry.residues = [residues[entry.accession]];
         residuesWithEntryDetails.push(matchedEntry);
-        residues[entry.accession].linked=true;
+        residues[entry.accession].linked = true;
       }
 
       if (entry.children && entry.children.length)
@@ -247,7 +247,7 @@ const mergeResidues = (data, residues) => {
             matchedEntry.accession = `residue:${child.accession}`;
             matchedEntry.residues = [residues[child.accession]];
             residuesWithEntryDetails.push(matchedEntry);
-            residues[child.accession].linked=true;
+            residues[child.accession].linked = true;
           }
         });
     }),
