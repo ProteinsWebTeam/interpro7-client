@@ -4,8 +4,9 @@ import { Tweenable } from 'shifty';
 
 const applyStyleToSelection = (selection, { opacity, y }) => {
   selection.forEach((element) => {
-    if (typeof opacity !== undefined) element.style.opacity = opacity;
-    if (typeof y !== undefined) element.style.transform = `translateY(${y}px)`;
+    if (typeof opacity !== 'undefined') element.style.opacity = opacity;
+    if (typeof y !== 'undefined')
+      element.style.transform = `translateY(${y}px)`;
   });
 };
 class InterProGraphicAnim extends PureComponent {

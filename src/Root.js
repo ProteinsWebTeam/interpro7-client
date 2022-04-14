@@ -27,7 +27,7 @@ const Pages = loadable({
 const EBIHeader = loadable({
   loader: () =>
     import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
-  loading: () => <div className="tmp-ebi-header"></div>,
+  loading: () => <div className="tmp-ebi-header" />,
 });
 const Header = loadable({
   loader: () =>
