@@ -5,7 +5,8 @@
 import { elementMatches as elementMatchesPolyfill } from 'utils/polyfills';
 
 import React from 'react';
-import { render, hydrate } from 'react-dom';
+// import { render, hydrate } from 'react-dom';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 
 import App from 'App';
 
@@ -36,6 +37,7 @@ export const main = async (shouldHydrate) => {
   await ready();
   // Root of the DOM to hook React to
   const DOM_ROOT = document.getElementById('root');
+  const root = createRoot(DOM_ROOT); // createRoot(container!) if you use TypeScript
 
   // Instantiates schema.org manager
   schemaOrgManager({
@@ -76,11 +78,11 @@ export const main = async (shouldHydrate) => {
   });
 
   if (shouldHydrate) {
-    console.log('Hydrate');
-    hydrate(<App />, DOM_ROOT);
+    console.log('Hydrate18');
+    hydrateRoot(DOM_ROOT, <App />);
   } else {
-    console.log('Render');
-    render(<App />, DOM_ROOT);
+    console.log('Render18');
+    root.render(<App />);
   }
 
   if (DEV) {
