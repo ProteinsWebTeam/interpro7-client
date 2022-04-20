@@ -5,7 +5,7 @@ window.addEventListener('unhandledrejection', handleError);
 main().catch(handleError);
 
 if (module.hot) {
-  module.hot.accept(function (err) {
-    console.log('An error occurred while accepting new version');
+  module.hot.accept((err) => {
+    console.log('An error occurred while accepting new version', err);
   });
 }
