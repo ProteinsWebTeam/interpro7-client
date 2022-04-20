@@ -28,7 +28,7 @@ module.exports = {
     });
     config.module.rules.push({
       test: /\.yml$/i,
-      use: [{ loader: 'json-loader' }, { loader: 'yaml-loader' }],
+      use: [{ loader: 'yaml-loader' }],
     });
     config.module.rules.push({
       test: /\.avif$/i,
