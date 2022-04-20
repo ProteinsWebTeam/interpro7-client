@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
@@ -299,9 +299,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           const isNewElement = !this.web_tracks[d.accession]._data;
           this.web_tracks[d.accession].data = tmp;
           if (this.props.fixedHighlight)
-            this.web_tracks[
-              d.accession
-            ].fixedHighlight = this.props.fixedHighlight;
+            this.web_tracks[d.accession].fixedHighlight =
+              this.props.fixedHighlight;
           this._setResiduesInState(children, d.accession);
           if (isNewElement) {
             this.web_tracks[d.accession].addEventListener(
@@ -348,7 +347,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               this.props?.dataDB?.payload?.databases,
             );
             if (this._popperContentRef.current) {
-              render(
+              const root = createRoot(this._popperContentRef.current);
+              root.render(
                 <ProtVistaPopup
                   detail={detail}
                   sourceDatabase={sourceDatabase}
@@ -357,7 +357,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   // Need to pass it from here because it rendered out of the redux provider
                   goToCustomLocation={this.props.goToCustomLocation}
                 />,
-                this._popperContentRef.current,
               );
             }
 
@@ -825,9 +824,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                           displayend={length}
                                           id={`track_${entry.accession}`}
                                           ref={(e) =>
-                                            (this.web_tracks[
-                                              entry.accession
-                                            ] = e)
+                                            (this.web_tracks[entry.accession] =
+                                              e)
                                           }
                                           shape="roundRectangle"
                                           highlight-event="onmouseover"

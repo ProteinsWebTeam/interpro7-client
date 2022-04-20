@@ -5,14 +5,11 @@
 import { elementMatches as elementMatchesPolyfill } from 'utils/polyfills';
 
 import React from 'react';
-// import { render, hydrate } from 'react-dom';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 
 import App from 'App';
 
 import ready from 'utils/ready';
-
-import hmr from 'index-hmr';
 
 import config, { DEV } from 'config';
 
@@ -83,11 +80,6 @@ export const main = async (shouldHydrate) => {
   } else {
     console.log('Render18');
     root.render(<App />);
-  }
-
-  if (DEV) {
-    // enables hot module reloading if needed
-    hmr(DOM_ROOT);
   }
 };
 
