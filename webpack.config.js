@@ -232,9 +232,6 @@ const getConfigFor = (env, mode, module = false) => {
           test: /\.yml$/i,
           use: [
             {
-              loader: 'json-loader',
-            },
-            {
               loader: 'yaml-loader',
             },
           ],
