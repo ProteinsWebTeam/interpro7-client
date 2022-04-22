@@ -44,7 +44,7 @@ export const EBI /*: Array<Object> */ = [
   },
 ];
 
-const getEntryForFilter = ({ main, entry }) => {
+const getEntryForFilter = ({ _main, entry }) => {
   if (entry.db) {
     return { db: entry.db, isFilter: true };
   }

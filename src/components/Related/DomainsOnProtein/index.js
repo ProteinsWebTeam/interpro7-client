@@ -261,9 +261,7 @@ const mergeResidues = (data, residuesPayload) => {
 
   // prettier-ignore
   (Object.values(data)/*: any */).forEach(
-    (
-      group /*: Array<{accession:string, residues: Array<Object>, children: any}> */,
-    ) =>
+    (group/*: Array<{accession:string, residues: Array<Object>, children: any}> */) =>
       group.forEach((entry) => {
         const resAccession = entry.accession.startsWith('PIRSF')
           ? `PIRSR${entry.accession.substring(5, 11)}`

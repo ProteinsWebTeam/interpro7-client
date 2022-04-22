@@ -3,7 +3,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { BaseLink, PMCLink, DOILink, GoLink, PDBeLink, UniProtLink } from '.';
+import { BaseLink, PMCLink, DOILink, GoLink, UniProtLink } from '.';
 
 const renderer = new ShallowRenderer();
 

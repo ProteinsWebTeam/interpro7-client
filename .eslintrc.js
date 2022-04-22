@@ -31,6 +31,7 @@ const env = {
   es6: true,
   es2021: true,
   jest: true,
+  node: true,
 };
 
 const rules = {

@@ -26,12 +26,12 @@ async function compress(input) {
   const brotli = createBrotliCompress();
   const source = createReadStream(input);
   const sourceBr = createReadStream(input);
-  const destinationGZ = createWriteStream(input + '.gz');
+  const destinationGZ = createWriteStream(`${input}.gz`);
   await pipe(source, gzip, destinationGZ);
-  console.log('GZIP:', input + '.gz');
-  const destinationBR = createWriteStream(input + '.br');
+  console.log('GZIP:', `${input}.gz`);
+  const destinationBR = createWriteStream(`${input}.br`);
   await pipe(sourceBr, brotli, destinationBR);
-  console.log('BROTLY:', input + '.br');
+  console.log('BROTLY:', `${input}.br`);
 }
 
 // const URL = process.env.URL || 'http://localhost:8888/interpro/loading/';
@@ -43,7 +43,8 @@ puppeteer
   .launch()
   .then(async (browser) => {
     const page = await browser.newPage();
-    let innerHTML, innerLoadingHTML;
+    let innerHTML;
+    let innerLoadingHTML;
     try {
       // Getting the innerHTML of the home page
       await Promise.all([page.waitForNavigation(), page.goto(URL)]);
@@ -97,7 +98,7 @@ puppeteer
         newIndexHTML,
         (err) => {
           if (err) throw err;
-          console.log(`New index.html created`);
+          console.log('New index.html created');
         }
       );
       compress(path.resolve('.', 'dist', 'index.html')).catch((err) => {
@@ -117,7 +118,7 @@ puppeteer
         newIndexLoadingHTML,
         (err) => {
           if (err) throw err;
-          console.log(`New index.loading.html created`);
+          console.log('New index.loading.html created');
         }
       );
       compress(path.resolve('.', 'dist', 'index.loading.html')).catch((err) => {
