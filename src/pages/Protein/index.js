@@ -41,8 +41,16 @@ import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
+import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 
-const f = foundationPartial(fonts, pageStyle, ebiStyles, ipro, exporterStyle);
+const f = foundationPartial(
+  fonts,
+  pageStyle,
+  ebiStyles,
+  ipro,
+  exporterStyle,
+  filtersAndTable,
+);
 
 import {
   schemaProcessDataTable,
@@ -305,16 +313,8 @@ class List extends PureComponent /*:: <ListProps> */ {
       };
     }
     return (
-      <div className={f('row')}>
-        <div
-          className={f(
-            'columns',
-            'small-12',
-            'medium-3',
-            'large-2',
-            'no-padding',
-          )}
-        >
+      <div className={f('row', 'filters-and-table')}>
+        <nav>
           <div className={f('browse-side-panel')} ref={this.filterPanel}>
             <div className={f('selector-container')}>
               <MemberDBSelector
@@ -329,8 +329,8 @@ class List extends PureComponent /*:: <ListProps> */ {
             element={this.filterPanel?.current}
             refresh={entryDB === null}
           />
-        </div>
-        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+        </nav>
+        <section>
           {databases && db && databases[db.toLowerCase()] && (
             <SchemaOrgData
               data={{
@@ -518,7 +518,7 @@ class List extends PureComponent /*:: <ListProps> */ {
               Length
             </Column>
           </Table>
-        </div>
+        </section>
       </div>
     );
   }
@@ -541,7 +541,8 @@ for (const subPage of config.pages.protein.subPages) {
   subPagesForProtein.set(subPage, subPages.get(subPage));
 }
 
-const childRoutesReg = /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
+const childRoutesReg =
+  /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
 
 const Protein = () => (
   <EndPointPage

@@ -91,6 +91,7 @@
 
 .filter-buttons {
   margin-left: 1rem;
+  white-space: nowrap;
 }
 
 hr {
@@ -135,4 +136,42 @@ hr {
 
 .stale {
   opacity: 0.5;
+}
+
+.radio-btn-label {
+  display: flex;
+  align-items: center;
+  padding: 0.05rem 0;
+  color: var(--colors-submain);
+  font-size: 1.25rem;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: all 0.25s linear;
+  &.checked {
+    font-weight: bold;
+    &::before {
+      border: 0.4rem solid var(--colors-submain);
+      background: var(--colors-submain);
+    }
+  }
+  & span:first-of-type {
+    padding-left: 0;
+    padding-right: 1em;
+    transition: padding 0.25s linear;
+  }
+}
+.radio-btn-label:not(.checked):hover span:first-of-type {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+.radio-btn-label::before {
+  display: inline-block;
+  content: '';
+  height: 0.8rem;
+  min-width: 0.8rem;
+  width: 0.8rem;
+  margin-right: 0.5rem;
+  border: 0.2rem solid var(--colors-submain);
+  border-radius: 50%;
+  transition: all 0.25s linear;
 }

@@ -159,7 +159,7 @@ class TaxonomyFilter extends PureComponent /*:: <Props> */ {
             onChange={this._handleSelection}
           />
         )}
-        <div className={f('column')}>
+        <div>
           {this.state.taxes.map(([taxId, { value: count, title }]) => (
             <TaxonomyOption
               key={taxId}

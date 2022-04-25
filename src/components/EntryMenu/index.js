@@ -21,8 +21,6 @@ import entryMenuLinkClasses from './EntryMenuLink/style.css';
 
 const f = foundationPartial(styles, fonts);
 
-const TRANSITION_DURATION = 500;
-
 const mapNameToClass = new Map([
   ['domain', 'menu-domain'],
   ['family', 'menu-family'],
@@ -82,9 +80,12 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
   }
 
   componentDidUpdate(_, prevState) {
-    if (this.state.isCollapsed !== prevState.isCollapsed)
-      setTimeout(() => this._moveFakeBorder(), 300);
-    else this._moveFakeBorder();
+    const DELAY = 300;
+    if (this.state.isCollapsed === prevState.isCollapsed) {
+      this._moveFakeBorder();
+    } else {
+      setTimeout(() => this._moveFakeBorder(), DELAY);
+    }
   }
 
   componentWillUnmount() {

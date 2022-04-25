@@ -35,6 +35,8 @@ import { foundationPartial } from 'styles/foundation';
 
 const f = foundationPartial(fonts);
 
+const DEFAULT_WIDTH = 600;
+
 export class Tree extends PureComponent /*:: <Props, State> */ {
   /* ::
     _ref: { current: null | React$ElementRef<'svg'> };
@@ -179,7 +181,7 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
                 className={styles.container}
                 ref={this._ref}
                 style={{ flex: '1' }}
-                width={100 * Math.floor((width || 600) / 100)}
+                width={100 * Math.floor((width || DEFAULT_WIDTH) / 100)}
               />
             </div>
           )}
@@ -188,7 +190,6 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
     );
   }
 }
-
 const mapStateToProps = createSelector(
   (state) => state.customLocation.search.search,
   (search) => ({ search }),

@@ -34,7 +34,9 @@ AlphaFoldMenuLink.propTypes = {
     loading: T.bool,
     payload: T.array,
   }),
+  collapsed: T.bool,
 };
+
 const getAlphaFoldURL = createSelector(
   (state) => state.settings.alphafold,
   (state) => state.customLocation.description.protein.accession,

@@ -102,6 +102,7 @@ EntryMenuLinkWithoutData.propTypes = {
   to: T.oneOfType([T.object, T.func]).isRequired,
   exact: T.bool,
   usedOnTheSide: T.bool,
+  collapsed: T.bool,
 };
 
 const hasAlignments = (name, db, annotations) => {
