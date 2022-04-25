@@ -109,7 +109,8 @@ const getConfigFor = (env, mode, module = false) => {
             splitChunks: {
               // include all types of chunks
               chunks: 'all',
-              minSize: 30 * 1024,
+              // eslint-disable-next-line no-magic-numbers
+              minSize: 30 * 1024, // 30Kb
             },
           }
         : undefined,
@@ -230,9 +231,6 @@ const getConfigFor = (env, mode, module = false) => {
         {
           test: /\.yml$/i,
           use: [
-            {
-              loader: 'json-loader',
-            },
             {
               loader: 'yaml-loader',
             },

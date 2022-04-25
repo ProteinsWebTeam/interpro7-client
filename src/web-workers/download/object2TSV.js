@@ -277,13 +277,6 @@ columns.entryProtein = [
   },
 ];
 
-const addQuotesIfNotANumber = (value /*: number | string */) => {
-  if (isNaN(Number(value))) {
-    return `"${String(value).replace(/"/g, '\\"')}"`;
-  }
-  return value;
-};
-
 export const object2TSV = (
   object /*: Object */,
   selectors /*: Array<{selector: string, serializer?: function}> */,

@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
@@ -347,7 +347,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               this.props?.dataDB?.payload?.databases,
             );
             if (this._popperContentRef.current) {
-              render(
+              const root = createRoot(this._popperContentRef.current);
+              root.render(
                 <ProtVistaPopup
                   detail={detail}
                   sourceDatabase={sourceDatabase}
@@ -356,7 +357,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   // Need to pass it from here because it rendered out of the redux provider
                   goToCustomLocation={this.props.goToCustomLocation}
                 />,
-                this._popperContentRef.current,
               );
             }
 
@@ -618,7 +618,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper__arrow')} />
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
-        <div id={`${this.state.optionsID}ProtvistaDiv`}>
+        <div>
           <div className={f('protvista')}>
             <protvista-manager
               attributes="length displaystart displayend highlight"
@@ -651,7 +651,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   )}
                 </div>
               </div>
-              <div ref={this._protvistaRef}>
+              <div
+                ref={this._protvistaRef}
+                id={`${this.state.optionsID}ProtvistaDiv`}
+              >
                 <div className={f('track-container')}>
                   <div className={f('track-row')}>
                     <div
