@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -10,7 +11,6 @@ import { InterPro } from 'menuConfig';
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-// import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import interproStyles from 'styles/interpro-new.css';
 import styles from './styles.css';
 
@@ -18,6 +18,54 @@ import dotsvg from 'images/icons/ico-more.svg';
 
 const f = foundationPartial(fonts, interproStyles, styles);
 
+const RECHECK_AFTER_MOUNT = 500; // ms
+const MAX_DELAY_BEFORE_CHECKING_FIT = 200; // ms
+
+const InterProMin = InterPro.filter((item) => item.name !== 'Settings');
+
+const MenuItemWithEntities = (
+  { to, activeClass, exact, name, entities, nested } /*: { 
+      to:{}, 
+      name: string, 
+      activeClass: string, 
+      exact:boolean, 
+      nested?:boolean, 
+      entities?: Array<{
+        to:{}, 
+        name: string, 
+        exact:boolean, 
+      }>  
+    } */,
+) =>
+  entities ? (
+    <div className={f('dropdown')}>
+      <MenuItem to={to} activeClass={activeClass} exact={exact}>
+        <span className={f('arrow')}>▾</span> {name}
+      </MenuItem>
+      <ul role="tree" tabIndex="0" className={f({ nested })}>
+        {entities.map(({ to, name, exact }) => (
+          <li key={name} className={f('menu-item')} role="treeitem">
+            <MenuItem to={to} activeClass={f('reactive')} exact={exact}>
+              {name}
+            </MenuItem>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ) : (
+    <MenuItem to={to} activeClass={activeClass} exact={exact}>
+      {name}
+    </MenuItem>
+  );
+
+MenuItemWithEntities.propTypes = {
+  to: T.object,
+  activeClass: T.string,
+  exact: T.bool,
+  name: T.string,
+  entities: T.arrayOf(T.object),
+  nested: T.bool,
+};
 /*:: type Props = {
   width: number,
 }; */
@@ -25,15 +73,12 @@ const f = foundationPartial(fonts, interproStyles, styles);
   [key: string]: boolean,
 }; */
 
-const RECHECK_AFTER_MOUNT = 500; // ms
-const MAX_DELAY_BEFORE_CHECKING_FIT = 200; // ms
-
-const InterProMin = InterPro.filter((item) => item.name !== 'Settings');
-
 class DynamicMenu extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     width: T.number.isRequired,
   };
+  /*:: _menuItems: Set<HTMLElement>; */
+  /*:: _dotdotdotRef: { current: null | React$ElementRef<'span'> }; */
 
   static defaultProps = {
     width: +Infinity,
@@ -47,9 +92,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
       this.state[name] = true;
     }
 
-    /*:: _menuItems: Set<HTMLElement>; */
     this._menuItems = new Set();
-    /*:: _dotdotdotRef: HTMLElement; */
     this._dotdotdotRef = React.createRef();
   }
 
@@ -65,7 +108,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
   _checkSizes = async (width /*: number */) => {
     await schedule(MAX_DELAY_BEFORE_CHECKING_FIT);
     let remainingWidth =
-      width - this._dotdotdotRef.current.getBoundingClientRect().width;
+      width - (this._dotdotdotRef.current?.getBoundingClientRect().width || 0);
     for (const menuItem of this._menuItems) {
       if (remainingWidth > 0) {
         const { width } = menuItem.getBoundingClientRect();
@@ -95,30 +138,13 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
             className={f('menu-item', { visible: this.state[name] || false })}
             data-testid={`menu-tab-${name.toLowerCase().replace(/\s+/g, '_')}`}
           >
-            {entities ? (
-              <div className={f('dropdown')}>
-                <MenuItem to={to} activeClass={activeClass} exact={exact}>
-                  <span className={f('arrow')}>▾</span> {name}
-                </MenuItem>
-                <ul role="tree" tabIndex="0">
-                  {entities.map(({ to, name, exact }) => (
-                    <li key={name} className={f('menu-item')} role="treeitem">
-                      <MenuItem
-                        to={to}
-                        activeClass={f('reactive')}
-                        exact={exact}
-                      >
-                        {name}
-                      </MenuItem>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <MenuItem to={to} activeClass={activeClass} exact={exact}>
-                {name}
-              </MenuItem>
-            )}
+            <MenuItemWithEntities
+              to={to}
+              activeClass={activeClass}
+              exact={exact}
+              name={name}
+              entities={entities}
+            />
           </li>
         ))}
         <ul
@@ -132,11 +158,16 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
             <img src={dotsvg} width="30px" alt="view all menu items" />
           </span>
 
-          {hiddenItems.map(({ to, name, activeClass, exact }) => (
+          {hiddenItems.map(({ to, name, activeClass, exact, entities }) => (
             <li key={name} className={f('menu-item')} role="treeitem">
-              <MenuItem to={to} activeClass={activeClass} exact={exact}>
-                {name}
-              </MenuItem>
+              <MenuItemWithEntities
+                to={to}
+                activeClass={activeClass}
+                exact={exact}
+                name={name}
+                entities={entities}
+                nested={true}
+              />
             </li>
           ))}
         </ul>
