@@ -20,7 +20,6 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import EntryMenu from 'components/EntryMenu';
 import RemovedEntrySummary from 'components/Entry/RemovedEntrySummary';
 import Title from 'components/Title';
-import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 import EdgeCase from 'components/EdgeCase';
 
 import {

@@ -47,6 +47,7 @@ import pageStyle from '../style.css';
 import { formatExperimentType } from 'components/Structure/utils';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import theme from 'styles/theme-interpro.css';
+import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 
 const f = foundationPartial(
   ebiGlobalStyles,
@@ -54,6 +55,7 @@ const f = foundationPartial(
   fonts,
   exporterStyle,
   theme,
+  filtersAndTable,
 );
 
 const SummaryAsync = loadable({
@@ -478,16 +480,8 @@ const List = (
   }
   const includeGrid = url;
   return (
-    <div className={f('row')}>
-      <div
-        className={f(
-          'columns',
-          'small-12',
-          'medium-3',
-          'large-2',
-          'no-padding',
-        )}
-      >
+    <div className={f('row', 'filters-and-table')}>
+      <nav>
         <div className={f('browse-side-panel')}>
           <div className={f('selector-container')}>
             <MemberDBSelector
@@ -498,9 +492,9 @@ const List = (
           <hr style={{ paddingTop: '0.5rem' }} />
           <StructureListFilters />
         </div>
-      </div>
+      </nav>
 
-      <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+      <section>
         {databases && db && databases[db.toLowerCase()] && (
           <SchemaOrgData
             data={{
@@ -684,7 +678,7 @@ const List = (
             Structure
           </Column>
         </Table>
-      </div>
+      </section>
     </div>
   );
 };

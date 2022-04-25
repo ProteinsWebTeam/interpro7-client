@@ -1,0 +1,18 @@
+/************************************ Entity pages ************************************/
+.filters-and-table {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.2rem;
+  & > section {
+    flex-grow: 2;
+  }
+}
+/* small screen only*/
+@media screen and (max-width: 39.9375em) {
+  .filters-and-table {
+    flex-wrap: wrap;
+    & > nav {
+      width: 97vw;
+    }
+  }
+}

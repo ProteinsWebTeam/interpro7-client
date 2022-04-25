@@ -137,17 +137,19 @@ class EntryTypeFilter extends PureComponent /*:: <Props> */ {
                   checked={checked}
                   style={{ margin: '0.25em' }}
                 />
-                {isAll(type) || db !== 'InterPro' ? (
-                  this._formatType(type)
-                ) : (
-                  <interpro-type
-                    type={type.replace('_', ' ')}
-                    expanded
-                    dimension="17px"
-                  >
-                    {type}
-                  </interpro-type>
-                )}
+                <span>
+                  {isAll(type) || db !== 'InterPro' ? (
+                    this._formatType(type)
+                  ) : (
+                    <interpro-type
+                      type={type.replace('_', ' ')}
+                      expanded
+                      dimension="17px"
+                    >
+                      {type}
+                    </interpro-type>
+                  )}
+                </span>
                 <NumberComponent
                   label
                   loading={loading}

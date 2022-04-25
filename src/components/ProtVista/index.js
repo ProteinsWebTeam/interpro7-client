@@ -608,7 +608,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper__arrow')} />
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
-        <div id={`${this.state.optionsID}ProtvistaDiv`}>
+        <div>
           <div className={f('protvista')}>
             <protvista-manager
               attributes="length displaystart displayend highlight"
@@ -641,7 +641,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   )}
                 </div>
               </div>
-              <div ref={this._protvistaRef}>
+              <div
+                ref={this._protvistaRef}
+                id={`${this.state.optionsID}ProtvistaDiv`}
+              >
                 <div className={f('track-container')}>
                   <div className={f('track-row')}>
                     <div

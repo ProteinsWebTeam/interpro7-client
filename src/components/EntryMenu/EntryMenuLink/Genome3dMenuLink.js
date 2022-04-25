@@ -32,6 +32,7 @@ Genome3dMenuLink.propTypes = {
     loading: T.bool,
     payload: T.object,
   }),
+  collapsed: T.bool,
 };
 const getGenome3dURL = createSelector(
   (state) => state.settings.genome3d,

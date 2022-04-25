@@ -96,9 +96,8 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
   async componentDidMount() {
     await loadWebComponent(() => ProtvistaSaver).as('protvista-saver');
 
-    const saver /*: null | React$ElementRef<typeof ProtvistaSaver> */ = document.querySelector(
-      `#${this.props.id}Saver`,
-    );
+    const saver /*: null | React$ElementRef<typeof ProtvistaSaver> */ =
+      document.querySelector(`#${this.props.id}Saver`);
 
     if (saver) {
       saver.preSave = () => {
@@ -123,7 +122,11 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
           });
 
           str = str + ebiGlobalCSS + globalCSS + fontCSS + colorsCSS;
-          style.innerHTML = `${str}`;
+          console.log(str);
+          style.innerHTML = `${str.replace(
+            'font-size: 12px;',
+            'font-size: 16px;',
+          )}`;
           base.appendChild(style);
         } else
           console.warn(

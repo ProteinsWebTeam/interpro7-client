@@ -86,7 +86,7 @@ class FragmentFilter extends PureComponent /*:: <Props> */ {
     const currentValue = (search.is_fragment || 'both').toLowerCase();
     return (
       <div className={f('list-curation', { stale: isStale })}>
-        <div className={f('column')}>
+        <div>
           {Object.entries(groups)
             .sort(([x], [y]) => {
               if (x === 'both') return -1;

@@ -55,6 +55,7 @@ import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import local from './style.css';
+import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 
 const f = foundationPartial(
   ebiGlobalStyles,
@@ -63,36 +64,39 @@ const f = foundationPartial(
   fonts,
   exporterStyle,
   local,
+  filtersAndTable,
 );
 
-const EntryAccessionsRenderer = (entryDB) => (taxId, _row, extra) => (
-  <File
-    fileType="accession"
-    name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
-    count={extra && extra.counters && extra.counters.entries}
-    customLocationDescription={{
-      main: { key: 'entry' },
-      entry: { db: entryDB || 'all' },
-      taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
-    }}
-  />
-);
+const EntryAccessionsRenderer = (entryDB) => (taxId, _row, extra) =>
+  (
+    <File
+      fileType="accession"
+      name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
+      count={extra && extra.counters && extra.counters.entries}
+      customLocationDescription={{
+        main: { key: 'entry' },
+        entry: { db: entryDB || 'all' },
+        taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
+      }}
+    />
+  );
 
-const ProteinFastasRenderer = (entryDB) => (taxId, _row, extra) => (
-  <File
-    fileType="fasta"
-    name={`protein-sequences${
-      entryDB ? `-matching-${entryDB}` : ''
-    }-for-${taxId}.fasta`}
-    count={extra && extra.counters && extra.counters.proteins}
-    customLocationDescription={{
-      main: { key: 'protein' },
-      protein: { db: 'UniProt' },
-      entry: { isFilter: true, db: entryDB || 'all' },
-      taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
-    }}
-  />
-);
+const ProteinFastasRenderer = (entryDB) => (taxId, _row, extra) =>
+  (
+    <File
+      fileType="fasta"
+      name={`protein-sequences${
+        entryDB ? `-matching-${entryDB}` : ''
+      }-for-${taxId}.fasta`}
+      count={extra && extra.counters && extra.counters.proteins}
+      customLocationDescription={{
+        main: { key: 'protein' },
+        protein: { db: 'UniProt' },
+        entry: { isFilter: true, db: entryDB || 'all' },
+        taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
+      }}
+    />
+  );
 
 const SummaryAsync = loadable({
   loader: () =>
@@ -508,16 +512,8 @@ class List extends PureComponent /*:: <Props,State> */ {
     //   );
     // }
     return (
-      <div className={f('row')}>
-        <div
-          className={f(
-            'columns',
-            'small-12',
-            'medium-3',
-            'large-2',
-            'no-padding',
-          )}
-        >
+      <div className={f('row', 'filters-and-table')}>
+        <nav>
           <div className={f('browse-side-panel')}>
             <div className={f('selector-container')}>
               <MemberDBSelector
@@ -527,8 +523,8 @@ class List extends PureComponent /*:: <Props,State> */ {
             </div>
             <hr style={{ paddingTop: '0.5rem' }} />
           </div>
-        </div>
-        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+        </nav>
+        <section>
           {databases && (
             <SchemaOrgData
               data={{
@@ -746,7 +742,7 @@ class List extends PureComponent /*:: <Props,State> */ {
               FASTA
             </Column>
           </Table>
-        </div>
+        </section>
       </div>
     );
   }
