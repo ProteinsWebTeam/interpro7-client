@@ -10,11 +10,15 @@ import T from 'prop-types';
 */
 
 const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
-  const { accession, type } = detail?.feature || {};
-  let { currentResidue } = detail?.feature;
+  const { type } = detail?.feature || {};
+  let { accession, currentResidue } = detail?.feature;
 
-  // PIRSR is not integrated as entry in InterPro
+  if (sourceDatabase === 'PIRSF') {
+    accession = accession.replace('PIRSF', 'PIRSR');
+  }
   if (sourceDatabase === 'PIRSR') {
+    accession = accession.replace(/\.\d+/, '');
+
     currentResidue = detail?.feature.locations[0].fragments[0];
     currentResidue.description = detail?.feature.locations[0].description;
   }

@@ -221,48 +221,88 @@ const mergeExtraFeatures = (data, extraFeatures) => {
   return data;
 };
 
+/**
+ * PIRSR residues associated with the same family can come from several models
+ * which accession correspond to the family followed by the model. e.g. PIRSR000001-1 and PIRSR000001-2
+ * This function groups those two model into a single residue with multiple locations.
+ */
+const mergePIRSFRResidues = (
+  residues /*: {[string]: any} */,
+) /*: {[string]: any} */ => {
+  const newResidues = {};
+  Object.keys(residues).forEach((acc) => {
+    if (acc.startsWith('PIRSR')) {
+      const newAcc = acc.substring(0, 11);
+
+      if (!newResidues[newAcc]) {
+        newResidues[newAcc] = {
+          ...residues[acc],
+          accession: newAcc,
+          locations: [],
+        };
+      }
+      residues[acc].locations.forEach((location) => (location.accession = acc));
+      newResidues[newAcc].locations.push(...residues[acc].locations);
+    } else {
+      newResidues[acc] = { ...residues[acc] };
+    }
+  });
+  return newResidues;
+};
+
 const orderByAccession = (
   a /*: {accession: string} */,
   b /*: {accession: string} */,
 ) => (a.accession > b.accession ? 1 : -1);
 
-const mergeResidues = (data, residues) => {
+const mergeResidues = (data, residuesPayload) => {
   const residuesWithEntryDetails = [];
+  const residues = mergePIRSFRResidues(residuesPayload);
+
   // prettier-ignore
   (Object.values(data)/*: any */).forEach(
     (group/*: Array<{accession:string, residues: Array<Object>, children: any}> */) =>
-    group.forEach((entry) => {
-      if (residues[entry.accession]) {
-        const matchedEntry = {...entry};
-        matchedEntry.accession = `residue:${entry.accession}`;
-        matchedEntry.residues = [residues[entry.accession]];
-        residuesWithEntryDetails.push(matchedEntry);
-        residues[entry.accession].linked = true;
-      }
+      group.forEach((entry) => {
+        const resAccession = entry.accession.startsWith('PIRSF')
+          ? `PIRSR${entry.accession.substring(5, 11)}`
+          : entry.accession;
+        if (residues[resAccession]) {
+          const matchedEntry = { ...entry };
+          matchedEntry.accession = `residue:${entry.accession}`;
+          matchedEntry.residues = [residues[resAccession]];
+          residuesWithEntryDetails.push(matchedEntry);
+          residues[resAccession].linked = true;
+        }
 
-      if (entry.children && entry.children.length)
-        entry.children.forEach((child) => {
-          if (residues[child.accession]) {
-            const matchedEntry = {...child};
-            matchedEntry.accession = `residue:${child.accession}`;
-            matchedEntry.residues = [residues[child.accession]];
-            residuesWithEntryDetails.push(matchedEntry);
-            residues[child.accession].linked = true;
-          }
-        });
-    }),
+        if (entry.children && entry.children.length)
+          entry.children.forEach((child) => {
+            const childResAccession = child.accession.startsWith('PIRSF')
+              ? `PIRSR${child.accession.substring(5, 11)}`
+              : child.accession;
+            if (residues[childResAccession]) {
+              const matchedEntry = { ...child };
+              matchedEntry.accession = `residue:${child.accession}`;
+              matchedEntry.residues = [residues[childResAccession]];
+              residuesWithEntryDetails.push(matchedEntry);
+              residues[childResAccession].linked = true;
+            }
+          });
+      }),
   );
 
-  // PIRSR doesn't have any entry integrated in InterPro
   const unlinkedResidues = [];
 
   // prettier-ignore
   (Object.values(residues)/*: any */)
     .filter(({ linked }/*: {linked?: boolean} */) => !linked)
     .forEach((residue) => {
-      const residueEntry = { ...residue };
-      residueEntry.type = 'residue';
-      unlinkedResidues.push(residueEntry);
+      residue.locations.forEach((location, i) => {
+        const residueEntry = { ...residue };
+        residueEntry.accession = `${location.accession || residue.accession}.${i}`;
+        residueEntry.type = 'residue';
+        residueEntry.locations = [location];
+        unlinkedResidues.push(residueEntry);
+      });
     });
   unlinkedResidues.sort(orderByAccession);
 

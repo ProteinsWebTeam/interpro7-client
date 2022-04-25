@@ -38,9 +38,10 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import localCSS from './style.css';
 
-const f = foundationPartial(ipro, localCSS, spinner);
+const f = foundationPartial(ipro, localCSS, spinner, fonts);
 
 const webComponents = [];
 
@@ -315,7 +316,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           );
         }
       }
-      this.setObjectValueInState('hideCategory', type[0], false);
+      this.setObjectValueInState(
+        'hideCategory',
+        type[0],
+        type[0] === 'other residues',
+      );
     }
   }
 
@@ -462,7 +467,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     // const databases = dataDB.payload.databases;
     if (entry.source_database === 'mobidblt')
       return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
-    if (entry.source_database === 'pirsr')
+    if (entry.type === 'residue')
       return <span>{entry.locations[0].description}</span>;
     if (
       NOT_MEMBER_DBS.has(entry.source_database) ||
@@ -552,31 +557,16 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     return entry.residues.map((residue) =>
       residue.locations.map((r, i) => (
         <div
-          key={`res_${r.accession || i}`}
+          key={`res_${r.accession}_${i}`}
           className={f('track-accession-child', {
             hide: !expandedTrack[entry.accession],
           })}
         >
-          {entry.source_database === 'pirsr' ? (
-            <span>{entry.locations[0].description}</span>
-          ) : (
-            <Link
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: {
-                    db: entry.source_database,
-                    accession: entry.accession.startsWith('residue:')
-                      ? entry.accession.split('residue:')[1]
-                      : entry.accession,
-                  },
-                },
-              }}
-            >
-              {r.accession ||
-                r.description.charAt(0).toUpperCase() + r.description.slice(1)}
-            </Link>
-          )}
+          <span>
+            {r.description
+              ? r.description.charAt(0).toUpperCase() + r.description.slice(1)
+              : r.accession}
+          </span>
         </div>
       )),
     );
@@ -725,7 +715,16 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                       )
                                     }
                                   >
-                                    {hideCategory[type] ? '▸' : '▾'} {type}
+                                    <span
+                                      className={f(
+                                        'icon',
+                                        'icon-common',
+                                        hideCategory[type]
+                                          ? 'icon-caret-right'
+                                          : 'icon-caret-down',
+                                      )}
+                                    />{' '}
+                                    {type}
                                   </button>
                                 </header>
                               </div>
@@ -864,7 +863,14 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                             <button
                               onClick={() => this.handleConservationLoad(this)}
                             >
-                              ▸ Match Conservation
+                              <span
+                                className={f(
+                                  'icon',
+                                  'icon-common',
+                                  'icon-caret-right',
+                                )}
+                              />{' '}
+                              Match Conservation
                             </button>
                           </header>
                         </div>
