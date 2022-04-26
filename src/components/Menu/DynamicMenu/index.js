@@ -24,17 +24,17 @@ const MAX_DELAY_BEFORE_CHECKING_FIT = 200; // ms
 const InterProMin = InterPro.filter((item) => item.name !== 'Settings');
 
 const MenuItemWithEntities = (
-  { to, activeClass, exact, name, entities, nested } /*: { 
+  { to, activeClass, exact, name, entities, nested } /*: {
       to: Object| function,
-      name: string,   
+      name: string,
       activeClass?: string | function,
-      exact:boolean, 
-      nested?:boolean, 
+      exact:boolean,
+      nested?:boolean,
       entities?: Array<{
-        to:{}, 
-        name: string, 
-        exact:boolean, 
-      }>  
+        to:{},
+        name: string,
+        exact:boolean,
+      }>
     } */,
 ) =>
   entities ? (
