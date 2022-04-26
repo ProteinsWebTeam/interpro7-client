@@ -25,9 +25,9 @@ const InterProMin = InterPro.filter((item) => item.name !== 'Settings');
 
 const MenuItemWithEntities = (
   { to, activeClass, exact, name, entities, nested } /*: { 
-      to:{}, 
-      name: string, 
-      activeClass: string, 
+      to: Object| function,
+      name: string,   
+      activeClass?: string | function,
       exact:boolean, 
       nested?:boolean, 
       entities?: Array<{
@@ -59,11 +59,11 @@ const MenuItemWithEntities = (
   );
 
 MenuItemWithEntities.propTypes = {
-  to: T.object,
-  activeClass: T.string,
   exact: T.bool,
   name: T.string,
   entities: T.arrayOf(T.object),
+  activeClass: T.oneOfType([T.string, T.func]),
+  to: T.oneOfType([T.object, T.func]),
   nested: T.bool,
 };
 /*:: type Props = {
