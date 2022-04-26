@@ -107,7 +107,7 @@
     "intersection-observer": "0.12.0",
     "isomorphic-fetch": "3.0.0",
     "lodash-es": "4.17.21",
-    "molstar": "3.7.0",
+    "molstar": "3.5.0",
     "nightingale-heatmap": "^3.2.11",
     "nightingale-linegraph-track": "3.4.0",
     "nightingale-sunburst": "3.5.7",
