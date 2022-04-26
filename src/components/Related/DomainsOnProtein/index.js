@@ -26,6 +26,9 @@ import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 const f = foundationPartial(ipro);
 
 const CONSERVATION_WINDOW = 25;
+const PIRSR_ACCESSION_LENGTH = 11;
+const PIRSF_PREFIX_LENGTH = 5;
+
 const ProtVista = loadable({
   loader: () =>
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
@@ -225,6 +228,8 @@ const mergeExtraFeatures = (data, extraFeatures) => {
  * PIRSR residues associated with the same family can come from several models
  * which accession correspond to the family followed by the model. e.g. PIRSR000001-1 and PIRSR000001-2
  * This function groups those two model into a single residue with multiple locations.
+ * @param {object} residues list of residues
+ * @returns {object} list of residues with the PIRSR ones grouped
  */
 const mergePIRSFRResidues = (
   residues /*: {[string]: any} */,
@@ -232,7 +237,7 @@ const mergePIRSFRResidues = (
   const newResidues = {};
   Object.keys(residues).forEach((acc) => {
     if (acc.startsWith('PIRSR')) {
-      const newAcc = acc.substring(0, 11);
+      const newAcc = acc.substring(0, PIRSR_ACCESSION_LENGTH);
 
       if (!newResidues[newAcc]) {
         newResidues[newAcc] = {
@@ -264,7 +269,7 @@ const mergeResidues = (data, residuesPayload) => {
     (group/*: Array<{accession:string, residues: Array<Object>, children: any}> */) =>
       group.forEach((entry) => {
         const resAccession = entry.accession.startsWith('PIRSF')
-          ? `PIRSR${entry.accession.substring(5, 11)}`
+          ? `PIRSR${entry.accession.substring(PIRSF_PREFIX_LENGTH, PIRSR_ACCESSION_LENGTH)}`
           : entry.accession;
         if (residues[resAccession]) {
           const matchedEntry = { ...entry };
@@ -277,7 +282,7 @@ const mergeResidues = (data, residuesPayload) => {
         if (entry.children && entry.children.length)
           entry.children.forEach((child) => {
             const childResAccession = child.accession.startsWith('PIRSF')
-              ? `PIRSR${child.accession.substring(5, 11)}`
+              ? `PIRSR${child.accession.substring(PIRSF_PREFIX_LENGTH, PIRSR_ACCESSION_LENGTH)}`
               : child.accession;
             if (residues[childResAccession]) {
               const matchedEntry = { ...child };

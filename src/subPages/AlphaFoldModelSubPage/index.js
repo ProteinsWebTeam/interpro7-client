@@ -101,6 +101,13 @@ const _AlphaFoldModel = ({
   modelUrl,
   data,
 }) => {
+  const [shouldResetViewer, setShouldResetViewer] = useState(false);
+  useEffect(() => {
+    if (shouldResetViewer) {
+      requestAnimationFrame(() => setShouldResetViewer(false));
+    }
+  }, [shouldResetViewer]);
+
   if (data?.loading) return <Loading />;
   if (!data.loading && Object.keys(data.payload).length !== 1) {
     return (
@@ -225,6 +232,12 @@ const _AlphaFoldModel = ({
                   />
                   &nbsp;mmCIF file
                 </Link>
+                <button
+                  className={f('icon', 'icon-common', 'control')}
+                  onClick={() => setShouldResetViewer(true)}
+                  data-icon="}"
+                  title="Reset image"
+                />
                 <FullScreenButton
                   className={f('icon', 'icon-common', 'control')}
                   tooltip="View the structure in full screen mode"
@@ -239,6 +252,7 @@ const _AlphaFoldModel = ({
               elementId={elementId}
               ext="mmcif"
               theme={'af'}
+              shouldResetViewer={shouldResetViewer}
             />
           </PictureInPicturePanel>
         </div>

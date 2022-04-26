@@ -82,6 +82,13 @@ div.dropdown {
     outline: none;
     margin: 0;
     z-index: var(--z-index-main-menu);
+
+    &.nested {
+      right: 2rem;
+      & .menu-item {
+        background: var(--colors-info);
+      }
+    }
   }
 
   & .menu-item {

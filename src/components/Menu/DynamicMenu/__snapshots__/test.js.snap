@@ -9,297 +9,172 @@ exports[`<DynamicMenu /> should render 1`] = `
     data-name="Home"
     data-testid="menu-tab-home"
   >
-    <Memo(Connect(MenuItem))
+    <MenuItemWithEntities
       exact={true}
+      name="Home"
       to={
         Object {
           "description": Object {},
         }
       }
-    >
-      Home
-    </Memo(Connect(MenuItem))>
+    />
   </li>
   <li
     className="menu-item visible"
     data-name="Search"
     data-testid="menu-tab-search"
   >
-    <div
-      className="dropdown"
-    >
-      <Memo(Connect(MenuItem))
-        to={
+    <MenuItemWithEntities
+      entities={
+        Array [
           Object {
-            "description": Object {
-              "main": Object {
-                "key": "search",
+            "activeClass": [Function],
+            "name": "By Sequence",
+            "to": Object {
+              "description": Object {
+                "main": Object {
+                  "key": "search",
+                },
+                "search": Object {
+                  "type": "sequence",
+                },
               },
             },
-          }
+          },
+          Object {
+            "activeClass": [Function],
+            "name": "By Text",
+            "to": Object {
+              "description": Object {
+                "main": Object {
+                  "key": "search",
+                },
+                "search": Object {
+                  "type": "text",
+                },
+              },
+            },
+          },
+          Object {
+            "activeClass": [Function],
+            "name": "By Domain Architecture",
+            "to": Object {
+              "description": Object {
+                "main": Object {
+                  "key": "search",
+                },
+                "search": Object {
+                  "type": "ida",
+                },
+              },
+            },
+          },
+        ]
+      }
+      name="Search"
+      to={
+        Object {
+          "description": Object {
+            "main": Object {
+              "key": "search",
+            },
+          },
         }
-      >
-        <span
-          className="arrow"
-        >
-          ▾
-        </span>
-         
-        Search
-      </Memo(Connect(MenuItem))>
-      <ul
-        role="tree"
-        tabIndex="0"
-      >
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "main": Object {
-                    "key": "search",
-                  },
-                  "search": Object {
-                    "type": "sequence",
-                  },
-                },
-              }
-            }
-          >
-            By Sequence
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "main": Object {
-                    "key": "search",
-                  },
-                  "search": Object {
-                    "type": "text",
-                  },
-                },
-              }
-            }
-          >
-            By Text
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "main": Object {
-                    "key": "search",
-                  },
-                  "search": Object {
-                    "type": "ida",
-                  },
-                },
-              }
-            }
-          >
-            By Domain Architecture
-          </Memo(Connect(MenuItem))>
-        </li>
-      </ul>
-    </div>
+      }
+    />
   </li>
   <li
     className="menu-item visible"
     data-name="Browse"
     data-testid="menu-tab-browse"
   >
-    <div
-      className="dropdown"
-    >
-      <Memo(Connect(MenuItem))
-        activeClass={[Function]}
-        to={[Function]}
-      >
-        <span
-          className="arrow"
-        >
-          ▾
-        </span>
-         
-        Browse
-      </Memo(Connect(MenuItem))>
-      <ul
-        role="tree"
-        tabIndex="0"
-      >
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={[Function]}
-          >
-            By InterPro
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={[Function]}
-          >
-            By Member DB
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={[Function]}
-          >
-            By Protein
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={[Function]}
-          >
-            By Structure
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={[Function]}
-          >
-            By Taxonomy
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={[Function]}
-          >
-            By Proteome
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={[Function]}
-          >
-            By Set
-          </Memo(Connect(MenuItem))>
-        </li>
-      </ul>
-    </div>
+    <MenuItemWithEntities
+      activeClass={[Function]}
+      entities={
+        Array [
+          Object {
+            "name": "By InterPro",
+            "to": [Function],
+          },
+          Object {
+            "name": "By Member DB",
+            "to": [Function],
+          },
+          Object {
+            "name": "By Protein",
+            "to": [Function],
+          },
+          Object {
+            "name": "By Structure",
+            "to": [Function],
+          },
+          Object {
+            "name": "By Taxonomy",
+            "to": [Function],
+          },
+          Object {
+            "name": "By Proteome",
+            "to": [Function],
+          },
+          Object {
+            "name": "By Set",
+            "to": [Function],
+          },
+        ]
+      }
+      name="Browse"
+      to={[Function]}
+    />
   </li>
   <li
     className="menu-item visible"
     data-name="Results"
     data-testid="menu-tab-results"
   >
-    <div
-      className="dropdown"
-    >
-      <Memo(Connect(MenuItem))
-        to={[Function]}
-      >
-        <span
-          className="arrow"
-        >
-          ▾
-        </span>
-         
-        Results
-      </Memo(Connect(MenuItem))>
-      <ul
-        role="tree"
-        tabIndex="0"
-      >
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "main": Object {
-                    "key": "result",
-                  },
-                  "result": Object {
-                    "type": "InterProScan",
-                  },
+    <MenuItemWithEntities
+      entities={
+        Array [
+          Object {
+            "activeClass": [Function],
+            "name": "Your InterProScan searches",
+            "to": Object {
+              "description": Object {
+                "main": Object {
+                  "key": "result",
                 },
-              }
-            }
-          >
-            Your InterProScan searches
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "main": Object {
-                    "key": "result",
-                  },
-                  "result": Object {
-                    "type": "download",
-                  },
+                "result": Object {
+                  "type": "InterProScan",
                 },
-              }
-            }
-          >
-            Your downloads
-          </Memo(Connect(MenuItem))>
-        </li>
-      </ul>
-    </div>
+              },
+            },
+          },
+          Object {
+            "activeClass": [Function],
+            "name": "Your downloads",
+            "to": Object {
+              "description": Object {
+                "main": Object {
+                  "key": "result",
+                },
+                "result": Object {
+                  "type": "download",
+                },
+              },
+            },
+          },
+        ]
+      }
+      name="Results"
+      to={[Function]}
+    />
   </li>
   <li
     className="menu-item visible"
     data-name="Release notes"
     data-testid="menu-tab-release_notes"
   >
-    <Memo(Connect(MenuItem))
+    <MenuItemWithEntities
+      name="Release notes"
       to={
         Object {
           "description": Object {
@@ -309,16 +184,15 @@ exports[`<DynamicMenu /> should render 1`] = `
           },
         }
       }
-    >
-      Release notes
-    </Memo(Connect(MenuItem))>
+    />
   </li>
   <li
     className="menu-item visible"
     data-name="Download"
     data-testid="menu-tab-download"
   >
-    <Memo(Connect(MenuItem))
+    <MenuItemWithEntities
+      name="Download"
       to={
         Object {
           "description": Object {
@@ -328,277 +202,171 @@ exports[`<DynamicMenu /> should render 1`] = `
           },
         }
       }
-    >
-      Download
-    </Memo(Connect(MenuItem))>
+    />
   </li>
   <li
     className="menu-item visible"
     data-name="Help"
     data-testid="menu-tab-help"
   >
-    <div
-      className="dropdown"
-    >
-      <Memo(Connect(MenuItem))
-        to={
+    <MenuItemWithEntities
+      entities={
+        Array [
           Object {
-            "description": Object {
-              "other": Array [
-                "help",
-              ],
+            "activeClass": "is-active",
+            "name": "Tutorials & Webinars",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "help",
+                  "tutorial",
+                ],
+              },
             },
-          }
+          },
+          Object {
+            "activeClass": "is-active",
+            "name": "Training",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "help",
+                  "training",
+                ],
+              },
+            },
+          },
+          Object {
+            "activeClass": "is-active",
+            "name": "FAQs",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "help",
+                  "faqs",
+                ],
+              },
+            },
+          },
+          Object {
+            "activeClass": "is-active",
+            "name": "Documentation",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "help",
+                  "documentation",
+                ],
+              },
+            },
+          },
+        ]
+      }
+      name="Help"
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "help",
+            ],
+          },
         }
-      >
-        <span
-          className="arrow"
-        >
-          ▾
-        </span>
-         
-        Help
-      </Memo(Connect(MenuItem))>
-      <ul
-        role="tree"
-        tabIndex="0"
-      >
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "help",
-                    "tutorial",
-                  ],
-                },
-              }
-            }
-          >
-            Tutorials & Webinars
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "help",
-                    "training",
-                  ],
-                },
-              }
-            }
-          >
-            Training
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "help",
-                    "faqs",
-                  ],
-                },
-              }
-            }
-          >
-            FAQs
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "help",
-                    "documentation",
-                  ],
-                },
-              }
-            }
-          >
-            Documentation
-          </Memo(Connect(MenuItem))>
-        </li>
-      </ul>
-    </div>
+      }
+    />
   </li>
   <li
     className="menu-item visible"
     data-name="About"
     data-testid="menu-tab-about"
   >
-    <div
-      className="dropdown"
-    >
-      <Memo(Connect(MenuItem))
-        to={
+    <MenuItemWithEntities
+      entities={
+        Array [
           Object {
-            "description": Object {
-              "other": Array [
-                "about",
-              ],
+            "activeClass": "is-active",
+            "name": "InterPro",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "about",
+                  "interpro",
+                ],
+              },
             },
-          }
+          },
+          Object {
+            "activeClass": "is-active",
+            "name": "InterProScan",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "about",
+                  "interproscan",
+                ],
+              },
+            },
+          },
+          Object {
+            "activeClass": "is-active",
+            "name": "The InterPro Consortium",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "about",
+                  "consortium",
+                ],
+              },
+            },
+          },
+          Object {
+            "activeClass": "is-active",
+            "name": "Funding",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "about",
+                  "funding",
+                ],
+              },
+            },
+          },
+          Object {
+            "activeClass": "is-active",
+            "name": "Privacy",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "about",
+                  "privacy",
+                ],
+              },
+            },
+          },
+          Object {
+            "activeClass": "is-active",
+            "name": "Team",
+            "to": Object {
+              "description": Object {
+                "other": Array [
+                  "about",
+                  "team",
+                ],
+              },
+            },
+          },
+        ]
+      }
+      name="About"
+      to={
+        Object {
+          "description": Object {
+            "other": Array [
+              "about",
+            ],
+          },
         }
-      >
-        <span
-          className="arrow"
-        >
-          ▾
-        </span>
-         
-        About
-      </Memo(Connect(MenuItem))>
-      <ul
-        role="tree"
-        tabIndex="0"
-      >
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "about",
-                    "interpro",
-                  ],
-                },
-              }
-            }
-          >
-            InterPro
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "about",
-                    "interproscan",
-                  ],
-                },
-              }
-            }
-          >
-            InterProScan
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "about",
-                    "consortium",
-                  ],
-                },
-              }
-            }
-          >
-            The InterPro Consortium
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "about",
-                    "funding",
-                  ],
-                },
-              }
-            }
-          >
-            Funding
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "about",
-                    "privacy",
-                  ],
-                },
-              }
-            }
-          >
-            Privacy
-          </Memo(Connect(MenuItem))>
-        </li>
-        <li
-          className="menu-item"
-          role="treeitem"
-        >
-          <Memo(Connect(MenuItem))
-            activeClass="reactive"
-            to={
-              Object {
-                "description": Object {
-                  "other": Array [
-                    "about",
-                    "team",
-                  ],
-                },
-              }
-            }
-          >
-            Team
-          </Memo(Connect(MenuItem))>
-        </li>
-      </ul>
-    </div>
+      }
+    />
   </li>
   <ul
     className="menu-item view-more"
