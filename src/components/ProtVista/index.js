@@ -163,13 +163,13 @@ export class ProtVista extends Component /*:: <Props, State> */ {
 
     this.state = {
       entryHovered: null,
-      // colorMode: EntryColorMode.DOMAIN_RELATIONSHIP,
       hideCategory: {},
       expandedTrack: {},
       collapsed: false,
       label: {
         accession: true,
         name: false,
+        short: false,
       },
       addLabelClass: '',
       enableTooltip: true,
@@ -445,14 +445,17 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       entry.source_database === 'interpro' && entry.type ? (
         <interpro-type type={entry.type.replace('_', ' ')} dimension="1em" />
       ) : null;
+    if (entry.accession.startsWith('residue:'))
+      return entry.accession.split('residue:')[1];
+    let text = label.short ? entry.short_name : '';
+    if (label.short && label.accession) text += ' - ';
+    if (label.accession) text += entry.accession;
+    if ((label.accession || label.short) && label.name) text += ': ';
+    if (label.name) text += entry.name;
     return (
       <>
         {type}
-        {label.accession && entry.accession.startsWith('residue:')
-          ? entry.accession.split('residue:')[1]
-          : entry.accession}
-        {label.accession && label.name && ': '}
-        {label.name && entry.name}
+        {text}
       </>
     );
   }

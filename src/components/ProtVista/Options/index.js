@@ -86,6 +86,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
       label: {
         accession: true,
         name: false,
+        short: false,
       },
       collapsed: false,
       enableTooltip: true,
@@ -173,7 +174,11 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
   updateLabel = (evt) => {
     const newLabelState = { ...this.state.label };
     newLabelState[evt.target.value] = !newLabelState[evt.target.value];
-    if (!newLabelState.accession && !newLabelState.name) {
+    if (
+      !newLabelState.accession &&
+      !newLabelState.name &&
+      !newLabelState.short
+    ) {
       newLabelState.accession = true;
     }
     this.setState({
@@ -309,6 +314,17 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
                           checked={this.state.label.name}
                         />{' '}
                         Name
+                      </label>
+                    </li>
+                    <li key={'shortname'}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          onChange={this.updateLabel}
+                          value={'short'}
+                          checked={this.state.label.short}
+                        />{' '}
+                        Short Name
                       </label>
                     </li>
                   </ul>
