@@ -102,6 +102,11 @@ const loadProtVistaWebComponents = () => {
   data: Array<Object>,
   dataDB: Object,
   colorDomainsBy: ColorMode,
+  label: {
+    accession: boolean,
+    name: boolean,
+    short: boolean,
+  },
   fetchConservation: function,
   title: string,
   fixedHighlight: string,
@@ -119,8 +124,6 @@ const loadProtVistaWebComponents = () => {
   hideCategory: Object,
   expandedTrack: Object,
   collapsed: boolean,
-  label: Object,
-  addLabelClass: string,
   enableTooltip: boolean,
   showLoading: boolean,
   overPopup: boolean,
@@ -145,6 +148,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     data: T.array,
     dataDB: T.object,
     colorDomainsBy: T.string,
+    label: T.shape({
+      accession: T.bool,
+      name: T.bool,
+      short: T.bool,
+    }),
     title: T.string,
     fixedHighlight: T.string,
     id: T.string,
@@ -426,12 +434,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     }
   };
 
-  updateLabel = (newLabelState) =>
-    this.setState({
-      label: newLabelState,
-      addLabelClass: newLabelState.name ? 'label-by-name' : '',
-    });
-
   updateTracksCollapseStatus = (expandedTrack) =>
     this.setState({ expandedTrack });
 
@@ -519,7 +521,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             },
           }}
         >
-          {this.renderSwitch(this.state.label, entry)}
+          {this.renderSwitch(this.props.label, entry)}
         </Link>
         <div
           className={f({
@@ -544,7 +546,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                     },
                   }}
                 >
-                  {this.renderSwitch(this.state.label, d)}
+                  {this.renderSwitch(this.props.label, d)}
                 </Link>
                 {this.renderResidueLabels(d)}
               </div>
@@ -596,12 +598,14 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       showConservationButton,
       children,
       showOptions = true,
+      label,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
 
     const { hideCategory } = this.state;
 
+    const labelClass = label.name ? 'label-by-name' : '';
     return (
       <div
         ref={this._mainRef}
@@ -622,7 +626,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   className={f(
                     'aligned-to-track-component',
                     'view-options-wrap',
-                    `${this.state.addLabelClass}`,
+                    `${labelClass}`,
                   )}
                 >
                   {showOptions && (
@@ -633,7 +637,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                       webTracks={this.web_tracks}
                       expandedTrack={this.state.expandedTrack}
                       getParentElem={this.getProtvistaRefs}
-                      updateLabel={this.updateLabel}
                       updateTracksCollapseStatus={
                         this.updateTracksCollapseStatus
                       }
@@ -653,7 +656,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                     <div
                       className={f(
                         'aligned-to-track-component',
-                        `${this.state.addLabelClass}`,
+                        `${labelClass}`,
                       )}
                     >
                       <protvista-navigation
@@ -667,7 +670,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                     <div
                       className={f(
                         'aligned-to-track-component',
-                        `${this.state.addLabelClass}`,
+                        `${labelClass}`,
                       )}
                     >
                       <protvista-sequence
@@ -704,7 +707,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                               <div
                                 className={f(
                                   'track-component',
-                                  `${this.state.addLabelClass}`,
+                                  `${labelClass}`,
                                 )}
                                 style={{ borderBottom: 0 }}
                               >
@@ -757,7 +760,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         className={f(
                                           'track-component',
                                           entry.type.replace('_', '-'),
-                                          `${this.state.addLabelClass}`,
+                                          `${labelClass}`,
                                         )}
                                       >
                                         {entry.type ===
@@ -820,7 +823,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                       <div
                                         className={f(
                                           'track-component',
-                                          `${this.state.addLabelClass}`,
+                                          `${labelClass}`,
                                         )}
                                       >
                                         <protvista-interpro-track
@@ -842,7 +845,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     <div
                                       className={f(
                                         'track-accession',
-                                        `${this.state.addLabelClass}`,
+                                        `${labelClass}`,
                                       )}
                                     >
                                       {this.renderLabels(entry)}
@@ -856,12 +859,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   {showConservationButton ? (
                     <div className={f('track-container')}>
                       <div className={f('track-row')}>
-                        <div
-                          className={f(
-                            'track-component',
-                            this.state.addLabelClass,
-                          )}
-                        >
+                        <div className={f('track-component', labelClass)}>
                           <header>
                             <button
                               onClick={() => this.handleConservationLoad(this)}
@@ -884,7 +882,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                             className={f(
                               'track-component',
                               'conservation-placeholder-component',
-                              this.state.addLabelClass,
+                              labelClass,
                             )}
                             ref={this._conservationTrackRef}
                           >
@@ -899,12 +897,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                               </div>
                             ) : null}
                           </div>
-                          <div
-                            className={f(
-                              'track-accession',
-                              this.state.addLabelClass,
-                            )}
-                          >
+                          <div className={f('track-accession', labelClass)}>
                             <button
                               type="button"
                               className={f(
@@ -937,6 +930,7 @@ const mapStateToProps = createSelector(
   (customLocation, ui) => ({
     customLocation,
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
+    label: ui.labelContent,
   }),
 );
 

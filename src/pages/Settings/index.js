@@ -265,10 +265,10 @@ const UISettings = (
   {
     ui: { lowGraphics, colorDomainsBy, labelContent, structureViewer },
     changeSettingsRaw,
-  } /*: 
+  } /*:
   { ui: {
-      lowGraphics: boolean, 
-      colorDomainsBy: string, 
+      lowGraphics: boolean,
+      colorDomainsBy: string,
       labelContent: {
         accession: boolean,
         name: boolean,
