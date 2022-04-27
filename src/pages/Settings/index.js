@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent, useState } from 'react';
+import React, { PureComponent, useState, useEffect } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -18,7 +18,12 @@ import { installPrompt } from 'main';
 
 import loadable from 'higherOrder/loadable';
 
-import { changeSettings, resetSettings, addToast } from 'actions/creators';
+import {
+  changeSettings,
+  changeSettingsRaw,
+  resetSettings,
+  addToast,
+} from 'actions/creators';
 import { askNotificationPermission } from 'utils/browser-notifications';
 
 import { EntryColorMode } from 'utils/entry-color';
@@ -46,7 +51,7 @@ const Advanced = loadable({
 const NavigationSettings = (
   {
     navigation: { pageSize, secondsToRetry },
-  } /*: {navigation: {pageSize: number, secondsToRetry: number}, handleChange: function} */,
+  } /*: {navigation: {pageSize: number, secondsToRetry: number}} */,
 ) => (
   <form data-category="navigation">
     <h4>Navigation settings</h4>
@@ -108,7 +113,6 @@ NavigationSettings.propTypes = {
     pageSize: T.number.isRequired,
     secondsToRetry: T.number.isRequired,
   }).isRequired,
-  handleChange: T.func.isRequired,
 };
 
 const NotificationSettings = (
@@ -259,82 +263,172 @@ NotificationSettings.propTypes = {
 
 const UISettings = (
   {
-    ui: { lowGraphics, colorDomainsBy, structureViewer },
-  } /*: {ui: {lowGraphics: boolean, colorDomainsBy: string, structureViewer: boolean}} */,
-) => (
-  <form data-category="ui">
-    <h4>UI settings</h4>
-    <SchemaOrgData
-      data={{
-        name: 'UI settings',
-        description: 'User Interface options',
-      }}
-      processData={schemaProcessDataPageSection}
-    />
-    <div className={f('row')}>
-      <div className={f('medium-12', 'column')}>
-        <p>Low graphics mode:</p>
-        <p>
-          <small>Recommended for low-end devices</small>
-        </p>
-        <ToggleSwitch
-          switchCond={lowGraphics}
-          name={'lowGraphics'}
-          id={'lowGraphics-input'}
-          SRLabel={'Low graphics mode'}
-        />
+    ui: { lowGraphics, colorDomainsBy, labelContent, structureViewer },
+    changeSettingsRaw,
+  } /*: 
+  { ui: {
+      lowGraphics: boolean, 
+      colorDomainsBy: string, 
+      labelContent: {
+        accession: boolean,
+        name: boolean,
+        short: boolean,
+      },
+      structureViewer: boolean
+    },
+    changeSettingsRaw: function,
+  } */,
+) => {
+  // Making sure there is a least 1 value for label Content
+  useEffect(() => {
+    const { accession, name, short } = labelContent;
+    if (!accession && !name && !short) {
+      changeSettingsRaw('ui', 'labelContent', {
+        accession: true,
+        name,
+        short,
+      });
+    }
+  }, [labelContent]);
+  return (
+    <form data-category="ui">
+      <h4>UI settings</h4>
+      <SchemaOrgData
+        data={{
+          name: 'UI settings',
+          description: 'User Interface options',
+        }}
+        processData={schemaProcessDataPageSection}
+      />
+      <div className={f('row')}>
+        <div className={f('medium-12', 'column')}>
+          <header>Low graphics mode:</header>
+          <p>
+            <small>Recommended for low-end devices</small>
+          </p>
+          <ToggleSwitch
+            switchCond={lowGraphics}
+            name={'lowGraphics'}
+            id={'lowGraphics-input'}
+            SRLabel={'Low graphics mode'}
+          />
+        </div>
       </div>
-    </div>
-    <div className={f('row')}>
-      <div className={f('medium-12', 'column')}>
-        <p>Colour Domains:</p>
-        <p>
-          <small>Selection mode to colour by</small>
-        </p>
-        <select
-          className={f('select-inline')}
-          value={colorDomainsBy}
-          name="colorDomainsBy"
-          onChange={noop}
-          onBlur={noop}
-        >
-          <option value={EntryColorMode.ACCESSION}>Accession</option>
-          <option value={EntryColorMode.MEMBER_DB}>Member Database</option>
-          <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
-            Domain Relationship
-          </option>
-        </select>
+      <div className={f('row')}>
+        <div className={f('medium-12', 'column')}>
+          <header>Colour Domains:</header>
+          <p>
+            <small>Selection mode to colour by in the feature viewer</small>
+          </p>
+          <select
+            className={f('select-inline')}
+            value={colorDomainsBy}
+            name="colorDomainsBy"
+            onChange={noop}
+            onBlur={noop}
+          >
+            <option value={EntryColorMode.ACCESSION}>Accession</option>
+            <option value={EntryColorMode.MEMBER_DB}>Member Database</option>
+            <option value={EntryColorMode.DOMAIN_RELATIONSHIP}>
+              Domain Relationship
+            </option>
+          </select>
+        </div>
       </div>
-    </div>
-    <div className={f('row')}>
-      <div className={f('medium-12', 'column')}>
-        <p>Display structure viewer all the time:</p>
-        <p>
-          <small>
-            On some low-end devices, small screens, or under network or battery
-            constraints, we might decide to not display the structure viewer by
-            default. It will still be available on demand. Do you still want to
-            display the viewer all the time?
-          </small>
-        </p>
-        <ToggleSwitch
-          switchCond={structureViewer}
-          name={'structureViewer'}
-          id={'structureViewer-input'}
-          SRLabel={'Structure viewer always visible'}
-          onValue={'Yes'}
-          offValue={'No'}
-        />
+      <div className={f('row')}>
+        <div className={f('medium-12', 'column')}>
+          <header>Label Content:</header>
+          <p>
+            <small>The content of the labels in the feature viewer</small>
+          </p>
+          <div className={f('row')}>
+            <div className={f('medium-4', 'column')}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Label</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Accession</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="labelContent.accession"
+                        id="labelContentAccession-input"
+                        checked={labelContent.accession}
+                        onChange={noop}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Name</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="labelContent.name"
+                        id="labelContentName-input"
+                        checked={labelContent.name}
+                        onChange={noop}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Short Name</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="labelContent.short"
+                        id="labelContentShort-input"
+                        checked={labelContent.short}
+                        onChange={noop}
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </form>
-);
+      <div className={f('row')}>
+        <div className={f('medium-12', 'column')}>
+          <header>Display structure viewer all the time:</header>
+          <p>
+            <small>
+              On some low-end devices, small screens, or under network or
+              battery constraints, we might decide to not display the structure
+              viewer by default. It will still be available on demand. Do you
+              still want to display the viewer all the time?
+            </small>
+          </p>
+          <ToggleSwitch
+            switchCond={structureViewer}
+            name={'structureViewer'}
+            id={'structureViewer-input'}
+            SRLabel={'Structure viewer always visible'}
+            onValue={'Yes'}
+            offValue={'No'}
+          />
+        </div>
+      </div>
+    </form>
+  );
+};
 UISettings.propTypes = {
   ui: T.shape({
     lowGraphics: T.bool.isRequired,
     colorDomainsBy: T.string.isRequired,
+    labelContent: T.shape({
+      accession: T.bool,
+      name: T.bool,
+      short: T.bool,
+    }),
     structureViewer: T.bool.isRequired,
   }).isRequired,
+  changeSettingsRaw: T.func,
 };
 
 const CacheSettings = (
@@ -617,6 +711,7 @@ const AddToHomeScreen = connect(undefined, { addToast })(_AddToHomeScreen);
     alphafold: Object,
   },
   changeSettings: function,
+  changeSettingsRaw: function,
   resetSettings: function
 };*/
 
@@ -635,6 +730,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
       alphafold: T.object.isRequired,
     }).isRequired,
     changeSettings: T.func.isRequired,
+    changeSettingsRaw: T.func.isRequired,
     resetSettings: T.func.isRequired,
   };
 
@@ -655,6 +751,7 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
         alphafold = {},
       },
       changeSettings,
+      changeSettingsRaw,
     } = this.props;
     return (
       <>
@@ -672,14 +769,11 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
           <div className={f('columns', 'large-12')}>
             <h3>Settings</h3>
             <section onChange={changeSettings}>
-              <NavigationSettings
-                navigation={navigation}
-                handleChange={changeSettings}
-              />
+              <NavigationSettings navigation={navigation} />
 
               <NotificationSettings notifications={notifications} />
 
-              <UISettings ui={ui} />
+              <UISettings ui={ui} changeSettingsRaw={changeSettingsRaw} />
 
               <CacheSettings cache={cache} />
 
@@ -737,6 +831,8 @@ const mapStateToProps = createSelector(
   (settings) => ({ settings }),
 );
 
-export default connect(mapStateToProps, { changeSettings, resetSettings })(
-  Settings,
-);
+export default connect(mapStateToProps, {
+  changeSettings,
+  resetSettings,
+  changeSettingsRaw,
+})(Settings);
