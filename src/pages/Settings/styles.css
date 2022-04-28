@@ -5,3 +5,31 @@
 .fullwidth {
   width: 100%;
 }
+
+.menu-and-content {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  & > section {
+    flex-grow: 2;
+  }
+  & > nav > ul {
+    top: 15vh;
+    position: sticky;
+    & a {
+      white-space: nowrap;
+    }
+    & .active {
+      font-weight: bold;
+    }
+  }
+  & h5 {
+    text-decoration: underline;
+  }
+}
+/* small screen only*/
+@media screen and (max-width: 39.9375em) {
+  .menu-and-content {
+    flex-wrap: wrap;
+  }
+}

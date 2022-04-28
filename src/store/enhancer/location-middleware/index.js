@@ -11,67 +11,70 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import autoScroll from 'utils/auto-scroll';
 
 // Middleware to handle history change events
-const middleware = (history /*: any */) /*: Middleware<*, *, *> */ => ({
-  dispatch,
-  getState,
-}) => {
-  // Hook into history
-  history.listen(
-    // Dispatch new action only when history actually changes
-    // Build new action from scratch
-    async ({ state: { customLocation, state } }) => {
-      await Promise.resolve();
-      return dispatch(
-        customLocationChangeFromHistory(customLocation, {
-          ...customLocation.state,
-          ...state,
-        }),
-      );
-    },
-  );
+const middleware =
+  (history /*: any */) /*: Middleware<*, *, *> */ =>
+  ({ dispatch, getState }) => {
+    // Hook into history
+    history.listen(
+      // Dispatch new action only when history actually changes
+      // Build new action from scratch
+      async (args) => {
+        if (!args?.state?.customLocation) return;
+        const {
+          state: { customLocation, state },
+        } = args;
+        await Promise.resolve();
+        return dispatch(
+          customLocationChangeFromHistory(customLocation, {
+            ...customLocation.state,
+            ...state,
+          }),
+        );
+      },
+    );
 
-  // Analytics
-  history.listen(() => {
-    gtag('event', 'page_view', {
-      event_label: window.location.href,
+    // Analytics
+    history.listen(() => {
+      gtag('event', 'page_view', {
+        event_label: window.location.href,
+      });
     });
-  });
 
-  const historyDispatch = ({ customLocation, replace, state }) => {
-    const { from_interpro6: _, ...query } = customLocation.search || {};
-    history[replace ? 'replace' : 'push']({
-      pathname: descriptionToPath(customLocation.description),
-      search: format({ query }),
-      hash: customLocation.hash,
-      state: { customLocation, state },
+    const historyDispatch = ({ customLocation, replace, state }) => {
+      const { from_interpro6: _, ...query } = customLocation.search || {};
+      history[replace ? 'replace' : 'push']({
+        pathname: descriptionToPath(customLocation.description),
+        search: format({ query }),
+        hash: customLocation.hash,
+        state: { customLocation, state },
+      });
+    };
+
+    // Just run once on startup
+    historyDispatch({
+      customLocation: getState().customLocation,
+      replace: true,
+      state: null,
     });
+    autoScroll(history.location);
+
+    // Hijack normal Redux flow
+    return (next) => (action) => {
+      // if NEW_CUSTOM_LOCATION don't process and update history, it will
+      // eventually result in another NEW_PROCESSED_CUSTOM_LOCATION action being
+      // dispatched through callback
+      if (action.type === NEW_CUSTOM_LOCATION) {
+        const previous = history.location;
+        // update browser's location
+        historyDispatch(action);
+        autoScroll(history.location, previous);
+
+        return;
+      }
+
+      // If anything but NEW_CUSTOM_LOCATION, process normally
+      return next(action);
+    };
   };
-
-  // Just run once on startup
-  historyDispatch({
-    customLocation: getState().customLocation,
-    replace: true,
-    state: null,
-  });
-  autoScroll(history.location);
-
-  // Hijack normal Redux flow
-  return (next) => (action) => {
-    // if NEW_CUSTOM_LOCATION don't process and update history, it will
-    // eventually result in another NEW_PROCESSED_CUSTOM_LOCATION action being
-    // dispatched through callback
-    if (action.type === NEW_CUSTOM_LOCATION) {
-      const previous = history.location;
-      // update browser's location
-      historyDispatch(action);
-      autoScroll(history.location, previous);
-
-      return;
-    }
-
-    // If anything but NEW_CUSTOM_LOCATION, process normally
-    return next(action);
-  };
-};
 
 export default middleware;

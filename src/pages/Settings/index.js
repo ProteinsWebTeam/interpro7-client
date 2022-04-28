@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import ToggleSwitch from 'components/ToggleSwitch';
+import Link from 'components/generic/Link';
 import { DEV } from 'config';
 
 import { noop } from 'lodash-es';
@@ -24,6 +25,7 @@ import {
   resetSettings,
   addToast,
 } from 'actions/creators';
+import { customLocationSelector } from 'reducers/custom-location';
 import { askNotificationPermission } from 'utils/browser-notifications';
 
 import { EntryColorMode } from 'utils/entry-color';
@@ -54,7 +56,7 @@ const NavigationSettings = (
   } /*: {navigation: {pageSize: number, secondsToRetry: number}} */,
 ) => (
   <form data-category="navigation">
-    <h4>Navigation settings</h4>
+    <h4 id="settings-navigation">Navigation settings</h4>
     <SchemaOrgData
       data={{
         name: 'Navigation settings',
@@ -134,7 +136,7 @@ const NotificationSettings = (
   );
   return (
     <form data-category="notifications">
-      <h4>Notification settings</h4>
+      <h4 id="settings-notification">Notification settings</h4>
       <SchemaOrgData
         data={{
           name: 'Notification settings',
@@ -292,7 +294,7 @@ const UISettings = (
   }, [labelContent]);
   return (
     <form data-category="ui">
-      <h4>UI settings</h4>
+      <h4 id="settings-ui">UI settings</h4>
       <SchemaOrgData
         data={{
           name: 'UI settings',
@@ -435,7 +437,7 @@ const CacheSettings = (
   { cache: { enabled } } /*: {cache: {enabled: boolean}} */,
 ) => (
   <form data-category="cache">
-    <h4>Cache settings</h4>
+    <h4 id="settings-cache">Cache settings</h4>
     <SchemaOrgData
       data={{
         name: 'Cache settings',
@@ -487,7 +489,7 @@ const EndpointSettings = (
   } /*: {category: string, endpointDetails: {protocol: string, hostname: string, port: string, root: string,}, children: any, status: boolean} */,
 ) => (
   <form data-category={category}>
-    <h4>{children}</h4>
+    <h5>{children}</h5>
     <SchemaOrgData
       data={{
         name: children[0],
@@ -697,7 +699,34 @@ class _AddToHomeScreen extends PureComponent /*:: <Props,State> */ {
 }
 const AddToHomeScreen = connect(undefined, { addToast })(_AddToHomeScreen);
 
-/*:: type SettingsProps = {
+const HashLink = (
+  {
+    firstVisibleTitle,
+    hash,
+    label,
+  } /*: { firstVisibleTitle: string|null, hash:string, label: string } */,
+) => (
+  <li>
+    <Link
+      to={(current) => ({
+        ...current,
+        hash,
+      })}
+      href="#settings-notification"
+      activeClass={() => firstVisibleTitle === hash && f('active')}
+    >
+      {label}
+    </Link>
+  </li>
+);
+HashLink.propTypes = {
+  firstVisibleTitle: T.string,
+  hash: T.string,
+  label: T.string,
+};
+
+/*::
+type SettingsProps = {
   settings: {
     navigation: Object,
     notifications: Object,
@@ -712,10 +741,15 @@ const AddToHomeScreen = connect(undefined, { addToast })(_AddToHomeScreen);
   },
   changeSettings: function,
   changeSettingsRaw: function,
-  resetSettings: function
-};*/
+  resetSettings: function,
+  customLocation: Object,
+};
+type SettingsState = {
+  firstVisibleTitle: null | string,
+}
+*/
 
-class Settings extends PureComponent /*:: <SettingsProps> */ {
+class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
   static propTypes = {
     settings: T.shape({
       navigation: T.object.isRequired,
@@ -732,8 +766,28 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
     changeSettings: T.func.isRequired,
     changeSettingsRaw: T.func.isRequired,
     resetSettings: T.func.isRequired,
+    customLocation: T.object.isRequired,
+  };
+  state = {
+    firstVisibleTitle: null,
   };
 
+  componentDidMount() {
+    document.addEventListener('scroll', this._updateHashBasedOnScroll);
+  }
+
+  _updateHashBasedOnScroll = () => {
+    const offsetForStickyHeader = 100;
+    const firstVisibleTitle = Array.from(document.querySelectorAll('h4[id]'))
+      .map((e) => ({
+        id: e.id,
+        top: e.getBoundingClientRect().top - offsetForStickyHeader,
+      }))
+      .filter(({ top }) => top >= 0)?.[0]?.id;
+    if (this.state.firstVisibleTitle !== firstVisibleTitle) {
+      this.setState({ firstVisibleTitle });
+    }
+  };
   _handleReset = () => this.props.resetSettings();
 
   render() {
@@ -768,57 +822,97 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
           />
           <div className={f('columns', 'large-12')}>
             <h3>Settings</h3>
-            <section onChange={changeSettings}>
-              <NavigationSettings navigation={navigation} />
+            <div className={f('menu-and-content')}>
+              <nav>
+                <ul className={f('no-bullet')}>
+                  <HashLink
+                    firstVisibleTitle={this.state.firstVisibleTitle}
+                    hash="settings-navigation"
+                    label="Navigation"
+                  />
+                  <HashLink
+                    firstVisibleTitle={this.state.firstVisibleTitle}
+                    hash="settings-notification"
+                    label="Notifications"
+                  />
+                  <HashLink
+                    firstVisibleTitle={this.state.firstVisibleTitle}
+                    hash="settings-ui"
+                    label="User Interfaces"
+                  />
+                  <HashLink
+                    firstVisibleTitle={this.state.firstVisibleTitle}
+                    hash="settings-cache"
+                    label="Cache"
+                  />
+                  <HashLink
+                    firstVisibleTitle={this.state.firstVisibleTitle}
+                    hash="settings-servers"
+                    label="Servers"
+                  />
+                  <HashLink
+                    firstVisibleTitle={this.state.firstVisibleTitle}
+                    hash="settings-devs"
+                    label="Developer Information"
+                  />
+                </ul>
+              </nav>
+              <section>
+                <section onChange={changeSettings}>
+                  <NavigationSettings navigation={navigation} />
+                  <hr />
+                  <NotificationSettings notifications={notifications} />
+                  <hr />
+                  <UISettings ui={ui} changeSettingsRaw={changeSettingsRaw} />
+                  <hr />
+                  <CacheSettings cache={cache} />
+                  <hr />
+                  <h4 id="settings-servers">Servers settings</h4>
+                  <APIEndpointSettings category="api" endpointDetails={api}>
+                    API Settings {!DEV && '(modification temporarily disabled)'}
+                  </APIEndpointSettings>
+                  <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
+                    EBI Search Settings{' '}
+                    {!DEV && '(modification temporarily disabled)'}
+                  </EBIEndpointSettings>
+                  <IPScanEndpointSettings
+                    category="ipScan"
+                    endpointDetails={ipScan}
+                  >
+                    InterProScan Settings{' '}
+                    {!DEV && '(modification temporarily disabled)'}
+                  </IPScanEndpointSettings>
+                  <Genome3DEndpointSettings
+                    category="genome3d"
+                    endpointDetails={genome3d}
+                  >
+                    Genome3D Settings{' '}
+                    {!DEV && '(modification temporarily disabled)'}
+                  </Genome3DEndpointSettings>
+                  <WikipediaEndpointSettings
+                    category="wikipedia"
+                    endpointDetails={wikipedia}
+                  >
+                    Wikipedia Settings{' '}
+                    {!DEV && '(modification temporarily disabled)'}
+                  </WikipediaEndpointSettings>
+                  <AlphaFoldEndpointSettings
+                    category="alphafold"
+                    endpointDetails={alphafold}
+                  >
+                    AlphaFold API Settings{' '}
+                    {!DEV && '(modification temporarily disabled)'}
+                  </AlphaFoldEndpointSettings>
 
-              <NotificationSettings notifications={notifications} />
-
-              <UISettings ui={ui} changeSettingsRaw={changeSettingsRaw} />
-
-              <CacheSettings cache={cache} />
-
-              <APIEndpointSettings category="api" endpointDetails={api}>
-                API Settings {!DEV && '(modification temporarily disabled)'}
-              </APIEndpointSettings>
-              <EBIEndpointSettings category="ebi" endpointDetails={ebi}>
-                EBI Search Settings{' '}
-                {!DEV && '(modification temporarily disabled)'}
-              </EBIEndpointSettings>
-              <IPScanEndpointSettings
-                category="ipScan"
-                endpointDetails={ipScan}
-              >
-                InterProScan Settings{' '}
-                {!DEV && '(modification temporarily disabled)'}
-              </IPScanEndpointSettings>
-              <Genome3DEndpointSettings
-                category="genome3d"
-                endpointDetails={genome3d}
-              >
-                Genome3D Settings{' '}
-                {!DEV && '(modification temporarily disabled)'}
-              </Genome3DEndpointSettings>
-              <WikipediaEndpointSettings
-                category="wikipedia"
-                endpointDetails={wikipedia}
-              >
-                Wikipedia Settings{' '}
-                {!DEV && '(modification temporarily disabled)'}
-              </WikipediaEndpointSettings>
-              <AlphaFoldEndpointSettings
-                category="alphafold"
-                endpointDetails={alphafold}
-              >
-                AlphaFold API Settings{' '}
-                {!DEV && '(modification temporarily disabled)'}
-              </AlphaFoldEndpointSettings>
-
-              <button onClick={this._handleReset} className={f('button')}>
-                Reset settings to default values
-              </button>
-            </section>
-
-            <Advanced />
+                  <button onClick={this._handleReset} className={f('button')}>
+                    Reset settings to default values
+                  </button>
+                </section>
+                <hr />
+                <h4 id="settings-devs">Developer Information</h4>
+                <Advanced />
+              </section>
+            </div>
           </div>
         </div>
       </>
@@ -828,7 +922,8 @@ class Settings extends PureComponent /*:: <SettingsProps> */ {
 
 const mapStateToProps = createSelector(
   (state) => state.settings,
-  (settings) => ({ settings }),
+  customLocationSelector,
+  (settings, customLocation) => ({ settings, customLocation }),
 );
 
 export default connect(mapStateToProps, {

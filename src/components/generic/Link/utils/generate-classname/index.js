@@ -14,7 +14,7 @@ export default (
   exact /*:: ?: boolean*/,
 ) => {
   // If an href was given, assume it can't be active (because outside of scope)
-  if (predefinedHref) return;
+  if (predefinedHref && !predefinedHref.startsWith('#')) return;
   // If we have a function, just depend on the result of that function
   if (typeof activeClass === 'function') return activeClass(customLocation);
   let pathname;
@@ -32,6 +32,7 @@ export default (
     parse(generatedHref);
   const generatedCleanHash = getHashPartWithoutHashSign(generatedHash);
   if (hash && generatedCleanHash && hash !== generatedCleanHash) return;
+  if (predefinedHref?.startsWith('#')) return activeClass;
   if (exact) {
     // If we want an exact match
     // We check strict equality
