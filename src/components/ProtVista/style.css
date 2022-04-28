@@ -210,7 +210,7 @@ g:global(.child-group) path:global(.feature) {
 body .track-accession {
   font-family: var(--fonts-system);
   width: 15%;
-  overflow: hidden;
+  overflow: auto;
   white-space: nowrap;
   padding-left: 0.5rem;
   & a:hover {

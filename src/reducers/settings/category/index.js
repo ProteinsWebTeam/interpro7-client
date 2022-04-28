@@ -30,6 +30,11 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
       return {
         lowGraphics: false,
         colorDomainsBy: EntryColorMode.ACCESSION,
+        labelContent: {
+          accession: true,
+          name: false,
+          short: false,
+        },
         structureViewer: false,
         shouldHighlight: true,
       };
@@ -93,6 +98,17 @@ export default (category /*: Category */) =>
     switch (action.type) {
       case CHANGE_SETTINGS:
         if (action.category !== category) return state;
+        if (action.key.includes('.')) {
+          const parts = action.key.split('.');
+          const currentGroup = state[parts[0]];
+          return {
+            ...state,
+            [parts[0]]: {
+              ...currentGroup,
+              [parts[1]]: action.value,
+            },
+          };
+        }
         return {
           ...state,
           [action.key]: action.value,

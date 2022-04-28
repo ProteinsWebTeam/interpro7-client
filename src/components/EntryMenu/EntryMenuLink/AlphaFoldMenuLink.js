@@ -16,7 +16,7 @@ const AlphaFoldMenuLink = (
     usedOnTheSide,
     collapsed,
     data: { loading, payload },
-  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, collapsed: boolean, data: {loading: boolean, payload: Array<Object>}} */,
+  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, collapsed: boolean, data: {loading: boolean, payload: Array<Object>|Object}} */,
 ) => {
   if (Array.isArray(payload) && payload.length === 1) {
     const value = payload.length;
@@ -32,7 +32,7 @@ AlphaFoldMenuLink.propTypes = {
   usedOnTheSide: T.bool,
   data: T.shape({
     loading: T.bool,
-    payload: T.array,
+    payload: T.oneOfType([T.object, T.array]),
   }),
   collapsed: T.bool,
 };

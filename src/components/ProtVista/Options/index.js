@@ -42,8 +42,12 @@ const ONE_SEC = 1000;
   webTracks: Object,
   expandedTrack: Object,
   colorDomainsBy: string,
+  labelContent: {
+    accession: boolean,
+    name: boolean,
+    short: boolean,
+  },
   changeSettingsRaw: function,
-  updateLabel: function,
   updateTracksCollapseStatus: function,
   toggleTooltipStatus: function,
   getParentElem: function,
@@ -52,7 +56,6 @@ const ONE_SEC = 1000;
 
 /*:: type State = {
   collapsed: boolean,
-  label: Object,
   enableTooltip: boolean,
 }; */
 
@@ -71,8 +74,12 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
     webTracks: T.object,
     expandedTrack: T.object,
     colorDomainsBy: T.string,
+    labelContent: T.shape({
+      accession: T.bool,
+      name: T.bool,
+      short: T.bool,
+    }),
     changeSettingsRaw: T.func,
-    updateLabel: T.func,
     updateTracksCollapseStatus: T.func,
     toggleTooltipStatus: T.func,
     children: T.any,
@@ -83,10 +90,6 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
     super(props);
 
     this.state = {
-      label: {
-        accession: true,
-        name: false,
-      },
       collapsed: false,
       enableTooltip: true,
     };
@@ -171,15 +174,15 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
   };
 
   updateLabel = (evt) => {
-    const newLabelState = { ...this.state.label };
-    newLabelState[evt.target.value] = !newLabelState[evt.target.value];
-    if (!newLabelState.accession && !newLabelState.name) {
-      newLabelState.accession = true;
+    const opt = evt.target.value;
+    const next = {
+      ...this.props.labelContent,
+      [opt]: !this.props.labelContent[opt],
+    };
+    if (!next.accession && !next.name && !next.short) {
+      next.accession = true;
     }
-    this.setState({
-      label: newLabelState,
-    });
-    this.props.updateLabel(newLabelState);
+    this.props.changeSettingsRaw('ui', 'labelContent', next);
   };
 
   toggleTooltipStatus = () => {
@@ -295,7 +298,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
                           type="checkbox"
                           onChange={this.updateLabel}
                           value={'accession'}
-                          checked={this.state.label.accession}
+                          checked={this.props.labelContent.accession}
                         />{' '}
                         Accession
                       </label>
@@ -306,9 +309,20 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
                           type="checkbox"
                           onChange={this.updateLabel}
                           value={'name'}
-                          checked={this.state.label.name}
+                          checked={this.props.labelContent.name}
                         />{' '}
                         Name
+                      </label>
+                    </li>
+                    <li key={'shortname'}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          onChange={this.updateLabel}
+                          value={'short'}
+                          checked={this.props.labelContent.short}
+                        />{' '}
+                        Short Name
                       </label>
                     </li>
                   </ul>
@@ -398,6 +412,7 @@ const mapStateToProps = createSelector(
   (state) => state.settings.ui,
   (ui) => ({
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
+    labelContent: ui.labelContent,
   }),
 );
 
