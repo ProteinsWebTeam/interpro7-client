@@ -2,12 +2,22 @@
 @import '../../styles/colors.css';
 
 .filters-panel {
+  --left-gap: 0.7rem;
   display: flex;
   flex-direction: column;
   background: var(--colors-filter-background);
-  padding-left: 0.7rem;
-  padding-top: 0.2rem;
+  padding-left: var(--left-gap);
 
+  & > header {
+    width: calc(100% + var(--left-gap));
+    background-color: #d9e1e3;
+    font-weight: 600;
+    margin-left: calc(0px - var(--left-gap));
+    padding-left: var(--left-gap);
+  }
+  & > nav {
+    text-align: right;
+  }
   & label {
     line-height: normal;
     margin-top: 0.1em;
@@ -48,6 +58,9 @@
   outline: 0;
   cursor: pointer;
 }
+.filters-panel .list-curation label span:first-of-type {
+  overflow: hidden;
+}
 .filter-title-arrow {
   font-size: 150%;
 }
@@ -78,6 +91,7 @@
 
 .filter-buttons {
   margin-left: 1rem;
+  white-space: nowrap;
 }
 
 hr {
@@ -122,4 +136,42 @@ hr {
 
 .stale {
   opacity: 0.5;
+}
+
+.radio-btn-label {
+  display: flex;
+  align-items: center;
+  padding: 0.05rem 0;
+  color: var(--colors-submain);
+  font-size: 1.25rem;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: all 0.25s linear;
+  &.checked {
+    font-weight: bold;
+    &::before {
+      border: 0.4rem solid var(--colors-submain);
+      background: var(--colors-submain);
+    }
+  }
+  & span:first-of-type {
+    padding-left: 0;
+    padding-right: 1em;
+    transition: padding 0.25s linear;
+  }
+}
+.radio-btn-label:not(.checked):hover span:first-of-type {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+.radio-btn-label::before {
+  display: inline-block;
+  content: '';
+  height: 0.8rem;
+  min-width: 0.8rem;
+  width: 0.8rem;
+  margin-right: 0.5rem;
+  border: 0.2rem solid var(--colors-submain);
+  border-radius: 50%;
+  transition: all 0.25s linear;
 }

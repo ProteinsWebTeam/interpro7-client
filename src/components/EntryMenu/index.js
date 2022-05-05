@@ -14,13 +14,12 @@ import Genome3dMenuLink from './EntryMenuLink/Genome3dMenuLink';
 import AlphaFoldMenuLink from './EntryMenuLink/AlphaFoldMenuLink';
 import { foundationPartial } from 'styles/foundation';
 
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './style.css';
 
 import entryMenuLinkClasses from './EntryMenuLink/style.css';
 
-const f = foundationPartial(styles);
-
-const TRANSITION_DURATION = 500;
+const f = foundationPartial(styles, fonts);
 
 const mapNameToClass = new Map([
   ['domain', 'menu-domain'],
@@ -69,17 +68,24 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
   constructor(props /*: Props */) {
     super(props);
 
-    this._currentTransformTranslate = { x: 0, y: 0 };
-    this._currentTransformScaleX = 1;
     this._ref = React.createRef();
+    this.state = {
+      topBorder: 0,
+      isCollapsed: false,
+    };
   }
 
   componentDidMount() {
     this._moveFakeBorder();
   }
 
-  componentDidUpdate() {
-    this._moveFakeBorder();
+  componentDidUpdate(_, prevState) {
+    const DELAY = 300;
+    if (this.state.isCollapsed === prevState.isCollapsed) {
+      this._moveFakeBorder();
+    } else {
+      setTimeout(() => this._moveFakeBorder(), DELAY);
+    }
   }
 
   componentWillUnmount() {
@@ -92,63 +98,20 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       `a.${entryMenuLinkClasses['is-active-tab']}`,
     );
     if (!newTarget) return;
-    const fakeBorder = this._ref.current.firstElementChild;
 
     const containerBoundingRect = this._ref.current.getBoundingClientRect();
     const boundingRect = newTarget.getBoundingClientRect();
 
-    const countainerWidth = this.props.width;
-    // current transform
-    const currentTransform = `translateX(${this._currentTransformTranslate.x}px) translateY(${this._currentTransformTranslate.y}px) scaleX(${this._currentTransformScaleX})`;
-    // next transform
-    const nextTranslate = {
-      x: boundingRect.left - containerBoundingRect.left,
-      y: boundingRect.top + boundingRect.height - containerBoundingRect.top,
-    };
-    let nextScaleX = boundingRect.width / countainerWidth;
-    if (Number.isNaN(nextScaleX)) nextScaleX = this._currentTransformScaleX;
-    const nextTransform = `translateX(${nextTranslate.x}px) translateY(${nextTranslate.y}px) scaleX(${nextScaleX})`;
-    if (!fakeBorder.animate) {
-      fakeBorder.style.transform = nextTransform;
-      return;
-    }
-    // middle transform
-    let middleTranslate = { ...this._currentTransformTranslate };
-    let middleScaleX = this._currentTransformScaleX;
-    if (nextTranslate.x > this._currentTransformTranslate.x) {
-      // going right
-      middleTranslate = { ...this._currentTransformTranslate };
-      middleScaleX =
-        (boundingRect.right -
-          containerBoundingRect.left -
-          this._currentTransformTranslate.x) /
-        countainerWidth;
-    } else if (nextTranslate.x < this._currentTransformTranslate.x) {
-      // going left
-      middleTranslate = { ...nextTranslate };
-      middleScaleX =
-        (this._currentTransformScaleX +
-          this._currentTransformTranslate.x -
-          nextTranslate.x) /
-        countainerWidth;
-    }
-    const middleTransform = `translateX(${middleTranslate.x}px) translateY(${middleTranslate.y}px) scaleX(${middleScaleX})`;
-
-    // cancel previous animation in case it's still running
-    if (this._animation) this._animation.cancel();
-    // trigger new animation
-    this._animation = fakeBorder.animate(
-      { transform: [currentTransform, middleTransform, nextTransform] },
-      {
-        duration: this.props.lowGraphics ? 0 : TRANSITION_DURATION,
-        easing: 'cubic-bezier(0.215, 0.610, 0.175, 1.180)',
-        fill: 'both',
-      },
-    );
-    // stash end values inside this instance to use them as
-    // the starting point of the next animation
-    this._currentTransformTranslate = { ...nextTranslate };
-    this._currentTransformScaleX = nextScaleX;
+    this.setState({
+      topBorder:
+        1 +
+        boundingRect.top +
+        boundingRect.height -
+        containerBoundingRect.top -
+        parseFloat(
+          window.getComputedStyle(newTarget).getPropertyValue('padding-bottom'),
+        ),
+    });
   };
 
   render() {
@@ -177,10 +140,24 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     const alphafold = singleEntity.get('alphafold');
     return (
       <ul
-        className={f('tabs', className, { sign: isSignature })}
+        className={f('tabs', className, {
+          sign: isSignature,
+          onside: usedOnTheSide,
+          collapsed: this.state.isCollapsed,
+        })}
         ref={this._ref}
         data-testid="menu"
       >
+        {!usedOnTheSide && (
+          <nav className={f('collapse-bar')}>
+            <button
+              className={f('icon', 'icon-common', 'icon-backward')}
+              onClick={() =>
+                this.setState({ isCollapsed: !this.state.isCollapsed })
+              }
+            />
+          </nav>
+        )}
         <span
           data-testid="entry-menu"
           className={f(
@@ -190,6 +167,9 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
               : null,
             { ['is-signature']: isSignature },
           )}
+          style={{
+            top: this.state.topBorder,
+          }}
         />
         {children}
         {tabs.map((e) => (
@@ -204,6 +184,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             counter={e.counter}
             isFirstLevel={!mainAccession}
             usedOnTheSide={usedOnTheSide}
+            collapsed={this.state.isCollapsed}
           />
         ))}
         {mainType === 'entry' && !isSignature && genome3d && (
@@ -212,6 +193,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             exact={genome3d.exact}
             name={genome3d.name}
             usedOnTheSide={usedOnTheSide}
+            collapsed={this.state.isCollapsed}
           />
         )}
         {mainType === 'protein' && alphafold && (
@@ -220,6 +202,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             exact={alphafold.exact}
             name={alphafold.name}
             usedOnTheSide={usedOnTheSide}
+            collapsed={this.state.isCollapsed}
           />
         )}
       </ul>

@@ -40,23 +40,29 @@ const icons = new Map([
 ]);
 
 export const EntryMenuLinkWithoutData = (
-  { name, value, loading, to, exact, usedOnTheSide } /*: {
+  { name, value, loading, to, exact, usedOnTheSide, collapsed } /*: {
     name: string,
     value: ?number,
     loading: boolean,
     to: function,
     exact?: ?boolean,
+    collapsed?: ?boolean,
     usedOnTheSide?: boolean
   }*/,
 ) => (
   <li
-    className={f('tabs-title', { ['used-on-the-side']: usedOnTheSide })}
+    className={f('tabs-title', {
+      ['used-on-the-side']: usedOnTheSide,
+      collapsed,
+    })}
     data-testid={`menu-${name.toLowerCase().replace(/\s+/g, '_')}`}
   >
     <Link
       to={to}
       exact={exact}
-      className={f('browse-tabs-link')}
+      className={f('browse-tabs-link', {
+        'withuot-counter': value === null || isNaN(value),
+      })}
       activeClass={f('is-active', 'is-active-tab')}
     >
       <span data-content={name} className={f('name')}>
@@ -96,6 +102,7 @@ EntryMenuLinkWithoutData.propTypes = {
   to: T.oneOfType([T.object, T.func]).isRequired,
   exact: T.bool,
   usedOnTheSide: T.bool,
+  collapsed: T.bool,
 };
 
 const hasAlignments = (name, db, annotations) => {
@@ -116,6 +123,7 @@ const hasAlignments = (name, db, annotations) => {
   },
   isFirstLevel?: boolean,
   usedOnTheSide?: boolean,
+  collapsed?: boolean,
   mainKey ?: string,
   entryDB ?: string,
 }; */
@@ -132,6 +140,7 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
     }).isRequired,
     isFirstLevel: T.bool,
     usedOnTheSide: T.bool,
+    collapsed: T.bool,
     mainKey: T.string,
     entryDB: T.string,
   };
@@ -146,6 +155,7 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
       data: { loading, payload },
       isFirstLevel,
       usedOnTheSide,
+      collapsed,
       mainKey,
       entryDB,
     } = this.props;
@@ -218,6 +228,7 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
         to={to}
         exact={exact}
         usedOnTheSide={usedOnTheSide}
+        collapsed={collapsed}
       />
     );
   }

@@ -44,8 +44,15 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
+import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 
-const f = foundationPartial(pageStyle, ebiStyles, fonts, exporterStyle);
+const f = foundationPartial(
+  pageStyle,
+  ebiStyles,
+  fonts,
+  exporterStyle,
+  filtersAndTable,
+);
 
 import {
   schemaProcessDataTable,
@@ -495,16 +502,8 @@ class List extends PureComponent /*:: <Props> */ {
     const shouldShowMemberDBSelector =
       description.entry.db.toLowerCase() !== 'interpro';
     return (
-      <div className={f('row')}>
-        <div
-          className={f(
-            'columns',
-            'small-12',
-            'medium-3',
-            'large-2',
-            'no-padding',
-          )}
-        >
+      <div className={f('row', 'filters-and-table')}>
+        <nav>
           <div className={f('browse-side-panel')}>
             {shouldShowMemberDBSelector && (
               <>
@@ -519,9 +518,9 @@ class List extends PureComponent /*:: <Props> */ {
             )}
             <EntryListFilter />
           </div>
-        </div>
+        </nav>
 
-        <div className={f('columns', 'small-12', 'medium-9', 'large-10')}>
+        <section>
           {databases && db && databases[db.toLowerCase()] && (
             <SchemaOrgData
               data={{
@@ -842,7 +841,7 @@ class List extends PureComponent /*:: <Props> */ {
               </Column>
             ) : null}
           </Table>
-        </div>
+        </section>
       </div>
     );
   }
