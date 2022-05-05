@@ -12,8 +12,9 @@ import { toPlural } from 'utils/pages';
 
 import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 
-const f = foundationPartial(ebiGlobalStyles);
+const f = foundationPartial(ebiGlobalStyles, filtersAndTable);
 
 const primariesAndSecondaries = {
   entry: {
@@ -161,25 +162,17 @@ const RelatedTable = (
         focusType={focusType}
         databases={databases}
       />
-      <div className={f('row')}>
+      <div className={f('filters-and-table')}>
         {hasFilters && (
-          <div
-            className={f(
-              'columns',
-              'small-12',
-              'medium-3',
-              'large-2',
-              'no-padding',
-            )}
-          >
+          <nav>
             <div className={f('browse-side-panel')}>
               <FiltersPanel>
                 <CurationFilter label="UniProt Curation" />
               </FiltersPanel>
             </div>
-          </div>
+          </nav>
         )}
-        <div
+        <section
           className={f(
             'columns',
             'small-12',
@@ -205,7 +198,7 @@ const RelatedTable = (
             databases={databases}
             {...primariesAndSecondaries[mainType][focusType]}
           />
-        </div>
+        </section>
       </div>
     </>
   );

@@ -37,6 +37,16 @@ export default (
     // We check strict equality
     if (pathname === generatedPathname) return activeClass;
   } else {
-    if ((pathname || '').startsWith(generatedPathname)) return activeClass;
+    if (
+      (pathname || '')
+        .replace('protein/reviewed', 'protein/UniProt')
+        .replace('protein/unreviewed', 'protein/UniProt')
+        .startsWith(
+          generatedPathname
+            .replace('protein/reviewed', 'protein/UniProt')
+            .replace('protein/unreviewed', 'protein/UniProt'),
+        )
+    )
+      return activeClass;
   }
 };

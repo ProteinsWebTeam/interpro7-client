@@ -14,12 +14,13 @@ const Genome3dMenuLink = (
     exact,
     name,
     usedOnTheSide,
+    collapsed,
     data: { loading, payload },
-  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, data: {loading: boolean, payload: Object}} */,
+  } /*: {to: Object | function, exact: boolean, name: string, usedOnTheSide: boolean, collapsed: boolean, data: {loading: boolean, payload: Object}} */,
 ) => {
   // eslint-disable-next-line camelcase
   const value = payload?.pager?.total_entries || 0;
-  const attrs = { name, value, loading, to, exact, usedOnTheSide };
+  const attrs = { name, value, loading, to, exact, usedOnTheSide, collapsed };
   return value ? <EntryMenuLinkWithoutData {...attrs} /> : null;
 };
 Genome3dMenuLink.propTypes = {
@@ -31,10 +32,11 @@ Genome3dMenuLink.propTypes = {
     loading: T.bool,
     payload: T.object,
   }),
+  collapsed: T.bool,
 };
 const getGenome3dURL = createSelector(
-  state => state.settings.genome3d,
-  state => state.customLocation.description.entry.accession,
+  (state) => state.settings.genome3d,
+  (state) => state.customLocation.description.entry.accession,
   ({ protocol, hostname, port, root }, accession) => {
     return format({
       protocol,

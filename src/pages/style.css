@@ -84,6 +84,24 @@
   }
 }
 /*/homepage figures*/
+/************************************ Entity pages ************************************/
+.menu-and-content {
+  display: flex;
+  flex-wrap: nowrap;
+  & section {
+    flex-grow: 2;
+  }
+}
+/* small screen only*/
+@media screen and (max-width: 39.9375em) {
+  .menu-and-content {
+    flex-wrap: wrap;
+    & > nav > ul {
+      width: 95vw;
+    }
+  }
+}
+
 /************************************entry.js************************************/
 .acc-row {
   font-size: 0.8rem;
