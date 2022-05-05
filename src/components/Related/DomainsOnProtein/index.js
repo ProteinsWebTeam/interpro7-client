@@ -659,7 +659,7 @@ const getRelatedEntriesURL = createSelector(
       pathname: root + descriptionToPath(newDesc),
       query: {
         page_size: 200,
-        extra_fields: 'hierarchy',
+        extra_fields: 'hierarchy,short_name',
       },
     });
   },

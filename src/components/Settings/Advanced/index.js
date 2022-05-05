@@ -16,7 +16,6 @@ export default class Advanced extends PureComponent /*:: <{}> */ {
   render() {
     return (
       <section>
-        <h4>Developer information</h4>
         <DiskUsage />
         <div>
           {'This website has been built on '}
