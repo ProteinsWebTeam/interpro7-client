@@ -12,7 +12,7 @@ import { setDBs } from 'utils/processDescription/handlers';
 import Literature from 'components/Entry/Literature';
 
 import ClanViewer from 'clanviewer';
-import 'clanviewer/css/clanviewer.css';
+import 'clanviewer/build/main.css';
 import ZoomOverlay from 'components/ZoomOverlay';
 
 import { foundationPartial } from 'styles/foundation';
