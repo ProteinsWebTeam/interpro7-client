@@ -36,7 +36,6 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
-import setTimeout from 'core-js/actual/set-timeout';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
 
