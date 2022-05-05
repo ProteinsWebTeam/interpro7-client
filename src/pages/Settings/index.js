@@ -40,7 +40,7 @@ import local from './styles.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
 
 const DEFAULT_SEC = 20;
-const offsetForStickyHeader = 100;
+const offsetForStickyHeader = 95;
 
 // Generate async components
 const Advanced = loadable({
