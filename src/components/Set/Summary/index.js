@@ -145,10 +145,11 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
   }
 
   componentDidMount() {
-    if (!this._ref.current) return;
+    if (!this._ref.current || this._vis) return;
     this._vis = new ClanViewer({
       element: this._ref.current,
       useCtrlToZoom: true,
+      height: 600,
     });
     if (
       this.props.data &&
