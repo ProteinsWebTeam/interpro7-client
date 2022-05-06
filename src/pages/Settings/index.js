@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import ToggleSwitch from 'components/ToggleSwitch';
-import Link from 'components/generic/Link';
 import { DEV } from 'config';
 
 import { noop } from 'lodash-es';
@@ -41,6 +40,7 @@ import local from './styles.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
 
 const DEFAULT_SEC = 20;
+const offsetForStickyHeader = 95;
 
 // Generate async components
 const Advanced = loadable({
@@ -707,16 +707,16 @@ const HashLink = (
   } /*: { firstVisibleTitle: string|null, hash:string, label: string } */,
 ) => (
   <li>
-    <Link
-      to={(current) => ({
-        ...current,
-        hash,
-      })}
-      href="#settings-notification"
-      activeClass={() => firstVisibleTitle === hash && f('active')}
+    <button
+      className={f('link', { active: firstVisibleTitle === hash })}
+      onClick={() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
+        history.replaceState(null, '', `#${hash}`);
+      }}
     >
+      {' '}
       {label}
-    </Link>
+    </button>
   </li>
 );
 HashLink.propTypes = {
@@ -773,11 +773,20 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
   };
 
   componentDidMount() {
+    const shortWait = 200;
     document.addEventListener('scroll', this._updateHashBasedOnScroll);
+    if (this.props.customLocation.hash) {
+      setTimeout(
+        () =>
+          document
+            .getElementById(this.props.customLocation.hash)
+            ?.scrollIntoView({ behavior: 'smooth' }),
+        shortWait,
+      );
+    }
   }
 
   _updateHashBasedOnScroll = () => {
-    const offsetForStickyHeader = 100;
     const firstVisibleTitle = Array.from(document.querySelectorAll('h4[id]'))
       .map((e) => ({
         id: e.id,

@@ -53,6 +53,9 @@
 .md-all .md-color {
   fill: var(--colors-all);
 }
+.md-removed .md-color {
+  fill: var(--colors-dark);
+}
 
 .md-color,
 .md-server {
@@ -64,6 +67,10 @@
 :root {
   --aspect-ratio: 1 / 1;
 }
+.entry-member-db-icon svg {
+  width: 80px;
+}
+
 .memberdb-logo {
   min-height: 80px;
   display: flex;

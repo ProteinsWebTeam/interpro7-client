@@ -449,11 +449,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       ) : null;
     if (entry.accession.startsWith('residue:'))
       return entry.accession.split('residue:')[1];
-    let text = label.short ? entry.short_name : '';
-    if (label.short && label.accession) text += ' - ';
+    let text = label.short ? entry.short_name || '' : '';
+    if (text.length > 0 && label.accession) text += ' - ';
     if (label.accession) text += entry.accession;
-    if ((label.accession || label.short) && label.name) text += ': ';
+    if (text.length > 0 && label.name) text += ': ';
     if (label.name) text += entry.name;
+    if (text.length == 0) text += entry.accession;
     return (
       <>
         {type}

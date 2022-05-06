@@ -41,7 +41,7 @@ const middleware =
     });
 
     const historyDispatch = ({ customLocation, replace, state }) => {
-      const { from_interpro6: _, ...query } = customLocation.search || {};
+      const { from_interpro6: _, ...query } = customLocation?.search || {};
       history[replace ? 'replace' : 'push']({
         pathname: descriptionToPath(customLocation.description),
         search: format({ query }),

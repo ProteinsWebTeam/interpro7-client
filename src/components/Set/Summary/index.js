@@ -12,7 +12,7 @@ import { setDBs } from 'utils/processDescription/handlers';
 import Literature from 'components/Entry/Literature';
 
 import ClanViewer from 'clanviewer';
-import 'clanviewer/css/clanviewer.css';
+import 'clanviewer/build/main.css';
 import ZoomOverlay from 'components/ZoomOverlay';
 
 import { foundationPartial } from 'styles/foundation';
@@ -145,10 +145,11 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
   }
 
   componentDidMount() {
-    if (!this._ref.current) return;
+    if (!this._ref.current || this._vis) return;
     this._vis = new ClanViewer({
       element: this._ref.current,
       useCtrlToZoom: true,
+      height: 600,
     });
     if (
       this.props.data &&
@@ -158,11 +159,24 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       this.props.data.metadata.relationships.nodes.length <= MAX_NUMBER_OF_NODES
     )
       this.setState({ showClanViewer: true });
-    this._ref.current.addEventListener('click', this._handleClick);
+    this._ref.current.addEventListener('click', (evt) =>
+      this._handleClick(evt),
+    );
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.data) this.loaded = false;
+    this.repaint();
+  }
+
+  componentWillUnmount() {
+    if (this._ref.current) {
+      this._ref.current.removeEventListener('click', this._handleClick);
+    }
+    // TODO: Update clanviewer to clean SVG
+    this._vis.clear();
+  }
+  repaint() {
     if (
       (this.state.showClanViewer ||
         this.props.data.metadata.relationships.nodes.length <=
@@ -174,14 +188,6 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       this._vis.paint(data, false);
       this.loaded = true;
     }
-  }
-
-  componentWillUnmount() {
-    if (this._ref.current) {
-      this._ref.current.removeEventListener('click', this._handleClick);
-    }
-    // TODO: Update clanviewer to clean SVG
-    this._vis.clear();
   }
 
   _handleClick = (event) => {
@@ -198,7 +204,11 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       });
     }
   };
-
+  _handleSelectChange = (evt) => {
+    if (this._vis.nodeLabel === evt.target.value) return;
+    this.loaded = false;
+    this._vis.updateNodeLabel(evt.target.value);
+  };
   render() {
     const metadata =
       this.props.loading || !this.props.data.metadata
@@ -306,6 +316,14 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
                 </div>
               )}
             <ZoomOverlay elementId="clanViewerContainer" />
+            <div>
+              <h5>Label Content</h5>
+              <select onChange={this._handleSelectChange}>
+                <option value="accession">Accession</option>
+                <option value="short_name">Short Name</option>
+                <option value="name">Name</option>
+              </select>
+            </div>
             <div
               ref={this._ref}
               style={{ minHeight: 500 }}
