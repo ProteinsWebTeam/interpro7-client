@@ -2,6 +2,7 @@
 
 exports[`<MemberSymbol /> should render 1`] = `
 <span
+  className="entry-member-db-icon"
   data-testid="entry-member-db-icon"
 >
   <svg
