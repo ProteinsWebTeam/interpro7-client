@@ -141,6 +141,7 @@ const classNames = new Map([
   ['TIGRFAMS', f('md-ti')],
   ['NEW', f('md-new')],
   ['ALL', f('md-all')],
+  ['REMOVED', f('md-removed')],
 ]);
 
 const MemberSymbol = (
@@ -155,12 +156,15 @@ const MemberSymbol = (
   const [png, setPng] = useState(null);
   const [avif, setAvif] = useState(null);
   if (!svg) {
-    images[type][0].then((src) => setAvif(src.default));
-    images[type][1].then((src) => setPng(src.default));
+    images?.[type]?.[0].then((src) => setAvif(src.default));
+    images?.[type]?.[1].then((src) => setPng(src.default));
   }
   return (
-    <span data-testid="entry-member-db-icon">
-      {svg ? (
+    <span
+      data-testid="entry-member-db-icon"
+      className={f('entry-member-db-icon')}
+    >
+      {svg || (!png && !avif) ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 200 200"
