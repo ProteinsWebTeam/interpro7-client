@@ -207,8 +207,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
   _handleSelectChange = (evt) => {
     if (this._vis.nodeLabel === evt.target.value) return;
     this.loaded = false;
-    this._vis.nodeLabel = evt.target.value;
-    this.repaint();
+    this._vis.updateNodeLabel(evt.target.value);
   };
   render() {
     const metadata =
