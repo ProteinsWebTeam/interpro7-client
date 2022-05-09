@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
 import ClanViewer from 'clanviewer';
-import 'clanviewer/css/clanviewer.css';
 
 export default {
   title: 'InterPro UI/ClanViewer',

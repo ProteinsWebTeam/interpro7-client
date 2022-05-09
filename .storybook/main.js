@@ -12,7 +12,7 @@ module.exports = {
     '@storybook/addon-knobs',
     '@storybook/addon-postcss',
   ],
-
+  typescript: { reactDocgen: 'none' },
   webpackFinal: async (config) => {
     // do mutation to the config
     config.resolve.modules.push(path.resolve('.', 'src'));
@@ -20,15 +20,26 @@ module.exports = {
       test.toString().includes('.css')
     );
 
-    cssRule.exclude = /tippy.css$/i;
+    cssRule.exclude = /((tippy)|(clanviewer))\.css$/i;
 
     config.module.rules.push({
-      test: /tippy.css$/i,
+      test: /((tippy)|(clanviewer))\.css$/i,
       use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
     });
     config.module.rules.push({
       test: /\.yml$/i,
       use: [{ loader: 'yaml-loader' }],
+    });
+    config.module.rules.push({
+      test: /\.ts$/,
+      use: [
+        {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+          },
+        },
+      ],
     });
     config.module.rules.push({
       test: /\.avif$/i,
