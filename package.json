@@ -123,7 +123,7 @@
     "protvista-manager": "3.4.0",
     "protvista-msa": "3.4.0",
     "protvista-navigation": "3.5.1",
-    "protvista-overlay": "3.0.0",
+    "protvista-overlay": "^3.5.10",
     "protvista-saver": "3.1.2",
     "protvista-sequence": "3.5.1",
     "protvista-track": "3.4.0",

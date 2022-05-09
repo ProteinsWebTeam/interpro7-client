@@ -167,7 +167,8 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.data.metadata.accession !== this.props.data.metadata.accession
+      prevProps.data?.metadata?.accession !==
+      this.props?.data?.metadata?.accession
     )
       this.loaded = false;
     this.repaint();
@@ -326,7 +327,6 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
                   </section>
                 </div>
               )}
-            <ZoomOverlay elementId="clanViewerContainer" />
             <div>
               <h5>Label Content</h5>
               <select onChange={this._handleSelectChange}>
@@ -336,6 +336,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
               </select>
             </div>
             <div className={f('clanviewer-container')}>
+              <ZoomOverlay elementId="clanViewerContainer" />
               <div
                 ref={this._ref}
                 style={{ minHeight: 500 }}
