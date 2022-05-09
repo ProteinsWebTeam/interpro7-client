@@ -15,14 +15,15 @@ import ClanViewer from 'clanviewer';
 import 'clanviewer/build/main.css';
 import ZoomOverlay from 'components/ZoomOverlay';
 
-import { foundationPartial } from 'styles/foundation';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-
-const f = foundationPartial(ebiGlobalStyles);
-
 import loadable from 'higherOrder/loadable';
 import config from 'config';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
+import { foundationPartial } from 'styles/foundation';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import style from './style.css';
+
+const f = foundationPartial(ebiGlobalStyles, style);
 
 /*:: type Props = {
   data: {
@@ -140,7 +141,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
     super(props);
 
     this._ref = React.createRef();
-    this.state = { showClanViewer: false };
+    this.state = { showClanViewer: false, nodeHovered: null };
     this.loaded = false;
   }
 
@@ -165,7 +166,10 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.data !== this.props.data) this.loaded = false;
+    if (
+      prevProps.data.metadata.accession !== this.props.data.metadata.accession
+    )
+      this.loaded = false;
     this.repaint();
   }
 
@@ -187,6 +191,14 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       this._vis.clear();
       this._vis.paint(data, false);
       this.loaded = true;
+      for (const node of this._ref.current.querySelectorAll('g.node')) {
+        node.addEventListener('mouseenter', (evt) => {
+          this.setState({ nodeHovered: evt.target.__data__ });
+        });
+        node.addEventListener('mouseleave', () => {
+          this.setState({ nodeHovered: null });
+        });
+      }
     }
   }
 
@@ -206,7 +218,6 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
   };
   _handleSelectChange = (evt) => {
     if (this._vis.nodeLabel === evt.target.value) return;
-    this.loaded = false;
     this._vis.updateNodeLabel(evt.target.value);
   };
   render() {
@@ -324,11 +335,31 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
                 <option value="name">Name</option>
               </select>
             </div>
-            <div
-              ref={this._ref}
-              style={{ minHeight: 500 }}
-              id="clanViewerContainer"
-            />
+            <div className={f('clanviewer-container')}>
+              <div
+                ref={this._ref}
+                style={{ minHeight: 500 }}
+                id="clanViewerContainer"
+              />
+              <div
+                className={f('legends')}
+                style={{
+                  opacity: this.state.nodeHovered ? 1 : 0,
+                }}
+              >
+                <ul className={f('no-bullet')}>
+                  <li>
+                    <b>Accession</b>: {this.state?.nodeHovered?.accession}
+                  </li>
+                  <li>
+                    <b>Name</b>: {this.state?.nodeHovered?.name}
+                  </li>
+                  <li>
+                    <b>Short name</b>: {this.state?.nodeHovered?.short_name}
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
       </div>
