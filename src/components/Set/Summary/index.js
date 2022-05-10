@@ -1,3 +1,4 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,8 +8,10 @@ import { goToCustomLocation } from 'actions/creators';
 
 import Accession from 'components/Accession';
 import Description from 'components/Description';
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { BaseLink } from 'components/ExtLink';
 import { setDBs } from 'utils/processDescription/handlers';
+import { getTextForLabel } from 'utils/text';
 import Literature from 'components/Entry/Literature';
 
 import ClanViewer from 'clanviewer';
@@ -22,21 +25,35 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import style from './style.css';
+import LabelBy from '../../ProtVista/Options/LabelBy';
 
 const f = foundationPartial(ebiGlobalStyles, style);
 
-/*:: type Props = {
+/*::
+type Props = {
   data: {
     metadata: Object,
   },
   db: string,
   goToCustomLocation: function,
   customLocation: Object,
-  loading: boolean
-}; */
-/*:: type State = {
-  showClanViewer: boolean
-}; */
+  loading: boolean,
+  label: {
+    accession: boolean,
+    name: boolean,
+    short: boolean,
+  },
+};
+
+type State = {
+  showClanViewer: boolean,
+  nodeHovered: null | {
+    accession:string,
+    name:string,
+    short_name:string,
+  }
+};
+ */
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
@@ -124,7 +141,7 @@ SetAuthors.propTypes = {
 class SummarySet extends PureComponent /*:: <Props, State> */ {
   /*::
     _ref: { current: null | React$ElementRef<'div'> };
-    _vis: ClanViewer;
+    _vis: typeof ClanViewer;
     loaded: boolean;
   */
   static propTypes = {
@@ -135,6 +152,11 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
     goToCustomLocation: T.func.isRequired,
     customLocation: T.object.isRequired,
     loading: T.bool.isRequired,
+    label: T.shape({
+      accession: T.bool,
+      name: T.bool,
+      short: T.bool,
+    }),
   };
 
   constructor(props /*: Props */) {
@@ -151,6 +173,10 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       element: this._ref.current,
       useCtrlToZoom: true,
       height: 600,
+      nodeLabel: (node) => {
+        console.log(node);
+        return getTextForLabel(node, this.props.label);
+      },
     });
     if (
       this.props.data &&
@@ -160,12 +186,13 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       this.props.data.metadata.relationships.nodes.length <= MAX_NUMBER_OF_NODES
     )
       this.setState({ showClanViewer: true });
-    this._ref.current.addEventListener('click', (evt) =>
+    this._ref.current?.addEventListener('click', (evt /*: Event */) =>
       this._handleClick(evt),
     );
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.label !== this.props.label) this._refreshLabels();
     if (
       prevProps.data?.metadata?.accession !==
       this.props?.data?.metadata?.accession
@@ -176,7 +203,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
 
   componentWillUnmount() {
     if (this._ref.current) {
-      this._ref.current.removeEventListener('click', this._handleClick);
+      this._ref.current?.removeEventListener('click', this._handleClick);
     }
     // TODO: Update clanviewer to clean SVG
     this._vis.clear();
@@ -192,9 +219,11 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       this._vis.clear();
       this._vis.paint(data, false);
       this.loaded = true;
-      for (const node of this._ref.current.querySelectorAll('g.node')) {
-        node.addEventListener('mouseenter', (evt) => {
-          this.setState({ nodeHovered: evt.target.__data__ });
+      for (const node /*: HTMLElement */ of this._ref.current?.querySelectorAll(
+        'g.node',
+      ) || []) {
+        node.addEventListener('mouseenter', (evt /*: Event */) => {
+          this.setState({ nodeHovered: (evt.target /*: any */).__data__ });
         });
         node.addEventListener('mouseleave', () => {
           this.setState({ nodeHovered: null });
@@ -203,23 +232,27 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
     }
   }
 
-  _handleClick = (event) => {
+  _handleClick = (event /*: Event */) => {
     const g = event
       .composedPath()
-      .filter((e) => e.nodeName === 'g')
-      .filter((e) => e.classList.contains('node'))?.[0];
+      .filter((e /*: any */) => e.nodeName === 'g')
+      .filter((e /*: any */) => e.classList.contains('node'))?.[0];
     if (g) {
       this.props.goToCustomLocation({
         description: {
           main: { key: 'entry' },
-          entry: { db: this.props.db, accession: g.dataset.accession },
+          entry: {
+            db: this.props.db,
+            accession: (g /*: any */).dataset.accession,
+          },
         },
       });
     }
   };
-  _handleSelectChange = (evt) => {
-    if (this._vis.nodeLabel === evt.target.value) return;
-    this._vis.updateNodeLabel(evt.target.value);
+  _refreshLabels = () => {
+    this._vis.updatingLabels = true;
+    if (this._vis.tick) this._vis.tick();
+    this._vis.updatingLabels = false;
   };
   render() {
     const metadata =
@@ -228,6 +261,9 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
             accession: '',
             description: '',
             id: '',
+            source_database: '',
+            authors: null,
+            literature: null,
           }
         : this.props.data.metadata;
     let currentSet = null;
@@ -328,12 +364,12 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
                 </div>
               )}
             <div>
-              <h5>Label Content</h5>
-              <select onChange={this._handleSelectChange}>
-                <option value="accession">Accession</option>
-                <option value="short_name">Short Name</option>
-                <option value="name">Name</option>
-              </select>
+              <DropDownButton
+                label="Label Content"
+                extraClasses={f('protvista-menu')}
+              >
+                <LabelBy />
+              </DropDownButton>
             </div>
             <div className={f('clanviewer-container')}>
               <ZoomOverlay elementId="clanViewerContainer" />
@@ -370,7 +406,8 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   (state) => state.customLocation.description.set.db,
-  (db) => ({ db }),
+  (state) => state.settings.ui,
+  (db, ui) => ({ db, label: ui.labelContent }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(SummarySet);
