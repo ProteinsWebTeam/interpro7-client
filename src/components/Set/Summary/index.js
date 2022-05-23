@@ -205,7 +205,6 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
     if (this._ref.current) {
       this._ref.current?.removeEventListener('click', this._handleClick);
     }
-    // TODO: Update clanviewer to clean SVG
     this._vis.clear();
   }
   repaint() {
