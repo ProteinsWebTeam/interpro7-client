@@ -5,8 +5,6 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
 
-import id from 'utils/cheap-unique-id';
-
 import ProtVistaOptions from './Options';
 import ProtVistaPopup from './Popup';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -31,6 +29,8 @@ import spinner from 'components/SimpleCommonComponents/Loading/style.css';
 import PopperJS from 'popper.js';
 
 import loadWebComponent from 'utils/load-web-component';
+import { getTextForLabel } from 'utils/text';
+import id from 'utils/cheap-unique-id';
 
 import loadData from 'higherOrder/loadData';
 import { goToCustomLocation } from 'actions/creators';
@@ -449,16 +449,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       ) : null;
     if (entry.accession.startsWith('residue:'))
       return entry.accession.split('residue:')[1];
-    let text = label.short ? entry.short_name || '' : '';
-    if (text.length > 0 && label.accession) text += ' - ';
-    if (label.accession) text += entry.accession;
-    if (text.length > 0 && label.name) text += ': ';
-    if (label.name) text += entry.name;
-    if (text.length == 0) text += entry.accession;
+
     return (
       <>
         {type}
-        {text}
+        {getTextForLabel(entry, label)}
       </>
     );
   }

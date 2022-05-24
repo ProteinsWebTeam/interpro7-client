@@ -18,6 +18,8 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { changeSettingsRaw } from 'actions/creators';
 import { createSelector } from 'reselect';
 
+import LabelBy from './LabelBy';
+
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
@@ -42,11 +44,6 @@ const ONE_SEC = 1000;
   webTracks: Object,
   expandedTrack: Object,
   colorDomainsBy: string,
-  labelContent: {
-    accession: boolean,
-    name: boolean,
-    short: boolean,
-  },
   changeSettingsRaw: function,
   updateTracksCollapseStatus: function,
   toggleTooltipStatus: function,
@@ -173,18 +170,6 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
     this.props.changeSettingsRaw('ui', 'colorDomainsBy', colorMode);
   };
 
-  updateLabel = (evt) => {
-    const opt = evt.target.value;
-    const next = {
-      ...this.props.labelContent,
-      [opt]: !this.props.labelContent[opt],
-    };
-    if (!next.accession && !next.name && !next.short) {
-      next.accession = true;
-    }
-    this.props.changeSettingsRaw('ui', 'labelContent', next);
-  };
-
   toggleTooltipStatus = () => {
     this.setState({
       enableTooltip: !this.state.enableTooltip,
@@ -289,44 +274,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
                   </ul>
                 </li>
                 <hr />
-                <li>
-                  Label by
-                  <ul className={f('nested-list')}>
-                    <li key={'accession'}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          onChange={this.updateLabel}
-                          value={'accession'}
-                          checked={this.props.labelContent.accession}
-                        />{' '}
-                        Accession
-                      </label>
-                    </li>
-                    <li key={'name'}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          onChange={this.updateLabel}
-                          value={'name'}
-                          checked={this.props.labelContent.name}
-                        />{' '}
-                        Name
-                      </label>
-                    </li>
-                    <li key={'shortname'}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          onChange={this.updateLabel}
-                          value={'short'}
-                          checked={this.props.labelContent.short}
-                        />{' '}
-                        Short Name
-                      </label>
-                    </li>
-                  </ul>
-                </li>
+                <LabelBy />
                 <hr />
                 <li>
                   Snapshot
@@ -412,7 +360,6 @@ const mapStateToProps = createSelector(
   (state) => state.settings.ui,
   (ui) => ({
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
-    labelContent: ui.labelContent,
   }),
 );
 

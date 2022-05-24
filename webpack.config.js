@@ -157,7 +157,7 @@ const getConfigFor = (env, mode, module = false) => {
             /react-msa-viewer/,
             path.resolve('node_modules', 'd3'),
             path.resolve('node_modules', 'idb'),
-            path.resolve('node_modules', 'clanviewer'),
+            // path.resolve('node_modules', 'clanviewer'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
           ],
