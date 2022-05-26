@@ -465,7 +465,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     if (dataDB.payload) {
       databases = dataDB.payload.databases;
     }
-    // const databases = dataDB.payload.databases;
     if (entry.source_database === 'mobidblt')
       return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
     if (entry.type === 'residue')
@@ -594,14 +593,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       showConservationButton,
       children,
       showOptions = true,
-      label,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
 
     const { hideCategory } = this.state;
 
-    const labelClass = label.name ? 'label-by-name' : '';
     return (
       <div
         ref={this._mainRef}
@@ -622,7 +619,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   className={f(
                     'aligned-to-track-component',
                     'view-options-wrap',
-                    `${labelClass}`,
                   )}
                 >
                   {showOptions && (
@@ -649,12 +645,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               >
                 <div className={f('track-container')}>
                   <div className={f('track-row')}>
-                    <div
-                      className={f(
-                        'aligned-to-track-component',
-                        `${labelClass}`,
-                      )}
-                    >
+                    <div className={f('aligned-to-track-component')}>
                       <protvista-navigation
                         length={length}
                         displaystart="1"
@@ -663,12 +654,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                     </div>
                   </div>
                   <div className={f('track-row')}>
-                    <div
-                      className={f(
-                        'aligned-to-track-component',
-                        `${labelClass}`,
-                      )}
-                    >
+                    <div className={f('aligned-to-track-component')}>
                       <protvista-sequence
                         ref={this._webProteinRef}
                         length={length}
@@ -701,10 +687,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                           <div key={type} className={f('track-container')}>
                             <div className={f('track-row')}>
                               <div
-                                className={f(
-                                  'track-component',
-                                  `${labelClass}`,
-                                )}
+                                className={f('track-component')}
                                 style={{ borderBottom: 0 }}
                               >
                                 <header>
@@ -756,7 +739,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         className={f(
                                           'track-component',
                                           entry.type.replace('_', '-'),
-                                          `${labelClass}`,
                                         )}
                                       >
                                         {entry.type ===
@@ -816,12 +798,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         )}
                                       </div>
                                     ) : (
-                                      <div
-                                        className={f(
-                                          'track-component',
-                                          `${labelClass}`,
-                                        )}
-                                      >
+                                      <div className={f('track-component')}>
                                         <protvista-interpro-track
                                           length={length}
                                           displaystart="1"
@@ -838,12 +815,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         />
                                       </div>
                                     )}
-                                    <div
-                                      className={f(
-                                        'track-accession',
-                                        `${labelClass}`,
-                                      )}
-                                    >
+                                    <div className={f('track-accession')}>
                                       {this.renderLabels(entry)}
                                     </div>
                                   </div>
@@ -855,7 +827,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   {showConservationButton ? (
                     <div className={f('track-container')}>
                       <div className={f('track-row')}>
-                        <div className={f('track-component', labelClass)}>
+                        <div className={f('track-component')}>
                           <header>
                             <button
                               onClick={() => this.handleConservationLoad(this)}
@@ -878,7 +850,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                             className={f(
                               'track-component',
                               'conservation-placeholder-component',
-                              labelClass,
                             )}
                             ref={this._conservationTrackRef}
                           >
@@ -893,7 +864,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                               </div>
                             ) : null}
                           </div>
-                          <div className={f('track-accession', labelClass)}>
+                          <div className={f('track-accession')}>
                             <button
                               type="button"
                               className={f(

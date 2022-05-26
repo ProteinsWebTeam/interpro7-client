@@ -3,7 +3,7 @@
 @import '../../styles/timing.css';
 
 :root {
-  --track-space: 85%;
+  --track-space: 70vw;
 }
 .protvista {
   font-size: 12px;
@@ -134,9 +134,6 @@
   cursor: move;
 }
 
-.track-component.label-by-name {
-  width: 70%;
-}
 .track-length {
   width: var(--track-space, 85%);
   display: flex;
@@ -198,18 +195,13 @@ g:global(.child-group) path:global(.feature) {
 }
 
 .aligned-to-track-component {
-  width: var(-track-space, 85%);
+  width: var(--track-space, 85%);
   line-height: 0;
-}
-
-.aligned-to-track-component.label-by-name {
-  width: 70%;
-  line-height: inherit;
 }
 
 body .track-accession {
   font-family: var(--fonts-system);
-  width: 15%;
+  max-width: 15vw;
   overflow: auto;
   white-space: nowrap;
   padding-left: 0.5rem;
@@ -222,10 +214,6 @@ body .track-accession nav {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-}
-body .track-accession.label-by-name {
-  width: 30%;
-  text-transform: none;
 }
 body .track-accession > a,
 body .track-accession > a:focus,
