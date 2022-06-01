@@ -42,7 +42,7 @@ const SchemaOrgData = loadable({
 });
 
 const extractDataFromHash = (hash) => {
-  const [path, fileType, subset] = hash.split('|');
+  const [path, fileType, subset] = hash.replace('%7C', '|').split('|');
   const output = { fileType, subset: !!subset };
   const [href, params] = path.split('?');
   try {
@@ -184,9 +184,8 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
   render() {
     const { matched, api, lowGraphics, data } = this.props;
 
-    const { description, search, fileType, subset } = extractDataFromHash(
-      matched,
-    );
+    const { description, search, fileType, subset } =
+      extractDataFromHash(matched);
     if (!description) return null;
 
     const endpoint = toPublicAPI(
