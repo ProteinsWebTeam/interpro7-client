@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+// @flow
+import React from 'react';
 import T from 'prop-types';
+
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 
