@@ -139,30 +139,31 @@ sub main {
         print "\n";
       <% } else if (fileType === "fasta") { %>
       if (defined $item->{"entries"}){
+        print ">$item->{metadata}->{accession}$HEADER_SEPARATOR";
         foreach my $entry (@{$item->{"entries"}}) {
+          print " $entry->{accession}(";
+          my $SEMICOLON = "";
           foreach my $locations  (@{$entry->{"entry_protein_locations"}}) {
-            foreach my $location  (@{$entry->{"entry_protein_locations"}}) {
-              foreach my $fragment (@{$locations->{"fragments"}}) {
-                my $start = $fragment->{"start"};
-                my $end = $fragment->{"end"};
-                print ">$item->{metadata}->{accession}$HEADER_SEPARATOR"
-                      ."$entry->{accession}$HEADER_SEPARATOR"
-                      ."$start...$end$HEADER_SEPARATOR"
-                      ."$item->{metadata}->{name}\n";
-                my $seq =  $item->{"extra_fields"}{"sequence"};
-                foreach my $fastaSeqFragment (unpack("(A$LINE_LENGTH)*", $seq)) {
-                  print "$fastaSeqFragment\n";
-                }
-              }
+            print "$SEMICOLON";
+            my $COMMA = "";
+            foreach my $fragment (@{$locations->{"fragments"}}) {
+              my $start = $fragment->{"start"};
+              my $end = $fragment->{"end"};
+              print "$COMMA$start...$end";
+              $COMMA=",";
             }
+            $SEMICOLON = ";";            
           }
+          print ")"
         }
+        print "$HEADER_SEPARATOR$item->{metadata}->{name}\n";
+
       } else {
         print ">$item->{metadata}->{accession}$HEADER_SEPARATOR$item->{metadata}->{name}\n";
-        my $seq =  $item->{"extra_fields"}{"sequence"};
-        foreach my $fastaSeqFragment (unpack("(A$LINE_LENGTH)*", $seq)) {
-          print "$fastaSeqFragment\n";
-        }
+      }
+      my $seq =  $item->{"extra_fields"}{"sequence"};
+      foreach my $fastaSeqFragment (unpack("(A$LINE_LENGTH)*", $seq)) {
+        print "$fastaSeqFragment\n";
       }
       <% } else { %>
       print $item->{'metadata'}->{'accession'}."\n";
