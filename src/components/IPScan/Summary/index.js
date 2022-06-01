@@ -5,12 +5,9 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { flattenDeep } from 'lodash-es';
 import { format } from 'url';
 
 import getFetch from 'higherOrder/loadData/getFetch';
-import { NOT_MEMBER_DBS } from 'menuConfig';
-import { iproscan2urlDB } from 'utils/url-patterns';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
 
@@ -19,7 +16,6 @@ import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
-import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 import GoTerms from 'components/GoTerms';
 import Accession from 'components/Accession';
 import Title from 'components/Title';
@@ -33,6 +29,9 @@ import NucleotideSummary from 'components/IPScan/NucleotideSummary';
 import IPScanTitle from './IPScanTitle';
 import { Exporter } from 'components/Table';
 import { updateJobTitle } from 'actions/creators';
+
+import StatusTooltip from './StatusTooltip';
+import { mergeData } from './serializers';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -58,13 +57,8 @@ const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
     },
   },
   localPayload: ?Object,
-}; */
-
-const mergeMatch = (match1, match2) => {
-  if (!match1) return match2;
-  match1.locations = match1.locations.concat(match2.locations);
-  return match1;
 };
+*/
 
 const getGoTerms = (matches) => {
   const goTerms = new Map();
@@ -83,162 +77,12 @@ const getGoTerms = (matches) => {
   }
   return goTerms;
 };
-const integrateSignature = (signature, interpro, integrated) => {
-  const accession = interpro.accession;
-  const entry = integrated.get(accession) || {
-    accession,
-    name: interpro.name,
-    source_database: 'InterPro',
-    _children: {},
-    children: [],
-    type: interpro.type.toLowerCase(),
-  };
-  entry._children[signature.accession] = signature;
-  entry.children = Object.values(entry._children);
-  integrated.set(accession, entry);
-};
-
-const _StatusTooltip = ({ status /*: string */ }) => (
-  <Tooltip title={`Job ${status}`}>
-    {(status === 'running' ||
-      status === 'created' ||
-      status === 'importing' ||
-      status === 'submitted') && (
-      <>
-        <SpinningCircle />
-        <div className={f('status')}>Searching</div>
-      </>
-    )}
-
-    {status === 'not found' || status === 'failure' || status === 'error' ? (
-      <>
-        <span
-          className={f('icon', 'icon-common', 'ico-notfound')}
-          data-icon="&#x78;"
-          aria-label="Job failed or not found"
-        />{' '}
-        {status}
-      </>
-    ) : null}
-    {['finished', 'imported file', 'saved in browser'].includes(status) && (
-      <>
-        <span
-          className={f('icon', 'icon-common', 'ico-confirmed')}
-          data-icon="&#xf00c;"
-          aria-label="Job finished"
-        />{' '}
-        {status}
-      </>
-    )}
-  </Tooltip>
-);
-_StatusTooltip.propTypes = {
-  status: T.oneOf([
-    'running',
-    'created',
-    'importing',
-    'imported file',
-    'saved in browser',
-    'submitted',
-    'not found',
-    'failure',
-    'error',
-    'finished',
-  ]),
-};
-const StatusTooltip = React.memo(_StatusTooltip);
-StatusTooltip.displayName = 'StatusTooltip';
-
-const mergeData = (matches, sequenceLength) => {
-  const mergedData /*: {unintegrated:any[], predictions: any[], family?: any[]} */ = {
-    unintegrated: [],
-    predictions: [],
-  };
-  const unintegrated = {};
-  let integrated = new Map();
-  const signatures = new Map();
-  for (const match of matches) {
-    const { library } = match.signature.signatureLibraryRelease;
-    const processedMatch = {
-      accession: match.signature.accession,
-      name: match.signature.name,
-      source_database: iproscan2urlDB(library),
-      protein_length: sequenceLength,
-      locations: match.locations.map((loc) => ({
-        ...loc,
-        model_acc: match['model-ac'],
-        fragments:
-          loc['location-fragments'] && loc['location-fragments'].length
-            ? loc['location-fragments']
-            : [{ start: loc.start, end: loc.end }],
-      })),
-      score: match.score,
-      residues: undefined,
-    };
-    const residues = match.locations
-      .map(({ sites }) =>
-        sites
-          ? {
-              accession: match.signature.accession,
-              locations: sites.map((site) => ({
-                description: site.description,
-                fragments: site.siteLocations,
-              })),
-            }
-          : null,
-      )
-      .filter(Boolean);
-    if (residues.length > 0) processedMatch.residues = residues;
-
-    if (NOT_MEMBER_DBS.has(library)) {
-      processedMatch.accession += ` (${mergedData.predictions.length + 1})`;
-      processedMatch.source_database = library; // Making sure the change matches the ignore list.
-      mergedData.predictions.push(processedMatch);
-      continue;
-    }
-    const mergedMatch = mergeMatch(
-      signatures.get(processedMatch.accession),
-      processedMatch,
-    );
-    signatures.set(mergedMatch.accession, mergedMatch);
-    if (match.signature.entry) {
-      integrateSignature(mergedMatch, match.signature.entry, integrated);
-    } else {
-      unintegrated[mergedMatch.accession] = mergedMatch;
-    }
-  }
-  mergedData.unintegrated = (Object.values(unintegrated) /*: any */);
-  integrated = Array.from(integrated.values()).map((m) => {
-    const locations = flattenDeep(
-      (m.children /*: any */)
-        .map((s /*: {locations: Array<{fragments: Array<Object>}>} */) =>
-          s.locations.map((l) => l.fragments.map((f) => [f.start, f.end])),
-        ),
-    );
-    return {
-      ...m,
-      locations: [
-        {
-          fragments: [
-            { start: Math.min(...locations), end: Math.max(...locations) },
-          ],
-        },
-      ],
-    };
-  });
-  (mergedData.unintegrated /*: any[] */)
-    .sort((m1, m2) => m2.score - m1.score);
-  for (const entry of integrated) {
-    if (!mergedData[entry.type]) mergedData[entry.type] = [];
-    mergedData[entry.type].push(entry);
-  }
-  return mergedData;
-};
 
 const getCreated = (payload, accession) => {
   let created = payload?.times?.created;
   if (!created) {
-    const regex = /iprscan5-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
+    const regex =
+      /iprscan5-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
     const matches = regex.exec(accession);
     if (matches) {
       const [_, y, m, d, hh, mm, ss] = matches;
