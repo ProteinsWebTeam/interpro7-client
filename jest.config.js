@@ -12,12 +12,14 @@ module.exports = {
   verbose: false,
   moduleNameMapper: {
     'config.yml$': '<rootDir>/interpro-config.js',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|tmpl|fasta)$':
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|tmpl|fasta|avif)$':
       '<rootDir>/src/__mocks__/fileMock.js',
     '\\.(css|less|scss)$': 'identity-obj-proxy',
     '^taxonomy-visualisation(.*)$':
       '<rootDir>/node_modules/taxonomy-visualisation/src/$1',
     '^protvista-([^/]*)(.*)$': '<rootDir>/node_modules/protvista-$1/src/$2',
+    '^d3-([^/]*)(.*)$': '<rootDir>/node_modules/d3-$1/dist/d3-$1.min.js',
+    d3: '<rootDir>/node_modules/d3/dist/d3.min.js',
   },
   moduleDirectories: ['node_modules', 'src'],
   collectCoverageFrom: ['src/**/*.js', '!**/.*.js'],
