@@ -1,24 +1,24 @@
-export const requestFullScreen = element => {
+export const requestFullScreen = (element) => {
   if ('requestFullscreen' in element) {
-    element.requestFullscreen();
+    return element.requestFullscreen();
   } else if ('webkitRequestFullscreen' in element) {
-    element.webkitRequestFullscreen();
+    return element.webkitRequestFullscreen();
   } else if ('mozRequestFullScreen' in element) {
-    element.mozRequestFullScreen();
+    return element.mozRequestFullScreen();
   } else if ('msRequestFullscreen' in element) {
-    element.msRequestFullscreen();
+    return element.msRequestFullscreen();
   }
 };
 
 export const exitFullScreen = () => {
   if ('exitFullscreen' in document) {
-    document.exitFullscreen();
+    return document.exitFullscreen();
   } else if ('webkitExitFullscreen' in document) {
-    document.webkitExitFullscreen();
+    return document.webkitExitFullscreen();
   } else if ('mozExitFullScreen' in document) {
-    document.mozExitFullScreen();
+    return document.mozExitFullScreen();
   } else if ('msExitFullscreen' in document) {
-    document.msExitFullscreen();
+    return document.msExitFullscreen();
   }
 };
 

@@ -30,6 +30,7 @@ import { foundationPartial } from 'styles/foundation';
 }; */
 /*:: type State = {
   fisheye: boolean,
+  isFullScreen: boolean,
   searchTerm: string,
 }; */
 
@@ -63,27 +64,10 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
     const fisheye = !!props.initialFisheye;
     const search = props.search;
 
-    this._vis = new TaxonomyVisualisation(undefined, {
-      initialMaxNodes: +Infinity,
-      fisheye,
-      fixedNodeSize: 5,
-      classnames: {
-        inPath: styles['in-path'],
-        node: styles.node,
-      },
-      enableZooming: true,
-      useCtrlToZoom: true,
-      searchTerm: search,
-      highlightColor: '#094EEE',
-      // shouldCorrectNodesOutside: true,
-    });
-
-    this._vis.addEventListener('focus', this._handleFocus);
-    this._vis.addEventListener('click', this._handleLabelClick);
     this._loadingVis = false;
     this._ref = React.createRef();
 
-    this.state = { fisheye, searchTerm: search };
+    this.state = { fisheye, searchTerm: search, isFullScreen: false };
   }
 
   static getDerivedStateFromProps(
@@ -95,6 +79,23 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
   }
 
   componentDidMount() {
+    this._vis = new TaxonomyVisualisation(undefined, {
+      initialMaxNodes: +Infinity,
+      fisheye: this.state.fisheye,
+      fixedNodeSize: 5,
+      classnames: {
+        inPath: styles['in-path'],
+        node: styles.node,
+      },
+      enableZooming: true,
+      useCtrlToZoom: true,
+      searchTerm: this.props.search,
+      highlightColor: '#094EEE',
+      // shouldCorrectNodesOutside: true,
+    });
+
+    this._vis.addEventListener('focus', this._handleFocus);
+    this._vis.addEventListener('click', this._handleLabelClick);
     this._vis.tree = this._ref.current;
     this._loadingVis = true;
     this._populateData(this.props.data, this.props.focused);
@@ -146,8 +147,16 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
         <div className={styles.buttons}>
           <span className={styles.fullscreen}>
             <FullScreenButton
-              element={this._ref.current}
+              element="treeDiv"
               tooltip="View the taxonomy tree in full screen mode"
+              onFullScreenHook={() =>
+                requestAnimationFrame(() =>
+                  this.setState({ isFullScreen: true }),
+                )
+              }
+              onExitFullScreenHook={() =>
+                this.setState({ isFullScreen: false })
+              }
             />
           </span>
           {this.props.hideToggle ? null : (
@@ -181,7 +190,11 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
                 className={styles.container}
                 ref={this._ref}
                 style={{ flex: '1' }}
-                width={100 * Math.floor((width || DEFAULT_WIDTH) / 100)}
+                width={
+                  this.state.isFullScreen
+                    ? window.screen.width
+                    : 100 * Math.floor((width || DEFAULT_WIDTH) / 100)
+                }
               />
             </div>
           )}
