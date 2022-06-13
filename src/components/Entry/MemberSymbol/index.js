@@ -156,8 +156,8 @@ const MemberSymbol = (
   const [png, setPng] = useState(null);
   const [avif, setAvif] = useState(null);
   if (!svg) {
-    images?.[type]?.[0].then((src) => setAvif(src.default));
-    images?.[type]?.[1].then((src) => setPng(src.default));
+    if (!avif) images?.[type]?.[0].then((src) => setAvif(src.default));
+    if (!png) images?.[type]?.[1].then((src) => setPng(src.default));
   }
   return (
     <span
