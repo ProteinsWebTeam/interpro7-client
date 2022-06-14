@@ -128,16 +128,16 @@ def output_list():
         entries = item["entries"]
       
       if entries is not None:
-        entries_header = ""
-        for entry in entries:
-          entries_header += " " + entry["accession"] + "(" + ";".join(
+        entries_header = "-".join(
+          [entry["accession"] + "(" + ";".join(
             [
               ",".join(
                 [ str(fragment["start"]) + "..." + str(fragment["end"]) 
                   for fragment in locations["fragments"]]
               ) for locations in entry["entry_protein_locations"]
             ]
-          ) + ")"
+          ) + ")" for entry in entries]
+        )
         sys.stdout.write(">" + item["metadata"]["accession"] + HEADER_SEPARATOR
                           + entries_header + HEADER_SEPARATOR
                           + item["metadata"]["name"] + "\n")

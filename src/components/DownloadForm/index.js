@@ -42,7 +42,11 @@ const SchemaOrgData = loadable({
 });
 
 const extractDataFromHash = (hash) => {
-  const [path, fileType, subset] = hash.replace('%7C', '|').split('|');
+  const [path, fileType, subset] = hash
+    .replaceAll('%7C', '|')
+    .replaceAll('%26', '&')
+    .replaceAll('%3F', '?')
+    .split('|');
   const output = { fileType, subset: !!subset };
   const [href, params] = path.split('?');
   try {

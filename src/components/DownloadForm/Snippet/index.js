@@ -16,14 +16,14 @@ import { addToast } from 'actions/creators';
 
 import jsRaw from 'raw-loader!../../../snippets/template.js.tmpl';
 import pythonRaw from 'raw-loader!../../../snippets/template.py.tmpl';
-import python2Raw from 'raw-loader!../../../snippets/template.py2.tmpl';
 import perlRaw from 'raw-loader!../../../snippets/template.pl.tmpl';
 
+import style from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import { foundationPartial } from 'styles/foundation';
 
-const f = foundationPartial(fonts, ebiGlobalStyles);
+const f = foundationPartial(style, fonts, ebiGlobalStyles);
 
 SyntaxHighlighter.registerLanguage('javascript', js);
 SyntaxHighlighter.registerLanguage('python', python);
@@ -38,14 +38,6 @@ const lut = new Map([
       template: template(pythonRaw, options),
       type: 'application/x-python',
       syntax: 'python',
-    },
-  ],
-  [
-    'py2',
-    {
-      template: template(python2Raw, options),
-      type: 'application/x-perl',
-      syntax: 'perl',
     },
   ],
   [
@@ -171,8 +163,7 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
               onBlur={this._handleChange}
               value={language}
             >
-              <option value="py">Python (version ≥ 3)</option>
-              <option value="py2">Python (version 2)</option>
+              <option value="py">Python3</option>
               <option value="pl">Perl (version 5)</option>
               <option value="js">JavaScript (node, version ≥ 10)</option>
             </select>

@@ -138,10 +138,18 @@ sub main {
       <% } %>
         print "\n";
       <% } else if (fileType === "fasta") { %>
+      my $entries;
       if (defined $item->{"entries"}){
+        $entries=$item->{"entries"};
+      }
+      if (defined $item->{"entry_subset"}){
+        $entries=$item->{"entry_subset"};
+      }
+      if ($entries){
         print ">$item->{metadata}->{accession}$HEADER_SEPARATOR";
-        foreach my $entry (@{$item->{"entries"}}) {
-          print " $entry->{accession}(";
+        my $DASH="";
+        foreach my $entry (@{$entries}) {
+          print "$DASH$entry->{accession}(";
           my $SEMICOLON = "";
           foreach my $locations  (@{$entry->{"entry_protein_locations"}}) {
             print "$SEMICOLON";
@@ -154,7 +162,8 @@ sub main {
             }
             $SEMICOLON = ";";            
           }
-          print ")"
+          $DASH="-";
+          print ")";
         }
         print "$HEADER_SEPARATOR$item->{metadata}->{name}\n";
 
