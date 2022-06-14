@@ -16,10 +16,14 @@ import { addToast } from 'actions/creators';
 
 import jsRaw from 'raw-loader!../../../snippets/template.js.tmpl';
 import pythonRaw from 'raw-loader!../../../snippets/template.py.tmpl';
-import python2Raw from 'raw-loader!../../../snippets/template.py2.tmpl';
 import perlRaw from 'raw-loader!../../../snippets/template.pl.tmpl';
 
-import f from 'styles/foundation';
+import style from '../style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import { foundationPartial } from 'styles/foundation';
+
+const f = foundationPartial(style, fonts, ebiGlobalStyles);
 
 SyntaxHighlighter.registerLanguage('javascript', js);
 SyntaxHighlighter.registerLanguage('python', python);
@@ -34,14 +38,6 @@ const lut = new Map([
       template: template(pythonRaw, options),
       type: 'application/x-python',
       syntax: 'python',
-    },
-  ],
-  [
-    'py2',
-    {
-      template: template(python2Raw, options),
-      type: 'application/x-perl',
-      syntax: 'perl',
     },
   ],
   [
@@ -120,8 +116,7 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
       this.props.addToast(
         {
           title: 'Error while copying',
-          body:
-            'An error was encountered while trying to copy this snippet of code in your clipboard',
+          body: 'An error was encountered while trying to copy this snippet of code in your clipboard',
           ttl: TTL,
           className: f('alert'),
         },
@@ -168,8 +163,7 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
               onBlur={this._handleChange}
               value={language}
             >
-              <option value="py">Python (version ≥ 3)</option>
-              <option value="py2">Python (version 2)</option>
+              <option value="py">Python3</option>
               <option value="pl">Perl (version 5)</option>
               <option value="js">JavaScript (node, version ≥ 10)</option>
             </select>
@@ -188,6 +182,13 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
           >
             Download script file
           </a>
+          {language === 'js' && (
+            <div className={f('callout', 'info', 'withicon')}>
+              This script requires the packages: <code>node-fetch</code> and{' '}
+              <code>timing-functions</code> either globally or in the local{' '}
+              <code>node_modules</code>
+            </div>
+          )}
           <SyntaxHighlighter language={lut.get(language).syntax} style={docco}>
             {code}
           </SyntaxHighlighter>
@@ -197,7 +198,4 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
   }
 }
 
-export default connect(
-  undefined,
-  { addToast },
-)(Snippet);
+export default connect(undefined, { addToast })(Snippet);

@@ -20,6 +20,11 @@
   & h6 {
     font-weight: bold;
   }
+  & .button.hollow {
+    color: var(--colors-submain);
+    background-color: var(--colors-almost-white);
+    margin-right: 0.5rem;
+  }
 }
 
 input.invalid-accession,
