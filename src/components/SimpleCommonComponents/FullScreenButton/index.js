@@ -43,8 +43,7 @@ const FullScreenButton = (
       exitFullScreen();
       onExitFullScreenHook();
     } else {
-      requestFullScreen(elementInDOM);
-      onFullScreenHook();
+      requestFullScreen(elementInDOM).then(() => onFullScreenHook());
     }
     setFull(!isFull);
   };

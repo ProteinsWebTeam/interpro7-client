@@ -270,6 +270,10 @@ const getConfigFor = (env, mode, module = false) => {
           ],
         },
         {
+          test: /logo.css$/i,
+          type: 'asset/source',
+        },
+        {
           test: /tippy.css$/i,
           use: [
             {
@@ -316,7 +320,8 @@ const getConfigFor = (env, mode, module = false) => {
               },
             },
           ],
-          exclude: /((tippy)|(clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          exclude:
+            /((tippy)|(clanviewer)|(ebi-global)|(interpro-new)|(logo))\.css$/i,
         },
         {
           test: /\.scss$/i,

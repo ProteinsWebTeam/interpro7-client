@@ -129,7 +129,7 @@ const AlignmentViewer = ({
             <protvista-zoom-tool
               length={length}
               displaystart="1"
-              displayend="100"
+              displayend={Math.min(100, length)}
             >
               <span
                 slot="zoom-out"
@@ -146,7 +146,10 @@ const AlignmentViewer = ({
               />
             </protvista-zoom-tool>
           </div>
-          <protvista-navigation length={length} displayend="100" />
+          <protvista-navigation
+            length={length}
+            displayend={Math.min(100, length)}
+          />
         </div>
         {contacts && (
           <div style={{ display: 'flex' }}>

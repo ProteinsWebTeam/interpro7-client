@@ -562,4 +562,6 @@ const mapStateToProps = createSelector(
   (showTreeToast) => ({ showTreeToast }),
 );
 
-export default connect(mapStateToProps, { goToCustomLocation })(TreeView);
+export default React.memo(
+  connect(mapStateToProps, { goToCustomLocation })(TreeView),
+);
