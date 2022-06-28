@@ -1,5 +1,96 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<ExactMatch /> search with  number 1  1`] = `
+Array [
+  <ExactMatchWrapper
+    to={
+      Object {
+        "description": Object {
+          "entry": Object {
+            "accession": "IPR000001",
+            "db": "interpro",
+          },
+          "main": Object {
+            "key": "entry",
+          },
+        },
+      }
+    }
+  >
+    entry
+     
+    IPR000001
+  </ExactMatchWrapper>,
+  <ExactMatchWrapper
+    to={
+      Object {
+        "description": Object {
+          "main": Object {
+            "key": "taxonomy",
+          },
+          "taxonomy": Object {
+            "accession": "1",
+            "db": "uniprot",
+          },
+        },
+      }
+    }
+  >
+    taxonomy
+     
+    1
+  </ExactMatchWrapper>,
+]
+`;
+
+exports[`<ExactMatch /> search with exact protein accession 1`] = `
+Array [
+  <ExactMatchWrapper
+    to={
+      Object {
+        "description": Object {
+          "main": Object {
+            "key": "protein",
+          },
+          "protein": Object {
+            "accession": "P99999",
+            "db": "reviewed",
+          },
+        },
+      }
+    }
+  >
+    protein
+     
+    P99999
+  </ExactMatchWrapper>,
+]
+`;
+
+exports[`<ExactMatch /> search with gene CYC 1`] = `
+Array [
+  <ExactGeneMatchWrapper
+    gene="CYC"
+    matches={
+      Array [
+        Object {
+          "accessions": Array [
+            "O61734",
+          ],
+          "name": "Drosophila melanogaster",
+        },
+        Object {
+          "accessions": Array [
+            "Q6IQM2",
+          ],
+          "name": "Danio rerio",
+        },
+      ]
+    }
+  />,
+]
+`;
+
 exports[`<SearchResults /> should render 1`] = `
 <Memo(Connect(UnconnectedErrorBoundary))>
   <Memo(Loadable)
