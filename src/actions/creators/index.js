@@ -223,15 +223,17 @@ export const downloadSuccess = (
   fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
   subset /*: boolean */,
   endpoint /*: string */,
-  { blobURL, size } /*: { blobURL:string, size: string } */,
+  { blob, length, date, version } /*: { blobURL:string, size: string } */,
 ) => ({
   type: types.DOWNLOAD_SUCCESS,
   url,
   fileType,
   subset,
   endpoint,
-  blobURL,
-  size,
+  blob,
+  length,
+  date,
+  version,
 });
 
 export const downloadProgress = (
@@ -258,6 +260,11 @@ export const downloadDelete = (
   url,
   fileType,
   subset,
+});
+
+export const setInitialDownloads = (downloads /*: Array<{}> */) => ({
+  type: types.SET_INITIAL_DOWNLOADS,
+  downloads,
 });
 
 // status

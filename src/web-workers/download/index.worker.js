@@ -3,6 +3,8 @@ import fetch from 'isomorphic-fetch';
 import { format, parse } from 'url';
 import { throttle } from 'lodash-es';
 import { sleep } from 'timing-functions';
+
+import getTableAccess, { DownloadJobs } from 'storage/idb';
 import { object2TSV, columns } from './object2TSV';
 
 import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';
@@ -38,9 +40,46 @@ const lut = new Map([
   ['tsv', 'text/tab-separated-values'],
 ]);
 
+const jobsData = getTableAccess(DownloadJobs);
+
+const deleteFromDB = async (key) => {
+  const jobsTable = await jobsData;
+  jobsTable.delete(key);
+};
+
+const saveInIndexedDB = async (
+  key /*: string */,
+  content /*: Array<string> */,
+  fileType /*: FileType */,
+  subset /*: boolean */,
+) => {
+  const _content = fileType === 'json' ? [`[${content.join(',')}]`] : content;
+  const blob = new Blob(_content, { type: lut.get(fileType) });
+  try {
+    // add entry to idb
+    const jobsDataTable = await jobsData;
+    const obj = {
+      key,
+      date: new Date().toISOString(),
+      fileType,
+      length: content.length,
+      blob,
+      subset,
+      version: null,
+    };
+    await jobsDataTable.set(obj, key);
+    return obj;
+  } catch {
+    // cleanup if anything bad happens
+    await deleteFromDB(key);
+  }
+};
+
 // always send the same thing, so abstract that
-const createActionCallerFor = (...args1) => (creator, ...args2) =>
-  creator(...args1, ...args2);
+const createActionCallerFor =
+  (...args1) =>
+  (creator, ...args2) =>
+    creator(...args1, ...args2);
 
 const DESCRIPTION_SEPARATOR = '|';
 
@@ -142,83 +181,71 @@ const mutatePayloadTo3rdPartyAPI = (payload, endpoint, page) => {
   }
 };
 // the `_` is just to make flow happy
-const downloadContent = (onProgress, onSuccess, onError) => async (
-  url,
-  fileType,
-  subset,
-  endpoint,
-  _,
-) => {
-  try {
-    const firstPage = getFirstPage(url, fileType, endpoint);
-    // TSV header
-    if (fileType === 'tsv') {
-      onProgress({
-        part: `${columns[endpoint].map(({ name }) => name).join('\t')}\n`,
-        progress: 0,
-      });
-    }
+const downloadContent =
+  (onProgress, onSuccess, onError) =>
+  async (url, fileType, subset, endpoint, _) => {
+    try {
+      const firstPage = getFirstPage(url, fileType, endpoint);
+      // TSV header
+      if (fileType === 'tsv') {
+        onProgress({
+          part: `${columns[endpoint].map(({ name }) => name).join('\t')}\n`,
+          progress: 0,
+        });
+      }
 
-    const key = [url, fileType, subset].filter(Boolean).join('');
-    // Counters for progress information
-    let totalCount;
-    let i = 0;
-    // Create a function to transform API response into processed file part
-    const processResults = processResultsFor(fileType, subset, endpoint);
-    // As long as we have a next page, we keep processing
-    // Let's start with the first one
-    let next = format(firstPage);
-    let errorCount = 0;
-    while (next) {
-      try {
-        const response = await fetch(next);
-        // If the server sent a timeout response…
-        if (response.status === REQUEST_TIMEOUT) {
-          // …wait a bit…
-          await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
-          // …then restart the loop with at the same URL
-          continue;
-        }
-        const payload = await response.json();
-        mutatePayloadTo3rdPartyAPI(payload, endpoint, firstPage);
-        totalCount = payload.count;
-        for (const part of processResults(payload.results)) {
-          // Check if it was canceled, if so, stop everything and return
-          // eslint-disable-next-line
-          if (canceled.has(key)) return;
-          // use `totalCount + 1` to not finish at exactly 1 to account for the
-          // time needed to create the blob
-          onProgress({ part, progress: ++i / (totalCount + 1) });
-        }
-        // If it's the last page, it will be null, so we exit the loop
-        next = payload.next;
-        // reset error counter as we're finished with that URL
-        errorCount = 0;
-      } catch (error) {
-        // If we have too many errors for one URL, just bail and throw the last
-        if (errorCount > MAX_ERROR_COUNT_FOR_ONE_REQUEST) {
-          throw error;
-        } else {
-          errorCount++;
-          await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
+      const key = [url, fileType, subset].filter(Boolean).join('|');
+      // Counters for progress information
+      let totalCount;
+      let i = 0;
+      // Create a function to transform API response into processed file part
+      const processResults = processResultsFor(fileType, subset, endpoint);
+      // As long as we have a next page, we keep processing
+      // Let's start with the first one
+      let next = format(firstPage);
+      let errorCount = 0;
+      let version = null;
+      while (next) {
+        try {
+          const response = await fetch(next);
+          // If the server sent a timeout response…
+          if (response.status === REQUEST_TIMEOUT) {
+            // …wait a bit…
+            await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
+            // …then restart the loop with at the same URL
+            continue;
+          }
+          const payload = await response.json();
+          version = version ?? response.headers.get('InterPro-Version');
+          mutatePayloadTo3rdPartyAPI(payload, endpoint, firstPage);
+          totalCount = payload.count;
+          for (const part of processResults(payload.results)) {
+            // Check if it was canceled, if so, stop everything and return
+            // eslint-disable-next-line
+            if (canceled.has(key)) return;
+            // use `totalCount + 1` to not finish at exactly 1 to account for the
+            // time needed to create the blob
+            onProgress({ part, progress: ++i / (totalCount + 1) });
+          }
+          // If it's the last page, it will be null, so we exit the loop
+          next = payload.next;
+          // reset error counter as we're finished with that URL
+          errorCount = 0;
+        } catch (error) {
+          // If we have too many errors for one URL, just bail and throw the last
+          if (errorCount > MAX_ERROR_COUNT_FOR_ONE_REQUEST) {
+            throw error;
+          } else {
+            errorCount++;
+            await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
+          }
         }
       }
+      onSuccess({ key, version: Number(version) });
+    } catch (error) {
+      onError(error);
     }
-    onSuccess();
-  } catch (error) {
-    onError(error);
-  }
-};
-
-// Create a file from the passed content and return its blob URL
-const generateFileHandle = (
-  content /*: Array<string> */,
-  fileType /*: FileType */,
-) => {
-  const _content = fileType === 'json' ? [`[${content.join(',')}]`] : content;
-  const blob = new Blob(_content, { type: lut.get(fileType) });
-  return { blobURL: URL.createObjectURL(blob), size: blob.size };
-};
+  };
 
 const postProgress = throttle(
   (progressAction) => self.postMessage(progressAction),
@@ -248,15 +275,21 @@ const download = async (url, fileType, subset, endpoint) => {
           postProgress(action(downloadProgress, progress));
         },
         // onSuccess
-        () => {
+        async ({ key, version }) => {
           // Finished getting all the content, generate a blob out of that
           // and get its URL
 
-          const urlAndSize = generateFileHandle(content, fileType);
+          const newDownload = await saveInIndexedDB(
+            key,
+            content,
+            fileType,
+            subset,
+          );
+          (newDownload || {}).version = version;
           // OK, we have done everything, set progress to 1 and set success
           postProgress(action(downloadProgress, 1));
           postProgress.flush();
-          self.postMessage(action(downloadSuccess, urlAndSize));
+          self.postMessage(action(downloadSuccess, newDownload));
         },
         onError,
       ),
