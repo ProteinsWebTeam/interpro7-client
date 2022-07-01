@@ -10,8 +10,10 @@ export const IPScanJobsData = 'IPScan-jobs-data';
 export const FavEntries = 'fav-entries';
 export const DownloadJobs = 'download-jobs';
 
+const CURRENT_DB_VERSION = 3;
+
 const init = () => {
-  dbPromise = openDB('InterPro', 3, {
+  dbPromise = openDB('InterPro', CURRENT_DB_VERSION, {
     upgrade(db, oldVersion) {
       // do not put 'break;', keep fall-through,
       // it is to apply all the updates, one after the other
@@ -25,6 +27,7 @@ const init = () => {
         // eslint-disable-next-line no-fallthrough
         case 2:
           db.createObjectStore(DownloadJobs, { autoIncrement: true });
+        // eslint-disable-next-line no-fallthrough
         default:
           break;
       }

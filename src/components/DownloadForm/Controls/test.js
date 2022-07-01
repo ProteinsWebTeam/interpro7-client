@@ -17,6 +17,7 @@ describe('<Controls />', () => {
         downloadDelete={() => {}}
         count={36713}
         noData={false}
+        interProVersion={89}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();

@@ -13,3 +13,10 @@
 .button {
   line-height: initial;
 }
+
+.callout .button {
+  background-color: #eeeeee;
+  &:hover {
+    background-color: white;
+  }
+}

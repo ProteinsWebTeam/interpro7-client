@@ -17,18 +17,18 @@ const deleteDownloadInDB = async (key) => {
   downloadsT.delete(key);
 };
 
-/*:: 
+/*::
 export type DatumProgress = {
   progress: number,
   successful: ?boolean,
   blobURL: ?string,
-}; 
-export type CompletedDownload ={ 
-  blob: Blob, 
-  date: Date, 
-  fileType: string, 
-  version: string, 
-  length: number, 
+};
+export type CompletedDownload ={
+  blob: Blob,
+  date: Date,
+  fileType: string,
+  version: string,
+  length: number,
   subset: boolean,
 }
 
@@ -41,9 +41,6 @@ const keyFromAction = (action) =>
   [action.url, action.fileType, action.subset && 'subset']
     .filter(Boolean)
     .join('|');
-
-const keyFromValues = (...values /*: (string|boolean)[] */) =>
-  values.filter(Boolean).join('|');
 
 export default (state /*: Download */ = {}, action /*: Object */) => {
   switch (action.type) {
@@ -86,6 +83,7 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
           subset: action.subset,
           date: action.date,
           version: action.version,
+          fileType: action.fileType,
         },
       };
     case DOWNLOAD_DELETE:
@@ -111,6 +109,7 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
               subset,
               fileType,
               date,
+              version,
             };
           },
         );

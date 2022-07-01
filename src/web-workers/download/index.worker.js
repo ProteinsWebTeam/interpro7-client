@@ -52,6 +52,7 @@ const saveInIndexedDB = async (
   content /*: Array<string> */,
   fileType /*: FileType */,
   subset /*: boolean */,
+  version /*: number */,
 ) => {
   const _content = fileType === 'json' ? [`[${content.join(',')}]`] : content;
   const blob = new Blob(_content, { type: lut.get(fileType) });
@@ -65,7 +66,7 @@ const saveInIndexedDB = async (
       length: content.length,
       blob,
       subset,
-      version: null,
+      version,
     };
     await jobsDataTable.set(obj, key);
     return obj;
@@ -183,6 +184,7 @@ const mutatePayloadTo3rdPartyAPI = (payload, endpoint, page) => {
 // the `_` is just to make flow happy
 const downloadContent =
   (onProgress, onSuccess, onError) =>
+  // eslint-disable-next-line max-statements
   async (url, fileType, subset, endpoint, _) => {
     try {
       const firstPage = getFirstPage(url, fileType, endpoint);
@@ -216,7 +218,7 @@ const downloadContent =
             continue;
           }
           const payload = await response.json();
-          version = version ?? response.headers.get('InterPro-Version');
+          version = response.headers.get('InterPro-Version');
           mutatePayloadTo3rdPartyAPI(payload, endpoint, firstPage);
           totalCount = payload.count;
           for (const part of processResults(payload.results)) {
@@ -278,14 +280,14 @@ const download = async (url, fileType, subset, endpoint) => {
         async ({ key, version }) => {
           // Finished getting all the content, generate a blob out of that
           // and get its URL
-
+          console.log('pruff', version);
           const newDownload = await saveInIndexedDB(
             key,
             content,
             fileType,
             subset,
+            version,
           );
-          (newDownload || {}).version = version;
           // OK, we have done everything, set progress to 1 and set success
           postProgress(action(downloadProgress, 1));
           postProgress.flush();

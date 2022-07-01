@@ -30,12 +30,14 @@ export const SOFT_LIMIT = 10000;
   download: {
     progress: number,
     successful: boolean,
-    blobURL: string
+    blobURL: string,
+    version: number,
   },
   downloadURL: function,
   downloadDelete: function,
   isStale?: boolean,
   count: number,
+  interProVersion: number,
   noData: boolean
 };*/
 
@@ -49,11 +51,13 @@ export class Controls extends PureComponent /*:: <Props> */ {
       progress: T.number,
       successful: T.bool,
       blobURL: T.string,
+      version: T.string,
     }).isRequired,
     downloadURL: T.func.isRequired,
     downloadDelete: T.func.isRequired,
     isStale: T.bool,
     count: T.number.isRequired,
+    interProVersion: T.number.isRequired,
     noData: T.bool.isRequired,
   };
 
@@ -82,10 +86,11 @@ export class Controls extends PureComponent /*:: <Props> */ {
     const {
       fileType,
       entityType,
-      download: { progress, successful, blobURL },
+      download: { progress, successful, blobURL, version },
       count,
       noData,
       isStale,
+      interProVersion,
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
     return (
@@ -109,7 +114,24 @@ export class Controls extends PureComponent /*:: <Props> */ {
             Please generate the file in order to download it.
           </div>
         ) : null}
-
+        {interProVersion > version && (
+          <div className={f('callout', 'alert', 'withicon')}>
+            <h5>The existing download is outdated.</h5>
+            <p>
+              It was obtained using InterPro version <i>{version}</i>, while the
+              current version is <i>{interProVersion}</i>. You need to remove
+              the existing file before re-generating the download.
+            </p>
+            <p>
+              <Link
+                className={f('button', 'hollow')}
+                onClick={this._handleCancelClick}
+              >
+                Remove the current download
+              </Link>
+            </p>
+          </div>
+        )}
         <div className={f('container')}>
           <button
             type="button"
