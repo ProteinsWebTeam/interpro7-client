@@ -68,6 +68,16 @@ _DataProvider.propTypes = {
       name: T.string,
     }),
   ),
+  locations: T.arrayOf(
+    T.shape({
+      fragments: T.arrayOf(
+        T.shape({
+          start: T.number,
+          end: T.number,
+        }),
+      ),
+    }),
+  ),
 };
 
 const getUrlFor = createSelector(
