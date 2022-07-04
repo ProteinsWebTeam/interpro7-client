@@ -458,7 +458,10 @@ module.exports = (
       },
 
       client: {
-        overlay: true,
+        overlay: {
+          errors: true,
+          warnings: false,
+        },
       },
       hot: true,
       historyApiFallback: {
