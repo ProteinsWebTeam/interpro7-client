@@ -23,11 +23,13 @@ const f = foundationPartial(fonts, ipro, local);
   localID: string,
   status: string,
   withTitle: boolean,
+  versionMismatch: boolean,
   jobs: Object,
   updateJob: function,
   deleteJob: function,
   goToCustomLocation: function,
-  keepJobAsLocal: function
+  keepJobAsLocal: function,
+  sequence: string,
 }*/
 
 export class Actions extends PureComponent /*:: <Props> */ {
@@ -35,17 +37,31 @@ export class Actions extends PureComponent /*:: <Props> */ {
     localID: T.string.isRequired,
     status: T.string,
     withTitle: T.bool,
+    versionMismatch: T.bool,
     jobs: T.object.isRequired,
     updateJob: T.func.isRequired,
     deleteJob: T.func.isRequired,
     goToCustomLocation: T.func.isRequired,
     keepJobAsLocal: T.func.isRequired,
+    sequence: T.string.isRequired,
   };
 
   _handleSaveToggle = () => {
     const { localID, jobs, updateJob } = this.props;
     const { metadata } = jobs[localID];
     updateJob({ metadata: { ...metadata, saved: !metadata.saved } });
+  };
+  _handleReRun = () => {
+    const { sequence, goToCustomLocation } = this.props;
+    goToCustomLocation({
+      description: {
+        main: { key: 'search' },
+        search: {
+          type: 'sequence',
+          value: (sequence || '').match(/(.{1,60})/g).join('\n'),
+        },
+      },
+    });
   };
 
   _handleDelete = () => {
@@ -61,7 +77,8 @@ export class Actions extends PureComponent /*:: <Props> */ {
 
   render() {
     // const { localID, withTitle, jobs } = this.props;
-    const { withTitle, status, localID, keepJobAsLocal } = this.props;
+    const { withTitle, status, localID, keepJobAsLocal, versionMismatch } =
+      this.props;
     // const { saved } = (jobs[localID] || {}).metadata || {};
     return (
       <nav className={f('buttons')}>
@@ -107,6 +124,24 @@ export class Actions extends PureComponent /*:: <Props> */ {
               data-icon="&#x53;"
               onClick={() => keepJobAsLocal(localID)}
               aria-label="Save results in Browser"
+            />
+          </Tooltip>
+        )}
+        {versionMismatch && (
+          <Tooltip
+            title={
+              <div>
+                <b>Execute the job again</b>: We detected the current results
+                were executed with a previous version of InterProScan. Click in
+                the button to create a new job with the most recent version.
+              </div>
+            }
+          >
+            <button
+              className={f('icon', 'icon-common', 'ico-neutral')}
+              data-icon="&#xf1da;"
+              onClick={this._handleReRun}
+              aria-label="Execute the job again"
             />
           </Tooltip>
         )}
