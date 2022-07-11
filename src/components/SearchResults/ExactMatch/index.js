@@ -1,13 +1,13 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Fragment, useState } from 'react';
 import T from 'prop-types';
-import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+import loadData from 'higherOrder/loadData';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
-
-import loadData from 'higherOrder/loadData';
+import ExactGeneMatchWrapper from './Gene';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -48,53 +48,6 @@ class ExactMatchWrapper extends PureComponent /*:: <EMWProps> */ {
     );
   }
 }
-
-/*:: type EMGWProps = {
-  matches: {
-    accession: string[],
-    name: string,
-  },
-  gene: string,
-}; */
-const ExactGeneMatchWrapper = ({ matches, gene }) => (
-  <div className={f('callout', 'warning', 'margin-bottom-medium')}>
-    <span className={f('icon', 'icon-common')} data-icon="&#xf35a;">
-      {' '}
-      Found an exact gene match for <b>{gene}</b>:
-    </span>{' '}
-    <ul>
-      {matches.map(({ accessions, name }) => (
-        <li key={name}>
-          <b>{name}</b>:{' '}
-          {accessions.map((accession, i) => (
-            <Fragment key={accession}>
-              {i > 0 ? ', ' : ''}
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'protein' },
-                    protein: { db: 'uniprot', accession },
-                  },
-                }}
-              >
-                {accession}
-              </Link>
-            </Fragment>
-          ))}
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-ExactGeneMatchWrapper.propTypes = {
-  matches: T.arrayOf(
-    T.shape({
-      accession: T.arrayOf(T.string),
-      name: T.string,
-    }),
-  ),
-  gene: T.string,
-};
 
 /*:: type SMProps = {
   data: {

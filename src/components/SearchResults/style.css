@@ -1,3 +1,15 @@
+@import '../../styles/colors.css';
 .acc-row {
   font-size: 0.8rem;
+}
+button.link {
+  font-style: italic;
+  font-weight: bold;
+  color: var(--colors-progress);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--colors-gray);
+    text-decoration: underline;
+  }
 }
