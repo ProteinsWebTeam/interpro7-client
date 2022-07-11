@@ -139,6 +139,12 @@ const commonCachedFetch =
     } else if (responseType === 'yaml') {
       const yaml = await import(/* webpackChunkName: "js-yaml" */ 'js-yaml');
       payloadP = yaml.load(await response.text(), { json: true });
+    } else if (responseType === 'xml') {
+      const { XMLParser } = await import(
+        /* webpackChunkName: "fast-xml-parser" */ 'fast-xml-parser'
+      );
+      const xmlParser = new XMLParser();
+      payloadP = xmlParser.parse(await response.text());
     }
     const output /*: FetchOutput */ = {
       status: response.status,
@@ -158,5 +164,6 @@ export const cachedFetchText = commonCachedFetch('text');
 export const cachedFetchJSON = commonCachedFetch('json');
 export const cachedFetchYAML = commonCachedFetch('yaml');
 export const cachedFetchGZIP = commonCachedFetch('gzip');
+export const cachedFetchXML = commonCachedFetch('xml');
 
 export default commonCachedFetch();

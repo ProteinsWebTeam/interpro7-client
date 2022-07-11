@@ -23,13 +23,18 @@ const f = foundationPartial(fonts, ipro, local);
   localID: string,
   status: string,
   withTitle: boolean,
-  versionMismatch: boolean,
+  versionMismatch?: boolean,
   jobs: Object,
   updateJob: function,
   deleteJob: function,
   goToCustomLocation: function,
   keepJobAsLocal: function,
-  sequence: string,
+  sequence?: string,
+  attributes?: {
+    applications: string[] | null,
+    goterms: boolean | null,
+    pathways: boolean | null,
+  }
 }*/
 
 export class Actions extends PureComponent /*:: <Props> */ {
@@ -44,6 +49,11 @@ export class Actions extends PureComponent /*:: <Props> */ {
     goToCustomLocation: T.func.isRequired,
     keepJobAsLocal: T.func.isRequired,
     sequence: T.string.isRequired,
+    attributes: T.shape({
+      applications: T.arrayOf(T.string),
+      goterms: T.bool,
+      pathways: T.bool,
+    }),
   };
 
   _handleSaveToggle = () => {
@@ -52,15 +62,22 @@ export class Actions extends PureComponent /*:: <Props> */ {
     updateJob({ metadata: { ...metadata, saved: !metadata.saved } });
   };
   _handleReRun = () => {
-    const { sequence, goToCustomLocation } = this.props;
+    const { sequence, attributes, goToCustomLocation } = this.props;
+    const search = {};
+    if (attributes?.applications) search.applications = attributes.applications;
+    if (![null, undefined].includes(attributes?.goterms))
+      search.goterms = !!attributes?.goterms;
+    if (![null, undefined].includes(attributes?.pathways))
+      search.pathways = !!attributes?.pathways;
     goToCustomLocation({
       description: {
         main: { key: 'search' },
         search: {
           type: 'sequence',
-          value: (sequence || '').match(/(.{1,60})/g).join('\n'),
+          value: ((sequence || '').match(/(.{1,60})/g) || []).join('\n'),
         },
       },
+      search,
     });
   };
 

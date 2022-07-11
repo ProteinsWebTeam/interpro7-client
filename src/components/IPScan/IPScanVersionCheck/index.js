@@ -17,7 +17,11 @@ const DAYS_TO_UPDATE_IPSCAN = 5;
   type Props = {
     data?: {
       loading:Boolean,
-      payload: ?{databases: {}}
+      payload: ?{databases: {
+        [string]: {
+          [string]: any,
+        }
+      }}
     },
     ipScanVersion?: string,
     callback: boolean => void
@@ -27,7 +31,7 @@ const DAYS_TO_UPDATE_IPSCAN = 5;
 const IPScanVersionCheck = ({ data, ipScanVersion, callback } /*: Props */) => {
   const currentVersion = data?.payload?.databases?.interpro?.version;
   const currentVersionReleaseDate = new Date(
-    data?.payload?.databases?.interpro?.releaseDate,
+    data?.payload?.databases?.interpro?.releaseDate || 0,
   );
   const [_, jobVersion] = (ipScanVersion || '').split('-');
   useEffect(() => {

@@ -250,6 +250,11 @@ const SummaryIPScanJob = ({
                 status={status}
                 versionMismatch={versionMismatch}
                 sequence={metadata.sequence}
+                attributes={{
+                  applications: localPayload?.applications,
+                  goterms: localPayload?.goterms,
+                  pathways: localPayload?.pathways,
+                }}
               />
             </section>
           </section>

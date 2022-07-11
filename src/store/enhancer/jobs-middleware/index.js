@@ -1,11 +1,30 @@
 // @flow
 /*:: import type { Middleware } from 'redux'; */
 /*:: import type { JobMetadata } from 'reducers/jobs/metadata'; */
+/*::
+  type ImportedParametersPayload = {
+    execution: {
+      userParameters: {
+        entry: Array<{
+          string: string,
+          boolean?: boolean,
+          'string-array'?: {
+            string: string[]
+          },
+        }>
+      }
+    }
+  }
+*/
 import url from 'url';
 import { schedule } from 'timing-functions';
 
 import { createNotification } from 'utils/browser-notifications';
-import { cachedFetchJSON, cachedFetchText } from 'utils/cached-fetch';
+import {
+  cachedFetchJSON,
+  cachedFetchText,
+  cachedFetchXML,
+} from 'utils/cached-fetch';
 import id from 'utils/cheap-unique-id';
 
 import {
@@ -83,6 +102,31 @@ const updateJobInDB = async (metadata, data, title) => {
     metadata.localTitle = title || data?.results?.[0]?.xref?.[0]?.name;
   }
   metaT.set(metadata, metadata.localID);
+};
+
+const processImportedAttributes = (
+  payload /*: ImportedParametersPayload */,
+) /*:  { goterms: boolean|null, pathways: boolean|null, applications: string[]|null } */ => {
+  let goterms = null;
+  let pathways = null;
+  let applications = null;
+  const parameters = payload?.execution?.userParameters?.entry || [];
+  parameters.forEach((parameter) => {
+    switch (parameter?.string) {
+      case 'goterms':
+        goterms = parameter?.boolean ?? null;
+        break;
+      case 'pathways':
+        pathways = parameter?.boolean ?? null;
+        break;
+      case 'appl':
+        applications = parameter?.['string-array']?.string || [];
+        break;
+      default:
+        break;
+    }
+  });
+  return { goterms, pathways, applications };
 };
 
 const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
@@ -209,7 +253,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     if (meta.status === 'finished' && !meta.hasResults) {
       const ipScanInfo = getState().settings.ipScan;
       // Getting the results from the interporScan Server
-      const { payload: data, ok } = await cachedFetchJSON(
+      const { payload: data1, ok } = await cachedFetchJSON(
         meta.remoteID
           ? url.resolve(
               url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
@@ -217,10 +261,27 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
             )
           : null,
       );
-      if (ok) {
-        dispatch(updateJob({ metadata: { ...meta, hasResults: true }, data }));
+      const { payload: data2, ok: ok2 } = await cachedFetchXML(
+        meta.remoteID
+          ? url.resolve(
+              url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
+              `result/${meta.remoteID || ''}/submission`,
+            )
+          : null,
+      );
+      if (ok && ok2) {
+        const data = {
+          ...processImportedAttributes(data2),
+          ...data1,
+        };
+        dispatch(
+          updateJob({
+            metadata: { ...meta, hasResults: true },
+            data,
+          }),
+        );
       } else {
-        console.log('GOT here', data);
+        console.log('GOT here', data1, data2);
         dispatch(
           updateJob({
             metadata: { ...meta, hasResults: false, status: 'error' },
