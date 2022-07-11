@@ -1,4 +1,5 @@
-import React, { PureComponent, Fragment, useState } from 'react';
+// @flow
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';

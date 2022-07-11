@@ -1,3 +1,4 @@
+// @flow
 import React, { Fragment, useState } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
@@ -12,7 +13,8 @@ import style from '../../style.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, style);
 
 const NUMBER_OF_PROTEINS_TO_SHOW = 10;
-const ListOfProteins = ({ accessions }) => {
+
+const ListOfProteins = ({ accessions } /*: {accessions: string[]} */) => {
   const [showMore, setShowMore] = useState(false);
   const accessions2show =
     accessions.length < NUMBER_OF_PROTEINS_TO_SHOW || showMore
@@ -43,10 +45,13 @@ const ListOfProteins = ({ accessions }) => {
     </>
   );
 };
+ListOfProteins.propTypes = {
+  accessions: T.arrayOf(T.string),
+};
 
 /*:: type EMGWProps = {
   matches: {
-    accession: string[],
+    accessions: string[],
     name: string,
   },
   gene: string,
@@ -69,7 +74,7 @@ const ExactGeneMatchWrapper = ({ matches, gene }) => (
 ExactGeneMatchWrapper.propTypes = {
   matches: T.arrayOf(
     T.shape({
-      accession: T.arrayOf(T.string),
+      accessions: T.arrayOf(T.string),
       name: T.string,
     }),
   ),
