@@ -39,7 +39,8 @@ const ListOfProteins = ({ accessions } /*: {accessions: string[]} */) => {
       ))}
       {accessions.length > NUMBER_OF_PROTEINS_TO_SHOW && !showMore && (
         <button className={f('link')} onClick={() => setShowMore(true)}>
-          ... Show More
+          ... and {accessions.length - NUMBER_OF_PROTEINS_TO_SHOW} proteins more
+          (click to show).
         </button>
       )}
     </>
