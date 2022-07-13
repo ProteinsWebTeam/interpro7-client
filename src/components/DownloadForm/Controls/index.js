@@ -141,12 +141,6 @@ export class Controls extends PureComponent /*:: <Props> */ {
           >
             Generate
           </button>
-          <ProgressButton
-            downloading={downloading}
-            success={successful}
-            failed={successful === false}
-            progress={progress || 0}
-          />
           <Link
             type="button"
             className={f('button', 'hollow', { warning: count >= SOFT_LIMIT })}
