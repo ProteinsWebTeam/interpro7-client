@@ -170,7 +170,7 @@ const Announcement = () => (
   <div className={f('row')}>
     <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
       <div
-        className={f('callout', 'info')}
+        className={f('callout', 'warning')}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -182,25 +182,16 @@ const Announcement = () => (
             color: 'darkblue',
             paddingRight: '1rem',
           }}
-          className={f('small', 'icon', 'icon-species')}
-          data-icon="v"
+          className={f('small', 'icon', 'icon-common', 'icon-announcement')}
         />{' '}
-        You can see the special page created to compile all the information for:{' '}
-        <Link
-          to={{
-            description: {
-              main: { key: 'proteome' },
-              proteome: { db: 'uniprot', accession: 'UP000464024' },
-            },
-          }}
-          style={{
-            color: '#003457',
-          }}
-        >
-          {' '}
-          SARS-CoV-2
-        </Link>
-        .
+        <p>
+          The Pfam website will be decomissioned on October 5th 2022. All Pfam
+          data of this, and future versions, will be available here at the
+          InterPro website. You can read more about it in our{' '}
+          <a href="http://proteinswebteam.github.io/interpro-blog/">
+            blog post
+          </a>
+        </p>
       </div>
     </div>
   </div>
