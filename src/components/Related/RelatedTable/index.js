@@ -162,16 +162,6 @@ const RelatedTable = (
         focusType={focusType}
         databases={databases}
       />
-      {mainType === 'set' &&
-        focusType === 'entry' &&
-        mainData?.source_database === 'pfam' && (
-          <div className={f('callout', 'info', 'withicon')}>
-            For more information about the different domain architectures of the
-            Pfam entries included in this clan, you can click on a Pfam
-            accession in the table below and go to the Domain architectures tab
-            of the Pfam entry.
-          </div>
-        )}
       <div className={f('filters-and-table')}>
         {hasFilters && (
           <nav>

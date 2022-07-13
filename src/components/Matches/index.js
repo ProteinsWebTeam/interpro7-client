@@ -668,7 +668,7 @@ const Matches = (
         displayIf={
           primary === 'entry' &&
           secondary === 'set' &&
-          description?.entry?.db == 'pfam'
+          description?.entry?.db === 'pfam'
         }
         renderer={(accession /*: string */) => (
           <Link
@@ -688,7 +688,36 @@ const Matches = (
           </Link>
         )}
       >
-        Links
+        Aligments
+      </Column>
+      <Column
+        dataKey="accession"
+        defaultKey="ida"
+        headerClassName={f('table-center')}
+        cellClassName={f('table-center')}
+        displayIf={
+          primary === 'entry' &&
+          secondary === 'set' &&
+          description?.entry?.db === 'pfam'
+        }
+        renderer={(accession /*: string */) => (
+          <Link
+            to={(customLocation) => ({
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: customLocation.description.set.db,
+                  accession,
+                  detail: 'domain_architecture',
+                },
+              },
+            })}
+          >
+            IDA Table
+          </Link>
+        )}
+      >
+        Domain architectures
       </Column>
     </Table>
   );
