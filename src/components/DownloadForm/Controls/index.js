@@ -4,7 +4,6 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
-import ProgressButton from 'components/ProgressButton';
 import NumberComponent from 'components/NumberComponent';
 
 import { downloadURL, downloadDelete } from 'actions/creators';

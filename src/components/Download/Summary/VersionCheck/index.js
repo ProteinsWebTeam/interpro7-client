@@ -13,6 +13,9 @@ import interproTheme from 'styles/theme-interpro.css'; /* needed for custom butt
 import ipro from 'styles/interpro-new.css';
 const f = foundationPartial(interproTheme, ipro);
 
+const ONE_SEC = 1000;
+const ALMOST_BOTTOM = 0.75;
+
 /*:: type Props = {
   localID: string,
   downloadVersion: number,
@@ -38,10 +41,10 @@ const VersionCheck = ({ data, downloadVersion, localID } /*: Props */) => {
       <Tooltip
         html={
           <>
-            <h5 style={{ color: 'white' }}>This download is outdated.</h5>
+            <h5 style={{ color: 'white' }}>New data available</h5>
             <p>
-              It was obtained using InterPro version <i>{downloadVersion}</i>,
-              while the current version is <i>{currentVersion}</i>
+              One or more versions of InterPro have been released since you
+              generated this download.
             </p>
             <p>
               <Link
@@ -53,10 +56,21 @@ const VersionCheck = ({ data, downloadVersion, localID } /*: Props */) => {
                   hash: localID?.split('/api')?.[1],
                 }}
                 className={f('button')}
+                onNewLocation={() =>
+                  setTimeout(
+                    () =>
+                      window.scrollTo({
+                        top:
+                          (document?.body?.scrollHeight || 0) * ALMOST_BOTTOM,
+                        left: 0,
+                        behavior: 'smooth',
+                      }),
+                    ONE_SEC,
+                  )
+                }
               >
                 Restart the download with current data
               </Link>
-              .
             </p>
           </>
         }
