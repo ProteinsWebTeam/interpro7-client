@@ -660,6 +660,36 @@ const Matches = (
       >
         Actions
       </Column>
+      <Column
+        dataKey="accession"
+        defaultKey="seedAlignment"
+        headerClassName={f('table-center')}
+        cellClassName={f('table-center')}
+        displayIf={
+          primary === 'entry' &&
+          secondary === 'set' &&
+          description?.entry?.db == 'pfam'
+        }
+        renderer={(accession /*: string */) => (
+          <Link
+            to={(customLocation) => ({
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: customLocation.description.set.db,
+                  accession,
+                  detail: 'entry_alignments',
+                },
+              },
+              search: { type: 'seed' },
+            })}
+          >
+            Seed Aligment
+          </Link>
+        )}
+      >
+        Links
+      </Column>
     </Table>
   );
 };
