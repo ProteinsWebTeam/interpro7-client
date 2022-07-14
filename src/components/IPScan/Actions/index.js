@@ -32,8 +32,6 @@ const f = foundationPartial(fonts, ipro, local);
   sequence?: string,
   attributes?: {
     applications: string[] | null,
-    goterms: boolean | null,
-    pathways: boolean | null,
   }
 }*/
 
@@ -51,8 +49,6 @@ export class Actions extends PureComponent /*:: <Props> */ {
     sequence: T.string.isRequired,
     attributes: T.shape({
       applications: T.arrayOf(T.string),
-      goterms: T.bool,
-      pathways: T.bool,
     }),
   };
 
@@ -65,10 +61,6 @@ export class Actions extends PureComponent /*:: <Props> */ {
     const { sequence, attributes, goToCustomLocation } = this.props;
     const search = {};
     if (attributes?.applications) search.applications = attributes.applications;
-    if (![null, undefined].includes(attributes?.goterms))
-      search.goterms = !!attributes?.goterms;
-    if (![null, undefined].includes(attributes?.pathways))
-      search.pathways = !!attributes?.pathways;
     goToCustomLocation({
       description: {
         main: { key: 'search' },

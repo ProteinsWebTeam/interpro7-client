@@ -5,6 +5,7 @@
 .buttons {
   display: flex;
   & button {
-    margin-right: 1em;
+    margin: 0 0.5rem;
+    cursor: pointer;
   }
 }

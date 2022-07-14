@@ -169,8 +169,6 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
           group: meta?.group,
           orf: data?.results?.[0]?.orf,
           applications: data?.applications,
-          goterms: data?.goterms,
-          pathways: data?.pathways,
         },
       });
     });

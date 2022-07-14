@@ -106,19 +106,11 @@ const updateJobInDB = async (metadata, data, title) => {
 
 const processImportedAttributes = (
   payload /*: ImportedParametersPayload */,
-) /*:  { goterms: boolean|null, pathways: boolean|null, applications: string[]|null } */ => {
-  let goterms = null;
-  let pathways = null;
+) /*:  { applications: string[]|null } */ => {
   let applications = null;
   const parameters = payload?.execution?.userParameters?.entry || [];
   parameters.forEach((parameter) => {
     switch (parameter?.string) {
-      case 'goterms':
-        goterms = parameter?.boolean ?? null;
-        break;
-      case 'pathways':
-        pathways = parameter?.boolean ?? null;
-        break;
       case 'appl':
         applications = parameter?.['string-array']?.string || [];
         break;
@@ -126,7 +118,7 @@ const processImportedAttributes = (
         break;
     }
   });
-  return { goterms, pathways, applications };
+  return { applications };
 };
 
 const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
@@ -138,9 +130,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     if (meta.status === 'failed') return;
     if (meta.status === 'created') {
       const dataT = await dataTA;
-      const { input, applications, goterms, pathways } = await dataT.get(
-        localID,
-      );
+      const { input, applications } = await dataT.get(localID);
 
       const ipScanInfo = getState().settings.ipScan;
 
@@ -162,8 +152,6 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
                 title: localID,
                 sequence: input,
                 appl: applications,
-                goterms,
-                pathways,
               },
             })
             .replace(/^\?/, ''),
@@ -281,7 +269,6 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
           }),
         );
       } else {
-        console.log('GOT here', data1, data2);
         dispatch(
           updateJob({
             metadata: { ...meta, hasResults: false, status: 'error' },

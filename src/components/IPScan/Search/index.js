@@ -365,8 +365,6 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       data: {
         input: lines.join('\n'),
         applications: getCheckedApplications(this._formRef.current),
-        goterms: true,
-        pathways: true,
       },
     });
     // Request browser notification
