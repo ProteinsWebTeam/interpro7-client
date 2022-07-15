@@ -11,8 +11,6 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
 const InterProDownloads = () => {
-  const IS_UNIPARC_READY = true;
-  const UniparcLink = IS_UNIPARC_READY ? Link : 'span';
   return (
     <>
       <table className={f('classic')}>
@@ -109,30 +107,23 @@ const InterProDownloads = () => {
 
           <tr>
             <td>
-              <UniparcLink href="https://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
                 Uniparc sequences
-              </UniparcLink>
+              </Link>
             </td>
             <td>
               All uniparc (UniProt Archive) sequences and the InterPro entries
               and individual signatures they match, in XML format.
-              {!IS_UNIPARC_READY && (
-                <div>
-                  <br />
-                  <b>Note:</b>The Uniparc file is still been generated for this
-                  version. We will update this link once is ready.
-                </div>
-              )}
             </td>
             <td className={f('xs-hide')}>uniparc_match.tar.gz</td>
             <td className={f('xs-hide')}>gzipped</td>
             <td>
-              <UniparcLink href="https://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
                 <span
                   className={f('icon', 'icon-common', 'font-l')}
                   data-icon="&#x3d;"
                 />
-              </UniparcLink>
+              </Link>
               <br />
             </td>
           </tr>

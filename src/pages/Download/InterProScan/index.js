@@ -21,7 +21,7 @@ const InterProScanDownloads = () => (
       <Link href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/">
         FTP Site
       </Link>
-      . InterProScan's source code is available on{' '}
+      . InterProScan&#39;s source code is available on{' '}
       <Link
         href="//github.com/ebi-pf-team/interproscan"
         className={f('ext')}
