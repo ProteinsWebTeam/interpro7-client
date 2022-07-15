@@ -684,7 +684,7 @@ const Matches = (
               search: { type: 'seed' },
             })}
           >
-            Seed Aligment
+            Link
           </Link>
         )}
       >
