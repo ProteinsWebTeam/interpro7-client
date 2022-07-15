@@ -10,7 +10,9 @@ import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 
 /*:: type Props = {
-  children: any
+  selectedTab?: string,
+  onTabSelected?: (tab: string) => void,
+  children: any,
 }; */
 
 /*:: type State = {
@@ -19,6 +21,8 @@ const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme);
 export default class Tabs extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     children: T.any,
+    selectedTab: T.string,
+    onTabSelected: T.func,
   };
 
   constructor(props /*: Props */) {
@@ -26,12 +30,23 @@ export default class Tabs extends PureComponent /*:: <Props, State> */ {
     this.state = { activeTab: 0 };
   }
 
-  _handleChangeTab = index => () => this.setState({ activeTab: index });
+  _handleChangeTab = (index) => () => {
+    const { children, onTabSelected } = this.props;
+    if (onTabSelected) {
+      const id = Children.toArray(children)?.[index]?.props?.title || '';
+      onTabSelected(id);
+    } else {
+      this.setState({ activeTab: index });
+    }
+  };
 
   render() {
-    const { children } = this.props;
-    const { activeTab } = this.state;
+    const { children, selectedTab } = this.props;
     const _children = Children.toArray(children);
+    const index = _children.findIndex(
+      (ch) => ch.props.title.toLowerCase() === selectedTab?.toLowerCase(),
+    );
+    const activeTab = index >= 0 ? index : this.state.activeTab;
     const _child = _children[activeTab];
     return (
       <div>

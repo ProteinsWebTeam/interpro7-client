@@ -173,10 +173,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       element: this._ref.current,
       useCtrlToZoom: true,
       height: 600,
-      nodeLabel: (node) => {
-        console.log(node);
-        return getTextForLabel(node, this.props.label);
-      },
+      nodeLabel: (node) => getTextForLabel(node, this.props.label),
     });
     if (
       this.props.data &&
