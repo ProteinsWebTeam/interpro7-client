@@ -186,7 +186,7 @@ const Announcement = () => (
         />{' '}
         <p>
           The Pfam website will be decomissioned on October 5th 2022. All Pfam
-          data of this, and future versions, will be available here at the
+          data for this, and future versions, will be available here on the
           InterPro website. You can read more about it in our{' '}
           <a href="http://proteinswebteam.github.io/interpro-blog/">
             blog post
