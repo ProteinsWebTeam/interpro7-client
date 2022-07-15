@@ -1,11 +1,30 @@
 // @flow
 /*:: import type { Middleware } from 'redux'; */
 /*:: import type { JobMetadata } from 'reducers/jobs/metadata'; */
+/*::
+  type ImportedParametersPayload = {
+    execution: {
+      userParameters: {
+        entry: Array<{
+          string: string,
+          boolean?: boolean,
+          'string-array'?: {
+            string: string[]
+          },
+        }>
+      }
+    }
+  }
+*/
 import url from 'url';
 import { schedule } from 'timing-functions';
 
 import { createNotification } from 'utils/browser-notifications';
-import { cachedFetchJSON, cachedFetchText } from 'utils/cached-fetch';
+import {
+  cachedFetchJSON,
+  cachedFetchText,
+  cachedFetchXML,
+} from 'utils/cached-fetch';
 import id from 'utils/cheap-unique-id';
 
 import {
@@ -85,6 +104,23 @@ const updateJobInDB = async (metadata, data, title) => {
   metaT.set(metadata, metadata.localID);
 };
 
+const processImportedAttributes = (
+  payload /*: ImportedParametersPayload */,
+) /*:  { applications: string[]|null } */ => {
+  let applications = null;
+  const parameters = payload?.execution?.userParameters?.entry || [];
+  parameters.forEach((parameter) => {
+    switch (parameter?.string) {
+      case 'appl':
+        applications = parameter?.['string-array']?.string || [];
+        break;
+      default:
+        break;
+    }
+  });
+  return { applications };
+};
+
 const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
   // function definitions
   // eslint-disable-next-line
@@ -94,9 +130,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     if (meta.status === 'failed') return;
     if (meta.status === 'created') {
       const dataT = await dataTA;
-      const { input, applications, goterms, pathways } = await dataT.get(
-        localID,
-      );
+      const { input, applications } = await dataT.get(localID);
 
       const ipScanInfo = getState().settings.ipScan;
 
@@ -118,8 +152,6 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
                 title: localID,
                 sequence: input,
                 appl: applications,
-                goterms,
-                pathways,
               },
             })
             .replace(/^\?/, ''),
@@ -209,7 +241,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     if (meta.status === 'finished' && !meta.hasResults) {
       const ipScanInfo = getState().settings.ipScan;
       // Getting the results from the interporScan Server
-      const { payload: data, ok } = await cachedFetchJSON(
+      const { payload: data1, ok } = await cachedFetchJSON(
         meta.remoteID
           ? url.resolve(
               url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
@@ -217,10 +249,26 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
             )
           : null,
       );
-      if (ok) {
-        dispatch(updateJob({ metadata: { ...meta, hasResults: true }, data }));
+      const { payload: data2, ok: ok2 } = await cachedFetchXML(
+        meta.remoteID
+          ? url.resolve(
+              url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
+              `result/${meta.remoteID || ''}/submission`,
+            )
+          : null,
+      );
+      if (ok && ok2) {
+        const data = {
+          ...processImportedAttributes(data2),
+          ...data1,
+        };
+        dispatch(
+          updateJob({
+            metadata: { ...meta, hasResults: true },
+            data,
+          }),
+        );
       } else {
-        console.log('GOT here', data);
         dispatch(
           updateJob({
             metadata: { ...meta, hasResults: false, status: 'error' },

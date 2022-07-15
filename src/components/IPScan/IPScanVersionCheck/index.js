@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useEffect } from 'react';
 import T from 'prop-types';
 
 import loadData from 'higherOrder/loadData';
@@ -17,26 +17,34 @@ const DAYS_TO_UPDATE_IPSCAN = 5;
   type Props = {
     data?: {
       loading:Boolean,
-      payload: ?{databases: {}}
+      payload: ?{databases: {
+        [string]: {
+          [string]: any,
+        }
+      }}
     },
     ipScanVersion?: string,
+    callback: boolean => void
   }
 */
 
-const IPScanVersionCheck = ({ data, ipScanVersion } /*: Props */) => {
-  if (!data || data.loading || !ipScanVersion) return <Loading inline={true} />;
-  const currentVersion = data.payload?.databases?.interpro?.version;
+const IPScanVersionCheck = ({ data, ipScanVersion, callback } /*: Props */) => {
+  const currentVersion = data?.payload?.databases?.interpro?.version;
   const currentVersionReleaseDate = new Date(
-    data.payload?.databases?.interpro?.releaseDate,
+    data?.payload?.databases?.interpro?.releaseDate || 0,
   );
   const [_, jobVersion] = (ipScanVersion || '').split('-');
+  useEffect(() => {
+    callback(currentVersion !== jobVersion);
+  }, [currentVersion, jobVersion]);
+
+  if (!data || data.loading || !ipScanVersion) return <Loading inline={true} />;
 
   // eslint-disable-next-line no-magic-numbers
   const msPerDay = 24 * 60 * 60 * 1000; // Number of milliseconds per day
   const daysSinceRelease = Math.round(
     (new Date().getTime() - currentVersionReleaseDate.getTime()) / msPerDay,
   );
-
   if (currentVersion !== jobVersion) {
     return (
       <div className={f('callout', 'info', 'withicon')}>
@@ -71,5 +79,6 @@ IPScanVersionCheck.propTypes = {
     payload: T.object,
   }),
   ipScanVersion: T.string,
+  callback: T.func,
 };
 export default loadData(getUrlForMeta)(IPScanVersionCheck);

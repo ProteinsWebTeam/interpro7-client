@@ -118,6 +118,7 @@ const SummaryIPScanJob = ({
   updateJobTitle,
 }) => {
   const [mergedData, setMergedData] = useState({});
+  const [versionMismatch, setVersionMismatch] = useState(false);
   const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
 
   useEffect(() => {
@@ -202,7 +203,10 @@ const SummaryIPScanJob = ({
             Using data stored in your browser
           </div>
         ) : null}
-        <IPScanVersionCheck ipScanVersion={payload['interproscan-version']} />
+        <IPScanVersionCheck
+          ipScanVersion={payload['interproscan-version']}
+          callback={setVersionMismatch}
+        />
         <NucleotideSummary payload={payload} />
         <IPScanTitle
           localTitle={localTitle}
@@ -239,9 +243,19 @@ const SummaryIPScanJob = ({
         </section>
         {localID && (
           <section className={f('summary-row')}>
-            <header>Action</header>
+            <header>Actions</header>
             <section>
-              <Actions localID={localID} status={status} />
+              <Actions
+                localID={localID}
+                status={status}
+                versionMismatch={versionMismatch}
+                sequence={metadata.sequence}
+                attributes={{
+                  applications: localPayload?.applications,
+                  goterms: localPayload?.goterms,
+                  pathways: localPayload?.pathways,
+                }}
+              />
             </section>
           </section>
         )}

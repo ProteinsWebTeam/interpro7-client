@@ -139,6 +139,11 @@ mark {
   color: var(--colors-all);
 }
 
+.ico-neutral:hover::before {
+  opacity: 1;
+  color: var(--colors-black);
+}
+
 .ico-notfound::before {
   color: var(--colors-alert-main);
 }

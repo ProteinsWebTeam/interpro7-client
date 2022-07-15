@@ -94,12 +94,17 @@ const labels = new Map([
   ['PrositeProfiles', 'PROSITE profiles'],
   ['PrositePatterns', 'PROSITE patterns'],
 ]);
-const groupApplications = (applications) => {
+const groupApplications = (applications, initialOptions) => {
   const mdb1 = [];
   const mdb2 = [];
   const other = [];
   const noCategory = [];
   for (const application of applications) {
+    if (initialOptions?.applications?.length) {
+      application.defaultValue = initialOptions.applications.includes(
+        application.value,
+      );
+    }
     if (mdb1Values.has(application.value)) mdb1.push(application);
     else if (mdb2Values.has(application.value)) mdb2.push(application);
     else if (otherValues.has(application.value)) other.push(application);
@@ -164,6 +169,7 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
     }).isRequired,
     title: T.string,
     changeTitle: T.func,
+    initialOptions: T.object,
   };
 
   constructor(props /*: AdvancedOptionsProps */) {
@@ -190,11 +196,13 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
     const {
       data: { loading, payload, ok },
       title,
+      initialOptions,
     } = this.props;
     if (loading) return 'Loading…';
     if (!ok) return 'Failed…';
     const { mdb1, mdb2, other, noCategory } = groupApplications(
       payload.values.values,
+      initialOptions,
     );
     return (
       <div className={f('row')}>

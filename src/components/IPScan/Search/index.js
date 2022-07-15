@@ -221,6 +221,8 @@ InfoMessages.propTypes = {
   ipScan: Object,
   value: string,
   main: string,
+  search: Object,
+
 }*/
 
 /*:: type State = {
@@ -240,6 +242,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     ipScan: T.object.isRequired,
     value: T.string,
     main: T.string,
+    search: T.object,
   };
 
   constructor(props /*: Props */) {
@@ -250,6 +253,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     let tooShort = true;
     let headerIssues = false;
     let title = '';
+    let initialAdvancedOptions = null;
     if (props.value) {
       editorState = EditorState.createWithContent(
         ContentState.createFromText(decodeURIComponent(props.value)),
@@ -266,12 +270,16 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     } else {
       editorState = EditorState.createEmpty(compositeDecorator);
     }
+    if (props.search) {
+      initialAdvancedOptions = props.search;
+    }
     this.state = {
       editorState,
       valid,
       tooShort,
       headerIssues,
       title,
+      initialAdvancedOptions,
     };
 
     this._formRef = React.createRef();
@@ -357,8 +365,6 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       data: {
         input: lines.join('\n'),
         applications: getCheckedApplications(this._formRef.current),
-        goterms: true,
-        pathways: true,
       },
     });
     // Request browser notification
@@ -624,6 +630,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                 <AdvancedOptions
                   title={this.state.title}
                   changeTitle={this._changeTitle}
+                  initialOptions={this.state.initialAdvancedOptions}
                 />
 
                 <div className={f('row')}>
@@ -673,7 +680,13 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
 const mapStateToProps = createSelector(
   (state) => state.settings.ipScan,
   (state) => state.customLocation.description,
-  (ipScan, desc) => ({ ipScan, value: desc.search.value, main: desc.main.key }),
+  (state) => state.customLocation.search,
+  (ipScan, desc, search) => ({
+    ipScan,
+    value: desc.search.value,
+    main: desc.main.key,
+    search,
+  }),
 );
 
 export default connect(mapStateToProps, {
