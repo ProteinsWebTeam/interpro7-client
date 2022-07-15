@@ -713,7 +713,7 @@ const Matches = (
               },
             })}
           >
-            IDA Table
+            Link
           </Link>
         )}
       >
