@@ -1,5 +1,5 @@
-// flow-typed signature: ca0a98f445ecc1ade80d94ae1554f5cc
-// flow-typed version: 173c144ae2/react-redux_v7.x.x/flow_>=v0.142.x
+// flow-typed signature: 99aed2dd0b5229f74e5db0e2218394e7
+// flow-typed version: 8af0836db5/react-redux_v8.x.x/flow_>=v0.142.x
 
 /**
 The order of type arguments for connect() is as follows:
@@ -29,7 +29,6 @@ Decrypting the abbreviations:
   Com = React Component
   SS = Selected state
   ST = Static properties of Com
-  EFO = Extra factory options (used only in connectAdvanced)
 */
 
 declare module "react-redux" {
@@ -38,7 +37,6 @@ declare module "react-redux" {
   // ------------------------------------------------------------
 
   declare export type Options<S, OP, SP, MP> = {|
-    pure?: boolean,
     forwardRef?: boolean,
     areStatesEqual?: (next: S, prev: S) => boolean,
     areOwnPropsEqual?: (next: OP, prev: OP) => boolean,
@@ -238,63 +236,6 @@ declare module "react-redux" {
     subKey?: string,
   ): Class<Provider<*>>;
 
-  // ------------------------------------------------------------
-  // Typings for connectAdvanced()
-  // ------------------------------------------------------------
-
-  declare type ConnectAdvancedOptions = {
-    getDisplayName?: (name: string) => string,
-    methodName?: string,
-    renderCountProp?: string,
-    shouldHandleStateChanges?: boolean,
-    storeKey?: string,
-    forwardRef?: boolean,
-    ...
-  };
-
-  declare type SelectorFactoryOptions<Com> = {
-    getDisplayName: (name: string) => string,
-    methodName: string,
-    renderCountProp: ?string,
-    shouldHandleStateChanges: boolean,
-    storeKey: string,
-    forwardRef: boolean,
-    displayName: string,
-    wrappedComponentName: string,
-    WrappedComponent: Com,
-    ...
-  };
-
-  declare type MapStateToPropsEx<S: Object, SP: Object, RSP: Object> = (
-    state: S,
-    props: SP,
-  ) => RSP;
-
-  declare type SelectorFactory<
-    Com: React$ComponentType<*>,
-    Dispatch,
-    S: Object,
-    OP: Object,
-    EFO: Object,
-    CP: Object,
-  > = (
-    dispatch: Dispatch,
-    factoryOptions: SelectorFactoryOptions<Com> & EFO,
-  ) => MapStateToPropsEx<S, OP, CP>;
-
-  declare export function connectAdvanced<
-    Com: React$ComponentType<*>,
-    D,
-    S: Object,
-    OP: Object,
-    CP: Object,
-    EFO: Object,
-    ST: { [_: $Keys<Com>]: any, ... },
-  >(
-    selectorFactory: SelectorFactory<Com, D, S, OP, EFO, CP>,
-    connectAdvancedOptions: ?(ConnectAdvancedOptions & EFO),
-  ): (component: Com) => React$ComponentType<OP> & $Shape<ST>;
-
   declare export function batch(() => void): void
 
   declare export function shallowEqual<T>(left: T, right: any): boolean
@@ -303,7 +244,6 @@ declare module "react-redux" {
     Provider: typeof Provider,
     createProvider: typeof createProvider,
     connect: typeof connect,
-    connectAdvanced: typeof connectAdvanced,
     useDispatch: typeof useDispatch,
     useSelector: typeof useSelector,
     useStore: typeof useStore,

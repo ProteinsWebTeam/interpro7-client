@@ -36,11 +36,6 @@ exports[`<Controls /> should render 1`] = `
     >
       Generate
     </button>
-    <ProgressButton
-      downloading={false}
-      failed={false}
-      progress={0}
-    />
     <Memo(Connect(Link))
       className="button hollow warning"
       disabled={true}

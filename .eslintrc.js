@@ -374,7 +374,12 @@ const rules = {
   // Require ES6 class declarations over React.createClass
   'react/prefer-es6-class': 2,
   // Prevent missing props validation in a React component definition
-  'react/prop-types': 1,
+  'react/prop-types': [
+    1,
+    {
+      skipUndeclared: true,
+    },
+  ],
   // Prevent missing React when using JSX
   'react/react-in-jsx-scope': 2,
   // Prevent extra closing tags for components without children

@@ -25,6 +25,7 @@ const getNextLocation = (customLocation, to) =>
 
 /*:: type Props = {
   onClick?: function,
+  onNewLocation?: function,
   customLocation: {
     description: Object,
     search: Object,
@@ -52,6 +53,7 @@ const getNextLocation = (customLocation, to) =>
 export class _Link extends PureComponent /*:: <Props> */ {
   static propTypes = {
     onClick: T.func,
+    onNewLocation: T.func,
     customLocation: T.shape({
       description: T.object.isRequired,
       search: T.object.isRequired,
@@ -82,6 +84,7 @@ export class _Link extends PureComponent /*:: <Props> */ {
     const {
       disabled,
       onClick,
+      onNewLocation,
       target,
       closeEverything,
       goToCustomLocation,
@@ -106,7 +109,9 @@ export class _Link extends PureComponent /*:: <Props> */ {
     // OK, now we can handle it
     event.preventDefault();
     if (this.props.disabled) return;
-    goToCustomLocation(getNextLocation(customLocation, to));
+    const nextLocation = getNextLocation(customLocation, to);
+    goToCustomLocation(nextLocation);
+    if (onNewLocation) onNewLocation(nextLocation);
   };
 
   render() {

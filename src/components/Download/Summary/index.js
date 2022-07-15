@@ -14,6 +14,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Actions from 'components/Download/Actions';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
+import { formatLongDate } from 'utils/date';
 import { downloadSelector } from 'reducers/download';
 
 import { foundationPartial } from 'styles/foundation';
@@ -21,6 +22,7 @@ import { foundationPartial } from 'styles/foundation';
 import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import VersionCheck from './VersionCheck';
 
 const f = foundationPartial(interproTheme, fonts, ipro);
 
@@ -82,12 +84,27 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
             >
               URL
             </Column>
+            <Column dataKey="fileType">Type</Column>
             <Column
-              dataKey="localID"
-              defaultKey="type"
-              renderer={(localID /*: string */) => localID.split('|')[1]}
+              dataKey="version"
+              renderer={(version /*: number */, { localID }) => (
+                <>
+                  {version.toLocaleString(undefined, {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1,
+                  })}{' '}
+                  <VersionCheck downloadVersion={version} localID={localID} />
+                </>
+              )}
             >
-              Type
+              InterPro Version
+            </Column>
+            <Column
+              dataKey="date"
+              defaultKey="date"
+              renderer={(date /*: string */) => formatLongDate(new Date(date))}
+            >
+              Date
             </Column>
             <Column
               dataKey="progress"

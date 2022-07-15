@@ -1,3 +1,7 @@
 .button {
   margin-bottom: 0;
 }
+button.icon {
+  cursor: pointer;
+  margin: 0 0.5rem;
+}

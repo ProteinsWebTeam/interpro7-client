@@ -59,7 +59,10 @@ export default class ProgressAnimation extends PureComponent /*:: <Props> */ {
             </filter>
           </defs>
         </svg>
-        <div className={s('main-container')}>
+        <div
+          className={s('main-container')}
+          style={{ opacity: downloading ? 1 : 0 }}
+        >
           <div className={s('filter-container', 'absolute')}>
             <div className={s('left', 'side', 'absolute')} />
             <div

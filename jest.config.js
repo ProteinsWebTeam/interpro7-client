@@ -28,6 +28,8 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!lodash-es|timing-functions|taxonomy-visualisation|protvista|react-syntax-highlighter)',
   ],
-  testURL: websiteURL.href,
+  testEnvironmentOptions: {
+    url: websiteURL.href,
+  },
   testEnvironment: 'jsdom',
 };

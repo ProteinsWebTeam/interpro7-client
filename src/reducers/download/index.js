@@ -5,18 +5,39 @@ import {
   DOWNLOAD_SUCCESS,
   DOWNLOAD_DELETE,
   DOWNLOAD_ERROR,
+  SET_INITIAL_DOWNLOADS,
 } from 'actions/types';
 import { createNotification } from 'utils/browser-notifications';
+import getTableAccess, { DownloadJobs } from 'storage/idb';
 
-/*:: export type DatumProgress = {
+const downloadsTable = getTableAccess(DownloadJobs);
+
+const deleteDownloadInDB = async (key) => {
+  const downloadsT = await downloadsTable;
+  downloadsT.delete(key);
+};
+
+/*::
+export type DatumProgress = {
   progress: number,
   successful: ?boolean,
   blobURL: ?string,
-}; */
+};
+export type CompletedDownload ={
+  blob: Blob,
+  date: Date,
+  fileType: string,
+  version: string,
+  length: number,
+  subset: boolean,
+}
+
+*/
 /*:: export type Download = { [string]: DatumProgress }; */
 /*:: import type { State } from 'reducers'; */
 
 const keyFromAction = (action) =>
+  action.key ||
   [action.url, action.fileType, action.subset && 'subset']
     .filter(Boolean)
     .join('|');
@@ -56,13 +77,46 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
         [keyFromAction(action)]: {
           progress: action.progress || 1,
           successful: action.type === DOWNLOAD_SUCCESS,
-          blobURL: action.blobURL,
-          size: action.size,
+          blobURL: action.blob ? URL.createObjectURL(action.blob) : null,
+          size: action.blob?.size,
+          length: action.length,
+          subset: action.subset,
+          date: action.date,
+          version: action.version,
+          fileType: action.fileType,
         },
       };
     case DOWNLOAD_DELETE:
-      const { [keyFromAction(action)]: _, ...newState } = state;
+      const key = keyFromAction(action);
+      const { [key]: _, ...newState } = state;
+      deleteDownloadInDB(key);
       return newState;
+    case SET_INITIAL_DOWNLOADS:
+      const savedDownloads = {};
+      // prettier-ignore
+      (Object.entries(action.downloads) /*: any */)
+        .forEach(
+          ([
+            key,
+            { blob, date, fileType, length, subset, version },
+          ]/*: [string, CompletedDownload] */) => {
+            savedDownloads[key] = {
+              progress: 1,
+              successful: true,
+              blobURL: URL.createObjectURL(blob),
+              size: blob.size,
+              length,
+              subset,
+              fileType,
+              date,
+              version,
+            };
+          },
+        );
+      return {
+        ...state,
+        ...savedDownloads,
+      };
     default:
       return state;
   }

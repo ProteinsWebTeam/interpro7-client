@@ -235,6 +235,9 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     if (!data?.loading && data?.payload) {
       this.memberDB = data.payload.databases;
     }
+    const currentVersion = Number(
+      data?.payload?.databases?.interpro?.version || 0,
+    );
 
     const path2perl = (path, varName) => {
       const parts = path.split('[*]');
@@ -439,6 +442,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                     isStale={isStale}
                     count={count}
                     noData={noData}
+                    interProVersion={currentVersion}
                   />
                 </div>
                 {lowGraphics || <ProgressAnimation download={download} />}

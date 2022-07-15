@@ -6,8 +6,8 @@ import { createStore } from 'redux';
 import rootReducer from 'reducers';
 import settingsStorage from 'storage/settings';
 
-import getTableAccess, { FavEntries } from 'storage/idb';
-import { setInitialFavourites } from 'actions/creators';
+import getTableAccess, { FavEntries, DownloadJobs } from 'storage/idb';
+import { setInitialFavourites, setInitialDownloads } from 'actions/creators';
 
 import enhancer from 'store/enhancer';
 import hmr from 'store/hmr';
@@ -44,6 +44,11 @@ export default (history /*: History<*> */) => {
     .then((keys) => {
       store.dispatch(setInitialFavourites(keys));
     });
+
+  // Dispatch action to set initial downloads stored in IndexedDB to Redux
+  getTableAccess(DownloadJobs)
+    .then((jobsT) => jobsT.getAll())
+    .then((content) => store.dispatch(setInitialDownloads(content)));
 
   if (settingsStorage) {
     settingsStorage.linkedStore = store;
