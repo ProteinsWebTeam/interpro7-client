@@ -688,7 +688,7 @@ const Matches = (
           </Link>
         )}
       >
-        Aligments
+        Seed alignment
       </Column>
       <Column
         dataKey="accession"
