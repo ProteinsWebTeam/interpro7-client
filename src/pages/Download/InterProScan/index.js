@@ -21,14 +21,13 @@ const InterProScanDownloads = () => (
       <Link href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/">
         FTP Site
       </Link>
-      . You can find, clone, and download the full InterProScan source code on
-      the{' '}
+      . InterProScan's source code is available on{' '}
       <Link
         href="//github.com/ebi-pf-team/interproscan"
         className={f('ext')}
         target="_blank"
       >
-        Github repository
+        Github
       </Link>
       .
     </p>
