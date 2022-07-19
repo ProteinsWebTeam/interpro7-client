@@ -75,10 +75,8 @@ export const main = async (shouldHydrate) => {
   });
 
   if (shouldHydrate) {
-    console.log('Hydrate18');
     hydrateRoot(DOM_ROOT, <App />);
   } else {
-    console.log('Render18');
     root.render(<App />);
   }
 };
