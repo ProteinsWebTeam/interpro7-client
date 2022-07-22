@@ -185,12 +185,14 @@ const Announcement = () => (
           className={f('small', 'icon', 'icon-common', 'icon-announcement')}
         />{' '}
         <p>
-          The Pfam website will be decommissioned on October 5th 2022. All Pfam
-          data for this, and future versions, will be available here on the
-          InterPro website. You can read more about it in our{' '}
-          <a href="http://proteinswebteam.github.io/interpro-blog/">
+          The Pfam website will be decommissioned on October 5th 2022. Data for
+          the current and future Pfam releases will be made available on the
+          Interpro website. You can read more about the Pfam website
+          decommission in our{' '}
+          <a href="https://xfam.wordpress.com/2022/08/04/pfam-website-decommission/">
             blog post
           </a>
+          .
         </p>
       </div>
     </div>
