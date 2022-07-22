@@ -537,11 +537,14 @@ export const setAccessionHandler /*: Handler */ = handlerConstructor({
     value: (value) => value,
   },
   match: {
-    value(current) {
+    value(current, description) {
       // $FlowFixMe object-this-reference
       const _current = this.cleanUp(current);
-      for (const { re } of setDBs) {
-        if (re.test(_current)) return true;
+      for (const { name, re } of setDBs) {
+        if (re.test(_current)) {
+          description.set.db = name;
+          return true;
+        }
       }
     },
   },
