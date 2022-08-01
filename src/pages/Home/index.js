@@ -185,11 +185,16 @@ const Announcement = () => (
           className={f('small', 'icon', 'icon-common', 'icon-announcement')}
         />{' '}
         <p>
-          The Pfam website will be decommissioned on October 5th 2022. Data for
-          the current and future Pfam releases will be made available on the
-          Interpro website. You can read more about the Pfam website
-          decommission in our{' '}
-          <a href="https://xfam.wordpress.com/2022/08/04/pfam-website-decommission/">
+          <strong>Powering down the Pfam website</strong>
+          <br />
+          On October 5th, we will start redirecting the traffic from Pfam (
+          <a href="//pfam.xfam.org">pfam.xfam.org</a>) to InterPro (
+          <a href="//www.ebi.ac.uk/interpro">www.ebi.ac.uk/interpro</a>). The
+          Pfam website will be available at{' '}
+          <a href="//legacy.pfam.xfam.org">legacy.pfam.xfam.org</a> until
+          January 2023, when it will be decommissioned. You can read more about
+          the sunset period in our{' '}
+          <a href="//xfam.wordpress.com/2022/08/04/pfam-website-decommission/">
             blog post
           </a>
           .
