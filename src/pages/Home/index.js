@@ -188,15 +188,30 @@ const Announcement = () => (
           <strong>Powering down the Pfam website</strong>
           <br />
           On October 5th, we will start redirecting the traffic from Pfam (
-          <a href="//pfam.xfam.org">pfam.xfam.org</a>) to InterPro (
-          <a href="//www.ebi.ac.uk/interpro">www.ebi.ac.uk/interpro</a>). The
-          Pfam website will be available at{' '}
-          <a href="//legacy.pfam.xfam.org">legacy.pfam.xfam.org</a> until
-          January 2023, when it will be decommissioned. You can read more about
-          the sunset period in our{' '}
-          <a href="//xfam.wordpress.com/2022/08/04/pfam-website-decommission/">
+          <Link href="//pfam.xfam.org" className={f('ext')} target="_blank">
+            pfam.xfam.org
+          </Link>
+          ) to InterPro (
+          <Link
+            to={{
+              description: {},
+            }}
+          >
+            www.ebi.ac.uk/interpro
+          </Link>
+          ). The Pfam website will be available at{' '}
+          <span href="//legacy.pfam.xfam.org" className={f('link', 'disabled')}>
+            legacy.pfam.xfam.org
+          </span>{' '}
+          until January 2023, when it will be decommissioned. You can read more
+          about the sunset period in our{' '}
+          <Link
+            href="//xfam.wordpress.com/2022/08/04/pfam-website-decommission/"
+            className={f('ext')}
+            target="_blank"
+          >
             blog post
-          </a>
+          </Link>
           .
         </p>
       </div>
