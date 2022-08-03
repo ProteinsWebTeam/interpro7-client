@@ -186,6 +186,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
     this._ref.current?.addEventListener('click', (evt /*: Event */) =>
       this._handleClick(evt),
     );
+    this.updateLocationIfAllDB();
   }
 
   componentDidUpdate(prevProps) {
@@ -196,6 +197,7 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
     )
       this.loaded = false;
     this.repaint();
+    this.updateLocationIfAllDB();
   }
 
   componentWillUnmount() {
@@ -203,6 +205,22 @@ class SummarySet extends PureComponent /*:: <Props, State> */ {
       this._ref.current?.removeEventListener('click', this._handleClick);
     }
     this._vis.clear();
+  }
+  updateLocationIfAllDB() {
+    if (
+      this.props.db === 'all' &&
+      this.props?.data?.metadata?.source_database
+    ) {
+      this.props.goToCustomLocation({
+        description: {
+          main: { key: 'set' },
+          set: {
+            db: this.props?.data?.metadata?.source_database,
+            accession: this.props?.data?.metadata?.accession,
+          },
+        },
+      });
+    }
   }
   repaint() {
     if (

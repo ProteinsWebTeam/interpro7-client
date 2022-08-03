@@ -36,7 +36,7 @@ const getURLByAccession = (accession) => {
       return directLinkDescription;
     }
   }
-  // Then cehcking other endpoints
+  // Then checking other endpoints
   for (const [ep, db] of Object.entries(otherEndpoints)) {
     const directEndpointLinkDescription = {
       main: { key: ep },
