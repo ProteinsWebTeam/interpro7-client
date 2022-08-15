@@ -35,8 +35,8 @@ const IPScanVersionCheck = ({ data, ipScanVersion, callback } /*: Props */) => {
   );
   const [_, jobVersion] = (ipScanVersion || '').split('-');
   useEffect(() => {
-    callback(currentVersion !== jobVersion);
-  }, [currentVersion, jobVersion]);
+    if (callback) callback(currentVersion !== jobVersion);
+  }, [currentVersion, jobVersion, callback]);
 
   if (!data || data.loading || !ipScanVersion) return <Loading inline={true} />;
 
