@@ -631,7 +631,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
             </p>
 
             <p>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/interpro2go">
                 List of InterPro2GO mappings
               </Link>
               . These are also available through the EBI GO browser{' '}

@@ -26,7 +26,7 @@ const InterProDownloads = () => {
         <tbody>
           <tr>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/entry.list">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/entry.list">
                 InterPro entry list
               </Link>
             </td>
@@ -37,7 +37,7 @@ const InterProDownloads = () => {
             <td className={f('xs-hide')}>entry.list</td>
             <td className={f('xs-hide')}>TSV</td>
             <td style={{ whiteSpace: 'nowrap' }}>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/entry.list">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/entry.list">
                 <span
                   className={f('icon', 'icon-common', 'font-l')}
                   data-icon="&#x3d;"
@@ -50,7 +50,7 @@ const InterProDownloads = () => {
           <tr>
             <td>
               {' '}
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/interpro.xml.gz">
                 InterPro entry details
               </Link>
             </td>
@@ -58,7 +58,7 @@ const InterProDownloads = () => {
               XML file listing each InterPro entry, the signatures that it
               contains, its abstract, GO terms, etc. - it contains the
               equivalent to the Entry pages on the web interface. A{' '}
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/interpro.dtd">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/interpro.dtd">
                 DTD file
               </Link>{' '}
               exists describing the format.
@@ -66,7 +66,7 @@ const InterProDownloads = () => {
             <td className={f('xs-hide')}>interpro.xml.gz</td>
             <td className={f('xs-hide')}>gzipped</td>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/interpro.xml.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/interpro.xml.gz">
                 <span
                   className={f('icon', 'icon-common', 'font-l')}
                   data-icon="&#x3d;"
@@ -79,7 +79,7 @@ const InterProDownloads = () => {
           <tr>
             <td>
               {' '}
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/match_complete.xml.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/match_complete.xml.gz">
                 Protein matched complete
               </Link>
             </td>
@@ -87,7 +87,7 @@ const InterProDownloads = () => {
               All UniProtKB proteins and the InterPro entries and individual
               signatures they match, in XML format. Proteins without any matches
               to InterPro are also included. A{' '}
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/match_complete.dtd">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/match_complete.dtd">
                 DTD file
               </Link>{' '}
               exists describing the format.
@@ -95,7 +95,7 @@ const InterProDownloads = () => {
             <td className={f('xs-hide')}>match_complete.xml.gz</td>
             <td className={f('xs-hide')}>gzipped</td>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/match_complete.xml.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/match_complete.xml.gz">
                 <span
                   className={f('icon', 'icon-common', 'font-l')}
                   data-icon="&#x3d;"
@@ -107,7 +107,7 @@ const InterProDownloads = () => {
 
           <tr>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/uniparc_match.tar.gz">
                 Uniparc sequences
               </Link>
             </td>
@@ -118,7 +118,7 @@ const InterProDownloads = () => {
             <td className={f('xs-hide')}>uniparc_match.tar.gz</td>
             <td className={f('xs-hide')}>gzipped</td>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/uniparc_match.tar.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/uniparc_match.tar.gz">
                 <span
                   className={f('icon', 'icon-common', 'font-l')}
                   data-icon="&#x3d;"
@@ -130,7 +130,7 @@ const InterProDownloads = () => {
 
           <tr>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/protein2ipr.dat.gz">
                 UniProtKB proteins
               </Link>
             </td>
@@ -141,7 +141,7 @@ const InterProDownloads = () => {
             <td className={f('xs-hide')}>protein2ipr.dat.gz</td>
             <td className={f('xs-hide')}>gzipped</td>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/protein2ipr.dat.gz">
                 <span
                   className={f('icon', 'icon-common', 'font-l')}
                   data-icon="&#x3d;"
@@ -153,7 +153,7 @@ const InterProDownloads = () => {
 
           <tr>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/ParentChildTreeFile.txt">
                 Entry relationships tree
               </Link>
             </td>
@@ -165,7 +165,7 @@ const InterProDownloads = () => {
             <td className={f('xs-hide')}>ParentChildTreeFile.txt</td>
             <td className={f('xs-hide')}>TXT</td>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/ParentChildTreeFile.txt">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/ParentChildTreeFile.txt">
                 <span
                   className={f('icon', 'icon-common', 'font-l')}
                   data-icon="&#x3d;"
@@ -178,7 +178,7 @@ const InterProDownloads = () => {
           <tr>
             <td>
               {' '}
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/interpro2go">
                 List of GO terms
               </Link>
             </td>
@@ -186,7 +186,7 @@ const InterProDownloads = () => {
             <td className={f('xs-hide')}>interpro2go</td>
             <td className={f('xs-hide')}>TXT</td>
             <td>
-              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/interpro2go">
+              <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/interpro2go">
                 <span
                   className={f('icon', 'icon-common', 'font-l')}
                   data-icon="&#x3d;"
@@ -199,7 +199,7 @@ const InterProDownloads = () => {
           {
             <tr>
               <td>
-                <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
+                <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/release_notes.txt">
                   Latest release note
                 </Link>
               </td>
@@ -207,7 +207,7 @@ const InterProDownloads = () => {
               <td>release_notes.txt</td>
               <td>TXT</td>
               <td>
-                <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/release_notes.txt">
+                <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/release_notes.txt">
                   <span
                     className={f('icon', 'icon-common', 'font-l')}
                     data-icon="&#x3d;"
