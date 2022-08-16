@@ -10,6 +10,7 @@ import Link from 'components/generic/Link';
 import { UniProtLink } from 'components/ExtLink';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
+import ProtVistaForAlphaFold from 'components/Structure/ViewerAndEntries/ProtVistaForAlphaFold';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
@@ -469,7 +470,15 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
       )}
       {mainDB.toLowerCase() === 'interpro' ? (
         <ProteinTable onProteinChange={handleProteinChange} />
-      ) : null}
+      ) : (
+        <div
+          // ref={this._protvista}
+          data-testid="structure-protvista"
+          className={f('protvista-container')}
+        >
+          <ProtVistaForAlphaFold protein={proteinAcc} />
+        </div>
+      )}
     </div>
   );
 };
