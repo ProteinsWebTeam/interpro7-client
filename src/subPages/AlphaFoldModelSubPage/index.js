@@ -101,6 +101,7 @@ const _AlphaFoldModel = ({
   modelId,
   modelUrl,
   data,
+  selections,
 }) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
   useEffect(() => {
@@ -108,6 +109,9 @@ const _AlphaFoldModel = ({
       requestAnimationFrame(() => setShouldResetViewer(false));
     }
   }, [shouldResetViewer]);
+  useEffect(() => {
+    if (!selections) setShouldResetViewer(true);
+  }, [selections]);
 
   if (data?.loading) return <Loading />;
   if (!data.loading && Object.keys(data.payload).length !== 1) {
@@ -254,6 +258,7 @@ const _AlphaFoldModel = ({
               ext="mmcif"
               theme={'af'}
               shouldResetViewer={shouldResetViewer}
+              selections={selections}
             />
           </PictureInPicturePanel>
         </div>
@@ -268,6 +273,7 @@ _AlphaFoldModel.propTypes = {
   modelId: T.string,
   modelUrl: T.string,
   data: T.object,
+  selections: T.arrayOf(T.object),
 };
 
 const getModelInfoUrl = (isUrlToApi) =>
@@ -436,6 +442,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
   const mainAccession = description[description.main.key].accession;
   const mainDB = description[description.main.key].db;
   const container = useRef();
+  const [selectionsInModel, setSelectionsInModel] = useState(null);
   const [proteinAcc, setProteinAcc] = useState('');
   const [modelId, setModelId] = useState(null);
   const handleProteinChange = (value) => {
@@ -466,6 +473,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
           modelId={modelId}
+          selections={selectionsInModel}
         />
       )}
       {mainDB.toLowerCase() === 'interpro' ? (
@@ -476,7 +484,12 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
           data-testid="structure-protvista"
           className={f('protvista-container')}
         >
-          <ProtVistaForAlphaFold protein={proteinAcc} />
+          <ProtVistaForAlphaFold
+            protein={proteinAcc}
+            onChangeSelection={(selection) => {
+              setSelectionsInModel(selection);
+            }}
+          />
         </div>
       )}
     </div>
