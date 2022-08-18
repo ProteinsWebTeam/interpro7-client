@@ -44,15 +44,27 @@ const confidenceColors = [
   },
 ];
 
-const AlphaFoldModel = ({
-  proteinAcc,
-  hasMultipleProteins,
-  onModelChange,
-  modelId,
-  modelUrl,
-  data,
-  selections,
-}) => {
+/*:: import type { FetchOutput } from 'utils/cached-fetch'; */
+
+const AlphaFoldModel = (
+  {
+    proteinAcc,
+    hasMultipleProteins,
+    onModelChange,
+    modelId,
+    modelUrl,
+    data,
+    selections,
+  } /*: {
+  proteinAcc: string,
+  hasMultipleProteins: boolean,
+  onModelChange: (Event)=> void,
+  modelId: string,
+  modelUrl: string,
+  data: FetchOutput,
+  selections: Object[],
+} */,
+) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
   useEffect(() => {
     if (shouldResetViewer) {
@@ -64,7 +76,7 @@ const AlphaFoldModel = ({
   }, [selections]);
 
   if (data?.loading) return <Loading />;
-  if (!data.loading && Object.keys(data.payload).length !== 1) {
+  if (!data.loading && Object.keys(data.payload || {}).length !== 1) {
     return (
       <div>
         <h3>Structure prediction</h3>
@@ -73,7 +85,7 @@ const AlphaFoldModel = ({
     );
   }
 
-  const models = data.payload;
+  const models = data.payload || {};
   // const [modelInfo] = modelId === null ? models.slice(0, 1) : models.filter(x => x.entryId === modelId);
   const [modelInfo] = models.slice(0, 1);
   const elementId = 'new-structure-model-viewer';

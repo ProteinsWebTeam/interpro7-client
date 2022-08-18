@@ -19,64 +19,27 @@ import style from './style.css';
 
 const f = foundationPartial(style, ipro, fonts);
 
-export const getUrl = (includeSearch) =>
-  createSelector(
-    (state) => state.settings.api,
-    (state) => state.customLocation.description,
-    (state) => state.customLocation.search,
-    ({ protocol, hostname, port, root }, description, search) => {
-      if (
-        description.main.key === 'entry' &&
-        description[description.main.key].db.toLowerCase() === 'interpro'
-      ) {
-        const _description = {
-          main: {
-            key: 'protein',
-            numberOfFilters: 1,
-          },
-          protein: { db: description.protein.db || 'UniProt' },
-          entry: {
-            isFilter: true,
-            db: description.entry.db || 'interpro',
-            accession: description.entry.accession,
-          },
-        };
-        let query;
-        if (includeSearch) query = { ...search, has_model: true };
-        else query = { has_model: true };
-        return format({
-          protocol,
-          hostname,
-          port,
-          pathname: root + descriptionToPath(_description),
-          query: query,
-        });
-      }
+/*:: import type { FetchOutput } from 'utils/cached-fetch'; */
 
-      return {
-        accession: description[description.main.key].accession,
-      };
-    },
-  );
-
-export const mapStateToPropsForModels = createSelector(
-  (state) => state.customLocation.description,
-  (state) => state.customLocation.search,
-  (description, search) => ({ description, search }),
-);
-
-const ProteinTable = ({ data, isStale, search, onProteinChange }) => {
+const ProteinTable = (
+  { data, isStale, search, onProteinChange } /*: {
+  data: FetchOutput,
+  isStale: boolean,
+  search: {[string]: string},
+  onProteinChange: (string)=>void
+} */,
+) => {
   if (data?.loading) return <Loading />;
 
   return (
     <div>
       <Table
-        dataTable={data.payload?.results.map((e) => e.metadata)}
+        dataTable={data.payload?.results.map((e) => e.metadata) || []}
         contentType="protein"
         loading={data.loading}
         ok={data.ok}
         status={data.status}
-        actualSize={data.payload?.count}
+        actualSize={data.payload?.count || 0}
         query={search}
         nextAPICall={data.payload?.next}
         previousAPICall={data.payload?.previous}
@@ -197,6 +160,52 @@ ProteinTable.propTypes = {
   search: T.object,
   onProteinChange: T.func,
 };
+
+export const getUrl = (includeSearch /*: boolean */) =>
+  createSelector(
+    (state) => state.settings.api,
+    (state) => state.customLocation.description,
+    (state) => state.customLocation.search,
+    ({ protocol, hostname, port, root }, description, search) => {
+      if (
+        description.main.key === 'entry' &&
+        description[description.main.key].db.toLowerCase() === 'interpro'
+      ) {
+        const _description = {
+          main: {
+            key: 'protein',
+            numberOfFilters: 1,
+          },
+          protein: { db: description.protein.db || 'UniProt' },
+          entry: {
+            isFilter: true,
+            db: description.entry.db || 'interpro',
+            accession: description.entry.accession,
+          },
+        };
+        let query;
+        if (includeSearch) query = { ...search, has_model: true };
+        else query = { has_model: true };
+        return format({
+          protocol,
+          hostname,
+          port,
+          pathname: root + descriptionToPath(_description),
+          query: query,
+        });
+      }
+
+      return {
+        accession: description[description.main.key].accession,
+      };
+    },
+  );
+
+export const mapStateToPropsForModels = createSelector(
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
+  (description, search) => ({ description, search }),
+);
 
 export default loadData({
   getUrl: getUrl(true),
