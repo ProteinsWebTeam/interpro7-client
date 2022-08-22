@@ -30,6 +30,10 @@ const InteractionsSubPage = loadable({
 const PathwaysSubPage = loadable({
   loader: () => import(/* webpackChunkName: "pathways-subpage" */ './Pathways'),
 });
+const SubfamiliesSubPage = loadable({
+  loader: () =>
+    import(/* webpackChunkName: "subfamilies-subpage" */ './Subfamilies'),
+});
 
 const HMMModel = loadable({
   loader: () =>
@@ -167,7 +171,7 @@ const getGenome3dURL = createSelector(
     });
   },
 );
-const getInterProModifierURL = (modifier) =>
+const getDBModifierURL = (db, modifier) =>
   createSelector(
     (state) => state.settings.api,
     (state) => state.customLocation.description.entry,
@@ -177,7 +181,7 @@ const getInterProModifierURL = (modifier) =>
       const _description = {
         main: { key: 'entry' },
         entry: {
-          db: 'interpro',
+          db,
           accession: entry.accession,
         },
       };
@@ -201,9 +205,16 @@ const subPages = new Map([
   ['domain_architecture', DomainArchitecture],
   [
     'interactions',
-    loadData(getInterProModifierURL('interactions'))(InteractionsSubPage),
+    loadData(getDBModifierURL('InterPro', 'interactions'))(InteractionsSubPage),
   ],
-  ['pathways', loadData(getInterProModifierURL('pathways'))(PathwaysSubPage)],
+  [
+    'pathways',
+    loadData(getDBModifierURL('InterPro', 'pathways'))(PathwaysSubPage),
+  ],
+  [
+    'subfamilies',
+    loadData(getDBModifierURL('panther', 'subfamilies'))(SubfamiliesSubPage),
+  ],
   ['rosettafold', RoseTTAFoldModel],
   ['alphafold', AlphaFoldModelSubPage],
   ['alignments', SetAlignments],

@@ -530,6 +530,25 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
+    'subfamilies',
+    {
+      to(customLocation) {
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key: 'entry' },
+            entry: {
+              ...customLocation.description.entry,
+              detail: 'subfamilies',
+            },
+          },
+        };
+      },
+      name: 'Subfamilies',
+      counter: 'subfamilies',
+    },
+  ],
+  [
     'genome3d',
     {
       to(customLocation) {
