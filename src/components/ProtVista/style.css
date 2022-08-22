@@ -482,3 +482,17 @@ protvista-zoom-tool {
     margin: 1px;
   }
 }
+
+div.subfamily {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  background: #444;
+
+  & > header {
+    font-weight: bold;
+  }
+  & ul li > header {
+    font-weight: 600;
+    display: inline-block;
+  }
+}

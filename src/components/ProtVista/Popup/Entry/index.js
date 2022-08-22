@@ -63,7 +63,11 @@ const ProtVistaEntryPopup = (
   if (highlightChild) {
     newLocations = highlightChild.split(',').map((loc) => {
       const [start, end] = loc.split(':');
-      return { fragments: [{ start, end }], model_acc: null };
+      return {
+        fragments: [{ start, end }],
+        model_acc: null,
+        subfamily: undefined,
+      };
     });
   }
   const handleClick = (start, end) => () => {
@@ -103,9 +107,22 @@ const ProtVistaEntryPopup = (
       </p>
       <ul>
         {(newLocations || locations || []).map(
-          ({ fragments, model_acc: model }, j) => (
+          ({ fragments, model_acc: model, subfamily }, j) => (
             <li key={j}>
               {model && model !== accession && <>Model: {model}</>}
+              {subfamily && (
+                <div className={f('subfamily')}>
+                  <header>Subfamily</header>
+                  <ul>
+                    <li>
+                      <header>Accession:</header> {subfamily.accession}
+                    </li>
+                    <li>
+                      <header>Name:</header> {subfamily.name}
+                    </li>
+                  </ul>
+                </div>
+              )}
               <ul>
                 {(fragments || []).map(({ start, end }, i) => (
                   <li key={i}>

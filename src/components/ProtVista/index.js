@@ -132,6 +132,7 @@ const loadProtVistaWebComponents = () => {
 export class ProtVista extends Component /*:: <Props, State> */ {
   /*::
     web_tracks: {};
+    reactRoot: any;
     popper: any;
     _isPopperTop: boolean;
     _timeoutID: ?IntervalID;
@@ -360,8 +361,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               this.props?.dataDB?.payload?.databases,
             );
             if (this._popperContentRef.current) {
-              const root = createRoot(this._popperContentRef.current);
-              root.render(
+              if (!this.reactRoot)
+                this.reactRoot = createRoot(this._popperContentRef.current);
+
+              this.reactRoot.render(
                 <ProtVistaPopup
                   detail={detail}
                   sourceDatabase={sourceDatabase}
