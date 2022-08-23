@@ -36,6 +36,8 @@ import example from './example.fasta';
 
 const f = foundationPartial(interproTheme, ipro, local);
 
+export const MAX_NUMBER_OF_SEQUENCES = 3;
+
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
@@ -48,12 +50,13 @@ const strategy = (re) => (block, cb) => {
     cb(match.index, match.index + match[0].length);
   }
 };
-const isFirstBlockWithContent = (block, contentState) => {
+const doesPreviousBlockHasContent = (block, contentState) => {
   const before = contentState.getBlockBefore(block.key);
   if (!before) return true;
-  if (before.getText().trim() === '')
-    return isFirstBlockWithContent(before, contentState);
-  return false;
+  const trimmed = before.getText().trim();
+  if (trimmed === '' || trimmed.startsWith(';'))
+    return doesPreviousBlockHasContent(before, contentState);
+  return !trimmed.startsWith('>');
 };
 const commentsStrategy =
   (re, forErrors = false) =>
@@ -61,10 +64,10 @@ const commentsStrategy =
     const text = block.getText();
     let match;
     while ((match = re.exec(text))) {
-      const isFirstComment = isFirstBlockWithContent(block, contentState);
-      if (!forErrors && isFirstComment)
+      const prevSequenceOK = doesPreviousBlockHasContent(block, contentState);
+      if (!forErrors && (prevSequenceOK || text.trim().startsWith(';')))
         cb(match.index, match.index + match[0].length);
-      if (forErrors && !isFirstComment)
+      if (forErrors && !prevSequenceOK)
         cb(match.index, match.index + match[0].length);
     }
   };
@@ -104,38 +107,70 @@ const isXChecked = (x) => (form) => !!form.querySelector(checkedSelectorFor(x));
 
 const isStayChecked = isXChecked('stay');
 
-const commentRE = /^\s*[>;].*$/m;
+const headerRE = /^\s*>.*$/m;
 const IUPACProtRE = /^[a-z\s]*$/im;
 
+const trimSequenceLines = (lines) =>
+  lines
+    .map((l) => l.trim()) // trimming
+    .map((l) => (l.startsWith(';') ? false : l)) // removing comments
+    .filter(Boolean);
+
 export const checkValidity = (lines) => {
-  const trimmedLines = lines.map((l) => l.trim()).filter(Boolean);
-  if (!commentRE.test(trimmedLines[0]) && !IUPACProtRE.test(trimmedLines[0]))
+  let numberOfSequences = 0;
+  let gotContentYet = false;
+  const trimmedLines = trimSequenceLines(lines);
+  if (!headerRE.test(trimmedLines[0]) && !IUPACProtRE.test(trimmedLines[0]))
     return false;
-  for (const line of trimmedLines.slice(1)) {
-    if (!IUPACProtRE.test(line)) return false;
+  for (const line of trimmedLines) {
+    if (headerRE.test(line)) {
+      if (numberOfSequences > 0 && !gotContentYet) return false;
+      gotContentYet = false;
+      numberOfSequences++;
+    } else if (IUPACProtRE.test(line)) {
+      gotContentYet = true;
+    } else {
+      return false;
+    }
   }
-  return true;
+  return numberOfSequences <= MAX_NUMBER_OF_SEQUENCES && gotContentYet;
 };
 
 const MIN_LENGTH = 3;
 
 export const isTooShort = (lines) => {
   let count = 0;
-  for (const line of lines) {
+  let firstLine = true;
+  const trimmedLines = trimSequenceLines(lines);
+  for (const line of trimmedLines) {
     if (IUPACProtRE.test(line)) count += line.trim().length;
-    if (count >= MIN_LENGTH) return false;
+    if (headerRE.test(line) && !firstLine) {
+      if (count < MIN_LENGTH) return true;
+      count = 0;
+    }
+    firstLine = false;
   }
-  return true;
+  return count < MIN_LENGTH;
 };
 
 const hasHeaderIssues = (lines) => {
-  const trimmedLines = lines.map((l) => l.trim()).filter(Boolean);
+  const trimmedLines = trimSequenceLines(lines);
   const isFirstLineAComment =
     trimmedLines.length && trimmedLines[0].startsWith('>');
-  const numberOfComments = trimmedLines.filter((l) => l.startsWith('>')).length;
-  if (numberOfComments === 0) return false;
-  if (numberOfComments === 1 && isFirstLineAComment) return false;
-  return true;
+  const numberOfHeaders = trimmedLines.filter((l) => l.startsWith('>')).length;
+  if (numberOfHeaders === 0) return false;
+  if (numberOfHeaders === 1 && isFirstLineAComment) return false;
+  for (let x = 1; x < lines.length; x++) {
+    if (lines[x - 1].startsWith('>') && lines[x].startsWith('>')) return true; // it has 2 consecutive headers
+  }
+  return false;
+};
+const hasTooManySequences = (lines) => {
+  const trimmedLines = trimSequenceLines(lines);
+  return (
+    trimmedLines.filter((line) => line.startsWith('>')).length >
+    MAX_NUMBER_OF_SEQUENCES
+  );
 };
 const compositeDecorator = new CompositeDecorator([
   {
@@ -143,7 +178,7 @@ const compositeDecorator = new CompositeDecorator([
     component: classedSpan(f('comment')),
   },
   {
-    strategy: commentsStrategy(/^\s*[>;].*$/gm, true),
+    strategy: commentsStrategy(/^\s*[>].*$/gm, true),
     component: classedSpan(f('invalid-comment')),
   },
   {
@@ -151,28 +186,30 @@ const compositeDecorator = new CompositeDecorator([
     component: classedSpan(f('invalid-letter')),
   },
 ]);
-
+const hasContentInNextLine = (lines, i) => {
+  if (i + 1 >= lines.length) return false;
+  const line = lines[i + 1].text.trim();
+  if (line.startsWith(';') || line === '')
+    return hasContentInNextLine(lines, i + 1);
+  if (line.startsWith('>')) return false;
+  return true;
+};
 export const cleanUp = (blocks) => {
-  let endOfFirstSequence = false;
   return blocks
     .map(({ text }, i, lines) => {
       const line = text.trim();
-      if (!line || endOfFirstSequence) return null;
-      const firstComment = lines.findIndex(({ text: l }) =>
-        l.trim().startsWith('>'),
-      );
-      if (line.startsWith('>') && firstComment !== i) {
-        endOfFirstSequence = true;
-        return null;
-      }
-      if (/^[;>]/.test(line)) return line;
+      if (!line) return null;
+      if (line.startsWith(';')) return line;
+      if (line.startsWith('>'))
+        return hasContentInNextLine(lines, i) ? line : null;
+
       return line.replace(/[^a-z\s]/gi, '').trim();
     })
     .filter(Boolean)
     .join('\n');
 };
 
-const InfoMessages = ({ valid, tooShort, headerIssues }) => {
+const InfoMessages = ({ valid, tooShort, tooMany, headerIssues }) => {
   return (
     <div className={f('text-right')}>
       {!valid && (
@@ -191,9 +228,18 @@ const InfoMessages = ({ valid, tooShort, headerIssues }) => {
           </span>
         </div>
       )}
+      {tooMany && (
+        <div>
+          There are too many sequences. The maximum allowed is{' '}
+          {MAX_NUMBER_OF_SEQUENCES}.{' '}
+          <span role="img" aria-label="warning">
+            ⚠️
+          </span>
+        </div>
+      )}
       {headerIssues && (
         <div>
-          There are issues with the header of the sequence.{' '}
+          There are issues with the headers.{' '}
           <span role="img" aria-label="warning">
             ⚠️
           </span>
@@ -213,6 +259,7 @@ const InfoMessages = ({ valid, tooShort, headerIssues }) => {
 InfoMessages.propTypes = {
   valid: T.bool.isRequired,
   tooShort: T.bool.isRequired,
+  tooMany: T.bool.isRequired,
   headerIssues: T.bool.isRequired,
 };
 /*:: type Props = {
@@ -229,6 +276,7 @@ InfoMessages.propTypes = {
   editorState: Object,
   valid: boolean,
   tooShort: boolean,
+  tooMany: boolean,
 }*/
 
 export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
@@ -251,6 +299,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     let editorState;
     let valid = true;
     let tooShort = true;
+    let tooMany = false;
     let headerIssues = false;
     let title = '';
     let initialAdvancedOptions = null;
@@ -266,6 +315,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       title = this._getTitle(lines);
       valid = checkValidity(lines);
       tooShort = isTooShort(lines);
+      tooMany = hasTooManySequences(lines);
       headerIssues = hasHeaderIssues(lines);
     } else {
       editorState = EditorState.createEmpty(compositeDecorator);
@@ -277,6 +327,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       editorState,
       valid,
       tooShort,
+      tooMany,
       headerIssues,
       title,
       initialAdvancedOptions,
@@ -340,6 +391,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
             : EditorState.createEmpty(compositeDecorator),
         valid: true,
         tooShort: true,
+        tooMany: false,
         headerIssues: false,
         dragging: false,
         uploading: false,
@@ -466,6 +518,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       editorState,
       valid: checkValidity(lines),
       tooShort: isTooShort(lines),
+      tooMany: hasTooManySequences(lines),
       headerIssues: hasHeaderIssues(lines),
       title: this._getTitle(lines),
     });
@@ -485,7 +538,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
           }}
         />
       );
-    const { editorState, valid, tooShort, headerIssues, dragging } = this.state;
+    const { editorState, valid, tooShort, tooMany, headerIssues, dragging } =
+      this.state;
     return (
       <div className={f('row', 'margin-bottom-medium')}>
         <div className={f('large-12', 'columns')}>
@@ -581,6 +635,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                         valid={valid}
                         tooShort={tooShort}
                         headerIssues={headerIssues}
+                        tooMany={tooMany}
                       />
                     )}
                   </div>
