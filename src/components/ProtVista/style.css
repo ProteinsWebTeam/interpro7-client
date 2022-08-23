@@ -487,12 +487,17 @@ div.subfamily {
   margin-bottom: 0.5rem;
   font-size: 0.8rem;
   background: #444;
+  text-align: left;
+  padding: 0.3rem;
 
   & > header {
     font-weight: bold;
+    margin-bottom: 0.5rem;
   }
   & ul li > header {
     font-weight: 600;
     display: inline-block;
+    min-width: 7rem;
+    padding-left: 1rem;
   }
 }
