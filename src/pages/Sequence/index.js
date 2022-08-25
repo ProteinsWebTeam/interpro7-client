@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import { connect } from 'react-redux';
 
 import loadData from 'higherOrder/loadData';
 
@@ -9,6 +10,7 @@ import loadData from 'higherOrder/loadData';
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
+import Redirect from 'components/generic/Redirect';
 
 import loadable from 'higherOrder/loadable';
 
@@ -22,6 +24,8 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import { iproscan2urlDB } from 'utils/url-patterns';
 import ResultImporter from 'components/IPScan/ResultImporter';
+import { IPscanRegex } from 'utils/processDescription/handlers';
+import { updateJobStatus } from 'actions/creators';
 
 const f = foundationPartial(fonts, pageStyle, ipro, styles);
 
@@ -95,20 +99,14 @@ const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
 
 /*:: type State = {
   localIDForLocalPayload: ?string,
+  remoteIDForLocalPayload: ?string,
   localPayload: ?Object,
 };*/
 class IPScanResult extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.shape({
-        results: T.array,
-      }),
-    }),
     matched: T.string.isRequired,
     entryDB: T.string,
     localID: T.string,
-    job: T.object,
     localTitle: T.string,
     entries: T.number,
   };
@@ -118,6 +116,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
 
     this.state = {
       localIDForLocalPayload: null,
+      remoteIDForLocalPayload: null,
       localPayload: null,
       shouldImportResults: false,
       isImporting: false,
@@ -126,74 +125,90 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
 
   componentDidMount() {
     this.#getLocalDataIfNeeded();
+    this.props.updateJobStatus();
   }
 
   componentDidUpdate() {
     this.#getLocalDataIfNeeded();
+    this.props.updateJobStatus();
   }
 
   #getLocalDataIfNeeded = () => {
-    const { localID, job } = this.props;
-    if (!localID && !job && !this.state.isImporting) {
+    const { localID, remoteID } = this.props;
+    if (!localID && !this.state.isImporting) {
       this.setState({ shouldImportResults: true, isImporting: true });
       return;
     }
     if (
       !localID ||
-      this.props.data.payload ||
-      this.state.localIDForLocalPayload === localID
+      (this.state.localIDForLocalPayload === localID &&
+        this.state.remoteIDForLocalPayload === remoteID)
     ) {
       return;
     }
-    this.setState({ localIDForLocalPayload: localID }, async () => {
-      const dataT = await getTableAccess(IPScanJobsData);
-      const data = await dataT.get(localID);
-      const metaTA = await getTableAccess(IPScanJobsMeta);
-      const meta = await metaTA.get(localID);
+    this.setState(
+      { localIDForLocalPayload: localID, remoteIDForLocalPayload: remoteID },
+      async () => {
+        const dataT = await getTableAccess(IPScanJobsData);
+        const data = await dataT.get(localID);
+        const metaTA = await getTableAccess(IPScanJobsMeta);
+        const meta = await metaTA.get(localID);
 
-      this.setState({
-        localPayload: {
-          sequence: (data?.input || data?.results?.[0]?.sequence || '')
-            .replace(FASTA_CLEANER, '')
-            .toUpperCase(),
-          matches: data?.results?.[0]?.matches || [],
-          'interproscan-version': data?.['interproscan-version'],
-          xref: [
-            {
-              name:
-                meta.status === 'error'
-                  ? 'There was an error recovering this job from the server.'
-                  : 'Results are being processed on the InterProScan server',
-            },
-          ],
-          group: meta?.group,
-          orf: data?.results?.[0]?.orf,
-          applications: data?.applications,
-        },
-      });
-    });
+        this.setState({
+          remoteIDForLocalPayload: data?.results ? remoteID : null,
+          localPayload: {
+            sequence: (data?.input || data?.results?.[0]?.sequence || '')
+              .replace(FASTA_CLEANER, '')
+              .toUpperCase(),
+            matches: data?.results?.[0]?.matches || [],
+            'interproscan-version': data?.['interproscan-version'],
+            xref: [
+              {
+                name:
+                  meta.status === 'error'
+                    ? 'There was an error recovering this job from the server.'
+                    : 'Results are being processed on the InterProScan server',
+              },
+            ],
+            group: meta?.group,
+            orf: data?.results?.[0]?.orf,
+            applications: data?.applications,
+          },
+        });
+      },
+    );
   };
 
   render() {
-    const {
-      data: { payload } = {},
-      matched,
-      entryDB,
-      localTitle,
-      entries: entriesFromIDB,
-    } = this.props;
+    const { matched, entryDB, localTitle, entries, remoteID, accession } =
+      this.props;
 
-    let entries = NaN;
-    if (payload && payload.results) {
-      if (!entryDB || entryDB.toLowerCase() === 'interpro') {
-        entries = countInterPro(payload);
-      } else {
-        const dbEntries = countLibraries(payload);
-        entries = dbEntries[entryDB].size;
-      }
+    // let entries = NaN;
+    // if (payload && payload.results) {
+    //   if (!entryDB || entryDB.toLowerCase() === 'interpro') {
+    //     entries = countInterPro(payload);
+    //   } else {
+    //     const dbEntries = countLibraries(payload);
+    //     entries = dbEntries[entryDB].size;
+    //   }
+    // }
+    // if (!entries && entriesFromIDB) entries = entriesFromIDB;
+
+    if (remoteID && remoteID !== accession) {
+      return (
+        <Redirect
+          to={{
+            description: {
+              main: { key: 'result' },
+              result: {
+                type: 'InterProScan',
+                accession: remoteID,
+              },
+            },
+          }}
+        />
+      );
     }
-    if (!entries && entriesFromIDB) entries = entriesFromIDB;
-
     return (
       <>
         <ResultImporter
@@ -223,6 +238,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
         {!this.state.shouldImportResults && (
           <ErrorBoundary>
             <Switch
+              data={{ payload: null }}
               {...this.props}
               localPayload={this.state.localPayload}
               localTitle={localTitle}
@@ -237,27 +253,6 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
   }
 }
 
-const mapStateToUrl = createSelector(
-  (state) => state.jobs,
-  (state) => state.settings.ipScan,
-  (state) => state.customLocation.description.result.accession,
-  (jobs, { protocol, hostname, port, root }, accession) => {
-    if (!jobs) return;
-    const job = Object.values(jobs).find(
-      (job) =>
-        job.metadata.localID === accession ||
-        job.metadata.remoteID === accession,
-    );
-    if (!job || job.metadata.status !== 'finished') return;
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}/result/${accession}/json`,
-    });
-  },
-);
-
 const mapStateToProps = createSelector(
   (state) => state.jobs || {},
   (state) => state.customLocation.description.result.accession,
@@ -266,20 +261,22 @@ const mapStateToProps = createSelector(
     const job = Object.values(jobs).find(
       (job) =>
         job.metadata.localID === accession ||
-        job.metadata.remoteID === accession,
+        job.metadata.remoteID === accession ||
+        job.metadata.localID === accession + '-1' ||
+        job.metadata.remoteID === accession + '-1',
     );
 
     return job
       ? {
           localID: job.metadata.localID,
+          remoteID: job.metadata.remoteID,
           entryDB: isFilter && db,
           localTitle: job.metadata.localTitle,
           entries: job.metadata.entries,
+          accession,
         }
-      : null;
+      : { accession };
   },
 );
 
-export default loadData({ getUrl: mapStateToUrl, mapStateToProps })(
-  IPScanResult,
-);
+export default connect(mapStateToProps, { updateJobStatus })(IPScanResult);

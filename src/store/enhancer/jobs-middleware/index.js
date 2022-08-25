@@ -38,7 +38,12 @@ import {
   IMPORT_JOB,
   IMPORT_JOB_FROM_DATA,
 } from 'actions/types';
-import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
+import {
+  rehydrateJobs,
+  updateJob,
+  addToast,
+  goToCustomLocation,
+} from 'actions/creators';
 
 import config from 'config';
 
@@ -47,7 +52,7 @@ import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
 // eslint-disable-next-line no-magic-numbers
 const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
 // eslint-disable-next-line no-magic-numbers
-const DEFAULT_LOOP_TIMEOUT = 1000 * 60; // one minute
+const DEFAULT_LOOP_TIMEOUT = 1000 * 6; // one minute
 // eslint-disable-next-line no-magic-numbers
 export const MAX_TIME_ON_SERVER = 1000 * 60 * 60 * 24 * 7; // one week
 
@@ -95,13 +100,65 @@ const createJobInDB = async (metadata /*: JobMetadata */, data) => {
   }
 };
 
-const updateJobInDB = async (metadata, data, title) => {
+const updateJobInDB = async (
+  metadata,
+  data,
+  title,
+  dispatch /*: function */,
+) => {
   const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
+  const { remoteID, localID } = metadata;
   if (data) {
-    dataT.update(metadata.localID, (prev) => ({ ...prev, ...data }));
+    const prev = dataT.get(metadata.localID);
+    const newData = {
+      ...prev,
+      ...data,
+      results: [data?.results?.[0]],
+    };
+
     metadata.localTitle = title || data?.results?.[0]?.xref?.[0]?.name;
+    if (data?.results?.length > 1 && !remoteID.endsWith('-1')) {
+      metadata.remoteID = `${remoteID}-1`;
+      metadata.localID = `${localID}-1`;
+      metaT.delete(localID);
+      dataT.delete(localID);
+    }
+    dataT.set(newData, metadata.localID);
   }
   metaT.set(metadata, metadata.localID);
+
+  (data?.results || []).slice(1).forEach((result, i) => {
+    const newLocalID = `${localID}-${i + 2}`;
+    dataT.set({ ...data, results: [result], localID: newLocalID }, newLocalID);
+    metaT.set(
+      {
+        ...metadata,
+        localID: newLocalID,
+        remoteID: `${remoteID}-${i + 2}`,
+        localTitle: result.xref?.[0]?.name,
+      },
+      newLocalID,
+    );
+  });
+  if (dispatch) {
+    rehydrateStoredJobs(dispatch);
+    // if ((data?.results?.length || 0) > 1 && !remoteID.endsWith('-1')) {
+    //   dispatch(
+    //     goToCustomLocation(
+    //       {
+    //         description: {
+    //           main: { key: 'result' },
+    //           result: {
+    //             type: 'InterProScan',
+    //             accession: metadata.remoteID,
+    //           },
+    //         },
+    //       },
+    //       true,
+    //     ),
+    //   );
+    // }
+  }
 };
 
 const processImportedAttributes = (
@@ -333,6 +390,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
         getState().jobs[action.job.metadata.localID].metadata,
         action.job.data,
         null,
+        dispatch,
       );
     }
 

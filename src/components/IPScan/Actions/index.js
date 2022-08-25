@@ -46,7 +46,7 @@ export class Actions extends PureComponent /*:: <Props> */ {
     deleteJob: T.func.isRequired,
     goToCustomLocation: T.func.isRequired,
     keepJobAsLocal: T.func.isRequired,
-    sequence: T.string.isRequired,
+    sequence: T.string,
     attributes: T.shape({
       applications: T.arrayOf(T.string),
     }),

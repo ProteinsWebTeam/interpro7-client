@@ -36,7 +36,7 @@ import example from './example.fasta';
 
 const f = foundationPartial(interproTheme, ipro, local);
 
-export const MAX_NUMBER_OF_SEQUENCES = 3;
+export const MAX_NUMBER_OF_SEQUENCES = 100;
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),

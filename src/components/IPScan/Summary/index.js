@@ -339,10 +339,10 @@ const SummaryIPScanJob = ({
 };
 SummaryIPScanJob.propTypes = {
   accession: T.string.isRequired,
-  localID: T.string.isRequired,
+  localID: T.string,
   remoteID: T.string,
   localTitle: T.string,
-  status: T.string.isRequired,
+  status: T.string,
   data: dataPropType,
   localPayload: T.object,
   api: T.object,
@@ -375,11 +375,11 @@ const mapStateToProps = createSelector(
   jobSelector,
   (state) => state.settings.api,
   (state) => state.settings.ipScan,
-  (accession, { metadata: { localID, remoteID, status } }, api, ipScan) => ({
+  (accession, job, api, ipScan) => ({
     accession,
-    localID,
-    remoteID,
-    status,
+    localID: job?.metadata?.localID,
+    remoteID: job?.metadata?.remoteID,
+    status: job?.metadata?.status,
     api,
     ipScan,
   }),

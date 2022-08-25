@@ -69,8 +69,8 @@ ResultImporter.propTypes = {
 };
 
 const mapStateToUrl = createSelector(
-  state => state.settings.ipScan,
-  state => state.customLocation.description.result.accession,
+  (state) => state.settings.ipScan,
+  (state) => state.customLocation.description.result.accession,
   ({ protocol, hostname, port, root }, accession) => {
     return format({
       protocol,
@@ -81,13 +81,13 @@ const mapStateToUrl = createSelector(
   },
 );
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.result.accession,
-  accession => ({ accession }),
+  (state) => state.customLocation.description.result.accession,
+  (accession) => ({ accession }),
 );
 
 export default loadData({
   getUrl: mapStateToUrl,
   mapStateToProps,
   mapDispatchToProps: { importJob },
-  fetchOptions: { responseType: 'text' },
+  fetchOptions: { useCache: false, responseType: 'text' },
 })(ResultImporter);
