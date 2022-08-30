@@ -144,7 +144,7 @@ const EntryAlignments = ({
   const types = Object.entries(data?.payload?.metadata?.entry_annotations || {})
     .filter(([type]) => type.startsWith(tag))
     .map(([type, count]) => [type.slice(tag.length), count])
-    .sort(([aType, aCount], [bType, bCount]) => aCount - bCount);
+    .sort(([, aCount], [, bCount]) => aCount - bCount);
   if (!types.length) return null;
   const handleChange = (evt) => {
     goToCustomLocation({
