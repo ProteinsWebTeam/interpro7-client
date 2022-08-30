@@ -1,12 +1,9 @@
+// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
-import { format } from 'url';
 import { connect } from 'react-redux';
 
-import loadData from 'higherOrder/loadData';
-
-// import { EntryMenuWithoutData } from 'components/EntryMenu';
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -22,9 +19,7 @@ import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
-import { iproscan2urlDB } from 'utils/url-patterns';
 import ResultImporter from 'components/IPScan/ResultImporter';
-import { IPscanRegex } from 'utils/processDescription/handlers';
 import { updateJobStatus } from 'actions/creators';
 
 const f = foundationPartial(fonts, pageStyle, ipro, styles);
@@ -57,9 +52,10 @@ const locationSelector = createSelector(
   (customLocation) => {
     const { key } = customLocation.description.main;
     return (
+      // prettier-ignore
       customLocation.description[key].detail ||
-      (Object.entries(customLocation.description).find(
-        ([_key, value]) => value.isFilter,
+      ((Object.entries(customLocation.description)/*: any */).find(
+        ([_key, value]/*: [string, {isFilter: boolean}] */) => value.isFilter,
       ) || [])[0]
     );
   },
@@ -70,21 +66,6 @@ export const countInterProFromMatches = (matches) =>
     new Set(matches.map((m) => (m.signature.entry || {}).accession)).values(),
   ).filter(Boolean).length;
 
-const countInterPro = createSelector(
-  (payload) => payload.results[0].matches,
-  countInterProFromMatches,
-);
-const countLibraries = createSelector(
-  (payload) => payload.results[0].matches,
-  (matches) =>
-    matches.reduce((agg, m) => {
-      const lib = iproscan2urlDB(m.signature.signatureLibraryRelease.library);
-      if (!agg[lib]) agg[lib] = new Set();
-      agg[lib].add(m.signature.accession);
-      return agg;
-    }, {}),
-);
-
 const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
 /*:: type Props = {
   data: {
@@ -93,22 +74,31 @@ const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
   },
   matched: string,
   entryDB: string,
+  entries: number,
+  accession: string,
   localID: string,
+  remoteID: string,
   localTitle: string,
+  updateJobStatus: ()=>void,
 };*/
 
 /*:: type State = {
   localIDForLocalPayload: ?string,
   remoteIDForLocalPayload: ?string,
   localPayload: ?Object,
+  isImporting: boolean,
+  shouldImportResults: boolean,
 };*/
 class IPScanResult extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
     matched: T.string.isRequired,
+    accession: T.string,
     entryDB: T.string,
     localID: T.string,
+    remoteID: T.string,
     localTitle: T.string,
     entries: T.number,
+    updateJobStatus: T.func.isRequired,
   };
 
   constructor(props /*: Props */) {
@@ -165,7 +155,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
             xref: [
               {
                 name:
-                  meta.status === 'error'
+                  meta?.status === 'error'
                     ? 'There was an error recovering this job from the server.'
                     : 'Results are being processed on the InterProScan server',
               },
@@ -180,19 +170,18 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
   };
 
   render() {
-    const { matched, entryDB, localTitle, entries, remoteID, accession } =
-      this.props;
+    const {
+      matched,
+      localTitle,
+      entries: entriesProps,
+      remoteID,
+      accession,
+    } = this.props;
 
-    // let entries = NaN;
-    // if (payload && payload.results) {
-    //   if (!entryDB || entryDB.toLowerCase() === 'interpro') {
-    //     entries = countInterPro(payload);
-    //   } else {
-    //     const dbEntries = countLibraries(payload);
-    //     entries = dbEntries[entryDB].size;
-    //   }
-    // }
-    // if (!entries && entriesFromIDB) entries = entriesFromIDB;
+    let entries = entriesProps || NaN;
+    if (this.state.localPayload && isNaN(entries)) {
+      entries = countInterProFromMatches(this.state.localPayload.matches);
+    }
 
     if (remoteID && remoteID !== accession) {
       return (
@@ -258,12 +247,14 @@ const mapStateToProps = createSelector(
   (state) => state.customLocation.description.result.accession,
   (state) => state.customLocation.description.entry,
   (jobs, accession, { isFilter, db }) => {
-    const job = Object.values(jobs).find(
+    const job /*: {metadata: {localID: string, remoteID: string, localTitle: string, entries: number}} */ =
+      // prettier-ignore
+      (Object.values(jobs)/*: any */).find(
       (job) =>
         job.metadata.localID === accession ||
         job.metadata.remoteID === accession ||
-        job.metadata.localID === accession + '-1' ||
-        job.metadata.remoteID === accession + '-1',
+        job.metadata.localID === `${accession}-1` ||
+        job.metadata.remoteID === `${accession}-1`,
     );
 
     return job
