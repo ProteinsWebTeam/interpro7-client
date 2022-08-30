@@ -39,7 +39,9 @@ const getValue = (loading, payload, counter, name) => {
   // i.e. only enable the menu item if there is info for it
   if (
     payload.metadata.entry_annotations &&
-    singleEntityNames.get(name) in payload.metadata.entry_annotations
+    payload.metadata.entry_annotations.hasOwnProperty(
+      singleEntityNames.get(name),
+    )
   ) {
     return NaN;
   }

@@ -193,7 +193,9 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
        */
       if (
         payload.metadata.entry_annotations &&
-        (singleEntityNames.get(name) in payload.metadata.entry_annotations ||
+        (payload.metadata.entry_annotations.hasOwnProperty(
+          singleEntityNames.get(name),
+        ) ||
           hasAlignments(name, entryDB, payload.metadata.entry_annotations))
       ) {
         value = NaN;
