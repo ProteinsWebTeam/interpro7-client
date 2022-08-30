@@ -38,12 +38,7 @@ import {
   IMPORT_JOB,
   IMPORT_JOB_FROM_DATA,
 } from 'actions/types';
-import {
-  rehydrateJobs,
-  updateJob,
-  addToast,
-  goToCustomLocation,
-} from 'actions/creators';
+import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
 
 import config from 'config';
 
@@ -100,6 +95,21 @@ const createJobInDB = async (metadata /*: JobMetadata */, data) => {
   }
 };
 
+const updateJobTitleInDB = async (metadata, title) => {
+  const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
+  const { localID } = metadata;
+
+  metaT.update(localID, (prev) => ({ ...prev, localTitle: title }));
+  dataT.update(localID, (prev) => ({
+    ...prev,
+    results: [
+      {
+        ...prev.results[0],
+        xref: [{ name: title, id: title.replaceAll(' ', '') }],
+      },
+    ],
+  }));
+};
 const updateJobInDB = async (
   metadata,
   data,
@@ -109,7 +119,7 @@ const updateJobInDB = async (
   const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
   const { remoteID, localID } = metadata;
   if (data) {
-    const prev = dataT.get(metadata.localID);
+    const prev = await dataT.get(metadata.localID);
     const newData = {
       ...prev,
       ...data,
@@ -127,37 +137,26 @@ const updateJobInDB = async (
   }
   metaT.set(metadata, metadata.localID);
 
-  (data?.results || []).slice(1).forEach((result, i) => {
-    const newLocalID = `${localID}-${i + 2}`;
-    dataT.set({ ...data, results: [result], localID: newLocalID }, newLocalID);
-    metaT.set(
-      {
-        ...metadata,
-        localID: newLocalID,
-        remoteID: `${remoteID}-${i + 2}`,
-        localTitle: result.xref?.[0]?.name,
-      },
-      newLocalID,
-    );
-  });
+  (Array.isArray(data?.results) ? data?.results : [])
+    .slice(1)
+    .forEach((result, i) => {
+      const newLocalID = `${localID}-${i + 2}`;
+      dataT.set(
+        { ...data, results: [result], localID: newLocalID },
+        newLocalID,
+      );
+      metaT.set(
+        {
+          ...metadata,
+          localID: newLocalID,
+          remoteID: `${remoteID}-${i + 2}`,
+          localTitle: result.xref?.[0]?.name,
+        },
+        newLocalID,
+      );
+    });
   if (dispatch) {
     rehydrateStoredJobs(dispatch);
-    // if ((data?.results?.length || 0) > 1 && !remoteID.endsWith('-1')) {
-    //   dispatch(
-    //     goToCustomLocation(
-    //       {
-    //         description: {
-    //           main: { key: 'result' },
-    //           result: {
-    //             type: 'InterProScan',
-    //             accession: metadata.remoteID,
-    //           },
-    //         },
-    //       },
-    //       true,
-    //     ),
-    //   );
-    // }
   }
 };
 
@@ -403,9 +402,8 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     }
 
     if (action.type === UPDATE_JOB_TITLE) {
-      updateJobInDB(
+      updateJobTitleInDB(
         getState().jobs[action.job.metadata.localID].metadata,
-        action.job.data,
         action.value,
       );
     }
