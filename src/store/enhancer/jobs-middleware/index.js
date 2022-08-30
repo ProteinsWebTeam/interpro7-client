@@ -47,7 +47,7 @@ import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
 // eslint-disable-next-line no-magic-numbers
 const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
 // eslint-disable-next-line no-magic-numbers
-const DEFAULT_LOOP_TIMEOUT = 1000 * 6; // one minute
+const DEFAULT_LOOP_TIMEOUT = 1000 * 10; // ten seconds
 // eslint-disable-next-line no-magic-numbers
 export const MAX_TIME_ON_SERVER = 1000 * 60 * 60 * 24 * 7; // one week
 
@@ -125,6 +125,8 @@ const updateJobInDB = async (
       ...data,
       results: [data?.results?.[0]],
     };
+    newData.originalInput = newData.input;
+    delete newData.input;
 
     metadata.localTitle = title || data?.results?.[0]?.xref?.[0]?.name;
     if (data?.results?.length > 1 && !remoteID.endsWith('-1')) {
