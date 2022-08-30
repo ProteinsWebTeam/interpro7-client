@@ -107,7 +107,7 @@ EntryMenuLinkWithoutData.propTypes = {
 
 const hasAlignments = (name, db, annotations) => {
   if (name !== 'Alignment' || db === 'InterPro') return false;
-  for (const ann of annotations) {
+  for (const ann of Object.keys(annotations)) {
     if (ann.startsWith('alignment:')) return true;
   }
   return false;
@@ -193,9 +193,7 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
        */
       if (
         payload.metadata.entry_annotations &&
-        (payload.metadata.entry_annotations.includes(
-          singleEntityNames.get(name),
-        ) ||
+        (singleEntityNames.get(name) in payload.metadata.entry_annotations ||
           hasAlignments(name, entryDB, payload.metadata.entry_annotations))
       ) {
         value = NaN;

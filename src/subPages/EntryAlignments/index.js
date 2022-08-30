@@ -141,9 +141,10 @@ const EntryAlignments = ({
   const [overlayConservation, setOverlayConservation] = useState(false);
 
   // eslint-disable-next-line camelcase
-  const types = (data?.payload?.metadata?.entry_annotations || [])
-    .filter((ann) => ann.startsWith(tag))
-    .map((ann) => ann.slice(tag.length));
+  const types = Object.entries(data?.payload?.metadata?.entry_annotations || {})
+    .filter(([type]) => type.startsWith(tag))
+    .map(([type, count]) => [type.slice(tag.length), count])
+    .sort(([aType, aCount], [bType, bCount]) => aCount - bCount);
   if (!types.length) return null;
   const handleChange = (evt) => {
     goToCustomLocation({
@@ -173,8 +174,10 @@ const EntryAlignments = ({
           <option value="" disabled>
             Choose...
           </option>
-          {types.map((t) => (
-            <option key={t}>{t}</option>
+          {types.map(([type, count]) => (
+            <option key={type}>
+              {type} ({count.toLocaleString()})
+            </option>
           ))}
         </select>
       </label>

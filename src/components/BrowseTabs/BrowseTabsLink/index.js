@@ -14,7 +14,7 @@ import styles from './style.css';
 const f = foundationPartial(styles);
 
 const singleEntityNames = new Map(
-  Array.from(singleEntity).map(e => [e[1].name, e[0]]),
+  Array.from(singleEntity).map((e) => [e[1].name, e[0]]),
 );
 
 const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
@@ -35,11 +35,11 @@ const getValue = (loading, payload, counter, name) => {
     Number.isFinite(payload.metadata.counters[counter])
   ) {
     return payload.metadata.counters[counter];
-  } // Enabling the menuitems that appear in the entry_annotations array.
+  } // Enabling the menuitems that appear in the entry_annotations object.
   // i.e. only enable the menu item if there is info for it
   if (
     payload.metadata.entry_annotations &&
-    payload.metadata.entry_annotations.includes(singleEntityNames.get(name))
+    singleEntityNames.get(name) in payload.metadata.entry_annotations
   ) {
     return NaN;
   }
