@@ -175,7 +175,7 @@ const EntryAlignments = ({
             Choose...
           </option>
           {types.map(([type, count]) => (
-            <option key={type}>
+            <option key={type} value={type}>
               {type} ({count.toLocaleString()})
             </option>
           ))}
