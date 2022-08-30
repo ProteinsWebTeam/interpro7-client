@@ -133,7 +133,6 @@ const EntryAlignments = ({
   goToCustomLocation,
 }) => {
   const tag = 'alignment:';
-  const disallowedList = ['ncbi', 'meta'];
   const [colorscheme, setColorscheme] = useState('clustal2');
   const [conservastionProgress, setConservastionProgress] = useState(0);
   // TODO: draw the legend using 👇🏽 the colorMap coming from events in the component.
@@ -144,8 +143,7 @@ const EntryAlignments = ({
   // eslint-disable-next-line camelcase
   const types = (data?.payload?.metadata?.entry_annotations || [])
     .filter((ann) => ann.startsWith(tag))
-    .map((ann) => ann.slice(tag.length))
-    .filter((ann) => disallowedList.indexOf(ann) === -1);
+    .map((ann) => ann.slice(tag.length));
   if (!types.length) return null;
   const handleChange = (evt) => {
     goToCustomLocation({
