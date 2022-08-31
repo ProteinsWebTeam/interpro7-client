@@ -3,7 +3,7 @@
 .title {
   display: flex;
 
-  .title-name {
+  & .title-name.ipscan {
     display: inline-flex;
   }
   & > div:first-of-type:not(.icon-container):not(.title-name) {

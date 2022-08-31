@@ -1,0 +1,55 @@
+.jobs-browser {
+  background: var(--colors-very-white, #eee);
+  border: 0;
+  & header {
+    font-weight: 400;
+  }
+  & main {
+    --main-scroller-height: 3em;
+    display: flex;
+    border: 1px solid var(--colors-ulightgray, #ddd);
+    & .counter {
+      white-space: nowrap;
+      justify-content: center;
+      align-items: center;
+      margin: 0 0.5em;
+      line-height: var(--main-scroller-height, 3em);
+    }
+    & button {
+      cursor: pointer;
+      &:hover {
+        text-shadow: 2px 2px 5px yellow;
+      }
+    }
+    & .job-slider {
+      width: 100%;
+      text-align: center;
+      overflow: hidden;
+
+      & .slides {
+        display: flex;
+
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+
+        & > div {
+          scroll-snap-align: start;
+          flex-shrink: 0;
+          width: 100%;
+          height: var(--main-scroller-height, 3em);
+          margin-right: 50px;
+          border-radius: 10px;
+          background: #eee;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: left;
+          padding-left: 1em;
+        }
+      }
+    }
+  }
+}

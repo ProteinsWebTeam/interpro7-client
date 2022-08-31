@@ -61,9 +61,7 @@ const mapNameToClass = new Map([
 const accessionDisplay = new Set(['protein', 'structure', 'proteome']);
 
 const EntryIcon = (
-  {
-    metadata,
-  } /*: {metadata: {name: { name: string, short: ?string },
+  { metadata } /*: {metadata: {name: { name: string, short: ?string },
     accession: string | number,
     source_database: string,
     type: string,
@@ -130,11 +128,7 @@ const rtdLinks = {
 };
 
 const TitleTag = (
-  {
-    metadata,
-    mainType,
-    dbLabel,
-  } /*: {metadata:
+  { metadata, mainType, dbLabel } /*: {metadata:
                     {
                       name: { name: string, short: ?string },
                       accession: string | number,
@@ -195,23 +189,21 @@ TitleTag.propTypes = {
 };
 
 const AccessionTag = (
-  {
-    metadata,
-    mainType,
-  } /*: {metadata:
-                    {
-                      name: { name: string, short: ?string },
-                      accession: string | number,
-                      source_database: string,
-                      type: string,
-                      gene?: string,
-                      experiment_type?: string,
-                      source_organism?: Object,
-                      release_date?: string,
-                      chains?: Array<string>
-                      },
-                      mainType: string
-                      } */,
+  { metadata, mainType, isIPScanResult = false } /*: {metadata:
+    {
+      name: { name: string, short: ?string },
+      accession: string | number,
+      source_database: string,
+      type: string,
+      gene?: string,
+      experiment_type?: string,
+      source_organism?: Object,
+      release_date?: string,
+      chains?: Array<string>,
+    },
+    mainType: string,
+    isIPScanResult: boolean,
+  } */,
 ) => {
   const isEntry = mainType === 'entry';
   return (
@@ -247,7 +239,7 @@ const AccessionTag = (
         // greyblueish accession: for protein , structure, and proteomes and no accession for tax
         accessionDisplay.has(mainType) &&
           metadata.source_database !== 'taxonomy' &&
-          metadata.name.name !== 'InterProScan Search Result' && (
+          !isIPScanResult && (
             // for proteins, structures and proteomes (no accession in title for taxonomy and sets)
             <span className={f('title-id-other')}>{metadata.accession}</span>
           )
@@ -258,6 +250,7 @@ const AccessionTag = (
 AccessionTag.propTypes = {
   metadata: T.object.isRequired,
   mainType: T.string.isRequired,
+  isIPScanResult: T.bool,
 };
 
 class Title extends PureComponent /*:: <Props, State> */ {
@@ -295,6 +288,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
       databases && databases[metadata.source_database]
         ? databases[metadata.source_database].name
         : metadata.source_database;
+    const isIPScanResult = metadata.name.name === 'InterProScan Search Result';
 
     return (
       <div className={f('title')} data-testid="titlebar">
@@ -339,18 +333,19 @@ class Title extends PureComponent /*:: <Props, State> */ {
           </Helmet>
         )}
 
-        <div className={f('title-name')}>
+        <div
+          className={f('title-name', {
+            ipscan: isIPScanResult,
+          })}
+        >
           <div className={f('title-fav')}>
-            {
-              // add margin only for IPSCAN result page
-              metadata.name.name === 'InterProScan Search Result' ? (
-                <h3 className={f('margin-bottom-large')}>
-                  {metadata.name.name}{' '}
-                </h3>
-              ) : (
-                <h3>{metadata.name.name}</h3>
-              )
-            }
+            <h3
+              className={f({
+                'margin-bottom-large': isIPScanResult,
+              })}
+            >
+              {metadata.name.name}{' '}
+            </h3>
             {
               // Showing Favourites only for InterPro entries for now
               isEntry &&
@@ -380,7 +375,11 @@ class Title extends PureComponent /*:: <Props, State> */ {
           </div>
           <TitleTag metadata={metadata} mainType={mainType} dbLabel={dbLabel} />
         </div>
-        <AccessionTag metadata={metadata} mainType={mainType} />
+        <AccessionTag
+          metadata={metadata}
+          mainType={mainType}
+          isIPScanResult={isIPScanResult}
+        />
       </div>
     );
   }

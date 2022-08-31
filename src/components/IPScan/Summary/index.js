@@ -27,6 +27,7 @@ import { getIProScanURL } from 'components/IPScan/Status';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideSummary from 'components/IPScan/NucleotideSummary';
 import IPScanTitle from './IPScanTitle';
+import SubJobsBrowser from '../SubJobsBrowser';
 import { Exporter } from 'components/Table';
 import { updateJobTitle } from 'actions/creators';
 
@@ -207,6 +208,7 @@ const SummaryIPScanJob = ({
           ipScanVersion={payload['interproscan-version']}
           callback={setVersionMismatch}
         />
+        <SubJobsBrowser />
         <NucleotideSummary payload={payload} />
         <IPScanTitle
           localTitle={localTitle}
