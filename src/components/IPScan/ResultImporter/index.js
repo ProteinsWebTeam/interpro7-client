@@ -7,6 +7,7 @@ import loadData from 'higherOrder/loadData';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import id from 'utils/cheap-unique-id';
+import { IPscanRegex } from 'utils/processDescription/handlers';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -15,6 +16,14 @@ import theme from 'styles/theme-interpro.css';
 const f = foundationPartial(theme, ipro);
 
 const STATUS_OK = 200;
+
+const getBaseIPScanID = (accession) => {
+  const matches = accession.match(IPscanRegex);
+  const posfix = matches[2];
+  return posfix && posfix.startsWith('-')
+    ? accession.slice(0, -posfix.length)
+    : accession;
+};
 const ResultImporter = ({
   accession,
   shouldImport,
@@ -35,7 +44,7 @@ const ResultImporter = ({
         metadata: {
           localID: id(`internal-${Date.now()}`),
           type: 'InterProScan',
-          remoteID: accession,
+          remoteID: getBaseIPScanID(accession),
         },
         data: {
           input: '',
@@ -76,7 +85,7 @@ const mapStateToUrl = createSelector(
       protocol,
       hostname,
       port,
-      pathname: `${root}/status/${accession}`,
+      pathname: `${root}/status/${getBaseIPScanID(accession)}`,
     });
   },
 );

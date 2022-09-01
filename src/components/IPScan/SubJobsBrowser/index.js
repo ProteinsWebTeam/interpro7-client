@@ -53,11 +53,11 @@ const SubJobsBrowser = ({ jobs, accession } /*: Props */) => {
   const scrollPrev = () => scroll(false);
   return (
     <section className={f('callout', 'jobs-browser')}>
-      <header>This result was part of a multiple sequence job.</header>
+      <header>
+        This result was part of a multiple ({jobs.length}) sequence job. You can
+        choose another sequence below:
+      </header>
       <main>
-        <div className={f('counter')}>
-          {currentJob + 1} of {jobs.length}
-        </div>
         <button onClick={scrollPrev}>◀︎</button>
 
         <div className={f('job-slider')}>
