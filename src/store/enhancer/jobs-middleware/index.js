@@ -130,6 +130,7 @@ const updateJobInDB = async (
 
     metadata.localTitle = title || data?.results?.[0]?.xref?.[0]?.name;
     if (data?.results?.length > 1 && !remoteID.endsWith('-1')) {
+      metadata.group = remoteID;
       metadata.remoteID = `${remoteID}-1`;
       metadata.localID = `${localID}-1`;
       metaT.delete(localID);
