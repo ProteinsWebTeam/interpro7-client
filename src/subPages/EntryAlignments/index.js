@@ -6,10 +6,6 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
-import { format } from 'url';
-import loadData from 'higherOrder/loadData';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
-
 import Link from 'components/generic/Link';
 import Tip from 'components/Tip';
 import AlignmentViewer from './Viewer';
@@ -22,27 +18,24 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const f = foundationPartial(localStyle, ipro, fonts);
 
-const _Alignment = ({
+const Alignment = ({
   type,
+  numSequences,
   colorscheme,
   onConservationProgress,
   setDisplayingAlignment,
   setColorMap,
   overlayConservation,
-  data: { payload },
 }) => {
   const [forceShow, setForceShow] = useState(false);
   const threshold = 1000;
-  // eslint-disable-next-line camelcase
-  const num = payload?.num_sequences || Infinity;
-  const show = forceShow || num < threshold;
+  const show = forceShow || numSequences < threshold;
   useEffect(() => {
     setDisplayingAlignment(show);
   }, [show]);
   useEffect(() => {
     setForceShow(false);
-  }, [payload]);
-  if (!payload) return null;
+  }, [numSequences]);
 
   return (
     <div>
@@ -51,15 +44,15 @@ const _Alignment = ({
           onConservationProgress={onConservationProgress}
           setColorMap={setColorMap}
           type={type}
-          num={num}
+          num={numSequences}
           colorscheme={colorscheme}
           overlayConservation={overlayConservation}
         />
       ) : (
         <div>
           <p>
-            This alignment has {num} sequences. This can cause memory issues in
-            your browser.
+            This alignment has {numSequences} sequences. This can cause memory
+            issues in your browser.
           </p>
           <p>
             If you still want to display it, press{' '}
@@ -72,41 +65,15 @@ const _Alignment = ({
     </div>
   );
 };
-_Alignment.propTypes = {
+Alignment.propTypes = {
   type: T.string,
+  numSequences: T.number,
   colorscheme: T.string,
   onConservationProgress: T.func,
   setDisplayingAlignment: T.func,
   setColorMap: T.func,
-  data: dataPropType,
   overlayConservation: T.bool,
 };
-
-const mapStateToPropsForAlignment = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.description,
-  (_, props) => props?.type || '',
-  ({ protocol, hostname, port, root }, description, type) => {
-    // omit elements from description
-    const { ...copyOfDescription } = description;
-    if (description.main.key) {
-      copyOfDescription[description.main.key] = {
-        ...description[description.main.key],
-        detail: null,
-      };
-    }
-    // build URL
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + descriptionToPath(copyOfDescription),
-      query: { 'annotation:info': type },
-    });
-  },
-);
-
-const Alignment = loadData(mapStateToPropsForAlignment)(_Alignment);
 
 const AllowedColorschemes = [
   'buried_index',
@@ -251,7 +218,10 @@ const EntryAlignments = ({
       {alignmentType !== '' && (
         <Alignment
           colorscheme={colorscheme}
-          type={`${tag}${type}`}
+          type={`${tag}${alignmentType}`}
+          numSequences={
+            data?.payload?.metadata?.entry_annotations[`${tag}${alignmentType}`]
+          }
           onConservationProgress={setConservastionProgress}
           setDisplayingAlignment={setDisplayingAlignment}
           setColorMap={setColorMap}
@@ -272,10 +242,6 @@ EntryAlignments.propTypes = {
 const mapStateToProps = createSelector(
   (state) => state.customLocation,
   (state) => state.customLocation?.search?.type,
-  (state) =>
-    mapStateToPropsForAlignment(state)
-      .replace(':info', '')
-      .replace('%3Ainfo', ''),
   (state) => state.settings.notifications.showCtrlToZoomToast,
   (customLocation, type, url, showCtrlToZoomToast) => ({
     customLocation,
