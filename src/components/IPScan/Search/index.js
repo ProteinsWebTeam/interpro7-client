@@ -143,10 +143,11 @@ export const isTooShort = (lines) => {
   let firstLine = true;
   const trimmedLines = trimSequenceLines(lines);
   for (const line of trimmedLines) {
-    if (IUPACProtRE.test(line)) count += line.trim().length;
-    if (headerRE.test(line) && !firstLine) {
-      if (count < MIN_LENGTH) return true;
+    if (headerRE.test(line)) {
+      if (!firstLine && count < MIN_LENGTH) return true;
       count = 0;
+    } else {
+      count += line.trim().length;
     }
     firstLine = false;
   }
@@ -214,7 +215,9 @@ const InfoMessages = ({ valid, tooShort, tooMany, headerIssues }) => {
     <div className={f('text-right')}>
       {!valid && (
         <div>
-          The sequence has invalid characters.{' '}
+          {tooShort
+            ? 'There is a header without content. '
+            : 'The sequence has invalid characters. '}
           <span role="img" aria-label="warning">
             ⚠️
           </span>
@@ -489,8 +492,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     const currentContent = editorState.getCurrentContent();
     if (currentContent.hasText()) {
       const firstLine = (lines?.[0] || '').trim();
-      const hasHeader = firstLine.startsWith('>') && firstLine.length > 1;
-      if (!hasHeader) {
+      const hasHeader = firstLine.startsWith('>');
+      if (!hasHeader && firstLine.length > 3) {
         const localTitle = `Sequence title ${getId()}`;
         const header = `> ${localTitle}`;
         this.setState({ title: localTitle });
@@ -615,8 +618,13 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                       <div
                         type="text"
                         className={f('editor', {
-                          'invalid-block': !valid,
-                          'valid-block': valid && !tooShort && !headerIssues,
+                          'invalid-block':
+                            !valid && editorState.getCurrentContent().hasText(),
+                          'valid-block':
+                            valid &&
+                            editorState.getCurrentContent().hasText() &&
+                            !tooShort &&
+                            !headerIssues,
                         })}
                       >
                         <Editor
@@ -629,8 +637,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                         />
                       </div>
                     </div>
-                    {editorState.getCurrentContent().getPlainText().length >
-                      0 && (
+                    {editorState.getCurrentContent().hasText() && (
                       <InfoMessages
                         valid={valid}
                         tooShort={tooShort}
@@ -673,7 +680,10 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                       </button>
                       <button
                         type="button"
-                        className={f('button', 'alert', { hidden: valid })}
+                        className={f('button', 'alert', {
+                          hidden:
+                            valid || !editorState.getCurrentContent().hasText(),
+                        })}
                         onClick={this._cleanUp}
                       >
                         Automatic FASTA clean up
