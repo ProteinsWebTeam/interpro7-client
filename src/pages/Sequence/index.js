@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
+import Title from 'components/Title';
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
@@ -198,6 +199,13 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
         />
       );
     }
+    const metadata = {
+      accession,
+      counters: { entries },
+      name: {
+        name: 'InterProScan Search Result',
+      },
+    };
     return (
       <>
         <ResultImporter
@@ -210,6 +218,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
               {
                 // Menu Just for InterProScan search
               }
+              <Title metadata={metadata} mainType="protein" />
 
               <BrowseTabsWithoutData
                 key="browse"
@@ -218,7 +227,7 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
                 mainAccession={matched}
                 data={{
                   loading: false,
-                  payload: { metadata: { counters: { entries } } },
+                  payload: { metadata },
                 }}
               />
             </div>

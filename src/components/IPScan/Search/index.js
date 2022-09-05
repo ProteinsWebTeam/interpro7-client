@@ -489,11 +489,12 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
   };
 
   _addFastAHeaderIfNeeded = (editorState, lines) => {
+    const minLengthForHeader = 3;
     const currentContent = editorState.getCurrentContent();
     if (currentContent.hasText()) {
       const firstLine = (lines?.[0] || '').trim();
       const hasHeader = firstLine.startsWith('>');
-      if (!hasHeader && firstLine.length > 3) {
+      if (!hasHeader && firstLine.length > minLengthForHeader) {
         const localTitle = `Sequence title ${getId()}`;
         const header = `> ${localTitle}`;
         this.setState({ title: localTitle });
@@ -596,8 +597,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                           ), with a maximum length of 40,000 amino acids.
                         </p>
                         <p>
-                          Please note that you can only scan one sequence at a
-                          time. Alternatively, read{' '}
+                          Please note that can scan up {MAX_NUMBER_OF_SEQUENCES}{' '}
+                          sequences at a time. Alternatively, read{' '}
                           <Link
                             to={{
                               description: { other: ['about', 'interproscan'] },
