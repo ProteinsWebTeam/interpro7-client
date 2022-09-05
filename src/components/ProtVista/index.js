@@ -361,6 +361,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               this.props?.dataDB?.payload?.databases,
             );
             if (this._popperContentRef.current) {
+              // eslint-disable-next-line max-depth
               if (!this.reactRoot)
                 this.reactRoot = createRoot(this._popperContentRef.current);
 

@@ -211,10 +211,7 @@ const subPages = new Map([
     'pathways',
     loadData(getDBModifierURL('InterPro', 'pathways'))(PathwaysSubPage),
   ],
-  [
-    'subfamilies',
-    loadData(getDBModifierURL('panther', 'subfamilies'))(SubfamiliesSubPage),
-  ],
+  ['subfamilies', SubfamiliesSubPage],
   ['rosettafold', RoseTTAFoldModel],
   ['alphafold', AlphaFoldModelSubPage],
   ['alignments', SetAlignments],

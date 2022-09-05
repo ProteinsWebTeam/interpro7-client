@@ -66,7 +66,7 @@ const ProtVistaEntryPopup = (
       return {
         fragments: [{ start, end }],
         model_acc: null,
-        subfamily: undefined,
+        subfamily: locations?.[0]?.subfamily,
       };
     });
   }
@@ -115,7 +115,7 @@ const ProtVistaEntryPopup = (
                   <header>Subfamily</header>
                   <ul>
                     <li>
-                      <header>Accession:</header> {subfamily.accession}
+                      <header>Accession:</header> {subfamily.acc}
                     </li>
                     <li>
                       <header>Name:</header> {subfamily.name}
