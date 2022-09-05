@@ -18,7 +18,6 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 import GoTerms from 'components/GoTerms';
 import Accession from 'components/Accession';
-import Title from 'components/Title';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 import Length from 'components/Protein/Length';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
@@ -198,7 +197,6 @@ const SummaryIPScanJob = ({
   return (
     <div className={f('sections')}>
       <section>
-        <Title metadata={metadata} mainType="protein" />
         {!data.payload && payload?.['interproscan-version'] ? (
           <div className={f('callout', 'info', 'withicon')}>
             Using data stored in your browser
