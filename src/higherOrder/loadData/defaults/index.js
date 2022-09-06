@@ -201,6 +201,7 @@ export const getUrlForApi = (...parameters) =>
     .replace('/alphafold', '/')
     .replace('/domain_architecture', '/')
     .replace('/interactions', '/')
+    .replace('/subfamilies', '/')
     .replace('/pathways', '/')
     .replace('/sequence', '/')
     .replace('/genome3d', '/')

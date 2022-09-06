@@ -429,7 +429,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'RoseTTAFold',
-      counter: 'structural_models.RoseTTAFold',
+      counter: 'structural_models.rosettafold',
     },
   ],
   [
@@ -527,6 +527,25 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'Alignments',
+    },
+  ],
+  [
+    'subfamilies',
+    {
+      to(customLocation) {
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key: 'entry' },
+            entry: {
+              ...customLocation.description.entry,
+              detail: 'subfamilies',
+            },
+          },
+        };
+      },
+      name: 'Subfamilies',
+      counter: 'subfamilies',
     },
   ],
   [

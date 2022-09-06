@@ -175,7 +175,7 @@ export const endpoint2type = {
 };
 
 const cleanUpDescription = (description /*: string */) =>
-  (Array.isArray(description) ? description[0] : description)
+  ((Array.isArray(description) ? description[0] : description) || '')
     .replace(/\r/g, '')
     .replace(/\n/g, '')
     .replace(/<\/?[a-zA-Z]+>/g, '')

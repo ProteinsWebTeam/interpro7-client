@@ -45,6 +45,7 @@ pages:
       - pathways
       - genome3d
       - curation
+      - subfamilies
   protein:
     subPages:
       - entry

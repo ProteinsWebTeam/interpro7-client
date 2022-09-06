@@ -66,7 +66,9 @@ export const toCanonicalURL = (
       const regex = /(.+)=(.+)/;
       const matches = regex.exec(arg);
       if (matches) {
-        return `${matches[1]}=${encodeURIComponent(matches[2])}`;
+        return `${matches[1]}=${
+          matches[1] === 'cursor' ? matches[2] : encodeURIComponent(matches[2])
+        }`;
       }
       return arg;
     })
