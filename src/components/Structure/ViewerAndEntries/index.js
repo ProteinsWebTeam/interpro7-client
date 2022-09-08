@@ -107,9 +107,10 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
           case 'sequence-chain':
             if (highlight) {
               const [start, stop] = highlight.split(':');
-              const p2s = this._protein2structureMappers[
-                `${protein}->${chain}`.toUpperCase()
-              ];
+              const p2s =
+                this._protein2structureMappers[
+                  `${protein}->${chain}`.toUpperCase()
+                ];
               this.setState({
                 selectionsInStructure: [
                   {
@@ -287,9 +288,8 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
           const chain = structure.chain;
           const protein = structure.protein;
           const p2s = getMapper(structure.protein_structure_mapping[chain]);
-          this._protein2structureMappers[
-            `${protein}->${chain}`.toUpperCase()
-          ] = p2s;
+          this._protein2structureMappers[`${protein}->${chain}`.toUpperCase()] =
+            p2s;
           if (!memberDBMap[db][entry][chain])
             memberDBMap[db][entry][chain] = {};
           if (!memberDBMap[db][entry][chain][protein])
@@ -313,13 +313,12 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
             memberDBMap.pdb[structure.accession][chain] = {};
           }
           if (!memberDBMap.pdb[structure.accession][chain][structure.protein]) {
-            memberDBMap.pdb[structure.accession][chain][
-              structure.protein
-            ] = this._getChainMap(
-              chain,
-              structure.structure_protein_locations,
-              p2s,
-            );
+            memberDBMap.pdb[structure.accession][chain][structure.protein] =
+              this._getChainMap(
+                chain,
+                structure.structure_protein_locations,
+                p2s,
+              );
           }
         }
       }

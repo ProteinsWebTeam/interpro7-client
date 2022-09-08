@@ -99,6 +99,8 @@ const cachedFetch = async (
   ok: boolean,
   headers: Headers,
   payload?: Object,
+  loading?: boolean,
+  url?: string,
 |}; */
 
 const commonCachedFetch =
