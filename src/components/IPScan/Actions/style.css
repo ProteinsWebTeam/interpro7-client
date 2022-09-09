@@ -9,3 +9,7 @@
     cursor: pointer;
   }
 }
+
+button.group::before {
+  color: var(--colors-progress, #1f6ca2);
+}
