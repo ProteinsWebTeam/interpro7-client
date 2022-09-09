@@ -304,7 +304,6 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     let tooShort = true;
     let tooMany = false;
     let headerIssues = false;
-    let title = '';
     let initialAdvancedOptions = null;
     if (props.value) {
       editorState = EditorState.createWithContent(
@@ -314,8 +313,6 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       const lines = convertToRaw(editorState.getCurrentContent()).blocks.map(
         (block) => block.text,
       );
-
-      title = this._getTitle(lines);
       valid = checkValidity(lines);
       tooShort = isTooShort(lines);
       tooMany = hasTooManySequences(lines);
@@ -332,8 +329,9 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       tooShort,
       tooMany,
       headerIssues,
-      title,
+      title: null,
       initialAdvancedOptions,
+      submittedJob: null,
     };
 
     this._formRef = React.createRef();
@@ -353,16 +351,24 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     const newTitle = this._formRef.current
       .querySelector('input[name="local-title"]')
       .value.trim();
-    const text = this.state.editorState.getCurrentContent().getPlainText();
-    const lines = text.split(/\n/);
-    lines[0] = `>${newTitle}`;
+    // const text = this.state.editorState.getCurrentContent().getPlainText();
+    // const lines = text.split(/\n/);
+    // if (
+    //   lines.map((s) => s.trim()).filter((s) => s.startsWith('>')).length > 1
+    // ) {
     this.setState({
       title: newTitle,
-      editorState: EditorState.createWithContent(
-        ContentState.createFromText(lines.join('\n')),
-        compositeDecorator,
-      ),
     });
+    //   return;
+    // }
+    // lines[0] = `>${newTitle}`;
+    // this.setState({
+    //   title: newTitle,
+    //   editorState: EditorState.createWithContent(
+    //     ContentState.createFromText(lines.join('\n')),
+    //     compositeDecorator,
+    //   ),
+    // });
   };
 
   _handleReset = (text) => {
@@ -377,11 +383,11 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       }
     }
 
-    let fileTitle = '';
-    if (typeof text === 'string') {
-      const lines = text.split(/\n/);
-      fileTitle = this._getTitle(lines);
-    }
+    // let fileTitle = '';
+    // if (typeof text === 'string') {
+    // const lines = text.split(/\n/);
+    // fileTitle = this._getTitle(lines);
+    // }
 
     this.setState(
       {
@@ -398,7 +404,8 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
         headerIssues: false,
         dragging: false,
         uploading: false,
-        title: fileTitle,
+        title: null,
+        submittedJob: null,
       },
       this._focusEditor,
     );
@@ -411,10 +418,11 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       this.state.editorState.getCurrentContent(),
     ).blocks.map((block) => block.text);
     if (!lines.length) return;
+    const localID = id(`internal-${Date.now()}`);
     this.props.createJob({
       metadata: {
-        localID: id(`internal-${Date.now()}`),
-        localTitle: this.state.title,
+        localID,
+        group: this.state.title,
         type: 'InterProScan',
       },
       data: {
@@ -427,6 +435,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
 
     if (isStayChecked(this._formRef.current)) {
       this._handleReset();
+      this.setState({ submittedJob: localID });
     } else {
       this.props.goToCustomLocation({
         description: {
@@ -495,9 +504,9 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       const firstLine = (lines?.[0] || '').trim();
       const hasHeader = firstLine.startsWith('>');
       if (!hasHeader && firstLine.length > minLengthForHeader) {
-        const localTitle = `Sequence title ${getId()}`;
-        const header = `> ${localTitle}`;
-        this.setState({ title: localTitle });
+        const newHeader = `Sequence title ${getId()}`;
+        const header = `> ${newHeader}`;
+        // this.setState({ title: newHeader });
         lines.splice(0, 0, header);
         const newState = EditorState.createWithContent(
           ContentState.createFromText(lines.join('\n')),
@@ -524,7 +533,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
       tooShort: isTooShort(lines),
       tooMany: hasTooManySequences(lines),
       headerIssues: hasHeaderIssues(lines),
-      title: this._getTitle(lines),
+      // title: this._getTitle(lines),
     });
   };
 
@@ -572,6 +581,25 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
               >
                 <div className={f('row')}>
                   <div className={f('large-12', 'columns', 'search-input')}>
+                    {this.props.main === 'search' && this.state.submittedJob && (
+                      <div className={f('callout')}>
+                        Your search job(
+                        <span className={f('mono')}>
+                          {this.state.submittedJob}
+                        </span>
+                        ) has been submitted. You can check its state in the{' '}
+                        <Link
+                          to={{
+                            description: {
+                              main: { key: 'result' },
+                              result: { type: 'InterProScan' },
+                            },
+                          }}
+                        >
+                          Results page
+                        </Link>
+                      </div>
+                    )}
                     <h3 className={f('light')}>Sequence, in FASTA format</h3>
                     <SchemaOrgData
                       data={{

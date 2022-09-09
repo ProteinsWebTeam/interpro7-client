@@ -95,7 +95,7 @@ const createJobInDB = async (metadata /*: JobMetadata */, data) => {
   }
 };
 
-const updateJobTitleInDB = async (metadata, title) => {
+const updateSequenceTitleDB = async (metadata, title) => {
   const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
   const { localID } = metadata;
 
@@ -110,12 +110,7 @@ const updateJobTitleInDB = async (metadata, title) => {
     ],
   }));
 };
-const updateJobInDB = async (
-  metadata,
-  data,
-  title,
-  dispatch /*: function */,
-) => {
+const updateJobInDB = async (metadata, data, dispatch /*: function */) => {
   const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
   const { remoteID, localID } = metadata;
   if (data) {
@@ -128,9 +123,20 @@ const updateJobInDB = async (
     newData.originalInput = newData.input;
     delete newData.input;
 
-    metadata.localTitle = title || data?.results?.[0]?.xref?.[0]?.name;
+    metadata.localTitle = data?.results?.[0]?.xref?.[0]?.name;
     if (data?.results?.length > 1 && !remoteID.endsWith('-1')) {
-      metadata.group = remoteID;
+      const now = new Date();
+      metadata.group =
+        metadata.group ||
+        `${now.getFullYear()}${(now.getMonth() + 1)
+          .toString()
+          .padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}-${now
+          .getHours()
+          .toString()
+          .padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now
+          .getSeconds()
+          .toString()
+          .padStart(2, '0')}-${data.results.length}`;
       metadata.remoteID = `${remoteID}-1`;
       metadata.localID = `${localID}-1`;
       metaT.delete(localID);
@@ -391,7 +397,6 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       updateJobInDB(
         getState().jobs[action.job.metadata.localID].metadata,
         action.job.data,
-        null,
         dispatch,
       );
     }
@@ -405,10 +410,11 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     }
 
     if (action.type === UPDATE_JOB_TITLE) {
-      updateJobTitleInDB(
+      updateSequenceTitleDB(
         getState().jobs[action.job.metadata.localID].metadata,
         action.value,
       );
+      rehydrateStoredJobs(dispatch);
     }
     if (action.type === KEEP_JOB_AS_LOCAL) {
       updateJobInDB({
