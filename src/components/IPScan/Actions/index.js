@@ -105,7 +105,7 @@ export class Actions extends PureComponent /*:: <Props> */ {
         <Tooltip
           title={
             <div>
-              <b>Delete search</b>: This will remove the stored data from your
+              <b>Delete sequence</b>: This will remove the stored data from your
               browser. Remember that search results are only retained on our
               servers for 7 days
             </div>

@@ -8,7 +8,12 @@ exports[`<AdvancedOptions /> should render 1`] = `
     className="columns margin-bottom-medium option-style"
   >
     <summary>
-      Advanced options
+      <span
+        className="triangle"
+      >
+        ►
+      </span>
+       Advanced options
     </summary>
     <fieldset
       className="fieldset"

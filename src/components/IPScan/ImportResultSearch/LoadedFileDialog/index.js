@@ -132,6 +132,7 @@ const LoadedFileDialog = (
       } else {
         // prettier-ignore
         const result/*: ProteinResult */ = (fileContent.results[i]/*: any */);
+        result.group = fileName;
         saveJobInIDB(
           result,
           `imported_file-${fileName}-${i + 1}`,

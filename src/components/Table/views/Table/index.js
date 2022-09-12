@@ -24,6 +24,7 @@ const f = foundationPartial(styles, ipro, fonts);
   columns: Array<string>,
   rowClassName?: string | function,
   groups?: Array<string>,
+  groupActions?: Array<(string)=>any>,
 } */
 
 class TableView extends PureComponent /*:: <Props> */ {
@@ -38,6 +39,7 @@ class TableView extends PureComponent /*:: <Props> */ {
     rowKey: T.string,
     rowClassName: T.oneOfType([T.string, T.func]),
     groups: T.arrayOf(T.string),
+    groupActions: T.arrayOf(T.object),
   };
 
   render() {
@@ -52,6 +54,7 @@ class TableView extends PureComponent /*:: <Props> */ {
       rowKey,
       rowClassName,
       groups,
+      groupActions,
     } = this.props;
     return (
       <table
@@ -70,6 +73,7 @@ class TableView extends PureComponent /*:: <Props> */ {
           status={status}
           rowClassName={rowClassName}
           groups={groups}
+          groupActions={groupActions}
         />
       </table>
     );

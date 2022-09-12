@@ -209,7 +209,9 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
         <details
           className={f('columns', 'margin-bottom-medium', 'option-style')}
         >
-          <summary>Advanced options</summary>
+          <summary>
+            <span className={f('triangle')}>►</span> Advanced options
+          </summary>
           <fieldset className={f('fieldset')}>
             <legend>Job configuration</legend>
             <Tooltip title="Stay on this page after submitting a new job?">

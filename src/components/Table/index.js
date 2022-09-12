@@ -56,6 +56,7 @@ ExtraOptions.propTypes = { children: T.any };
   showTableIcon?: boolean,
   onFocusChanged?: ?function,
   shouldGroup?: boolean,
+  groupActions?: (string)=>any
 } */
 
 const TableView = loadable({
@@ -245,6 +246,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     showTableIcon: T.bool,
     shouldGroup: T.bool,
     onFocusChanged: T.func,
+    groupActions: T.func,
   };
 
   render() {
@@ -270,6 +272,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
       showTableIcon,
       onFocusChanged,
       shouldGroup,
+      groupActions,
     } = this.props;
 
     const _query = query || {};
@@ -374,6 +377,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
                   rowClassName={rowClassName}
                   onFocusChanged={onFocusChanged}
                   groups={groups}
+                  groupActions={groupActions}
                 />
               </div>
               <Switch

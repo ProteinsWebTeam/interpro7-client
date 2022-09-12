@@ -47,6 +47,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     actualSize={0}
     contentType="result"
     dataTable={Array []}
+    groupActions={[Function]}
     query={Object {}}
     rowKey="localID"
     shouldGroup={true}
@@ -71,17 +72,11 @@ exports[`<IPScanStatus /> should render 1`] = `
       </DropDownButton>
     </ExtraOptions>
     <Column
-      dataKey="localID"
+      dataKey="localTitle"
       isSearchable={true}
       renderer={[Function]}
     >
       Results
-    </Column>
-    <Column
-      dataKey="localTitle"
-      isSearchable={true}
-    >
-      Name
     </Column>
     <Column
       dataKey="times"
