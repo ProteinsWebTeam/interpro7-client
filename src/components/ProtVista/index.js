@@ -461,7 +461,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
   }
 
   renderLabels(entry) {
-    const { expandedTrack } = this.state;
+    const { expandedTrack, isPrinting } = this.state;
     const { dataDB, id } = this.props;
     let databases = {};
     if (dataDB.payload) {
@@ -503,23 +503,27 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       entry.source_database === 'pdb' ? 'structure' : 'entry';
     return (
       <>
-        <Link
-          to={{
-            description: {
-              main: {
-                key,
+        {isPrinting ? (
+          <b>{this.renderSwitch(this.props.label, entry)}</b>
+        ) : (
+          <Link
+            to={{
+              description: {
+                main: {
+                  key,
+                },
+                [key]: {
+                  db: entry.source_database,
+                  accession: entry.accession.startsWith('residue:')
+                    ? entry.accession.split('residue:')[1]
+                    : entry.accession,
+                },
               },
-              [key]: {
-                db: entry.source_database,
-                accession: entry.accession.startsWith('residue:')
-                  ? entry.accession.split('residue:')[1]
-                  : entry.accession,
-              },
-            },
-          }}
-        >
-          {this.renderSwitch(this.props.label, entry)}
-        </Link>
+            }}
+          >
+            {this.renderSwitch(this.props.label, entry)}
+          </Link>
+        )}
         <div
           className={f({
             hide: !expandedTrack[entry.accession],
@@ -532,19 +536,23 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                 key={`main_${d.accession}`}
                 className={f('track-accession-child')}
               >
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: d.source_database,
-                        accession: d.accession,
+                {isPrinting ? (
+                  this.renderSwitch(this.props.label, d)
+                ) : (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: d.source_database,
+                          accession: d.accession,
+                        },
                       },
-                    },
-                  }}
-                >
-                  {this.renderSwitch(this.props.label, d)}
-                </Link>
+                    }}
+                  >
+                    {this.renderSwitch(this.props.label, d)}
+                  </Link>
+                )}
                 {this.renderResidueLabels(d)}
               </div>
             ))}
@@ -616,7 +624,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             id="pv-manager"
           >
             <div
-              className={f('protvista-grid')}
+              className={f('protvista-grid', {
+                printing: this.state.isPrinting,
+              })}
               ref={this._protvistaRef}
               id={`${this.state.optionsID}ProtvistaDiv`}
             >
@@ -684,10 +694,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                       <div
                         key={type}
                         className={f(
-                          // 'track-container',
                           'tracks-container',
                           'track-sized',
                           'protvista-grid',
+                          {
+                            printing: this.state.isPrinting,
+                          },
                         )}
                       >
                         <header>
@@ -721,9 +733,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                         )}{' '}
                         {entries &&
                           entries.map((entry) => (
-                            <>
+                            <React.Fragment key={entry.accession}>
                               <div
-                                key={entry.accession}
                                 className={f('track', {
                                   hideCategory: hideCategory[type],
                                 })}
@@ -804,70 +815,63 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                               >
                                 {this.renderLabels(entry)}
                               </div>
-                            </>
+                            </React.Fragment>
                           ))}
                       </div>
                     );
                   })}
-              {/*    
-                  {showConservationButton ? (
-                    <div className={f('track-container')}>
-                      <div className={f('track-row')}>
-                        <div className={f('track-component')}>
-                          <header>
-                            <button
-                              onClick={() => this.handleConservationLoad(this)}
-                            >
-                              <span
-                                className={f(
-                                  'icon',
-                                  'icon-common',
-                                  'icon-caret-right',
-                                )}
-                              />{' '}
-                              Match Conservation
-                            </button>
-                          </header>
-                        </div>
-                      </div>
-                      <div className={f('track-group')}>
-                        <div className={f('track-row')}>
+              {showConservationButton ? (
+                <div
+                  className={f(
+                    'tracks-container',
+                    'track-sized',
+                    'protvista-grid',
+                    {
+                      printing: this.state.isPrinting,
+                    },
+                  )}
+                >
+                  <header>
+                    <button onClick={() => this.handleConservationLoad(this)}>
+                      <span
+                        className={f('icon', 'icon-common', 'icon-caret-right')}
+                      />{' '}
+                      Match Conservation
+                    </button>
+                  </header>
+                  <div className={f('track')}>
+                    <div className={f('track')}>
+                      <div
+                        className={f(
+                          'track-component',
+                          'conservation-placeholder-component',
+                        )}
+                        ref={this._conservationTrackRef}
+                      >
+                        {this.state.showLoading ? (
                           <div
-                            className={f(
-                              'track-component',
-                              'conservation-placeholder-component',
-                            )}
-                            ref={this._conservationTrackRef}
+                            className={f('loading-spinner')}
+                            style={{ margin: '10px auto' }}
                           >
-                            {this.state.showLoading ? (
-                              <div
-                                className={f('loading-spinner')}
-                                style={{ margin: '10px auto' }}
-                              >
-                                <div />
-                                <div />
-                                <div />
-                              </div>
-                            ) : null}
+                            <div />
+                            <div />
+                            <div />
                           </div>
-                          <div className={f('track-accession')}>
-                            <button
-                              type="button"
-                              className={f(
-                                'hollow',
-                                'button',
-                                'user-select-none',
-                              )}
-                              onClick={() => this.handleConservationLoad(this)}
-                            >
-                              Fetch Conservation
-                            </button>
-                          </div>
-                        </div>
+                        ) : null}
                       </div>
                     </div>
-                  ) : null} */}
-              {/* </div> */}
+                  </div>
+                  <div className={f('track-label')}>
+                    <button
+                      type="button"
+                      className={f('hollow', 'button', 'user-select-none')}
+                      onClick={() => this.handleConservationLoad(this)}
+                    >
+                      Fetch Conservation
+                    </button>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </protvista-manager>
         </div>

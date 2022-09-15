@@ -152,6 +152,9 @@
 }
 
 @media print {
+  @page {
+    size: landscape;
+  }
   a {
     text-decoration: none;
   }
@@ -405,8 +408,8 @@ protvista-zoom-tool {
 .protvista-grid {
   display: grid;
   font-size: 12px;
+  grid-template-columns: 70% 30%;
 
-  grid-template-columns: 4fr 1fr;
   & .view-options-wrap {
     display: flex;
     align-items: baseline;
