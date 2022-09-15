@@ -48,6 +48,7 @@ const ONE_SEC = 1000;
   updateTracksCollapseStatus: function,
   toggleTooltipStatus: function,
   getParentElem: function,
+  setPrintingMode: function,
   children: any,
 }; */
 
@@ -81,6 +82,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
     toggleTooltipStatus: T.func,
     children: T.any,
     getParentElem: T.func,
+    setPrintingMode: T.func,
   };
 
   constructor(props /*: Props */) {
@@ -177,7 +179,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
     this.props.toggleTooltipStatus(!this.state.enableTooltip);
   };
   render() {
-    const { length, children } = this.props;
+    const { length, children, setPrintingMode } = this.props;
     const { collapsed } = this.state;
 
     const title = this.props.title || 'Domains on protein';
@@ -306,18 +308,13 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
                           </button>
                         )}
                         onBeforeGetContent={() => {
-                          // prettier-ignore
-                          // $FlowFixMe
-                          this.parentRefs._protvistaRef.current.style = 'width: 1000px;';
+                          setPrintingMode(true);
                           return new Promise((resolve) => {
                             setTimeout(() => resolve(), ONE_SEC);
                           });
                         }}
                         content={() => this.parentRefs._protvistaRef.current}
-                        onAfterPrint={() =>
-                          // $FlowFixMe
-                          (this.parentRefs._protvistaRef.current.style = '')
-                        }
+                        onAfterPrint={() => setPrintingMode(false)}
                       />
                     </li>
                   </ul>

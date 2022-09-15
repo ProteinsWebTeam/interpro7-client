@@ -128,6 +128,7 @@ const loadProtVistaWebComponents = () => {
   showLoading: boolean,
   overPopup: boolean,
   optionsID: string,
+  isPrinting: boolean,
 }; */
 export class ProtVista extends Component /*:: <Props, State> */ {
   /*::
@@ -184,6 +185,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       showLoading: false,
       overPopup: false,
       optionsID: id('protvista-options-'),
+      isPrinting: false,
     };
 
     this._mainRef = React.createRef();
@@ -609,221 +611,205 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           <div className={f('popper-content')} ref={this._popperContentRef} />
         </div>
         <div>
-          <div className={f('protvista')}>
-            <protvista-manager
-              attributes="length displaystart displayend highlight"
-              id="pv-manager"
+          <protvista-manager
+            attributes="length displaystart displayend highlight"
+            id="pv-manager"
+          >
+            <div
+              className={f('protvista-grid')}
+              ref={this._protvistaRef}
+              id={`${this.state.optionsID}ProtvistaDiv`}
             >
-              <div className={f('track-row')}>
-                <div
-                  className={f(
-                    'aligned-to-track-component',
-                    'view-options-wrap',
-                  )}
-                >
-                  {showOptions && (
-                    <ProtVistaOptions
-                      title={this.props.title}
-                      length={length}
-                      id={this.state.optionsID}
-                      webTracks={this.web_tracks}
-                      expandedTrack={this.state.expandedTrack}
-                      getParentElem={this.getProtvistaRefs}
-                      updateTracksCollapseStatus={
-                        this.updateTracksCollapseStatus
-                      }
-                      toggleTooltipStatus={this.toggleTooltipStatus}
-                    >
-                      {children}
-                    </ProtVistaOptions>
-                  )}
-                </div>
-              </div>
               <div
-                ref={this._protvistaRef}
-                id={`${this.state.optionsID}ProtvistaDiv`}
+                className={f('view-options-wrap', 'track-sized')}
+                style={{
+                  display: this.state.isPrinting ? 'none' : undefined,
+                }}
               >
-                <div className={f('track-container')}>
-                  <div className={f('track-row')}>
-                    <div className={f('aligned-to-track-component')}>
-                      <protvista-navigation
-                        length={length}
-                        displaystart="1"
-                        displayend={length}
-                      />
-                    </div>
-                  </div>
-                  <div className={f('track-row')}>
-                    <div className={f('aligned-to-track-component')}>
-                      <protvista-sequence
-                        ref={this._webProteinRef}
-                        length={length}
-                        displaystart="1"
-                        displayend={length}
-                        highlight-event="onmouseover"
-                        use-ctrl-to-zoom
-                      />
-                      <protvista-coloured-sequence
-                        ref={this._hydroRef}
-                        length={length}
-                        displaystart="1"
-                        displayend={length}
-                        scale="hydrophobicity-scale"
-                        height="10"
-                        color_range="#0000FF:-3,#ffdd00:3"
-                        highlight-event="onmouseover"
-                        use-ctrl-to-zoom
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className={f('tracks-container')}>
-                  {data &&
-                    data
-                      .filter(([_, tracks]) => tracks && tracks.length)
-                      .map(([type, entries, component]) => {
-                        const LabelComponent = component?.component;
-                        return (
-                          <div key={type} className={f('track-container')}>
-                            <div className={f('track-row')}>
+                {showOptions && (
+                  <ProtVistaOptions
+                    title={this.props.title}
+                    length={length}
+                    id={this.state.optionsID}
+                    webTracks={this.web_tracks}
+                    expandedTrack={this.state.expandedTrack}
+                    getParentElem={this.getProtvistaRefs}
+                    updateTracksCollapseStatus={this.updateTracksCollapseStatus}
+                    toggleTooltipStatus={this.toggleTooltipStatus}
+                    setPrintingMode={(mode /*: boolean */) =>
+                      this.setState({ isPrinting: mode })
+                    }
+                  >
+                    {children}
+                  </ProtVistaOptions>
+                )}
+              </div>
+              <div className={f('track')}>
+                <protvista-navigation
+                  length={length}
+                  displaystart="1"
+                  displayend={length}
+                />
+              </div>
+              <div className={f('track')}>
+                <protvista-sequence
+                  ref={this._webProteinRef}
+                  length={length}
+                  displaystart="1"
+                  displayend={length}
+                  highlight-event="onmouseover"
+                  use-ctrl-to-zoom
+                />
+              </div>
+              <div className={f('track')}>
+                <protvista-coloured-sequence
+                  ref={this._hydroRef}
+                  length={length}
+                  displaystart="1"
+                  displayend={length}
+                  scale="hydrophobicity-scale"
+                  height="10"
+                  color_range="#0000FF:-3,#ffdd00:3"
+                  highlight-event="onmouseover"
+                  use-ctrl-to-zoom
+                />
+              </div>
+
+              {data &&
+                data
+                  .filter(([_, tracks]) => tracks && tracks.length)
+                  .map(([type, entries, component]) => {
+                    const LabelComponent = component?.component;
+                    return (
+                      <div
+                        key={type}
+                        className={f(
+                          // 'track-container',
+                          'tracks-container',
+                          'track-sized',
+                          'protvista-grid',
+                        )}
+                      >
+                        <header>
+                          <button
+                            onClick={() =>
+                              this.setObjectValueInState(
+                                'hideCategory',
+                                type,
+                                !hideCategory[type],
+                              )
+                            }
+                          >
+                            <span
+                              className={f(
+                                'icon',
+                                'icon-common',
+                                hideCategory[type]
+                                  ? 'icon-caret-right'
+                                  : 'icon-caret-down',
+                              )}
+                            />{' '}
+                            {type}
+                          </button>
+                        </header>
+                        {component && (
+                          <div className={f('track-accession')}>
+                            <LabelComponent
+                              {...(component?.attributes || {})}
+                            />
+                          </div>
+                        )}{' '}
+                        {entries &&
+                          entries.map((entry) => (
+                            <>
                               <div
-                                className={f('track-component')}
-                                style={{ borderBottom: 0 }}
+                                key={entry.accession}
+                                className={f('track', {
+                                  hideCategory: hideCategory[type],
+                                })}
                               >
-                                <header>
-                                  <button
-                                    onClick={() =>
-                                      this.setObjectValueInState(
-                                        'hideCategory',
-                                        type,
-                                        !hideCategory[type],
-                                      )
-                                    }
-                                  >
-                                    <span
-                                      className={f(
-                                        'icon',
-                                        'icon-common',
-                                        hideCategory[type]
-                                          ? 'icon-caret-right'
-                                          : 'icon-caret-down',
-                                      )}
-                                    />{' '}
-                                    {type}
-                                  </button>
-                                </header>
-                              </div>
-                              {component && (
-                                <div className={f('track-accession')}>
-                                  <LabelComponent
-                                    {...(component?.attributes || {})}
-                                  />
-                                </div>
-                              )}{' '}
-                            </div>
-                            <div
-                              className={f('track-group', {
-                                hideCategory: hideCategory[type],
-                              })}
-                            >
-                              {entries &&
-                                entries.map((entry) => (
+                                {entry.type === 'secondary_structure' ||
+                                entry.type === 'sequence_conservation' ||
+                                entry.type === 'residue' ? (
                                   <div
-                                    key={entry.accession}
-                                    className={f('track-row')}
+                                    className={f(
+                                      'track',
+                                      entry.type.replace('_', '-'),
+                                    )}
                                   >
-                                    {entry.type === 'secondary_structure' ||
-                                    entry.type === 'sequence_conservation' ||
-                                    entry.type === 'residue' ? (
-                                      <div
-                                        className={f(
-                                          'track-component',
-                                          entry.type.replace('_', '-'),
-                                        )}
-                                      >
-                                        {entry.type ===
-                                          'sequence_conservation' &&
-                                          entry.warnings.length > 0 && (
-                                            <div
-                                              className={f(
-                                                'conservation-warning',
-                                              )}
-                                            >
-                                              {entry.warnings.map((message) => (
-                                                <div key={message}>
-                                                  {message}
-                                                </div>
-                                              ))}
-                                            </div>
-                                          )}
-                                        {entry.type ===
-                                          'sequence_conservation' &&
-                                          entry.warnings.length === 0 && (
-                                            <nightingale-linegraph-track
-                                              length={length}
-                                              displaystart="1"
-                                              displayend={length}
-                                              type="conservation"
-                                              id={`track_${entry.accession}`}
-                                              ref={(e) =>
-                                                (this.web_tracks[
-                                                  entry.accession
-                                                ] = e)
-                                              }
-                                              highlight-event="onmouseover"
-                                              use-ctrl-to-zoom
-                                            />
-                                          )}
-                                        {(entry.type ===
-                                          'secondary_structure' ||
-                                          entry.type === 'residue') && (
-                                          <protvista-track
-                                            length={length}
-                                            displaystart="1"
-                                            displayend={length}
-                                            height={
-                                              entry.type === 'residue'
-                                                ? '15'
-                                                : null
-                                            }
-                                            id={`track_${entry.accession}`}
-                                            ref={(e) =>
-                                              (this.web_tracks[
-                                                entry.accession
-                                              ] = e)
-                                            }
-                                            highlight-event="onmouseover"
-                                            use-ctrl-to-zoom
-                                          />
-                                        )}
-                                      </div>
-                                    ) : (
-                                      <div className={f('track-component')}>
-                                        <protvista-interpro-track
+                                    {entry.type === 'sequence_conservation' &&
+                                      entry.warnings.length > 0 && (
+                                        <div
+                                          className={f('conservation-warning')}
+                                        >
+                                          {entry.warnings.map((message) => (
+                                            <div key={message}>{message}</div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    {entry.type === 'sequence_conservation' &&
+                                      entry.warnings.length === 0 && (
+                                        <nightingale-linegraph-track
                                           length={length}
                                           displaystart="1"
                                           displayend={length}
+                                          type="conservation"
                                           id={`track_${entry.accession}`}
                                           ref={(e) =>
                                             (this.web_tracks[entry.accession] =
                                               e)
                                           }
-                                          shape="roundRectangle"
                                           highlight-event="onmouseover"
                                           use-ctrl-to-zoom
-                                          expanded
                                         />
-                                      </div>
+                                      )}
+                                    {(entry.type === 'secondary_structure' ||
+                                      entry.type === 'residue') && (
+                                      <protvista-track
+                                        length={length}
+                                        displaystart="1"
+                                        displayend={length}
+                                        height={
+                                          entry.type === 'residue' ? '15' : null
+                                        }
+                                        id={`track_${entry.accession}`}
+                                        ref={(e) =>
+                                          (this.web_tracks[entry.accession] = e)
+                                        }
+                                        highlight-event="onmouseover"
+                                        use-ctrl-to-zoom
+                                      />
                                     )}
-                                    <div className={f('track-accession')}>
-                                      {this.renderLabels(entry)}
-                                    </div>
                                   </div>
-                                ))}
-                            </div>
-                          </div>
-                        );
-                      })}
+                                ) : (
+                                  <protvista-interpro-track
+                                    length={length}
+                                    displaystart="1"
+                                    displayend={length}
+                                    id={`track_${entry.accession}`}
+                                    ref={(e) =>
+                                      (this.web_tracks[entry.accession] = e)
+                                    }
+                                    shape="roundRectangle"
+                                    highlight-event="onmouseover"
+                                    use-ctrl-to-zoom
+                                    expanded
+                                  />
+                                )}
+                              </div>
+                              <div
+                                className={f('track-label', {
+                                  hideCategory: hideCategory[type],
+                                })}
+                              >
+                                {this.renderLabels(entry)}
+                              </div>
+                            </>
+                          ))}
+                      </div>
+                    );
+                  })}
+              {/*    
                   {showConservationButton ? (
                     <div className={f('track-container')}>
                       <div className={f('track-row')}>
@@ -880,11 +866,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                         </div>
                       </div>
                     </div>
-                  ) : null}
-                </div>
-              </div>
-            </protvista-manager>
-          </div>
+                  ) : null} */}
+              {/* </div> */}
+            </div>
+          </protvista-manager>
         </div>
       </div>
     );
