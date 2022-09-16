@@ -32,7 +32,8 @@ import colorsCSS from '!!raw-loader!styles/colors.css';
 import ebiGlobalCSS from '!!raw-loader!ebi-framework/css/ebi-global.css';
 import globalCSS from '!!raw-loader!styles/global.css';
 import protvistaCSS from '../style.css';
-import protvistaCSSasText from '!!raw-loader!../style.css';
+import protvistaGridCSS from '../grid.css';
+import protvistaCSSasText from '!!raw-loader!../grid.css';
 
 const f = foundationPartial(ipro, protvistaCSS, fonts);
 const ONE_SEC = 1000;
@@ -113,7 +114,12 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
           style.setAttribute('id', 'tmp_style');
           // TODO it needs to be changed in an efficient way through webpack
           let str = protvistaCSSasText + iproCSSasText + foundationCSSasText;
-          const cssStyles = [protvistaCSS, ipro, foundationCSS];
+          const cssStyles = [
+            protvistaCSS,
+            protvistaGridCSS,
+            ipro,
+            foundationCSS,
+          ];
           cssStyles.forEach((item) => {
             Object.keys(item).forEach((key) => {
               str = str.replace(
@@ -124,11 +130,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
           });
 
           str = str + ebiGlobalCSS + globalCSS + fontCSS + colorsCSS;
-          console.log(str);
-          style.innerHTML = `${str.replace(
-            'font-size: 12px;',
-            'font-size: 16px;',
-          )}`;
+          style.innerHTML = str;
           base.appendChild(style);
         } else
           console.warn(

@@ -40,8 +40,9 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import localCSS from './style.css';
+import gridCSS from './grid.css';
 
-const f = foundationPartial(ipro, localCSS, spinner, fonts);
+const f = foundationPartial(ipro, localCSS, spinner, fonts, gridCSS);
 
 const webComponents = [];
 
@@ -623,19 +624,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             attributes="length displaystart displayend highlight"
             id="pv-manager"
           >
-            <div
-              className={f('protvista-grid', {
-                printing: this.state.isPrinting,
-              })}
-              ref={this._protvistaRef}
-              id={`${this.state.optionsID}ProtvistaDiv`}
-            >
-              <div
-                className={f('view-options-wrap', 'track-sized')}
-                style={{
-                  display: this.state.isPrinting ? 'none' : undefined,
-                }}
-              >
+            <div className={f('protvista-grid')}>
+              <div className={f('view-options-wrap', 'track-sized')}>
                 {showOptions && (
                   <ProtVistaOptions
                     title={this.props.title}
@@ -654,6 +644,14 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   </ProtVistaOptions>
                 )}
               </div>
+            </div>
+            <div
+              className={f('protvista-grid', {
+                printing: this.state.isPrinting,
+              })}
+              ref={this._protvistaRef}
+              id={`${this.state.optionsID}ProtvistaDiv`}
+            >
               <div className={f('track')}>
                 <protvista-navigation
                   length={length}
