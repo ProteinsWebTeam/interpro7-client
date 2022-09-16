@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash-es';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
-import localCSS from '../../style.css';
+import localCSS from './style.css';
 
 const f = foundationPartial(ipro, localCSS);
 
