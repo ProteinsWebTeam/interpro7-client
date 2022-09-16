@@ -41,8 +41,9 @@ import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import localCSS from './style.css';
 import gridCSS from './grid.css';
+import popperCSS from './popper.css';
 
-const f = foundationPartial(ipro, localCSS, spinner, fonts, gridCSS);
+const f = foundationPartial(ipro, localCSS, spinner, fonts, gridCSS, popperCSS);
 
 const webComponents = [];
 
@@ -838,25 +839,20 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                     </button>
                   </header>
                   <div className={f('track')}>
-                    <div className={f('track')}>
-                      <div
-                        className={f(
-                          'track-component',
-                          'conservation-placeholder-component',
-                        )}
-                        ref={this._conservationTrackRef}
-                      >
-                        {this.state.showLoading ? (
-                          <div
-                            className={f('loading-spinner')}
-                            style={{ margin: '10px auto' }}
-                          >
-                            <div />
-                            <div />
-                            <div />
-                          </div>
-                        ) : null}
-                      </div>
+                    <div
+                      className={f('conservation-placeholder-component')}
+                      ref={this._conservationTrackRef}
+                    >
+                      {this.state.showLoading ? (
+                        <div
+                          className={f('loading-spinner')}
+                          style={{ margin: '10px auto' }}
+                        >
+                          <div />
+                          <div />
+                          <div />
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                   <div className={f('track-label')}>

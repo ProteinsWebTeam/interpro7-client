@@ -34,8 +34,9 @@ import globalCSS from '!!raw-loader!styles/global.css';
 import protvistaCSS from '../style.css';
 import protvistaGridCSS from '../grid.css';
 import protvistaCSSasText from '!!raw-loader!../grid.css';
+import localCSS from './style.css';
 
-const f = foundationPartial(ipro, protvistaCSS, fonts);
+const f = foundationPartial(localCSS, ipro, protvistaCSS, fonts);
 const ONE_SEC = 1000;
 
 /*:: type Props = {
