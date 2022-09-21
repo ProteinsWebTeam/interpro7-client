@@ -14,14 +14,45 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import f from 'styles/foundation';
 
+export const FunFamLink = ({ accession, children }) => {
+  const parts = accession.split(':FF:');
+  const lengthOfPrefix = 6;
+  return parts.length === 2 ? (
+    <Link
+      target="_blank"
+      className={f('ext')}
+      href={`http://www.cathdb.info/version/latest/superfamily/${parts[0].slice(
+        lengthOfPrefix,
+      )}/funfam/${Number(parts[1])}`}
+    >
+      {children}
+    </Link>
+  ) : (
+    <>{children}</>
+  );
+};
+
+export const PantherLink = ({ accession, children }) => (
+  <Link
+    target="_blank"
+    className={f('ext')}
+    href={`http://www.pantherdb.org/panther/family.do?clsAccession=${accession.toUpperCase()}`}
+  >
+    {children}
+  </Link>
+);
 const SubfamiliesSubpage = (
-  { data, search } /*: {
+  { data, search, db } /*: {
     data: {loading: boolean, ok: boolean, status: number, payload: ?Object, url: string},
     search: Object,
+    db: string,
   }*/,
 ) => {
   if (data.loading) return <Loading />;
 
+  let SubfamilyLink = 'span';
+  if (db === 'panther') SubfamilyLink = PantherLink;
+  if (db === 'cathgene3d') SubfamilyLink = FunFamLink;
   return (
     <section>
       <Table
@@ -40,13 +71,7 @@ const SubfamiliesSubpage = (
         <Column
           dataKey="accession"
           renderer={(accession) => (
-            <Link
-              target="_blank"
-              className={f('ext')}
-              href={`http://www.pantherdb.org/panther/family.do?clsAccession=${accession.toUpperCase()}`}
-            >
-              {accession}
-            </Link>
+            <SubfamilyLink accession={accession}>{accession}</SubfamilyLink>
           )}
         >
           Accession
@@ -54,13 +79,7 @@ const SubfamiliesSubpage = (
         <Column
           dataKey="name"
           renderer={(name, { accession }) => (
-            <Link
-              target="_blank"
-              className={f('ext')}
-              href={`http://www.pantherdb.org/panther/family.do?clsAccession=${accession.toUpperCase()}`}
-            >
-              {name}
-            </Link>
+            <SubfamilyLink accession={accession}>{name}</SubfamilyLink>
           )}
         >
           Accession
@@ -72,12 +91,13 @@ const SubfamiliesSubpage = (
 SubfamiliesSubpage.propTypes = {
   data: dataPropType,
   search: T.object,
+  db: T.string,
 };
 const mapStateToUrl = createSelector(
   (state) => state.settings.api,
-  (state) => state.customLocation.description?.entry?.accession,
+  (state) => state.customLocation.description?.entry,
   (state) => state.customLocation.search,
-  ({ protocol, hostname, port, root }, accession, search) => {
+  ({ protocol, hostname, port, root }, { accession, db }, search) => {
     const s = {
       ...search,
       subfamilies: '',
@@ -90,7 +110,7 @@ const mapStateToUrl = createSelector(
         root +
         descriptionToPath({
           main: { key: 'entry' },
-          entry: { db: 'panther', accession },
+          entry: { db, accession },
         }),
       query: s,
     });
@@ -98,7 +118,8 @@ const mapStateToUrl = createSelector(
 );
 export const mapStateToProps = createSelector(
   (state) => state.customLocation.search,
-  (search) => ({ search }),
+  (state) => state.customLocation.description.entry.db,
+  (search, db) => ({ search, db }),
 );
 
 export default loadData({

@@ -115,7 +115,7 @@ const ProtVistaEntryPopup = (
                   <header>Subfamily</header>
                   <ul>
                     <li>
-                      <header>Accession:</header> {subfamily.acc}
+                      <header>Accession:</header> {subfamily.accession}
                     </li>
                     <li>
                       <header>Name:</header> {subfamily.name}
