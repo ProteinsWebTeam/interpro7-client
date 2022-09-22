@@ -185,14 +185,6 @@ class ClanViewer extends PureComponent /*:: <Props, State> */ {
             literature: null,
           }
         : this.props.data.metadata;
-    let currentSet = null;
-    if (metadata.source_database) {
-      for (const db of setDBs) {
-        if (db.name === metadata.source_database) currentSet = db;
-      }
-      if (metadata.source_database === 'panther')
-        metadata.description = metadata.name.name;
-    }
 
     return (
       <div className={f('row')}>

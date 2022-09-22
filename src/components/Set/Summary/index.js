@@ -36,7 +36,6 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const MAX_NUMBER_OF_NODES = 100;
 export const schemaProcessData = (
   {
     data: { accession, score },
