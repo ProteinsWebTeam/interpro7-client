@@ -213,7 +213,7 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                 </div>
               </div>
             ) : null}
-            <ClanViewer data={this.props.data} />
+            <ClanViewer data={this.props.data} loading={this.props.loading} />
           </div>
         </section>
       </div>
