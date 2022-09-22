@@ -170,7 +170,7 @@ const Announcement = () => (
   <div className={f('row')}>
     <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
       <div
-        className={f('callout', 'warning')}
+        className={f('callout', 'info')}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -185,26 +185,25 @@ const Announcement = () => (
           className={f('small', 'icon', 'icon-common', 'icon-announcement')}
         />{' '}
         <p>
-          <strong>Powering down the Pfam website</strong>
+          <strong>We are the new house for Pfam</strong>
           <br />
-          On October 5th, we will start redirecting the traffic from Pfam (
-          <Link href="//pfam.xfam.org" className={f('ext')} target="_blank">
+          Since October 5th, we are the official web for Pfam. The Pfam website
+          (
+          <span href="//pfam.xfam.org" className={f('link', 'disabled')}>
             pfam.xfam.org
-          </Link>
-          ) to InterPro (
+          </span>
+          ) is now retired.
+          <br />A legacy version of the Pfam website will be available at{' '}
           <Link
-            to={{
-              description: {},
-            }}
+            href="//pfam-legacy.xfam.org/"
+            className={f('ext')}
+            target="_blank"
           >
-            www.ebi.ac.uk/interpro
-          </Link>
-          ). The Pfam website will be available at{' '}
-          <span href="//legacy.pfam.xfam.org" className={f('link', 'disabled')}>
-            legacy.pfam.xfam.org
-          </span>{' '}
-          until January 2023, when it will be decommissioned. You can read more
-          about the sunset period in our{' '}
+            https://pfam-legacy.xfam.org/
+          </Link>{' '}
+          until January 2023, when it will be decommissioned. Please notice this
+          version will not receive any updates and will be kept under very low
+          maintenance. You can read more about the sunset period in our{' '}
           <Link
             href="//xfam.wordpress.com/2022/08/04/pfam-website-decommission/"
             className={f('ext')}

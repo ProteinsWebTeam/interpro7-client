@@ -692,7 +692,8 @@ class List extends PureComponent /*:: <Props> */ {
                   const symbol = (
                     <MemberSymbol type={db} className={f('md-small')} />
                   );
-                  if (!externalLinkRenderer) return symbol;
+                  if (db.toLowerCase() === 'pfam' || !externalLinkRenderer)
+                    return symbol;
                   return (
                     <Tooltip
                       title={`link to ${accession} on the ${

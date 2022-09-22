@@ -124,16 +124,17 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                       />
                     </Tooltip>
                   </div>
-                  {memberDbURL.get(canonical) && (
-                    <Link href={memberDbURL.get(canonical)} target="_blank">
-                      <span
-                        role="link"
-                        className={f('small', 'icon', 'icon-common')}
-                        data-icon="&#xf35d;"
-                        aria-label="link to external site"
-                      />
-                    </Link>
-                  )}
+                  {canonical.toLowerCase() !== 'pfam' &&
+                    memberDbURL.get(canonical) && (
+                      <Link href={memberDbURL.get(canonical)} target="_blank">
+                        <span
+                          role="link"
+                          className={f('small', 'icon', 'icon-common')}
+                          data-icon="&#xf35d;"
+                          aria-label="link to external site"
+                        />
+                      </Link>
+                    )}
                 </div>
                 <hr className={f('md', canonical)} />
                 <small>{version}</small>
