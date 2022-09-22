@@ -618,7 +618,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       >
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
-          <div className={f('popper-content')} ref={this._popperContentRef} />
+          <div ref={this._popperContentRef} />
         </div>
         <div>
           <protvista-manager
