@@ -12,7 +12,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Genome3dLink } from 'components/ExtLink';
-import { FunFamLink } from 'subpages/Subfamilies';
+import { FunFamLink } from 'subPages/Subfamilies';
 
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaSequence from 'protvista-sequence';
