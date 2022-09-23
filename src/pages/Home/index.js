@@ -185,7 +185,7 @@ const Announcement = () => (
           className={f('small', 'icon', 'icon-common', 'icon-announcement')}
         />{' '}
         <p>
-          <strong>We are the new house for Pfam</strong>
+          <strong>We are the new home for Pfam data</strong>
           <br />
           Since October 5th, we are the official web for Pfam. The Pfam website
           (
