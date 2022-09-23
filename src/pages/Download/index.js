@@ -12,9 +12,11 @@ import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
-import InterProScanDownloads from './InterProScan';
-import InterProDownloads from './InterPro';
-import PfamDownloads from './Pfam';
+import InterProScanDownloads from 'components/DownloadFTP/InterProScan';
+import InterProDownloads from 'components/DownloadFTP/InterPro';
+import PfamDownloads from 'components/DownloadFTP/Pfam';
+import PrintsDownloads from 'components/DownloadFTP/Prints';
+import SFLDDownloads from '../../components/DownloadFTP/SFLD';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -72,6 +74,12 @@ const Download = ({ currentTab, goToCustomLocation }) => {
             <div title="Pfam">
               <PfamDownloads />
             </div>
+            <div title="Prints">
+              <PrintsDownloads />
+            </div>
+            <div title="SFLD">
+              <SFLDDownloads />
+            </div>
           </Tabs>
         </section>
       </div>
@@ -80,7 +88,7 @@ const Download = ({ currentTab, goToCustomLocation }) => {
 };
 Download.propTypes = {
   currentTab: T.string,
-  goToCustomLocation,
+  goToCustomLocation: T.func,
 };
 
 const mapStateToProps = createSelector(
