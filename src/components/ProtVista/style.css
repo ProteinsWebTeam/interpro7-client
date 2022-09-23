@@ -5,124 +5,11 @@
 :root {
   --track-space: 70vw;
 }
-.protvista {
-  font-size: 12px;
-}
-/*top option*/
-.view-options-wrap {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
 
 @media screen and (max-width: 39.9375em) {
   .view-options-wrap {
     flex-wrap: wrap;
   }
-  .option-fullscreen {
-    display: none;
-  }
-}
-
-.view-options-title {
-  font-size: 1.25rem;
-  font-family: var(--fonts-system);
-  color: #444;
-  font-weight: 600;
-}
-
-@media screen and (max-width: 75rem) {
-  .view-options-title {
-    font-size: 1rem;
-    font-weight: 500;
-    flex-shrink: 0;
-  }
-}
-
-.view-options {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  font-size: 90%;
-}
-
-.view-options select {
-  font-size: 100%;
-  width: auto;
-  padding: 0 1.5rem 0 0.5rem;
-  border: 1px transparent solid; /*define transparent border to fix the moving bu on focus*/
-  margin-bottom: 0;
-}
-/*avoid select text to collapse for small screens*/
-.option-color {
-  white-space: nowrap;
-}
-.viewer-options button {
-  color: var(--colors-dark);
-}
-.viewer-options button:hover {
-  color: var(--colors-nearly-black);
-}
-
-.option-collapse {
-  width: 150px;
-  border-left: 1px solid black;
-  padding-left: 1.5rem;
-  & button {
-    outline: none;
-  }
-}
-
-@media screen and (max-width: 39.9375em) {
-  .option-collapse {
-    padding-left: 0.5rem;
-  }
-}
-
-.track-group {
-  width: 100%;
-  display: block;
-}
-
-.tracks-container {
-  color: rgb(102, 102, 102);
-  /*color: white;*/
-}
-
-.tracks-container header {
-  padding-top: 0.5rem;
-  padding-left: 0.3rem;
-  /*Trial to make it work with highlighted*/
-  /*position: absolute;*/
-  /*margin-top: -1.5rem;*/
-  border-top: 3px solid rgba(195, 195, 195, 0.4);
-}
-
-.tracks-container header button {
-  outline: 0;
-  fill: var(--colors-dark);
-  text-transform: capitalize;
-  font-size: 129%;
-  font-family: var(--fonts-system);
-  font-weight: 300;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-}
-
-/*text ruler used when zooming*/
-.track-container text {
-  fill: var(--colors-graydark);
-}
-
-/*zoom sqc indicator*/
-.track-container svg polygon {
-  fill: black;
-  opacity: 0.8;
-}
-.track-container svg rect {
-  stroke-width: 0;
-  fill-opacity: 0.45; /*fill: black;*/
 }
 
 .track-row {
@@ -148,28 +35,7 @@
   }
 }
 
-/*can't use highlight class*/
-.track-component g:global(.highlighted) rect {
-  fill: #7f7f7f;
-}
-
 /*blobs*/
-.track-component path:global(.feature) {
-  stroke: rgba(0, 0, 0, 0.3);
-  stroke-width: 2;
-  cursor: pointer;
-  opacity: 0.7;
-  &:hover {
-    opacity: 1;
-  }
-}
-.track-component rect:global(.outer-rectangle) {
-  cursor: pointer;
-}
-g:global(.residues-group) path:global(.feature),
-g:global(.child-group) path:global(.feature) {
-  transition: fill 0.2s ease-out;
-}
 
 .sequence-conservation-label {
   margin-top: 1.3em;
@@ -199,40 +65,10 @@ g:global(.child-group) path:global(.feature) {
   line-height: 0;
 }
 
-body .track-accession {
-  font-family: var(--fonts-system);
-  max-width: 15vw;
-  overflow: auto;
-  white-space: nowrap;
-  padding-left: 0.5rem;
-  & a:hover {
-    border-bottom: 1px var(--colors-dark) solid;
-  }
-}
-body .track-accession nav {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-body .track-accession > a,
-body .track-accession > a:focus,
-body .track-accession > a:visited {
-  font-weight: 600;
-  color: var(--colors-dark);
-}
-body .track-accession-child {
-  line-height: 1.2; /*condensed view - if removed highlight is not working anymore*/
-  white-space: nowrap;
-}
-body .track-accession-child > a,
-body .track-accession-child > a:focus,
-body .track-accession-child > a:visited {
-  font-size: 90%;
-  color: var(--colors-graydark);
-}
-
 @media print {
+  @page {
+    size: landscape;
+  }
   a {
     text-decoration: none;
   }
@@ -301,100 +137,6 @@ g:global(.child-location-group.clg-5) path {
   background-color: white;
 }
 
-.popper {
-  position: absolute;
-  background: var(--colors-ebidark);
-  text-align: center;
-  color: white;
-  min-width: 180px;
-  border-radius: 4px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  padding: 0.8rem 1rem;
-  margin: 4px;
-
-  & h5 {
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-  & h6 {
-    opacity: 0.8;
-  }
-  & h6,
-  & h5,
-  & h4 {
-    color: white;
-  }
-
-  & ul {
-    /*text-align: left;*/
-    list-style: none;
-    margin: 0;
-  }
-}
-
-.popper .popper__arrow {
-  width: 0;
-  height: 0;
-  position: absolute;
-  margin: 5px;
-  border: solid #333;
-}
-
-.popper[x-placement^='top'] .popper__arrow {
-  border-width: 5px 5px 0 5px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  bottom: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.popper[x-placement^='bottom'] {
-  margin-top: 5px;
-}
-.popper[x-placement^='bottom'] .popper__arrow {
-  border-width: 0 5px 5px 5px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-top-color: transparent;
-  top: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-.popper[x-placement^='right'] {
-  margin-left: 5px;
-}
-.popper[x-placement^='right'] .popper__arrow {
-  border-width: 5px 5px 5px 0;
-  border-left-color: transparent;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-  left: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-.popper[x-placement^='left'] {
-  margin-right: 5px;
-}
-.popper[x-placement^='left'] .popper__arrow {
-  border-width: 5px 0 5px 5px;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  right: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-
-/*Structure and protein page - entry list page*/
-.track-in-table {
-  /*min-width: 300px;*/
-}
-
 .track-in-table text {
   fill: var(--colors-graydark);
 }
@@ -411,47 +153,6 @@ g:global(.child-location-group.clg-5) path {
 .track-in-table .track-row:nth-of-type(2) {
   margin-top: -18px;
 }
-.exporter {
-  min-width: 120px;
-}
-.pop-wrapper {
-  display: flex;
-  justify-content: center;
-  & div:first-of-type {
-    margin-right: 0.5rem;
-  }
-}
-
-.protvista-menu {
-  margin: 0.5rem 0 0.5rem 0;
-  & button {
-    font-size: 0.75rem;
-  }
-  & ul.menu-options {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    & li {
-      display: block;
-      padding: 0.3rem 1rem;
-      white-space: nowrap;
-    }
-
-    & li input {
-      padding: 0 0.5rem;
-      margin: 0;
-      white-space: nowrap;
-    }
-
-    & hr {
-      margin: 0;
-    }
-  }
-
-  & .nested-list {
-    font-size: 0.8rem;
-  }
-}
 
 .conservation-placeholder-component {
   height: 4em;
@@ -460,25 +161,4 @@ g:global(.child-location-group.clg-5) path {
 .protvista div:global(.zoom-button-div) {
   display: inline;
   margin-right: 0.25rem;
-}
-
-protvista-zoom-tool {
-  --button-padding-v: 0;
-  --button-padding-h: 0;
-  --button-background: white;
-}
-
-.zoom-button {
-  font-size: 2rem;
-  margin: 1px;
-}
-
-.option-fullscreen {
-  display: inline;
-  margin-right: 0.5rem;
-
-  & div > button {
-    font-size: 2rem;
-    margin: 1px;
-  }
 }

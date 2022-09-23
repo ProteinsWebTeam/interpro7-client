@@ -344,6 +344,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
           <div className={f('row')}>
             <div className={f('columns')}>
               <_TotalNb
+                {...this.props}
                 className={f('show-for-small-only')}
                 data={data}
                 actualSize={actualSize}
