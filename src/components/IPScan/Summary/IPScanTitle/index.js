@@ -70,9 +70,10 @@ const IPScanTitle = (
         <input
           ref={titleInputRef}
           className={f('title')}
-          defaultValue={`${title}`}
+          value={title}
           readOnly={readable}
           style={{ width: `${title.length}ch` }}
+          onChange={(event) => setTitle(event.target.value)}
         />
         {['finished', 'imported file', 'saved in browser'].includes(status) ? (
           <button

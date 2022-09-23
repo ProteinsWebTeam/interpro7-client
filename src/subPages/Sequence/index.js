@@ -5,31 +5,42 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Sequence, { InnerSequence } from 'components/Protein/Sequence';
 
-/*:: type Props = {
-  localPayload: {
-    sequence: string,
-    xref: [],
-    orf: {
-      dnaSequence: string,
-      start: number,
-      end: number,
-    },
-    group: string,
+/*::
+type LocalPayload = {
+  sequence: string,
+  xref: {
+      identifier: string,
+      name: string,
+    }[],
+  orf: {
+    dnaSequence: string,
+    start: number,
+    end: number,
   },
+  group: string,
+};
+type RemotePayload= {
+  metadata?: {
+    accession: string,
+    sequence: string,
+    name?: {
+      name?: string,
+    },
+  },
+  results?: {
+    xref:{
+      identifier: string,
+      name: string,
+    }[]
+  }
+};
+type Props = {
+  localPayload: LocalPayload,
   localTitle: string,
   data: {
     loading: boolean,
     ok: boolean,
-    payload:
-      {
-        metadata: {
-          accession: string,
-          sequence: string,
-          name?: {
-            name?: string,
-          },
-        },
-      },
+    payload: RemotePayload,
   }
 }; */
 
@@ -44,20 +55,25 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
     let accession;
     let sequence;
     let name;
-    let { payload } = this.props.data;
-    const { loading, ok } = this.props.data;
-    if (ok && !loading && !payload?.metadata)
-      payload = payload?.results?.[0] || this.props.localPayload;
-    if (!payload) return null;
     const local = this.props.localPayload;
-    if (payload.metadata) {
-      accession = payload.metadata.accession;
-      sequence = payload.metadata.sequence;
-      name = payload.metadata.name?.name;
+    let payload = null;
+    const { loading, ok } = this.props.data;
+    if (ok && !loading && !payload && this.props.data?.payload) {
+      payload = this.props.data?.payload;
+    }
+    if (!payload && !local) return null;
+    if (payload?.metadata) {
+      accession = payload.metadata?.accession;
+      sequence = payload.metadata?.sequence;
+      name = payload.metadata?.name?.name;
+    } else if (payload?.results) {
+      accession = payload.results?.[0]?.xref?.accession;
+      sequence = payload.results?.[0]?.xref?.sequence;
+      name = payload.results?.[0]?.xref?.name?.name;
     } else {
-      accession = payload.xref[0].identifier || '';
-      name = this.props.localTitle || payload.xref[0].name || '';
-      sequence = payload.sequence;
+      accession = local.xref[0].identifier || '';
+      name = this.props.localTitle || local.xref[0].name || '';
+      sequence = local.sequence;
     }
     return (
       <>
