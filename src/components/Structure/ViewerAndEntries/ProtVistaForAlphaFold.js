@@ -59,12 +59,18 @@ const ProtVistaForAlphaFold = (
           }
           break;
         case 'mouseover': {
+          const colour = parseInt(
+            (event /*: any */)?.detail?.feature?.color
+              .substring(1),
+            16,
+          );
+
           const selection =
             highlight?.split(',').map((block) => {
               const parts = block.split(':');
               const start = Number(parts?.[0]) || 1;
               const end = Number(parts?.[1]) || 1;
-              return { chain: 'A', start, end };
+              return { chain: 'A', start, end, colour };
             }) || [];
           setHoverSelection(selection);
           break;
