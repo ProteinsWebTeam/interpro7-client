@@ -7,7 +7,6 @@ import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
-import { setDBs } from 'utils/processDescription/handlers';
 import { getTextForLabel } from 'utils/text';
 
 import ClanViewerViz from 'clanviewer';

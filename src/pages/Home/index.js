@@ -201,8 +201,15 @@ const Announcement = () => (
           >
             https://pfam-legacy.xfam.org/
           </Link>{' '}
-          until January 2023, when it will be decommissioned. Please notice this
-          version will not receive any updates and will be kept under very low
+          until January 2023, when it will be decommissioned. Please notice{' '}
+          <Link
+            href="//pfam-legacy.xfam.org/"
+            className={f('ext')}
+            target="_blank"
+          >
+            pfam-legacy.xfam.org
+          </Link>{' '}
+          will not receive any updates and will be kept under very low
           maintenance. You can read more about the sunset period in our{' '}
           <Link
             href="//xfam.wordpress.com/2022/08/04/pfam-website-decommission/"
