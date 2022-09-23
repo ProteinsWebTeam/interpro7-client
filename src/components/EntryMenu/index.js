@@ -105,12 +105,14 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     this.setState({
       topBorder:
         1 +
-        boundingRect.top +
-        boundingRect.height -
-        containerBoundingRect.top -
-        parseFloat(
-          window.getComputedStyle(newTarget).getPropertyValue('padding-bottom'),
-        ),
+          boundingRect.top +
+          boundingRect.height -
+          containerBoundingRect.top -
+          parseFloat(
+            window
+              .getComputedStyle(newTarget)
+              .getPropertyValue('padding-bottom'),
+          ) || 0,
     });
   };
 
@@ -168,7 +170,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             { ['is-signature']: isSignature },
           )}
           style={{
-            top: this.state.topBorder,
+            top: this.state?.topBorder || 0,
           }}
         />
         {children}
