@@ -12,6 +12,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Genome3dLink } from 'components/ExtLink';
+import { FunFamLink } from 'subPages/Subfamilies';
 
 import ProtVistaManager from 'protvista-manager';
 import ProtVistaSequence from 'protvista-sequence';
@@ -135,6 +136,7 @@ const loadProtVistaWebComponents = () => {
 export class ProtVista extends Component /*:: <Props, State> */ {
   /*::
     web_tracks: {};
+    reactRoot: any;
     popper: any;
     _isPopperTop: boolean;
     _timeoutID: ?IntervalID;
@@ -364,8 +366,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               this.props?.dataDB?.payload?.databases,
             );
             if (this._popperContentRef.current) {
-              const root = createRoot(this._popperContentRef.current);
-              root.render(
+              // eslint-disable-next-line max-depth
+              if (!this.reactRoot)
+                this.reactRoot = createRoot(this._popperContentRef.current);
+
+              this.reactRoot.render(
                 <ProtVistaPopup
                   detail={detail}
                   sourceDatabase={sourceDatabase}
@@ -471,6 +476,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     }
     if (entry.source_database === 'mobidblt')
       return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
+    if (entry.source_database === 'funfam') {
+      return (
+        <FunFamLink accession={entry.accession}>{entry.accession}</FunFamLink>
+      );
+    }
     if (entry.type === 'residue')
       return <span>{entry.locations[0].description}</span>;
     if (
