@@ -98,17 +98,6 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
             />
           </Tooltip>
         </div>
-        <Memo(Connect(Link))
-          href="//pfam.xfam.org/"
-          target="_blank"
-        >
-          <span
-            aria-label="link to external site"
-            className="small icon icon-common"
-            data-icon=""
-            role="link"
-          />
-        </Memo(Connect(Link))>
       </div>
       <hr
         className="md pfam"

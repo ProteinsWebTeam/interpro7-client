@@ -50,7 +50,7 @@ export const memberDbURL = new Map([
   ['cdd', '//www.ncbi.nlm.nih.gov/cdd/'],
   ['hamap', '//hamap.expasy.org/'],
   ['panther', '//pantherdb.org/'],
-  ['pfam', '//pfam.xfam.org/'],
+  ['pfam', '//www.ebi.ac.uk/interpro/entry/pfam/'],
   ['pirsf', '//proteininformationresource.org/pirsf/'],
   ['profile', '//prosite.expasy.org/'],
   ['prosite', '//prosite.expasy.org/'],
@@ -65,7 +65,7 @@ export default (db /*: string */) => {
     ['cdd', '//www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid={}'],
     ['hamap', '//hamap.expasy.org/signature/{}'],
     ['panther', 'http://www.pantherdb.org/panther/family.do?clsAccession={}'],
-    ['pfam', '//pfam.xfam.org/family/{}'],
+    ['pfam', '//www.ebi.ac.uk/interpro/entry/pfam/{}'],
     ['pirsf', '//pir.georgetown.edu/cgi-bin/ipcSF?id={}'],
     [
       'prints',

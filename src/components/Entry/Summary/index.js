@@ -232,7 +232,9 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
         </Tooltip>
       </div>
       {metadata.integrated && <Integration intr={metadata.integrated} />}
-      {metadata.source_database.toLowerCase() !== 'interpro' && (
+      {!['interpro', 'pfam'].includes(
+        metadata.source_database.toLowerCase(),
+      ) && (
         <section>
           <h5>External Links</h5>
           <ul className={f('no-bullet')}>
@@ -246,18 +248,6 @@ const _SidePanel = ({ metadata, dbInfo, api, addToast }) => {
                 {(dbInfo && dbInfo.name) || metadata.source_database}
               </Link>
             </li>
-            {false && // TODO: reactivate that after change in the API
-              metadata.wikipedia && (
-                <li>
-                  <Link
-                    className={f('ext')}
-                    target="_blank"
-                    href={`https://en.wikipedia.org/wiki/${metadata.wikipedia}`}
-                  >
-                    Wikipedia article
-                  </Link>
-                </li>
-              )}
           </ul>
         </section>
       )}
@@ -554,12 +544,7 @@ const _wikipedia = ({ title, extract, thumbnail, data }) => {
                             {id.name}
                           </a>
                         </th>
-                        <td className={f('row-data')}>
-                          {/* TODO add external links*/}
-                          {/* <a rel="nofollow" className="external text" href="http://pfam.xfam.org/family?acc=PF02171">*/}
-                          {id.value}
-                          {/* </a>*/}
-                        </td>
+                        <td className={f('row-data')}>{id.value}</td>
                       </tr>
                     );
                   })}

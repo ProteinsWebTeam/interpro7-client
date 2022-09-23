@@ -169,7 +169,6 @@ export const setDBs /*: Set<Object> */ = new Set([
     name: 'pfam',
     dbName: 'Pfam',
     re: /^[Cc][lL][0-9]{4}$/,
-    url_template: 'http://pfam.xfam.org/clan/{id}',
   },
   {
     name: 'cdd',
