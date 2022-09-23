@@ -200,8 +200,8 @@ const Announcement = () => (
             www.ebi.ac.uk/interpro
           </Link>
           ). The Pfam website will be available at{' '}
-          <span href="//legacy.pfam.xfam.org" className={f('link', 'disabled')}>
-            legacy.pfam.xfam.org
+          <span href="//pfam-legacy.xfam.org" className={f('link', 'disabled')}>
+            pfam-legacy.xfam.org
           </span>{' '}
           until January 2023, when it will be decommissioned. You can read more
           about the sunset period in our{' '}
