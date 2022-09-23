@@ -18,6 +18,10 @@ import ProtVistaConservationPopup from './Conservation';
     fragments: Array<ProtVistaFragment>,
     match?: string,
     model_acc?: string,
+    subfamily?: {
+      name: string,
+      accession: string,
+    },
   }
   export type PopupDetail = {
     feature: {
