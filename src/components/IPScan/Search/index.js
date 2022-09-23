@@ -351,24 +351,9 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     const newTitle = this._formRef.current
       .querySelector('input[name="local-title"]')
       .value.trim();
-    // const text = this.state.editorState.getCurrentContent().getPlainText();
-    // const lines = text.split(/\n/);
-    // if (
-    //   lines.map((s) => s.trim()).filter((s) => s.startsWith('>')).length > 1
-    // ) {
     this.setState({
       title: newTitle,
     });
-    //   return;
-    // }
-    // lines[0] = `>${newTitle}`;
-    // this.setState({
-    //   title: newTitle,
-    //   editorState: EditorState.createWithContent(
-    //     ContentState.createFromText(lines.join('\n')),
-    //     compositeDecorator,
-    //   ),
-    // });
   };
 
   _handleReset = (text) => {
@@ -450,6 +435,9 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
     const fr = new FileReader();
     fr.onload = () => {
       this._handleReset(fr.result);
+      this.setState({
+        title: file.name,
+      });
     };
     fr.readAsText(file);
   };
