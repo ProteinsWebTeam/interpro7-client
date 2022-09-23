@@ -41,8 +41,10 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import localCSS from './style.css';
+import gridCSS from './grid.css';
+import popperCSS from './popper.css';
 
-const f = foundationPartial(ipro, localCSS, spinner, fonts);
+const f = foundationPartial(ipro, localCSS, spinner, fonts, gridCSS, popperCSS);
 
 const webComponents = [];
 
@@ -129,6 +131,7 @@ const loadProtVistaWebComponents = () => {
   showLoading: boolean,
   overPopup: boolean,
   optionsID: string,
+  isPrinting: boolean,
 }; */
 export class ProtVista extends Component /*:: <Props, State> */ {
   /*::
@@ -186,6 +189,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       showLoading: false,
       overPopup: false,
       optionsID: id('protvista-options-'),
+      isPrinting: false,
     };
 
     this._mainRef = React.createRef();
@@ -464,7 +468,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
   }
 
   renderLabels(entry) {
-    const { expandedTrack } = this.state;
+    const { expandedTrack, isPrinting } = this.state;
     const { dataDB, id } = this.props;
     let databases = {};
     if (dataDB.payload) {
@@ -511,23 +515,27 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       entry.source_database === 'pdb' ? 'structure' : 'entry';
     return (
       <>
-        <Link
-          to={{
-            description: {
-              main: {
-                key,
+        {isPrinting ? (
+          <b>{this.renderSwitch(this.props.label, entry)}</b>
+        ) : (
+          <Link
+            to={{
+              description: {
+                main: {
+                  key,
+                },
+                [key]: {
+                  db: entry.source_database,
+                  accession: entry.accession.startsWith('residue:')
+                    ? entry.accession.split('residue:')[1]
+                    : entry.accession,
+                },
               },
-              [key]: {
-                db: entry.source_database,
-                accession: entry.accession.startsWith('residue:')
-                  ? entry.accession.split('residue:')[1]
-                  : entry.accession,
-              },
-            },
-          }}
-        >
-          {this.renderSwitch(this.props.label, entry)}
-        </Link>
+            }}
+          >
+            {this.renderSwitch(this.props.label, entry)}
+          </Link>
+        )}
         <div
           className={f({
             hide: !expandedTrack[entry.accession],
@@ -540,19 +548,23 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                 key={`main_${d.accession}`}
                 className={f('track-accession-child')}
               >
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: d.source_database,
-                        accession: d.accession,
+                {isPrinting ? (
+                  this.renderSwitch(this.props.label, d)
+                ) : (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'entry' },
+                        entry: {
+                          db: d.source_database,
+                          accession: d.accession,
+                        },
                       },
-                    },
-                  }}
-                >
-                  {this.renderSwitch(this.props.label, d)}
-                </Link>
+                    }}
+                  >
+                    {this.renderSwitch(this.props.label, d)}
+                  </Link>
+                )}
                 {this.renderResidueLabels(d)}
               </div>
             ))}
@@ -616,285 +628,256 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       >
         <div ref={this._popperRef} className={f('popper', 'hide')}>
           <div className={f('popper__arrow')} />
-          <div className={f('popper-content')} ref={this._popperContentRef} />
+          <div ref={this._popperContentRef} />
         </div>
         <div>
-          <div className={f('protvista')}>
-            <protvista-manager
-              attributes="length displaystart displayend highlight"
-              id="pv-manager"
-            >
-              <div className={f('track-row')}>
-                <div
-                  className={f(
-                    'aligned-to-track-component',
-                    'view-options-wrap',
-                  )}
-                >
-                  {showOptions && (
-                    <ProtVistaOptions
-                      title={this.props.title}
-                      length={length}
-                      id={this.state.optionsID}
-                      webTracks={this.web_tracks}
-                      expandedTrack={this.state.expandedTrack}
-                      getParentElem={this.getProtvistaRefs}
-                      updateTracksCollapseStatus={
-                        this.updateTracksCollapseStatus
-                      }
-                      toggleTooltipStatus={this.toggleTooltipStatus}
-                    >
-                      {children}
-                    </ProtVistaOptions>
-                  )}
-                </div>
+          <protvista-manager
+            attributes="length displaystart displayend highlight"
+            id="pv-manager"
+          >
+            <div className={f('protvista-grid')}>
+              <div className={f('view-options-wrap', 'track-sized')}>
+                {showOptions && (
+                  <ProtVistaOptions
+                    title={this.props.title}
+                    length={length}
+                    id={this.state.optionsID}
+                    webTracks={this.web_tracks}
+                    expandedTrack={this.state.expandedTrack}
+                    getParentElem={this.getProtvistaRefs}
+                    updateTracksCollapseStatus={this.updateTracksCollapseStatus}
+                    toggleTooltipStatus={this.toggleTooltipStatus}
+                    setPrintingMode={(mode /*: boolean */) =>
+                      this.setState({ isPrinting: mode })
+                    }
+                  >
+                    {children}
+                  </ProtVistaOptions>
+                )}
               </div>
-              <div
-                ref={this._protvistaRef}
-                id={`${this.state.optionsID}ProtvistaDiv`}
-              >
-                <div className={f('track-container')}>
-                  <div className={f('track-row')}>
-                    <div className={f('aligned-to-track-component')}>
-                      <protvista-navigation
-                        length={length}
-                        displaystart="1"
-                        displayend={length}
-                      />
-                    </div>
-                  </div>
-                  <div className={f('track-row')}>
-                    <div className={f('aligned-to-track-component')}>
-                      <protvista-sequence
-                        ref={this._webProteinRef}
-                        length={length}
-                        displaystart="1"
-                        displayend={length}
-                        highlight-event="onmouseover"
-                        use-ctrl-to-zoom
-                      />
-                      <protvista-coloured-sequence
-                        ref={this._hydroRef}
-                        length={length}
-                        displaystart="1"
-                        displayend={length}
-                        scale="hydrophobicity-scale"
-                        height="10"
-                        color_range="#0000FF:-3,#ffdd00:3"
-                        highlight-event="onmouseover"
-                        use-ctrl-to-zoom
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className={f('tracks-container')}>
-                  {data &&
-                    data
-                      .filter(([_, tracks]) => tracks && tracks.length)
-                      .map(([type, entries, component]) => {
-                        const LabelComponent = component?.component;
-                        return (
-                          <div key={type} className={f('track-container')}>
-                            <div className={f('track-row')}>
+            </div>
+            <div
+              className={f('protvista-grid', {
+                printing: this.state.isPrinting,
+              })}
+              ref={this._protvistaRef}
+              id={`${this.state.optionsID}ProtvistaDiv`}
+            >
+              <div className={f('track')}>
+                <protvista-navigation
+                  length={length}
+                  displaystart="1"
+                  displayend={length}
+                />
+              </div>
+              <div className={f('track')}>
+                <protvista-sequence
+                  ref={this._webProteinRef}
+                  length={length}
+                  displaystart="1"
+                  displayend={length}
+                  highlight-event="onmouseover"
+                  use-ctrl-to-zoom
+                />
+              </div>
+              <div className={f('track')}>
+                <protvista-coloured-sequence
+                  ref={this._hydroRef}
+                  length={length}
+                  displaystart="1"
+                  displayend={length}
+                  scale="hydrophobicity-scale"
+                  height="10"
+                  color_range="#0000FF:-3,#ffdd00:3"
+                  highlight-event="onmouseover"
+                  use-ctrl-to-zoom
+                />
+              </div>
+
+              {data &&
+                data
+                  .filter(([_, tracks]) => tracks && tracks.length)
+                  .map(([type, entries, component]) => {
+                    const LabelComponent = component?.component;
+                    return (
+                      <div
+                        key={type}
+                        className={f(
+                          'tracks-container',
+                          'track-sized',
+                          'protvista-grid',
+                          {
+                            printing: this.state.isPrinting,
+                          },
+                        )}
+                      >
+                        <header>
+                          <button
+                            onClick={() =>
+                              this.setObjectValueInState(
+                                'hideCategory',
+                                type,
+                                !hideCategory[type],
+                              )
+                            }
+                          >
+                            <span
+                              className={f(
+                                'icon',
+                                'icon-common',
+                                hideCategory[type]
+                                  ? 'icon-caret-right'
+                                  : 'icon-caret-down',
+                              )}
+                            />{' '}
+                            {type}
+                          </button>
+                        </header>
+                        {component && (
+                          <div className={f('track-accession')}>
+                            <LabelComponent
+                              {...(component?.attributes || {})}
+                            />
+                          </div>
+                        )}{' '}
+                        {entries &&
+                          entries.map((entry) => (
+                            <React.Fragment key={entry.accession}>
                               <div
-                                className={f('track-component')}
-                                style={{ borderBottom: 0 }}
+                                className={f('track', {
+                                  hideCategory: hideCategory[type],
+                                })}
                               >
-                                <header>
-                                  <button
-                                    onClick={() =>
-                                      this.setObjectValueInState(
-                                        'hideCategory',
-                                        type,
-                                        !hideCategory[type],
-                                      )
-                                    }
-                                  >
-                                    <span
-                                      className={f(
-                                        'icon',
-                                        'icon-common',
-                                        hideCategory[type]
-                                          ? 'icon-caret-right'
-                                          : 'icon-caret-down',
-                                      )}
-                                    />{' '}
-                                    {type}
-                                  </button>
-                                </header>
-                              </div>
-                              {component && (
-                                <div className={f('track-accession')}>
-                                  <LabelComponent
-                                    {...(component?.attributes || {})}
-                                  />
-                                </div>
-                              )}{' '}
-                            </div>
-                            <div
-                              className={f('track-group', {
-                                hideCategory: hideCategory[type],
-                              })}
-                            >
-                              {entries &&
-                                entries.map((entry) => (
+                                {entry.type === 'secondary_structure' ||
+                                entry.type === 'sequence_conservation' ||
+                                entry.type === 'residue' ? (
                                   <div
-                                    key={entry.accession}
-                                    className={f('track-row')}
+                                    className={f(
+                                      'track',
+                                      entry.type.replace('_', '-'),
+                                    )}
                                   >
-                                    {entry.type === 'secondary_structure' ||
-                                    entry.type === 'sequence_conservation' ||
-                                    entry.type === 'residue' ? (
-                                      <div
-                                        className={f(
-                                          'track-component',
-                                          entry.type.replace('_', '-'),
-                                        )}
-                                      >
-                                        {entry.type ===
-                                          'sequence_conservation' &&
-                                          entry.warnings.length > 0 && (
-                                            <div
-                                              className={f(
-                                                'conservation-warning',
-                                              )}
-                                            >
-                                              {entry.warnings.map((message) => (
-                                                <div key={message}>
-                                                  {message}
-                                                </div>
-                                              ))}
-                                            </div>
-                                          )}
-                                        {entry.type ===
-                                          'sequence_conservation' &&
-                                          entry.warnings.length === 0 && (
-                                            <nightingale-linegraph-track
-                                              length={length}
-                                              displaystart="1"
-                                              displayend={length}
-                                              type="conservation"
-                                              id={`track_${entry.accession}`}
-                                              ref={(e) =>
-                                                (this.web_tracks[
-                                                  entry.accession
-                                                ] = e)
-                                              }
-                                              highlight-event="onmouseover"
-                                              use-ctrl-to-zoom
-                                            />
-                                          )}
-                                        {(entry.type ===
-                                          'secondary_structure' ||
-                                          entry.type === 'residue') && (
-                                          <protvista-track
-                                            length={length}
-                                            displaystart="1"
-                                            displayend={length}
-                                            height={
-                                              entry.type === 'residue'
-                                                ? '15'
-                                                : null
-                                            }
-                                            id={`track_${entry.accession}`}
-                                            ref={(e) =>
-                                              (this.web_tracks[
-                                                entry.accession
-                                              ] = e)
-                                            }
-                                            highlight-event="onmouseover"
-                                            use-ctrl-to-zoom
-                                          />
-                                        )}
-                                      </div>
-                                    ) : (
-                                      <div className={f('track-component')}>
-                                        <protvista-interpro-track
+                                    {entry.type === 'sequence_conservation' &&
+                                      entry.warnings.length > 0 && (
+                                        <div
+                                          className={f('conservation-warning')}
+                                        >
+                                          {entry.warnings.map((message) => (
+                                            <div key={message}>{message}</div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    {entry.type === 'sequence_conservation' &&
+                                      entry.warnings.length === 0 && (
+                                        <nightingale-linegraph-track
                                           length={length}
                                           displaystart="1"
                                           displayend={length}
+                                          type="conservation"
                                           id={`track_${entry.accession}`}
                                           ref={(e) =>
                                             (this.web_tracks[entry.accession] =
                                               e)
                                           }
-                                          shape="roundRectangle"
                                           highlight-event="onmouseover"
                                           use-ctrl-to-zoom
-                                          expanded
                                         />
-                                      </div>
+                                      )}
+                                    {(entry.type === 'secondary_structure' ||
+                                      entry.type === 'residue') && (
+                                      <protvista-track
+                                        length={length}
+                                        displaystart="1"
+                                        displayend={length}
+                                        height={
+                                          entry.type === 'residue' ? '15' : null
+                                        }
+                                        id={`track_${entry.accession}`}
+                                        ref={(e) =>
+                                          (this.web_tracks[entry.accession] = e)
+                                        }
+                                        highlight-event="onmouseover"
+                                        use-ctrl-to-zoom
+                                      />
                                     )}
-                                    <div className={f('track-accession')}>
-                                      {this.renderLabels(entry)}
-                                    </div>
                                   </div>
-                                ))}
-                            </div>
-                          </div>
-                        );
-                      })}
-                  {showConservationButton ? (
-                    <div className={f('track-container')}>
-                      <div className={f('track-row')}>
-                        <div className={f('track-component')}>
-                          <header>
-                            <button
-                              onClick={() => this.handleConservationLoad(this)}
-                            >
-                              <span
-                                className={f(
-                                  'icon',
-                                  'icon-common',
-                                  'icon-caret-right',
+                                ) : (
+                                  <protvista-interpro-track
+                                    length={length}
+                                    displaystart="1"
+                                    displayend={length}
+                                    id={`track_${entry.accession}`}
+                                    ref={(e) =>
+                                      (this.web_tracks[entry.accession] = e)
+                                    }
+                                    shape="roundRectangle"
+                                    highlight-event="onmouseover"
+                                    use-ctrl-to-zoom
+                                    expanded
+                                  />
                                 )}
-                              />{' '}
-                              Match Conservation
-                            </button>
-                          </header>
-                        </div>
-                      </div>
-                      <div className={f('track-group')}>
-                        <div className={f('track-row')}>
-                          <div
-                            className={f(
-                              'track-component',
-                              'conservation-placeholder-component',
-                            )}
-                            ref={this._conservationTrackRef}
-                          >
-                            {this.state.showLoading ? (
-                              <div
-                                className={f('loading-spinner')}
-                                style={{ margin: '10px auto' }}
-                              >
-                                <div />
-                                <div />
-                                <div />
                               </div>
-                            ) : null}
-                          </div>
-                          <div className={f('track-accession')}>
-                            <button
-                              type="button"
-                              className={f(
-                                'hollow',
-                                'button',
-                                'user-select-none',
-                              )}
-                              onClick={() => this.handleConservationLoad(this)}
-                            >
-                              Fetch Conservation
-                            </button>
-                          </div>
-                        </div>
+                              <div
+                                className={f('track-label', {
+                                  hideCategory: hideCategory[type],
+                                })}
+                              >
+                                {this.renderLabels(entry)}
+                              </div>
+                            </React.Fragment>
+                          ))}
                       </div>
+                    );
+                  })}
+              {showConservationButton ? (
+                <div
+                  className={f(
+                    'tracks-container',
+                    'track-sized',
+                    'protvista-grid',
+                    {
+                      printing: this.state.isPrinting,
+                    },
+                  )}
+                >
+                  <header>
+                    <button onClick={() => this.handleConservationLoad(this)}>
+                      <span
+                        className={f('icon', 'icon-common', 'icon-caret-right')}
+                      />{' '}
+                      Match Conservation
+                    </button>
+                  </header>
+                  <div className={f('track')}>
+                    <div
+                      className={f('conservation-placeholder-component')}
+                      ref={this._conservationTrackRef}
+                    >
+                      {this.state.showLoading ? (
+                        <div
+                          className={f('loading-spinner')}
+                          style={{ margin: '10px auto' }}
+                        >
+                          <div />
+                          <div />
+                          <div />
+                        </div>
+                      ) : null}
                     </div>
-                  ) : null}
+                  </div>
+                  <div className={f('track-label')}>
+                    <button
+                      type="button"
+                      className={f('hollow', 'button', 'user-select-none')}
+                      onClick={() => this.handleConservationLoad(this)}
+                    >
+                      Fetch Conservation
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </protvista-manager>
-          </div>
+              ) : null}
+            </div>
+          </protvista-manager>
         </div>
       </div>
     );
