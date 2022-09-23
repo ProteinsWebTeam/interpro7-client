@@ -204,7 +204,9 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                       },
                     }}
                   >
-                    {localTitle || row.remoteID || row.localID}
+                    {(localTitle === '∅' ? null : localTitle) ||
+                      row.remoteID ||
+                      row.localID}
                   </Link>
                 </span>
                 {row.remoteID && !row.remoteID.startsWith('imported') && (

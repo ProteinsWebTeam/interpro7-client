@@ -70,6 +70,7 @@
   white-space: nowrap;
   font-family: var(--fonts-system);
   padding-left: 0.5rem;
+  scrollbar-color: lightgray transparent;
 }
 .protvista-grid .track-label > a,
 .protvista-grid .track-label > a:focus,
@@ -92,7 +93,9 @@
   font-size: 90%;
   color: var(--colors-graydark);
 }
-
+.protvista-grid .track-label::-webkit-scrollbar {
+  background-color: transparent;
+}
 .protvista-grid .tracks-container {
   grid-column: 1 / 3;
   color: rgb(102, 102, 102);

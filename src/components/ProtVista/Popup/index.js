@@ -20,7 +20,7 @@ import ProtVistaConservationPopup from './Conservation';
     model_acc?: string,
     subfamily?: {
       name: string,
-      acc: string,
+      accession: string,
     },
   }
   export type PopupDetail = {
