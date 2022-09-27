@@ -429,7 +429,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
         };
       },
       name: 'RoseTTAFold',
-      counter: 'structural_models.RoseTTAFold',
+      counter: 'structural_models.rosettafold',
     },
   ],
   [
