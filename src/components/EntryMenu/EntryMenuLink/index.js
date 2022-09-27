@@ -204,8 +204,12 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
       if (whitelist.has(name)) value = NaN;
       // TODO: find a generic way to deal with this:
       if (
-        name === 'Pathways' &&
-        payload.metadata.source_database.toLowerCase() !== 'interpro'
+        (name === 'Pathways' &&
+          payload.metadata.source_database.toLowerCase() !== 'interpro') ||
+        (name === 'AlphaFold' &&
+          !['interpro', 'pfam'].includes(
+            payload.metadata.source_database.toLowerCase(),
+          ))
       ) {
         value = null;
       }
