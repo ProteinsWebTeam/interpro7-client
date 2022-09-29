@@ -185,15 +185,15 @@ const Announcement = () => (
           className={f('small', 'icon', 'icon-common', 'icon-announcement')}
         />{' '}
         <p>
-          <strong>We are the new home for Pfam data</strong>
+          <strong>InterPro is the new home of Pfam</strong>
           <br />
-          Since October 5th, we are the official web for Pfam. The Pfam website
-          (
+          The Pfam website (
           <span href="//pfam.xfam.org" className={f('link', 'disabled')}>
             pfam.xfam.org
           </span>
-          ) is now retired.
-          <br />A legacy version of the Pfam website will be available at{' '}
+          ) was shut down on October 5th, but InterPro offers the same
+          functionality and data.
+          <br />A legacy version of Pfam will remain available at{' '}
           <Link
             href="//pfam-legacy.xfam.org/"
             className={f('ext')}
@@ -201,22 +201,14 @@ const Announcement = () => (
           >
             https://pfam-legacy.xfam.org/
           </Link>{' '}
-          until January 2023, when it will be decommissioned. Please notice{' '}
-          <Link
-            href="//pfam-legacy.xfam.org/"
-            className={f('ext')}
-            target="_blank"
-          >
-            pfam-legacy.xfam.org
-          </Link>{' '}
-          will not receive any updates and will be kept under very low
-          maintenance. You can read more about the sunset period in our{' '}
+          until January 2023, but will not receive any updates. You can read
+          more about our decision to shut down the Pfam website in{' '}
           <Link
             href="//xfam.wordpress.com/2022/08/04/pfam-website-decommission/"
             className={f('ext')}
             target="_blank"
           >
-            blog post
+            our blog post
           </Link>
           .
         </p>
