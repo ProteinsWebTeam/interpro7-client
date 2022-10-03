@@ -3,7 +3,7 @@
 @import '../../../styles/z-index.css';
 
 .dropdown-container {
-  display: flex;
+  display: inline-flex;
   margin: 0;
   position: relative;
 

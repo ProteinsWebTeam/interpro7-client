@@ -170,7 +170,7 @@ const Announcement = () => (
   <div className={f('row')}>
     <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
       <div
-        className={f('callout', 'warning')}
+        className={f('callout', 'info')}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -185,32 +185,30 @@ const Announcement = () => (
           className={f('small', 'icon', 'icon-common', 'icon-announcement')}
         />{' '}
         <p>
-          <strong>Powering down the Pfam website</strong>
+          <strong>InterPro is the new home of Pfam</strong>
           <br />
-          On October 5th, we will start redirecting the traffic from Pfam (
-          <Link href="//pfam.xfam.org" className={f('ext')} target="_blank">
+          The Pfam website (
+          <span href="//pfam.xfam.org" className={f('link', 'disabled')}>
             pfam.xfam.org
-          </Link>
-          ) to InterPro (
+          </span>
+          ) was shut down on October 5th, but InterPro offers the same
+          functionality and data.
+          <br />A legacy version of Pfam will remain available at{' '}
           <Link
-            to={{
-              description: {},
-            }}
+            href="//pfam-legacy.xfam.org/"
+            className={f('ext')}
+            target="_blank"
           >
-            www.ebi.ac.uk/interpro
-          </Link>
-          ). The Pfam website will be available at{' '}
-          <span href="//pfam-legacy.xfam.org" className={f('link', 'disabled')}>
-            pfam-legacy.xfam.org
-          </span>{' '}
-          until January 2023, when it will be decommissioned. You can read more
-          about the sunset period in our{' '}
+            https://pfam-legacy.xfam.org/
+          </Link>{' '}
+          until January 2023, but will not receive any updates. You can read
+          more about our decision to shut down the Pfam website in{' '}
           <Link
             href="//xfam.wordpress.com/2022/08/04/pfam-website-decommission/"
             className={f('ext')}
             target="_blank"
           >
-            blog post
+            our blog post
           </Link>
           .
         </p>
