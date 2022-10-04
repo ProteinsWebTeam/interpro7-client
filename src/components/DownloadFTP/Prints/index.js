@@ -26,10 +26,10 @@ const PrintsDownloads = () => (
         <tr>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/FingerPRINTShierarchy21Feb2012">
-              Prints hierarchy
+              Hierarchy of PRINTS families
             </Link>
           </td>
-          <td>Fingerprints hierarchy 21 Feb 2012</td>
+          <td>Fingerprints hierarchy</td>
           <td className={f('xs-hide')}>FingerPRINTShierarchy21Feb2012</td>
           <td className={f('xs-hide')}>text</td>
           <td style={{ whiteSpace: 'nowrap' }}>
@@ -45,12 +45,12 @@ const PrintsDownloads = () => (
         <tr>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/prints42_0.kdat">
-              Prints data
+              PRINTS database
             </Link>
           </td>
           <td>Compendium of protein fingerprints</td>
           <td className={f('xs-hide')}>prints42_0.kdat</td>
-          <td className={f('xs-hide')}>bin</td>
+          <td className={f('xs-hide')}>text</td>
           <td style={{ whiteSpace: 'nowrap' }}>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/prints42_0.kdat">
               <span
@@ -64,7 +64,7 @@ const PrintsDownloads = () => (
         <tr>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/prints42_0.pval_blos62">
-              Blos62
+              BLOSUM62 matrices of PRINTS families
             </Link>
           </td>
           <td>Compact version of prints.dat</td>

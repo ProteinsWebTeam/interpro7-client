@@ -107,7 +107,8 @@ export const mergeData = (matches, sequenceLength) => {
     const { library } = match.signature.signatureLibraryRelease;
     const processedMatch = {
       accession: match.signature.accession,
-      name: match.signature.name,
+      name: match.signature.description || match.signature.name,
+      short_name: match.signature.name,
       source_database: iproscan2urlDB(library),
       protein_length: sequenceLength,
       locations: match.locations.map((loc) => ({

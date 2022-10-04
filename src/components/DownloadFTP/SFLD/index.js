@@ -29,9 +29,9 @@ const SFLDDownloads = () => (
               SFLD models
             </Link>
           </td>
-          <td>HMMs for SFLD.</td>
+          <td>HMMs for SFLD</td>
           <td className={f('xs-hide')}>sfld.hmm</td>
-          <td className={f('xs-hide')}>bin</td>
+          <td className={f('xs-hide')}>text</td>
           <td style={{ whiteSpace: 'nowrap' }}>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/4/sfld.hmm">
               <span
