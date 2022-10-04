@@ -20,7 +20,7 @@ const f = foundationPartial(ipro, fonts);
 
 const AlphaFoldModelSubPage = ({ data, description }) => {
   const mainAccession = description[description.main.key].accession;
-  const mainDB = description[description.main.key].db;
+  const mainType = description.main.key.toLowerCase();
   const container = useRef();
   const [selectionsInModel, setSelectionsInModel] = useState(null);
   const [proteinAcc, setProteinAcc] = useState('');
@@ -36,7 +36,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
   };
 
   useEffect(() => {
-    if (mainDB.toLowerCase() === 'interpro') {
+    if (mainType === 'entry') {
       // Take the list of matched UniProt matches and assign the first one to protein accession
       if (data?.payload?.count > 0)
         setProteinAcc(data.payload.results[0].metadata.accession);
@@ -44,8 +44,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
   }, [mainAccession, data]);
 
   if (data?.loading) return <Loading />;
-  const hasMultipleProteins =
-    mainDB.toLowerCase() === 'interpro' && data.payload.count > 1;
+  const hasMultipleProteins = mainType === 'entry' && data.payload.count > 1;
   return (
     <div className={f('row', 'column')} ref={container}>
       {proteinAcc && (
@@ -57,7 +56,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
           selections={selectionsInModel}
         />
       )}
-      {mainDB.toLowerCase() === 'interpro' ? (
+      {mainType === 'entry' ? (
         <ProteinTable onProteinChange={handleProteinChange} />
       ) : (
         <div
