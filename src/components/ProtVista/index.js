@@ -481,6 +481,20 @@ export class ProtVista extends Component /*:: <Props, State> */ {
         <FunFamLink accession={entry.accession}>{entry.accession}</FunFamLink>
       );
     }
+    if (entry.source_database === 'pfam-n') {
+      return (
+        <Link
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: { db: 'pfam', accession: entry.accession },
+            },
+          }}
+        >
+          N: {entry.accession}
+        </Link>
+      );
+    }
     if (entry.type === 'residue')
       return <span>{entry.locations[0].description}</span>;
     if (
