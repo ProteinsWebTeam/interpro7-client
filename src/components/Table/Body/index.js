@@ -74,6 +74,7 @@ class NoRows extends PureComponent /*:: <Props> */ {
   columns: Array<string>,
   rowClassName:string | function,
   groups?: Array<string>,
+  groupActions?: (string)=>any,
   notFound: boolean
 } */
 
@@ -88,6 +89,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
     notFound: T.bool,
     rowClassName: T.oneOfType([T.string, T.func]),
     groups: T.arrayOf(T.string),
+    groupActions: T.object,
   };
 
   static defaultProps = {
@@ -105,6 +107,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
       notFound,
       rowClassName,
       groups,
+      groupActions,
     } = this.props;
     const edgeCaseText = edgeCases.get(status);
     if (edgeCaseText)
@@ -132,10 +135,12 @@ class Body extends PureComponent /*:: <BodyProps> */ {
           const rowData = row.metadata || row;
           const extraData = row.extra_fields;
           const rcn = row.className ? row.className : rowClassName;
+          let GroupActions = null;
           const shouldRenderGroupHeader =
             groups?.length && row.group && curentGroup !== row.group;
           if (shouldRenderGroupHeader) {
             curentGroup = row.group;
+            GroupActions = groupActions?.(row.group);
           }
           return (
             <React.Fragment key={rowData[rowKey] || index}>
@@ -143,12 +148,23 @@ class Body extends PureComponent /*:: <BodyProps> */ {
                 <tr>
                   <th
                     style={{
+                      color: 'var(--colors-progress, #1f6ca2)',
                       textAlign: 'start',
                       backgroundColor: colorHash.hex(row.group),
                     }}
                   >
                     {row.group}
                   </th>
+                  {GroupActions && (
+                    <>
+                      {columns.slice(2).map((_, i) => (
+                        <th key={i} />
+                      ))}
+                      <th>
+                        <GroupActions />
+                      </th>
+                    </>
+                  )}
                 </tr>
               )}
               <Row

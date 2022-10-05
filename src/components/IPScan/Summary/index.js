@@ -18,7 +18,6 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 import GoTerms from 'components/GoTerms';
 import Accession from 'components/Accession';
-import Title from 'components/Title';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 import Length from 'components/Protein/Length';
 import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
@@ -27,6 +26,7 @@ import { getIProScanURL } from 'components/IPScan/Status';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideSummary from 'components/IPScan/NucleotideSummary';
 import IPScanTitle from './IPScanTitle';
+import SubJobsBrowser from '../SubJobsBrowser';
 import { Exporter } from 'components/Table';
 import { updateJobTitle } from 'actions/creators';
 
@@ -197,7 +197,6 @@ const SummaryIPScanJob = ({
   return (
     <div className={f('sections')}>
       <section>
-        <Title metadata={metadata} mainType="protein" />
         {!data.payload && payload?.['interproscan-version'] ? (
           <div className={f('callout', 'info', 'withicon')}>
             Using data stored in your browser
@@ -207,6 +206,7 @@ const SummaryIPScanJob = ({
           ipScanVersion={payload['interproscan-version']}
           callback={setVersionMismatch}
         />
+        <SubJobsBrowser />
         <NucleotideSummary payload={payload} />
         <IPScanTitle
           localTitle={localTitle}
@@ -339,10 +339,10 @@ const SummaryIPScanJob = ({
 };
 SummaryIPScanJob.propTypes = {
   accession: T.string.isRequired,
-  localID: T.string.isRequired,
+  localID: T.string,
   remoteID: T.string,
   localTitle: T.string,
-  status: T.string.isRequired,
+  status: T.string,
   data: dataPropType,
   localPayload: T.object,
   api: T.object,
@@ -375,11 +375,11 @@ const mapStateToProps = createSelector(
   jobSelector,
   (state) => state.settings.api,
   (state) => state.settings.ipScan,
-  (accession, { metadata: { localID, remoteID, status } }, api, ipScan) => ({
+  (accession, job, api, ipScan) => ({
     accession,
-    localID,
-    remoteID,
-    status,
+    localID: job?.metadata?.localID,
+    remoteID: job?.metadata?.remoteID,
+    status: job?.metadata?.status,
     api,
     ipScan,
   }),

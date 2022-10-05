@@ -47,7 +47,7 @@ import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
 // eslint-disable-next-line no-magic-numbers
 const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
 // eslint-disable-next-line no-magic-numbers
-const DEFAULT_LOOP_TIMEOUT = 1000 * 60; // one minute
+const DEFAULT_LOOP_TIMEOUT = 1000 * 10; // ten seconds
 // eslint-disable-next-line no-magic-numbers
 export const MAX_TIME_ON_SERVER = 1000 * 60 * 60 * 24 * 7; // one week
 
@@ -95,13 +95,78 @@ const createJobInDB = async (metadata /*: JobMetadata */, data) => {
   }
 };
 
-const updateJobInDB = async (metadata, data, title) => {
+const updateSequenceTitleDB = async (metadata, title) => {
   const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
+  const { localID } = metadata;
+
+  metaT.update(localID, (prev) => ({ ...prev, localTitle: title }));
+  dataT.update(localID, (prev) => ({
+    ...prev,
+    results: [
+      {
+        ...prev.results[0],
+        xref: [{ name: title, id: title.replaceAll(' ', '') }],
+      },
+    ],
+  }));
+};
+const updateJobInDB = async (metadata, data, dispatch /*: function */) => {
+  const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
+  const { remoteID, localID } = metadata;
   if (data) {
-    dataT.update(metadata.localID, (prev) => ({ ...prev, ...data }));
-    metadata.localTitle = title || data?.results?.[0]?.xref?.[0]?.name;
+    const prev = await dataT.get(metadata.localID);
+    const newData = {
+      ...prev,
+      ...data,
+      results: [data?.results?.[0]],
+    };
+    newData.originalInput = newData.input;
+    delete newData.input;
+
+    metadata.localTitle = data?.results?.[0]?.xref?.[0]?.name;
+    if (data?.results?.length > 1 && !remoteID.endsWith('-1')) {
+      const now = new Date();
+      metadata.group =
+        metadata.group ||
+        `${now.getFullYear()}${(now.getMonth() + 1)
+          .toString()
+          .padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}-${now
+          .getHours()
+          .toString()
+          .padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now
+          .getSeconds()
+          .toString()
+          .padStart(2, '0')}-${data.results.length}`;
+      metadata.remoteID = `${remoteID}-1`;
+      metadata.localID = `${localID}-1`;
+      metaT.delete(localID);
+      dataT.delete(localID);
+    }
+    dataT.set(newData, metadata.localID);
   }
   metaT.set(metadata, metadata.localID);
+
+  (Array.isArray(data?.results) ? data?.results : [])
+    .slice(1)
+    .forEach((result, i) => {
+      const newLocalID = `${localID}-${i + 2}`;
+      dataT.set(
+        { ...data, results: [result], localID: newLocalID },
+        newLocalID,
+      );
+      metaT.set(
+        {
+          ...metadata,
+          localID: newLocalID,
+          remoteID: `${remoteID}-${i + 2}`,
+          localTitle: result.xref?.[0]?.name,
+        },
+        newLocalID,
+      );
+    });
+  if (dispatch) {
+    rehydrateStoredJobs(dispatch);
+  }
 };
 
 const processImportedAttributes = (
@@ -332,7 +397,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       updateJobInDB(
         getState().jobs[action.job.metadata.localID].metadata,
         action.job.data,
-        null,
+        dispatch,
       );
     }
 
@@ -345,11 +410,11 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     }
 
     if (action.type === UPDATE_JOB_TITLE) {
-      updateJobInDB(
+      updateSequenceTitleDB(
         getState().jobs[action.job.metadata.localID].metadata,
-        action.job.data,
         action.value,
       );
+      rehydrateStoredJobs(dispatch);
     }
     if (action.type === KEEP_JOB_AS_LOCAL) {
       updateJobInDB({

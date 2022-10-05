@@ -169,7 +169,6 @@ export const setDBs /*: Set<Object> */ = new Set([
     name: 'pfam',
     dbName: 'Pfam',
     re: /^[Cc][lL][0-9]{4}$/,
-    url_template: 'http://pfam.xfam.org/clan/{id}',
   },
   {
     name: 'cdd',
@@ -592,7 +591,8 @@ export const resultTypeHandler /*: Handler */ = handlerConstructor({
     value: /^(interproscan|download)$/i,
   },
 });
-
+export const IPscanRegex =
+  /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}(-\d+)?|internal-[1-9]\d*-[1-9]\d*)|imported_file-.+(-\d+)$/;
 export const resultIPScanAccessionHandler /*: Handler */ = handlerConstructor({
   name: {
     value: 'resultIPScanAccessionHandler',
@@ -604,8 +604,7 @@ export const resultIPScanAccessionHandler /*: Handler */ = handlerConstructor({
     value: (value) => value,
   },
   regexp: {
-    value:
-      /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}|internal-[1-9]\d*-[1-9]\d*)|imported_file-.+-\d+$/,
+    value: IPscanRegex,
   },
 });
 

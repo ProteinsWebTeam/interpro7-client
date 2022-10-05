@@ -61,6 +61,9 @@
     color: var(--colors-dark);
   }
 }
+.mono {
+  font-family: var(--fonts-mono);
+}
 
 .dragging-overlay {
   position: absolute;

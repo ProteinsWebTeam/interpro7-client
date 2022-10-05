@@ -14,6 +14,7 @@ import RefreshButton from 'components/IPScan/RefreshButton';
 import ClearAllDialog from 'components/IPScan/ClearAllDialog';
 import ImportResultSearch from 'components/IPScan/ImportResultSearch';
 import Actions from 'components/IPScan/Actions';
+import GroupActions from 'components/IPScan/Actions/Group';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
@@ -173,6 +174,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           query={search}
           showTableIcon={false}
           shouldGroup={true}
+          groupActions={(group) => () => <GroupActions group={group} />}
         >
           <ExtraOptions>
             <DropDownButton label="Clear All" icon="&#xf1f8;">
@@ -186,23 +188,27 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
             </DropDownButton>
           </ExtraOptions>
           <Column
-            dataKey="localID"
+            dataKey="localTitle"
             isSearchable={true}
-            renderer={(localID /*: string */, row /*: Object */) => (
+            renderer={(localTitle /*: string */, row /*: Object */) => (
               <>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'result' },
-                      result: {
-                        type: 'InterProScan',
-                        accession: row.remoteID || localID,
+                <span style={{ marginRight: '1em' }}>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'result' },
+                        result: {
+                          type: 'InterProScan',
+                          accession: row.remoteID || row.localID,
+                        },
                       },
-                    },
-                  }}
-                >
-                  {row.remoteID || localID}{' '}
-                </Link>
+                    }}
+                  >
+                    {(localTitle === '∅' ? null : localTitle) ||
+                      row.remoteID ||
+                      row.localID}
+                  </Link>
+                </span>
                 {row.remoteID && !row.remoteID.startsWith('imported') && (
                   <CopyToClipboard
                     textToCopy={getIProScanURL(row.remoteID)}
@@ -213,9 +219,6 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
             )}
           >
             Results
-          </Column>
-          <Column dataKey="localTitle" isSearchable={true}>
-            Name
           </Column>
           <Column
             dataKey="times"

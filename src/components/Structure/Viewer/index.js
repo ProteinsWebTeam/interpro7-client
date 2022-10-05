@@ -219,6 +219,9 @@ class StructureView extends PureComponent /*:: <Props> */ {
       }
       if (this.props.selections?.length > 0) {
         this.highlightSelections(this.props.selections);
+      } else {
+        this.clearSelections();
+        this.applyChainIdTheme();
       }
     }
   }
@@ -298,6 +301,8 @@ class StructureView extends PureComponent /*:: <Props> */ {
                 PluginCommands.Canvas3D.SetSettings(this.viewer, {
                   settings: (props) => {
                     props.renderer.selectColor = Color(selection.colour);
+                    props.renderer.selectStrength = 0.8;
+                    props.marking.enabled = false;
                   },
                 });
               }
