@@ -16,9 +16,9 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
       >
         <EntryCard
           entry={
-            Object {
-              "extra_fields": Object {
-                "counters": Object {
+            {
+              "extra_fields": {
+                "counters": {
                   "domain_architectures": 0,
                   "proteins": 504,
                   "proteomes": 141,
@@ -27,10 +27,10 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
                   "taxa": 220,
                 },
               },
-              "metadata": Object {
+              "metadata": {
                 "accession": "IPR026652",
-                "member_databases": Object {
-                  "panther": Object {
+                "member_databases": {
+                  "panther": {
                     "PTHR46657": "FAMILY NOT NAMED",
                   },
                 },
@@ -45,16 +45,16 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
       <Memo(Connect(Link))
         className="button margin-bottom-none"
         to={
-          Object {
-            "description": Object {
-              "entry": Object {
+          {
+            "description": {
+              "entry": {
                 "db": "InterPro",
               },
-              "main": Object {
+              "main": {
                 "key": "entry",
               },
             },
-            "search": Object {
+            "search": {
               "latest_entries": "",
             },
           }

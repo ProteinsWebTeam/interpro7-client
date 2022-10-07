@@ -12,11 +12,11 @@ exports[`<SummaryEntry /> should render 1`] = `
         className="medium-8 large-8 columns"
       >
         <MemberDBSubtitle
-          dbInfo={Object {}}
+          dbInfo={{}}
           metadata={
-            Object {
+            {
               "accession": "IPR000001",
-              "counters": Object {
+              "counters": {
                 "domain_architectures": 511,
                 "matches": 44375,
                 "proteins": 6786,
@@ -25,23 +25,23 @@ exports[`<SummaryEntry /> should render 1`] = `
                 "structures": 698,
                 "taxa": 675,
               },
-              "cross_references": Object {},
-              "description": Array [
+              "cross_references": {},
+              "description": [
                 "<p>Kringle</p>",
               ],
-              "go_terms": Object {},
-              "literature": Object {},
-              "name": Object {
+              "go_terms": {},
+              "literature": {},
+              "name": {
                 "name": "Kringle",
                 "short": "Kringle",
               },
-              "overlaps_with": Array [
-                Object {
+              "overlaps_with": [
+                {
                   "accession": "IPR013806",
                   "name": "Kringle-like fold",
                   "type": "homologous_superfamily",
                 },
-                Object {
+                {
                   "accession": "IPR038178",
                   "name": "Kringle superfamily",
                   "type": "homologous_superfamily",
@@ -65,9 +65,9 @@ exports[`<SummaryEntry /> should render 1`] = `
         </p>
         <OverlappingEntries
           metadata={
-            Object {
+            {
               "accession": "IPR000001",
-              "counters": Object {
+              "counters": {
                 "domain_architectures": 511,
                 "matches": 44375,
                 "proteins": 6786,
@@ -76,23 +76,23 @@ exports[`<SummaryEntry /> should render 1`] = `
                 "structures": 698,
                 "taxa": 675,
               },
-              "cross_references": Object {},
-              "description": Array [
+              "cross_references": {},
+              "description": [
                 "<p>Kringle</p>",
               ],
-              "go_terms": Object {},
-              "literature": Object {},
-              "name": Object {
+              "go_terms": {},
+              "literature": {},
+              "name": {
                 "name": "Kringle",
                 "short": "Kringle",
               },
-              "overlaps_with": Array [
-                Object {
+              "overlaps_with": [
+                {
                   "accession": "IPR013806",
                   "name": "Kringle-like fold",
                   "type": "homologous_superfamily",
                 },
-                Object {
+                {
                   "accession": "IPR038178",
                   "name": "Kringle superfamily",
                   "type": "homologous_superfamily",
@@ -114,9 +114,9 @@ exports[`<SummaryEntry /> should render 1`] = `
           </h4>
           <Description
             accession="IPR000001"
-            literature={Array []}
+            literature={[]}
             textBlocks={
-              Array [
+              [
                 "<p>Kringle</p>",
               ]
             }
@@ -124,11 +124,11 @@ exports[`<SummaryEntry /> should render 1`] = `
         </React.Fragment>
       </div>
       <Memo(Connect(_SidePanel))
-        dbInfo={Object {}}
+        dbInfo={{}}
         metadata={
-          Object {
+          {
             "accession": "IPR000001",
-            "counters": Object {
+            "counters": {
               "domain_architectures": 511,
               "matches": 44375,
               "proteins": 6786,
@@ -137,23 +137,23 @@ exports[`<SummaryEntry /> should render 1`] = `
               "structures": 698,
               "taxa": 675,
             },
-            "cross_references": Object {},
-            "description": Array [
+            "cross_references": {},
+            "description": [
               "<p>Kringle</p>",
             ],
-            "go_terms": Object {},
-            "literature": Object {},
-            "name": Object {
+            "go_terms": {},
+            "literature": {},
+            "name": {
               "name": "Kringle",
               "short": "Kringle",
             },
-            "overlaps_with": Array [
-              Object {
+            "overlaps_with": [
+              {
                 "accession": "IPR013806",
                 "name": "Kringle-like fold",
                 "type": "homologous_superfamily",
               },
-              Object {
+              {
                 "accession": "IPR038178",
                 "name": "Kringle superfamily",
                 "type": "homologous_superfamily",
@@ -169,15 +169,15 @@ exports[`<SummaryEntry /> should render 1`] = `
   </section>
   <OtherSections
     citations={
-      Object {
-        "extra": Array [],
-        "included": Array [],
+      {
+        "extra": [],
+        "included": [],
       }
     }
     metadata={
-      Object {
+      {
         "accession": "IPR000001",
-        "counters": Object {
+        "counters": {
           "domain_architectures": 511,
           "matches": 44375,
           "proteins": 6786,
@@ -186,23 +186,23 @@ exports[`<SummaryEntry /> should render 1`] = `
           "structures": 698,
           "taxa": 675,
         },
-        "cross_references": Object {},
-        "description": Array [
+        "cross_references": {},
+        "description": [
           "<p>Kringle</p>",
         ],
-        "go_terms": Object {},
-        "literature": Object {},
-        "name": Object {
+        "go_terms": {},
+        "literature": {},
+        "name": {
           "name": "Kringle",
           "short": "Kringle",
         },
-        "overlaps_with": Array [
-          Object {
+        "overlaps_with": [
+          {
             "accession": "IPR013806",
             "name": "Kringle-like fold",
             "type": "homologous_superfamily",
           },
-          Object {
+          {
             "accession": "IPR038178",
             "name": "Kringle superfamily",
             "type": "homologous_superfamily",

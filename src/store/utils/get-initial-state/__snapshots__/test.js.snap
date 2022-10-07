@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getInitialState about 1`] = `
-Object {
-  "customLocation": Object {
-    "description": Object {
-      "entry": Object {
+{
+  "customLocation": {
+    "description": {
+      "entry": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -14,44 +14,44 @@ Object {
         "memberDBAccession": null,
         "order": null,
       },
-      "main": Object {
+      "main": {
         "key": null,
         "numberOfFilters": 0,
       },
-      "other": Array [
+      "other": [
         "about",
       ],
-      "protein": Object {
+      "protein": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "proteome": Object {
+      "proteome": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "result": Object {
+      "result": {
         "accession": null,
         "detail": null,
         "type": null,
       },
-      "search": Object {
+      "search": {
         "type": null,
         "value": null,
       },
-      "set": Object {
+      "set": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "structure": Object {
+      "structure": {
         "accession": null,
         "chain": null,
         "db": null,
@@ -59,7 +59,7 @@ Object {
         "isFilter": null,
         "order": null,
       },
-      "taxonomy": Object {
+      "taxonomy": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -68,17 +68,17 @@ Object {
       },
     },
     "hash": "",
-    "search": Object {},
+    "search": {},
   },
   "settings": undefined,
 }
 `;
 
 exports[`getInitialState browse entries 1`] = `
-Object {
-  "customLocation": Object {
-    "description": Object {
-      "entry": Object {
+{
+  "customLocation": {
+    "description": {
+      "entry": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -88,42 +88,42 @@ Object {
         "memberDBAccession": null,
         "order": null,
       },
-      "main": Object {
+      "main": {
         "key": "entry",
         "numberOfFilters": 0,
       },
-      "other": Array [],
-      "protein": Object {
+      "other": [],
+      "protein": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "proteome": Object {
+      "proteome": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "result": Object {
+      "result": {
         "accession": null,
         "detail": null,
         "type": null,
       },
-      "search": Object {
+      "search": {
         "type": null,
         "value": null,
       },
-      "set": Object {
+      "set": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "structure": Object {
+      "structure": {
         "accession": null,
         "chain": null,
         "db": null,
@@ -131,7 +131,7 @@ Object {
         "isFilter": null,
         "order": null,
       },
-      "taxonomy": Object {
+      "taxonomy": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -140,17 +140,17 @@ Object {
       },
     },
     "hash": "",
-    "search": Object {},
+    "search": {},
   },
   "settings": undefined,
 }
 `;
 
 exports[`getInitialState browse proteins 1`] = `
-Object {
-  "customLocation": Object {
-    "description": Object {
-      "entry": Object {
+{
+  "customLocation": {
+    "description": {
+      "entry": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -160,42 +160,42 @@ Object {
         "memberDBAccession": null,
         "order": null,
       },
-      "main": Object {
+      "main": {
         "key": "protein",
         "numberOfFilters": 0,
       },
-      "other": Array [],
-      "protein": Object {
+      "other": [],
+      "protein": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "proteome": Object {
+      "proteome": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "result": Object {
+      "result": {
         "accession": null,
         "detail": null,
         "type": null,
       },
-      "search": Object {
+      "search": {
         "type": null,
         "value": null,
       },
-      "set": Object {
+      "set": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "structure": Object {
+      "structure": {
         "accession": null,
         "chain": null,
         "db": null,
@@ -203,7 +203,7 @@ Object {
         "isFilter": null,
         "order": null,
       },
-      "taxonomy": Object {
+      "taxonomy": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -212,17 +212,17 @@ Object {
       },
     },
     "hash": "",
-    "search": Object {},
+    "search": {},
   },
   "settings": undefined,
 }
 `;
 
 exports[`getInitialState home 1`] = `
-Object {
-  "customLocation": Object {
-    "description": Object {
-      "entry": Object {
+{
+  "customLocation": {
+    "description": {
+      "entry": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -232,42 +232,42 @@ Object {
         "memberDBAccession": null,
         "order": null,
       },
-      "main": Object {
+      "main": {
         "key": null,
         "numberOfFilters": 0,
       },
-      "other": Array [],
-      "protein": Object {
+      "other": [],
+      "protein": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "proteome": Object {
+      "proteome": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "result": Object {
+      "result": {
         "accession": null,
         "detail": null,
         "type": null,
       },
-      "search": Object {
+      "search": {
         "type": null,
         "value": null,
       },
-      "set": Object {
+      "set": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "structure": Object {
+      "structure": {
         "accession": null,
         "chain": null,
         "db": null,
@@ -275,7 +275,7 @@ Object {
         "isFilter": null,
         "order": null,
       },
-      "taxonomy": Object {
+      "taxonomy": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -284,17 +284,17 @@ Object {
       },
     },
     "hash": "",
-    "search": Object {},
+    "search": {},
   },
   "settings": undefined,
 }
 `;
 
 exports[`getInitialState summary entry 1`] = `
-Object {
-  "customLocation": Object {
-    "description": Object {
-      "entry": Object {
+{
+  "customLocation": {
+    "description": {
+      "entry": {
         "accession": "IPR000001",
         "db": "InterPro",
         "detail": null,
@@ -304,42 +304,42 @@ Object {
         "memberDBAccession": null,
         "order": null,
       },
-      "main": Object {
+      "main": {
         "key": "entry",
         "numberOfFilters": 0,
       },
-      "other": Array [],
-      "protein": Object {
+      "other": [],
+      "protein": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "proteome": Object {
+      "proteome": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "result": Object {
+      "result": {
         "accession": null,
         "detail": null,
         "type": null,
       },
-      "search": Object {
+      "search": {
         "type": null,
         "value": null,
       },
-      "set": Object {
+      "set": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "structure": Object {
+      "structure": {
         "accession": null,
         "chain": null,
         "db": null,
@@ -347,7 +347,7 @@ Object {
         "isFilter": null,
         "order": null,
       },
-      "taxonomy": Object {
+      "taxonomy": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -356,17 +356,17 @@ Object {
       },
     },
     "hash": "",
-    "search": Object {},
+    "search": {},
   },
   "settings": undefined,
 }
 `;
 
 exports[`getInitialState summary protein 1`] = `
-Object {
-  "customLocation": Object {
-    "description": Object {
-      "entry": Object {
+{
+  "customLocation": {
+    "description": {
+      "entry": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -376,42 +376,42 @@ Object {
         "memberDBAccession": null,
         "order": null,
       },
-      "main": Object {
+      "main": {
         "key": "protein",
         "numberOfFilters": 0,
       },
-      "other": Array [],
-      "protein": Object {
+      "other": [],
+      "protein": {
         "accession": "A0A023GPI8",
         "db": "reviewed",
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "proteome": Object {
+      "proteome": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "result": Object {
+      "result": {
         "accession": null,
         "detail": null,
         "type": null,
       },
-      "search": Object {
+      "search": {
         "type": null,
         "value": null,
       },
-      "set": Object {
+      "set": {
         "accession": null,
         "db": null,
         "detail": null,
         "isFilter": null,
         "order": null,
       },
-      "structure": Object {
+      "structure": {
         "accession": null,
         "chain": null,
         "db": null,
@@ -419,7 +419,7 @@ Object {
         "isFilter": null,
         "order": null,
       },
-      "taxonomy": Object {
+      "taxonomy": {
         "accession": null,
         "db": null,
         "detail": null,
@@ -428,7 +428,7 @@ Object {
       },
     },
     "hash": "",
-    "search": Object {},
+    "search": {},
   },
   "settings": undefined,
 }

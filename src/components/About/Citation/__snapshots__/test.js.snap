@@ -7,7 +7,7 @@ exports[`<Citation /> should render 1`] = `
   </h3>
   <Memo(Loadable)
     data={
-      Object {
+      {
         "description": "Includes the most revelant scientific publications about Interpro",
         "name": "InterPro Publications Page",
       }

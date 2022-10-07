@@ -3,14 +3,14 @@
 exports[`<Embed /> should render with children as loading component 1`] = `
 <div
   style={
-    Object {
+    {
       "position": "relative",
     }
   }
 >
   <span
     style={
-      Object {
+      {
         "alignItems": "center",
         "bottom": 0,
         "display": "flex",
@@ -34,14 +34,14 @@ exports[`<Embed /> should render with children as loading component 1`] = `
 exports[`<Embed /> should render with default loading component 1`] = `
 <div
   style={
-    Object {
+    {
       "position": "relative",
     }
   }
 >
   <span
     style={
-      Object {
+      {
         "alignItems": "center",
         "bottom": 0,
         "display": "flex",

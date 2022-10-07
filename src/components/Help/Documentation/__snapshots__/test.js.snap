@@ -4,7 +4,7 @@ exports[`<Documentation /> should render 1`] = `
 <section>
   <Memo(Loadable)
     data={
-      Object {
+      {
         "description": "Includes links to the documentations for the different parts of our service",
         "name": "InterPro Documentation Page",
       }
@@ -111,12 +111,12 @@ exports[`<Documentation /> should render 1`] = `
             <li>
               <Memo(Connect(Link))
                 to={
-                  Object {
-                    "description": Object {
-                      "main": Object {
+                  {
+                    "description": {
+                      "main": {
                         "key": "result",
                       },
-                      "result": Object {
+                      "result": {
                         "type": "download",
                       },
                     },

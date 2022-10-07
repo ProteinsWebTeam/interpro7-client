@@ -5,19 +5,19 @@ exports[`<CookieBanner /> should render 1`] = `
   animateSelf={true}
   element="div"
   keyframes={
-    Object {
-      "opacity": Array [
+    {
+      "opacity": [
         0,
         1,
       ],
-      "transform": Array [
+      "transform": [
         "translateY(100%)",
         "translateY(0)",
       ],
     }
   }
   style={
-    Object {
+    {
       "background": "rgb(112, 115, 114)",
       "bottom": 0,
       "color": "#eee",
@@ -31,7 +31,7 @@ exports[`<CookieBanner /> should render 1`] = `
   <div
     className="row"
     style={
-      Object {
+      {
         "alignItems": "baseline",
         "display": "flex",
       }
@@ -45,7 +45,7 @@ exports[`<CookieBanner /> should render 1`] = `
       <Memo(Connect(Link))
         href="https://www.ebi.ac.uk/data-protection/privacy-notice/embl-ebi-public-website"
         style={
-          Object {
+          {
             "color": "#f8f8f8",
           }
         }
@@ -57,7 +57,7 @@ exports[`<CookieBanner /> should render 1`] = `
       <Memo(Connect(Link))
         href="https://www.ebi.ac.uk/about/terms-of-use"
         style={
-          Object {
+          {
             "color": "#f8f8f8",
           }
         }
@@ -73,7 +73,7 @@ exports[`<CookieBanner /> should render 1`] = `
       <button
         onClick={[Function]}
         style={
-          Object {
+          {
             "color": "#fff",
           }
         }

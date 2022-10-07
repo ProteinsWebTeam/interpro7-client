@@ -18,12 +18,12 @@ exports[`<EntriesOnStructure /> should render 1`] = `
           (
           <Memo(Connect(Link))
             to={
-              Object {
-                "description": Object {
-                  "main": Object {
+              {
+                "description": {
+                  "main": {
                     "key": "protein",
                   },
-                  "protein": Object {
+                  "protein": {
                     "accession": "p00735",
                     "db": "uniprot",
                   },
@@ -46,25 +46,25 @@ exports[`<EntriesOnStructure /> should render 1`] = `
         fixedHighlight="208:366"
         id="A-p00735"
         tracks={
-          Array [
-            Array [
+          [
+            [
               "Chain",
-              Array [
-                Object {
+              [
+                {
                   "accession": "A",
-                  "coordinates": Array [
-                    Array [
-                      Array [
+                  "coordinates": [
+                    [
+                      [
                         208,
                         366,
                       ],
                     ],
                   ],
                   "label": "Chain A",
-                  "locations": Array [
-                    Object {
-                      "fragments": Array [
-                        Object {
+                  "locations": [
+                    {
+                      "fragments": [
+                        {
                           "end": 366,
                           "start": 208,
                         },
@@ -77,30 +77,30 @@ exports[`<EntriesOnStructure /> should render 1`] = `
                 },
               ],
             ],
-            Array [
+            [
               "Secondary Structure",
-              Array [],
+              [],
             ],
-            Array [
+            [
               "Entries",
-              Array [
-                Object {
+              [
+                {
                   "accession": "IPR038178",
                   "chain": "A",
                   "children": undefined,
-                  "coordinates": Array [
-                    Array [
-                      Array [
+                  "coordinates": [
+                    [
+                      [
                         44,
                         199,
                       ],
                     ],
                   ],
                   "link": "/entry/interpro/IPR038178",
-                  "locations": Array [
-                    Object {
-                      "fragments": Array [
-                        Object {
+                  "locations": [
+                    {
+                      "fragments": [
+                        {
                           "dc-status": "CONTINUOUS",
                           "end": 199,
                           "start": 44,

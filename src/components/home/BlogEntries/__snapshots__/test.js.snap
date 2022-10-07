@@ -5,7 +5,7 @@ exports[`<BlogEntries /> Blog entries 1`] = `
   <ResizeObserverComponent
     element="div"
     measurements={
-      Array [
+      [
         "width",
       ]
     }
@@ -74,7 +74,7 @@ exports[`<BlogEntry /> Blog entry 1`] = `
     <div
       className="card-description"
       dangerouslySetInnerHTML={
-        Object {
+        {
           "__html": "About InterPro",
         }
       }

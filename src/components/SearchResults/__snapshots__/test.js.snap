@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ExactMatch /> search with  number 1  1`] = `
-Array [
+[
   <ExactMatchWrapper
     to={
-      Object {
-        "description": Object {
-          "entry": Object {
+      {
+        "description": {
+          "entry": {
             "accession": "IPR000001",
             "db": "interpro",
           },
-          "main": Object {
+          "main": {
             "key": "entry",
           },
         },
@@ -23,12 +23,12 @@ Array [
   </ExactMatchWrapper>,
   <ExactMatchWrapper
     to={
-      Object {
-        "description": Object {
-          "main": Object {
+      {
+        "description": {
+          "main": {
             "key": "taxonomy",
           },
-          "taxonomy": Object {
+          "taxonomy": {
             "accession": "1",
             "db": "uniprot",
           },
@@ -44,15 +44,15 @@ Array [
 `;
 
 exports[`<ExactMatch /> search with exact protein accession 1`] = `
-Array [
+[
   <ExactMatchWrapper
     to={
-      Object {
-        "description": Object {
-          "main": Object {
+      {
+        "description": {
+          "main": {
             "key": "protein",
           },
-          "protein": Object {
+          "protein": {
             "accession": "P99999",
             "db": "reviewed",
           },
@@ -68,19 +68,19 @@ Array [
 `;
 
 exports[`<ExactMatch /> search with gene CYC 1`] = `
-Array [
+[
   <ExactGeneMatchWrapper
     gene="CYC"
     matches={
-      Array [
-        Object {
-          "accessions": Array [
+      [
+        {
+          "accessions": [
             "O61734",
           ],
           "name": "Drosophila melanogaster",
         },
-        Object {
-          "accessions": Array [
+        {
+          "accessions": [
             "Q6IQM2",
           ],
           "name": "Danio rerio",
@@ -95,7 +95,7 @@ exports[`<SearchResults /> should render 1`] = `
 <Memo(Connect(UnconnectedErrorBoundary))>
   <Memo(Loadable)
     data={
-      Object {
+      {
         "description": "Text matches found in InterPro database",
         "name": "Search Results",
       }
@@ -108,16 +108,16 @@ exports[`<SearchResults /> should render 1`] = `
   <Table
     contentType="entry"
     dataTable={
-      Array [
-        Object {
-          "fields": Object {
-            "description": Array [
+      [
+        {
+          "fields": {
+            "description": [
               "Description",
             ],
-            "name": Array [
+            "name": [
               "Dual specificity protein phosphatase domain",
             ],
-            "source_database": Array [],
+            "source_database": [],
           },
           "id": "IPR020422",
           "source": "interpro",
@@ -126,7 +126,7 @@ exports[`<SearchResults /> should render 1`] = `
     }
     isStale={false}
     loading={false}
-    query={Object {}}
+    query={{}}
   >
     <Memo(Connect(HighlightToggler)) />
     <Memo(Connect(Exporter))>
@@ -163,7 +163,7 @@ exports[`<SearchResults /> should render 1`] = `
       dataKey="id"
       defaultKey="name"
       headerStyle={
-        Object {
+        {
           "width": "28%",
         }
       }
@@ -178,7 +178,7 @@ exports[`<SearchResults /> should render 1`] = `
     </Column>
     <Column
       cellStyle={
-        Object {
+        {
           "textAlign": "justify",
         }
       }

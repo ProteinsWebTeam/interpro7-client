@@ -39,7 +39,7 @@ exports[`<MemberDBSelector /> should render 1`] = `
         className="db-choice"
         data-testid="memberdb-filter-cdd"
         style={
-          Object {
+          {
             "color": "#addc58",
           }
         }
@@ -62,7 +62,7 @@ exports[`<MemberDBSelector /> should render 1`] = `
           className="label"
           loading={false}
           style={
-            Object {
+            {
               "background": false,
             }
           }

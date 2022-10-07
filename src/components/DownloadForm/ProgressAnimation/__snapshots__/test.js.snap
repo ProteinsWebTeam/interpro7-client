@@ -31,7 +31,7 @@ exports[`<ProgressAnimation /> should render 1`] = `
   <div
     className="main-container"
     style={
-      Object {
+      {
         "opacity": 0,
       }
     }
@@ -45,7 +45,7 @@ exports[`<ProgressAnimation /> should render 1`] = `
       <div
         className="moving-container absolute"
         style={
-          Object {
+          {
             "transform": "translateX(110.00000000000001%)",
           }
         }

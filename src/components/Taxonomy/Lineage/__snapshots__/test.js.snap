@@ -10,7 +10,7 @@ exports[`<Lineage /> should render 1`] = `
     <TaxIdOrName
       accession="1"
       name={
-        Object {
+        {
           "name": "root",
           "short": "root",
         }
@@ -26,7 +26,7 @@ exports[`<Lineage /> should render 1`] = `
     <TaxIdOrName
       accession="131567"
       name={
-        Object {
+        {
           "name": "cellular organisms",
           "short": "cellular organisms",
         }
@@ -42,7 +42,7 @@ exports[`<Lineage /> should render 1`] = `
     <TaxIdOrName
       accession="2"
       name={
-        Object {
+        {
           "name": "Bacteria",
           "short": "Bacteria (eubacteria)",
         }
@@ -58,7 +58,7 @@ exports[`<Lineage /> should render 1`] = `
     <TaxIdOrName
       accession="1224"
       name={
-        Object {
+        {
           "name": "Proteobacteria",
           "short": "Proteobacteria",
         }
@@ -74,7 +74,7 @@ exports[`<Lineage /> should render 1`] = `
     <TaxIdOrName
       accession="28211"
       name={
-        Object {
+        {
           "name": "Alphaproteobacteria",
           "short": "Alphaproteobacteria",
         }
@@ -90,7 +90,7 @@ exports[`<Lineage /> should render 1`] = `
     <TaxIdOrName
       accession="356"
       name={
-        Object {
+        {
           "name": "Rhizobiales",
           "short": "Rhizobiales (rhizobacteria)",
         }
@@ -106,7 +106,7 @@ exports[`<Lineage /> should render 1`] = `
     <TaxIdOrName
       accession="335928"
       name={
-        Object {
+        {
           "name": "Xanthobacteraceae",
           "short": "Xanthobacteraceae",
         }
@@ -122,7 +122,7 @@ exports[`<Lineage /> should render 1`] = `
     <TaxIdOrName
       accession="99"
       name={
-        Object {
+        {
           "name": "Ancylobacter",
           "short": "Ancylobacter",
         }
@@ -138,7 +138,7 @@ exports[`<Lineage /> should render 1`] = `
     <TaxIdOrName
       accession="100"
       name={
-        Object {
+        {
           "name": "Ancylobacter aquaticus",
           "short": "Ancylobacter aquaticus",
         }

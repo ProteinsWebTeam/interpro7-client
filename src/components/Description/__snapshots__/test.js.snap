@@ -6,29 +6,29 @@ exports[`<Description /> should render 1`] = `
   data-testid="description"
 >
   <Paragraph
-    literature={Array []}
+    literature={[]}
     p="a"
   />
   <hr
     style={
-      Object {
+      {
         "border": "1px solid transparent",
       }
     }
   />
   <Paragraph
-    literature={Array []}
+    literature={[]}
     p="b"
   />
   <hr
     style={
-      Object {
+      {
         "border": "1px solid transparent",
       }
     }
   />
   <Paragraph
-    literature={Array []}
+    literature={[]}
     p="c"
   />
 </div>

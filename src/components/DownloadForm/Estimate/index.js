@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import filesize from 'filesize';
+import { filesize } from 'filesize';
 
 import NumberComponent from 'components/NumberComponent';
 

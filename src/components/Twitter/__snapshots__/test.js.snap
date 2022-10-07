@@ -7,7 +7,7 @@ exports[`<Twitter /> should render 1`] = `
   <div
     className="columns"
     style={
-      Object {
+      {
         "padding": 0,
       }
     }

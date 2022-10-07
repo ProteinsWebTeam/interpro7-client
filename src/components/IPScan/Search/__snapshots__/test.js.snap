@@ -36,7 +36,7 @@ exports[`<IPScanSearch /> should render 1`] = `
               </h3>
               <Memo(Loadable)
                 data={
-                  Object {
+                  {
                     "description": "Search for InterPro matches in your seqeunce",
                     "name": "Search By Sequence",
                   }
@@ -56,58 +56,58 @@ exports[`<IPScanSearch /> should render 1`] = `
                     ariaDescribedBy="{{editor_id_placeholder}}"
                     blockRenderMap={
                       Immutable.Map {
-                        "ordered-list-item": Object {
+                        "ordered-list-item": {
                           "element": "li",
                           "wrapper": <ol
                             className="public-DraftStyleDefault-ol"
                           />,
                         },
-                        "header-six": Object {
+                        "header-six": {
                           "element": "h6",
                         },
-                        "section": Object {
+                        "section": {
                           "element": "section",
                         },
-                        "header-four": Object {
+                        "header-four": {
                           "element": "h4",
                         },
-                        "header-one": Object {
+                        "header-one": {
                           "element": "h1",
                         },
-                        "unordered-list-item": Object {
+                        "unordered-list-item": {
                           "element": "li",
                           "wrapper": <ul
                             className="public-DraftStyleDefault-ul"
                           />,
                         },
-                        "atomic": Object {
+                        "atomic": {
                           "element": "figure",
                         },
-                        "unstyled": Object {
-                          "aliasedElements": Array [
+                        "unstyled": {
+                          "aliasedElements": [
                             "p",
                           ],
                           "element": "div",
                         },
-                        "header-two": Object {
+                        "header-two": {
                           "element": "h2",
                         },
-                        "code-block": Object {
+                        "code-block": {
                           "element": "pre",
                           "wrapper": <pre
                             className="public-DraftStyleDefault-pre"
                           />,
                         },
-                        "blockquote": Object {
+                        "blockquote": {
                           "element": "blockquote",
                         },
-                        "header-five": Object {
+                        "header-five": {
                           "element": "h5",
                         },
-                        "article": Object {
+                        "article": {
                           "element": "article",
                         },
-                        "header-three": Object {
+                        "header-three": {
                           "element": "h3",
                         },
                       }
@@ -119,7 +119,7 @@ exports[`<IPScanSearch /> should render 1`] = `
                         "_immutable": Immutable.Record {
                           "allowUndo": true,
                           "currentContent": Immutable.Record {
-                            "entityMap": Object {
+                            "entityMap": {
                               "__add": [Function],
                               "__create": [Function],
                               "__get": [Function],
@@ -163,16 +163,16 @@ exports[`<IPScanSearch /> should render 1`] = `
                             },
                           },
                           "decorator": CompositeDraftDecorator {
-                            "_decorators": Array [
-                              Object {
+                            "_decorators": [
+                              {
                                 "component": [Function],
                                 "strategy": [Function],
                               },
-                              Object {
+                              {
                                 "component": [Function],
                                 "strategy": [Function],
                               },
-                              Object {
+                              {
                                 "component": [Function],
                                 "strategy": [Function],
                               },

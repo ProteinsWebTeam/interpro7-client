@@ -8,8 +8,8 @@ exports[`<InterProMenu /> should render 1`] = `
     <Memo(Connect(MenuItem))
       exact={true}
       to={
-        Object {
-          "description": Object {},
+        {
+          "description": {},
         }
       }
     >
@@ -20,9 +20,9 @@ exports[`<InterProMenu /> should render 1`] = `
   <li>
     <Memo(Connect(MenuItem))
       to={
-        Object {
-          "description": Object {
-            "main": Object {
+        {
+          "description": {
+            "main": {
               "key": "search",
             },
           },
@@ -62,9 +62,9 @@ exports[`<InterProMenu /> should render 1`] = `
   <li>
     <Memo(Connect(MenuItem))
       to={
-        Object {
-          "description": Object {
-            "other": Array [
+        {
+          "description": {
+            "other": [
               "release_notes",
             ],
           },
@@ -81,9 +81,9 @@ exports[`<InterProMenu /> should render 1`] = `
   <li>
     <Memo(Connect(MenuItem))
       to={
-        Object {
-          "description": Object {
-            "other": Array [
+        {
+          "description": {
+            "other": [
               "download",
             ],
           },
@@ -100,9 +100,9 @@ exports[`<InterProMenu /> should render 1`] = `
   <li>
     <Memo(Connect(MenuItem))
       to={
-        Object {
-          "description": Object {
-            "other": Array [
+        {
+          "description": {
+            "other": [
               "help",
             ],
           },
@@ -119,9 +119,9 @@ exports[`<InterProMenu /> should render 1`] = `
   <li>
     <Memo(Connect(MenuItem))
       to={
-        Object {
-          "description": Object {
-            "other": Array [
+        {
+          "description": {
+            "other": [
               "about",
             ],
           },
@@ -138,9 +138,9 @@ exports[`<InterProMenu /> should render 1`] = `
   <li>
     <Memo(Connect(MenuItem))
       to={
-        Object {
-          "description": Object {
-            "other": Array [
+        {
+          "description": {
+            "other": [
               "settings",
             ],
           },
