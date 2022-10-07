@@ -14,7 +14,7 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
     >
       <Memo(Loadable)
         data={
-          Object {
+          {
             "description": "Pfam description",
             "location": Location {
               "assign": [Function],
@@ -42,12 +42,12 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
         className="block"
         data-testid="member-database-pfam"
         to={
-          Object {
-            "description": Object {
-              "entry": Object {
+          {
+            "description": {
+              "entry": {
                 "db": "pfam",
               },
-              "main": Object {
+              "main": {
                 "key": "entry",
               },
             },
@@ -67,12 +67,12 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
             className="block"
             data-testid="member-database-pfam"
             to={
-              Object {
-                "description": Object {
-                  "entry": Object {
+              {
+                "description": {
+                  "entry": {
                     "db": "pfam",
                   },
-                  "main": Object {
+                  "main": {
                     "key": "entry",
                   },
                 },
@@ -124,12 +124,12 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
   <Memo(Connect(Link))
     className="button margin-bottom-none margin-top-large"
     to={
-      Object {
-        "description": Object {
-          "entry": Object {
+      {
+        "description": {
+          "entry": {
             "db": "InterPro",
           },
-          "main": Object {
+          "main": {
             "key": "entry",
           },
         },

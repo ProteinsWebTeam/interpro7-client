@@ -3,12 +3,12 @@
 exports[`<TaxIdOrName /> should render 1`] = `
 <Memo(Connect(Link))
   to={
-    Object {
-      "description": Object {
-        "main": Object {
+    {
+      "description": {
+        "main": {
           "key": "taxonomy",
         },
-        "taxonomy": Object {
+        "taxonomy": {
           "accession": "1",
           "db": "uniprot",
         },

@@ -37,20 +37,20 @@ exports[`<SummaryStructure /> should render 1`] = `
               >
                 <Memo(Connect(Link))
                   to={
-                    Object {
-                      "description": Object {
-                        "entry": Object {
+                    {
+                      "description": {
+                        "entry": {
                           "db": "InterPro",
                           "isFilter": true,
                         },
-                        "main": Object {
+                        "main": {
                           "key": "structure",
                         },
-                        "structure": Object {
+                        "structure": {
                           "db": "PDB",
                         },
                       },
-                      "search": Object {
+                      "search": {
                         "experiment_type": "x-ray",
                       },
                     }
@@ -195,9 +195,9 @@ exports[`<SummaryStructure /> should render 1`] = `
           <Memo(Connect(StructureView))
             id="102m"
             matches={
-              Array [
-                Object {
-                  "metadata": Object {
+              [
+                {
+                  "metadata": {
                     "accession": "G3DSA:1.10.490.10",
                     "go_terms": null,
                     "integrated": "IPR012292",
@@ -206,8 +206,8 @@ exports[`<SummaryStructure /> should render 1`] = `
                     "source_database": "cathgene3d",
                     "type": "homologous_superfamily",
                   },
-                  "structures": Array [
-                    Object {
+                  "structures": [
+                    {
                       "accession": "102m",
                       "chain": "A",
                     },

@@ -39,9 +39,9 @@ exports[`<ViewerOnDemand /> should render 1`] = `
            
           <Memo(Connect(Link))
             to={
-              Object {
-                "description": Object {
-                  "other": Array [
+              {
+                "description": {
+                  "other": [
                     "settings",
                   ],
                 },

@@ -6,7 +6,7 @@ exports[`<SearchByText /> should render 1`] = `
 >
   <Memo(Loadable)
     data={
-      Object {
+      {
         "description": "Search families, domains, proteins, keywords or GO terms",
         "name": "Search By Text",
       }
@@ -45,7 +45,7 @@ exports[`<SearchByText /> should render 1`] = `
           <div
             className="medium-8 columns neutral"
             style={
-              Object {
+              {
                 "float": "none",
               }
             }
@@ -113,12 +113,12 @@ exports[`<SearchByText /> should render 1`] = `
             <Memo(Connect(Link))
               className="secondary hollow button"
               to={
-                Object {
-                  "description": Object {
-                    "main": Object {
+                {
+                  "description": {
+                    "main": {
                       "key": "search",
                     },
-                    "search": Object {
+                    "search": {
                       "type": "text",
                     },
                   },

@@ -61,7 +61,7 @@ exports[`<Publication /> should render 1`] = `
               Sigrist, Ian Sillitoe, Granger G Sutton, Narmada Thanki, Paul
               D Thomas, Silvio C E Tosatto, Siew-Yit Yong and Robert D Finn"
       source={
-        Object {
+        {
           "details": "Jan 2019, (doi: 10.1093/nar/gky1100)",
           "journal": "Nucleic Acids Research",
         }
@@ -82,7 +82,7 @@ exports[`<Publication /> should render 1`] = `
               Wu, Christine Orengo, Ian Sillitoe, Huaiyu Mi, Paul D. Thomas
               and Robert D. Finn."
       source={
-        Object {
+        {
           "details": "Jan 2015, (doi:10.1093/nar/gku1243)",
           "journal": "Nucleic Acids Research",
         }
@@ -106,7 +106,7 @@ exports[`<Publication /> should render 1`] = `
               Tate; Manjulapramila Thimmajanarthanan; Paul D. Thomas; Cathy H.
               Wu; Corin Yeats; Siew-Yit Yong."
       source={
-        Object {
+        {
           "details": "2012, Vol. 40, Database issue (doi: 10.1093/nar/gkr948)",
           "journal": "Nucleic Acids Research",
         }
@@ -119,7 +119,7 @@ exports[`<Publication /> should render 1`] = `
               McAnulla, C., Mitchell, A., Sangrador-Vegas, A., Yong, S.,
               Mulder, N., Hunter, S."
       source={
-        Object {
+        {
           "details": "Vol. 2012 (doi: 10.1093/database/bar068)",
           "journal": "Database",
         }
@@ -130,7 +130,7 @@ exports[`<Publication /> should render 1`] = `
     <PreviousPublication
       authors="Jones P., Binns D., McMenamin C., McAnulla C., Hunter S."
       source={
-        Object {
+        {
           "details": "Vol. 2011 (doi: 10.1093/database/bar033)",
           "journal": "Database",
         }
@@ -141,7 +141,7 @@ exports[`<Publication /> should render 1`] = `
     <PreviousPublication
       authors="McDowall J, Hunter S."
       source={
-        Object {
+        {
           "details": "2011, 694:37-47. doi:10.1007/978-1-60761-977-2_3",
           "journal": "Methods Mol Biol.",
         }
@@ -158,7 +158,7 @@ exports[`<Publication /> should render 1`] = `
               Sigrist CJ, Thimma M, Thomas PD, Valentin F, Wilson D, Wu CH,
               Yeats C."
       source={
-        Object {
+        {
           "details": "2009 Jan, 37(Database issue):D211-5.doi: 10.1093/nar/gkn785.",
           "journal": "Nucleic Acids Res.",
         }
@@ -169,7 +169,7 @@ exports[`<Publication /> should render 1`] = `
     <PreviousPublication
       authors="Mulder NJ, Apweiler R."
       source={
-        Object {
+        {
           "details": "2008 Mar, Chapter 2:Unit 2.7. doi:10.1002/0471250953.bi0207s21.",
           "journal": "Curr Protoc Bioinformatics",
         }
@@ -180,7 +180,7 @@ exports[`<Publication /> should render 1`] = `
     <PreviousPublication
       authors="Mulder N, Apweiler R."
       source={
-        Object {
+        {
           "details": "2007,396:59-70.",
           "journal": "Methods Mol Biol",
         }
@@ -198,7 +198,7 @@ exports[`<Publication /> should render 1`] = `
               Nikolskaya AN, Orchard S, Orengo C, Petryszak R, Selengut JD,
               Sigrist CJ, Thomas PD, Valentin F, Wilson D, Wu CH, Yeats C."
       source={
-        Object {
+        {
           "details": "2007 Jan, 35(Database issue):D224-8.",
           "journal": "Nucleic Acids Research",
         }
@@ -210,7 +210,7 @@ exports[`<Publication /> should render 1`] = `
       authors="Quevillon E., Silventoinen V., Pillai S., Harte N., Mulder N.,
               Apweiler R., Lopez R."
       source={
-        Object {
+        {
           "details": "2005, Vol. 33, Issue suppl 2 (doi: 10.1093/nar/gki442)",
           "journal": "Nucleic Acids Research",
         }
@@ -228,7 +228,7 @@ exports[`<Publication /> should render 1`] = `
               Selengut J, Sigrist CJ, Silventoinen V, Studholme DJ, Vaughan R,
               Wu CH."
       source={
-        Object {
+        {
           "details": "33(Database issue):D201-5.",
           "journal": "Nucleic Acids Res",
         }
@@ -245,7 +245,7 @@ exports[`<Publication /> should render 1`] = `
               Orchard SE, Pagni M, Peyruc D, Ponting CP, Selengut JD, Servant
               F, Sigrist CJ, Vaughan R, Zdobnov EM."
       source={
-        Object {
+        {
           "details": "2003 Jan 1;31(1):315-8.",
           "journal": "Nucleic Acids Res",
         }
@@ -256,7 +256,7 @@ exports[`<Publication /> should render 1`] = `
     <PreviousPublication
       authors="Bateman A, Haft DH."
       source={
-        Object {
+        {
           "details": "2002 Sep;3(3):236-45.",
           "journal": "Brief Bioinform",
         }
@@ -272,7 +272,7 @@ exports[`<Publication /> should render 1`] = `
               Lopez R, Letunic I, Orchard S, Pagni M, Peyruc D, Ponting CP,
               Servant F, Sigrist CJ; InterPro Consortium."
       source={
-        Object {
+        {
           "details": "2002 Sep;3(3):225-35.",
           "journal": "Brief Bioinform",
         }
@@ -285,7 +285,7 @@ exports[`<Publication /> should render 1`] = `
               Y, Kersey P, Kriventseva EV, Mittard V, Mulder N, Oinn T, Phan
               I, Servant F, Zdobnov E."
       source={
-        Object {
+        {
           "details": "2002 Feb;18(2):374-5.",
           "journal": "Bioinformatics",
         }
@@ -296,7 +296,7 @@ exports[`<Publication /> should render 1`] = `
     <PreviousPublication
       authors="Zdobnov EM, Apweiler R."
       source={
-        Object {
+        {
           "details": "2001 Sep;17(9):847-8.",
           "journal": "Bioinformatics",
         }
@@ -312,7 +312,7 @@ exports[`<Publication /> should render 1`] = `
               TM, Pagni M, Servant F, Sigrist CJ, Zdobnov EM; InterPro
               Consortium."
       source={
-        Object {
+        {
           "details": "2000 Dec;16(12):1145-50.",
           "journal": "Bioinformatics",
         }
@@ -327,7 +327,7 @@ exports[`<Publication /> should render 1`] = `
               D, Kanapin A, Karavidopoulou Y, Lopez R, Marx B, Mulder NJ, Oinn
               TM, Pagni M, Servant F, Sigrist CJ, Zdobnov EM."
       source={
-        Object {
+        {
           "details": "2001 Jan 1;29(1):37-40.",
           "journal": "Nucleic Acids Res",
         }

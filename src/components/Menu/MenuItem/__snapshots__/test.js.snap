@@ -6,9 +6,9 @@ exports[`<MenuItem /> should render 1`] = `
   className="menu-item"
   onClick={[Function]}
   to={
-    Object {
-      "description": Object {
-        "other": Array [
+    {
+      "description": {
+        "other": [
           "help",
         ],
       },

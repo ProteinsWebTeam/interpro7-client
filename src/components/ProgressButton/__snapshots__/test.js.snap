@@ -41,7 +41,7 @@ exports[`<ProgressButton /> should render, first step 1`] = `
         height="100"
         width="60"
         x="30"
-        xlinkHref={Object {}}
+        xlinkHref={{}}
         y="10"
       />
       <image
@@ -49,7 +49,7 @@ exports[`<ProgressButton /> should render, first step 1`] = `
         height="100"
         width="60"
         x="30"
-        xlinkHref={Object {}}
+        xlinkHref={{}}
         y="10"
       />
     </g>
@@ -98,7 +98,7 @@ exports[`<ProgressButton /> should render, with failure 1`] = `
         height="100"
         width="60"
         x="30"
-        xlinkHref={Object {}}
+        xlinkHref={{}}
         y="10"
       />
       <image
@@ -106,7 +106,7 @@ exports[`<ProgressButton /> should render, with failure 1`] = `
         height="100"
         width="60"
         x="30"
-        xlinkHref={Object {}}
+        xlinkHref={{}}
         y="10"
       />
     </g>
@@ -155,7 +155,7 @@ exports[`<ProgressButton /> should render, with progress 1`] = `
         height="100"
         width="60"
         x="30"
-        xlinkHref={Object {}}
+        xlinkHref={{}}
         y="10"
       />
       <image
@@ -163,7 +163,7 @@ exports[`<ProgressButton /> should render, with progress 1`] = `
         height="100"
         width="60"
         x="30"
-        xlinkHref={Object {}}
+        xlinkHref={{}}
         y="10"
       />
     </g>
@@ -212,7 +212,7 @@ exports[`<ProgressButton /> should render, with success 1`] = `
         height="100"
         width="60"
         x="30"
-        xlinkHref={Object {}}
+        xlinkHref={{}}
         y="10"
       />
       <image
@@ -220,7 +220,7 @@ exports[`<ProgressButton /> should render, with success 1`] = `
         height="100"
         width="60"
         x="30"
-        xlinkHref={Object {}}
+        xlinkHref={{}}
         y="10"
       />
     </g>

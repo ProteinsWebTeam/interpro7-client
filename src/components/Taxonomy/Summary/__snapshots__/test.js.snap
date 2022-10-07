@@ -37,7 +37,7 @@ exports[`<SummaryTaxonomy /> should render 1`] = `
         </tr>
         <Memo(Loadable)
           data={
-            Object {
+            {
               "name": "root",
               "taxId": "1",
             }
@@ -55,24 +55,24 @@ exports[`<SummaryTaxonomy /> should render 1`] = `
             <Lineage
               lineage=" 1 131567 "
               names={
-                Object {
-                  "1": Object {
+                {
+                  "1": {
                     "name": "root",
                     "short": "root",
                   },
-                  "131567": Object {
+                  "131567": {
                     "name": "cellular organisms",
                     "short": "cellular organisms",
                   },
-                  "2": Object {
+                  "2": {
                     "name": "Bacteria",
                     "short": "Bacteria (eubacteria)",
                   },
-                  "2157": Object {
+                  "2157": {
                     "name": "Archaea",
                     "short": "Archaea",
                   },
-                  "2759": Object {
+                  "2759": {
                     "name": "Eukaryota",
                     "short": "Eukaryota (eucaryotes)",
                   },
@@ -90,31 +90,31 @@ exports[`<SummaryTaxonomy /> should render 1`] = `
           >
             <Children
               names={
-                Object {
-                  "1": Object {
+                {
+                  "1": {
                     "name": "root",
                     "short": "root",
                   },
-                  "131567": Object {
+                  "131567": {
                     "name": "cellular organisms",
                     "short": "cellular organisms",
                   },
-                  "2": Object {
+                  "2": {
                     "name": "Bacteria",
                     "short": "Bacteria (eubacteria)",
                   },
-                  "2157": Object {
+                  "2157": {
                     "name": "Archaea",
                     "short": "Archaea",
                   },
-                  "2759": Object {
+                  "2759": {
                     "name": "Eukaryota",
                     "short": "Eukaryota (eucaryotes)",
                   },
                 }
               }
               taxChildren={
-                Array [
+                [
                   "2",
                   "2157",
                   "2759",

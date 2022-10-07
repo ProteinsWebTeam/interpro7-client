@@ -7,7 +7,7 @@ exports[`<Tutorial /> should render 1`] = `
   </h3>
   <Memo(Loadable)
     data={
-      Object {
+      {
         "description": "A number of online tutorials relating to InterPro are available",
         "name": "InterPro Help: Tutorials",
       }
@@ -385,7 +385,7 @@ exports[`<Tutorial /> should render 1`] = `
     </h3>
     <ul
       style={
-        Object {
+        {
           "listStyleType": "none",
           "margin": 0,
         }

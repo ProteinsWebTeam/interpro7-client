@@ -13,16 +13,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-domain"
       to={
-        Object {
-          "description": Object {
-            "entry": Object {
+        {
+          "description": {
+            "entry": {
               "db": "InterPro",
             },
-            "main": Object {
+            "main": {
               "key": "entry",
             },
           },
-          "search": Object {
+          "search": {
             "type": "domain",
           },
         }
@@ -40,7 +40,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
           dimension="4em"
           role="listitem"
           style={
-            Object {
+            {
               "display": "block",
               "paddingTop": "1rem",
             }
@@ -76,16 +76,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-family"
       to={
-        Object {
-          "description": Object {
-            "entry": Object {
+        {
+          "description": {
+            "entry": {
               "db": "InterPro",
             },
-            "main": Object {
+            "main": {
               "key": "entry",
             },
           },
-          "search": Object {
+          "search": {
             "type": "family",
           },
         }
@@ -104,7 +104,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
           dimension="4em"
           role="listitem"
           style={
-            Object {
+            {
               "display": "block",
               "paddingTop": "1rem",
             }
@@ -140,16 +140,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-homologous_superfamily"
       to={
-        Object {
-          "description": Object {
-            "entry": Object {
+        {
+          "description": {
+            "entry": {
               "db": "InterPro",
             },
-            "main": Object {
+            "main": {
               "key": "entry",
             },
           },
-          "search": Object {
+          "search": {
             "type": "homologous_superfamily",
           },
         }
@@ -163,7 +163,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
           dimension="4em"
           role="listitem"
           style={
-            Object {
+            {
               "display": "block",
               "paddingTop": "1rem",
             }
@@ -199,16 +199,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-repeat"
       to={
-        Object {
-          "description": Object {
-            "entry": Object {
+        {
+          "description": {
+            "entry": {
               "db": "InterPro",
             },
-            "main": Object {
+            "main": {
               "key": "entry",
             },
           },
-          "search": Object {
+          "search": {
             "type": "repeat",
           },
         }
@@ -225,7 +225,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
           dimension="4em"
           role="listitem"
           style={
-            Object {
+            {
               "display": "block",
               "paddingTop": "1rem",
             }
@@ -261,16 +261,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-conserved_site"
       to={
-        Object {
-          "description": Object {
-            "entry": Object {
+        {
+          "description": {
+            "entry": {
               "db": "InterPro",
             },
-            "main": Object {
+            "main": {
               "key": "entry",
             },
           },
-          "search": Object {
+          "search": {
             "type": "conserved_site",
           },
         }
@@ -286,7 +286,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
           dimension="4em"
           role="listitem"
           style={
-            Object {
+            {
               "display": "block",
               "paddingTop": "1rem",
             }
@@ -322,16 +322,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-active_site"
       to={
-        Object {
-          "description": Object {
-            "entry": Object {
+        {
+          "description": {
+            "entry": {
               "db": "InterPro",
             },
-            "main": Object {
+            "main": {
               "key": "entry",
             },
           },
-          "search": Object {
+          "search": {
             "type": "active_site",
           },
         }
@@ -347,7 +347,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
           dimension="4em"
           role="listitem"
           style={
-            Object {
+            {
               "display": "block",
               "paddingTop": "1rem",
             }
@@ -383,16 +383,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-binding_site"
       to={
-        Object {
-          "description": Object {
-            "entry": Object {
+        {
+          "description": {
+            "entry": {
               "db": "InterPro",
             },
-            "main": Object {
+            "main": {
               "key": "entry",
             },
           },
-          "search": Object {
+          "search": {
             "type": "binding_site",
           },
         }
@@ -408,7 +408,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
           dimension="4em"
           role="listitem"
           style={
-            Object {
+            {
               "display": "block",
               "paddingTop": "1rem",
             }
@@ -444,16 +444,16 @@ exports[`<ByEntryType /> Entry types 1`] = `
       className="columns medium-4 large-4 text-center block"
       data-testid="entry-ptm"
       to={
-        Object {
-          "description": Object {
-            "entry": Object {
+        {
+          "description": {
+            "entry": {
               "db": "InterPro",
             },
-            "main": Object {
+            "main": {
               "key": "entry",
             },
           },
-          "search": Object {
+          "search": {
             "type": "ptm",
           },
         }
@@ -470,7 +470,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
           dimension="4em"
           role="listitem"
           style={
-            Object {
+            {
               "display": "block",
               "paddingTop": "1rem",
             }
@@ -506,12 +506,12 @@ exports[`<ByEntryType /> Entry types 1`] = `
   <Memo(Connect(Link))
     className="button margin-bottom-none margin-top-large"
     to={
-      Object {
-        "description": Object {
-          "entry": Object {
+      {
+        "description": {
+          "entry": {
             "db": "InterPro",
           },
-          "main": Object {
+          "main": {
             "key": "entry",
           },
         },

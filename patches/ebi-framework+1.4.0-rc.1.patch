@@ -1,0 +1,13 @@
+diff --git a/node_modules/ebi-framework/css/ebi-global.css b/node_modules/ebi-framework/css/ebi-global.css
+index 992d34e..ea45d11 100644
+--- a/node_modules/ebi-framework/css/ebi-global.css
++++ b/node_modules/ebi-framework/css/ebi-global.css
+@@ -1931,7 +1931,7 @@ ul.no-bullet, ol.no-bullet {
+   * {
+     background: transparent !important;
+     color: black !important;
+-    color-adjust: economy;
++    print-color-adjust: economy;
+     box-shadow: none !important;
+     text-shadow: none !important; }
+   .show-for-print {

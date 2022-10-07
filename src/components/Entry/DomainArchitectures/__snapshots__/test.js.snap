@@ -36,7 +36,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
     >
       <Memo(Loadable)
         data={
-          Object {
+          {
             "ida": "PF00594:IPR000294-PF00051:IPR000001-PF00051:IPR000001-PF09396:IPR018992-PF00089:IPR001254",
             "ida_id": "f4536d89e1b17ef8000602879b888026d22d1348",
             "unique_proteins": 301,
@@ -47,20 +47,20 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
       <div>
         <Memo(Connect(Link))
           to={
-            Object {
-              "description": Object {
-                "entry": Object {
+            {
+              "description": {
+                "entry": {
                   "accession": "IPR000001",
                   "db": "pfam",
                 },
-                "main": Object {
+                "main": {
                   "key": "protein",
                 },
-                "protein": Object {
+                "protein": {
                   "db": "UniProt",
                 },
               },
-              "search": Object {
+              "search": {
                 "ida": "f4536d89e1b17ef8000602879b888026d22d1348",
               },
             }
@@ -79,7 +79,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
       </div>
       <TextIDA
         accessions={
-          Array [
+          [
             "PF00594",
             "PF00051",
             "PF00051",
@@ -90,8 +90,8 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
       />
       <IDAProtVista
         databases={
-          Object {
-            "interpro": Object {
+          {
+            "interpro": {
               "canonical": "interpro",
               "name": "InterPro",
               "releaseDate": "2019-07-04T00:00:00Z",
@@ -101,19 +101,19 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
           }
         }
         highlight={
-          Array [
+          [
             "IPR000001",
           ]
         }
         length={1000}
         matches={
-          Array [
-            Object {
+          [
+            {
               "accession": "PF00594",
-              "locations": Array [
-                Object {
-                  "fragments": Array [
-                    Object {
+              "locations": [
+                {
+                  "fragments": [
+                    {
                       "end": 199,
                       "start": 5,
                     },
@@ -122,20 +122,20 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
               ],
               "unintegrated": false,
             },
-            Object {
+            {
               "accession": "PF00051",
-              "locations": Array [
-                Object {
-                  "fragments": Array [
-                    Object {
+              "locations": [
+                {
+                  "fragments": [
+                    {
                       "end": 398,
                       "start": 204,
                     },
                   ],
                 },
-                Object {
-                  "fragments": Array [
-                    Object {
+                {
+                  "fragments": [
+                    {
                       "end": 597,
                       "start": 403,
                     },
@@ -144,12 +144,12 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
               ],
               "unintegrated": false,
             },
-            Object {
+            {
               "accession": "PF09396",
-              "locations": Array [
-                Object {
-                  "fragments": Array [
-                    Object {
+              "locations": [
+                {
+                  "fragments": [
+                    {
                       "end": 796,
                       "start": 602,
                     },
@@ -158,12 +158,12 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
               ],
               "unintegrated": false,
             },
-            Object {
+            {
               "accession": "PF00089",
-              "locations": Array [
-                Object {
-                  "fragments": Array [
-                    Object {
+              "locations": [
+                {
+                  "fragments": [
+                    {
                       "end": 995,
                       "start": 801,
                     },
@@ -178,7 +178,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
     </div>
     <Footer
       actualSize={511}
-      pagination={Object {}}
+      pagination={{}}
       withPageSizeSelector={true}
     />
   </div>

@@ -370,7 +370,7 @@ const rules = {
   // Prevent using string references
   'react/no-string-refs': 1,
   // Prevent usage of unknown DOM property
-  'react/no-unknown-property': 2,
+  'react/no-unknown-property': [2, { ignore: ['inert'] }],
   // Require ES6 class declarations over React.createClass
   'react/prefer-es6-class': 2,
   // Prevent missing props validation in a React component definition

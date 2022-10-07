@@ -34,7 +34,7 @@ exports[`<ContributingSignatures /> should render 1`] = `
           <React.Fragment>
             <Memo(Loadable)
               data={
-                Object {
+                {
                   "db": "pfam",
                   "name": "PF00051",
                 }
