@@ -175,6 +175,9 @@ export const getReversedUrl = createSelector(
         page_size: search.page_size || settingsPageSize,
       },
     });
+    if (description.main.key === 'set' && description?.entry?.isFilter) {
+      url = url.replace('counters', 'counters,short_name');
+    }
     if (description.main.key === 'entry' && newMain === 'taxonomy') {
       url = url.replace('/entry/', '/protein/entry/');
     }
