@@ -22,7 +22,6 @@
 }
 
 .track-length {
-  width: var(--track-space, 85%);
   display: flex;
   justify-content: space-between;
   & > .note {
