@@ -1,4 +1,4 @@
-/* eslint no-magic-numbers: [1, {ignore: [0, 1, 2, 3, 10]}]*/
+/* eslint no-magic-numbers: [1, {ignore: [0, 1, 2, 100]}]*/
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -41,6 +41,7 @@ const SchemaOrgData = loadable({
 
 const FAKE_PROTEIN_LENGTH = 1000;
 const GAP_BETWEEN_DOMAINS = 5;
+const MAX_PERC_WIDTH = 95; // Just to reseve a bit for the labels
 
 const schemaProcessData = (data) => ({
   '@id': '@additionalProperty',
@@ -104,7 +105,12 @@ export const ida2json = (
   };
   return obj;
 };
-
+const getMaxLength = (idaResults) => {
+  const max = Math.max(
+    ...idaResults.map((result) => result?.representative?.length || 0),
+  );
+  return max === 0 ? FAKE_PROTEIN_LENGTH : 100 * Math.ceil(max / 100);
+};
 export const TextIDA = ({ accessions } /*: {accessions: Array<string>} */) => (
   <div style={{ display: 'flex' }}>
     <div>
@@ -175,7 +181,15 @@ export class IDAProtVista extends ProtVistaMatches {
   }
 
   render() {
-    const { matches, length, databases, highlight = [] } = this.props;
+    const {
+      matches,
+      length,
+      maxLength,
+      databases,
+      highlight = [],
+    } = this.props;
+
+    const width = `${(MAX_PERC_WIDTH * length) / maxLength}%`;
     return (
       <div className={f('ida-protvista')}>
         {matches.map((d, i) => (
@@ -184,6 +198,9 @@ export class IDAProtVista extends ProtVistaMatches {
               className={f('track-component', {
                 highlight: highlight.indexOf(d.accession) >= 0,
               })}
+              style={{
+                width,
+              }}
             >
               <DynamicTooltip
                 type="entry"
@@ -230,7 +247,12 @@ export class IDAProtVista extends ProtVistaMatches {
           </div>
         ))}
         <div className={f('track-row')}>
-          <div className={f('track-length')}>
+          <div
+            className={f('track-length')}
+            style={{
+              width,
+            }}
+          >
             <div className={f('note')} />
             <div className={f('length')}>
               <NumberComponent noTitle>{length}</NumberComponent>
@@ -337,6 +359,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
         </>
       );
     }
+    const maxLength = getMaxLength(payload.results || []);
     return (
       <div className={f('row')}>
         <div className={f('columns')}>
@@ -393,6 +416,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                 <IDAProtVista
                   matches={idaObj.domains}
                   length={idaObj.length}
+                  maxLength={maxLength}
                   databases={dataDB.payload.databases}
                   highlight={toHighlight}
                 />
