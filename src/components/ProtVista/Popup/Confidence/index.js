@@ -3,19 +3,25 @@ import React from 'react';
 import T from 'prop-types';
 
 import ColorScale from '../ColorScale';
+
+const levels = {
+  H: 'Very high',
+  M: 'Confident',
+  L: 'Low',
+  D: 'Very Low',
+};
 /*::
   import type {PopupDetail} from '../index.js';
 */
-const HydroPopup = ({ detail } /*: {detail: PopupDetail} */) => {
+const ConfidencePopup = ({ detail } /*: {detail: PopupDetail} */) => {
   const element = detail?.target?.closest('protvista-coloured-sequence');
   if (!element) return null;
+  const aa = detail.feature.aa || '';
   return (
     <section>
-      <h6>
-        Residue {detail.feature.start}: {detail.feature.aa}
-      </h6>
+      <h6>Residue {detail.feature.start}</h6>
       <div>
-        <b>Hydrophobicity:</b> {detail.feature.value}
+        <b>{aa ? levels[aa] : '-'}</b>
         <br />
         <br />
         <ColorScale {...(element /*: any */).colorScale} />
@@ -24,11 +30,11 @@ const HydroPopup = ({ detail } /*: {detail: PopupDetail} */) => {
     </section>
   );
 };
-HydroPopup.propTypes = {
+ConfidencePopup.propTypes = {
   detail: T.shape({
     feature: T.object,
     target: T.any,
   }),
 };
 
-export default HydroPopup;
+export default ConfidencePopup;

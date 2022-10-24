@@ -11,7 +11,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { Genome3dLink } from 'components/ExtLink';
+import { Genome3dLink, AlphafoldLink } from 'components/ExtLink';
 import { FunFamLink } from 'subPages/Subfamilies';
 
 import ProtVistaManager from 'protvista-manager';
@@ -267,22 +267,21 @@ export class ProtVista extends Component /*:: <Props, State> */ {
 
     for (const type of data) {
       for (const d of type[1]) {
-        const tmp =
-          d.type === 'sequence_conservation'
-            ? d.data
-            : (d.entry_protein_locations || d.locations).map((loc) => ({
-                accession: d.accession,
-                name: d.name,
-                source_database: d.source_database,
-                locations: [loc],
-                color: getTrackColor(d, this.props.colorDomainsBy),
-                entry_type: d.entry_type,
-                type: d.type || 'entry',
-                residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
-                chain: d.chain,
-                protein: d.protein,
-                confidence: loc.confidence,
-              }));
+        const tmp = ['sequence_conservation', 'confidence'].includes(d.type)
+          ? d.data
+          : (d.entry_protein_locations || d.locations).map((loc) => ({
+              accession: d.accession,
+              name: d.name,
+              source_database: d.source_database,
+              locations: [loc],
+              color: getTrackColor(d, this.props.colorDomainsBy),
+              entry_type: d.entry_type,
+              type: d.type || 'entry',
+              residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
+              chain: d.chain,
+              protein: d.protein,
+              confidence: loc.confidence,
+            }));
         const children = d.children
           ? d.children.map((child) => ({
               accession: child.accession,
@@ -311,7 +310,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             }))
           : null;
         if (tmp.length > 0) {
-          const isNewElement = !this.web_tracks[d.accession]._data;
+          const isNewElement =
+            !this.web_tracks[d.accession]._data &&
+            !this.web_tracks[d.accession].sequence;
           this.web_tracks[d.accession].data = tmp;
           if (this.props.fixedHighlight)
             this.web_tracks[d.accession].fixedHighlight =
@@ -388,7 +389,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                 detail.target,
                 this._popperRef.current,
                 {
-                  placement: this._isPopperTop ? 'top' : 'bottom',
+                  // placement: this._isPopperTop ? 'top' : 'bottom',
                   applyStyle: { enabled: false },
                 },
               );
@@ -467,13 +468,13 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
-  renderLabels(entry) {
-    const { expandedTrack, isPrinting } = this.state;
+  renderExceptionalLabels(entry) {
     const { dataDB, id } = this.props;
     let databases = {};
     if (dataDB.payload) {
       databases = dataDB.payload.databases;
     }
+
     if (entry.source_database === 'mobidblt')
       return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
     if (entry.source_database === 'funfam') {
@@ -493,6 +494,13 @@ export class ProtVista extends Component /*:: <Props, State> */ {
         >
           N: {entry.accession}
         </Link>
+      );
+    }
+    if (entry.source_database === 'alphafold') {
+      return (
+        <AlphafoldLink id={entry.protein} className={f('ext')}>
+          pLDDT
+        </AlphafoldLink>
       );
     }
     if (entry.type === 'residue')
@@ -520,70 +528,77 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       );
     }
     if (entry.accession && entry.accession.startsWith('G3D:')) {
-      // entry.accession = G3D:{entry.source_database}-PREDICTED... entry.source_database is what had to be shown
       return (
         <Genome3dLink id={entry.protein}>{entry.source_database}</Genome3dLink>
       );
     }
+    return null;
+  }
+
+  renderLabels(entry) {
+    const { expandedTrack, isPrinting } = this.state;
+
     const key /*: string */ =
       entry.source_database === 'pdb' ? 'structure' : 'entry';
     return (
-      <>
-        {isPrinting ? (
-          <b>{this.renderSwitch(this.props.label, entry)}</b>
-        ) : (
-          <Link
-            to={{
-              description: {
-                main: {
-                  key,
+      this.renderExceptionalLabels(entry) || (
+        <>
+          {isPrinting ? (
+            <b>{this.renderSwitch(this.props.label, entry)}</b>
+          ) : (
+            <Link
+              to={{
+                description: {
+                  main: {
+                    key,
+                  },
+                  [key]: {
+                    db: entry.source_database,
+                    accession: entry.accession.startsWith('residue:')
+                      ? entry.accession.split('residue:')[1]
+                      : entry.accession,
+                  },
                 },
-                [key]: {
-                  db: entry.source_database,
-                  accession: entry.accession.startsWith('residue:')
-                    ? entry.accession.split('residue:')[1]
-                    : entry.accession,
-                },
-              },
-            }}
+              }}
+            >
+              {this.renderSwitch(this.props.label, entry)}
+            </Link>
+          )}
+          <div
+            className={f({
+              hide: !expandedTrack[entry.accession],
+            })}
           >
-            {this.renderSwitch(this.props.label, entry)}
-          </Link>
-        )}
-        <div
-          className={f({
-            hide: !expandedTrack[entry.accession],
-          })}
-        >
-          {this.renderResidueLabels(entry)}
-          {entry.children &&
-            entry.children.map((d) => (
-              <div
-                key={`main_${d.accession}`}
-                className={f('track-accession-child')}
-              >
-                {isPrinting ? (
-                  this.renderSwitch(this.props.label, d)
-                ) : (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: {
-                          db: d.source_database,
-                          accession: d.accession,
+            {this.renderResidueLabels(entry)}
+            {entry.children &&
+              entry.children.map((d) => (
+                <div
+                  key={`main_${d.accession}`}
+                  className={f('track-accession-child')}
+                >
+                  {isPrinting ? (
+                    this.renderSwitch(this.props.label, d)
+                  ) : (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: {
+                            db: d.source_database,
+                            accession: d.accession,
+                          },
                         },
-                      },
-                    }}
-                  >
-                    {this.renderSwitch(this.props.label, d)}
-                  </Link>
-                )}
-                {this.renderResidueLabels(d)}
-              </div>
-            ))}
-        </div>
-      </>
+                      }}
+                    >
+                      {this.renderSwitch(this.props.label, d)}
+                    </Link>
+                  )}
+                  {this.renderResidueLabels(d)}
+                </div>
+              ))}
+          </div>
+        </>
+      )
     );
   }
 
@@ -705,6 +720,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   color_range="#0000FF:-3,#ffdd00:3"
                   highlight-event="onmouseover"
                   use-ctrl-to-zoom
+                  class="hydro"
                 />
               </div>
 
@@ -764,6 +780,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                               >
                                 {entry.type === 'secondary_structure' ||
                                 entry.type === 'sequence_conservation' ||
+                                entry.type === 'confidence' ||
                                 entry.type === 'residue' ? (
                                   <div
                                     className={f(
@@ -811,6 +828,23 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                           (this.web_tracks[entry.accession] = e)
                                         }
                                         highlight-event="onmouseover"
+                                        use-ctrl-to-zoom
+                                      />
+                                    )}
+                                    {entry.type === 'confidence' && (
+                                      <protvista-coloured-sequence
+                                        ref={(e) =>
+                                          (this.web_tracks[entry.accession] = e)
+                                        }
+                                        id={`track_${entry.accession}`}
+                                        length={length}
+                                        displaystart="1"
+                                        displayend={length}
+                                        scale="H:90,M:70,L:50,D:0"
+                                        height="12"
+                                        color_range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
+                                        highlight-event="onmouseover"
+                                        class="confidence"
                                         use-ctrl-to-zoom
                                       />
                                     )}
