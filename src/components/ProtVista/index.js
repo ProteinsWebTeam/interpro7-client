@@ -723,6 +723,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   class="hydro"
                 />
               </div>
+              <div className={f('track-label')}>Hydrophobicity</div>
 
               {data &&
                 data
