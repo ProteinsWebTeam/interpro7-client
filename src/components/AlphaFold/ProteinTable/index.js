@@ -191,10 +191,11 @@ export const getUrl = (includeSearch /*: boolean */) =>
           query: query,
         });
       }
-
-      return {
-        accession: description[description.main.key].accession,
-      };
+      return null;
+      // This below was to support the idea of multiple models for the same protein, which is unnecessary at the moment
+      // return {
+      //   accession: description[description.main.key].accession,
+      // };
     },
   );
 
