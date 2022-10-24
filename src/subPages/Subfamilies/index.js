@@ -11,6 +11,8 @@ import loadData from 'higherOrder/loadData';
 import Table, { Column, PageSizeSelector } from 'components/Table';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { GoLink } from 'components/ExtLink';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import f from 'styles/foundation';
 
@@ -82,7 +84,21 @@ const SubfamiliesSubpage = (
             <SubfamilyLink accession={accession}>{name}</SubfamilyLink>
           )}
         >
-          Accession
+          Name
+        </Column>
+        <Column
+          dataKey="go_terms"
+          renderer={(terms) =>
+            (terms || []).map(({ identifier, name: n }) => (
+              <Tooltip key={identifier} title={n}>
+                <GoLink id={identifier} className={f('go-terms', 'ext')}>
+                  {identifier}
+                </GoLink>{' '}
+              </Tooltip>
+            ))
+          }
+        >
+          GO terms
         </Column>
       </Table>
     </section>
