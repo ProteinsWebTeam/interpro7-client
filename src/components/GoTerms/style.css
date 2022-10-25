@@ -41,3 +41,8 @@ body a.go-terms:hover {
 .cc {
   background: #fbdcd0;
 }
+
+.go-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}

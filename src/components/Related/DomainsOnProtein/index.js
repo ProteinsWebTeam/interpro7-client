@@ -477,6 +477,7 @@ type DPWithoutDataProps = {
   dataFeatures: Object,
   dataGenome3d: Object,
   children: mixed,
+  onMatchesLoaded?: function,
 };
 type DPState ={
   generateConservationData: boolean,
@@ -493,6 +494,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     dataFeatures: T.object.isRequired,
     dataGenome3d: T.object.isRequired,
     children: T.any,
+    onMatchesLoaded: T.func,
   };
 
   constructor(props /*: DPWithoutDataProps */) {
@@ -503,6 +505,17 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       dataConservation: null,
     };
   }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.data !== this.props.data &&
+      !this.props.data.loading &&
+      this.props.onMatchesLoaded
+    ) {
+      this.props.onMatchesLoaded(this.props.data?.payload?.results);
+    }
+  }
+
   // eslint-disable-next-line no-magic-numbers
   static MAX_PROTEIN_LENGTH_FOR_HMMER = 5000;
 

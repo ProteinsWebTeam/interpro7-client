@@ -273,6 +273,7 @@ exports[`<SummaryProtein /> should render 1`] = `
                 },
               }
             }
+            onMatchesLoaded={[Function]}
           />
         </div>
       </div>
@@ -292,6 +293,9 @@ exports[`<SummaryProtein /> should render 1`] = `
       ]
     }
     type="protein"
+  />
+  <PantherGoTerms
+    subfamilies={[]}
   />
 </div>
 `;
