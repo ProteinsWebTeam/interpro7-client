@@ -12,24 +12,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
         511
          domain architectures found.
       </h4>
-      <div
-        className="accession-selector-panel"
-      >
-        <Tooltip
-          title="Toogle between domain architectures based on Pfam and InterPro entries"
-        >
-          <ToggleSwitch
-            SRLabel="Use accessions from"
-            addAccessionStyle={true}
-            handleChange={[Function]}
-            id="accessionDB-input"
-            name="accessionDB"
-            offValue="InterPro"
-            onValue="Pfam"
-            switchCond={true}
-          />
-        </Tooltip>
-      </div>
+      <Memo(Connect(IDAOptions)) />
     </React.Fragment>
     <div
       className="margin-bottom-large"
@@ -120,6 +103,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
                   ],
                 },
               ],
+              "name": "PF00594",
               "unintegrated": false,
             },
             {
@@ -142,6 +126,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
                   ],
                 },
               ],
+              "name": "PF00051",
               "unintegrated": false,
             },
             {
@@ -156,6 +141,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
                   ],
                 },
               ],
+              "name": "PF09396",
               "unintegrated": false,
             },
             {
@@ -170,6 +156,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
                   ],
                 },
               ],
+              "name": "PF00089",
               "unintegrated": false,
             },
           ]
@@ -179,6 +166,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
     </div>
     <Footer
       actualSize={511}
+      notFound={false}
       pagination={{}}
       withPageSizeSelector={true}
     />

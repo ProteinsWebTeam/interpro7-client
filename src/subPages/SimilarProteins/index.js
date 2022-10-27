@@ -5,7 +5,6 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { toggleAccessionDBForIDA } from 'actions/creators';
 
 import { searchSelector } from 'reducers/custom-location/search';
 import { descriptionSelector } from 'reducers/custom-location/description';
@@ -29,11 +28,10 @@ import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
-import {
-  IDAProtVista,
-  TextIDA,
-  ida2json,
-} from 'components/Entry/DomainArchitectures';
+import { ida2json } from 'components/Entry/DomainArchitectures';
+import IDAProtVista from 'components/Entry/DomainArchitectures/IDAProtVista';
+import IDAOptions from 'components/Entry/DomainArchitectures/Options';
+import TextIDA from 'components/Entry/DomainArchitectures/TextIDA';
 
 const f = foundationPartial(fonts, localStyle, exporterStyle);
 const FAKE_PROTEIN_LENGTH = 1000;
@@ -73,6 +71,8 @@ const formatDomainsPayload = (payload, loading, ida) => {
     domains.push({
       entry: domain.toUpperCase(),
       coordinates: domainsMap[domain.toLowerCase()].splice(0, 1),
+      name:
+        payload.results?.[0]?.extra_fields?.short_name || domain.toUpperCase(),
     });
   });
   return {
@@ -89,14 +89,14 @@ const SimilarProteinsHeaderWithData = (
     dataDomain: { payload: payloadDomain, loading: loadingDomain },
     databases,
     idaAccessionDB,
-    toggleAccessionDBForIDA,
+    idaLabel,
   } /*: {
       accession: string,
       data: {payload: Object, loading: boolean},
       dataDomain: {payload: Object, loading: boolean},
       databases: Object,
       idaAccessionDB: string,
-      toggleAccessionDBForIDA: function
+      idaLabel: string,
     } */,
 ) => {
   if (loading || !payload) return <Loading />;
@@ -105,33 +105,22 @@ const SimilarProteinsHeaderWithData = (
     loadingDomain,
     payload.ida,
   );
-  console.count('representative');
+  if (!representative) return null;
   const idaObj = ida2json(payload.ida, representative, idaAccessionDB);
   return (
     <div>
       <header>
         All the proteins in this page share the domain architecture below with
         the protein with accession <b>{accession}</b>.
-        <div className={f('accession-selector-panel')}>
-          <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-            <ToggleSwitch
-              switchCond={idaAccessionDB === 'pfam'}
-              name={'accessionDB'}
-              id={'accessionDB-input'}
-              SRLabel={'Use accessions from'}
-              onValue={'Pfam'}
-              offValue={'InterPro'}
-              handleChange={toggleAccessionDBForIDA}
-              addAccessionStyle={true}
-            />
-          </Tooltip>
-        </div>
+        <IDAOptions />
       </header>
       <TextIDA accessions={idaObj.accessions} representative={accession} />
       <IDAProtVista
         matches={idaObj.domains}
         length={idaObj?.length || FAKE_PROTEIN_LENGTH}
+        maxLength={idaObj?.length || FAKE_PROTEIN_LENGTH}
         databases={databases}
+        attributeForLabel={idaLabel}
       />
       <br />
     </div>
@@ -143,7 +132,8 @@ SimilarProteinsHeaderWithData.propTypes = {
   dataDomain: dataPropType,
   databases: T.object,
   idaAccessionDB: T.string,
-  toggleAccessionDBForIDA: T.func,
+  idaLabel: T.string,
+  changeSettingsRaw: T.func,
 };
 
 const getUrlForIDA = createSelector(
@@ -186,14 +176,18 @@ const getUrlForPfamDomains = createSelector(
       hostname,
       port,
       pathname: root + descriptionToPath(newDescription),
+      query: {
+        extra_fields: 'short_name',
+      },
     });
   },
 );
 
 const mapStateToPropsAccessionDB = createSelector(
-  (state) => state.ui.idaAccessionDB,
-  (idaAccessionDB) => ({
+  (state) => state.settings.ui,
+  ({ idaAccessionDB, idaLabel }) => ({
     idaAccessionDB,
+    idaLabel,
   }),
 );
 
@@ -204,7 +198,6 @@ const SimilarProteinsHeader = loadData({
   loadData({
     getUrl: getUrlForIDA,
     mapStateToProps: mapStateToPropsAccessionDB,
-    mapDispatchToProps: { toggleAccessionDBForIDA },
   })(React.memo(SimilarProteinsHeaderWithData)),
 );
 

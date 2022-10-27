@@ -37,6 +37,8 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         },
         structureViewer: false,
         shouldHighlight: true,
+        idaAccessionDB: 'interpro',
+        idaLabel: 'name',
       };
     case 'cache':
       return {
