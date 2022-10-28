@@ -11,8 +11,7 @@ import loadData from 'higherOrder/loadData';
 import Table, { Column, PageSizeSelector } from 'components/Table';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { GoLink } from 'components/ExtLink';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import ListOfGOTerms from 'components/GoTerms/List';
 
 import f from 'styles/foundation';
 
@@ -43,6 +42,7 @@ export const PantherLink = ({ accession, children }) => (
     {children}
   </Link>
 );
+
 const SubfamiliesSubpage = (
   { data, search, db } /*: {
     data: {loading: boolean, ok: boolean, status: number, payload: ?Object, url: string},
@@ -88,15 +88,7 @@ const SubfamiliesSubpage = (
         </Column>
         <Column
           dataKey="go_terms"
-          renderer={(terms) =>
-            (terms || []).map(({ identifier, name: n }) => (
-              <Tooltip key={identifier} title={n}>
-                <GoLink id={identifier} className={f('go-terms', 'ext')}>
-                  {identifier}
-                </GoLink>{' '}
-              </Tooltip>
-            ))
-          }
+          renderer={(terms) => <ListOfGOTerms terms={terms} />}
         >
           GO terms
         </Column>
