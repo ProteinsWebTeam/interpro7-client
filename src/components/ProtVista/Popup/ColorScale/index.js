@@ -25,21 +25,30 @@ const ColorScale = (
     width = COLOR_SCALE_WIDTH,
     height = COLOR_SCALE_HEIGHT,
   } /*: ColorScaleType */,
-) => (
-  <div className={f('color-scale')}>
-    <span>{domain[0]}</span>
-    <svg height={height} width={width}>
-      <defs>
-        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style={{ stopColor: range[0] }} />
-          <stop offset="100%" style={{ stopColor: range[1] }} />
-        </linearGradient>
-      </defs>
-      <rect width="100%" height={height} fill="url(#grad1)" />
-    </svg>
-    <span>{domain[1]}</span>
-  </div>
-);
+) => {
+  const maxDomain = domain.slice(-1)[0];
+  return (
+    <div className={f('color-scale')}>
+      <div className={f('legend', 'left')}>{domain[0]}</div>
+      <svg height={height} width={width}>
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style={{ stopColor: range[0] }} />
+            {domain.slice(1).map((d, i) => (
+              <stop
+                key={i}
+                offset={`${(100 * d) / maxDomain}%`}
+                style={{ stopColor: range[i + 1] }}
+              />
+            ))}
+          </linearGradient>
+        </defs>
+        <rect width="100%" height={height} fill="url(#grad1)" />
+      </svg>
+      <div className={f('legend', 'right')}>{maxDomain}</div>
+    </div>
+  );
+};
 ColorScale.propTypes = {
   domain: T.arrayOf(T.number),
   range: T.arrayOf(T.string),
