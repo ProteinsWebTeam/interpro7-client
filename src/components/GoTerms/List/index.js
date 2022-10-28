@@ -14,23 +14,26 @@ const f = foundationPartial(local);
 /*::
 type Props = {
   terms: typeof undefined | null | Array<{
-    identifier: string, 
+    identifier: string,
     name: string,
     category: {
       code: string,
       name: string,
     }
   }>,
-  maxNumberOfTerms: number,
+  maxNumberOfTerms?: number,
 }
  */
 
+const DEFAULT_MAX_NUMBER_OF_TERMS = 10;
 const colors = {
   P: 'var(--colors-go-bp)',
   F: 'var(--colors-go-mf)',
   C: 'var(--colors-go-cc)',
 };
-const ListOfGOTerms = ({ terms, maxNumberOfTerms = 10 } /*: Props */) => {
+const ListOfGOTerms = (
+  { terms, maxNumberOfTerms = DEFAULT_MAX_NUMBER_OF_TERMS } /*: Props */,
+) => {
   const [showMore, setShowMore] = useState(false);
   if (!terms) return null;
   const hasMany = terms.length > maxNumberOfTerms;
@@ -69,5 +72,6 @@ ListOfGOTerms.propTypes = {
       name: T.string,
     }),
   ),
+  maxNumberOfTerms: T.number,
 };
 export default ListOfGOTerms;
