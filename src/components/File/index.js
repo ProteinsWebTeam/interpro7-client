@@ -85,6 +85,7 @@ TooltipContent.propTypes = {
   count: number,
   name: string,
   progress: number,
+  minWidth?: number | string,
   successful?: boolean,
   blobURL?: string,
   label?: string,
@@ -109,6 +110,7 @@ export class FileButton extends PureComponent /*:: <ButtonProps> */ {
     handleClick: T.func.isRequired,
     shouldLinkToResults: T.bool,
     showIcon: T.bool,
+    minWidth: T.number,
   };
 
   // eslint-disable-next-line complexity
@@ -127,6 +129,7 @@ export class FileButton extends PureComponent /*:: <ButtonProps> */ {
       className,
       shouldLinkToResults = true,
       showIcon,
+      minWidth,
     } = this.props;
     const downloading = Number.isFinite(progress) && !successful;
     const failed = successful === false;
@@ -165,18 +168,20 @@ export class FileButton extends PureComponent /*:: <ButtonProps> */ {
           />
         }
       >
-        <div>
-          <Link
-            download={filename}
-            href={blobURL || url}
-            disabled={downloading || count > HARD_LIMIT || count === 0}
+        <Link
+          download={filename}
+          href={blobURL || url}
+          disabled={downloading || count > HARD_LIMIT || count === 0}
+          onClick={downloading || successful ? undefined : handleClick}
+          data-url={url}
+          data-type={fileType}
+        >
+          <div
             className={f(...buttonClass, className, {
               downloading,
               failed,
             })}
-            onClick={downloading || successful ? undefined : handleClick}
-            data-url={url}
-            data-type={fileType}
+            style={{ minWidth }}
           >
             <ProgressButton
               downloading={downloading}
@@ -187,8 +192,8 @@ export class FileButton extends PureComponent /*:: <ButtonProps> */ {
             {labelToShow && !showIcon && (
               <span className={f('file-label')}>{labelToShow}</span>
             )}
-          </Link>
-        </div>
+          </div>
+        </Link>
       </Tooltip>
     );
   }

@@ -28,6 +28,7 @@ const FileExporter = (
     secondary,
     className,
     focused = null,
+    minWidth,
   } /*: {
     description: {
       main: {key:string},
@@ -37,6 +38,7 @@ const FileExporter = (
       extra_fields: string,
     },
     count: number,
+    minWidth?: number |string,
     fileType: string,
     primary: string,
     secondary: string,
@@ -73,6 +75,7 @@ const FileExporter = (
         }`,
       }}
       endpoint={(endpoint[primary] && endpoint[primary][secondary]) || primary}
+      minWidth={minWidth}
     />
   );
 };
@@ -80,6 +83,7 @@ FileExporter.propTypes = {
   description: T.object,
   search: T.object,
   count: T.number,
+  minWidth: T.number,
   fileType: T.string,
   primary: T.string,
   secondary: T.string,

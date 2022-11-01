@@ -85,7 +85,7 @@ export const SummaryProtein = (
     const meta = `>${metadata.id} ${start}-${end}`.trim();
     return encodeURIComponent(`${meta}\n${metadata.sequence}`);
   };
-
+  const minWidth = '290px';
   return (
     <div className={f('sections')}>
       {metadata.gene && (
@@ -244,6 +244,7 @@ export const SummaryProtein = (
                   secondary="protein"
                   label="Export Matches [TSV]"
                   className={'button hollow'}
+                  minWidth={minWidth}
                 />
               </label>
               <hr style={{ margin: '0.8em' }} />
@@ -251,12 +252,12 @@ export const SummaryProtein = (
                 sequence={metadata.sequence}
                 accession={metadata.accession}
                 title="Search protein with HMMER"
-                minWidth="290px"
+                minWidth={minWidth}
               />
               <IPScanButton
                 sequence={splitSequenceByChunks}
                 title="Search protein with InterProScan"
-                minWidth="290px"
+                minWidth={minWidth}
               />
             </div>
           </div>
