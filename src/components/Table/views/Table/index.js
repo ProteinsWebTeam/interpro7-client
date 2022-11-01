@@ -39,7 +39,7 @@ class TableView extends PureComponent /*:: <Props> */ {
     rowKey: T.string,
     rowClassName: T.oneOfType([T.string, T.func]),
     groups: T.arrayOf(T.string),
-    groupActions: T.arrayOf(T.object),
+    groupActions: T.func,
   };
 
   render() {

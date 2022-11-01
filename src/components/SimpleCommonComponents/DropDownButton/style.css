@@ -33,18 +33,24 @@
   }
 
   & .dropdown-pane {
-    z-index: var(--z-index-just-over); /* so sticky header stay on top*/
+    z-index: var(--z-index-over-plus); /* so sticky header stay on top*/
     & ul {
       list-style-type: none;
       margin: 0;
       padding: 0;
-      & li a {
-        display: block;
+      & li {
         padding: 0.3rem 1rem;
-      }
-      & li a:hover {
-        background-color: #1878ba;
-        color: white;
+        text-align: left;
+        &:hover {
+          background-color: lightgray;
+        }
+
+        & a {
+          display: block;
+        }
+        & a:hover {
+          color: white;
+        }
       }
     }
   }

@@ -18,7 +18,8 @@ const DropDownButton = (
     fontSize = null,
     extraClasses = '',
     disabled = false,
-  } /*: {label: string, icon?: string, color ?: ?string, children: any, fontSize ?: ?string, extraClasses ?: string, disabled?: boolean} */,
+    hollow = false,
+  } /*: {label: string, icon?: string, color ?: ?string, children: any, fontSize ?: ?string, extraClasses ?: string, disabled?: boolean, hollow?: boolean} */,
 ) => {
   const [isOpen, setOpen] = useState(false);
   const handleClick = () => {
@@ -34,7 +35,7 @@ const DropDownButton = (
       )}`}
     >
       <button
-        className={fPlus('button', 'dropdown')}
+        className={fPlus('button', 'dropdown', { hollow })}
         style={{ backgroundColor: color, fontSize }}
         onClick={handleClick}
       >
@@ -65,5 +66,6 @@ DropDownButton.propTypes = {
   fontSize: T.string,
   extraClasses: T.string,
   disabled: T.bool,
+  hollow: T.bool,
 };
 export default DropDownButton;
