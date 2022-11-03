@@ -99,6 +99,9 @@ const loadProtVistaWebComponents = () => {
   return Promise.all(webComponents);
 };
 
+const getUIDFromEntry = (entry) =>
+  `${entry.accession}${entry.source_database === 'pfam-n' ? '-N' : ''}`;
+
 /*:: import type { ColorMode } from 'utils/entry-color'; */
 /*:: type Props = {
   protein: Object,
@@ -311,15 +314,15 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           : null;
         if (tmp.length > 0) {
           const isNewElement =
-            !this.web_tracks[d.accession]._data &&
-            !this.web_tracks[d.accession].sequence;
-          this.web_tracks[d.accession].data = tmp;
+            !this.web_tracks[getUIDFromEntry(d)]._data &&
+            !this.web_tracks[getUIDFromEntry(d)].sequence;
+          this.web_tracks[getUIDFromEntry(d)].data = tmp;
           if (this.props.fixedHighlight)
-            this.web_tracks[d.accession].fixedHighlight =
+            this.web_tracks[getUIDFromEntry(d)].fixedHighlight =
               this.props.fixedHighlight;
           this._setResiduesInState(children, d.accession);
           if (isNewElement) {
-            this.web_tracks[d.accession].addEventListener(
+            this.web_tracks[getUIDFromEntry(d)].addEventListener(
               'change',
               this._handleTrackChange,
             );
@@ -327,7 +330,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           this.setObjectValueInState(
             'expandedTrack',
             d.accession,
-            this.web_tracks[d.accession]._expanded,
+            this.web_tracks[getUIDFromEntry(d)]._expanded,
           );
         }
       }
@@ -808,8 +811,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                           type="conservation"
                                           id={`track_${entry.accession}`}
                                           ref={(e) =>
-                                            (this.web_tracks[entry.accession] =
-                                              e)
+                                            (this.web_tracks[
+                                              getUIDFromEntry(entry)
+                                            ] = e)
                                           }
                                           highlight-event="onmouseover"
                                           use-ctrl-to-zoom
@@ -826,7 +830,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         }
                                         id={`track_${entry.accession}`}
                                         ref={(e) =>
-                                          (this.web_tracks[entry.accession] = e)
+                                          (this.web_tracks[
+                                            getUIDFromEntry(entry)
+                                          ] = e)
                                         }
                                         highlight-event="onmouseover"
                                         use-ctrl-to-zoom
@@ -857,7 +863,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     displayend={length}
                                     id={`track_${entry.accession}`}
                                     ref={(e) =>
-                                      (this.web_tracks[entry.accession] = e)
+                                      (this.web_tracks[getUIDFromEntry(entry)] =
+                                        e)
                                     }
                                     shape="roundRectangle"
                                     highlight-event="onmouseover"
