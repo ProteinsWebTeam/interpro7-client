@@ -179,6 +179,7 @@ exports[`<SummaryProtein /> should render 1`] = `
               }
               fileType="tsv"
               label="Export Matches [TSV]"
+              minWidth="290px"
               primary="entry"
               secondary="protein"
             />
