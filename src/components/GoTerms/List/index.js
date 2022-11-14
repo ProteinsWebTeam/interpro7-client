@@ -41,22 +41,26 @@ const ListOfGOTerms = (
     showMore || !hasMany ? terms : terms.slice(0, maxNumberOfTerms);
   return (
     <>
-      {termsToShow.map(({ identifier, name: n, category: { code, name } }) => (
-        <Tooltip
-          key={identifier}
-          title={`${capitalize(name.replace('_', ' '))}: ${n}`}
-        >
-          <GoLink
-            id={identifier}
-            className={f('go-terms', 'ext', 'tag')}
-            style={{
-              background: colors[code] || 'transparent',
-            }}
+      {termsToShow.map(
+        ({ identifier, name, category: { code, name: categoryName } }) => (
+          <Tooltip
+            key={identifier}
+            title={`${capitalize(
+              categoryName.replace('_', ' '),
+            )}: [${identifier}] ${name}`}
           >
-            {identifier}
-          </GoLink>{' '}
-        </Tooltip>
-      ))}
+            <GoLink
+              id={identifier}
+              className={f('go-terms', 'ext', 'tag')}
+              style={{
+                background: colors[code] || 'transparent',
+              }}
+            >
+              {name}
+            </GoLink>{' '}
+          </Tooltip>
+        ),
+      )}
       {terms.length !== termsToShow.length && (
         <button onClick={() => setShowMore(true)} className={f('link')}>
           Show {terms.length - maxNumberOfTerms} more
