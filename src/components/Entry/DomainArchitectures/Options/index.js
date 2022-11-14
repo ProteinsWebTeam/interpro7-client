@@ -18,11 +18,11 @@ const f = foundationPartial(local);
 type PropsIDAOptions = {
   changeSettingsRaw: function,
   idaAccessionDB: string,
-  idaLabel: string,
+  idaLabel?: string,
 }
 */
 const IDAOptions = (
-  { changeSettingsRaw, idaAccessionDB, idaLabel } /*: PropsIDAOptions */,
+  { changeSettingsRaw, idaAccessionDB /*, idaLabel*/ } /*: PropsIDAOptions */,
 ) => {
   const toggleDomainEntry = () => {
     changeSettingsRaw(
@@ -31,13 +31,14 @@ const IDAOptions = (
       idaAccessionDB === 'pfam' ? 'interpro' : 'pfam',
     );
   };
-  const toggleDomainLabel = () => {
-    changeSettingsRaw(
-      'ui',
-      'idaLabel',
-      idaLabel === 'name' ? 'accession' : 'name',
-    );
-  };
+  // TODO: Remove function and component if by July 2023  hasn't been required. It needs to be removed from redux too.
+  // const toggleDomainLabel = () => {
+  //   changeSettingsRaw(
+  //     'ui',
+  //     'idaLabel',
+  //     idaLabel === 'name' ? 'accession' : 'name',
+  //   );
+  // };
 
   return (
     <nav className={f('options-panel')}>
@@ -58,7 +59,7 @@ const IDAOptions = (
           </Tooltip>
         </label>
       </div>
-      <div className={f('accession-selector-panel')}>
+      {/* <div className={f('accession-selector-panel')}>
         <label>
           Label:{' '}
           <Tooltip title="Display labels as names or accessions">
@@ -74,7 +75,7 @@ const IDAOptions = (
             />
           </Tooltip>
         </label>
-      </div>
+      </div> */}
     </nav>
   );
 };
