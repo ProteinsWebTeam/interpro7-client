@@ -8,11 +8,9 @@ import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.css';
-import ipro from 'styles/interpro-new.css';
 import local from './style.css';
 
-const f = foundationPartial(ebiStyles, ipro, local);
+const f = foundationPartial(local);
 
 const getDefaultPayload = () => ({
   biological_process: [],
@@ -31,18 +29,21 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessData = data => ({
+const schemaProcessData = (data) => ({
   '@type': 'DataRecord',
   '@id': '@seeAlso',
   identifier: data,
 });
 
 const GoTerms = (
-  { terms, type, db } /*: {terms: Array<Object>, type: string, db?: string} */,
+  {
+    terms,
+    type,
+    db,
+    withoutTitle = false,
+  } /*: {terms: Array<Object>, type: string, db?: string, withoutTitle: boolean} */,
 ) => {
-  // remove duplicates
-  // TODO: remove duplicates from data, then remove this as will be unnecessary
-  let _terms = new Map(terms.map(term => [term.identifier, term]));
+  let _terms = new Map(terms.map((term) => [term.identifier, term]));
   _terms = Array.from(_terms.values()).reduce((acc, term) => {
     if (term.category_name) {
       // eslint-disable-next-line no-param-reassign
@@ -53,14 +54,11 @@ const GoTerms = (
     }
     // eslint-disable-next-line no-param-reassign
     if (!acc[term.category.name]) acc[term.category.name] = [];
-    // if (typeof term === 'string') {
-    //   acc[term.category].push({ identifier: term });
-    //   return acc;
-    // }
     acc[term.category.name].push(term);
     return acc;
   }, getDefaultPayload());
   let title = 'GO terms, ';
+  let label = 'GO terms';
   if (type === 'entry' && typeof db !== 'undefined') {
     if (db.toLowerCase() === 'interpro') {
       title += 'annotated by InterPro curators';
@@ -69,56 +67,56 @@ const GoTerms = (
     }
   } else {
     title += 'as provided by the InterPro2GO pipeline';
+    label = `InterPro ${label}`;
   }
   const goTermEntries = Object.entries(_terms);
   const none = goTermEntries.every(([, category]) => !category.length);
   return (
     <section data-testid="go-terms">
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <Tooltip title={title}>
-            <h4 className={f('title')}>GO terms</h4>
-          </Tooltip>
+      {!withoutTitle && (
+        <div className={f('row')}>
+          <div className={f('large-12', 'columns')}>
+            <Tooltip title={title}>
+              <h4 className={f('title')}>{label}</h4>
+            </Tooltip>
+          </div>
         </div>
-      </div>
-      <div className={f('row')}>
-        {none ? (
-          <p className={f('columns')}>No GO Terms</p>
-        ) : (
-          goTermEntries.map(([key, values]) => (
-            <div
-              key={key}
-              className={f(
-                'small-12',
-                'medium-4',
-                'columns',
-                'margin-bottom-large',
-              )}
-            >
-              <p className={f(mapNameToClass.get(key), 'go-title')}>
-                {key.replace('_', ' ')}
-              </p>
-              <ul className={f('go-list')}>
-                {values && values.length ? (
-                  values.map(({ identifier, name }) => (
-                    <li key={identifier}>
-                      <SchemaOrgData
-                        data={identifier}
-                        processData={schemaProcessData}
-                      />
+      )}
+      <div className={f('row', 'columns')}>
+        <div className={f('go-columns')}>
+          {none ? (
+            <p className={f('columns')}>No GO Terms</p>
+          ) : (
+            goTermEntries.map(([key, values]) => (
+              <div key={key}>
+                <p className={f(mapNameToClass.get(key), 'go-title')}>
+                  {key.replace('_', ' ')}
+                </p>
+                <ul className={f('go-list')}>
+                  {values && values.length ? (
+                    values.map(({ identifier, name }) => (
+                      <li key={identifier}>
+                        <SchemaOrgData
+                          data={identifier}
+                          processData={schemaProcessData}
+                        />
 
-                      <GoLink id={identifier} className={f('go-terms', 'ext')}>
-                        {name} ({identifier})
-                      </GoLink>
-                    </li>
-                  ))
-                ) : (
-                  <li className={f('no-goterm')}>None</li>
-                )}
-              </ul>
-            </div>
-          ))
-        )}
+                        <GoLink
+                          id={identifier}
+                          className={f('go-terms', 'ext')}
+                        >
+                          {name} ({identifier})
+                        </GoLink>
+                      </li>
+                    ))
+                  ) : (
+                    <li className={f('no-goterm')}>None</li>
+                  )}
+                </ul>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </section>
   );
@@ -127,6 +125,7 @@ GoTerms.propTypes = {
   terms: T.arrayOf(T.object.isRequired).isRequired,
   type: T.string.isRequired,
   db: T.string,
+  withoutTitle: T.bool,
 };
 
 export default GoTerms;
