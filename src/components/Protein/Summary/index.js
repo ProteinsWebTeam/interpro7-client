@@ -28,6 +28,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
+import PantherGoTerms from 'components/Protein/PantherGoTerms';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import { foundationPartial } from 'styles/foundation';
@@ -69,6 +70,7 @@ export const SummaryProtein = (
   const comparisonContainerRef = useRef();
   const [renderComparisonButton, setRenderComparisonButton] = useState(false);
   const [comparisonMode, setComparisonMode] = useState(false);
+  const [subfamilies, setSubfamilies] = useState(null);
   useEffect(() => {
     setRenderComparisonButton(true);
   }, [comparisonContainerRef]);
@@ -86,6 +88,31 @@ export const SummaryProtein = (
     return encodeURIComponent(`${meta}\n${metadata.sequence}`);
   };
   const minWidth = '290px';
+
+  const getSubfamiliesFromMatches = (results) => {
+    if (results?.length) {
+      setSubfamilies(
+        results
+          .filter(
+            ({ metadata: { source_database: db } }) =>
+              db?.toLowerCase() === 'panther',
+          )
+          .map(({ proteins }) => {
+            const subfamilies = [];
+            proteins.forEach((p) => {
+              p.entry_protein_locations.forEach(({ subfamily }) => {
+                subfamilies.push(subfamily?.accession);
+              });
+            });
+            return subfamilies.filter(Boolean);
+          })
+          .flat(),
+      );
+      return;
+    }
+    setSubfamilies(null);
+  };
+
   return (
     <div className={f('sections')}>
       {metadata.gene && (
@@ -271,7 +298,10 @@ export const SummaryProtein = (
         <section>
           <div className={f('row')}>
             <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
-              <DomainsOnProtein mainData={data} />
+              <DomainsOnProtein
+                mainData={data}
+                onMatchesLoaded={getSubfamiliesFromMatches}
+              />
             </div>
           </div>
         </section>
@@ -279,6 +309,7 @@ export const SummaryProtein = (
       {metadata.go_terms && (
         <GoTerms terms={metadata.go_terms} type="protein" />
       )}
+      <PantherGoTerms subfamilies={subfamilies || []} />
     </div>
   );
 };
