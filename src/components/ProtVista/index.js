@@ -467,7 +467,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       ) : null;
     if (entry.accession.startsWith('residue:'))
       return entry.accession.split('residue:')[1];
-
     return (
       <>
         {type}
@@ -478,20 +477,29 @@ export class ProtVista extends Component /*:: <Props, State> */ {
 
   renderExceptionalLabels(entry) {
     const { dataDB, id } = this.props;
+    const { isPrinting } = this.state;
     let databases = {};
     if (dataDB.payload) {
       databases = dataDB.payload.databases;
     }
 
     if (entry.source_database === 'mobidblt')
-      return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
+      return isPrinting ? (
+        <span>{entry.accession}</span>
+      ) : (
+        <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>
+      );
     if (entry.source_database === 'funfam') {
-      return (
+      return isPrinting ? (
+        <span>{entry.accession}</span>
+      ) : (
         <FunFamLink accession={entry.accession}>{entry.accession}</FunFamLink>
       );
     }
     if (entry.source_database === 'pfam-n') {
-      return (
+      return isPrinting ? (
+        <span>N: {entry.accession}</span>
+      ) : (
         <Link
           to={{
             description: {
