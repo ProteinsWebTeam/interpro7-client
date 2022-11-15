@@ -387,15 +387,20 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             }
 
             this._isPopperTop = !this._isPopperTop;
-            if (this._popperRef.current)
+            if (this._popperRef.current) {
               this.popper = new PopperJS(
                 detail.target,
                 this._popperRef.current,
                 {
-                  // placement: this._isPopperTop ? 'top' : 'bottom',
                   applyStyle: { enabled: false },
+                  modifiers: {
+                    preventOverflow: {
+                      boundariesElement: this._protvistaRef?.current || window,
+                    },
+                  },
                 },
               );
+            }
           }
           break;
         default:
