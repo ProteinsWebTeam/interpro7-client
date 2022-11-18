@@ -4,7 +4,8 @@
   --z-index-deepest: 1;
   --z-index-deep: 2;
   --z-index-just-over: 5;
-  --z-index-over: 5;
+  --z-index-over: 10;
+  --z-index-over-plus: 15;
   --z-index-memberdb: 20;
   --z-index-main-menu: 50;
   --z-index-over-main: 80;
