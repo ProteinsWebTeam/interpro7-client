@@ -35,7 +35,7 @@ const DropDownButton = (
       )}`}
     >
       <button
-        className={fPlus('button', 'dropdown', { hollow })}
+        className={fPlus('button', 'dropdown-button', { hollow })}
         style={{ backgroundColor: color, fontSize }}
         onClick={handleClick}
       >
@@ -43,6 +43,7 @@ const DropDownButton = (
           <span className={fPlus('icon', 'icon-common')} data-icon={icon} />
         ) : null}
         <span className={fPlus('hide-for-small-only')}>{label}</span>{' '}
+        <span className={fPlus('icon', 'icon-common', 'icon-caret-down')} />
       </button>
       <div
         className={fPlus('dropdown-pane', 'dropdown-content')}
