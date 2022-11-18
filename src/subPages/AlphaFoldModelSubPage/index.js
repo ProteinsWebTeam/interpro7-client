@@ -25,6 +25,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
   const [selectionsInModel, setSelectionsInModel] = useState(null);
   const [proteinAcc, setProteinAcc] = useState('');
   const [modelId, setModelId] = useState(null);
+  const [confidenceURL, setConfidenceURL] = useState(null);
   const handleProteinChange = (value) => {
     setProteinAcc(value);
     setModelId(null);
@@ -54,6 +55,12 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
           onModelChange={handleModelChange}
           modelId={modelId}
           selections={selectionsInModel}
+          onModelCifChange={(cif) => {
+            const newURL = cif?.length
+              ? cif.replace('-model', '-confidence').replace('.cif', '.json')
+              : null;
+            if (newURL !== confidenceURL) setConfidenceURL(newURL);
+          }}
         />
       )}
       {mainType === 'entry' ? (
@@ -68,6 +75,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
             onChangeSelection={(selection) => {
               setSelectionsInModel(selection);
             }}
+            confidenceURL={confidenceURL}
           />
         </div>
       )}

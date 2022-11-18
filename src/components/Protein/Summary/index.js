@@ -28,6 +28,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
+import PantherGoTerms from 'components/Protein/PantherGoTerms';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import { foundationPartial } from 'styles/foundation';
@@ -69,6 +70,7 @@ export const SummaryProtein = (
   const comparisonContainerRef = useRef();
   const [renderComparisonButton, setRenderComparisonButton] = useState(false);
   const [comparisonMode, setComparisonMode] = useState(false);
+  const [subfamilies, setSubfamilies] = useState(null);
   useEffect(() => {
     setRenderComparisonButton(true);
   }, [comparisonContainerRef]);
@@ -84,6 +86,31 @@ export const SummaryProtein = (
       .replace(/(.{1,80})/g, '$1\n');
     const meta = `>${metadata.id} ${start}-${end}`.trim();
     return encodeURIComponent(`${meta}\n${metadata.sequence}`);
+  };
+  const minWidth = '290px';
+
+  const getSubfamiliesFromMatches = (results) => {
+    if (results?.length) {
+      setSubfamilies(
+        results
+          .filter(
+            ({ metadata: { source_database: db } }) =>
+              db?.toLowerCase() === 'panther',
+          )
+          .map(({ proteins }) => {
+            const subfamilies = [];
+            proteins.forEach((p) => {
+              p.entry_protein_locations.forEach(({ subfamily }) => {
+                subfamilies.push(subfamily?.accession);
+              });
+            });
+            return subfamilies.filter(Boolean);
+          })
+          .flat(),
+      );
+      return;
+    }
+    setSubfamilies(null);
   };
 
   return (
@@ -244,6 +271,7 @@ export const SummaryProtein = (
                   secondary="protein"
                   label="Export Matches [TSV]"
                   className={'button hollow'}
+                  minWidth={minWidth}
                 />
               </label>
               <hr style={{ margin: '0.8em' }} />
@@ -251,12 +279,12 @@ export const SummaryProtein = (
                 sequence={metadata.sequence}
                 accession={metadata.accession}
                 title="Search protein with HMMER"
-                minWidth="290px"
+                minWidth={minWidth}
               />
               <IPScanButton
                 sequence={splitSequenceByChunks}
                 title="Search protein with InterProScan"
-                minWidth="290px"
+                minWidth={minWidth}
               />
             </div>
           </div>
@@ -270,7 +298,10 @@ export const SummaryProtein = (
         <section>
           <div className={f('row')}>
             <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
-              <DomainsOnProtein mainData={data} />
+              <DomainsOnProtein
+                mainData={data}
+                onMatchesLoaded={getSubfamiliesFromMatches}
+              />
             </div>
           </div>
         </section>
@@ -278,6 +309,7 @@ export const SummaryProtein = (
       {metadata.go_terms && (
         <GoTerms terms={metadata.go_terms} type="protein" />
       )}
+      <PantherGoTerms subfamilies={subfamilies || []} />
     </div>
   );
 };

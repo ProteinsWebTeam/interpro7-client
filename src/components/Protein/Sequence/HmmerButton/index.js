@@ -36,13 +36,7 @@ const HmmerButton = (
       target="_blank"
     >
       <div
-        className={f(
-          'sequence-link',
-          'button-more',
-          'icon',
-          'icon-common',
-          'icon-right',
-        )}
+        className={f('sequence-link', 'button', 'hollow')}
         data-icon="&#xf061;"
         style={{ minWidth: minWidth }}
       >

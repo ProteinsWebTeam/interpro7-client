@@ -23,3 +23,6 @@ div.subfamily ul li > header {
   min-width: 7rem;
   padding-left: 1rem;
 }
+.entry-popup .title {
+  max-width: 20ch;
+}

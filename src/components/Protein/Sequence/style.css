@@ -46,8 +46,9 @@
 .sequence-link {
   position: relative;
   overflow: hidden;
-
+  width: 100%;
   & > span {
+    color: var(--colors-graydark);
     position: relative;
   }
 

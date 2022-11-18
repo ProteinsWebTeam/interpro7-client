@@ -23,9 +23,11 @@ const ProtVista = loadable({
 type Selection = { chain: string, start: number, end: number}
   */
 const ProtVistaForAlphaFold = (
-  { data, dataProtein, onChangeSelection } /*: {
+  { data, protein, dataProtein, dataConfidence, onChangeSelection } /*: {
   data: {loading: boolean, payload: ?Object},
+  protein: string,
   dataProtein: {loading: boolean, payload: ?Object},
+  dataConfidence: {loading: boolean, payload: ?Object},
   onChangeSelection: (Selection[]|null)=>void;
 }*/,
 ) => {
@@ -89,12 +91,28 @@ const ProtVistaForAlphaFold = (
     data: data.payload ? data : { payload: { results: [] } },
     endpoint: 'protein',
   });
+  const tracks = [['Entries', interpro.concat(unintegrated)]];
+  if (dataConfidence.payload?.confidenceCategory?.length) {
+    const confidenceTrack = [
+      'confidence',
+      [
+        {
+          accession: `confidence_af_${protein}`,
+          data: dataConfidence.payload.confidenceCategory.join(''),
+          type: 'confidence',
+          protein,
+          source_database: 'alphafold',
+        },
+      ],
+    ];
+    tracks.splice(0, 0, confidenceTrack);
+  }
   if (!dataProtein.payload?.metadata) return null;
   return (
     <div ref={containerRef}>
       <ProtVista
         protein={dataProtein.payload.metadata}
-        data={[['Entries', interpro.concat(unintegrated)]]}
+        data={tracks}
         title="Protein domains"
       />
     </div>
@@ -103,8 +121,17 @@ const ProtVistaForAlphaFold = (
 ProtVistaForAlphaFold.propTypes = {
   data: dataPropType,
   dataProtein: dataPropType,
+  dataConfidence: dataPropType,
   onChangeSelection: T.func,
+  protein: T.string.isRequired,
+  confidenceURL: T.string,
 };
+const getConfidenceURL = createSelector(
+  (_, props) => props.confidenceURL,
+  (confidenceURL) => {
+    return confidenceURL;
+  },
+);
 const getProteinURL = createSelector(
   (state) => state.settings.api,
   (_, props) => props.protein,
@@ -143,6 +170,11 @@ const getInterproRelatedEntriesURL = createSelector(
 );
 
 export default loadData({
-  getUrl: getProteinURL,
-  propNamespace: 'Protein',
-})(loadData(getInterproRelatedEntriesURL)(ProtVistaForAlphaFold));
+  getUrl: getConfidenceURL,
+  propNamespace: 'Confidence',
+})(
+  loadData({
+    getUrl: getProteinURL,
+    propNamespace: 'Protein',
+  })(loadData(getInterproRelatedEntriesURL)(ProtVistaForAlphaFold)),
+);

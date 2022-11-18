@@ -78,7 +78,7 @@ const ProtVistaEntryPopup = (
     goToCustomLocation(newLocation);
   };
   return (
-    <section>
+    <section className={f('entry-popup')}>
       <h6>
         {accession.startsWith('residue:')
           ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
@@ -86,7 +86,7 @@ const ProtVistaEntryPopup = (
         {description && <p>[{description}]</p>}
       </h6>
 
-      {name && <h4>{name}</h4>}
+      {name && <h4 className={f('title')}>{name}</h4>}
 
       <div className={f('pop-wrapper')}>
         <div>
