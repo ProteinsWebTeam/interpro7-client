@@ -475,13 +475,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
+  // eslint-disable-next-line complexity
   renderExceptionalLabels(entry) {
     const { dataDB, id } = this.props;
     const { isPrinting } = this.state;
-    let databases = {};
-    if (dataDB.payload) {
-      databases = dataDB.payload.databases;
-    }
+    const databases = dataDB?.payload?.databases || {};
 
     if (entry.source_database === 'mobidblt')
       return isPrinting ? (

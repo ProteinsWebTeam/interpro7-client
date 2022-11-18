@@ -110,7 +110,7 @@ export class FileButton extends PureComponent /*:: <ButtonProps> */ {
     handleClick: T.func.isRequired,
     shouldLinkToResults: T.bool,
     showIcon: T.bool,
-    minWidth: T.number,
+    minWidth: T.oneOfType([T.number, T.string]),
   };
 
   // eslint-disable-next-line complexity

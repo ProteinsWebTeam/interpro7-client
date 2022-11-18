@@ -63,7 +63,7 @@ IPScanButton.propTypes = {
   goToCustomLocation: T.func.isRequired,
   sequence: T.oneOfType([T.func, T.string]).isRequired,
   title: T.string,
-  minWidth: T.string,
+  minWidth: T.oneOfType([T.number, T.string]),
 };
 
 export default connect(null, { goToCustomLocation })(IPScanButton);

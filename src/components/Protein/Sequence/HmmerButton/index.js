@@ -52,7 +52,7 @@ HmmerButton.propTypes = {
   sequence: T.oneOfType([T.func, T.string]).isRequired,
   accession: T.string,
   title: T.string,
-  minWidth: T.string,
+  minWidth: T.oneOfType([T.number, T.string]),
 };
 
 export default HmmerButton;

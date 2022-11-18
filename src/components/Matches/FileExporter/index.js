@@ -83,7 +83,7 @@ FileExporter.propTypes = {
   description: T.object,
   search: T.object,
   count: T.number,
-  minWidth: T.number,
+  minWidth: T.oneOfType([T.number, T.string]),
   fileType: T.string,
   primary: T.string,
   secondary: T.string,
