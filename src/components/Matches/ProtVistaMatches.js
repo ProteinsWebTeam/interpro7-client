@@ -4,28 +4,28 @@ import T from 'prop-types';
 
 import loadWebComponent from 'utils/load-web-component';
 
-import ProtVistaInterProTrack from 'protvista-interpro-track';
-import ProtVistaManager from 'protvista-manager';
-import ProtVistaSequence from 'protvista-sequence';
+// import ProtVistaInterProTrack from 'protvista-interpro-track';
+// import ProtVistaManager from 'protvista-manager';
+// import ProtVistaSequence from 'protvista-sequence';
 
 const webComponents = [];
 
-const loadProtVistaWebComponents = () => {
-  if (!webComponents.length) {
-    webComponents.push(
-      loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
-    );
-    webComponents.push(
-      loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
-    );
-    webComponents.push(
-      loadWebComponent(() => ProtVistaInterProTrack).as(
-        'protvista-interpro-track',
-      ),
-    );
-  }
-  return Promise.all(webComponents);
-};
+// const loadProtVistaWebComponents = () => {
+//   if (!webComponents.length) {
+//     webComponents.push(
+//       loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
+//     );
+//     webComponents.push(
+//       loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
+//     );
+//     webComponents.push(
+//       loadWebComponent(() => ProtVistaInterProTrack).as(
+//         'protvista-interpro-track',
+//       ),
+//     );
+//   }
+//   return Promise.all(webComponents);
+// };
 
 /*:: type Props = {
   matches: Array<Object>,

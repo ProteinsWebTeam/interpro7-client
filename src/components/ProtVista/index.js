@@ -14,14 +14,13 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import { Genome3dLink, AlphafoldLink } from 'components/ExtLink';
 import { FunFamLink } from 'subPages/Subfamilies';
 
-import ProtVistaManager from 'protvista-manager';
-import ProtVistaSequence from 'protvista-sequence';
-import ProtVistaColouredSequence from 'protvista-coloured-sequence';
-import ProtVistaNavigation from 'protvista-navigation';
-import ProtVistaInterProTrack from 'protvista-interpro-track';
-import ProtvistaTrack from 'protvista-track';
-import ProtvistaZoomTool from 'protvista-zoom-tool';
-import NightingaleLinegraphTrack from 'nightingale-linegraph-track';
+import '@nightingale-elements/nightingale-manager';
+import '@nightingale-elements/nightingale-navigation';
+import '@nightingale-elements/nightingale-sequence';
+import '@nightingale-elements/nightingale-track';
+import '@nightingale-elements/nightingale-interpro-track';
+import '@nightingale-elements/nightingale-coloured-sequence';
+import '@nightingale-elements/nightingale-linegraph-track';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
@@ -49,55 +48,6 @@ const f = foundationPartial(ipro, localCSS, spinner, fonts, gridCSS, popperCSS);
 const webComponents = [];
 
 const TOOLTIP_DELAY = 500;
-
-const loadProtVistaWebComponents = () => {
-  if (!webComponents.length) {
-    webComponents.push(
-      loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaColouredSequence).as(
-        'protvista-coloured-sequence',
-      ),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaNavigation).as('protvista-navigation'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaInterProTrack).as(
-        'protvista-interpro-track',
-      ),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtvistaTrack).as('protvista-track'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => NightingaleLinegraphTrack).as(
-        'nightingale-linegraph-track',
-      ),
-    );
-
-    webComponents.push(
-      loadWebComponent(() =>
-        import('interpro-components').then((m) => m.InterproType),
-      ).as('interpro-type'),
-    );
-  }
-  return Promise.all(webComponents);
-};
 
 const getUIDFromEntry = (entry) =>
   `${entry.accession}${entry.source_database === 'pfam-n' ? '-N' : ''}`;
@@ -207,7 +157,16 @@ export class ProtVista extends Component /*:: <Props, State> */ {
   }
 
   async componentDidMount() {
-    await loadProtVistaWebComponents();
+    const promises = [
+      'nightingale-manager',
+      'nightingale-navigation',
+      'nightingale-sequence',
+      'nightingale-track',
+      'nightingale-interpro-track',
+      'nightingale-linegraph-track',
+      'nightingale-coloured-sequence',
+    ].map((localName) => customElements.whenDefined(localName));
+    await Promise.all(promises);
     const { data, protein } = this.props;
     if (this._webProteinRef.current && this._hydroRef.current) {
       const proteinE = this._webProteinRef.current;
@@ -674,10 +633,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           <div ref={this._popperContentRef} />
         </div>
         <div>
-          <protvista-manager
-            attributes="length displaystart displayend highlight"
-            id="pv-manager"
-          >
+          <nightingale-manager id="pv-manager">
             <div className={f('protvista-grid')}>
               <div className={f('view-options-wrap', 'track-sized')}>
                 {showOptions && (
@@ -707,24 +663,24 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               id={`${this.state.optionsID}ProtvistaDiv`}
             >
               <div className={f('track')}>
-                <protvista-navigation
+                <nightingale-navigation
                   length={length}
-                  displaystart="1"
-                  displayend={length}
+                  display-start="1"
+                  display-end={length}
                 />
               </div>
               <div className={f('track')}>
-                <protvista-sequence
+                <nightingale-sequence
                   ref={this._webProteinRef}
                   length={length}
-                  displaystart="1"
-                  displayend={length}
+                  display-start="1"
+                  display-end={length}
                   highlight-event="onmouseover"
                   use-ctrl-to-zoom
                 />
               </div>
               <div className={f('track')}>
-                <protvista-coloured-sequence
+                <nightingale-coloured-sequence
                   ref={this._hydroRef}
                   length={length}
                   displaystart="1"
@@ -832,7 +788,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                       )}
                                     {(entry.type === 'secondary_structure' ||
                                       entry.type === 'residue') && (
-                                      <protvista-track
+                                      <nightingale-track
                                         length={length}
                                         displaystart="1"
                                         displayend={length}
@@ -850,7 +806,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                       />
                                     )}
                                     {entry.type === 'confidence' && (
-                                      <protvista-coloured-sequence
+                                      <nightingale-coloured-sequence
                                         ref={(e) =>
                                           (this.web_tracks[entry.accession] = e)
                                         }
@@ -868,7 +824,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     )}
                                   </div>
                                 ) : (
-                                  <protvista-interpro-track
+                                  <nightingale-interpro-track
                                     length={length}
                                     displaystart="1"
                                     displayend={length}
@@ -944,7 +900,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                 </div>
               ) : null}
             </div>
-          </protvista-manager>
+          </nightingale-manager>
         </div>
       </div>
     );

@@ -12,9 +12,9 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import ProtVistaMSA from 'protvista-msa';
-import ProtVistaManager from 'protvista-manager';
-import ProtVistaNavigation from 'protvista-navigation';
-import ProtvistaZoomTool from 'protvista-zoom-tool';
+// import ProtVistaManager from 'protvista-manager';
+// import ProtVistaNavigation from 'protvista-navigation';
+// import ProtvistaZoomTool from 'protvista-zoom-tool';
 import ProtvistaLinks from 'protvista-links';
 
 import { foundationPartial } from 'styles/foundation';
@@ -28,18 +28,18 @@ const webComponents = [];
 
 const loadProtVistaWebComponents = () => {
   if (!webComponents.length) {
-    webComponents.push(
-      loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
-    );
+    // webComponents.push(
+    //   loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
+    // );
     webComponents.push(
       loadWebComponent(() => ProtVistaMSA).as('protvista-msa'),
     );
-    webComponents.push(
-      loadWebComponent(() => ProtVistaNavigation).as('protvista-navigation'),
-    );
-    webComponents.push(
-      loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
-    );
+    // webComponents.push(
+    //   loadWebComponent(() => ProtVistaNavigation).as('protvista-navigation'),
+    // );
+    // webComponents.push(
+    //   loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
+    // );
     webComponents.push(
       loadWebComponent(() => ProtvistaLinks).as('protvista-links'),
     );

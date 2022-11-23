@@ -87,6 +87,28 @@ const getAssetModuleFilename = (pathData) => {
   else if (['woff', 'woff2', 'ttf', 'eot'].includes(ext)) subfolder = 'fonts';
   return path.join('assets', subfolder, '[name].[hash:3][ext]');
 };
+
+const nightingaleAliases = [
+  'nightingale-new-core',
+  'nightingale-manager',
+  'nightingale-navigation',
+  'nightingale-sequence',
+  'nightingale-track',
+  'nightingale-interpro-track',
+  'nightingale-linegraph-track',
+  'nightingale-coloured-sequence',
+].reduce(
+  (agg, v) => ({
+    ...agg,
+    [`@nightingale-elements/${v}`]: path.resolve(
+      'node_modules',
+      '@nightingale-elements',
+      v,
+      'src'
+    ),
+  }),
+  {}
+);
 const getConfigFor = (env, mode, module = false) => {
   const name = module ? 'module' : 'legacy';
 
@@ -128,6 +150,7 @@ const getConfigFor = (env, mode, module = false) => {
         'EBI-FileFormats': 'EBI-Icon-fonts/EBI-FileFormats',
         'EBI-Chemistry': 'EBI-Icon-fonts/EBI-Chemistry',
         react: path.resolve('node_modules/react'),
+        ...nightingaleAliases,
       },
     },
     module: {

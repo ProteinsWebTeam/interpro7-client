@@ -4,10 +4,12 @@
     "moduleResolution": "Node",
     "module": "CommonJS",
     "target": "ES6",
-    "declaration": false
+    "declaration": false,
+    "experimentalDecorators": true,
   },
   "include": [
     "src/**/*",
-    "node_modules/protvista-links/src/*"
+    "node_modules/protvista-links/src/*",
+    "node_modules/@nightingale-elements/*/src/*"
   ],
 }
