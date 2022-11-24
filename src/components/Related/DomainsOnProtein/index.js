@@ -7,10 +7,16 @@ import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import {
+  getAlphaFoldPredictionURL,
+  getConfidenceURLFromPayload,
+} from 'components/AlphaFold/selectors';
 
 import { processData } from 'components/ProtVista/utils';
 
 import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProtVistaForAlphaFold';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
@@ -20,8 +26,6 @@ import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
-
-import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 const f = foundationPartial(ipro);
 
@@ -379,6 +383,7 @@ const getExtraURL = (query /*: string */) =>
 /*:: type Props = {
   mainData: Object,
   dataMerged: Object,
+  dataConfidence?: Object,
   showConservationButton?: boolean,
   handleConservationLoad?: function,
   children: any,
@@ -387,6 +392,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
   static propTypes = {
     mainData: T.object.isRequired,
     dataMerged: T.object.isRequired,
+    dataConfidence: T.object,
     showConservationButton: T.bool,
     handleConservationLoad: T.func,
     children: T.any,
@@ -396,6 +402,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
     const {
       mainData,
       dataMerged,
+      dataConfidence,
       showConservationButton,
       handleConservationLoad,
     } = this.props;
@@ -406,10 +413,12 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
         key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
         value,
       ]);
+    const protein = mainData.metadata || mainData.payload.metadata;
+    addConfidenceTrack(dataConfidence, protein.accession, sortedData);
 
     return (
       <ProtVista
-        protein={mainData.metadata || mainData.payload.metadata}
+        protein={protein}
         data={sortedData}
         title="Entry matches to this protein"
         id={mainData.metadata.accession || mainData.payload.metadata.accession}
@@ -476,6 +485,7 @@ type DPWithoutDataProps = {
   dataResidues: Object,
   dataFeatures: Object,
   dataGenome3d: Object,
+  dataConfidence: Object,
   children: mixed,
   onMatchesLoaded?: function,
 };
@@ -493,6 +503,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     dataResidues: T.object.isRequired,
     dataFeatures: T.object.isRequired,
     dataGenome3d: T.object.isRequired,
+    dataConfidence: T.object.isRequired,
     children: T.any,
     onMatchesLoaded: T.func,
   };
@@ -567,8 +578,14 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 
   /* eslint-disable complexity  */
   render() {
-    const { data, mainData, dataResidues, dataFeatures, dataGenome3d } =
-      this.props;
+    const {
+      data,
+      mainData,
+      dataResidues,
+      dataFeatures,
+      dataGenome3d,
+      dataConfidence,
+    } = this.props;
 
     if (
       (!data || data.loading) &&
@@ -647,6 +664,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
           dataMerged={mergedData}
           showConservationButton={showConservationButton}
           handleConservationLoad={this.fetchConservationData}
+          dataConfidence={dataConfidence}
         >
           {this.props.children}
         </DomainOnProteinWithoutMergedData>
@@ -695,12 +713,22 @@ const getGenome3dURL = createSelector(
 );
 
 export default loadData({
-  getUrl: getExtraURL('extra_features'),
-  propNamespace: 'Features',
+  getUrl: getAlphaFoldPredictionURL,
+  propNamespace: 'Prediction',
 })(
-  loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
-    loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
-      loadData(getRelatedEntriesURL)(DomainOnProteinWithoutData),
+  loadData({
+    getUrl: getConfidenceURLFromPayload('Prediction'),
+    propNamespace: 'Confidence',
+  })(
+    loadData({
+      getUrl: getExtraURL('extra_features'),
+      propNamespace: 'Features',
+    })(
+      loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
+        loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
+          loadData(getRelatedEntriesURL)(DomainOnProteinWithoutData),
+        ),
+      ),
     ),
   ),
 );

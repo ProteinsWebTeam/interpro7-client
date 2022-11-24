@@ -119,6 +119,7 @@ const getUIDFromEntry = (entry) =>
   id: string,
   showOptions: boolean,
   showConservationButton: boolean,
+  showHydrophobicity: boolean,
   handleConservationLoad: function,
   goToCustomLocation: function,
   customLocation: Object,
@@ -166,6 +167,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     id: T.string,
     showOptions: T.bool,
     showConservationButton: T.bool,
+    showHydrophobicity: T.bool,
     handleConservationLoad: T.func,
     goToCustomLocation: T.func,
     customLocation: T.object,
@@ -658,6 +660,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       showConservationButton,
       children,
       showOptions = true,
+      showHydrophobicity = false,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
@@ -723,22 +726,25 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   use-ctrl-to-zoom
                 />
               </div>
-              <div className={f('track')}>
-                <protvista-coloured-sequence
-                  ref={this._hydroRef}
-                  length={length}
-                  displaystart="1"
-                  displayend={length}
-                  scale="hydrophobicity-scale"
-                  height="10"
-                  color_range="#0000FF:-3,#ffdd00:3"
-                  highlight-event="onmouseover"
-                  use-ctrl-to-zoom
-                  class="hydro"
-                />
-              </div>
-              <div className={f('track-label')}>Hydrophobicity</div>
-
+              {showHydrophobicity && (
+                <>
+                  <div className={f('track')}>
+                    <protvista-coloured-sequence
+                      ref={this._hydroRef}
+                      length={length}
+                      displaystart="1"
+                      displayend={length}
+                      scale="hydrophobicity-scale"
+                      height="10"
+                      color_range="#0000FF:-3,#ffdd00:3"
+                      highlight-event="onmouseover"
+                      use-ctrl-to-zoom
+                      class="hydro"
+                    />
+                  </div>
+                  <div className={f('track-label')}>Hydrophobicity</div>
+                </>
+              )}
               {data &&
                 data
                   .filter(([_, tracks]) => tracks && tracks.length)
