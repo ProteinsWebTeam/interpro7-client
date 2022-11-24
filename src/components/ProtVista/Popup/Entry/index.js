@@ -2,8 +2,6 @@
 import React from 'react';
 import T from 'prop-types';
 
-import { cloneDeep } from 'lodash-es';
-
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import localCSS from './style.css';
