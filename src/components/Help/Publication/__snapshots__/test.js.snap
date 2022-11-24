@@ -11,6 +11,7 @@ exports[`<Publication /> should render 1`] = `
   <div
     className="flex-column"
   >
+    <InterPro2022 />
     <InterPro2020 />
     <Publication
       authors="Robert D. Finn, Teresa K. Attwood, Patricia C. Babbitt,

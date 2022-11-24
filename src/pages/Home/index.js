@@ -13,7 +13,7 @@ import Description from 'components/Description';
 import CurrentVersion from 'components/home/CurrentVersion';
 import GeneralWarning from 'components/home/GeneralWarning';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
-import { PrintedInterPro2020 } from 'components/Help/Publication';
+import { PrintedInterPro2022 } from 'components/Help/Publication';
 import Tip from 'components/Tip';
 import Link from 'components/generic/Link';
 
@@ -152,12 +152,12 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
 );
 
 const CitingInterPro = () => (
-  <details className={f('citing-details')}>
+  <details className={f('citing-details')} open>
     <summary>Citing InterPro</summary>
     <div>
       If you find InterPro useful, please cite the reference that describes this
       work:
-      <PrintedInterPro2020 />
+      <PrintedInterPro2022 />
     </div>
   </details>
 );
