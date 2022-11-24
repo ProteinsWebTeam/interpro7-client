@@ -211,13 +211,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
   async componentDidMount() {
     await loadProtVistaWebComponents();
     const { data, protein } = this.props;
-    if (this._webProteinRef.current && this._hydroRef.current) {
+    if (this._webProteinRef.current) {
       const proteinE = this._webProteinRef.current;
-      const hydroE = this._hydroRef.current;
       proteinE.data = protein;
-      hydroE.data = protein;
       this.updateTracksWithData(data);
-      hydroE.addEventListener('change', this._handleTrackChange);
       if (this._popperContentRef.current) {
         const popperE = this._popperContentRef.current;
         popperE.addEventListener('mouseover', () =>
@@ -227,6 +224,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           this.setState({ overPopup: false }),
         );
       }
+    }
+    if (this._hydroRef.current) {
+      const hydroE = this._hydroRef.current;
+      hydroE.data = protein;
+      hydroE.addEventListener('change', this._handleTrackChange);
     }
   }
 
@@ -398,6 +400,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   modifiers: {
                     preventOverflow: {
                       boundariesElement: this._protvistaRef?.current || window,
+                      priority: ['left', 'right'],
                     },
                   },
                 },
