@@ -70,12 +70,19 @@ const ProtVistaEntryPopup = (
       };
     });
   }
+  const protein =
+    currentLocation?.description?.protein?.accession ||
+    detail?.feature?.protein ||
+    detail?.feature?.parent?.protein;
   const handleClick = (start, end) => () => {
-    const newLocation = cloneDeep(currentLocation);
-    newLocation.description[newLocation.description.main.key].detail =
-      'sequence';
-    newLocation.hash = `${start}-${end}`;
-    goToCustomLocation(newLocation);
+    if (!protein) return;
+    goToCustomLocation({
+      description: {
+        main: { key: 'protein' },
+        protein: { accession: protein, db: 'UniProt', detail: 'sequence' },
+      },
+      hash: `${start}-${end}`,
+    });
   };
   return (
     <section className={f('entry-popup')}>
@@ -129,6 +136,9 @@ const ProtVistaEntryPopup = (
                     <button
                       className={f('button', 'secondary')}
                       onClick={handleClick(start, end)}
+                      style={{
+                        cursor: protein ? 'pointer' : 'inherit',
+                      }}
                     >
                       {start} - {end}
                     </button>
