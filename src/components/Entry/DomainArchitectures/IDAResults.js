@@ -5,7 +5,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
-import { toggleAccessionDBForIDA } from 'actions/creators';
+import { changeSettingsRaw } from 'actions/creators';
 
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -14,22 +14,23 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { DomainArchitecturesWithData } from 'components/Entry/DomainArchitectures/index';
 
 const mapStateToProps = createSelector(
-  state =>
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
-  state => state.customLocation.search,
-  state => state.ui.idaAccessionDB,
-  (mainAccession, search, idaAccessionDB) => ({
+  (state) => state.customLocation.search,
+  (state) => state.settings.ui,
+  (mainAccession, search, { idaAccessionDB, idaLabel }) => ({
     mainAccession,
     search,
     idaAccessionDB,
+    idaLabel,
   }),
 );
 
 const getUrlForIDASearch = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, search) => {
     // omit from search
     const description = {
@@ -52,9 +53,9 @@ const IDAResults = (
   } /*: {searchFromURL: string , ignoreFromURL: string} */,
 ) => {
   if (!searchFromURL) return null; // Empty search
-  const entries = searchFromURL.split(',').map(e => e.trim());
+  const entries = searchFromURL.split(',').map((e) => e.trim());
   const ignore = ignoreFromURL
-    ? ignoreFromURL.split(',').map(e => e.trim())
+    ? ignoreFromURL.split(',').map((e) => e.trim())
     : [];
   if (entries.indexOf('') !== -1) return null; // One of the entries is empty
   if (ignoreFromURL !== undefined && ignoreFromURL.trim() === '') return null; // single ignore entry empty
@@ -66,7 +67,7 @@ const IDAResults = (
     loadData({
       getUrl: getUrlForIDASearch,
       mapStateToProps,
-      mapDispatchToProps: { toggleAccessionDBForIDA },
+      mapDispatchToProps: { changeSettingsRaw },
     })(DomainArchitecturesWithData),
   );
   return <Results highlight={entries} />;
@@ -77,7 +78,7 @@ IDAResults.propTypes = {
 };
 
 const mapSearchStateToProps = createSelector(
-  state => state.customLocation.search,
+  (state) => state.customLocation.search,
   ({ ida_search: searchFromURL, ida_ignore: ignoreFromURL }) => ({
     searchFromURL,
     ignoreFromURL,
