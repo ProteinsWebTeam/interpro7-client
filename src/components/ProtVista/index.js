@@ -28,7 +28,6 @@ import { NOT_MEMBER_DBS } from 'menuConfig';
 import spinner from 'components/SimpleCommonComponents/Loading/style.css';
 import PopperJS from 'popper.js';
 
-import loadWebComponent from 'utils/load-web-component';
 import { getTextForLabel } from 'utils/text';
 import id from 'utils/cheap-unique-id';
 
@@ -44,8 +43,6 @@ import gridCSS from './grid.css';
 import popperCSS from './popper.css';
 
 const f = foundationPartial(ipro, localCSS, spinner, fonts, gridCSS, popperCSS);
-
-const webComponents = [];
 
 const TOOLTIP_DELAY = 500;
 
@@ -97,8 +94,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     _popperRef: { current: null | React$ElementRef<'div'> };
     _popperContentRef: { current: null | React$ElementRef<'div'> };
     _protvistaRef: { current: null | React$ElementRef<'div'> };
-    _webProteinRef: { current: null | React$ElementRef<typeof ProtVistaSequence> };
-    _hydroRef: { current: null | React$ElementRef<typeof ProtVistaColouredSequence> };
+    _webProteinRef: { current: null | (React$ElementRef<'nigthingale-sequence'> ) };
+    _hydroRef: { current: null | (React$ElementRef<'nigthingale-coloured-sequence'> ) };
     _conservationTrackRef: { current: null | React$ElementRef<'div'> };
    */
   static propTypes = {
@@ -171,10 +168,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     if (this._webProteinRef.current && this._hydroRef.current) {
       const proteinE = this._webProteinRef.current;
       const hydroE = this._hydroRef.current;
-      proteinE.data = protein;
-      hydroE.data = protein;
+      (proteinE /*: any */).data = protein;
+      (hydroE /*: any */).data = protein;
       this.updateTracksWithData(data);
-      hydroE.addEventListener('change', this._handleTrackChange);
+      (hydroE /*: any */)
+        .addEventListener('change', this._handleTrackChange);
       if (this._popperContentRef.current) {
         const popperE = this._popperContentRef.current;
         popperE.addEventListener('mouseover', () =>
@@ -195,8 +193,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     if (!isEqual(prevProps.data, this.props.data)) {
       this.updateTracksWithData(this.props.data);
       if (this._webProteinRef.current && this._hydroRef.current) {
-        this._webProteinRef.current.data = this.props.protein;
-        this._hydroRef.current.data = this.props.protein;
+        (this._webProteinRef.current /*: any */).data = this.props.protein;
+        (this._hydroRef.current /*: any */).data = this.props.protein;
       }
     } else if (prevProps.colorDomainsBy !== this.props.colorDomainsBy) {
       for (const track of (Object.values(this.web_tracks) /*: any */)) {

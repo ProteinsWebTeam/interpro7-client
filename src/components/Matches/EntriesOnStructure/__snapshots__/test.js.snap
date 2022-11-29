@@ -10,9 +10,10 @@ exports[`<EntriesOnStructure /> should render 1`] = `
     <div
       className="aligned-to-track-component"
     >
-      <protvista-sequence
+      <nightingale-sequence
         displayend={622}
         displaystart="1"
+        height="30"
         length={622}
         use-ctrl-to-zoom={true}
       />
@@ -24,9 +25,9 @@ exports[`<EntriesOnStructure /> should render 1`] = `
     <Tooltip
       title="<b>1a4w</b><br/>CRYSTAL STRUCTURES OF THROMBIN WITH THIAZOLE-CONTAINING INHIBITORS: PROBES OF THE S1' BINDING SITE<br/>"
     >
-      <protvista-interpro-track
-        displayend={622}
-        displaystart="1"
+      <nightingale-interpro-track
+        display-end={622}
+        display-start="1"
         expanded={true}
         id="track_1a4w"
         length={622}
@@ -41,9 +42,9 @@ exports[`<EntriesOnStructure /> should render 1`] = `
     <Tooltip
       title="<b>IPR000001</b><br/>Kringle<br/><p>105-188</p><p>211-293</p>"
     >
-      <protvista-interpro-track
-        displayend={622}
-        displaystart="1"
+      <nightingale-interpro-track
+        display-end={622}
+        display-start="1"
         expanded={true}
         id="track_IPR000001"
         length={622}

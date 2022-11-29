@@ -213,10 +213,10 @@ export class IDAProtVista extends ProtVistaMatches {
                 databases={databases}
                 locations={d.locations}
               >
-                <protvista-interpro-track
+                <nightingale-interpro-track
                   length={length}
-                  displaystart="1"
-                  displayend={length}
+                  display-start="1"
+                  display-end={length}
                   id={`track_${d.accession}_${i}`}
                   ref={(e) =>
                     (this.web_tracks[`track_${d.accession}_${i}`] = e)

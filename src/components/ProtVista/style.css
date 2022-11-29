@@ -146,6 +146,7 @@ g:global(.child-location-group.clg-5) path {
 .track-in-table .track-component,
 .track-in-table .aligned-to-track-component {
   width: 100%;
+  background: transparent;
 }
 /*keep nth-of-type to make it work with multi track as for structure*/
 .track-in-table .track-component:nth-of-type(2),

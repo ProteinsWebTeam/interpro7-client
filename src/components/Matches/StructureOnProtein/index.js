@@ -38,7 +38,7 @@ class StructureOnProtein extends ProtVistaMatches {
     if (!this.web_protein.data)
       this.web_protein.data = protein.sequence || ' '.repeat(protein.length);
 
-    const tmp = locations.map(loc => ({
+    const tmp = locations.map((loc) => ({
       accession: structure.accession,
       name: structure.name,
       source_database: structure.source_database,
@@ -58,11 +58,12 @@ class StructureOnProtein extends ProtVistaMatches {
       <div className={f('track-in-table')}>
         <div className={f('track-container')}>
           <div className={f('aligned-to-track-component')}>
-            <protvista-sequence
-              ref={e => (this.web_protein = e)}
+            <nightingale-sequence
+              ref={(e) => (this.web_protein = e)}
               length={protein.length}
-              displaystart="1"
-              displayend={protein.length}
+              display-start="1"
+              display-end={protein.length}
+              height="30"
               use-ctrl-to-zoom
             />
           </div>
@@ -76,12 +77,12 @@ class StructureOnProtein extends ProtVistaMatches {
               structure.name.name,
             )}
           >
-            <protvista-interpro-track
+            <nightingale-interpro-track
               length={protein.length}
-              displaystart="1"
-              displayend={protein.length}
+              display-start="1"
+              display-end={protein.length}
               id={`track_${structure.accession}`}
-              ref={e => (this.web_tracks[structure.accession] = e)}
+              ref={(e) => (this.web_tracks[structure.accession] = e)}
               shape="rectangle"
               expanded
               use-ctrl-to-zoom

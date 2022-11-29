@@ -16,7 +16,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadable from 'higherOrder/loadable';
 import ToggleSwitch from 'components/ToggleSwitch';
 
-import loadWebComponent from 'utils/load-web-component';
+// import loadWebComponent from 'utils/load-web-component';
 // import ProtvistaInterproTrack from 'protvista-interpro-track';
 
 import { foundationPartial } from 'styles/foundation';
@@ -105,7 +105,6 @@ const SimilarProteinsHeaderWithData = (
     loadingDomain,
     payload.ida,
   );
-  console.count('representative');
   const idaObj = ida2json(payload.ida, representative, idaAccessionDB);
   return (
     <div>
