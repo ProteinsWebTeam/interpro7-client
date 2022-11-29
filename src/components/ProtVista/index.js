@@ -303,7 +303,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
 
   _handleTrackChange = ({ detail }) => {
     if (detail) {
-      switch (detail.eventtype) {
+      switch (detail.eventType) {
         case 'click':
           this.handleCollapseLabels(detail.feature.accession);
           break;
@@ -622,7 +622,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     if (!(length && data)) return <Loading />;
 
     const { hideCategory } = this.state;
-
+    const highlightColor = '#EB3BFF22';
     return (
       <div
         ref={this._mainRef}
@@ -667,6 +667,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   length={length}
                   display-start="1"
                   display-end={length}
+                  height="50"
+                  show-highlight
+                  highlight-color={highlightColor}
                 />
               </div>
               <div className={f('track')}>
@@ -676,6 +679,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   display-start="1"
                   display-end={length}
                   highlight-event="onmouseover"
+                  highlight-color={highlightColor}
+                  height="30"
                   use-ctrl-to-zoom
                 />
               </div>
@@ -689,6 +694,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   height="10"
                   color_range="#0000FF:-3,#ffdd00:3"
                   highlight-event="onmouseover"
+                  highlight-color={highlightColor}
                   use-ctrl-to-zoom
                   class="hydro"
                 />
@@ -783,6 +789,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                             ] = e)
                                           }
                                           highlight-event="onmouseover"
+                                          highlight-color={highlightColor}
                                           use-ctrl-to-zoom
                                         />
                                       )}
@@ -802,6 +809,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                           ] = e)
                                         }
                                         highlight-event="onmouseover"
+                                        highlight-color={highlightColor}
                                         use-ctrl-to-zoom
                                       />
                                     )}
@@ -818,6 +826,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         height="12"
                                         color_range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
                                         highlight-event="onmouseover"
+                                        highlight-color={highlightColor}
                                         class="confidence"
                                         use-ctrl-to-zoom
                                       />
@@ -835,6 +844,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     }
                                     shape="roundRectangle"
                                     highlight-event="onmouseover"
+                                    highlight-color={highlightColor}
                                     use-ctrl-to-zoom
                                     expanded
                                   />

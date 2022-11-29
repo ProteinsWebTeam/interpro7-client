@@ -58,11 +58,6 @@
   transition: fill 0.2s ease-out;
 }
 
-.protvista-grid .track g:global(.highlighted) rect {
-  fill: #7f7f7f;
-  opacity: 0.5;
-}
-
 .protvista-grid .track-label {
   grid-column: 2 / 3;
   overflow-x: scroll;
