@@ -18,7 +18,6 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
-import { noop } from 'lodash-es';
 
 const f = foundationPartial(style, ipro, fonts);
 
@@ -56,7 +55,6 @@ const AlphaFoldModel = (
     modelUrl,
     data,
     selections,
-    onModelCifChange = noop,
   } /*: {
   proteinAcc: string,
   hasMultipleProteins: boolean,
@@ -65,11 +63,9 @@ const AlphaFoldModel = (
   modelUrl: string,
   data: FetchOutput,
   selections: Object[],
-  onModelCifChange: (x:string|null)=>void|null,
 } */,
 ) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
-  const [modelCif, setModelCif] = useState(null);
   useEffect(() => {
     if (shouldResetViewer) {
       requestAnimationFrame(() => setShouldResetViewer(false));
@@ -78,9 +74,6 @@ const AlphaFoldModel = (
   useEffect(() => {
     if (!selections) setShouldResetViewer(true);
   }, [selections]);
-  useEffect(() => {
-    onModelCifChange(modelCif);
-  }, [modelCif]);
 
   if (data?.loading) return <Loading />;
   if ((data?.payload || []).length === 0) {
@@ -97,7 +90,6 @@ const AlphaFoldModel = (
     modelId === null
       ? models.slice(0, 1)
       : models.filter((x) => x.entryId === modelId);
-  if (modelCif !== modelInfo.cifUrl) setModelCif(modelInfo.cifUrl);
   const elementId = 'new-structure-model-viewer';
   return (
     <div>
@@ -246,7 +238,6 @@ AlphaFoldModel.propTypes = {
   modelUrl: T.string,
   data: T.object,
   selections: T.arrayOf(T.object),
-  onModelCifChange: T.func,
 };
 
 const getModelInfoUrl = (isUrlToApi) =>
