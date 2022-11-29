@@ -192,8 +192,8 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                   />
                 ))}
             </div>
-            {currentSet?.url_template ? (
-              <div className={f('medium-3', 'columns')}>
+            <div className={f('medium-3', 'columns')}>
+              {currentSet?.url_template ? (
                 <div className={f('panel')}>
                   <h5>External Links</h5>
                   <ul
@@ -212,8 +212,10 @@ class SummarySet extends PureComponent /*:: <Props> */ {
                     </li>
                   </ul>
                 </div>
-              </div>
-            ) : null}
+              ) : null}
+            </div>
+          </div>{' '}
+          <div className={f('row', 'columns')}>
             <ClanViewer data={this.props.data} loading={this.props.loading} />
           </div>
         </section>
