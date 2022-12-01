@@ -11,7 +11,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { Genome3dLink } from 'components/ExtLink';
+import { Genome3dLink, AlphafoldLink } from 'components/ExtLink';
 import { FunFamLink } from 'subPages/Subfamilies';
 
 import ProtVistaManager from 'protvista-manager';
@@ -99,6 +99,9 @@ const loadProtVistaWebComponents = () => {
   return Promise.all(webComponents);
 };
 
+const getUIDFromEntry = (entry) =>
+  `${entry.accession}${entry.source_database === 'pfam-n' ? '-N' : ''}`;
+
 /*:: import type { ColorMode } from 'utils/entry-color'; */
 /*:: type Props = {
   protein: Object,
@@ -116,6 +119,7 @@ const loadProtVistaWebComponents = () => {
   id: string,
   showOptions: boolean,
   showConservationButton: boolean,
+  showHydrophobicity: boolean,
   handleConservationLoad: function,
   goToCustomLocation: function,
   customLocation: Object,
@@ -163,6 +167,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     id: T.string,
     showOptions: T.bool,
     showConservationButton: T.bool,
+    showHydrophobicity: T.bool,
     handleConservationLoad: T.func,
     goToCustomLocation: T.func,
     customLocation: T.object,
@@ -206,13 +211,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
   async componentDidMount() {
     await loadProtVistaWebComponents();
     const { data, protein } = this.props;
-    if (this._webProteinRef.current && this._hydroRef.current) {
+    if (this._webProteinRef.current) {
       const proteinE = this._webProteinRef.current;
-      const hydroE = this._hydroRef.current;
       proteinE.data = protein;
-      hydroE.data = protein;
       this.updateTracksWithData(data);
-      hydroE.addEventListener('change', this._handleTrackChange);
       if (this._popperContentRef.current) {
         const popperE = this._popperContentRef.current;
         popperE.addEventListener('mouseover', () =>
@@ -222,6 +224,11 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           this.setState({ overPopup: false }),
         );
       }
+    }
+    if (this._hydroRef.current) {
+      const hydroE = this._hydroRef.current;
+      hydroE.data = protein;
+      hydroE.addEventListener('change', this._handleTrackChange);
     }
   }
 
@@ -267,22 +274,21 @@ export class ProtVista extends Component /*:: <Props, State> */ {
 
     for (const type of data) {
       for (const d of type[1]) {
-        const tmp =
-          d.type === 'sequence_conservation'
-            ? d.data
-            : (d.entry_protein_locations || d.locations).map((loc) => ({
-                accession: d.accession,
-                name: d.name,
-                source_database: d.source_database,
-                locations: [loc],
-                color: getTrackColor(d, this.props.colorDomainsBy),
-                entry_type: d.entry_type,
-                type: d.type || 'entry',
-                residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
-                chain: d.chain,
-                protein: d.protein,
-                confidence: loc.confidence,
-              }));
+        const tmp = ['sequence_conservation', 'confidence'].includes(d.type)
+          ? d.data
+          : (d.entry_protein_locations || d.locations).map((loc) => ({
+              accession: d.accession,
+              name: d.name,
+              source_database: d.source_database,
+              locations: [loc],
+              color: getTrackColor(d, this.props.colorDomainsBy),
+              entry_type: d.entry_type,
+              type: d.type || 'entry',
+              residues: d.residues && JSON.parse(JSON.stringify(d.residues)),
+              chain: d.chain,
+              protein: d.protein,
+              confidence: loc.confidence,
+            }));
         const children = d.children
           ? d.children.map((child) => ({
               accession: child.accession,
@@ -311,14 +317,16 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             }))
           : null;
         if (tmp.length > 0) {
-          const isNewElement = !this.web_tracks[d.accession]._data;
-          this.web_tracks[d.accession].data = tmp;
+          const isNewElement =
+            !this.web_tracks[getUIDFromEntry(d)]._data &&
+            !this.web_tracks[getUIDFromEntry(d)].sequence;
+          this.web_tracks[getUIDFromEntry(d)].data = tmp;
           if (this.props.fixedHighlight)
-            this.web_tracks[d.accession].fixedHighlight =
+            this.web_tracks[getUIDFromEntry(d)].fixedHighlight =
               this.props.fixedHighlight;
           this._setResiduesInState(children, d.accession);
           if (isNewElement) {
-            this.web_tracks[d.accession].addEventListener(
+            this.web_tracks[getUIDFromEntry(d)].addEventListener(
               'change',
               this._handleTrackChange,
             );
@@ -326,7 +334,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           this.setObjectValueInState(
             'expandedTrack',
             d.accession,
-            this.web_tracks[d.accession]._expanded,
+            this.web_tracks[getUIDFromEntry(d)]._expanded,
           );
         }
       }
@@ -383,15 +391,21 @@ export class ProtVista extends Component /*:: <Props, State> */ {
             }
 
             this._isPopperTop = !this._isPopperTop;
-            if (this._popperRef.current)
+            if (this._popperRef.current) {
               this.popper = new PopperJS(
                 detail.target,
                 this._popperRef.current,
                 {
-                  placement: this._isPopperTop ? 'top' : 'bottom',
                   applyStyle: { enabled: false },
+                  modifiers: {
+                    preventOverflow: {
+                      boundariesElement: this._protvistaRef?.current || window,
+                      priority: ['left', 'right'],
+                    },
+                  },
                 },
               );
+            }
           }
           break;
         default:
@@ -458,7 +472,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       ) : null;
     if (entry.accession.startsWith('residue:'))
       return entry.accession.split('residue:')[1];
-
     return (
       <>
         {type}
@@ -467,22 +480,29 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     );
   }
 
-  renderLabels(entry) {
-    const { expandedTrack, isPrinting } = this.state;
+  // eslint-disable-next-line complexity
+  renderExceptionalLabels(entry) {
     const { dataDB, id } = this.props;
-    let databases = {};
-    if (dataDB.payload) {
-      databases = dataDB.payload.databases;
-    }
+    const { isPrinting } = this.state;
+    const databases = dataDB?.payload?.databases || {};
+
     if (entry.source_database === 'mobidblt')
-      return <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>;
+      return isPrinting ? (
+        <span>{entry.accession}</span>
+      ) : (
+        <Link href={`https://mobidb.org/${id}`}>{entry.accession}</Link>
+      );
     if (entry.source_database === 'funfam') {
-      return (
+      return isPrinting ? (
+        <span>{entry.accession}</span>
+      ) : (
         <FunFamLink accession={entry.accession}>{entry.accession}</FunFamLink>
       );
     }
     if (entry.source_database === 'pfam-n') {
-      return (
+      return isPrinting ? (
+        <span>N: {entry.accession}</span>
+      ) : (
         <Link
           to={{
             description: {
@@ -493,6 +513,13 @@ export class ProtVista extends Component /*:: <Props, State> */ {
         >
           N: {entry.accession}
         </Link>
+      );
+    }
+    if (entry.source_database === 'alphafold') {
+      return (
+        <AlphafoldLink id={entry.protein} className={f('ext')}>
+          pLDDT
+        </AlphafoldLink>
       );
     }
     if (entry.type === 'residue')
@@ -520,70 +547,77 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       );
     }
     if (entry.accession && entry.accession.startsWith('G3D:')) {
-      // entry.accession = G3D:{entry.source_database}-PREDICTED... entry.source_database is what had to be shown
       return (
         <Genome3dLink id={entry.protein}>{entry.source_database}</Genome3dLink>
       );
     }
+    return null;
+  }
+
+  renderLabels(entry) {
+    const { expandedTrack, isPrinting } = this.state;
+
     const key /*: string */ =
       entry.source_database === 'pdb' ? 'structure' : 'entry';
     return (
-      <>
-        {isPrinting ? (
-          <b>{this.renderSwitch(this.props.label, entry)}</b>
-        ) : (
-          <Link
-            to={{
-              description: {
-                main: {
-                  key,
+      this.renderExceptionalLabels(entry) || (
+        <>
+          {isPrinting ? (
+            <b>{this.renderSwitch(this.props.label, entry)}</b>
+          ) : (
+            <Link
+              to={{
+                description: {
+                  main: {
+                    key,
+                  },
+                  [key]: {
+                    db: entry.source_database,
+                    accession: entry.accession.startsWith('residue:')
+                      ? entry.accession.split('residue:')[1]
+                      : entry.accession,
+                  },
                 },
-                [key]: {
-                  db: entry.source_database,
-                  accession: entry.accession.startsWith('residue:')
-                    ? entry.accession.split('residue:')[1]
-                    : entry.accession,
-                },
-              },
-            }}
+              }}
+            >
+              {this.renderSwitch(this.props.label, entry)}
+            </Link>
+          )}
+          <div
+            className={f({
+              hide: !expandedTrack[entry.accession],
+            })}
           >
-            {this.renderSwitch(this.props.label, entry)}
-          </Link>
-        )}
-        <div
-          className={f({
-            hide: !expandedTrack[entry.accession],
-          })}
-        >
-          {this.renderResidueLabels(entry)}
-          {entry.children &&
-            entry.children.map((d) => (
-              <div
-                key={`main_${d.accession}`}
-                className={f('track-accession-child')}
-              >
-                {isPrinting ? (
-                  this.renderSwitch(this.props.label, d)
-                ) : (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: {
-                          db: d.source_database,
-                          accession: d.accession,
+            {this.renderResidueLabels(entry)}
+            {entry.children &&
+              entry.children.map((d) => (
+                <div
+                  key={`main_${d.accession}`}
+                  className={f('track-accession-child')}
+                >
+                  {isPrinting ? (
+                    this.renderSwitch(this.props.label, d)
+                  ) : (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: {
+                            db: d.source_database,
+                            accession: d.accession,
+                          },
                         },
-                      },
-                    }}
-                  >
-                    {this.renderSwitch(this.props.label, d)}
-                  </Link>
-                )}
-                {this.renderResidueLabels(d)}
-              </div>
-            ))}
-        </div>
-      </>
+                      }}
+                    >
+                      {this.renderSwitch(this.props.label, d)}
+                    </Link>
+                  )}
+                  {this.renderResidueLabels(d)}
+                </div>
+              ))}
+          </div>
+        </>
+      )
     );
   }
 
@@ -629,6 +663,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       showConservationButton,
       children,
       showOptions = true,
+      showHydrophobicity = false,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
@@ -694,20 +729,25 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   use-ctrl-to-zoom
                 />
               </div>
-              <div className={f('track')}>
-                <protvista-coloured-sequence
-                  ref={this._hydroRef}
-                  length={length}
-                  displaystart="1"
-                  displayend={length}
-                  scale="hydrophobicity-scale"
-                  height="10"
-                  color_range="#0000FF:-3,#ffdd00:3"
-                  highlight-event="onmouseover"
-                  use-ctrl-to-zoom
-                />
-              </div>
-
+              {showHydrophobicity && (
+                <>
+                  <div className={f('track')}>
+                    <protvista-coloured-sequence
+                      ref={this._hydroRef}
+                      length={length}
+                      displaystart="1"
+                      displayend={length}
+                      scale="hydrophobicity-scale"
+                      height="10"
+                      color_range="#0000FF:-3,#ffdd00:3"
+                      highlight-event="onmouseover"
+                      use-ctrl-to-zoom
+                      class="hydro"
+                    />
+                  </div>
+                  <div className={f('track-label')}>Hydrophobicity</div>
+                </>
+              )}
               {data &&
                 data
                   .filter(([_, tracks]) => tracks && tracks.length)
@@ -764,6 +804,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                               >
                                 {entry.type === 'secondary_structure' ||
                                 entry.type === 'sequence_conservation' ||
+                                entry.type === 'confidence' ||
                                 entry.type === 'residue' ? (
                                   <div
                                     className={f(
@@ -790,8 +831,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                           type="conservation"
                                           id={`track_${entry.accession}`}
                                           ref={(e) =>
-                                            (this.web_tracks[entry.accession] =
-                                              e)
+                                            (this.web_tracks[
+                                              getUIDFromEntry(entry)
+                                            ] = e)
                                           }
                                           highlight-event="onmouseover"
                                           use-ctrl-to-zoom
@@ -808,9 +850,28 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         }
                                         id={`track_${entry.accession}`}
                                         ref={(e) =>
-                                          (this.web_tracks[entry.accession] = e)
+                                          (this.web_tracks[
+                                            getUIDFromEntry(entry)
+                                          ] = e)
                                         }
                                         highlight-event="onmouseover"
+                                        use-ctrl-to-zoom
+                                      />
+                                    )}
+                                    {entry.type === 'confidence' && (
+                                      <protvista-coloured-sequence
+                                        ref={(e) =>
+                                          (this.web_tracks[entry.accession] = e)
+                                        }
+                                        id={`track_${entry.accession}`}
+                                        length={length}
+                                        displaystart="1"
+                                        displayend={length}
+                                        scale="H:90,M:70,L:50,D:0"
+                                        height="12"
+                                        color_range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
+                                        highlight-event="onmouseover"
+                                        class="confidence"
                                         use-ctrl-to-zoom
                                       />
                                     )}
@@ -822,7 +883,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     displayend={length}
                                     id={`track_${entry.accession}`}
                                     ref={(e) =>
-                                      (this.web_tracks[entry.accession] = e)
+                                      (this.web_tracks[getUIDFromEntry(entry)] =
+                                        e)
                                     }
                                     shape="roundRectangle"
                                     highlight-event="onmouseover"

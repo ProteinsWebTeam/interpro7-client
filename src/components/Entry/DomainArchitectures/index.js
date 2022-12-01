@@ -1,28 +1,25 @@
+// @flow
 /* eslint no-magic-numbers: [1, {ignore: [0, 1, 2, 100]}]*/
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import { toggleAccessionDBForIDA } from 'actions/creators';
-
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Footer from 'components/Table/Footer';
-import ProtVistaMatches from 'components/Matches/ProtVistaMatches';
-import NumberComponent from 'components/NumberComponent';
-import DynamicTooltip from 'components/SimpleCommonComponents/DynamicTooltip';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { edgeCases } from 'utils/server-message';
 import EdgeCase from 'components/EdgeCase';
-import ToggleSwitch from 'components/ToggleSwitch';
 
+import IDAOptions from './Options';
+import IDAProtVista from './IDAProtVista';
+import TextIDA from './TextIDA';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import { toPlural } from 'utils/pages';
-import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -30,7 +27,6 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from './style.css';
 import protvista from 'components/ProtVista/style.css';
-import { getUrlForMeta } from '../../../higherOrder/loadData/defaults';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, protvista, fonts);
 
@@ -41,7 +37,6 @@ const SchemaOrgData = loadable({
 
 const FAKE_PROTEIN_LENGTH = 1000;
 const GAP_BETWEEN_DOMAINS = 5;
-const MAX_PERC_WIDTH = 95; // Just to reseve a bit for the labels
 
 const schemaProcessData = (data) => ({
   '@id': '@additionalProperty',
@@ -56,17 +51,32 @@ const schemaProcessData = (data) => ({
     },
   ],
 });
+/*::
+type Representative = {
+  domains:Array<{
+    name: string,
+    coordinates: {
+      fragments: {
+          start: number;
+          end: number;
+      }[]
+    }[]
+  }>,
+  length: number
+}|typeof undefined
+*/
 export const ida2json = (
   ida /*: string */,
-  representative /*: {domains:Array<{}>, length: number}|undefined */,
+  representative /*: Representative */,
   entry /*: string */,
-) /*: {    length: number,    domains: [],    accessions: Array<string>  } */ => {
+) /*: {    length: number,    domains: Array<mixed>,    accessions: Array<string>  } */ => {
   const idaParts = ida.split('-');
   const n = idaParts.length;
   const feature = (FAKE_PROTEIN_LENGTH - GAP_BETWEEN_DOMAINS * (n + 1)) / n;
-  const repDomains = representative ? [...representative.domains] : null;
+  const repDomains = representative ? [...representative.domains] : [];
   const domains = idaParts.map((p, i) => {
     const [pf, ipr] = p.split(':');
+    let [namePf, nameIpr] = p.split(':');
     let locations = [
       {
         fragments: [
@@ -79,6 +89,8 @@ export const ida2json = (
     ];
     if (representative) {
       const [pfLocation, iprLocation] = repDomains.splice(0, ipr ? 2 : 1);
+      if (pfLocation?.name) namePf = pfLocation.name;
+      if (iprLocation?.name) nameIpr = iprLocation.name;
       locations =
         entry === 'pfam'
           ? pfLocation?.coordinates
@@ -87,6 +99,7 @@ export const ida2json = (
     return {
       // accession: ipr || pf,
       accession: entry === 'pfam' ? pf : ipr || pf,
+      name: entry === 'pfam' ? namePf : nameIpr || namePf,
       unintegrated: !ipr,
       locations,
     };
@@ -111,158 +124,6 @@ const getMaxLength = (idaResults) => {
   );
   return max === 0 ? FAKE_PROTEIN_LENGTH : 100 * Math.ceil(max / 100);
 };
-export const TextIDA = ({ accessions } /*: {accessions: Array<string>} */) => (
-  <div style={{ display: 'flex' }}>
-    <div>
-      {accessions.map((accession, i) => (
-        <React.Fragment key={i}>
-          {i !== 0 && ' - '}
-          <span className={f('ida-text-domain')}>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: {
-                    db: accession.toLowerCase().startsWith('ipr')
-                      ? 'InterPro'
-                      : 'pfam',
-                    accession,
-                  },
-                },
-              }}
-            >
-              {' '}
-              {accession}
-            </Link>
-          </span>
-        </React.Fragment>
-      ))}
-    </div>
-  </div>
-);
-
-TextIDA.propTypes = {
-  accessions: T.arrayOf(T.string),
-};
-
-/* :: type Props = {
-  matches: Array<Object>,
-  highlight: Array<string>,
-  databases: Object,
-}
-*/
-export class IDAProtVista extends ProtVistaMatches {
-  static propTypes = {
-    matches: T.arrayOf(T.object).isRequired,
-    databases: T.object.isRequired,
-    highlight: T.arrayOf(T.string),
-  };
-
-  updateTracksWithData(props /*: Props */) {
-    const { matches } = props;
-
-    matches.forEach((domain, i) => {
-      const isIPR = domain.accession.toLowerCase().startsWith('ipr');
-      const sourceDatabase = isIPR ? 'interpro' : 'pfam';
-      const tmp = [
-        {
-          name: domain.accession,
-          source_database: sourceDatabase,
-          color: getTrackColor(
-            { accession: domain.accession },
-            EntryColorMode.ACCESSION,
-          ),
-          type: 'entry',
-          ...domain,
-        },
-      ];
-      this.web_tracks[`track_${domain.accession}_${i}`].data = tmp;
-    });
-  }
-
-  render() {
-    const {
-      matches,
-      length,
-      maxLength,
-      databases,
-      highlight = [],
-    } = this.props;
-
-    const width = `${(MAX_PERC_WIDTH * length) / maxLength}%`;
-    return (
-      <div className={f('ida-protvista')}>
-        {matches.map((d, i) => (
-          <div key={`${d.accession}-${i}`} className={f('track-row')}>
-            <div
-              className={f('track-component', {
-                highlight: highlight.indexOf(d.accession) >= 0,
-              })}
-              style={{
-                width,
-              }}
-            >
-              <DynamicTooltip
-                type="entry"
-                source={
-                  d.accession.toLowerCase().startsWith('ipr')
-                    ? 'interpro'
-                    : 'pfam'
-                }
-                accession={`${d.accession}`}
-                databases={databases}
-                locations={d.locations}
-              >
-                <protvista-interpro-track
-                  length={length}
-                  displaystart="1"
-                  displayend={length}
-                  id={`track_${d.accession}_${i}`}
-                  ref={(e) =>
-                    (this.web_tracks[`track_${d.accession}_${i}`] = e)
-                  }
-                  shape="roundRectangle"
-                  expanded
-                  use-ctrl-to-zoom
-                />
-              </DynamicTooltip>
-            </div>
-            <div className={f('track-accession')}>
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'entry' },
-                    entry: {
-                      db: d.accession.toLowerCase().startsWith('ipr')
-                        ? 'InterPro'
-                        : 'pfam',
-                      accession: d.accession,
-                    },
-                  },
-                }}
-              >
-                {d.accession}
-              </Link>
-            </div>
-          </div>
-        ))}
-        <div className={f('track-row')}>
-          <div
-            className={f('track-length')}
-            style={{
-              width,
-            }}
-          >
-            <div className={f('note')} />
-            <div className={f('length')}>
-              <NumberComponent noTitle>{length}</NumberComponent>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
 
 /* :: type DomainArchitecturesWithDataProps = {
   data: Object,
@@ -271,8 +132,8 @@ export class IDAProtVista extends ProtVistaMatches {
   search: Object,
   highlight: Array<string>,
   idaAccessionDB: string,
+  idaLabel: string,
   database: string,
-  toggleAccessionDBForIDA: function,
 }
 */
 class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitecturesWithDataProps> */ {
@@ -283,12 +144,8 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     dataDB: T.object.isRequired,
     highlight: T.arrayOf(T.string),
     idaAccessionDB: T.string,
+    idaLabel: T.string,
     database: T.string,
-    toggleAccessionDBForIDA: T.func,
-  };
-
-  toggleDomainEntry = () => {
-    this.props.toggleAccessionDBForIDA();
   };
 
   render() {
@@ -299,6 +156,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       dataDB,
       highlight = [],
       idaAccessionDB,
+      idaLabel,
       database,
     } = this.props;
     if (loading || dataDB.loading) return <Loading />;
@@ -340,22 +198,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       messageContent = (
         <>
           <h4>{payload.count} domain architectures found.</h4>
-          {!database && (
-            <div className={f('accession-selector-panel')}>
-              <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
-                <ToggleSwitch
-                  switchCond={idaAccessionDB === 'pfam'}
-                  name={'accessionDB'}
-                  id={'accessionDB-input'}
-                  SRLabel={'Use accessions from'}
-                  onValue={'Pfam'}
-                  offValue={'InterPro'}
-                  handleChange={this.toggleDomainEntry}
-                  addAccessionStyle={true}
-                />
-              </Tooltip>
-            </div>
-          )}
+          {!database && <IDAOptions />}
         </>
       );
     }
@@ -419,6 +262,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                   maxLength={maxLength}
                   databases={dataDB.payload.databases}
                   highlight={toHighlight}
+                  attributeForLabel={idaLabel}
                 />
                 {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
               </div>
@@ -430,6 +274,7 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
             pagination={search}
             nextAPICall={payload.next}
             previousAPICall={payload.previous}
+            notFound={false}
           />
         </div>
       </div>
@@ -465,11 +310,12 @@ const mapStateToProps = createSelector(
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,
   (state) => state.customLocation.search,
-  (state) => state.ui.idaAccessionDB,
-  (mainAccession, search, idaAccessionDB) => ({
+  (state) => state.settings.ui,
+  (mainAccession, search, { idaAccessionDB, idaLabel }) => ({
     mainAccession,
     search,
     idaAccessionDB,
+    idaLabel,
   }),
 );
 
@@ -481,6 +327,5 @@ export default loadData({
   loadData({
     getUrl: getUrlFor,
     mapStateToProps,
-    mapDispatchToProps: { toggleAccessionDBForIDA },
   })(DomainArchitecturesWithData),
 );

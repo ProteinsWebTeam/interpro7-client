@@ -3,6 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import ProtVistaHydroPopup from './Hydro';
+import ProtVistaConfidencePopup from './Confidence';
 import ProtVistaResiduePopup from './Residue';
 import ProtVistaEntryPopup from './Entry';
 import ProtVistaConservationPopup from './Conservation';
@@ -33,6 +34,8 @@ import ProtVistaConservationPopup from './Conservation';
       entry: string,
       confidence: number,
       start?: number,
+      protein?: string,
+      parent?:{protein?: string},
       aa?: string,
       value?: number,
       currentResidue?: {
@@ -79,9 +82,13 @@ const ProtVistaPopup = (
     );
   }
 
+  const colouredTrack = detail?.target?.closest('protvista-coloured-sequence');
   // comes from the hydrophobicity track
-  if (detail?.target?.closest('protvista-coloured-sequence')) {
-    return <ProtVistaHydroPopup detail={detail} />;
+  if (colouredTrack) {
+    if (colouredTrack.classList.contains('hydro'))
+      return <ProtVistaHydroPopup detail={detail} />;
+    if (colouredTrack.classList.contains('confidence'))
+      return <ProtVistaConfidencePopup detail={detail} />;
   }
 
   // comes from the Entry track

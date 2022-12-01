@@ -2,8 +2,6 @@
 import React from 'react';
 import T from 'prop-types';
 
-import { cloneDeep } from 'lodash-es';
-
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import localCSS from './style.css';
@@ -70,15 +68,22 @@ const ProtVistaEntryPopup = (
       };
     });
   }
+  const protein =
+    currentLocation?.description?.protein?.accession ||
+    detail?.feature?.protein ||
+    detail?.feature?.parent?.protein;
   const handleClick = (start, end) => () => {
-    const newLocation = cloneDeep(currentLocation);
-    newLocation.description[newLocation.description.main.key].detail =
-      'sequence';
-    newLocation.hash = `${start}-${end}`;
-    goToCustomLocation(newLocation);
+    if (!protein) return;
+    goToCustomLocation({
+      description: {
+        main: { key: 'protein' },
+        protein: { accession: protein, db: 'UniProt', detail: 'sequence' },
+      },
+      hash: `${start}-${end}`,
+    });
   };
   return (
-    <section>
+    <section className={f('entry-popup')}>
       <h6>
         {accession.startsWith('residue:')
           ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
@@ -86,7 +91,7 @@ const ProtVistaEntryPopup = (
         {description && <p>[{description}]</p>}
       </h6>
 
-      {name && <h4>{name}</h4>}
+      {name && <h4 className={f('title')}>{name}</h4>}
 
       <div className={f('pop-wrapper')}>
         <div>
@@ -129,6 +134,9 @@ const ProtVistaEntryPopup = (
                     <button
                       className={f('button', 'secondary')}
                       onClick={handleClick(start, end)}
+                      style={{
+                        cursor: protein ? 'pointer' : 'inherit',
+                      }}
                     >
                       {start} - {end}
                     </button>

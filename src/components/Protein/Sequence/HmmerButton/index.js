@@ -36,13 +36,7 @@ const HmmerButton = (
       target="_blank"
     >
       <div
-        className={f(
-          'sequence-link',
-          'button-more',
-          'icon',
-          'icon-common',
-          'icon-right',
-        )}
+        className={f('sequence-link', 'button', 'hollow')}
         data-icon="&#xf061;"
         style={{ minWidth: minWidth }}
       >
@@ -58,7 +52,7 @@ HmmerButton.propTypes = {
   sequence: T.oneOfType([T.func, T.string]).isRequired,
   accession: T.string,
   title: T.string,
-  minWidth: T.string,
+  minWidth: T.oneOfType([T.number, T.string]),
 };
 
 export default HmmerButton;

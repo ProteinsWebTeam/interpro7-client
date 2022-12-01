@@ -89,7 +89,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
     notFound: T.bool,
     rowClassName: T.oneOfType([T.string, T.func]),
     groups: T.arrayOf(T.string),
-    groupActions: T.object,
+    groupActions: T.func,
   };
 
   static defaultProps = {

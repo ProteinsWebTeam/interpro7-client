@@ -173,6 +173,11 @@ export const UniProtLink = patternLinkWrapper(
 );
 UniProtLink.displayName = 'UniProtLink';
 
+export const AlphafoldLink = patternLinkWrapper(
+  'https://alphafold.ebi.ac.uk/entry/{id}',
+);
+AlphafoldLink.displayName = 'AlphafoldLink';
+
 export const Genome3dLink = patternLinkWrapper(
   'http://www.genome3d.net/uniprot/id/{id}/annotations',
 );

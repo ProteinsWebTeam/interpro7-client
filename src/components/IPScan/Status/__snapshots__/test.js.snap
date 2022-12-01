@@ -58,17 +58,23 @@ exports[`<IPScanStatus /> should render 1`] = `
         icon=""
         label="Clear All"
       >
-        <button
-          onClick={[Function]}
-        >
-          Loaded from File
-        </button>
-        <hr />
-        <button
-          onClick={[Function]}
-        >
-          Loaded from Servers
-        </button>
+        <ul>
+          <li>
+            <button
+              onClick={[Function]}
+            >
+              Loaded from File
+            </button>
+          </li>
+          <li>
+             
+            <button
+              onClick={[Function]}
+            >
+              Loaded from Servers
+            </button>
+          </li>
+        </ul>
       </DropDownButton>
     </ExtraOptions>
     <Column

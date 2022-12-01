@@ -53,27 +53,29 @@ type NucleotideResult = {
 export type ProteinFile = {
   results: Array<ProteinResult>,
   'interproscan-version': string,
+  applications: string[]|string,
 }
-  export type NucleotideFile = {
-      results: Array<NucleotideResult>,
-      'interproscan-version': string,
-    }
-  type JobMetadata = {
-    localID: string,
-    localTitle: string,
-    type: string,
-    remoteID: string,
-    hasResults: boolean,
-    entries: Array<Object>,
-    group?: string,
+export type NucleotideFile = {
+  results: Array<NucleotideResult>,
+  'interproscan-version': string,
+  applications: string[]|string,
   }
-  type Props = {
-    show: Boolean,
-    closeModal: function,
-    fileContent: ProteinFile | NucleotideFile,
-    fileName: string,
-    importJobFromData: function,
-  }
+type JobMetadata = {
+  localID: string,
+  localTitle: string,
+  type: string,
+  remoteID: string,
+  hasResults: boolean,
+  entries: Array<Object>,
+  group?: string,
+}
+type Props = {
+  show: Boolean,
+  closeModal: function,
+  fileContent: ProteinFile | NucleotideFile,
+  fileName: string,
+  importJobFromData: function,
+}
 */
 
 const saveJobInIDB = (
@@ -81,6 +83,7 @@ const saveJobInIDB = (
   remoteID /*: string */,
   localTitle /*: string */,
   ipScanVersion /*: string */,
+  applications /*: ?string[]|string */,
   importJobFromData /*: function */,
 ) => {
   const localID = id(`internal-${Date.now()}`);
@@ -96,6 +99,7 @@ const saveJobInIDB = (
     'interproscan-version': ipScanVersion,
     input: result.sequence,
     results: [result],
+    applications,
   };
   if (result.group) {
     metadata.group = result.group;
@@ -125,6 +129,7 @@ const LoadedFileDialog = (
               `imported_file-${fileName}-${i + 1}-orf-${rest.id}`,
               `${id} - ORF:${rest.id}`,
               fileContent['interproscan-version'],
+              fileContent.applications,
               importJobFromData,
             );
           }
@@ -138,6 +143,7 @@ const LoadedFileDialog = (
           `imported_file-${fileName}-${i + 1}`,
           result?.xref?.[0]?.id || `Seq ${i + 1} from ${fileName}`,
           fileContent['interproscan-version'],
+          fileContent.applications,
           importJobFromData,
         );
       }
