@@ -96,6 +96,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     _protvistaRef: { current: null | React$ElementRef<'div'> };
     _webProteinRef: { current: null | (React$ElementRef<'nigthingale-sequence'> ) };
     _hydroRef: { current: null | (React$ElementRef<'nigthingale-coloured-sequence'> ) };
+    _navigationRef: { current: null | (React$ElementRef<'nigthingale-navigation'> ) };
     _conservationTrackRef: { current: null | React$ElementRef<'div'> };
    */
   static propTypes = {
@@ -148,6 +149,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     this._protvistaRef = React.createRef();
     this._webProteinRef = React.createRef();
     this._hydroRef = React.createRef();
+    this._navigationRef = React.createRef();
     this._conservationTrackRef = React.createRef();
     this._isPopperTop = true;
     this._timeoutID = null;
@@ -647,6 +649,14 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                     setPrintingMode={(mode /*: boolean */) =>
                       this.setState({ isPrinting: mode })
                     }
+                    onZoomIn={() => {
+                      (this._navigationRef.current /*: any */)
+                        ?.zoomIn();
+                    }}
+                    onZoomOut={() => {
+                      (this._navigationRef.current /*: any */)
+                        ?.zoomOut();
+                    }}
                   >
                     {children}
                   </ProtVistaOptions>
@@ -663,6 +673,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               <div className={f('track')}>
                 <nightingale-navigation
                   length={length}
+                  ref={this._navigationRef}
                   display-start="1"
                   display-end={length}
                   height="50"
