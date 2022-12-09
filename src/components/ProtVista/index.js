@@ -289,7 +289,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           this.setObjectValueInState(
             'expandedTrack',
             d.accession,
-            this.web_tracks[getUIDFromEntry(d)]._expanded,
+            this.web_tracks[getUIDFromEntry(d)].expanded,
           );
         }
       }
@@ -400,7 +400,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       this.setObjectValueInState(
         'expandedTrack',
         accession,
-        this.web_tracks[accession]._expanded,
+        this.web_tracks[accession].expanded,
       );
     } else if (this.state.expandedTrack.hasOwnProperty(accession)) {
       this.setObjectValueInState(
