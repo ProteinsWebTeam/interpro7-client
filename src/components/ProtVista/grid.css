@@ -45,7 +45,7 @@
   stroke: rgba(0, 0, 0, 0.3);
   stroke-width: 2;
   cursor: pointer;
-  opacity: 0.7;
+  opacity: 0.8;
   &:hover {
     opacity: 1;
   }

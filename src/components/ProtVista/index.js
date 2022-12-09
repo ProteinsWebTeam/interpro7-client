@@ -234,6 +234,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           : (d.entry_protein_locations || d.locations).map((loc) => ({
               accession: d.accession,
               name: d.name,
+              short_name: d.short_name,
               source_database: d.source_database,
               locations: [loc],
               color: getTrackColor(d, this.props.colorDomainsBy),
@@ -249,6 +250,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               accession: child.accession,
               chain: d.chain,
               name: child.name,
+              short_name: child.short_name,
               residues:
                 child.residues && JSON.parse(JSON.stringify(child.residues)),
               source_database: child.source_database,
@@ -854,6 +856,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     shape="roundRectangle"
                                     highlight-event="onmouseover"
                                     highlight-color={highlightColor}
+                                    show-label
+                                    label=".feature.short_name"
                                     use-ctrl-to-zoom
                                     expanded
                                   />
