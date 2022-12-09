@@ -22,7 +22,7 @@ type PropsIDAOptions = {
 }
 */
 const IDAOptions = (
-  { changeSettingsRaw, idaAccessionDB /*, idaLabel*/ } /*: PropsIDAOptions */,
+  { changeSettingsRaw, idaAccessionDB /* , idaLabel*/ } /*: PropsIDAOptions */,
 ) => {
   const toggleDomainEntry = () => {
     changeSettingsRaw(

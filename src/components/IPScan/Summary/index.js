@@ -193,7 +193,10 @@ const SummaryIPScanJob = ({
     const blob = new Blob([downloadContent], { type: 'application/json' });
     dataURL = URL.createObjectURL(blob);
   }
-
+  // TODO: Check if thejob is still in the server to display or not the Exporter
+  const reg = /(.+)(-\d+)$/;
+  const match = reg.exec(accession);
+  const rootAccession = match?.[1] ?? accession;
   return (
     <div className={f('sections')}>
       <section>
@@ -319,7 +322,9 @@ const SummaryIPScanJob = ({
                     <Link
                       target="_blank"
                       href={
-                        expired ? dataURL : `${dataURL}/${accession}/${type}`
+                        expired
+                          ? dataURL
+                          : `${dataURL}/${rootAccession}/${type}`
                       }
                       download={`InterProScan.${type}`}
                       disabled={expired && type !== 'json'}
