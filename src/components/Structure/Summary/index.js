@@ -198,7 +198,7 @@ export class SummaryStructure extends PureComponent /*:: <Props> */ {
   }
 }
 
-const getURLForMatches = createSelector(
+export const getURLForMatches = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description.structure,
   ({ protocol, hostname, port, root }, { accession }) =>
@@ -211,7 +211,10 @@ const getURLForMatches = createSelector(
         structure: { isFilter: true, db: 'pdb', accession },
         entry: { db: 'all' },
       })}`,
-      query: { page_size: 200 },
+      query: {
+        page_size: 200,
+        extra_fields: 'short_name',
+      },
     }),
 );
 

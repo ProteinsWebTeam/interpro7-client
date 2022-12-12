@@ -42,7 +42,7 @@ class EntriesOnStructure extends ProtVistaMatches {
         protein_length: length,
       },
     } = firstMatch;
-    const strData = locationsPS.map(loc => ({
+    const strData = locationsPS.map((loc) => ({
       accession: structure.accession,
       name: structure.name,
       source_database: structure.source_database,
@@ -50,9 +50,10 @@ class EntriesOnStructure extends ProtVistaMatches {
       color: getTrackColor(structure, EntryColorMode.ACCESSION),
       type: 'structure',
     }));
-    const entryData = locationsEP.map(loc => ({
+    const entryData = locationsEP.map((loc) => ({
       accession: entry.accession,
       name: entry.name,
+      short_name: entry.short_name,
       source_database: entry.source_database,
       locations: [loc],
       color: getTrackColor(entry, EntryColorMode.ACCESSION),
@@ -77,7 +78,7 @@ class EntriesOnStructure extends ProtVistaMatches {
         <div className={f('track-container')}>
           <div className={f('aligned-to-track-component')}>
             <protvista-sequence
-              ref={e => (this.web_protein = e)}
+              ref={(e) => (this.web_protein = e)}
               length={length}
               displaystart="1"
               displayend={length}
@@ -99,7 +100,7 @@ class EntriesOnStructure extends ProtVistaMatches {
               displaystart="1"
               displayend={length}
               id={`track_${structure.accession}`}
-              ref={e => (this.web_tracks[structure.accession] = e)}
+              ref={(e) => (this.web_tracks[structure.accession] = e)}
               shape="rectangle"
               expanded
               use-ctrl-to-zoom
@@ -120,7 +121,7 @@ class EntriesOnStructure extends ProtVistaMatches {
               displaystart="1"
               displayend={length}
               id={`track_${entry.accession}`}
-              ref={e => (this.web_tracks[entry.accession] = e)}
+              ref={(e) => (this.web_tracks[entry.accession] = e)}
               shape="roundRectangle"
               expanded
               use-ctrl-to-zoom
