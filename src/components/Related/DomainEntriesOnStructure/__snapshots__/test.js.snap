@@ -110,6 +110,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
                   ],
                   "name": "Kringle superfamily",
                   "protein": "p00735",
+                  "short_name": undefined,
                   "source_database": "interpro",
                   "type": "homologous_superfamily",
                 },

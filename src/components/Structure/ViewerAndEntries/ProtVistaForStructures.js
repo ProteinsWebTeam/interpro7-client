@@ -55,27 +55,25 @@ ProtVistaForStructure.propTypes = {
   }),
 };
 
-const getInterproRelatedEntriesURL = createSelector(
+export const getURLForMatches = createSelector(
   (state) => state.settings.api,
-  (state) => state.customLocation.description.structure.accession,
-  ({ protocol, hostname, port, root }, accession) => {
-    const newDesc = {
-      main: { key: 'entry' },
-      structure: { isFilter: true, db: 'PDB', accession },
-      entry: { db: 'all' },
-    };
-    return format({
+  (state) => state.customLocation.description.structure,
+  ({ protocol, hostname, port, root }, { accession }) =>
+    format({
       protocol,
       hostname,
       port,
-      pathname: root + descriptionToPath(newDesc),
+      pathname: `${root}${descriptionToPath({
+        main: { key: 'entry' },
+        structure: { isFilter: true, db: 'pdb', accession },
+        entry: { db: 'all' },
+      })}`,
       query: {
         page_size: 200,
+        extra_fields: 'short_name',
       },
-    });
-  },
+    }),
 );
-
 const getSecondaryStructureURL = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description.structure,
@@ -99,4 +97,4 @@ const getSecondaryStructureURL = createSelector(
 export default loadData({
   propNamespace: 'Secondary',
   getUrl: getSecondaryStructureURL,
-})(loadData(getInterproRelatedEntriesURL)(ProtVistaForStructure));
+})(loadData(getURLForMatches)(ProtVistaForStructure));
