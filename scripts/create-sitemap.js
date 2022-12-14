@@ -10,8 +10,9 @@ const readline = require('readline');
 const args = process.argv.slice(2);
 
 const PATH = path.resolve(args.length ? args[0] : './dist/sitemap');
-const API_URL = 'https://www.ebi.ac.uk:443/interpro/api/';
-const BASE_URL = `${API_URL}/entry/InterPro/?page_size=200`;
+const API_URL = 'https://wwwdev.ebi.ac.uk:443/interpro/api/';
+const BASE_URL = `${API_URL}/entry/{DB}/?page_size=200`;
+const DATABASES = ['interpro', 'pfam'];
 
 const ONE_SEC = 1000;
 const ONE_MIN = 60000;
@@ -21,8 +22,10 @@ const status = {
   empty: 204,
   timeout: 408,
 };
-const processItem = function* ({ metadata: { accession } }) {
-  yield `https://www.ebi.ac.uk/interpro/entry/InterPro/${accession}\n`;
+const processItem = function* ({
+  metadata: { accession, source_database: db },
+}) {
+  yield `https://www.ebi.ac.uk/interpro/entry/${db}/${accession}\n`;
 };
 
 const getVersion = async function () {
@@ -39,25 +42,30 @@ const getVersion = async function () {
 const main = async function* (startURL) {
   let next = startURL;
   while (next) {
-    const response = await fetch(next, {
-      headers: { Accept: 'application/json' },
-    });
-    // If the server sent a timeout response…
-    if (response.status === status.timeout) {
-      // …wait a bit for the server to process the query in the background…
-      await sleep(ONE_MIN);
-      // …then continue this loop with the same URL
-      continue;
-    } else if (response.status === status.empty) {
-      break;
+    try {
+      const response = await fetch(next, {
+        headers: { Accept: 'application/json' },
+      });
+      // If the server sent a timeout response…
+      if (response.status === status.timeout) {
+        // …wait a bit for the server to process the query in the background…
+        await sleep(ONE_MIN);
+        // …then continue this loop with the same URL
+        continue;
+      } else if (response.status === status.empty) {
+        break;
+      }
+      const payload = await response.json();
+      for (const item of payload.results) {
+        yield* processItem(item);
+      }
+      next = payload.next;
+      // Don't overload the server, give it a bit of time before asking for more
+      if (next) await sleep(ONE_SEC);
+    } catch (Exception) {
+      process.stdout.write('there was a fetch error, tryin again in 10 SEC');
+      await sleep(ONE_SEC * 10);
     }
-    const payload = await response.json();
-    for (const item of payload.results) {
-      yield* processItem(item);
-    }
-    next = payload.next;
-    // Don't overload the server, give it a bit of time before asking for more
-    if (next) await sleep(ONE_SEC);
   }
 };
 const isThereASiteMapFor = function (version) {
@@ -73,22 +81,19 @@ const generateFolder = function (version) {
   return `${PATH}/${version}`;
 };
 
-const generateInterProEntriesSiteMap = async function (path, url) {
-  const writeStream = fs.createWriteStream(path);
+const generateEntriesSiteMap = async function (writeStream, url) {
   let processed = 0;
   const interval = setInterval(() => {
     readline.clearLine(process.stdout); // clear current text
     readline.cursorTo(process.stdout, 0); // move cursor to beginning of line
     process.stdout.write(`URLs written: ${processed}`);
   }, ONE_SEC);
-  writeStream.on('finish', () => {
-    clearInterval(interval);
-  });
+
   for await (const output of main(url)) {
     writeStream.write(output);
     processed++;
   }
-  writeStream.end();
+  return interval;
 };
 const createOrReplaceSymLink = function (target, path) {
   const createLink = () =>
@@ -124,7 +129,16 @@ if (require.main === module) {
     process.stdout.write(`📁 Folders created ${newPath}\n`);
     const entryFileName = 'entries.interpro.sitemap.txt';
     const newSitemap = `${newPath}/${entryFileName}`;
-    generateInterProEntriesSiteMap(newSitemap, BASE_URL);
+    const writeStream = fs.createWriteStream(`${newPath}/${entryFileName}`);
+    for (const db of DATABASES) {
+      process.stdout.write(`🗃️ Processing: ${db}\n`);
+      const interval = await generateEntriesSiteMap(
+        writeStream,
+        BASE_URL.replace('{DB}', db)
+      );
+      clearInterval(interval);
+    }
+    writeStream.end();
     createOrReplaceSymLink(newSitemap, `${PATH}/${entryFileName}`);
     process.stdout.write(`🌎 Map created: ${newSitemap}\n`);
   };
