@@ -15,6 +15,7 @@ const BASE_URL = `${API_URL}/entry/{DB}/?page_size=200`;
 const DATABASES = ['interpro', 'pfam'];
 
 const ONE_SEC = 1000;
+const TEN_SEC = 10000;
 const ONE_MIN = 60000;
 
 const status = {
@@ -64,7 +65,7 @@ const main = async function* (startURL) {
       if (next) await sleep(ONE_SEC);
     } catch (Exception) {
       process.stdout.write('there was a fetch error, tryin again in 10 SEC');
-      await sleep(ONE_SEC * 10);
+      await sleep(TEN_SEC);
     }
   }
 };
