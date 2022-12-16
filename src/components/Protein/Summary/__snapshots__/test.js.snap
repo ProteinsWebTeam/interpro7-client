@@ -199,8 +199,12 @@ exports[`<SummaryProtein /> should render 1`] = `
           />
           <Memo(Connect(IPScanButton))
             minWidth="290px"
-            sequence={[Function]}
+            sequence="%3EA0A000_STRVD%201-109%0AMDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTN%0AHFHVALEREPAEPHGKEDAVLFTSGYSAN%0A"
             title="Search protein with InterProScan"
+          />
+          <DownloadButton
+            accession="A0A000"
+            sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
           />
         </div>
       </div>
