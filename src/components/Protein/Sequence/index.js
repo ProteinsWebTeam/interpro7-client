@@ -327,10 +327,7 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
               title="Search selection with HMMER"
               minWidth="302px"
             />
-            <DownloadButton
-              sequence={sequence}
-              accession={accession}
-            ></DownloadButton>
+            <DownloadButton sequence={sequence} accession={accession} />
           </div>
         </div>
       </section>

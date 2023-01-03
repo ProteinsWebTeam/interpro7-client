@@ -282,7 +282,7 @@ export const SummaryProtein = (
               <DownloadButton
                 sequence={metadata.sequence}
                 accession={metadata.accession}
-              ></DownloadButton>
+              />
             </div>
           </div>
         </div>
