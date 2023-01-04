@@ -128,20 +128,20 @@ if (require.main === module) {
     }
     const newPath = generateFolder(version);
     process.stdout.write(`📁 Folders created ${newPath}\n`);
-    const entryFileName = 'entries.interpro.sitemap.txt';
-    const newSitemap = `${newPath}/${entryFileName}`;
-    const writeStream = fs.createWriteStream(`${newPath}/${entryFileName}`);
     for (const db of DATABASES) {
       process.stdout.write(`🗃️ Processing: ${db}\n`);
+      const entryFileName = `entries.${db}.sitemap.txt`;
+      const newSitemap = `${newPath}/${entryFileName}`;
+      const writeStream = fs.createWriteStream(`${newPath}/${entryFileName}`);
       const interval = await generateEntriesSiteMap(
         writeStream,
         BASE_URL.replace('{DB}', db)
       );
       clearInterval(interval);
+      writeStream.end();
+      createOrReplaceSymLink(newSitemap, `${PATH}/${entryFileName}`);
+      process.stdout.write(`🌎 Map created: ${newSitemap}\n`);
     }
-    writeStream.end();
-    createOrReplaceSymLink(newSitemap, `${PATH}/${entryFileName}`);
-    process.stdout.write(`🌎 Map created: ${newSitemap}\n`);
   };
   mainWriteToStdout();
 } else {
