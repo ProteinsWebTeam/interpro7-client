@@ -9,7 +9,7 @@
   min-width: 150px;
   border-radius: 3px;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  padding: 10px;
+  padding: 0.5rem;
   text-align: left;
   margin: 6px;
   border: 1px #dedede solid;
@@ -42,7 +42,7 @@
   border-right-color: transparent;
   border-top-color: transparent;
   top: -5px;
-  left: calc(50% - 5px);
+  left: 0;
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -71,4 +71,25 @@
   top: calc(50% - 5px);
   margin-left: 0;
   margin-right: 0;
+}
+
+.entry-popup {
+  max-width: 40ch;
+
+  & .title {
+    font-weight: bold;
+    opacity: 1;
+  }
+  & h6 {
+    margin-bottom: 0.3rem;
+    color: white;
+  }
+  & ul {
+    list-style-type: none;
+    margin-bottom: 0;
+  }
+}
+button.coordinates {
+  padding: 0.3rem 0.7rem;
+  margin: 0;
 }
