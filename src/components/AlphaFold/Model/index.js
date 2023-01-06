@@ -10,6 +10,7 @@ import Link from 'components/generic/Link';
 import { UniProtLink } from 'components/ExtLink';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
+import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
@@ -126,7 +127,19 @@ const AlphaFoldModel = (
           <ul className={f('information')}>
             <li>
               <span className={f('header')}>Protein</span>
-              {modelInfo.uniprotAccession}
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'protein' },
+                    protein: {
+                      db: 'uniprot',
+                      accession: modelInfo.uniprotAccession,
+                    },
+                  },
+                }}
+              >
+                {modelInfo.uniprotAccession}
+              </Link>
               <span className={f('footer')}>
                 View on{' '}
                 <Link href={modelUrl} className={f('ext')}>
@@ -212,6 +225,9 @@ const AlphaFoldModel = (
                   tooltip="View the structure in full screen mode"
                   element={elementId}
                 />{' '}
+                <PIPToggleButton
+                  className={f('icon', 'icon-common', 'control')}
+                />
               </>
             }
           >

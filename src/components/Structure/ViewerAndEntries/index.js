@@ -11,6 +11,7 @@ import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 import ProtVistaForStructure from './ProtVistaForStructures';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
+import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
@@ -437,6 +438,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
                   element={elementId}
                 />
               )}
+              <PIPToggleButton
+                className={f('icon', 'icon-common', 'control')}
+              />
             </>
           }
         >
