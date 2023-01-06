@@ -56,6 +56,9 @@ const AlphaFoldModel = (
     modelUrl,
     data,
     selections,
+    parentElement,
+    isSplitScreen,
+    onSplitScreenChange,
   } /*: {
   proteinAcc: string,
   hasMultipleProteins: boolean,
@@ -64,6 +67,9 @@ const AlphaFoldModel = (
   modelUrl: string,
   data: FetchOutput,
   selections: Object[],
+  parentElement?: HTMLElement,
+  isSplitScreen: boolean,
+  onSplitScreenChange?: (v:boolean)=>void
 } */,
 ) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
@@ -75,7 +81,6 @@ const AlphaFoldModel = (
   useEffect(() => {
     if (!selections) setShouldResetViewer(true);
   }, [selections]);
-
   if (data?.loading) return <Loading />;
   if ((data?.payload || []).length === 0) {
     return (
@@ -93,21 +98,23 @@ const AlphaFoldModel = (
       : models.filter((x) => x.entryId === modelId);
   const elementId = 'new-structure-model-viewer';
   return (
-    <div>
+    <div className={f('alphafold-model')}>
       <h3>
         AlphaFold structure prediction
         {models.length > 1 || hasMultipleProteins ? 's' : ''}
       </h3>
-      <p>
-        The protein structure below has been predicted by{' '}
-        <Link href={'//deepmind.com/'}>DeepMind</Link> with AlphaFold (
-        <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
-          Jumper, J et al. 2021
-        </Link>
-        ). For more information and additional features, please visit this
-        sequence&apos;s page at <Link href={modelUrl}>AlphaFold DB</Link>.
-      </p>
-      {hasMultipleProteins ? (
+      {!isSplitScreen && (
+        <p>
+          The protein structure below has been predicted by{' '}
+          <Link href={'//deepmind.com/'}>DeepMind</Link> with AlphaFold (
+          <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
+            Jumper, J et al. 2021
+          </Link>
+          ). For more information and additional features, please visit this
+          sequence&apos;s page at <Link href={modelUrl}>AlphaFold DB</Link>.
+        </p>
+      )}
+      {hasMultipleProteins && !isSplitScreen ? (
         <div className={f('callout', 'primary', 'info')}>
           <p>
             <span
@@ -122,73 +129,81 @@ const AlphaFoldModel = (
         ''
       )}
       <div className={f('row')}>
-        <div className={f('column', 'small-12', 'medium-3')}>
-          <h5>Information</h5>
-          <ul className={f('information')}>
-            <li>
-              <span className={f('header')}>Protein</span>
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'protein' },
-                    protein: {
-                      db: 'uniprot',
-                      accession: modelInfo.uniprotAccession,
-                    },
-                  },
-                }}
-              >
-                {modelInfo.uniprotAccession}
-              </Link>
-              <span className={f('footer')}>
-                View on{' '}
-                <Link href={modelUrl} className={f('ext')}>
-                  AlphaFold DB
-                </Link>{' '}
-                or{' '}
-                <UniProtLink
-                  id={modelInfo.uniprotAccession}
-                  className={f('ext')}
-                >
-                  UniProtKB
-                </UniProtLink>
-              </span>
-            </li>
-            <li>
-              <span className={f('header')}>Organism</span>
-              <i>{modelInfo.organismScientificName}</i>
-            </li>
-            {models.length > 1 ? (
+        {!isSplitScreen && (
+          <div className={f('column', 'small-12', 'medium-3')}>
+            <h5>Information</h5>
+            <ul className={f('information')}>
               <li>
-                <span className={f('header')}>Prediction</span>
-                <select
-                  value={modelId}
-                  className={f('protein-list')}
-                  onChange={(event) => onModelChange(event.target.value)}
-                  onBlur={(event) => onModelChange(event.target.value)}
+                <span className={f('header')}>Protein</span>
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'protein' },
+                      protein: {
+                        db: 'uniprot',
+                        accession: modelInfo.uniprotAccession,
+                      },
+                    },
+                  }}
                 >
-                  {models.map((model) => (
-                    <option key={model.entryId}>{model.entryId}</option>
-                  ))}
-                </select>
+                  {modelInfo.uniprotAccession}
+                </Link>
+                <span className={f('footer')}>
+                  View on{' '}
+                  <Link href={modelUrl} className={f('ext')}>
+                    AlphaFold DB
+                  </Link>{' '}
+                  or{' '}
+                  <UniProtLink
+                    id={modelInfo.uniprotAccession}
+                    className={f('ext')}
+                  >
+                    UniProtKB
+                  </UniProtLink>
+                </span>
               </li>
-            ) : (
-              ''
-            )}
-          </ul>
-          <h5>Model confidence</h5>
-          <ul className={f('legend')}>
-            {confidenceColors.map((item) => (
-              <li key={item.category}>
-                <span style={{ backgroundColor: item.color }}>&nbsp;</span>{' '}
-                {item.category} ({item.range})
+              <li>
+                <span className={f('header')}>Organism</span>
+                <i>{modelInfo.organismScientificName}</i>
               </li>
-            ))}
-          </ul>
-        </div>
-        <div className={f('column', 'small-12', 'medium-9')}>
+              {models.length > 1 ? (
+                <li>
+                  <span className={f('header')}>Prediction</span>
+                  <select
+                    value={modelId}
+                    className={f('protein-list')}
+                    onChange={(event) => onModelChange(event.target.value)}
+                    onBlur={(event) => onModelChange(event.target.value)}
+                  >
+                    {models.map((model) => (
+                      <option key={model.entryId}>{model.entryId}</option>
+                    ))}
+                  </select>
+                </li>
+              ) : (
+                ''
+              )}
+            </ul>
+            <h5>Model confidence</h5>
+            <ul className={f('legend')}>
+              {confidenceColors.map((item) => (
+                <li key={item.category}>
+                  <span style={{ backgroundColor: item.color }}>&nbsp;</span>{' '}
+                  {item.category} ({item.range})
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <div
+          className={f({
+            column: !isSplitScreen,
+            'small-12': !isSplitScreen,
+            'medium-9': !isSplitScreen,
+          })}
+        >
           <PictureInPicturePanel
-            className={f('structure-viewer')}
+            className={f({ 'structure-viewer-split': isSplitScreen })}
             testid="structure-3d-viewer"
             OtherButtons={
               <>
@@ -225,6 +240,16 @@ const AlphaFoldModel = (
                   tooltip="View the structure in full screen mode"
                   element={elementId}
                 />{' '}
+                <FullScreenButton
+                  className={f('icon', 'icon-common', 'control')}
+                  tooltip={
+                    isSplitScreen ? 'Exit full screen' : 'Split full screen'
+                  }
+                  dataIcon={isSplitScreen ? 'G' : '\uF0DB'}
+                  element={parentElement}
+                  onFullScreenHook={() => onSplitScreenChange?.(true)}
+                  onExitFullScreenHook={() => onSplitScreenChange?.(false)}
+                />{' '}
                 <PIPToggleButton
                   className={f('icon', 'icon-common', 'control')}
                 />
@@ -254,6 +279,9 @@ AlphaFoldModel.propTypes = {
   modelUrl: T.string,
   data: T.object,
   selections: T.arrayOf(T.object),
+  parentElement: T.any,
+  isSplitScreen: T.bool,
+  onSplitScreenChange: T.func,
 };
 
 const getModelInfoUrl = (isUrlToApi) =>
