@@ -124,6 +124,7 @@ const getUIDFromEntry = (entry) =>
   goToCustomLocation: function,
   customLocation: Object,
   children: any,
+  conservationError: null|string,
 }; */
 
 /*:: type State = {
@@ -172,6 +173,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     goToCustomLocation: T.func,
     customLocation: T.object,
     children: T.any,
+    conservationError: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -929,16 +931,24 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                       className={f('conservation-placeholder-component')}
                       ref={this._conservationTrackRef}
                     >
-                      {this.state.showLoading ? (
-                        <div
-                          className={f('loading-spinner')}
-                          style={{ margin: '10px auto' }}
-                        >
-                          <div />
-                          <div />
-                          <div />
+                      {this.props.conservationError ? (
+                        <div className={f('conservation-error')}>
+                          ⚠️ {this.props.conservationError}
                         </div>
-                      ) : null}
+                      ) : (
+                        <>
+                          {this.state.showLoading ? (
+                            <div
+                              className={f('loading-spinner')}
+                              style={{ margin: '10px auto' }}
+                            >
+                              <div />
+                              <div />
+                              <div />
+                            </div>
+                          ) : null}
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className={f('track-label')}>

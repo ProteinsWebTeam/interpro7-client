@@ -32,6 +32,7 @@ const f = foundationPartial(ipro);
 const CONSERVATION_WINDOW = 25;
 const PIRSR_ACCESSION_LENGTH = 11;
 const PIRSF_PREFIX_LENGTH = 5;
+const HTTP_OK = 200;
 
 const ProtVista = loadable({
   loader: () =>
@@ -384,6 +385,7 @@ const getExtraURL = (query /*: string */) =>
   mainData: Object,
   dataMerged: Object,
   dataConfidence?: Object,
+  conservationError?: string|null,
   showConservationButton?: boolean,
   handleConservationLoad?: function,
   children: any,
@@ -393,6 +395,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
     mainData: T.object.isRequired,
     dataMerged: T.object.isRequired,
     dataConfidence: T.object,
+    conservationError: T.string,
     showConservationButton: T.bool,
     handleConservationLoad: T.func,
     children: T.any,
@@ -403,6 +406,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
       mainData,
       dataMerged,
       dataConfidence,
+      conservationError,
       showConservationButton,
       handleConservationLoad,
     } = this.props;
@@ -424,6 +428,7 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
         id={mainData.metadata.accession || mainData.payload.metadata.accession}
         showConservationButton={showConservationButton}
         handleConservationLoad={handleConservationLoad}
+        conservationError={conservationError}
       >
         {this.props.children}
       </ProtVista>
@@ -432,25 +437,28 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
 }
 
 const ConservationProvider = (
-  {
-    handleLoaded,
-    dataConservation,
-  } /*: { handleLoaded: function, dataConservation?: { loading: boolean, payload: {}} } */,
+  { handleLoaded, handleError, dataConservation } /*: {
+    handleLoaded: function,
+    handleError: function,
+    dataConservation?: { ok: boolean, loading: boolean, payload: {}} } */,
 ) => {
   useEffect(() => {
-    if (
-      dataConservation &&
-      !dataConservation.loading &&
-      dataConservation.payload
-    ) {
-      handleLoaded(dataConservation.payload);
+    if (dataConservation && !dataConservation.loading) {
+      if (dataConservation.ok && dataConservation.payload) {
+        handleLoaded(dataConservation.payload);
+      } else {
+        handleError(dataConservation);
+      }
     }
+    console.log('=>', dataConservation);
   });
   return null;
 };
 ConservationProvider.propTypes = {
   handleLoaded: T.func,
+  handleError: T.func,
   dataConservation: T.shape({
+    ok: T.bool,
     loading: T.bool,
     payload: T.object,
   }),
@@ -493,6 +501,7 @@ type DPState ={
   generateConservationData: boolean,
   showConservationButton: boolean,
   dataConservation: ?{ [string]: {entries: ?{}, warnings: Array<string>}},
+  errorConservation: null | string;
 }
 */
 
@@ -514,6 +523,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       generateConservationData: false,
       showConservationButton: false,
       dataConservation: null,
+      errorConservation: null,
     };
   }
 
@@ -648,7 +658,25 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     return (
       <>
         <ConservationProviderElement
-          handleLoaded={(data) => this.setState({ dataConservation: data })}
+          handleLoaded={(data) =>
+            this.setState({
+              dataConservation: data,
+              errorConservation: null,
+            })
+          }
+          handleError={(payload) => {
+            let message = 'Unknown issue fetching the data.';
+            if (payload.status) {
+              message =
+                payload.status === HTTP_OK
+                  ? 'The server responded OK, however the payload is empty'
+                  : `Server code - ${payload.status}`;
+            }
+            this.setState({
+              dataConservation: null,
+              errorConservation: `ERROR: ${message}`,
+            });
+          }}
         />
         <div className={f('margin-bottom-large')}>
           <h5>Protein family membership</h5>
@@ -665,6 +693,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
           showConservationButton={showConservationButton}
           handleConservationLoad={this.fetchConservationData}
           dataConfidence={dataConfidence}
+          conservationError={this.state.errorConservation}
         >
           {this.props.children}
         </DomainOnProteinWithoutMergedData>
