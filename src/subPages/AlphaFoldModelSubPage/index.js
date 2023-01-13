@@ -76,6 +76,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
             onChangeSelection={(selection) => {
               setSelectionsInModel(selection);
             }}
+            isSplitScreen={isSplitScreen}
           />
         </div>
       )}

@@ -404,7 +404,11 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
             ) : null,
           }}
           OtherButtons={
-            <>
+            <div
+              style={{
+                display: isSplitScreen ? 'none' : 'block',
+              }}
+            >
               <button
                 className={f('icon', 'icon-common', 'as-link')}
                 onClick={() => {
@@ -422,26 +426,22 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
               <FullScreenButton
                 element={this._splitView.current}
                 className={f('icon', 'icon-common', 'as-link')}
-                tooltip={
-                  isSplitScreen ? 'Exit full screen' : 'Split full screen'
-                }
-                dataIcon={isSplitScreen ? 'G' : '\uF0DB'}
+                tooltip="Split full screen"
+                dataIcon={'\uF0DB'}
                 onFullScreenHook={() => this.setState({ isSplitScreen: true })}
                 onExitFullScreenHook={() =>
                   this.setState({ isSplitScreen: false })
                 }
               />
-              {isSplitScreen ? null : (
-                <FullScreenButton
-                  className={f('icon', 'icon-common', 'as-link')}
-                  tooltip="View the structure in full screen mode"
-                  element={elementId}
-                />
-              )}
+              <FullScreenButton
+                className={f('icon', 'icon-common', 'as-link')}
+                tooltip="View the structure in full screen mode"
+                element={elementId}
+              />
               <PIPToggleButton
                 className={f('icon', 'icon-common', 'as-link')}
               />
-            </>
+            </div>
           }
         >
           <StructureViewer

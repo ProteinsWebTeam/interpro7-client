@@ -99,20 +99,22 @@ const AlphaFoldModel = (
   const elementId = 'new-structure-model-viewer';
   return (
     <div className={f('alphafold-model')}>
-      <h3>
-        AlphaFold structure prediction
-        {models.length > 1 || hasMultipleProteins ? 's' : ''}
-      </h3>
       {!isSplitScreen && (
-        <p>
-          The protein structure below has been predicted by{' '}
-          <Link href={'//deepmind.com/'}>DeepMind</Link> with AlphaFold (
-          <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
-            Jumper, J et al. 2021
-          </Link>
-          ). For more information and additional features, please visit this
-          sequence&apos;s page at <Link href={modelUrl}>AlphaFold DB</Link>.
-        </p>
+        <>
+          <h3>
+            AlphaFold structure prediction
+            {models.length > 1 || hasMultipleProteins ? 's' : ''}
+          </h3>
+          <p>
+            The protein structure below has been predicted by{' '}
+            <Link href={'//deepmind.com/'}>DeepMind</Link> with AlphaFold (
+            <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
+              Jumper, J et al. 2021
+            </Link>
+            ). For more information and additional features, please visit this
+            sequence&apos;s page at <Link href={modelUrl}>AlphaFold DB</Link>.
+          </p>
+        </>
       )}
       {hasMultipleProteins && !isSplitScreen ? (
         <div className={f('callout', 'primary', 'info')}>
@@ -206,7 +208,11 @@ const AlphaFoldModel = (
             className={f({ 'structure-viewer-split': isSplitScreen })}
             testid="structure-3d-viewer"
             OtherButtons={
-              <>
+              <div
+                style={{
+                  display: isSplitScreen ? 'none' : 'block',
+                }}
+              >
                 <Link
                   className={f('control')}
                   href={modelInfo.pdbUrl}
@@ -242,10 +248,8 @@ const AlphaFoldModel = (
                 />{' '}
                 <FullScreenButton
                   className={f('icon', 'icon-common', 'control')}
-                  tooltip={
-                    isSplitScreen ? 'Exit full screen' : 'Split full screen'
-                  }
-                  dataIcon={isSplitScreen ? 'G' : '\uF0DB'}
+                  tooltip="Split full screen"
+                  dataIcon={'\uF0DB'}
                   element={parentElement}
                   onFullScreenHook={() => onSplitScreenChange?.(true)}
                   onExitFullScreenHook={() => onSplitScreenChange?.(false)}
@@ -253,7 +257,7 @@ const AlphaFoldModel = (
                 <PIPToggleButton
                   className={f('icon', 'icon-common', 'control')}
                 />
-              </>
+              </div>
             }
           >
             <StructureViewer

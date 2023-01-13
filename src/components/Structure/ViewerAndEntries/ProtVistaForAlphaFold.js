@@ -45,12 +45,20 @@ export const addConfidenceTrack = (dataConfidence, protein, tracks) => {
 type Selection = { chain: string, start: number, end: number}
   */
 const ProtVistaForAlphaFold = (
-  { data, protein, dataProtein, dataConfidence, onChangeSelection } /*: {
+  {
+    data,
+    protein,
+    dataProtein,
+    dataConfidence,
+    onChangeSelection,
+    isSplitScreen = false,
+  } /*: {
   data: {loading: boolean, payload: ?Object},
   protein: string,
   dataProtein: {loading: boolean, payload: ?Object},
   dataConfidence: {loading: boolean, payload: ?Object},
   onChangeSelection: (Selection[]|null)=>void;
+  isSplitScreen: boolean;
 }*/,
 ) => {
   const containerRef =
@@ -122,6 +130,7 @@ const ProtVistaForAlphaFold = (
         protein={dataProtein.payload.metadata}
         data={tracks}
         title="Protein domains"
+        showOptions={!isSplitScreen}
       />
     </div>
   );
@@ -133,6 +142,7 @@ ProtVistaForAlphaFold.propTypes = {
   onChangeSelection: T.func,
   protein: T.string.isRequired,
   confidenceURL: T.string,
+  isSplitScreen: T.bool,
 };
 
 const getProteinURL = createSelector(
