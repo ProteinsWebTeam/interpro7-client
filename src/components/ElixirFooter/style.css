@@ -1,14 +1,38 @@
-.elixir-ribbon {
+.ribbon {
+  display: flex;
+  justify-content: space-between;
+  align-content: stretch;
+  flex-wrap: wrap;
+  row-gap: 2rem;
   padding: 1rem 0;
   font-family: Helvetica, Arial, FreeSans, 'Liberation Sans', sans-serif;
   border-top: 1px solid #f6f6f6;
 
-  & .elixir-title {
+  & > * {
+    flex-grow: 2;
+  }
+  & .stakeholder {
+    display: flex;
+    gap: 1rem;
+
+    & .logo {
+      height: 60px;
+    }
+
+    &.right {
+      flex-direction: row-reverse;
+      & .text {
+        text-align: right;
+      }
+    }
+  }
+
+  & .title {
     font-size: 1.3rem;
   }
 
   &,
-  & .elixir-title,
+  & .title,
   & a,
   & a:active,
   & a:hover {
@@ -19,37 +43,4 @@
   & a:hover {
     opacity: 0.8;
   }
-
-  & .readmore {
-    border-bottom: 1px dotted #fff;
-  }
-
-  & .elixir-logo-kite {
-    position: relative;
-    top: -5px;
-    margin: 0 1rem -0.5rem 0;
-    height: 60px;
-    width: 60px;
-    display: inline-block;
-    float: left;
-    background-size: 60px;
-  }
-}
-
-.row {
-  /*max-width: 1200px;*/
-  margin: 0 auto 1rem;
-  display: flex;
-
-  &::before,
-  &::after {
-    display: table;
-    content: ' ';
-  }
-}
-
-.elixir-logo-kite {
-  display: inline-block;
-  float: left;
-  margin: 0 1rem -0.5rem 0;
 }
