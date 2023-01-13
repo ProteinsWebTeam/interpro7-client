@@ -155,6 +155,11 @@ g:global(.child-location-group.clg-5) path {
 
 .conservation-placeholder-component {
   height: 4em;
+  display: flex;
+  justify-content: center;
+  & > div {
+    font-size: 1.2rem;
+  }
 }
 
 .protvista div:global(.zoom-button-div) {

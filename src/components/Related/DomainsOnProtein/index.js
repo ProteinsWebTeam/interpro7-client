@@ -450,7 +450,6 @@ const ConservationProvider = (
         handleError(dataConservation);
       }
     }
-    console.log('=>', dataConservation);
   });
   return null;
 };

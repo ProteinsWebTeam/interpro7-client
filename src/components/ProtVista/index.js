@@ -937,16 +937,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                         </div>
                       ) : (
                         <>
-                          {this.state.showLoading ? (
-                            <div
-                              className={f('loading-spinner')}
-                              style={{ margin: '10px auto' }}
-                            >
-                              <div />
-                              <div />
-                              <div />
-                            </div>
-                          ) : null}
+                          {this.state.showLoading ? <Loading inline /> : null}
                         </>
                       )}
                     </div>
