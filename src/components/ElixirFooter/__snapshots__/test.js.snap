@@ -2,42 +2,75 @@
 
 exports[`<ElixirFooter /> should render 1`] = `
 <div
-  className="elixir-ribbon"
+  className="row columns"
 >
   <div
-    className="row"
+    className="ribbon"
   >
-    <div
-      className="columns"
-    >
+    <div>
       <Memo(Connect(Link))
         href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi"
         target="_blank"
       >
-        <LazyImage
-          alt="Elixir logo"
-          className="elixir-logo-kite"
-          src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.4/images/logos/ELIXIR/elixir-cdr.gif"
-        />
-        <span
-          className="elixir-title"
+        <div
+          className="stakeholder"
         >
-          This service is part of the ELIXIR infrastructure
-        </span>
-        <br />
-        <small>
-          <span
-            className="elixir-banner-description"
+          <LazyImage
+            alt="Elixir logo"
+            className="logo"
+            src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.4/images/logos/ELIXIR/elixir-cdr.gif"
+          />
+          <div
+            className="text"
           >
-            InterPro is an ELIXIR Core Data Resource
-          </span>
-           
-          <span
-            className="readmore"
+            <span
+              className="title"
+            >
+              This service is part of the ELIXIR infrastructure
+            </span>
+            <br />
+            <small>
+              <span
+                className="elixir-banner-description"
+              >
+                InterPro is an ELIXIR Core Data Resource
+              </span>
+            </small>
+          </div>
+        </div>
+      </Memo(Connect(Link))>
+    </div>
+    <div>
+      <Memo(Connect(Link))
+        href="https://globalbiodata.org/scientific-activities/global-core-biodata-resources/"
+        target="_blank"
+      >
+        <div
+          className="stakeholder right"
+        >
+          <LazyImage
+            alt="Glogal biodata coalition logo"
+            className="logo"
+            src={{}}
+          />
+          <div
+            className="text"
           >
-            Learn more ›
-          </span>
-        </small>
+            <span
+              className="title"
+            >
+              This service is part of the GBC
+            </span>
+            <br />
+            <small>
+              <span
+                className="elixir-banner-description"
+              >
+                InterPro is a Global Core Biodata Resource
+              </span>
+            </small>
+          </div>
+        </div>
       </Memo(Connect(Link))>
     </div>
   </div>

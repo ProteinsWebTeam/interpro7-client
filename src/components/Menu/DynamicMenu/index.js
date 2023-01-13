@@ -44,7 +44,12 @@ const MenuItemWithEntities = (
       </MenuItem>
       <ul role="tree" tabIndex="0" className={f({ nested })}>
         {entities.map(({ to, name, exact }) => (
-          <li key={name} className={f('menu-item')} role="treeitem">
+          <li
+            key={name}
+            className={f('menu-item')}
+            role="treeitem"
+            aria-selected="false"
+          >
             <MenuItem to={to} activeClass={f('reactive')} exact={exact}>
               {name}
             </MenuItem>
@@ -159,7 +164,12 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
           </span>
 
           {hiddenItems.map(({ to, name, activeClass, exact, entities }) => (
-            <li key={name} className={f('menu-item')} role="treeitem">
+            <li
+              key={name}
+              className={f('menu-item')}
+              role="treeitem"
+              aria-selected="false"
+            >
               <MenuItemWithEntities
                 to={to}
                 activeClass={activeClass}
