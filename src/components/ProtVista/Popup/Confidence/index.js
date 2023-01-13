@@ -23,9 +23,7 @@ const ConfidencePopup = ({ detail } /*: {detail: PopupDetail} */) => {
       <div>
         <b>{aa ? levels[aa] : '-'}</b>
         <br />
-        <br />
         <ColorScale {...(element /*: any */).colorScale} />
-        <br />
       </div>
     </section>
   );
