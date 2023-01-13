@@ -25,23 +25,20 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
   const end = currentResidue?.end;
   const description = currentResidue?.description || '';
   const residue = currentResidue?.residue || currentResidue?.residues || '';
+  const hasMultiple = end && end !== start;
   return (
     <section>
       <h6>
-        Residue in {sourceDatabase} -{' '}
+        {sourceDatabase} -{' '}
         {accession.startsWith('residue:')
           ? accession.split('residue:')[1]
           : accession}
       </h6>
       {description && <p>[{description}]</p>}
-
-      <ul>
-        <li>
-          Position: {start}
-          {end && end !== start ? <>-{end}</> : null}
-        </li>
-        <li>Residue: {residue}</li>
-      </ul>
+      <div>
+        Residue{hasMultiple && 's'}: {start}
+        {hasMultiple && `-${end}`} ({residue})
+      </div>
     </section>
   );
 };
