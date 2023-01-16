@@ -37,7 +37,7 @@
   & .structure-viewer {
     height: initial;
     & .wrapper {
-      height: 95vh;
+      height: 90vh;
     }
   }
 }
