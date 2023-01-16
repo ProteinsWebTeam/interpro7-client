@@ -11,6 +11,7 @@ import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 import ProtVistaForStructure from './ProtVistaForStructures';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
+import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
@@ -405,7 +406,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
           OtherButtons={
             <>
               <button
-                className={f('icon', 'icon-common')}
+                className={f('icon', 'icon-common', 'as-link')}
                 onClick={() => {
                   this.setState({ isSpinning: !isSpinning });
                 }}
@@ -413,14 +414,14 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
                 title={isSpinning ? 'Stop spinning' : 'Spin structure'}
               />
               <button
-                className={f('icon', 'icon-common')}
+                className={f('icon', 'icon-common', 'as-link')}
                 onClick={() => this.setState({ shouldResetViewer: true })}
                 data-icon="}"
                 title="Reset image"
               />
               <FullScreenButton
                 element={this._splitView.current}
-                className={f('icon', 'icon-common')}
+                className={f('icon', 'icon-common', 'as-link')}
                 tooltip={
                   isSplitScreen ? 'Exit full screen' : 'Split full screen'
                 }
@@ -432,11 +433,14 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
               />
               {isSplitScreen ? null : (
                 <FullScreenButton
-                  className={f('icon', 'icon-common')}
+                  className={f('icon', 'icon-common', 'as-link')}
                   tooltip="View the structure in full screen mode"
                   element={elementId}
                 />
               )}
+              <PIPToggleButton
+                className={f('icon', 'icon-common', 'as-link')}
+              />
             </>
           }
         >

@@ -85,31 +85,33 @@ const ProtVistaEntryPopup = (
   return (
     <section className={f('entry-popup')}>
       <h6>
-        {accession.startsWith('residue:')
-          ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
-          : accession}
-        {description && <p>[{description}]</p>}
+        <div className={f('pop-wrapper')}>
+          <div>
+            {isInterPro && (
+              <interpro-type
+                type={type.replace('_', ' ')}
+                dimension="1.4em"
+                aria-label="Entry type"
+              />
+            )}
+          </div>
+          <div>{sourceDatabase}</div>
+          <div>
+            {accession.startsWith('residue:')
+              ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
+              : accession}
+          </div>
+        </div>{' '}
       </h6>
 
-      {name && <h4 className={f('title')}>{name}</h4>}
+      {name && <h6 className={f('title')}>{name}</h6>}
+      {description && <p>[{description}]</p>}
 
-      <div className={f('pop-wrapper')}>
-        <div>
-          {isInterPro && (
-            <interpro-type
-              type={type.replace('_', ' ')}
-              dimension="1.4em"
-              aria-label="Entry type"
-            />
-          )}
-        </div>
-        <div>
-          {sourceDatabase} {(type || '').replace('_', ' ')}
-        </div>
-      </div>
-      <p>
-        <small>{entry && <>({entry})</>}</small>
-      </p>
+      {entry && (
+        <p>
+          <small>({entry})</small>
+        </p>
+      )}
       <ul>
         {(newLocations || locations || []).map(
           ({ fragments, model_acc: model, subfamily }, j) => (
@@ -132,7 +134,7 @@ const ProtVistaEntryPopup = (
                 {(fragments || []).map(({ start, end }, i) => (
                   <li key={i}>
                     <button
-                      className={f('button', 'secondary')}
+                      className={f('button', 'secondary', 'coordinates')}
                       onClick={handleClick(start, end)}
                       style={{
                         cursor: protein ? 'pointer' : 'inherit',
