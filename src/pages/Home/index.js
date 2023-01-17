@@ -203,14 +203,6 @@ const Announcement = () => (
           </Link>{' '}
           but will not receive any updates and will be decommissioned in Spring
           2023.
-          <Link
-            href="//xfam.wordpress.com/2022/08/04/pfam-website-decommission/"
-            className={f('ext')}
-            target="_blank"
-          >
-            our blog post
-          </Link>
-          .
         </p>
       </div>
     </div>
