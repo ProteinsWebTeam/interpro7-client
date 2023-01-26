@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import T from 'prop-types';
 
-import loadWebComponent from 'utils/load-web-component';
 import { goToCustomLocation } from 'actions/creators';
 
 import Stockholm from 'stockholm-js';
@@ -12,11 +11,10 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import ProtVistaMSA from 'protvista-msa';
-// import ProtVistaManager from 'protvista-manager';
-// import ProtVistaNavigation from 'protvista-navigation';
-// import ProtvistaZoomTool from 'protvista-zoom-tool';
-import ProtvistaLinks from 'protvista-links';
+import '@nightingale-elements/nightingale-manager';
+import '@nightingale-elements/nightingale-navigation';
+import '@nightingale-elements/nightingale-msa';
+// import '@nightingale-elements/nightingale-links';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -25,40 +23,17 @@ import local from './style.css';
 
 const f = foundationPartial(fonts, local);
 
-const webComponents = [];
-
-const loadProtVistaWebComponents = () => {
-  if (!webComponents.length) {
-    // webComponents.push(
-    //   loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
-    // );
-    webComponents.push(
-      loadWebComponent(() => ProtVistaMSA).as('protvista-msa'),
-    );
-    // webComponents.push(
-    //   loadWebComponent(() => ProtVistaNavigation).as('protvista-navigation'),
-    // );
-    // webComponents.push(
-    //   loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
-    // );
-    webComponents.push(
-      loadWebComponent(() => ProtvistaLinks).as('protvista-links'),
-    );
-  }
-  return Promise.all(webComponents);
-};
-
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 const defaultContactMinDistance = 5;
 const defaultContactMinProbability = 0.9;
+const numberOfBasesToDisplay = 200;
 
 const AlignmentViewer = ({
   data: { loading, payload },
   colorscheme,
   onConservationProgress,
   setColorMap,
-  overlayConservation,
   contacts = null,
   contactMinDistance = defaultContactMinDistance,
   contactMinProbability = defaultContactMinProbability,
@@ -67,9 +42,20 @@ const AlignmentViewer = ({
 }) => {
   const msaTrack = useRef(null);
   const linksTrack = useRef(null);
+  const navigationTrack = useRef(null);
   const [align, setAlign] = useState(null);
+
   useEffect(() => {
-    (async () => await loadProtVistaWebComponents())();
+    const waitForWC = async () => {
+      const promises = [
+        'nightingale-manager',
+        'nightingale-navigation',
+        'nightingale-msa',
+        // 'nightingale-links',
+      ].map((localName) => customElements.whenDefined(localName));
+      await Promise.all(promises);
+    };
+    waitForWC();
   }, []);
   useEffect(() => {
     if (payload) {
@@ -119,19 +105,9 @@ const AlignmentViewer = ({
   const labelWidth = 200;
   const length = align.columns();
 
-  const conservationOptions = {
-    'calculate-conservation': true,
-    'sample-size-conservation': 100,
-  };
-  if (overlayConservation) {
-    conservationOptions['overlay-conservation'] = true;
-  }
   return (
     <>
-      <protvista-manager
-        attributes="length displaystart displayend highlight"
-        id="example"
-      >
+      <nightingale-manager id="example">
         <div style={{ display: 'flex' }}>
           <div
             style={{
@@ -140,32 +116,41 @@ const AlignmentViewer = ({
               fontWeight: 'bold',
               textAlign: 'center',
               alignSelf: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              height: '80px',
+              justifyContent: 'center',
+              gap: '1rem',
             }}
           >
-            {align.rows()} Sequences
-            <protvista-zoom-tool
-              length={length}
-              displaystart="1"
-              displayend={Math.min(100, length)}
-            >
-              <span
-                slot="zoom-out"
+            <span>{align.rows()} Sequences</span>
+            <div>
+              <button
                 className={f('icon', 'icon-common', 'zoom-button')}
                 data-icon="&#xf146;"
                 title={'Click to zoom out      Ctrl+Scroll'}
+                onClick={() => {
+                  (navigationTrack.current /*: any */)
+                    ?.zoomOut();
+                }}
               />
-              <span
-                slot="zoom-in"
+
+              <button
                 className={f('icon', 'icon-common', 'zoom-button')}
                 data-icon="&#xf0fe;"
                 title={'Click to zoom in      Ctrl+Scroll'}
-                // style={{ marginRight: '0.4rem' }}
+                onClick={() => {
+                  (navigationTrack.current /*: any */)
+                    ?.zoomIn();
+                }}
               />
-            </protvista-zoom-tool>
+            </div>
           </div>
-          <protvista-navigation
+          <nightingale-navigation
+            ref={navigationTrack}
             length={length}
-            displayend={Math.min(100, length)}
+            display-end={Math.min(numberOfBasesToDisplay, length)}
+            height={80}
           />
         </div>
         {contacts && (
@@ -194,26 +179,26 @@ const AlignmentViewer = ({
                 </sup>
               </Tooltip>
             </div>
-            <protvista-links
+            <nightingale-links
               id="contacts-track"
               length={length}
               ref={linksTrack}
-              minprobability={contactMinProbability}
-              mindistance={contactMinDistance}
+              min-probability={contactMinProbability}
+              min-distance={contactMinDistance}
             />
           </div>
         )}
-        <protvista-msa
+        <nightingale-msa
           length={length}
           height="600"
-          displayend="100"
+          display-end={Math.min(numberOfBasesToDisplay, length)}
           use-ctrl-to-zoom
-          labelWidth={labelWidth}
+          label-width={labelWidth}
           ref={msaTrack}
-          colorscheme={colorscheme}
-          {...conservationOptions}
+          color-scheme={colorscheme}
+          sample-size-conservation={100}
         />
-      </protvista-manager>
+      </nightingale-manager>
     </>
   );
 };
@@ -222,7 +207,6 @@ AlignmentViewer.propTypes = {
   colorscheme: T.string,
   onConservationProgress: T.func,
   setColorMap: T.func,
-  overlayConservation: T.bool,
   contacts: T.array,
   contactMinDistance: T.number,
   contactMinProbability: T.number,

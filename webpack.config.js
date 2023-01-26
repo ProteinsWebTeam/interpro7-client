@@ -97,6 +97,7 @@ const nightingaleAliases = [
   'nightingale-interpro-track',
   'nightingale-linegraph-track',
   'nightingale-coloured-sequence',
+  'nightingale-msa',
 ].reduce(
   (agg, v) => ({
     ...agg,
