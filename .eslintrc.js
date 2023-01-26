@@ -56,7 +56,7 @@ const rules = {
   // Enforce one true comma style
   'comma-style': [1, 'last'],
   // Specify the maximum cyclomatic complexity allowed in a program
-  complexity: [1, 16],
+  complexity: [1, 18],
   // Disallow padding inside computed properties
   'computed-property-spacing': [1, 'never'],
   // Require return statements to either always or never specify values

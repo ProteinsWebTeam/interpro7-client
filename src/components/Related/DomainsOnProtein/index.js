@@ -7,10 +7,16 @@ import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import {
+  getAlphaFoldPredictionURL,
+  getConfidenceURLFromPayload,
+} from 'components/AlphaFold/selectors';
 
 import { processData } from 'components/ProtVista/utils';
 
 import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProtVistaForAlphaFold';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
@@ -21,13 +27,12 @@ import loadable from 'higherOrder/loadable';
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 
-import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
-
 const f = foundationPartial(ipro);
 
 const CONSERVATION_WINDOW = 25;
 const PIRSR_ACCESSION_LENGTH = 11;
 const PIRSF_PREFIX_LENGTH = 5;
+const HTTP_OK = 200;
 
 // const ProtVista = loadable({
 //   loader: () =>
@@ -383,6 +388,8 @@ const getExtraURL = (query /*: string */) =>
 /*:: type Props = {
   mainData: Object,
   dataMerged: Object,
+  dataConfidence?: Object,
+  conservationError?: string|null,
   showConservationButton?: boolean,
   handleConservationLoad?: function,
   children: any,
@@ -391,6 +398,8 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
   static propTypes = {
     mainData: T.object.isRequired,
     dataMerged: T.object.isRequired,
+    dataConfidence: T.object,
+    conservationError: T.string,
     showConservationButton: T.bool,
     handleConservationLoad: T.func,
     children: T.any,
@@ -400,6 +409,8 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
     const {
       mainData,
       dataMerged,
+      dataConfidence,
+      conservationError,
       showConservationButton,
       handleConservationLoad,
     } = this.props;
@@ -410,15 +421,18 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
         key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
         value,
       ]);
+    const protein = mainData.metadata || mainData.payload.metadata;
+    addConfidenceTrack(dataConfidence, protein.accession, sortedData);
 
     return (
       <ProtVista
-        protein={mainData.metadata || mainData.payload.metadata}
+        protein={protein}
         data={sortedData}
         title="Entry matches to this protein"
         id={mainData.metadata.accession || mainData.payload.metadata.accession}
         showConservationButton={showConservationButton}
         handleConservationLoad={handleConservationLoad}
+        conservationError={conservationError}
       >
         {this.props.children}
       </ProtVista>
@@ -427,25 +441,27 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
 }
 
 const ConservationProvider = (
-  {
-    handleLoaded,
-    dataConservation,
-  } /*: { handleLoaded: function, dataConservation?: { loading: boolean, payload: {}} } */,
+  { handleLoaded, handleError, dataConservation } /*: {
+    handleLoaded: function,
+    handleError: function,
+    dataConservation?: { ok: boolean, loading: boolean, payload: {}} } */,
 ) => {
   useEffect(() => {
-    if (
-      dataConservation &&
-      !dataConservation.loading &&
-      dataConservation.payload
-    ) {
-      handleLoaded(dataConservation.payload);
+    if (dataConservation && !dataConservation.loading) {
+      if (dataConservation.ok && dataConservation.payload) {
+        handleLoaded(dataConservation.payload);
+      } else {
+        handleError(dataConservation);
+      }
     }
   });
   return null;
 };
 ConservationProvider.propTypes = {
   handleLoaded: T.func,
+  handleError: T.func,
   dataConservation: T.shape({
+    ok: T.bool,
     loading: T.bool,
     payload: T.object,
   }),
@@ -480,6 +496,7 @@ type DPWithoutDataProps = {
   dataResidues: Object,
   dataFeatures: Object,
   dataGenome3d: Object,
+  dataConfidence: Object,
   children: mixed,
   onMatchesLoaded?: function,
 };
@@ -487,6 +504,7 @@ type DPState ={
   generateConservationData: boolean,
   showConservationButton: boolean,
   dataConservation: ?{ [string]: {entries: ?{}, warnings: Array<string>}},
+  errorConservation: null | string;
 }
 */
 
@@ -497,6 +515,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     dataResidues: T.object.isRequired,
     dataFeatures: T.object.isRequired,
     dataGenome3d: T.object.isRequired,
+    dataConfidence: T.object.isRequired,
     children: T.any,
     onMatchesLoaded: T.func,
   };
@@ -507,6 +526,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
       generateConservationData: false,
       showConservationButton: false,
       dataConservation: null,
+      errorConservation: null,
     };
   }
 
@@ -571,8 +591,14 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
 
   /* eslint-disable complexity  */
   render() {
-    const { data, mainData, dataResidues, dataFeatures, dataGenome3d } =
-      this.props;
+    const {
+      data,
+      mainData,
+      dataResidues,
+      dataFeatures,
+      dataGenome3d,
+      dataConfidence,
+    } = this.props;
 
     if (
       (!data || data.loading) &&
@@ -635,7 +661,25 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     return (
       <>
         <ConservationProviderElement
-          handleLoaded={(data) => this.setState({ dataConservation: data })}
+          handleLoaded={(data) =>
+            this.setState({
+              dataConservation: data,
+              errorConservation: null,
+            })
+          }
+          handleError={(payload) => {
+            let message = 'Unknown issue fetching the data.';
+            if (payload.status) {
+              message =
+                payload.status === HTTP_OK
+                  ? 'The server responded OK, however the payload is empty'
+                  : `Server code - ${payload.status}`;
+            }
+            this.setState({
+              dataConservation: null,
+              errorConservation: `ERROR: ${message}`,
+            });
+          }}
         />
         <div className={f('margin-bottom-large')}>
           <h5>Protein family membership</h5>
@@ -651,6 +695,8 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
           dataMerged={mergedData}
           showConservationButton={showConservationButton}
           handleConservationLoad={this.fetchConservationData}
+          dataConfidence={dataConfidence}
+          conservationError={this.state.errorConservation}
         >
           {this.props.children}
         </DomainOnProteinWithoutMergedData>
@@ -699,12 +745,22 @@ const getGenome3dURL = createSelector(
 );
 
 export default loadData({
-  getUrl: getExtraURL('extra_features'),
-  propNamespace: 'Features',
+  getUrl: getAlphaFoldPredictionURL,
+  propNamespace: 'Prediction',
 })(
-  loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
-    loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
-      loadData(getRelatedEntriesURL)(DomainOnProteinWithoutData),
+  loadData({
+    getUrl: getConfidenceURLFromPayload('Prediction'),
+    propNamespace: 'Confidence',
+  })(
+    loadData({
+      getUrl: getExtraURL('extra_features'),
+      propNamespace: 'Features',
+    })(
+      loadData({ getUrl: getExtraURL('residues'), propNamespace: 'Residues' })(
+        loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' })(
+          loadData(getRelatedEntriesURL)(DomainOnProteinWithoutData),
+        ),
+      ),
     ),
   ),
 );

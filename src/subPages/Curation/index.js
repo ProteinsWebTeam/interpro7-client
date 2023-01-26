@@ -104,7 +104,9 @@ const CurationSubPage = ({ data }) => {
             <td>
               <Link
                 href={`${config.root.API.href}/entry/pfam/${payload?.metadata?.accession}?annotation=hmm`}
-                download={`${payload?.metadata?.accession || 'download'}.hmm`}
+                download={`${
+                  payload?.metadata?.accession || 'download'
+                }.hmm.gz`}
               >
                 <span
                   className={f('icon', 'icon-common', 'icon-download')}

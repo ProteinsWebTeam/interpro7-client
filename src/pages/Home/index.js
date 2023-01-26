@@ -193,7 +193,7 @@ const Announcement = () => (
           </span>
           ) was shut down on October 5th, but InterPro offers the same
           functionality and data.
-          <br />A legacy version of Pfam will remain available at{' '}
+          <br />A legacy version of Pfam is available at{' '}
           <Link
             href="//pfam-legacy.xfam.org/"
             className={f('ext')}
@@ -201,16 +201,8 @@ const Announcement = () => (
           >
             https://pfam-legacy.xfam.org/
           </Link>{' '}
-          until January 2023, but will not receive any updates. You can read
-          more about our decision to shut down the Pfam website in{' '}
-          <Link
-            href="//xfam.wordpress.com/2022/08/04/pfam-website-decommission/"
-            className={f('ext')}
-            target="_blank"
-          >
-            our blog post
-          </Link>
-          .
+          but will not receive any updates and will be decommissioned in Spring
+          2023.
         </p>
       </div>
     </div>

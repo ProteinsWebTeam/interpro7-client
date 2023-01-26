@@ -53,6 +53,7 @@ class EntriesOnStructure extends ProtVistaMatches {
     const entryData = locationsEP.map((loc) => ({
       accession: entry.accession,
       name: entry.name,
+      short_name: entry.short_name,
       source_database: entry.source_database,
       locations: [loc],
       color: getTrackColor(entry, EntryColorMode.ACCESSION),

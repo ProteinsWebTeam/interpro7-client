@@ -11,6 +11,10 @@ import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { processData } from 'components/ProtVista/utils';
+import {
+  getAlphaFoldPredictionURL,
+  getConfidenceURLFromPayload,
+} from 'components/AlphaFold/selectors';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -19,16 +23,42 @@ const ProtVista = loadable({
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
 
+export const addConfidenceTrack = (dataConfidence, protein, tracks) => {
+  if (dataConfidence?.payload?.confidenceCategory?.length) {
+    const confidenceTrack = [
+      'AlphaFold confidence',
+      [
+        {
+          accession: `confidence_af_${protein}`,
+          data: dataConfidence.payload.confidenceCategory.join(''),
+          type: 'confidence',
+          protein,
+          source_database: 'alphafold',
+        },
+      ],
+    ];
+    tracks.splice(0, 0, confidenceTrack);
+  }
+};
+
 /*::
 type Selection = { chain: string, start: number, end: number}
   */
 const ProtVistaForAlphaFold = (
-  { data, protein, dataProtein, dataConfidence, onChangeSelection } /*: {
+  {
+    data,
+    protein,
+    dataProtein,
+    dataConfidence,
+    onChangeSelection,
+    isSplitScreen = false,
+  } /*: {
   data: {loading: boolean, payload: ?Object},
   protein: string,
   dataProtein: {loading: boolean, payload: ?Object},
   dataConfidence: {loading: boolean, payload: ?Object},
   onChangeSelection: (Selection[]|null)=>void;
+  isSplitScreen: boolean;
 }*/,
 ) => {
   const containerRef =
@@ -92,21 +122,7 @@ const ProtVistaForAlphaFold = (
     endpoint: 'protein',
   });
   const tracks = [['Entries', interpro.concat(unintegrated)]];
-  if (dataConfidence.payload?.confidenceCategory?.length) {
-    const confidenceTrack = [
-      'confidence',
-      [
-        {
-          accession: `confidence_af_${protein}`,
-          data: dataConfidence.payload.confidenceCategory.join(''),
-          type: 'confidence',
-          protein,
-          source_database: 'alphafold',
-        },
-      ],
-    ];
-    tracks.splice(0, 0, confidenceTrack);
-  }
+  addConfidenceTrack(dataConfidence, protein, tracks);
   if (!dataProtein.payload?.metadata) return null;
   return (
     <div ref={containerRef}>
@@ -114,6 +130,7 @@ const ProtVistaForAlphaFold = (
         protein={dataProtein.payload.metadata}
         data={tracks}
         title="Protein domains"
+        showOptions={!isSplitScreen}
       />
     </div>
   );
@@ -125,13 +142,9 @@ ProtVistaForAlphaFold.propTypes = {
   onChangeSelection: T.func,
   protein: T.string.isRequired,
   confidenceURL: T.string,
+  isSplitScreen: T.bool,
 };
-const getConfidenceURL = createSelector(
-  (_, props) => props.confidenceURL,
-  (confidenceURL) => {
-    return confidenceURL;
-  },
-);
+
 const getProteinURL = createSelector(
   (state) => state.settings.api,
   (_, props) => props.protein,
@@ -170,11 +183,16 @@ const getInterproRelatedEntriesURL = createSelector(
 );
 
 export default loadData({
-  getUrl: getConfidenceURL,
-  propNamespace: 'Confidence',
+  getUrl: getAlphaFoldPredictionURL,
+  propNamespace: 'Prediction',
 })(
   loadData({
-    getUrl: getProteinURL,
-    propNamespace: 'Protein',
-  })(loadData(getInterproRelatedEntriesURL)(ProtVistaForAlphaFold)),
+    getUrl: getConfidenceURLFromPayload('Prediction'),
+    propNamespace: 'Confidence',
+  })(
+    loadData({
+      getUrl: getProteinURL,
+      propNamespace: 'Protein',
+    })(loadData(getInterproRelatedEntriesURL)(ProtVistaForAlphaFold)),
+  ),
 );

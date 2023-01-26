@@ -16,7 +16,7 @@
   display: flex;
 }
 .track-component {
-  width: var(--track-space, 85%);
+  width: var(--track-space, 80%);
   background: rgba(0, 0, 0, 0.02);
   cursor: move;
 }
@@ -156,6 +156,11 @@ g:global(.child-location-group.clg-5) path {
 
 .conservation-placeholder-component {
   height: 4em;
+  display: flex;
+  justify-content: center;
+  & > div {
+    font-size: 1.2rem;
+  }
 }
 
 .protvista div:global(.zoom-button-div) {
@@ -176,4 +181,8 @@ g:global(.child-location-group.clg-5) path {
       text-align: left;
     }
   }
+}
+
+.conservation-error {
+  margin: 1rem;
 }

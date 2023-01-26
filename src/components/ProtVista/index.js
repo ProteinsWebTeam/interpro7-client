@@ -66,10 +66,12 @@ const getUIDFromEntry = (entry) =>
   id: string,
   showOptions: boolean,
   showConservationButton: boolean,
+  showHydrophobicity: boolean,
   handleConservationLoad: function,
   goToCustomLocation: function,
   customLocation: Object,
   children: any,
+  conservationError: null|string,
 }; */
 
 /*:: type State = {
@@ -114,10 +116,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     id: T.string,
     showOptions: T.bool,
     showConservationButton: T.bool,
+    showHydrophobicity: T.bool,
     handleConservationLoad: T.func,
     goToCustomLocation: T.func,
     customLocation: T.object,
     children: T.any,
+    conservationError: T.string,
   };
 
   constructor(props /*: Props */) {
@@ -167,14 +171,10 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     ].map((localName) => customElements.whenDefined(localName));
     await Promise.all(promises);
     const { data, protein } = this.props;
-    if (this._webProteinRef.current && this._hydroRef.current) {
+    if (this._webProteinRef.current) {
       const proteinE = this._webProteinRef.current;
-      const hydroE = this._hydroRef.current;
       (proteinE /*: any */).data = protein;
-      (hydroE /*: any */).data = protein;
       this.updateTracksWithData(data);
-      (hydroE /*: any */)
-        .addEventListener('change', this._handleTrackChange);
       if (this._popperContentRef.current) {
         const popperE = this._popperContentRef.current;
         popperE.addEventListener('mouseover', () =>
@@ -184,6 +184,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           this.setState({ overPopup: false }),
         );
       }
+    }
+    if (this._hydroRef.current) {
+      const hydroE = this._hydroRef.current;
+      (hydroE /*: any */).data = protein;
+      (hydroE /*: any */)
+        .addEventListener('change', this._handleTrackChange);
     }
   }
 
@@ -357,6 +363,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   modifiers: {
                     preventOverflow: {
                       boundariesElement: this._protvistaRef?.current || window,
+                      priority: ['left', 'right'],
                     },
                   },
                 },
@@ -619,6 +626,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       showConservationButton,
       children,
       showOptions = true,
+      showHydrophobicity = false,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
@@ -899,16 +907,15 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                       className={f('conservation-placeholder-component')}
                       ref={this._conservationTrackRef}
                     >
-                      {this.state.showLoading ? (
-                        <div
-                          className={f('loading-spinner')}
-                          style={{ margin: '10px auto' }}
-                        >
-                          <div />
-                          <div />
-                          <div />
+                      {this.props.conservationError ? (
+                        <div className={f('conservation-error')}>
+                          ⚠️ {this.props.conservationError}
                         </div>
-                      ) : null}
+                      ) : (
+                        <>
+                          {this.state.showLoading ? <Loading inline /> : null}
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className={f('track-label')}>

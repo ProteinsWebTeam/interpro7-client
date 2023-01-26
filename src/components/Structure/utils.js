@@ -4,5 +4,5 @@ export const experimentTypes = new Map([
   ['all', 'All'],
   ['em', 'Cryo-EM'],
 ]);
-export const formatExperimentType = type =>
+export const formatExperimentType = (type) =>
   experimentTypes.get((type || '').toLowerCase(), type.toUpperCase());

@@ -34,6 +34,8 @@ import ProtVistaConservationPopup from './Conservation';
       entry: string,
       confidence: number,
       start?: number,
+      protein?: string,
+      parent?:{protein?: string},
       aa?: string,
       value?: number,
       currentResidue?: {

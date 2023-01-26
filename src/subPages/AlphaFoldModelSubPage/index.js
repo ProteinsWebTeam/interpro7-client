@@ -15,8 +15,9 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import forSplit from 'components/Structure/ViewerAndEntries/style.css';
 
-const f = foundationPartial(ipro, fonts);
+const f = foundationPartial(ipro, fonts, forSplit);
 
 const AlphaFoldModelSubPage = ({ data, description }) => {
   const mainAccession = description[description.main.key].accession;
@@ -25,7 +26,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
   const [selectionsInModel, setSelectionsInModel] = useState(null);
   const [proteinAcc, setProteinAcc] = useState('');
   const [modelId, setModelId] = useState(null);
-  const [confidenceURL, setConfidenceURL] = useState(null);
+  const [isSplitScreen, setSplitScreen] = useState(false);
   const handleProteinChange = (value) => {
     setProteinAcc(value);
     setModelId(null);
@@ -47,7 +48,10 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
   if (data?.loading) return <Loading />;
   const hasMultipleProteins = mainType === 'entry' && data.payload.count > 1;
   return (
-    <div className={f('row', 'column')} ref={container}>
+    <div
+      className={f('row', 'column', { 'split-view': isSplitScreen })}
+      ref={container}
+    >
       {proteinAcc && (
         <AlphaFoldModel
           proteinAcc={proteinAcc}
@@ -55,12 +59,9 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
           onModelChange={handleModelChange}
           modelId={modelId}
           selections={selectionsInModel}
-          onModelCifChange={(cif) => {
-            const newURL = cif?.length
-              ? cif.replace('-model', '-confidence').replace('.cif', '.json')
-              : null;
-            if (newURL !== confidenceURL) setConfidenceURL(newURL);
-          }}
+          parentElement={container.current}
+          isSplitScreen={isSplitScreen}
+          onSplitScreenChange={(value) => setSplitScreen(value)}
         />
       )}
       {mainType === 'entry' ? (
@@ -75,7 +76,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
             onChangeSelection={(selection) => {
               setSelectionsInModel(selection);
             }}
-            confidenceURL={confidenceURL}
+            isSplitScreen={isSplitScreen}
           />
         </div>
       )}

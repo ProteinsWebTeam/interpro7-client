@@ -9,6 +9,7 @@ import { goToCustomLocation } from 'actions/creators';
 import { foundationPartial } from 'styles/foundation';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
+import DownloadButton from './DownloadButton';
 
 import local from './style.css';
 import ipro from 'styles/interpro-new.css';
@@ -326,6 +327,7 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
               title="Search selection with HMMER"
               minWidth="302px"
             />
+            <DownloadButton sequence={sequence} accession={accession} />
           </div>
         </div>
       </section>

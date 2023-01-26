@@ -11,6 +11,7 @@ import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 import ProtVistaForStructure from './ProtVistaForStructures';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
+import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
@@ -403,9 +404,13 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
             ) : null,
           }}
           OtherButtons={
-            <>
+            <div
+              style={{
+                display: isSplitScreen ? 'none' : 'block',
+              }}
+            >
               <button
-                className={f('icon', 'icon-common')}
+                className={f('icon', 'icon-common', 'as-link')}
                 onClick={() => {
                   this.setState({ isSpinning: !isSpinning });
                 }}
@@ -413,31 +418,30 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
                 title={isSpinning ? 'Stop spinning' : 'Spin structure'}
               />
               <button
-                className={f('icon', 'icon-common')}
+                className={f('icon', 'icon-common', 'as-link')}
                 onClick={() => this.setState({ shouldResetViewer: true })}
                 data-icon="}"
                 title="Reset image"
               />
               <FullScreenButton
                 element={this._splitView.current}
-                className={f('icon', 'icon-common')}
-                tooltip={
-                  isSplitScreen ? 'Exit full screen' : 'Split full screen'
-                }
-                dataIcon={isSplitScreen ? 'G' : '\uF0DB'}
+                className={f('icon', 'icon-common', 'as-link')}
+                tooltip="Split full screen"
+                dataIcon={'\uF0DB'}
                 onFullScreenHook={() => this.setState({ isSplitScreen: true })}
                 onExitFullScreenHook={() =>
                   this.setState({ isSplitScreen: false })
                 }
               />
-              {isSplitScreen ? null : (
-                <FullScreenButton
-                  className={f('icon', 'icon-common')}
-                  tooltip="View the structure in full screen mode"
-                  element={elementId}
-                />
-              )}
-            </>
+              <FullScreenButton
+                className={f('icon', 'icon-common', 'as-link')}
+                tooltip="View the structure in full screen mode"
+                element={elementId}
+              />
+              <PIPToggleButton
+                className={f('icon', 'icon-common', 'as-link')}
+              />
+            </div>
           }
         >
           <StructureViewer
