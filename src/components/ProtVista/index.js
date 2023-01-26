@@ -66,7 +66,6 @@ const getUIDFromEntry = (entry) =>
   id: string,
   showOptions: boolean,
   showConservationButton: boolean,
-  showHydrophobicity: boolean,
   handleConservationLoad: function,
   goToCustomLocation: function,
   customLocation: Object,
@@ -97,7 +96,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     _popperContentRef: { current: null | React$ElementRef<'div'> };
     _protvistaRef: { current: null | React$ElementRef<'div'> };
     _webProteinRef: { current: null | (React$ElementRef<'nigthingale-sequence'> ) };
-    _hydroRef: { current: null | (React$ElementRef<'nigthingale-coloured-sequence'> ) };
     _navigationRef: { current: null | (React$ElementRef<'nigthingale-navigation'> ) };
     _conservationTrackRef: { current: null | React$ElementRef<'div'> };
    */
@@ -116,7 +114,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     id: T.string,
     showOptions: T.bool,
     showConservationButton: T.bool,
-    showHydrophobicity: T.bool,
     handleConservationLoad: T.func,
     goToCustomLocation: T.func,
     customLocation: T.object,
@@ -152,7 +149,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     this._popperContentRef = React.createRef();
     this._protvistaRef = React.createRef();
     this._webProteinRef = React.createRef();
-    this._hydroRef = React.createRef();
     this._navigationRef = React.createRef();
     this._conservationTrackRef = React.createRef();
     this._isPopperTop = true;
@@ -185,12 +181,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
         );
       }
     }
-    if (this._hydroRef.current) {
-      const hydroE = this._hydroRef.current;
-      (hydroE /*: any */).data = protein;
-      (hydroE /*: any */)
-        .addEventListener('change', this._handleTrackChange);
-    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -200,9 +190,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.data, this.props.data)) {
       this.updateTracksWithData(this.props.data);
-      if (this._webProteinRef.current && this._hydroRef.current) {
+      if (this._webProteinRef.current) {
         (this._webProteinRef.current /*: any */).data = this.props.protein;
-        (this._hydroRef.current /*: any */).data = this.props.protein;
       }
     } else if (prevProps.colorDomainsBy !== this.props.colorDomainsBy) {
       for (const track of (Object.values(this.web_tracks) /*: any */)) {
@@ -626,7 +615,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       showConservationButton,
       children,
       showOptions = true,
-      showHydrophobicity = false,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
@@ -703,22 +691,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   use-ctrl-to-zoom
                 />
               </div>
-              <div className={f('track')}>
-                <nightingale-coloured-sequence
-                  ref={this._hydroRef}
-                  length={length}
-                  displaystart="1"
-                  displayend={length}
-                  scale="hydrophobicity-scale"
-                  height="10"
-                  color_range="#0000FF:-3,#ffdd00:3"
-                  highlight-event="onmouseover"
-                  highlight-color={highlightColor}
-                  use-ctrl-to-zoom
-                  class="hydro"
-                />
-              </div>
-              <div className={f('track-label')}>Hydrophobicity</div>
 
               {data &&
                 data
@@ -843,7 +815,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         displayend={length}
                                         scale="H:90,M:70,L:50,D:0"
                                         height="12"
-                                        color_range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
+                                        color-range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
                                         highlight-event="onmouseover"
                                         highlight-color={highlightColor}
                                         class="confidence"

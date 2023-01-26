@@ -186,3 +186,7 @@ g:global(.child-location-group.clg-5) path {
 .conservation-error {
   margin: 1rem;
 }
+
+nightingale-manager {
+  width: 100%;
+}
