@@ -182,6 +182,7 @@ class StructureView extends PureComponent /*:: <Props> */ {
         AfConfidenceColorThemeProvider,
       );
       // mouseover
+      window.viewer = this.viewer;
     }
 
     if (this.props.url) {
@@ -197,7 +198,6 @@ class StructureView extends PureComponent /*:: <Props> */ {
   componentDidUpdate(prevProps) {
     if (this.name !== `${this.props.id}` || prevProps.url !== this.props.url) {
       this.name = `${this.props.id}`;
-      this.viewer.clear();
       if (this.props.url) {
         this.loadStructureInViewer(this.props.url, this.props.ext);
       } else {
@@ -226,35 +226,37 @@ class StructureView extends PureComponent /*:: <Props> */ {
     }
   }
 
-  async loadStructureInViewer(url /*: string */, format /*: string */) {
+  loadStructureInViewer(url /*: string */, format /*: string */) {
     if (this.viewer) {
-      await this.viewer.clear();
-      const data = await this.viewer.builders.data.download(
-        { url: url },
-        { state: { isGhost: false } },
-      );
-      const trajectory = await this.viewer.builders.structure.parseTrajectory(
-        data,
-        format,
-      );
-      this.viewer.builders.structure.hierarchy
-        .applyPreset(trajectory, 'default', {
-          structure: {
-            name: 'model',
-            params: {},
-          },
-          showUnitcell: false,
-          representationPreset: 'auto',
-        })
-        .then(() => {
-          // populate the entry map object used for entry highlighting
-          if (this.props.onStructureLoaded) {
-            this.props.onStructureLoaded();
-          }
-          // spin/stop spinning the structure
-          this.setSpin(this.props.isSpinning);
-          this.applyChainIdTheme();
-        });
+      requestAnimationFrame(async () => {
+        await this.viewer.clear();
+        const data = await this.viewer.builders.data.download(
+          { url: url },
+          { state: { isGhost: false } },
+        );
+        const trajectory = await this.viewer.builders.structure.parseTrajectory(
+          data,
+          format,
+        );
+        this.viewer.builders.structure.hierarchy
+          .applyPreset(trajectory, 'default', {
+            structure: {
+              name: 'model',
+              params: {},
+            },
+            showUnitcell: false,
+            representationPreset: 'auto',
+          })
+          .then(() => {
+            // populate the entry map object used for entry highlighting
+            if (this.props.onStructureLoaded) {
+              this.props.onStructureLoaded();
+            }
+            // spin/stop spinning the structure
+            this.setSpin(this.props.isSpinning);
+            this.applyChainIdTheme();
+          });
+      });
     }
   }
 

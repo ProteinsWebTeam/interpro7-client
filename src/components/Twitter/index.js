@@ -48,6 +48,11 @@ class Twitter extends PureComponent /*:: <{}> */ {
         window.twttr.events.bind('rendered', ({ target }) => {
           target.style.opacity = 1;
           target.style.transform = 'translateX(0)';
+          const iframe = target.getElementsByTagName('iframe')?.[0];
+          if (iframe) {
+            iframe.style.opacity = 1;
+            iframe.style.transform = 'translateX(0)';
+          }
         });
         bound = true;
       }

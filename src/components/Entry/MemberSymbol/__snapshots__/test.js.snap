@@ -38,7 +38,7 @@ exports[`<MemberSymbol /> should render 1`] = `
       dx="-0.01em"
       dy="0.4em"
       style={
-        Object {
+        {
           "clipPath": "url(#clip-0)",
         }
       }

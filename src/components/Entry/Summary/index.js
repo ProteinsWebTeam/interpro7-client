@@ -21,7 +21,6 @@ import CrossReferences from 'components/Entry/CrossReferences';
 import Integration from 'components/Entry/Integration';
 import ContributingSignatures from 'components/Entry/ContributingSignatures';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
-import SetLinkFromEntry from 'components/Set/SetLinkFromEntry';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
@@ -60,6 +59,10 @@ const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
         cross_references: Object,
         wikipedia: Object,
         counters: Object,
+        set_info?: {
+          accession: string,
+          name: string,
+        }
       }
  */
 
@@ -121,7 +124,23 @@ const MemberDBSubtitle = (
           <tr>
             <td>Set</td>
             <td>
-              <SetLinkFromEntry />
+              {metadata.set_info ? (
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'set' },
+                      set: {
+                        db: metadata.source_database,
+                        accession: metadata.set_info.accession,
+                      },
+                    },
+                  }}
+                >
+                  {metadata.set_info.name}
+                </Link>
+              ) : (
+                'ø'
+              )}
             </td>
           </tr>
         ) : null}

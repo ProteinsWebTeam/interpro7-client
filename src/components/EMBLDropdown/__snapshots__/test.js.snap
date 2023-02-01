@@ -41,7 +41,7 @@ exports[`<EMBLDropdown /> should render as invisible 1`] = `
             <h3
               className="no-underline inline"
               style={
-                Object {
+                {
                   "lineHeight": "1rem",
                 }
               }
@@ -318,7 +318,7 @@ exports[`<EMBLDropdown /> should render as visible 1`] = `
             <h3
               className="no-underline inline"
               style={
-                Object {
+                {
                   "lineHeight": "1rem",
                 }
               }

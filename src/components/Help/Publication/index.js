@@ -27,9 +27,18 @@ const data4InterPro2020 = {
   source: 'Nucleic Acids Research, Nov 2020, (doi: 10.1093/nar/gkaa977)',
   imageClass: 'image-nar-default',
 };
+const data4InterPro2022 = {
+  url: 'https://doi.org/10.1093/nar/gkac993',
+  title: 'InterPro in 2022',
+  authors: `Paysan-Lafosse T, Blum M, Chuguransky S, Grego T, Pinto BL, Salazar GA, 
+            Bileschi ML, Bork P, Bridge A, Colwell L, Gough J, Haft DH, Letunić I, 
+            Marchler-Bauer A, Mi H, Natale DA, Orengo CA, Pandurangan AP, Rivoire C, 
+            Sigrist CJA, Sillitoe I, Thanki N, Thomas PD, Tosatto SCE, Wu CH, Bateman A.`,
+  source: 'Nucleic Acids Research, Nov 2022, (doi: 10.1093/nar/gkac993)',
+  imageClass: 'image-nar-default',
+};
 const data4InterProScan2014 = {
-  url:
-    'http://bioinformatics.oxfordjournals.org/content/early/2014/01/29/bioinformatics.btu031.full',
+  url: 'http://bioinformatics.oxfordjournals.org/content/early/2014/01/29/bioinformatics.btu031.full',
   title: 'InterProScan 5: genome-scale protein function classification',
   authors: `Philip Jones, David Binns, Hsin-Yu Chang, Matthew Fraser,
   Weizhong Li, Craig McAnulla, Hamish McWilliam, John Maslen,
@@ -413,12 +422,16 @@ export const PrintedPublication = (
 );
 PrintedPublication.propTypes = pubTypes;
 
+export const InterPro2022 = () => <Publication {...data4InterPro2022} />;
 export const InterPro2020 = () => <Publication {...data4InterPro2020} />;
 export const InterProScan2014 = () => (
   <Publication {...data4InterProScan2014} />
 );
 export const PrintedInterPro2020 = () => (
   <PrintedPublication {...data4InterPro2020} />
+);
+export const PrintedInterPro2022 = () => (
+  <PrintedPublication {...data4InterPro2022} />
 );
 export const PrintedInterProScan2014 = () => (
   <PrintedPublication {...data4InterProScan2014} />
@@ -433,6 +446,7 @@ export default class Publications extends PureComponent /*:: <{}> */ {
           A number of online Publications relating to InterPro are available.
         </p>
         <div className={f('flex-column')}>
+          <InterPro2022 />
           <InterPro2020 />
 
           <Publication

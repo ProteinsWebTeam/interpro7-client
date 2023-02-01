@@ -45,13 +45,7 @@ const IPScanButton = (
       onClick={_handleIPSClick}
     >
       <div
-        className={f(
-          'sequence-link',
-          'button-more',
-          'icon',
-          'icon-common',
-          'icon-right',
-        )}
+        className={f('sequence-link', 'button', 'hollow')}
         data-icon="&#xf061;"
         style={{ minWidth: minWidth, marginRight: '1rem' }}
       >
@@ -69,7 +63,7 @@ IPScanButton.propTypes = {
   goToCustomLocation: T.func.isRequired,
   sequence: T.oneOfType([T.func, T.string]).isRequired,
   title: T.string,
-  minWidth: T.string,
+  minWidth: T.oneOfType([T.number, T.string]),
 };
 
 export default connect(null, { goToCustomLocation })(IPScanButton);

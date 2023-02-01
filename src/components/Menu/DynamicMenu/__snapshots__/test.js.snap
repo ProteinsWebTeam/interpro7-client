@@ -13,8 +13,8 @@ exports[`<DynamicMenu /> should render 1`] = `
       exact={true}
       name="Home"
       to={
-        Object {
-          "description": Object {},
+        {
+          "description": {},
         }
       }
     />
@@ -26,44 +26,44 @@ exports[`<DynamicMenu /> should render 1`] = `
   >
     <MenuItemWithEntities
       entities={
-        Array [
-          Object {
+        [
+          {
             "activeClass": [Function],
             "name": "By Sequence",
-            "to": Object {
-              "description": Object {
-                "main": Object {
+            "to": {
+              "description": {
+                "main": {
                   "key": "search",
                 },
-                "search": Object {
+                "search": {
                   "type": "sequence",
                 },
               },
             },
           },
-          Object {
+          {
             "activeClass": [Function],
             "name": "By Text",
-            "to": Object {
-              "description": Object {
-                "main": Object {
+            "to": {
+              "description": {
+                "main": {
                   "key": "search",
                 },
-                "search": Object {
+                "search": {
                   "type": "text",
                 },
               },
             },
           },
-          Object {
+          {
             "activeClass": [Function],
             "name": "By Domain Architecture",
-            "to": Object {
-              "description": Object {
-                "main": Object {
+            "to": {
+              "description": {
+                "main": {
                   "key": "search",
                 },
-                "search": Object {
+                "search": {
                   "type": "ida",
                 },
               },
@@ -73,9 +73,9 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
       name="Search"
       to={
-        Object {
-          "description": Object {
-            "main": Object {
+        {
+          "description": {
+            "main": {
               "key": "search",
             },
           },
@@ -91,32 +91,32 @@ exports[`<DynamicMenu /> should render 1`] = `
     <MenuItemWithEntities
       activeClass={[Function]}
       entities={
-        Array [
-          Object {
+        [
+          {
             "name": "By InterPro",
             "to": [Function],
           },
-          Object {
+          {
             "name": "By Member DB",
             "to": [Function],
           },
-          Object {
+          {
             "name": "By Protein",
             "to": [Function],
           },
-          Object {
+          {
             "name": "By Structure",
             "to": [Function],
           },
-          Object {
+          {
             "name": "By Taxonomy",
             "to": [Function],
           },
-          Object {
+          {
             "name": "By Proteome",
             "to": [Function],
           },
-          Object {
+          {
             "name": "By Set",
             "to": [Function],
           },
@@ -133,30 +133,30 @@ exports[`<DynamicMenu /> should render 1`] = `
   >
     <MenuItemWithEntities
       entities={
-        Array [
-          Object {
+        [
+          {
             "activeClass": [Function],
             "name": "Your InterProScan searches",
-            "to": Object {
-              "description": Object {
-                "main": Object {
+            "to": {
+              "description": {
+                "main": {
                   "key": "result",
                 },
-                "result": Object {
+                "result": {
                   "type": "InterProScan",
                 },
               },
             },
           },
-          Object {
+          {
             "activeClass": [Function],
             "name": "Your downloads",
-            "to": Object {
-              "description": Object {
-                "main": Object {
+            "to": {
+              "description": {
+                "main": {
                   "key": "result",
                 },
-                "result": Object {
+                "result": {
                   "type": "download",
                 },
               },
@@ -176,9 +176,9 @@ exports[`<DynamicMenu /> should render 1`] = `
     <MenuItemWithEntities
       name="Release notes"
       to={
-        Object {
-          "description": Object {
-            "other": Array [
+        {
+          "description": {
+            "other": [
               "release_notes",
             ],
           },
@@ -194,9 +194,9 @@ exports[`<DynamicMenu /> should render 1`] = `
     <MenuItemWithEntities
       name="Download"
       to={
-        Object {
-          "description": Object {
-            "other": Array [
+        {
+          "description": {
+            "other": [
               "download",
             ],
           },
@@ -211,49 +211,49 @@ exports[`<DynamicMenu /> should render 1`] = `
   >
     <MenuItemWithEntities
       entities={
-        Array [
-          Object {
+        [
+          {
             "activeClass": "is-active",
             "name": "Tutorials & Webinars",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "help",
                   "tutorial",
                 ],
               },
             },
           },
-          Object {
+          {
             "activeClass": "is-active",
             "name": "Training",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "help",
                   "training",
                 ],
               },
             },
           },
-          Object {
+          {
             "activeClass": "is-active",
             "name": "FAQs",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "help",
                   "faqs",
                 ],
               },
             },
           },
-          Object {
+          {
             "activeClass": "is-active",
             "name": "Documentation",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "help",
                   "documentation",
                 ],
@@ -264,9 +264,9 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
       name="Help"
       to={
-        Object {
-          "description": Object {
-            "other": Array [
+        {
+          "description": {
+            "other": [
               "help",
             ],
           },
@@ -281,73 +281,73 @@ exports[`<DynamicMenu /> should render 1`] = `
   >
     <MenuItemWithEntities
       entities={
-        Array [
-          Object {
+        [
+          {
             "activeClass": "is-active",
             "name": "InterPro",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "about",
                   "interpro",
                 ],
               },
             },
           },
-          Object {
+          {
             "activeClass": "is-active",
             "name": "InterProScan",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "about",
                   "interproscan",
                 ],
               },
             },
           },
-          Object {
+          {
             "activeClass": "is-active",
             "name": "The InterPro Consortium",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "about",
                   "consortium",
                 ],
               },
             },
           },
-          Object {
+          {
             "activeClass": "is-active",
             "name": "Funding",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "about",
                   "funding",
                 ],
               },
             },
           },
-          Object {
+          {
             "activeClass": "is-active",
             "name": "Privacy",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "about",
                   "privacy",
                 ],
               },
             },
           },
-          Object {
+          {
             "activeClass": "is-active",
             "name": "Team",
-            "to": Object {
-              "description": Object {
-                "other": Array [
+            "to": {
+              "description": {
+                "other": [
                   "about",
                   "team",
                 ],
@@ -358,9 +358,9 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
       name="About"
       to={
-        Object {
-          "description": Object {
-            "other": Array [
+        {
+          "description": {
+            "other": [
               "about",
             ],
           },
@@ -378,7 +378,7 @@ exports[`<DynamicMenu /> should render 1`] = `
     >
       <img
         alt="view all menu items"
-        src={Object {}}
+        src={{}}
         width="30px"
       />
     </span>

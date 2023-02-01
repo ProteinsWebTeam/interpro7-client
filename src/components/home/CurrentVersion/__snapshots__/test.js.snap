@@ -13,9 +13,9 @@ exports[`<CurrentVersion /> Current Version should show the proper version 1`] =
     <header>
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "other": Array [
+          {
+            "description": {
+              "other": [
                 "release_notes",
               ],
             },

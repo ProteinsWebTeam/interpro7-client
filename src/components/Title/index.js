@@ -46,6 +46,7 @@ const mapNameToClass = new Map([
     source_organism?: Object,
     release_date?: string,
     chains?: Array<string>,
+    is_fragment?: boolean,
   },
   mainType: string,
   data?: Object,
@@ -186,6 +187,18 @@ TitleTag.propTypes = {
   metadata: T.object.isRequired,
   mainType: T.string.isRequired,
   dbLabel: T.string,
+};
+const FragmentTag = ({ isFragment } /*: {isFragment: boolean} */) => {
+  if (!isFragment) return null;
+  return (
+    <div className={f('fragment-tag')} data-testid="title">
+      <div className={f('tag')}>Fragment</div>
+      {/* <TooltipAndRTDLink rtdPage={`browse.html#${rtdLink}`} /> */}
+    </div>
+  );
+};
+FragmentTag.propTypes = {
+  isFragment: T.bool,
 };
 
 const AccessionTag = (
@@ -380,6 +393,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
           mainType={mainType}
           isIPScanResult={isIPScanResult}
         />
+        <FragmentTag isFragment={!!metadata?.is_fragment} />
       </div>
     );
   }

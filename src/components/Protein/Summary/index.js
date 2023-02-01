@@ -28,7 +28,10 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
+import PantherGoTerms from 'components/Protein/PantherGoTerms';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
+
+import { splitSequenceByChunks } from 'utils/sequence';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -38,6 +41,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 import summary from 'styles/summary.css';
 import theme from 'styles/theme-interpro.css';
+import DownloadButton from '../Sequence/DownloadButton';
 
 const f = foundationPartial(
   summary,
@@ -69,21 +73,37 @@ export const SummaryProtein = (
   const comparisonContainerRef = useRef();
   const [renderComparisonButton, setRenderComparisonButton] = useState(false);
   const [comparisonMode, setComparisonMode] = useState(false);
+  const [subfamilies, setSubfamilies] = useState(null);
   useEffect(() => {
     setRenderComparisonButton(true);
   }, [comparisonContainerRef]);
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
 
-  const splitSequenceByChunks = () => {
-    const start = 1;
-    const end = metadata.sequence.length;
-    // Split lines
-    metadata.sequence = metadata.sequence
-      .slice(Math.max(0, start - 1), end)
-      .replace(/(.{1,80})/g, '$1\n');
-    const meta = `>${metadata.id} ${start}-${end}`.trim();
-    return encodeURIComponent(`${meta}\n${metadata.sequence}`);
+  const minWidth = '290px';
+
+  const getSubfamiliesFromMatches = (results) => {
+    if (results?.length) {
+      setSubfamilies(
+        results
+          .filter(
+            ({ metadata: { source_database: db } }) =>
+              db?.toLowerCase() === 'panther',
+          )
+          .map(({ proteins }) => {
+            const subfamilies = [];
+            proteins.forEach((p) => {
+              p.entry_protein_locations.forEach(({ subfamily }) => {
+                subfamilies.push(subfamily?.accession);
+              });
+            });
+            return subfamilies.filter(Boolean);
+          })
+          .flat(),
+      );
+      return;
+    }
+    setSubfamilies(null);
   };
 
   return (
@@ -244,6 +264,7 @@ export const SummaryProtein = (
                   secondary="protein"
                   label="Export Matches [TSV]"
                   className={'button hollow'}
+                  minWidth={minWidth}
                 />
               </label>
               <hr style={{ margin: '0.8em' }} />
@@ -251,12 +272,16 @@ export const SummaryProtein = (
                 sequence={metadata.sequence}
                 accession={metadata.accession}
                 title="Search protein with HMMER"
-                minWidth="290px"
+                minWidth={minWidth}
               />
               <IPScanButton
-                sequence={splitSequenceByChunks}
+                sequence={splitSequenceByChunks(metadata.sequence, metadata.id)}
                 title="Search protein with InterProScan"
-                minWidth="290px"
+                minWidth={minWidth}
+              />
+              <DownloadButton
+                sequence={metadata.sequence}
+                accession={metadata.accession}
               />
             </div>
           </div>
@@ -270,7 +295,10 @@ export const SummaryProtein = (
         <section>
           <div className={f('row')}>
             <div className={f('medium-12', 'columns', 'margin-bottom-large')}>
-              <DomainsOnProtein mainData={data} />
+              <DomainsOnProtein
+                mainData={data}
+                onMatchesLoaded={getSubfamiliesFromMatches}
+              />
             </div>
           </div>
         </section>
@@ -278,6 +306,7 @@ export const SummaryProtein = (
       {metadata.go_terms && (
         <GoTerms terms={metadata.go_terms} type="protein" />
       )}
+      <PantherGoTerms subfamilies={subfamilies || []} />
     </div>
   );
 };

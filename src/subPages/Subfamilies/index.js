@@ -11,6 +11,7 @@ import loadData from 'higherOrder/loadData';
 import Table, { Column, PageSizeSelector } from 'components/Table';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import ListOfGOTerms from 'components/GoTerms/List';
 
 import f from 'styles/foundation';
 
@@ -41,6 +42,7 @@ export const PantherLink = ({ accession, children }) => (
     {children}
   </Link>
 );
+
 const SubfamiliesSubpage = (
   { data, search, db } /*: {
     data: {loading: boolean, ok: boolean, status: number, payload: ?Object, url: string},
@@ -82,7 +84,13 @@ const SubfamiliesSubpage = (
             <SubfamilyLink accession={accession}>{name}</SubfamilyLink>
           )}
         >
-          Accession
+          Name
+        </Column>
+        <Column
+          dataKey="go_terms"
+          renderer={(terms) => <ListOfGOTerms terms={terms} />}
+        >
+          GO terms
         </Column>
       </Table>
     </section>

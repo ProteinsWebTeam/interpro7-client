@@ -14,7 +14,7 @@ exports[`<Pages /> should render 1`] = `
   <Memo(Connect(UnconnectedErrorBoundary))>
     <Memo(Connect(_Switch))
       catchAll={
-        Object {
+        {
           "$$typeof": Symbol(react.memo),
           "compare": null,
           "type": [Function],
@@ -22,42 +22,42 @@ exports[`<Pages /> should render 1`] = `
       }
       childRoutes={
         Map {
-          "entry" => Object {
+          "entry" => {
             "$$typeof": Symbol(react.memo),
             "compare": null,
             "type": [Function],
           },
-          "protein" => Object {
+          "protein" => {
             "$$typeof": Symbol(react.memo),
             "compare": null,
             "type": [Function],
           },
-          "structure" => Object {
+          "structure" => {
             "$$typeof": Symbol(react.memo),
             "compare": null,
             "type": [Function],
           },
-          "taxonomy" => Object {
+          "taxonomy" => {
             "$$typeof": Symbol(react.memo),
             "compare": null,
             "type": [Function],
           },
-          "proteome" => Object {
+          "proteome" => {
             "$$typeof": Symbol(react.memo),
             "compare": null,
             "type": [Function],
           },
-          "set" => Object {
+          "set" => {
             "$$typeof": Symbol(react.memo),
             "compare": null,
             "type": [Function],
           },
-          "search" => Object {
+          "search" => {
             "$$typeof": Symbol(react.memo),
             "compare": null,
             "type": [Function],
           },
-          "result" => Object {
+          "result" => {
             "$$typeof": Symbol(react.memo),
             "compare": null,
             "type": [Function],

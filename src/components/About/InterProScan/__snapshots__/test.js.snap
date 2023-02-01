@@ -19,7 +19,7 @@ exports[`<InterProScan /> should render with data 1`] = `
      
     <Tooltip
       style={
-        Object {
+        {
           "cursor": "help",
           "textDecoration": "underline",
         }

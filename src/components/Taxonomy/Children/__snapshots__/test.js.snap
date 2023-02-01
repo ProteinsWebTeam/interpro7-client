@@ -8,7 +8,7 @@ exports[`<Children /> should render 1`] = `
     <TaxIdOrName
       accession="12333"
       name={
-        Object {
+        {
           "name": "unclassified bacterial viruses",
           "short": "unclassified bacterial viruses",
         }
@@ -16,8 +16,8 @@ exports[`<Children /> should render 1`] = `
     />
     <Memo(Loadable)
       data={
-        Object {
-          "name": Object {
+        {
+          "name": {
             "name": "unclassified bacterial viruses",
             "short": "unclassified bacterial viruses",
           },
@@ -31,7 +31,7 @@ exports[`<Children /> should render 1`] = `
     <TaxIdOrName
       accession="12877"
       name={
-        Object {
+        {
           "name": "Satellites",
           "short": "Satellites",
         }
@@ -39,8 +39,8 @@ exports[`<Children /> should render 1`] = `
     />
     <Memo(Loadable)
       data={
-        Object {
-          "name": Object {
+        {
+          "name": {
             "name": "Satellites",
             "short": "Satellites",
           },

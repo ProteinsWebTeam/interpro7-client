@@ -51,10 +51,6 @@ export const toggleSideNav = () => ({
   type: types.TOGGLE_SIDE_NAV,
 });
 
-export const toggleAccessionDBForIDA = () => ({
-  type: types.TOGGLE_ACCESSION_DB_FOR_IDA,
-});
-
 export const openSideNav = () => ({
   type: types.TOGGLE_SIDE_NAV,
   status: 'open',

@@ -22,13 +22,17 @@ exports[`External links <GoTerms /> entry: interpro should render GOTerms compon
     </div>
   </div>
   <div
-    className="row"
+    className="row columns"
   >
-    <p
-      className="columns"
+    <div
+      className="go-columns"
     >
-      No GO Terms
-    </p>
+      <p
+        className="columns"
+      >
+        No GO Terms
+      </p>
+    </div>
   </div>
 </section>
 `;
@@ -55,119 +59,115 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
     </div>
   </div>
   <div
-    className="row"
+    className="row columns"
   >
     <div
-      className="small-12 medium-4 columns margin-bottom-large"
+      className="go-columns"
     >
-      <p
-        className="bp go-title"
-      >
-        biological process
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+      <div>
+        <p
+          className="bp go-title"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="mf go-title"
-      >
-        molecular function
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+          biological process
+        </p>
+        <ul
+          className="go-list"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="cc go-title"
-      >
-        cellular component
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="go-title"
-      >
-        undefined
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li>
-          <Memo(Loadable)
-            data="GO:0004930"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0004930"
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
           >
-            test1
-             (
-            GO:0004930
-            )
-          </GoLink>
-        </li>
-        <li>
-          <Memo(Loadable)
-            data="GO:0007186"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0007186"
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
           >
-            test2
-             (
-            GO:0007186
-            )
-          </GoLink>
-        </li>
-        <li>
-          <Memo(Loadable)
-            data="GO:0016021"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0016021"
-          >
-            test3
-             (
-            GO:0016021
-            )
-          </GoLink>
-        </li>
-      </ul>
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="go-title"
+        >
+          undefined
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li>
+            <Memo(Loadable)
+              data="GO:0004930"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0004930"
+            >
+              test1
+               (
+              GO:0004930
+              )
+            </GoLink>
+          </li>
+          <li>
+            <Memo(Loadable)
+              data="GO:0007186"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0007186"
+            >
+              test2
+               (
+              GO:0007186
+              )
+            </GoLink>
+          </li>
+          <li>
+            <Memo(Loadable)
+              data="GO:0016021"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0016021"
+            >
+              test3
+               (
+              GO:0016021
+              )
+            </GoLink>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -195,89 +195,85 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
     </div>
   </div>
   <div
-    className="row"
+    className="row columns"
   >
     <div
-      className="small-12 medium-4 columns margin-bottom-large"
+      className="go-columns"
     >
-      <p
-        className="bp go-title"
-      >
-        biological process
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+      <div>
+        <p
+          className="bp go-title"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="mf go-title"
-      >
-        molecular function
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+          biological process
+        </p>
+        <ul
+          className="go-list"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="cc go-title"
-      >
-        cellular component
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
-        >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="go-title"
-      >
-        undefined
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li>
-          <Memo(Loadable)
-            data="GO:0004930"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0004930"
+          <li
+            className="no-goterm"
           >
-            test2
-             (
-            GO:0004930
-            )
-          </GoLink>
-        </li>
-      </ul>
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
+        >
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="go-title"
+        >
+          undefined
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li>
+            <Memo(Loadable)
+              data="GO:0004930"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0004930"
+            >
+              test2
+               (
+              GO:0004930
+              )
+            </GoLink>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -305,13 +301,17 @@ exports[`External links <GoTerms /> entry: pfam should render GOTerms component 
     </div>
   </div>
   <div
-    className="row"
+    className="row columns"
   >
-    <p
-      className="columns"
+    <div
+      className="go-columns"
     >
-      No GO Terms
-    </p>
+      <p
+        className="columns"
+      >
+        No GO Terms
+      </p>
+    </div>
   </div>
 </section>
 `;
@@ -338,119 +338,115 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
     </div>
   </div>
   <div
-    className="row"
+    className="row columns"
   >
     <div
-      className="small-12 medium-4 columns margin-bottom-large"
+      className="go-columns"
     >
-      <p
-        className="bp go-title"
-      >
-        biological process
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+      <div>
+        <p
+          className="bp go-title"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="mf go-title"
-      >
-        molecular function
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+          biological process
+        </p>
+        <ul
+          className="go-list"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="cc go-title"
-      >
-        cellular component
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="go-title"
-      >
-        undefined
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li>
-          <Memo(Loadable)
-            data="GO:0004930"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0004930"
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
           >
-            test1
-             (
-            GO:0004930
-            )
-          </GoLink>
-        </li>
-        <li>
-          <Memo(Loadable)
-            data="GO:0007186"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0007186"
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
           >
-            test2
-             (
-            GO:0007186
-            )
-          </GoLink>
-        </li>
-        <li>
-          <Memo(Loadable)
-            data="GO:0016021"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0016021"
-          >
-            test3
-             (
-            GO:0016021
-            )
-          </GoLink>
-        </li>
-      </ul>
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="go-title"
+        >
+          undefined
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li>
+            <Memo(Loadable)
+              data="GO:0004930"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0004930"
+            >
+              test1
+               (
+              GO:0004930
+              )
+            </GoLink>
+          </li>
+          <li>
+            <Memo(Loadable)
+              data="GO:0007186"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0007186"
+            >
+              test2
+               (
+              GO:0007186
+              )
+            </GoLink>
+          </li>
+          <li>
+            <Memo(Loadable)
+              data="GO:0016021"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0016021"
+            >
+              test3
+               (
+              GO:0016021
+              )
+            </GoLink>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -478,89 +474,85 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
     </div>
   </div>
   <div
-    className="row"
+    className="row columns"
   >
     <div
-      className="small-12 medium-4 columns margin-bottom-large"
+      className="go-columns"
     >
-      <p
-        className="bp go-title"
-      >
-        biological process
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+      <div>
+        <p
+          className="bp go-title"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="mf go-title"
-      >
-        molecular function
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+          biological process
+        </p>
+        <ul
+          className="go-list"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="cc go-title"
-      >
-        cellular component
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
-        >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="go-title"
-      >
-        undefined
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li>
-          <Memo(Loadable)
-            data="GO:0004930"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0004930"
+          <li
+            className="no-goterm"
           >
-            test2
-             (
-            GO:0004930
-            )
-          </GoLink>
-        </li>
-      </ul>
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
+        >
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="go-title"
+        >
+          undefined
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li>
+            <Memo(Loadable)
+              data="GO:0004930"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0004930"
+            >
+              test2
+               (
+              GO:0004930
+              )
+            </GoLink>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -582,19 +574,23 @@ exports[`External links <GoTerms /> protein: reviewed should render GOTerms comp
         <h4
           className="title"
         >
-          GO terms
+          InterPro GO terms
         </h4>
       </Tooltip>
     </div>
   </div>
   <div
-    className="row"
+    className="row columns"
   >
-    <p
-      className="columns"
+    <div
+      className="go-columns"
     >
-      No GO Terms
-    </p>
+      <p
+        className="columns"
+      >
+        No GO Terms
+      </p>
+    </div>
   </div>
 </section>
 `;
@@ -615,125 +611,121 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
         <h4
           className="title"
         >
-          GO terms
+          InterPro GO terms
         </h4>
       </Tooltip>
     </div>
   </div>
   <div
-    className="row"
+    className="row columns"
   >
     <div
-      className="small-12 medium-4 columns margin-bottom-large"
+      className="go-columns"
     >
-      <p
-        className="bp go-title"
-      >
-        biological process
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+      <div>
+        <p
+          className="bp go-title"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="mf go-title"
-      >
-        molecular function
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+          biological process
+        </p>
+        <ul
+          className="go-list"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="cc go-title"
-      >
-        cellular component
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="go-title"
-      >
-        undefined
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li>
-          <Memo(Loadable)
-            data="GO:0004930"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0004930"
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
           >
-            test1
-             (
-            GO:0004930
-            )
-          </GoLink>
-        </li>
-        <li>
-          <Memo(Loadable)
-            data="GO:0007186"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0007186"
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
           >
-            test2
-             (
-            GO:0007186
-            )
-          </GoLink>
-        </li>
-        <li>
-          <Memo(Loadable)
-            data="GO:0016021"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0016021"
-          >
-            test3
-             (
-            GO:0016021
-            )
-          </GoLink>
-        </li>
-      </ul>
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="go-title"
+        >
+          undefined
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li>
+            <Memo(Loadable)
+              data="GO:0004930"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0004930"
+            >
+              test1
+               (
+              GO:0004930
+              )
+            </GoLink>
+          </li>
+          <li>
+            <Memo(Loadable)
+              data="GO:0007186"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0007186"
+            >
+              test2
+               (
+              GO:0007186
+              )
+            </GoLink>
+          </li>
+          <li>
+            <Memo(Loadable)
+              data="GO:0016021"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0016021"
+            >
+              test3
+               (
+              GO:0016021
+              )
+            </GoLink>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -755,95 +747,91 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
         <h4
           className="title"
         >
-          GO terms
+          InterPro GO terms
         </h4>
       </Tooltip>
     </div>
   </div>
   <div
-    className="row"
+    className="row columns"
   >
     <div
-      className="small-12 medium-4 columns margin-bottom-large"
+      className="go-columns"
     >
-      <p
-        className="bp go-title"
-      >
-        biological process
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+      <div>
+        <p
+          className="bp go-title"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="mf go-title"
-      >
-        molecular function
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
+          biological process
+        </p>
+        <ul
+          className="go-list"
         >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="cc go-title"
-      >
-        cellular component
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li
-          className="no-goterm"
-        >
-          None
-        </li>
-      </ul>
-    </div>
-    <div
-      className="small-12 medium-4 columns margin-bottom-large"
-    >
-      <p
-        className="go-title"
-      >
-        undefined
-      </p>
-      <ul
-        className="go-list"
-      >
-        <li>
-          <Memo(Loadable)
-            data="GO:0004930"
-            processData={[Function]}
-          />
-          <GoLink
-            className="go-terms ext"
-            id="GO:0004930"
+          <li
+            className="no-goterm"
           >
-            test2
-             (
-            GO:0004930
-            )
-          </GoLink>
-        </li>
-      </ul>
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
+        >
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="go-title"
+        >
+          undefined
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li>
+            <Memo(Loadable)
+              data="GO:0004930"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0004930"
+            >
+              test2
+               (
+              GO:0004930
+              )
+            </GoLink>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>

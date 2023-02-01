@@ -17,7 +17,8 @@ const HydroPopup = ({ detail } /*: {detail: PopupDetail} */) => {
       <div>
         <b>Hydrophobicity:</b> {detail.feature.value}
         <br />
-        <b>Scale:</b> <ColorScale {...(element /*: any */).colorScale} />
+        <br />
+        <ColorScale {...(element /*: any */).colorScale} />
         <br />
       </div>
     </section>

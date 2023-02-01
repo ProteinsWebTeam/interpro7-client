@@ -10,7 +10,6 @@ import T from 'prop-types';
 */
 
 const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
-  const { type } = detail?.feature || {};
   let { accession, currentResidue } = detail?.feature;
 
   if (sourceDatabase === 'PIRSF') {
@@ -26,27 +25,19 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
   const end = currentResidue?.end;
   const description = currentResidue?.description || '';
   const residue = currentResidue?.residue || currentResidue?.residues || '';
+  const hasMultiple = end && end !== start;
   return (
     <section>
       <h6>
+        {sourceDatabase} -{' '}
         {accession.startsWith('residue:')
           ? accession.split('residue:')[1]
           : accession}
-        {description && <p>[{description}]</p>}
       </h6>
-
+      {description && <p>[{description}]</p>}
       <div>
-        <div>
-          Residue in {sourceDatabase}{' '}
-          {type && type !== 'residue' && type.replace('_', ' ')}
-        </div>
-        <ul>
-          <li>
-            Position: {start}
-            {end && end !== start ? <>-{end}</> : null}
-          </li>
-          <li>Residue: {residue}</li>
-        </ul>
+        Residue{hasMultiple && 's'}: {start}
+        {hasMultiple && `-${end}`} ({residue})
       </div>
     </section>
   );

@@ -3,6 +3,7 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import T from 'prop-types';
 
 import loadWebComponent from 'utils/load-web-component';
+import { goToCustomLocation } from 'actions/creators';
 
 import Stockholm from 'stockholm-js';
 import { createSelector } from 'reselect';
@@ -62,6 +63,7 @@ const AlignmentViewer = ({
   contactMinDistance = defaultContactMinDistance,
   contactMinProbability = defaultContactMinProbability,
   onAlignmentLoaded = () => null,
+  goToCustomLocation,
 }) => {
   const msaTrack = useRef(null);
   const linksTrack = useRef(null);
@@ -89,6 +91,21 @@ const AlignmentViewer = ({
         const { map } = msaTrack.current.getColorMap();
         setColorMap(map || {});
       });
+      msaTrack.current.addEventListener('click', (event) => {
+        if (event.target.tagName === 'SPAN') {
+          const name = event.target.innerHTML;
+          const accession = align.gs.AC[name]?.[0]?.replace(/\.\d$/, '');
+          if (accession) {
+            goToCustomLocation({
+              description: {
+                main: { key: 'protein' },
+                protein: { db: 'uniprot', accession },
+              },
+            });
+          }
+        }
+      });
+
       if (contacts && linksTrack.current) {
         linksTrack.current.data = contacts.map((p) => [p[2], p[3], p[4]]);
       }
@@ -211,6 +228,7 @@ AlignmentViewer.propTypes = {
   contactMinProbability: T.number,
   data: dataPropType,
   onAlignmentLoaded: T.func,
+  goToCustomLocation: T.func,
 };
 
 const mapStateToPropsForAlignment = createSelector(
@@ -242,4 +260,5 @@ export default loadData({
   fetchOptions: {
     responseType: 'gzip',
   },
+  mapDispatchToProps: { goToCustomLocation },
 })(AlignmentViewer);

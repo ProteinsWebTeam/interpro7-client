@@ -9,21 +9,21 @@ exports[`<List /> should render 1`] = `
   >
     <Memo(Loadable)
       data={
-        Array [
-          Object {
+        [
+          {
             "accession": "E0W2I7",
             "length": 1010,
-            "locations": Array [
-              Object {
-                "fragments": Array [
-                  Object {
+            "locations": [
+              {
+                "fragments": [
+                  {
                     "end": 179,
                     "start": 87,
                   },
                 ],
               },
             ],
-            "metadata": Object {
+            "metadata": {
               "anno_id": 581570,
               "confidence": "99",
               "resource": "Gene3D",
@@ -38,17 +38,17 @@ exports[`<List /> should render 1`] = `
     <Table
       actualSize={1649}
       dataTable={
-        Array [
-          Object {
+        [
+          {
             "accession": "E0W2I7",
             "anno_id": 581570,
             "confidence": "99",
             "id": 581570,
             "length": 1010,
-            "locations": Array [
-              Object {
-                "fragments": Array [
-                  Object {
+            "locations": [
+              {
+                "fragments": [
+                  {
                     "end": 179,
                     "start": 87,
                   },
@@ -93,7 +93,7 @@ exports[`<List /> should render 1`] = `
       </Memo(Connect(Exporter))>
       <Column
         customiseSearch={
-          Object {
+          {
             "message": "Accepts only UniProt accessions",
             "validation": /\\^\\(\\[OPQ\\]\\[0-9\\]\\[A-Z0-9\\]\\{3\\}\\[0-9\\]\\|\\[A-NR-Z\\]\\[0-9\\]\\(\\[A-Z\\]\\[A-Z0-9\\]\\{2\\}\\[0-9\\]\\)\\{1,2\\}\\)\\$/i,
           }
@@ -107,7 +107,7 @@ exports[`<List /> should render 1`] = `
       <Column
         dataKey="evidences"
         isSearchable={true}
-        options={Array []}
+        options={[]}
         renderer={[Function]}
         showOptions={true}
       >
@@ -115,7 +115,7 @@ exports[`<List /> should render 1`] = `
       </Column>
       <Column
         customiseSearch={
-          Object {
+          {
             "placeholder": ">=",
             "type": "number",
           }

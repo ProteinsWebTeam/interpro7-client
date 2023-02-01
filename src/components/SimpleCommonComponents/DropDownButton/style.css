@@ -7,8 +7,15 @@
   margin: 0;
   position: relative;
 
-  & .dropdown {
+  & button {
+    cursor: pointer;
+  }
+  & .dropdown-button {
     background: var(--colors-interpro);
+    & .icon-caret-down {
+      margin-left: 1rem;
+      padding: 0;
+    }
   }
   & button {
     margin-bottom: 1px;
@@ -33,25 +40,31 @@
   }
 
   & .dropdown-pane {
-    z-index: var(--z-index-just-over); /* so sticky header stay on top*/
+    z-index: var(--z-index-over-plus); /* so sticky header stay on top*/
     & ul {
       list-style-type: none;
       margin: 0;
       padding: 0;
-      & li a {
-        display: block;
+      & li {
         padding: 0.3rem 1rem;
-      }
-      & li a:hover {
-        background-color: #1878ba;
-        color: white;
+        text-align: left;
+        &:hover {
+          background-color: lightgray;
+        }
+
+        & a {
+          display: block;
+        }
+        & a:hover {
+          color: white;
+        }
       }
     }
   }
 }
 
 .disableDropdown {
-  & .dropdown {
+  & .dropdown-button {
     background: var(--colors-gray);
     cursor: not-allowed;
   }
@@ -67,8 +80,8 @@
 }
 
 @media screen and (max-width: 39.9375em) {
-  .dropdown-container .dropdown::after {
-    border: none; /*remove select arrow for small screens*/
+  .dropdown-container .dropdown-button .icon-caret-down {
+    display: none; /*remove select arrow for small screens*/
   }
   .dropdown-container .dropdown-content {
     width: 182px; /*temp value*/

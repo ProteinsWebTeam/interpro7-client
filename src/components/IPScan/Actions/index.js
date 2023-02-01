@@ -48,7 +48,7 @@ export class Actions extends PureComponent /*:: <Props> */ {
     keepJobAsLocal: T.func.isRequired,
     sequence: T.string,
     attributes: T.shape({
-      applications: T.arrayOf(T.string),
+      applications: T.oneOfType([T.string, T.arrayOf(T.string)]),
     }),
   };
 
@@ -60,7 +60,12 @@ export class Actions extends PureComponent /*:: <Props> */ {
   _handleReRun = () => {
     const { sequence, attributes, goToCustomLocation } = this.props;
     const search = {};
-    if (attributes?.applications) search.applications = attributes.applications;
+    if (attributes?.applications) {
+      search.applications =
+        typeof attributes.applications === 'string'
+          ? [attributes.applications]
+          : attributes.applications;
+    }
     goToCustomLocation({
       description: {
         main: { key: 'search' },

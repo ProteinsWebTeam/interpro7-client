@@ -63,3 +63,7 @@ h5 {
 select {
   max-width: 100% !important;
 }
+
+div.alphafold-model .structure-viewer-split {
+  height: 90vh;
+}

@@ -15,16 +15,18 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import forSplit from 'components/Structure/ViewerAndEntries/style.css';
 
-const f = foundationPartial(ipro, fonts);
+const f = foundationPartial(ipro, fonts, forSplit);
 
 const AlphaFoldModelSubPage = ({ data, description }) => {
   const mainAccession = description[description.main.key].accession;
-  const mainDB = description[description.main.key].db;
+  const mainType = description.main.key.toLowerCase();
   const container = useRef();
   const [selectionsInModel, setSelectionsInModel] = useState(null);
   const [proteinAcc, setProteinAcc] = useState('');
   const [modelId, setModelId] = useState(null);
+  const [isSplitScreen, setSplitScreen] = useState(false);
   const handleProteinChange = (value) => {
     setProteinAcc(value);
     setModelId(null);
@@ -36,7 +38,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
   };
 
   useEffect(() => {
-    if (mainDB.toLowerCase() === 'interpro') {
+    if (mainType === 'entry') {
       // Take the list of matched UniProt matches and assign the first one to protein accession
       if (data?.payload?.count > 0)
         setProteinAcc(data.payload.results[0].metadata.accession);
@@ -44,10 +46,12 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
   }, [mainAccession, data]);
 
   if (data?.loading) return <Loading />;
-  const hasMultipleProteins =
-    mainDB.toLowerCase() === 'interpro' && data.payload.count > 1;
+  const hasMultipleProteins = mainType === 'entry' && data.payload.count > 1;
   return (
-    <div className={f('row', 'column')} ref={container}>
+    <div
+      className={f('row', 'column', { 'split-view': isSplitScreen })}
+      ref={container}
+    >
       {proteinAcc && (
         <AlphaFoldModel
           proteinAcc={proteinAcc}
@@ -55,9 +59,12 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
           onModelChange={handleModelChange}
           modelId={modelId}
           selections={selectionsInModel}
+          parentElement={container.current}
+          isSplitScreen={isSplitScreen}
+          onSplitScreenChange={(value) => setSplitScreen(value)}
         />
       )}
-      {mainDB.toLowerCase() === 'interpro' ? (
+      {mainType === 'entry' ? (
         <ProteinTable onProteinChange={handleProteinChange} />
       ) : (
         <div
@@ -69,6 +76,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
             onChangeSelection={(selection) => {
               setSelectionsInModel(selection);
             }}
+            isSplitScreen={isSplitScreen}
           />
         </div>
       )}

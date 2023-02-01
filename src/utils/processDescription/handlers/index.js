@@ -150,7 +150,7 @@ const memberDB = new Set([
   },
   { name: 'cdd', re: /^(?:[cs])d[0-9]{5}$/i },
   { name: 'hamap', re: /^MF_[0-9]{5}(_([AB]){1})?$/i },
-  { name: 'panther', re: /^PTHR[0-9]{5}(:SF[0-9]{1,3})?$/i },
+  { name: 'panther', re: /^PTHR[0-9]{5}(:SF[0-9]{1,4})?$/i },
   { name: 'pfam', re: /^PF[0-9]{5}$/i },
   { name: 'pirsf', re: /^PIRSF[0-9]{6}$/i },
   { name: 'prints', re: /^PR[0-9]{5}$/i },

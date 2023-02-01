@@ -3,10 +3,9 @@ import React from 'react';
 import T from 'prop-types';
 
 import loadData from 'higherOrder/loadData';
-import { createSelector } from 'reselect';
-import { format } from 'url';
 
 import { EntryMenuLinkWithoutData } from '.';
+import { getAlphaFoldPredictionURL } from 'components/AlphaFold/selectors';
 
 const AlphaFoldMenuLink = (
   {
@@ -37,17 +36,4 @@ AlphaFoldMenuLink.propTypes = {
   collapsed: T.bool,
 };
 
-const getAlphaFoldURL = createSelector(
-  (state) => state.settings.alphafold,
-  (state) => state.customLocation.description.protein.accession,
-  ({ protocol, hostname, port, root, query }, accession) => {
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}api/prediction/${accession}`,
-      query: query,
-    });
-  },
-);
-export default loadData(getAlphaFoldURL)(AlphaFoldMenuLink);
+export default loadData(getAlphaFoldPredictionURL)(AlphaFoldMenuLink);

@@ -339,7 +339,7 @@ class StructureCard extends PureComponent /*:: <StructureCardProps, StructureCar
               title={`3D visualisation for ${data.metadata.accession} structure`}
             >
               <LazyImage
-                src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${data.metadata.accession}/traces.jpg`}
+                src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${data.metadata.accession}&file=traces.jpg`}
                 alt={`structure with accession ${data.metadata.accession}`}
               />
             </Tooltip>
@@ -668,7 +668,7 @@ const List = (
                 })}
               >
                 <LazyImage
-                  src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
+                  src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${accession}&file=traces.jpg`}
                   alt={`structure with accession ${accession}`}
                   style={{ maxWidth: '33%' }}
                 />

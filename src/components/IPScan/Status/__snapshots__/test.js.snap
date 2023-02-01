@@ -25,7 +25,7 @@ exports[`<IPScanStatus /> should render 1`] = `
   </p>
   <Memo(Loadable)
     data={
-      Object {
+      {
         "description": "The status of all the requested InterProScan searches",
         "name": "Your InterProScan searches",
       }
@@ -46,9 +46,9 @@ exports[`<IPScanStatus /> should render 1`] = `
   <Table
     actualSize={0}
     contentType="result"
-    dataTable={Array []}
+    dataTable={[]}
     groupActions={[Function]}
-    query={Object {}}
+    query={{}}
     rowKey="localID"
     shouldGroup={true}
     showTableIcon={false}
@@ -58,17 +58,23 @@ exports[`<IPScanStatus /> should render 1`] = `
         icon=""
         label="Clear All"
       >
-        <button
-          onClick={[Function]}
-        >
-          Loaded from File
-        </button>
-        <hr />
-        <button
-          onClick={[Function]}
-        >
-          Loaded from Servers
-        </button>
+        <ul>
+          <li>
+            <button
+              onClick={[Function]}
+            >
+              Loaded from File
+            </button>
+          </li>
+          <li>
+             
+            <button
+              onClick={[Function]}
+            >
+              Loaded from Servers
+            </button>
+          </li>
+        </ul>
       </DropDownButton>
     </ExtraOptions>
     <Column

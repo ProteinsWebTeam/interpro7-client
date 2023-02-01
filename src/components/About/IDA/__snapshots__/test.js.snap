@@ -16,7 +16,7 @@ exports[`<AboutIDA /> should render with data 1`] = `
     </div>
     <Memo(Loadable)
       data={
-        Object {
+        {
           "description": "he InterPro Domain Architecture (IDA) tool allows to search the InterPro database with a particular set of domains",
           "name": "About InterPro Domain Architectures",
         }
@@ -40,7 +40,7 @@ exports[`<AboutIDA /> should render with data 1`] = `
       <img
         alt="Add domain"
         className="image-funding"
-        src={Object {}}
+        src={{}}
       />
       <div
         className="steps-list"
@@ -64,7 +64,7 @@ exports[`<AboutIDA /> should render with data 1`] = `
              checkbox should be checked.
             <ol
               style={
-                Object {
+                {
                   "listStyleType": "lower-alpha",
                 }
               }

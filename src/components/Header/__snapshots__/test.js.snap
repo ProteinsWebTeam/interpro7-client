@@ -181,7 +181,7 @@ exports[`<Header /> stuck, not signature 1`] = `
   className="masthead tmp-header"
   id="masthead"
   style={
-    Object {
+    {
       "position": "fixed",
       "top": "-40px",
     }
@@ -209,7 +209,7 @@ exports[`<Header /> stuck, signature 1`] = `
   className="masthead tmp-header sign"
   id="masthead"
   style={
-    Object {
+    {
       "position": "fixed",
       "top": "-40px",
     }
@@ -237,7 +237,7 @@ exports[`<Header /> unstuck, not signature 1`] = `
   className="masthead tmp-header"
   id="masthead"
   style={
-    Object {
+    {
       "top": "-40px",
     }
   }
@@ -264,7 +264,7 @@ exports[`<Header /> unstuck, signature 1`] = `
   className="masthead tmp-header sign"
   id="masthead"
   style={
-    Object {
+    {
       "top": "-40px",
     }
   }
@@ -309,12 +309,12 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
       />
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "main": Object {
+          {
+            "description": {
+              "main": {
                 "key": "search",
               },
-              "search": Object {
+              "search": {
                 "type": "text",
               },
             },
@@ -370,12 +370,12 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
       />
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "main": Object {
+          {
+            "description": {
+              "main": {
                 "key": "search",
               },
-              "search": Object {
+              "search": {
                 "type": "text",
               },
             },
@@ -431,12 +431,12 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
       />
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "main": Object {
+          {
+            "description": {
+              "main": {
                 "key": "search",
               },
-              "search": Object {
+              "search": {
                 "type": "text",
               },
             },
@@ -492,12 +492,12 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
       />
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "main": Object {
+          {
+            "description": {
+              "main": {
                 "key": "search",
               },
-              "search": Object {
+              "search": {
                 "type": "text",
               },
             },
@@ -553,12 +553,12 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
       />
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "main": Object {
+          {
+            "description": {
+              "main": {
                 "key": "search",
               },
-              "search": Object {
+              "search": {
                 "type": "text",
               },
             },
@@ -614,12 +614,12 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
       />
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "main": Object {
+          {
+            "description": {
+              "main": {
                 "key": "search",
               },
-              "search": Object {
+              "search": {
                 "type": "text",
               },
             },
@@ -675,12 +675,12 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
       />
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "main": Object {
+          {
+            "description": {
+              "main": {
                 "key": "search",
               },
-              "search": Object {
+              "search": {
                 "type": "text",
               },
             },
@@ -736,12 +736,12 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
       />
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "main": Object {
+          {
+            "description": {
+              "main": {
                 "key": "search",
               },
-              "search": Object {
+              "search": {
                 "type": "text",
               },
             },

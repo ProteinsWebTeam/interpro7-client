@@ -14,8 +14,8 @@ exports[`<CrossReferences /> should render 1`] = `
     >
       <ReferenceSection
         accessions={
-          Array [
-            Object {
+          [
+            {
               "accession": "PDOC00020",
               "url": "http://prosite.expasy.org/PDOC00020",
             },

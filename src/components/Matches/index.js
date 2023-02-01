@@ -527,6 +527,30 @@ const Matches = (
         )}
       />
       <Column
+        dataKey="counters.extra_fields.short_name"
+        displayIf={primary === 'entry' && secondary === 'set'}
+        renderer={(
+          name /*: string */,
+          {
+            accession,
+            source_database: sourceDatabase,
+          } /*: {accession: string, source_database: string} */,
+        ) => (
+          <Link
+            to={{
+              description: {
+                main: { key: primary },
+                [primary]: { db: sourceDatabase, accession },
+              },
+            }}
+          >
+            <HighlightedText text={name} textToHighlight={search.search} />
+          </Link>
+        )}
+      >
+        Short Name
+      </Column>
+      <Column
         dataKey="source_organism"
         displayIf={primary === 'protein'}
         renderer={(sourceOrganism) =>
@@ -603,7 +627,7 @@ const Matches = (
             })}
           >
             <LazyImage
-              src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
+              src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${accession}&file=traces.jpg`}
               alt={`structure with accession ${accession}`}
               style={{ maxWidth: '33%' }}
             />

@@ -14,8 +14,8 @@ exports[`<Title /> loading, stuck, offline 1`] = `
       <Memo(Connect(Link))
         title="Back to InterPro homepage"
         to={
-          Object {
-            "description": Object {},
+          {
+            "description": {},
           }
         }
       >
@@ -57,8 +57,8 @@ exports[`<Title /> loading, stuck, online 1`] = `
       <Memo(Connect(Link))
         title="Back to InterPro homepage"
         to={
-          Object {
-            "description": Object {},
+          {
+            "description": {},
           }
         }
       >
@@ -99,8 +99,8 @@ exports[`<Title /> not loading, unstuck, offline 1`] = `
       <Memo(Connect(Link))
         title="Back to InterPro homepage"
         to={
-          Object {
-            "description": Object {},
+          {
+            "description": {},
           }
         }
       >
@@ -142,8 +142,8 @@ exports[`<Title /> not loading, unstuck, online 1`] = `
       <Memo(Connect(Link))
         title="Back to InterPro homepage"
         to={
-          Object {
-            "description": Object {},
+          {
+            "description": {},
           }
         }
       >

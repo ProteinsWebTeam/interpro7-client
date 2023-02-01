@@ -24,7 +24,7 @@ exports[`<Tree /> should render 1`] = `
         >
           <img
             alt="toggle-fisheye"
-            src={Object {}}
+            src={{}}
           />
         </button>
       </Tooltip>
@@ -47,7 +47,7 @@ exports[`<Tree /> should render 1`] = `
   <ResizeObserverComponent
     element="div"
     measurements={
-      Array [
+      [
         "width",
       ]
     }

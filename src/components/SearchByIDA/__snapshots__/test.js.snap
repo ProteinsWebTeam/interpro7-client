@@ -12,7 +12,7 @@ exports[`<SearchByIDA /> should render 1`] = `
     >
       <Memo(Loadable)
         data={
-          Object {
+          {
             "description": "Search proteins which match a domain architecture",
             "name": "Search By Domain Architecture IDA",
           }
@@ -43,15 +43,15 @@ exports[`<SearchByIDA /> should render 1`] = `
             <PanelIDA
               changeEntryHandler={[Function]}
               changeIgnoreHandler={[Function]}
-              entryList={Array []}
+              entryList={[]}
               handleMoveEntry={[Function]}
               handleMoveMarker={[Function]}
-              ignoreList={Array []}
+              ignoreList={[]}
               isOrdered={false}
               markerAfterEntry={null}
               markerBeforeEntry={null}
               mergeResults={[Function]}
-              options={Object {}}
+              options={{}}
               removeEntryHandler={[Function]}
               removeIgnoreHandler={[Function]}
             />

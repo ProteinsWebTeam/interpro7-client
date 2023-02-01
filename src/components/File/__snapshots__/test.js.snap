@@ -3,7 +3,7 @@
 exports[`<File /> should render 1`] = `
 <Memo(Connect(FileButton))
   api={
-    Object {
+    {
       "hostname": "wp-np3-ac.ebi.ac.uk",
       "port": "80",
       "protocol": "http:",
@@ -13,7 +13,7 @@ exports[`<File /> should render 1`] = `
   count={6795}
   downloadURL={[Function]}
   entryDescription={
-    Object {
+    {
       "accession": "IPR000001",
       "db": "InterPro",
     }

@@ -174,17 +174,24 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           query={search}
           showTableIcon={false}
           shouldGroup={true}
+          // eslint-disable-next-line react/display-name
           groupActions={(group) => () => <GroupActions group={group} />}
         >
           <ExtraOptions>
             <DropDownButton label="Clear All" icon="&#xf1f8;">
-              <button onClick={() => this.deleteAll('file')}>
-                Loaded from File
-              </button>
-              <hr />
-              <button onClick={() => this.deleteAll('server')}>
-                Loaded from Servers
-              </button>
+              <ul>
+                <li>
+                  <button onClick={() => this.deleteAll('file')}>
+                    Loaded from File
+                  </button>
+                </li>
+                <li>
+                  {' '}
+                  <button onClick={() => this.deleteAll('server')}>
+                    Loaded from Servers
+                  </button>
+                </li>
+              </ul>
             </DropDownButton>
           </ExtraOptions>
           <Column

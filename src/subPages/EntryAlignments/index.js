@@ -6,6 +6,9 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
+import { format } from 'url';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
 import Link from 'components/generic/Link';
 import Tip from 'components/Tip';
 import AlignmentViewer from './Viewer';
@@ -242,6 +245,25 @@ EntryAlignments.propTypes = {
 const mapStateToProps = createSelector(
   (state) => state.customLocation,
   (state) => state.customLocation?.search?.type,
+  (state) => {
+    const { protocol, hostname, port, root } = state.settings.api;
+    const description = state.customLocation.description;
+    const { ...copyOfDescription } = description;
+    if (description.main.key) {
+      copyOfDescription[description.main.key] = {
+        ...description[description.main.key],
+        detail: null,
+      };
+    }
+
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(copyOfDescription),
+      query: { annotation: '' },
+    });
+  },
   (state) => state.settings.notifications.showCtrlToZoomToast,
   (customLocation, type, url, showCtrlToZoomToast) => ({
     customLocation,

@@ -28,8 +28,8 @@ exports[`<NotFound /> should render 1`] = `
         Double check the URL or go back to the 
         <Memo(Connect(Link))
           to={
-            Object {
-              "description": Object {},
+            {
+              "description": {},
             }
           }
         >
@@ -52,9 +52,9 @@ exports[`<NotFound /> should render 1`] = `
         <li>
           <Memo(Connect(Link))
             to={
-              Object {
-                "description": Object {
-                  "other": Array [
+              {
+                "description": {
+                  "other": [
                     "release_notes",
                   ],
                 },
@@ -67,9 +67,9 @@ exports[`<NotFound /> should render 1`] = `
         <li>
           <Memo(Connect(Link))
             to={
-              Object {
-                "description": Object {
-                  "other": Array [
+              {
+                "description": {
+                  "other": [
                     "help",
                     "tutorial",
                   ],
@@ -83,9 +83,9 @@ exports[`<NotFound /> should render 1`] = `
         <li>
           <Memo(Connect(Link))
             to={
-              Object {
-                "description": Object {
-                  "other": Array [
+              {
+                "description": {
+                  "other": [
                     "help",
                     "faqs",
                   ],
@@ -99,9 +99,9 @@ exports[`<NotFound /> should render 1`] = `
         <li>
           <Memo(Connect(Link))
             to={
-              Object {
-                "description": Object {
-                  "other": Array [
+              {
+                "description": {
+                  "other": [
                     "help",
                     "documentation",
                   ],

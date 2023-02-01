@@ -16,13 +16,12 @@
   display: flex;
 }
 .track-component {
-  width: var(--track-space, 85%);
+  width: var(--track-space, 80%);
   background: rgba(0, 0, 0, 0.02);
   cursor: move;
 }
 
 .track-length {
-  width: var(--track-space, 85%);
   display: flex;
   justify-content: space-between;
   & > .note {
@@ -156,9 +155,33 @@ g:global(.child-location-group.clg-5) path {
 
 .conservation-placeholder-component {
   height: 4em;
+  display: flex;
+  justify-content: center;
+  & > div {
+    font-size: 1.2rem;
+  }
 }
 
 .protvista div:global(.zoom-button-div) {
   display: inline;
   margin-right: 0.25rem;
+}
+
+.color-scale {
+  display: inline-flex;
+  & .legend {
+    padding: 0 0.5rem;
+    vertical-align: top;
+    width: 3rem;
+    &.left {
+      text-align: right;
+    }
+    &.right {
+      text-align: left;
+    }
+  }
+}
+
+.conservation-error {
+  margin: 1rem;
 }

@@ -56,7 +56,7 @@ const rules = {
   // Enforce one true comma style
   'comma-style': [1, 'last'],
   // Specify the maximum cyclomatic complexity allowed in a program
-  complexity: [1, 16],
+  complexity: [1, 18],
   // Disallow padding inside computed properties
   'computed-property-spacing': [1, 'never'],
   // Require return statements to either always or never specify values
@@ -370,7 +370,7 @@ const rules = {
   // Prevent using string references
   'react/no-string-refs': 1,
   // Prevent usage of unknown DOM property
-  'react/no-unknown-property': 2,
+  'react/no-unknown-property': [2, { ignore: ['inert'] }],
   // Require ES6 class declarations over React.createClass
   'react/prefer-es6-class': 2,
   // Prevent missing props validation in a React component definition

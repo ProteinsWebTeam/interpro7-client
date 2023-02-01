@@ -70,7 +70,7 @@ export class ViewerOnDemand extends PureComponent /*:: <Props, State> */ {
         <button className={styles['inner-wrapper']} onClick={this._handleClick}>
           <div className={styles.background}>
             <LazyImage
-              src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${id}/traces.jpg`}
+              src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${id}&file=traces.jpg`}
               alt={`structure with accession ${id}`}
             />
           </div>

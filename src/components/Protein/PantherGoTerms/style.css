@@ -1,0 +1,10 @@
+details.go-terms > summary {
+  color: var(--colors-graydark);
+  cursor: pointer;
+  transition: all var(--timing-medclose) ease-out;
+  margin-bottom: 0.5rem;
+  &:hover {
+    color: var(--colors-dark);
+    text-decoration: underline;
+  }
+}

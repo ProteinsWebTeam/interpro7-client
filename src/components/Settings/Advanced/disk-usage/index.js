@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
-import filesize from 'filesize';
+import { filesize } from 'filesize';
 
-const getFileSize = bytes => filesize(bytes, { round: 0, standard: 'iec' });
+const getFileSize = (bytes) => filesize(bytes, { round: 0, standard: 'iec' });
 
 const support = 'storage' in navigator && 'estimate' in navigator.storage;
 

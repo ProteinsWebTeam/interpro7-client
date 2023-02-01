@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getEmptyDescription should return new empty description object 1`] = `
-Object {
-  "entry": Object {
+{
+  "entry": {
     "accession": null,
     "db": null,
     "detail": null,
@@ -12,42 +12,42 @@ Object {
     "memberDBAccession": null,
     "order": null,
   },
-  "main": Object {
+  "main": {
     "key": null,
     "numberOfFilters": 0,
   },
-  "other": Array [],
-  "protein": Object {
+  "other": [],
+  "protein": {
     "accession": null,
     "db": null,
     "detail": null,
     "isFilter": null,
     "order": null,
   },
-  "proteome": Object {
+  "proteome": {
     "accession": null,
     "db": null,
     "detail": null,
     "isFilter": null,
     "order": null,
   },
-  "result": Object {
+  "result": {
     "accession": null,
     "detail": null,
     "type": null,
   },
-  "search": Object {
+  "search": {
     "type": null,
     "value": null,
   },
-  "set": Object {
+  "set": {
     "accession": null,
     "db": null,
     "detail": null,
     "isFilter": null,
     "order": null,
   },
-  "structure": Object {
+  "structure": {
     "accession": null,
     "chain": null,
     "db": null,
@@ -55,7 +55,7 @@ Object {
     "isFilter": null,
     "order": null,
   },
-  "taxonomy": Object {
+  "taxonomy": {
     "accession": null,
     "db": null,
     "detail": null,

@@ -9,17 +9,17 @@ exports[`<FiltersPanel /> should render 1`] = `
   </header>
   <UnconnectedErrorBoundary
     customLocation={
-      Object {
-        "description": Object {
-          "entry": Object {
+      {
+        "description": {
+          "entry": {
             "db": "InterPro",
           },
-          "main": Object {
+          "main": {
             "key": "entry",
           },
         },
         "hash": "table",
-        "search": Object {},
+        "search": {},
       }
     }
   >

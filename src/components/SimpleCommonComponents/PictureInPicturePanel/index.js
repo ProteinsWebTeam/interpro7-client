@@ -2,6 +2,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import T from 'prop-types';
 
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+
 import { intersectionObserver as intersectionObserverPolyfill } from 'utils/polyfills';
 
 import { foundationPartial } from 'styles/foundation';
@@ -18,16 +21,32 @@ const optionsForObserver = {
     (_, n) => (n + 1) / NUMBER_OF_CHECKS,
   ),
 };
+/*:: type Props = {
+  className: string,
+  testId: string,
+  hideBar:boolean,
+  OtherControls: {
+    bottom: boolean,
+    top: boolean,
+  },
+  OtherButtons: any,
+  onChangingMode: function,
+  isPIPEnabled:boolean,
+  children: any,
+}  */
 
-const PictureInPicturePanel = ({
-  className,
-  testId,
-  hideBar = false,
-  OtherControls = {},
-  OtherButtons = null,
-  onChangingMode = () => null,
-  children,
-}) => {
+const PictureInPicturePanel = (
+  {
+    className,
+    testId,
+    hideBar = false,
+    OtherControls = {},
+    OtherButtons = null,
+    onChangingMode = () => null,
+    isPIPEnabled = true,
+    children,
+  } /*: Props */,
+) => {
   const [isStuck, setStuck] = useState(false);
   const [isMinimized, setMinimized] = useState(false);
   const wrapperRef /*: { current: null | React$ElementRef<'div'> } */ =
@@ -58,7 +77,7 @@ const PictureInPicturePanel = ({
     <div ref={wrapperRef} className={f('wrapper')}>
       <div
         className={f(className, 'content', {
-          'is-stuck': isStuck,
+          'is-stuck': isStuck && isPIPEnabled,
           'is-minimized': isMinimized,
         })}
         data-testid={testId}
@@ -72,9 +91,9 @@ const PictureInPicturePanel = ({
         >
           {OtherControls.bottom}
           <div className={f('controls')}>
-            {isStuck && OtherControls.top}
+            {isStuck && isPIPEnabled && OtherControls.top}
             {OtherButtons}
-            {isStuck && (
+            {isStuck && isPIPEnabled && (
               <button
                 data-icon={isMinimized ? '\uF2D0' : '\uF2D1'}
                 title={'Minimize'}
@@ -93,10 +112,18 @@ PictureInPicturePanel.propTypes = {
   className: T.string,
   testId: T.string,
   hideBar: T.bool,
+  isPIPEnabled: T.bool,
   OtherControls: T.object,
   OtherButtons: T.any,
   onChangingMode: T.func,
   children: T.any,
 };
 
-export default PictureInPicturePanel;
+const mapStateToProps = createSelector(
+  (state) => state.settings.ui,
+  (ui) => ({
+    isPIPEnabled: !!ui.isPIPEnabled,
+  }),
+);
+
+export default connect(mapStateToProps)(PictureInPicturePanel);

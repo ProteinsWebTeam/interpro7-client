@@ -10,7 +10,7 @@ exports[`<BySpecies /> By Species 1`] = `
   >
     <Species
       species={
-        Object {
+        {
           "color": "#5bc0de",
           "description": "Saccharomyces cerevisiae (strain ATCC 204508 / S288c)",
           "icon": "Y",
@@ -22,7 +22,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#d9534f",
           "description": "Caenorhabditis elegans",
           "icon": "W",
@@ -34,7 +34,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#5bc0de",
           "description": "Escherichia virus T4",
           "icon": "v",
@@ -46,7 +46,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#5bc0de",
           "description": "Escherichia coli O127:H6 (strain E2348/69 / EPEC)",
           "icon": "L",
@@ -58,7 +58,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#5bc0de",
           "description": "Schizosaccharomyces pombe (strain 972 / ATCC 24843)",
           "icon": "Y",
@@ -70,7 +70,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#d9534f",
           "description": "Drosophila melanogaster",
           "icon": "F",
@@ -82,7 +82,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#5bc0de",
           "description": "Escherichia virus T4",
           "icon": "v",
@@ -96,7 +96,7 @@ exports[`<BySpecies /> By Species 1`] = `
       entries={64093}
       proteins={170588}
       species={
-        Object {
+        {
           "color": "#d9534f",
           "description": "Homo sapiens",
           "icon": "H",
@@ -108,7 +108,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#d9534f",
           "description": "Mus musculus",
           "icon": "M",
@@ -120,7 +120,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#5cb85c",
           "description": "Arabidopsis thaliana",
           "icon": "B",
@@ -132,7 +132,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#5cb85c",
           "description": "Oryza sativa subsp. japonica",
           "icon": "6",
@@ -144,7 +144,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
     <Species
       species={
-        Object {
+        {
           "color": "#d9534f",
           "description": "Danio rerio",
           "icon": "Z",
@@ -158,12 +158,12 @@ exports[`<BySpecies /> By Species 1`] = `
   <Memo(Connect(Link))
     className="button margin-bottom-none margin-top-large"
     to={
-      Object {
-        "description": Object {
-          "main": Object {
+      {
+        "description": {
+          "main": {
             "key": "taxonomy",
           },
-          "taxonomy": Object {
+          "taxonomy": {
             "db": "uniprot",
           },
         },
@@ -183,12 +183,12 @@ exports[`<Species /> Species 1`] = `
   <Memo(Connect(Link))
     data-testid="species-9606"
     to={
-      Object {
-        "description": Object {
-          "main": Object {
+      {
+        "description": {
+          "main": {
             "key": "taxonomy",
           },
-          "taxonomy": Object {
+          "taxonomy": {
             "accession": "9606",
             "db": "uniprot",
           },
@@ -200,7 +200,7 @@ exports[`<Species /> Species 1`] = `
       className="small icon icon-species"
       data-icon="H"
       style={
-        Object {
+        {
           "color": "#d9534f",
         }
       }
@@ -218,16 +218,16 @@ exports[`<Species /> Species 1`] = `
     <p>
       <Memo(Connect(Link))
         to={
-          Object {
-            "description": Object {
-              "entry": Object {
+          {
+            "description": {
+              "entry": {
                 "db": "all",
                 "isFilter": true,
               },
-              "main": Object {
+              "main": {
                 "key": "taxonomy",
               },
-              "taxonomy": Object {
+              "taxonomy": {
                 "accession": "9606",
                 "db": "uniprot",
               },
@@ -249,16 +249,16 @@ exports[`<Species /> Species 1`] = `
       <Memo(Connect(Link))
         disabled={true}
         to={
-          Object {
-            "description": Object {
-              "main": Object {
+          {
+            "description": {
+              "main": {
                 "key": "taxonomy",
               },
-              "protein": Object {
+              "protein": {
                 "db": "UniProt",
                 "isFilter": true,
               },
-              "taxonomy": Object {
+              "taxonomy": {
                 "accession": "9606",
                 "db": "uniprot",
               },

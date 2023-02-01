@@ -10,8 +10,9 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import { foundationPartial } from 'styles/foundation';
 import local from './style.css';
+import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(local);
+const f = foundationPartial(ipro, local);
 
 const _DataProvider = (
   {
@@ -31,27 +32,25 @@ const _DataProvider = (
 
       /* eslint-disable react/prop-types */
       const message = () => (
-        <>
-          <b>{accession}</b>
-          <br />
-          {name} <br />
-          <small>{databases[db].name}</small>
+        <section className={f('entry-popup')}>
+          <h6>
+            {databases[db].name} - {accession}
+          </h6>
+          <h6>{name}</h6>
           {locations?.length && (
-            <div>
-              <header>Locations:</header>
-              <ul>
-                {locations.map((l, i) => (
-                  <li key={i}>
+            <ul>
+              {locations.map((l, i) => (
+                <li key={i}>
+                  <button className={f('button', 'secondary', 'coordinates')}>
                     {l.fragments
                       .map(({ start, end }) => `${start}-${end}`)
                       .join(',')}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
-          <br />
-        </>
+        </section>
       );
       /* eslint-enable react/prop-types */
 

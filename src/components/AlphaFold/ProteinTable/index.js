@@ -167,10 +167,7 @@ export const getUrl = (includeSearch /*: boolean */) =>
     (state) => state.customLocation.description,
     (state) => state.customLocation.search,
     ({ protocol, hostname, port, root }, description, search) => {
-      if (
-        description.main.key === 'entry' &&
-        description[description.main.key].db.toLowerCase() === 'interpro'
-      ) {
+      if (description.main.key === 'entry') {
         const _description = {
           main: {
             key: 'protein',
@@ -179,7 +176,7 @@ export const getUrl = (includeSearch /*: boolean */) =>
           protein: { db: description.protein.db || 'UniProt' },
           entry: {
             isFilter: true,
-            db: description.entry.db || 'interpro',
+            db: description.entry.db,
             accession: description.entry.accession,
           },
         };
@@ -194,10 +191,11 @@ export const getUrl = (includeSearch /*: boolean */) =>
           query: query,
         });
       }
-
-      return {
-        accession: description[description.main.key].accession,
-      };
+      return null;
+      // This below was to support the idea of multiple models for the same protein, which is unnecessary at the moment
+      // return {
+      //   accession: description[description.main.key].accession,
+      // };
     },
   );
 

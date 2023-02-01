@@ -9,7 +9,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
   >
     <BrowseTabsLink
       data={
-        Object {
+        {
           "loading": false,
           "payload": null,
         }
@@ -24,7 +24,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
   >
     <BrowseTabsLink
       data={
-        Object {
+        {
           "loading": false,
           "payload": null,
         }
@@ -39,7 +39,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
   >
     <BrowseTabsLink
       data={
-        Object {
+        {
           "loading": false,
           "payload": null,
         }
@@ -54,7 +54,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
   >
     <BrowseTabsLink
       data={
-        Object {
+        {
           "loading": false,
           "payload": null,
         }
@@ -69,7 +69,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
   >
     <BrowseTabsLink
       data={
-        Object {
+        {
           "loading": false,
           "payload": null,
         }
@@ -84,7 +84,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
   >
     <BrowseTabsLink
       data={
-        Object {
+        {
           "loading": false,
           "payload": null,
         }
@@ -99,7 +99,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
   >
     <BrowseTabsLink
       data={
-        Object {
+        {
           "loading": false,
           "payload": null,
         }

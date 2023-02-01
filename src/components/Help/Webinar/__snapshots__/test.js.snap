@@ -7,7 +7,7 @@ exports[`<Webinar /> should render 1`] = `
   </h3>
   <Memo(Loadable)
     data={
-      Object {
+      {
         "description": "A number of webinars on InterPro and related tools are available",
         "name": "InterPro Help: Tutorials",
       }
