@@ -627,7 +627,7 @@ const Matches = (
             })}
           >
             <LazyImage
-              src={`//www.ebi.ac.uk/thornton-srv/databases/pdbsum/${accession}/traces.jpg`}
+              src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${accession}&file=traces.jpg`}
               alt={`structure with accession ${accession}`}
               style={{ maxWidth: '33%' }}
             />
