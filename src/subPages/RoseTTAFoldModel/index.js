@@ -15,7 +15,8 @@ import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPi
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 import loadWebComponent from 'utils/load-web-component';
-import NightingaleHeatmap from 'nightingale-heatmap';
+import '@nightingale-elements/nightingale-heatmap';
+// import NightingaleHeatmap from 'nightingale-heatmap';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -37,12 +38,24 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
   const heatmap = useRef(null);
 
   useEffect(() => {
-    loadWebComponent(() => NightingaleHeatmap).as('nightingale-heatmap');
+    const waitForWC = async () => {
+      const promises = ['nightingale-heatmap'].map((localName) =>
+        customElements.whenDefined(localName),
+      );
+      await Promise.all(promises);
+      // setReady(true);
+    };
+    waitForWC();
+    // loadWebComponent(() => NightingaleHeatmap).as('nightingale-heatmap');
   }, []);
 
   useEffect(() => {
     if (dataContacts.payload && heatmap.current)
-      heatmap.current.data = dataContacts.payload.map((p) => [p[0], p[1], p[4]]);
+      heatmap.current.data = dataContacts.payload.map((p) => [
+        p[0],
+        p[1],
+        p[4],
+      ]);
   }, [heatmap.current]);
 
   useEffect(() => {
@@ -50,7 +63,7 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
       container.current.addEventListener('change', (evt) => {
         if (evt?.target?.id === 'contacts-track') {
           if (evt.detail.type === 'mouseover') {
-            const selected = +evt.target._data.selected;
+            const selected = +evt.target.selected;
             const linkedSelections = evt.detail.highlight
               .split(',')
               .map((sel) => sel.split(':').map(Number))
@@ -133,9 +146,13 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
     <div className={f('row', 'column')} ref={container}>
       <h3>RoseTTAFold structure prediction</h3>
       <div>
-        The protein structure below has been predicted by <Link href={'//www.bakerlab.org'}>the  Baker Lab</Link>{' '}
-        with RoseTTAFold (<Link href={'//science.sciencemag.org/content/373/6557/871'}>Baek, M et al. 2021</Link>){' '}
-        using the UniProt multiple sequence alignment from Pfam.
+        The protein structure below has been predicted by{' '}
+        <Link href={'//www.bakerlab.org'}>the Baker Lab</Link> with RoseTTAFold
+        (
+        <Link href={'//science.sciencemag.org/content/373/6557/871'}>
+          Baek, M et al. 2021
+        </Link>
+        ) using the UniProt multiple sequence alignment from Pfam.
       </div>
 
       <PictureInPicturePanel
@@ -188,6 +205,8 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
             width={500}
             height={500}
             symmetric={true}
+            margin-left={50}
+            margin-bottom={30}
           />
         </div>
         <div className={f('alignment')}>

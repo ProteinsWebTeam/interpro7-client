@@ -2,30 +2,9 @@
 import { PureComponent } from 'react';
 import T from 'prop-types';
 
-import loadWebComponent from 'utils/load-web-component';
-
-import ProtVistaInterProTrack from 'protvista-interpro-track';
-import ProtVistaManager from 'protvista-manager';
-import ProtVistaSequence from 'protvista-sequence';
-
-const webComponents = [];
-
-const loadProtVistaWebComponents = () => {
-  if (!webComponents.length) {
-    webComponents.push(
-      loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
-    );
-    webComponents.push(
-      loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
-    );
-    webComponents.push(
-      loadWebComponent(() => ProtVistaInterProTrack).as(
-        'protvista-interpro-track',
-      ),
-    );
-  }
-  return Promise.all(webComponents);
-};
+import '@nightingale-elements/nightingale-manager';
+import '@nightingale-elements/nightingale-sequence';
+import '@nightingale-elements/nightingale-interpro-track';
 
 /*:: type Props = {
   matches: Array<Object>,
@@ -51,7 +30,12 @@ class ProtVistaMatches extends PureComponent /*:: <Props> */ {
   }
 
   async componentDidMount() {
-    await loadProtVistaWebComponents();
+    const promises = [
+      'nightingale-manager',
+      'nightingale-sequence',
+      'nightingale-interpro-track',
+    ].map((localName) => customElements.whenDefined(localName));
+    await Promise.all(promises);
     this.updateTracksWithData(this.props);
   }
 

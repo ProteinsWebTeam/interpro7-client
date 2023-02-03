@@ -89,7 +89,7 @@ class IDAProtVista extends ProtVistaMatches /*:: <Props> */ {
                 databases={databases}
                 locations={d.locations}
               >
-                <protvista-interpro-track
+                <nightingale-interpro-track
                   length={length}
                   displaystart="1"
                   displayend={length}

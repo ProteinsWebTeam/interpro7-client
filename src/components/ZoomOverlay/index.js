@@ -3,8 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
-import ProtvistaOverlay from 'protvista-overlay';
-import loadWebComponent from 'utils/load-web-component';
+import '@nightingale-elements/nightingale-overlay';
 
 /*:: type Props = {
   elementId: string,
@@ -22,10 +21,6 @@ class ZoomOverlay extends PureComponent /*:: <Props> */ {
     this._ref = React.createRef();
   }
 
-  async componentDidMount() {
-    await loadWebComponent(() => ProtvistaOverlay).as('protvista-overlay');
-  }
-
   componentDidUpdate(prevProps /*: Props */) {
     if (prevProps.stuck !== this.props.stuck) {
       this._ref.current?.refreshOverlay(this.props.elementId)();
@@ -34,13 +29,13 @@ class ZoomOverlay extends PureComponent /*:: <Props> */ {
 
   render() {
     const { elementId } = this.props;
-    return <protvista-overlay for={elementId} ref={this._ref} />;
+    return <nightingale-overlay for={elementId} ref={this._ref} />;
   }
 }
 
 const mapStateToProps = createSelector(
-  state => state.ui.stuck,
-  stuck => ({ stuck }),
+  (state) => state.ui.stuck,
+  (stuck) => ({ stuck }),
 );
 
 export default connect(mapStateToProps)(ZoomOverlay);

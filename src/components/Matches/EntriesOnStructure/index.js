@@ -77,11 +77,12 @@ class EntriesOnStructure extends ProtVistaMatches {
       <div className={f('track-in-table')}>
         <div className={f('track-container')}>
           <div className={f('aligned-to-track-component')}>
-            <protvista-sequence
+            <nightingale-sequence
               ref={(e) => (this.web_protein = e)}
               length={length}
               displaystart="1"
               displayend={length}
+              height="30"
               use-ctrl-to-zoom
             />
           </div>
@@ -95,10 +96,10 @@ class EntriesOnStructure extends ProtVistaMatches {
               structure.name.name ? structure.name.name : structure.name,
             )}
           >
-            <protvista-interpro-track
+            <nightingale-interpro-track
               length={length}
-              displaystart="1"
-              displayend={length}
+              display-start="1"
+              display-end={length}
               id={`track_${structure.accession}`}
               ref={(e) => (this.web_tracks[structure.accession] = e)}
               shape="rectangle"
@@ -116,10 +117,10 @@ class EntriesOnStructure extends ProtVistaMatches {
               entry.name.name ? entry.name.name : entry.name,
             )}
           >
-            <protvista-interpro-track
+            <nightingale-interpro-track
               length={length}
-              displaystart="1"
-              displayend={length}
+              display-start="1"
+              display-end={length}
               id={`track_${entry.accession}`}
               ref={(e) => (this.web_tracks[entry.accession] = e)}
               shape="roundRectangle"

@@ -28,6 +28,7 @@
     & input {
       margin-left: 0.7em;
       margin-right: 0.7em;
+      width: 100%;
     }
   }
 }

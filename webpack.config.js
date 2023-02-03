@@ -87,6 +87,34 @@ const getAssetModuleFilename = (pathData) => {
   else if (['woff', 'woff2', 'ttf', 'eot'].includes(ext)) subfolder = 'fonts';
   return path.join('assets', subfolder, '[name].[hash:3][ext]');
 };
+
+const nightingaleAliases = [
+  'nightingale-coloured-sequence',
+  'nightingale-heatmap',
+  'nightingale-interpro-track',
+  'nightingale-linegraph-track',
+  'nightingale-links',
+  'nightingale-manager',
+  'nightingale-msa',
+  'nightingale-navigation',
+  'nightingale-new-core',
+  'nightingale-overlay',
+  'nightingale-saver',
+  'nightingale-sequence',
+  'nightingale-sunburst',
+  'nightingale-track',
+].reduce(
+  (agg, v) => ({
+    ...agg,
+    [`@nightingale-elements/${v}`]: path.resolve(
+      'node_modules',
+      '@nightingale-elements',
+      v,
+      'src'
+    ),
+  }),
+  {}
+);
 const getConfigFor = (env, mode, module = false) => {
   const name = module ? 'module' : 'legacy';
 
@@ -128,6 +156,8 @@ const getConfigFor = (env, mode, module = false) => {
         'EBI-FileFormats': 'EBI-Icon-fonts/EBI-FileFormats',
         'EBI-Chemistry': 'EBI-Icon-fonts/EBI-Chemistry',
         react: path.resolve('node_modules/react'),
+        shallowequal: path.resolve('node_modules/shallowequal'),
+        ...nightingaleAliases,
       },
     },
     module: {
@@ -153,11 +183,8 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('src'),
             path.resolve('node_modules', 'lodash-es'),
             path.resolve('node_modules', 'timing-functions'),
-            /protvista/i,
-            /react-msa-viewer/,
             path.resolve('node_modules', 'd3'),
             path.resolve('node_modules', 'idb'),
-            // path.resolve('node_modules', 'clanviewer'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
           ],

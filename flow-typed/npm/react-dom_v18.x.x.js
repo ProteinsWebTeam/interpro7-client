@@ -1,5 +1,5 @@
-// flow-typed signature: de0a47185086152df6ab4a598943384d
-// flow-typed version: cf9120ecbb/react-dom_v18.x.x/flow_>=v0.127.x
+// flow-typed signature: 1d4beeed8c995b17afd06f505b9e5e25
+// flow-typed version: 7a3d9c1b8b/react-dom_v18.x.x/flow_>=v0.127.x
 
 declare module 'react-dom_shared-types' {
   /**
@@ -158,7 +158,7 @@ declare module 'react-dom/client' {
 
   declare opaque type FiberRoot;
 
-  declare type RootType = {
+  declare export type RootType = {
     render(children: ReactNodeList): void,
     unmount(): void,
     _internalRoot: FiberRoot | null,

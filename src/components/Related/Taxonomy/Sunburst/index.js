@@ -4,7 +4,7 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import { format } from 'url';
 import { createSelector } from 'reselect';
-import NightingaleSunburst from 'nightingale-sunburst';
+import '@nightingale-elements/nightingale-sunburst';
 
 import loadData from 'higherOrder/loadData';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -12,7 +12,6 @@ import Link from 'components/generic/Link';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import loadWebComponent from 'utils/load-web-component';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -81,17 +80,23 @@ const Sunburst = ({ data, description }) => {
   const [maxDepth, setMaxDepth] = useState(DEFAULT_DEPTH);
 
   useEffect(() => {
-    loadWebComponent(() => NightingaleSunburst).as('nightingale-sunburst');
+    const waitForWC = async () => {
+      const promises = ['nightingale-sunburst'].map((localName) =>
+        customElements.whenDefined(localName),
+      );
+      await Promise.all(promises);
+    };
+    waitForWC();
   }, []);
   useEffect(() => {
     if (loading || !payload || !sunburst.current) return;
     sunburst.current.data = payload.taxa;
     setMaxDepth(getDefaultMaxDepth(payload.taxa.species));
     setLegends(
-      sunburst.current.topOptions.map((name) => [
+      sunburst.current?.topOptions?.map((name) => [
         name,
         sunburst.current.getColorBySuperKingdom(name),
-      ]),
+      ]) || [],
     );
     sunburst.current.addEventListener('taxon-hover', (evt) => {
       setCurrentNode(evt.detail);
@@ -186,8 +191,9 @@ const Sunburst = ({ data, description }) => {
           </div>
           <div>
             <h5>
-              Sunburst Depth{' '}
-              <span className={f('small')}>({maxDepth} rings)</span>
+              Sunburst Depth
+              <br />
+              <span className={f('small')}>{maxDepth} rings</span>
             </h5>
             <div className={f('sunburst-depth')}>
               2

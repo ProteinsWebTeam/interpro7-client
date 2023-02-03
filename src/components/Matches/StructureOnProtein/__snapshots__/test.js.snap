@@ -10,9 +10,10 @@ exports[`<StructureOnProtein /> should render 1`] = `
     <div
       className="aligned-to-track-component"
     >
-      <protvista-sequence
-        displayend={625}
-        displaystart="1"
+      <nightingale-sequence
+        display-end={625}
+        display-start="1"
+        height="30"
         length={625}
         use-ctrl-to-zoom={true}
       />
@@ -24,9 +25,9 @@ exports[`<StructureOnProtein /> should render 1`] = `
     <Tooltip
       title="<b>1a0h</b><br/>THE X-RAY CRYSTAL STRUCTURE OF PPACK-MEIZOTHROMBIN DESF1: KRINGLE/THROMBIN AND CARBOHYDRATE/KRINGLE/THROMBIN INTERACTIONS AND LOCATION OF THE LINKER CHAIN<br/>"
     >
-      <protvista-interpro-track
-        displayend={625}
-        displaystart="1"
+      <nightingale-interpro-track
+        display-end={625}
+        display-start="1"
         expanded={true}
         id="track_1a0h"
         length={625}
