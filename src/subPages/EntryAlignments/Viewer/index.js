@@ -14,7 +14,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import '@nightingale-elements/nightingale-manager';
 import '@nightingale-elements/nightingale-navigation';
 import '@nightingale-elements/nightingale-msa';
-// import '@nightingale-elements/nightingale-links';
+import '@nightingale-elements/nightingale-links';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -44,6 +44,7 @@ const AlignmentViewer = ({
   const linksTrack = useRef(null);
   const navigationTrack = useRef(null);
   const [align, setAlign] = useState(null);
+  const [isReady, setReady] = useState(false);
 
   useEffect(() => {
     const waitForWC = async () => {
@@ -51,14 +52,15 @@ const AlignmentViewer = ({
         'nightingale-manager',
         'nightingale-navigation',
         'nightingale-msa',
-        // 'nightingale-links',
+        'nightingale-links',
       ].map((localName) => customElements.whenDefined(localName));
       await Promise.all(promises);
+      setReady(true);
     };
     waitForWC();
   }, []);
   useEffect(() => {
-    if (payload) {
+    if (payload && isReady) {
       const aln = Stockholm.parse(payload);
       setAlign(aln);
       onAlignmentLoaded(aln);
@@ -66,10 +68,11 @@ const AlignmentViewer = ({
   }, [payload]);
   useEffect(() => {
     if (align) {
-      msaTrack.current.data = align.seqname.map((name) => ({
+      const formatedSeqs = align.seqname.map((name) => ({
         name,
         sequence: align.seqdata[name],
       }));
+      requestAnimationFrame(() => (msaTrack.current.data = formatedSeqs));
       msaTrack.current.addEventListener('conservationProgress', (evt) => {
         onConservationProgress(evt.detail.progress);
       });
@@ -93,7 +96,7 @@ const AlignmentViewer = ({
       });
 
       if (contacts && linksTrack.current) {
-        linksTrack.current.data = contacts.map((p) => [p[2], p[3], p[4]]);
+        linksTrack.current.contacts = contacts.map((p) => [p[2], p[3], p[4]]);
       }
     }
   }, [align, contacts]);
@@ -183,8 +186,10 @@ const AlignmentViewer = ({
               id="contacts-track"
               length={length}
               ref={linksTrack}
+              height={60}
               min-probability={contactMinProbability}
               min-distance={contactMinDistance}
+              use-ctrl-to-zoom
             />
           </div>
         )}
