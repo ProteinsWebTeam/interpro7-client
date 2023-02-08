@@ -14,9 +14,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
-import loadWebComponent from 'utils/load-web-component';
 import '@nightingale-elements/nightingale-heatmap';
-// import NightingaleHeatmap from 'nightingale-heatmap';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
