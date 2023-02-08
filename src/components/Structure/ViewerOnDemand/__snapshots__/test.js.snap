@@ -13,7 +13,7 @@ exports[`<ViewerOnDemand /> should render 1`] = `
     >
       <LazyImage
         alt="structure with accession 102m"
-        src="//www.ebi.ac.uk/thornton-srv/databases/pdbsum/102m/traces.jpg"
+        src="//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=102m&file=traces.jpg"
       />
     </div>
     <div
