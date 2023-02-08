@@ -82,7 +82,9 @@ const ProtVistaPopup = (
     );
   }
 
-  const colouredTrack = detail?.target?.closest('protvista-coloured-sequence');
+  const colouredTrack = detail?.target?.closest(
+    'nightingale-coloured-sequence',
+  );
   // comes from the hydrophobicity track
   if (colouredTrack) {
     if (colouredTrack.classList.contains('hydro'))
