@@ -98,6 +98,7 @@ class IDAProtVista extends ProtVistaMatches /*:: <Props> */ {
                     (this.web_tracks[`track_${d.accession}_${i}`] = e)
                   }
                   shape="roundRectangle"
+                  margin-color="transparent"
                   expanded
                   use-ctrl-to-zoom
                 />

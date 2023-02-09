@@ -81,6 +81,7 @@ class StructureOnProtein extends ProtVistaMatches {
               length={protein.length}
               display-start="1"
               display-end={protein.length}
+              margin-color="transparent"
               id={`track_${structure.accession}`}
               ref={(e) => (this.web_tracks[structure.accession] = e)}
               shape="rectangle"

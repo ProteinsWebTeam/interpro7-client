@@ -83,6 +83,7 @@ class EntriesOnProtein extends ProtVistaMatches {
               length={protein.length}
               display-start="1"
               display-end={protein.length}
+              margin-color="transparent"
               id={`track_${entry.accession}`}
               ref={(e) => (this.web_tracks[entry.accession] = e)}
               shape="roundRectangle"

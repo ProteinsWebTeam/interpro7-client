@@ -828,6 +828,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     length={length}
                                     displaystart="1"
                                     displayend={length}
+                                    margin-color="transparent"
                                     id={`track_${entry.accession}`}
                                     ref={(e) =>
                                       (this.web_tracks[getUIDFromEntry(entry)] =

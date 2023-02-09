@@ -100,6 +100,7 @@ class EntriesOnStructure extends ProtVistaMatches {
               length={length}
               display-start="1"
               display-end={length}
+              margin-color="transparent"
               id={`track_${structure.accession}`}
               ref={(e) => (this.web_tracks[structure.accession] = e)}
               shape="rectangle"
@@ -121,6 +122,7 @@ class EntriesOnStructure extends ProtVistaMatches {
               length={length}
               display-start="1"
               display-end={length}
+              margin-color="transparent"
               id={`track_${entry.accession}`}
               ref={(e) => (this.web_tracks[entry.accession] = e)}
               shape="roundRectangle"

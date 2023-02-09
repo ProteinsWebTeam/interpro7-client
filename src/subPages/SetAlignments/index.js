@@ -91,6 +91,7 @@ class AlignmentProtvista extends ProtVistaMatches {
                 length={length}
                 display-start="1"
                 display-end={length}
+                margin-color="transparent"
                 id={`track_${accession}_${entry}`}
                 ref={(e) => (this.web_tracks[entry] = e)}
                 shape="roundRectangle"

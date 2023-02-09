@@ -59,6 +59,7 @@ class MatchesOnProtein extends ProtVistaMatches {
               length={length}
               display-start="1"
               display-end={length}
+              margin-color="transparent"
               id={`track_${accession}`}
               ref={(e) => (this.web_tracks[accession] = e)}
               expanded
