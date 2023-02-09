@@ -14,7 +14,7 @@
   justify-content: space-between;
 }
 .protvista-grid header {
-  background: rgba(0, 0, 0, 0.02);
+  background: #fafafa;
   padding-top: 0.5rem;
   padding-left: 0.3rem;
   border-top: 3px solid rgba(195, 195, 195, 0.4);
@@ -38,7 +38,7 @@
 .protvista-grid .track {
   grid-column: 1 / 2;
   line-height: 0;
-  background: rgba(0, 0, 0, 0.02);
+  background: #fafafa;
   cursor: move;
 }
 .protvista-grid .track path:global(.feature) {

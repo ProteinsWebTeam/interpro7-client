@@ -19,7 +19,7 @@ import '@nightingale-elements/nightingale-navigation';
 import '@nightingale-elements/nightingale-sequence';
 import '@nightingale-elements/nightingale-track';
 import '@nightingale-elements/nightingale-interpro-track';
-import '@nightingale-elements/nightingale-coloured-sequence';
+import '@nightingale-elements/nightingale-colored-sequence';
 import '@nightingale-elements/nightingale-linegraph-track';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
@@ -163,7 +163,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       'nightingale-track',
       'nightingale-interpro-track',
       'nightingale-linegraph-track',
-      'nightingale-coloured-sequence',
+      'nightingale-colored-sequence',
     ].map((localName) => customElements.whenDefined(localName));
     await Promise.all(promises);
     const { data, protein } = this.props;
@@ -674,6 +674,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   ref={this._navigationRef}
                   display-start="1"
                   display-end={length}
+                  margin-color="#fafafa"
                   height="50"
                   show-highlight
                   highlight-color={highlightColor}
@@ -685,6 +686,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                   length={length}
                   display-start="1"
                   display-end={length}
+                  margin-color="#fafafa"
                   highlight-event="onmouseover"
                   highlight-color={highlightColor}
                   height="30"
@@ -779,6 +781,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                               getUIDFromEntry(entry)
                                             ] = e)
                                           }
+                                          margin-color="#fafafa"
                                           highlight-event="onmouseover"
                                           highlight-color={highlightColor}
                                           use-ctrl-to-zoom
@@ -790,6 +793,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         length={length}
                                         displaystart="1"
                                         displayend={length}
+                                        margin-color="#fafafa"
                                         height={
                                           entry.type === 'residue' ? '15' : null
                                         }
@@ -805,7 +809,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                       />
                                     )}
                                     {entry.type === 'confidence' && (
-                                      <nightingale-coloured-sequence
+                                      <nightingale-colored-sequence
                                         ref={(e) =>
                                           (this.web_tracks[entry.accession] = e)
                                         }
@@ -816,6 +820,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         scale="H:90,M:70,L:50,D:0"
                                         height="12"
                                         color-range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
+                                        margin-left="10"
+                                        margin-right="10"
+                                        margin-color="#fafafa"
                                         highlight-event="onmouseover"
                                         highlight-color={highlightColor}
                                         class="confidence"
@@ -828,7 +835,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     length={length}
                                     displaystart="1"
                                     displayend={length}
-                                    margin-color="transparent"
+                                    margin-color="#fafafa"
                                     id={`track_${entry.accession}`}
                                     ref={(e) =>
                                       (this.web_tracks[getUIDFromEntry(entry)] =

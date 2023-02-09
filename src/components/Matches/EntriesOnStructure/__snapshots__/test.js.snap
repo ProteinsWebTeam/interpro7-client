@@ -31,6 +31,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
         expanded={true}
         id="track_1a4w"
         length={622}
+        margin-color="#fafafa"
         shape="rectangle"
         use-ctrl-to-zoom={true}
       />
@@ -48,6 +49,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
         expanded={true}
         id="track_IPR000001"
         length={622}
+        margin-color="#fafafa"
         shape="roundRectangle"
         use-ctrl-to-zoom={true}
       />

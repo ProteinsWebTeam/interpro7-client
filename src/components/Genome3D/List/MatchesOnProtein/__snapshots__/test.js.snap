@@ -31,6 +31,7 @@ exports[`<MatchesOnProtein /> should render 1`] = `
         expanded={true}
         id="track_Q80YC5"
         length={597}
+        margin-color="#fafafa"
         use-ctrl-to-zoom={true}
       />
     </Tooltip>

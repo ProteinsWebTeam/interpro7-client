@@ -31,6 +31,7 @@ exports[`<StructureOnProtein /> should render 1`] = `
         expanded={true}
         id="track_1a0h"
         length={625}
+        margin-color="#fafafa"
         shape="rectangle"
         use-ctrl-to-zoom={true}
       />

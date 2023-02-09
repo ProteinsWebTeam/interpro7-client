@@ -76,6 +76,7 @@ class AlignmentProtvista extends ProtVistaMatches {
               display-start="1"
               display-end={length}
               height="30"
+              margin-color="#fafafa"
               use-ctrl-to-zoom
             />
           </div>
@@ -91,7 +92,7 @@ class AlignmentProtvista extends ProtVistaMatches {
                 length={length}
                 display-start="1"
                 display-end={length}
-                margin-color="transparent"
+                margin-color="#fafafa"
                 id={`track_${accession}_${entry}`}
                 ref={(e) => (this.web_tracks[entry] = e)}
                 shape="roundRectangle"
