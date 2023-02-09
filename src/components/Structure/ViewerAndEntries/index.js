@@ -93,7 +93,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
 
     this._protvista.current.addEventListener(
       'change',
-      ({ detail: { eventtype, highlight, feature, chain, protein } }) => {
+      ({ detail: { eventType, highlight, feature, chain, protein } }) => {
         const {
           accession,
           source_database: sourceDB,
@@ -104,7 +104,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
         } = feature || {};
         let proteinD = proteinF;
 
-        switch (eventtype) {
+        switch (eventType) {
           case 'sequence-chain':
             if (highlight) {
               const [start, stop] = highlight.split(':');
