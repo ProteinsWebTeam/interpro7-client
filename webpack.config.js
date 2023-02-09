@@ -89,7 +89,7 @@ const getAssetModuleFilename = (pathData) => {
 };
 
 const nightingaleAliases = [
-  'nightingale-coloured-sequence',
+  'nightingale-colored-sequence',
   'nightingale-heatmap',
   'nightingale-interpro-track',
   'nightingale-linegraph-track',

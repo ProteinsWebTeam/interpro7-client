@@ -7,7 +7,7 @@ import ColorScale from '../ColorScale';
   import type {PopupDetail} from '../index.js';
 */
 const HydroPopup = ({ detail } /*: {detail: PopupDetail} */) => {
-  const element = detail?.target?.closest('protvista-coloured-sequence');
+  const element = detail?.target?.closest('protvista-colored-sequence');
   if (!element) return null;
   return (
     <section>

@@ -272,7 +272,7 @@ table.classic {
     border: 1px solid var(--colors-very-white);
   }
   & tr:hover {
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: #fafafa;
   }
 }
 

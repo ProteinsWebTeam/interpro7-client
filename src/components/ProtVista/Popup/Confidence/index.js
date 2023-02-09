@@ -14,7 +14,7 @@ const levels = {
   import type {PopupDetail} from '../index.js';
 */
 const ConfidencePopup = ({ detail } /*: {detail: PopupDetail} */) => {
-  const element = detail?.target?.closest('nightingale-coloured-sequence');
+  const element = detail?.target?.closest('nightingale-colored-sequence');
   if (!element) return null;
   const aa = detail.feature.aa || '';
   return (
