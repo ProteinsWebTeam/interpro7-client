@@ -25,8 +25,9 @@ const addNewDefaultSttings = (settings) => {
 
 export default (history) => {
   const {
-    location: { pathname, search, hash },
-  } = history;
+    location: { pathname: p, search, hash },
+  } = history.history;
+  const pathname = p.replace(history.basename, '/');
   let settings;
   if (settingsStorage) {
     settings = settingsStorage.getValue() || undefined;
