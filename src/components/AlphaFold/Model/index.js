@@ -212,6 +212,7 @@ const AlphaFoldModel = (
                 style={{
                   display: isSplitScreen ? 'none' : 'block',
                 }}
+                className={f('button-bar')}
               >
                 <Link
                   className={f('control')}
