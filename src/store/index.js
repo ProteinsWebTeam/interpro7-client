@@ -1,6 +1,6 @@
 // @flow
 /*:: import type { Store } from 'redux'; */
-/*:: import type { History } from 'history'; */
+/*:: import type { BrowserHistory } from 'history'; */
 import { createStore } from 'redux';
 
 import rootReducer from 'reducers';
@@ -31,7 +31,7 @@ const persist = (
     };
   })();
 
-export default (history /*: History<*> */) => {
+export default (history /*: {history: BrowserHistory, basename: string} */) => {
   const store = createStore(
     rootReducer,
     getInitialState(history),
