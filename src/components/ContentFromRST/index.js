@@ -62,8 +62,9 @@ const Switch = ({ type, ...rest }) => {
         return (
           <div
             className="content"
+            // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: html }}
-          ></div>
+          />
         );
       }
       break;
