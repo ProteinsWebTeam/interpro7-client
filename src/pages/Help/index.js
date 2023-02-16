@@ -27,7 +27,9 @@ const f = foundationPartial(ebiGlobalStyles, ipro);
 const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
 const Faqs = () => <ContentFromRTD page="faq.rst" format="faq" />;
 const Training = () => <ContentFromRTD page="training.rst" />;
-const Game = () => <ContentFromRTD page="protein_families_game.rst" />;
+const Game = () => (
+  <ContentFromRTD page="protein_families_game.rst" format="faq" />
+);
 
 const Publication = loadable({
   loader: () =>
