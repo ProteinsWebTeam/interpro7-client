@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 
 import LazyImage from 'components/LazyImage';
@@ -11,7 +10,13 @@ import local from '../style.css';
 
 const f = foundationPartial(ipro, local);
 
-const RepresentativeStructure = ({ accession, name }) => {
+const RepresentativeStructure = ({
+  accession,
+  name,
+}: {
+  accession: string;
+  name: string;
+}) => {
   return (
     <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
       <div className={f('side-box')}>

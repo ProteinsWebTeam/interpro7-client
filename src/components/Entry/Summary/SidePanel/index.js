@@ -1,4 +1,3 @@
-// @flow
 import React, { useState } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,7 +12,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Integration from 'components/Entry/Integration';
 import ContributingSignatures from 'components/Entry/ContributingSignatures';
-import RepresentativeStructure from './RepresentativeStructure';
+import RepresentativeStructure from './RepresentativeStructure/index.tsx';
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
