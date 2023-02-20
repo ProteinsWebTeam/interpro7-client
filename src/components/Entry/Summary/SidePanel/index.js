@@ -13,7 +13,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Integration from 'components/Entry/Integration';
 import ContributingSignatures from 'components/Entry/ContributingSignatures';
-
+import RepresentativeStructure from './RepresentativeStructure';
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -142,6 +142,12 @@ const SidePanel = ({ metadata, dbInfo, api, addToast }) => {
       Object.keys(metadata.member_databases).length ? (
         <ContributingSignatures contr={metadata.member_databases} />
       ) : null}
+      {metadata.representative_structure && (
+        <RepresentativeStructure
+          accession={metadata.representative_structure.accession}
+          name={metadata.representative_structure.name}
+        />
+      )}
     </section>
   );
 };
