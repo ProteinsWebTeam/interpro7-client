@@ -6,7 +6,6 @@ import 'tippy.js/dist/tippy.css';
 const Tooltip = ({
   html,
   title,
-  interactive,
   useContext,
   children,
   distance,
@@ -14,7 +13,6 @@ const Tooltip = ({
 }: PropsWithChildren<{
   html?: React.ReactElement | string | number;
   title?: React.ReactElement | string | number;
-  interactive?: boolean;
   useContext?: boolean;
   distance?: number;
 }>) => {
@@ -27,7 +25,6 @@ const Tooltip = ({
     <Tippy
       content={content}
       arrow={true}
-      interactive={true}
       onShow={() => hideAll({ duration: 0 })}
       distance={distance}
       appendTo={document.body}
