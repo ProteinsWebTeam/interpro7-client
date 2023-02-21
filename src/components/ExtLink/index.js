@@ -1,6 +1,7 @@
 /* eslint no-magic-numbers: [1, {ignore: [3]}] */
 import React from 'react';
 import T from 'prop-types';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';

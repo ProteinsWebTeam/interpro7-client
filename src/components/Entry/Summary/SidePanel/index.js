@@ -9,6 +9,7 @@ import { addToast } from 'actions/creators';
 import getUrlFor from 'utils/url-patterns';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Integration from 'components/Entry/Integration';

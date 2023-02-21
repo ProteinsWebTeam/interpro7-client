@@ -8,6 +8,7 @@ import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import LazyImage from 'components/LazyImage';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 import Table, {

@@ -6,6 +6,7 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
 import { noop } from 'lodash-es';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';

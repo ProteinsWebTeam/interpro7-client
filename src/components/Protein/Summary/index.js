@@ -25,6 +25,7 @@ import IsoformSelector from 'components/Protein/Isoforms/Selector';
 import IsoformViewer from 'components/Protein/Isoforms/Viewer';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';

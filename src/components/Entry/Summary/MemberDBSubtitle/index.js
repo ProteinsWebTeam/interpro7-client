@@ -3,6 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';

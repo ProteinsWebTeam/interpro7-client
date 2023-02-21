@@ -11,10 +11,12 @@ import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 import MemberSymbol from 'components/Entry/MemberSymbol';
+// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import { foundationPartial } from 'styles/foundation';

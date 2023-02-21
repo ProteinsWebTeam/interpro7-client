@@ -14,7 +14,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import MemberDBSubtitle from './MemberDBSubtitle';
 import SidePanel from './SidePanel';
-import OverlappingEntries from './OverlappingEntries';
+import OverlappingEntries from './OverlappingEntries/index.tsx';
 import Wikipedia from './Wikipedia';
 
 import { foundationPartial } from 'styles/foundation';

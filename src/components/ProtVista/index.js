@@ -7,6 +7,7 @@ import { isEqual } from 'lodash-es';
 
 import ProtVistaOptions from './Options';
 import ProtVistaPopup from './Popup';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { updateJobStatus } from 'actions/creators';
@@ -65,7 +66,4 @@ export class RefreshButton extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(
-  undefined,
-  { updateJobStatus },
-)(RefreshButton);
+export default connect(undefined, { updateJobStatus })(RefreshButton);

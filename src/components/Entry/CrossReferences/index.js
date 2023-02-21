@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import AnimatedEntry from 'components/AnimatedEntry';

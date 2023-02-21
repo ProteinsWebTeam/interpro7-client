@@ -5,6 +5,7 @@ import T from 'prop-types';
 import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 

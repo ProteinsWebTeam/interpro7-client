@@ -12,6 +12,7 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 const f = foundationPartial(ipro, local);
@@ -32,28 +33,30 @@ const schemaProcessData = ({ db, name }) => ({
   license: 'https://creativecommons.org/licenses/by/4.0/',
 });
 
-const SignatureLink = React.memo((
-  {
-    accession,
-    db,
-    label,
-  } /*: {accession: string, db: string, label: string} */,
-) => (
-  <Link
-    to={{
-      description: {
-        main: { key: 'entry' },
-        entry: { db, accession },
-      },
-    }}
-  >
-    <small>
-      <Tooltip title={`${label || 'Unintegrated'} (${accession})`}>
-        {accession || label}
-      </Tooltip>
-    </small>
-  </Link>
-));
+const SignatureLink = React.memo(
+  (
+    {
+      accession,
+      db,
+      label,
+    } /*: {accession: string, db: string, label: string} */,
+  ) => (
+    <Link
+      to={{
+        description: {
+          main: { key: 'entry' },
+          entry: { db, accession },
+        },
+      }}
+    >
+      <small>
+        <Tooltip title={`${label || 'Unintegrated'} (${accession})`}>
+          {accession || label}
+        </Tooltip>
+      </small>
+    </Link>
+  ),
+);
 SignatureLink.displayName = 'SignatureLink';
 SignatureLink.propTypes = {
   accession: T.string.isRequired,

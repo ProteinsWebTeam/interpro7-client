@@ -2,7 +2,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "moduleResolution": "Node",
-    "module": "CommonJS",
+    "module": "es2015",
     "target": "ES6",
     "lib": [
       "es2019",

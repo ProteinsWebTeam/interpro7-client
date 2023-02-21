@@ -1,21 +1,23 @@
-// @flow
-import React from 'react';
-import T from 'prop-types';
+import React, { PropsWithChildren } from 'react';
 import Tippy from '@tippy.js/react';
 import { hideAll } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 
-const _Tooltip = (
-  {
-    html,
-    title,
-    interactive,
-    useContext,
-    children,
-    distance,
-    ...rest
-  } /*: {html?: any, title?: any, interactive?: boolean, useContext?: boolean, children: any, target?: Object, distance? : number} */,
-) => {
+const Tooltip = ({
+  html,
+  title,
+  interactive,
+  useContext,
+  children,
+  distance,
+  ...rest
+}: PropsWithChildren<{
+  html?: React.ReactElement | string | number;
+  title?: React.ReactElement | string | number;
+  interactive?: boolean;
+  useContext?: boolean;
+  distance?: number;
+}>) => {
   let content = html || title;
   if (typeof content === 'string') {
     // eslint-disable-next-line react/no-danger
@@ -39,14 +41,4 @@ const _Tooltip = (
   );
 };
 
-_Tooltip.displayName = 'Tooltip';
-_Tooltip.propTypes = {
-  html: T.any,
-  title: T.any,
-  interactive: T.bool,
-  useContext: T.bool,
-  children: T.any,
-  target: T.object,
-  distance: T.number,
-};
-export default _Tooltip;
+export default Tooltip;

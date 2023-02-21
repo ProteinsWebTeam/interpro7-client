@@ -1,5 +1,6 @@
 import React from 'react';
 import T from 'prop-types';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { GoLink } from 'components/ExtLink';

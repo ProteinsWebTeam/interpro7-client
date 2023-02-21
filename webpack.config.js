@@ -163,7 +163,7 @@ const getConfigFor = (env, mode, isModule = false) => {
         : undefined,
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
-      extensions: ['.js', '.ts', '.json', '.worker.js'],
+      extensions: ['.js', '.ts', '.tsx', '.json', '.worker.js'],
       alias: {
         '../libraries': 'ebi-framework/libraries',
         'EBI-Common': 'EBI-Icon-fonts/EBI-Common',

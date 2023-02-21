@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { capitalize } from 'lodash-es';
 
 import { GoLink } from 'components/ExtLink';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { foundationPartial } from 'styles/foundation';
 

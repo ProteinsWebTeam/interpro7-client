@@ -4,8 +4,10 @@ import T from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 
 import MemberSymbol from 'components/Entry/MemberSymbol';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadWebComponent from 'utils/load-web-component';
+// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import loadData from '../../higherOrder/loadData';

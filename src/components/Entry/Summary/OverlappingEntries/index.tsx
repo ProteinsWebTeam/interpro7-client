@@ -1,6 +1,4 @@
-// @flow
 import React, { useState } from 'react';
-import T from 'prop-types';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -13,7 +11,7 @@ const f = foundationPartial(fonts, local);
 
 const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
 
-const OverlappingEntries = ({ metadata }) => {
+const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
   const [showAllOverlappingEntries, setShowAllOverlappingEntries] =
     useState(false);
   const overlaps = metadata.overlaps_with;
@@ -30,7 +28,7 @@ const OverlappingEntries = ({ metadata }) => {
   if (!showAllOverlappingEntries)
     _overlaps = metadata.overlaps_with.slice(
       0,
-      MAX_NUMBER_OF_OVERLAPPING_ENTRIES,
+      MAX_NUMBER_OF_OVERLAPPING_ENTRIES
     );
 
   return (
@@ -101,10 +99,6 @@ const OverlappingEntries = ({ metadata }) => {
       )}
     </div>
   );
-};
-OverlappingEntries.propTypes = {
-  metadata: T.object.isRequired,
-  overlaps: T.arrayOf(T.object),
 };
 
 export default OverlappingEntries;
