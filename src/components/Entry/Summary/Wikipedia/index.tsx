@@ -108,7 +108,7 @@ const Wikipedia = ({
                     ) : (
                       imageLink
                     )}
-                    <div>{article.caption} YEBO</div>
+                    <div>{article.caption}</div>
                   </td>
                 </tr>
               ) : null}

@@ -1,19 +1,18 @@
 import React from 'react';
-import T from 'prop-types';
 
-import Link from 'components/generic/Link';
-import MemberSymbol from 'components/Entry/MemberSymbol';
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+
+import Link from 'components/generic/Link';
+import MemberSymbol from 'components/Entry/MemberSymbol';
+
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
-
-// $FlowFixMe
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 const f = foundationPartial(ipro, local);
 
@@ -34,13 +33,15 @@ const schemaProcessData = ({ db, name }) => ({
 });
 
 const SignatureLink = React.memo(
-  (
-    {
-      accession,
-      db,
-      label,
-    } /*: {accession: string, db: string, label: string} */,
-  ) => (
+  ({
+    accession,
+    db,
+    label,
+  }: {
+    accession: string;
+    db: string;
+    label: string;
+  }) => (
     <Link
       to={{
         description: {
@@ -55,18 +56,17 @@ const SignatureLink = React.memo(
         </Tooltip>
       </small>
     </Link>
-  ),
+  )
 );
 SignatureLink.displayName = 'SignatureLink';
-SignatureLink.propTypes = {
-  accession: T.string.isRequired,
-  db: T.string.isRequired,
-  label: T.string.isRequired,
-};
 
-export const ContributingSignatures = (
-  { contr, data } /*: {contr: Object, data: Object} */,
-) => {
+export const ContributingSignatures = ({
+  contr,
+  data,
+}: {
+  contr: ContributingEntries;
+  data: RequestedData<RootAPIPayload>;
+}) => {
   const metaDB = data.loading || !data.payload ? {} : data.payload.databases;
   const contrEntries = Object.entries(contr);
   return (
@@ -101,10 +101,6 @@ export const ContributingSignatures = (
       </div>
     </div>
   );
-};
-ContributingSignatures.propTypes = {
-  contr: T.object.isRequired,
-  data: T.object.isRequired,
 };
 
 export default loadData(getUrlForMeta)(React.memo(ContributingSignatures));

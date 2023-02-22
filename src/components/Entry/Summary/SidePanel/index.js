@@ -12,8 +12,10 @@ import Link from 'components/generic/Link';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
-import Integration from 'components/Entry/Integration';
-import ContributingSignatures from 'components/Entry/ContributingSignatures';
+// $FlowFixMe
+import Integration from './Integration';
+// $FlowFixMe
+import ContributingSignatures from './ContributingSignatures';
 import RepresentativeStructure from './RepresentativeStructure/index.tsx';
 import { foundationPartial } from 'styles/foundation';
 

@@ -2,6 +2,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
+// $FlowFixMe
 import { ContributingSignatures } from '.';
 
 const renderer = new ShallowRenderer();

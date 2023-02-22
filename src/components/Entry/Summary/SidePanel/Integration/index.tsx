@@ -1,19 +1,17 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
-import Link from 'components/generic/Link';
 
 import loadable from 'higherOrder/loadable';
+import loadData from 'higherOrder/loadData';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+
+import Link from 'components/generic/Link';
+
+import { schemaProcessIntegrated } from 'schema_org/processors';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import local from './style.css';
-
-import loadData from 'higherOrder/loadData';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
-
-import { schemaProcessIntegrated } from 'schema_org/processors';
 
 const f = foundationPartial(ipro, local);
 
@@ -22,13 +20,14 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const Integration = (
-  {
-    intr,
-    dataBase,
-  } /*: {intr: string, dataBase: {payload: {databases: {interpro: {version: string}}}}} */,
-) => {
-  const databases = dataBase && dataBase.payload && dataBase.payload.databases;
+const Integration = ({
+  intr,
+  dataBase,
+}: {
+  intr: string;
+  dataBase: RequestedData<RootAPIPayload>;
+}) => {
+  const databases = dataBase?.payload?.databases;
   return (
     <div>
       <h5>Integrated to</h5>
@@ -58,15 +57,6 @@ const Integration = (
     </div>
   );
 };
-Integration.propTypes = {
-  intr: T.string.isRequired,
-  dataBase: T.shape({
-    payload: T.shape({
-      databases: T.object,
-    }),
-  }).isRequired,
-};
-
 export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  Integration,
+  Integration
 );

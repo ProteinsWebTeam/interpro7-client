@@ -54,17 +54,19 @@ type WikipediaEntry = {
   thumbnail: string;
 };
 
+type ContributingEntries = {
+  [db: string]: {
+    [accession: string]: string;
+  };
+} | null;
+
 type EntryMetadata = {
   accession: string;
   name: { name: string; short?: string };
   source_database: string;
   type: string;
   integrated: string | null;
-  member_databases: {
-    [db: string]: {
-      [accession: string]: string;
-    };
-  } | null;
+  member_databases: ContributingEntries;
   go_terms: Array<GOTerm>;
   description: Array<string>;
   literature: {
@@ -121,6 +123,20 @@ type RequestedData<Payload> = {
   url: string;
 };
 
+type RootAPIPayload = {
+  databases: DBsInfo;
+  endpoints: Array<string>;
+  sources: {
+    mysql: {
+      server: string;
+      status: string;
+    };
+    elasticsearch: {
+      server: string;
+      status: string;
+    };
+  };
+};
 type WikipediaPayload = {
   parse: {
     title: string;
