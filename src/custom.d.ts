@@ -48,6 +48,12 @@ type Reference = {
   DOI_URL: string | null;
 };
 
+type WikipediaEntry = {
+  title: string;
+  extract: string;
+  thumbnail: string;
+};
+
 type EntryMetadata = {
   accession: string;
   name: { name: string; short?: string };
@@ -81,11 +87,7 @@ type EntryMetadata = {
       }>;
     };
   };
-  wikipedia: {
-    title: string;
-    extract: string;
-    thumbnail: string;
-  };
+  wikipedia: WikipediaEntry;
   counters: {
     [resource: string]:
       | number
@@ -96,5 +98,36 @@ type EntryMetadata = {
   set_info?: {
     accession: string;
     name: string;
+  };
+};
+
+type DBInfo = {
+  canonical: string;
+  name: string;
+  description: string;
+  version: string;
+  releaseDate: string;
+  type: string;
+};
+
+type DBsInfo = Record<string, DBInfo>;
+
+type RequestedData<Payload> = {
+  loading: boolean;
+  progress: number;
+  ok: boolean;
+  status: null | number;
+  payload: null | Payload;
+  url: string;
+};
+
+type WikipediaPayload = {
+  parse: {
+    title: string;
+    pageid: number;
+    parsetree: {
+      '*': string;
+      [node: string]: string;
+    };
   };
 };

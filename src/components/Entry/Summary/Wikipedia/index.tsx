@@ -1,6 +1,4 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 
 import ReactHtmlParser from 'react-html-parser';
 import { XMLParser } from 'fast-xml-parser';
@@ -18,11 +16,16 @@ import local from '../style.css';
 
 const f = foundationPartial(local);
 
-const Wikipedia = ({ title, extract, thumbnail, data }) => {
+const Wikipedia = ({
+  title,
+  extract,
+  thumbnail,
+  data,
+}: WikipediaEntry & { data: RequestedData<WikipediaPayload> }) => {
   if (data.loading && !data.payload) return <Loading />;
 
   const identifiers = [];
-  const article = {};
+  const article: Record<string, string> = {};
   const properties = ['symbol', 'name', 'image', 'width', 'caption', 'pdb'];
 
   const result = data.payload;
@@ -86,13 +89,13 @@ const Wikipedia = ({ title, extract, thumbnail, data }) => {
           <table className={f('infobox')}>
             <tbody>
               <tr>
-                <th colSpan="2" className={f('th-infobox')}>
+                <th colSpan={2} className={f('th-infobox')}>
                   {article.Name ? article.Name : title.replace(/_/g, ' ')}
                 </th>
               </tr>
               {thumbnail ? (
                 <tr>
-                  <td colSpan="2" className={f('td-thumbnail')}>
+                  <td colSpan={2} className={f('td-thumbnail')}>
                     {article.image ? (
                       <a
                         href={`https://en.wikipedia.org/wiki/File:${article.image}`}
@@ -105,14 +108,14 @@ const Wikipedia = ({ title, extract, thumbnail, data }) => {
                     ) : (
                       imageLink
                     )}
-                    <div>{article.caption}</div>
+                    <div>{article.caption} YEBO</div>
                   </td>
                 </tr>
               ) : null}
               {infoStatus ? (
                 <>
                   <tr>
-                    <th colSpan="2" className={f('th-identifier')}>
+                    <th colSpan={2} className={f('th-identifier')}>
                       Identifiers
                     </th>
                   </tr>
@@ -148,12 +151,6 @@ const Wikipedia = ({ title, extract, thumbnail, data }) => {
     </div>
   );
 };
-Wikipedia.propTypes = {
-  title: T.string,
-  extract: T.string,
-  thumbnail: T.string,
-  data: T.object,
-};
 
 const getWikiUrl = createSelector(
   (state) => state.settings.wikipedia,
@@ -172,6 +169,6 @@ const getWikiUrl = createSelector(
         prop: 'parsetree',
       },
     });
-  },
+  }
 );
 export default loadData({ getUrl: getWikiUrl })(Wikipedia);

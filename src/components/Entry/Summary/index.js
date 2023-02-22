@@ -12,9 +12,12 @@ import CrossReferences from 'components/Entry/CrossReferences';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+// $FlowFixMe
 import MemberDBSubtitle from './MemberDBSubtitle';
 import SidePanel from './SidePanel';
-import OverlappingEntries from './OverlappingEntries/index.tsx';
+// $FlowFixMe
+import OverlappingEntries from './OverlappingEntries';
+// $FlowFixMe
 import Wikipedia from './Wikipedia';
 
 import { foundationPartial } from 'styles/foundation';

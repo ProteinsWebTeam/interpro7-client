@@ -1,9 +1,6 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
@@ -12,11 +9,14 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../style.css';
 
 const f = foundationPartial(fonts, local);
-/*:: import type { Metadata } from '../index'; */
 
-const MemberDBSubtitle = (
-  { metadata, dbInfo } /*: {metadata: Metadata, dbInfo: Object} */,
-) => {
+const MemberDBSubtitle = ({
+  metadata,
+  dbInfo,
+}: {
+  metadata: EntryMetadata;
+  dbInfo: DBInfo;
+}) => {
   if (
     !metadata.source_database ||
     metadata.source_database.toLowerCase() === 'interpro'
@@ -95,10 +95,6 @@ const MemberDBSubtitle = (
       </tbody>
     </table>
   );
-};
-MemberDBSubtitle.propTypes = {
-  metadata: T.object.isRequired,
-  dbInfo: T.object.isRequired,
 };
 
 export default MemberDBSubtitle;
