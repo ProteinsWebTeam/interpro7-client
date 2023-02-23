@@ -19,8 +19,9 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
+import buttonBar from 'components/Structure/ViewerAndEntries/button-bar.css';
 
-const f = foundationPartial(style, ipro, fonts);
+const f = foundationPartial(style, buttonBar, ipro, fonts);
 
 const confidenceColors = [
   {
@@ -212,6 +213,7 @@ const AlphaFoldModel = (
                 style={{
                   display: isSplitScreen ? 'none' : 'block',
                 }}
+                className={f('button-bar')}
               >
                 <Link
                   className={f('control')}
