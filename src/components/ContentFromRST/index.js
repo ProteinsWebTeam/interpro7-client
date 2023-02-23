@@ -216,7 +216,7 @@ const Reference = ({ children }) => {
       const raw = children[0].value;
       const matches = referenceRegExp.exec(raw) || [];
       if (matches.length === EXPECTED_GROUPS) {
-        text = matches[1];
+        text = matches[1].trimEnd();
         url = matches[2];
       }
 
