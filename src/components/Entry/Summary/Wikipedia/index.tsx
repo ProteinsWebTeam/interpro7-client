@@ -5,7 +5,7 @@ import { XMLParser } from 'fast-xml-parser';
 
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';

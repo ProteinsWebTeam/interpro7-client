@@ -1,6 +1,4 @@
-// @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 import { partition } from 'lodash-es';
 
 import GoTerms from 'components/GoTerms';
@@ -12,13 +10,9 @@ import CrossReferences from 'components/Entry/CrossReferences';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-// $FlowFixMe
 import MemberDBSubtitle from './MemberDBSubtitle';
-// $FlowFixMe
 import SidePanel from './SidePanel';
-// $FlowFixMe
 import OverlappingEntries from './OverlappingEntries';
-// $FlowFixMe
 import Wikipedia from './Wikipedia';
 
 import { foundationPartial } from 'styles/foundation';
@@ -28,34 +22,18 @@ import local from './style.css';
 
 const f = foundationPartial(ebiGlobalStyles, local);
 
-/*:: export type Metadata = {
-        accession: string,
-        name: {name: string, short: ?string},
-        source_database: string,
-        type: string,
-        gene?: string,
-        experiment_type?: string,
-        source_organism?: Object,
-        release_date?: string,
-        chains?: Array<string>,
-        integrated?: string,
-        member_databases?: Object,
-        go_terms: Object,
-        description: Array<string>,
-        literature: Object,
-        hierarchy?: Object,
-        overlaps_with: Object,
-        cross_references: Object,
-        wikipedia: Object,
-        counters: Object,
-        set_info?: {
-          accession: string,
-          name: string,
-        }
-      }
- */
+type OtherSectionsProps = {
+  metadata: EntryMetadata;
+  citations: {
+    included: Array<unknown>;
+    extra: Array<unknown>;
+  };
+};
 
-const OtherSections = ({ metadata, citations: { included, extra } }) => (
+const OtherSections = ({
+  metadata,
+  citations: { included, extra },
+}: OtherSectionsProps) => (
   <>
     {!Object.keys(metadata.go_terms || []).length ||
     metadata.source_database.toLowerCase() !== 'interpro' ? null : (
@@ -88,19 +66,17 @@ const OtherSections = ({ metadata, citations: { included, extra } }) => (
     ) : null}
   </>
 );
-OtherSections.propTypes = {
-  metadata: T.object.isRequired,
-  citations: T.shape({
-    included: T.array,
-    extra: T.array,
-  }),
+
+type HierarchyProps = {
+  hierarchy: {
+    children?: Array<unknown>;
+  };
+  type: string;
+  accession: string;
 };
 
-const Hierarchy = ({ hierarchy, type, accession }) =>
-  hierarchy &&
-  Object.keys(hierarchy).length &&
-  hierarchy.children &&
-  hierarchy.children.length ? (
+const Hierarchy = ({ hierarchy, type, accession }: HierarchyProps) =>
+  hierarchy?.children?.length ? (
     <div className={f('margin-bottom-large')}>
       <h4 className={f('first-letter-cap')}>
         {type.replace('_', ' ').toLowerCase()} relationships
@@ -108,30 +84,16 @@ const Hierarchy = ({ hierarchy, type, accession }) =>
       <InterProHierarchy accession={accession} hierarchy={hierarchy} />
     </div>
   ) : null;
-Hierarchy.propTypes = {
-  hierarchy: T.object,
-  type: T.string,
-  accession: T.string,
+
+type SummaryEntryProps = {
+  data: {
+    metadata: EntryMetadata;
+  };
+  loading: boolean;
+  dbInfo: DBInfo;
 };
 
-/*:: type Props = {
-    data: {
-      metadata: Metadata,
-    },
-    loading: boolean,
-    dbInfo: Object,
-  };
-*/
-
-class SummaryEntry extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    data: T.shape({
-      metadata: T.object,
-    }).isRequired,
-    dbInfo: T.object.isRequired,
-    loading: T.bool.isRequired,
-  };
-
+class SummaryEntry extends PureComponent<SummaryEntryProps> {
   render() {
     const {
       data: { metadata },
@@ -142,7 +104,7 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
     const citations = getLiteratureIdsFromDescription(metadata.description);
     const [included, extra] = partition(
       Object.entries(metadata.literature || {}),
-      ([id]) => citations.includes(id),
+      ([id]) => citations.includes(id)
     );
     const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
     included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
