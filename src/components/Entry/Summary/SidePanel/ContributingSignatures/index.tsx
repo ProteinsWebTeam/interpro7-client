@@ -1,7 +1,7 @@
 import React from 'react';
 
 import loadable from 'higherOrder/loadable';
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import Link from 'components/generic/Link';
@@ -60,13 +60,12 @@ const SignatureLink = React.memo(
 );
 SignatureLink.displayName = 'SignatureLink';
 
-export const ContributingSignatures = ({
-  contr,
-  data,
-}: {
+type Props = {
   contr: ContributingEntries;
-  data: RequestedData<RootAPIPayload>;
-}) => {
+  data?: RequestedData<RootAPIPayload>;
+};
+
+export const ContributingSignatures = ({ contr, data }: Props) => {
   const metaDB = data.loading || !data.payload ? {} : data.payload.databases;
   const contrEntries = Object.entries(contr);
   return (

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+// $FlowFixMe
 import getFetch from 'higherOrder/loadData/getFetch';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';

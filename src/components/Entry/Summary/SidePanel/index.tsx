@@ -1,6 +1,4 @@
-// @flow
 import React, { useState } from 'react';
-import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -9,22 +7,33 @@ import { addToast } from 'actions/creators';
 import getUrlFor from 'utils/url-patterns';
 
 import Link from 'components/generic/Link';
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
-// $FlowFixMe
+
 import Integration from './Integration';
-// $FlowFixMe
 import ContributingSignatures from './ContributingSignatures';
-import RepresentativeStructure from './RepresentativeStructure/index.tsx';
+import RepresentativeStructure from './RepresentativeStructure';
+
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../style.css';
 
+type addToastType = typeof addToast;
+
 const f = foundationPartial(fonts, local);
 
-const SidePanel = ({ metadata, dbInfo, api, addToast }) => {
+const SidePanel = ({
+  metadata,
+  dbInfo,
+  api,
+  addToast,
+}: {
+  metadata: EntryMetadata;
+  dbInfo: DBInfo;
+  api: ParsedURLServer;
+  addToast: addToastType;
+}) => {
   const url = getUrlFor(metadata.source_database);
   const { protocol, hostname, port, root } = api;
 
@@ -62,7 +71,7 @@ const SidePanel = ({ metadata, dbInfo, api, addToast }) => {
           title: text,
           ttl: 3000,
         },
-        'interhelp-mail',
+        'interhelp-mail'
       );
       setMessage('');
       setEmail('');
@@ -101,7 +110,7 @@ const SidePanel = ({ metadata, dbInfo, api, addToast }) => {
                 name="message"
                 value={message}
                 onChange={handleFields}
-                rows="5"
+                rows={5}
                 required
               />
               <label htmlFor="from_email">Email address</label>
@@ -123,7 +132,7 @@ const SidePanel = ({ metadata, dbInfo, api, addToast }) => {
       </div>
       {metadata.integrated && <Integration intr={metadata.integrated} />}
       {!['interpro', 'pfam'].includes(
-        metadata.source_database.toLowerCase(),
+        metadata.source_database.toLowerCase()
       ) && (
         <section>
           <h5>External Links</h5>
@@ -154,18 +163,10 @@ const SidePanel = ({ metadata, dbInfo, api, addToast }) => {
     </section>
   );
 };
-SidePanel.propTypes = {
-  metadata: T.object.isRequired,
-  dbInfo: T.object.isRequired,
-  api: T.object.isRequired,
-  addToast: T.func.isRequired,
-};
 
 const mapStateToProps = createSelector(
   (state) => state.settings.api,
-  (api) => ({
-    api,
-  }),
+  (api) => ({ api })
 );
 
 export default connect(mapStateToProps, { addToast })(SidePanel);

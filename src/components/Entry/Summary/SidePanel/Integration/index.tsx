@@ -1,7 +1,7 @@
 import React from 'react';
 
 import loadable from 'higherOrder/loadable';
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import Link from 'components/generic/Link';
@@ -20,13 +20,11 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const Integration = ({
-  intr,
-  dataBase,
-}: {
+type Props = {
   intr: string;
-  dataBase: RequestedData<RootAPIPayload>;
-}) => {
+  dataBase?: RequestedData<RootAPIPayload>;
+};
+const Integration = ({ intr, dataBase }: Props) => {
   const databases = dataBase?.payload?.databases;
   return (
     <div>
@@ -57,6 +55,8 @@ const Integration = ({
     </div>
   );
 };
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  Integration
-);
+
+export default loadData<RootAPIPayload>({
+  getUrl: getUrlForMeta,
+  propNamespace: 'Base',
+})(Integration);

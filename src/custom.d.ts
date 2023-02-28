@@ -101,6 +101,10 @@ type EntryMetadata = {
     accession: string;
     name: string;
   };
+  representative_structure?: {
+    accession: string;
+    name: string;
+  };
 };
 
 type DBInfo = {
@@ -146,4 +150,28 @@ type WikipediaPayload = {
       [node: string]: string;
     };
   };
+};
+
+type ParsedURLServer = {
+  protocol: string;
+  hostname: string;
+  port: number;
+  root: string;
+};
+
+type FetchOptions = {
+  method?: string;
+  responseType?: string;
+};
+
+type CancelableRequest<Response = BasicResponse> = {
+  promise: Promise<Response>;
+  canceled: boolean;
+  cancel(): void;
+};
+
+type BasicResponse = {
+  status: number;
+  ok: boolean;
+  headers: Set<string>;
 };

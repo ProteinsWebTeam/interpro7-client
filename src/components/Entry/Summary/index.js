@@ -14,6 +14,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 // $FlowFixMe
 import MemberDBSubtitle from './MemberDBSubtitle';
+// $FlowFixMe
 import SidePanel from './SidePanel';
 // $FlowFixMe
 import OverlappingEntries from './OverlappingEntries';
