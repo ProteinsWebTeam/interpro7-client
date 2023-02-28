@@ -24,7 +24,7 @@ const mapStateToState = createSelector(
   (appState) => ({ appState })
 );
 
-type GlobalState = Record<string, any>; // TODO: replace for redus state type
+type GlobalState = Record<string, any>; // TODO: replace for redux state type
 
 // Props to connect to the wrapper component that are not injected in the wrapped one
 type ConnectedProps = {

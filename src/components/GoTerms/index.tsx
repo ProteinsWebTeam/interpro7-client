@@ -1,10 +1,7 @@
 import React from 'react';
-import T from 'prop-types';
-// $FlowFixMe
+
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-
-import { GoLink } from 'components/ExtLink';
-
+import GoLink from 'components/ExtLink/GoLink';
 import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
@@ -36,16 +33,15 @@ const schemaProcessData = (data) => ({
   identifier: data,
 });
 
-const GoTerms = (
-  {
-    terms,
-    type,
-    db,
-    withoutTitle = false,
-  } /*: {terms: Array<Object>, type: string, db?: string, withoutTitle: boolean} */,
-) => {
-  let _terms = new Map(terms.map((term) => [term.identifier, term]));
-  _terms = Array.from(_terms.values()).reduce((acc, term) => {
+type GoTermsProps = {
+  terms: Array<GOTerm>;
+  type: string;
+  db?: string;
+  withoutTitle?: boolean;
+};
+const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
+  const termsMap = new Map(terms.map((term) => [term.identifier, term]));
+  const _terms = Array.from(termsMap.values()).reduce((acc, term) => {
     if (term.category_name) {
       // eslint-disable-next-line no-param-reassign
       term.category = {
@@ -121,12 +117,6 @@ const GoTerms = (
       </div>
     </section>
   );
-};
-GoTerms.propTypes = {
-  terms: T.arrayOf(T.object.isRequired).isRequired,
-  type: T.string.isRequired,
-  db: T.string,
-  withoutTitle: T.bool,
 };
 
 export default GoTerms;

@@ -6,7 +6,8 @@ import { createSelector } from 'reselect';
 
 import Accession from 'components/Accession';
 import Description from 'components/Description';
-import { BaseLink } from 'components/ExtLink';
+// $FlowFixMe
+import BaseLink from 'components/ExtLink/BaseLink';
 import { setDBs } from 'utils/processDescription/handlers';
 import Literature from 'components/Entry/Literature';
 

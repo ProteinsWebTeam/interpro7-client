@@ -32,6 +32,8 @@ type GOTerm = {
     code: string;
     name: string;
   };
+  category_name?: string;
+  category_code?: string;
 };
 type Reference = {
   PMID: number;
@@ -175,3 +177,12 @@ type BasicResponse = {
   ok: boolean;
   headers: Set<string>;
 };
+
+type BaseLinkProps = {
+  id: string | number;
+  target?: string;
+  className?: string;
+  children?: React.ReactNode;
+};
+
+type ActiveClassProp = string | ((location: unknown) => string);
