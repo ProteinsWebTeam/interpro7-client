@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
-// $FlowFixMe
+
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import AnimatedEntry from 'components/AnimatedEntry';
@@ -15,27 +14,24 @@ import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ipro, fonts, ebiStyles, local);
 
-const ReferenceItem = (
-  { url, accession } /*: {url: string, accession: string} */,
-) => (
+type ReferenceData = {
+  url: string;
+  accession: string;
+};
+const ReferenceItem = ({ url, accession }: ReferenceData) => (
   <li>
     <Link href={url} className={f('ext')}>
       {accession}
     </Link>
   </li>
 );
-ReferenceItem.propTypes = {
-  url: T.string.isRequired,
-  accession: T.string.isRequired,
-};
 
-const ReferenceSection = (
-  {
-    accessions,
-    name,
-    description,
-  } /*: {accessions: Array<Object>, name: string, description: string} */,
-) =>
+type SectionProps = {
+  accessions: Array<ReferenceData>;
+  name: string;
+  description: string;
+};
+const ReferenceSection = ({ accessions, name, description }: SectionProps) =>
   name !== 'pdb' && (
     <li className={f('xref-section', 'small')}>
       <h5 className={f('text-up')}>
@@ -55,20 +51,14 @@ const ReferenceSection = (
       </ul>
     </li>
   );
-ReferenceSection.propTypes = {
-  accessions: T.array.isRequired,
-  name: T.string.isRequired,
-  description: T.string.isRequired,
+
+type Props = {
+  xRefs: Record<string, CrossReference>;
 };
-
-export default class CrossReferences extends PureComponent /*:: <{xRefs: Object}> */ {
-  static propTypes = {
-    xRefs: T.object.isRequired,
-  };
-
+export default class CrossReferences extends PureComponent<Props> {
   render() {
     const databases = Object.entries(this.props.xRefs).sort(
-      ([a], [b]) => a.rank - b.rank,
+      ([_, a], [__, b]) => a.rank - b.rank
     );
     return (
       <div className={f('row')}>
@@ -86,7 +76,7 @@ export default class CrossReferences extends PureComponent /*:: <{xRefs: Object}
                   description={description}
                   accessions={accessions}
                 />
-              ),
+              )
             )}
           </AnimatedEntry>
         </div>

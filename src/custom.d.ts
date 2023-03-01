@@ -63,6 +63,15 @@ type ContributingEntries = {
   };
 } | null;
 
+type CrossReference = {
+  displayName: string;
+  description: string;
+  rank: number;
+  accessions: Array<{
+    accession: string;
+    url: string;
+  }>;
+};
 type EntryMetadata = {
   accession: string;
   name: { name: string; short?: string };
@@ -81,17 +90,7 @@ type EntryMetadata = {
     name: string;
     type: string;
   }> | null;
-  cross_references: {
-    [source: string]: {
-      displayName: string;
-      description: string;
-      rank: number;
-      accessions: Array<{
-        accession: string;
-        url: string;
-      }>;
-    };
-  };
+  cross_references: Record<string, CrossReference>;
   wikipedia: WikipediaEntry;
   counters: {
     [resource: string]:
