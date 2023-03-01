@@ -25,8 +25,8 @@ const f = foundationPartial(ebiGlobalStyles, local);
 type OtherSectionsProps = {
   metadata: EntryMetadata;
   citations: {
-    included: Array<unknown>;
-    extra: Array<unknown>;
+    included: [number, Reference][];
+    extra: [number, Reference][];
   };
 };
 

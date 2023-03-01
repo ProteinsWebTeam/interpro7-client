@@ -7,7 +7,8 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
-import { UniProtLink } from 'components/ExtLink';
+// $FlowFixMe
+import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';

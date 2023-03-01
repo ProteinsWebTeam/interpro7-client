@@ -1,12 +1,10 @@
-// @flow
 /* eslint react/jsx-key: 0 */
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { PMCLink, DOILink, UniProtLink } from '.';
-// $FlowFixMe
+import { DOILink, UniProtLink } from './patternLinkWrapper';
+import PMCLink from './PMCLink';
 import GoLink from './GoLink';
-// $FlowFixMe
 import BaseLink from './BaseLink';
 
 const renderer = new ShallowRenderer();

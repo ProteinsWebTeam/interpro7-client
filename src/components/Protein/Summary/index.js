@@ -11,7 +11,8 @@ import Species from 'components/Protein/Species';
 import Link from 'components/generic/Link';
 import FileExporter from 'components/Matches/FileExporter';
 
-import { UniProtLink } from 'components/ExtLink';
+// $FlowFixMe
+import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
 import loadable from 'higherOrder/loadable';

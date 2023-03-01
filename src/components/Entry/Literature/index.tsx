@@ -1,10 +1,9 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { PMCLink, DOILink } from 'components/ExtLink';
+import PMCLink from 'components/ExtLink/PMCLink';
+import { DOILink } from 'components/ExtLink/patternLinkWrapper';
 import Link from 'components/generic/Link';
 
 import { hashSelector } from 'reducers/custom-location/hash';
@@ -19,16 +18,16 @@ import ebiStyles from 'ebi-framework/css/ebi-global.css';
 const f = foundationPartial(refStyles, ebiStyles);
 
 export const getLiteratureIdsFromDescription = (
-  description /*: Array<string> */,
-) =>
+  description: Array<string>
+): Array<string> =>
   (description || []).reduce(
     (acc, part) => [
       ...acc,
       ...(part.match(/\[cite:(PUB\d+)\]/gi) || []).map((t) =>
-        t.replace(/(^\[cite:)|(]$)/g, ''),
+        t.replace(/(^\[cite:)|(]$)/g, '')
       ),
     ],
-    [],
+    []
   );
 
 const SchemaOrgData = loadable({
@@ -36,23 +35,20 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-/*:: type Reference = Object; */
-
-const LiteratureItem = (
-  {
-    pubID,
-    reference: r,
-    i,
-    included,
-    target,
-  } /*: {|
-  pubID: number,
-  reference: Reference,
-  i?: number,
-  included?: boolean,
-  target: boolean,
-|} */,
-) => (
+type LiteratureItemProps = {
+  pubID: number;
+  reference: Reference;
+  i?: number;
+  included?: boolean;
+  target: boolean;
+};
+const LiteratureItem = ({
+  // pubID,
+  reference: r,
+  i,
+  included,
+  target,
+}: LiteratureItemProps) => (
   <div className={f('reference', 'small', { target })}>
     <p className={f('cite')}>
       <SchemaOrgData
@@ -66,7 +62,7 @@ const LiteratureItem = (
       {typeof i !== 'undefined' &&
         (included ? (
           <Link
-            id={pubID}
+            // id={pubID}
             className={f('index')}
             to={(customLocation) => ({
               ...customLocation,
@@ -106,25 +102,13 @@ const LiteratureItem = (
     </p>
   </div>
 );
-LiteratureItem.propTypes = {
-  pubID: T.oneOfType([T.string, T.number]).isRequired,
-  reference: T.object.isRequired,
-  i: T.number,
-  included: T.bool,
-  target: T.bool.isRequired,
-};
 
-const Literature = (
-  {
-    included = [],
-    extra = [],
-    target,
-  } /*: {|
-  included?: Array<[number, Reference]>,
-  extra?: Array<[number, Reference]>,
-  target: string
-|} */,
-) => (
+type Props = {
+  included?: Array<[number, Reference]>;
+  extra?: Array<[number, Reference]>;
+  target: string;
+};
+const Literature = ({ included = [], extra = [], target }: Props) => (
   <div className={f('row')}>
     <div className={f('large-12', 'columns', 'margin-bottom-large')}>
       {included.length ? (
@@ -136,7 +120,7 @@ const Literature = (
               reference={ref}
               i={i + 1}
               included
-              target={target === pubID}
+              target={target === String(pubID)}
             />
           ))}
         </div>
@@ -154,7 +138,7 @@ const Literature = (
               pubID={pubID}
               key={pubID}
               reference={ref}
-              target={target === pubID}
+              target={target === String(pubID)}
               i={(included?.length || 0) + i + 1}
             />
           ))}
@@ -163,11 +147,6 @@ const Literature = (
     </div>
   </div>
 );
-Literature.propTypes = {
-  included: T.arrayOf(T.array),
-  extra: T.arrayOf(T.array),
-  target: T.string.isRequired,
-};
 
 const mapStateToProps = createSelector(hashSelector, (target) => ({ target }));
 

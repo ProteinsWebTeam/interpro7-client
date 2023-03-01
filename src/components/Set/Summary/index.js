@@ -9,6 +9,7 @@ import Description from 'components/Description';
 // $FlowFixMe
 import BaseLink from 'components/ExtLink/BaseLink';
 import { setDBs } from 'utils/processDescription/handlers';
+// $FlowFixMe
 import Literature from 'components/Entry/Literature';
 
 import loadable from 'higherOrder/loadable';

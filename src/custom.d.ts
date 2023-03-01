@@ -43,7 +43,8 @@ type Reference = {
   year: number;
   title: string;
   URL: string | null;
-  raw_pages: string;
+  raw_pages?: string;
+  rawPages?: string;
   medline_journal: string;
   ISO_journal: string;
   authors: Array<string>;
