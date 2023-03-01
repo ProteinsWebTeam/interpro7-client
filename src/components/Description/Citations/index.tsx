@@ -1,0 +1,57 @@
+import React from 'react';
+import Link from 'components/generic/Link';
+
+import { foundationPartial } from 'styles/foundation';
+
+import styles from '../style.css';
+
+const f = foundationPartial(styles);
+
+export const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](,\\s*)?';
+
+type Props = {
+  text: string;
+  literature?: Array<string>;
+  accession: string;
+  withoutIDs: boolean;
+};
+const Citations = ({ text, literature = [], withoutIDs, accession }: Props) => (
+  <sup>
+    [
+    {text.split(',').map((cita, i) => {
+      const citMatch = cita.match(CITATION_REGEX);
+      if (!citMatch || citMatch.length < 2) {
+        return null;
+      }
+      const pubId = citMatch[1];
+      const refCounter = literature.map((d) => d[0]).indexOf(pubId) + 1;
+      return (
+        <Link
+          key={cita}
+          id={withoutIDs ? null : `description-${refCounter}`}
+          className={f('text-high')}
+          to={(customLocation) => {
+            const key = customLocation.description.main.key;
+            return {
+              ...customLocation,
+              description: {
+                main: { key },
+                [key]: {
+                  db: customLocation.description[key].db,
+                  accession,
+                },
+              },
+              hash: pubId,
+            };
+          }}
+        >
+          {refCounter}
+          {i + 1 < text.split(',').length && ', '}
+        </Link>
+      );
+    })}
+    ]
+  </sup>
+);
+
+export default Citations;

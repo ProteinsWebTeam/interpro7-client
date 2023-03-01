@@ -9,12 +9,14 @@ const Tooltip = ({
   useContext,
   children,
   distance,
+  interactive = false,
   ...rest
 }: PropsWithChildren<{
   html?: React.ReactElement | string | number;
   title?: React.ReactElement | string | number;
   useContext?: boolean;
   distance?: number;
+  interactive?: boolean;
 }>) => {
   let content = html || title;
   if (typeof content === 'string') {
@@ -30,6 +32,7 @@ const Tooltip = ({
       appendTo={document.body}
       allowHTML={true}
       className={'tippy-box'}
+      interactive={interactive}
     >
       <div {...rest} style={useContext ? {} : { display: 'inline' }}>
         {children}

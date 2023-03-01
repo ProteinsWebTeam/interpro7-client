@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Accession from 'components/Accession';
+// $FlowFixMe
 import Description from 'components/Description';
 // $FlowFixMe
 import BaseLink from 'components/ExtLink/BaseLink';

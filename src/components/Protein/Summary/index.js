@@ -21,7 +21,8 @@ import {
   isContainedInOrganism,
 } from 'schema_org/processors';
 
-import { DescriptionReadMore } from 'components/Description';
+// $FlowFixMe
+import DescriptionReadMore from 'components/Description/DescriptionReadMore';
 
 import IsoformSelector from 'components/Protein/Isoforms/Selector';
 import IsoformViewer from 'components/Protein/Isoforms/Viewer';
