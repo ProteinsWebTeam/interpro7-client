@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import { goToCustomLocation } from 'actions/creators';
@@ -19,24 +18,24 @@ const loadInterProWebComponents = () => {
       );
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproHierarchy),
-      ).as('interpro-hierarchy'),
+        interproComponents().then((m) => m.InterproHierarchy)
+      ).as('interpro-hierarchy')
     );
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then(m => m.InterproEntry),
-      ).as('interpro-entry'),
+        interproComponents().then((m) => m.InterproEntry)
+      ).as('interpro-entry')
     );
     webComponents.push(
-      loadWebComponent(() => interproComponents().then(m => m.InterproType)).as(
-        'interpro-type',
-      ),
+      loadWebComponent(() =>
+        interproComponents().then((m) => m.InterproType)
+      ).as('interpro-type')
     );
   }
   return Promise.all(webComponents);
 };
 
-const cleanHierarchyType = hierarchy => {
+const cleanHierarchyType = (hierarchy: InterProHierarchyType) => {
   const output = { ...hierarchy };
   output.type = output.type.replace('_', ' ');
   if (output.children && output.children.length) {
@@ -45,41 +44,28 @@ const cleanHierarchyType = hierarchy => {
   return output;
 };
 
-/*:: type Props = {
-  accession: string,
-  hierarchy: string | Object,
-  goToCustomLocation: function
-}; */
+type Props = {
+  accession: string;
+  hierarchy: InterProHierarchyType;
+  goToCustomLocation: typeof goToCustomLocation;
+};
 
-class InterProHierarchy extends PureComponent /*:: <Props> */ {
-  /*::
-      _ref: { current: null | React$ElementRef<'interpro-hierarchy'> };
-    */
-  static propTypes = {
-    accession: T.string.isRequired,
-    hierarchy: T.oneOfType([T.string, T.object]).isRequired,
-    goToCustomLocation: T.func.isRequired,
-  };
-
-  constructor(props /*: Props */) {
-    super(props);
-
-    this._ref = React.createRef();
-  }
+class InterProHierarchy extends PureComponent<Props> {
+  _ref = React.createRef<HTMLElement & { hierarchy: InterProHierarchyType }>();
 
   async componentDidMount() {
     await loadInterProWebComponents();
     const hierarchy = this.props.hierarchy;
     if (hierarchy) this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
-    this._ref.current.addEventListener('click', e => {
-      const target = (e.path || e.composedPath())[0];
+    this._ref.current.addEventListener('click', (e) => {
+      const target = e.composedPath()[0] as HTMLElement;
       if (target.classList.contains('link')) {
         e.preventDefault();
         this.props.goToCustomLocation({
           description: pathToDescription(
             target
               .getAttribute('href')
-              .replace(new RegExp(`^${config.root.website.path}`), ''),
+              .replace(new RegExp(`^${config.root.website.path}`), '')
           ),
         });
       }
@@ -97,7 +83,7 @@ class InterProHierarchy extends PureComponent /*:: <Props> */ {
         style={{ display: 'block', marginBottom: '1rem', marginLeft: '-4px' }}
         accession={this.props.accession}
         accessions={this.props.accession}
-        hideafter="2"
+        hideafter={2}
         hrefroot={`${config.root.website.path}/entry/interpro`}
         ref={this._ref}
         displaymode="pruned"
@@ -106,7 +92,4 @@ class InterProHierarchy extends PureComponent /*:: <Props> */ {
   }
 }
 
-export default connect(
-  null,
-  { goToCustomLocation },
-)(InterProHierarchy);
+export default connect(null, { goToCustomLocation })(InterProHierarchy);

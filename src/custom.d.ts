@@ -7,6 +7,7 @@ declare module '*.css' {
 declare namespace JSX {
   interface IntrinsicElements {
     'interpro-type': InterProTypeProps;
+    'interpro-hierarchy': InterProHierarchyProps;
   }
 }
 
@@ -19,12 +20,26 @@ interface InterProTypeProps
   dimension: string;
 }
 
-type InterProHierarchy = {
+interface InterProHierarchyProps
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLElement>,
+    HTMLElement
+  > {
+  accession: string;
+  accessions: string | string[];
+  displaymode: string;
+  hideafter: number;
+  hrefroot: string | null;
+  hierarchy?: InterProHierarchyType;
+}
+
+type InterProHierarchyType = {
   accession: string;
   name: string;
   type: string;
-  children: Array<InterProHierarchy> | null;
+  children: Array<InterProHierarchyType> | null;
 };
+
 type GOTerm = {
   identifier: string;
   name: string;
@@ -84,7 +99,7 @@ type EntryMetadata = {
   literature: {
     [PubID: string]: Reference;
   };
-  hierarchy?: InterProHierarchy;
+  hierarchy?: InterProHierarchyType;
   overlaps_with?: Array<{
     accession: string;
     name: string;

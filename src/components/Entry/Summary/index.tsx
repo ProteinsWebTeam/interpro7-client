@@ -68,9 +68,7 @@ const OtherSections = ({
 );
 
 type HierarchyProps = {
-  hierarchy: {
-    children?: Array<unknown>;
-  };
+  hierarchy: InterProHierarchyType;
   type: string;
   accession: string;
 };
