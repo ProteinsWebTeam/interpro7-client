@@ -7,11 +7,11 @@ import Link from 'components/generic/Link';
 
 import Citations, { CITATION_REGEX } from '../Citations';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import styles from '../style.css';
 
-const f = foundationPartial(styles);
+const css = cssBinder(styles);
 
 const TAG_REGEX = /(\[\w+:[\w.-]+\])/;
 const TAG_REGEX_KV = /\[(\w+):([\w.-]+)]/;
@@ -118,7 +118,7 @@ export const Paragraph = ({
               <Link
                 href={xReferenceURL[type].replace('{}', tagValue)}
                 target="_blank"
-                className={f('ext')}
+                className={css('ext')}
                 key={i}
               >
                 {tagValue}
@@ -129,7 +129,7 @@ export const Paragraph = ({
         // TODO: change the way descriptions work from the backend side.
         return (
           <div
-            className={f('inline')}
+            className={css('inline')}
             key={i}
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{

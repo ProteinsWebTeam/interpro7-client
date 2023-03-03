@@ -5,11 +5,11 @@ import { transformFormatted } from 'utils/text';
 
 import Paragraph from './Paragraph';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
 
-const f = foundationPartial(styles);
+const css = cssBinder(styles);
 
 type Props = {
   textBlocks: Array<string>;
@@ -25,10 +25,7 @@ class Description extends PureComponent<Props> {
     });
 
     return (
-      <div
-        className={f('margin-bottom-large', 'description')}
-        data-testid="description"
-      >
+      <div className={css('description')} data-testid="description">
         {sections
           .map((section, i) =>
             section

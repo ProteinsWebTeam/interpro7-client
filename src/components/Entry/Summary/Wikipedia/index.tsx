@@ -10,11 +10,11 @@ import loadData from 'higherOrder/loadData/ts';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import local from '../style.css';
 
-const f = foundationPartial(local);
+const css = cssBinder(local);
 
 const Wikipedia = ({
   title,
@@ -70,32 +70,32 @@ const Wikipedia = ({
   );
 
   return (
-    <div className={f('wiki-article')}>
-      <div className={f('row', 'wiki-content')}>
-        <div className={f('medium-8', 'large-8', 'columns')}>
+    <div className={css('wiki-article')}>
+      <div className={css('vf-grid', 'wiki-content')}>
+        <div className={css('vf-grid__col--span-3', 'columns')}>
           <h4>
             <Link
-              className={f('ext')}
+              className={css('ext')}
               target="_blank"
               href={`https://en.wikipedia.org/wiki/${title}`}
             >
               {title.replace(/_/g, ' ')}
             </Link>{' '}
-            <div className={f('tag')}>Wikipedia</div>
+            <div className={css('tag')}>Wikipedia</div>
           </h4>
           {ReactHtmlParser(extract)}
         </div>
-        <div className={f('medium-4', 'large-4', 'columns')}>
-          <table className={f('infobox')}>
+        <div className={css('columns')}>
+          <table className={css('infobox')}>
             <tbody>
               <tr>
-                <th colSpan={2} className={f('th-infobox')}>
+                <th colSpan={2} className={css('th-infobox')}>
                   {article.Name ? article.Name : title.replace(/_/g, ' ')}
                 </th>
               </tr>
               {thumbnail ? (
                 <tr>
-                  <td colSpan={2} className={f('td-thumbnail')}>
+                  <td colSpan={2} className={css('td-thumbnail')}>
                     {article.image ? (
                       <a
                         href={`https://en.wikipedia.org/wiki/File:${article.image}`}
@@ -115,22 +115,22 @@ const Wikipedia = ({
               {infoStatus ? (
                 <>
                   <tr>
-                    <th colSpan={2} className={f('th-identifier')}>
+                    <th colSpan={2} className={css('th-identifier')}>
                       Identifiers
                     </th>
                   </tr>
                   <tr>
-                    <th scope="row" className={f('row-header')}>
+                    <th scope="row" className={css('row-header')}>
                       Symbol
                     </th>
-                    <td className={f('row-data')}>
+                    <td className={css('row-data')}>
                       {article.Symbol ? article.Symbol : title}
                     </td>
                   </tr>
                   {identifiers.map((id) => {
                     return (
                       <tr key={id.name}>
-                        <th scope="row" className={f('row-header')}>
+                        <th scope="row" className={css('row-header')}>
                           <a
                             href={`https://en.wikipedia.org/wiki/${id.name}`}
                             title={id.name}
@@ -138,7 +138,7 @@ const Wikipedia = ({
                             {id.name}
                           </a>
                         </th>
-                        <td className={f('row-data')}>{id.value}</td>
+                        <td className={css('row-data')}>{id.value}</td>
                       </tr>
                     );
                   })}

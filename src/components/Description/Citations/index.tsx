@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'components/generic/Link';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import styles from '../style.css';
 
-const f = foundationPartial(styles);
+const css = cssBinder(styles);
 
 export const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](,\\s*)?';
 
@@ -29,7 +29,7 @@ const Citations = ({ text, literature = [], withoutIDs, accession }: Props) => (
         <Link
           key={cita}
           id={withoutIDs ? null : `description-${refCounter}`}
-          className={f('text-high')}
+          className={css('text-high')}
           to={(customLocation) => {
             const key = customLocation.description.main.key;
             return {

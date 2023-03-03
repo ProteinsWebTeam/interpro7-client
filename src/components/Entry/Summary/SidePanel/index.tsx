@@ -14,14 +14,14 @@ import Integration from './Integration';
 import ContributingSignatures from './ContributingSignatures';
 import RepresentativeStructure from './RepresentativeStructure';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import local from '../style.css';
+import local from './style.css';
+
+const css = cssBinder(fonts, local);
 
 type addToastType = typeof addToast;
-
-const f = foundationPartial(fonts, local);
 
 const SidePanel = ({
   metadata,
@@ -101,31 +101,63 @@ const SidePanel = ({
           <DropDownButton
             label="Add your annotation"
             icon="&#xf303;"
-            extraClasses={f('annotation')}
+            extraClasses={css('annotation')}
           >
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="message">Your annotation</label>
+            <form
+              onSubmit={handleSubmit}
+              className={css('vf-stack', 'vf-stack--200')}
+            >
+              <label
+                className={css('vf-form__label', 'vf-form__label--required')}
+                htmlFor="message"
+              >
+                Your annotation
+              </label>
               <textarea
                 id="message"
                 name="message"
                 value={message}
                 onChange={handleFields}
+                className={css('vf-form__textarea')}
                 rows={5}
                 required
               />
-              <label htmlFor="from_email">Email address</label>
+              <label
+                className={css('vf-form__label', 'vf-form__label--required')}
+                htmlFor="from_email"
+              >
+                Email address
+              </label>
               <input
                 id="from_email"
                 name="from_email"
                 type="email"
                 value={email}
                 onChange={handleFields}
+                className={css('vf-form__input')}
                 required
               />
-              <button className={f('button')}>Submit</button>
-              <button className={f('button')} onClick={clearFields}>
-                Clear
-              </button>
+              <div className={css('flex-space-evenly')}>
+                <button
+                  className={css(
+                    'vf-button',
+                    'vf-button--primary',
+                    'vf-button--sm'
+                  )}
+                >
+                  Submit
+                </button>
+                <button
+                  className={css(
+                    'vf-button',
+                    'vf-button--secondary',
+                    'vf-button--sm'
+                  )}
+                  onClick={clearFields}
+                >
+                  Clear
+                </button>
+              </div>
             </form>
           </DropDownButton>
         </Tooltip>
@@ -136,10 +168,10 @@ const SidePanel = ({
       ) && (
         <section>
           <h5>External Links</h5>
-          <ul className={f('no-bullet')}>
+          <ul className={css('no-bullet')}>
             <li>
               <Link
-                className={f('ext')}
+                className={css('ext')}
                 target="_blank"
                 href={url && url(metadata.accession)}
               >

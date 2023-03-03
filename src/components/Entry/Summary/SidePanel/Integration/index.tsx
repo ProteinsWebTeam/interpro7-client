@@ -8,12 +8,10 @@ import Link from 'components/generic/Link';
 
 import { schemaProcessIntegrated } from 'schema_org/processors';
 
-import { foundationPartial } from 'styles/foundation';
-
-import ipro from 'styles/interpro-new.css';
+import cssBinder from 'styles/cssBinder';
 import local from './style.css';
 
-const f = foundationPartial(ipro, local);
+const css = cssBinder(local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -29,7 +27,7 @@ const Integration = ({ intr, dataBase }: Props) => {
   return (
     <div>
       <h5>Integrated to</h5>
-      <ul className={f('chevron')}>
+      <ul className={css('chevron')}>
         <li>
           {databases && (
             <SchemaOrgData

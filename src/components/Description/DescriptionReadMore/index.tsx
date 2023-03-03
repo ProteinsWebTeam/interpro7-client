@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 
 import Description from '..';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import styles from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(styles, fonts);
+const css = cssBinder(styles, fonts);
 
 type DescriptionReadMoreProps = {
   text: string;
@@ -45,7 +45,11 @@ class DescriptionReadMore extends PureComponent<
         <Description textBlocks={[textToShow]} {...this.props} />
         {minNumberOfCharToShow < text.length && (
           <button
-            className={f('button', 'hollow', 'secondary', 'margin-bottom-none')}
+            className={css(
+              'vf-button',
+              'vf-button--secondary',
+              'vf-button--sm'
+            )}
             onClick={() => this.setState({ showMore: !showMore })}
           >
             Show{' '}
@@ -53,7 +57,7 @@ class DescriptionReadMore extends PureComponent<
               <span>
                 Less{' '}
                 <i
-                  className={f('icon', 'icon-common', 'font-sm')}
+                  className={css('icon', 'icon-common', 'font-sm')}
                   data-icon="&#xf102;"
                 />
               </span>
@@ -61,7 +65,7 @@ class DescriptionReadMore extends PureComponent<
               <span>
                 More{' '}
                 <i
-                  className={f('icon', 'icon-common', 'font-sm')}
+                  className={css('icon', 'icon-common', 'font-sm')}
                   data-icon="&#xf103;"
                 />
               </span>

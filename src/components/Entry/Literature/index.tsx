@@ -10,12 +10,11 @@ import { hashSelector } from 'reducers/custom-location/hash';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessCitations } from 'schema_org/processors';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import refStyles from './style.css';
-import ebiStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(refStyles, ebiStyles);
+const css = cssBinder(refStyles);
 
 export const getLiteratureIdsFromDescription = (
   description: Array<string>
@@ -49,8 +48,8 @@ const LiteratureItem = ({
   included,
   target,
 }: LiteratureItemProps) => (
-  <div className={f('reference', 'small', { target })}>
-    <p className={f('cite')}>
+  <div className={css('reference', 'small', { target })}>
+    <p className={css('cite')}>
       <SchemaOrgData
         data={{
           identifier: `http://identifiers.org/pubmed/${r.PMID}`,
@@ -63,7 +62,7 @@ const LiteratureItem = ({
         (included ? (
           <Link
             // id={pubID}
-            className={f('index')}
+            className={css('index')}
             to={(customLocation) => ({
               ...customLocation,
               hash: `description-${i}`,
@@ -75,26 +74,28 @@ const LiteratureItem = ({
         ) : (
           <span>[{i}]. </span>
         ))}
-      <span className={f('title')}>{r.title} </span>
-      <span className={f('authors')}>{r.authors.join(', ')} </span>{' '}
-      {r.ISO_journal && <span className={f('journal')}>{r.ISO_journal} </span>}
-      {r.volume && <span className={f('volume')}> {r.volume}, </span>}
-      {r.raw_pages && <span className={f('pages')}> {r.raw_pages}, </span>}
-      <span className={f('year')}>({r.year})</span>.{' '}
-      {r.rawPages && <span className={f('pages')}>{r.rawPages}. </span>}
+      <span className={css('title')}>{r.title} </span>
+      <span className={css('authors')}>{r.authors.join(', ')} </span>{' '}
+      {r.ISO_journal && (
+        <span className={css('journal')}>{r.ISO_journal} </span>
+      )}
+      {r.volume && <span className={css('volume')}> {r.volume}, </span>}
+      {r.raw_pages && <span className={css('pages')}> {r.raw_pages}, </span>}
+      <span className={css('year')}>({r.year})</span>.{' '}
+      {r.rawPages && <span className={css('pages')}>{r.rawPages}. </span>}
       {
         // not used anywhere on Europe PMC website not even to link to PMCID:PMC
         // <span className={f('reference_id')}>{pubID}.</span>
       }
       {r.DOI_URL && (
-        <DOILink id={r.DOI_URL} className={f('ext', 'margin-right-medium')}>
+        <DOILink id={r.DOI_URL} className={css('ext', 'margin-right-medium')}>
           View article
         </DOILink>
       )}
       {r.PMID && (
         <span>
           PMID:{' '}
-          <PMCLink id={r.PMID} className={f('ext', 'margin-right-medium')}>
+          <PMCLink id={r.PMID} className={css('ext', 'margin-right-medium')}>
             {r.PMID}
           </PMCLink>
         </span>
@@ -109,42 +110,40 @@ type Props = {
   target: string;
 };
 const Literature = ({ included = [], extra = [], target }: Props) => (
-  <div className={f('row')}>
-    <div className={f('large-12', 'columns', 'margin-bottom-large')}>
-      {included.length ? (
-        <div className={f('list', { 'single-entry': included.length === 1 })}>
-          {included.map(([pubID, ref], i) => (
-            <LiteratureItem
-              pubID={pubID}
-              key={pubID}
-              reference={ref}
-              i={i + 1}
-              included
-              target={target === String(pubID)}
-            />
-          ))}
-        </div>
-      ) : null}
-      {/* Only display "Further reading" if there have been main references */}
-      {included.length && extra.length ? <h5>Further reading</h5> : null}
-      {extra.length ? (
-        <div
-          className={f('list', 'further', {
-            'single-entry': extra.length === 1,
-          })}
-        >
-          {extra.map(([pubID, ref], i) => (
-            <LiteratureItem
-              pubID={pubID}
-              key={pubID}
-              reference={ref}
-              target={target === String(pubID)}
-              i={(included?.length || 0) + i + 1}
-            />
-          ))}
-        </div>
-      ) : null}
-    </div>
+  <div className={css('vf-grid')}>
+    {included.length ? (
+      <div className={css('list', { 'single-entry': included.length === 1 })}>
+        {included.map(([pubID, ref], i) => (
+          <LiteratureItem
+            pubID={pubID}
+            key={pubID}
+            reference={ref}
+            i={i + 1}
+            included
+            target={target === String(pubID)}
+          />
+        ))}
+      </div>
+    ) : null}
+    {/* Only display "Further reading" if there have been main references */}
+    {included.length && extra.length ? <h5>Further reading</h5> : null}
+    {extra.length ? (
+      <div
+        className={css('list', 'further', {
+          'single-entry': extra.length === 1,
+        })}
+      >
+        {extra.map(([pubID, ref], i) => (
+          <LiteratureItem
+            pubID={pubID}
+            key={pubID}
+            reference={ref}
+            target={target === String(pubID)}
+            i={(included?.length || 0) + i + 1}
+          />
+        ))}
+      </div>
+    ) : null}
   </div>
 );
 

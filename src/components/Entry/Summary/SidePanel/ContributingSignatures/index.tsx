@@ -9,12 +9,10 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { foundationPartial } from 'styles/foundation';
-
-import ipro from 'styles/interpro-new.css';
+import cssBinder from 'styles/cssBinder';
 import local from './style.css';
 
-const f = foundationPartial(ipro, local);
+const css = cssBinder(local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -69,18 +67,18 @@ export const ContributingSignatures = ({ contr, data }: Props) => {
   const metaDB = data.loading || !data.payload ? {} : data.payload.databases;
   const contrEntries = Object.entries(contr);
   return (
-    <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
-      <div className={f('md-icon-list-box', 'margin-bottom-large')}>
+    <div className={css('side-panel')}>
+      <div className={css('md-icon-list-box')}>
         <h5>
           Contributing Member Database Entr
           {contrEntries.length < 2 ? 'y' : 'ies'}
         </h5>
-        <ul className={f('md-list')}>
+        <ul className={css('md-list')}>
           {contrEntries.map(([db, signatures]) => (
             <li key={db}>
-              <MemberSymbol type={db} className={f('md-small')} svg={false} />
-              <div className={f('db-label')}>
-                <span className={f('db-name')}>
+              <MemberSymbol type={db} className={css('md-small')} svg={false} />
+              <div className={css('db-label')}>
+                <span className={css('db-name')}>
                   {(metaDB[db] && metaDB[db].name) || db}:{' '}
                 </span>{' '}
                 {Object.entries(signatures).map(([accession, name], index) => (

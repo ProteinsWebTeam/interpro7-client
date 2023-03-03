@@ -2,3 +2,7 @@
   border: 1px #e6e6e6 solid;
   padding: 1rem;
 }
+div.flex-space-evenly {
+  display: flex;
+  justify-content: space-evenly;
+}

@@ -3,12 +3,11 @@ import React from 'react';
 import LazyImage from 'components/LazyImage';
 import Link from 'components/generic/Link';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-import ipro from 'styles/interpro-new.css';
 import local from '../style.css';
 
-const f = foundationPartial(ipro, local);
+const css = cssBinder(local);
 
 const RepresentativeStructure = ({
   accession,
@@ -18,11 +17,11 @@ const RepresentativeStructure = ({
   name: string;
 }) => {
   return (
-    <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
-      <div className={f('side-box')}>
+    <div className={css('side-panel')}>
+      <div className={css('side-box')}>
         <h5>Representative structure</h5>
         <Link
-          className={f('nolink')}
+          className={css('nolink')}
           to={{
             description: {
               main: { key: 'structure' },

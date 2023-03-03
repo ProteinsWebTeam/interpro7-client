@@ -5,14 +5,12 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import AnimatedEntry from 'components/AnimatedEntry';
 import Link from 'components/generic/Link';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
-import ebiStyles from 'ebi-framework/css/ebi-global.css';
-import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(ipro, fonts, ebiStyles, local);
+const css = cssBinder(fonts, local);
 
 type ReferenceData = {
   url: string;
@@ -20,7 +18,7 @@ type ReferenceData = {
 };
 const ReferenceItem = ({ url, accession }: ReferenceData) => (
   <li>
-    <Link href={url} className={f('ext')}>
+    <Link href={url} className={css('ext')}>
       {accession}
     </Link>
   </li>
@@ -33,12 +31,12 @@ type SectionProps = {
 };
 const ReferenceSection = ({ accessions, name, description }: SectionProps) =>
   name !== 'pdb' && (
-    <li className={f('xref-section', 'small')}>
-      <h5 className={f('text-up')}>
+    <li className={css('xref-section', 'small')}>
+      <h5 className={css('text-up')}>
         {name}{' '}
         <Tooltip title={description}>
           <span
-            className={f('small', 'icon', 'icon-common')}
+            className={css('font-s', 'icon', 'icon-common')}
             data-icon="&#xf129;"
           />
         </Tooltip>
@@ -61,25 +59,23 @@ export default class CrossReferences extends PureComponent<Props> {
       ([_, a], [__, b]) => a.rank - b.rank
     );
     return (
-      <div className={f('row')}>
-        <div className={f('large-12', 'columns')}>
-          <AnimatedEntry
-            className={f('list', 'margin-left-none')}
-            itemDelay={100}
-            duration={500}
-          >
-            {databases.map(
-              ([database, { displayName, description, accessions }]) => (
-                <ReferenceSection
-                  key={database}
-                  name={displayName}
-                  description={description}
-                  accessions={accessions}
-                />
-              )
-            )}
-          </AnimatedEntry>
-        </div>
+      <div className={css('vf-grid')}>
+        <AnimatedEntry
+          className={css('list', 'margin-left-none')}
+          itemDelay={100}
+          duration={500}
+        >
+          {databases.map(
+            ([database, { displayName, description, accessions }]) => (
+              <ReferenceSection
+                key={database}
+                name={displayName}
+                description={description}
+                accessions={accessions}
+              />
+            )
+          )}
+        </AnimatedEntry>
       </div>
     );
   }

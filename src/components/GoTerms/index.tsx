@@ -4,11 +4,11 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import GoLink from 'components/ExtLink/GoLink';
 import loadable from 'higherOrder/loadable';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import local from './style.css';
 
-const f = foundationPartial(local);
+const css = cssBinder(local);
 
 const getDefaultPayload = () => ({
   biological_process: [],
@@ -71,25 +71,23 @@ const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
   return (
     <section data-testid="go-terms">
       {!withoutTitle && (
-        <div className={f('row')}>
-          <div className={f('large-12', 'columns')}>
-            <Tooltip title={title}>
-              <h4 className={f('title')}>{label}</h4>
-            </Tooltip>
-          </div>
+        <div className={css('vf-stack')}>
+          <Tooltip title={title}>
+            <h4 className={css('title')}>{label}</h4>
+          </Tooltip>
         </div>
       )}
-      <div className={f('row', 'columns')}>
-        <div className={f('go-columns')}>
+      <div className={css('vf-stack')}>
+        <div className={css('go-columns')}>
           {none ? (
-            <p className={f('columns')}>No GO Terms</p>
+            <p>No GO Terms</p>
           ) : (
             goTermEntries.map(([key, values]) => (
               <div key={key}>
-                <p className={f(mapNameToClass.get(key), 'go-title')}>
+                <p className={css(mapNameToClass.get(key), 'go-title')}>
                   {key.replace('_', ' ')}
                 </p>
-                <ul className={f('go-list')}>
+                <ul className={css('go-list')}>
                   {values && values.length ? (
                     values.map(({ identifier, name }) => (
                       <li key={identifier}>
@@ -100,14 +98,14 @@ const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
 
                         <GoLink
                           id={identifier}
-                          className={f('go-terms', 'ext')}
+                          className={css('go-terms', 'ext')}
                         >
                           {name} ({identifier})
                         </GoLink>
                       </li>
                     ))
                   ) : (
-                    <li className={f('no-goterm')}>None</li>
+                    <li className={css('no-goterm')}>None</li>
                   )}
                 </ul>
               </div>

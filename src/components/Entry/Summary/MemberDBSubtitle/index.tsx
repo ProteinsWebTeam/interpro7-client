@@ -3,12 +3,11 @@ import React from 'react';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import fonts from 'EBI-Icon-fonts/fonts.css';
-import interproVF from 'styles/interpro-vf.css';
-
 import cssBinder from 'styles/cssBinder';
 
-const css = cssBinder(interproVF, fonts);
+import fonts from 'EBI-Icon-fonts/fonts.css';
+
+const css = cssBinder(fonts);
 
 const MemberDBSubtitle = ({
   metadata,

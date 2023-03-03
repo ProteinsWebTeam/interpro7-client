@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../style.css';
 
-const f = foundationPartial(fonts, local);
+const css = cssBinder(local, fonts);
 
 const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
 
@@ -32,7 +32,7 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
     );
 
   return (
-    <div className={f('margin-bottom-large')}>
+    <div>
       <h4>
         {metadata.type === 'homologous_superfamily'
           ? 'Overlapping entries'
@@ -45,13 +45,13 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
         >
           &nbsp;
           <span
-            className={f('small', 'icon', 'icon-common', 'font-s')}
+            className={css('icon', 'icon-common', 'font-s')}
             data-icon="&#xf129;"
           />
         </Tooltip>
       </h4>
       {_overlaps.map((ov) => (
-        <div key={ov.accession} className={f('list-items')}>
+        <div key={ov.accession} className={css('list-items')}>
           <interpro-type type={ov.type.replace('_', ' ')} dimension="1.2em" />
           <Link
             to={{
@@ -72,7 +72,7 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
       {Object.keys(metadata.overlaps_with || {}).length >
         MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
         <button
-          className={f('button', 'hollow', 'secondary', 'margin-bottom-none')}
+          className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
           onClick={() =>
             setShowAllOverlappingEntries(!showAllOverlappingEntries)
           }
@@ -82,7 +82,7 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
             <span>
               Less{' '}
               <i
-                className={f('icon', 'icon-common', 'font-sm')}
+                className={css('icon', 'icon-common', 'font-sm')}
                 data-icon="&#xf102;"
               />
             </span>
@@ -90,7 +90,7 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
             <span>
               More{' '}
               <i
-                className={f('icon', 'icon-common', 'font-sm')}
+                className={css('icon', 'icon-common', 'font-sm')}
                 data-icon="&#xf103;"
               />
             </span>
