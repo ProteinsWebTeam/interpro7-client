@@ -19,6 +19,8 @@ const cssNano = require('cssnano');
 // Web service plugin
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
 const buildInfo = require('./scripts/build-info');
 const pkg = require('./package.json');
 
@@ -404,6 +406,17 @@ const getConfigFor = (env, mode, isModule = false) => {
             },
           })
         : null,
+      new ForkTsCheckerWebpackPlugin({
+        typescript: {
+          diagnosticOptions: {
+            semantic: true,
+            syntactic: true,
+          },
+          configOverwrite: {
+            include: ['src/**/*'],
+          },
+        },
+      }),
     ].filter(Boolean),
     devtool: mode === 'development' ? 'cheap-module-source-map' : 'source-map',
   };

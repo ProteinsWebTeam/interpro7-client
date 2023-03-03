@@ -152,6 +152,7 @@ export const AfConfidenceProvider: CustomModelProperty.Provider<
   defaultParams: AfConfidenceParams,
   getParams: (_data: Model) => AfConfidenceParams,
   isApplicable: (data: Model) => AfConfidence.isApplicable(data),
+  //@ts-ignore
   obtain: async (
     ctx: CustomProperty.Context,
     data: Model

@@ -206,6 +206,7 @@
     "file-loader": "6.2.0",
     "flow-bin": "0.171.0",
     "flow-coverage-report": "0.8.0",
+    "fork-ts-checker-webpack-plugin": "7.3.0",
     "html-webpack-plugin": "5.5.0",
     "husky": "8.0.3",
     "identity-obj-proxy": "3.0.0",
