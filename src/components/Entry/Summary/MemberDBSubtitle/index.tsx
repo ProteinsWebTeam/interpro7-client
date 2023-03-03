@@ -3,12 +3,12 @@ import React from 'react';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { foundationPartial } from 'styles/foundation';
-
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import local from '../style.css';
+import interproVF from 'styles/interpro-vf.css';
 
-const f = foundationPartial(fonts, local);
+import cssBinder from 'styles/cssBinder';
+
+const css = cssBinder(interproVF, fonts);
 
 const MemberDBSubtitle = ({
   metadata,
@@ -24,15 +24,12 @@ const MemberDBSubtitle = ({
     return null;
   }
   return (
-    <table className={f('light', 'table-sum')}>
+    <table className={css('vf-table', 'left-headers')}>
       <tbody>
         <tr>
-          <td className={f('font-ml')} style={{ maxWidth: '50%' }}>
-            Member database
-          </td>
-          <td className={f('first-letter-cap', 'md-hlight', 'font-ml')}>
+          <td style={{ maxWidth: '50%' }}>Member database</td>
+          <td>
             <Link
-              className={f('nolink')}
               to={{
                 description: {
                   main: { key: 'entry' },
@@ -47,7 +44,7 @@ const MemberDBSubtitle = ({
                 }
               >
                 <span
-                  className={f('font-s', 'icon', 'icon-common')}
+                  className={css('font-s', 'icon', 'icon-common')}
                   data-icon="&#xf129;"
                 />
               </Tooltip>
@@ -55,16 +52,14 @@ const MemberDBSubtitle = ({
           </td>
         </tr>
         <tr>
-          <td className={f('first-letter-cap')}>{dbInfo.name} type</td>
-          <td className={f('first-letter-cap')}>
-            {metadata.type.replace('_', ' ').toLowerCase()}
-          </td>
+          <td className={css('first-letter-cap')}>{dbInfo.name} type</td>
+          <td>{metadata.type.replace('_', ' ').toLowerCase()}</td>
         </tr>
         {metadata.name.short && metadata.accession !== metadata.name.short && (
           <tr>
             <td>Short name</td>
             <td>
-              <i className={f('shortname')}>{metadata.name.short}</i>
+              <i className={css('shortname')}>{metadata.name.short}</i>
             </td>
           </tr>
         )}

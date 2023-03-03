@@ -1,0 +1,13 @@
+.shortname {
+  color: var(--colors-graydark);
+}
+
+.first-letter-cap::first-letter {
+  text-transform: capitalize;
+}
+
+table.left-headers {
+  & tr td:first-child {
+    font-weight: 600;
+  }
+}
