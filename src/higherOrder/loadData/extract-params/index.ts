@@ -21,10 +21,9 @@ export type Params =
       fetchOptions?: FetchOptions;
       propNamespace?: string;
       weight?: number;
-      mapStateToProps?: (
-        state: unknown,
-        props: unknown
-      ) => Record<string, unknown>;
+      mapStateToProps?:
+        | ((state: unknown, props: unknown) => Record<string, unknown>)
+        | typeof noop;
       mapDispatchToProps?: Record<string, unknown>;
     }
   | string

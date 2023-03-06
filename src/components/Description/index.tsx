@@ -13,7 +13,7 @@ const css = cssBinder(styles);
 
 type Props = {
   textBlocks: Array<string>;
-  literature?: Array<string>;
+  literature?: Array<[string, Reference]>;
   accession?: string;
   withoutIDs?: boolean;
 };

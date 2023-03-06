@@ -83,7 +83,7 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
       static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
       _id: string;
       _request: CancelableRequest;
-      timeoutID: number;
+      timeoutID = 0;
 
       constructor(props: WrapperProps) {
         super(props);
@@ -149,7 +149,7 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
         this.props.dataProgressInfo(this._id, progress, weight);
       };
 
-      _load = async (url /*: ?string */) => {
+      _load = async (url: string) => {
         if (!url) {
           this.setState({
             staleData: {
@@ -255,7 +255,7 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
             <Wrapped
               {...(rest as BaseProps)}
               {...passedProps}
-              {...(mapStateToProps(appState, passedProps) || {})}
+              {...(mapStateToProps?.(appState, passedProps) || {})}
             />
           </UnconnectedErrorBoundary>
         );

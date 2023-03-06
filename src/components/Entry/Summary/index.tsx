@@ -25,8 +25,8 @@ const css = cssBinder(ebiGlobalStyles, local);
 type OtherSectionsProps = {
   metadata: EntryMetadata;
   citations: {
-    included: [number, Reference][];
-    extra: [number, Reference][];
+    included: [string, Reference][];
+    extra: [string, Reference][];
   };
 };
 
@@ -128,7 +128,7 @@ class SummaryEntry extends PureComponent<SummaryEntryProps> {
                   <h4>Description</h4>
                   <Description
                     textBlocks={metadata.description}
-                    literature={included}
+                    literature={included as Array<[string, Reference]>}
                     accession={metadata.accession}
                   />
                 </>
@@ -139,7 +139,15 @@ class SummaryEntry extends PureComponent<SummaryEntryProps> {
             <SidePanel metadata={metadata} dbInfo={dbInfo} />
           </div>
         </section>
-        <OtherSections metadata={metadata} citations={{ included, extra }} />
+        <OtherSections
+          metadata={metadata}
+          citations={
+            { included, extra } as {
+              included: Array<[string, Reference]>;
+              extra: Array<[string, Reference]>;
+            }
+          }
+        />
         <section>
           {metadata.source_database === 'pfam' && metadata.wikipedia ? (
             <Wikipedia

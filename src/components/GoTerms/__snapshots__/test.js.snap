@@ -5,31 +5,25 @@ exports[`External links <GoTerms /> entry: interpro should render GOTerms compon
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, annotated by InterPro curators"
     >
-      <Tooltip
-        title="GO terms, annotated by InterPro curators"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
     >
-      <p
-        className="columns"
-      >
+      <p>
         No GO Terms
       </p>
     </div>
@@ -42,24 +36,20 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, annotated by InterPro curators"
     >
-      <Tooltip
-        title="GO terms, annotated by InterPro curators"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
@@ -178,24 +168,20 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, annotated by InterPro curators"
     >
-      <Tooltip
-        title="GO terms, annotated by InterPro curators"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
@@ -284,31 +270,25 @@ exports[`External links <GoTerms /> entry: pfam should render GOTerms component 
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, as provided by pfam"
     >
-      <Tooltip
-        title="GO terms, as provided by pfam"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
     >
-      <p
-        className="columns"
-      >
+      <p>
         No GO Terms
       </p>
     </div>
@@ -321,24 +301,20 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, as provided by pfam"
     >
-      <Tooltip
-        title="GO terms, as provided by pfam"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
@@ -457,24 +433,20 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, as provided by pfam"
     >
-      <Tooltip
-        title="GO terms, as provided by pfam"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
@@ -563,31 +535,25 @@ exports[`External links <GoTerms /> protein: reviewed should render GOTerms comp
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, as provided by the InterPro2GO pipeline"
     >
-      <Tooltip
-        title="GO terms, as provided by the InterPro2GO pipeline"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          InterPro GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        InterPro GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
     >
-      <p
-        className="columns"
-      >
+      <p>
         No GO Terms
       </p>
     </div>
@@ -600,24 +566,20 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, as provided by the InterPro2GO pipeline"
     >
-      <Tooltip
-        title="GO terms, as provided by the InterPro2GO pipeline"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          InterPro GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        InterPro GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
@@ -736,24 +698,20 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, as provided by the InterPro2GO pipeline"
     >
-      <Tooltip
-        title="GO terms, as provided by the InterPro2GO pipeline"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          InterPro GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        InterPro GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"

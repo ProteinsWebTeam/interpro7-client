@@ -35,7 +35,7 @@ const SchemaOrgData = loadable({
 });
 
 type LiteratureItemProps = {
-  pubID: number;
+  pubID: string;
   reference: Reference;
   i?: number;
   included?: boolean;
@@ -105,8 +105,8 @@ const LiteratureItem = ({
 );
 
 type Props = {
-  included?: Array<[number, Reference]>;
-  extra?: Array<[number, Reference]>;
+  included?: Array<[string, Reference]>;
+  extra?: Array<[string, Reference]>;
   target: string;
 };
 const Literature = ({ included = [], extra = [], target }: Props) => (

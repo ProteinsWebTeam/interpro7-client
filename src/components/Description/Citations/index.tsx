@@ -11,7 +11,7 @@ export const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](,\\s*)?';
 
 type Props = {
   text: string;
-  literature?: Array<string>;
+  literature?: Array<[string, Reference]>;
   accession: string;
   withoutIDs: boolean;
 };

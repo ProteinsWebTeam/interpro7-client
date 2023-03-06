@@ -4,171 +4,169 @@ exports[`<SummaryEntry /> should render 1`] = `
 <div
   className="sections"
 >
-  <section>
+  <section
+    className="vf-grid"
+  >
     <div
-      className="row"
+      className="vf-stack vf-grid__col--span-3"
     >
-      <div
-        className="medium-8 large-8 columns"
-      >
-        <MemberDBSubtitle
-          dbInfo={{}}
-          metadata={
-            {
-              "accession": "IPR000001",
-              "counters": {
-                "domain_architectures": 511,
-                "matches": 44375,
-                "proteins": 6786,
-                "proteomes": 343,
-                "sets": 0,
-                "structures": 698,
-                "taxa": 675,
+      <MemberDBSubtitle
+        dbInfo={{}}
+        metadata={
+          {
+            "accession": "IPR000001",
+            "counters": {
+              "domain_architectures": 511,
+              "matches": 44375,
+              "proteins": 6786,
+              "proteomes": 343,
+              "sets": 0,
+              "structures": 698,
+              "taxa": 675,
+            },
+            "cross_references": {},
+            "description": [
+              "<p>Kringle</p>",
+            ],
+            "go_terms": {},
+            "literature": {},
+            "name": {
+              "name": "Kringle",
+              "short": "Kringle",
+            },
+            "overlaps_with": [
+              {
+                "accession": "IPR013806",
+                "name": "Kringle-like fold",
+                "type": "homologous_superfamily",
               },
-              "cross_references": {},
-              "description": [
-                "<p>Kringle</p>",
-              ],
-              "go_terms": {},
-              "literature": {},
-              "name": {
-                "name": "Kringle",
-                "short": "Kringle",
+              {
+                "accession": "IPR038178",
+                "name": "Kringle superfamily",
+                "type": "homologous_superfamily",
               },
-              "overlaps_with": [
-                {
-                  "accession": "IPR013806",
-                  "name": "Kringle-like fold",
-                  "type": "homologous_superfamily",
-                },
-                {
-                  "accession": "IPR038178",
-                  "name": "Kringle superfamily",
-                  "type": "homologous_superfamily",
-                },
-              ],
-              "source_database": "interpro",
-              "type": "domain",
-              "wikipedia": "",
-            }
+            ],
+            "source_database": "interpro",
+            "type": "domain",
+            "wikipedia": "",
           }
-        />
-        <p
-          data-testid="entry-shortname"
+        }
+      />
+      <p
+        data-testid="entry-shortname"
+      >
+        Short name: 
+        <i
+          className="shortname"
         >
-          Short name: 
-          <i
-            className="shortname"
-          >
-            Kringle
-          </i>
-        </p>
-        <OverlappingEntries
-          metadata={
-            {
-              "accession": "IPR000001",
-              "counters": {
-                "domain_architectures": 511,
-                "matches": 44375,
-                "proteins": 6786,
-                "proteomes": 343,
-                "sets": 0,
-                "structures": 698,
-                "taxa": 675,
+          Kringle
+        </i>
+      </p>
+      <OverlappingEntries
+        metadata={
+          {
+            "accession": "IPR000001",
+            "counters": {
+              "domain_architectures": 511,
+              "matches": 44375,
+              "proteins": 6786,
+              "proteomes": 343,
+              "sets": 0,
+              "structures": 698,
+              "taxa": 675,
+            },
+            "cross_references": {},
+            "description": [
+              "<p>Kringle</p>",
+            ],
+            "go_terms": {},
+            "literature": {},
+            "name": {
+              "name": "Kringle",
+              "short": "Kringle",
+            },
+            "overlaps_with": [
+              {
+                "accession": "IPR013806",
+                "name": "Kringle-like fold",
+                "type": "homologous_superfamily",
               },
-              "cross_references": {},
-              "description": [
-                "<p>Kringle</p>",
-              ],
-              "go_terms": {},
-              "literature": {},
-              "name": {
-                "name": "Kringle",
-                "short": "Kringle",
+              {
+                "accession": "IPR038178",
+                "name": "Kringle superfamily",
+                "type": "homologous_superfamily",
               },
-              "overlaps_with": [
-                {
-                  "accession": "IPR013806",
-                  "name": "Kringle-like fold",
-                  "type": "homologous_superfamily",
-                },
-                {
-                  "accession": "IPR038178",
-                  "name": "Kringle superfamily",
-                  "type": "homologous_superfamily",
-                },
-              ],
-              "source_database": "interpro",
-              "type": "domain",
-              "wikipedia": "",
-            }
+            ],
+            "source_database": "interpro",
+            "type": "domain",
+            "wikipedia": "",
           }
-        />
-        <Hierarchy
+        }
+      />
+      <Hierarchy
+        accession="IPR000001"
+        type="domain"
+      />
+      <React.Fragment>
+        <h4>
+          Description
+        </h4>
+        <Description
           accession="IPR000001"
-          type="domain"
-        />
-        <React.Fragment>
-          <h4>
-            Description
-          </h4>
-          <Description
-            accession="IPR000001"
-            literature={[]}
-            textBlocks={
-              [
-                "<p>Kringle</p>",
-              ]
-            }
-          />
-        </React.Fragment>
-      </div>
-      <div
-        className="medium-4 large-4 columns"
-      >
-        <Memo(Connect(SidePanel))
-          dbInfo={{}}
-          metadata={
-            {
-              "accession": "IPR000001",
-              "counters": {
-                "domain_architectures": 511,
-                "matches": 44375,
-                "proteins": 6786,
-                "proteomes": 343,
-                "sets": 0,
-                "structures": 698,
-                "taxa": 675,
-              },
-              "cross_references": {},
-              "description": [
-                "<p>Kringle</p>",
-              ],
-              "go_terms": {},
-              "literature": {},
-              "name": {
-                "name": "Kringle",
-                "short": "Kringle",
-              },
-              "overlaps_with": [
-                {
-                  "accession": "IPR013806",
-                  "name": "Kringle-like fold",
-                  "type": "homologous_superfamily",
-                },
-                {
-                  "accession": "IPR038178",
-                  "name": "Kringle superfamily",
-                  "type": "homologous_superfamily",
-                },
-              ],
-              "source_database": "interpro",
-              "type": "domain",
-              "wikipedia": "",
-            }
+          literature={[]}
+          textBlocks={
+            [
+              "<p>Kringle</p>",
+            ]
           }
         />
-      </div>
+      </React.Fragment>
+    </div>
+    <div
+      className="vf-stack"
+    >
+      <Memo(Connect(SidePanel))
+        dbInfo={{}}
+        metadata={
+          {
+            "accession": "IPR000001",
+            "counters": {
+              "domain_architectures": 511,
+              "matches": 44375,
+              "proteins": 6786,
+              "proteomes": 343,
+              "sets": 0,
+              "structures": 698,
+              "taxa": 675,
+            },
+            "cross_references": {},
+            "description": [
+              "<p>Kringle</p>",
+            ],
+            "go_terms": {},
+            "literature": {},
+            "name": {
+              "name": "Kringle",
+              "short": "Kringle",
+            },
+            "overlaps_with": [
+              {
+                "accession": "IPR013806",
+                "name": "Kringle-like fold",
+                "type": "homologous_superfamily",
+              },
+              {
+                "accession": "IPR038178",
+                "name": "Kringle superfamily",
+                "type": "homologous_superfamily",
+              },
+            ],
+            "source_database": "interpro",
+            "type": "domain",
+            "wikipedia": "",
+          }
+        }
+      />
     </div>
   </section>
   <OtherSections

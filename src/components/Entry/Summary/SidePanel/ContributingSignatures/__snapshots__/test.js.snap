@@ -2,10 +2,10 @@
 
 exports[`<ContributingSignatures /> should render 1`] = `
 <div
-  className="side-panel margin-top-small margin-bottom-large"
+  className="side-panel"
 >
   <div
-    className="md-icon-list-box margin-bottom-large"
+    className="md-icon-list-box"
   >
     <h5>
       Contributing Member Database Entr

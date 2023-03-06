@@ -28,7 +28,7 @@ const xReferenceURL = {
 
 type Props = {
   p: string;
-  literature?: Array<string>;
+  literature?: Array<[string, Reference]>;
   accession?: string;
   withoutIDs?: boolean;
 };
