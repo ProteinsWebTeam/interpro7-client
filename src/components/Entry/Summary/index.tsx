@@ -64,7 +64,7 @@ const OtherSections = ({
 );
 
 type HierarchyProps = {
-  hierarchy: InterProHierarchyType;
+  hierarchy?: InterProHierarchyType;
   type: string;
   accession: string;
 };
@@ -101,7 +101,9 @@ class SummaryEntry extends PureComponent<SummaryEntryProps> {
       ([id]: [string]) => citations.includes(id)
     );
     const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
-    included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
+    (included as Array<[string, Reference]>).sort(
+      (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
+    );
     return (
       <div className={css('sections')}>
         <section className={css('vf-grid')}>

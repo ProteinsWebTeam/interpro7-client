@@ -21,7 +21,7 @@ class Description extends PureComponent<Props> {
   render() {
     const { textBlocks, literature, accession, withoutIDs } = this.props;
     const sections = textBlocks.map((e) => {
-      return transformFormatted(e);
+      return transformFormatted(e) as string[];
     });
 
     return (
@@ -44,7 +44,7 @@ class Description extends PureComponent<Props> {
                   prev.length ? <br key={key} /> : null,
                   curr,
                 ],
-                []
+                [] as (JSX.Element | null)[]
               )
           )
           .reduce(
@@ -55,7 +55,7 @@ class Description extends PureComponent<Props> {
               ) : null,
               curr,
             ],
-            []
+            [] as ((JSX.Element | null)[] | JSX.Element | null)[]
           )}
       </div>
     );

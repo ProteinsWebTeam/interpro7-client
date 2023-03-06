@@ -176,6 +176,7 @@
     "@storybook/manager-webpack5": "6.5.15",
     "@storybook/react": "6.5.15",
     "@storybook/theming": "6.5.15",
+    "@types/dompurify": "^2.4.0",
     "@types/gtag.js": "0.0.12",
     "@types/lodash-es": "^4.17.6",
     "@types/react-html-parser": "^2.0.2",

@@ -26,7 +26,7 @@ export const getLiteratureIdsFromDescription = (
         t.replace(/(^\[cite:)|(]$)/g, '')
       ),
     ],
-    []
+    [] as string[]
   );
 
 const SchemaOrgData = loadable({

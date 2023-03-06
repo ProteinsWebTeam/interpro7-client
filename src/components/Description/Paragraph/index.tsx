@@ -36,7 +36,7 @@ export const Paragraph = ({
   p,
   literature = [],
   accession,
-  withoutIDs,
+  withoutIDs = false,
 }: Props) => {
   let text = p;
   let match = null;
@@ -44,7 +44,7 @@ export const Paragraph = ({
   while ((match = text.match(CITATIONS_REGEX))) {
     parts.push(...text.slice(0, match.index).split(TAG_REGEX));
     parts.push(match[0]);
-    text = text.slice(match.index + match[0].length);
+    text = text.slice((match.index || 0) + match[0].length);
   }
   parts.push(...text.split(TAG_REGEX));
   return (
@@ -57,7 +57,7 @@ export const Paragraph = ({
               text={text}
               key={i}
               literature={literature}
-              accession={accession}
+              accession={accession || ''}
               withoutIDs={withoutIDs}
             />
           );
@@ -116,7 +116,10 @@ export const Paragraph = ({
           if (type in xReferenceURL) {
             return (
               <Link
-                href={xReferenceURL[type].replace('{}', tagValue)}
+                href={xReferenceURL[type as keyof typeof xReferenceURL].replace(
+                  '{}',
+                  tagValue
+                )}
                 target="_blank"
                 className={css('ext')}
                 key={i}

@@ -3,17 +3,31 @@ declare module '*.css' {
   const content: any;
   export default content;
 }
+declare module 'interpro-components' {
+  let InterproHierarchy: InterProHierarchyProps;
+  let InterproEntry: InterProEntryProps;
+  let InterproType: InterProTypeProps;
+}
 
 declare namespace JSX {
   interface IntrinsicElements {
     'interpro-type': InterProTypeProps;
     'interpro-hierarchy': InterProHierarchyProps;
+    'interpro-entry': InterProEntryProps;
   }
 }
 
 type GlobalState = Record<string, any>; // TODO: replace for redux state type
 
 interface InterProTypeProps
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLElement>,
+    HTMLElement
+  > {
+  type: string;
+  dimension: string;
+}
+interface InterProEntryProps
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLElement>,
     HTMLElement

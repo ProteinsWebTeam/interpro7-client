@@ -8,7 +8,7 @@ import pathToDescription from 'utils/processDescription/pathToDescription';
 
 import config from 'config';
 
-const webComponents = [];
+const webComponents: Promise<unknown>[] = [];
 
 const loadInterProWebComponents = () => {
   if (!webComponents.length) {
@@ -16,6 +16,7 @@ const loadInterProWebComponents = () => {
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
       );
+
     webComponents.push(
       loadWebComponent(() =>
         interproComponents().then((m) => m.InterproHierarchy)
@@ -56,16 +57,17 @@ class InterProHierarchy extends PureComponent<Props> {
   async componentDidMount() {
     await loadInterProWebComponents();
     const hierarchy = this.props.hierarchy;
-    if (hierarchy) this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
-    this._ref.current.addEventListener('click', (e) => {
+    if (hierarchy && this._ref.current)
+      this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
+    this._ref.current?.addEventListener('click', (e) => {
       const target = e.composedPath()[0] as HTMLElement;
       if (target.classList.contains('link')) {
         e.preventDefault();
         this.props.goToCustomLocation({
           description: pathToDescription(
             target
-              .getAttribute('href')
-              .replace(new RegExp(`^${config.root.website.path}`), '')
+              ?.getAttribute('href')
+              ?.replace(new RegExp(`^${config.root.website.path}`), '')
           ),
         });
       }
@@ -74,7 +76,8 @@ class InterProHierarchy extends PureComponent<Props> {
   async componentDidUpdate() {
     await loadInterProWebComponents();
     const hierarchy = this.props.hierarchy;
-    if (hierarchy) this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
+    if (hierarchy && this._ref.current)
+      this._ref.current.hierarchy = cleanHierarchyType(hierarchy);
   }
 
   render() {

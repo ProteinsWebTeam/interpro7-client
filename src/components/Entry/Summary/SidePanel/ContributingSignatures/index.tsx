@@ -19,7 +19,7 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessData = ({ db, name }) => ({
+const schemaProcessData = ({ db, name }: { db: string; name: string }) => ({
   '@type': ['Dataset'],
   // '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
   '@id': '@isBasedOn',
@@ -64,8 +64,9 @@ type Props = {
 };
 
 export const ContributingSignatures = ({ contr, data }: Props) => {
-  const metaDB = data.loading || !data.payload ? {} : data.payload.databases;
-  const contrEntries = Object.entries(contr);
+  const metaDB =
+    !data || data.loading || !data.payload ? {} : data.payload.databases;
+  const contrEntries = Object.entries(contr || {});
   return (
     <div className={css('side-panel')}>
       <div className={css('md-icon-list-box')}>

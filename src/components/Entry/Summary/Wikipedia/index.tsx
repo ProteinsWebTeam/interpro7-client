@@ -23,7 +23,7 @@ interface WikipediaProps
 
 type ParserPart = {
   name: string;
-  value: string | {};
+  value: string | Record<string, string>;
 };
 const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
   if (data.loading && !data.payload) return <Loading />;

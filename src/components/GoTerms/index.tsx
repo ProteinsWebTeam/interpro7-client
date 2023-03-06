@@ -11,9 +11,9 @@ import local from './style.css';
 const css = cssBinder(local);
 
 const getDefaultPayload = () => ({
-  biological_process: [],
-  molecular_function: [],
-  cellular_component: [],
+  biological_process: [] as GOTerm[],
+  molecular_function: [] as GOTerm[],
+  cellular_component: [] as GOTerm[],
 });
 
 const mapNameToClass = new Map([
@@ -40,6 +40,7 @@ type GoTermsProps = {
   withoutTitle?: boolean;
 };
 const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
+  console.log('Terms', terms);
   const termsMap = new Map(terms.map((term) => [term.identifier, term]));
   const _terms = Array.from(termsMap.values()).reduce((acc, term) => {
     if (term.category_name && term.category_code) {
@@ -49,9 +50,12 @@ const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
         code: term.category_code,
       };
     }
+    const catName = term.category.name;
+    if (Object.keys(acc).includes(catName))
+      acc[catName as keyof typeof acc].push(term);
     // eslint-disable-next-line no-param-reassign
-    if (!acc[term.category.name]) acc[term.category.name] = [];
-    acc[term.category.name].push(term);
+    // if (!acc[catName]) acc[catName] = [];
+
     return acc;
   }, getDefaultPayload());
   let title = 'GO terms, ';

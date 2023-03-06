@@ -26,7 +26,7 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
 
   let _overlaps = overlaps;
   if (!showAllOverlappingEntries)
-    _overlaps = metadata.overlaps_with.slice(
+    _overlaps = (metadata.overlaps_with || []).slice(
       0,
       MAX_NUMBER_OF_OVERLAPPING_ENTRIES
     );

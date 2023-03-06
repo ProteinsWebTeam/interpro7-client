@@ -30,7 +30,7 @@ export class AnimatedEntry extends PureComponent /*:: <Props> */ {
     duration: T.number,
     animateSelf: T.bool,
     lowGraphics: T.bool.isRequired,
-    dispatch: T.func.isRequired,
+    dispatch: T.func,
     className: T.string,
     children: T.any,
   };

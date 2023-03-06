@@ -30,7 +30,7 @@ type SectionProps = {
   description: string;
 };
 const ReferenceSection = ({ accessions, name, description }: SectionProps) =>
-  name !== 'pdb' && (
+  name !== 'pdb' ? (
     <li className={css('xref-section', 'small')}>
       <h5 className={css('text-up')}>
         {name}{' '}
@@ -48,7 +48,7 @@ const ReferenceSection = ({ accessions, name, description }: SectionProps) =>
         ))}
       </ul>
     </li>
-  );
+  ) : null;
 
 type Props = {
   xRefs: Record<string, CrossReference>;
