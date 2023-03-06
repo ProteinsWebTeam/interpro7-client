@@ -11,6 +11,8 @@ declare namespace JSX {
   }
 }
 
+type GlobalState = Record<string, any>; // TODO: replace for redux state type
+
 interface InterProTypeProps
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLElement>,
@@ -201,3 +203,16 @@ type BaseLinkProps = {
 };
 
 type ActiveClassProp = string | ((location: unknown) => string);
+
+type DataKey = `data${string}`;
+type IsStaleKey = `isStale${string}`;
+// Props to be injected in the wrapped component
+type LoadDataProps<Payload = unknown> = {
+  [k: DataKey]: RequestedData<Payload>;
+  [k: IsStaleKey]: boolean;
+};
+
+type GetUrl<Props = Record<string, unknown>> = (
+  params: Record<string, unknown>,
+  props?: Props
+) => string;

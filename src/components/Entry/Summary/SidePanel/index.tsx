@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -48,9 +48,10 @@ const SidePanel = ({
   });
   const entry = `${metadata.name.name} (${metadata.accession})`;
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: FormEvent) => {
+    if (!event.target) return;
     event.preventDefault();
-    const data = new FormData(event.target);
+    const data = new FormData(event.target as HTMLFormElement);
     data.append('subject', `Add annotation, ${entry}`);
     fetch(apiUrl, {
       method: 'POST',
@@ -78,9 +79,10 @@ const SidePanel = ({
     });
   };
 
-  const handleFields = (e) => {
-    if (e.target.name === 'message') setMessage(e.target.value);
-    else setEmail(e.target.value);
+  const handleFields = (e: FormEvent) => {
+    const target = e.target as HTMLFormElement;
+    if (target.name === 'message') setMessage(target.value);
+    else setEmail(target.value);
   };
 
   const clearFields = () => {
@@ -197,7 +199,7 @@ const SidePanel = ({
 };
 
 const mapStateToProps = createSelector(
-  (state) => state.settings.api,
+  (state: GlobalState) => state.settings.api,
   (api) => ({ api })
 );
 

@@ -10,11 +10,6 @@ const extractGetUrl = (getUrl = defaults.getUrlForApi) => {
   return getUrl;
 };
 
-type GetUrl = (
-  params: Record<string, unknown>,
-  props?: Record<string, unknown>
-) => string;
-
 export type Params =
   | {
       getUrl?: GetUrl;
@@ -29,8 +24,19 @@ export type Params =
   | string
   | GetUrl;
 
+export type ExtractedParams = {
+  getUrl: GetUrl;
+  fetchOptions: FetchOptions;
+  propNamespace: string;
+  weight: number;
+  mapStateToProps:
+    | ((state: unknown, props: unknown) => Record<string, unknown>)
+    | typeof noop;
+  mapDispatchToProps: Record<string, unknown>;
+};
+
 export default (params?: Params) => {
-  const extracted: Params = {
+  const extracted: ExtractedParams = {
     getUrl: defaults.getUrlForApi,
     fetchOptions: {},
     propNamespace: '',

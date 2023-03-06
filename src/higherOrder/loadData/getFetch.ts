@@ -5,7 +5,7 @@ import cachedFetch, {
   cachedFetchGZIP,
 } from 'utils/cached-fetch';
 
-export default ({ method, responseType }: FetchOptions) => {
+export default ({ method, responseType }: FetchOptions = {}) => {
   if (responseType === 'text') return cachedFetchText;
   if (responseType === 'yaml') return cachedFetchYAML;
   if (responseType === 'gzip') return cachedFetchGZIP;

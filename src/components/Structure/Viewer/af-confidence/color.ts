@@ -44,7 +44,10 @@ export function AfConfidenceColorTheme(
       color = (location: Location) => {
         if (StructureElement.Location.is(location)) {
           const confidenceScore = getConfidenceScore(location);
-          return ConfidenceColors[confidenceScore[1]];
+          const key = confidenceScore
+            ? (confidenceScore[1] as keyof typeof ConfidenceColors)
+            : 'No Score';
+          return ConfidenceColors[key];
         }
         return ConfidenceColors['No Score'];
       };
@@ -53,8 +56,10 @@ export function AfConfidenceColorTheme(
       color = (location: Location) => {
         if (StructureElement.Location.is(location)) {
           const confidenceScore = getConfidenceScore(location);
-          if (confidenceScore[1] === categoryProp)
-            return ConfidenceColors[confidenceScore[1]];
+          if (confidenceScore?.[1] === categoryProp)
+            return ConfidenceColors[
+              confidenceScore[1] as keyof typeof ConfidenceColors
+            ];
           return ConfidenceColors['No Score'];
         }
         return ConfidenceColors['No Score'];

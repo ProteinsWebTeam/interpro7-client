@@ -25,7 +25,7 @@ const Tooltip = ({
   }
   return (
     <Tippy
-      content={content}
+      content={content || ''}
       arrow={true}
       onShow={() => hideAll({ duration: 0 })}
       distance={distance}

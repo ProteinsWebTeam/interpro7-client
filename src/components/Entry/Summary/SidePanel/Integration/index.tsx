@@ -13,7 +13,7 @@ import local from './style.css';
 
 const css = cssBinder(local);
 
-const SchemaOrgData = loadable({
+const SchemaOrgData: React.ElementType = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });

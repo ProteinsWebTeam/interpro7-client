@@ -27,7 +27,7 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const schemaProcessData = (data) => ({
+const schemaProcessData = (data: string) => ({
   '@type': 'DataRecord',
   '@id': '@seeAlso',
   identifier: data,
@@ -42,7 +42,7 @@ type GoTermsProps = {
 const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
   const termsMap = new Map(terms.map((term) => [term.identifier, term]));
   const _terms = Array.from(termsMap.values()).reduce((acc, term) => {
-    if (term.category_name) {
+    if (term.category_name && term.category_code) {
       // eslint-disable-next-line no-param-reassign
       term.category = {
         name: term.category_name,

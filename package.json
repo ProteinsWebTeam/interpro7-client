@@ -178,6 +178,7 @@
     "@storybook/theming": "6.5.15",
     "@types/gtag.js": "0.0.12",
     "@types/lodash-es": "^4.17.6",
+    "@types/react-html-parser": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
     "babel-core": "7.0.0-bridge.0",

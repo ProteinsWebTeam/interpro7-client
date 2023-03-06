@@ -24,8 +24,6 @@ const mapStateToState = createSelector(
   (appState) => ({ appState })
 );
 
-type GlobalState = Record<string, any>; // TODO: replace for redux state type
-
 // Props to connect to the wrapper component that are not injected in the wrapped one
 type ConnectedProps = {
   dataProgressInfo?: typeof dataProgressInfo;
@@ -34,15 +32,7 @@ type ConnectedProps = {
   appState?: GlobalState;
 };
 
-type DataKey = `data${string}`;
-type IsStaleKey = `isStale${string}`;
-// Props to be injected in the wrapped component
-type LoadDataProps<Payload = unknown> = {
-  [k: DataKey]: RequestedData<Payload>;
-  [k: IsStaleKey]: boolean;
-};
-
-const loadData = <Payload = unknown,>(params: Params = {}) => {
+const loadData = <Payload = unknown,>(params: Params) => {
   const {
     getUrl,
     fetchOptions,
@@ -81,22 +71,22 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
 
     class DataWrapper extends PureComponent<WrapperProps, WrapperState> {
       static displayName = `loadData(${Wrapped.displayName || Wrapped.name})`;
-      _id: string;
-      _request: CancelableRequest;
+      #id: string;
+      #request?: CancelableRequest;
       timeoutID = 0;
 
       constructor(props: WrapperProps) {
         super(props);
 
         // Identify this specific data loader
-        this._id = uniqueId('data-loader');
+        this.#id = uniqueId('data-loader');
 
         // Initialize state
-        const url = getUrl(props.appState, props);
+        const url = getUrl?.(props.appState || {}, props) || '';
         this.state = {
           url,
           data: newData(url),
-          staleData: null,
+          staleData: undefined,
           retries: 0,
         };
       }
@@ -106,7 +96,7 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
         prevState: WrapperState
       ) {
         // get potential new url in state according to props
-        const url = getUrl(nextProps.appState, nextProps);
+        const url = getUrl?.(nextProps.appState || {}, nextProps) || '';
         // if it's the same, don't update the state
         if (prevState.url === url) return null;
         // otherwise, update url in state, and create new data object in state
@@ -140,13 +130,13 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
       }
 
       _cancel = () => {
-        if (this._request) this._request.cancel();
-        this.props.dataProgressUnload(this._id);
+        if (this.#request) this.#request.cancel();
+        this.props.dataProgressUnload?.(this.#id);
       };
 
       _progress = (progress: number) => {
         this.setState(({ data }) => ({ data: { ...data, progress } }));
-        this.props.dataProgressInfo(this._id, progress, weight);
+        this.props.dataProgressInfo?.(this.#id, progress, weight);
       };
 
       _load = async (url: string) => {
@@ -159,8 +149,8 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
           return;
         }
         // Progress: 0
-        this.props.dataProgressInfo(this._id, 0, weight);
-        this._request = cancelable<BasicResponse>((signal) =>
+        this.props.dataProgressInfo?.(this.#id, 0, weight);
+        this.#request = cancelable<BasicResponse>((signal) =>
           fetchFun(
             url,
             { ...fetchOptions, signal },
@@ -169,7 +159,7 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
           )
         );
         // We keep a hold on *this* request, because it might change
-        const request = this._request;
+        const request = this.#request;
         try {
           const response = await request.promise;
           // Analytics
@@ -193,10 +183,10 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
             return { data: nextData, staleData: nextData };
           });
           // Progress: 1
-          this.props.dataProgressInfo(this._id, 1, weight);
+          this.props.dataProgressInfo?.(this.#id, 1, weight);
 
           const msToRetry =
-            this.props.appState.settings.navigation.secondsToRetry * MS;
+            this.props.appState?.settings.navigation.secondsToRetry * MS;
           // Schedulling to retry because we got a 408
           if (response.status === TIMEOUT) {
             this.timeoutID = window.setTimeout(() => {
@@ -221,7 +211,7 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
               data: { ...data, loading: false, progress: 1, ok: false, error },
             }));
             // Progress: 1
-            this.props.dataProgressInfo(this._id, 1, weight);
+            this.props.dataProgressInfo?.(this.#id, 1, weight);
           }
         }
       };
@@ -251,7 +241,7 @@ const loadData = <Payload = unknown,>(params: Params = {}) => {
         )
           passedProps[`isStale${propNamespace}`] = false;
         return (
-          <UnconnectedErrorBoundary customLocation={appState.customLocation}>
+          <UnconnectedErrorBoundary customLocation={appState?.customLocation}>
             <Wrapped
               {...(rest as BaseProps)}
               {...passedProps}
