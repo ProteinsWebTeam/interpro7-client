@@ -40,7 +40,6 @@ type GoTermsProps = {
   withoutTitle?: boolean;
 };
 const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
-  console.log('Terms', terms);
   const termsMap = new Map(terms.map((term) => [term.identifier, term]));
   const _terms = Array.from(termsMap.values()).reduce((acc, term) => {
     if (term.category_name && term.category_code) {
@@ -58,6 +57,7 @@ const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
 
     return acc;
   }, getDefaultPayload());
+
   let title = 'GO terms, ';
   let label = 'GO terms';
   if (type === 'entry' && typeof db !== 'undefined') {
