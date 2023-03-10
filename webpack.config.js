@@ -159,6 +159,9 @@ const getConfigFor = (env, mode, module = false) => {
         shallowequal: path.resolve('node_modules/shallowequal'),
         ...nightingaleAliases,
       },
+      fallback: {
+        fs: false, // To avoid issue in molstar@3.31.X
+      },
     },
     module: {
       rules: [
