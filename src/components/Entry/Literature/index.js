@@ -3,6 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { partition } from 'lodash-es';
 
 import { PMCLink, DOILink } from 'components/ExtLink';
 import Link from 'components/generic/Link';
@@ -30,6 +31,8 @@ export const getLiteratureIdsFromDescription = (
     ],
     [],
   );
+export const splitCitations = (literature, citations) =>
+  partition(Object.entries(literature || {}), ([id]) => citations.includes(id));
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -39,13 +42,7 @@ const SchemaOrgData = loadable({
 /*:: type Reference = Object; */
 
 const LiteratureItem = (
-  {
-    pubID,
-    reference: r,
-    i,
-    included,
-    target,
-  } /*: {|
+  { pubID, reference: r, i, included, target } /*: {|
   pubID: number,
   reference: Reference,
   i?: number,
@@ -115,11 +112,7 @@ LiteratureItem.propTypes = {
 };
 
 const Literature = (
-  {
-    included = [],
-    extra = [],
-    target,
-  } /*: {|
+  { included = [], extra = [], target } /*: {|
   included?: Array<[number, Reference]>,
   extra?: Array<[number, Reference]>,
   target: string

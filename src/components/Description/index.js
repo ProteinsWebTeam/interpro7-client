@@ -28,8 +28,7 @@ const Citations = (
     text,
     literature = [],
     withoutIDs,
-    accession,
-  } /*: {text: string, literature?: Array<string>, accession: string, withoutIDs: boolean} */,
+  } /*: {text: string, literature?: Array<string>, withoutIDs: boolean} */,
 ) => (
   <sup>
     [
@@ -46,16 +45,8 @@ const Citations = (
           id={withoutIDs ? null : `description-${refCounter}`}
           className={f('text-high')}
           to={(customLocation) => {
-            const key = customLocation.description.main.key;
             return {
               ...customLocation,
-              description: {
-                main: { key },
-                [key]: {
-                  db: customLocation.description[key].db,
-                  accession,
-                },
-              },
               hash: pubId,
             };
           }}

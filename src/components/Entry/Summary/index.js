@@ -1,7 +1,6 @@
 // @flow
 import React, { PureComponent, useState } from 'react';
 import T from 'prop-types';
-import { partition } from 'lodash-es';
 
 import ReactHtmlParser from 'react-html-parser';
 import { XMLParser } from 'fast-xml-parser';
@@ -14,8 +13,10 @@ import { addToast } from 'actions/creators';
 import Link from 'components/generic/Link';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
+import DescriptionFromIntegrated from 'components/Description/DescriptionFromIntegrated';
 import Literature, {
   getLiteratureIdsFromDescription,
+  splitCitations,
 } from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
 import Integration from 'components/Entry/Integration';
@@ -630,10 +631,8 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
 
     if (this.props.loading || !metadata) return <Loading />;
     const citations = getLiteratureIdsFromDescription(metadata.description);
-    const [included, extra] = partition(
-      Object.entries(metadata.literature || {}),
-      ([id]) => citations.includes(id),
-    );
+    const [included, extra] = splitCitations(metadata.literature, citations);
+
     const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
     included.sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
     return (
@@ -669,7 +668,9 @@ class SummaryEntry extends PureComponent /*:: <Props> */ {
                       accession={metadata.accession}
                     />
                   </>
-                ) : null
+                ) : (
+                  <DescriptionFromIntegrated integrated={metadata.integrated} />
+                )
               }
             </div>
             <SidePanel metadata={metadata} dbInfo={dbInfo} />
