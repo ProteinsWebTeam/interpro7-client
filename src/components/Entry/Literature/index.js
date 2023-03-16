@@ -31,7 +31,10 @@ export const getLiteratureIdsFromDescription = (
     ],
     [],
   );
-export const splitCitations = (literature, citations) =>
+export const splitCitations = (
+  literature /*: Object */,
+  citations /*: Array<string> */,
+) =>
   partition(Object.entries(literature || {}), ([id]) => citations.includes(id));
 
 const SchemaOrgData = loadable({

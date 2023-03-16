@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -9,14 +10,17 @@ import Literature, {
   splitCitations,
 } from 'components/Entry/Literature';
 
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Description from 'components/Description';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const css = foundationPartial(ipro, local);
+const css = foundationPartial(ipro, fonts, local);
 
 const DescriptionFromIntegrated = ({
   integrated,
@@ -37,7 +41,34 @@ const DescriptionFromIntegrated = ({
     return (
       <>
         <h4>
-          Description <span className={css('tag')}>From {integrated}</span>
+          Description{' '}
+          <Tooltip
+            title={`The member database didn't provide a description for this entry. 
+                    What is displayed here comes from ${integrated}, the InterPro entry that it has been integrated to.`}
+          >
+            <span className={css('tag')}>
+              <sup>
+                <span
+                  className={css('icon', 'icon-common', 'icon-info', 'small')}
+                  data-icon="&#xf129;"
+                />{' '}
+              </sup>
+              From{' '}
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: 'InterPro',
+                      accession: integrated,
+                    },
+                  },
+                }}
+              >
+                {integrated}
+              </Link>
+            </span>
+          </Tooltip>
         </h4>
         <Description
           textBlocks={payload.metadata.description}
