@@ -81,6 +81,7 @@ const ProtVistaForAlphaFold = (
   }, [fixedSelection, hoverSelection]);
   useEffect(() => {
     containerRef.current?.addEventListener('change', (event /*: Event */) => {
+      if (!(event /*: any */).detail) return;
       const { eventtype, highlight } = (event /*: any */).detail;
       switch (eventtype) {
         case 'click':
@@ -91,11 +92,12 @@ const ProtVistaForAlphaFold = (
           }
           break;
         case 'mouseover': {
-          const colour = parseInt(
-            (event /*: any */)?.detail?.feature?.color
-              .substring(1),
-            16,
-          );
+          const colour =
+            parseInt(
+              (event /*: any */)?.detail?.feature?.color
+                ?.substring(1),
+              16,
+            ) || 0;
 
           const selection =
             highlight?.split(',').map((block) => {
@@ -177,6 +179,7 @@ const getInterproRelatedEntriesURL = createSelector(
       pathname: root + descriptionToPath(newDesc),
       query: {
         page_size: 200,
+        extra_fields: 'short_name',
       },
     });
   },
