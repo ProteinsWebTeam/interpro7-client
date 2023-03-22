@@ -50,6 +50,22 @@ const Switch = ({ type, ...rest }) => {
     case 'directive':
       if (['image', 'figure'].includes(rest.directive)) {
         return <Image {...rest} />;
+      } else if (
+        rest.directive === 'raw' &&
+        rest.children?.[0]?.value === 'html'
+      ) {
+        const html = rest.children
+          .slice(1)
+          .filter(({ type }) => type === 'text')
+          .map(({ value }) => value)
+          .join('');
+        return (
+          <div
+            className="content"
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        );
       }
       break;
     case 'interpreted_text':
@@ -200,7 +216,7 @@ const Reference = ({ children }) => {
       const raw = children[0].value;
       const matches = referenceRegExp.exec(raw) || [];
       if (matches.length === EXPECTED_GROUPS) {
-        text = matches[1];
+        text = matches[1].trimEnd();
         url = matches[2];
       }
 
@@ -209,7 +225,6 @@ const Reference = ({ children }) => {
     case 2:
       text = children[0].value;
       url = children[1].value.trim().slice(1, -1);
-      console.log({ text, url });
       break;
     default:
       return <Children>{children}</Children>;

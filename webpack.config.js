@@ -186,7 +186,7 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('src'),
             path.resolve('node_modules', 'lodash-es'),
             path.resolve('node_modules', 'timing-functions'),
-            path.resolve('node_modules', 'd3'),
+            // path.resolve('node_modules', 'd3'),
             path.resolve('node_modules', 'idb'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),

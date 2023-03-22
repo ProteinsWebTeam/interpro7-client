@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import Link from 'components/generic/Link';
 import EntrySelection from './EntrySelection';
 import { NO_SELECTION } from './EntrySelection';
 import { EntryColorMode, getTrackColor } from 'utils/entry-color';
@@ -22,8 +23,9 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import { foundationPartial } from 'styles/foundation';
 
 import style from './style.css';
+import buttonBar from './button-bar.css';
 
-const f = foundationPartial(style, fonts);
+const f = foundationPartial(style, buttonBar, fonts);
 
 const RED = 0xff0000;
 
@@ -388,7 +390,9 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
       isSplitScreen,
       shouldResetViewer,
     } = this.state;
-    const elementId = `structure-${this.props.id}`;
+    const pdbId = this.props.id;
+    const elementId = `structure-${pdbId}`;
+
     return (
       <div ref={this._splitView} className={f({ 'split-view': isSplitScreen })}>
         <PictureInPicturePanel
@@ -408,7 +412,31 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
               style={{
                 display: isSplitScreen ? 'none' : 'block',
               }}
+              className={f('button-bar')}
             >
+              <Link
+                className={f('control')}
+                href={`https://www.ebi.ac.uk/pdbe/entry-files/download/pdb${pdbId}.ent`}
+                download={`${pdbId || 'download'}.model.pdb.ent`}
+              >
+                <span
+                  className={f('icon', 'icon-common', 'icon-download')}
+                  data-icon="&#xf019;"
+                />
+                &nbsp;PDB file
+              </Link>
+              <Link
+                className={f('control')}
+                href={`https://www.ebi.ac.uk/pdbe/entry-files/download/${pdbId}.cif`}
+                download={`${pdbId || 'download'}.model.cif`}
+              >
+                <span
+                  className={f('icon', 'icon-common', 'icon-download')}
+                  data-icon="&#xf019;"
+                />
+                &nbsp;mmCIF file
+              </Link>
+
               <button
                 className={f('icon', 'icon-common', 'as-link')}
                 onClick={() => {
@@ -445,7 +473,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
           }
         >
           <StructureViewer
-            id={this.props.id}
+            id={pdbId}
             elementId={elementId}
             onStructureLoaded={() => {
               if (this.props.matches) {

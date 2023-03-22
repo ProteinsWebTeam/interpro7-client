@@ -303,7 +303,7 @@ class DescriptionEntries extends PureComponent /*:: <DescriptionEntriesProps> */
 };*/
 class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
   static propTypes = {
-    data: dataPropType.object,
+    data: dataPropType,
     search: T.string,
     entryDB: T.string,
   };
