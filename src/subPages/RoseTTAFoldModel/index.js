@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import AlignmentViewer from '../EntryAlignments/Viewer';
@@ -42,7 +43,11 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
 
   useEffect(() => {
     if (dataContacts.payload && heatmap.current)
-      heatmap.current.data = dataContacts.payload.map((p) => [p[0], p[1], p[4]]);
+      heatmap.current.data = dataContacts.payload.map((p) => [
+        p[0],
+        p[1],
+        p[4],
+      ]);
   }, [heatmap.current]);
 
   useEffect(() => {
@@ -133,9 +138,13 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
     <div className={f('row', 'column')} ref={container}>
       <h3>RoseTTAFold structure prediction</h3>
       <div>
-        The protein structure below has been predicted by <Link href={'//www.bakerlab.org'}>the  Baker Lab</Link>{' '}
-        with RoseTTAFold (<Link href={'//science.sciencemag.org/content/373/6557/871'}>Baek, M et al. 2021</Link>){' '}
-        using the UniProt multiple sequence alignment from Pfam.
+        The protein structure below has been predicted by{' '}
+        <Link href={'//www.bakerlab.org'}>the Baker Lab</Link> with RoseTTAFold
+        (
+        <Link href={'//science.sciencemag.org/content/373/6557/871'}>
+          Baek, M et al. 2021
+        </Link>
+        ) using the UniProt multiple sequence alignment from Pfam.
       </div>
 
       <PictureInPicturePanel

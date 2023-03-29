@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 import { changeSettingsRaw } from 'actions/creators';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ToggleSwitch from 'components/ToggleSwitch';
 

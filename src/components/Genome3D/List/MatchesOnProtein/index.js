@@ -9,6 +9,7 @@ import protvista from 'components/ProtVista/style.css';
 const f = foundationPartial(protvista);
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 /* :: type Props = {
@@ -44,7 +45,7 @@ class MatchesOnProtein extends ProtVistaMatches {
         <div className={f('track-container')}>
           <div className={f('aligned-to-track-component')}>
             <protvista-sequence
-              ref={e => (this.web_protein = e)}
+              ref={(e) => (this.web_protein = e)}
               length={length}
               displaystart="1"
               displayend={length}
@@ -59,7 +60,7 @@ class MatchesOnProtein extends ProtVistaMatches {
               displaystart="1"
               displayend={length}
               id={`track_${accession}`}
-              ref={e => (this.web_tracks[accession] = e)}
+              ref={(e) => (this.web_tracks[accession] = e)}
               expanded
               use-ctrl-to-zoom
             />

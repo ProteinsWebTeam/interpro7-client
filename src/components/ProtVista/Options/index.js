@@ -5,12 +5,14 @@ import T from 'prop-types';
 import loadWebComponent from 'utils/load-web-component';
 import ProtvistaSaver from 'protvista-saver';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { EntryColorMode } from 'utils/entry-color';
 import ReactToPrint from 'react-to-print';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { Exporter } from 'components/Table';
+// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import loadData from 'higherOrder/loadData';

@@ -7,6 +7,7 @@ import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';

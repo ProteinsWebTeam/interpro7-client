@@ -7,15 +7,18 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+// $FlowFixMe
 import getFetch from 'higherOrder/loadData/getFetch';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
 
 import Redirect from 'components/generic/Redirect';
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
+// $FlowFixMe
 import GoTerms from 'components/GoTerms';
 import Accession from 'components/Accession';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';

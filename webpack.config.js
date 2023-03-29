@@ -19,6 +19,8 @@ const cssNano = require('cssnano');
 // Web service plugin
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
 const buildInfo = require('./scripts/build-info');
 const pkg = require('./package.json');
 
@@ -87,8 +89,55 @@ const getAssetModuleFilename = (pathData) => {
   else if (['woff', 'woff2', 'ttf', 'eot'].includes(ext)) subfolder = 'fonts';
   return path.join('assets', subfolder, '[name].[hash:3][ext]');
 };
-const getConfigFor = (env, mode, module = false) => {
-  const name = module ? 'module' : 'legacy';
+
+const getBabelLoader = (mode, isModule) => ({
+  loader: 'babel-loader',
+  options: {
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          modules: false,
+          loose: true,
+          useBuiltIns: 'usage',
+          corejs: 3,
+          targets: isModule
+            ? {
+                esmodules: true,
+              }
+            : {
+                esmodules: false,
+                browsers: '> 0.1% and not last 2 versions, not dead',
+              },
+        },
+      ],
+      ['@babel/react', { development: mode === 'development' }],
+    ],
+    plugins: [
+      '@babel/plugin-syntax-dynamic-import',
+      ['@babel/plugin-proposal-class-properties', { loose: true }],
+      ['@babel/plugin-proposal-optional-chaining', { loose: true }],
+    ],
+    env: {
+      dev: {
+        // better sourcemaps for JSX code
+        plugins: ['transform-react-jsx-source'],
+      },
+      production: {
+        plugins: [
+          // optimisations for react
+          'babel-plugin-transform-react-remove-prop-types',
+          'babel-plugin-transform-react-constant-elements',
+          'babel-plugin-transform-react-inline-elements',
+          ['transform-remove-console', { exclude: ['error', 'warn'] }],
+        ],
+      },
+    },
+  },
+});
+
+const getConfigFor = (env, mode, isModule = false) => {
+  const name = isModule ? 'module' : 'legacy';
 
   return {
     name,
@@ -116,7 +165,7 @@ const getConfigFor = (env, mode, module = false) => {
         : undefined,
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
-      extensions: ['.js', '.ts', '.json', '.worker.js'],
+      extensions: ['.js', '.ts', '.tsx', '.json', '.worker.js'],
       alias: {
         '../libraries': 'ebi-framework/libraries',
         'EBI-Common': 'EBI-Icon-fonts/EBI-Common',
@@ -161,61 +210,12 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
           ],
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                presets: [
-                  [
-                    '@babel/preset-env',
-                    {
-                      modules: false,
-                      loose: true,
-                      useBuiltIns: 'usage',
-                      corejs: 3,
-                      targets: module
-                        ? {
-                            esmodules: true,
-                          }
-                        : {
-                            esmodules: false,
-                            browsers:
-                              '> 0.1% and not last 2 versions, not dead',
-                          },
-                    },
-                  ],
-                  ['@babel/react', { development: mode === 'development' }],
-                ],
-                plugins: [
-                  '@babel/plugin-syntax-dynamic-import',
-                  ['@babel/plugin-proposal-class-properties', { loose: true }],
-                  ['@babel/plugin-proposal-optional-chaining', { loose: true }],
-                ],
-                env: {
-                  dev: {
-                    // better sourcemaps for JSX code
-                    plugins: ['transform-react-jsx-source'],
-                  },
-                  production: {
-                    plugins: [
-                      // optimisations for react
-                      'babel-plugin-transform-react-remove-prop-types',
-                      'babel-plugin-transform-react-constant-elements',
-                      'babel-plugin-transform-react-inline-elements',
-                      [
-                        'transform-remove-console',
-                        { exclude: ['error', 'warn'] },
-                      ],
-                    ],
-                  },
-                },
-              },
-            },
-          ],
+          use: [getBabelLoader(mode)],
         },
         {
-          test: /\.ts$/,
+          test: /\.tsx?$/,
           use: [
+            getBabelLoader(mode),
             {
               loader: 'ts-loader',
               options: {
@@ -406,6 +406,17 @@ const getConfigFor = (env, mode, module = false) => {
             },
           })
         : null,
+      new ForkTsCheckerWebpackPlugin({
+        typescript: {
+          diagnosticOptions: {
+            semantic: true,
+            syntactic: true,
+          },
+          configOverwrite: {
+            include: ['src/**/*'],
+          },
+        },
+      }),
     ].filter(Boolean),
     devtool: mode === 'development' ? 'cheap-module-source-map' : 'source-map',
   };
