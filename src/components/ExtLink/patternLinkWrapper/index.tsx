@@ -12,7 +12,7 @@ const patternLinkWrapper = (pattern: string) => {
 };
 
 export const UniProtLink = patternLinkWrapper(
-  'http://www.uniprot.org/uniprot/{id}'
+  'https://www.uniprot.org/uniprotkb/{id}/entry'
 );
 UniProtLink.displayName = 'UniProtLink';
 
@@ -25,7 +25,7 @@ export const AlphafoldLink = patternLinkWrapper(
 AlphafoldLink.displayName = 'AlphafoldLink';
 
 export const Genome3dLink = patternLinkWrapper(
-  'http://www.genome3d.net/uniprot/id/{id}/annotations'
+  'https://www.genome3d.net/uniprot/id/{id}/annotations'
 );
 Genome3dLink.displayName = 'Genome3DLink';
 

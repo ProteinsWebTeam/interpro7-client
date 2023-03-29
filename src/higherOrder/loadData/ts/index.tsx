@@ -187,7 +187,7 @@ const loadData = <Payload = unknown,>(params: Params) => {
 
           const msToRetry =
             this.props.appState?.settings.navigation.secondsToRetry * MS;
-          // Schedulling to retry because we got a 408
+          // Scheduling to retry because we got a 408
           if (response.status === TIMEOUT) {
             this.timeoutID = window.setTimeout(() => {
               console.log('Retrying the Timed out query');
