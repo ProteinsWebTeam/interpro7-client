@@ -18,7 +18,7 @@ type Props = {
 const Citations = ({ text, literature = [], withoutIDs, accession }: Props) => (
   <sup>
     [
-    {text.split(',').map((cita, i) => {
+    {text.split(',').map((cita, i, array) => {
       const citMatch = cita.match(CITATION_REGEX);
       if (!citMatch || citMatch.length < 2) {
         return null;
@@ -46,7 +46,7 @@ const Citations = ({ text, literature = [], withoutIDs, accession }: Props) => (
           }}
         >
           {refCounter}
-          {i + 1 < text.split(',').length && ', '}
+          {i + 1 < array.length && ', '}
         </Link>
       );
     })}
