@@ -129,7 +129,6 @@ export const Paragraph = ({
             );
           }
         }
-        // TODO: change the way descriptions work from the backend side.
         return (
           <div
             className={css('inline')}

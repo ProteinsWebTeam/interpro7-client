@@ -18,7 +18,7 @@ const Tooltip = ({
   distance?: number;
   interactive?: boolean;
 }>) => {
-  let content = html || title;
+  let content = html || title || '';
   if (typeof content === 'string') {
     // eslint-disable-next-line react/no-danger
     content = <div dangerouslySetInnerHTML={{ __html: content }} />;

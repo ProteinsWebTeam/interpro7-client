@@ -35,14 +35,12 @@ const SchemaOrgData = loadable({
 });
 
 type LiteratureItemProps = {
-  pubID: string;
   reference: Reference;
   i?: number;
   included?: boolean;
   target: boolean;
 };
 const LiteratureItem = ({
-  // pubID,
   reference: r,
   i,
   included,
@@ -61,7 +59,6 @@ const LiteratureItem = ({
       {typeof i !== 'undefined' &&
         (included ? (
           <Link
-            // id={pubID}
             className={css('index')}
             to={(customLocation) => ({
               ...customLocation,
@@ -83,10 +80,6 @@ const LiteratureItem = ({
       {r.raw_pages && <span className={css('pages')}> {r.raw_pages}, </span>}
       <span className={css('year')}>({r.year})</span>.{' '}
       {r.rawPages && <span className={css('pages')}>{r.rawPages}. </span>}
-      {
-        // not used anywhere on Europe PMC website not even to link to PMCID:PMC
-        // <span className={f('reference_id')}>{pubID}.</span>
-      }
       {r.DOI_URL && (
         <DOILink id={r.DOI_URL} className={css('ext', 'margin-right-medium')}>
           View article
@@ -115,7 +108,6 @@ const Literature = ({ included = [], extra = [], target }: Props) => (
       <div className={css('list', { 'single-entry': included.length === 1 })}>
         {included.map(([pubID, ref], i) => (
           <LiteratureItem
-            pubID={pubID}
             key={pubID}
             reference={ref}
             i={i + 1}
@@ -135,7 +127,6 @@ const Literature = ({ included = [], extra = [], target }: Props) => (
       >
         {extra.map(([pubID, ref], i) => (
           <LiteratureItem
-            pubID={pubID}
             key={pubID}
             reference={ref}
             target={target === String(pubID)}
