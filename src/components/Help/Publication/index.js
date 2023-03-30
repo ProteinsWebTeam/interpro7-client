@@ -2,7 +2,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
-import { DescriptionReadMore } from 'components/Description';
+// $FlowFixMe
+import DescriptionReadMore from 'components/Description/DescriptionReadMore';
 import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';

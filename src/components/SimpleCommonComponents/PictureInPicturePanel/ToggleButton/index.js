@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 
 import { changeSettingsRaw } from 'actions/creators';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 /*:: type Props = {
   isPIPEnabled: boolean,

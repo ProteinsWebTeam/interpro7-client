@@ -11,6 +11,7 @@ import protvista from 'components/ProtVista/style.css';
 const f = foundationPartial(protvista);
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { location2html } from 'utils/text';
 

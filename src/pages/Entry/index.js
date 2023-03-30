@@ -5,10 +5,12 @@ import {
   metadataPropType,
 } from 'higherOrder/loadData/dataPropTypes';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
-import { GoLink } from 'components/ExtLink';
+// $FlowFixMe
+import GoLink from 'components/ExtLink/GoLink';
 import Description from 'components/Description';
 import MemberDBSelector from 'components/MemberDBSelector';
 import EntryListFilter from 'components/Entry/EntryListFilters';
