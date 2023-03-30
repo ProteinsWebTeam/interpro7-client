@@ -27,6 +27,6 @@
   },
   "include": [
     "src/**/*",
-    "node_modules/@nightingale-elements/*/src/*"
+    // "node_modules/@nightingale-elements/*/src/*"
   ]
 }

@@ -9,7 +9,7 @@ const zlib = require('zlib');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // custom plugins
-const LegacyModuleSplitPlugin = require('./webpack-plugins/legacy-module-split-plugin');
+// const LegacyModuleSplitPlugin = require('./webpack-plugins/legacy-module-split-plugin');
 
 // CSS-related
 const postCSSImport = require('postcss-import');
@@ -49,11 +49,10 @@ const cssSettings = {
 
 const publicPath = websiteURL.pathname || '/interpro/';
 
-const getHTMLWebpackPlugin = (mode) =>
+const getHTMLWebpackPlugin = () =>
   new HTMLWebpackPlugin({
     title: iprConfig.title || 'InterPro',
     template: path.join('.', 'src', 'index.template.html'),
-    inject: mode === 'development',
     filename: '[name].html',
     templateParameters: (compilation, assets, assetTags, options) => {
       // Leaving this here for easy debugging of the assets
@@ -74,7 +73,7 @@ const getHTMLWebpackPlugin = (mode) =>
     },
   });
 
-const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();
+// const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
   filename: path.join('css', '[name].[fullhash:3].css'),
@@ -118,7 +117,7 @@ const nightingaleAliases = [
   {}
 );
 
-const getBabelLoader = (mode, isModule) => ({
+const getBabelLoader = (mode) => ({
   loader: 'babel-loader',
   options: {
     presets: [
@@ -129,14 +128,9 @@ const getBabelLoader = (mode, isModule) => ({
           loose: true,
           useBuiltIns: 'usage',
           corejs: 3,
-          targets: isModule
-            ? {
-                esmodules: true,
-              }
-            : {
-                esmodules: false,
-                browsers: '> 0.1% and not last 2 versions, not dead',
-              },
+          targets: {
+            esmodules: true,
+          },
         },
       ],
       ['@babel/react', { development: mode === 'development' }],
@@ -164,8 +158,8 @@ const getBabelLoader = (mode, isModule) => ({
   },
 });
 
-const getConfigFor = (env, mode, isModule = false) => {
-  const name = isModule ? 'module' : 'legacy';
+const getConfigFor = (env, mode) => {
+  const name = 'module';
 
   return {
     name,
@@ -411,7 +405,7 @@ const getConfigFor = (env, mode, isModule = false) => {
 
       // Custom plugin to split codebase into legacy/modern bundles,
       // depends on HTMLWebpackPlugin
-      legacyModuleSplitPlugin,
+      // legacyModuleSplitPlugin,
       // GZIP compression
       mode === 'production'
         ? new (getCompressionPlugin())({
@@ -449,11 +443,8 @@ const getConfigFor = (env, mode, isModule = false) => {
   };
 };
 
-module.exports = (
-  env = { dev: true },
-  { mode = 'production', testingIE = false }
-) => {
-  const configModule = getConfigFor(env, mode, !testingIE);
+module.exports = (env = { dev: true }, { mode = 'production' }) => {
+  const configModule = getConfigFor(env, mode);
 
   const htmlWebpackPlugin = getHTMLWebpackPlugin(mode);
 
@@ -510,17 +501,6 @@ module.exports = (
     configModule.stats = 'minimal';
   }
 
-  if (mode === 'production') {
-    // also, generate a bundle for legacy browsers
-    const configLegacy = getConfigFor(env, mode);
-    configLegacy.plugins = [htmlWebpackPlugin, ...configLegacy.plugins];
-
-    // generate the hydration entrypoint - disabled as it didn;t offer much improvement
-    // configModule.entry.hydrate = './src/index-hydrate.js';
-    // configLegacy.entry.hydrate = './src/index-hydrate.js';
-
-    return [configLegacy, configModule];
-  }
   // just generate for modern browsers
   return configModule;
 };
