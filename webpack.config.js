@@ -8,8 +8,6 @@ const zlib = require('zlib');
 // Webpack plugins
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// custom plugins
-// const LegacyModuleSplitPlugin = require('./webpack-plugins/legacy-module-split-plugin');
 
 // CSS-related
 const postCSSImport = require('postcss-import');
@@ -72,8 +70,6 @@ const getHTMLWebpackPlugin = () =>
       };
     },
   });
-
-// const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
   filename: path.join('css', '[name].[fullhash:3].css'),
@@ -402,10 +398,6 @@ const getConfigFor = (env, mode) => {
             exclude: ['**/.*', '**/*.{map,br,gz}'],
           })
         : null,
-
-      // Custom plugin to split codebase into legacy/modern bundles,
-      // depends on HTMLWebpackPlugin
-      // legacyModuleSplitPlugin,
       // GZIP compression
       mode === 'production'
         ? new (getCompressionPlugin())({

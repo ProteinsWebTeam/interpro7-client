@@ -50,6 +50,12 @@
         margin: 0;
         padding: 0;
       }
+      #error {
+        margin: 1em;
+        font-size: 1.3em;
+        padding: 1em;
+        background: lightsteelblue;
+      }
       .tmp-layout {
         display: flex;
         flex-direction: column;
@@ -192,7 +198,7 @@
       window.addEventListener('load', function (event) {
         if (!('noModule' in HTMLScriptElement.prototype)) {
           document.getElementById('error').innerHTML =
-            "<b>⚠️ Error!</b> The version of this browser doesn't support some essential features used in InterPro";
+            "<b>⚠️ Error!</b> The version of this browser doesn't support some essential features used in InterPro.<br/><br/>Please upgrade your browser.";
           console.error('No support for es-modules');
         }
       });
