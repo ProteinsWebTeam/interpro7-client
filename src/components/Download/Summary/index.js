@@ -10,8 +10,10 @@ import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import Link from 'components/generic/Link';
 import Table, { Column } from 'components/Table';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Actions from 'components/Download/Actions';
+// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import { formatLongDate } from 'utils/date';

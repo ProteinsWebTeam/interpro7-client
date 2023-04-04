@@ -7,6 +7,7 @@ import { format } from 'url';
 
 import ProgressButton from 'components/ProgressButton';
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { askNotificationPermission } from 'utils/browser-notifications';

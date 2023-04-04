@@ -19,6 +19,7 @@ module.exports = {
       '<rootDir>/node_modules/taxonomy-visualisation/src/$1',
     '^d3-([^/]*)(.*)$': '<rootDir>/node_modules/d3-$1/dist/d3-$1.min.js',
   },
+  preset: 'ts-jest/presets/js-with-babel',
   moduleDirectories: ['node_modules', 'src'],
   collectCoverageFrom: ['src/**/*.js', '!**/.*.js'],
   coverageReporters: ['json-summary', 'lcov', 'text-summary'],

@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { downloadDelete } from 'actions/creators';

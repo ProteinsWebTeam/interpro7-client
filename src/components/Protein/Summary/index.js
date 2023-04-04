@@ -4,13 +4,15 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
 import Link from 'components/generic/Link';
 import FileExporter from 'components/Matches/FileExporter';
 
-import { UniProtLink } from 'components/ExtLink';
+// $FlowFixMe
+import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
 import loadable from 'higherOrder/loadable';
@@ -19,12 +21,14 @@ import {
   isContainedInOrganism,
 } from 'schema_org/processors';
 
-import { DescriptionReadMore } from 'components/Description';
+// $FlowFixMe
+import DescriptionReadMore from 'components/Description/DescriptionReadMore';
 
 import IsoformSelector from 'components/Protein/Isoforms/Selector';
 import IsoformViewer from 'components/Protein/Isoforms/Viewer';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
