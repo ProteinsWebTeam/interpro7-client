@@ -2,12 +2,30 @@
   "compilerOptions": {
     "sourceMap": true,
     "moduleResolution": "Node",
-    "module": "CommonJS",
+    "module": "es2020",
     "target": "ES6",
-    "declaration": false
+    "lib": [
+      "es2019",
+      "dom",
+      "esnext"
+    ],
+    "jsx": "react",
+    "declaration": false,
+    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "*",
+        "src/*",
+        "public/*"
+      ]
+    },
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": true
   },
   "include": [
     "src/**/*",
     "node_modules/protvista-links/src/*"
-  ],
+  ]
 }

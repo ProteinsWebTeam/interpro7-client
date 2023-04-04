@@ -14,6 +14,7 @@ import Tree from 'components/Tree';
 import NumberComponent from 'components/NumberComponent';
 import abbreviateNumber from 'components/NumberComponent/utils/number-to-display-text';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';

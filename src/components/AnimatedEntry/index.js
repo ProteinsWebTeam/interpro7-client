@@ -30,7 +30,9 @@ export class AnimatedEntry extends PureComponent /*:: <Props> */ {
     duration: T.number,
     animateSelf: T.bool,
     lowGraphics: T.bool.isRequired,
-    dispatch: T.func.isRequired,
+    dispatch: T.func,
+    className: T.string,
+    children: T.any,
   };
 
   static defaultProps = {
@@ -93,11 +95,8 @@ export class AnimatedEntry extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.settings.ui.lowGraphics,
-  lowGraphics => ({ lowGraphics }),
+  (state) => state.settings.ui.lowGraphics,
+  (lowGraphics) => ({ lowGraphics }),
 );
 
-export default connect(
-  mapStateToProps,
-  undefined,
-)(AnimatedEntry);
+export default connect(mapStateToProps, undefined)(AnimatedEntry);

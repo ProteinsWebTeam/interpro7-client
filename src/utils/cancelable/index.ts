@@ -1,21 +1,18 @@
-import AbortController from './AbortController';
+type CancelableParameter<T> =
+  | Promise<unknown>
+  | ((signal: AbortSignal) => Promise<T>);
 
-/*:: type Output = {
-  promise: Promise<*>,
-  cancel: () => void,
-}; */
-
-// prettier-ignore
-export default (
-  promiseOrFunction/*: Promise<*> | () => Promise<*> */ = Promise.resolve()
-)/*: Output */ => {
+export default <T = unknown>(
+  promiseOrFunction: CancelableParameter<T> = Promise.resolve()
+) => {
   let promise = promiseOrFunction;
   const controller = new AbortController();
-  if (!('then' in promiseOrFunction)) {// not actually a Promise
+  if (!('then' in promiseOrFunction)) {
+    // not actually a Promise
     promise = promiseOrFunction(controller.signal);
   }
   const output = {
-    promise: promise.then(value => {
+    promise: (promise as Promise<T>).then((value) => {
       // eslint-disable-next-line no-throw-literal
       if (output.canceled) throw { canceled: output.canceled };
       return value;

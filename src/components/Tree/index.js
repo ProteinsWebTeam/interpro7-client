@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 import ZoomOverlay from 'components/ZoomOverlay';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 

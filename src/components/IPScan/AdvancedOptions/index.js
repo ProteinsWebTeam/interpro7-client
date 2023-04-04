@@ -3,6 +3,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import loadData from 'higherOrder/loadData';

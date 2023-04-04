@@ -21,6 +21,7 @@ module.exports = {
     '^d3-([^/]*)(.*)$': '<rootDir>/node_modules/d3-$1/dist/d3-$1.min.js',
     d3: '<rootDir>/node_modules/d3/dist/d3.min.js',
   },
+  preset: 'ts-jest/presets/js-with-babel',
   moduleDirectories: ['node_modules', 'src'],
   collectCoverageFrom: ['src/**/*.js', '!**/.*.js'],
   coverageReporters: ['json-summary', 'lcov', 'text-summary'],

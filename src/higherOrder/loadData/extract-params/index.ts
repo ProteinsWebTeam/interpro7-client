@@ -1,4 +1,3 @@
-// @flow
 import { noop } from 'lodash-es';
 
 import * as defaults from '../defaults';
@@ -11,19 +10,33 @@ const extractGetUrl = (getUrl = defaults.getUrlForApi) => {
   return getUrl;
 };
 
-/* ::
-  type GetUrl = Object => string;
-  type Params = {|
-    getUrl: ?GetUrl,
-    fetchOptions: ?Object,
-    propNamespace: ?string,
-    weight: ?number,
-    mapStateToProps: Object => Object,
-    mapDispatchToProps: Object,
-  |} | string;
-*/
-export default (params /*: ?Params */) => {
-  const extracted = {
+export type Params =
+  | {
+      getUrl?: GetUrl;
+      fetchOptions?: FetchOptions;
+      propNamespace?: string;
+      weight?: number;
+      mapStateToProps?:
+        | ((state: unknown, props: unknown) => Record<string, unknown>)
+        | typeof noop;
+      mapDispatchToProps?: Record<string, unknown>;
+    }
+  | string
+  | GetUrl;
+
+export type ExtractedParams = {
+  getUrl: GetUrl;
+  fetchOptions: FetchOptions;
+  propNamespace: string;
+  weight: number;
+  mapStateToProps:
+    | ((state: unknown, props: unknown) => Record<string, unknown>)
+    | typeof noop;
+  mapDispatchToProps: Record<string, unknown>;
+};
+
+export default (params?: Params) => {
+  const extracted: ExtractedParams = {
     getUrl: defaults.getUrlForApi,
     fetchOptions: {},
     propNamespace: '',

@@ -7,11 +7,16 @@ import { isEqual } from 'lodash-es';
 
 import ProtVistaOptions from './Options';
 import ProtVistaPopup from './Popup';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { Genome3dLink, AlphafoldLink } from 'components/ExtLink';
+import {
+  Genome3dLink,
+  AlphafoldLink,
+  // $FlowFixMe
+} from 'components/ExtLink/patternLinkWrapper';
 import { FunFamLink } from 'subPages/Subfamilies';
 
 import ProtVistaManager from 'protvista-manager';

@@ -1,27 +1,25 @@
 import React from 'react';
-import T from 'prop-types';
+
+import loadable from 'higherOrder/loadable';
+import loadData from 'higherOrder/loadData/ts';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import Link from 'components/generic/Link';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import loadable from 'higherOrder/loadable';
-import loadData from 'higherOrder/loadData';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
-
-import { foundationPartial } from 'styles/foundation';
-
-import ipro from 'styles/interpro-new.css';
-import local from './style.css';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-const f = foundationPartial(ipro, local);
+import cssBinder from 'styles/cssBinder';
+import local from './style.css';
+
+const css = cssBinder(local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 
-const schemaProcessData = ({ db, name }) => ({
+const schemaProcessData = ({ db, name }: { db: string; name: string }) => ({
   '@type': ['Dataset'],
   // '@type': ['Entry', 'BioChemEntity', 'CreativeWork'],
   '@id': '@isBasedOn',
@@ -32,53 +30,56 @@ const schemaProcessData = ({ db, name }) => ({
   license: 'https://creativecommons.org/licenses/by/4.0/',
 });
 
-const SignatureLink = React.memo((
-  {
+const SignatureLink = React.memo(
+  ({
     accession,
     db,
     label,
-  } /*: {accession: string, db: string, label: string} */,
-) => (
-  <Link
-    to={{
-      description: {
-        main: { key: 'entry' },
-        entry: { db, accession },
-      },
-    }}
-  >
-    <small>
-      <Tooltip title={`${label || 'Unintegrated'} (${accession})`}>
-        {accession || label}
-      </Tooltip>
-    </small>
-  </Link>
-));
+  }: {
+    accession: string;
+    db: string;
+    label: string;
+  }) => (
+    <Link
+      to={{
+        description: {
+          main: { key: 'entry' },
+          entry: { db, accession },
+        },
+      }}
+    >
+      <small>
+        <Tooltip title={`${label || 'Unintegrated'} (${accession})`}>
+          {accession || label}
+        </Tooltip>
+      </small>
+    </Link>
+  )
+);
 SignatureLink.displayName = 'SignatureLink';
-SignatureLink.propTypes = {
-  accession: T.string.isRequired,
-  db: T.string.isRequired,
-  label: T.string.isRequired,
+
+type Props = {
+  contr: ContributingEntries;
+  data?: RequestedData<RootAPIPayload>;
 };
 
-export const ContributingSignatures = (
-  { contr, data } /*: {contr: Object, data: Object} */,
-) => {
-  const metaDB = data.loading || !data.payload ? {} : data.payload.databases;
-  const contrEntries = Object.entries(contr);
+export const ContributingSignatures = ({ contr, data }: Props) => {
+  const metaDB =
+    !data || data.loading || !data.payload ? {} : data.payload.databases;
+  const contrEntries = Object.entries(contr || {});
   return (
-    <div className={f('side-panel', 'margin-top-small', 'margin-bottom-large')}>
-      <div className={f('md-icon-list-box', 'margin-bottom-large')}>
+    <div className={css('side-panel')}>
+      <div className={css('md-icon-list-box')}>
         <h5>
           Contributing Member Database Entr
           {contrEntries.length < 2 ? 'y' : 'ies'}
         </h5>
-        <ul className={f('md-list')}>
+        <ul className={css('md-list')}>
           {contrEntries.map(([db, signatures]) => (
             <li key={db}>
-              <MemberSymbol type={db} className={f('md-small')} svg={false} />
-              <div className={f('db-label')}>
-                <span className={f('db-name')}>
+              <MemberSymbol type={db} className={css('md-small')} svg={false} />
+              <div className={css('db-label')}>
+                <span className={css('db-name')}>
                   {(metaDB[db] && metaDB[db].name) || db}:{' '}
                 </span>{' '}
                 {Object.entries(signatures).map(([accession, name], index) => (
@@ -98,10 +99,6 @@ export const ContributingSignatures = (
       </div>
     </div>
   );
-};
-ContributingSignatures.propTypes = {
-  contr: T.object.isRequired,
-  data: T.object.isRequired,
 };
 
 export default loadData(getUrlForMeta)(React.memo(ContributingSignatures));

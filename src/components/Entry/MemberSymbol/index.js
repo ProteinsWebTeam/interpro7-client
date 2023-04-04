@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
@@ -155,10 +155,12 @@ const MemberSymbol = (
   const id = uniqueId();
   const [png, setPng] = useState(null);
   const [avif, setAvif] = useState(null);
-  if (!svg) {
-    if (!avif) images?.[type]?.[0].then((src) => setAvif(src.default));
-    if (!png) images?.[type]?.[1].then((src) => setPng(src.default));
-  }
+  useEffect(() => {
+    if (!svg) {
+      if (!avif) images?.[type]?.[0].then((src) => setAvif(src.default));
+      if (!png) images?.[type]?.[1].then((src) => setPng(src.default));
+    }
+  }, [svg]);
   return (
     <span
       data-testid="entry-member-db-icon"

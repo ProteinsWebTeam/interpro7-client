@@ -1,38 +1,33 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
-import Link from 'components/generic/Link';
 
 import loadable from 'higherOrder/loadable';
-
-import { foundationPartial } from 'styles/foundation';
-
-import ipro from 'styles/interpro-new.css';
-import local from './style.css';
-
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+
+import Link from 'components/generic/Link';
 
 import { schemaProcessIntegrated } from 'schema_org/processors';
 
-const f = foundationPartial(ipro, local);
+import cssBinder from 'styles/cssBinder';
+import local from './style.css';
 
-const SchemaOrgData = loadable({
+const css = cssBinder(local);
+
+const SchemaOrgData: React.ElementType = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 
-const Integration = (
-  {
-    intr,
-    dataBase,
-  } /*: {intr: string, dataBase: {payload: {databases: {interpro: {version: string}}}}} */,
-) => {
-  const databases = dataBase && dataBase.payload && dataBase.payload.databases;
+type Props = {
+  intr: string;
+  dataBase?: RequestedData<RootAPIPayload>;
+};
+const Integration = ({ intr, dataBase }: Props) => {
+  const databases = dataBase?.payload?.databases;
   return (
     <div>
       <h5>Integrated to</h5>
-      <ul className={f('chevron')}>
+      <ul className={css('chevron')}>
         <li>
           {databases && (
             <SchemaOrgData
@@ -58,15 +53,8 @@ const Integration = (
     </div>
   );
 };
-Integration.propTypes = {
-  intr: T.string.isRequired,
-  dataBase: T.shape({
-    payload: T.shape({
-      databases: T.object,
-    }),
-  }).isRequired,
-};
 
-export default loadData({ getUrl: getUrlForMeta, propNamespace: 'Base' })(
-  Integration,
-);
+export default loadData<RootAPIPayload>({
+  getUrl: getUrlForMeta,
+  propNamespace: 'Base',
+})(Integration);
