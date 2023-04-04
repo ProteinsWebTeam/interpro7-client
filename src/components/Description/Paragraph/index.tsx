@@ -57,7 +57,6 @@ export const Paragraph = ({
               text={text}
               key={i}
               literature={literature}
-              accession={accession || ''}
               withoutIDs={withoutIDs}
             />
           );

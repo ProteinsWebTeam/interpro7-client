@@ -227,7 +227,7 @@ type LoadDataProps<Payload = unknown> = {
   [k: IsStaleKey]: boolean;
 };
 
-type GetUrl<Props = Record<string, unknown>> = (
+type GetUrl<Props = unknown> = (
   params: Record<string, unknown>,
   props?: Props
-) => string;
+) => string | null;

@@ -1,9 +1,8 @@
-// @flow
 import React from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Literature, {
   getLiteratureIdsFromDescription,
@@ -14,28 +13,37 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Description from 'components/Description';
+import { Params } from 'src/higherOrder/loadData/extract-params';
 
-import { foundationPartial } from 'styles/foundation';
-import ipro from 'styles/interpro-new.css';
+import cssBinder from 'styles/cssBinder';
+// import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const css = foundationPartial(ipro, fonts, local);
+const css = cssBinder(local, fonts);
+
+type Props = {
+  integrated: string | null;
+};
+
+interface IntegratedProps
+  extends Props,
+    LoadDataProps<{ metadata: EntryMetadata }> {}
 
 const DescriptionFromIntegrated = ({
   integrated,
   data: { loading, payload },
-}) => {
+}: IntegratedProps) => {
   if (!integrated) return null;
   if (loading) return <Loading />;
 
   if (payload?.metadata?.description?.length) {
     const citations = getLiteratureIdsFromDescription(
-      payload.metadata.description,
+      payload.metadata.description
     );
     const [included, extra] = splitCitations(
       payload.metadata.literature,
-      citations,
+      citations
     );
 
     return (
@@ -83,11 +91,12 @@ const DescriptionFromIntegrated = ({
   return null;
 };
 
-const getUrlFor = createSelector(
-  (state) => state.settings.api,
-  (_state, props) => props.integrated,
-  ({ protocol, hostname, port, root }, accession) => {
+const getUrlFor: GetUrl<Props> = createSelector(
+  (state: GlobalState) => state.settings.api,
+  (_state: GlobalState, props?: Props) => props?.integrated || '',
+  (server: ParsedURLServer, accession: string) => {
     if (!accession) return null;
+    const { protocol, hostname, port, root } = server;
     return format({
       protocol,
       hostname,
@@ -99,7 +108,7 @@ const getUrlFor = createSelector(
           entry: { db: 'interpro', accession },
         }),
     });
-  },
+  }
 );
 
-export default loadData(getUrlFor)(DescriptionFromIntegrated);
+export default loadData(getUrlFor as Params)(DescriptionFromIntegrated);
