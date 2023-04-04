@@ -3,7 +3,7 @@ import { noop } from 'lodash-es';
 import * as defaults from '../defaults';
 
 // getUrl
-const extractGetUrl = <Props = Record<string, unknown>>(
+const extractGetUrl = <Props = unknown>(
   getUrl: string | GetUrl<Props> = defaults.getUrlForApi
 ) => {
   if (typeof getUrl === 'string') {
