@@ -43,7 +43,6 @@ s.font-m {
 table.left-headers {
   & tr td:first-child {
     font-weight: 500;
-    text-align: right;
     width: 25%;
     white-space: nowrap;
   }
