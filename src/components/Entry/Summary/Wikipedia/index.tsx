@@ -6,6 +6,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'src/higherOrder/loadData/extract-params';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -13,9 +14,9 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import cssBinder from 'styles/cssBinder';
 
 import local from '../style.css';
-import { Params } from 'src/higherOrder/loadData/extract-params';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(local);
+const css = cssBinder(local, ipro);
 
 interface WikipediaProps
   extends WikipediaEntry,
@@ -81,7 +82,7 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
         <div className={css('vf-grid__col--span-3', 'columns')}>
           <h4>
             <Link
-              className={css('ext')}
+              className={css('ext-link')}
               target="_blank"
               href={`https://en.wikipedia.org/wiki/${title}`}
             >

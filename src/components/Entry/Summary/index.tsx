@@ -18,10 +18,10 @@ import Wikipedia from './Wikipedia';
 
 import cssBinder from 'styles/cssBinder';
 
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import ipro from 'styles/interpro-vf.css';
 import local from './style.css';
 
-const css = cssBinder(ebiGlobalStyles, local);
+const css = cssBinder(local, ipro);
 
 type OtherSectionsProps = {
   metadata: EntryMetadata;

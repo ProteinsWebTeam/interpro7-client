@@ -16,11 +16,11 @@ import Description from 'components/Description';
 import { Params } from 'src/higherOrder/loadData/extract-params';
 
 import cssBinder from 'styles/cssBinder';
-// import ipro from 'styles/interpro-new.css';
+import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const css = cssBinder(local, fonts);
+const css = cssBinder(ipro, local, fonts);
 
 type Props = {
   integrated: string | null;
@@ -51,8 +51,8 @@ const DescriptionFromIntegrated = ({
         <h4>
           Description{' '}
           <Tooltip
-            title={`The member database didn't provide a description for this entry. 
-                    What is displayed here comes from ${integrated}, the InterPro entry that it has been integrated to.`}
+            title={`The member database didn't provide a description for this signature. 
+                    The description displayed has been imported from ${integrated}, the InterPro entry in which the signature is integrated.`}
           >
             <span className={css('tag')}>
               <sup>
@@ -61,7 +61,7 @@ const DescriptionFromIntegrated = ({
                   data-icon="&#xf129;"
                 />{' '}
               </sup>
-              From{' '}
+              Imported from{' '}
               <Link
                 to={{
                   description: {

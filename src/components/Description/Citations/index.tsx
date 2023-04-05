@@ -30,7 +30,6 @@ const Citations = ({ text, literature = [], withoutIDs }: Props) => (
           id={withoutIDs ? null : `description-${refCounter}`}
           className={css('text-high')}
           to={(customLocation) => {
-            const key = customLocation.description.main.key;
             return {
               ...customLocation,
               hash: pubId,

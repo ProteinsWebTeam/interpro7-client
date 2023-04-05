@@ -13,9 +13,10 @@ import { schemaProcessCitations } from 'schema_org/processors';
 
 import cssBinder from 'styles/cssBinder';
 
+import ipro from 'styles/interpro-vf.css';
 import refStyles from './style.css';
 
-const css = cssBinder(refStyles);
+const css = cssBinder(refStyles, ipro);
 
 export const getLiteratureIdsFromDescription = (
   description: Array<string>
@@ -87,14 +88,20 @@ const LiteratureItem = ({
       <span className={css('year')}>({r.year})</span>.{' '}
       {r.rawPages && <span className={css('pages')}>{r.rawPages}. </span>}
       {r.DOI_URL && (
-        <DOILink id={r.DOI_URL} className={css('ext', 'margin-right-medium')}>
+        <DOILink
+          id={r.DOI_URL}
+          className={css('ext-link', 'margin-right-medium')}
+        >
           View article
         </DOILink>
       )}
       {r.PMID && (
         <span>
           PMID:{' '}
-          <PMCLink id={r.PMID} className={css('ext', 'margin-right-medium')}>
+          <PMCLink
+            id={r.PMID}
+            className={css('ext-link', 'margin-right-medium')}
+          >
             {r.PMID}
           </PMCLink>
         </span>
