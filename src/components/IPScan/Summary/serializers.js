@@ -24,8 +24,9 @@ const integrateSignature = (signature, interpro, integrated) => {
   const accession = interpro.accession;
   const entry = integrated.get(accession) || {
     accession,
-    name: interpro.name,
-    source_database: 'InterPro',
+    name: interpro.description,
+    short_name: interpro.name,
+    source_database: 'interpro',
     _children: {},
     children: [],
     type: interpro.type.toLowerCase(),
@@ -42,7 +43,9 @@ const match2residues = (match) => {
         ? {
             accession: match?.signature?.accession || match?.accession,
             locations: sites.map((site) => ({
-              description: site.description,
+              description: `${site.label || ''}${site.label ? ': ' : ''}${
+                site.description
+              }`,
               fragments: site.siteLocations,
             })),
             type: 'residue',
@@ -117,10 +120,11 @@ const condenseLocations = (
   }));
 };
 
+// eslint-disable-next-line max-statements
 export const mergeData = (matches, sequenceLength) => {
   const mergedData /*: {
-    unintegrated:any[], 
-    other_features: any[], 
+    unintegrated:any[],
+    other_features: any[],
     residues: any[],
     other_residues: any[],
   } */ = {
@@ -130,8 +134,7 @@ export const mergeData = (matches, sequenceLength) => {
     other_residues: [],
   };
   const unintegrated = {};
-  const predictions = {};
-  const residuesCategory = [];
+  const otherFeatures = {};
   let integrated = new Map();
   const signatures = new Map();
   for (const match of matches) {
@@ -167,12 +170,12 @@ export const mergeData = (matches, sequenceLength) => {
     }
     if (NOT_MEMBER_DBS.has(library)) {
       processedMatch.source_database = library; // Making sure the change matches the ignore list.
-      if (processedMatch.accession in predictions) {
-        predictions[processedMatch.accession].locations.push(
+      if (processedMatch.accession in otherFeatures) {
+        otherFeatures[processedMatch.accession].locations.push(
           ...processedMatch.locations,
         );
       } else {
-        predictions[processedMatch.accession] = processedMatch;
+        otherFeatures[processedMatch.accession] = processedMatch;
       }
       continue;
     }
@@ -193,7 +196,7 @@ export const mergeData = (matches, sequenceLength) => {
     }
   }
   mergedData.unintegrated = (Object.values(unintegrated) /*: any */);
-  mergedData.other_features.push(...(Object.values(predictions) /*: any */));
+  mergedData.other_features.push(...(Object.values(otherFeatures) /*: any */));
   integrated = Array.from(integrated.values()).map((m) => {
     // prettier-ignore
     const locations = condenseLocations((m.children/*: any */));
