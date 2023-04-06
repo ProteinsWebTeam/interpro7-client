@@ -5,9 +5,10 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import cssBinder from 'styles/cssBinder';
 
+import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const css = cssBinder(fonts);
+const css = cssBinder(ipro, fonts);
 
 const MemberDBSubtitle = ({
   metadata,
@@ -42,10 +43,12 @@ const MemberDBSubtitle = ({
                   dbInfo.description || `${dbInfo.name} (${dbInfo.version})`
                 }
               >
-                <span
-                  className={css('font-s', 'icon', 'icon-common')}
-                  data-icon="&#xf129;"
-                />
+                <sup>
+                  <span
+                    className={css('icon', 'icon-common')}
+                    data-icon="&#xf129;"
+                  />
+                </sup>
               </Tooltip>
             </Link>
           </td>

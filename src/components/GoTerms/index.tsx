@@ -7,8 +7,9 @@ import loadable from 'higherOrder/loadable';
 import cssBinder from 'styles/cssBinder';
 
 import local from './style.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(local);
+const css = cssBinder(local, ipro);
 
 const getDefaultPayload = () => ({
   biological_process: [] as GOTerm[],
@@ -102,7 +103,7 @@ const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
 
                         <GoLink
                           id={identifier}
-                          className={css('go-terms', 'ext')}
+                          className={css('go-terms', 'ext-link')}
                         >
                           {name} ({identifier})
                         </GoLink>

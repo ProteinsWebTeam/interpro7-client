@@ -18,8 +18,9 @@ import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(fonts, local);
+const css = cssBinder(fonts, local, ipro);
 
 type addToastType = typeof addToast;
 
@@ -173,7 +174,7 @@ const SidePanel = ({
           <ul className={css('no-bullet')}>
             <li>
               <Link
-                className={css('ext')}
+                className={css('ext-link')}
                 target="_blank"
                 href={url && url(metadata.accession)}
               >
