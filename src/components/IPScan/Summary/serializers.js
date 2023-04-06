@@ -12,6 +12,9 @@ type Location = {
 }
 */
 
+const OTHER_FEATURES_DBS = ['funfam'];
+const OTHER_RESIDUES_DBS = ['pirsr'];
+
 const mergeMatch = (match1, match2) => {
   if (!match1) return match2;
   match1.locations = match1.locations.concat(match2.locations);
@@ -21,8 +24,9 @@ const integrateSignature = (signature, interpro, integrated) => {
   const accession = interpro.accession;
   const entry = integrated.get(accession) || {
     accession,
-    name: interpro.name,
-    source_database: 'InterPro',
+    name: interpro.description,
+    short_name: interpro.name,
+    source_database: 'interpro',
     _children: {},
     children: [],
     type: interpro.type.toLowerCase(),
@@ -30,6 +34,28 @@ const integrateSignature = (signature, interpro, integrated) => {
   entry._children[signature.accession] = signature;
   entry.children = Object.values(entry._children);
   integrated.set(accession, entry);
+};
+
+const match2residues = (match) => {
+  return match.locations
+    .map(({ sites }) =>
+      sites
+        ? {
+            accession: match?.signature?.accession || match?.accession,
+            locations: sites.map((site) => ({
+              description: `${site.label || ''}${site.label ? ': ' : ''}${
+                site.description
+              }`,
+              fragments: site.siteLocations,
+            })),
+            type: 'residue',
+            source_database:
+              match?.signature?.signatureLibraryRelease?.library?.toLowerCase() ||
+              match.source_database,
+          }
+        : null,
+    )
+    .filter(Boolean);
 };
 
 const condenseFragments = (location /*: Location */) => {
@@ -94,13 +120,21 @@ const condenseLocations = (
   }));
 };
 
+// eslint-disable-next-line max-statements
 export const mergeData = (matches, sequenceLength) => {
-  const mergedData /*: {unintegrated:any[], predictions: any[], family?: any[]} */ =
-    {
-      unintegrated: [],
-      predictions: [],
-    };
+  const mergedData /*: {
+    unintegrated:any[],
+    other_features: any[],
+    residues: any[],
+    other_residues: any[],
+  } */ = {
+    unintegrated: [],
+    other_features: [],
+    residues: [],
+    other_residues: [],
+  };
   const unintegrated = {};
+  const otherFeatures = {};
   let integrated = new Map();
   const signatures = new Map();
   for (const match of matches) {
@@ -121,26 +155,28 @@ export const mergeData = (matches, sequenceLength) => {
       })),
       score: match.score,
       residues: undefined,
+      signature: undefined,
     };
-    const residues = match.locations
-      .map(({ sites }) =>
-        sites
-          ? {
-              accession: match.signature.accession,
-              locations: sites.map((site) => ({
-                description: site.description,
-                fragments: site.siteLocations,
-              })),
-            }
-          : null,
-      )
-      .filter(Boolean);
-    if (residues.length > 0) processedMatch.residues = residues;
-
+    const residues = match2residues(match);
+    if (
+      residues.length > 0 &&
+      !OTHER_RESIDUES_DBS.includes(residues?.[0].source_database)
+    ) {
+      mergedData.residues.push({
+        ...processedMatch,
+        accession: `residue:${processedMatch.accession}`,
+        residues,
+      });
+    }
     if (NOT_MEMBER_DBS.has(library)) {
-      processedMatch.accession += ` (${mergedData.predictions.length + 1})`;
       processedMatch.source_database = library; // Making sure the change matches the ignore list.
-      mergedData.predictions.push(processedMatch);
+      if (processedMatch.accession in otherFeatures) {
+        otherFeatures[processedMatch.accession].locations.push(
+          ...processedMatch.locations,
+        );
+      } else {
+        otherFeatures[processedMatch.accession] = processedMatch;
+      }
       continue;
     }
     const mergedMatch = mergeMatch(
@@ -150,11 +186,17 @@ export const mergeData = (matches, sequenceLength) => {
     signatures.set(mergedMatch.accession, mergedMatch);
     if (match.signature.entry) {
       integrateSignature(mergedMatch, match.signature.entry, integrated);
+    } else if (OTHER_FEATURES_DBS.includes(mergedMatch.source_database)) {
+      mergedData.other_features.push(mergedMatch);
+    } else if (OTHER_RESIDUES_DBS.includes(mergedMatch.source_database)) {
+      const residues = match2residues(mergedMatch);
+      mergedData.other_residues.push(residues[0]);
     } else {
       unintegrated[mergedMatch.accession] = mergedMatch;
     }
   }
   mergedData.unintegrated = (Object.values(unintegrated) /*: any */);
+  mergedData.other_features.push(...(Object.values(otherFeatures) /*: any */));
   integrated = Array.from(integrated.values()).map((m) => {
     // prettier-ignore
     const locations = condenseLocations((m.children/*: any */));

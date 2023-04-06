@@ -11,8 +11,6 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 import { schemaProcessInterProCitation } from 'schema_org/processors';
 
-import 'styles/interpro-vf.css';
-
 const STICKY_MENU_OFFSET = 110;
 const DEFAULT_SCHEDULE_DELAY = 1000;
 

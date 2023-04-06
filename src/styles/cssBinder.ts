@@ -1,16 +1,13 @@
 import classNames from 'classnames/bind';
 
-export default (
-  cssModule: Record<string, string>,
-  ...otherCssModules: Array<Record<string, string>>
-) => {
-  const output = cssModule;
-  for (const style of otherCssModules) {
+export default (...cssModules: Array<Record<string, string>>) => {
+  const output: Record<string, string> = {};
+  for (const style of cssModules) {
     for (const [rule, hash] of Object.entries(style) /*: any */) {
       if (output[rule]) {
         if (!output[rule].split(' ').includes(hash)) output[rule] += ` ${hash}`;
       } else {
-        output[rule] = hash;
+        output[rule] = `${rule} ${hash}`;
       }
     }
   }

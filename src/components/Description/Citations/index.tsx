@@ -12,10 +12,9 @@ export const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](,\\s*)?';
 type Props = {
   text: string;
   literature?: Array<[string, Reference]>;
-  accession: string;
   withoutIDs: boolean;
 };
-const Citations = ({ text, literature = [], withoutIDs, accession }: Props) => (
+const Citations = ({ text, literature = [], withoutIDs }: Props) => (
   <sup>
     [
     {text.split(',').map((cita, i, array) => {
@@ -31,16 +30,8 @@ const Citations = ({ text, literature = [], withoutIDs, accession }: Props) => (
           id={withoutIDs ? null : `description-${refCounter}`}
           className={css('text-high')}
           to={(customLocation) => {
-            const key = customLocation.description.main.key;
             return {
               ...customLocation,
-              description: {
-                main: { key },
-                [key]: {
-                  db: customLocation.description[key].db,
-                  accession,
-                },
-              },
               hash: pubId,
             };
           }}

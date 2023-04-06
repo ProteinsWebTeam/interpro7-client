@@ -103,6 +103,9 @@ type CrossReference = {
     url: string;
   }>;
 };
+type LiteratureMetadata = {
+  [PubID: string]: Reference;
+};
 type EntryMetadata = {
   accession: string;
   name: { name: string; short?: string };
@@ -112,9 +115,7 @@ type EntryMetadata = {
   member_databases: ContributingEntries;
   go_terms: Array<GOTerm>;
   description: Array<string>;
-  literature: {
-    [PubID: string]: Reference;
-  };
+  literature: LiteratureMetadata;
   hierarchy?: InterProHierarchyType;
   overlaps_with?: Array<{
     accession: string;
@@ -226,7 +227,7 @@ type LoadDataProps<Payload = unknown> = {
   [k: IsStaleKey]: boolean;
 };
 
-type GetUrl<Props = Record<string, unknown>> = (
+type GetUrl<Props = unknown> = (
   params: Record<string, unknown>,
   props?: Props
-) => string;
+) => string | null;

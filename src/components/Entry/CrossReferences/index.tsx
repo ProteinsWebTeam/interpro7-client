@@ -9,8 +9,9 @@ import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(fonts, local);
+const css = cssBinder(fonts, local, ipro);
 
 type ReferenceData = {
   url: string;
@@ -18,7 +19,7 @@ type ReferenceData = {
 };
 const ReferenceItem = ({ url, accession }: ReferenceData) => (
   <li>
-    <Link href={url} className={css('ext')}>
+    <Link href={url} className={css('ext-link')}>
       {accession}
     </Link>
   </li>

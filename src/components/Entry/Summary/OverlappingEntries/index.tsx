@@ -6,8 +6,9 @@ import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../style.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(local, fonts);
+const css = cssBinder(local, fonts, ipro);
 
 const MAX_NUMBER_OF_OVERLAPPING_ENTRIES = 5;
 
@@ -44,10 +45,12 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
           and either the Jaccard index (equivalent) or containment index (parent/child) of the matching sequence sets is greater than 0.75."
         >
           &nbsp;
-          <span
-            className={css('icon', 'icon-common', 'font-s')}
-            data-icon="&#xf129;"
-          />
+          <sup>
+            <span
+              className={css('icon', 'icon-common', 'font-s')}
+              data-icon="&#xf129;"
+            />
+          </sup>
         </Tooltip>
       </h4>
       {_overlaps.map((ov) => (
