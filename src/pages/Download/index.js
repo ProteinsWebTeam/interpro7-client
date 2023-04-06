@@ -10,6 +10,7 @@ import { customLocationSelector } from 'reducers/custom-location';
 import Tabs from 'components/Tabs';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
+// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import InterProScanDownloads from 'components/DownloadFTP/InterProScan';

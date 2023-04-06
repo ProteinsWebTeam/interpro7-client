@@ -250,6 +250,18 @@ exports[`<DynamicMenu /> should render 1`] = `
           },
           {
             "activeClass": "is-active",
+            "name": "Protein families game",
+            "to": {
+              "description": {
+                "other": [
+                  "help",
+                  "protein_families_game",
+                ],
+              },
+            },
+          },
+          {
+            "activeClass": "is-active",
             "name": "Documentation",
             "to": {
               "description": {
@@ -326,6 +338,18 @@ exports[`<DynamicMenu /> should render 1`] = `
                 "other": [
                   "about",
                   "funding",
+                ],
+              },
+            },
+          },
+          {
+            "activeClass": "is-active",
+            "name": "License",
+            "to": {
+              "description": {
+                "other": [
+                  "about",
+                  "license",
                 ],
               },
             },

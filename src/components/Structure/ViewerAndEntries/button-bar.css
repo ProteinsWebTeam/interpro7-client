@@ -1,0 +1,13 @@
+@import '../../../styles/colors.css';
+
+div.button-bar {
+  & a.control,
+  & button.control {
+    color: var(--colors-nearly-black);
+    margin: 0 1em 0 0;
+    cursor: pointer;
+  }
+  & .control:hover {
+    opacity: 0.7;
+  }
+}

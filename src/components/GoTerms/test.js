@@ -22,17 +22,26 @@ describe('External links', () => {
               db={db}
               terms={[
                 {
-                  category: 'biological_process',
+                  category: {
+                    name: 'biological_process',
+                    code: 'bp',
+                  },
                   identifier: 'GO:0004930',
                   name: 'test1',
                 },
                 {
-                  category: 'biological_process',
+                  category: {
+                    name: 'biological_process',
+                    code: 'bp',
+                  },
                   identifier: 'GO:0007186',
                   name: 'test2',
                 },
                 {
-                  category: 'biological_process',
+                  category: {
+                    name: 'biological_process',
+                    code: 'bp',
+                  },
                   identifier: 'GO:0016021',
                   name: 'test3',
                 },
@@ -46,12 +55,18 @@ describe('External links', () => {
               db={db}
               terms={[
                 {
-                  category: 'biological_process',
+                  category: {
+                    name: 'biological_process',
+                    code: 'bp',
+                  },
                   identifier: 'GO:0004930',
                   name: 'test1',
                 },
                 {
-                  category: 'molecular_function',
+                  category: {
+                    name: 'molecular_function',
+                    code: 'mf',
+                  },
                   identifier: 'GO:0004930',
                   name: 'test2',
                 },

@@ -27,6 +27,9 @@ const f = foundationPartial(ebiGlobalStyles, ipro);
 const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
 const Faqs = () => <ContentFromRTD page="faq.rst" format="faq" />;
 const Training = () => <ContentFromRTD page="training.rst" />;
+const Game = () => (
+  <ContentFromRTD page="protein_families_game.rst" format="faq" />
+);
 
 const Publication = loadable({
   loader: () =>
@@ -69,6 +72,7 @@ const routes = new Map([
   ['training', Training],
   ['faqs', Faqs],
   ['documentation', InnerSwitch],
+  ['protein_families_game', Game],
 ]);
 
 const locationSelector = createSelector(

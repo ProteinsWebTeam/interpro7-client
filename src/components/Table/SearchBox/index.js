@@ -8,6 +8,7 @@ import { debounce } from 'lodash-es';
 import { customLocationSelector } from 'reducers/custom-location';
 import { goToCustomLocation } from 'actions/creators';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';

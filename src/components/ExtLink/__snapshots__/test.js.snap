@@ -154,7 +154,7 @@ exports[`External links <PMCLink /> should render simple links 1`] = `
 exports[`External links <UniProtLink /> should render simple links 1`] = `
 <BaseLink
   id="A0A023GPI8"
-  pattern="http://www.uniprot.org/uniprot/{id}"
+  pattern="https://www.uniprot.org/uniprotkb/{id}/entry"
   target="_blank"
 >
   A0A023GPI8

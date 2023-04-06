@@ -7,7 +7,8 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
-import { UniProtLink } from 'components/ExtLink';
+// $FlowFixMe
+import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
@@ -19,8 +20,9 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
+import buttonBar from 'components/Structure/ViewerAndEntries/button-bar.css';
 
-const f = foundationPartial(style, ipro, fonts);
+const f = foundationPartial(style, buttonBar, ipro, fonts);
 
 const confidenceColors = [
   {
@@ -212,6 +214,7 @@ const AlphaFoldModel = (
                 style={{
                   display: isSplitScreen ? 'none' : 'block',
                 }}
+                className={f('button-bar')}
               >
                 <Link
                   className={f('control')}

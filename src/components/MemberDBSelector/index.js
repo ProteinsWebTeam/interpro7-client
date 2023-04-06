@@ -8,6 +8,7 @@ import { noop, get as _get } from 'lodash-es';
 import config from 'config';
 
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import loadData from 'higherOrder/loadData';
@@ -250,20 +251,19 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
     this.setState({ visible: true });
   };
 
-  _handleExit = (withDelay /*: boolean*/) => (
-    maybeEvent /*: Event | number */,
-  ) => {
-    if (!this.state.visible) return;
-    const delay = Number.isFinite(maybeEvent) ? maybeEvent : MIN_DELAY;
-    this._exit = cancelable(
-      sleep(withDelay ? delay : 0).then(() => {
-        if (this._exit && !this._exit.canceled) {
-          this.setState({ visible: false });
-        }
-      }),
-    );
-    this._exit.promise.catch(noop);
-  };
+  _handleExit =
+    (withDelay /*: boolean*/) => (maybeEvent /*: Event | number */) => {
+      if (!this.state.visible) return;
+      const delay = Number.isFinite(maybeEvent) ? maybeEvent : MIN_DELAY;
+      this._exit = cancelable(
+        sleep(withDelay ? delay : 0).then(() => {
+          if (this._exit && !this._exit.canceled) {
+            this.setState({ visible: false });
+          }
+        }),
+      );
+      this._exit.promise.catch(noop);
+    };
 
   render() {
     const {

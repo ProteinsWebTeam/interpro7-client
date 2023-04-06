@@ -689,6 +689,11 @@ const help = [
     activeClass: f('is-active'),
   },
   {
+    name: 'Protein families game',
+    to: { description: { other: ['help', 'protein_families_game'] } },
+    activeClass: f('is-active'),
+  },
+  {
     name: 'Documentation',
     to: { description: { other: ['help', 'documentation'] } },
     activeClass: f('is-active'),
@@ -713,6 +718,11 @@ const about = [
   {
     name: 'Funding',
     to: { description: { other: ['about', 'funding'] } },
+    activeClass: f('is-active'),
+  },
+  {
+    name: 'License',
+    to: { description: { other: ['about', 'license'] } },
     activeClass: f('is-active'),
   },
   {

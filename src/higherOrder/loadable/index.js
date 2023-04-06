@@ -1,11 +1,13 @@
 import React from 'react';
 import LoadingComponent from 'components/SimpleCommonComponents/Loading';
 
+const Empty = React.PureComponent('Empty');
+
 const loadable = ({ loader, loading }) /*: Object */ => {
-  if (!loader) return;
+  if (!loader) return Empty;
   const Loaded = React.lazy(loader);
   const Loading = loading || LoadingComponent;
-  const Loadable = props => {
+  const Loadable = (props) => {
     return (
       <React.Suspense fallback={<Loading />}>
         <Loaded {...props} />

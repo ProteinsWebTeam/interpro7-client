@@ -5,31 +5,25 @@ exports[`External links <GoTerms /> entry: interpro should render GOTerms compon
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, annotated by InterPro curators"
     >
-      <Tooltip
-        title="GO terms, annotated by InterPro curators"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
     >
-      <p
-        className="columns"
-      >
+      <p>
         No GO Terms
       </p>
     </div>
@@ -42,24 +36,20 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, annotated by InterPro curators"
     >
-      <Tooltip
-        title="GO terms, annotated by InterPro curators"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
@@ -69,54 +59,6 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
           className="bp go-title"
         >
           biological process
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="mf go-title"
-        >
-          molecular function
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="cc go-title"
-        >
-          cellular component
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="go-title"
-        >
-          undefined
         </p>
         <ul
           className="go-list"
@@ -165,6 +107,38 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
               GO:0016021
               )
             </GoLink>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
+        >
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
           </li>
         </ul>
       </div>
@@ -178,24 +152,20 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, annotated by InterPro curators"
     >
-      <Tooltip
-        title="GO terms, annotated by InterPro curators"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
@@ -225,10 +195,20 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
         <ul
           className="go-list"
         >
-          <li
-            className="no-goterm"
-          >
-            None
+          <li>
+            <Memo(Loadable)
+              data="GO:0004930"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext"
+              id="GO:0004930"
+            >
+              test2
+               (
+              GO:0004930
+              )
+            </GoLink>
           </li>
         </ul>
       </div>
@@ -245,32 +225,6 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
             className="no-goterm"
           >
             None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="go-title"
-        >
-          undefined
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li>
-            <Memo(Loadable)
-              data="GO:0004930"
-              processData={[Function]}
-            />
-            <GoLink
-              className="go-terms ext"
-              id="GO:0004930"
-            >
-              test2
-               (
-              GO:0004930
-              )
-            </GoLink>
           </li>
         </ul>
       </div>
@@ -284,31 +238,25 @@ exports[`External links <GoTerms /> entry: pfam should render GOTerms component 
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, as provided by pfam"
     >
-      <Tooltip
-        title="GO terms, as provided by pfam"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
     >
-      <p
-        className="columns"
-      >
+      <p>
         No GO Terms
       </p>
     </div>
@@ -321,24 +269,20 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, as provided by pfam"
     >
-      <Tooltip
-        title="GO terms, as provided by pfam"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
@@ -348,54 +292,6 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
           className="bp go-title"
         >
           biological process
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="mf go-title"
-        >
-          molecular function
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="cc go-title"
-        >
-          cellular component
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="go-title"
-        >
-          undefined
         </p>
         <ul
           className="go-list"
@@ -444,6 +340,38 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
               GO:0016021
               )
             </GoLink>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
+        >
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
           </li>
         </ul>
       </div>
@@ -457,24 +385,20 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
   data-testid="go-terms"
 >
   <div
-    className="row"
+    className="vf-stack"
   >
-    <div
-      className="large-12 columns"
+    <Tooltip
+      title="GO terms, as provided by pfam"
     >
-      <Tooltip
-        title="GO terms, as provided by pfam"
+      <h4
+        className="title"
       >
-        <h4
-          className="title"
-        >
-          GO terms
-        </h4>
-      </Tooltip>
-    </div>
+        GO terms
+      </h4>
+    </Tooltip>
   </div>
   <div
-    className="row columns"
+    className="vf-stack"
   >
     <div
       className="go-columns"
@@ -500,38 +424,6 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
           className="mf go-title"
         >
           molecular function
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="cc go-title"
-        >
-          cellular component
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="go-title"
-        >
-          undefined
         </p>
         <ul
           className="go-list"
@@ -553,107 +445,6 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
           </li>
         </ul>
       </div>
-    </div>
-  </div>
-</section>
-`;
-
-exports[`External links <GoTerms /> protein: reviewed should render GOTerms component with empty subset 1`] = `
-<section
-  data-testid="go-terms"
->
-  <div
-    className="row"
-  >
-    <div
-      className="large-12 columns"
-    >
-      <Tooltip
-        title="GO terms, as provided by the InterPro2GO pipeline"
-      >
-        <h4
-          className="title"
-        >
-          InterPro GO terms
-        </h4>
-      </Tooltip>
-    </div>
-  </div>
-  <div
-    className="row columns"
-  >
-    <div
-      className="go-columns"
-    >
-      <p
-        className="columns"
-      >
-        No GO Terms
-      </p>
-    </div>
-  </div>
-</section>
-`;
-
-exports[`External links <GoTerms /> protein: reviewed should render GoTerms component 1`] = `
-<section
-  data-testid="go-terms"
->
-  <div
-    className="row"
-  >
-    <div
-      className="large-12 columns"
-    >
-      <Tooltip
-        title="GO terms, as provided by the InterPro2GO pipeline"
-      >
-        <h4
-          className="title"
-        >
-          InterPro GO terms
-        </h4>
-      </Tooltip>
-    </div>
-  </div>
-  <div
-    className="row columns"
-  >
-    <div
-      className="go-columns"
-    >
-      <div>
-        <p
-          className="bp go-title"
-        >
-          biological process
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
-      <div>
-        <p
-          className="mf go-title"
-        >
-          molecular function
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
       <div>
         <p
           className="cc go-title"
@@ -670,11 +461,70 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
           </li>
         </ul>
       </div>
+    </div>
+  </div>
+</section>
+`;
+
+exports[`External links <GoTerms /> protein: reviewed should render GOTerms component with empty subset 1`] = `
+<section
+  data-testid="go-terms"
+>
+  <div
+    className="vf-stack"
+  >
+    <Tooltip
+      title="GO terms, as provided by the InterPro2GO pipeline"
+    >
+      <h4
+        className="title"
+      >
+        InterPro GO terms
+      </h4>
+    </Tooltip>
+  </div>
+  <div
+    className="vf-stack"
+  >
+    <div
+      className="go-columns"
+    >
+      <p>
+        No GO Terms
+      </p>
+    </div>
+  </div>
+</section>
+`;
+
+exports[`External links <GoTerms /> protein: reviewed should render GoTerms component 1`] = `
+<section
+  data-testid="go-terms"
+>
+  <div
+    className="vf-stack"
+  >
+    <Tooltip
+      title="GO terms, as provided by the InterPro2GO pipeline"
+    >
+      <h4
+        className="title"
+      >
+        InterPro GO terms
+      </h4>
+    </Tooltip>
+  </div>
+  <div
+    className="vf-stack"
+  >
+    <div
+      className="go-columns"
+    >
       <div>
         <p
-          className="go-title"
+          className="bp go-title"
         >
-          undefined
+          biological process
         </p>
         <ul
           className="go-list"
@@ -726,54 +576,6 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
           </li>
         </ul>
       </div>
-    </div>
-  </div>
-</section>
-`;
-
-exports[`External links <GoTerms /> protein: reviewed should render GoTerms component 2`] = `
-<section
-  data-testid="go-terms"
->
-  <div
-    className="row"
-  >
-    <div
-      className="large-12 columns"
-    >
-      <Tooltip
-        title="GO terms, as provided by the InterPro2GO pipeline"
-      >
-        <h4
-          className="title"
-        >
-          InterPro GO terms
-        </h4>
-      </Tooltip>
-    </div>
-  </div>
-  <div
-    className="row columns"
-  >
-    <div
-      className="go-columns"
-    >
-      <div>
-        <p
-          className="bp go-title"
-        >
-          biological process
-        </p>
-        <ul
-          className="go-list"
-        >
-          <li
-            className="no-goterm"
-          >
-            None
-          </li>
-        </ul>
-      </div>
       <div>
         <p
           className="mf go-title"
@@ -806,11 +608,55 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
           </li>
         </ul>
       </div>
+    </div>
+  </div>
+</section>
+`;
+
+exports[`External links <GoTerms /> protein: reviewed should render GoTerms component 2`] = `
+<section
+  data-testid="go-terms"
+>
+  <div
+    className="vf-stack"
+  >
+    <Tooltip
+      title="GO terms, as provided by the InterPro2GO pipeline"
+    >
+      <h4
+        className="title"
+      >
+        InterPro GO terms
+      </h4>
+    </Tooltip>
+  </div>
+  <div
+    className="vf-stack"
+  >
+    <div
+      className="go-columns"
+    >
       <div>
         <p
-          className="go-title"
+          className="bp go-title"
         >
-          undefined
+          biological process
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
+        >
+          molecular function
         </p>
         <ul
           className="go-list"
@@ -829,6 +675,22 @@ exports[`External links <GoTerms /> protein: reviewed should render GoTerms comp
               GO:0004930
               )
             </GoLink>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
           </li>
         </ul>
       </div>

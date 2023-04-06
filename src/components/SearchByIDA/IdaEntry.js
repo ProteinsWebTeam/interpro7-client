@@ -7,6 +7,7 @@ import { createSelector } from 'reselect';
 
 import Select from 'react-select';
 
+// $FlowFixMe
 import getFetch from 'higherOrder/loadData/getFetch';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';

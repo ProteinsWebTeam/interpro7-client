@@ -1,4 +1,3 @@
-// @flow
 import { getLiteratureIdsFromDescription } from '.';
 
 describe('getLiteratureIdsFromDescription', () => {

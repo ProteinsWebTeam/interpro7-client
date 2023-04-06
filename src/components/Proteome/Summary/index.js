@@ -4,7 +4,8 @@ import T from 'prop-types';
 
 import Accession from 'components/Accession';
 import Species from 'components/Protein/Species';
-import { ProteomeLink } from 'components/ExtLink';
+// $FlowFixMe
+import ProteomeLink from 'components/ExtLink/ProteomeLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import SarsCov2 from 'components/Proteome/SarsCov2';
 

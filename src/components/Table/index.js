@@ -4,6 +4,7 @@ import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';

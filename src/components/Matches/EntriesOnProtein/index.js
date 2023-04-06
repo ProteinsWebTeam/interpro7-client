@@ -8,6 +8,7 @@ import ProtVistaMatches from '../ProtVistaMatches';
 import protvista from 'components/ProtVista/style.css';
 import { location2html } from 'utils/text';
 import { EntryColorMode, getTrackColor } from 'utils/entry-color';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 const f = foundationPartial(protvista);

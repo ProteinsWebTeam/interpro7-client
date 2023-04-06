@@ -7,6 +7,7 @@ import cn from 'classnames/bind';
 
 import Link from 'components/generic/Link';
 import TimeAgo from 'components/TimeAgo';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import styles from './style.css';

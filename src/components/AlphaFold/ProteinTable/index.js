@@ -9,6 +9,7 @@ import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 

@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+// $FlowFixMe
 import cancelable from 'utils/cancelable/index';
 import getsInView from 'utils/gets-in-view/index';
 import { schedule } from 'timing-functions';

@@ -10,6 +10,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { Column } from 'components/Table';
 import Table from 'components/Table';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';

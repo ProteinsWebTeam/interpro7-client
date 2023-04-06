@@ -52,6 +52,7 @@ const getNextLocation = (customLocation, to) =>
 
 export class _Link extends PureComponent /*:: <Props> */ {
   static propTypes = {
+    id: T.string,
     onClick: T.func,
     onNewLocation: T.func,
     customLocation: T.shape({

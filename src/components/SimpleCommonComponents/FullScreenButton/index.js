@@ -4,6 +4,7 @@ import T from 'prop-types';
 
 import { noop } from 'lodash-es';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';

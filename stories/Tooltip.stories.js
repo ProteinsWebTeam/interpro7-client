@@ -1,5 +1,6 @@
 import React from 'react';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 export default {

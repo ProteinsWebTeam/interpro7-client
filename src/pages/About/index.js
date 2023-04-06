@@ -30,17 +30,11 @@ const AboutInterPro = () => <ContentFromRTD page="interpro.rst" />;
 const Consortium = () => <ContentFromRTD page="databases.rst" />;
 const Funding = () => <ContentFromRTD page="funding.rst" />;
 const Privacy = () => <ContentFromRTD page="privacy.rst" />;
+const License = () => <ContentFromRTD page="license.rst" />;
 const Team = () => <ContentFromRTD page="team.rst" />;
 const InterProScan = () => (
   <ContentFromRTD page="interproscan.rst" format="interproscan" />
 );
-
-// const InterProScan = loadable({
-//   loader: () =>
-//     import(
-//       /* webpackChunkName: "about-interproscan" */ 'components/About/InterProScan'
-//     ),
-// });
 
 const routes = new Map([
   ['interpro', AboutInterPro],
@@ -48,6 +42,7 @@ const routes = new Map([
   ['consortium', Consortium],
   ['funding', Funding],
   ['privacy', Privacy],
+  ['license', License],
   ['team', Team],
 ]);
 

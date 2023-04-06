@@ -3,6 +3,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import ClipboardJS from 'clipboard';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { addToast } from 'actions/creators';
 
@@ -48,7 +49,4 @@ CopyToClipboard.propTypes = {
   tooltipText: T.string,
   addToast: T.func,
 };
-export default connect(
-  undefined,
-  { addToast },
-)(CopyToClipboard);
+export default connect(undefined, { addToast })(CopyToClipboard);

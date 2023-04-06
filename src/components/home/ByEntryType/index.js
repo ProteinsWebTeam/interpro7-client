@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { format } from 'url';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';

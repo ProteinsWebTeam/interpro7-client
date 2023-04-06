@@ -5,9 +5,12 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Accession from 'components/Accession';
+// $FlowFixMe
 import Description from 'components/Description';
-import { BaseLink } from 'components/ExtLink';
+// $FlowFixMe
+import BaseLink from 'components/ExtLink/BaseLink';
 import { setDBs } from 'utils/processDescription/handlers';
+// $FlowFixMe
 import Literature from 'components/Entry/Literature';
 
 import loadable from 'higherOrder/loadable';

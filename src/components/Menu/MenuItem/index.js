@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import cn from 'classnames';
 
 import Link from 'components/generic/Link';
-import { BaseLink } from 'components/ExtLink';
+// $FlowFixMe
+import BaseLink from 'components/ExtLink/BaseLink';
 
 import { closeEverything } from 'actions/creators';
 

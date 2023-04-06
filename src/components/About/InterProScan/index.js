@@ -13,6 +13,7 @@ import loadData from 'higherOrder/loadData';
 import { getUrlForRelease } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 const f = foundationPartial(ipro, style, fonts);

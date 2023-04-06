@@ -11,6 +11,7 @@ import { descriptionSelector } from 'reducers/custom-location/description';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadable from 'higherOrder/loadable';
 import ToggleSwitch from 'components/ToggleSwitch';

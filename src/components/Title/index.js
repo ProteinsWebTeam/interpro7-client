@@ -4,8 +4,10 @@ import T from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 
 import MemberSymbol from 'components/Entry/MemberSymbol';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadWebComponent from 'utils/load-web-component';
+// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import loadData from '../../higherOrder/loadData';
@@ -35,9 +37,9 @@ const mapNameToClass = new Map([
   ['homologous_superfamily', 'title-id-hh'],
 ]);
 
-/*:: type Props = {
-  metadata: {
-    name: { name: string, short: ?string },
+/*::
+type Metadata = {
+    name: { name: string, short: ?string } | string,
     accession: string | number,
     source_database: string,
     type: string,
@@ -47,7 +49,9 @@ const mapNameToClass = new Map([
     release_date?: string,
     chains?: Array<string>,
     is_fragment?: boolean,
-  },
+  }
+type Props = {
+  metadata: Metadata,
   mainType: string,
   data?: Object,
   entries: Array<string>,
@@ -61,17 +65,7 @@ const mapNameToClass = new Map([
 
 const accessionDisplay = new Set(['protein', 'structure', 'proteome']);
 
-const EntryIcon = (
-  { metadata } /*: {metadata: {name: { name: string, short: ?string },
-    accession: string | number,
-    source_database: string,
-    type: string,
-    gene?: string,
-    experiment_type?: string,
-    source_organism?: Object,
-    release_date?: string,
-    chains?: Array<string>}} */,
-) => (
+const EntryIcon = ({ metadata } /*: {metadata: Metadata} */) => (
   <Tooltip title={`${metadata.type.replace('_', ' ')} type`}>
     <interpro-type
       type={metadata.type.replace('_', ' ')}
@@ -129,21 +123,11 @@ const rtdLinks = {
 };
 
 const TitleTag = (
-  { metadata, mainType, dbLabel } /*: {metadata:
-                    {
-                      name: { name: string, short: ?string },
-                      accession: string | number,
-                      source_database: string,
-                      type: string,
-                      gene?: string,
-                      experiment_type?: string,
-                      source_organism?: Object,
-                      release_date?: string,
-                      chains?: Array<string>
-                      },
-                      mainType: string,
-                      dbLabel: string
-                     } */,
+  { metadata, mainType, dbLabel } /*: {
+    metadata:Metadata,
+    mainType: string,
+    dbLabel: string
+  } */,
 ) => {
   const isEntry = mainType === 'entry';
   // eslint-disable-next-line camelcase
@@ -202,18 +186,8 @@ FragmentTag.propTypes = {
 };
 
 const AccessionTag = (
-  { metadata, mainType, isIPScanResult = false } /*: {metadata:
-    {
-      name: { name: string, short: ?string },
-      accession: string | number,
-      source_database: string,
-      type: string,
-      gene?: string,
-      experiment_type?: string,
-      source_organism?: Object,
-      release_date?: string,
-      chains?: Array<string>,
-    },
+  { metadata, mainType, isIPScanResult = false } /*: {
+    metadata: Metadata,
     mainType: string,
     isIPScanResult: boolean,
   } */,
@@ -301,7 +275,12 @@ class Title extends PureComponent /*:: <Props, State> */ {
       databases && databases[metadata.source_database]
         ? databases[metadata.source_database].name
         : metadata.source_database;
-    const isIPScanResult = metadata.name.name === 'InterProScan Search Result';
+
+    const longName =
+      typeof metadata.name === 'string'
+        ? metadata.name
+        : metadata.name.name || metadata.name.short || metadata.accession;
+    const isIPScanResult = longName === 'InterProScan Search Result';
 
     return (
       <div className={f('title')} data-testid="titlebar">
@@ -312,7 +291,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
             <>
               <EntryIcon metadata={metadata} />
               <Helmet
-                titleTemplate={`${metadata.name.name} ${metadata.accession} - Entry - InterPro`}
+                titleTemplate={`${longName} ${metadata.accession} - Entry - InterPro`}
               >
                 <title>InterPro</title>
               </Helmet>
@@ -336,9 +315,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
         }
         {metadata && (
           <Helmet
-            titleTemplate={`${
-              metadata.name.name || metadata.name.short || metadata.accession
-            } (${metadata.accession}) - ${
+            titleTemplate={`${longName} (${metadata.accession}) - ${
               isEntry ? dbLabel : ' '
             } ${mainType} - InterPro`}
           >
@@ -357,7 +334,7 @@ class Title extends PureComponent /*:: <Props, State> */ {
                 'margin-bottom-large': isIPScanResult,
               })}
             >
-              {metadata.name.name}{' '}
+              {longName}{' '}
             </h3>
             {
               // Showing Favourites only for InterPro entries for now

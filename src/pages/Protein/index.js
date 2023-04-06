@@ -6,6 +6,7 @@ import {
   metadataPropType,
 } from 'higherOrder/loadData/dataPropTypes';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';

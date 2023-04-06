@@ -7,7 +7,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
-
+// $FlowFixMe
 import GoTerms from 'components/GoTerms';
 import Loading from 'components/SimpleCommonComponents/Loading';
 

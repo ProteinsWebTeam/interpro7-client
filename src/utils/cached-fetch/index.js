@@ -107,7 +107,12 @@ const commonCachedFetch =
   (responseType /*: ?string */) =>
   async (
     url /*: string */,
-    { method = 'GET', headers = new Headers(), ...options } /*: Object */ = {},
+    {
+      method = 'GET',
+      headers = new Headers(),
+      signal,
+      ...options
+    } /*: Object */ = {},
     onProgress /*:: ?: (number) => void */,
     versionChanged /*: function */,
   ) /*: Promise<FetchOutput> */ => {

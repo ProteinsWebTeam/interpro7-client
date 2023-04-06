@@ -15,6 +15,8 @@ import GeneralWarning from 'components/home/GeneralWarning';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
 import { PrintedInterPro2022 } from 'components/Help/Publication';
 import Tip from 'components/Tip';
+import Toast from 'components/Toast/Toast';
+
 import Link from 'components/generic/Link';
 
 import { ToolCards } from 'components/home/Tools';
@@ -35,6 +37,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
 import style from '../style.css';
 import local from './style.css';
+import toast from 'components/Toast/ToastDisplay/style.css';
 
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -45,7 +48,15 @@ import wellcome from '../../images/thirdparty/funding/logo_wellcome.jpg';
 import bbsrc from '../../images/thirdparty/funding/logo_bbsrc.png';
 
 // Bind css with style object
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, style, local);
+const f = foundationPartial(
+  ebiGlobalStyles,
+  fonts,
+  ipro,
+  theme,
+  style,
+  local,
+  toast,
+);
 
 const MAX_DELAY_FOR_TWITTER = 10000;
 
@@ -208,6 +219,17 @@ const Announcement = () => (
     </div>
   </div>
 );
+
+// eslint-disable-next-line
+function supportsES6() {
+  try {
+    // eslint-disable-next-line
+    new Function('(a = 0) => a');
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
 class Home extends PureComponent {
   static propTypes = {
     showSettingsToast: T.bool.isRequired,
@@ -225,6 +247,17 @@ class Home extends PureComponent {
             settingsName="showSettingsToast"
           />
         ) : null}
+        {'noModule' in HTMLScriptElement.prototype && supportsES6() ? null : (
+          <ul className={f('toast-display')}>
+            <Toast
+              title="⚠️ Unsuported Browser"
+              body="We have detected some missing features in your browser. You might experience some issues in our website. Please update your browser."
+              toastID="browser-error"
+              style={{ right: '2rem', bottom: '40vh' }}
+            />
+          </ul>
+        )}
+
         {this.props.showHelpToast ? (
           <Tip
             title="💡 Need help?"

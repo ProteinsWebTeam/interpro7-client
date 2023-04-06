@@ -9,6 +9,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import '@nightingale-elements/nightingale-manager';

@@ -1,7 +1,10 @@
 import React from 'react';
 import { withKnobs, number } from '@storybook/addon-knobs';
 
-import Description, { DescriptionReadMore } from 'components/Description';
+import Description from 'components/Description';
+// $FlowFixMe
+import DescriptionReadMore from 'components/Description/DescriptionReadMore';
+
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
 import Literature from 'components/Entry/Literature';
