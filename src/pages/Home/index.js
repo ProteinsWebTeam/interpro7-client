@@ -251,7 +251,7 @@ class Home extends PureComponent {
           <ul className={f('toast-display')}>
             <Toast
               title="⚠️ Unsuported Browser"
-              body="We have detected some missing features in your browser. You might experience some issues in our website. Please update your browser."
+              body="We have detected that your web browser does not support JavaScript modules, which are required for the InterPro website to function properly. As a result, certain features may not work as expected. We recommend that you upgrade your browser to the latest version or switch to a supported browser such as Firefox, Chrome, or Edge."
               toastID="browser-error"
               style={{ right: '2rem', bottom: '40vh' }}
             />

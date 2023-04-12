@@ -198,7 +198,7 @@
       window.addEventListener('load', function (event) {
         if (!('noModule' in HTMLScriptElement.prototype)) {
           document.getElementById('error').innerHTML =
-            "<b>⚠️ Error!</b> The version of this browser doesn't support some essential features used in InterPro.<br/><br/>Please upgrade your browser.";
+            "Sorry, your web browser does not support JavaScript modules, which are required for InterPro. Please upgrade your browser to a newer version, or switch to a different browser that supports JavaScript modules.";
           console.error('No support for es-modules');
         }
       });
