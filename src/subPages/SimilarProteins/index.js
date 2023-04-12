@@ -16,8 +16,8 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadable from 'higherOrder/loadable';
 import ToggleSwitch from 'components/ToggleSwitch';
 
-import loadWebComponent from 'utils/load-web-component';
-import ProtvistaInterproTrack from 'protvista-interpro-track';
+// import loadWebComponent from 'utils/load-web-component';
+// import ProtvistaInterproTrack from 'protvista-interpro-track';
 
 import { foundationPartial } from 'styles/foundation';
 import localStyle from './style.css';
@@ -465,7 +465,7 @@ state: Object,
   const [similarProtDb, setSimilarProtDb] = useState('uniprot');
   if (loadingData) return <Loading />;
 
-  loadWebComponent(() => ProtvistaInterproTrack).as('protvista-interpro-track');
+  // loadWebComponent(() => ProtvistaInterproTrack).as('protvista-interpro-track');
   return (
     <div className={f('row', 'column')}>
       <SimilarProteinsHeader

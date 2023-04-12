@@ -44,21 +44,23 @@ class MatchesOnProtein extends ProtVistaMatches {
       <div className={f('track-in-table')}>
         <div className={f('track-container')}>
           <div className={f('aligned-to-track-component')}>
-            <protvista-sequence
+            <nightingale-sequence
               ref={(e) => (this.web_protein = e)}
               length={length}
-              displaystart="1"
-              displayend={length}
+              display-start="1"
+              display-end={length}
+              height="30"
               use-ctrl-to-zoom
             />
           </div>
         </div>
         <div className={f('track-component')}>
           <Tooltip title={tooltip}>
-            <protvista-interpro-track
+            <nightingale-interpro-track
               length={length}
-              displaystart="1"
-              displayend={length}
+              display-start="1"
+              display-end={length}
+              margin-color="#fafafa"
               id={`track_${accession}`}
               ref={(e) => (this.web_tracks[accession] = e)}
               expanded

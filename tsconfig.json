@@ -11,6 +11,7 @@
     ],
     "jsx": "react",
     "declaration": false,
+    "experimentalDecorators": true,
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
@@ -26,6 +27,5 @@
   },
   "include": [
     "src/**/*",
-    "node_modules/protvista-links/src/*"
   ]
 }

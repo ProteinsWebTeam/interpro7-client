@@ -28,7 +28,6 @@ const Alignment = ({
   onConservationProgress,
   setDisplayingAlignment,
   setColorMap,
-  overlayConservation,
 }) => {
   const [forceShow, setForceShow] = useState(false);
   const threshold = 1000;
@@ -49,7 +48,6 @@ const Alignment = ({
           type={type}
           num={numSequences}
           colorscheme={colorscheme}
-          overlayConservation={overlayConservation}
         />
       ) : (
         <div>
@@ -75,7 +73,6 @@ Alignment.propTypes = {
   onConservationProgress: T.func,
   setDisplayingAlignment: T.func,
   setColorMap: T.func,
-  overlayConservation: T.bool,
 };
 
 const AllowedColorschemes = [
@@ -108,7 +105,6 @@ const EntryAlignments = ({
   // TODO: draw the legend using 👇🏽 the colorMap coming from events in the component.
   const [colorMap, setColorMap] = useState({});
   const [isDisplayingAlignment, setDisplayingAlignment] = useState(false);
-  const [overlayConservation, setOverlayConservation] = useState(false);
 
   // eslint-disable-next-line camelcase
   const types = Object.entries(data?.payload?.metadata?.entry_annotations || {})
@@ -176,28 +172,20 @@ const EntryAlignments = ({
                     </option>
                   </select>
                 </label>
-                <label className={f({ disabled: conservastionProgress < 1 })}>
-                  Conservation:
-                  <input
-                    type="checkbox"
-                    value={overlayConservation}
-                    onChange={() =>
-                      setOverlayConservation(!overlayConservation)
-                    }
-                    disabled={conservastionProgress < 1}
-                  />
-                </label>
+
                 <DropDownButton
                   label="Legends"
                   extraClasses={f('dropdown-container')}
                 >
                   <table className={f('legend-table')}>
-                    {Object.entries(colorMap).map(([legend, color], i) => (
-                      <tr key={i}>
-                        <td style={{ background: color }}> </td>
-                        <td>{legend}</td>
-                      </tr>
-                    ))}
+                    <tbody>
+                      {Object.entries(colorMap).map(([legend, color], i) => (
+                        <tr key={i}>
+                          <td style={{ background: color }}> </td>
+                          <td>{legend}</td>
+                        </tr>
+                      ))}
+                    </tbody>
                   </table>
                 </DropDownButton>
               </>
@@ -228,7 +216,6 @@ const EntryAlignments = ({
           onConservationProgress={setConservastionProgress}
           setDisplayingAlignment={setDisplayingAlignment}
           setColorMap={setColorMap}
-          overlayConservation={overlayConservation}
         />
       )}
     </div>

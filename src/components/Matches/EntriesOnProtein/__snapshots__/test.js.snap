@@ -10,9 +10,10 @@ exports[`<EntriesOnProtein /> should render 1`] = `
     <div
       className="aligned-to-track-component"
     >
-      <protvista-sequence
-        displayend={882}
-        displaystart="1"
+      <nightingale-sequence
+        display-end={882}
+        display-start="1"
+        height="30"
         length={882}
         use-ctrl-to-zoom={true}
       />
@@ -24,12 +25,13 @@ exports[`<EntriesOnProtein /> should render 1`] = `
     <Tooltip
       title="<b>IPR000001</b><br/>Kringle<br/><p>300-380</p>"
     >
-      <protvista-interpro-track
-        displayend={882}
-        displaystart="1"
+      <nightingale-interpro-track
+        display-end={882}
+        display-start="1"
         expanded={true}
         id="track_IPR000001"
         length={882}
+        margin-color="#fafafa"
         shape="roundRectangle"
         use-ctrl-to-zoom={true}
       />

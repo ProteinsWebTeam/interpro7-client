@@ -62,11 +62,12 @@ class EntriesOnProtein extends ProtVistaMatches {
         {/* <SchemaOrgData data={matches[0]} processData={schemaProcessData} />*/}
         <div className={f('track-container')}>
           <div className={f('aligned-to-track-component')}>
-            <protvista-sequence
+            <nightingale-sequence
               ref={(e) => (this.web_protein = e)}
               length={protein.length}
-              displaystart="1"
-              displayend={protein.length}
+              display-start="1"
+              display-end={protein.length}
+              height="30"
               use-ctrl-to-zoom
             />
           </div>
@@ -79,10 +80,11 @@ class EntriesOnProtein extends ProtVistaMatches {
               entry?.name?.name || entry?.name?.short || entry.name,
             )}
           >
-            <protvista-interpro-track
+            <nightingale-interpro-track
               length={protein.length}
-              displaystart="1"
-              displayend={protein.length}
+              display-start="1"
+              display-end={protein.length}
+              margin-color="#fafafa"
               id={`track_${entry.accession}`}
               ref={(e) => (this.web_tracks[entry.accession] = e)}
               shape="roundRectangle"

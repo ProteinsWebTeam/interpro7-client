@@ -1,5 +1,5 @@
-// flow-typed signature: 99aed2dd0b5229f74e5db0e2218394e7
-// flow-typed version: 8af0836db5/react-redux_v8.x.x/flow_>=v0.142.x
+// flow-typed signature: ac3c3bfd0c0a853cc9f58c16521d8a9f
+// flow-typed version: efe3d0abb1/react-redux_v8.x.x/flow_>=v0.142.x
 
 /**
 The order of type arguments for connect() is as follows:
@@ -204,7 +204,29 @@ declare module "react-redux" {
   // Typings for Hooks
   // ------------------------------------------------------------
 
-  declare export function useDispatch<D>(): (
+  /* Action and AnyAction are taken from the redux TypeScript types defined here:
+    * https://github.com/reduxjs/redux/blob/d794c56f78eccb56ba3c67971c26df8ee34dacc1/src/types/actions.ts
+    *
+    * We turn them into objects so that they can be spread.
+    *
+    * We use AnyAction as the default for useDispatch as DefinitelyTyped does:
+    * https://github.com/DefinitelyTyped/DefinitelyTyped/blob/f7ec78508c6797e42f87a4390735bc2c650a1bfd/types/react-redux/index.d.ts#L540
+    */
+  declare export type Action<T> = {
+    type: T,
+    ...
+  }
+
+  declare export type AnyAction = {
+    ...Action<any>,
+    [string]: any
+  }
+
+  declare export type Dispatch<-A: Action<any>> = (action: A, ...extraArgs: any[]) => mixed
+
+  // Since A is contravariant in Dispatch, empty is a reasonable bound here. This is equivalent
+  // to using mixed as a default in a read-only position.
+  declare export function useDispatch<D: Dispatch<empty> = Dispatch<AnyAction>>(): (
     & (<T: { [key: string]: any }>(T) => T)
     // Supports thunks at their various lengths and use cases depending if user has typed them as tuple vs array
     & (<T>((...args: [any]) => T) => T)

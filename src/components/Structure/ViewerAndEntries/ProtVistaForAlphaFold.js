@@ -82,8 +82,8 @@ const ProtVistaForAlphaFold = (
   useEffect(() => {
     containerRef.current?.addEventListener('change', (event /*: Event */) => {
       if (!(event /*: any */).detail) return;
-      const { eventtype, highlight } = (event /*: any */).detail;
-      switch (eventtype) {
+      const { eventType, highlight } = (event /*: any */).detail;
+      switch (eventType) {
         case 'click':
           if (fixedSelectionRef.current.length) {
             setFixedSelection([]);
