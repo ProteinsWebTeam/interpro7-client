@@ -4,10 +4,11 @@ import Description from '..';
 
 import cssBinder from 'styles/cssBinder';
 
+import ipro from 'styles/interpro-vf.css';
 import styles from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const css = cssBinder(styles, fonts);
+const css = cssBinder(styles, fonts, ipro);
 
 type DescriptionReadMoreProps = {
   text: string;
@@ -57,7 +58,7 @@ class DescriptionReadMore extends PureComponent<
               <span>
                 Less{' '}
                 <i
-                  className={css('icon', 'icon-common', 'font-sm')}
+                  className={css('icon', 'icon-common', 'font-s')}
                   data-icon="&#xf102;"
                 />
               </span>
@@ -65,7 +66,7 @@ class DescriptionReadMore extends PureComponent<
               <span>
                 More{' '}
                 <i
-                  className={css('icon', 'icon-common', 'font-sm')}
+                  className={css('icon', 'icon-common', 'font-s')}
                   data-icon="&#xf103;"
                 />
               </span>

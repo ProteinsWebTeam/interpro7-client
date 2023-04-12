@@ -499,6 +499,7 @@ module.exports = (
         overlay: {
           errors: true,
           warnings: false,
+          runtimeErrors: false,
         },
       },
       hot: true,

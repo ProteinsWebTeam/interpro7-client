@@ -3,29 +3,31 @@ import { noop } from 'lodash-es';
 import * as defaults from '../defaults';
 
 // getUrl
-const extractGetUrl = (getUrl = defaults.getUrlForApi) => {
+const extractGetUrl = <Props = unknown>(
+  getUrl: string | GetUrl<Props> = defaults.getUrlForApi
+) => {
   if (typeof getUrl === 'string') {
     return defaults.getUrl(getUrl);
   }
   return getUrl;
 };
 
-export type Params =
+export type Params<Props = unknown> =
   | {
-      getUrl?: GetUrl;
+      getUrl?: GetUrl<Props>;
       fetchOptions?: FetchOptions;
       propNamespace?: string;
       weight?: number;
       mapStateToProps?:
-        | ((state: unknown, props: unknown) => Record<string, unknown>)
+        | ((state: unknown, props: unknown) => Props)
         | typeof noop;
       mapDispatchToProps?: Record<string, unknown>;
     }
   | string
-  | GetUrl;
+  | GetUrl<Props>;
 
-export type ExtractedParams = {
-  getUrl: GetUrl;
+export type ExtractedParams<Props = unknown> = {
+  getUrl: GetUrl<Props>;
   fetchOptions: FetchOptions;
   propNamespace: string;
   weight: number;
@@ -35,9 +37,9 @@ export type ExtractedParams = {
   mapDispatchToProps: Record<string, unknown>;
 };
 
-export default (params?: Params) => {
-  const extracted: ExtractedParams = {
-    getUrl: defaults.getUrlForApi,
+export default <Props = unknown>(params?: Params<Props>) => {
+  const extracted: ExtractedParams<Props> = {
+    getUrl: defaults.getUrlForApi as GetUrl<Props>,
     fetchOptions: {},
     propNamespace: '',
     weight: 1,
