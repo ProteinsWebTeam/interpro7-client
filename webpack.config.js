@@ -482,6 +482,7 @@ module.exports = (env = { dev: true }, { mode = 'production' }) => {
         overlay: {
           errors: true,
           warnings: false,
+          runtimeErrors: false,
         },
       },
       hot: true,

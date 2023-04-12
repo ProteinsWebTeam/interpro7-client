@@ -10,8 +10,9 @@ import Citations, { CITATION_REGEX } from '../Citations';
 import cssBinder from 'styles/cssBinder';
 
 import styles from '../style.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(styles);
+const css = cssBinder(styles, ipro);
 
 const TAG_REGEX = /(\[\w+:[\w.-]+\])/;
 const TAG_REGEX_KV = /\[(\w+):([\w.-]+)]/;
@@ -29,13 +30,11 @@ const xReferenceURL = {
 type Props = {
   p: string;
   literature?: Array<[string, Reference]>;
-  accession?: string;
   withoutIDs?: boolean;
 };
 export const Paragraph = ({
   p,
   literature = [],
-  accession,
   withoutIDs = false,
 }: Props) => {
   let text = p;
@@ -57,7 +56,6 @@ export const Paragraph = ({
               text={text}
               key={i}
               literature={literature}
-              accession={accession || ''}
               withoutIDs={withoutIDs}
             />
           );
@@ -121,7 +119,7 @@ export const Paragraph = ({
                   tagValue
                 )}
                 target="_blank"
-                className={css('ext')}
+                className={css('ext-link')}
                 key={i}
               >
                 {tagValue}

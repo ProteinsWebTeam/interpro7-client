@@ -259,7 +259,7 @@
     "utility-types": "3.10.0",
     "webpack": "5.76.1",
     "webpack-cli": "5.0.1",
-    "webpack-dev-server": "4.11.1",
+    "webpack-dev-server": "4.13.2",
     "worker-loader": "3.0.8",
     "yaml-loader": "0.8.0"
   }

@@ -625,7 +625,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     if (!(length && data)) return <Loading />;
 
     const { hideCategory } = this.state;
-    const highlightColor = '#EB3BFF22';
+    const highlightColor = '#607D8B50';
     return (
       <div
         ref={this._mainRef}

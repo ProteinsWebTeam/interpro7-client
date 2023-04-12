@@ -127,12 +127,12 @@ const AlignmentViewer = ({
               gap: '1rem',
             }}
           >
-            <span>{align.rows()} Sequences</span>
+            <span>{align.rows().toLocaleString()} sequences</span>
             <div>
               <button
                 className={f('icon', 'icon-common', 'zoom-button')}
                 data-icon="&#xf146;"
-                title={'Click to zoom out      Ctrl+Scroll'}
+                title={'Click or use CTRL + mouse wheel down to zoom out'}
                 onClick={() => {
                   (navigationTrack.current /*: any */)
                     ?.zoomOut();
@@ -142,7 +142,7 @@ const AlignmentViewer = ({
               <button
                 className={f('icon', 'icon-common', 'zoom-button')}
                 data-icon="&#xf0fe;"
-                title={'Click to zoom in      Ctrl+Scroll'}
+                title={'Click or use CTRL + mouse wheel up to to zoom in'}
                 onClick={() => {
                   (navigationTrack.current /*: any */)
                     ?.zoomIn();
