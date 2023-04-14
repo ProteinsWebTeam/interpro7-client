@@ -35,6 +35,7 @@ const AlignmentViewer = ({
   colorscheme,
   onConservationProgress,
   setColorMap,
+  overlayConservation,
   contacts = null,
   contactMinDistance = defaultContactMinDistance,
   contactMinProbability = defaultContactMinProbability,
@@ -81,18 +82,16 @@ const AlignmentViewer = ({
         const { map } = msaTrack.current.getColorMap();
         setColorMap(map || {});
       });
-      msaTrack.current.addEventListener('click', (event) => {
-        if (event.target.tagName === 'SPAN') {
-          const name = event.target.innerHTML;
-          const accession = align.gs.AC[name]?.[0]?.replace(/\.\d$/, '');
-          if (accession) {
-            goToCustomLocation({
-              description: {
-                main: { key: 'protein' },
-                protein: { db: 'uniprot', accession },
-              },
-            });
-          }
+      msaTrack.current.addEventListener('msa-active-label', (event) => {
+        const name = event.detail.label;
+        const accession = align.gs.AC[name]?.[0]?.replace(/\.\d$/, '');
+        if (accession) {
+          goToCustomLocation({
+            description: {
+              main: { key: 'protein' },
+              protein: { db: 'uniprot', accession },
+            },
+          });
         }
       });
 
@@ -109,6 +108,13 @@ const AlignmentViewer = ({
   const labelWidth = 200;
   const length = align.columns();
 
+  const conservationOptions = {
+    'calculate-conservation': true,
+    'sample-size-conservation': 100,
+  };
+  if (overlayConservation) {
+    conservationOptions['overlay-conservation'] = true;
+  }
   return (
     <>
       <nightingale-manager id="example">
@@ -202,7 +208,7 @@ const AlignmentViewer = ({
           label-width={labelWidth}
           ref={msaTrack}
           color-scheme={colorscheme}
-          sample-size-conservation={100}
+          {...conservationOptions}
         />
       </nightingale-manager>
     </>
@@ -219,6 +225,7 @@ AlignmentViewer.propTypes = {
   data: dataPropType,
   onAlignmentLoaded: T.func,
   goToCustomLocation: T.func,
+  overlayConsevation: T.bool,
 };
 
 const mapStateToPropsForAlignment = createSelector(
