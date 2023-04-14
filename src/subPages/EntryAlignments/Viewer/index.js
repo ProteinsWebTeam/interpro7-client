@@ -225,7 +225,7 @@ AlignmentViewer.propTypes = {
   data: dataPropType,
   onAlignmentLoaded: T.func,
   goToCustomLocation: T.func,
-  overlayConsevation: T.bool,
+  overlayConservation: T.bool,
 };
 
 const mapStateToPropsForAlignment = createSelector(
