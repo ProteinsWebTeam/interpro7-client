@@ -275,7 +275,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           : null;
         if (tmp.length > 0) {
           const isNewElement =
-            !this.web_tracks[getUIDFromEntry(d)].data &&
+            !this.web_tracks[getUIDFromEntry(d)].data?.length &&
             !this.web_tracks[getUIDFromEntry(d)].sequence;
           this.web_tracks[getUIDFromEntry(d)].data = tmp;
           if (this.props.fixedHighlight)
