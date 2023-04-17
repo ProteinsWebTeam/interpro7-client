@@ -23,11 +23,11 @@ const addNewDefaultSttings = (settings) => {
   });
 };
 
-export default (history) => {
+export default (historyWrapper) => {
   const {
     location: { pathname: p, search, hash },
-  } = history.history;
-  const pathname = p.replace(history.basename, '/');
+  } = historyWrapper.history;
+  const pathname = p.replace(historyWrapper.basename, '/');
   let settings;
   if (settingsStorage) {
     settings = settingsStorage.getValue() || undefined;
@@ -60,10 +60,6 @@ export default (history) => {
         root: config.root.genome3d.pathname,
       };
     }
-  }
-  // TODO: remove this line when the logs show that users are now using /wwwapi/
-  if (settings?.api?.hostname === 'www.ebi.ac.uk') {
-    settings.api.root = settings.api.root.replace('/api/', '/wwwapi/');
   }
   let description = { other: ['NotFound'] };
   try {

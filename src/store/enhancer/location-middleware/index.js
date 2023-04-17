@@ -14,11 +14,11 @@ import autoScroll from 'utils/auto-scroll';
 // Middleware to handle history change events
 const middleware =
   (
-    history /*: {history: any, basename: string} */,
+    historyWrapper /*: {history: any, basename: string} */,
   ) /*: Middleware<*, *, *> */ =>
   ({ dispatch, getState }) => {
     // Hook into history
-    history.history.listen(
+    historyWrapper.history.listen(
       // Dispatch new action only when history actually changes
       // Build new action from scratch
       async ({ location } /*: {location: Location} */) => {
@@ -35,7 +35,7 @@ const middleware =
     );
 
     // Analytics
-    history.history.listen(() => {
+    historyWrapper.history.listen(() => {
       gtag('event', 'page_view', {
         event_label: window.location.href,
       });
@@ -44,10 +44,11 @@ const middleware =
     const historyDispatch = ({ customLocation, replace, state }) => {
       const { from_interpro6: _, ...query } = customLocation?.search || {};
       // $FlowFixMe
-      history.history[replace ? 'replace' : 'push'](
+      historyWrapper.history[replace ? 'replace' : 'push'](
         {
           pathname:
-            history.basename + descriptionToPath(customLocation.description),
+            historyWrapper.basename +
+            descriptionToPath(customLocation.description),
           search: format({ query }),
           hash: customLocation.hash,
         },
@@ -61,7 +62,7 @@ const middleware =
       replace: true,
       state: null,
     });
-    autoScroll(history.history.location);
+    autoScroll(historyWrapper.history.location);
 
     // Hijack normal Redux flow
     return (next) => (action) => {
@@ -69,10 +70,10 @@ const middleware =
       // eventually result in another NEW_PROCESSED_CUSTOM_LOCATION action being
       // dispatched through callback
       if (action.type === NEW_CUSTOM_LOCATION) {
-        const previous = history.history.location;
+        const previous = historyWrapper.history.location;
         // update browser's location
         historyDispatch(action);
-        autoScroll(history.history.location, previous);
+        autoScroll(historyWrapper.history.location, previous);
 
         return;
       }
