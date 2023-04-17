@@ -13,6 +13,7 @@ const ACCESSION_CLEANUP = [
 export const iproscan2urlDB = (db /*: string */) =>
   new Map([
     ['TIGRFAM', 'tigrfams'],
+    ['NCBIfam', 'ncbifam'],
     ['PROSITE_PROFILES', 'profile'],
     ['PROSITE_PATTERNS', 'prosite'],
     ['SUPERFAMILY', 'ssf'],
@@ -22,6 +23,7 @@ export const iproscan2urlDB = (db /*: string */) =>
 export const ebiSearch2urlDB = (db /*: string */) =>
   new Map([
     ['TIGRFAM', 'tigrfams'],
+    ['NCBIfam', 'ncbifam'],
     ['PROSITE profiles', 'profile'],
     ['PROSITE patterns', 'prosite'],
     ['SUPERFAMILY', 'ssf'],
@@ -37,6 +39,7 @@ export const ENTRY_DBS = [
   'profile',
   'smart',
   'tigrfams',
+  'ncbifam',
   'prosite',
   'prints',
   'hamap',
@@ -57,6 +60,7 @@ export const memberDbURL = new Map([
   ['smart', 'http://smart.embl-heidelberg.de/'],
   ['ssf', 'http://supfam.org/SUPERFAMILY/'],
   ['tigrfams', 'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/tigrfams/'],
+  ['ncbifam', 'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/'],
 ]);
 
 export default (db /*: string */) => {
@@ -81,6 +85,10 @@ export default (db /*: string */) => {
     ['ssf', 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid={}'],
     [
       'tigrfams',
+      'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/{}/',
+    ],
+    [
+      'ncbifam',
       'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/{}/',
     ],
   ]);

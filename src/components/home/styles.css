@@ -129,6 +129,9 @@ hr.md.ssf {
 hr.md.tigrfams {
   border-bottom: 2px solid var(--colors-tigrfams);
 }
+hr.md.ncbifam {
+  border-bottom: 2px solid var(--colors-ncbifam);
+}
 hr.md {
   margin: 2px 0 0 0;
 }

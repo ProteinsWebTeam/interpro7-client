@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
+import Redirect from 'components/generic/Redirect';
 import loadable from 'higherOrder/loadable';
 
 import BreadCrumbs from 'components/BreadCrumbs';
@@ -171,6 +172,29 @@ class HomeOrOther extends PureComponent /*:: <Props> */ {
   }
 }
 
+const locationSelectorForEntryDB = createSelector(
+  (state) => state?.customLocation?.description?.entry?.db,
+  (entryDB) => ({ entryDB }),
+);
+
+const TigrfamsRedirectConnected = ({ entryDB }) => {
+  return entryDB === 'tigrfams' ? (
+    <Redirect
+      to={(customLocation) => ({
+        ...customLocation,
+        description: {
+          ...customLocation.description,
+          entry: { ...customLocation.description.entry, db: 'ncbifam' },
+        },
+      })}
+    />
+  ) : null;
+};
+
+const TigrfamsRedirect = connect(locationSelectorForEntryDB)(
+  TigrfamsRedirectConnected,
+);
+
 export class Pages extends PureComponent /*:: <Props> */ {
   static propTypes = {
     stuck: T.bool.isRequired,
@@ -181,6 +205,7 @@ export class Pages extends PureComponent /*:: <Props> */ {
     const { stuck, top, ...props } = this.props;
     return (
       <div className={f('main', { stuck })}>
+        <TigrfamsRedirect />
         <ErrorBoundary>
           <div className={f('row', 'large-12', 'columns', 'breadcrumb')}>
             <BreadCrumbs />

@@ -18,6 +18,7 @@ export default {
       'smart',
       'ssf',
       'tigrfams',
+      'ncbifam',
     ],
     entryTypes: [
       'domain',
@@ -33,17 +34,7 @@ export default {
   /* eslint-disable no-magic-numbers */
   homepage: {
     species: [
-      559292,
-      6239,
-      10665,
-      83333,
-      284812,
-      7227,
-      2242,
-      9606,
-      10090,
-      3702,
-      39947,
+      559292, 6239, 10665, 83333, 284812, 7227, 2242, 9606, 10090, 3702, 39947,
       7955,
     ],
   },
