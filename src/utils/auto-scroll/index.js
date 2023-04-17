@@ -1,4 +1,6 @@
 // @flow
+/*:: import type { Location } from 'history'; */
+
 import { schedule, sleep } from 'timing-functions';
 
 const RETRY_DELAY = 100;

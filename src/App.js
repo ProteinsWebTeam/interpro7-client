@@ -9,11 +9,15 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 
 import config, { PROD, STAGING } from 'config';
 import createStore from 'store';
+import { removeLastSlash } from 'utils/url';
 
-const history = createBrowserHistory({
-  basename: config.root.website.pathname,
-});
-const store = createStore(history);
+const history = createBrowserHistory();
+const historyWrapper = {
+  history,
+  basename: removeLastSlash(config.root.website.pathname),
+};
+
+const store = createStore(historyWrapper);
 
 class App extends PureComponent /*:: <{||}> */ {
   async componentDidMount() {

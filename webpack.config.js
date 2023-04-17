@@ -198,6 +198,9 @@ const getConfigFor = (env, mode) => {
         shallowequal: path.resolve('node_modules/shallowequal'),
         ...nightingaleAliases,
       },
+      fallback: {
+        fs: false, // To avoid issue in molstar@3.31.X
+      },
     },
     module: {
       rules: [
@@ -222,7 +225,7 @@ const getConfigFor = (env, mode) => {
             path.resolve('src'),
             path.resolve('node_modules', 'lodash-es'),
             path.resolve('node_modules', 'timing-functions'),
-            path.resolve('node_modules', 'd3'),
+            // path.resolve('node_modules', 'd3'),
             path.resolve('node_modules', 'idb'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),

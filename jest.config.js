@@ -17,9 +17,7 @@ module.exports = {
     '\\.(css|less|scss)$': 'identity-obj-proxy',
     '^taxonomy-visualisation(.*)$':
       '<rootDir>/node_modules/taxonomy-visualisation/src/$1',
-    '^protvista-([^/]*)(.*)$': '<rootDir>/node_modules/protvista-$1/src/$2',
     '^d3-([^/]*)(.*)$': '<rootDir>/node_modules/d3-$1/dist/d3-$1.min.js',
-    d3: '<rootDir>/node_modules/d3/dist/d3.min.js',
   },
   preset: 'ts-jest/presets/js-with-babel',
   moduleDirectories: ['node_modules', 'src'],
