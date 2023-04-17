@@ -161,7 +161,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
             else if (type === 'secondary_structure')
               this.setSelectionsForSecondaryStructure(feature);
             else if (accession && !accession.startsWith('G3D:'))
-              // TODO: Needs refactoring
               this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
             break;
           case 'mouseout':

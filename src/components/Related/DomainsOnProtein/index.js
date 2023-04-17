@@ -34,10 +34,6 @@ const PIRSR_ACCESSION_LENGTH = 11;
 const PIRSF_PREFIX_LENGTH = 5;
 const HTTP_OK = 200;
 
-// const ProtVista = loadable({
-//   loader: () =>
-//     import(/* webpackChunkName: "protvista" */ 'components/ProtVista/deleteme'),
-// });
 const ProtVista = loadable({
   loader: () =>
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),

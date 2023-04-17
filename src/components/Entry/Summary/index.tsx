@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
-import { partition } from 'lodash-es';
 
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
+import DescriptionFromIntegrated from 'components/Description/DescriptionFromIntegrated';
 import Literature, {
   getLiteratureIdsFromDescription,
+  splitCitations,
 } from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
 import InterProHierarchy from 'components/Entry/InterProHierarchy';
@@ -17,10 +18,10 @@ import Wikipedia from './Wikipedia';
 
 import cssBinder from 'styles/cssBinder';
 
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import ipro from 'styles/interpro-vf.css';
 import local from './style.css';
 
-const css = cssBinder(ebiGlobalStyles, local);
+const css = cssBinder(local, ipro);
 
 type OtherSectionsProps = {
   metadata: EntryMetadata;
@@ -96,10 +97,8 @@ class SummaryEntry extends PureComponent<SummaryEntryProps> {
 
     if (this.props.loading || !metadata) return <Loading />;
     const citations = getLiteratureIdsFromDescription(metadata.description);
-    const [included, extra] = partition(
-      Object.entries(metadata.literature || {}),
-      ([id]: [string]) => citations.includes(id)
-    );
+    const [included, extra] = splitCitations(metadata.literature, citations);
+
     const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
     (included as Array<[string, Reference]>).sort(
       (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
@@ -134,7 +133,9 @@ class SummaryEntry extends PureComponent<SummaryEntryProps> {
                     accession={metadata.accession}
                   />
                 </>
-              ) : null
+              ) : (
+                <DescriptionFromIntegrated integrated={metadata.integrated} />
+              )
             }
           </div>
           <div className={css('vf-stack')}>

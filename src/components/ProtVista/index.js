@@ -200,7 +200,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       }
     } else if (prevProps.colorDomainsBy !== this.props.colorDomainsBy) {
       for (const track of (Object.values(this.web_tracks) /*: any */)) {
-        for (const d of [...track._data, ...(track._contributors || [])]) {
+        for (const d of [...track.data, ...(track.contributors || [])]) {
           d.color = getTrackColor(d, this.props.colorDomainsBy);
         }
         track.refresh();
@@ -275,7 +275,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           : null;
         if (tmp.length > 0) {
           const isNewElement =
-            !this.web_tracks[getUIDFromEntry(d)]._data &&
+            !this.web_tracks[getUIDFromEntry(d)].data?.length &&
             !this.web_tracks[getUIDFromEntry(d)].sequence;
           this.web_tracks[getUIDFromEntry(d)].data = tmp;
           if (this.props.fixedHighlight)
@@ -625,7 +625,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     if (!(length && data)) return <Loading />;
 
     const { hideCategory } = this.state;
-    const highlightColor = '#EB3BFF22';
+    const highlightColor = '#607D8B50';
     return (
       <div
         ref={this._mainRef}

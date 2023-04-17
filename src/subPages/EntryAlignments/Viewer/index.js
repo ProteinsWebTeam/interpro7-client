@@ -35,6 +35,7 @@ const AlignmentViewer = ({
   colorscheme,
   onConservationProgress,
   setColorMap,
+  overlayConservation,
   contacts = null,
   contactMinDistance = defaultContactMinDistance,
   contactMinProbability = defaultContactMinProbability,
@@ -81,18 +82,16 @@ const AlignmentViewer = ({
         const { map } = msaTrack.current.getColorMap();
         setColorMap(map || {});
       });
-      msaTrack.current.addEventListener('click', (event) => {
-        if (event.target.tagName === 'SPAN') {
-          const name = event.target.innerHTML;
-          const accession = align.gs.AC[name]?.[0]?.replace(/\.\d$/, '');
-          if (accession) {
-            goToCustomLocation({
-              description: {
-                main: { key: 'protein' },
-                protein: { db: 'uniprot', accession },
-              },
-            });
-          }
+      msaTrack.current.addEventListener('msa-active-label', (event) => {
+        const name = event.detail.label;
+        const accession = align.gs.AC[name]?.[0]?.replace(/\.\d$/, '');
+        if (accession) {
+          goToCustomLocation({
+            description: {
+              main: { key: 'protein' },
+              protein: { db: 'uniprot', accession },
+            },
+          });
         }
       });
 
@@ -109,6 +108,13 @@ const AlignmentViewer = ({
   const labelWidth = 200;
   const length = align.columns();
 
+  const conservationOptions = {
+    'calculate-conservation': true,
+    'sample-size-conservation': 100,
+  };
+  if (overlayConservation) {
+    conservationOptions['overlay-conservation'] = true;
+  }
   return (
     <>
       <nightingale-manager id="example">
@@ -127,12 +133,12 @@ const AlignmentViewer = ({
               gap: '1rem',
             }}
           >
-            <span>{align.rows()} Sequences</span>
+            <span>{align.rows().toLocaleString()} sequences</span>
             <div>
               <button
                 className={f('icon', 'icon-common', 'zoom-button')}
                 data-icon="&#xf146;"
-                title={'Click to zoom out      Ctrl+Scroll'}
+                title={'Click or use CTRL + mouse wheel down to zoom out'}
                 onClick={() => {
                   (navigationTrack.current /*: any */)
                     ?.zoomOut();
@@ -142,7 +148,7 @@ const AlignmentViewer = ({
               <button
                 className={f('icon', 'icon-common', 'zoom-button')}
                 data-icon="&#xf0fe;"
-                title={'Click to zoom in      Ctrl+Scroll'}
+                title={'Click or use CTRL + mouse wheel up to to zoom in'}
                 onClick={() => {
                   (navigationTrack.current /*: any */)
                     ?.zoomIn();
@@ -202,7 +208,7 @@ const AlignmentViewer = ({
           label-width={labelWidth}
           ref={msaTrack}
           color-scheme={colorscheme}
-          sample-size-conservation={100}
+          {...conservationOptions}
         />
       </nightingale-manager>
     </>
@@ -219,6 +225,7 @@ AlignmentViewer.propTypes = {
   data: dataPropType,
   onAlignmentLoaded: T.func,
   goToCustomLocation: T.func,
+  overlayConservation: T.bool,
 };
 
 const mapStateToPropsForAlignment = createSelector(

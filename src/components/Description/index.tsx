@@ -34,7 +34,6 @@ class Description extends PureComponent<Props> {
                   key={`${i}.${j}`}
                   p={p}
                   literature={literature || []}
-                  accession={accession}
                   withoutIDs={withoutIDs}
                 />
               ))
