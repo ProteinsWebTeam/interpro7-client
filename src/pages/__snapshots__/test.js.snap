@@ -4,6 +4,7 @@ exports[`<Pages /> should render 1`] = `
 <div
   className="main stuck"
 >
+  <Memo(Connect(TigrfamsRedirectConnected)) />
   <Memo(Connect(UnconnectedErrorBoundary))>
     <div
       className="row large-12 columns breadcrumb"

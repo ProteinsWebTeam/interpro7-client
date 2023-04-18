@@ -114,6 +114,14 @@ const images = {
       /* webpackChunkName: "member-logos" */ '../../../images/member_databases/tigrfams_logo.png'
     ),
   ],
+  ncbifam: [
+    import(
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/nih_nlm_logo.avif'
+    ),
+    import(
+      /* webpackChunkName: "member-logos" */ '../../../images/member_databases/nih_nlm_logo.png'
+    ),
+  ],
 };
 
 const f = foundationPartial(styles);
