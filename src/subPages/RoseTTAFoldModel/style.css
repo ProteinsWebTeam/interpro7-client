@@ -39,3 +39,14 @@
 /*    float: right;*/
 /*  }*/
 /*}*/
+
+.split-screen {
+  display: flex;
+  background: white;
+  & > * {
+    width: 50%;
+  }
+  & .components-header {
+    display: none;
+  }
+}
