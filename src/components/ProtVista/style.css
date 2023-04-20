@@ -54,11 +54,6 @@
   cursor: default;
 }
 
-.track-component path:global(.helix) {
-  stroke: red;
-  stroke-width: 1;
-}
-
 .aligned-to-track-component {
   width: var(--track-space, 85%);
   line-height: 0;

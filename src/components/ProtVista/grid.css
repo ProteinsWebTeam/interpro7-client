@@ -95,6 +95,10 @@
   grid-column: 1 / 3;
   color: rgb(102, 102, 102);
 }
+.protvista-grid div.track path:global(.helix) {
+  stroke: red;
+  stroke-width: 1;
+}
 
 .track-container text {
   fill: var(--colors-graydark);

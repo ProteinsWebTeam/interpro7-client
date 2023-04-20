@@ -801,9 +801,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         displaystart="1"
                                         displayend={length}
                                         margin-color="#fafafa"
-                                        height={
-                                          entry.type === 'residue' ? '15' : null
-                                        }
+                                        height={15}
                                         id={`track_${entry.accession}`}
                                         ref={(e) =>
                                           (this.web_tracks[
