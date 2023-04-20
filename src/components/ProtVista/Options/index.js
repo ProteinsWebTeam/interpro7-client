@@ -297,6 +297,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
                         element-id={`${this.props.id}ProtvistaDiv`}
                         background-color={'#e5e5e5'}
                         id={`${this.props.id}Saver`}
+                        extra-height={12}
                       >
                         <button>
                           <span

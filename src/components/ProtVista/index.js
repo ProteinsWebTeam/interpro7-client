@@ -200,10 +200,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       }
     } else if (prevProps.colorDomainsBy !== this.props.colorDomainsBy) {
       for (const track of (Object.values(this.web_tracks) /*: any */)) {
-        for (const d of [...track.data, ...(track.contributors || [])]) {
-          d.color = getTrackColor(d, this.props.colorDomainsBy);
+        if (typeof track.data !== 'string') {
+          for (const d of [...track.data, ...(track.contributors || [])]) {
+            d.color = getTrackColor(d, this.props.colorDomainsBy);
+          }
+          track.refresh();
         }
-        track.refresh();
       }
     }
   }
