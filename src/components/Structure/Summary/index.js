@@ -6,7 +6,8 @@ import { format } from 'url';
 
 import Accession from 'components/Accession';
 import Link from 'components/generic/Link';
-import { BaseLink } from 'components/ExtLink';
+// $FlowFixMe
+import BaseLink from 'components/ExtLink/BaseLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
 import TimeAgo from 'components/TimeAgo';

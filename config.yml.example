@@ -105,5 +105,6 @@ colors:
   smart: '#ff8d8d'
   ssf: '#686868'
   tigrfams: '#56b9a6'
+  ncbifam: '#56b9a6'
   interpro: '#2daec1'
   pdb: '#74b360'

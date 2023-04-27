@@ -17,7 +17,7 @@
 }
 .track-component {
   width: var(--track-space, 80%);
-  background: rgba(0, 0, 0, 0.02);
+  background: #fafafa;
   cursor: move;
 }
 
@@ -52,11 +52,6 @@
 .conservation-warning {
   text-align: center;
   cursor: default;
-}
-
-.track-component path:global(.helix) {
-  stroke: red;
-  stroke-width: 1;
 }
 
 .aligned-to-track-component {
@@ -146,6 +141,7 @@ g:global(.child-location-group.clg-5) path {
 .track-in-table .track-component,
 .track-in-table .aligned-to-track-component {
   width: 100%;
+  background: transparent;
 }
 /*keep nth-of-type to make it work with multi track as for structure*/
 .track-in-table .track-component:nth-of-type(2),
@@ -184,4 +180,8 @@ g:global(.child-location-group.clg-5) path {
 
 .conservation-error {
   margin: 1rem;
+}
+
+nightingale-manager {
+  width: 100%;
 }

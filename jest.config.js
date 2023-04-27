@@ -17,16 +17,15 @@ module.exports = {
     '\\.(css|less|scss)$': 'identity-obj-proxy',
     '^taxonomy-visualisation(.*)$':
       '<rootDir>/node_modules/taxonomy-visualisation/src/$1',
-    '^protvista-([^/]*)(.*)$': '<rootDir>/node_modules/protvista-$1/src/$2',
     '^d3-([^/]*)(.*)$': '<rootDir>/node_modules/d3-$1/dist/d3-$1.min.js',
-    d3: '<rootDir>/node_modules/d3/dist/d3.min.js',
   },
+  preset: 'ts-jest/presets/js-with-babel',
   moduleDirectories: ['node_modules', 'src'],
   collectCoverageFrom: ['src/**/*.js', '!**/.*.js'],
   coverageReporters: ['json-summary', 'lcov', 'text-summary'],
   coverageDirectory: 'reports/jest-coverage',
   transformIgnorePatterns: [
-    'node_modules/(?!lodash-es|timing-functions|taxonomy-visualisation|protvista|react-syntax-highlighter)',
+    'node_modules/(?!lodash-es|timing-functions|taxonomy-visualisation|protvista|react-syntax-highlighter|@nightingale)',
   ],
   testEnvironmentOptions: {
     url: websiteURL.href,

@@ -1,6 +1,7 @@
 // @flow
 /* global gtag: false */
 /*:: import type { Middleware } from 'redux'; */
+/*:: import type { BrowserHistory, Location } from 'history'; */
 /*:: declare var gtag: (str: string, str: string, obj: {}) => void; */
 import { format } from 'url';
 
@@ -12,17 +13,17 @@ import autoScroll from 'utils/auto-scroll';
 
 // Middleware to handle history change events
 const middleware =
-  (history /*: any */) /*: Middleware<*, *, *> */ =>
+  (
+    historyWrapper /*: {history: any, basename: string} */,
+  ) /*: Middleware<*, *, *> */ =>
   ({ dispatch, getState }) => {
     // Hook into history
-    history.listen(
+    historyWrapper.history.listen(
       // Dispatch new action only when history actually changes
       // Build new action from scratch
-      async (args) => {
-        if (!args?.state?.customLocation) return;
-        const {
-          state: { customLocation, state },
-        } = args;
+      async ({ location } /*: {location: Location} */) => {
+        if (!(location?.state /*: any */)?.customLocation) return;
+        const { customLocation, state } = (location.state /*: any */);
         await Promise.resolve();
         return dispatch(
           customLocationChangeFromHistory(customLocation, {
@@ -34,7 +35,7 @@ const middleware =
     );
 
     // Analytics
-    history.listen(() => {
+    historyWrapper.history.listen(() => {
       gtag('event', 'page_view', {
         event_label: window.location.href,
       });
@@ -42,12 +43,17 @@ const middleware =
 
     const historyDispatch = ({ customLocation, replace, state }) => {
       const { from_interpro6: _, ...query } = customLocation?.search || {};
-      history[replace ? 'replace' : 'push']({
-        pathname: descriptionToPath(customLocation.description),
-        search: format({ query }),
-        hash: customLocation.hash,
-        state: { customLocation, state },
-      });
+      // $FlowFixMe
+      historyWrapper.history[replace ? 'replace' : 'push'](
+        {
+          pathname:
+            historyWrapper.basename +
+            descriptionToPath(customLocation.description),
+          search: format({ query }),
+          hash: customLocation.hash,
+        },
+        { customLocation, state },
+      );
     };
 
     // Just run once on startup
@@ -56,7 +62,7 @@ const middleware =
       replace: true,
       state: null,
     });
-    autoScroll(history.location);
+    autoScroll(historyWrapper.history.location);
 
     // Hijack normal Redux flow
     return (next) => (action) => {
@@ -64,10 +70,10 @@ const middleware =
       // eventually result in another NEW_PROCESSED_CUSTOM_LOCATION action being
       // dispatched through callback
       if (action.type === NEW_CUSTOM_LOCATION) {
-        const previous = history.location;
+        const previous = historyWrapper.history.location;
         // update browser's location
         historyDispatch(action);
-        autoScroll(history.location, previous);
+        autoScroll(historyWrapper.history.location, previous);
 
         return;
       }

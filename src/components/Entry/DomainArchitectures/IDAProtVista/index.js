@@ -89,7 +89,7 @@ class IDAProtVista extends ProtVistaMatches /*:: <Props> */ {
                 databases={databases}
                 locations={d.locations}
               >
-                <protvista-interpro-track
+                <nightingale-interpro-track
                   length={length}
                   displaystart="1"
                   displayend={length}
@@ -98,6 +98,7 @@ class IDAProtVista extends ProtVistaMatches /*:: <Props> */ {
                     (this.web_tracks[`track_${d.accession}_${i}`] = e)
                   }
                   shape="roundRectangle"
+                  margin-color="#fafafa"
                   expanded
                   use-ctrl-to-zoom
                 />

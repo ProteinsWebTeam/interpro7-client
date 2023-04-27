@@ -192,12 +192,14 @@ const EntryAlignments = ({
                   extraClasses={f('dropdown-container')}
                 >
                   <table className={f('legend-table')}>
-                    {Object.entries(colorMap).map(([legend, color], i) => (
-                      <tr key={i}>
-                        <td style={{ background: color }}> </td>
-                        <td>{legend}</td>
-                      </tr>
-                    ))}
+                    <tbody>
+                      {Object.entries(colorMap).map(([legend, color], i) => (
+                        <tr key={i}>
+                          <td style={{ background: color }}> </td>
+                          <td>{legend}</td>
+                        </tr>
+                      ))}
+                    </tbody>
                   </table>
                 </DropDownButton>
               </>

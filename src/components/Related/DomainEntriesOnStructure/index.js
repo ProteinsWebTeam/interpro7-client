@@ -7,6 +7,7 @@ import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { foundationPartial } from 'styles/foundation';
@@ -167,14 +168,14 @@ const ProtVistaLoaded = (
     if (!protvistaEl.current || !protvistaEl.current.addEventListener) return;
     const handleMouseover = (event) => {
       const {
-        detail: { eventtype, highlight, feature },
+        detail: { eventType, highlight, feature },
       } = event;
-      if (eventtype === 'mouseover' && feature.aa) {
+      if (eventType === 'mouseover' && feature.aa) {
         protvistaEl.current.dispatchEvent(
           new CustomEvent('change', {
             detail: {
               highlight,
-              eventtype: 'sequence-chain',
+              eventType: 'sequence-chain',
               chain,
               protein: dataprotein.payload.metadata.accession,
             },

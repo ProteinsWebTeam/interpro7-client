@@ -7,21 +7,25 @@ import { isEqual } from 'lodash-es';
 
 import ProtVistaOptions from './Options';
 import ProtVistaPopup from './Popup';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { Genome3dLink, AlphafoldLink } from 'components/ExtLink';
+import {
+  Genome3dLink,
+  AlphafoldLink,
+  // $FlowFixMe
+} from 'components/ExtLink/patternLinkWrapper';
 import { FunFamLink } from 'subPages/Subfamilies';
 
-import ProtVistaManager from 'protvista-manager';
-import ProtVistaSequence from 'protvista-sequence';
-import ProtVistaColouredSequence from 'protvista-coloured-sequence';
-import ProtVistaNavigation from 'protvista-navigation';
-import ProtVistaInterProTrack from 'protvista-interpro-track';
-import ProtvistaTrack from 'protvista-track';
-import ProtvistaZoomTool from 'protvista-zoom-tool';
-import NightingaleLinegraphTrack from 'nightingale-linegraph-track';
+import '@nightingale-elements/nightingale-manager';
+import '@nightingale-elements/nightingale-navigation';
+import '@nightingale-elements/nightingale-sequence';
+import '@nightingale-elements/nightingale-track';
+import '@nightingale-elements/nightingale-interpro-track';
+import '@nightingale-elements/nightingale-colored-sequence';
+import '@nightingale-elements/nightingale-linegraph-track';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { NOT_MEMBER_DBS } from 'menuConfig';
@@ -29,7 +33,6 @@ import { NOT_MEMBER_DBS } from 'menuConfig';
 import spinner from 'components/SimpleCommonComponents/Loading/style.css';
 import PopperJS from 'popper.js';
 
-import loadWebComponent from 'utils/load-web-component';
 import { getTextForLabel } from 'utils/text';
 import id from 'utils/cheap-unique-id';
 
@@ -46,58 +49,7 @@ import popperCSS from './popper.css';
 
 const f = foundationPartial(ipro, localCSS, spinner, fonts, gridCSS, popperCSS);
 
-const webComponents = [];
-
 const TOOLTIP_DELAY = 500;
-
-const loadProtVistaWebComponents = () => {
-  if (!webComponents.length) {
-    webComponents.push(
-      loadWebComponent(() => ProtVistaManager).as('protvista-manager'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaSequence).as('protvista-sequence'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaColouredSequence).as(
-        'protvista-coloured-sequence',
-      ),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaNavigation).as('protvista-navigation'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtVistaInterProTrack).as(
-        'protvista-interpro-track',
-      ),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtvistaTrack).as('protvista-track'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => ProtvistaZoomTool).as('protvista-zoom-tool'),
-    );
-
-    webComponents.push(
-      loadWebComponent(() => NightingaleLinegraphTrack).as(
-        'nightingale-linegraph-track',
-      ),
-    );
-
-    webComponents.push(
-      loadWebComponent(() =>
-        import('interpro-components').then((m) => m.InterproType),
-      ).as('interpro-type'),
-    );
-  }
-  return Promise.all(webComponents);
-};
 
 const getUIDFromEntry = (entry) =>
   `${entry.accession}${entry.source_database === 'pfam-n' ? '-N' : ''}`;
@@ -119,7 +71,6 @@ const getUIDFromEntry = (entry) =>
   id: string,
   showOptions: boolean,
   showConservationButton: boolean,
-  showHydrophobicity: boolean,
   handleConservationLoad: function,
   goToCustomLocation: function,
   customLocation: Object,
@@ -149,8 +100,8 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     _popperRef: { current: null | React$ElementRef<'div'> };
     _popperContentRef: { current: null | React$ElementRef<'div'> };
     _protvistaRef: { current: null | React$ElementRef<'div'> };
-    _webProteinRef: { current: null | React$ElementRef<typeof ProtVistaSequence> };
-    _hydroRef: { current: null | React$ElementRef<typeof ProtVistaColouredSequence> };
+    _webProteinRef: { current: null | (React$ElementRef<'nigthingale-sequence'> ) };
+    _navigationRef: { current: null | (React$ElementRef<'nigthingale-navigation'> ) };
     _conservationTrackRef: { current: null | React$ElementRef<'div'> };
    */
   static propTypes = {
@@ -168,7 +119,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     id: T.string,
     showOptions: T.bool,
     showConservationButton: T.bool,
-    showHydrophobicity: T.bool,
     handleConservationLoad: T.func,
     goToCustomLocation: T.func,
     customLocation: T.object,
@@ -204,18 +154,27 @@ export class ProtVista extends Component /*:: <Props, State> */ {
     this._popperContentRef = React.createRef();
     this._protvistaRef = React.createRef();
     this._webProteinRef = React.createRef();
-    this._hydroRef = React.createRef();
+    this._navigationRef = React.createRef();
     this._conservationTrackRef = React.createRef();
     this._isPopperTop = true;
     this._timeoutID = null;
   }
 
   async componentDidMount() {
-    await loadProtVistaWebComponents();
+    const promises = [
+      'nightingale-manager',
+      'nightingale-navigation',
+      'nightingale-sequence',
+      'nightingale-track',
+      'nightingale-interpro-track',
+      'nightingale-linegraph-track',
+      'nightingale-colored-sequence',
+    ].map((localName) => customElements.whenDefined(localName));
+    await Promise.all(promises);
     const { data, protein } = this.props;
     if (this._webProteinRef.current) {
       const proteinE = this._webProteinRef.current;
-      proteinE.data = protein;
+      (proteinE /*: any */).data = protein;
       this.updateTracksWithData(data);
       if (this._popperContentRef.current) {
         const popperE = this._popperContentRef.current;
@@ -227,11 +186,6 @@ export class ProtVista extends Component /*:: <Props, State> */ {
         );
       }
     }
-    if (this._hydroRef.current) {
-      const hydroE = this._hydroRef.current;
-      hydroE.data = protein;
-      hydroE.addEventListener('change', this._handleTrackChange);
-    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -241,16 +195,17 @@ export class ProtVista extends Component /*:: <Props, State> */ {
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.data, this.props.data)) {
       this.updateTracksWithData(this.props.data);
-      if (this._webProteinRef.current && this._hydroRef.current) {
-        this._webProteinRef.current.data = this.props.protein;
-        this._hydroRef.current.data = this.props.protein;
+      if (this._webProteinRef.current) {
+        (this._webProteinRef.current /*: any */).data = this.props.protein;
       }
     } else if (prevProps.colorDomainsBy !== this.props.colorDomainsBy) {
       for (const track of (Object.values(this.web_tracks) /*: any */)) {
-        for (const d of [...track._data, ...(track._contributors || [])]) {
-          d.color = getTrackColor(d, this.props.colorDomainsBy);
+        if (typeof track.data !== 'string') {
+          for (const d of [...track.data, ...(track.contributors || [])]) {
+            d.color = getTrackColor(d, this.props.colorDomainsBy);
+          }
+          track.refresh();
         }
-        track.refresh();
       }
     }
   }
@@ -281,6 +236,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           : (d.entry_protein_locations || d.locations).map((loc) => ({
               accession: d.accession,
               name: d.name,
+              short_name: d.short_name,
               source_database: d.source_database,
               locations: [loc],
               color: getTrackColor(d, this.props.colorDomainsBy),
@@ -296,6 +252,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               accession: child.accession,
               chain: d.chain,
               name: child.name,
+              short_name: child.short_name,
               residues:
                 child.residues && JSON.parse(JSON.stringify(child.residues)),
               source_database: child.source_database,
@@ -320,7 +277,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           : null;
         if (tmp.length > 0) {
           const isNewElement =
-            !this.web_tracks[getUIDFromEntry(d)]._data &&
+            !this.web_tracks[getUIDFromEntry(d)].data?.length &&
             !this.web_tracks[getUIDFromEntry(d)].sequence;
           this.web_tracks[getUIDFromEntry(d)].data = tmp;
           if (this.props.fixedHighlight)
@@ -336,7 +293,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           this.setObjectValueInState(
             'expandedTrack',
             d.accession,
-            this.web_tracks[getUIDFromEntry(d)]._expanded,
+            this.web_tracks[getUIDFromEntry(d)].expanded,
           );
         }
       }
@@ -350,7 +307,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
 
   _handleTrackChange = ({ detail }) => {
     if (detail) {
-      switch (detail.eventtype) {
+      switch (detail.eventType) {
         case 'click':
           this.handleCollapseLabels(detail.feature.accession);
           break;
@@ -448,7 +405,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       this.setObjectValueInState(
         'expandedTrack',
         accession,
-        this.web_tracks[accession]._expanded,
+        this.web_tracks[accession].expanded,
       );
     } else if (this.state.expandedTrack.hasOwnProperty(accession)) {
       this.setObjectValueInState(
@@ -665,13 +622,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
       showConservationButton,
       children,
       showOptions = true,
-      showHydrophobicity = false,
     } = this.props;
 
     if (!(length && data)) return <Loading />;
 
     const { hideCategory } = this.state;
-
+    const highlightColor = '#607D8B50';
     return (
       <div
         ref={this._mainRef}
@@ -682,10 +638,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
           <div ref={this._popperContentRef} />
         </div>
         <div>
-          <protvista-manager
-            attributes="length displaystart displayend highlight"
-            id="pv-manager"
-          >
+          <nightingale-manager id="pv-manager">
             <div className={f('protvista-grid')}>
               <div className={f('view-options-wrap', 'track-sized')}>
                 {showOptions && (
@@ -701,6 +654,14 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                     setPrintingMode={(mode /*: boolean */) =>
                       this.setState({ isPrinting: mode })
                     }
+                    onZoomIn={() => {
+                      (this._navigationRef.current /*: any */)
+                        ?.zoomIn();
+                    }}
+                    onZoomOut={() => {
+                      (this._navigationRef.current /*: any */)
+                        ?.zoomOut();
+                    }}
                   >
                     {children}
                   </ProtVistaOptions>
@@ -715,41 +676,31 @@ export class ProtVista extends Component /*:: <Props, State> */ {
               id={`${this.state.optionsID}ProtvistaDiv`}
             >
               <div className={f('track')}>
-                <protvista-navigation
+                <nightingale-navigation
                   length={length}
-                  displaystart="1"
-                  displayend={length}
+                  ref={this._navigationRef}
+                  display-start="1"
+                  display-end={length}
+                  margin-color="#fafafa"
+                  height="50"
+                  show-highlight
+                  highlight-color={highlightColor}
                 />
               </div>
               <div className={f('track')}>
-                <protvista-sequence
+                <nightingale-sequence
                   ref={this._webProteinRef}
                   length={length}
-                  displaystart="1"
-                  displayend={length}
+                  display-start="1"
+                  display-end={length}
+                  margin-color="#fafafa"
                   highlight-event="onmouseover"
+                  highlight-color={highlightColor}
+                  height="30"
                   use-ctrl-to-zoom
                 />
               </div>
-              {showHydrophobicity && (
-                <>
-                  <div className={f('track')}>
-                    <protvista-coloured-sequence
-                      ref={this._hydroRef}
-                      length={length}
-                      displaystart="1"
-                      displayend={length}
-                      scale="hydrophobicity-scale"
-                      height="10"
-                      color_range="#0000FF:-3,#ffdd00:3"
-                      highlight-event="onmouseover"
-                      use-ctrl-to-zoom
-                      class="hydro"
-                    />
-                  </div>
-                  <div className={f('track-label')}>Hydrophobicity</div>
-                </>
-              )}
+
               {data &&
                 data
                   .filter(([_, tracks]) => tracks && tracks.length)
@@ -837,19 +788,20 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                               getUIDFromEntry(entry)
                                             ] = e)
                                           }
+                                          margin-color="#fafafa"
                                           highlight-event="onmouseover"
+                                          highlight-color={highlightColor}
                                           use-ctrl-to-zoom
                                         />
                                       )}
                                     {(entry.type === 'secondary_structure' ||
                                       entry.type === 'residue') && (
-                                      <protvista-track
+                                      <nightingale-track
                                         length={length}
                                         displaystart="1"
                                         displayend={length}
-                                        height={
-                                          entry.type === 'residue' ? '15' : null
-                                        }
+                                        margin-color="#fafafa"
+                                        height={15}
                                         id={`track_${entry.accession}`}
                                         ref={(e) =>
                                           (this.web_tracks[
@@ -857,11 +809,12 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                           ] = e)
                                         }
                                         highlight-event="onmouseover"
+                                        highlight-color={highlightColor}
                                         use-ctrl-to-zoom
                                       />
                                     )}
                                     {entry.type === 'confidence' && (
-                                      <protvista-coloured-sequence
+                                      <nightingale-colored-sequence
                                         ref={(e) =>
                                           (this.web_tracks[entry.accession] = e)
                                         }
@@ -871,18 +824,23 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                         displayend={length}
                                         scale="H:90,M:70,L:50,D:0"
                                         height="12"
-                                        color_range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
+                                        color-range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
+                                        margin-left="10"
+                                        margin-right="10"
+                                        margin-color="#fafafa"
                                         highlight-event="onmouseover"
+                                        highlight-color={highlightColor}
                                         class="confidence"
                                         use-ctrl-to-zoom
                                       />
                                     )}
                                   </div>
                                 ) : (
-                                  <protvista-interpro-track
+                                  <nightingale-interpro-track
                                     length={length}
                                     displaystart="1"
                                     displayend={length}
+                                    margin-color="#fafafa"
                                     id={`track_${entry.accession}`}
                                     ref={(e) =>
                                       (this.web_tracks[getUIDFromEntry(entry)] =
@@ -890,6 +848,9 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                                     }
                                     shape="roundRectangle"
                                     highlight-event="onmouseover"
+                                    highlight-color={highlightColor}
+                                    show-label
+                                    label=".feature.short_name"
                                     use-ctrl-to-zoom
                                     expanded
                                   />
@@ -954,7 +915,7 @@ export class ProtVista extends Component /*:: <Props, State> */ {
                 </div>
               ) : null}
             </div>
-          </protvista-manager>
+          </nightingale-manager>
         </div>
       </div>
     );

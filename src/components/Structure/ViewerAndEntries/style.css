@@ -33,11 +33,12 @@
   }
   & .protvista-container {
     overflow: scroll;
+    padding: 1em;
   }
   & .structure-viewer {
     height: initial;
-    & .wrapper {
-      height: 90vh;
-    }
+  }
+  & .wrapper {
+    height: 90vh;
   }
 }

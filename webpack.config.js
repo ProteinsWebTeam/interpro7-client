@@ -8,8 +8,6 @@ const zlib = require('zlib');
 // Webpack plugins
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// custom plugins
-const LegacyModuleSplitPlugin = require('./webpack-plugins/legacy-module-split-plugin');
 
 // CSS-related
 const postCSSImport = require('postcss-import');
@@ -18,6 +16,8 @@ const cssNano = require('cssnano');
 
 // Web service plugin
 const WorkboxPlugin = require('workbox-webpack-plugin');
+
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const buildInfo = require('./scripts/build-info');
 const pkg = require('./package.json');
@@ -47,11 +47,10 @@ const cssSettings = {
 
 const publicPath = websiteURL.pathname || '/interpro/';
 
-const getHTMLWebpackPlugin = (mode) =>
+const getHTMLWebpackPlugin = () =>
   new HTMLWebpackPlugin({
     title: iprConfig.title || 'InterPro',
     template: path.join('.', 'src', 'index.template.html'),
-    inject: mode === 'development',
     filename: '[name].html',
     templateParameters: (compilation, assets, assetTags, options) => {
       // Leaving this here for easy debugging of the assets
@@ -72,8 +71,6 @@ const getHTMLWebpackPlugin = (mode) =>
     },
   });
 
-const legacyModuleSplitPlugin = new LegacyModuleSplitPlugin();
-
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
   filename: path.join('css', '[name].[fullhash:3].css'),
   chunkFilename: path.join('css', '[id].[chunkhash:3].css'),
@@ -87,8 +84,78 @@ const getAssetModuleFilename = (pathData) => {
   else if (['woff', 'woff2', 'ttf', 'eot'].includes(ext)) subfolder = 'fonts';
   return path.join('assets', subfolder, '[name].[hash:3][ext]');
 };
-const getConfigFor = (env, mode, module = false) => {
-  const name = module ? 'module' : 'legacy';
+
+const nightingaleAliases = [
+  'nightingale-colored-sequence',
+  'nightingale-heatmap',
+  'nightingale-interpro-track',
+  'nightingale-linegraph-track',
+  'nightingale-links',
+  'nightingale-manager',
+  'nightingale-msa',
+  'nightingale-navigation',
+  'nightingale-new-core',
+  'nightingale-overlay',
+  'nightingale-saver',
+  'nightingale-sequence',
+  'nightingale-sunburst',
+  'nightingale-track',
+].reduce(
+  (agg, v) => ({
+    ...agg,
+    [`@nightingale-elements/${v}`]: path.resolve(
+      'node_modules',
+      '@nightingale-elements',
+      v,
+      'src'
+    ),
+  }),
+  {}
+);
+
+const getBabelLoader = (mode) => ({
+  loader: 'babel-loader',
+  options: {
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          modules: false,
+          loose: true,
+          useBuiltIns: 'usage',
+          corejs: 3,
+          targets: {
+            esmodules: true,
+          },
+        },
+      ],
+      ['@babel/react', { development: mode === 'development' }],
+    ],
+    plugins: [
+      '@babel/plugin-syntax-dynamic-import',
+      ['@babel/plugin-proposal-class-properties', { loose: true }],
+      ['@babel/plugin-proposal-optional-chaining', { loose: true }],
+    ],
+    env: {
+      dev: {
+        // better sourcemaps for JSX code
+        plugins: ['transform-react-jsx-source'],
+      },
+      production: {
+        plugins: [
+          // optimisations for react
+          'babel-plugin-transform-react-remove-prop-types',
+          'babel-plugin-transform-react-constant-elements',
+          'babel-plugin-transform-react-inline-elements',
+          ['transform-remove-console', { exclude: ['error', 'warn'] }],
+        ],
+      },
+    },
+  },
+});
+
+const getConfigFor = (env, mode) => {
+  const name = 'module';
 
   return {
     name,
@@ -116,7 +183,7 @@ const getConfigFor = (env, mode, module = false) => {
         : undefined,
     resolve: {
       modules: [path.resolve('.', 'src'), 'node_modules'],
-      extensions: ['.js', '.ts', '.json', '.worker.js'],
+      extensions: ['.js', '.ts', '.tsx', '.json', '.worker.js'],
       alias: {
         '../libraries': 'ebi-framework/libraries',
         'EBI-Common': 'EBI-Icon-fonts/EBI-Common',
@@ -128,6 +195,11 @@ const getConfigFor = (env, mode, module = false) => {
         'EBI-FileFormats': 'EBI-Icon-fonts/EBI-FileFormats',
         'EBI-Chemistry': 'EBI-Icon-fonts/EBI-Chemistry',
         react: path.resolve('node_modules/react'),
+        shallowequal: path.resolve('node_modules/shallowequal'),
+        ...nightingaleAliases,
+      },
+      fallback: {
+        fs: false, // To avoid issue in molstar@3.31.X
       },
     },
     module: {
@@ -153,69 +225,17 @@ const getConfigFor = (env, mode, module = false) => {
             path.resolve('src'),
             path.resolve('node_modules', 'lodash-es'),
             path.resolve('node_modules', 'timing-functions'),
-            /protvista/i,
-            /react-msa-viewer/,
-            path.resolve('node_modules', 'd3'),
+            // path.resolve('node_modules', 'd3'),
             path.resolve('node_modules', 'idb'),
-            // path.resolve('node_modules', 'clanviewer'),
             path.resolve('node_modules', 'interpro-components'),
             path.resolve('node_modules', 'lit-html'),
           ],
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                presets: [
-                  [
-                    '@babel/preset-env',
-                    {
-                      modules: false,
-                      loose: true,
-                      useBuiltIns: 'usage',
-                      corejs: 3,
-                      targets: module
-                        ? {
-                            esmodules: true,
-                          }
-                        : {
-                            esmodules: false,
-                            browsers:
-                              '> 0.1% and not last 2 versions, not dead',
-                          },
-                    },
-                  ],
-                  ['@babel/react', { development: mode === 'development' }],
-                ],
-                plugins: [
-                  '@babel/plugin-syntax-dynamic-import',
-                  ['@babel/plugin-proposal-class-properties', { loose: true }],
-                  ['@babel/plugin-proposal-optional-chaining', { loose: true }],
-                ],
-                env: {
-                  dev: {
-                    // better sourcemaps for JSX code
-                    plugins: ['transform-react-jsx-source'],
-                  },
-                  production: {
-                    plugins: [
-                      // optimisations for react
-                      'babel-plugin-transform-react-remove-prop-types',
-                      'babel-plugin-transform-react-constant-elements',
-                      'babel-plugin-transform-react-inline-elements',
-                      [
-                        'transform-remove-console',
-                        { exclude: ['error', 'warn'] },
-                      ],
-                    ],
-                  },
-                },
-              },
-            },
-          ],
+          use: [getBabelLoader(mode)],
         },
         {
-          test: /\.ts$/,
+          test: /\.tsx?$/,
           use: [
+            getBabelLoader(mode),
             {
               loader: 'ts-loader',
               options: {
@@ -381,10 +401,6 @@ const getConfigFor = (env, mode, module = false) => {
             exclude: ['**/.*', '**/*.{map,br,gz}'],
           })
         : null,
-
-      // Custom plugin to split codebase into legacy/modern bundles,
-      // depends on HTMLWebpackPlugin
-      legacyModuleSplitPlugin,
       // GZIP compression
       mode === 'production'
         ? new (getCompressionPlugin())({
@@ -406,16 +422,24 @@ const getConfigFor = (env, mode, module = false) => {
             },
           })
         : null,
+      new ForkTsCheckerWebpackPlugin({
+        typescript: {
+          diagnosticOptions: {
+            semantic: true,
+            syntactic: true,
+          },
+          configOverwrite: {
+            include: ['src/**/*'],
+          },
+        },
+      }),
     ].filter(Boolean),
     devtool: mode === 'development' ? 'cheap-module-source-map' : 'source-map',
   };
 };
 
-module.exports = (
-  env = { dev: true },
-  { mode = 'production', testingIE = false }
-) => {
-  const configModule = getConfigFor(env, mode, !testingIE);
+module.exports = (env = { dev: true }, { mode = 'production' }) => {
+  const configModule = getConfigFor(env, mode);
 
   const htmlWebpackPlugin = getHTMLWebpackPlugin(mode);
 
@@ -461,6 +485,7 @@ module.exports = (
         overlay: {
           errors: true,
           warnings: false,
+          runtimeErrors: false,
         },
       },
       hot: true,
@@ -472,17 +497,6 @@ module.exports = (
     configModule.stats = 'minimal';
   }
 
-  if (mode === 'production') {
-    // also, generate a bundle for legacy browsers
-    const configLegacy = getConfigFor(env, mode);
-    configLegacy.plugins = [htmlWebpackPlugin, ...configLegacy.plugins];
-
-    // generate the hydration entrypoint - disabled as it didn;t offer much improvement
-    // configModule.entry.hydrate = './src/index-hydrate.js';
-    // configLegacy.entry.hydrate = './src/index-hydrate.js';
-
-    return [configLegacy, configModule];
-  }
   // just generate for modern browsers
   return configModule;
 };

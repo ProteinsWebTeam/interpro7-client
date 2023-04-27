@@ -159,7 +159,9 @@ const memberDB = new Set([
   { name: 'sfld', re: /^sfld[gfs]\d{5}$/i },
   { name: 'smart', re: /^SM[0-9]{5}$/i },
   { name: 'ssf', re: /^SSF[0-9]{5,6}$/i },
-  { name: 'tigrfams', re: /^TIGR[0-9]{5}$/i },
+  // { name: 'tigrfams', re: /^TIGR[0-9]{5}$/i },
+  { name: 'tigrfams', re: /^(TIGR[0-9]{5})|(NF[0-9]{6})$/i },
+  { name: 'ncbifam', re: /^(TIGR[0-9]{5})|(NF[0-9]{6})$/i },
   { name: 'mobidblt', re: /^(\w|-)+$/ },
 ]);
 const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };

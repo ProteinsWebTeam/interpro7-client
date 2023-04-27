@@ -2,15 +2,16 @@
 import React, { Component, Children } from 'react';
 import T from 'prop-types';
 
-import loadWebComponent from 'utils/load-web-component';
-import ProtvistaSaver from 'protvista-saver';
+import '@nightingale-elements/nightingale-saver';
 
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { EntryColorMode } from 'utils/entry-color';
 import ReactToPrint from 'react-to-print';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { Exporter } from 'components/Table';
+// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import loadData from 'higherOrder/loadData';
@@ -51,6 +52,9 @@ const ONE_SEC = 1000;
   toggleTooltipStatus: function,
   getParentElem: function,
   setPrintingMode: function,
+  onZoomIn?: function,
+  onZoomOut?: function,
+  setPrintingMode: function,
   children: any,
 }; */
 
@@ -85,6 +89,8 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
     children: T.any,
     getParentElem: T.func,
     setPrintingMode: T.func,
+    onZoomIn: T.func,
+    onZoomOut: T.func,
   };
 
   constructor(props /*: Props */) {
@@ -98,13 +104,16 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
   }
 
   async componentDidMount() {
-    await loadWebComponent(() => ProtvistaSaver).as('protvista-saver');
+    const promises = ['nightingale-saver'].map((localName) =>
+      customElements.whenDefined(localName),
+    );
+    await Promise.all(promises);
 
-    const saver /*: null | React$ElementRef<typeof ProtvistaSaver> */ =
+    const saver /*: null | (React$ElementRef<'nigthingale-saver'> )*/ =
       document.querySelector(`#${this.props.id}Saver`);
 
     if (saver) {
-      saver.preSave = () => {
+      (saver /*: any */).preSave = () => {
         const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
         if (base) {
           // Including the styles of interpro-type elements
@@ -139,7 +148,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
           );
       };
       // removes the added style from the DOM
-      saver.postSave = () => {
+      (saver /*: any */).postSave = () => {
         const base = document.querySelector(`#${this.props.id}ProtvistaDiv`);
         const styleElement = document.getElementById('tmp_style');
         if (base && styleElement) {
@@ -182,7 +191,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
     this.props.toggleTooltipStatus(!this.state.enableTooltip);
   };
   render() {
-    const { length, children, setPrintingMode } = this.props;
+    const { children, setPrintingMode, onZoomIn, onZoomOut } = this.props;
     const { collapsed } = this.state;
 
     const title = this.props.title || 'Domains on protein';
@@ -208,25 +217,24 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
           </div>
 
           <div className={f('viewer-options')}>
-            <protvista-zoom-tool
-              length={length}
-              displaystart="1"
-              displayend={length}
-            >
-              <span
-                slot="zoom-out"
-                className={f('icon', 'icon-common', 'zoom-button')}
-                data-icon="&#xf146;"
-                title={'Click to zoom out      Ctrl+Scroll'}
-              />
-              <span
-                slot="zoom-in"
-                className={f('icon', 'icon-common', 'zoom-button')}
-                data-icon="&#xf0fe;"
-                title={'Click to zoom in      Ctrl+Scroll'}
-                style={{ marginRight: '0.4rem' }}
-              />
-            </protvista-zoom-tool>
+            <div style={{ marginRight: '0.4rem' }}>
+              {onZoomOut && (
+                <button
+                  className={f('icon', 'icon-common', 'zoom-button')}
+                  data-icon="&#xf146;"
+                  title={'Click to zoom out      Ctrl+Scroll'}
+                  onClick={onZoomOut}
+                />
+              )}
+              {onZoomIn && (
+                <button
+                  className={f('icon', 'icon-common', 'zoom-button')}
+                  data-icon="&#xf0fe;"
+                  title={'Click to zoom in      Ctrl+Scroll'}
+                  onClick={onZoomIn}
+                />
+              )}
+            </div>
           </div>
           <Tooltip title={'More options to customise the protein viewer'}>
             <DropDownButton label="Options" extraClasses={f('protvista-menu')}>
@@ -285,10 +293,11 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
                   Snapshot
                   <ul className={f('nested-list')}>
                     <li>
-                      <protvista-saver
+                      <nightingale-saver
                         element-id={`${this.props.id}ProtvistaDiv`}
                         background-color={'#e5e5e5'}
                         id={`${this.props.id}Saver`}
+                        extra-height={12}
                       >
                         <button>
                           <span
@@ -297,7 +306,7 @@ class ProtVistaOptions extends Component /*:: <Props, State> */ {
                           />{' '}
                           Save as Image
                         </button>
-                      </protvista-saver>
+                      </nightingale-saver>
                     </li>
                     <li>
                       <ReactToPrint
