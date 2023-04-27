@@ -147,6 +147,7 @@ const classNames = new Map([
   ['SUPERFAMILIES', f('md-su')],
   ['SSF', f('md-su')],
   ['TIGRFAMS', f('md-ti')],
+  ['NCBIFAM', f('md-nf')],
   ['NEW', f('md-new')],
   ['ALL', f('md-all')],
   ['REMOVED', f('md-removed')],
