@@ -71,10 +71,6 @@ export default (db /*: string */) => {
     ['panther', 'http://www.pantherdb.org/panther/family.do?clsAccession={}'],
     ['pfam', '//www.ebi.ac.uk/interpro/entry/pfam/{}'],
     ['pirsf', '//pir.georgetown.edu/cgi-bin/ipcSF?id={}'],
-    [
-      'prints',
-      'http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn={}&display_opts=Prints&category=None&queryform=false&regexpr=off',
-    ],
     ['profile', '//prosite.expasy.org/{}'],
     ['prosite', '//prosite.expasy.org/{}'],
     ['sfld', 'http://sfld.rbvi.ucsf.edu/archive/django/{}'],

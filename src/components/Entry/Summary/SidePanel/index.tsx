@@ -168,7 +168,7 @@ const SidePanel = ({
       {metadata.integrated && <Integration intr={metadata.integrated} />}
       {!['interpro', 'pfam'].includes(
         metadata.source_database.toLowerCase()
-      ) && (
+      ) && url && (
         <section>
           <h5>External Links</h5>
           <ul className={css('no-bullet')}>
@@ -176,7 +176,7 @@ const SidePanel = ({
               <Link
                 className={css('ext-link')}
                 target="_blank"
-                href={url && url(metadata.accession)}
+                href={url(metadata.accession)}
               >
                 View {metadata.accession} in{' '}
                 {(dbInfo && dbInfo.name) || metadata.source_database}
