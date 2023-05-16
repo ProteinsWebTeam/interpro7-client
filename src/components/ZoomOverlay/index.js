@@ -23,7 +23,7 @@ class ZoomOverlay extends PureComponent /*:: <Props> */ {
 
   componentDidUpdate(prevProps /*: Props */) {
     if (prevProps.stuck !== this.props.stuck) {
-      this._ref.current?.refreshOverlay(this.props.elementId)();
+      this._ref.current?.refreshOverlay(this.props.elementId)?.();
     }
   }
 
