@@ -24,7 +24,10 @@ const middleware = ({ dispatch }) => {
 
 const configureStore = (location = {}) => {
   const { pathname = '/', search = '', hash = '' } = location;
-  const state = getInitialState({ location: { pathname, search, hash } });
+  const state = getInitialState({
+    history: { location: { pathname, search, hash } },
+    basename: '',
+  });
   // console.log(state);
   return createStore(
     rootReducer,

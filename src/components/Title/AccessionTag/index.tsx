@@ -6,7 +6,7 @@ import styles from '../style.css';
 
 const css = cssBinder(styles);
 
-const accessionDisplay = new Set(['protein', 'structure', 'proteome']);
+const accessionDisplay = new Set(['protein', 'structure', 'proteome', 'set']);
 
 const mapNameToClass = new Map([
   ['domain', 'title-id-domain'],

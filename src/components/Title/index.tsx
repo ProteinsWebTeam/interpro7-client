@@ -24,7 +24,7 @@ const css = cssBinder(fonts, ipro, styles);
 type Props = {
   metadata: Metadata;
   mainType: Endpoint;
-  entries: Array<string>;
+  entries?: Array<string>;
   markFavourite: typeof markFavourite;
   unmarkFavourite: typeof unmarkFavourite;
 };
@@ -41,7 +41,7 @@ export class Title extends PureComponent<LoadedProps> {
   }
 
   manageFavourites(metadata: Metadata) {
-    if (this.props.entries.includes(metadata.accession)) {
+    if ((this.props.entries || []).includes(metadata.accession)) {
       this.props.unmarkFavourite(metadata.accession);
     } else {
       this.props.markFavourite(metadata.accession, { metadata });
@@ -137,7 +137,7 @@ export class Title extends PureComponent<LoadedProps> {
                       className={css(
                         'icon',
                         'icon-common',
-                        this.props.entries.includes(metadata.accession)
+                        (this.props.entries || []).includes(metadata.accession)
                           ? 'favourite'
                           : 'normal'
                       )}
