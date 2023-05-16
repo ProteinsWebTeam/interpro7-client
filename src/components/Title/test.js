@@ -1,7 +1,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import Title from '.';
+import { Title } from '.';
 
 const renderer = new ShallowRenderer();
 

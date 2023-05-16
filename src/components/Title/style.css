@@ -69,6 +69,7 @@
 
 .title-id-md {
   background-color: var(--colors-md-main);
+  color: var(--colors-nearly-white);
 }
 
 .tag {
