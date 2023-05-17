@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useState } from 'react';
 
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
@@ -29,11 +29,13 @@ type OtherSectionsProps = {
     included: [string, Reference][];
     extra: [string, Reference][];
   };
+  hasIntegratedCitations: boolean;
 };
 
 const OtherSections = ({
   metadata,
   citations: { included, extra },
+  hasIntegratedCitations,
 }: OtherSectionsProps) => (
   <>
     {!Object.keys(metadata.go_terms || []).length ||
@@ -47,7 +49,9 @@ const OtherSections = ({
     {Object.keys(metadata.literature || []).length ? (
       <section id="references" data-testid="entry-references">
         <div className={css('vf-grid')}>
-          <h4>References</h4>
+          <h4>
+            {hasIntegratedCitations ? 'Supplementary References' : 'References'}
+          </h4>
         </div>
         <Literature included={included} extra={extra} />
       </section>
@@ -88,81 +92,89 @@ type SummaryEntryProps = {
   dbInfo: DBInfo;
 };
 
-class SummaryEntry extends PureComponent<SummaryEntryProps> {
-  render() {
-    const {
-      data: { metadata },
-      dbInfo,
-    } = this.props;
+const SummaryEntry = ({
+  data: { metadata },
+  dbInfo,
+  loading,
+}: SummaryEntryProps) => {
+  const [integratedCitations, setIntegratedCitations] = useState<string[]>([]);
 
-    if (this.props.loading || !metadata) return <Loading />;
-    const citations = getLiteratureIdsFromDescription(metadata.description);
-    const [included, extra] = splitCitations(metadata.literature, citations);
+  if (loading || !metadata) return <Loading />;
+  const citations = getLiteratureIdsFromDescription(metadata.description);
+  const filterIntegratedCites = Object.fromEntries(
+    Object.keys(metadata.literature || {})
+      .filter((cite) => !integratedCitations.includes(cite))
+      .map((cite) => [cite, metadata.literature[cite]])
+  );
+  const [included, extra] = splitCitations(filterIntegratedCites, citations);
 
-    const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
-    (included as Array<[string, Reference]>).sort(
-      (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
-    );
-    return (
-      <div className={css('sections')}>
-        <section className={css('vf-grid')}>
-          <div className={css('vf-stack', 'vf-grid__col--span-3')}>
-            <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
-            {metadata?.source_database?.toLowerCase() === 'interpro' &&
-              metadata?.accession !== metadata?.name?.short && (
-                <p data-testid="entry-shortname">
-                  Short name:&nbsp;
-                  <i className={css('shortname')}>{metadata.name.short}</i>
-                </p>
-              )}
-            <OverlappingEntries metadata={metadata} />
-            <Hierarchy
-              hierarchy={metadata.hierarchy}
-              accession={metadata.accession}
-              type={metadata.type}
-            />
+  const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
+  (included as Array<[string, Reference]>).sort(
+    (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
+  );
+  return (
+    <div className={css('sections')}>
+      <section className={css('vf-grid')}>
+        <div className={css('vf-stack', 'vf-grid__col--span-3')}>
+          <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
+          {metadata?.source_database?.toLowerCase() === 'interpro' &&
+            metadata?.accession !== metadata?.name?.short && (
+              <p data-testid="entry-shortname">
+                Short name:&nbsp;
+                <i className={css('shortname')}>{metadata.name.short}</i>
+              </p>
+            )}
+          <OverlappingEntries metadata={metadata} />
+          <Hierarchy
+            hierarchy={metadata.hierarchy}
+            accession={metadata.accession}
+            type={metadata.type}
+          />
 
-            {
-              // doesn't work for some HAMAP as they have enpty <P> tag
-              (metadata.description || []).length ? (
-                <>
-                  <h4>Description</h4>
-                  <Description
-                    textBlocks={metadata.description}
-                    literature={included as Array<[string, Reference]>}
-                    accession={metadata.accession}
-                  />
-                </>
-              ) : (
-                <DescriptionFromIntegrated integrated={metadata.integrated} />
-              )
-            }
-          </div>
-          <div className={css('vf-stack')}>
-            <SidePanel metadata={metadata} dbInfo={dbInfo} />
-          </div>
-        </section>
-        <OtherSections
-          metadata={metadata}
-          citations={
-            { included, extra } as {
-              included: Array<[string, Reference]>;
-              extra: Array<[string, Reference]>;
-            }
+          {
+            // doesn't work for some HAMAP as they have enpty <P> tag
+            (metadata.description || []).length ? (
+              <>
+                <h4>Description</h4>
+                <Description
+                  textBlocks={metadata.description}
+                  literature={included as Array<[string, Reference]>}
+                  accession={metadata.accession}
+                />
+              </>
+            ) : (
+              <DescriptionFromIntegrated
+                integrated={metadata.integrated}
+                setIntegratedCitations={setIntegratedCitations}
+              />
+            )
           }
-        />
-        <section>
-          {metadata.source_database === 'pfam' && metadata.wikipedia ? (
-            <Wikipedia
-              title={metadata.wikipedia.title}
-              extract={metadata.wikipedia.extract}
-              thumbnail={metadata.wikipedia.thumbnail}
-            />
-          ) : null}
-        </section>
-      </div>
-    );
-  }
-}
+        </div>
+        <div className={css('vf-stack')}>
+          <SidePanel metadata={metadata} dbInfo={dbInfo} />
+        </div>
+      </section>
+      <OtherSections
+        metadata={metadata}
+        citations={
+          { included, extra } as {
+            included: Array<[string, Reference]>;
+            extra: Array<[string, Reference]>;
+          }
+        }
+        hasIntegratedCitations={integratedCitations?.length > 0}
+      />
+      <section>
+        {metadata.source_database === 'pfam' && metadata.wikipedia ? (
+          <Wikipedia
+            title={metadata.wikipedia.title}
+            extract={metadata.wikipedia.extract}
+            thumbnail={metadata.wikipedia.thumbnail}
+          />
+        ) : null}
+      </section>
+    </div>
+  );
+};
 
 export default SummaryEntry;
