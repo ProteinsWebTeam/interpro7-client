@@ -70,7 +70,6 @@ const DescriptionFromIntegrated = ({
 }: IntegratedProps) => {
   useEffect(() => {
     setIntegratedCitations(Object.keys(payload?.metadata?.literature || {}));
-    console.log(Object.keys(payload?.metadata?.literature || {}));
   }, [payload?.metadata?.literature]);
   if (!integrated) return null;
   if (loading) return <Loading />;
