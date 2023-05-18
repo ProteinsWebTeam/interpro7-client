@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
@@ -98,6 +98,9 @@ const SummaryEntry = ({
   loading,
 }: SummaryEntryProps) => {
   const [integratedCitations, setIntegratedCitations] = useState<string[]>([]);
+  useEffect(() => {
+    setIntegratedCitations([]);
+  }, [metadata]);
 
   if (loading || !metadata) return <Loading />;
   const citations = getLiteratureIdsFromDescription(metadata.description);
