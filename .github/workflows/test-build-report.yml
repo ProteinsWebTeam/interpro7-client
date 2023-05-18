@@ -13,8 +13,8 @@ jobs:
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
-          npm i -g npm@9.3.1
-          npm ci --legacy-peer-deps
+          npm i -g npm@6.14.9
+          npm ci
       - name: 🧪 | 🏗 - Test and Build
         run: |
           npm run deploy:production
