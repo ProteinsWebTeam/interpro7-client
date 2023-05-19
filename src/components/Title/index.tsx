@@ -66,12 +66,14 @@ export class Title extends PureComponent<LoadedProps> {
           (metadata as EntryMetadata).accession;
     const isIPScanResult = longName === 'InterProScan Search Result';
 
+    const entryMetadata = metadata as EntryMetadata;
+
     return (
       <div className={css('title')} data-testid="titlebar">
         {isEntry &&
-          (metadata as EntryMetadata).type &&
-          metadata.source_database &&
-          metadata.source_database.toLowerCase() === 'interpro' && (
+          entryMetadata.type &&
+          entryMetadata &&
+          entryMetadata.source_database.toLowerCase() === 'interpro' && (
             <>
               <EntryIcon type={(metadata as EntryMetadata).type} />
               <Helmet
@@ -85,14 +87,15 @@ export class Title extends PureComponent<LoadedProps> {
         {
           // MD icon
           isEntry &&
-            (metadata as EntryMetadata).type &&
-            metadata.source_database &&
-            metadata.source_database.toLowerCase() !== 'interpro' && (
+            entryMetadata.type &&
+            entryMetadata.source_database &&
+            entryMetadata.source_database.toLowerCase() !== 'interpro' && (
               <div className={css('icon-container')}>
                 <MemberSymbol
-                  type={metadata.source_database}
+                  type={entryMetadata.source_database as MemberDB}
                   svg={false}
                   filter={false}
+                  includeLink={true}
                 />
               </div>
             )
@@ -123,9 +126,9 @@ export class Title extends PureComponent<LoadedProps> {
             {
               // Showing Favourites only for InterPro entries for now
               isEntry &&
-                (metadata as EntryMetadata).type &&
-                metadata.source_database &&
-                metadata.source_database.toLowerCase() === 'interpro' && (
+                entryMetadata.type &&
+                entryMetadata.source_database &&
+                entryMetadata.source_database.toLowerCase() === 'interpro' && (
                   <span
                     className={css('fav-icon')}
                     role="button"

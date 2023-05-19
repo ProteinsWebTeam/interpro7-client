@@ -50,7 +50,10 @@ const MemberDBSubtitle = ({
                   />
                 </sup>
               </Tooltip>
-            </Link>
+            </Link>{' '}
+            {metadata.source_database === 'ncbifam' ? (
+              <span className={css('tag', 'plain')}>Includes TIGRFAMs</span>
+            ) : null}
           </td>
         </tr>
         <tr>

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import T from 'prop-types';
 
-import { foundationPartial } from 'styles/foundation';
+import Link from 'components/generic/Link';
+import { memberDbURL } from 'utils/url-patterns';
+
+import cssBinder from 'styles/cssBinder';
 
 import uniqueId from 'utils/cheap-unique-id';
 
 import cn from 'classnames';
 
 import styles from './style.css';
+const css = cssBinder(styles);
 
 const images = {
   cathgene3d: [
@@ -124,111 +127,117 @@ const images = {
   ],
 };
 
-const f = foundationPartial(styles);
-
 const classNames = new Map([
-  ['INTERPRO', f('md-ip')],
-  ['CATH', f('md-cg')],
-  ['CATHGENE3D', f('md-cg')],
-  ['CDD', f('md-cd')],
-  ['HAMAP', f('md-ha')],
-  ['MOBIDBLT', f('md-mo')],
-  ['PANTHER', f('md-pa')],
-  ['PFAM', f('md-pf')],
-  ['PIRSF', f('md-pi')],
-  ['PRINTS', f('md-pri')],
-  ['PRODOM', f('md-pro')],
-  ['PATTERNS', f('md-prpat')],
-  ['PROSITE', f('md-prpat')],
-  ['PROFILES', f('md-prpro')],
-  ['PROFILE', f('md-prpro')],
-  ['SFLD', f('md-sf')],
-  ['SMART', f('md-sm')],
-  ['SUPERFAMILIES', f('md-su')],
-  ['SSF', f('md-su')],
-  ['TIGRFAMS', f('md-ti')],
-  ['NCBIFAM', f('md-nf')],
-  ['NEW', f('md-new')],
-  ['ALL', f('md-all')],
-  ['REMOVED', f('md-removed')],
+  ['INTERPRO', css('md-ip')],
+  ['CATH', css('md-cg')],
+  ['CATHGENE3D', css('md-cg')],
+  ['CDD', css('md-cd')],
+  ['HAMAP', css('md-ha')],
+  ['MOBIDBLT', css('md-mo')],
+  ['PANTHER', css('md-pa')],
+  ['PFAM', css('md-pf')],
+  ['PIRSF', css('md-pi')],
+  ['PRINTS', css('md-pri')],
+  ['PRODOM', css('md-pro')],
+  ['PATTERNS', css('md-prpat')],
+  ['PROSITE', css('md-prpat')],
+  ['PROFILES', css('md-prpro')],
+  ['PROFILE', css('md-prpro')],
+  ['SFLD', css('md-sf')],
+  ['SMART', css('md-sm')],
+  ['SUPERFAMILIES', css('md-su')],
+  ['SSF', css('md-su')],
+  ['TIGRFAMS', css('md-ti')],
+  ['NCBIFAM', css('md-nf')],
+  ['NEW', css('md-new')],
+  ['ALL', css('md-all')],
+  ['REMOVED', css('md-removed')],
 ]);
 
-const MemberSymbol = (
-  {
-    type,
-    className = '',
-    svg = true,
-    filter = true,
-  } /*: { type: string, className?: string, svg?: boolean , filter?: boolean } */,
-) => {
+type Props = {
+  type: MemberDB;
+  className?: string;
+  svg?: boolean;
+  filter?: boolean;
+  includeLink?: boolean;
+};
+
+const MemberSymbol = ({
+  type,
+  className = '',
+  svg = true,
+  filter = true,
+  includeLink = false,
+}: Props) => {
   const id = uniqueId();
   const [png, setPng] = useState(null);
   const [avif, setAvif] = useState(null);
+  useEffect(() => {
+    setPng(null);
+    setAvif(null);
+  }, [type]);
   useEffect(() => {
     if (!svg) {
       if (!avif) images?.[type]?.[0].then((src) => setAvif(src.default));
       if (!png) images?.[type]?.[1].then((src) => setPng(src.default));
     }
-  }, [svg]);
+  }, [svg, avif, png]);
+  const MaybeLink = includeLink ? Link : 'span';
   return (
-    <span
-      data-testid="entry-member-db-icon"
-      className={f('entry-member-db-icon')}
-    >
-      {svg || (!png && !avif) ? (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 200 200"
-          id={`md-${type}`}
-          className={cn(className, classNames.get(type.toUpperCase()))}
-        >
-          <defs>
-            <clipPath id={`clip-${id}`}>
-              <rect x="33%" y="38%" width="68" height="68" />
-            </clipPath>
-          </defs>
-
-          <text
-            x="50%"
-            y="50%"
-            textAnchor="middle"
-            dx="-0.01em"
-            dy="0.4em"
-            className={f('md-server')}
+    <MaybeLink href={memberDbURL.get(type)} target="_blank">
+      <span
+        data-testid="entry-member-db-icon"
+        className={css('entry-member-db-icon')}
+      >
+        {svg || (!png && !avif) ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 200 200"
+            id={`md-${type}`}
+            className={cn(className, classNames.get(type.toUpperCase()))}
           >
-            D
-          </text>
+            <defs>
+              <clipPath id={`clip-${id}`}>
+                <rect x="33%" y="38%" width="68" height="68" />
+              </clipPath>
+            </defs>
 
-          <text
-            x="50%"
-            y="50%"
-            textAnchor="middle"
-            dx="-0.01em"
-            dy="0.4em"
-            className={f('md-color')}
-            style={{ clipPath: `url(#clip-${id})` }}
-          >
-            D
-          </text>
-        </svg>
-      ) : (
-        <div className={f('memberdb-logo', { filter })}>
-          {avif || png ? (
-            <picture>
-              <source type="image/avif" srcSet={avif} />
-              <img alt="Hut in the snow" src={png} />
-            </picture>
-          ) : null}
-        </div>
-      )}
-    </span>
+            <text
+              x="50%"
+              y="50%"
+              textAnchor="middle"
+              dx="-0.01em"
+              dy="0.4em"
+              className={css('md-server')}
+            >
+              D
+            </text>
+
+            <text
+              x="50%"
+              y="50%"
+              textAnchor="middle"
+              dx="-0.01em"
+              dy="0.4em"
+              className={css('md-color')}
+              style={{ clipPath: `url(#clip-${id})` }}
+            >
+              D
+            </text>
+          </svg>
+        ) : (
+          <div className={css('memberdb-logo', { filter })}>
+            {avif || png ? (
+              <picture>
+                <source type="image/avif" srcSet={avif || ''} />
+                <img alt="Hut in the snow" src={png || ''} />
+              </picture>
+            ) : null}
+          </div>
+        )}
+      </span>
+    </MaybeLink>
   );
-};
-MemberSymbol.propTypes = {
-  type: T.string.isRequired,
-  className: T.string,
-  svg: T.bool,
-  filter: T.bool,
 };
 
 export default MemberSymbol;

@@ -3,6 +3,16 @@ declare module '*.css' {
   const content: any;
   export default content;
 }
+declare module '*.avif' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
+declare module '*.png' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
   let InterproEntry: InterProEntryProps;
@@ -120,8 +130,25 @@ interface Metadata {
   };
   go_terms?: Array<GOTerm>;
 }
+
+type MemberDB =
+  | 'cathgene3d'
+  | 'cdd'
+  | 'hamap'
+  | 'panther'
+  | 'pfam'
+  | 'pirsf'
+  | 'prints'
+  | 'prosite'
+  | 'profile'
+  | 'sfld'
+  | 'smart'
+  | 'ssf'
+  | 'tigrfams'
+  | 'ncbifam';
 interface EntryMetadata extends Metadata {
   name: { name: string; short?: string };
+  source_database: 'interpro' | MemberDB;
   type: string;
   integrated: string | null;
   member_databases: ContributingEntries;
@@ -146,6 +173,7 @@ interface EntryMetadata extends Metadata {
 interface ProteinMetadata extends Metadata {
   id?: string;
   name: string;
+  source_database: 'uniprot' | 'reviewed' | 'unreviewed';
   length: number;
   sequence: string;
   proteome: string;
