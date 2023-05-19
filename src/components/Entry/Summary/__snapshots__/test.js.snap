@@ -176,6 +176,7 @@ exports[`<SummaryEntry /> should render 1`] = `
         "included": [],
       }
     }
+    hasIntegratedCitations={false}
     metadata={
       {
         "accession": "IPR000001",

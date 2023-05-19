@@ -73,7 +73,7 @@ const LiteratureItem = ({
             })}
             aria-label="jump up"
           >
-            {i}.^
+            {i}.
           </Link>
         ) : (
           <span>[{i}]. </span>
