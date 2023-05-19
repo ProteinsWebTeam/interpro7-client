@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -22,8 +22,41 @@ import local from './style.css';
 
 const css = cssBinder(ipro, local, fonts);
 
+const ImportedTag = ({ accession }: { accession: string }) => {
+  return (
+    <Tooltip
+      title={`The member database didn't provide a description for this signature. 
+            The description displayed has been imported from ${accession}, the InterPro entry in which the signature is integrated.`}
+    >
+      <span className={css('tag')}>
+        <sup>
+          <span
+            className={css('icon', 'icon-common', 'icon-info', 'small')}
+            data-icon="&#xf129;"
+          />{' '}
+        </sup>
+        Imported from{' '}
+        <Link
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: {
+                db: 'InterPro',
+                accession,
+              },
+            },
+          }}
+        >
+          {accession}
+        </Link>
+      </span>
+    </Tooltip>
+  );
+};
+
 type Props = {
   integrated: string | null;
+  setIntegratedCitations?: (citations: string[]) => void;
 };
 
 interface IntegratedProps
@@ -33,7 +66,11 @@ interface IntegratedProps
 const DescriptionFromIntegrated = ({
   integrated,
   data: { loading, payload },
+  setIntegratedCitations = (_: string[]) => null,
 }: IntegratedProps) => {
+  useEffect(() => {
+    setIntegratedCitations(Object.keys(payload?.metadata?.literature || {}));
+  }, [payload?.metadata?.literature]);
   if (!integrated) return null;
   if (loading) return <Loading />;
 
@@ -49,41 +86,16 @@ const DescriptionFromIntegrated = ({
     return (
       <>
         <h4>
-          Description{' '}
-          <Tooltip
-            title={`The member database didn't provide a description for this signature. 
-                    The description displayed has been imported from ${integrated}, the InterPro entry in which the signature is integrated.`}
-          >
-            <span className={css('tag')}>
-              <sup>
-                <span
-                  className={css('icon', 'icon-common', 'icon-info', 'small')}
-                  data-icon="&#xf129;"
-                />{' '}
-              </sup>
-              Imported from{' '}
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'entry' },
-                    entry: {
-                      db: 'InterPro',
-                      accession: integrated,
-                    },
-                  },
-                }}
-              >
-                {integrated}
-              </Link>
-            </span>
-          </Tooltip>
+          Description <ImportedTag accession={integrated} />
         </h4>
         <Description
           textBlocks={payload.metadata.description}
           literature={included}
           accession={payload.metadata.accession}
         />
-        <h4>References</h4>
+        <h4>
+          References <ImportedTag accession={integrated} />
+        </h4>
         <Literature included={included} extra={extra} />
       </>
     );
