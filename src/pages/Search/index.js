@@ -17,10 +17,11 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import style from './style.css';
+import tabs from 'components/Tabs/style.css';
 import InfoBanner from 'components/Help/InfoBanner';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ebiGlobalStyles, ipro, style, fonts);
+const f = foundationPartial(ebiGlobalStyles, ipro, tabs, style, fonts);
 
 const SearchByText = loadable({
   loader: () =>
@@ -223,8 +224,8 @@ Wrapper.propTypes = {
 };
 
 const locationSelector = createSelector(
-  customLocation => customLocation.description.search.type,
-  value => value,
+  (customLocation) => customLocation.description.search.type,
+  (value) => value,
 );
 
 const Search = () => (

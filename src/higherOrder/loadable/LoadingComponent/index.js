@@ -37,8 +37,8 @@ export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
             Reload this page
           </button>
           <p>
-            If this error persists, please get in touch with us
-            through our contact form.
+            If this error persists, please get in touch with us through our
+            contact form.
           </p>
           <Link
             className={f('button')}

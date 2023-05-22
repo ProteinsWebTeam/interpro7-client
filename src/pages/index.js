@@ -59,6 +59,7 @@ const Jobs = loadable({
 
 // Static pages
 const Download = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "about-page" */ './Download'),
 });
 const ReleaseNotes = loadable({
