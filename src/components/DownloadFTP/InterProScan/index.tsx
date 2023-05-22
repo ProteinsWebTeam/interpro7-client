@@ -1,20 +1,18 @@
-// @flow
 import React from 'react';
 
 import Link from 'components/generic/Link';
 import DownloadTable from 'components/IPScan/DownloadTable';
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
+const css = cssBinder(fonts, ipro);
 
 const InterProScanDownloads = () => (
   <>
     <DownloadTable />
-    <p className={f('small', 'margin-top-small')}>
+    <p className={css('small', 'margin-top-small')}>
       To ensure you have the latest data and software enhancements we always
       recommend you download the latest version of InterProScan. However all
       previous releases are archived on the{' '}
@@ -24,7 +22,7 @@ const InterProScanDownloads = () => (
       . InterProScan&#39;s source code is available on{' '}
       <Link
         href="//github.com/ebi-pf-team/interproscan"
-        className={f('ext')}
+        className={css('ext')}
         target="_blank"
       >
         Github
