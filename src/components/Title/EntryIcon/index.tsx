@@ -7,7 +7,7 @@ import ipro from 'styles/icons.css';
 const css = cssBinder(ipro);
 
 const EntryIcon = ({ type }: { type: string }) => (
-  <Tooltip title={`${type.replace('_', ' ')} type`}>
+  <Tooltip title={`Type: ${type.replace('_', ' ')}`}>
     <interpro-type
       type={type.replace('_', ' ')}
       dimension="4em"

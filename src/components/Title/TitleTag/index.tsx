@@ -47,7 +47,7 @@ const TitleTag = ({ db, mainType, dbLabel }: Props) => {
           {
             // Set
             mainType === 'set' && (
-              <Tooltip title="A Set is defined as a group of related entries">
+              <Tooltip title="A set is defined as a group of evolutionary related entries">
                 {' '}
                 <span
                   className={css('small', 'icon', 'icon-common')}
