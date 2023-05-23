@@ -24,7 +24,6 @@
   background-color: var(--colors-homolog-main);
 }
 
-/*SP is that still needed ?*/
 .icon {
   display: inline-block;
 }
@@ -46,7 +45,6 @@
 .ico-notfound::before {
   color: var(--colors-alert-main);
 }
-/*/I5 result page icons*/
 
 /*lineage*/
 .ico-primary ::before {

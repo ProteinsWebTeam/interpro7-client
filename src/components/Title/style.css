@@ -4,14 +4,9 @@
   display: flex;
 
   & .title-name {
-    flex-grow: 2;
     &.ipscan {
       display: inline-flex;
     }
-  }
-
-  & > div:first-of-type:not(.icon-container):not(.title-name) {
-    margin-top: 0.5rem; /* when using tooltip only way to move the SVG icon*/
   }
 
   & interpro-type {
@@ -41,7 +36,7 @@
 
 .title-id {
   color: #444;
-  margin: 0.5rem 0 0 1.5rem;
+  margin-right: 0.5rem;
   font-size: 130%;
 }
 .title-id span {
@@ -73,6 +68,9 @@
 
 .title-id-md {
   background-color: var(--colors-md-main);
+  color: var(--colors-nearly-black);
+}
+.title-id-md.white {
   color: var(--colors-nearly-white);
 }
 
@@ -84,16 +82,15 @@
   display: flex;
 }
 
-/* .fav-icon {
-  padding: 0.7rem 0.3rem 0.25rem 0.3rem;
-} */
-
 .favourite {
   color: #f37506;
 }
 
 .normal {
   color: #dddcdc;
+}
+.fav-icon {
+  margin-left: 0.5rem;
 }
 
 @media screen and (max-width: 63.9375em) {

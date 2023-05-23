@@ -116,6 +116,14 @@ export class Title extends PureComponent<LoadedProps> {
           })}
         >
           <div className={css('title-fav')}>
+            <AccessionTag
+              accession={metadata.accession}
+              db={metadata.source_database}
+              type={(metadata as EntryMetadata).type}
+              mainType={mainType}
+              isIPScanResult={isIPScanResult}
+            />
+
             <h3
               className={css({
                 'margin-bottom-large': isIPScanResult,
@@ -150,19 +158,13 @@ export class Title extends PureComponent<LoadedProps> {
                 )
             }
           </div>
+
           <TitleTag
             db={metadata?.source_database}
             mainType={mainType}
             dbLabel={dbLabel}
           />
         </div>
-        <AccessionTag
-          accession={metadata.accession}
-          db={metadata.source_database}
-          type={(metadata as EntryMetadata).type}
-          mainType={mainType}
-          isIPScanResult={isIPScanResult}
-        />
         <FragmentTag
           isFragment={!!(metadata as ProteinMetadata)?.is_fragment}
         />

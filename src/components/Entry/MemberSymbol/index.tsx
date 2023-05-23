@@ -230,7 +230,7 @@ const MemberSymbol = ({
             {avif || png ? (
               <picture>
                 <source type="image/avif" srcSet={avif || ''} />
-                <img alt="Hut in the snow" src={png || ''} />
+                <img alt={`${type} member database logo`} src={png || ''} />
               </picture>
             ) : null}
           </div>

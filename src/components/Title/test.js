@@ -5,6 +5,15 @@ import { Title } from '.';
 
 const renderer = new ShallowRenderer();
 
+const data = {
+  payload: {
+    databases: {
+      pfam: { name: 'Pfam' },
+      uniprot: { name: 'Uniprot KB' },
+      pdb: { name: 'PDB' },
+    },
+  },
+};
 describe('<Title />', () => {
   describe('For an entry', () => {
     test('should render a title component correctly', () => {
@@ -18,6 +27,8 @@ describe('<Title />', () => {
             accession: 'PF02171',
             source_database: 'pfam',
           }}
+          data={data}
+          mainType="entry"
         />,
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
@@ -30,15 +41,14 @@ describe('<Title />', () => {
           metadata={{
             length: 462,
             description: ["Created on Monday 13 August 2007 by user 'UJJWAL'"],
-            name: {
-              other: [],
-              name: 'VATB_METVS',
-              short: '',
-            },
+            name: 'VATB_METVS',
             gene: '',
             id: 'VATB_METVS',
             accession: 'A6UP55',
+            source_database: 'uniprot',
           }}
+          data={data}
+          mainType="protein"
         />,
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();
@@ -58,6 +68,8 @@ describe('<Title />', () => {
             release_date: '2009-02-24',
             chains: ['A', 'B'],
           }}
+          data={data}
+          mainType="structure"
         />,
       );
       expect(renderer.getRenderOutput()).toMatchSnapshot();

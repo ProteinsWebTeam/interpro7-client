@@ -28,6 +28,8 @@ type Props = {
   isIPScanResult: boolean;
 };
 
+const lightFontDBs = ['ssf', 'pfam'];
+
 const AccessionTag = ({
   accession,
   db,
@@ -51,7 +53,7 @@ const AccessionTag = ({
             style={{
               backgroundColor: config.colors.get(db),
             }}
-            className={css('title-id-md')}
+            className={css('title-id-md', { white: lightFontDBs.includes(db) })}
           >
             {accession}
           </span>
