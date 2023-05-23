@@ -3,6 +3,16 @@ declare module '*.css' {
   const content: any;
   export default content;
 }
+declare module '*.avif' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
+declare module '*.png' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
   let InterproEntry: InterProEntryProps;
@@ -106,15 +116,42 @@ type CrossReference = {
 type LiteratureMetadata = {
   [PubID: string]: Reference;
 };
-type EntryMetadata = {
+
+interface Metadata {
   accession: string;
-  name: { name: string; short?: string };
   source_database: string;
+  description: Array<string>;
+  counters: {
+    [resource: string]:
+      | number
+      | {
+          [db: string]: number;
+        };
+  };
+  go_terms?: Array<GOTerm>;
+}
+
+type MemberDB =
+  | 'cathgene3d'
+  | 'cdd'
+  | 'hamap'
+  | 'panther'
+  | 'pfam'
+  | 'pirsf'
+  | 'prints'
+  | 'prosite'
+  | 'profile'
+  | 'sfld'
+  | 'smart'
+  | 'ssf'
+  | 'tigrfams'
+  | 'ncbifam';
+interface EntryMetadata extends Metadata {
+  name: { name: string; short?: string };
+  source_database: 'interpro' | MemberDB;
   type: string;
   integrated: string | null;
   member_databases: ContributingEntries;
-  go_terms: Array<GOTerm>;
-  description: Array<string>;
   literature: LiteratureMetadata;
   hierarchy?: InterProHierarchyType;
   overlaps_with?: Array<{
@@ -124,13 +161,6 @@ type EntryMetadata = {
   }> | null;
   cross_references: Record<string, CrossReference>;
   wikipedia: WikipediaEntry;
-  counters: {
-    [resource: string]:
-      | number
-      | {
-          [db: string]: number;
-        };
-  };
   set_info?: {
     accession: string;
     name: string;
@@ -139,7 +169,19 @@ type EntryMetadata = {
     accession: string;
     name: string;
   };
-};
+}
+interface ProteinMetadata extends Metadata {
+  id?: string;
+  name: string;
+  source_database: 'uniprot' | 'reviewed' | 'unreviewed';
+  length: number;
+  sequence: string;
+  proteome: string;
+  gene: string;
+  protein_evidence: number;
+  is_fragment: boolean;
+  ida_accession: string;
+}
 
 type DBInfo = {
   canonical: string;
@@ -161,9 +203,17 @@ type RequestedData<Payload> = {
   url: string;
 };
 
+type Endpoint =
+  | 'entry'
+  | 'protein'
+  | 'structure'
+  | 'taxonomy'
+  | 'proteome'
+  | 'set';
+
 type RootAPIPayload = {
   databases: DBsInfo;
-  endpoints: Array<string>;
+  endpoints: Array<Endpoint>;
   sources: {
     mysql: {
       server: string;

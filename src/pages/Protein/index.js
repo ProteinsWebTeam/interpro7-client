@@ -11,6 +11,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
+// $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import ProteinListFilters from 'components/Protein/ProteinListFilters';

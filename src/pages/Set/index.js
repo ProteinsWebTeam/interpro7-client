@@ -19,6 +19,7 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import NumberComponent from 'components/NumberComponent';
 import File from 'components/File';
