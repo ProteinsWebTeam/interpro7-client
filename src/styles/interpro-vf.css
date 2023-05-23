@@ -60,3 +60,8 @@ table.left-headers {
   color: white;
   border-bottom: none;
 }
+
+.tag.plain {
+  background: var(--colors-ulightgray);
+  color: var(--colors-ebidark);
+}

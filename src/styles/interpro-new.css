@@ -657,6 +657,7 @@ body .tag.secondary {
 /* tag used on md signature page */
 body .tag.md-p {
   background-color: var(--colors-md-sub);
+  color: var(--colors-nearly-white);
 }
 
 /*used on ipscan search result*/

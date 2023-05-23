@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -8,7 +7,7 @@ const renderer = new ShallowRenderer();
 
 describe('<MemberSymbol />', () => {
   test('should render', () => {
-    renderer.render(<MemberSymbol type={'smart'} />);
+    renderer.render(<MemberSymbol type={'smart'} includeLink={true} />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 });
