@@ -16,6 +16,9 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
+// $FlowFixMe
+import SequenceCheck from './SequenceCheck';
+
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -118,6 +121,10 @@ const AlphaFoldModel = (
           </p>
         </>
       )}
+      <SequenceCheck
+        proteinAccession={proteinAcc}
+        alphaFoldSequence={data.payload?.[0]?.uniprotSequence}
+      />
       {hasMultipleProteins && !isSplitScreen ? (
         <div className={f('callout', 'primary', 'info')}>
           <p>
