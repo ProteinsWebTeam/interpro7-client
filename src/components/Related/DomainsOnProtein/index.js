@@ -10,6 +10,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
+  // $FlowFixMe
 } from 'components/AlphaFold/selectors';
 
 import { processData } from 'components/ProtVista/utils';

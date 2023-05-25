@@ -1,35 +1,38 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 
 import { createSelector } from 'reselect';
 import { format } from 'url';
+
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 
-import { foundationPartial } from 'styles/foundation';
-import ipro from 'styles/interpro-new.css';
+import cssBinder from 'styles/cssBinder';
+import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 
-const f = foundationPartial(style, ipro, fonts);
+const f = cssBinder(style, ipro, fonts);
 
-/*:: import type { FetchOutput } from 'utils/cached-fetch'; */
+type Props = {
+  isStale: boolean;
+  search: Record<string, string>;
+  onProteinChange: (acc: string) => void;
+};
+interface LoadedProps
+  extends Props,
+    LoadDataProps<PayloadList<ProteinEntryPayload>> {}
 
-const ProteinTable = (
-  { data, isStale, search, onProteinChange } /*: {
-  data: FetchOutput,
-  isStale: boolean,
-  search: {[string]: string},
-  onProteinChange: (string)=>void
-} */,
-) => {
+const ProteinTable = ({
+  data,
+  isStale,
+  search,
+  onProteinChange,
+}: LoadedProps) => {
   if (data?.loading) return <Loading />;
 
   return (
@@ -52,7 +55,7 @@ const ProteinTable = (
         <Column
           dataKey="accession"
           cellClassName={'nowrap'}
-          renderer={(accession, row) => (
+          renderer={(accession: string, row: Record<string, string>) => (
             <>
               <Link
                 to={{
@@ -86,7 +89,7 @@ const ProteinTable = (
         />
         <Column
           dataKey="name"
-          renderer={(name, row) => {
+          renderer={(name: string, row: Record<string, string>) => {
             return (
               <Link
                 to={{
@@ -110,7 +113,13 @@ const ProteinTable = (
         </Column>
         <Column
           dataKey="source_organism"
-          renderer={({ fullName, taxId }) => (
+          renderer={({
+            fullName,
+            taxId,
+          }: {
+            fullName: string;
+            taxId: number;
+          }) => (
             <Link
               to={{
                 description: {
@@ -132,7 +141,7 @@ const ProteinTable = (
           dataKey="length"
           headerClassName={f('text-right')}
           cellClassName={f('text-right')}
-          renderer={(length) => length.toLocaleString()}
+          renderer={(length: number) => length.toLocaleString()}
         >
           Length
         </Column>
@@ -140,7 +149,7 @@ const ProteinTable = (
           dataKey={''}
           headerClassName={f('text-right')}
           cellClassName={f('text-right')}
-          renderer={(_, row) => {
+          renderer={(_: string, row: Record<string, string>) => {
             return (
               <button
                 className={f('button')}
@@ -155,19 +164,17 @@ const ProteinTable = (
     </div>
   );
 };
-ProteinTable.propTypes = {
-  data: T.object,
-  isStale: T.bool,
-  search: T.object,
-  onProteinChange: T.func,
-};
 
-export const getUrl = (includeSearch /*: boolean */) =>
+export const getUrl = (includeSearch: boolean) =>
   createSelector(
-    (state) => state.settings.api,
-    (state) => state.customLocation.description,
-    (state) => state.customLocation.search,
-    ({ protocol, hostname, port, root }, description, search) => {
+    (state: GlobalState) => state.settings.api,
+    (state: GlobalState) => state.customLocation.description,
+    (state: GlobalState) => state.customLocation.search,
+    (
+      { protocol, hostname, port, root }: ParsedURLServer,
+      description,
+      search
+    ) => {
       if (description.main.key === 'entry') {
         const _description = {
           main: {
@@ -197,13 +204,16 @@ export const getUrl = (includeSearch /*: boolean */) =>
       // return {
       //   accession: description[description.main.key].accession,
       // };
-    },
+    }
   );
 
 export const mapStateToPropsForModels = createSelector(
-  (state) => state.customLocation.description,
-  (state) => state.customLocation.search,
-  (description, search) => ({ description, search }),
+  (state: GlobalState) => state.customLocation.description,
+  (state: GlobalState) => state.customLocation.search,
+  (description: InterProDescription, search: Record<string, string>) => ({
+    description,
+    search,
+  })
 );
 
 export default loadData({

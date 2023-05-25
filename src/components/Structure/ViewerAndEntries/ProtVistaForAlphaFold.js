@@ -14,6 +14,7 @@ import { processData } from 'components/ProtVista/utils';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
+  // $FlowFixMe
 } from 'components/AlphaFold/selectors';
 
 import Loading from 'components/SimpleCommonComponents/Loading';

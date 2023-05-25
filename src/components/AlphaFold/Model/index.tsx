@@ -52,12 +52,13 @@ type Props = {
   onModelChange: (value: string) => void;
   modelId: string;
   modelUrl: string;
-  data: RequestedData<AlphafoldPayload>;
   selections: Object[];
   parentElement?: HTMLElement;
   isSplitScreen: boolean;
   onSplitScreenChange?: (v: boolean) => void;
 };
+interface LoadedProps extends Props, LoadDataProps<AlphafoldPayload> {}
+
 const AlphaFoldModel = ({
   proteinAcc,
   hasMultipleProteins,
@@ -69,7 +70,7 @@ const AlphaFoldModel = ({
   parentElement,
   isSplitScreen,
   onSplitScreenChange,
-}: Props) => {
+}: LoadedProps) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
   useEffect(() => {
     if (shouldResetViewer) {

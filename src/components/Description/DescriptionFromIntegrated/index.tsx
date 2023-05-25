@@ -103,7 +103,7 @@ const DescriptionFromIntegrated = ({
   return null;
 };
 
-const getUrlFor: GetUrl<Props> = createSelector(
+const getUrlFor = createSelector(
   (state: GlobalState) => state.settings.api,
   (_state: GlobalState, props?: Props) => props?.integrated || '',
   (server: ParsedURLServer, accession: string) => {

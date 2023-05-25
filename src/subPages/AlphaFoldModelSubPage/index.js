@@ -8,6 +8,7 @@ import AlphaFoldModel from 'components/AlphaFold/Model';
 import ProteinTable, {
   getUrl,
   mapStateToPropsForModels,
+  // $FlowFixMe
 } from 'components/AlphaFold/ProteinTable';
 import ProtVistaForAlphaFold from 'components/Structure/ViewerAndEntries/ProtVistaForAlphaFold';
 import Loading from 'components/SimpleCommonComponents/Loading';

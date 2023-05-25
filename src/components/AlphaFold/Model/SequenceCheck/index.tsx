@@ -62,7 +62,7 @@ const SequenceCheck = ({
     </div>
   );
 };
-const getUrlForProtein: GetUrl<Props> = createSelector(
+const getUrlForProtein = createSelector(
   (state: GlobalState) => state.settings.api,
   (_state: GlobalState, props?: Props) => props?.proteinAccession || '',
   (server: ParsedURLServer, accession: string) => {
