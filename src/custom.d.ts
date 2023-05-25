@@ -31,6 +31,7 @@ type GlobalState = {
   customLocation: InterProLocation;
   [other: string]: any;
 }; // TODO: replace for redux state type
+
 type Endpoint =
   | 'entry'
   | 'protein'
@@ -370,6 +371,6 @@ type LoadDataProps<Payload = unknown> = {
 };
 
 type GetUrl<Props = unknown> = (
-  params: Record<string, unknown>,
+  params: GlobalState | {},
   props?: Props
 ) => string | null;

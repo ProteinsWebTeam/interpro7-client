@@ -4,7 +4,8 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'higherOrder/loadData/extract-params';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -19,8 +20,7 @@ import style from './style.css';
 const f = cssBinder(style, ipro, fonts);
 
 type Props = {
-  isStale: boolean;
-  search: Record<string, string>;
+  search?: Record<string, string>;
   onProteinChange: (acc: string) => void;
 };
 interface LoadedProps
@@ -219,4 +219,4 @@ export const mapStateToPropsForModels = createSelector(
 export default loadData({
   getUrl: getUrl(true),
   mapStateToProps: mapStateToPropsForModels,
-})(ProteinTable);
+} as Params)(ProteinTable);

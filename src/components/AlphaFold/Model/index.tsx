@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'higherOrder/loadData/extract-params';
 
 import Link from 'components/generic/Link';
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
@@ -50,10 +51,10 @@ type Props = {
   proteinAcc: string;
   hasMultipleProteins: boolean;
   onModelChange: (value: string) => void;
-  modelId: string;
-  modelUrl: string;
-  selections: Object[];
-  parentElement?: HTMLElement;
+  modelId: string | null;
+  modelUrl?: string;
+  selections: unknown[] | null;
+  parentElement?: HTMLElement | null;
   isSplitScreen: boolean;
   onSplitScreenChange?: (v: boolean) => void;
 };
@@ -175,7 +176,7 @@ const AlphaFoldModel = ({
                 <li>
                   <span className={css('header')}>Prediction</span>
                   <select
-                    value={modelId}
+                    value={modelId || ''}
                     className={css('protein-list')}
                     onChange={(event) => onModelChange(event.target.value)}
                     onBlur={(event) => onModelChange(event.target.value)}
@@ -305,4 +306,4 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
 export default loadData({
   getUrl: getModelInfoUrl(true),
   mapStateToProps: getModelInfoUrl(false),
-})(AlphaFoldModel);
+} as Params)(AlphaFoldModel);

@@ -146,6 +146,7 @@ ProtVistaForAlphaFold.propTypes = {
   protein: T.string.isRequired,
   confidenceURL: T.string,
   isSplitScreen: T.bool,
+  protein: T.string,
 };
 
 const getProteinURL = createSelector(
