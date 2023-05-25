@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import T from 'prop-types';
 
 import loadData from 'higherOrder/loadData';
-
+// $FlowFixMe
 import AlphaFoldModel from 'components/AlphaFold/Model';
 import ProteinTable, {
   getUrl,

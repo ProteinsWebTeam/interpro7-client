@@ -1,13 +1,10 @@
-// @flow
 import React, { useEffect, useState } from 'react';
-import T from 'prop-types';
 
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 
 import Link from 'components/generic/Link';
-// $FlowFixMe
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
@@ -16,16 +13,15 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
-// $FlowFixMe
 import SequenceCheck from './SequenceCheck';
 
-import { foundationPartial } from 'styles/foundation';
-import ipro from 'styles/interpro-new.css';
+import cssBinder from 'styles/cssBinder';
+import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 import buttonBar from 'components/Structure/ViewerAndEntries/button-bar.css';
 
-const f = foundationPartial(style, buttonBar, ipro, fonts);
+const css = cssBinder(style, buttonBar, ipro, fonts);
 
 const confidenceColors = [
   {
@@ -50,33 +46,30 @@ const confidenceColors = [
   },
 ];
 
-/*:: import type { FetchOutput } from 'utils/cached-fetch'; */
-
-const AlphaFoldModel = (
-  {
-    proteinAcc,
-    hasMultipleProteins,
-    onModelChange,
-    modelId,
-    modelUrl,
-    data,
-    selections,
-    parentElement,
-    isSplitScreen,
-    onSplitScreenChange,
-  } /*: {
-  proteinAcc: string,
-  hasMultipleProteins: boolean,
-  onModelChange: (Event)=> void,
-  modelId: string,
-  modelUrl: string,
-  data: FetchOutput,
-  selections: Object[],
-  parentElement?: HTMLElement,
-  isSplitScreen: boolean,
-  onSplitScreenChange?: (v:boolean)=>void
-} */,
-) => {
+type Props = {
+  proteinAcc: string;
+  hasMultipleProteins: boolean;
+  onModelChange: (value: string) => void;
+  modelId: string;
+  modelUrl: string;
+  data: RequestedData<AlphafoldPayload>;
+  selections: Object[];
+  parentElement?: HTMLElement;
+  isSplitScreen: boolean;
+  onSplitScreenChange?: (v: boolean) => void;
+};
+const AlphaFoldModel = ({
+  proteinAcc,
+  hasMultipleProteins,
+  onModelChange,
+  modelId,
+  modelUrl,
+  data,
+  selections,
+  parentElement,
+  isSplitScreen,
+  onSplitScreenChange,
+}: Props) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
   useEffect(() => {
     if (shouldResetViewer) {
@@ -103,7 +96,7 @@ const AlphaFoldModel = (
       : models.filter((x) => x.entryId === modelId);
   const elementId = 'new-structure-model-viewer';
   return (
-    <div className={f('alphafold-model')}>
+    <div className={css('alphafold-model')}>
       {!isSplitScreen && (
         <>
           <h3>
@@ -126,10 +119,10 @@ const AlphaFoldModel = (
         alphaFoldSequence={data.payload?.[0]?.uniprotSequence}
       />
       {hasMultipleProteins && !isSplitScreen ? (
-        <div className={f('callout', 'primary', 'info')}>
+        <div className={css('callout', 'primary', 'info')}>
           <p>
             <span
-              className={f('icon', 'icon-common', 'icon-info')}
+              className={css('icon', 'icon-common', 'icon-info')}
               data-icon="&#xf129;"
             />
             This entry matches several proteins with structure predictions. Use
@@ -139,13 +132,13 @@ const AlphaFoldModel = (
       ) : (
         ''
       )}
-      <div className={f('row')}>
+      <div className={css('row')}>
         {!isSplitScreen && (
-          <div className={f('column', 'small-12', 'medium-3')}>
+          <div className={css('column', 'small-12', 'medium-3')}>
             <h5>Information</h5>
-            <ul className={f('information')}>
+            <ul className={css('information')}>
               <li>
-                <span className={f('header')}>Protein</span>
+                <span className={css('header')}>Protein</span>
                 <Link
                   to={{
                     description: {
@@ -159,30 +152,30 @@ const AlphaFoldModel = (
                 >
                   {modelInfo.uniprotAccession}
                 </Link>
-                <span className={f('footer')}>
+                <span className={css('footer')}>
                   View on{' '}
-                  <Link href={modelUrl} className={f('ext')}>
+                  <Link href={modelUrl} className={css('ext')}>
                     AlphaFold DB
                   </Link>{' '}
                   or{' '}
                   <UniProtLink
                     id={modelInfo.uniprotAccession}
-                    className={f('ext')}
+                    className={css('ext')}
                   >
                     UniProtKB
                   </UniProtLink>
                 </span>
               </li>
               <li>
-                <span className={f('header')}>Organism</span>
+                <span className={css('header')}>Organism</span>
                 <i>{modelInfo.organismScientificName}</i>
               </li>
               {models.length > 1 ? (
                 <li>
-                  <span className={f('header')}>Prediction</span>
+                  <span className={css('header')}>Prediction</span>
                   <select
                     value={modelId}
-                    className={f('protein-list')}
+                    className={css('protein-list')}
                     onChange={(event) => onModelChange(event.target.value)}
                     onBlur={(event) => onModelChange(event.target.value)}
                   >
@@ -196,7 +189,7 @@ const AlphaFoldModel = (
               )}
             </ul>
             <h5>Model confidence</h5>
-            <ul className={f('legend')}>
+            <ul className={css('legend')}>
               {confidenceColors.map((item) => (
                 <li key={item.category}>
                   <span style={{ backgroundColor: item.color }}>&nbsp;</span>{' '}
@@ -207,57 +200,57 @@ const AlphaFoldModel = (
           </div>
         )}
         <div
-          className={f({
+          className={css({
             column: !isSplitScreen,
             'small-12': !isSplitScreen,
             'medium-9': !isSplitScreen,
           })}
         >
           <PictureInPicturePanel
-            className={f({ 'structure-viewer-split': isSplitScreen })}
-            testid="structure-3d-viewer"
+            className={css({ 'structure-viewer-split': isSplitScreen })}
+            data-testid="structure-3d-viewer"
             OtherButtons={
               <div
                 style={{
                   display: isSplitScreen ? 'none' : 'block',
                 }}
-                className={f('button-bar')}
+                className={css('button-bar')}
               >
                 <Link
-                  className={f('control')}
+                  className={css('control')}
                   href={modelInfo.pdbUrl}
                   download={`${proteinAcc || 'download'}.model.pdb`}
                 >
                   <span
-                    className={f('icon', 'icon-common', 'icon-download')}
+                    className={css('icon', 'icon-common', 'icon-download')}
                     data-icon="&#xf019;"
                   />
                   &nbsp;PDB file
                 </Link>
                 <Link
-                  className={f('control')}
+                  className={css('control')}
                   href={modelInfo.cifUrl}
                   download={`${proteinAcc || 'download'}.model.cif`}
                 >
                   <span
-                    className={f('icon', 'icon-common', 'icon-download')}
+                    className={css('icon', 'icon-common', 'icon-download')}
                     data-icon="&#xf019;"
                   />
                   &nbsp;mmCIF file
                 </Link>
                 <button
-                  className={f('icon', 'icon-common', 'control')}
+                  className={css('icon', 'icon-common', 'control')}
                   onClick={() => setShouldResetViewer(true)}
                   data-icon="}"
                   title="Reset image"
                 />
                 <FullScreenButton
-                  className={f('icon', 'icon-common', 'control')}
+                  className={css('icon', 'icon-common', 'control')}
                   tooltip="View the structure in full screen mode"
                   element={elementId}
                 />{' '}
                 <FullScreenButton
-                  className={f('icon', 'icon-common', 'control')}
+                  className={css('icon', 'icon-common', 'control')}
                   tooltip="Split full screen"
                   dataIcon={'\uF0DB'}
                   element={parentElement}
@@ -265,7 +258,7 @@ const AlphaFoldModel = (
                   onExitFullScreenHook={() => onSplitScreenChange?.(false)}
                 />{' '}
                 <PIPToggleButton
-                  className={f('icon', 'icon-common', 'control')}
+                  className={css('icon', 'icon-common', 'control')}
                 />
               </div>
             }
@@ -285,24 +278,15 @@ const AlphaFoldModel = (
     </div>
   );
 };
-AlphaFoldModel.propTypes = {
-  proteinAcc: T.string,
-  hasMultipleProteins: T.bool,
-  onModelChange: T.func,
-  modelId: T.string,
-  modelUrl: T.string,
-  data: T.object,
-  selections: T.arrayOf(T.object),
-  parentElement: T.any,
-  isSplitScreen: T.bool,
-  onSplitScreenChange: T.func,
-};
 
-const getModelInfoUrl = (isUrlToApi) =>
+const getModelInfoUrl = (isUrlToApi: boolean) =>
   createSelector(
-    (state) => state.settings.alphafold,
-    (_, props) => props.proteinAcc,
-    ({ protocol, hostname, port, root, query }, accession) => {
+    (state: GlobalState) => state.settings.alphafold,
+    (_: GlobalState, props?: Props) => props?.proteinAcc || '',
+    (
+      { protocol, hostname, port, root, query }: ParsedURLServer,
+      accession: string
+    ) => {
       const modelUrl = format({
         protocol,
         hostname,
@@ -314,7 +298,7 @@ const getModelInfoUrl = (isUrlToApi) =>
       });
       if (isUrlToApi) return modelUrl;
       return { modelUrl };
-    },
+    }
   );
 
 export default loadData({
