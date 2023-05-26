@@ -71,7 +71,7 @@ const Download = ({ currentTab, goToCustomLocation }: Props) => {
             <div title="Pfam">
               <PfamDownloads />
             </div>
-            <div title="Prints">
+            <div title="PRINTS">
               <PrintsDownloads />
             </div>
             <div title="SFLD">
