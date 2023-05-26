@@ -1,33 +1,37 @@
-// @flow
-import React from 'react';
-import { useEffect, useState } from 'react';
-import T from 'prop-types';
-import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
-
+import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+
+import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import loadData from 'higherOrder/loadData';
-// $FlowFixMe
+
 import GoTerms from 'components/GoTerms';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import { foundationPartial } from 'styles/foundation';
-
+import cssBinder from 'styles/cssBinder';
 import local from './style.css';
-const f = foundationPartial(local);
+const css = cssBinder(local);
+
+type PropsSF = {
+  subfamily: string;
+  onFoundGOTerms: () => void;
+};
+interface LoadedPropsSF
+  extends PropsSF,
+    LoadDataProps<{ metadata: EntryMetadata }> {}
 
 const PantherSFGoTermsWithData = ({
   data: { loading, payload },
-  onFoundGOTerms,
-}) => {
+  onFoundGOTerms = () => null,
+}: LoadedPropsSF) => {
   useEffect(() => {
     if (payload?.metadata?.go_terms?.length) onFoundGOTerms();
   }, [payload?.metadata?.go_terms]);
   if (loading) return <Loading inline={true} />;
 
   return payload?.metadata?.go_terms?.length ? (
-    <details className={f('go-terms')}>
+    <details className={css('go-terms')}>
       <summary>{payload.metadata.accession}</summary>
       <GoTerms
         terms={payload?.metadata.go_terms}
@@ -37,14 +41,11 @@ const PantherSFGoTermsWithData = ({
     </details>
   ) : null;
 };
-PantherSFGoTermsWithData.propTypes = {
-  data: dataPropType,
-};
 
 const getUrl = createSelector(
-  (state) => state.settings.api,
-  (_, props) => props.subfamily,
-  ({ protocol, hostname, port, root }, subfamily) => {
+  (state: GlobalState) => state.settings.api,
+  (_: GlobalState, props: PropsSF) => props.subfamily,
+  ({ protocol, hostname, port, root }: ParsedURLServer, subfamily) => {
     return format({
       protocol,
       hostname,
@@ -59,17 +60,16 @@ const getUrl = createSelector(
         subfamily: '',
       },
     });
-  },
+  }
 );
 
-const PantherSFGoTerms = loadData(getUrl)(PantherSFGoTermsWithData);
-/*::
-type Props = {
-  subfamilies?: string[]
-}
-*/
+const PantherSFGoTerms = loadData(getUrl as Params)(PantherSFGoTermsWithData);
 
-const PantherGoTerms = ({ subfamilies } /*: Props */) => {
+type Props = {
+  subfamilies?: string[];
+};
+
+const PantherGoTerms = ({ subfamilies }: Props) => {
   const [hasGOTerms, setHasGOTerms] = useState(false);
   useEffect(() => {
     setHasGOTerms(false);
@@ -87,9 +87,6 @@ const PantherGoTerms = ({ subfamilies } /*: Props */) => {
       ))}
     </section>
   );
-};
-PantherGoTerms.propTypes = {
-  subfamilies: T.arrayOf(T.string),
 };
 
 export default PantherGoTerms;

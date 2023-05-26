@@ -32,6 +32,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
+// $FlowFixMe
 import PantherGoTerms from 'components/Protein/PantherGoTerms';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
