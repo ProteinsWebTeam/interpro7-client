@@ -25,12 +25,12 @@ const AntiFamDownloads = () => (
         <tr>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/AntiFam/current/Antifam.tar.gz">
-              AntiFam models
+              AntiFam families
             </Link>
           </td>
-          <td>HMMs for AntiFam</td>
+          <td>Seed alignments and profile-HMMs</td>
           <td className={css('xs-hide')}>Antifam.tar.gz</td>
-          <td className={css('xs-hide')}>.hmm .seed (packaged in a tar.gz)</td>
+          <td className={css('xs-hide')}>Stockholm (seed files) and HMMER (hmm files)</td>
           <td style={{ whiteSpace: 'nowrap' }}>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/AntiFam/current/Antifam.tar.gz">
               <span
@@ -45,7 +45,7 @@ const AntiFamDownloads = () => (
     </table>
     <p className={css('small', 'margin-top-small')}>
       See all downloads available on the{' '}
-      <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/AntiFam/current/">
+      <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/AntiFam/">
         FTP Site
       </Link>
     </p>
