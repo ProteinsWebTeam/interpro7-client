@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { useEffect, useState } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
@@ -16,14 +17,24 @@ import { foundationPartial } from 'styles/foundation';
 import local from './style.css';
 const f = foundationPartial(local);
 
-const PantherSFGoTermsWithData = ({ data: { loading, payload } }) => {
+const PantherSFGoTermsWithData = ({
+  data: { loading, payload },
+  onFoundGOTerms,
+}) => {
+  useEffect(() => {
+    if (payload?.metadata?.go_terms?.length) onFoundGOTerms();
+  }, [payload?.metadata?.go_terms]);
   if (loading) return <Loading inline={true} />;
-  return payload?.metadata?.go_terms ? (
-    <GoTerms
-      terms={payload?.metadata.go_terms}
-      type="protein"
-      withoutTitle={true}
-    />
+
+  return payload?.metadata?.go_terms?.length ? (
+    <details className={f('go-terms')}>
+      <summary>{payload.metadata.accession}</summary>
+      <GoTerms
+        terms={payload?.metadata.go_terms}
+        type="protein"
+        withoutTitle={true}
+      />
+    </details>
   ) : null;
 };
 PantherSFGoTermsWithData.propTypes = {
@@ -59,15 +70,20 @@ type Props = {
 */
 
 const PantherGoTerms = ({ subfamilies } /*: Props */) => {
+  const [hasGOTerms, setHasGOTerms] = useState(false);
+  useEffect(() => {
+    setHasGOTerms(false);
+  }, [subfamilies]);
   if (!subfamilies?.length) return null;
   return (
     <section>
-      <h5>Panther GO terms</h5>
+      {hasGOTerms && <h5>Panther GO terms</h5>}
       {subfamilies.map((sf) => (
-        <details key={sf} className={f('go-terms')}>
-          <summary>{sf}</summary>
-          <PantherSFGoTerms subfamily={sf} />
-        </details>
+        <PantherSFGoTerms
+          key={sf}
+          subfamily={sf}
+          onFoundGOTerms={() => setHasGOTerms(true)}
+        />
       ))}
     </section>
   );
