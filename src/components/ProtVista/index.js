@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
 
 import ProtVistaOptions from './Options';
+// $FlowFixMe
 import ProtVistaPopup from './Popup';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';

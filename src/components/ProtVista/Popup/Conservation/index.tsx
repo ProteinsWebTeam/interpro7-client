@@ -1,20 +1,18 @@
 import React from 'react';
-import T from 'prop-types';
 
-/*::
-  type Props = {
-    detail: {
-      feature: {
-        [string]: {
-          position: number,
-          value?: number
-        }
-      },
-    },
-  }
-*/
+export type ConservationDetail = {
+  feature: {
+    [p: string]: {
+      position: number;
+      value?: number;
+    };
+  };
+};
+type Props = {
+  detail: ConservationDetail;
+};
 
-const ProtVistaConservationPopup = ({ detail } /*: Props */) => {
+const ProtVistaConservationPopup = ({ detail }: Props) => {
   const match = detail.feature;
   const sourceDatabase = 'PANTHER'; // TODO: get it from match.accession;
   const accession = Object.keys(match)[0];
@@ -35,10 +33,5 @@ const ProtVistaConservationPopup = ({ detail } /*: Props */) => {
       </div>
     </section>
   );
-};
-ProtVistaConservationPopup.propTypes = {
-  detail: T.shape({
-    feature: T.object,
-  }),
 };
 export default ProtVistaConservationPopup;

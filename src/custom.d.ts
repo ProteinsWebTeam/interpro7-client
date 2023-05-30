@@ -374,3 +374,21 @@ type GetUrl<Props = unknown> = (
   params: GlobalState | {},
   props?: Props
 ) => string | null;
+
+type ProtVistaFragment = {
+  start: number;
+  end: number;
+  color?: string;
+  shape?: string;
+};
+
+type ProtVistaLocation = {
+  fragments: Array<ProtVistaFragment>;
+  match?: string;
+  model_acc?: string;
+  subfamily?: {
+    name: string;
+    accession: string;
+  };
+  description?: string;
+};

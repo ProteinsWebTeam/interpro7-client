@@ -1,27 +1,34 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 
-import { foundationPartial } from 'styles/foundation';
+import { goToCustomLocation } from 'actions/creators';
+
+import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-new.css';
 import localCSS from './style.css';
 
-const f = foundationPartial(ipro, localCSS);
-
-/*::
-  import type {ProtVistaLocation, PopupDetail} from '../index.js';
-
-  type Props = {
-    detail: PopupDetail,
-    sourceDatabase: string,
-    goToCustomLocation: function,
-    currentLocation: Object,
-
-  }
-*/
-const getSecondaryStructureType = (
-  locations /*: Array<ProtVistaLocation> */,
-) => {
+const css = cssBinder(ipro, localCSS);
+export type EntryDetail = {
+  target?: HTMLElement;
+  feature?: {
+    accession: string;
+    description: string;
+    name: string;
+    type: string;
+    entry: string;
+    protein?: string;
+    parent?: { protein?: string };
+    locations: Array<ProtVistaLocation>;
+    confidence?: string;
+  };
+  highlight: string;
+};
+type Props = {
+  detail: EntryDetail;
+  sourceDatabase: string;
+  goToCustomLocation: typeof goToCustomLocation;
+  currentLocation: InterProLocation;
+};
+const getSecondaryStructureType = (locations: Array<ProtVistaLocation>) => {
   let type = '';
   if (locations && locations.length > 0) {
     if (locations[0].fragments && locations[0].fragments[0]) {
@@ -32,9 +39,12 @@ const getSecondaryStructureType = (
   return type;
 };
 
-const ProtVistaEntryPopup = (
-  { detail, sourceDatabase, goToCustomLocation, currentLocation } /*: Props */,
-) => {
+const ProtVistaEntryPopup = ({
+  detail,
+  sourceDatabase,
+  goToCustomLocation,
+  currentLocation,
+}: Props) => {
   const {
     accession,
     description,
@@ -59,8 +69,8 @@ const ProtVistaEntryPopup = (
     detail.highlight;
   let newLocations = null;
   if (highlightChild) {
-    newLocations = highlightChild.split(',').map((loc) => {
-      const [start, end] = loc.split(':');
+    newLocations = highlightChild.split(',').map((loc: string) => {
+      const [start, end] = loc.split(':').map(Number);
       return {
         fragments: [{ start, end }],
         model_acc: null,
@@ -72,7 +82,7 @@ const ProtVistaEntryPopup = (
     currentLocation?.description?.protein?.accession ||
     detail?.feature?.protein ||
     detail?.feature?.parent?.protein;
-  const handleClick = (start, end) => () => {
+  const handleClick = (start: number, end: number) => () => {
     if (!protein) return;
     goToCustomLocation({
       description: {
@@ -83,13 +93,13 @@ const ProtVistaEntryPopup = (
     });
   };
   return (
-    <section className={f('entry-popup')}>
+    <section className={css('entry-popup')}>
       <h6>
-        <div className={f('pop-wrapper')}>
+        <div className={css('pop-wrapper')}>
           <div>
             {isInterPro && (
               <interpro-type
-                type={type.replace('_', ' ')}
+                type={(type || '').replace('_', ' ')}
                 dimension="1.4em"
                 aria-label="Entry type"
               />
@@ -97,14 +107,14 @@ const ProtVistaEntryPopup = (
           </div>
           <div>{sourceDatabase}</div>
           <div>
-            {accession.startsWith('residue:')
+            {accession?.startsWith('residue:')
               ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
               : accession}
           </div>
         </div>{' '}
       </h6>
 
-      {name && <h6 className={f('title')}>{name}</h6>}
+      {name && <h6 className={css('title')}>{name}</h6>}
       {description && <p>[{description}]</p>}
 
       {entry && (
@@ -118,7 +128,7 @@ const ProtVistaEntryPopup = (
             <li key={j}>
               {model && model !== accession && <>Model: {model}</>}
               {subfamily && (
-                <div className={f('subfamily')}>
+                <div className={css('subfamily')}>
                   <header>Subfamily</header>
                   <ul>
                     <li>
@@ -134,7 +144,7 @@ const ProtVistaEntryPopup = (
                 {(fragments || []).map(({ start, end }, i) => (
                   <li key={i}>
                     <button
-                      className={f('button', 'secondary', 'coordinates')}
+                      className={css('button', 'secondary', 'coordinates')}
                       onClick={handleClick(start, end)}
                       style={{
                         cursor: protein ? 'pointer' : 'inherit',
@@ -146,22 +156,12 @@ const ProtVistaEntryPopup = (
                 ))}
               </ul>
             </li>
-          ),
+          )
         )}
       </ul>
       {confidence && <p>Confidence: {confidence}</p>}
     </section>
   );
-};
-ProtVistaEntryPopup.propTypes = {
-  detail: T.shape({
-    feature: T.object,
-    highlight: T.string,
-    target: T.any,
-  }),
-  sourceDatabase: T.string,
-  goToCustomLocation: T.func,
-  currentLocation: T.object,
 };
 
 export default ProtVistaEntryPopup;

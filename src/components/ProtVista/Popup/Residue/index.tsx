@@ -1,16 +1,26 @@
 import React from 'react';
-import T from 'prop-types';
 
-/*::
-  import type {PopupDetail} from '../index.js';
-  type Props = {
-    detail: PopupDetail,
-    sourceDatabase: string,
-  }
-*/
+export type ResidueDetail = {
+  feature?: {
+    locations: Array<ProtVistaLocation>;
+    accession: string;
+    currentResidue: {
+      description?: string;
+      residue?: string;
+      residues?: string;
+      start: number;
+      end: number;
+    };
+  };
+};
+type Props = {
+  detail: ResidueDetail;
+  sourceDatabase: string;
+};
 
-const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
-  let { accession, currentResidue } = detail?.feature;
+const ProtVistaResiduePopup = ({ detail, sourceDatabase }: Props) => {
+  if (!detail?.feature) return null;
+  let { accession, currentResidue } = detail.feature;
 
   if (sourceDatabase === 'PIRSF') {
     accession = accession.replace('PIRSF', 'PIRSR');
@@ -42,10 +52,5 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase } /*: Props */) => {
     </section>
   );
 };
-ProtVistaResiduePopup.propTypes = {
-  detail: T.shape({
-    feature: T.object,
-  }),
-  sourceDatabase: T.string,
-};
+
 export default ProtVistaResiduePopup;

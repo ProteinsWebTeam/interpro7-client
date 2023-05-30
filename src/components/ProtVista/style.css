@@ -163,21 +163,6 @@ g:global(.child-location-group.clg-5) path {
   margin-right: 0.25rem;
 }
 
-.color-scale {
-  display: inline-flex;
-  & .legend {
-    padding: 0 0.5rem;
-    vertical-align: top;
-    width: 3rem;
-    &.left {
-      text-align: right;
-    }
-    &.right {
-      text-align: left;
-    }
-  }
-}
-
 .conservation-error {
   margin: 1rem;
 }
