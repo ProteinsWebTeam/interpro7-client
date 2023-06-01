@@ -40,6 +40,7 @@
   line-height: 0;
   background: #fafafa;
   cursor: move;
+  min-height: 1rem;
 }
 .protvista-grid .track path:global(.feature) {
   stroke: transparent;

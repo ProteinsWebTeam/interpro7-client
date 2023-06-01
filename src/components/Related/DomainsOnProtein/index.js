@@ -39,6 +39,11 @@ const ProtVista = loadable({
   loader: () =>
     import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
 });
+const ProteinViewer = loadable({
+  loader: () =>
+    // $FlowFixMe
+    import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
+});
 
 const processConservationData = (entry, match) => {
   const halfWindow = Math.trunc(CONSERVATION_WINDOW / 2);
@@ -422,17 +427,27 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
     addConfidenceTrack(dataConfidence, protein.accession, sortedData);
 
     return (
-      <ProtVista
-        protein={protein}
-        data={sortedData}
-        title="Entry matches to this protein"
-        id={mainData.metadata.accession || mainData.payload.metadata.accession}
-        showConservationButton={showConservationButton}
-        handleConservationLoad={handleConservationLoad}
-        conservationError={conservationError}
-      >
-        {this.props.children}
-      </ProtVista>
+      <>
+        <ProteinViewer
+          protein={protein}
+          data={sortedData}
+          title="Entry matches to this protein"
+        />
+        <hr />
+        <ProtVista
+          protein={protein}
+          data={sortedData}
+          title="Entry matches to this protein"
+          id={
+            mainData.metadata.accession || mainData.payload.metadata.accession
+          }
+          showConservationButton={showConservationButton}
+          handleConservationLoad={handleConservationLoad}
+          conservationError={conservationError}
+        >
+          {this.props.children}
+        </ProtVista>
+      </>
     );
   }
 }
