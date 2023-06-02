@@ -15,8 +15,7 @@
 }
 .protvista-grid header {
   background: #fafafa;
-  padding-top: 0.5rem;
-  padding-left: 0.3rem;
+  padding: 0.5rem 0.3rem;
   border-top: 3px solid rgba(195, 195, 195, 0.4);
 }
 

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Feature } from '@nightingale-elements/nightingale-track';
+import {
+  Feature,
+  FeatureLocation,
+} from '@nightingale-elements/nightingale-track';
 
 import NightingaleManager from 'components/Nightingale/Manager';
 
@@ -16,6 +19,30 @@ const css = cssBinder(style, grid, fonts);
 
 const highlightColor = '#607D8B50';
 
+type Residue = {
+  locations: Array<
+    FeatureLocation & {
+      accession: string;
+      description: string;
+    }
+  >;
+};
+export type ExtendedFeatureLocation = FeatureLocation & { confidence?: number };
+export type ExtendedFeature = Feature & {
+  data?: unknown;
+  entry_protein_locations?: Array<ExtendedFeatureLocation>;
+  locations?: Array<ExtendedFeatureLocation>;
+  name?: string;
+  short_name?: string;
+  source_database?: string;
+  entry_type?: string;
+  residues?: Array<Residue>;
+  location2residue?: unknown;
+  chain?: string;
+  protein?: string;
+  children?: Array<ExtendedFeature>;
+  warnings?: Array<string>;
+};
 export type ProteinViewerData = Array<
   [
     string,
@@ -23,6 +50,7 @@ export type ProteinViewerData = Array<
     { component: string; attributes: Record<string, string> }
   ]
 >;
+
 type Props = {
   protein: ProteinMetadata;
   title: string;
@@ -43,7 +71,9 @@ const switchCategoryVisibility = (
 
 const ProteinViewer = ({ protein, title, data }: Props) => {
   const [isPrinting, setPrinting] = useState(false);
-  const [hideCategory, setHideCategory] = useState<CategoryVisibility>({});
+  const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
+    'other residues': true,
+  });
 
   return (
     <div
