@@ -861,6 +861,9 @@ const _NOT_MEMBER_DBS = [
   'SWISS-MODEL',
   'MODBASE',
   'SMODEL',
+  'FUNFAM',
+  'PFAM-N',
+  'ALPHAFOLD',
 ];
 export const NOT_MEMBER_DBS /*: Set<string> */ = new Set(
   _NOT_MEMBER_DBS.concat(_NOT_MEMBER_DBS.map((x) => x.toLowerCase())),

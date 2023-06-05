@@ -10,6 +10,7 @@ import cssBinder from 'styles/cssBinder';
 
 import style from '../../ProtVista/style.css';
 import grid from '../../ProtVista/grid.css';
+import ExceptionalLabels, { isAnExceptionalLabel } from './ExceptionalLabels';
 
 const css = cssBinder(style, grid);
 
@@ -26,7 +27,6 @@ const LabelsInTrack = ({
   isPrinting,
   expandedTrack,
 }: Props) => {
-  //TODO: Render exceptional labels
   const key = entry.source_database === 'pdb' ? 'structure' : 'entry';
 
   return (
@@ -35,63 +35,69 @@ const LabelsInTrack = ({
         hideCategory,
       })}
     >
-      {isPrinting ? (
-        <b>
-          <Label entry={entry} />
-        </b>
+      {isAnExceptionalLabel(entry) ? (
+        <ExceptionalLabels entry={entry} isPrinting={isPrinting} />
       ) : (
-        <Link
-          to={{
-            description: {
-              main: {
-                key,
-              },
-              [key]: {
-                db: entry.source_database,
-                accession: entry.accession.startsWith('residue:')
-                  ? entry.accession.split('residue:')[1]
-                  : entry.accession,
-              },
-            },
-          }}
-        >
-          <Label entry={entry} />
-        </Link>
-      )}
-      <div
-        className={css({
-          hide: !expandedTrack,
-        })}
-      >
-        <ResidueLabel entry={entry} expandedTrack={expandedTrack} />
-
-        {entry.children &&
-          entry.children.map((d) => (
-            <div
-              key={`main_${d.accession}`}
-              className={css('track-accession-child')}
+        <>
+          {isPrinting ? (
+            <b>
+              <Label entry={entry} />
+            </b>
+          ) : (
+            <Link
+              to={{
+                description: {
+                  main: {
+                    key,
+                  },
+                  [key]: {
+                    db: entry.source_database,
+                    accession: entry.accession.startsWith('residue:')
+                      ? entry.accession.split('residue:')[1]
+                      : entry.accession,
+                  },
+                },
+              }}
             >
-              {isPrinting ? (
-                <Label entry={d} />
-              ) : (
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: d.source_database,
-                        accession: d.accession,
-                      },
-                    },
-                  }}
+              <Label entry={entry} />
+            </Link>
+          )}
+          <div
+            className={css({
+              hide: !expandedTrack,
+            })}
+          >
+            <ResidueLabel entry={entry} expandedTrack={expandedTrack} />
+
+            {entry.children &&
+              entry.children.map((d) => (
+                <div
+                  key={`main_${d.accession}`}
+                  className={css('track-accession-child')}
                 >
-                  <Label entry={d} />
-                </Link>
-              )}
-              <ResidueLabel entry={d} expandedTrack={expandedTrack} />
-            </div>
-          ))}
-      </div>
+                  {isPrinting ? (
+                    <Label entry={d} />
+                  ) : (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: {
+                            db: d.source_database,
+                            accession: d.accession,
+                          },
+                        },
+                      }}
+                    >
+                      <Label entry={d} />
+                    </Link>
+                  )}
+                  <ResidueLabel entry={d} expandedTrack={expandedTrack} />
+                </div>
+              ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

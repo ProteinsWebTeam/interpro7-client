@@ -27,7 +27,10 @@ type Residue = {
     }
   >;
 };
-export type ExtendedFeatureLocation = FeatureLocation & { confidence?: number };
+export type ExtendedFeatureLocation = FeatureLocation & {
+  confidence?: number;
+  description?: string;
+};
 export type ExtendedFeature = Feature & {
   data?: unknown;
   entry_protein_locations?: Array<ExtendedFeatureLocation>;
