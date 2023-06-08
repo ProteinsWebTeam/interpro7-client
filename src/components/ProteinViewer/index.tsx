@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Feature,
   FeatureLocation,
@@ -77,16 +77,14 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'other residues': true,
   });
+  const popperRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
       // ref={this._mainRef}
       className={css('fullscreenable', 'margin-bottom-large')}
     >
-      <div
-        // ref={this._popperRef}
-        className={css('popper', 'hide')}
-      >
+      <div ref={popperRef} className={css('popper')}>
         <div className={css('popper__arrow')} />
         <div
         // ref={this._popperContentRef}
@@ -158,6 +156,7 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
                       sequence={protein.sequence}
                       hideCategory={hideCategory[type]}
                       highlightColor={highlightColor}
+                      popperRef={popperRef}
                     />
                   </div>
                 );

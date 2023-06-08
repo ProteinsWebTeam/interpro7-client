@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+// import { createPortal } from 'react-dom';
+
 import cssBinder from 'styles/cssBinder';
 import { LineData } from '@nightingale-elements/nightingale-linegraph-track';
 
-import NightingaleTrack from 'components/Nightingale/InterProTrack';
+import NightingaleTrack from 'components/Nightingale/Track';
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
 import NightingaleLinegraphTrack from 'components/Nightingale/Linegraph';
 import NightingaleColoredSequence from 'components/Nightingale/ColoredSequence';
@@ -15,13 +17,31 @@ import grid from '../../ProtVista/grid.css';
 import { ExtendedFeature, ExtendedFeatureLocation } from '..';
 import LabelsInTrack from '../LabelsInTrack';
 
+import useStateRef from 'utils/hooks/useStateRef';
+import useInterval from 'src/utils/hooks/useInterval';
+
 const css = cssBinder(style, grid);
+
+const TOOLTIP_DELAY = 500;
+
+// TODO: get from nightingale types
+type EventType = 'click' | 'mouseover' | 'mouseout' | 'reset';
+type DetailInterface = {
+  eventType: EventType;
+  // coords: null | [number, number];
+  feature?: ExtendedFeature | null;
+  target?: HTMLElement;
+  highlight?: string;
+  selectedId?: string | null;
+  parentEvent?: Event;
+};
 
 type Props = {
   entries: Array<ExtendedFeature>;
   highlightColor: string;
   hideCategory: boolean;
   sequence: string;
+  popperRef: React.RefObject<HTMLDivElement>;
 };
 
 const OTHER_TRACK_TYPES = [
@@ -39,6 +59,12 @@ const b2sh = new Map([
   ['NC_TERMINAL_DISC', 'discontinuos'],
 ]);
 
+const webComponents = [
+  'nightingale-colored-sequence',
+  'nightingale-linegraph-track',
+  'nightingale-interpro-track',
+  'nightingale-track',
+];
 const mapToFeatures = (entry: ExtendedFeature, colorDomainsBy: string) =>
   (entry.entry_protein_locations || entry.locations || []).map((loc) => ({
     accession: entry.accession,
@@ -96,10 +122,84 @@ const TracksInCategory = ({
   sequence,
   hideCategory,
   highlightColor,
+  popperRef,
 }: Props) => {
-  const [expandedTrack, setExpandedTrack] = useState<Record<string, boolean>>(
-    {}
-  );
+  const [expandedTrack, setExpandedTrack, expandedTrackRef] = useStateRef<
+    Record<string, boolean>
+  >({});
+  const [overPopup, setOverPopup, overPopupRef] = useStateRef(false);
+  const [hasListeners, setHasListeners] = useState<Record<string, boolean>>({});
+  const handleTrackEvent = ({ detail }: { detail: DetailInterface }) => {
+    const accession = detail.feature?.accession;
+    if (detail && accession) {
+      switch (detail.eventType) {
+        case 'click':
+          setExpandedTrack({
+            ...expandedTrackRef.current,
+            [accession]: !expandedTrackRef.current[accession],
+          });
+          break;
+        // case 'mouseout':
+        //   const [clear] = useInterval(() => {
+        //     if (overPopupRef.current) return;
+        //     clear();
+        //     // popper.destroy();
+        //     if (this._popperRef.current)
+        //       this._popperRef.current.classList.add(css('hide'));
+        //     timeoutID = null;
+        //   }, TOOLTIP_DELAY);
+        //   break;
+        // case 'mouseover':
+        //   if (this.state.enableTooltip) {
+        //     if (this._timeoutID !== null) {
+        //       clearInterval(this._timeoutID);
+        //     }
+        //     if (this._popperRef.current)
+        //       this._popperRef.current.classList.remove(f('hide'));
+        //     const sourceDatabase = this._getSourceDatabaseDisplayName(
+        //       detail.feature,
+        //       this.props?.dataDB?.payload?.databases,
+        //     );
+        //     if (this._popperContentRef.current) {
+        //       // eslint-disable-next-line max-depth
+        //       if (!this.reactRoot)
+        //         this.reactRoot = createRoot(this._popperContentRef.current);
+
+        //       this.reactRoot.render(
+        //         <ProtVistaPopup
+        //           detail={detail}
+        //           sourceDatabase={sourceDatabase}
+        //           data={this.props.data}
+        //           currentLocation={this.props.customLocation}
+        //           // Need to pass it from here because it rendered out of the redux provider
+        //           goToCustomLocation={this.props.goToCustomLocation}
+        //         />,
+        //       );
+        //     }
+
+        //     this._isPopperTop = !this._isPopperTop;
+        //     if (this._popperRef.current) {
+        //       this.popper = new PopperJS(
+        //         detail.target,
+        //         this._popperRef.current,
+        //         {
+        //           applyStyle: { enabled: false },
+        //           modifiers: {
+        //             preventOverflow: {
+        //               boundariesElement: this._protvistaRef?.current || window,
+        //               priority: ['left', 'right'],
+        //             },
+        //           },
+        //         },
+        //       );
+        //     }
+        //   }
+        //   break;
+        default:
+          break;
+      }
+    }
+  };
   useEffect(() => {
     setExpandedTrack(
       Object.fromEntries(
@@ -108,9 +208,35 @@ const TracksInCategory = ({
           .map((entry) => [entry.accession, true])
       )
     );
+    Promise.all(webComponents.map((wc) => customElements.whenDefined(wc))).then(
+      () => {
+        const addedListeners: Record<string, boolean> = {};
+        for (let entry of entries) {
+          if (!hasListeners[entry.accession]) {
+            const track = document.getElementById(`track_${entry.accession}`);
+            if (track) {
+              track.addEventListener(
+                'change',
+                (
+                  evt //console.log(expandedTrack)
+                ) => handleTrackEvent({ detail: (evt as CustomEvent).detail })
+              );
+              addedListeners[entry.accession || ''] = true;
+            }
+          }
+        }
+        setHasListeners({
+          ...hasListeners,
+          ...addedListeners,
+        });
+      }
+    );
   }, [entries]);
+  // console.log(popperRef.current);
   return (
     <>
+      {/* {popperRef.current !== null &&
+        createPortal(<p>Hello from React!</p>, popperRef.current)} */}
       {entries &&
         entries.map((entry) => {
           const type = entry.type || '';
@@ -140,7 +266,7 @@ const TracksInCategory = ({
                           display-start={1}
                           display-end={sequence.length}
                           type="conservation"
-                          // id={`track_${entry.accession}`}
+                          id={`track_${entry.accession}`}
                           // ref={(e) =>
                           //   (this.web_tracks[getUIDFromEntry(entry)] = e)
                           // }
@@ -186,7 +312,7 @@ const TracksInCategory = ({
                         display-end={sequence.length}
                         margin-color="#fafafa"
                         height={15}
-                        // id={`track_${entry.accession}`}
+                        id={`track_${entry.accession}`}
                         // ref={(e) =>
                         //   (this.web_tracks[getUIDFromEntry(entry)] = e)
                         // }
@@ -204,7 +330,7 @@ const TracksInCategory = ({
                     margin-color="#fafafa"
                     data={mapToFeatures(entry, 'ACCESSION')}
                     {...mapToContributors(entry, 'ACCESSION')}
-                    // id={`track_${entry.accession}`}
+                    id={`track_${entry.accession}`}
                     // ref={(e) =>
                     //   (this.web_tracks[getUIDFromEntry(entry)] =
                     //     e)
@@ -216,12 +342,23 @@ const TracksInCategory = ({
                     label=".feature.short_name"
                     use-ctrl-to-zoom
                     expanded={!!expandedTrack[entry.accession]}
-                    onClick={() =>
-                      setExpandedTrack({
-                        ...expandedTrack,
-                        [entry.accession]: !expandedTrack[entry.accession],
-                      })
-                    }
+                    // onClick={(event: React.MouseEvent) => {
+                    //   const classList = (event.target as HTMLElement).classList;
+                    //   if (
+                    //     !classList.contains('feature') ||
+                    //     classList.contains('child-fragment') ||
+                    //     classList.contains('residue')
+                    //   )
+                    //     return; //Don't do anything for child features
+                    //   console.log(event);
+                    //   setExpandedTrack({
+                    //     ...expandedTrack,
+                    //     [entry.accession]: !expandedTrack[entry.accession],
+                    //   });
+                    // }}
+                    // onMouseOver={handleMouseOver}
+                    // onMouseOut={handleMouseOut}
+                    // onChange={handleChange}
                   />
                 )}
               </div>
