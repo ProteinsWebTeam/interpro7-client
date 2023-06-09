@@ -21,8 +21,8 @@ const ProteinViewerHeader = ({ length, sequence, highlightColor }: Props) => {
         <NightingaleNavigation
           length={length}
           // ref={this._navigationRef}
-          display-start={1}
-          display-end={length}
+          // display-start={1}
+          // display-end={length}
           margin-color="#fafafa"
           height={50}
           show-highlight
@@ -33,8 +33,8 @@ const ProteinViewerHeader = ({ length, sequence, highlightColor }: Props) => {
         <NightingaleSequence
           sequence={sequence}
           length={length}
-          display-start={1}
-          display-end={length}
+          // display-start={1}
+          // display-end={length}
           margin-color="#fafafa"
           highlight-event="onmouseover"
           highlight-color={highlightColor}

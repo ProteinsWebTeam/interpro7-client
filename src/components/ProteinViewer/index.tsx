@@ -1,8 +1,19 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, ReactNode } from 'react';
+
 import {
   Feature,
   FeatureLocation,
 } from '@nightingale-elements/nightingale-track';
+
+import {
+  useFloating,
+  FloatingArrow,
+  autoPlacement,
+  arrow,
+  offset,
+} from '@floating-ui/react';
+
+import useStateRef from 'utils/hooks/useStateRef';
 
 import NightingaleManager from 'components/Nightingale/Manager';
 
@@ -14,10 +25,12 @@ import cssBinder from 'styles/cssBinder';
 import style from '../ProtVista/style.css';
 import grid from '../ProtVista/grid.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import popper from '../ProtVista/popper.css';
 
-const css = cssBinder(style, grid, fonts);
+const css = cssBinder(style, grid, fonts, popper);
 
 const highlightColor = '#607D8B50';
+const TOOLTIP_DELAY = 500;
 
 type Residue = {
   locations: Array<
@@ -77,18 +90,54 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'other residues': true,
   });
-  const popperRef = useRef<HTMLDivElement>(null);
+
+  const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
+  const arrowRef = useRef(null);
+  const [tooltipContent, setTooltipContent] = useState<ReactNode>(null);
+  const { refs, floatingStyles, context } = useFloating({
+    middleware: [
+      autoPlacement(),
+      offset({
+        mainAxis: 10,
+      }),
+      arrow({
+        element: arrowRef,
+      }),
+    ],
+  });
+
+  const openTooltip = (
+    element: HTMLElement | undefined,
+    content: ReactNode
+  ) => {
+    if (element) {
+      refs.setReference(element);
+      setTooltipContent(content);
+    }
+  };
+  const closeTooltip = () => {
+    const intervalID = setInterval(() => {
+      if (!overTooltipRef.current) {
+        setTooltipContent(null);
+        clearInterval(intervalID);
+      }
+    }, TOOLTIP_DELAY);
+  };
 
   return (
     <div
       // ref={this._mainRef}
       className={css('fullscreenable', 'margin-bottom-large')}
     >
-      <div ref={popperRef} className={css('popper')}>
-        <div className={css('popper__arrow')} />
-        <div
-        // ref={this._popperContentRef}
-        />
+      <div
+        ref={refs.setFloating}
+        style={floatingStyles}
+        className={css('popper', { hide: !tooltipContent })}
+        onMouseEnter={() => setOverTooltip(true)}
+        onMouseLeave={() => setOverTooltip(false)}
+      >
+        <FloatingArrow ref={arrowRef} context={context} />
+        {tooltipContent}
       </div>
       <div>
         <NightingaleManager id="pv-manager">
@@ -101,8 +150,6 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
             className={css('protvista-grid', {
               printing: isPrinting,
             })}
-            // ref={this._protvistaRef}
-            // id={`${this.state.optionsID}ProtvistaDiv`}
           >
             <Header
               length={protein.length}
@@ -156,7 +203,9 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
                       sequence={protein.sequence}
                       hideCategory={hideCategory[type]}
                       highlightColor={highlightColor}
-                      popperRef={popperRef}
+                      enableTooltip={true}
+                      openTooltip={openTooltip}
+                      closeTooltip={closeTooltip}
                     />
                   </div>
                 );

@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from 'react';
-// import { createPortal } from 'react-dom';
+import React, { useState, useEffect, ReactNode } from 'react';
+
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
+
+import { goToCustomLocation } from 'actions/creators';
 
 import cssBinder from 'styles/cssBinder';
 import { LineData } from '@nightingale-elements/nightingale-linegraph-track';
@@ -8,40 +12,28 @@ import NightingaleTrack from 'components/Nightingale/Track';
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
 import NightingaleLinegraphTrack from 'components/Nightingale/Linegraph';
 import NightingaleColoredSequence from 'components/Nightingale/ColoredSequence';
-// import NightingaleSequence from 'components/Nightingale/Sequence';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import style from '../../ProtVista/style.css';
 import grid from '../../ProtVista/grid.css';
-import { ExtendedFeature, ExtendedFeatureLocation } from '..';
+import { ExtendedFeature } from '..';
 import LabelsInTrack from '../LabelsInTrack';
 
 import useStateRef from 'utils/hooks/useStateRef';
-import useInterval from 'src/utils/hooks/useInterval';
+import ProtVistaPopup, { PopupDetail } from 'components/ProtVista/Popup';
 
 const css = cssBinder(style, grid);
-
-const TOOLTIP_DELAY = 500;
 
 // TODO: get from nightingale types
 type EventType = 'click' | 'mouseover' | 'mouseout' | 'reset';
 type DetailInterface = {
   eventType: EventType;
-  // coords: null | [number, number];
   feature?: ExtendedFeature | null;
   target?: HTMLElement;
   highlight?: string;
   selectedId?: string | null;
   parentEvent?: Event;
-};
-
-type Props = {
-  entries: Array<ExtendedFeature>;
-  highlightColor: string;
-  hideCategory: boolean;
-  sequence: string;
-  popperRef: React.RefObject<HTMLDivElement>;
 };
 
 const OTHER_TRACK_TYPES = [
@@ -80,58 +72,68 @@ const mapToFeatures = (entry: ExtendedFeature, colorDomainsBy: string) =>
     protein: entry.protein,
     confidence: loc.confidence,
   }));
-const mapToContributors = (entry: ExtendedFeature, colorDomainsBy: string) =>
-  entry.children
-    ? {
-        contributors: entry.children.map((child) => ({
-          accession: child.accession,
-          chain: entry.chain,
-          name: child.name,
-          short_name: child.short_name,
-          residues:
-            child.residues && JSON.parse(JSON.stringify(child.residues)),
-          source_database: child.source_database,
-          entry_type: child.entry_type,
-          type: child.type,
-          locations: (
-            child.entry_protein_locations ||
-            child.locations ||
-            []
-          ).map((loc) => ({
-            ...loc,
-            fragments: loc.fragments.map((f) => ({
-              shape: b2sh.get(
-                (f as unknown as { 'dc-status': string })['dc-status']
-              ),
-              ...f,
-            })),
-          })),
-          parent: entry,
-          color: getTrackColor(
-            Object.assign(child, { parent: entry }),
-            colorDomainsBy
-          ),
-          location2residue: child.location2residue,
-          // expanded: true,
-        })),
-      }
-    : {};
 
+const mapToContributors = (entry: ExtendedFeature, colorDomainsBy: string) =>
+  entry.children?.map((child) => ({
+    accession: child.accession,
+    chain: entry.chain,
+    name: child.name,
+    short_name: child.short_name,
+    residues: child.residues && JSON.parse(JSON.stringify(child.residues)),
+    source_database: child.source_database,
+    entry_type: child.entry_type,
+    type: child.type,
+    locations: (child.entry_protein_locations || child.locations || []).map(
+      (loc) => ({
+        ...loc,
+        fragments: loc.fragments.map((f) => ({
+          shape: b2sh.get(
+            (f as unknown as { 'dc-status': string })['dc-status']
+          ),
+          ...f,
+        })),
+      })
+    ),
+    parent: entry,
+    color: getTrackColor(
+      Object.assign(child, { parent: entry }),
+      colorDomainsBy
+    ),
+    location2residue: child.location2residue,
+    // expanded: true,
+  }));
+
+type Props = {
+  entries: Array<ExtendedFeature>;
+  highlightColor: string;
+  hideCategory: boolean;
+  enableTooltip: boolean;
+  openTooltip: (element: HTMLElement | undefined, content: ReactNode) => void;
+  closeTooltip: () => void;
+  sequence: string;
+  customLocation?: InterProLocation;
+  goToCustomLocation?: typeof goToCustomLocation;
+};
 const TracksInCategory = ({
   entries,
   sequence,
   hideCategory,
+  enableTooltip,
   highlightColor,
-  popperRef,
+  customLocation,
+  goToCustomLocation,
+  openTooltip,
+  closeTooltip,
 }: Props) => {
   const [expandedTrack, setExpandedTrack, expandedTrackRef] = useStateRef<
     Record<string, boolean>
   >({});
-  const [overPopup, setOverPopup, overPopupRef] = useStateRef(false);
   const [hasListeners, setHasListeners] = useState<Record<string, boolean>>({});
+  const [hasData, setHasData] = useState<Record<string, boolean>>({});
+
   const handleTrackEvent = ({ detail }: { detail: DetailInterface }) => {
-    const accession = detail.feature?.accession;
-    if (detail && accession) {
+    if (detail) {
+      const accession = detail.feature?.accession || '';
       switch (detail.eventType) {
         case 'click':
           setExpandedTrack({
@@ -139,62 +141,25 @@ const TracksInCategory = ({
             [accession]: !expandedTrackRef.current[accession],
           });
           break;
-        // case 'mouseout':
-        //   const [clear] = useInterval(() => {
-        //     if (overPopupRef.current) return;
-        //     clear();
-        //     // popper.destroy();
-        //     if (this._popperRef.current)
-        //       this._popperRef.current.classList.add(css('hide'));
-        //     timeoutID = null;
-        //   }, TOOLTIP_DELAY);
-        //   break;
-        // case 'mouseover':
-        //   if (this.state.enableTooltip) {
-        //     if (this._timeoutID !== null) {
-        //       clearInterval(this._timeoutID);
-        //     }
-        //     if (this._popperRef.current)
-        //       this._popperRef.current.classList.remove(f('hide'));
-        //     const sourceDatabase = this._getSourceDatabaseDisplayName(
-        //       detail.feature,
-        //       this.props?.dataDB?.payload?.databases,
-        //     );
-        //     if (this._popperContentRef.current) {
-        //       // eslint-disable-next-line max-depth
-        //       if (!this.reactRoot)
-        //         this.reactRoot = createRoot(this._popperContentRef.current);
-
-        //       this.reactRoot.render(
-        //         <ProtVistaPopup
-        //           detail={detail}
-        //           sourceDatabase={sourceDatabase}
-        //           data={this.props.data}
-        //           currentLocation={this.props.customLocation}
-        //           // Need to pass it from here because it rendered out of the redux provider
-        //           goToCustomLocation={this.props.goToCustomLocation}
-        //         />,
-        //       );
-        //     }
-
-        //     this._isPopperTop = !this._isPopperTop;
-        //     if (this._popperRef.current) {
-        //       this.popper = new PopperJS(
-        //         detail.target,
-        //         this._popperRef.current,
-        //         {
-        //           applyStyle: { enabled: false },
-        //           modifiers: {
-        //             preventOverflow: {
-        //               boundariesElement: this._protvistaRef?.current || window,
-        //               priority: ['left', 'right'],
-        //             },
-        //           },
-        //         },
-        //       );
-        //     }
-        //   }
-        //   break;
+        case 'mouseout':
+          closeTooltip();
+          break;
+        case 'mouseover':
+          if (enableTooltip) {
+            const sourceDatabase = detail.feature?.source_database || '';
+            if (customLocation && goToCustomLocation)
+              openTooltip(
+                detail.target,
+                <ProtVistaPopup
+                  detail={detail as unknown as PopupDetail}
+                  sourceDatabase={sourceDatabase}
+                  currentLocation={customLocation}
+                  // Need to pass it from here because it rendered out of the redux provider
+                  goToCustomLocation={goToCustomLocation}
+                />
+              );
+          }
+          break;
         default:
           break;
       }
@@ -211,17 +176,29 @@ const TracksInCategory = ({
     Promise.all(webComponents.map((wc) => customElements.whenDefined(wc))).then(
       () => {
         const addedListeners: Record<string, boolean> = {};
-        for (let entry of entries) {
-          if (!hasListeners[entry.accession]) {
-            const track = document.getElementById(`track_${entry.accession}`);
-            if (track) {
-              track.addEventListener(
-                'change',
-                (
-                  evt //console.log(expandedTrack)
-                ) => handleTrackEvent({ detail: (evt as CustomEvent).detail })
+        const addedData: Record<string, boolean> = {};
+        for (const entry of entries) {
+          const track = document.getElementById(`track_${entry.accession}`);
+          if (track) {
+            // setting up the listeners
+            if (!hasListeners[entry.accession]) {
+              track.addEventListener('change', (evt) =>
+                handleTrackEvent({ detail: (evt as CustomEvent).detail })
               );
               addedListeners[entry.accession || ''] = true;
+            }
+            // adding the data
+            if (!hasData[entry.accession]) {
+              if (
+                ['nightingale-track', 'nightingale-interpro-track'].includes(
+                  track.tagName.toLowerCase()
+                )
+              ) {
+                (track as any).data = mapToFeatures(entry, 'ACCESSION');
+                const contributors = mapToContributors(entry, 'ACCESSION');
+                if (contributors) (track as any).contributors = contributors;
+              }
+              addedData[entry.accession || ''] = true;
             }
           }
         }
@@ -229,14 +206,16 @@ const TracksInCategory = ({
           ...hasListeners,
           ...addedListeners,
         });
+        setHasData({
+          ...hasData,
+          ...addedData,
+        });
       }
     );
   }, [entries]);
-  // console.log(popperRef.current);
+
   return (
     <>
-      {/* {popperRef.current !== null &&
-        createPortal(<p>Hello from React!</p>, popperRef.current)} */}
       {entries &&
         entries.map((entry) => {
           const type = entry.type || '';
@@ -263,13 +242,8 @@ const TracksInCategory = ({
                         <NightingaleLinegraphTrack
                           data={entry.data as LineData[]}
                           length={sequence.length}
-                          display-start={1}
-                          display-end={sequence.length}
                           type="conservation"
                           id={`track_${entry.accession}`}
-                          // ref={(e) =>
-                          //   (this.web_tracks[getUIDFromEntry(entry)] = e)
-                          // }
                           margin-color="#fafafa"
                           highlight-event="onmouseover"
                           highlight-color={highlightColor}
@@ -278,14 +252,9 @@ const TracksInCategory = ({
                       )}
                     {entry.type === 'confidence' && (
                       <NightingaleColoredSequence
-                        // ref={(e) =>
-                        //   (this.web_tracks[entry.accession] = e)
-                        // }
                         id={`track_${entry.accession}`}
                         data={entry.data as string}
                         length={sequence.length}
-                        display-start={1}
-                        display-end={sequence.length}
                         scale="H:90,M:70,L:50,D:0"
                         height={12}
                         color-range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
@@ -306,16 +275,9 @@ const TracksInCategory = ({
                     ].includes(entry.type || '') && (
                       <NightingaleTrack
                         length={sequence.length}
-                        data={mapToFeatures(entry, 'ACCESSION')}
-                        {...mapToContributors(entry, 'ACCESSION')}
-                        display-start={1}
-                        display-end={sequence.length}
                         margin-color="#fafafa"
                         height={15}
                         id={`track_${entry.accession}`}
-                        // ref={(e) =>
-                        //   (this.web_tracks[getUIDFromEntry(entry)] = e)
-                        // }
                         highlight-event="onmouseover"
                         highlight-color={highlightColor}
                         use-ctrl-to-zoom
@@ -325,16 +287,8 @@ const TracksInCategory = ({
                 ) : (
                   <NightingaleInterProTrack
                     length={sequence.length}
-                    display-start={1}
-                    display-end={sequence.length}
                     margin-color="#fafafa"
-                    data={mapToFeatures(entry, 'ACCESSION')}
-                    {...mapToContributors(entry, 'ACCESSION')}
                     id={`track_${entry.accession}`}
-                    // ref={(e) =>
-                    //   (this.web_tracks[getUIDFromEntry(entry)] =
-                    //     e)
-                    // }
                     shape="roundRectangle"
                     highlight-event="onmouseover"
                     highlight-color={highlightColor}
@@ -342,23 +296,6 @@ const TracksInCategory = ({
                     label=".feature.short_name"
                     use-ctrl-to-zoom
                     expanded={!!expandedTrack[entry.accession]}
-                    // onClick={(event: React.MouseEvent) => {
-                    //   const classList = (event.target as HTMLElement).classList;
-                    //   if (
-                    //     !classList.contains('feature') ||
-                    //     classList.contains('child-fragment') ||
-                    //     classList.contains('residue')
-                    //   )
-                    //     return; //Don't do anything for child features
-                    //   console.log(event);
-                    //   setExpandedTrack({
-                    //     ...expandedTrack,
-                    //     [entry.accession]: !expandedTrack[entry.accession],
-                    //   });
-                    // }}
-                    // onMouseOver={handleMouseOver}
-                    // onMouseOut={handleMouseOut}
-                    // onChange={handleChange}
                   />
                 )}
               </div>
@@ -375,4 +312,10 @@ const TracksInCategory = ({
   );
 };
 
-export default TracksInCategory;
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.customLocation,
+  (customLocation: InterProLocation) => ({ customLocation })
+);
+export default connect(mapStateToProps, { goToCustomLocation })(
+  TracksInCategory
+);

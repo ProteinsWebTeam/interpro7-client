@@ -7,7 +7,7 @@ import ProtVistaResiduePopup, { ResidueDetail } from './Residue';
 import ProtVistaEntryPopup, { EntryDetail } from './Entry';
 import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 
-type PopupDetail = (
+export type PopupDetail = (
   | ConservationDetail
   | ResidueDetail
   | ConfidenceDetail

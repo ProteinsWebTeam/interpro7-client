@@ -12,4 +12,4 @@ export const NightingaleInterproTrack = createComponent({
   // },
 });
 
-export default NightingaleInterproTrack;
+export default React.memo(NightingaleInterproTrack);
