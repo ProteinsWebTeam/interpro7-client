@@ -108,22 +108,26 @@ type Props = {
   highlightColor: string;
   hideCategory: boolean;
   enableTooltip: boolean;
+  isPrinting: boolean;
   openTooltip: (element: HTMLElement | undefined, content: ReactNode) => void;
   closeTooltip: () => void;
   sequence: string;
   customLocation?: InterProLocation;
   goToCustomLocation?: typeof goToCustomLocation;
+  colorDomainsBy?: string;
 };
 const TracksInCategory = ({
   entries,
   sequence,
   hideCategory,
   enableTooltip,
+  isPrinting,
   highlightColor,
   customLocation,
   goToCustomLocation,
   openTooltip,
   closeTooltip,
+  colorDomainsBy,
 }: Props) => {
   const [expandedTrack, setExpandedTrack, expandedTrackRef] = useStateRef<
     Record<string, boolean>
@@ -165,6 +169,11 @@ const TracksInCategory = ({
       }
     }
   };
+
+  useEffect(() => {
+    setHasData({}); // Forcing reload of the data
+  }, [colorDomainsBy]);
+
   useEffect(() => {
     setExpandedTrack(
       Object.fromEntries(
@@ -194,25 +203,33 @@ const TracksInCategory = ({
                   track.tagName.toLowerCase()
                 )
               ) {
-                (track as any).data = mapToFeatures(entry, 'ACCESSION');
-                const contributors = mapToContributors(entry, 'ACCESSION');
+                (track as any).data = mapToFeatures(
+                  entry,
+                  colorDomainsBy || 'ACCESSION'
+                );
+                const contributors = mapToContributors(
+                  entry,
+                  colorDomainsBy || 'ACCESSION'
+                );
                 if (contributors) (track as any).contributors = contributors;
               }
               addedData[entry.accession || ''] = true;
             }
           }
         }
-        setHasListeners({
-          ...hasListeners,
-          ...addedListeners,
-        });
-        setHasData({
-          ...hasData,
-          ...addedData,
-        });
+        if (Object.keys(addedListeners).length)
+          setHasListeners({
+            ...hasListeners,
+            ...addedListeners,
+          });
+        if (Object.keys(addedData).length)
+          setHasData({
+            ...hasData,
+            ...addedData,
+          });
       }
     );
-  }, [entries]);
+  }, [entries, hasData]);
 
   return (
     <>
@@ -303,7 +320,7 @@ const TracksInCategory = ({
                 entry={entry}
                 hideCategory={hideCategory}
                 expandedTrack={!!expandedTrack[entry.accession]}
-                isPrinting={false}
+                isPrinting={isPrinting}
               />
             </React.Fragment>
           );
@@ -314,7 +331,12 @@ const TracksInCategory = ({
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation,
-  (customLocation: InterProLocation) => ({ customLocation })
+  (state: GlobalState) => state.settings.ui,
+  (customLocation: InterProLocation, ui: Record<string, unknown>) => ({
+    customLocation,
+    colorDomainsBy:
+      (ui.colorDomainsBy as string) || EntryColorMode.DOMAIN_RELATIONSHIP,
+  })
 );
 export default connect(mapStateToProps, { goToCustomLocation })(
   TracksInCategory

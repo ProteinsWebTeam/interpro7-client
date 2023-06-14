@@ -29,6 +29,7 @@ declare namespace JSX {
 
 type GlobalState = {
   customLocation: InterProLocation;
+  settings: SettingsState;
   [other: string]: any;
 }; // TODO: replace for redux state type
 
@@ -82,6 +83,44 @@ type InterProLocation = {
   state: Record<string, string>;
 };
 
+type SettingsState = {
+  navigation: {
+    pageSize: number;
+    secondsToRetry: number;
+  };
+  notifications: {
+    showTreeToast: boolean;
+    showConnectionStatusToast: boolean;
+    showSettingsToast: boolean;
+    showHelpToast: boolean;
+    showCtrlToZoomToast: boolean;
+  };
+  ui: UISettings;
+  cache: {
+    enabled: boolean;
+  };
+  ebi: ParsedURLServer;
+  api: ParsedURLServer;
+  ipScan: ParsedURLServer;
+  genome3d: ParsedURLServer;
+  wikipedia: ParsedURLServer;
+  alphafold: ParsedURLServer;
+};
+type UISettings = {
+  lowGraphics: boolean;
+  colorDomainsBy: string;
+  labelContent: LabelUISettings;
+  structureViewer: boolean;
+  shouldHighlight: boolean;
+  idaAccessionDB: string;
+  idaLabel: string;
+  isPIPEnabled: boolean;
+};
+type LabelUISettings = {
+  accession: boolean;
+  name: boolean;
+  short: boolean;
+};
 interface InterProTypeProps
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLElement>,

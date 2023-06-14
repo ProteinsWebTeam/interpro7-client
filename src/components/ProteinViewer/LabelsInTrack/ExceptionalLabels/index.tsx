@@ -66,7 +66,9 @@ const ExceptionalLabels = ({ entry, isPrinting }: PropsEL) => {
     );
   }
   if (entry.source_database === 'alphafold') {
-    return (
+    return isPrinting ? (
+      <span>pLDDT</span>
+    ) : (
       <AlphafoldLink id={entry.protein || ''} className={css('ext')}>
         pLDDT
       </AlphafoldLink>
@@ -98,7 +100,9 @@ const ExceptionalLabels = ({ entry, isPrinting }: PropsEL) => {
     // );
   }
   if (entry.accession && entry.accession.startsWith('G3D:')) {
-    return (
+    return isPrinting ? (
+      <span> {entry.source_database} </span>
+    ) : (
       <Genome3dLink id={entry.protein || ''}>
         {entry.source_database}
       </Genome3dLink>
