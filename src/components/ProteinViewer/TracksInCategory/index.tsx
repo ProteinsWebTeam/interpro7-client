@@ -1,4 +1,10 @@
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, {
+  useState,
+  useEffect,
+  ReactNode,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -102,7 +108,9 @@ const mapToContributors = (entry: ExtendedFeature, colorDomainsBy: string) =>
     location2residue: child.location2residue,
     // expanded: true,
   }));
-
+export type ExpandedHandle = {
+  setExpandedAllTracks: (v: boolean) => void;
+};
 type Props = {
   entries: Array<ExtendedFeature>;
   highlightColor: string;
@@ -116,74 +124,85 @@ type Props = {
   goToCustomLocation?: typeof goToCustomLocation;
   colorDomainsBy?: string;
 };
-const TracksInCategory = ({
-  entries,
-  sequence,
-  hideCategory,
-  enableTooltip,
-  isPrinting,
-  highlightColor,
-  customLocation,
-  goToCustomLocation,
-  openTooltip,
-  closeTooltip,
-  colorDomainsBy,
-}: Props) => {
-  const [expandedTrack, setExpandedTrack, expandedTrackRef] = useStateRef<
-    Record<string, boolean>
-  >({});
-  const [hasListeners, setHasListeners] = useState<Record<string, boolean>>({});
-  const [hasData, setHasData] = useState<Record<string, boolean>>({});
-
-  const handleTrackEvent = ({ detail }: { detail: DetailInterface }) => {
-    if (detail) {
-      const accession = detail.feature?.accession || '';
-      switch (detail.eventType) {
-        case 'click':
-          setExpandedTrack({
-            ...expandedTrackRef.current,
-            [accession]: !expandedTrackRef.current[accession],
-          });
-          break;
-        case 'mouseout':
-          closeTooltip();
-          break;
-        case 'mouseover':
-          if (enableTooltip) {
-            const sourceDatabase = detail.feature?.source_database || '';
-            if (customLocation && goToCustomLocation)
-              openTooltip(
-                detail.target,
-                <ProtVistaPopup
-                  detail={detail as unknown as PopupDetail}
-                  sourceDatabase={sourceDatabase}
-                  currentLocation={customLocation}
-                  // Need to pass it from here because it rendered out of the redux provider
-                  goToCustomLocation={goToCustomLocation}
-                />
-              );
-          }
-          break;
-        default:
-          break;
-      }
-    }
-  };
-
-  useEffect(() => {
-    setHasData({}); // Forcing reload of the data
-  }, [colorDomainsBy]);
-
-  useEffect(() => {
-    setExpandedTrack(
-      Object.fromEntries(
-        entries
-          .filter((entry) => !OTHER_TRACK_TYPES.includes(entry.type || ''))
-          .map((entry) => [entry.accession, true])
-      )
+const TracksInCategory = forwardRef<ExpandedHandle, Props>(
+  (
+    {
+      entries,
+      sequence,
+      hideCategory,
+      enableTooltip,
+      isPrinting,
+      highlightColor,
+      customLocation,
+      goToCustomLocation,
+      openTooltip,
+      closeTooltip,
+      colorDomainsBy,
+    },
+    ref
+  ) => {
+    const [expandedTrack, setExpandedTrack, expandedTrackRef] = useStateRef<
+      Record<string, boolean>
+    >({});
+    const [hasListeners, setHasListeners] = useState<Record<string, boolean>>(
+      {}
     );
-    Promise.all(webComponents.map((wc) => customElements.whenDefined(wc))).then(
-      () => {
+    const [hasData, setHasData] = useState<Record<string, boolean>>({});
+
+    const handleTrackEvent = ({ detail }: { detail: DetailInterface }) => {
+      if (detail) {
+        const accession = detail.feature?.accession || '';
+        switch (detail.eventType) {
+          case 'click':
+            setExpandedTrack({
+              ...expandedTrackRef.current,
+              [accession]: !expandedTrackRef.current[accession],
+            });
+            break;
+          case 'mouseout':
+            closeTooltip();
+            break;
+          case 'mouseover':
+            if (enableTooltip) {
+              const sourceDatabase = detail.feature?.source_database || '';
+              if (customLocation && goToCustomLocation)
+                openTooltip(
+                  detail.target,
+                  <ProtVistaPopup
+                    detail={detail as unknown as PopupDetail}
+                    sourceDatabase={sourceDatabase}
+                    currentLocation={customLocation}
+                    // Need to pass it from here because it rendered out of the redux provider
+                    goToCustomLocation={goToCustomLocation}
+                  />
+                );
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    };
+
+    useEffect(() => {
+      setHasData({}); // Forcing reload of the data
+    }, [colorDomainsBy]);
+
+    const setExpandedAllTracks = (expanded: boolean) => {
+      setExpandedTrack(
+        Object.fromEntries(
+          entries
+            .filter((entry) => !OTHER_TRACK_TYPES.includes(entry.type || ''))
+            .map((entry) => [entry.accession, expanded])
+        )
+      );
+    };
+    useImperativeHandle(ref, () => ({ setExpandedAllTracks }), []);
+    useEffect(() => {
+      setExpandedAllTracks(true);
+      Promise.all(
+        webComponents.map((wc) => customElements.whenDefined(wc))
+      ).then(() => {
         const addedListeners: Record<string, boolean> = {};
         const addedData: Record<string, boolean> = {};
         for (const entry of entries) {
@@ -227,107 +246,107 @@ const TracksInCategory = ({
             ...hasData,
             ...addedData,
           });
-      }
-    );
-  }, [entries, hasData]);
+      });
+    }, [entries, hasData]);
 
-  return (
-    <>
-      {entries &&
-        entries.map((entry) => {
-          const type = entry.type || '';
+    return (
+      <>
+        {entries &&
+          entries.map((entry) => {
+            const type = entry.type || '';
 
-          return (
-            <React.Fragment key={entry.accession}>
-              <div
-                className={css('track', {
-                  hideCategory,
-                })}
-              >
-                {OTHER_TRACK_TYPES.includes(type) ? (
-                  <div className={css('track', type.replace('_', '-'))}>
-                    {entry.type === 'sequence_conservation' &&
-                      (entry.warnings || []).length > 0 && (
-                        <div className={css('conservation-warning')}>
-                          {(entry.warnings || []).map((message) => (
-                            <div key={message}>{message}</div>
-                          ))}
-                        </div>
-                      )}
-                    {entry.type === 'sequence_conservation' &&
-                      (entry.warnings || []).length === 0 && (
-                        <NightingaleLinegraphTrack
-                          data={entry.data as LineData[]}
-                          length={sequence.length}
-                          type="conservation"
+            return (
+              <React.Fragment key={entry.accession}>
+                <div
+                  className={css('track', {
+                    hideCategory,
+                  })}
+                >
+                  {OTHER_TRACK_TYPES.includes(type) ? (
+                    <div className={css('track', type.replace('_', '-'))}>
+                      {entry.type === 'sequence_conservation' &&
+                        (entry.warnings || []).length > 0 && (
+                          <div className={css('conservation-warning')}>
+                            {(entry.warnings || []).map((message) => (
+                              <div key={message}>{message}</div>
+                            ))}
+                          </div>
+                        )}
+                      {entry.type === 'sequence_conservation' &&
+                        (entry.warnings || []).length === 0 && (
+                          <NightingaleLinegraphTrack
+                            data={entry.data as LineData[]}
+                            length={sequence.length}
+                            type="conservation"
+                            id={`track_${entry.accession}`}
+                            margin-color="#fafafa"
+                            highlight-event="onmouseover"
+                            highlight-color={highlightColor}
+                            use-ctrl-to-zoom
+                          />
+                        )}
+                      {entry.type === 'confidence' && (
+                        <NightingaleColoredSequence
                           id={`track_${entry.accession}`}
+                          data={entry.data as string}
+                          length={sequence.length}
+                          scale="H:90,M:70,L:50,D:0"
+                          height={12}
+                          color-range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
+                          margin-left={10}
+                          margin-right={10}
                           margin-color="#fafafa"
+                          highlight-event="onmouseover"
+                          highlight-color={highlightColor}
+                          className="confidence"
+                          use-ctrl-to-zoom
+                        />
+                      )}
+                      {[
+                        'secondary_structure',
+                        'residue',
+                        'Model',
+                        'Domain',
+                      ].includes(entry.type || '') && (
+                        <NightingaleTrack
+                          length={sequence.length}
+                          margin-color="#fafafa"
+                          height={15}
+                          id={`track_${entry.accession}`}
                           highlight-event="onmouseover"
                           highlight-color={highlightColor}
                           use-ctrl-to-zoom
                         />
-                      )}
-                    {entry.type === 'confidence' && (
-                      <NightingaleColoredSequence
-                        id={`track_${entry.accession}`}
-                        data={entry.data as string}
-                        length={sequence.length}
-                        scale="H:90,M:70,L:50,D:0"
-                        height={12}
-                        color-range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
-                        margin-left={10}
-                        margin-right={10}
-                        margin-color="#fafafa"
-                        highlight-event="onmouseover"
-                        highlight-color={highlightColor}
-                        className="confidence"
-                        use-ctrl-to-zoom
-                      />
-                    )}
-                    {[
-                      'secondary_structure',
-                      'residue',
-                      'Model',
-                      'Domain',
-                    ].includes(entry.type || '') && (
-                      <NightingaleTrack
-                        length={sequence.length}
-                        margin-color="#fafafa"
-                        height={15}
-                        id={`track_${entry.accession}`}
-                        highlight-event="onmouseover"
-                        highlight-color={highlightColor}
-                        use-ctrl-to-zoom
-                      />
-                    )}{' '}
-                  </div>
-                ) : (
-                  <NightingaleInterProTrack
-                    length={sequence.length}
-                    margin-color="#fafafa"
-                    id={`track_${entry.accession}`}
-                    shape="roundRectangle"
-                    highlight-event="onmouseover"
-                    highlight-color={highlightColor}
-                    show-label
-                    label=".feature.short_name"
-                    use-ctrl-to-zoom
-                    expanded={!!expandedTrack[entry.accession]}
-                  />
-                )}
-              </div>
-              <LabelsInTrack
-                entry={entry}
-                hideCategory={hideCategory}
-                expandedTrack={!!expandedTrack[entry.accession]}
-                isPrinting={isPrinting}
-              />
-            </React.Fragment>
-          );
-        })}
-    </>
-  );
-};
+                      )}{' '}
+                    </div>
+                  ) : (
+                    <NightingaleInterProTrack
+                      length={sequence.length}
+                      margin-color="#fafafa"
+                      id={`track_${entry.accession}`}
+                      shape="roundRectangle"
+                      highlight-event="onmouseover"
+                      highlight-color={highlightColor}
+                      show-label
+                      label=".feature.short_name"
+                      use-ctrl-to-zoom
+                      expanded={!!expandedTrack[entry.accession]}
+                    />
+                  )}
+                </div>
+                <LabelsInTrack
+                  entry={entry}
+                  hideCategory={hideCategory}
+                  expandedTrack={!!expandedTrack[entry.accession]}
+                  isPrinting={isPrinting}
+                />
+              </React.Fragment>
+            );
+          })}
+      </>
+    );
+  }
+);
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation,
@@ -338,6 +357,6 @@ const mapStateToProps = createSelector(
       (ui.colorDomainsBy as string) || EntryColorMode.DOMAIN_RELATIONSHIP,
   })
 );
-export default connect(mapStateToProps, { goToCustomLocation })(
-  TracksInCategory
-);
+export default connect(mapStateToProps, { goToCustomLocation }, null, {
+  forwardRef: true,
+})(TracksInCategory);

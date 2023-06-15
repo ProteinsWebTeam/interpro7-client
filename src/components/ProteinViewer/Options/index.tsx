@@ -43,6 +43,7 @@ type Props = PropsWithChildren<{
   };
   colorDomainsBy?: string;
   changeSettingsRaw?: typeof changeSettingsRaw;
+  setExpandedAllTracks: (v: boolean) => void;
 }>;
 
 const ProteinViewerOptions = ({
@@ -54,8 +55,9 @@ const ProteinViewerOptions = ({
   parentReferences,
   colorDomainsBy,
   changeSettingsRaw,
+  setExpandedAllTracks,
 }: Props) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const componentsDivId =
     parentReferences.componentsRef.current?.getAttribute('id');
 
@@ -123,7 +125,10 @@ const ProteinViewerOptions = ({
         (evt.target as HTMLInputElement)?.value
       );
   };
-
+  const toggleExpandAll = () => {
+    setExpandedAllTracks(!expanded);
+    setExpanded(!expanded);
+  };
   return (
     <>
       <div className={css('view-options-title')}>
@@ -247,18 +252,16 @@ const ProteinViewerOptions = ({
                 </ul>
               </li>
               <hr />
-              {/* 
               <li>
                 <button
-                  onClick={this.toggleCollapseAll}
-                  aria-label={`${
-                    collapsed ? 'Expand' : 'Collapse'
-                  } all tracks`}
+                  onClick={toggleExpandAll}
+                  aria-label={`${expanded ? 'Collapse' : 'Expand'} all tracks`}
                 >
-                  {collapsed ? 'Expand' : 'Collapse'} All Tracks
+                  {expanded ? 'Collapse' : 'Expand'} All Tracks
                 </button>
               </li>
               <hr />
+              {/* 
               <li key={'tooltip'}>
                 <label>
                   <input

@@ -20,7 +20,7 @@ import id from 'utils/cheap-unique-id';
 
 import Header from './Header';
 import Options from './Options';
-import TracksInCategory from './TracksInCategory';
+import TracksInCategory, { ExpandedHandle } from './TracksInCategory';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -94,6 +94,7 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'other residues': true,
   });
+  const categoryRefs = useRef<ExpandedHandle[]>([]);
 
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
   const arrowRef = useRef(null);
@@ -140,6 +141,11 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
         }
       }, TOOLTIP_DELAY);
   };
+  const setExpandedAllTracks = (expanded: boolean) => {
+    for (const category of categoryRefs.current) {
+      category?.setExpandedAllTracks(expanded);
+    }
+  };
 
   return (
     <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
@@ -170,6 +176,7 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
                   mainRef,
                   componentsRef,
                 }}
+                setExpandedAllTracks={setExpandedAllTracks}
               />
             </div>
           </div>
@@ -188,7 +195,7 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
               {data
                 .filter(([_, tracks]) => tracks && tracks.length)
 
-                .map(([type, entries, component]) => {
+                .map(([type, entries, component], i) => {
                   const LabelComponent = component?.component;
                   return (
                     <div
@@ -237,6 +244,9 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
                         openTooltip={openTooltip}
                         closeTooltip={closeTooltip}
                         isPrinting={isPrinting}
+                        ref={(ref: ExpandedHandle) =>
+                          categoryRefs.current.push(ref)
+                        }
                       />
                     </div>
                   );
