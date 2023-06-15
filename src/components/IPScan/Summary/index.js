@@ -90,14 +90,16 @@ const getPantherGoTerms = (matches) => {
 
     if (db === 'panther' && goXRefs.length !== 0) {
       goXRefs.forEach(({ id, category, name }) => {
-        goTerms.set(id, {
-          category: {
-            name: category.toLowerCase(),
-            code: category[0],
-          },
-          name,
-          identifier: id,
-        });
+        if (category !== null && name !== null) {
+          goTerms.set(id, {
+            category: {
+              name: category.toLowerCase(),
+              code: category[0],
+            },
+            name,
+            identifier: id,
+          });
+        }
       });
     }
   }
@@ -364,15 +366,8 @@ const SummaryIPScanJob = ({
               </ul>
             </Exporter>
           </DomainOnProteinWithoutMergedData>
-          <GoTerms
-            terms={Array.from(interProGoTerms.values())}
-            type="protein"
-          />
-          <GoTerms
-            terms={Array.from(pantherGoTerms.values())}
-            type="entry"
-            db="PANTHER"
-          />
+          <GoTerms terms={interProGoTerms} type="protein" />
+          <GoTerms terms={pantherGoTerms} type="entry" db="PANTHER" />
         </>
       )}
     </div>
