@@ -19,9 +19,10 @@ import { format } from 'url';
 
 const f = foundationPartial(ebiGlobalStyles, fonts);
 
-const ProtVista = loadable({
+const ProteinViewer = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
+    // $FlowFixMe
+    import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
 });
 
 const toArrayStructure = (locations) =>
@@ -237,7 +238,7 @@ const ProtVistaLoaded = (
       {dataprotein.loading ? (
         <div>loading</div>
       ) : (
-        <ProtVista
+        <ProteinViewer
           protein={dataprotein.payload.metadata}
           data={enrichedTracks}
           fixedHighlight={fixedHighlight}

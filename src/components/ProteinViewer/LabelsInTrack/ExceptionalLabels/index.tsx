@@ -23,7 +23,12 @@ type PropsEL = {
   isPrinting: boolean;
 };
 
-const EXCEPTIONAL_TYPES = ['residue', 'sequence_conservation'];
+const EXCEPTIONAL_TYPES = [
+  'residue',
+  'sequence_conservation',
+  'chain',
+  'secondary_structure',
+];
 
 export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
   return (

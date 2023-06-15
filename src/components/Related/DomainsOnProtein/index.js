@@ -35,10 +35,6 @@ const PIRSR_ACCESSION_LENGTH = 11;
 const PIRSF_PREFIX_LENGTH = 5;
 const HTTP_OK = 200;
 
-const ProtVista = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
-});
 const ProteinViewer = loadable({
   loader: () =>
     // $FlowFixMe
@@ -439,20 +435,6 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
           {' '}
           {this.props.children}
         </ProteinViewer>
-        <hr />
-        <ProtVista
-          protein={protein}
-          data={sortedData}
-          title="Entry matches to this protein"
-          id={
-            mainData.metadata.accession || mainData.payload.metadata.accession
-          }
-          showConservationButton={showConservationButton}
-          handleConservationLoad={handleConservationLoad}
-          conservationError={conservationError}
-        >
-          {this.props.children}
-        </ProtVista>
       </>
     );
   }
