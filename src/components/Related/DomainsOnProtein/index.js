@@ -432,6 +432,9 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
           protein={protein}
           data={sortedData}
           title="Entry matches to this protein"
+          showConservationButton={showConservationButton}
+          handleConservationLoad={handleConservationLoad}
+          conservationError={conservationError}
         >
           {' '}
           {this.props.children}

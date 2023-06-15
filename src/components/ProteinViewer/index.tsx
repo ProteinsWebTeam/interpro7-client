@@ -28,6 +28,7 @@ import style from '../ProtVista/style.css';
 import grid from '../ProtVista/grid.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import popper from '../ProtVista/popper.css';
+import ConservationMockupTrack from './ConservationMockupTrack';
 
 const css = cssBinder(style, grid, fonts, popper);
 
@@ -75,6 +76,9 @@ type Props = {
   protein: ProteinMetadata;
   title: string;
   data: ProteinViewerData;
+  showConservationButton?: boolean;
+  handleConservationLoad?: () => void;
+  conservationError?: string;
 };
 
 type CategoryVisibility = { [name: string]: boolean };
@@ -89,7 +93,14 @@ const switchCategoryVisibility = (
   };
 };
 
-const ProteinViewer = ({ protein, title, data }: Props) => {
+const ProteinViewer = ({
+  protein,
+  title,
+  data,
+  showConservationButton,
+  handleConservationLoad,
+  conservationError,
+}: Props) => {
   const [isPrinting, setPrinting] = useState(false);
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'other residues': true,
@@ -254,6 +265,12 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
                     </div>
                   );
                 })}
+              <ConservationMockupTrack
+                showConservationButton={showConservationButton}
+                handleConservationLoad={handleConservationLoad}
+                conservationError={conservationError}
+                isPrinting={isPrinting}
+              />
             </div>
           </div>
         </NightingaleManager>
