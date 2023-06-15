@@ -12,7 +12,7 @@ import {
   getConfidenceURLFromPayload,
   // $FlowFixMe
 } from 'components/AlphaFold/selectors';
-
+// $FlowFixMe
 import { processData } from 'components/ProteinViewer/utils';
 
 import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';

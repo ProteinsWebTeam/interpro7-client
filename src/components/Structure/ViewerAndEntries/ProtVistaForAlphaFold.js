@@ -9,7 +9,7 @@ import { createSelector } from 'reselect';
 
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-
+// $FlowFixMe
 import { processData } from 'components/ProteinViewer/utils';
 import {
   getAlphaFoldPredictionURL,
