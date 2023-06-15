@@ -103,6 +103,8 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
   const mainRef = useRef<HTMLDivElement>(null);
   const componentsRef = useRef<HTMLDivElement>(null);
   const intervalId = useRef<NodeJS.Timer | null>(null);
+  const [tooltipEnabled, setTooltipEnabled, tooltipEnabledRef] =
+    useStateRef(true);
   const [tooltipContent, setTooltipContent] = useState<ReactNode>(null);
   const { refs, floatingStyles, context } = useFloating({
     middleware: [
@@ -120,7 +122,7 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
     element: HTMLElement | undefined,
     content: ReactNode
   ) => {
-    if (element) {
+    if (element && tooltipEnabledRef.current) {
       refs.setReference(element);
       setTooltipContent(content);
       if (intervalId.current) {
@@ -177,6 +179,8 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
                   componentsRef,
                 }}
                 setExpandedAllTracks={setExpandedAllTracks}
+                tooltipEnabled={tooltipEnabled}
+                setTooltipEnabled={setTooltipEnabled}
               />
             </div>
           </div>
@@ -195,7 +199,7 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
               {data
                 .filter(([_, tracks]) => tracks && tracks.length)
 
-                .map(([type, entries, component], i) => {
+                .map(([type, entries, component]) => {
                   const LabelComponent = component?.component;
                   return (
                     <div
@@ -240,7 +244,6 @@ const ProteinViewer = ({ protein, title, data }: Props) => {
                         sequence={protein.sequence}
                         hideCategory={hideCategory[type]}
                         highlightColor={highlightColor}
-                        enableTooltip={true}
                         openTooltip={openTooltip}
                         closeTooltip={closeTooltip}
                         isPrinting={isPrinting}

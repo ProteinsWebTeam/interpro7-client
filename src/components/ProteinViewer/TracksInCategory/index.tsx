@@ -18,6 +18,7 @@ import NightingaleTrack from 'components/Nightingale/Track';
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
 import NightingaleLinegraphTrack from 'components/Nightingale/Linegraph';
 import NightingaleColoredSequence from 'components/Nightingale/ColoredSequence';
+import NightingaleInterProTrackCE from '@nightingale-elements/nightingale-interpro-track';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
@@ -115,7 +116,6 @@ type Props = {
   entries: Array<ExtendedFeature>;
   highlightColor: string;
   hideCategory: boolean;
-  enableTooltip: boolean;
   isPrinting: boolean;
   openTooltip: (element: HTMLElement | undefined, content: ReactNode) => void;
   closeTooltip: () => void;
@@ -130,7 +130,6 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       entries,
       sequence,
       hideCategory,
-      enableTooltip,
       isPrinting,
       highlightColor,
       customLocation,
@@ -148,7 +147,6 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       {}
     );
     const [hasData, setHasData] = useState<Record<string, boolean>>({});
-
     const handleTrackEvent = ({ detail }: { detail: DetailInterface }) => {
       if (detail) {
         const accession = detail.feature?.accession || '';
@@ -162,22 +160,21 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
           case 'mouseout':
             closeTooltip();
             break;
-          case 'mouseover':
-            if (enableTooltip) {
-              const sourceDatabase = detail.feature?.source_database || '';
-              if (customLocation && goToCustomLocation)
-                openTooltip(
-                  detail.target,
-                  <ProtVistaPopup
-                    detail={detail as unknown as PopupDetail}
-                    sourceDatabase={sourceDatabase}
-                    currentLocation={customLocation}
-                    // Need to pass it from here because it rendered out of the redux provider
-                    goToCustomLocation={goToCustomLocation}
-                  />
-                );
-            }
+          case 'mouseover': {
+            const sourceDatabase = detail.feature?.source_database || '';
+            if (customLocation && goToCustomLocation)
+              openTooltip(
+                detail.target,
+                <ProtVistaPopup
+                  detail={detail as unknown as PopupDetail}
+                  sourceDatabase={sourceDatabase}
+                  currentLocation={customLocation}
+                  // Need to pass it from here because it rendered out of the redux provider
+                  goToCustomLocation={goToCustomLocation}
+                />
+              );
             break;
+          }
           default:
             break;
         }
@@ -222,7 +219,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                   track.tagName.toLowerCase()
                 )
               ) {
-                (track as any).data = mapToFeatures(
+                (track as NightingaleInterProTrackCE).data = mapToFeatures(
                   entry,
                   colorDomainsBy || 'ACCESSION'
                 );
@@ -230,7 +227,9 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                   entry,
                   colorDomainsBy || 'ACCESSION'
                 );
-                if (contributors) (track as any).contributors = contributors;
+                if (contributors)
+                  (track as NightingaleInterProTrackCE).contributors =
+                    contributors;
               }
               addedData[entry.accession || ''] = true;
             }

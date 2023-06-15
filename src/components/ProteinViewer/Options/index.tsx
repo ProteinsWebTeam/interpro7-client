@@ -44,6 +44,8 @@ type Props = PropsWithChildren<{
   colorDomainsBy?: string;
   changeSettingsRaw?: typeof changeSettingsRaw;
   setExpandedAllTracks: (v: boolean) => void;
+  tooltipEnabled: boolean;
+  setTooltipEnabled: (v: boolean) => void;
 }>;
 
 const ProteinViewerOptions = ({
@@ -56,6 +58,8 @@ const ProteinViewerOptions = ({
   colorDomainsBy,
   changeSettingsRaw,
   setExpandedAllTracks,
+  tooltipEnabled,
+  setTooltipEnabled,
 }: Props) => {
   const [expanded, setExpanded] = useState(true);
   const componentsDivId =
@@ -261,18 +265,16 @@ const ProteinViewerOptions = ({
                 </button>
               </li>
               <hr />
-              {/* 
               <li key={'tooltip'}>
                 <label>
                   <input
                     type="checkbox"
-                    onChange={this.toggleTooltipStatus}
-                    checked={this.state.enableTooltip}
+                    onChange={() => setTooltipEnabled(!tooltipEnabled)}
+                    checked={tooltipEnabled}
                   />{' '}
-                  Tooltip {this.state.enableTooltip ? 'Active' : 'Inactive'}
+                  Tooltip {tooltipEnabled ? 'Active' : 'Inactive'}
                 </label>
               </li>
-              */}
             </ul>
           </DropDownButton>
         </Tooltip>

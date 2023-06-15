@@ -1,4 +1,4 @@
-import React, { Ref, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import cssBinder from 'styles/cssBinder';
 
 import NightingaleNavigationCE from '@nightingale-elements/nightingale-navigation';
