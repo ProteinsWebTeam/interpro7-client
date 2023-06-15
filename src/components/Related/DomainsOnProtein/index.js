@@ -13,7 +13,7 @@ import {
   // $FlowFixMe
 } from 'components/AlphaFold/selectors';
 
-import { processData } from 'components/ProtVista/utils';
+import { processData } from 'components/ProteinViewer/utils';
 
 import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';

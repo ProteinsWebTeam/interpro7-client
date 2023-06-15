@@ -6,8 +6,8 @@ import NightingaleNavigationCE from '@nightingale-elements/nightingale-navigatio
 import NightingaleNavigation from 'components/Nightingale/Navigation';
 import NightingaleSequence from 'components/Nightingale/Sequence';
 
-import style from '../../ProtVista/style.css';
-import grid from '../../ProtVista/grid.css';
+import style from '../../ProteinViewer/style.css';
+import grid from '../../ProteinViewer/grid.css';
 
 const css = cssBinder(style, grid);
 

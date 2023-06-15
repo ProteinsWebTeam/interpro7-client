@@ -20,10 +20,10 @@ import cssBinder from 'styles/cssBinder';
 import localCSS from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-import protvistaGridCSS from '../../ProtVista/grid.css';
-import protvistaCSS from '../../ProtVista/style.css';
-import protvistaGridCSSasText from '!!raw-loader!../../ProtVista/grid.css';
-import protvistaCSSastext from '!!raw-loader!../../ProtVista/style.css';
+import protvistaGridCSS from '../../ProteinViewer/grid.css';
+import protvistaCSS from '../../ProteinViewer/style.css';
+import protvistaGridCSSasText from '!!raw-loader!../../ProteinViewer/grid.css';
+import protvistaCSSastext from '!!raw-loader!../../ProteinViewer/style.css';
 import vfIproCSS from '!!raw-loader!styles/interpro-vf.css';
 import fontCSS from '!!raw-loader!styles/fonts.css';
 import colorsCSS from '!!raw-loader!styles/colors.css';

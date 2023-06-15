@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Popup from '../src/components/ProtVista/Popup';
-import Conservation from '../src/components/ProtVista/Popup/Conservation';
-import Entry from '../src/components/ProtVista/Popup/Entry';
-import Residue from '../src/components/ProtVista/Popup/Residue';
+import Popup from '../src/components/ProteinViewer/Popup';
+import Conservation from '../src/components/ProteinViewer/Popup/Conservation';
+import Entry from '../src/components/ProteinViewer/Popup/Entry';
+import Residue from '../src/components/ProteinViewer/Popup/Residue';
 import { goToCustomLocation } from '../src/actions/creators';
 
 export default {

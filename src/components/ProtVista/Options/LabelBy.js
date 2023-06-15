@@ -9,7 +9,7 @@ import { changeSettingsRaw } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
 
-import protvistaCSS from '../style.css';
+import protvistaCSS from '../../ProteinViewer/style.css';
 
 const f = foundationPartial(protvistaCSS);
 

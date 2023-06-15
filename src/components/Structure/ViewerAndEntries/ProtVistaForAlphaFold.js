@@ -10,7 +10,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import { processData } from 'components/ProtVista/utils';
+import { processData } from 'components/ProteinViewer/utils';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,

@@ -14,7 +14,7 @@ import { ExtendedFeature } from '../..';
 
 import cssBinder from 'styles/cssBinder';
 
-import style from '../../../ProtVista/style.css';
+import style from '../../../ProteinViewer/style.css';
 
 const css = cssBinder(style);
 

@@ -44,9 +44,9 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import localCSS from './style.css';
-import gridCSS from './grid.css';
-import popperCSS from './popper.css';
+import localCSS from '../ProteinViewer/style.css';
+import gridCSS from '../ProteinViewer//grid.css';
+import popperCSS from '../ProteinViewer//popper.css';
 
 const f = foundationPartial(ipro, localCSS, spinner, fonts, gridCSS, popperCSS);
 

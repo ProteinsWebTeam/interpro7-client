@@ -4,7 +4,7 @@ import { ExtendedFeature } from '../..';
 
 import cssBinder from 'styles/cssBinder';
 
-import grid from '../../../ProtVista/grid.css';
+import grid from '../../../ProteinViewer/grid.css';
 
 const css = cssBinder(grid);
 

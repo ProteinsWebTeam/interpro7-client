@@ -24,10 +24,10 @@ import TracksInCategory, { ExpandedHandle } from './TracksInCategory';
 
 import cssBinder from 'styles/cssBinder';
 
-import style from '../ProtVista/style.css';
-import grid from '../ProtVista/grid.css';
+import style from './style.css';
+import grid from './grid.css';
+import popper from './popper.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import popper from '../ProtVista/popper.css';
 import ConservationMockupTrack from './ConservationMockupTrack';
 
 const css = cssBinder(style, grid, fonts, popper);

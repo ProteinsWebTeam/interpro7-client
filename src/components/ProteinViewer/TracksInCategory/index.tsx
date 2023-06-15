@@ -22,13 +22,13 @@ import NightingaleInterProTrackCE from '@nightingale-elements/nightingale-interp
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
-import style from '../../ProtVista/style.css';
-import grid from '../../ProtVista/grid.css';
+import style from '../../ProteinViewer/style.css';
+import grid from '../../ProteinViewer/grid.css';
 import { ExtendedFeature } from '..';
 import LabelsInTrack from '../LabelsInTrack';
 
 import useStateRef from 'utils/hooks/useStateRef';
-import ProtVistaPopup, { PopupDetail } from 'components/ProtVista/Popup';
+import ProtVistaPopup, { PopupDetail } from '../Popup';
 
 const css = cssBinder(style, grid);
 

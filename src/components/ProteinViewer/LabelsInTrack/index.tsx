@@ -8,8 +8,8 @@ import ResidueLabel from './ResidueLabel';
 
 import cssBinder from 'styles/cssBinder';
 
-import style from '../../ProtVista/style.css';
-import grid from '../../ProtVista/grid.css';
+import style from '../../ProteinViewer/style.css';
+import grid from '../../ProteinViewer/grid.css';
 import ExceptionalLabels, { isAnExceptionalLabel } from './ExceptionalLabels';
 
 const css = cssBinder(style, grid);

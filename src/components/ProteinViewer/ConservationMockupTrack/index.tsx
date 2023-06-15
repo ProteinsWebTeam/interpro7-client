@@ -3,10 +3,10 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import cssBinder from 'styles/cssBinder';
 
-import style from '../../ProtVista/style.css';
-import grid from '../../ProtVista/grid.css';
+import style from '../../ProteinViewer/style.css';
+import grid from '../../ProteinViewer/grid.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import popper from '../../ProtVista/popper.css';
+import popper from '../popper.css';
 
 const css = cssBinder(style, grid, fonts, popper);
 

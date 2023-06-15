@@ -8,7 +8,7 @@ import DynamicTooltip from 'components/SimpleCommonComponents/DynamicTooltip';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
-import protvista from 'components/ProtVista/style.css';
+import protvista from 'components/ProteinViewer/style.css';
 
 const f = foundationPartial(protvista);
 
