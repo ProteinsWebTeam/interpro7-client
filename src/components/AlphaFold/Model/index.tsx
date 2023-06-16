@@ -116,10 +116,6 @@ const AlphaFoldModel = ({
           </p>
         </>
       )}
-      <SequenceCheck
-        proteinAccession={proteinAcc}
-        alphaFoldSequence={data.payload?.[0]?.uniprotSequence}
-      />
       {hasMultipleProteins && !isSplitScreen ? (
         <div className={css('callout', 'primary', 'info')}>
           <p>
@@ -131,9 +127,13 @@ const AlphaFoldModel = ({
             the table below the structure viewer to select another protein.
           </p>
         </div>
-      ) : (
-        ''
-      )}
+      ) : null}
+      <SequenceCheck
+        proteinAccession={proteinAcc}
+        alphaFoldSequence={data.payload?.[0]?.uniprotSequence}
+        alphaFoldCreationDate={data.payload?.[0]?.modelCreatedDate}
+      />
+
       <div className={css('row')}>
         {!isSplitScreen && (
           <div className={css('column', 'small-12', 'medium-3')}>
