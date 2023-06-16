@@ -1,6 +1,7 @@
 import React, {
   useState,
   useEffect,
+  useRef,
   ReactNode,
   forwardRef,
   useImperativeHandle,
@@ -123,6 +124,7 @@ type Props = {
   customLocation?: InterProLocation;
   goToCustomLocation?: typeof goToCustomLocation;
   colorDomainsBy?: string;
+  databases?: DBsInfo;
 };
 const TracksInCategory = forwardRef<ExpandedHandle, Props>(
   (
@@ -137,6 +139,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       openTooltip,
       closeTooltip,
       colorDomainsBy,
+      databases,
     },
     ref
   ) => {
@@ -147,6 +150,10 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       {}
     );
     const [hasData, setHasData] = useState<Record<string, boolean>>({});
+    const databasesRef = useRef<DBsInfo | null>(null);
+    useEffect(() => {
+      if (databases) databasesRef.current = databases;
+    }, [databases]);
     const handleTrackEvent = ({ detail }: { detail: DetailInterface }) => {
       if (detail) {
         const accession = detail.feature?.accession || '';
@@ -161,7 +168,11 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
             closeTooltip();
             break;
           case 'mouseover': {
-            const sourceDatabase = detail.feature?.source_database || '';
+            const sourceDatabase =
+              databasesRef.current?.[detail.feature?.source_database || '']
+                ?.name ||
+              detail.feature?.source_database ||
+              '';
             if (customLocation && goToCustomLocation)
               openTooltip(
                 detail.target,

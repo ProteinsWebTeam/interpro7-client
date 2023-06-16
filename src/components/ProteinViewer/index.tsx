@@ -1,5 +1,8 @@
 import React, { useState, useRef, ReactNode } from 'react';
 
+import loadData from 'higherOrder/loadData/ts';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+
 import {
   Feature,
   FeatureLocation,
@@ -75,11 +78,12 @@ type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 type Props = {
   protein: ProteinMetadata;
   title: string;
-  data: ProteinViewerData;
+  // data: ProteinViewerData;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
   conservationError?: string;
 };
+interface LoadedProps extends Props, LoadDataProps<RootAPIPayload> {}
 
 type CategoryVisibility = { [name: string]: boolean };
 
@@ -93,14 +97,33 @@ const switchCategoryVisibility = (
   };
 };
 
-const ProteinViewer = ({
+const getSourceDatabaseDisplayName = (entry: Metadata, databases: DBsInfo) => {
+  let sourceDatabase = '';
+  if (Array.isArray(entry.source_database)) {
+    if (entry.source_database[0] in databases) {
+      sourceDatabase = databases[entry.source_database[0]].name;
+    } else {
+      sourceDatabase = entry.source_database[0];
+    }
+  } else {
+    if (entry.source_database in databases) {
+      sourceDatabase = databases[entry.source_database].name;
+    } else {
+      sourceDatabase = entry.source_database;
+    }
+  }
+  return sourceDatabase;
+};
+
+export const ProteinViewer = ({
   protein,
   title,
   data,
   showConservationButton,
   handleConservationLoad,
   conservationError,
-}: Props) => {
+  dataBase,
+}: LoadedProps) => {
   const [isPrinting, setPrinting] = useState(false);
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'other residues': true,
@@ -207,7 +230,7 @@ const ProteinViewer = ({
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
-              {data
+              {(data as unknown as ProteinViewerData)
                 .filter(([_, tracks]) => tracks && tracks.length)
 
                 .map(([type, entries, component]) => {
@@ -261,6 +284,7 @@ const ProteinViewer = ({
                         ref={(ref: ExpandedHandle) =>
                           categoryRefs.current.push(ref)
                         }
+                        databases={dataBase?.payload?.databases}
                       />
                     </div>
                   );
@@ -279,4 +303,7 @@ const ProteinViewer = ({
   );
 };
 
-export default ProteinViewer;
+export default loadData<RootAPIPayload>({
+  getUrl: getUrlForMeta,
+  propNamespace: 'Base',
+})(ProteinViewer);
