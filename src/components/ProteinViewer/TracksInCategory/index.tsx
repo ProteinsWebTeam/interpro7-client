@@ -9,9 +9,10 @@ import React, {
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import useStateRef from 'utils/hooks/useStateRef';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { goToCustomLocation } from 'actions/creators';
 
-import cssBinder from 'styles/cssBinder';
 import { LineData } from '@nightingale-elements/nightingale-linegraph-track';
 
 import NightingaleTrack from 'components/Nightingale/Track';
@@ -20,14 +21,13 @@ import NightingaleLinegraphTrack from 'components/Nightingale/Linegraph';
 import NightingaleColoredSequence from 'components/Nightingale/ColoredSequence';
 import NightingaleInterProTrackCE from '@nightingale-elements/nightingale-interpro-track';
 
-import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+import cssBinder from 'styles/cssBinder';
 
 import style from '../../ProteinViewer/style.css';
 import grid from '../../ProteinViewer/grid.css';
 import { ExtendedFeature } from '..';
 import LabelsInTrack from '../LabelsInTrack';
 
-import useStateRef from 'utils/hooks/useStateRef';
 import ProtVistaPopup, { PopupDetail } from '../Popup';
 
 const css = cssBinder(style, grid);
@@ -169,7 +169,6 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                   detail={detail as unknown as PopupDetail}
                   sourceDatabase={sourceDatabase}
                   currentLocation={customLocation}
-                  // Need to pass it from here because it rendered out of the redux provider
                   goToCustomLocation={goToCustomLocation}
                 />
               );

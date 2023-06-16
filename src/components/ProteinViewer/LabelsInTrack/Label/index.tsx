@@ -8,7 +8,7 @@ import { ExtendedFeature } from '../..';
 
 type LabelProps = {
   entry: ExtendedFeature;
-  label?: unknown;
+  label?: LabelUISettings;
 };
 const Label = ({ entry, label }: LabelProps) => {
   const type =
@@ -31,7 +31,7 @@ const Label = ({ entry, label }: LabelProps) => {
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui,
-  (ui: Record<string, unknown>) => ({ label: ui.labelContent })
+  (ui: UISettings) => ({ label: ui.labelContent })
 );
 
 export default connect(mapStateToProps)(Label);

@@ -1,19 +1,22 @@
 import React, { PropsWithChildren, Children, useState, useEffect } from 'react';
+import { createSelector } from 'reselect';
+
+import ReactToPrint from 'react-to-print';
+
 import NightingaleSaverCE from '@nightingale-elements/nightingale-saver';
 
 import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { changeSettingsRaw } from 'actions/creators';
-import { createSelector } from 'reselect';
+import { EntryColorMode } from 'utils/entry-color';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-import { EntryColorMode } from 'utils/entry-color';
-import ReactToPrint from 'react-to-print';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { Exporter } from 'components/Table';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 import NightingaleSaver from 'components/Nightingale/Saver';
+
 import LabelBy from './LabelBy';
 
 import cssBinder from 'styles/cssBinder';

@@ -17,6 +17,7 @@ import useStateRef from 'utils/hooks/useStateRef';
 
 import NightingaleManager from 'components/Nightingale/Manager';
 import id from 'utils/cheap-unique-id';
+import ConservationMockupTrack from './ConservationMockupTrack';
 
 import Header from './Header';
 import Options from './Options';
@@ -28,7 +29,6 @@ import style from './style.css';
 import grid from './grid.css';
 import popper from './popper.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import ConservationMockupTrack from './ConservationMockupTrack';
 
 const css = cssBinder(style, grid, fonts, popper);
 
