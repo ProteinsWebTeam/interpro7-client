@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import loadWebComponent from 'utils/load-web-component';
 
-import loadData from '../../higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';

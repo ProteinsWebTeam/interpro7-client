@@ -27,7 +27,60 @@ declare namespace JSX {
   }
 }
 
-type GlobalState = Record<string, any>; // TODO: replace for redux state type
+type GlobalState = {
+  customLocation: InterProLocation;
+  [other: string]: any;
+}; // TODO: replace for redux state type
+
+type Endpoint =
+  | 'entry'
+  | 'protein'
+  | 'structure'
+  | 'taxonomy'
+  | 'proteome'
+  | 'set';
+
+type EndpointLocation = {
+  isFilter: boolean | null;
+  db: string;
+  accession: string;
+  detail: string;
+  order: number | null;
+};
+type InterProDescription = {
+  main: {
+    key: Endpoint | 'search' | 'result' | 'other';
+    numberOfFilters: 0;
+  };
+  entry: EndpointLocation & {
+    integration: string | null;
+    memberDB: string | null;
+    memberDBAccession: string | null;
+  };
+  protein: EndpointLocation;
+  structure: EndpointLocation & {
+    chain: string | null;
+  };
+  taxonomy: EndpointLocation;
+  proteome: EndpointLocation;
+  set: EndpointLocation;
+  search: {
+    type: string | null;
+    value: string | null;
+  };
+  result: {
+    type: string | null;
+    accession: string | null;
+    detail: string | null;
+  };
+  other: string[];
+};
+type InterProLocation = {
+  description: InterProDescription;
+  search: Record<string, string>;
+  hash: string;
+  state: Record<string, string>;
+};
 
 interface InterProTypeProps
   extends React.DetailedHTMLProps<
@@ -182,6 +235,33 @@ interface ProteinMetadata extends Metadata {
   is_fragment: boolean;
   ida_accession: string;
 }
+type PayloadList<Payload> = {
+  count: number;
+  next?: string | null;
+  previous?: string | null;
+  results: Array<Payload>;
+};
+type ProteinEntryPayload = {
+  metadata: ProteinMetadata;
+  entries: Array<{
+    accession: string;
+    entry_protein_locations: [
+      {
+        fragments: Array<{
+          start: 52;
+          end: 127;
+          'dc-status': 'CONTINUOUS';
+        }>;
+        model: string | null;
+        score: number | null;
+      }
+    ];
+    protein_length: number;
+    source_database: string;
+    entry_type: string;
+    entry_integrated: string | null;
+  }>;
+};
 
 type DBInfo = {
   canonical: string;
@@ -202,14 +282,6 @@ type RequestedData<Payload> = {
   payload: null | Payload;
   url: string;
 };
-
-type Endpoint =
-  | 'entry'
-  | 'protein'
-  | 'structure'
-  | 'taxonomy'
-  | 'proteome'
-  | 'set';
 
 type RootAPIPayload = {
   databases: DBsInfo;
@@ -235,12 +307,33 @@ type WikipediaPayload = {
     };
   };
 };
+type AlphafoldPayload = Array<{
+  entryId: string;
+  gene: string;
+  uniprotAccession: string;
+  uniprotId: string;
+  uniprotDescription: string;
+  taxId: number;
+  organismScientificName: string;
+  uniprotStart: number;
+  uniprotEnd: number;
+  uniprotSequence: string;
+  modelCreatedDate: string;
+  latestVersion: number;
+  allVersions: number[];
+  cifUrl: string;
+  bcifUrl: string;
+  pdbUrl: string;
+  paeImageUrl: string;
+  paeDocUrl: string;
+}>;
 
 type ParsedURLServer = {
   protocol: string;
   hostname: string;
   port: number;
   root: string;
+  query: string;
 };
 
 type FetchOptions = {
@@ -278,6 +371,6 @@ type LoadDataProps<Payload = unknown> = {
 };
 
 type GetUrl<Props = unknown> = (
-  params: Record<string, unknown>,
+  params: GlobalState | {},
   props?: Props
 ) => string | null;

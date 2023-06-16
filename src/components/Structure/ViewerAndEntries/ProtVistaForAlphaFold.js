@@ -14,6 +14,7 @@ import { processData } from 'components/ProtVista/utils';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
+  // $FlowFixMe
 } from 'components/AlphaFold/selectors';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -142,7 +143,7 @@ ProtVistaForAlphaFold.propTypes = {
   dataProtein: dataPropType,
   dataConfidence: dataPropType,
   onChangeSelection: T.func,
-  protein: T.string.isRequired,
+  protein: T.string,
   confidenceURL: T.string,
   isSplitScreen: T.bool,
 };
