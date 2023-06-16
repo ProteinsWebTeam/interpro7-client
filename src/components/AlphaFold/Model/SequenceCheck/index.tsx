@@ -34,11 +34,13 @@ const SequenceCheck = ({
   if (alphaFoldSequence === uniprotSequence) return null;
   return (
     <div className={css('callout', 'warning', 'margin-bottom-medium')}>
-      <span className={css('icon', 'icon-common')} data-icon="&#xf35a;"></span>{' '}
-      <b>Mismatched Sequence.</b>
+      <span className={css('icon', 'icon-common')} data-icon="&#xf071;"></span>{' '}
+      <b>AlphaFold Prediction Mismatch</b>
       <p>
-        The sequence used by AlphaFold when generating the model is different to
-        the one in the InterPro database.
+        The AlphaFold prediction displayed below was generated using 
+        a sequence that has since been updated in the UniProt database. 
+        Please note that the displayed prediction may not accurately represent 
+        the current structure of the protein due to the sequence mismatch.
       </p>
       <button
         className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
