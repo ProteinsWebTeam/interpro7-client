@@ -97,24 +97,6 @@ const switchCategoryVisibility = (
   };
 };
 
-const getSourceDatabaseDisplayName = (entry: Metadata, databases: DBsInfo) => {
-  let sourceDatabase = '';
-  if (Array.isArray(entry.source_database)) {
-    if (entry.source_database[0] in databases) {
-      sourceDatabase = databases[entry.source_database[0]].name;
-    } else {
-      sourceDatabase = entry.source_database[0];
-    }
-  } else {
-    if (entry.source_database in databases) {
-      sourceDatabase = databases[entry.source_database].name;
-    } else {
-      sourceDatabase = entry.source_database;
-    }
-  }
-  return sourceDatabase;
-};
-
 export const ProteinViewer = ({
   protein,
   title,

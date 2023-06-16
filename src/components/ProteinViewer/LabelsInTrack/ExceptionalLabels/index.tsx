@@ -21,6 +21,7 @@ const css = cssBinder(style);
 type PropsEL = {
   entry: ExtendedFeature;
   isPrinting: boolean;
+  databases?: DBsInfo;
 };
 
 const EXCEPTIONAL_TYPES = [
@@ -38,7 +39,7 @@ export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
   );
 };
 
-const ExceptionalLabels = ({ entry, isPrinting }: PropsEL) => {
+const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   if (entry.source_database === 'mobidblt')
     return isPrinting ? (
       <span>{entry.accession}</span>
@@ -79,6 +80,14 @@ const ExceptionalLabels = ({ entry, isPrinting }: PropsEL) => {
       </AlphafoldLink>
     );
   }
+  if (entry.source_database === 'elm')
+    return isPrinting ? (
+      <span>{entry.accession}</span>
+    ) : (
+      <Link href={`http://elm.eu.org/${entry.accession}`}>
+        {entry.accession}
+      </Link>
+    );
   if (entry.type === 'residue')
     return <span>{entry.locations?.[0]?.description || ''}</span>;
   if (
@@ -88,21 +97,13 @@ const ExceptionalLabels = ({ entry, isPrinting }: PropsEL) => {
   )
     return <>{entry.accession}</>;
   if (entry.type === 'sequence_conservation') {
-    // if (entry.accession in databases) {
     return (
       <Tooltip title={'Score calculated using Phmmer and HMM profile'}>
         <div className={css('sequence-conservation-label')}>
-          {entry.accession} conservation
-          {/* {databases[entry.accession].name} conservation */}
+          {databases?.[entry.accession]?.name || entry.accession} conservation
         </div>
       </Tooltip>
     );
-    // }
-    // return (
-    //   <div className={css('sequence-conservation-label')}>
-    //     {entry.accession} conservation
-    //   </div>
-    // );
   }
   if (entry.accession && entry.accession.startsWith('G3D:')) {
     return isPrinting ? (
