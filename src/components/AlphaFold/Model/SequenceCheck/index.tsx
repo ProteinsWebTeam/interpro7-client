@@ -18,6 +18,7 @@ const css = cssBinder(ipro, fonts);
 type Props = {
   proteinAccession: string;
   alphaFoldSequence?: string;
+  alphaFoldCreationDate?: string;
 };
 
 interface LoadedProps
@@ -26,6 +27,7 @@ interface LoadedProps
 
 const SequenceCheck = ({
   alphaFoldSequence,
+  alphaFoldCreationDate,
   data: { loading, payload },
 }: LoadedProps) => {
   const [showDiff, setShowDiff] = useState(false);
@@ -37,23 +39,23 @@ const SequenceCheck = ({
       <span className={css('icon', 'icon-common')} data-icon="&#xf071;"></span>{' '}
       <b>AlphaFold Prediction Mismatch</b>
       <p>
-        The AlphaFold prediction displayed below was generated using 
-        a sequence that has since been updated in the UniProt database. 
-        Please note that the displayed prediction may not accurately represent 
-        the current structure of the protein due to the sequence mismatch.
+        The AlphaFold prediction displayed below was generated on{' '}
+        {new Date(alphaFoldCreationDate || '').toLocaleDateString()} using a
+        sequence that has since been updated in the UniProt database. Please
+        note that the displayed prediction may not accurately represent the
+        current structure of the protein due to the sequence mismatch.
       </p>
       <button
         className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
         onClick={() => setShowDiff(!showDiff)}
+        style={{ width: '10rem' }}
       >
         {showDiff ? 'Hide' : 'Show'} Diff
       </button>
       {showDiff && (
-        <div style={{ overflow: 'scroll', maxWidth: '70vw' }}>
+        <div style={{ overflow: 'scroll', maxWidth: 'min(65vw,60em)' }}>
           <ReactDiffViewer
-            // oldValue={JSON.stringify(fav.differences.old)}
             oldValue={alphaFoldSequence}
-            // newValue={JSON.stringify(fav.differences.newData)}
             newValue={uniprotSequence}
             splitView={false}
             leftTitle={'AlphaFold / Uniprot'}
