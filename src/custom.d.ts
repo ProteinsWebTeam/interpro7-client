@@ -336,6 +336,20 @@ type RootAPIPayload = {
     };
   };
 };
+
+type ConservationValue = {
+  position: number;
+  value: string | number | null;
+  score: number;
+};
+type ConservationPayload = Record<
+  string,
+  {
+    entries: Record<string, Array<Array<ConservationValue>>>;
+    warnings: Array<string>;
+  }
+>;
+
 type WikipediaPayload = {
   parse: {
     title: string;
@@ -431,3 +445,15 @@ type ProtVistaLocation = {
   };
   description?: string;
 };
+
+type ProteinViewerData<Feature = unknown> = Array<
+  [
+    string,
+    Array<Feature>,
+    { component: string; attributes: Record<string, string> }
+  ]
+>;
+type ProteinViewerDataObject<Feature = unknown> = Record<
+  string,
+  Array<Feature>
+>;

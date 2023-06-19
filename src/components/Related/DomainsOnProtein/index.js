@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-param-reassign */
-import React, { PureComponent, useEffect } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -23,6 +23,12 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
 import EdgeCase from 'components/EdgeCase';
 
+import ConservationProviderLoaded, {
+  ConservationProvider,
+  mergeConservationData,
+  // $FlowFixMe
+} from './ConservationProvider';
+
 import loadable from 'higherOrder/loadable';
 
 import { foundationPartial } from 'styles/foundation';
@@ -30,7 +36,6 @@ import ipro from 'styles/interpro-new.css';
 
 const f = foundationPartial(ipro);
 
-const CONSERVATION_WINDOW = 25;
 const PIRSR_ACCESSION_LENGTH = 11;
 const PIRSF_PREFIX_LENGTH = 5;
 const HTTP_OK = 200;
@@ -40,148 +45,6 @@ const ProteinViewer = loadable({
     // $FlowFixMe
     import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
 });
-
-const processConservationData = (entry, match) => {
-  const halfWindow = Math.trunc(CONSERVATION_WINDOW / 2);
-  const scores = [];
-
-  let window = [];
-  for (let i = 0; i < match.length; i++) {
-    if (i < halfWindow) {
-      // First half of first window [0-11] -> window length varies from 13 to 24
-      window = match.slice(0, i + halfWindow + 1);
-    } else if (i >= halfWindow && i < match.length - halfWindow) {
-      // Rest takes fixed length of 25. [-12--element--12]
-      window = match.slice(i - halfWindow, i + halfWindow + 1);
-    } else {
-      // Last half of last window [seqLength-12 to seqLength] -> window length varies from 24 to 13
-      window = match.slice(i - halfWindow, match.length);
-    }
-    scores.push({
-      ...match[i],
-      value: (
-        window.reduce((acc, residue) => {
-          let score = residue.score;
-          if (score < 0)
-            // In case of negative score, treat it as 0
-            score = 0;
-          return acc + score;
-        }, 0) / window.length
-      ).toFixed(2),
-    });
-  }
-  return scores;
-};
-
-const addExistingEntryToConservationResults = (
-  data /*: {[string]: Array<Object>} */,
-  conservationDatabases /*: Array<string> */,
-  entryWithMostCoverage /*: string */,
-) => {
-  /* eslint-disable max-depth */
-  for (const matches of [data.domain, data.family, data.repeat]) {
-    if (matches) {
-      for (const entry of matches) {
-        for (const child of entry.children) {
-          if (
-            conservationDatabases.includes(child.source_database) &&
-            child.accession === entryWithMostCoverage
-          ) {
-            data.match_conservation.push(child);
-          }
-        }
-      }
-    }
-  }
-  /* eslint-enable max-depth */
-
-  for (const entry of data.unintegrated) {
-    if (
-      entry &&
-      conservationDatabases.includes(entry.source_database) &&
-      entry.accession === entryWithMostCoverage
-    ) {
-      data.match_conservation.push(entry);
-    }
-  }
-};
-
-// eslint-disable-next-line max-statements
-const mergeConservationData = (
-  data /*: {[string]: Array<Object>} */,
-  conservationData /*: { [string]: {entries: ?{}, warnings: Array<string>}} */,
-) => {
-  data.match_conservation = [];
-  const conservationDatabases = [];
-  let entryWithMostCoverage = '';
-  for (const db of Object.keys(conservationData)) {
-    if (db.toLowerCase() !== 'sequence') {
-      conservationDatabases.push(db);
-      const dbConservationScores = {
-        category: 'Sequence conservation',
-        type: 'sequence_conservation',
-        accession: db,
-        data: [],
-        warnings: [],
-      };
-      const entries = conservationData[db].entries;
-      /* eslint-disable max-depth */
-      if (entries) {
-        let coverage = 0;
-        // Add only the entry match that covers the most (longest)
-        for (const entry of Object.keys(entries)) {
-          const matches = entries[entry];
-          const length = matches.reduce((sum, array) => sum + array.length, 0);
-          if (length > coverage) {
-            coverage = length;
-            entryWithMostCoverage = entry;
-          }
-        }
-
-        for (const entry of Object.keys(entries)) {
-          if (entry === entryWithMostCoverage) {
-            const values = [];
-            let end = 0;
-            for (const match of entries[entry]) {
-              if (values.length === 0) {
-                end = match[match.length - 1].position;
-              } else {
-                // Fill with empty values to render gaps in between in the line graph
-                if (match[0].position - end > 1) {
-                  for (let i = end; i < match[0].position; i++) {
-                    const nextPosition = i + 1;
-                    values.push({ position: nextPosition, value: null });
-                  }
-                }
-              }
-              const conservationAverage = processConservationData(entry, match);
-              values.push(...conservationAverage);
-            }
-            dbConservationScores.data.push({
-              name: entry,
-              // eslint-disable-next-line no-magic-numbers
-              range: [0, 2.5],
-              colour: '#006400',
-              values: values,
-            });
-          }
-        }
-        const warnings = conservationData[db].warnings;
-        if (warnings) {
-          dbConservationScores.warnings = warnings;
-        }
-        data.match_conservation?.push(dbConservationScores);
-
-        // add data from integrated and unintegrated matches to panel for ease of use
-        addExistingEntryToConservationResults(
-          data,
-          conservationDatabases,
-          entryWithMostCoverage,
-        );
-      }
-    }
-  }
-};
 
 const splitMobiFeatures = (feature) => {
   const newFeatures = {};
@@ -439,55 +302,6 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
     );
   }
 }
-
-const ConservationProvider = (
-  { handleLoaded, handleError, dataConservation } /*: {
-    handleLoaded: function,
-    handleError: function,
-    dataConservation?: { ok: boolean, loading: boolean, payload: {}} } */,
-) => {
-  useEffect(() => {
-    if (dataConservation && !dataConservation.loading) {
-      if (dataConservation.ok && dataConservation.payload) {
-        handleLoaded(dataConservation.payload);
-      } else {
-        handleError(dataConservation);
-      }
-    }
-  });
-  return null;
-};
-ConservationProvider.propTypes = {
-  handleLoaded: T.func,
-  handleError: T.func,
-  dataConservation: T.shape({
-    ok: T.bool,
-    loading: T.bool,
-    payload: T.object,
-  }),
-};
-
-const getConservationURL = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.description,
-  ({ protocol, hostname, port, root }, description) => {
-    const url = format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + descriptionToPath(description),
-      query: {
-        conservation: 'panther',
-      },
-    });
-    return url;
-  },
-);
-
-const ConservationProviderLoaded = loadData({
-  getUrl: getConservationURL,
-  propNamespace: 'Conservation',
-})(ConservationProvider);
 
 /*::
 type DPWithoutDataProps = {

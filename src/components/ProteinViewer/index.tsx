@@ -65,13 +65,6 @@ export type ExtendedFeature = Feature & {
   children?: Array<ExtendedFeature>;
   warnings?: Array<string>;
 };
-export type ProteinViewerData = Array<
-  [
-    string,
-    Array<Feature>,
-    { component: string; attributes: Record<string, string> }
-  ]
->;
 
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
@@ -212,7 +205,7 @@ export const ProteinViewer = ({
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
-              {(data as unknown as ProteinViewerData)
+              {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
 
                 .map(([type, entries, component]) => {
