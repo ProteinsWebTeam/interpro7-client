@@ -17,7 +17,6 @@ import { processData } from 'components/ProteinViewer/utils';
 
 import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
-import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProtVistaForAlphaFold';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
@@ -26,10 +25,12 @@ import EdgeCase from 'components/EdgeCase';
 import ConservationProviderLoaded, {
   ConservationProvider,
   mergeConservationData,
+  isConservationDataAvailable,
   // $FlowFixMe
 } from './ConservationProvider';
 
-import loadable from 'higherOrder/loadable';
+// $FlowFixMe
+import DomainsOnProteinLoaded from './DomainsOnProteinLoaded';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -39,12 +40,6 @@ const f = foundationPartial(ipro);
 const PIRSR_ACCESSION_LENGTH = 11;
 const PIRSF_PREFIX_LENGTH = 5;
 const HTTP_OK = 200;
-
-const ProteinViewer = loadable({
-  loader: () =>
-    // $FlowFixMe
-    import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
-});
 
 const splitMobiFeatures = (feature) => {
   const newFeatures = {};
@@ -197,37 +192,6 @@ export const groupByEntryType = (interpro) => {
   return groups;
 };
 
-const UNDERSCORE = /_/g;
-export const byEntryType = ([a], [b]) => {
-  const firsts = [
-    'family',
-    'domain',
-    'homologous_superfamily',
-    'repeat',
-    'conserved_site',
-    'active_site',
-    'binding_site',
-    'ptm',
-    'unintegrated',
-  ];
-  const lasts = [
-    'other_residues',
-    'residues',
-    'features',
-    'predictions',
-    'match_conservation',
-  ];
-  for (const label of firsts) {
-    if (a.toLowerCase() === label) return -1;
-    if (b.toLowerCase() === label) return 1;
-  }
-  for (const l of lasts) {
-    if (a.toLowerCase() === l) return 1;
-    if (b.toLowerCase() === l) return -1;
-  }
-  return a > b ? 1 : 0;
-};
-
 const getExtraURL = (query /*: string */) =>
   createSelector(
     (state) => state.settings.api,
@@ -245,63 +209,6 @@ const getExtraURL = (query /*: string */) =>
       return url;
     },
   );
-
-/*:: type Props = {
-  mainData: Object,
-  dataMerged: Object,
-  dataConfidence?: Object,
-  conservationError?: string|null,
-  showConservationButton?: boolean,
-  handleConservationLoad?: function,
-  children: any,
-}; */
-export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    mainData: T.object.isRequired,
-    dataMerged: T.object.isRequired,
-    dataConfidence: T.object,
-    conservationError: T.string,
-    showConservationButton: T.bool,
-    handleConservationLoad: T.func,
-    children: T.any,
-  };
-
-  render() {
-    const {
-      mainData,
-      dataMerged,
-      dataConfidence,
-      conservationError,
-      showConservationButton,
-      handleConservationLoad,
-    } = this.props;
-    const sortedData = Object.entries(dataMerged)
-      .sort(byEntryType)
-      // “Binding_site” -> “Binding site”
-      .map(([key, value]) => [
-        key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
-        value,
-      ]);
-    const protein = mainData.metadata || mainData.payload.metadata;
-    addConfidenceTrack(dataConfidence, protein.accession, sortedData);
-
-    return (
-      <>
-        <ProteinViewer
-          protein={protein}
-          data={sortedData}
-          title="Entry matches to this protein"
-          showConservationButton={showConservationButton}
-          handleConservationLoad={handleConservationLoad}
-          conservationError={conservationError}
-        >
-          {' '}
-          {this.props.children}
-        </ProteinViewer>
-      </>
-    );
-  }
-}
 
 /*::
 type DPWithoutDataProps = {
@@ -354,53 +261,8 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     }
   }
 
-  // eslint-disable-next-line no-magic-numbers
-  static MAX_PROTEIN_LENGTH_FOR_HMMER = 5000;
-
   fetchConservationData = () => {
     this.setState({ generateConservationData: true });
-  };
-
-  isConservationDataAvailable = (data, proteinData) => {
-    // HMMER can't generate conservation data for unreviewed proteins
-    if (proteinData.source_database === 'unreviewed') return false;
-
-    // check if conservation data has already been generated
-    if (this.state.dataConservation) return false;
-
-    // check protein length is less than HmmerWeb length limit
-    if (data.domain && data.domain.length > 0) {
-      if (
-        data.domain[0].protein_length >=
-        DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER
-      )
-        return false;
-    }
-    if (data.unintegrated && data.unintegrated.length > 0) {
-      if (
-        data.unintegrated[0].protein_length >=
-        DomainOnProteinWithoutData.MAX_PROTEIN_LENGTH_FOR_HMMER
-      )
-        return false;
-    }
-
-    // ensure there is a panther entry somewhere in the matches
-    /* eslint-disable max-depth */
-    for (const matches of [data.domain, data.family, data.repeat]) {
-      if (matches) {
-        for (const entry of matches) {
-          for (const memberDatabase of Object.keys(entry.member_databases)) {
-            if (memberDatabase.toLowerCase() === 'panther') return true;
-          }
-        }
-      }
-    }
-    /* eslint-enable max-depth */
-    for (const entry of data.unintegrated) {
-      if (entry.source_database.toLowerCase() === 'panther') return true;
-    }
-
-    return false;
   };
 
   /* eslint-disable complexity  */
@@ -464,10 +326,14 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
     ) {
       return <div className={f('callout')}>No entries match this protein.</div>;
     }
-    const showConservationButton = this.isConservationDataAvailable(
-      mergedData,
-      mainData.metadata,
-    );
+    const showConservationButton =
+      // check if conservation data has already been generated
+      !this.state.dataConservation &&
+      // or if the conditions to calculate conservation are met.
+      isConservationDataAvailable(
+        mergedData,
+        mainData.metadata.source_database,
+      );
     const ConservationProviderElement = this.state.generateConservationData
       ? ConservationProviderLoaded
       : ConservationProvider;
@@ -504,7 +370,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
           )}
         </div>
 
-        <DomainOnProteinWithoutMergedData
+        <DomainsOnProteinLoaded
           mainData={mainData}
           dataMerged={mergedData}
           showConservationButton={showConservationButton}
@@ -513,7 +379,7 @@ export class DomainOnProteinWithoutData extends PureComponent /*:: <DPWithoutDat
           conservationError={this.state.errorConservation}
         >
           {this.props.children}
-        </DomainOnProteinWithoutMergedData>
+        </DomainsOnProteinLoaded>
       </>
     );
   }

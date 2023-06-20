@@ -213,3 +213,44 @@ export const mergeConservationData = (
     }
   }
 };
+
+const MAX_PROTEIN_LENGTH_FOR_HMMER = 5000;
+export const isConservationDataAvailable = (
+  data: ProteinViewerDataObject<{
+    protein_length: number;
+    member_databases: Record<string, string>;
+    source_database: string;
+  }>,
+  proteinDB: string
+) => {
+  // HMMER can't generate conservation data for unreviewed proteins
+  if (proteinDB === 'unreviewed') return false;
+
+  // check protein length is less than HmmerWeb length limit
+  if (data.domain && data.domain.length > 0) {
+    if (data.domain[0].protein_length >= MAX_PROTEIN_LENGTH_FOR_HMMER)
+      return false;
+  }
+  if (data.unintegrated && data.unintegrated.length > 0) {
+    if (data.unintegrated[0].protein_length >= MAX_PROTEIN_LENGTH_FOR_HMMER)
+      return false;
+  }
+
+  // ensure there is a panther entry somewhere in the matches
+  /* eslint-disable max-depth */
+  for (const matches of [data.domain, data.family, data.repeat]) {
+    if (matches) {
+      for (const entry of matches) {
+        for (const memberDatabase of Object.keys(entry.member_databases)) {
+          if (memberDatabase.toLowerCase() === 'panther') return true;
+        }
+      }
+    }
+  }
+  /* eslint-enable max-depth */
+  for (const entry of data.unintegrated) {
+    if (entry.source_database.toLowerCase() === 'panther') return true;
+  }
+
+  return false;
+};

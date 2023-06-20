@@ -8,10 +8,9 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
-import {
-  groupByEntryType,
-  byEntryType,
-} from 'components/Related/DomainsOnProtein';
+import { groupByEntryType } from 'components/Related/DomainsOnProtein';
+// $FlowFixMe
+import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';

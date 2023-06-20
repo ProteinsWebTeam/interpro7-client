@@ -23,7 +23,8 @@ import GoTerms from 'components/GoTerms';
 import Accession from 'components/Accession';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 import Length from 'components/Protein/Length';
-import { DomainOnProteinWithoutMergedData } from 'components/Related/DomainsOnProtein';
+// $FlowFixMe
+import DomainsOnProteinLoaded from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 import Actions from 'components/IPScan/Actions';
 import { getIProScanURL } from 'components/IPScan/Status';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
@@ -314,7 +315,7 @@ const SummaryIPScanJob = ({
 
       {['finished', 'imported file', 'saved in browser'].includes(status) && (
         <>
-          <DomainOnProteinWithoutMergedData
+          <DomainsOnProteinLoaded
             mainData={{ metadata }}
             dataMerged={mergedData}
           >
@@ -338,7 +339,7 @@ const SummaryIPScanJob = ({
                 ))}
               </ul>
             </Exporter>
-          </DomainOnProteinWithoutMergedData>
+          </DomainsOnProteinLoaded>
           <GoTerms terms={Array.from(goTerms.values())} type="protein" />
         </>
       )}
