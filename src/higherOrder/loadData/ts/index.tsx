@@ -186,7 +186,7 @@ const loadData = <Payload = unknown,>(params: Params) => {
           this.props.dataProgressInfo?.(this.#id, 1, weight);
 
           const msToRetry =
-            this.props.appState?.settings.navigation.secondsToRetry * MS;
+            (this.props.appState?.settings.navigation.secondsToRetry || 0) * MS;
           // Scheduling to retry because we got a 408
           if (response.status === TIMEOUT) {
             this.timeoutID = window.setTimeout(() => {

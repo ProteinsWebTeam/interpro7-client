@@ -5,7 +5,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import ProtVistaMatches from '../ProtVistaMatches';
 
-import protvista from 'components/ProtVista/style.css';
+import protvista from 'components/ProteinViewer/style.css';
 import { location2html } from 'utils/text';
 import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 // $FlowFixMe

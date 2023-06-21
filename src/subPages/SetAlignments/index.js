@@ -16,7 +16,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
-import protvista from 'components/ProtVista/style.css';
+import protvista from 'components/ProteinViewer/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 // import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';

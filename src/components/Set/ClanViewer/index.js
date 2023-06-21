@@ -8,6 +8,8 @@ import { goToCustomLocation } from 'actions/creators';
 
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { getTextForLabel } from 'utils/text';
+// $FlowFixMe
+import LabelBy from 'components/ProteinViewer/Options/LabelBy';
 
 import ClanViewerViz from 'clanviewer';
 import 'clanviewer/build/main.css';
@@ -16,7 +18,6 @@ import ZoomOverlay from 'components/ZoomOverlay';
 import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import style from '../Summary/style.css';
-import LabelBy from '../../ProtVista/Options/LabelBy';
 
 const f = foundationPartial(ebiGlobalStyles, style);
 

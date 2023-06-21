@@ -20,10 +20,12 @@ import { foundationPartial } from 'styles/foundation';
 import style from '../style.css';
 const f = foundationPartial(style);
 
-const ProtVista = loadable({
+const ProteinViewer = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
+    // $FlowFixMe
+    import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
 });
+
 /*::
   type Feature = {
     accession: string,
@@ -101,7 +103,7 @@ const Viewer = (
           <span className={f('key')}>Length:</span>{' '}
           <NumberComponent>{length}</NumberComponent>
         </header>
-        <ProtVista
+        <ProteinViewer
           protein={{ sequence, length: sequence.length }}
           data={dataProtvista}
           title="Entry matches to this Isoform"

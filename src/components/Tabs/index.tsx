@@ -1,4 +1,9 @@
-import React, { PureComponent, Children, ReactElement } from 'react';
+import React, {
+  PureComponent,
+  Children,
+  ReactElement,
+  PropsWithChildren,
+} from 'react';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -8,11 +13,10 @@ import style from './style.css';
 
 const css = cssBinder(fonts, ipro, style);
 
-type Props = {
+type Props = PropsWithChildren<{
   selectedTab?: string;
   onTabSelected?: (tab: string) => void;
-  children: any;
-};
+}>;
 
 type State = {
   activeTab: number;

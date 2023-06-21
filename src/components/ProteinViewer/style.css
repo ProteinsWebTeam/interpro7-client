@@ -1,0 +1,172 @@
+@import '../../styles/fonts.css';
+@import '../../styles/colors.css';
+@import '../../styles/timing.css';
+
+:root {
+  --track-space: 70vw;
+}
+
+@media screen and (max-width: 39.9375em) {
+  .view-options-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+.track-row {
+  display: flex;
+}
+.track-component {
+  width: var(--track-space, 80%);
+  background: #fafafa;
+  cursor: move;
+}
+
+.track-length {
+  display: flex;
+  justify-content: space-between;
+  & > .note {
+    font-size: 0.75rem;
+  }
+
+  & > .length {
+    font-family: monospace;
+    margin-right: -0.5rem;
+  }
+}
+
+/*blobs*/
+
+.sequence-conservation-label {
+  margin-top: 1.3em;
+}
+
+.sequence-conservation {
+  cursor: pointer;
+}
+
+.residue.track-component path:global(.feature) {
+  stroke: transparent;
+  transition: fill 0.2s ease-out;
+}
+
+.conservation-warning {
+  text-align: center;
+  cursor: default;
+}
+
+.aligned-to-track-component {
+  width: var(--track-space, 85%);
+  line-height: 0;
+}
+
+@media print {
+  @page {
+    size: landscape;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+
+/*resize elements for small screens in order to see full IPR number*/
+@media screen and (max-width: 39.9375em) {
+  .aligned-to-track-component,
+  .track-component {
+    width: 80%;
+  }
+  .track-accession {
+    width: 20%;
+  }
+}
+
+.hideCategory {
+  display: none;
+}
+
+.track-component path:global(.child-fragment) {
+  stroke-width: 1px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+g:global(.child-location-group.clg-0) path {
+  stroke: #aed0e4;
+}
+g:global(.child-location-group.clg-1) path {
+  stroke: #1ba3b6;
+}
+g:global(.child-location-group.clg-2) path {
+  stroke: #d0aee4;
+}
+g:global(.child-location-group.clg-3) path {
+  stroke: #a31bb6;
+}
+g:global(.child-location-group.clg-4) path {
+  stroke: #e4d0ae;
+}
+g:global(.child-location-group.clg-5) path {
+  stroke: #b6a31b;
+}
+
+.track-component path:global(.child-fragment):hover {
+  opacity: 0.7;
+}
+.track-component line:global(.cover) {
+  opacity: 0.5;
+}
+/*remove stroke when residues track*/
+.track-component :global(.residues-group) path:global(.feature) {
+  stroke-width: 0;
+}
+
+.fullscreenable:-webkit-full-screen .fullscreen {
+  display: none; /*is this necessary?*/
+}
+
+/*define fullscreen bgd otherwise dark by default - no need for IE*/
+.fullscreenable:-webkit-full-screen {
+  width: 100%;
+  background-color: white;
+}
+.fullscreenable:-moz-full-screen {
+  background-color: white;
+}
+
+.track-in-table text {
+  fill: var(--colors-graydark);
+}
+/*temp while we can't use the direct class .sequence*/
+.track-in-table protvista-sequence svg > g:nth-of-type(2) text {
+  transform: TranslateY(6px); /*temp fix when sequence appears*/
+}
+.track-in-table .track-component,
+.track-in-table .aligned-to-track-component {
+  width: 100%;
+  background: transparent;
+}
+/*keep nth-of-type to make it work with multi track as for structure*/
+.track-in-table .track-component:nth-of-type(2),
+.track-in-table .track-row:nth-of-type(2) {
+  margin-top: -18px;
+}
+
+.conservation-placeholder-component {
+  height: 4em;
+  display: flex;
+  justify-content: center;
+  & > div {
+    font-size: 1.2rem;
+  }
+}
+
+.protvista div:global(.zoom-button-div) {
+  display: inline;
+  margin-right: 0.25rem;
+}
+
+.conservation-error {
+  margin: 1rem;
+}
+
+nightingale-manager {
+  width: 100%;
+}

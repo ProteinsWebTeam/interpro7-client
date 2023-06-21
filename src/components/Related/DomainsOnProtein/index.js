@@ -12,8 +12,8 @@ import {
   getConfidenceURLFromPayload,
   // $FlowFixMe
 } from 'components/AlphaFold/selectors';
-
-import { processData } from 'components/ProtVista/utils';
+// $FlowFixMe
+import { processData } from 'components/ProteinViewer/utils';
 
 import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
@@ -35,9 +35,10 @@ const PIRSR_ACCESSION_LENGTH = 11;
 const PIRSF_PREFIX_LENGTH = 5;
 const HTTP_OK = 200;
 
-const ProtVista = loadable({
+const ProteinViewer = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
+    // $FlowFixMe
+    import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
 });
 
 const processConservationData = (entry, match) => {
@@ -422,17 +423,19 @@ export class DomainOnProteinWithoutMergedData extends PureComponent /*:: <Props>
     addConfidenceTrack(dataConfidence, protein.accession, sortedData);
 
     return (
-      <ProtVista
-        protein={protein}
-        data={sortedData}
-        title="Entry matches to this protein"
-        id={mainData.metadata.accession || mainData.payload.metadata.accession}
-        showConservationButton={showConservationButton}
-        handleConservationLoad={handleConservationLoad}
-        conservationError={conservationError}
-      >
-        {this.props.children}
-      </ProtVista>
+      <>
+        <ProteinViewer
+          protein={protein}
+          data={sortedData}
+          title="Entry matches to this protein"
+          showConservationButton={showConservationButton}
+          handleConservationLoad={handleConservationLoad}
+          conservationError={conservationError}
+        >
+          {' '}
+          {this.props.children}
+        </ProteinViewer>
+      </>
     );
   }
 }
