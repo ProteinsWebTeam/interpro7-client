@@ -89,11 +89,6 @@ export const processConservationData = (match: Array<ConservationValue>) => {
   return scores;
 };
 
-type MinimalFeature = {
-  accession: string;
-  source_database?: string;
-  children?: Array<{ accession: string; source_database: string }>;
-};
 export const addExistingEntryToConservationResults = (
   data: ProteinViewerDataObject<MinimalFeature>,
   conservationDatabases: Array<string>,

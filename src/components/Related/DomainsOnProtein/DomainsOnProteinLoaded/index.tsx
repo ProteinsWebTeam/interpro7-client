@@ -43,7 +43,15 @@ export const byEntryType = (
 };
 
 type Props = PropsWithChildren<{
-  mainData: ProteinEntryPayload | { payload: ProteinEntryPayload };
+  mainData:
+    | {
+        metadata: ProteinMetadata;
+      }
+    | {
+        payload: {
+          metadata: ProteinMetadata;
+        };
+      };
   dataMerged: ProteinViewerDataObject;
   dataConfidence?: Object;
   conservationError?: string | null;

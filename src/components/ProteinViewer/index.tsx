@@ -49,6 +49,7 @@ type Residue = {
 export type ExtendedFeatureLocation = FeatureLocation & {
   confidence?: number;
   description?: string;
+  seq_feature?: string;
 };
 export type ExtendedFeature = Feature & {
   data?: unknown;

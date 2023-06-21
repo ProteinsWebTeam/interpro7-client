@@ -13,6 +13,7 @@ import FileExporter from 'components/Matches/FileExporter';
 
 // $FlowFixMe
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
+// $FlowFixMe
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
 import loadable from 'higherOrder/loadable';

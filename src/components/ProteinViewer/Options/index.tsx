@@ -100,7 +100,7 @@ const ProteinViewerOptions = ({
             base.appendChild(style);
           } else
             console.warn(
-              "Couldn't setups the style for the protvista-saver snapshot "
+              "Couldn't setups the style for the nightingale-saver snapshot "
             );
         };
         saver.postSave = () => {

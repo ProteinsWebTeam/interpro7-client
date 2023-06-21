@@ -287,9 +287,9 @@ type ProteinEntryPayload = {
     entry_protein_locations: [
       {
         fragments: Array<{
-          start: 52;
-          end: 127;
-          'dc-status': 'CONTINUOUS';
+          start: number;
+          end: number;
+          'dc-status'?: string;
         }>;
         model: string | null;
         score: number | null;
@@ -415,6 +415,9 @@ type BaseLinkProps = {
 
 type ActiveClassProp = string | ((location: unknown) => string);
 
+type ErrorPayload = {
+  detail: string;
+};
 type DataKey = `data${string}`;
 type IsStaleKey = `isStale${string}`;
 // Props to be injected in the wrapped component
@@ -433,6 +436,7 @@ type ProtVistaFragment = {
   end: number;
   color?: string;
   shape?: string;
+  residues?: string;
 };
 
 type ProtVistaLocation = {
@@ -444,6 +448,7 @@ type ProtVistaLocation = {
     accession: string;
   };
   description?: string;
+  accession?: string;
 };
 
 type ProteinViewerData<Feature = unknown> = Array<
@@ -457,3 +462,28 @@ type ProteinViewerDataObject<Feature = unknown> = Record<
   string,
   Array<Feature>
 >;
+
+type ResiduesPayload = Record<
+  string,
+  {
+    accession: string;
+    source_database: string;
+    name: string;
+    locations: Array<ProtVistaLocation>;
+  }
+>;
+type MinimalFeature = {
+  accession: string;
+  source_database?: string;
+  children?: Array<{ accession: string; source_database: string }>;
+};
+type ExpectedPayload<M = Metadata> = {
+  metadata: M;
+  extra_fields?: Record<string, unknown>;
+} & {
+  [matches: string]: Array<Record<string, unknown>>;
+};
+type Data<M = Metadata> = {
+  data: RequestedData<PayloadList<ExpectedPayload<M>>>;
+  endpoint: Endpoint;
+};
