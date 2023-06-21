@@ -79,6 +79,7 @@ export class _Link extends PureComponent /*:: <Props> */ {
     className: T.string,
     activeClass: T.oneOfType([T.string, T.func]),
     withReferrer: T.bool,
+    download: T.string,
   };
 
   handleClick = (event) => {

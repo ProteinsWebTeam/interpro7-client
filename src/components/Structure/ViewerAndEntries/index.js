@@ -11,6 +11,7 @@ import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 
 import ProtVistaForStructure from './ProtVistaForStructures';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
+// $FlowFixMe
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import MemberDBSelector from 'components/MemberDBSelector';
+// $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import NumberComponent from 'components/NumberComponent';
 // $FlowFixMe

@@ -19,7 +19,7 @@ type Props = {
 };
 class Description extends PureComponent<Props> {
   render() {
-    const { textBlocks, literature, accession, withoutIDs } = this.props;
+    const { textBlocks, literature, withoutIDs } = this.props;
     const sections = textBlocks.map((e) => {
       return transformFormatted(e) as string[];
     });

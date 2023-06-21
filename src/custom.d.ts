@@ -3,6 +3,16 @@ declare module '*.css' {
   const content: any;
   export default content;
 }
+declare module '*.avif' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
+declare module '*.png' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
   let InterproEntry: InterProEntryProps;
@@ -17,7 +27,60 @@ declare namespace JSX {
   }
 }
 
-type GlobalState = Record<string, any>; // TODO: replace for redux state type
+type GlobalState = {
+  customLocation: InterProLocation;
+  [other: string]: any;
+}; // TODO: replace for redux state type
+
+type Endpoint =
+  | 'entry'
+  | 'protein'
+  | 'structure'
+  | 'taxonomy'
+  | 'proteome'
+  | 'set';
+
+type EndpointLocation = {
+  isFilter: boolean | null;
+  db: string;
+  accession: string;
+  detail: string;
+  order: number | null;
+};
+type InterProDescription = {
+  main: {
+    key: Endpoint | 'search' | 'result' | 'other';
+    numberOfFilters: 0;
+  };
+  entry: EndpointLocation & {
+    integration: string | null;
+    memberDB: string | null;
+    memberDBAccession: string | null;
+  };
+  protein: EndpointLocation;
+  structure: EndpointLocation & {
+    chain: string | null;
+  };
+  taxonomy: EndpointLocation;
+  proteome: EndpointLocation;
+  set: EndpointLocation;
+  search: {
+    type: string | null;
+    value: string | null;
+  };
+  result: {
+    type: string | null;
+    accession: string | null;
+    detail: string | null;
+  };
+  other: string[];
+};
+type InterProLocation = {
+  description: InterProDescription;
+  search: Record<string, string>;
+  hash: string;
+  state: Record<string, string>;
+};
 
 interface InterProTypeProps
   extends React.DetailedHTMLProps<
@@ -106,15 +169,42 @@ type CrossReference = {
 type LiteratureMetadata = {
   [PubID: string]: Reference;
 };
-type EntryMetadata = {
+
+interface Metadata {
   accession: string;
-  name: { name: string; short?: string };
   source_database: string;
+  description: Array<string>;
+  counters: {
+    [resource: string]:
+      | number
+      | {
+          [db: string]: number;
+        };
+  };
+  go_terms?: Array<GOTerm>;
+}
+
+type MemberDB =
+  | 'cathgene3d'
+  | 'cdd'
+  | 'hamap'
+  | 'panther'
+  | 'pfam'
+  | 'pirsf'
+  | 'prints'
+  | 'prosite'
+  | 'profile'
+  | 'sfld'
+  | 'smart'
+  | 'ssf'
+  | 'tigrfams'
+  | 'ncbifam';
+interface EntryMetadata extends Metadata {
+  name: { name: string; short?: string };
+  source_database: 'interpro' | MemberDB;
   type: string;
   integrated: string | null;
   member_databases: ContributingEntries;
-  go_terms: Array<GOTerm>;
-  description: Array<string>;
   literature: LiteratureMetadata;
   hierarchy?: InterProHierarchyType;
   overlaps_with?: Array<{
@@ -124,13 +214,6 @@ type EntryMetadata = {
   }> | null;
   cross_references: Record<string, CrossReference>;
   wikipedia: WikipediaEntry;
-  counters: {
-    [resource: string]:
-      | number
-      | {
-          [db: string]: number;
-        };
-  };
   set_info?: {
     accession: string;
     name: string;
@@ -139,6 +222,45 @@ type EntryMetadata = {
     accession: string;
     name: string;
   };
+}
+interface ProteinMetadata extends Metadata {
+  id?: string;
+  name: string;
+  source_database: 'uniprot' | 'reviewed' | 'unreviewed';
+  length: number;
+  sequence: string;
+  proteome: string;
+  gene: string;
+  protein_evidence: number;
+  is_fragment: boolean;
+  ida_accession: string;
+}
+type PayloadList<Payload> = {
+  count: number;
+  next?: string | null;
+  previous?: string | null;
+  results: Array<Payload>;
+};
+type ProteinEntryPayload = {
+  metadata: ProteinMetadata;
+  entries: Array<{
+    accession: string;
+    entry_protein_locations: [
+      {
+        fragments: Array<{
+          start: 52;
+          end: 127;
+          'dc-status': 'CONTINUOUS';
+        }>;
+        model: string | null;
+        score: number | null;
+      }
+    ];
+    protein_length: number;
+    source_database: string;
+    entry_type: string;
+    entry_integrated: string | null;
+  }>;
 };
 
 type DBInfo = {
@@ -163,7 +285,7 @@ type RequestedData<Payload> = {
 
 type RootAPIPayload = {
   databases: DBsInfo;
-  endpoints: Array<string>;
+  endpoints: Array<Endpoint>;
   sources: {
     mysql: {
       server: string;
@@ -185,12 +307,33 @@ type WikipediaPayload = {
     };
   };
 };
+type AlphafoldPayload = Array<{
+  entryId: string;
+  gene: string;
+  uniprotAccession: string;
+  uniprotId: string;
+  uniprotDescription: string;
+  taxId: number;
+  organismScientificName: string;
+  uniprotStart: number;
+  uniprotEnd: number;
+  uniprotSequence: string;
+  modelCreatedDate: string;
+  latestVersion: number;
+  allVersions: number[];
+  cifUrl: string;
+  bcifUrl: string;
+  pdbUrl: string;
+  paeImageUrl: string;
+  paeDocUrl: string;
+}>;
 
 type ParsedURLServer = {
   protocol: string;
   hostname: string;
   port: number;
   root: string;
+  query: string;
 };
 
 type FetchOptions = {
@@ -228,6 +371,6 @@ type LoadDataProps<Payload = unknown> = {
 };
 
 type GetUrl<Props = unknown> = (
-  params: Record<string, unknown>,
+  params: GlobalState | {},
   props?: Props
 ) => string | null;

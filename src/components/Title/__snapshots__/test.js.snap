@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Title /> For a protein should render a title component correctly 1`] = `
+<div
+  className="title"
+  data-testid="titlebar"
+>
+  <Helmet
+    defer={true}
+    encodeSpecialCharacters={true}
+    prioritizeSeoTags={false}
+    titleTemplate="VATB_METVS (A6UP55) -   protein - InterPro"
+  >
+    <title>
+      InterPro
+    </title>
+  </Helmet>
+  <div
+    className="title-name"
+  >
+    <div
+      className="title-fav"
+    >
+      <AccessionTag
+        accession="A6UP55"
+        db="uniprot"
+        isIPScanResult={false}
+        mainType="protein"
+      />
+      <h3
+        className=""
+      >
+        VATB_METVS
+         
+      </h3>
+    </div>
+    <TitleTag
+      db="uniprot"
+      dbLabel="Uniprot KB"
+      mainType="protein"
+    />
+  </div>
+  <FragmentTag
+    isFragment={false}
+  />
+</div>
+`;
+
+exports[`<Title /> For a structure should render a title component correctly 1`] = `
+<div
+  className="title"
+  data-testid="titlebar"
+>
+  <Helmet
+    defer={true}
+    encodeSpecialCharacters={true}
+    prioritizeSeoTags={false}
+    titleTemplate="RING-domain heterodimer (1JM7) -   structure - InterPro"
+  >
+    <title>
+      InterPro
+    </title>
+  </Helmet>
+  <div
+    className="title-name"
+  >
+    <div
+      className="title-fav"
+    >
+      <AccessionTag
+        accession="1JM7"
+        db="pdb"
+        isIPScanResult={false}
+        mainType="structure"
+      />
+      <h3
+        className=""
+      >
+        RING-domain heterodimer
+         
+      </h3>
+    </div>
+    <TitleTag
+      db="pdb"
+      dbLabel="PDB"
+      mainType="structure"
+    />
+  </div>
+  <FragmentTag
+    isFragment={false}
+  />
+</div>
+`;
+
+exports[`<Title /> For an entry should render a title component correctly 1`] = `
+<div
+  className="title"
+  data-testid="titlebar"
+>
+  <div
+    className="icon-container"
+  >
+    <MemberSymbol
+      filter={false}
+      includeLink={true}
+      svg={false}
+      type="pfam"
+    />
+  </div>
+  <Helmet
+    defer={true}
+    encodeSpecialCharacters={true}
+    prioritizeSeoTags={false}
+    titleTemplate="Piwi domain (PF02171) - Pfam entry - InterPro"
+  >
+    <title>
+      InterPro
+    </title>
+  </Helmet>
+  <div
+    className="title-name"
+  >
+    <div
+      className="title-fav"
+    >
+      <AccessionTag
+        accession="PF02171"
+        db="pfam"
+        isIPScanResult={false}
+        mainType="entry"
+        type="domain"
+      />
+      <h3
+        className=""
+      >
+        Piwi domain
+         
+      </h3>
+    </div>
+    <TitleTag
+      db="pfam"
+      dbLabel="Pfam"
+      mainType="entry"
+    />
+  </div>
+  <FragmentTag
+    isFragment={false}
+  />
+</div>
+`;

@@ -162,8 +162,8 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
 
 const getWikiUrl = createSelector(
   (state: GlobalState) => state.settings.wikipedia,
-  (_state: unknown, props?: WikipediaEntry) => props?.title,
-  ({ protocol, hostname, port, root }, title) => {
+  (_state: GlobalState, props?: WikipediaEntry) => props?.title,
+  ({ protocol, hostname, port, root }: ParsedURLServer, title?: string) => {
     return format({
       protocol,
       hostname,
@@ -179,4 +179,4 @@ const getWikiUrl = createSelector(
     });
   }
 );
-export default loadData({ getUrl: getWikiUrl } as Params)(Wikipedia);
+export default loadData(getWikiUrl as Params)(Wikipedia);

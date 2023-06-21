@@ -1,9 +1,7 @@
-// @flow
 import React, { useEffect, useRef, useState } from 'react';
-import T from 'prop-types';
 
-import loadData from 'higherOrder/loadData';
-
+import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'higherOrder/loadData/extract-params';
 import AlphaFoldModel from 'components/AlphaFold/Model';
 import ProteinTable, {
   getUrl,
@@ -12,44 +10,52 @@ import ProteinTable, {
 import ProtVistaForAlphaFold from 'components/Structure/ViewerAndEntries/ProtVistaForAlphaFold';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import { foundationPartial } from 'styles/foundation';
-import ipro from 'styles/interpro-new.css';
+import cssBinder from 'styles/cssBinder';
+import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import forSplit from 'components/Structure/ViewerAndEntries/style.css';
 
-const f = foundationPartial(ipro, fonts, forSplit);
+const css = cssBinder(ipro, fonts, forSplit);
 
-const AlphaFoldModelSubPage = ({ data, description }) => {
-  const mainAccession = description[description.main.key].accession;
+type Props = {
+  description: InterProDescription;
+};
+interface LoadedProps
+  extends Props,
+    LoadDataProps<PayloadList<ProteinEntryPayload>> {}
+
+const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
+  const mainAccession = description[description.main.key as Endpoint].accession;
   const mainType = description.main.key.toLowerCase();
-  const container = useRef();
-  const [selectionsInModel, setSelectionsInModel] = useState(null);
+  const container = useRef<HTMLDivElement>(null);
+  const [selectionsInModel, setSelectionsInModel] =
+    useState<Array<unknown> | null>(null);
   const [proteinAcc, setProteinAcc] = useState('');
-  const [modelId, setModelId] = useState(null);
+  const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
-  const handleProteinChange = (value) => {
+  const handleProteinChange = (value: string) => {
     setProteinAcc(value);
     setModelId(null);
-    (container.current /*: any */)
-      .scrollIntoView();
+    container.current?.scrollIntoView();
   };
-  const handleModelChange = (value) => {
+  const handleModelChange = (value: string) => {
     setModelId(value);
   };
 
   useEffect(() => {
     if (mainType === 'entry') {
       // Take the list of matched UniProt matches and assign the first one to protein accession
-      if (data?.payload?.count > 0)
-        setProteinAcc(data.payload.results[0].metadata.accession);
+      if ((data?.payload?.count || 0) > 0)
+        setProteinAcc(data.payload?.results[0].metadata.accession || '');
     } else setProteinAcc(mainAccession);
   }, [mainAccession, data]);
 
   if (data?.loading) return <Loading />;
-  const hasMultipleProteins = mainType === 'entry' && data.payload.count > 1;
+  const hasMultipleProteins =
+    mainType === 'entry' && (data.payload?.count || 0) > 1;
   return (
     <div
-      className={f('row', 'column', { 'split-view': isSplitScreen })}
+      className={css('row', 'column', { 'split-view': isSplitScreen })}
       ref={container}
     >
       {proteinAcc && (
@@ -61,7 +67,7 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
           selections={selectionsInModel}
           parentElement={container.current}
           isSplitScreen={isSplitScreen}
-          onSplitScreenChange={(value) => setSplitScreen(value)}
+          onSplitScreenChange={(value: boolean) => setSplitScreen(value)}
         />
       )}
       {mainType === 'entry' ? (
@@ -69,11 +75,12 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
       ) : (
         <div
           data-testid="alphafold-protvista"
-          className={f('protvista-container')}
+          className={css('protvista-container')}
         >
           <ProtVistaForAlphaFold
+            // @ts-ignore
             protein={proteinAcc}
-            onChangeSelection={(selection) => {
+            onChangeSelection={(selection: Array<unknown>) => {
               setSelectionsInModel(selection);
             }}
             isSplitScreen={isSplitScreen}
@@ -83,13 +90,8 @@ const AlphaFoldModelSubPage = ({ data, description }) => {
     </div>
   );
 };
-AlphaFoldModelSubPage.propTypes = {
-  data: T.object,
-  isStale: T.bool,
-  description: T.object,
-};
 
 export default loadData({
   getUrl: getUrl(false),
   mapStateToProps: mapStateToPropsForModels,
-})(AlphaFoldModelSubPage);
+} as Params)(AlphaFoldModelSubPage);
