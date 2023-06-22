@@ -7,36 +7,45 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { Params } from 'higherOrder/loadData/extract-params';
 
 type Props = {
+  generateData: boolean;
   handleLoaded: (payload: ConservationPayload) => void;
   handleError: (dataRequest: RequestedData<ConservationPayload>) => void;
 };
 
-interface LoadedProps extends Props, LoadDataProps<ConservationPayload> {}
+interface LoadedProps
+  extends Props,
+    LoadDataProps<ConservationPayload, 'Conservation'> {}
 
 export const ConservationProvider = ({
   handleLoaded,
   handleError,
   dataConservation,
+  generateData,
 }: LoadedProps) => {
   useEffect(() => {
-    if (dataConservation && !dataConservation.loading) {
-      if (dataConservation.ok && dataConservation.payload) {
-        handleLoaded(dataConservation.payload);
-      } else {
-        handleError(dataConservation);
+    if (generateData) {
+      if (dataConservation && !dataConservation.loading) {
+        if (dataConservation.ok && dataConservation.payload) {
+          handleLoaded(dataConservation.payload);
+        } else {
+          handleError(dataConservation);
+        }
       }
     }
-  });
+  }, [generateData, dataConservation]);
   return null;
 };
 
 const getConservationURL = createSelector(
   (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.customLocation.description,
+  (_: GlobalState, props?: Props) => !!props?.generateData,
   (
     { protocol, hostname, port, root }: ParsedURLServer,
-    description: InterProDescription
+    description: InterProDescription,
+    generateData: boolean
   ) => {
+    if (!generateData) return null;
     const url = format({
       protocol,
       hostname,
@@ -50,7 +59,7 @@ const getConservationURL = createSelector(
   }
 );
 
-export default loadData({
+export default loadData<ConservationPayload, 'Conservation'>({
   getUrl: getConservationURL,
   propNamespace: 'Conservation',
 } as Params)(ConservationProvider);
@@ -211,11 +220,7 @@ export const mergeConservationData = (
 
 const MAX_PROTEIN_LENGTH_FOR_HMMER = 5000;
 export const isConservationDataAvailable = (
-  data: ProteinViewerDataObject<{
-    protein_length: number;
-    member_databases: Record<string, string>;
-    source_database: string;
-  }>,
+  data: ProteinViewerDataObject<MinimalFeature>,
   proteinDB: string
 ) => {
   // HMMER can't generate conservation data for unreviewed proteins
@@ -223,11 +228,13 @@ export const isConservationDataAvailable = (
 
   // check protein length is less than HmmerWeb length limit
   if (data.domain && data.domain.length > 0) {
-    if (data.domain[0].protein_length >= MAX_PROTEIN_LENGTH_FOR_HMMER)
+    if ((data.domain[0].protein_length || 0) >= MAX_PROTEIN_LENGTH_FOR_HMMER)
       return false;
   }
   if (data.unintegrated && data.unintegrated.length > 0) {
-    if (data.unintegrated[0].protein_length >= MAX_PROTEIN_LENGTH_FOR_HMMER)
+    if (
+      (data.unintegrated[0].protein_length || 0) >= MAX_PROTEIN_LENGTH_FOR_HMMER
+    )
       return false;
   }
 
@@ -236,7 +243,9 @@ export const isConservationDataAvailable = (
   for (const matches of [data.domain, data.family, data.repeat]) {
     if (matches) {
       for (const entry of matches) {
-        for (const memberDatabase of Object.keys(entry.member_databases)) {
+        for (const memberDatabase of Object.keys(
+          entry.member_databases || {}
+        )) {
           if (memberDatabase.toLowerCase() === 'panther') return true;
         }
       }
@@ -244,7 +253,7 @@ export const isConservationDataAvailable = (
   }
   /* eslint-enable max-depth */
   for (const entry of data.unintegrated) {
-    if (entry.source_database.toLowerCase() === 'panther') return true;
+    if (entry.source_database?.toLowerCase() === 'panther') return true;
   }
 
   return false;

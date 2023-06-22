@@ -28,8 +28,9 @@ interface LoadedProps
 const SequenceCheck = ({
   alphaFoldSequence,
   alphaFoldCreationDate,
-  data: { loading, payload },
+  data,
 }: LoadedProps) => {
+  const { loading, payload } = data || {};
   const [showDiff, setShowDiff] = useState(false);
   if (!alphaFoldSequence || loading) return <Loading inline />;
   const uniprotSequence = payload?.metadata?.sequence || '';

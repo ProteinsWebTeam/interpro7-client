@@ -65,9 +65,10 @@ interface IntegratedProps
 
 const DescriptionFromIntegrated = ({
   integrated,
-  data: { loading, payload },
+  data,
   setIntegratedCitations = (_: string[]) => null,
 }: IntegratedProps) => {
+  const { loading, payload } = data || {};
   useEffect(() => {
     setIntegratedCitations(Object.keys(payload?.metadata?.literature || {}));
   }, [payload?.metadata?.literature]);

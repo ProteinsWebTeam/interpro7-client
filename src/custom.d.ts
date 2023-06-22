@@ -380,6 +380,11 @@ type AlphafoldPayload = Array<{
   paeImageUrl: string;
   paeDocUrl: string;
 }>;
+type AlphafoldConfidencePayload = {
+  residueNumber: Array<number>;
+  confidenceScore: Array<number>;
+  confidenceCategory: Array<string>;
+};
 
 type ParsedURLServer = {
   protocol: string;
@@ -420,10 +425,13 @@ type ErrorPayload = {
 };
 type DataKey = `data${string}`;
 type IsStaleKey = `isStale${string}`;
-// Props to be injected in the wrapped component
-type LoadDataProps<Payload = unknown> = {
-  [k: DataKey]: RequestedData<Payload>;
-  [k: IsStaleKey]: boolean;
+
+type LoadDataPropsBase<Payload = unknown> = {
+  data?: RequestedData<Payload>;
+  isStale?: boolean;
+};
+type LoadDataProps<Payload = unknown, Namespace extends string = ''> = {
+  [Property in keyof LoadDataPropsBase<Payload> as `${Property}${Namespace}`]: LoadDataPropsBase<Payload>[Property];
 };
 
 type GetUrl<Props = unknown> = (
@@ -437,6 +445,7 @@ type ProtVistaFragment = {
   color?: string;
   shape?: string;
   residues?: string;
+  seq_feature?: string;
 };
 
 type ProtVistaLocation = {
@@ -462,20 +471,30 @@ type ProteinViewerDataObject<Feature = unknown> = Record<
   string,
   Array<Feature>
 >;
+type ResidueMetadata = {
+  accession: string;
+  source_database: string;
+  name: string;
+  locations: Array<ProtVistaLocation>;
+};
+type ResiduesPayload = Record<string, ResidueMetadata>;
 
-type ResiduesPayload = Record<
+type ExtraFeaturesPayload = Record<
   string,
   {
     accession: string;
     source_database: string;
-    name: string;
     locations: Array<ProtVistaLocation>;
   }
 >;
 type MinimalFeature = {
   accession: string;
   source_database?: string;
+  name?: string;
+  protein_length?: number;
+  locations?: Array<ProtVistaLocation>;
   children?: Array<{ accession: string; source_database: string }>;
+  member_databases?: Record<string, unknown>;
 };
 type ExpectedPayload<M = Metadata> = {
   metadata: M;

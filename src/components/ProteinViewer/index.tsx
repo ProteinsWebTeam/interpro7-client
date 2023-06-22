@@ -72,12 +72,12 @@ type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 type Props = {
   protein: ProteinMetadata;
   title: string;
-  // data: ProteinViewerData;
+  data: ProteinViewerData;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
   conservationError?: string;
 };
-interface LoadedProps extends Props, LoadDataProps<RootAPIPayload> {}
+interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
 
 type CategoryVisibility = { [name: string]: boolean };
 
@@ -279,7 +279,7 @@ export const ProteinViewer = ({
   );
 };
 
-export default loadData<RootAPIPayload>({
+export default loadData<RootAPIPayload, 'Base'>({
   getUrl: getUrlForMeta,
   propNamespace: 'Base',
 })(ProteinViewer);

@@ -27,13 +27,13 @@ type ParserPart = {
   value: string | Record<string, string>;
 };
 const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
-  if (data.loading && !data.payload) return <Loading />;
+  if (data?.loading && !data?.payload) return <Loading />;
 
   const identifiers: Array<ParserPart> = [];
   const article: Record<string, string> = {};
   const properties = ['symbol', 'name', 'image', 'width', 'caption', 'pdb'];
 
-  const result = data.payload;
+  const result = data?.payload;
   if (!result) return null;
 
   const xmlParser = new XMLParser();
