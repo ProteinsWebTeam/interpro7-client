@@ -24,6 +24,7 @@ import ConservationProvider, {
 import mergeExtraFeatures from './mergeExtraFeatures';
 import mergeResidues from './mergeResidues';
 import DomainsOnProteinLoaded from './DomainsOnProteinLoaded';
+import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
 
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
@@ -63,6 +64,7 @@ type Props = PropsWithChildren<{
 }>;
 interface LoadedProps
   extends Props,
+    ExtenalSourcesProps,
     LoadDataProps<ExtraFeaturesPayload, 'Features'>,
     LoadDataProps<ResiduesPayload, 'Residues'>,
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
@@ -74,10 +76,10 @@ const DomainOnProteinWithoutData = ({
   mainData,
   dataResidues,
   dataFeatures,
-  // dataGenome3d,
   dataConfidence,
   onMatchesLoaded,
   children,
+  externalSourcesData,
 }: LoadedProps) => {
   const [conservation, setConservation] = useState<{
     generateData: boolean;
@@ -118,7 +120,6 @@ const DomainOnProteinWithoutData = ({
   const groups = groupByEntryType(
     interpro as Array<{ accession: string; type: string }>
   );
-  // const genome3d = formatGenome3dIntoProtVistaPanels(dataGenome3d);
   (unintegrated as Array<{ accession: string; type: string }>).sort(
     orderByAccession
   );
@@ -126,7 +127,7 @@ const DomainOnProteinWithoutData = ({
     ...groups,
     unintegrated: unintegrated as Array<MinimalFeature>,
     other_features: other,
-    // ...genome3d,
+    ...externalSourcesData,
   };
 
   if (dataResidues && !dataResidues.loading && dataResidues.payload) {
@@ -255,43 +256,27 @@ const getExtraURL = (query: string) =>
     }
   );
 
-// const getGenome3dURL = createSelector(
-//   (state: GlobalState) => state.settings.genome3d,
-//   (state: GlobalState) => state.customLocation.description.protein.accession,
-//   ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
-//     return format({
-//       protocol,
-//       hostname,
-//       port,
-//       pathname: `${root}uniprot/${accession}`,
-//       query: {
-//         protvista: true,
-//       },
-//     });
-//   }
-// );
-
-export default loadData<AlphafoldPayload, 'Prediction'>({
-  getUrl: getAlphaFoldPredictionURL,
-  propNamespace: 'Prediction',
-} as Params)(
-  loadData<AlphafoldConfidencePayload, 'Confidence'>({
-    getUrl: getConfidenceURLFromPayload('Prediction'),
-    propNamespace: 'Confidence',
+export default loadExternalSources(
+  loadData<AlphafoldPayload, 'Prediction'>({
+    getUrl: getAlphaFoldPredictionURL,
+    propNamespace: 'Prediction',
   } as Params)(
-    loadData<ExtraFeaturesPayload, 'Features'>({
-      getUrl: getExtraURL('extra_features'),
-      propNamespace: 'Features',
+    loadData<AlphafoldConfidencePayload, 'Confidence'>({
+      getUrl: getConfidenceURLFromPayload('Prediction'),
+      propNamespace: 'Confidence',
     } as Params)(
-      loadData<ResiduesPayload, 'Residues'>({
-        getUrl: getExtraURL('residues'),
-        propNamespace: 'Residues',
+      loadData<ExtraFeaturesPayload, 'Features'>({
+        getUrl: getExtraURL('extra_features'),
+        propNamespace: 'Features',
       } as Params)(
-        // loadData({ getUrl: getGenome3dURL, propNamespace: 'Genome3d' } as Params)(
-
-        loadData(getRelatedEntriesURL as Params)(DomainOnProteinWithoutData)
+        loadData<ResiduesPayload, 'Residues'>({
+          getUrl: getExtraURL('residues'),
+          propNamespace: 'Residues',
+        } as Params)(
+          loadData(getRelatedEntriesURL as Params)(DomainOnProteinWithoutData)
+        )
+        //     ),
       )
-      //     ),
     )
   )
 );
