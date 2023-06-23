@@ -3,7 +3,7 @@ import React from 'react';
 type Fun = () => void;
 export const useInterval = (callback: Fun, delay: number) => {
   const savedCallback = React.useRef<Fun>();
-  const [id, setId] = React.useState<NodeJS.Timer  |undefined>(undefined);
+  const [id, setId] = React.useState<NodeJS.Timer | undefined>(undefined);
 
   // Remember the latest callback.
   React.useEffect(() => {

@@ -64,7 +64,7 @@ const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 };
 */
 
-const getGoTerms = (matches) => {
+const getInterProGoTerms = (matches) => {
   const goTerms = new Map();
   for (const match of matches) {
     for (const { id, category, name } of (match.signature.entry || {})
@@ -79,7 +79,33 @@ const getGoTerms = (matches) => {
       });
     }
   }
-  return goTerms;
+  return Array.from(goTerms.values());
+};
+
+const getPantherGoTerms = (matches) => {
+  const goTerms = new Map();
+
+  for (const match of matches) {
+    const db = match.signature.signatureLibraryRelease.library.toLowerCase();
+    const goXRefs = match.goXRefs || [];
+
+    if (db === 'panther' && goXRefs.length !== 0) {
+      goXRefs.forEach(({ id, category, name }) => {
+        if (category !== null && name !== null) {
+          goTerms.set(id, {
+            category: {
+              name: category.toLowerCase(),
+              code: category[0],
+            },
+            name,
+            identifier: id,
+          });
+        }
+      });
+    }
+  }
+
+  return Array.from(goTerms.values());
 };
 
 const getCreated = (payload, accession) => {
@@ -183,7 +209,8 @@ const SummaryIPScanJob = ({
     },
   };
 
-  const goTerms = getGoTerms(payload.matches);
+  const interProGoTerms = getInterProGoTerms(payload.matches);
+  const pantherGoTerms = getPantherGoTerms(payload.matches);
 
   const { protocol, hostname, root } = ipScan;
   let dataURL = `${protocol}//${hostname}${root}result`;
@@ -340,7 +367,8 @@ const SummaryIPScanJob = ({
               </ul>
             </Exporter>
           </DomainsOnProteinLoaded>
-          <GoTerms terms={Array.from(goTerms.values())} type="protein" />
+          <GoTerms terms={interProGoTerms} type="protein" />
+          <GoTerms terms={pantherGoTerms} type="entry" db="PANTHER" />
         </>
       )}
     </div>
