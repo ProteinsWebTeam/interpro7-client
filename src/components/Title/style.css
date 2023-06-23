@@ -80,6 +80,10 @@
 
 .title-fav {
   display: flex;
+  align-items: center;
+  & h3 {
+    margin: 0;
+  }
 }
 
 .favourite {
@@ -108,7 +112,6 @@
     font-size: 70%;
   }
   .title-id {
-    margin-left: 0.5rem;
     font-size: 81%;
   }
   .fav-icon {

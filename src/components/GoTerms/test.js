@@ -6,8 +6,8 @@ import GoTerms from '.';
 const renderer = new ShallowRenderer();
 
 const TEST_DBS = new Set([
-  { type: 'entry', db: 'interpro' },
-  { type: 'entry', db: 'pfam' },
+  { type: 'entry', db: 'InterPro' },
+  { type: 'entry', db: 'Pfam' },
   { type: 'protein', db: 'reviewed' },
 ]);
 
