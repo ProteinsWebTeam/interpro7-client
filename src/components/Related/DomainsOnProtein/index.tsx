@@ -127,8 +127,11 @@ const DomainOnProteinWithoutData = ({
     ...groups,
     unintegrated: unintegrated as Array<MinimalFeature>,
     other_features: other,
-    ...externalSourcesData,
   };
+
+  if (externalSourcesData.length) {
+    mergedData.external_sources = externalSourcesData;
+  }
 
   if (dataResidues && !dataResidues.loading && dataResidues.payload) {
     mergeResidues(mergedData, dataResidues.payload);

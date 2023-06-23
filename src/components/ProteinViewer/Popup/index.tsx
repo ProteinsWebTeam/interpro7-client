@@ -6,6 +6,7 @@ import ProtVistaConfidencePopup, { ConfidenceDetail } from './Confidence';
 import ProtVistaResiduePopup, { ResidueDetail } from './Residue';
 import ProtVistaEntryPopup, { EntryDetail } from './Entry';
 import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
+import Genome3DPopup, { Genome3DDetail } from './Genome3D';
 
 export type PopupDetail = (
   | ConservationDetail
@@ -54,6 +55,8 @@ const ProtVistaPopup = ({
     if (colouredTrack.classList.contains('confidence'))
       return <ProtVistaConfidencePopup detail={detail as ConfidenceDetail} />;
   }
+  if (((detail as Genome3DDetail)?.feature?.accession || '').startsWith('G3D:'))
+    return <Genome3DPopup detail={detail as Genome3DDetail} />;
 
   // comes from the Entry track
   return (

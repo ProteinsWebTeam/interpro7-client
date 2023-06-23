@@ -8,7 +8,7 @@ import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
 
 export type ExtenalSourcesProps = {
   loading: boolean;
-  externalSourcesData: ProteinViewerDataObject<MinimalFeature>;
+  externalSourcesData: MinimalFeature[];
 };
 export function loadExternalSources<
   T extends ExtenalSourcesProps = ExtenalSourcesProps
@@ -25,13 +25,11 @@ export function loadExternalSources<
 
     const genome3dFormatted = dataGenome3D
       ? formatGenome3dIntoProtVistaPanels(dataGenome3D)
-      : {};
+      : [];
     // Fetch the props you want to inject. This could be done with context instead.
     const newProps = {
       loading: !!dataGenome3D?.loading,
-      externalSourcesData: {
-        ...genome3dFormatted,
-      },
+      externalSourcesData: [...genome3dFormatted],
     };
 
     // props comes afterwards so the can override the default ones.
