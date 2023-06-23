@@ -23,9 +23,9 @@ export function loadExternalSources<
   const ComponentWithExternalData = (props: Props) => {
     const { dataGenome3D, isStaleGenome3D: _, ...otherProps } = props;
 
-    const genome3dFormatted = formatGenome3dIntoProtVistaPanels(
-      dataGenome3D as any
-    ) as unknown as ProteinViewerDataObject<MinimalFeature>;
+    const genome3dFormatted = dataGenome3D
+      ? formatGenome3dIntoProtVistaPanels(dataGenome3D)
+      : {};
     // Fetch the props you want to inject. This could be done with context instead.
     const newProps = {
       loading: !!dataGenome3D?.loading,

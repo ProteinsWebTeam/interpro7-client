@@ -479,17 +479,21 @@ type ResidueMetadata = {
 };
 type ResiduesPayload = Record<string, ResidueMetadata>;
 
+type Genome3DAnnotation = {
+  accession: string;
+  metadata: {
+    source_database: string;
+    name: string;
+    resource: string;
+    type: string;
+    confidence: number;
+  };
+  length: number;
+  locations: Array<ProtVistaLocation>;
+};
 type Genome3DProteinPayload = {
   data: {
-    annotations: Array<{
-      accession: string;
-      metadata: {
-        source_database: string;
-        name: string;
-      };
-      length: number;
-      locations: Array<ProtVistaLocation>;
-    }>;
+    annotations: Array<Genome3DAnnotation>;
     sequence: string;
     gene_name: string;
     description: string;
