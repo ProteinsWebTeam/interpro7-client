@@ -8,6 +8,7 @@ root:
   wikipedia: https://en.wikipedia.org/w/api.php
   readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
   alphafold: https://alphafold.ebi.ac.uk/
+  repeatsDB: https://repeatsdb.bio.unipd.it/api/search
 
 title: InterPro
 

@@ -103,6 +103,7 @@ type SettingsState = {
   api: ParsedURLServer;
   ipScan: ParsedURLServer;
   genome3d: ParsedURLServer;
+  repeatsDB: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
 };
@@ -458,6 +459,7 @@ type ProtVistaLocation = {
   };
   description?: string;
   accession?: string;
+  [other: string]: unknown;
 };
 
 type ProteinViewerData<Feature = unknown> = Array<
@@ -502,6 +504,21 @@ type Genome3DProteinPayload = {
   };
   message: string;
 };
+type RepeatsDBAnnotation = {
+  start: number;
+  end: number;
+  classification: Array<string>;
+  period: number;
+};
+type RepeatsDBPayload = Array<{
+  uniprot_id: string;
+  uniprot_name: string;
+  uniprot_sequence: string;
+  repeatsdb_consensus_majority: Array<RepeatsDBAnnotation>;
+  reviewed_one: boolean;
+  reviewed_all: boolean;
+}>;
+
 type ExtraFeaturesPayload = Record<
   string,
   {

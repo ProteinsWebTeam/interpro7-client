@@ -73,6 +73,13 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
         root: config.root.genome3d.pathname,
       };
+    case 'repeatsDB':
+      return {
+        protocol: config.root.repeatsDB.protocol,
+        hostname: config.root.repeatsDB.hostname,
+        port: config.root.repeatsDB.port || DEFAULT_HTTP_PORT,
+        root: config.root.repeatsDB.pathname,
+      };
     case 'wikipedia':
       return {
         protocol: config.root.wikipedia.protocol,

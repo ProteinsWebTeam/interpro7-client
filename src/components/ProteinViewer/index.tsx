@@ -103,6 +103,7 @@ export const ProteinViewer = ({
   const [isPrinting, setPrinting] = useState(false);
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'other residues': true,
+    'external sources': true,
   });
   const categoryRefs = useRef<ExpandedHandle[]>([]);
 

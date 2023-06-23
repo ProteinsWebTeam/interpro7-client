@@ -7,6 +7,7 @@ import ProtVistaResiduePopup, { ResidueDetail } from './Residue';
 import ProtVistaEntryPopup, { EntryDetail } from './Entry';
 import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import Genome3DPopup, { Genome3DDetail } from './Genome3D';
+import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
 
 export type PopupDetail = (
   | ConservationDetail
@@ -57,6 +58,13 @@ const ProtVistaPopup = ({
   }
   if (((detail as Genome3DDetail)?.feature?.accession || '').startsWith('G3D:'))
     return <Genome3DPopup detail={detail as Genome3DDetail} />;
+
+  if (
+    ((detail as RepeatsDBDetail)?.feature?.accession || '').startsWith(
+      'REPEAT:'
+    )
+  )
+    return <RepeatsDBPopup detail={detail as RepeatsDBDetail} />;
 
   // comes from the Entry track
   return (

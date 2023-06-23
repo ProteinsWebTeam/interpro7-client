@@ -51,6 +51,7 @@ const OTHER_TRACK_TYPES = [
   'residue',
   'Model',
   'Domain',
+  'consensus majority',
 ];
 const b2sh = new Map([
   ['N_TERMINAL_DISC', 'discontinuosStart'], // TODO fix spelling in this and nightingale
@@ -316,6 +317,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                         'residue',
                         'Model',
                         'Domain',
+                        'consensus majority',
                       ].includes(entry.type || '') && (
                         <NightingaleTrack
                           length={sequence.length}

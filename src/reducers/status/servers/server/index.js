@@ -1,7 +1,7 @@
 // @flow
 import { SERVER_STATUS } from 'actions/types';
 
-/*:: type Server = 'api' | 'ebi' | 'ipScan' | 'genome3d' | 'wikipedia' | 'alphafold'; */
+/*:: type Server = 'api' | 'ebi' | 'ipScan' | 'genome3d' | 'wikipedia' | 'alphafold' | 'repeatsDB'; */
 /*:: export type ServerStatus = {|
   status: ?boolean,
   lastCheck: ?number,
@@ -10,18 +10,16 @@ import { SERVER_STATUS } from 'actions/types';
 /*:: import type { Action } from 'actions'; */
 
 // eslint-disable-next-line no-extra-parens
-export default (server /*: Server */) => ((
-  state = { status: null, lastCheck: null },
-  action,
-) => {
-  switch (action.type) {
-    case SERVER_STATUS:
-      if (action.server !== server) return state;
-      return {
-        status: action.status,
-        lastCheck: Date.now(),
-      };
-    default:
-      return state;
-  }
-} /*: (ServerStatus | void, any) => any */);
+export default (server /*: Server */) =>
+  (state = { status: null, lastCheck: null }, action) => {
+    switch (action.type) {
+      case SERVER_STATUS:
+        if (action.server !== server) return state;
+        return {
+          status: action.status,
+          lastCheck: Date.now(),
+        };
+      default:
+        return state;
+    }
+  };

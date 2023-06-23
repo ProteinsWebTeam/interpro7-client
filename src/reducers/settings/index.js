@@ -11,6 +11,7 @@ export default combineReducers({
   api: category('api'),
   ipScan: category('ipScan'),
   genome3d: category('genome3d'),
+  repeatsDB: category('repeatsDB'),
   wikipedia: category('wikipedia'),
   alphafold: category('alphafold'),
 });
