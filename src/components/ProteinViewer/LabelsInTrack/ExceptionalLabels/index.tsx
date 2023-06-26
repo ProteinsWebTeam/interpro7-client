@@ -30,7 +30,7 @@ const EXCEPTIONAL_TYPES = [
   'chain',
   'secondary_structure',
 ];
-const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:'];
+const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
 
 export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
   return (
@@ -126,6 +126,15 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
         target="_blank"
       >
         RepeatsDB: [{entry.type}]
+      </Link>
+    );
+  }
+  if (entry.accession && entry.accession.startsWith('DISPROT:')) {
+    return isPrinting ? (
+      <span>DisProt: [{entry.type}]</span>
+    ) : (
+      <Link href={`https://disprot.org/${entry.protein}`} target="_blank">
+        DisProt: [{entry.type}]
       </Link>
     );
   }

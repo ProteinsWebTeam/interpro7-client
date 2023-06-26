@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { goToCustomLocation } from 'actions/creators';
-
 import ProtVistaConfidencePopup, { ConfidenceDetail } from './Confidence';
 import ProtVistaResiduePopup, { ResidueDetail } from './Residue';
 import ProtVistaEntryPopup, { EntryDetail } from './Entry';
 import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import Genome3DPopup, { Genome3DDetail } from './Genome3D';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
+import DisProtPopup, { DisProtDetail } from './DisProt';
 
 export type PopupDetail = (
   | ConservationDetail
@@ -20,17 +19,11 @@ export type PopupDetail = (
 };
 type Props = {
   sourceDatabase: string;
-  goToCustomLocation: typeof goToCustomLocation;
   currentLocation: InterProLocation;
   detail: PopupDetail;
 };
 
-const ProtVistaPopup = ({
-  detail,
-  sourceDatabase,
-  currentLocation,
-  goToCustomLocation,
-}: Props) => {
+const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
   // comes from the conservation track
   if (detail.type === 'conservation') {
     return <ProtVistaConservationPopup detail={detail as ConservationDetail} />;
@@ -65,13 +58,18 @@ const ProtVistaPopup = ({
     )
   )
     return <RepeatsDBPopup detail={detail as RepeatsDBDetail} />;
+  if (
+    ((detail as RepeatsDBDetail)?.feature?.accession || '').startsWith(
+      'DISPROT:'
+    )
+  )
+    return <DisProtPopup detail={detail as DisProtDetail} />;
 
   // comes from the Entry track
   return (
     <ProtVistaEntryPopup
       detail={detail as EntryDetail}
       sourceDatabase={sourceDatabase}
-      goToCustomLocation={goToCustomLocation}
       currentLocation={currentLocation}
     />
   );

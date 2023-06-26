@@ -3,7 +3,6 @@ import {
   apiServerStatus,
   ebiServerStatus,
   ipScanServerStatus,
-  genome3dServerStatus,
 } from '.';
 
 describe('selectors', () => {
@@ -25,8 +24,5 @@ describe('selectors', () => {
 
   test('ipScanServerStatus', () => {
     expect(ipScanServerStatus(state)).toBe(state.status.servers.ipScan);
-  });
-  test('genome3dServerStatus', () => {
-    expect(genome3dServerStatus(state)).toBe(state.status.servers.genome3d);
   });
 });

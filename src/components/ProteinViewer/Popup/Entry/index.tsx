@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { goToCustomLocation } from 'actions/creators';
+import Positions from '../Positions';
 
 import cssBinder from 'styles/cssBinder';
-import ipro from 'styles/interpro-new.css';
+import ipro from 'styles/interpro-vf.css';
 import localCSS from './style.css';
 
 const css = cssBinder(ipro, localCSS);
@@ -25,7 +25,6 @@ export type EntryDetail = {
 type Props = {
   detail: EntryDetail;
   sourceDatabase: string;
-  goToCustomLocation: typeof goToCustomLocation;
   currentLocation: InterProLocation;
 };
 const getSecondaryStructureType = (locations: Array<ProtVistaLocation>) => {
@@ -42,7 +41,6 @@ const getSecondaryStructureType = (locations: Array<ProtVistaLocation>) => {
 const ProtVistaEntryPopup = ({
   detail,
   sourceDatabase,
-  goToCustomLocation,
   currentLocation,
 }: Props) => {
   const {
@@ -82,16 +80,6 @@ const ProtVistaEntryPopup = ({
     currentLocation?.description?.protein?.accession ||
     detail?.feature?.protein ||
     detail?.feature?.parent?.protein;
-  const handleClick = (start: number, end: number) => () => {
-    if (!protein) return;
-    goToCustomLocation({
-      description: {
-        main: { key: 'protein' },
-        protein: { accession: protein, db: 'UniProt', detail: 'sequence' },
-      },
-      hash: `${start}-${end}`,
-    });
-  };
   return (
     <section className={css('entry-popup')}>
       <h6>
@@ -140,21 +128,7 @@ const ProtVistaEntryPopup = ({
                   </ul>
                 </div>
               )}
-              <ul>
-                {(fragments || []).map(({ start, end }, i) => (
-                  <li key={i}>
-                    <button
-                      className={css('button', 'secondary', 'coordinates')}
-                      onClick={handleClick(start, end)}
-                      style={{
-                        cursor: protein ? 'pointer' : 'inherit',
-                      }}
-                    >
-                      {start} - {end}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <Positions fragments={fragments} protein={protein} />
             </li>
           )
         )}

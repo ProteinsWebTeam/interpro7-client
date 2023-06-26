@@ -6,6 +6,7 @@ import loadData from 'higherOrder/loadData/ts';
 import { Params } from 'higherOrder/loadData/extract-params';
 import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
 import formatRepeatsDB from './RepeatsDB';
+import formatDisProt from './DisProt';
 
 export type ExtenalSourcesProps = {
   loading: boolean;
@@ -20,6 +21,7 @@ export function loadExternalSources<
 
   type Props = Omit<T, keyof ExtenalSourcesProps> &
     LoadDataProps<Genome3DProteinPayload, 'Genome3D'> &
+    LoadDataProps<DisProtPayload, 'DisProt'> &
     LoadDataProps<RepeatsDBPayload, 'RepeatsDB'>;
 
   const ComponentWithExternalData = (props: Props) => {
@@ -28,6 +30,8 @@ export function loadExternalSources<
       isStaleGenome3D: _,
       dataRepeatsDB,
       isStaleRepeatsDB: __,
+      dataDisProt,
+      isStaleDisProt: ___,
       ...otherProps
     } = props;
 
@@ -37,10 +41,18 @@ export function loadExternalSources<
     const repeatsDBFormatted = dataRepeatsDB
       ? formatRepeatsDB(dataRepeatsDB)
       : [];
+    const disprotFormatted = dataDisProt ? formatDisProt(dataDisProt) : [];
+
+    // TODO: Add Disprot
+
     // Fetch the props you want to inject. This could be done with context instead.
     const newProps = {
       loading: !!dataGenome3D?.loading,
-      externalSourcesData: [...genome3dFormatted, ...repeatsDBFormatted],
+      externalSourcesData: [
+        ...genome3dFormatted,
+        ...repeatsDBFormatted,
+        ...disprotFormatted,
+      ],
     };
 
     // props comes afterwards so the can override the default ones.
@@ -53,10 +65,15 @@ export function loadExternalSources<
     getUrl: getRepeatsDBURL,
     propNamespace: 'RepeatsDB',
   } as Params)(
-    loadData<Genome3DProteinPayload, 'Genome3D'>({
-      getUrl: getGenome3dURL,
-      propNamespace: 'Genome3D',
-    } as Params)(ComponentWithExternalData)
+    loadData<DisProtPayload, 'DisProt'>({
+      getUrl: getDisProtURL,
+      propNamespace: 'DisProt',
+    } as Params)(
+      loadData<Genome3DProteinPayload, 'Genome3D'>({
+        getUrl: getGenome3dURL,
+        propNamespace: 'Genome3D',
+      } as Params)(ComponentWithExternalData)
+    )
   );
 }
 
@@ -87,6 +104,21 @@ const getRepeatsDBURL = createSelector(
       pathname: `${root}`,
       query: {
         query: `uniprot_id:${accession}`,
+      },
+    });
+  }
+);
+const getDisProtURL = createSelector(
+  (state: GlobalState) => state.settings.disprot,
+  (state: GlobalState) => state.customLocation.description.protein.accession,
+  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}/${accession}`,
+      query: {
+        format: 'json',
       },
     });
   }

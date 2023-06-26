@@ -1,4 +1,5 @@
 import React from 'react';
+import Positions from '../Positions';
 
 export type Genome3DDetail = {
   feature: {
@@ -6,6 +7,8 @@ export type Genome3DDetail = {
     type: string;
     source_database: string;
     confidence: string;
+    protein: string;
+    locations: ProtVistaLocation[];
   };
 };
 type Props = {
@@ -13,7 +16,13 @@ type Props = {
 };
 
 const Genome3DPopup = ({ detail }: Props) => {
-  const { accession, source_database: db, type } = detail.feature;
+  const {
+    accession,
+    source_database: db,
+    type,
+    locations,
+    protein,
+  } = detail.feature;
 
   return (
     <section>
@@ -21,6 +30,9 @@ const Genome3DPopup = ({ detail }: Props) => {
       <h6>{db}</h6>
 
       <div>{accession}</div>
+      {locations.map(({ fragments }, i) => (
+        <Positions fragments={fragments} protein={protein} key={i} />
+      ))}
     </section>
   );
 };

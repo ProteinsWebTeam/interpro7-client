@@ -65,6 +65,12 @@ export default (historyWrapper) => {
         port: config.root.repeatsDB.port || DEFAULT_HTTP_PORT,
         root: config.root.repeatsDB.pathname,
       };
+      settings.disprot = {
+        protocol: config.root.disprot.protocol,
+        hostname: config.root.disprot.hostname,
+        port: config.root.disprot.port || DEFAULT_HTTP_PORT,
+        root: config.root.disprot.pathname,
+      };
     }
   }
   let description = { other: ['NotFound'] };

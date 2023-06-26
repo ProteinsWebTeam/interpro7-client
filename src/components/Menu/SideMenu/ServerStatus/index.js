@@ -18,7 +18,7 @@ const mapEndpointToName = new Map([
   ['api', 'InterPro API'],
   ['ebi', 'EBI Search API'],
   ['ipScan', 'InterProScan API'],
-  ['genome3d', 'Genome3D'],
+  // ['genome3d', 'Genome3D'],
   ['wikipedia', 'Wikipedia API'],
   ['alphafold', 'AlphaFold API'],
 ]);

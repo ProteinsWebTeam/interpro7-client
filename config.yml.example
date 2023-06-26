@@ -9,7 +9,8 @@ root:
   readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
   alphafold: https://alphafold.ebi.ac.uk/
   repeatsDB: https://repeatsdb.bio.unipd.it/api/search
-
+  disprot: https://disprot.org/api/
+  
 title: InterPro
 
 github:

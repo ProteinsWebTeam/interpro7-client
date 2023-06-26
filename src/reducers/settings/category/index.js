@@ -80,6 +80,13 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         port: config.root.repeatsDB.port || DEFAULT_HTTP_PORT,
         root: config.root.repeatsDB.pathname,
       };
+    case 'disprot':
+      return {
+        protocol: config.root.disprot.protocol,
+        hostname: config.root.disprot.hostname,
+        port: config.root.disprot.port || DEFAULT_HTTP_PORT,
+        root: config.root.disprot.pathname,
+      };
     case 'wikipedia':
       return {
         protocol: config.root.wikipedia.protocol,

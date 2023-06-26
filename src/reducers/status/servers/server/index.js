@@ -1,7 +1,7 @@
 // @flow
 import { SERVER_STATUS } from 'actions/types';
 
-/*:: type Server = 'api' | 'ebi' | 'ipScan' | 'genome3d' | 'wikipedia' | 'alphafold' | 'repeatsDB'; */
+/*:: type Server = 'api' | 'ebi' | 'ipScan' | 'genome3d' | 'wikipedia' | 'alphafold' | 'repeatsDB' | 'disprot'; */
 /*:: export type ServerStatus = {|
   status: ?boolean,
   lastCheck: ?number,

@@ -104,6 +104,7 @@ type SettingsState = {
   ipScan: ParsedURLServer;
   genome3d: ParsedURLServer;
   repeatsDB: ParsedURLServer;
+  disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
 };
@@ -518,6 +519,33 @@ type RepeatsDBPayload = Array<{
   reviewed_one: boolean;
   reviewed_all: boolean;
 }>;
+type DisprotRegion = {
+  region_id: string;
+  term_namespace: string;
+  term_name: string;
+  ec_name: string;
+  acc: string;
+  start: number;
+  end: number;
+  released: string;
+};
+type DisProtPayload = {
+  acc: string;
+  sequence: string;
+  taxonomy: Array<string>;
+  length: number;
+  features: unknown;
+  date: string;
+  disprot_id: string;
+  name: string;
+  genes: Array<unknown>;
+  number_ambiguous_regions: number;
+  number_obsolete_regions: number;
+  disorder_content: number;
+  regions_counter: number;
+  regions: Array<DisprotRegion>;
+  disprot_consensus: unknown;
+};
 
 type ExtraFeaturesPayload = Record<
   string,
