@@ -15,6 +15,7 @@ import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { Exporter } from 'components/Table';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 import NightingaleSaver from 'components/Nightingale/Saver';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import LabelBy from './LabelBy';
 
@@ -48,6 +49,7 @@ type Props = PropsWithChildren<{
   setExpandedAllTracks: (v: boolean) => void;
   tooltipEnabled: boolean;
   setTooltipEnabled: (v: boolean) => void;
+  loading: boolean;
 }>;
 
 const ProteinViewerOptions = ({
@@ -62,6 +64,7 @@ const ProteinViewerOptions = ({
   setExpandedAllTracks,
   tooltipEnabled,
   setTooltipEnabled,
+  loading = false,
 }: Props) => {
   const [expanded, setExpanded] = useState(true);
   const componentsDivId =
@@ -138,9 +141,10 @@ const ProteinViewerOptions = ({
   return (
     <>
       <div className={css('view-options-title')}>
-        {title || 'Domains on protein'}{' '}
+        {title || 'Domains on protein'}
         <TooltipAndRTDLink rtdPage="protein_viewer.html" />
       </div>
+      {loading && <Loading inline />}
       <div className={css('view-options')}>
         <div className={css('option-fullscreen', 'font-l', 'viewer-options')}>
           <FullScreenButton

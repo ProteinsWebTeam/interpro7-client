@@ -205,6 +205,12 @@ const DomainOnProteinWithoutData = ({
         mainData={mainData}
         dataMerged={mergedData}
         dataConfidence={dataConfidence}
+        loading={
+          data?.loading ||
+          dataFeatures?.loading ||
+          dataResidues?.loading ||
+          false
+        }
         // Disabling Conservation until hmmer is working
         // conservationError={conservation.error}
         // showConservationButton={showConservationButton}

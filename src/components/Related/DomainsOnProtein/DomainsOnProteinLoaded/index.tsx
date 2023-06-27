@@ -57,6 +57,7 @@ type Props = PropsWithChildren<{
   conservationError?: string | null;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
+  loading: boolean;
 }>;
 
 const DomainsOnProteinLoaded = ({
@@ -66,6 +67,7 @@ const DomainsOnProteinLoaded = ({
   conservationError,
   showConservationButton,
   handleConservationLoad,
+  loading,
   children,
 }: Props) => {
   const sortedData = Object.entries(dataMerged)
@@ -89,6 +91,7 @@ const DomainsOnProteinLoaded = ({
         showConservationButton={showConservationButton}
         handleConservationLoad={handleConservationLoad}
         conservationError={conservationError}
+        loading={loading}
       >
         {children}
       </ProteinViewer>
