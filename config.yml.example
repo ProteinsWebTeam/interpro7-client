@@ -108,5 +108,6 @@ colors:
   ssf: '#686868'
   tigrfams: '#56b9a6'
   ncbifam: '#56b9a6'
+  antifam: '#b89494'
   interpro: '#2daec1'
   pdb: '#74b360'
