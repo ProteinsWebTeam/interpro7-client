@@ -19,7 +19,7 @@
 }
 
 .body {
-  @nest & > tr {
+  & > tr {
     border-top: solid 1px lightgray;
     text-align: center;
 
@@ -36,7 +36,7 @@
     }
   }
 
-  @nest & td {
+  & td {
     padding: var(--spacing-small);
   }
 }
@@ -46,14 +46,14 @@
   bottom: 0;
   text-align: center;
 
-  @nest & > tr {
+  & > tr {
     background-color: var(--colors-nearly-white);
   }
 
-  @nest & td {
+  & td {
     padding: var(--spacing-big) 0;
 
-    @nest & > * {
+    & > * {
       margin: var(--spacing-small);
     }
   }
