@@ -5,10 +5,10 @@ exports[`<SummaryEntry /> should render 1`] = `
   className="sections"
 >
   <section
-    className="vf-grid"
+    className="vf-grid summary-grid"
   >
     <div
-      className="vf-stack vf-grid__col--span-3"
+      className="vf-stack"
     >
       <MemberDBSubtitle
         dbInfo={{}}

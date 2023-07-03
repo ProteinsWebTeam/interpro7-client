@@ -22,123 +22,126 @@ exports[`<SummaryProtein /> should render 1`] = `
     }
     processData={[Function]}
   />
-  <section>
+  <section
+    className="vf-grid summary-grid"
+  >
     <div
-      className="row"
+      className="vf-stack"
     >
-      <div
-        className="medium-9 columns margin-bottom-large"
+      <table
+        className="vf-table left-headers"
       >
-        <table
-          className="light table-sum"
-        >
-          <tbody>
-            <tr>
-              <td>
-                Short name
-              </td>
-              <td>
-                <i
-                  className="shortname"
-                  data-testid="protein-shortname"
-                >
-                  A0A000_STRVD
-                </i>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Length
-              </td>
-              <td
-                data-testid="protein-length"
+        <tbody>
+          <tr>
+            <td
+              style={
+                {
+                  "maxWidth": "50%",
+                }
+              }
+            >
+              Short name
+            </td>
+            <td>
+              <i
+                className="shortname"
+                data-testid="protein-shortname"
               >
-                <Length
-                  metadata={
-                    {
-                      "accession": "A0A000",
-                      "counters": {
-                        "dbEntries": {
-                          "cathgene3d": 2,
-                          "cdd": 1,
-                          "interpro": 5,
-                          "panther": 2,
-                          "pfam": 1,
-                          "ssf": 1,
-                          "tigrfams": 1,
+                A0A000_STRVD
+              </i>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Length
+            </td>
+            <td
+              data-testid="protein-length"
+            >
+              <Length
+                metadata={
+                  {
+                    "accession": "A0A000",
+                    "counters": {
+                      "dbEntries": {
+                        "cathgene3d": 2,
+                        "cdd": 1,
+                        "interpro": 5,
+                        "panther": 2,
+                        "pfam": 1,
+                        "ssf": 1,
+                        "tigrfams": 1,
+                      },
+                      "entries": 13,
+                      "idas": 323222,
+                      "isoforms": 0,
+                      "proteome": 0,
+                      "proteomes": 0,
+                      "sets": 3,
+                      "similar_proteins": 323222,
+                      "structures": 0,
+                      "taxa": 1,
+                      "taxonomy": 1,
+                    },
+                    "description": [],
+                    "gene": "moeA5",
+                    "go_terms": [
+                      {
+                        "category": {
+                          "code": "F",
+                          "name": "molecular_function",
                         },
-                        "entries": 13,
-                        "idas": 323222,
-                        "isoforms": 0,
-                        "proteome": 0,
-                        "proteomes": 0,
-                        "sets": 3,
-                        "similar_proteins": 323222,
-                        "structures": 0,
-                        "taxa": 1,
-                        "taxonomy": 1,
+                        "identifier": "GO:0030170",
+                        "name": "pyridoxal phosphate binding",
                       },
-                      "description": [],
-                      "gene": "moeA5",
-                      "go_terms": [
-                        {
-                          "category": {
-                            "code": "F",
-                            "name": "molecular_function",
-                          },
-                          "identifier": "GO:0030170",
-                          "name": "pyridoxal phosphate binding",
-                        },
-                      ],
-                      "id": "A0A000_STRVD",
-                      "ida_accession": "220d43766bfe69807874ea078bc783ea7854e968",
-                      "is_fragment": false,
-                      "length": 394,
-                      "name": {
-                        "name": "MoeA5",
-                      },
-                      "protein_evidence": 4,
-                      "proteome": null,
-                      "sequence": "MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN",
-                      "source_database": "unreviewed",
-                      "source_organism": {
-                        "fullName": "Streptomyces viridosporus",
-                        "scientificName": "Streptomyces viridosporus",
-                        "taxId": "67581",
-                      },
-                    }
+                    ],
+                    "id": "A0A000_STRVD",
+                    "ida_accession": "220d43766bfe69807874ea078bc783ea7854e968",
+                    "is_fragment": false,
+                    "length": 394,
+                    "name": {
+                      "name": "MoeA5",
+                    },
+                    "protein_evidence": 4,
+                    "proteome": null,
+                    "sequence": "MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN",
+                    "source_database": "unreviewed",
+                    "source_organism": {
+                      "fullName": "Streptomyces viridosporus",
+                      "scientificName": "Streptomyces viridosporus",
+                      "taxId": "67581",
+                    },
                   }
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Species
-              </td>
-              <td
-                data-testid="protein-species"
-              >
-                <Species
-                  fullName="Streptomyces viridosporus"
-                  taxID="67581"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div
-        className="medium-3 columns"
-      >
-        <div
-          className="panel"
-        >
+                }
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Species
+            </td>
+            <td
+              data-testid="protein-species"
+            >
+              <Species
+                fullName="Streptomyces viridosporus"
+                taxID="67581"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      className="vf-stack"
+    >
+      <section>
+        <section>
           <h5>
             External Links
           </h5>
           <ul
             className="no-bullet"
-            data-testid="protein-external-links"
           >
             <li>
               <UniProtLink
@@ -151,63 +154,63 @@ exports[`<SummaryProtein /> should render 1`] = `
               </UniProtLink>
             </li>
           </ul>
-          <hr
-            style={
+        </section>
+        <hr
+          style={
+            {
+              "margin": "0.8em",
+            }
+          }
+        />
+        <label>
+          Export Matches [TSV]
+          <FileExporter
+            className="button hollow"
+            count={13}
+            description={
               {
-                "margin": "0.8em",
+                "entry": {
+                  "integration": "all",
+                },
+                "main": {
+                  "key": "protein",
+                },
+                "protein": {
+                  "accession": "A0A000",
+                  "db": "unreviewed",
+                },
               }
             }
+            fileType="tsv"
+            minWidth="200px"
+            primary="entry"
+            secondary="protein"
           />
-          <label>
-            Export Matches [TSV]
-            <FileExporter
-              className="button hollow"
-              count={13}
-              description={
-                {
-                  "entry": {
-                    "integration": "all",
-                  },
-                  "main": {
-                    "key": "protein",
-                  },
-                  "protein": {
-                    "accession": "A0A000",
-                    "db": "unreviewed",
-                  },
-                }
-              }
-              fileType="tsv"
-              label="Export Matches [TSV]"
-              minWidth="290px"
-              primary="entry"
-              secondary="protein"
-            />
-          </label>
-          <hr
-            style={
-              {
-                "margin": "0.8em",
-              }
+        </label>
+        <hr
+          style={
+            {
+              "margin": "0.8em",
             }
-          />
-          <HmmerButton
-            accession="A0A000"
-            minWidth="290px"
-            sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
-            title="Search protein with HMMER"
-          />
-          <Memo(Connect(IPScanButton))
-            minWidth="290px"
-            sequence="%3EA0A000_STRVD%201-109%0AMDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTN%0AHFHVALEREPAEPHGKEDAVLFTSGYSAN%0A"
-            title="Search protein with InterProScan"
-          />
-          <DownloadButton
-            accession="A0A000"
-            sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
-          />
-        </div>
-      </div>
+          }
+        />
+        <HmmerButton
+          accession="A0A000"
+          minWidth="200px"
+          sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
+          title="Search protein with HMMER"
+        />
+        <br />
+        <Memo(Connect(IPScanButton))
+          minWidth="200px"
+          sequence="%3EA0A000_STRVD%201-109%0AMDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTN%0AHFHVALEREPAEPHGKEDAVLFTSGYSAN%0A"
+          title="Search protein with InterProScan"
+        />
+        <DownloadButton
+          accession="A0A000"
+          sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
+        />
+      </section>
     </div>
   </section>
   <section

@@ -15,6 +15,7 @@ import config from 'config';
 import EntriesOnProtein from './EntriesOnProtein';
 import EntriesOnStructure from './EntriesOnStructure';
 import StructureOnProtein from './StructureOnProtein';
+// $FlowFixMe
 import FileExporter from './FileExporter';
 import File from 'components/File';
 

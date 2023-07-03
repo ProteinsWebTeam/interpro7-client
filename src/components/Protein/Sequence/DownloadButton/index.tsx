@@ -1,32 +1,22 @@
-// @flow
 import React from 'react';
 
 import { splitSequenceByChunks } from 'utils/sequence';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.css';
-import sequenceStyles from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-// import local from './style.css';
 import summary from 'styles/summary.css';
-import theme from 'styles/theme-interpro.css';
 
-const f = foundationPartial(
-  summary,
-  theme,
-  ebiStyles,
-  sequenceStyles,
-  fonts,
-  // local,
-);
-const DownloadButton = ({ accession, sequence }) => {
+const css = cssBinder(summary, fonts);
+
+type Props = { accession: string; sequence: string };
+const DownloadButton = ({ accession, sequence }: Props) => {
   return (
     <a
-      className={f('button', 'hollow')}
+      className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
       style={{
         display: 'block',
-        minWidth: '290px',
+        minWidth: '200px',
         width: '100%',
         color: 'var(--colors-graydark)',
       }}
@@ -34,11 +24,11 @@ const DownloadButton = ({ accession, sequence }) => {
       href={URL.createObjectURL(
         new Blob([splitSequenceByChunks(sequence, accession, false)], {
           type: 'text/plain',
-        }),
+        })
       )}
     >
       <span
-        className={f('icon', 'icon-common', 'icon-download')}
+        className={css('icon', 'icon-common', 'icon-download')}
         data-icon="&#xf019;"
       />
       &nbsp;Download Sequence

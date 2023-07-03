@@ -154,7 +154,9 @@ export class FileButton extends PureComponent /*:: <ButtonProps> */ {
 
     const filename = name || `${fileType}.${extensions[fileType]}`;
 
-    const buttonClass = showIcon ? [] : ['button', 'hollow'];
+    const buttonClass = showIcon
+      ? []
+      : ['vf-button', 'vf-button--secondary', 'vf-button--sm'];
     return (
       <Tooltip
         interactive
