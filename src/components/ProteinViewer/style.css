@@ -130,7 +130,9 @@ g:global(.child-location-group.clg-5) path {
 .fullscreenable:-moz-full-screen {
   background-color: white;
 }
-
+.fullscreenable {
+  overflow: scroll;
+}
 .track-in-table text {
   fill: var(--colors-graydark);
 }
