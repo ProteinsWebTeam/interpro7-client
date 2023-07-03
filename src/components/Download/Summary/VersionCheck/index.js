@@ -75,6 +75,7 @@ const VersionCheck = ({ data, downloadVersion, localID } /*: Props */) => {
             </p>
           </>
         }
+        interactive
       >
         ⚠️
       </Tooltip>
