@@ -284,7 +284,6 @@ export default loadExternalSources(
         } as Params)(
           loadData(getRelatedEntriesURL as Params)(DomainOnProteinWithoutData)
         )
-        //     ),
       )
     )
   )

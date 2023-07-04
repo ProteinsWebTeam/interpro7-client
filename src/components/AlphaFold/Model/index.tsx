@@ -156,13 +156,14 @@ const AlphaFoldModel = ({
                 </Link>
                 <span className={css('footer')}>
                   View on{' '}
-                  <Link href={modelUrl} className={css('ext')}>
+                  <Link href={modelUrl} className={css('ext')} target="_blank">
                     AlphaFold DB
                   </Link>{' '}
                   or{' '}
                   <UniProtLink
                     id={modelInfo.uniprotAccession}
                     className={css('ext')}
+                    target="_blank"
                   >
                     UniProtKB
                   </UniProtLink>
@@ -284,7 +285,11 @@ const AlphaFoldModel = ({
 const getModelInfoUrl = (isUrlToApi: boolean) =>
   createSelector(
     (state: GlobalState) => state.settings.alphafold,
-    (_: GlobalState, props?: Props) => props?.proteinAcc || '',
+    (_: GlobalState, props?: Props) => {
+      const proteinFromPayload =
+        (props as LoadedProps)?.data?.payload?.[0]?.uniprotAccession || '';
+      return props?.proteinAcc || proteinFromPayload;
+    },
     (
       { protocol, hostname, port, root, query }: ParsedURLServer,
       accession: string

@@ -13,7 +13,7 @@ import protvista from 'components/ProteinViewer/style.css';
 const f = foundationPartial(protvista);
 
 const MAX_PERC_WIDTH = 80; // Just to reseve a bit for the labels
-
+const HEIGHT_OF_TRACKS = 22;
 /* :: type Props = {
   matches: Array<Object>,
   highlight: Array<string>,
@@ -91,8 +91,8 @@ class IDAProtVista extends ProtVistaMatches /*:: <Props> */ {
               >
                 <nightingale-interpro-track
                   length={length}
-                  displaystart="1"
-                  displayend={length}
+                  display-start="1"
+                  display-end={length}
                   id={`track_${d.accession}_${i}`}
                   ref={(e) =>
                     (this.web_tracks[`track_${d.accession}_${i}`] = e)
@@ -101,6 +101,7 @@ class IDAProtVista extends ProtVistaMatches /*:: <Props> */ {
                   margin-color="#fafafa"
                   expanded
                   use-ctrl-to-zoom
+                  height={HEIGHT_OF_TRACKS}
                 />
               </DynamicTooltip>
             </div>
