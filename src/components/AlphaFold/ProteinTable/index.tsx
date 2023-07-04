@@ -38,20 +38,20 @@ const ProteinTable = ({
   return (
     <div>
       <Table
-        dataTable={data.payload?.results.map((e) => e.metadata) || []}
+        dataTable={data?.payload?.results.map((e) => e.metadata) || []}
         contentType="protein"
-        loading={data.loading}
-        ok={data.ok}
-        status={data.status}
-        actualSize={data.payload?.count || 0}
+        loading={data?.loading}
+        ok={data?.ok}
+        status={data?.status}
+        actualSize={data?.payload?.count || 0}
         query={search}
-        nextAPICall={data.payload?.next}
-        previousAPICall={data.payload?.previous}
-        currentAPICall={data.url}
+        nextAPICall={data?.payload?.next}
+        previousAPICall={data?.payload?.previous}
+        currentAPICall={data?.url}
         isStale={isStale}
       >
         <PageSizeSelector />
-        <SearchBox loading={data.loading}>Search proteins</SearchBox>
+        <SearchBox loading={data?.loading}>Search proteins</SearchBox>
         <Column
           dataKey="accession"
           cellClassName={'nowrap'}

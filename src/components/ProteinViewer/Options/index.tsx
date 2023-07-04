@@ -5,8 +5,7 @@ import ReactToPrint from 'react-to-print';
 
 import NightingaleSaverCE from '@nightingale-elements/nightingale-saver';
 
-import loadData from 'higherOrder/loadData/ts';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
+import { connect } from 'react-redux';
 import { changeSettingsRaw } from 'actions/creators';
 import { EntryColorMode } from 'utils/entry-color';
 
@@ -100,7 +99,7 @@ const ProteinViewerOptions = ({
             base.appendChild(style);
           } else
             console.warn(
-              "Couldn't setups the style for the protvista-saver snapshot "
+              "Couldn't setups the style for the nightingale-saver snapshot "
             );
         };
         saver.postSave = () => {
@@ -298,9 +297,6 @@ const mapStateToProps = createSelector(
   })
 );
 
-export default loadData({
-  getUrl: getUrlForMeta,
-  propNamespace: 'DB',
-  mapStateToProps,
-  mapDispatchToProps: { changeSettingsRaw },
-})(ProteinViewerOptions);
+export default connect(mapStateToProps, { changeSettingsRaw })(
+  ProteinViewerOptions
+);

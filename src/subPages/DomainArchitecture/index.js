@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-
+// $FlowFixMe
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 import DomainArchitectures from 'components/Entry/DomainArchitectures';
 import Loading from 'components/SimpleCommonComponents/Loading';

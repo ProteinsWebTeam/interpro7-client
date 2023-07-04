@@ -2,19 +2,8 @@ import { createSelector } from 'reselect';
 import { toPlural } from 'utils/pages/toPlural';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
-type ExpectedPayload = {
-  metadata: Metadata;
-  extra_fields?: Record<string, unknown>;
-} & {
-  [matches: string]: Array<Record<string, unknown>>;
-};
-type Data = {
-  data: RequestedData<PayloadList<ExpectedPayload>>;
-  endpoint: Endpoint;
-};
-
 export const processData = createSelector(
-  (data: Data) => data.data.payload?.results || [],
+  (data: Data) => data?.data?.payload?.results || [],
   (data: Data) => data.endpoint,
   (dataResults: ExpectedPayload[], endpoint: Endpoint) => {
     const results: Record<string, unknown>[] = [];

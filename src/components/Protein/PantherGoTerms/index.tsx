@@ -22,9 +22,10 @@ interface LoadedPropsSF
     LoadDataProps<{ metadata: EntryMetadata }> {}
 
 const PantherSFGoTermsWithData = ({
-  data: { loading, payload },
+  data,
   onFoundGOTerms = () => null,
 }: LoadedPropsSF) => {
+  const { loading, payload } = data || {};
   useEffect(() => {
     if (payload?.metadata?.go_terms?.length) onFoundGOTerms();
   }, [payload?.metadata?.go_terms]);

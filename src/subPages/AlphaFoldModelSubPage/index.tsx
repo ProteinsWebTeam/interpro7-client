@@ -46,13 +46,13 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
     if (mainType === 'entry') {
       // Take the list of matched UniProt matches and assign the first one to protein accession
       if ((data?.payload?.count || 0) > 0)
-        setProteinAcc(data.payload?.results[0].metadata.accession || '');
+        setProteinAcc(data?.payload?.results[0].metadata.accession || '');
     } else setProteinAcc(mainAccession);
   }, [mainAccession, data]);
 
   if (data?.loading) return <Loading />;
   const hasMultipleProteins =
-    mainType === 'entry' && (data.payload?.count || 0) > 1;
+    mainType === 'entry' && (data?.payload?.count || 0) > 1;
   return (
     <div
       className={css('row', 'column', { 'split-view': isSplitScreen })}

@@ -287,9 +287,9 @@ type ProteinEntryPayload = {
     entry_protein_locations: [
       {
         fragments: Array<{
-          start: 52;
-          end: 127;
-          'dc-status': 'CONTINUOUS';
+          start: number;
+          end: number;
+          'dc-status'?: string;
         }>;
         model: string | null;
         score: number | null;
@@ -336,6 +336,20 @@ type RootAPIPayload = {
     };
   };
 };
+
+type ConservationValue = {
+  position: number;
+  value: string | number | null;
+  score: number;
+};
+type ConservationPayload = Record<
+  string,
+  {
+    entries: Record<string, Array<Array<ConservationValue>>>;
+    warnings: Array<string>;
+  }
+>;
+
 type WikipediaPayload = {
   parse: {
     title: string;
@@ -366,6 +380,11 @@ type AlphafoldPayload = Array<{
   paeImageUrl: string;
   paeDocUrl: string;
 }>;
+type AlphafoldConfidencePayload = {
+  residueNumber: Array<number>;
+  confidenceScore: Array<number>;
+  confidenceCategory: Array<string>;
+};
 
 type ParsedURLServer = {
   protocol: string;
@@ -401,12 +420,18 @@ type BaseLinkProps = {
 
 type ActiveClassProp = string | ((location: unknown) => string);
 
+type ErrorPayload = {
+  detail: string;
+};
 type DataKey = `data${string}`;
 type IsStaleKey = `isStale${string}`;
-// Props to be injected in the wrapped component
-type LoadDataProps<Payload = unknown> = {
-  [k: DataKey]: RequestedData<Payload>;
-  [k: IsStaleKey]: boolean;
+
+type LoadDataPropsBase<Payload = unknown> = {
+  data?: RequestedData<Payload>;
+  isStale?: boolean;
+};
+type LoadDataProps<Payload = unknown, Namespace extends string = ''> = {
+  [Property in keyof LoadDataPropsBase<Payload> as `${Property}${Namespace}`]: LoadDataPropsBase<Payload>[Property];
 };
 
 type GetUrl<Props = unknown> = (
@@ -419,6 +444,8 @@ type ProtVistaFragment = {
   end: number;
   color?: string;
   shape?: string;
+  residues?: string;
+  seq_feature?: string;
 };
 
 type ProtVistaLocation = {
@@ -430,4 +457,75 @@ type ProtVistaLocation = {
     accession: string;
   };
   description?: string;
+  accession?: string;
+};
+
+type ProteinViewerData<Feature = unknown> = Array<
+  [
+    string,
+    Array<Feature>,
+    { component: string; attributes: Record<string, string> }
+  ]
+>;
+type ProteinViewerDataObject<Feature = unknown> = Record<
+  string,
+  Array<Feature>
+>;
+type ResidueMetadata = {
+  accession: string;
+  source_database: string;
+  name: string;
+  locations: Array<ProtVistaLocation>;
+};
+type ResiduesPayload = Record<string, ResidueMetadata>;
+
+type Genome3DAnnotation = {
+  accession: string;
+  metadata: {
+    source_database: string;
+    name: string;
+    resource: string;
+    type: string;
+    confidence: number;
+  };
+  length: number;
+  locations: Array<ProtVistaLocation>;
+};
+type Genome3DProteinPayload = {
+  data: {
+    annotations: Array<Genome3DAnnotation>;
+    sequence: string;
+    gene_name: string;
+    description: string;
+    taxon_id: number;
+    uniprot_acc: string;
+  };
+  message: string;
+};
+type ExtraFeaturesPayload = Record<
+  string,
+  {
+    accession: string;
+    source_database: string;
+    locations: Array<ProtVistaLocation>;
+  }
+>;
+type MinimalFeature = {
+  accession: string;
+  source_database?: string;
+  name?: string;
+  protein_length?: number;
+  locations?: Array<ProtVistaLocation>;
+  children?: Array<{ accession: string; source_database: string }>;
+  member_databases?: Record<string, unknown>;
+};
+type ExpectedPayload<M = Metadata> = {
+  metadata: M;
+  extra_fields?: Record<string, unknown>;
+} & {
+  [matches: string]: Array<Record<string, unknown>>;
+};
+type Data<M = Metadata> = {
+  data: RequestedData<PayloadList<ExpectedPayload<M>>>;
+  endpoint: Endpoint;
 };

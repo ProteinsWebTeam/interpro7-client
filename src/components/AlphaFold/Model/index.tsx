@@ -91,7 +91,7 @@ const AlphaFoldModel = ({
     );
   }
 
-  const models = data.payload || [];
+  const models = data?.payload || [];
   const [modelInfo] =
     modelId === null
       ? models.slice(0, 1)
@@ -130,8 +130,8 @@ const AlphaFoldModel = ({
       ) : null}
       <SequenceCheck
         proteinAccession={proteinAcc}
-        alphaFoldSequence={data.payload?.[0]?.uniprotSequence}
-        alphaFoldCreationDate={data.payload?.[0]?.modelCreatedDate}
+        alphaFoldSequence={models?.[0]?.uniprotSequence}
+        alphaFoldCreationDate={models?.[0]?.modelCreatedDate}
       />
 
       <div className={css('row')}>

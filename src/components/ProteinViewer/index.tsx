@@ -49,6 +49,7 @@ type Residue = {
 export type ExtendedFeatureLocation = FeatureLocation & {
   confidence?: number;
   description?: string;
+  seq_feature?: string;
 };
 export type ExtendedFeature = Feature & {
   data?: unknown;
@@ -65,25 +66,18 @@ export type ExtendedFeature = Feature & {
   children?: Array<ExtendedFeature>;
   warnings?: Array<string>;
 };
-export type ProteinViewerData = Array<
-  [
-    string,
-    Array<Feature>,
-    { component: string; attributes: Record<string, string> }
-  ]
->;
 
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = {
   protein: ProteinMetadata;
   title: string;
-  // data: ProteinViewerData;
+  data: ProteinViewerData;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
   conservationError?: string;
 };
-interface LoadedProps extends Props, LoadDataProps<RootAPIPayload> {}
+interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
 
 type CategoryVisibility = { [name: string]: boolean };
 
@@ -212,7 +206,7 @@ export const ProteinViewer = ({
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
-              {(data as unknown as ProteinViewerData)
+              {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
 
                 .map(([type, entries, component]) => {
@@ -285,7 +279,7 @@ export const ProteinViewer = ({
   );
 };
 
-export default loadData<RootAPIPayload>({
+export default loadData<RootAPIPayload, 'Base'>({
   getUrl: getUrlForMeta,
   propNamespace: 'Base',
 })(ProteinViewer);

@@ -17,12 +17,12 @@ const SchemaOrgData: React.ElementType = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
-
 type Props = {
   intr: string;
-  dataBase?: RequestedData<RootAPIPayload>;
 };
-const Integration = ({ intr, dataBase }: Props) => {
+interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
+
+const Integration = ({ intr, dataBase }: LoadedProps) => {
   const databases = dataBase?.payload?.databases;
   return (
     <div>
@@ -54,7 +54,7 @@ const Integration = ({ intr, dataBase }: Props) => {
   );
 };
 
-export default loadData<RootAPIPayload>({
+export default loadData<RootAPIPayload, 'Base'>({
   getUrl: getUrlForMeta,
   propNamespace: 'Base',
 })(Integration);
