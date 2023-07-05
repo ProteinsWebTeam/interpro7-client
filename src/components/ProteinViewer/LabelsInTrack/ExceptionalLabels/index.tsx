@@ -119,13 +119,13 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   }
   if (entry.accession && entry.accession.startsWith('REPEAT:')) {
     return isPrinting ? (
-      <span>RepeatsDB: [{entry.type}]</span>
+      <span>RepeatsDB consensus</span>
     ) : (
       <Link
         href={`https://repeatsdb.bio.unipd.it/protein/${entry.protein}`}
         target="_blank"
       >
-        RepeatsDB: [{entry.type}]
+        RepeatsDB consensus
       </Link>
     );
   }
