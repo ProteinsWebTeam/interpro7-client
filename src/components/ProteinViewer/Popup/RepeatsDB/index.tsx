@@ -14,7 +14,7 @@ type Props = {
 };
 
 const RepeatsDBPopup = ({ detail }: Props) => {
-  const { locations, type, protein } = detail.feature;
+  const { locations, protein } = detail.feature;
   return (
     <section>
       <h5>RepeatsDB: consensus</h5>

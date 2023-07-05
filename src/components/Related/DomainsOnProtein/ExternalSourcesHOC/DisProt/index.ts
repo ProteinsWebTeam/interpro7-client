@@ -1,11 +1,11 @@
 const HTTP_OK = 200;
 
-const TYPES: {[key: string]: string} = {
+const TYPES: { [key: string]: string } = {
   F: 'Function region',
   S: 'Order state',
   D: 'Disorder state',
   T: 'Transition',
-  I: 'Transition with interaction'
+  I: 'Transition with interaction',
 };
 
 export const formatDisProt = ({
@@ -29,9 +29,6 @@ export const formatDisProt = ({
                 end: region.end,
               },
             ],
-            term_name: region.term_name,
-            ec_name: region.ec_name,
-            released: region.released,
           },
         ],
       } as MinimalFeature);
