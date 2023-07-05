@@ -12,7 +12,6 @@ import { createSelector } from 'reselect';
 
 import useStateRef from 'utils/hooks/useStateRef';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
-import { goToCustomLocation } from 'actions/creators';
 
 import { LineData } from '@nightingale-elements/nightingale-linegraph-track';
 import NightingaleInterProTrackCE from '@nightingale-elements/nightingale-interpro-track';
@@ -52,7 +51,10 @@ const OTHER_TRACK_TYPES = [
   'residue',
   'Model',
   'Domain',
+  'consensus majority',
 ];
+const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
+
 const b2sh = new Map([
   ['N_TERMINAL_DISC', 'discontinuosStart'], // TODO fix spelling in this and nightingale
   ['C_TERMINAL_DISC', 'discontinuosEnd'],
@@ -123,7 +125,6 @@ type Props = {
   closeTooltip: () => void;
   sequence: string;
   customLocation?: InterProLocation;
-  goToCustomLocation?: typeof goToCustomLocation;
   colorDomainsBy?: string;
   databases?: DBsInfo;
 };
@@ -136,7 +137,6 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       isPrinting,
       highlightColor,
       customLocation,
-      goToCustomLocation,
       openTooltip,
       closeTooltip,
       colorDomainsBy,
@@ -177,14 +177,13 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                 ?.name ||
               detail.feature?.source_database ||
               '';
-            if (customLocation && goToCustomLocation)
+            if (customLocation)
               openTooltip(
                 detail.target,
                 <ProtVistaPopup
                   detail={detail as unknown as PopupDetail}
                   sourceDatabase={sourceDatabase}
                   currentLocation={customLocation}
-                  goToCustomLocation={goToCustomLocation}
                 />
               );
             break;
@@ -269,6 +268,9 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
         {entries &&
           entries.map((entry) => {
             const type = entry.type || '';
+            const isExternalSource = EXCEPTIONAL_PREFIXES.some((prefix) =>
+              entry.accession.startsWith(prefix)
+            );
 
             return (
               <React.Fragment key={entry.accession}>
@@ -277,7 +279,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                     hideCategory,
                   })}
                 >
-                  {OTHER_TRACK_TYPES.includes(type) ? (
+                  {OTHER_TRACK_TYPES.includes(type) || isExternalSource ? (
                     <div className={css('track', type.replace('_', '-'))}>
                       {entry.type === 'sequence_conservation' &&
                         (entry.warnings || []).length > 0 && (
@@ -317,12 +319,10 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           use-ctrl-to-zoom
                         />
                       )}
-                      {[
-                        'secondary_structure',
-                        'residue',
-                        'Model',
-                        'Domain',
-                      ].includes(entry.type || '') && (
+                      {(['secondary_structure', 'residue'].includes(
+                        entry.type || ''
+                      ) ||
+                        isExternalSource) && (
                         <NightingaleTrack
                           length={sequence.length}
                           margin-color="#fafafa"
@@ -372,6 +372,6 @@ const mapStateToProps = createSelector(
       (ui.colorDomainsBy as string) || EntryColorMode.DOMAIN_RELATIONSHIP,
   })
 );
-export default connect(mapStateToProps, { goToCustomLocation }, null, {
+export default connect(mapStateToProps, null, null, {
   forwardRef: true,
 })(TracksInCategory);

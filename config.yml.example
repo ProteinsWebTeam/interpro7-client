@@ -4,11 +4,13 @@ root:
   API: https://www.ebi.ac.uk/interpro/api/
   EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
   IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
-  genome3d: https://www.genome3d.eu/api/v1/
+  genome3d: https://www.genome3d.net/api/v1/
   wikipedia: https://en.wikipedia.org/w/api.php
   readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
   alphafold: https://alphafold.ebi.ac.uk/
-
+  repeatsDB: https://repeatsdb.bio.unipd.it/api/search
+  disprot: https://disprot.org/api/
+  
 title: InterPro
 
 github:

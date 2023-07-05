@@ -30,12 +30,13 @@ const EXCEPTIONAL_TYPES = [
   'chain',
   'secondary_structure',
 ];
+const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
 
 export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
   return (
     EXCEPTIONAL_TYPES.includes(entry.type || '') ||
     NOT_MEMBER_DBS.has(entry.source_database || '') ||
-    entry.accession.startsWith('G3D:')
+    EXCEPTIONAL_PREFIXES.some((prefix) => entry.accession.startsWith(prefix))
   );
 };
 
@@ -107,11 +108,34 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   }
   if (entry.accession && entry.accession.startsWith('G3D:')) {
     return isPrinting ? (
-      <span> {entry.source_database} </span>
+      <span>
+        Genome3D: {entry.source_database}{' '}
+      </span>
     ) : (
       <Genome3dLink id={entry.protein || ''}>
-        {entry.source_database}
+        Genome3D: [{entry.type}] {entry.source_database}
       </Genome3dLink>
+    );
+  }
+  if (entry.accession && entry.accession.startsWith('REPEAT:')) {
+    return isPrinting ? (
+      <span>RepeatsDB consensus</span>
+    ) : (
+      <Link
+        href={`https://repeatsdb.bio.unipd.it/protein/${entry.protein}`}
+        target="_blank"
+      >
+        RepeatsDB consensus
+      </Link>
+    );
+  }
+  if (entry.accession && entry.accession.startsWith('DISPROT:')) {
+    return isPrinting ? (
+      <span>DisProt consensus</span>
+    ) : (
+      <Link href={`https://disprot.org/${entry.protein}`} target="_blank">
+        DisProt consensus
+      </Link>
     );
   }
   return null;

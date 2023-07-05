@@ -59,6 +59,18 @@ export default (historyWrapper) => {
         port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
         root: config.root.genome3d.pathname,
       };
+      settings.repeatsDB = {
+        protocol: config.root.repeatsDB.protocol,
+        hostname: config.root.repeatsDB.hostname,
+        port: config.root.repeatsDB.port || DEFAULT_HTTP_PORT,
+        root: config.root.repeatsDB.pathname,
+      };
+      settings.disprot = {
+        protocol: config.root.disprot.protocol,
+        hostname: config.root.disprot.hostname,
+        port: config.root.disprot.port || DEFAULT_HTTP_PORT,
+        root: config.root.disprot.pathname,
+      };
     }
   }
   let description = { other: ['NotFound'] };

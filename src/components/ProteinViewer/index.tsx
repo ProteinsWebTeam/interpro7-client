@@ -76,6 +76,7 @@ type Props = {
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
   conservationError?: string;
+  loading: boolean;
 };
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
 
@@ -99,10 +100,12 @@ export const ProteinViewer = ({
   handleConservationLoad,
   conservationError,
   dataBase,
+  loading = false,
 }: LoadedProps) => {
   const [isPrinting, setPrinting] = useState(false);
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'other residues': true,
+    'external sources': true,
   });
   const categoryRefs = useRef<ExpandedHandle[]>([]);
 
@@ -191,6 +194,7 @@ export const ProteinViewer = ({
                 setExpandedAllTracks={setExpandedAllTracks}
                 tooltipEnabled={tooltipEnabled}
                 setTooltipEnabled={setTooltipEnabled}
+                loading={loading}
               />
             </div>
           </div>

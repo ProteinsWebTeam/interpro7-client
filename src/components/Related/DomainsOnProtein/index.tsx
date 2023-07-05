@@ -127,8 +127,11 @@ const DomainOnProteinWithoutData = ({
     ...groups,
     unintegrated: unintegrated as Array<MinimalFeature>,
     other_features: other,
-    ...externalSourcesData,
   };
+
+  if (externalSourcesData.length) {
+    mergedData.external_sources = externalSourcesData;
+  }
 
   if (dataResidues && !dataResidues.loading && dataResidues.payload) {
     mergeResidues(mergedData, dataResidues.payload);
@@ -202,6 +205,12 @@ const DomainOnProteinWithoutData = ({
         mainData={mainData}
         dataMerged={mergedData}
         dataConfidence={dataConfidence}
+        loading={
+          data?.loading ||
+          dataFeatures?.loading ||
+          dataResidues?.loading ||
+          false
+        }
         // Disabling Conservation until hmmer is working
         // conservationError={conservation.error}
         // showConservationButton={showConservationButton}

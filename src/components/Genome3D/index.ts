@@ -74,7 +74,7 @@ export const formatGenome3dIntoProtVistaPanels = ({
   status,
   payload,
 }: RequestedData<Genome3DProteinPayload>) => {
-  const panelsData: ProteinViewerDataObject<MinimalFeature> = {};
+  const panelsData: MinimalFeature[] = [];
   if (!loading && status === HTTP_OK && payload?.data?.annotations?.length) {
     const models = _getProtvistaTracksData({
       annotations: payload.data.annotations,
@@ -86,8 +86,7 @@ export const formatGenome3dIntoProtVistaPanels = ({
       type: 'Model',
       protein: payload.data.uniprot_acc,
     });
-    if (models)
-      panelsData['predicted_3D_structures_(Provided_by_genome3D)'] = models;
+    if (models) panelsData.push(...models);
     const domains = _getProtvistaTracksData({
       annotations: payload.data.annotations,
       condition: ({ metadata }) =>
@@ -98,8 +97,7 @@ export const formatGenome3dIntoProtVistaPanels = ({
       type: 'Domain',
       protein: payload.data.uniprot_acc,
     });
-    if (domains)
-      panelsData['predicted_domains_(Provided_by_genome3D)'] = domains;
+    if (domains) panelsData.push(...domains);
   }
   return panelsData;
 };

@@ -103,6 +103,8 @@ type SettingsState = {
   api: ParsedURLServer;
   ipScan: ParsedURLServer;
   genome3d: ParsedURLServer;
+  repeatsDB: ParsedURLServer;
+  disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
 };
@@ -458,6 +460,7 @@ type ProtVistaLocation = {
   };
   description?: string;
   accession?: string;
+  [other: string]: unknown;
 };
 
 type ProteinViewerData<Feature = unknown> = Array<
@@ -502,6 +505,59 @@ type Genome3DProteinPayload = {
   };
   message: string;
 };
+type RepeatsDBAnnotation = {
+  start: number;
+  end: number;
+  classification: Array<string>;
+  period: number;
+};
+type RepeatsDBPayload = Array<{
+  uniprot_id: string;
+  uniprot_name: string;
+  uniprot_sequence: string;
+  repeatsdb_consensus_majority: Array<RepeatsDBAnnotation>;
+  reviewed_one: boolean;
+  reviewed_all: boolean;
+}>;
+type DisprotRegion = {
+  region_id: string;
+  term_namespace: string;
+  term_name: string;
+  ec_name: string;
+  acc: string;
+  start: number;
+  end: number;
+  released: string;
+};
+type DisprotConsensusRegion = {
+  start: number,
+  end: number,
+  type: string;
+};
+type DisprotConsensus = {
+  full: Array<DisprotConsensusRegion>,
+  'Structural state': Array<object>,
+  'Structural transition': Array<object>,
+  'Biological process': Array<object>,
+};
+type DisProtPayload = {
+  acc: string;
+  sequence: string;
+  taxonomy: Array<string>;
+  length: number;
+  features: unknown;
+  date: string;
+  disprot_id: string;
+  name: string;
+  genes: Array<unknown>;
+  number_ambiguous_regions: number;
+  number_obsolete_regions: number;
+  disorder_content: number;
+  regions_counter: number;
+  regions: Array<DisprotRegion>;
+  disprot_consensus: DisprotConsensus;
+};
+
 type ExtraFeaturesPayload = Record<
   string,
   {
