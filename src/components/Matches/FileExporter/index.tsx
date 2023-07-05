@@ -1,10 +1,11 @@
 import React from 'react';
 import File from 'components/File';
+import { SupportedExtensions } from 'components/File/FileButton';
 
-type SupportedEnpoints = 'entry' | 'protein' | 'structure';
+type SupportedEndpoints = 'entry' | 'protein' | 'structure';
 const endpoint: Record<
-  SupportedEnpoints,
-  Record<SupportedEnpoints, string | undefined>
+  SupportedEndpoints,
+  Record<SupportedEndpoints, string | undefined>
 > = {
   protein: {
     entry: 'proteinEntry',
@@ -30,12 +31,12 @@ type Props = {
   };
   count: number;
   minWidth?: number | string;
-  fileType: string;
-  primary: SupportedEnpoints;
-  secondary: SupportedEnpoints;
+  fileType: SupportedExtensions;
+  primary: SupportedEndpoints;
+  secondary: SupportedEndpoints;
   label?: string;
-  className?: string;
   focused?: string | null;
+  className?: string;
 };
 const FileExporter = ({
   description,

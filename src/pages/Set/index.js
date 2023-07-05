@@ -22,6 +22,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 // $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import File from 'components/File';
 
 import loadable from 'higherOrder/loadable';

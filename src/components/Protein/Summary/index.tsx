@@ -24,7 +24,7 @@ import IsoformViewer from 'components/Protein/Isoforms/Viewer';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-import HmmerButton from 'components/Protein/Sequence/HmmerButton';
+// import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
 import PantherGoTerms from 'components/Protein/PantherGoTerms';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
@@ -244,7 +244,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
             <hr style={{ margin: '0.8em' }} />
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>
-              Export Matches [TSV]
+              <h5>Export Matches [TSV]</h5>
               <FileExporter
                 description={{
                   main: { key: 'protein' },
@@ -259,18 +259,18 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 primary="entry"
                 secondary="protein"
                 // label="Export Matches [TSV]"
-                className={'button hollow'}
+                // className={'button hollow'}
                 minWidth={minWidth}
               />
             </label>
             <hr style={{ margin: '0.8em' }} />
-            <HmmerButton
+            {/* <HmmerButton
               sequence={metadata.sequence}
               accession={metadata.accession}
               title="Search protein with HMMER"
               minWidth={minWidth}
             />
-            <br />
+            <br /> */}
             <IPScanButton
               sequence={splitSequenceByChunks(metadata.sequence, metadata.id)}
               title="Search protein with InterProScan"

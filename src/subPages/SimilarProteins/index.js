@@ -24,6 +24,7 @@ import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 
+// $FlowFixMe
 import File from 'components/File';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';

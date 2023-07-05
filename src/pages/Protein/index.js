@@ -26,6 +26,7 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import File from 'components/File';
 
 import loadData from 'higherOrder/loadData';

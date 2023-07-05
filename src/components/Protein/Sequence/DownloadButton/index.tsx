@@ -6,8 +6,9 @@ import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import summary from 'styles/summary.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(summary, fonts);
+const css = cssBinder(summary, ipro, fonts);
 
 type Props = { accession: string; sequence: string };
 const DownloadButton = ({ accession, sequence }: Props) => {
@@ -18,7 +19,6 @@ const DownloadButton = ({ accession, sequence }: Props) => {
         display: 'block',
         minWidth: '200px',
         width: '100%',
-        color: 'var(--colors-graydark)',
       }}
       download={`${accession}.fa`}
       href={URL.createObjectURL(

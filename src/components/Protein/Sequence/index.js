@@ -6,7 +6,7 @@ import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
 import { foundationPartial } from 'styles/foundation';
-import HmmerButton from 'components/Protein/Sequence/HmmerButton';
+// import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
 import DownloadButton from './DownloadButton';
 
@@ -321,11 +321,11 @@ export class Sequence extends PureComponent /*:: <SequenceProps> */ {
               title={'Search selection with InterProScan'}
               minWidth="302px"
             />
-            <HmmerButton
+            {/* <HmmerButton
               sequence={this._getSelection}
               title="Search selection with HMMER"
               minWidth="302px"
-            />
+            /> */}
             <DownloadButton sequence={sequence} accession={accession} />
           </div>
         </div>

@@ -14,12 +14,13 @@ import useStateRef from 'utils/hooks/useStateRef';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { LineData } from '@nightingale-elements/nightingale-linegraph-track';
+import NightingaleInterProTrackCE from '@nightingale-elements/nightingale-interpro-track';
 
 import NightingaleTrack from 'components/Nightingale/Track';
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
 import NightingaleLinegraphTrack from 'components/Nightingale/Linegraph';
 import NightingaleColoredSequence from 'components/Nightingale/ColoredSequence';
-import NightingaleInterProTrackCE from '@nightingale-elements/nightingale-interpro-track';
+import uniqueId from 'utils/cheap-unique-id';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -151,6 +152,9 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
     );
     const [hasData, setHasData] = useState<Record<string, boolean>>({});
     const databasesRef = useRef<DBsInfo | null>(null);
+    const uniqueID = useRef(uniqueId());
+    const getTrackAccession = (accession: string) =>
+      `track_${uniqueID.current}_${accession}`;
     useEffect(() => {
       if (databases) databasesRef.current = databases;
     }, [databases]);
@@ -212,7 +216,9 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
         const addedListeners: Record<string, boolean> = {};
         const addedData: Record<string, boolean> = {};
         for (const entry of entries) {
-          const track = document.getElementById(`track_${entry.accession}`);
+          const track = document.getElementById(
+            getTrackAccession(entry.accession)
+          );
           if (track) {
             // setting up the listeners
             if (!hasListeners[entry.accession]) {
@@ -289,7 +295,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                             data={entry.data as LineData[]}
                             length={sequence.length}
                             type="conservation"
-                            id={`track_${entry.accession}`}
+                            id={getTrackAccession(entry.accession)}
                             margin-color="#fafafa"
                             highlight-event="onmouseover"
                             highlight-color={highlightColor}
@@ -298,7 +304,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                         )}
                       {entry.type === 'confidence' && (
                         <NightingaleColoredSequence
-                          id={`track_${entry.accession}`}
+                          id={getTrackAccession(entry.accession)}
                           data={entry.data as string}
                           length={sequence.length}
                           scale="H:90,M:70,L:50,D:0"
@@ -321,7 +327,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           length={sequence.length}
                           margin-color="#fafafa"
                           height={15}
-                          id={`track_${entry.accession}`}
+                          id={getTrackAccession(entry.accession)}
                           highlight-event="onmouseover"
                           highlight-color={highlightColor}
                           use-ctrl-to-zoom
@@ -332,7 +338,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                     <NightingaleInterProTrack
                       length={sequence.length}
                       margin-color="#fafafa"
-                      id={`track_${entry.accession}`}
+                      id={getTrackAccession(entry.accession)}
                       shape="roundRectangle"
                       highlight-event="onmouseover"
                       highlight-color={highlightColor}
