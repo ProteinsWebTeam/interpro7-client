@@ -2,7 +2,7 @@
 
 exports[`<SummaryProtein /> should render 1`] = `
 <div
-  className="sections"
+  className="vf-stack vf-stack--400"
 >
   <Memo(Loadable)
     data={
@@ -208,77 +208,69 @@ exports[`<SummaryProtein /> should render 1`] = `
     </div>
   </section>
   <section
-    className=""
+    className="vf-stack vf-stack--200"
   >
     <Memo(Connect(loadData(Viewer))) />
     <section>
-      <div
-        className="row"
-      >
-        <div
-          className="medium-12 columns margin-bottom-large"
-        >
-          <Memo(Connect(loadData(Connect(loadData(Connect(loadData(loadExternalSources(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(DomainOnProteinWithoutData))))))))))))))))))
-            mainData={
-              {
-                "metadata": {
-                  "accession": "A0A000",
-                  "counters": {
-                    "dbEntries": {
-                      "cathgene3d": 2,
-                      "cdd": 1,
-                      "interpro": 5,
-                      "panther": 2,
-                      "pfam": 1,
-                      "ssf": 1,
-                      "tigrfams": 1,
-                    },
-                    "entries": 13,
-                    "idas": 323222,
-                    "isoforms": 0,
-                    "proteome": 0,
-                    "proteomes": 0,
-                    "sets": 3,
-                    "similar_proteins": 323222,
-                    "structures": 0,
-                    "taxa": 1,
-                    "taxonomy": 1,
-                  },
-                  "description": [],
-                  "gene": "moeA5",
-                  "go_terms": [
-                    {
-                      "category": {
-                        "code": "F",
-                        "name": "molecular_function",
-                      },
-                      "identifier": "GO:0030170",
-                      "name": "pyridoxal phosphate binding",
-                    },
-                  ],
-                  "id": "A0A000_STRVD",
-                  "ida_accession": "220d43766bfe69807874ea078bc783ea7854e968",
-                  "is_fragment": false,
-                  "length": 394,
-                  "name": {
-                    "name": "MoeA5",
-                  },
-                  "protein_evidence": 4,
-                  "proteome": null,
-                  "sequence": "MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN",
-                  "source_database": "unreviewed",
-                  "source_organism": {
-                    "fullName": "Streptomyces viridosporus",
-                    "scientificName": "Streptomyces viridosporus",
-                    "taxId": "67581",
-                  },
+      <Memo(Connect(loadData(Connect(loadData(Connect(loadData(loadExternalSources(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(DomainOnProteinWithoutData))))))))))))))))))
+        mainData={
+          {
+            "metadata": {
+              "accession": "A0A000",
+              "counters": {
+                "dbEntries": {
+                  "cathgene3d": 2,
+                  "cdd": 1,
+                  "interpro": 5,
+                  "panther": 2,
+                  "pfam": 1,
+                  "ssf": 1,
+                  "tigrfams": 1,
                 },
-              }
-            }
-            onMatchesLoaded={[Function]}
-          />
-        </div>
-      </div>
+                "entries": 13,
+                "idas": 323222,
+                "isoforms": 0,
+                "proteome": 0,
+                "proteomes": 0,
+                "sets": 3,
+                "similar_proteins": 323222,
+                "structures": 0,
+                "taxa": 1,
+                "taxonomy": 1,
+              },
+              "description": [],
+              "gene": "moeA5",
+              "go_terms": [
+                {
+                  "category": {
+                    "code": "F",
+                    "name": "molecular_function",
+                  },
+                  "identifier": "GO:0030170",
+                  "name": "pyridoxal phosphate binding",
+                },
+              ],
+              "id": "A0A000_STRVD",
+              "ida_accession": "220d43766bfe69807874ea078bc783ea7854e968",
+              "is_fragment": false,
+              "length": 394,
+              "name": {
+                "name": "MoeA5",
+              },
+              "protein_evidence": 4,
+              "proteome": null,
+              "sequence": "MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN",
+              "source_database": "unreviewed",
+              "source_organism": {
+                "fullName": "Streptomyces viridosporus",
+                "scientificName": "Streptomyces viridosporus",
+                "taxId": "67581",
+              },
+            },
+          }
+        }
+        onMatchesLoaded={[Function]}
+      />
     </section>
   </section>
   <GoTerms

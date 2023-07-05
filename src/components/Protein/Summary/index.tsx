@@ -6,7 +6,6 @@ import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
 import Link from 'components/generic/Link';
-import FileExporter from 'components/Matches/FileExporter';
 
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
@@ -26,6 +25,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 // import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
+import FileExporter from 'components/Matches/FileExporter';
 import PantherGoTerms from 'components/Protein/PantherGoTerms';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
@@ -105,7 +105,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
   };
 
   return (
-    <div className={css('sections')}>
+    <div className={css('vf-stack', 'vf-stack--400')}>
       {metadata.gene && (
         <SchemaOrgData
           data={{ gene: metadata.gene }}
@@ -211,10 +211,13 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                       <FullScreenButton
                         element={comparisonContainerRef.current}
                         className={css(
-                          'button',
+                          'vf-button',
+                          'vf-button--secondary',
+                          'vf-button--sm',
                           'comparison-button',
                           'icon',
-                          'icon-common'
+                          'icon-common',
+                          { disabled: !isoform }
                         )}
                         disabled={!isoform}
                         dataIcon={'\uF0DB'}
@@ -258,8 +261,6 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 fileType="tsv"
                 primary="entry"
                 secondary="protein"
-                // label="Export Matches [TSV]"
-                // className={'button hollow'}
                 minWidth={minWidth}
               />
             </label>
@@ -272,7 +273,10 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
             />
             <br /> */}
             <IPScanButton
-              sequence={splitSequenceByChunks(metadata.sequence, metadata.id)}
+              sequence={splitSequenceByChunks(
+                metadata.sequence,
+                metadata.id || ''
+              )}
               title="Search protein with InterProScan"
               minWidth={minWidth}
             />
@@ -285,18 +289,16 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
       </section>
       <section
         ref={comparisonContainerRef}
-        className={css({ splitfullscreen: comparisonMode })}
+        className={css('vf-stack', 'vf-stack--200', {
+          splitfullscreen: comparisonMode,
+        })}
       >
         <IsoformViewer />
         <section>
-          <div className={css('row')}>
-            <div className={css('medium-12', 'columns', 'margin-bottom-large')}>
-              <DomainsOnProtein
-                mainData={data}
-                onMatchesLoaded={getSubfamiliesFromMatches}
-              />
-            </div>
-          </div>
+          <DomainsOnProtein
+            mainData={data}
+            onMatchesLoaded={getSubfamiliesFromMatches}
+          />
         </section>
       </section>
       {metadata.go_terms && (
