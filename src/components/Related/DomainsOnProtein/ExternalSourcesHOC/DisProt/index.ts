@@ -1,5 +1,13 @@
 const HTTP_OK = 200;
 
+const TYPES: {[key: string]: string} = {
+  F: 'Function region',
+  S: 'Order state',
+  D: 'Disorder state',
+  T: 'Transition',
+  I: 'Transition with interaction'
+};
+
 export const formatDisProt = ({
   loading,
   status,
@@ -7,12 +15,12 @@ export const formatDisProt = ({
 }: RequestedData<DisProtPayload>) => {
   const panelsData: MinimalFeature[] = [];
   if (!loading && status === HTTP_OK && payload) {
-    for (const region of payload.regions) {
+    for (const region of payload.disprot_consensus.full) {
       panelsData.push({
-        accession: `DISPROT:${region.region_id}`,
+        accession: 'DISPROT:',
         protein: payload.acc,
         source_database: 'DisProt',
-        type: region.term_namespace,
+        type: TYPES[region.type] || '',
         locations: [
           {
             fragments: [

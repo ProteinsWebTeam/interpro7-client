@@ -529,6 +529,17 @@ type DisprotRegion = {
   end: number;
   released: string;
 };
+type DisprotConsensusRegion = {
+  start: number,
+  end: number,
+  type: string;
+};
+type DisprotConsensus = {
+  full: Array<DisprotConsensusRegion>,
+  'Structural state': Array<object>,
+  'Structural transition': Array<object>,
+  'Biological process': Array<object>,
+};
 type DisProtPayload = {
   acc: string;
   sequence: string;
@@ -544,7 +555,7 @@ type DisProtPayload = {
   disorder_content: number;
   regions_counter: number;
   regions: Array<DisprotRegion>;
-  disprot_consensus: unknown;
+  disprot_consensus: DisprotConsensus;
 };
 
 type ExtraFeaturesPayload = Record<

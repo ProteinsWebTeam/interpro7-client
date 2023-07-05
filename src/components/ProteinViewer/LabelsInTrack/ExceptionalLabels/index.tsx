@@ -109,7 +109,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   if (entry.accession && entry.accession.startsWith('G3D:')) {
     return isPrinting ? (
       <span>
-        Genome3D: [{entry.type}] {entry.source_database}{' '}
+        Genome3D: {entry.source_database}{' '}
       </span>
     ) : (
       <Genome3dLink id={entry.protein || ''}>

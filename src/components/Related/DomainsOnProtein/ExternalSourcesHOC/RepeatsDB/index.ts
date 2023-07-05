@@ -13,7 +13,7 @@ export const formatRepeatsDB = ({
           accession: `REPEAT:${repeatDatum.uniprot_id}:${feature.start}-${feature.end}`,
           protein: repeatDatum.uniprot_id,
           source_database: 'RepeatsDB',
-          type: 'consensus majority',
+          type: 'Consensus',
           locations: [
             {
               fragments: [
@@ -22,8 +22,6 @@ export const formatRepeatsDB = ({
                   end: feature.end,
                 },
               ],
-              classification: feature.classification,
-              period: feature.period,
             },
           ],
         } as MinimalFeature);
