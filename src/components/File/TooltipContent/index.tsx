@@ -30,9 +30,7 @@ const TooltipContent = ({
     </div>
   ) : (
     <div>
-      <p className={css('tooltip-paragraph')}>
-        <span>{title}</span>
-      </p>
+      <h5 style={{ color: 'var(--color-almost-white)' }}>{title}</h5>
       {shouldLinkToResults && (
         <p className={css('tooltip-paragraph')}>
           <Link

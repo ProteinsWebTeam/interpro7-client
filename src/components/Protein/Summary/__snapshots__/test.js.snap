@@ -163,9 +163,10 @@ exports[`<SummaryProtein /> should render 1`] = `
           }
         />
         <label>
-          Export Matches [TSV]
+          <h5>
+            Export Matches [TSV]
+          </h5>
           <FileExporter
-            className="button hollow"
             count={13}
             description={
               {
@@ -194,13 +195,6 @@ exports[`<SummaryProtein /> should render 1`] = `
             }
           }
         />
-        <HmmerButton
-          accession="A0A000"
-          minWidth="200px"
-          sequence="MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSAN"
-          title="Search protein with HMMER"
-        />
-        <br />
         <Memo(Connect(IPScanButton))
           minWidth="200px"
           sequence="%3EA0A000_STRVD%201-109%0AMDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTN%0AHFHVALEREPAEPHGKEDAVLFTSGYSAN%0A"
