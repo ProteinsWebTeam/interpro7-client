@@ -131,10 +131,10 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   }
   if (entry.accession && entry.accession.startsWith('DISPROT:')) {
     return isPrinting ? (
-      <span>DisProt: [{entry.type}]</span>
+      <span>DisProt consensus</span>
     ) : (
       <Link href={`https://disprot.org/${entry.protein}`} target="_blank">
-        DisProt: [{entry.type}]
+        DisProt consensus
       </Link>
     );
   }
