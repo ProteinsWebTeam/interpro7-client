@@ -1,4 +1,5 @@
 // @flow
+import config from 'config';
 
 const ACCESSION_PATTERN = /{}/;
 const ACCESSION_CLEANUP = [
@@ -55,6 +56,7 @@ export const memberDbURL = new Map([
   ['panther', '//pantherdb.org/'],
   ['pfam', '//www.ebi.ac.uk/interpro/entry/pfam/'],
   ['pirsf', '//proteininformationresource.org/pirsf/'],
+  ['prints', `${config.root.readthedocs.href}prints.html`],
   ['profile', '//prosite.expasy.org/'],
   ['prosite', '//prosite.expasy.org/'],
   ['smart', 'http://smart.embl-heidelberg.de/'],
