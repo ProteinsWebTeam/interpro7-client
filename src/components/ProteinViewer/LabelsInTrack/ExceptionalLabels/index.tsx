@@ -109,7 +109,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   if (entry.accession && entry.accession.startsWith('G3D:')) {
     return isPrinting ? (
       <span>
-        Genome3D: [{entry.type}] {entry.source_database}{' '}
+        Genome3D: {entry.source_database}{' '}
       </span>
     ) : (
       <Genome3dLink id={entry.protein || ''}>
@@ -119,22 +119,22 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   }
   if (entry.accession && entry.accession.startsWith('REPEAT:')) {
     return isPrinting ? (
-      <span>RepeatsDB: [{entry.type}]</span>
+      <span>RepeatsDB consensus</span>
     ) : (
       <Link
         href={`https://repeatsdb.bio.unipd.it/protein/${entry.protein}`}
         target="_blank"
       >
-        RepeatsDB: [{entry.type}]
+        RepeatsDB consensus
       </Link>
     );
   }
   if (entry.accession && entry.accession.startsWith('DISPROT:')) {
     return isPrinting ? (
-      <span>DisProt: [{entry.type}]</span>
+      <span>DisProt consensus</span>
     ) : (
       <Link href={`https://disprot.org/${entry.protein}`} target="_blank">
-        DisProt: [{entry.type}]
+        DisProt consensus
       </Link>
     );
   }
