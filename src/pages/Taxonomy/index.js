@@ -26,6 +26,7 @@ import Table, {
   Exporter,
   HighlightToggler,
 } from 'components/Table';
+// $FlowFixMe
 import File from 'components/File';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';

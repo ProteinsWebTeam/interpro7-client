@@ -1,5 +1,8 @@
-// @flow
-export const splitSequenceByChunks = (sequence, id, encode = true) => {
+export const splitSequenceByChunks = (
+  sequence: string,
+  id: string,
+  encode: boolean = true
+) => {
   const start = 1;
   const end = sequence.length;
   // Split lines

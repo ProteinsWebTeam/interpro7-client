@@ -41,40 +41,44 @@ type Endpoint =
   | 'proteome'
   | 'set';
 
-type EndpointLocation = {
-  isFilter: boolean | null;
-  db: string;
-  accession: string;
-  detail: string;
-  order: number | null;
+type EndpointLocation = Required<EndpointPartialLocation>;
+type EndpointPartialLocation = {
+  isFilter?: boolean | null;
+  db?: string;
+  accession?: string;
+  detail?: string;
+  order?: number | null;
 };
-type InterProDescription = {
+type InterProDescription = Required<
+  InterProPartialDescription<EndpointLocation>
+>;
+type InterProPartialDescription<Location = EndpointPartialLocation> = {
   main: {
     key: Endpoint | 'search' | 'result' | 'other';
-    numberOfFilters: 0;
+    numberOfFilters?: 0;
   };
-  entry: EndpointLocation & {
+  entry?: Location & {
     integration: string | null;
-    memberDB: string | null;
-    memberDBAccession: string | null;
+    memberDB?: string | null;
+    memberDBAccession?: string | null;
   };
-  protein: EndpointLocation;
-  structure: EndpointLocation & {
-    chain: string | null;
+  protein?: Location;
+  structure?: EndpointPartialLocation & {
+    chain?: string | null;
   };
-  taxonomy: EndpointLocation;
-  proteome: EndpointLocation;
-  set: EndpointLocation;
-  search: {
+  taxonomy?: Location;
+  proteome?: Location;
+  set?: Location;
+  search?: {
     type: string | null;
     value: string | null;
   };
-  result: {
+  result?: {
     type: string | null;
     accession: string | null;
     detail: string | null;
   };
-  other: string[];
+  other?: string[];
 };
 type InterProLocation = {
   description: InterProDescription;
@@ -276,6 +280,10 @@ interface ProteinMetadata extends Metadata {
   protein_evidence: number;
   is_fragment: boolean;
   ida_accession: string;
+  source_organism: {
+    fullName: string;
+    taxId: number;
+  };
 }
 type PayloadList<Payload> = {
   count: number;
@@ -296,8 +304,20 @@ type ProteinEntryPayload = {
         }>;
         model: string | null;
         score: number | null;
+        subfamily: { accession: string };
       }
     ];
+    protein_length: number;
+    source_database: string;
+    entry_type: string;
+    entry_integrated: string | null;
+  }>;
+};
+type EntryProteinPayload = {
+  metadata: EntryMetadata;
+  proteins: Array<{
+    accession: string;
+    entry_protein_locations: Array<ProtVistaLocation>;
     protein_length: number;
     source_database: string;
     entry_type: string;
@@ -530,6 +550,17 @@ type DisprotRegion = {
   end: number;
   released: string;
 };
+type DisprotConsensusRegion = {
+  start: number,
+  end: number,
+  type: string;
+};
+type DisprotConsensus = {
+  full: Array<DisprotConsensusRegion>,
+  'Structural state': Array<object>,
+  'Structural transition': Array<object>,
+  'Biological process': Array<object>,
+};
 type DisProtPayload = {
   acc: string;
   sequence: string;
@@ -545,7 +576,7 @@ type DisProtPayload = {
   disorder_content: number;
   regions_counter: number;
   regions: Array<DisprotRegion>;
-  disprot_consensus: unknown;
+  disprot_consensus: DisprotConsensus;
 };
 
 type ExtraFeaturesPayload = Record<

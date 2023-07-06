@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
 
-  @nest & > * {
+  & > * {
     padding: var(--spacing-medium);
   }
 }
@@ -84,7 +84,7 @@
   background-color: var(--colors-ebidark);
   color: var(--colors-nearly-white);
 
-  @nest & > * {
+  & > * {
     border-left: solid 1px grey;
 
     &:first-child {

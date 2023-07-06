@@ -14,6 +14,7 @@ import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 
 import MatchesOnProtein from './MatchesOnProtein';
+// $FlowFixMe
 import FileExporter from '../FileExporter';
 
 import { foundationPartial } from 'styles/foundation';
@@ -70,11 +71,7 @@ const schemaProcessData = (data) => {
     }
   */
 export const List = (
-  {
-    data,
-    dataResource,
-    customLocation: { search },
-  } /*: {data: {
+  { data, dataResource, customLocation: { search } } /*: {data: {
     loading: boolean,
     payload: Genome3DPayload,
     ok?: boolean,
@@ -152,7 +149,8 @@ export const List = (
             )}
             isSearchable={true}
             customiseSearch={{
-              validation: /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
+              validation:
+                /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
               message: 'Accepts only UniProt accessions',
             }}
           >

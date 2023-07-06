@@ -60,7 +60,7 @@ export const groupByEntryType = (
 
 type Props = PropsWithChildren<{
   mainData: { metadata: ProteinMetadata };
-  onMatchesLoaded?: (results: ProteinEntryPayload[]) => void;
+  onMatchesLoaded?: (results: EntryProteinPayload[]) => void;
 }>;
 interface LoadedProps
   extends Props,
@@ -69,7 +69,7 @@ interface LoadedProps
     LoadDataProps<ResiduesPayload, 'Residues'>,
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
-    LoadDataProps<PayloadList<ProteinEntryPayload> | ErrorPayload> {}
+    LoadDataProps<PayloadList<EntryProteinPayload> | ErrorPayload> {}
 
 const DomainOnProteinWithoutData = ({
   data,
@@ -93,7 +93,7 @@ const DomainOnProteinWithoutData = ({
     error: null,
   });
   useEffect(() => {
-    const payload = data?.payload as PayloadList<ProteinEntryPayload>;
+    const payload = data?.payload as PayloadList<EntryProteinPayload>;
     if (data && !data.loading && payload?.results && onMatchesLoaded)
       onMatchesLoaded(payload.results);
   }, [data]);
@@ -103,7 +103,7 @@ const DomainOnProteinWithoutData = ({
     (!dataFeatures || dataFeatures.loading || !dataFeatures.payload)
   )
     return <Loading />;
-  const payload = data?.payload as PayloadList<ProteinEntryPayload>;
+  const payload = data?.payload as PayloadList<EntryProteinPayload>;
   if (!payload?.results) {
     const edgeCaseText = edgeCases.get(STATUS_TIMEOUT);
     if ((data?.payload as ErrorPayload)?.detail === 'Query timed out')
@@ -284,7 +284,6 @@ export default loadExternalSources(
         } as Params)(
           loadData(getRelatedEntriesURL as Params)(DomainOnProteinWithoutData)
         )
-        //     ),
       )
     )
   )

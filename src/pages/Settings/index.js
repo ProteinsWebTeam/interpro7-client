@@ -597,15 +597,6 @@ const EBIEndpointSettings = connect(getStatusForEndpoint('ebi'))(
 const IPScanEndpointSettings = connect(getStatusForEndpoint('ipScan'))(
   EndpointSettings,
 );
-// const Genome3DEndpointSettings = connect(getStatusForEndpoint('genome3d'))(
-//   EndpointSettings,
-// );
-// const RepeatsDBEndpointSettings = connect(getStatusForEndpoint('repeatsDB'))(
-//   EndpointSettings,
-// );
-// const DisprotEndpointSettings = connect(getStatusForEndpoint('disprot'))(
-//   EndpointSettings,
-// );
 const WikipediaEndpointSettings = connect(getStatusForEndpoint('wikipedia'))(
   EndpointSettings,
 );
@@ -767,9 +758,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
       api: T.object.isRequired,
       ebi: T.object.isRequired,
       ipScan: T.object.isRequired,
-      // genome3d: T.object.isRequired,
-      // repeatsDB: T.object.isRequired,
-      // disprot: T.object.isRequired,
       wikipedia: T.object.isRequired,
       alphafold: T.object.isRequired,
     }).isRequired,
@@ -819,9 +807,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
         api = {},
         ebi = {},
         ipScan = {},
-        // genome3d = {},
-        // repeatsDB = {},
-        // disprot = {},
         wikipedia = {},
         alphafold = {},
       },
@@ -903,27 +888,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
                     InterProScan Settings{' '}
                     {!DEV && '(modification temporarily disabled)'}
                   </IPScanEndpointSettings>
-                  {/* <Genome3DEndpointSettings
-                    category="genome3d"
-                    endpointDetails={genome3d}
-                  >
-                    Genome3D Settings{' '}
-                    {!DEV && '(modification temporarily disabled)'}
-                  </Genome3DEndpointSettings>
-                  <RepeatsDBEndpointSettings
-                    category="repeatsDB"
-                    endpointDetails={repeatsDB}
-                  >
-                    RepeatsDB Settings{' '}
-                    {!DEV && '(modification temporarily disabled)'}
-                  </RepeatsDBEndpointSettings>
-                  <DisprotEndpointSettings
-                    category="disprot"
-                    endpointDetails={disprot}
-                  >
-                    DisProt Settings{' '}
-                    {!DEV && '(modification temporarily disabled)'}
-                  </DisprotEndpointSettings> */}
                   <WikipediaEndpointSettings
                     category="wikipedia"
                     endpointDetails={wikipedia}

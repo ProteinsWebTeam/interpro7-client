@@ -1,12 +1,12 @@
 .version-block {
   display: flex;
   justify-content: space-between;
-  @nest & .version-info {
+  & .version-info {
     font-size: 0.8em;
-    @nest & header {
+    & header {
       font-weight: bold;
     }
-    @nest & .version-date {
+    & .version-date {
       margin-top: -0.5em;
     }
   }
