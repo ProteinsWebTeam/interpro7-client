@@ -28,6 +28,7 @@ type InterProFeature = MinimalFeature & {
   integrated?: string;
   children?: Array<MinimalFeature>;
   type: string;
+  short_name?: string;
 };
 type FeatureMap = Record<string, InterProFeature>;
 
@@ -44,6 +45,7 @@ const features2protvista = (features: FeatureMap) => {
   const integrated: Array<InterProFeature> = [];
   for (const feature of featArray) {
     if (!feature) continue;
+    if (!feature.short_name) feature.short_name = feature.name;
     if (feature.integrated && feature.integrated in features) {
       const parent = features[feature.integrated];
       if (!('children' in parent)) {
