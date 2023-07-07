@@ -95,10 +95,24 @@ const DomainOnProteinWithoutData = ({
     data: null,
     error: null,
   });
+  const [processedData, setProcessedData] = useState<{
+    interpro: Record<string, unknown>[];
+    unintegrated: Record<string, unknown>[];
+    other: Array<MinimalFeature>;
+  } | null>(null);
   useEffect(() => {
     const payload = data?.payload as PayloadList<EntryProteinPayload>;
-    if (data && !data.loading && payload?.results && onMatchesLoaded)
-      onMatchesLoaded(payload.results);
+    if (data && !data.loading && payload?.results) {
+      const { interpro, unintegrated, other } = processData({
+        data: data as unknown as RequestedData<
+          PayloadList<ExpectedPayload<ProteinMetadata>>
+        >,
+        endpoint: 'protein',
+      });
+      setProcessedData({ interpro, unintegrated, other });
+      onMatchesLoaded?.(payload.results);
+      onFamiliesFound?.(interpro.filter((entry) => entry.type === 'family'));
+    }
   }, [data]);
 
   if (
@@ -112,16 +126,8 @@ const DomainOnProteinWithoutData = ({
     if ((data?.payload as ErrorPayload)?.detail === 'Query timed out')
       return <EdgeCase text={edgeCaseText || ''} status={STATUS_TIMEOUT} />;
   }
-
-  const { interpro, unintegrated, other } = processData({
-    data: data as unknown as RequestedData<
-      PayloadList<ExpectedPayload<ProteinMetadata>>
-    >,
-    endpoint: 'protein',
-  });
-  const interproFamilies = interpro.filter((entry) => entry.type === 'family');
-  onFamiliesFound?.(interproFamilies);
-
+  if (!processedData) return null;
+  const { interpro, unintegrated, other } = processedData;
   const groups = groupByEntryType(
     interpro as Array<{ accession: string; type: string }>
   );
@@ -131,8 +137,8 @@ const DomainOnProteinWithoutData = ({
   const mergedData: ProteinViewerDataObject<MinimalFeature> = {
     ...groups,
     unintegrated: unintegrated as Array<MinimalFeature>,
-    other_features: other,
   };
+  if (other) mergedData.other_features = other;
 
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;

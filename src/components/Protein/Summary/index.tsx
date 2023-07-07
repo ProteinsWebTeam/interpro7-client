@@ -195,9 +195,9 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                     //@ts-ignore
                     <ProteinEntryHierarchy entries={families} />
                   ) : (
-                    <p className={css('margin-bottom-medium')}>
+                    <div className={css('margin-bottom-medium')}>
                       {matchesLoaded ? 'None predicted' : <Loading inline />}
-                    </p>
+                    </div>
                   )}
                 </td>
               </tr>
