@@ -12,7 +12,6 @@ import {
   getConfidenceURLFromPayload,
 } from 'components/AlphaFold/selectors';
 import { processData } from 'components/ProteinViewer/utils';
-import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import EdgeCase from 'components/EdgeCase';
 
@@ -61,6 +60,8 @@ export const groupByEntryType = (
 type Props = PropsWithChildren<{
   mainData: { metadata: ProteinMetadata };
   onMatchesLoaded?: (results: EntryProteinPayload[]) => void;
+  onFamiliesFound?: (families: Record<string, unknown>[]) => void;
+  title?: string;
 }>;
 interface LoadedProps
   extends Props,
@@ -78,8 +79,10 @@ const DomainOnProteinWithoutData = ({
   dataFeatures,
   dataConfidence,
   onMatchesLoaded,
+  onFamiliesFound,
   children,
   externalSourcesData,
+  title,
 }: LoadedProps) => {
   const [conservation, setConservation] = useState<{
     generateData: boolean;
@@ -117,6 +120,8 @@ const DomainOnProteinWithoutData = ({
     endpoint: 'protein',
   });
   const interproFamilies = interpro.filter((entry) => entry.type === 'family');
+  onFamiliesFound?.(interproFamilies);
+
   const groups = groupByEntryType(
     interpro as Array<{ accession: string; type: string }>
   );
@@ -191,17 +196,9 @@ const DomainOnProteinWithoutData = ({
           });
         }}
       />
-      <div className={css('margin-bottom-large')}>
-        <h5>Protein family membership</h5>
-        {interproFamilies.length ? (
-          //@ts-ignore
-          <ProteinEntryHierarchy entries={interproFamilies} />
-        ) : (
-          <p className={css('margin-bottom-medium')}>None predicted</p>
-        )}
-      </div>
 
       <DomainsOnProteinLoaded
+        title={title}
         mainData={mainData}
         dataMerged={mergedData}
         dataConfidence={dataConfidence}

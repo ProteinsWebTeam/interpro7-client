@@ -129,6 +129,20 @@ exports[`<SummaryProtein /> should render 1`] = `
               />
             </td>
           </tr>
+          <tr>
+            <td>
+              Family membership
+            </td>
+            <td>
+              <p
+                className="margin-bottom-medium"
+              >
+                <Loading
+                  inline={true}
+                />
+              </p>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -269,6 +283,7 @@ exports[`<SummaryProtein /> should render 1`] = `
             },
           }
         }
+        onFamiliesFound={[Function]}
         onMatchesLoaded={[Function]}
       />
     </section>
