@@ -50,7 +50,7 @@ const Selector = ({
       className={css('vf-form__select')}
     >
       <option className={css('placeholder')} value="">
-        Select an Isoform to display...
+        Select an isoform
       </option>
       {isoforms.map((acc) => (
         <option value={acc} key={acc}>

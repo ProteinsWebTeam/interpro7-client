@@ -105,7 +105,7 @@ const Viewer = ({ isoform, data }: LoadedProps) => {
       <ProteinViewer
         protein={{ sequence, length: sequence.length }}
         data={dataProtvista}
-        title="Entry matches to this Isoform"
+        title="Entry matches to this isoform"
       />
     </div>
   );

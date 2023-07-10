@@ -233,7 +233,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                         )}
                         disabled={!isoform}
                         dataIcon={'\uF0DB'}
-                        tooltip="View in comparison mode"
+                        tooltip="Compare side-by-side with canonical sequence"
                         onFullScreenHook={() => setComparisonMode(true)}
                         onExitFullScreenHook={() => setComparisonMode(false)}
                       />
@@ -251,15 +251,29 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
               <ul className={css('no-bullet')}>
                 <li>
                   <UniProtLink id={metadata.accession} className={css('ext')}>
-                    View {metadata.accession} in UniProtKB
+                    UniProt
                   </UniProtLink>
                 </li>
               </ul>
             </section>
             <hr style={{ margin: '0.8em' }} />
+            {/* <HmmerButton
+              sequence={metadata.sequence}
+              accession={metadata.accession}
+              title="Search protein with HMMER"
+              minWidth={minWidth}
+            />
+            <br /> */}
+            <IPScanButton
+              sequence={splitSequenceByChunks(
+                metadata.sequence,
+                metadata.id || ''
+              )}
+              title="Search sequence with InterProScan"
+              minWidth={minWidth}
+            />
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>
-              <h5>Export Matches [TSV]</h5>
               <FileExporter
                 description={{
                   main: { key: 'protein' },
@@ -274,24 +288,9 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 primary="entry"
                 secondary="protein"
                 minWidth={minWidth}
+                label="Download matches (TSV)"
               />
             </label>
-            <hr style={{ margin: '0.8em' }} />
-            {/* <HmmerButton
-              sequence={metadata.sequence}
-              accession={metadata.accession}
-              title="Search protein with HMMER"
-              minWidth={minWidth}
-            />
-            <br /> */}
-            <IPScanButton
-              sequence={splitSequenceByChunks(
-                metadata.sequence,
-                metadata.id || ''
-              )}
-              title="Search protein with InterProScan"
-              minWidth={minWidth}
-            />
             <DownloadButton
               sequence={metadata.sequence}
               accession={metadata.accession}
@@ -309,7 +308,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
         <section>
           {isoform ? (
             <IsoformHeader
-              accession="Canonical Isoform"
+              accession="Canonical"
               length={metadata.length}
             />
           ) : null}

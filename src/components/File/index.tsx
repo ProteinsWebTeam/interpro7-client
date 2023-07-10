@@ -34,6 +34,7 @@ type Props = {
   endpoint?: string;
   className?: string;
   minWidth?: number | string;
+  label?: string;
 };
 
 type State = {
