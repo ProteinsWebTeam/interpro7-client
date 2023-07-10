@@ -9,7 +9,7 @@
     color: #ccc;
   }
 
-  @nest & i {
+  & i {
     margin-right: 0.5rem;
   }
 }

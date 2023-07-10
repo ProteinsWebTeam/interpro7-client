@@ -1,4 +1,4 @@
-import React, { useState, useRef, ReactNode } from 'react';
+import React, { useState, useRef, ReactNode, PropsWithChildren } from 'react';
 
 import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -69,7 +69,7 @@ export type ExtendedFeature = Feature & {
 
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
-type Props = {
+type Props = PropsWithChildren<{
   protein: ProteinMetadata;
   title: string;
   data: ProteinViewerData;
@@ -77,7 +77,7 @@ type Props = {
   handleConservationLoad?: () => void;
   conservationError?: string;
   loading: boolean;
-};
+}>;
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
 
 type CategoryVisibility = { [name: string]: boolean };
@@ -101,6 +101,7 @@ export const ProteinViewer = ({
   conservationError,
   dataBase,
   loading = false,
+  children,
 }: LoadedProps) => {
   const [isPrinting, setPrinting] = useState(false);
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
@@ -195,7 +196,9 @@ export const ProteinViewer = ({
                 tooltipEnabled={tooltipEnabled}
                 setTooltipEnabled={setTooltipEnabled}
                 loading={loading}
-              />
+              >
+                {children}
+              </Options>
             </div>
           </div>
           <div ref={componentsRef} id={idRef.current}>

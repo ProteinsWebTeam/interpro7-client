@@ -58,6 +58,7 @@ type Props = PropsWithChildren<{
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
   loading: boolean;
+  title?: string;
 }>;
 
 const DomainsOnProteinLoaded = ({
@@ -69,6 +70,7 @@ const DomainsOnProteinLoaded = ({
   handleConservationLoad,
   loading,
   children,
+  title = 'Entry matches to this protein',
 }: Props) => {
   const sortedData = Object.entries(dataMerged)
     .sort(byEntryType)
@@ -87,7 +89,7 @@ const DomainsOnProteinLoaded = ({
       <ProteinViewer
         protein={protein}
         data={sortedData}
-        title="Entry matches to this protein"
+        title={title}
         showConservationButton={showConservationButton}
         handleConservationLoad={handleConservationLoad}
         conservationError={conservationError}

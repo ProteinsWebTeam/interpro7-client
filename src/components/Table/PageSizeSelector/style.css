@@ -11,7 +11,7 @@
     opacity: 1;
   }
 
-  @nest & > div {
+  & > div {
     display: inline-block;
     /*transition: transform var(--timing-fast) ease-in-out;*/
     /*transform: rotate3d(0, 1, 0, 91deg);*/

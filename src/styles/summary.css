@@ -21,3 +21,7 @@ section.summary-row {
     padding: 0.5rem 1rem 0.5rem 0;
   }
 }
+
+.summary-grid {
+  grid-template-columns: 3fr 1fr;
+}

@@ -1,0 +1,18 @@
+.tooltip-paragraph {
+  padding: 0.2em;
+  display: flex;
+  justify-content: center;
+}
+.in-popup {
+  margin: 0;
+  box-shadow: none;
+  color: var(--colors-very-white);
+  &:visited {
+    color: var(--colors-very-white);
+  }
+  &:hover,
+  &:focus {
+    color: var(--colors-almost-white);
+    box-shadow: none;
+  }
+}

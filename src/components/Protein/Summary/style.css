@@ -8,6 +8,13 @@
 }
 .comparison-button {
   margin-left: 0.3em;
+  &.disabled {
+    background: lightgray;
+    border-color: darkgray;
+    color: darkgray;
+    box-shadow: none;
+    margin: 0 0.3em;
+  }
 }
 @media (orientation: portrait) {
   .splitfullscreen {

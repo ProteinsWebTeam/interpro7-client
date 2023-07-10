@@ -20,6 +20,7 @@ import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import { ebiSearch2urlDB } from 'utils/url-patterns';
+// $FlowFixMe
 import FileExporter from './FileExporter';
 
 import { foundationPartial } from 'styles/foundation';
@@ -40,8 +41,10 @@ const SchemaOrgData = loadable({
 const MAX_LENGTH = 200;
 
 const regTag = /&lt;\/?(p|ul|li)&gt;/gi;
-const regtax = /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
-const reg = /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
+const regtax =
+  /\<taxon [^>]+>([^<]+)<\/taxon>/gi; /* Remove TAG taxon and just keep the inside text part e.e <taxon tax_id="217897">...</taxon> */
+const reg =
+  /\<[^"].*?id="([^"]+)"\/>/gi; /* all TAGS containing ID e.g. [<cite id="PUB00068465"/>] <dbxref db="INTERPRO" id="IPR009071"/> */
 
 export const decodeDescription = (description) =>
   description

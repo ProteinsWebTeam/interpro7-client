@@ -47,7 +47,7 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
       // Take the list of matched UniProt matches and assign the first one to protein accession
       if ((data?.payload?.count || 0) > 0)
         setProteinAcc(data?.payload?.results[0].metadata.accession || '');
-    } else setProteinAcc(mainAccession);
+    } else setProteinAcc(mainAccession as string);
   }, [mainAccession, data]);
 
   if (data?.loading) return <Loading />;

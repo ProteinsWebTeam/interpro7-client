@@ -1,52 +1,55 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 import File from 'components/File';
+import { SupportedExtensions } from 'components/File/FileButton';
 
-const endpoint = {
+type SupportedEndpoints = 'entry' | 'protein' | 'structure';
+const endpoint: Record<
+  SupportedEndpoints,
+  Record<SupportedEndpoints, string | undefined>
+> = {
   protein: {
     entry: 'proteinEntry',
+    protein: undefined,
     structure: 'proteinStructure',
   },
   structure: {
     entry: 'structureEntry',
     protein: 'structureProtein',
+    structure: undefined,
   },
   entry: {
+    entry: undefined,
     protein: 'entryProtein',
     structure: 'entryStructure',
   },
 };
 
-const FileExporter = (
-  {
-    description,
-    search = {},
-    count,
-    fileType,
-    primary,
-    secondary,
-    className,
-    focused = null,
-    minWidth,
-  } /*: {
-    description: {
-      main: {key:string},
-      taxonomy?: {accession: string},
-    },
-    search?: {
-      extra_fields: string,
-    },
-    count: number,
-    minWidth?: number |string,
-    fileType: string,
-    primary: string,
-    secondary: string,
-    label?: string,
-    className?: string,
-    focused?: ?string
-  } */,
-) => {
+type Props = {
+  description: InterProPartialDescription;
+  search?: {
+    extra_fields?: string;
+  };
+  count: number;
+  minWidth?: number | string;
+  fileType: SupportedExtensions;
+  primary: SupportedEndpoints;
+  secondary: SupportedEndpoints;
+  label?: string;
+  focused?: string | null;
+  className?: string;
+};
+const FileExporter = ({
+  description,
+  search = {},
+  count,
+  fileType,
+  primary,
+  secondary,
+  className,
+  label,
+  focused = null,
+  minWidth,
+}: Props) => {
   const customLocationDescription = {
     ...description,
     main: { key: primary },
@@ -64,7 +67,7 @@ const FileExporter = (
       className={className}
       fileType={fileType}
       name={`${primary}-matching-${
-        description[description.main.key].accession
+        (description[description.main.key] as EndpointLocation).accession
       }.${fileType}`}
       count={count}
       customLocationDescription={customLocationDescription}
@@ -74,21 +77,11 @@ const FileExporter = (
           search.extra_fields ? `,${search.extra_fields}` : ''
         }`,
       }}
-      endpoint={(endpoint[primary] && endpoint[primary][secondary]) || primary}
+      endpoint={(endpoint?.[primary]?.[secondary] as string) || primary}
       minWidth={minWidth}
+      label={label}
     />
   );
-};
-FileExporter.propTypes = {
-  description: T.object,
-  search: T.object,
-  count: T.number,
-  minWidth: T.oneOfType([T.number, T.string]),
-  fileType: T.string,
-  primary: T.string,
-  secondary: T.string,
-  className: T.string,
-  focused: T.string,
 };
 
 export default FileExporter;

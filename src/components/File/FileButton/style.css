@@ -1,0 +1,30 @@
+@import '../../../styles/colors.css';
+
+.file-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0.1rem;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.downloading {
+  cursor: progress !important;
+}
+
+.failed {
+  cursor: not-allowed !important;
+}
+
+.button.in-popup {
+  padding: 0.5em 1em;
+  &,
+  &:focus,
+  &:visited {
+    border-color: white !important;
+    color: white !important;
+  }
+}

@@ -22,6 +22,7 @@ import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 import GoTerms from 'components/GoTerms';
 import Accession from 'components/Accession';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
+// $FlowFixMe
 import Length from 'components/Protein/Length';
 // $FlowFixMe
 import DomainsOnProteinLoaded from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';

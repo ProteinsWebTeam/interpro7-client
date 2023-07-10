@@ -19,11 +19,11 @@
 .dragging {
   border: 1px solid var(--colors-interpro);
 
-  @nest & > :not(.dragging-overlay) {
+  & > :not(.dragging-overlay) {
     filter: blur(2px);
   }
 
-  @nest & > .dragging-overlay {
+  & > .dragging-overlay {
     visibility: visible;
   }
 }

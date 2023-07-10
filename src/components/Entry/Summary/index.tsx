@@ -117,8 +117,8 @@ const SummaryEntry = ({
   );
   return (
     <div className={css('sections')}>
-      <section className={css('vf-grid')}>
-        <div className={css('vf-stack', 'vf-grid__col--span-3')}>
+      <section className={css('vf-grid', 'summary-grid')}>
+        <div className={css('vf-stack')}>
           <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
           {metadata?.source_database?.toLowerCase() === 'interpro' &&
             metadata?.accession !== metadata?.name?.short && (

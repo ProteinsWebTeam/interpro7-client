@@ -10,14 +10,14 @@
   overflow: auto;
   margin-bottom: 0.5rem;
 
-  @nest & :global(.public-DraftEditorPlaceholder-root) {
+  & :global(.public-DraftEditorPlaceholder-root) {
     color: #cacaca;
     font-size: 1rem;
     position: absolute;
     font-family: var(--fonts-ebi);
   }
 
-  @nest & div[data-block='true'] {
+  & div[data-block='true'] {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 }
@@ -25,7 +25,7 @@
 .line-with-buttons {
   align-items: baseline;
 
-  @nest & > * {
+  & > * {
     margin: auto 0.5ch;
   }
 }
@@ -40,11 +40,11 @@
   position: relative;
 
   &.dragging {
-    @nest & > :not(.dragging-overlay) {
+    & > :not(.dragging-overlay) {
       filter: blur(2px);
     }
 
-    @nest & > .dragging-overlay {
+    & > .dragging-overlay {
       visibility: visible;
     }
   }
