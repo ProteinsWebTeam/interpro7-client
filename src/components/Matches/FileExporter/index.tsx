@@ -46,6 +46,7 @@ const FileExporter = ({
   primary,
   secondary,
   className,
+  label,
   focused = null,
   minWidth,
 }: Props) => {
@@ -78,6 +79,7 @@ const FileExporter = ({
       }}
       endpoint={(endpoint?.[primary]?.[secondary] as string) || primary}
       minWidth={minWidth}
+      label={label}
     />
   );
 };

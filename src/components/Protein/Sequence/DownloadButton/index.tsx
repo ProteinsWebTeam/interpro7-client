@@ -31,7 +31,7 @@ const DownloadButton = ({ accession, sequence }: Props) => {
         className={css('icon', 'icon-common', 'icon-download')}
         data-icon="&#xf019;"
       />
-      &nbsp;Download Sequence
+      &nbsp;Download sequence (FASTA)
     </a>
   );
 };

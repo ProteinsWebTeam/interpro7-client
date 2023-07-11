@@ -1,11 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { isEqual } from 'lodash-es';
 
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
 import Link from 'components/generic/Link';
+import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
@@ -19,7 +21,9 @@ import {
 import DescriptionReadMore from 'components/Description/DescriptionReadMore';
 
 import IsoformSelector from 'components/Protein/Isoforms/Selector';
-import IsoformViewer from 'components/Protein/Isoforms/Viewer';
+import IsoformViewer, {
+  IsoformHeader,
+} from 'components/Protein/Isoforms/Viewer';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -59,6 +63,10 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
   const comparisonContainerRef = useRef<HTMLElement | null>(null);
   const [renderComparisonButton, setRenderComparisonButton] = useState(false);
   const [comparisonMode, setComparisonMode] = useState(false);
+  const [matchesLoaded, setMatchesLoaded] = useState(false);
+  const [families, setFamilies] = useState<Array<
+    Record<string, unknown>
+  > | null>(null);
   const [subfamilies, setSubfamilies] = useState<Array<string> | null>(null);
   useEffect(() => {
     setRenderComparisonButton(true);
@@ -68,19 +76,8 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
 
   const minWidth = '200px';
 
-  const getSubfamiliesFromMatches = (
-    results: EntryProteinPayload[]
-    //  Array<{
-    //   metadata: {
-    //     source_database: string;
-    //   };
-    //   proteins: Array<{
-    //     entry_protein_locations: Array<{
-    //       subfamily: { accession: string };
-    //     }>;
-    //   }>;
-    // }>
-  ) => {
+  const getSubfamiliesFromMatches = (results: EntryProteinPayload[]) => {
+    setMatchesLoaded(true);
     if (results?.length) {
       setSubfamilies(
         results
@@ -103,7 +100,9 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
     }
     setSubfamilies(null);
   };
-
+  const handleInterProFamilies = (fams: Record<string, unknown>[]) => {
+    if (!isEqual(fams, families)) setFamilies(fams);
+  };
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
       {metadata.gene && (
@@ -189,8 +188,21 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                   </td>
                 </tr>
               ) : null}
-              {metadata.counters &&
-              metadata.counters.isoforms &&
+              <tr>
+                <td>Family membership</td>
+                <td>
+                  {families?.length ? (
+                    //@ts-ignore
+                    <ProteinEntryHierarchy entries={families} />
+                  ) : (
+                    <div className={css('margin-bottom-medium')}>
+                      {matchesLoaded ? 'None predicted' : <Loading inline />}
+                    </div>
+                  )}
+                </td>
+              </tr>
+
+              {metadata?.counters?.isoforms &&
               (metadata.counters.isoforms as number) > 0 ? (
                 <tr>
                   <td data-testid="protein-function">
@@ -221,7 +233,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                         )}
                         disabled={!isoform}
                         dataIcon={'\uF0DB'}
-                        tooltip="View in comparison mode"
+                        tooltip="Compare side-by-side with canonical sequence"
                         onFullScreenHook={() => setComparisonMode(true)}
                         onExitFullScreenHook={() => setComparisonMode(false)}
                       />
@@ -239,15 +251,29 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
               <ul className={css('no-bullet')}>
                 <li>
                   <UniProtLink id={metadata.accession} className={css('ext')}>
-                    View {metadata.accession} in UniProtKB
+                    UniProt
                   </UniProtLink>
                 </li>
               </ul>
             </section>
             <hr style={{ margin: '0.8em' }} />
+            {/* <HmmerButton
+              sequence={metadata.sequence}
+              accession={metadata.accession}
+              title="Search protein with HMMER"
+              minWidth={minWidth}
+            />
+            <br /> */}
+            <IPScanButton
+              sequence={splitSequenceByChunks(
+                metadata.sequence,
+                metadata.id || ''
+              )}
+              title="Search sequence with InterProScan"
+              minWidth={minWidth}
+            />
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>
-              <h5>Export Matches [TSV]</h5>
               <FileExporter
                 description={{
                   main: { key: 'protein' },
@@ -262,24 +288,9 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 primary="entry"
                 secondary="protein"
                 minWidth={minWidth}
+                label="Download matches (TSV)"
               />
             </label>
-            <hr style={{ margin: '0.8em' }} />
-            {/* <HmmerButton
-              sequence={metadata.sequence}
-              accession={metadata.accession}
-              title="Search protein with HMMER"
-              minWidth={minWidth}
-            />
-            <br /> */}
-            <IPScanButton
-              sequence={splitSequenceByChunks(
-                metadata.sequence,
-                metadata.id || ''
-              )}
-              title="Search protein with InterProScan"
-              minWidth={minWidth}
-            />
             <DownloadButton
               sequence={metadata.sequence}
               accession={metadata.accession}
@@ -295,9 +306,16 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
       >
         <IsoformViewer />
         <section>
+          {isoform ? (
+            <IsoformHeader
+              accession="Canonical"
+              length={metadata.length}
+            />
+          ) : null}
           <DomainsOnProtein
             mainData={data}
             onMatchesLoaded={getSubfamiliesFromMatches}
+            onFamiliesFound={handleInterProFamilies}
           />
         </section>
       </section>

@@ -50,14 +50,19 @@ const Selector = ({
       className={css('vf-form__select')}
     >
       <option className={css('placeholder')} value="">
-        Select an Isoform to display...
+        Select an isoform
       </option>
-      {isoforms.map((acc) => (
-        <option value={acc} key={acc}>
-          {acc}
-          {acc.endsWith('-1') ? ' [canonical]' : ''}
-        </option>
-      ))}
+      {isoforms
+        .sort((a: string, b: string) => {
+          const i = Number.parseInt(a.split('-')[1]);
+          const j = Number.parseInt(b.split('-')[1]);
+          return i - j;
+        })
+        .map((acc) => (
+          <option value={acc} key={acc}>
+            {acc.endsWith('-1') ? 'Canonical' : acc}
+          </option>
+        ))}
     </select>
   );
 };

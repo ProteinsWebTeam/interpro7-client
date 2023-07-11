@@ -15,9 +15,10 @@ export const formatDisProt = ({
 }: RequestedData<DisProtPayload>) => {
   const panelsData: MinimalFeature[] = [];
   if (!loading && status === HTTP_OK && payload) {
+    let i = 1;
     for (const region of payload.disprot_consensus.full) {
       panelsData.push({
-        accession: 'DISPROT:',
+        accession: `DISPROT:${i++}`,
         protein: payload.acc,
         source_database: 'DisProt',
         type: TYPES[region.type] || '',
