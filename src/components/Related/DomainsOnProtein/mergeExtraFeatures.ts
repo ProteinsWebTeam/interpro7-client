@@ -1,5 +1,5 @@
 import { ExtendedFeature } from 'components/ProteinViewer';
-
+const mobiConsensus = 'Consensus Disorder Prediction';
 const splitMobiFeatures = (feature: ExtendedFeature) => {
   const newFeatures: Record<string, ExtendedFeature> = {};
   for (const loc of feature.locations || []) {
@@ -7,7 +7,7 @@ const splitMobiFeatures = (feature: ExtendedFeature) => {
       ((loc.fragments[0] as Record<string, number | string>)
         ?.seq_feature as string) ||
       loc.seq_feature ||
-      'Consensus Disorder Prediction';
+      mobiConsensus;
     if (newFeatures[key]) {
       newFeatures[key].locations?.push(loc);
     } else {
@@ -19,18 +19,7 @@ const splitMobiFeatures = (feature: ExtendedFeature) => {
     }
   }
 
-  const sortedObj = Object.keys(newFeatures)
-    .sort((a, b) => {
-      return a === 'Consensus Disorder Prediction' &&
-        b !== 'Consensus Disorder Prediction'
-        ? -1
-        : 1;
-    })
-    .reduce((acc, key) => {
-      acc[key] = newFeatures[key];
-      return acc;
-    }, {} as Record<string, ExtendedFeature>);
-  return Object.values(sortedObj);
+  return Object.values(newFeatures);
 };
 
 const mergeExtraFeatures = (
@@ -42,11 +31,28 @@ const mergeExtraFeatures = (
       splitMobiFeatures(extraFeatures['mobidb-lite'])
     );
   }
-  data.other_features = data.other_features.concat(
-    Object.values(extraFeatures).filter(
-      ({ source_database: db }) => db !== 'mobidblt'
+  data.other_features = data.other_features
+    .concat(
+      Object.values(extraFeatures).filter(
+        ({ source_database: db }) => db !== 'mobidblt'
+      )
     )
-  );
+    .sort((a, b) => {
+      const { accession: accA, source_database: dbA } = a as Record<
+        string,
+        string
+      >;
+      const { accession: accB, source_database: dbB } = b as Record<
+        string,
+        string
+      >;
+      if (dbA === dbB) {
+        if (accA.includes(mobiConsensus)) return -1;
+        if (accB.includes(mobiConsensus)) return 1;
+        return 0;
+      }
+      return dbA > dbB ? 1 : -1;
+    });
   return data;
 };
 export default mergeExtraFeatures;

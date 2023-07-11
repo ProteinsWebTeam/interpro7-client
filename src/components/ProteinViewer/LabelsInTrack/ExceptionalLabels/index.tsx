@@ -41,14 +41,17 @@ export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
 };
 
 const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
-  if (entry.source_database === 'mobidblt')
+  if (entry.source_database === 'mobidblt') {
+    const mobiLabel = `MobiDB-lite: ${(
+      (entry.locations?.[0]?.fragments?.[0]?.seq_feature ||
+        entry.accession) as string
+    ).replace('Mobidblt-', '')}`;
     return isPrinting ? (
-      <span>{entry.accession}</span>
+      <span>{mobiLabel}</span>
     ) : (
-      <Link href={`https://mobidb.org/${entry.protein}`}>
-        {entry.accession}
-      </Link>
+      <Link href={`https://mobidb.org/${entry.protein}`}>{mobiLabel}</Link>
     );
+  }
   if (entry.source_database === 'funfam') {
     return isPrinting ? (
       <span>{entry.accession}</span>
@@ -68,7 +71,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
           },
         }}
       >
-        N: {entry.accession}
+        Pfam-N: {entry.accession}
       </Link>
     );
   }
@@ -96,7 +99,14 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     entry.type === 'chain' ||
     entry.type === 'secondary_structure'
   )
-    return <>{entry.accession}</>;
+    return (
+      <>
+        <span style={{ textTransform: 'capitalize' }}>
+          {(entry.source_database || '').replace('_', ' ')}:
+        </span>{' '}
+        {entry.accession}
+      </>
+    );
   if (entry.type === 'sequence_conservation') {
     return (
       <Tooltip title={'Score calculated using Phmmer and HMM profile'}>
@@ -108,9 +118,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   }
   if (entry.accession && entry.accession.startsWith('G3D:')) {
     return isPrinting ? (
-      <span>
-        Genome3D: {entry.source_database}{' '}
-      </span>
+      <span>Genome3D: {entry.source_database} </span>
     ) : (
       <Genome3dLink id={entry.protein || ''}>
         Genome3D: [{entry.type}] {entry.source_database}
