@@ -134,13 +134,11 @@ exports[`<SummaryProtein /> should render 1`] = `
               Family membership
             </td>
             <td>
-              <div
-                className="margin-bottom-medium"
-              >
-                <Loading
-                  inline={true}
-                />
-              </div>
+              <FamilyHierarchy
+                entriesCounter={13}
+                families={null}
+                matchesLoaded={false}
+              />
             </td>
           </tr>
         </tbody>
