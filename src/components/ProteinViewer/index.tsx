@@ -177,7 +177,11 @@ export const ProteinViewer = ({
       </div>
       <div>
         <NightingaleManager id="pv-manager">
-          <div className={css('protvista-grid')}>
+          <div
+            className={css('protvista-grid', {
+              printing: isPrinting,
+            })}
+          >
             <div className={css('view-options-wrap', 'track-sized')}>
               <Options
                 setPrintingMode={setPrinting}
