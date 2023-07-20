@@ -221,6 +221,10 @@ export const ProteinViewer = ({
                 .filter(([_, tracks]) => tracks && tracks.length)
 
                 .map(([type, entries, component]) => {
+                  entries.forEach((entry: ExtendedFeature) => {
+                    entry.protein = protein.accession;
+                  });
+
                   const LabelComponent = component?.component;
                   return (
                     <div
