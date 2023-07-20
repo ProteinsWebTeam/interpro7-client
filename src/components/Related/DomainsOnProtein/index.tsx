@@ -97,19 +97,26 @@ const DomainOnProteinWithoutData = ({
   });
   const [processedData, setProcessedData] = useState<{
     interpro: Record<string, unknown>[];
+    representativeDomains: Record<string, unknown>[];
     unintegrated: Record<string, unknown>[];
     other: Array<MinimalFeature>;
   } | null>(null);
   useEffect(() => {
     const payload = data?.payload as PayloadList<EntryProteinPayload>;
     if (data && !data.loading) {
-      const { interpro, unintegrated, other } = processData({
-        data: data as unknown as RequestedData<
-          PayloadList<ExpectedPayload<ProteinMetadata>>
-        >,
-        endpoint: 'protein',
+      const { interpro, unintegrated, other, representativeDomains } =
+        processData({
+          data: data as unknown as RequestedData<
+            PayloadList<ExpectedPayload<ProteinMetadata>>
+          >,
+          endpoint: 'protein',
+        });
+      setProcessedData({
+        interpro,
+        unintegrated,
+        representativeDomains,
+        other,
       });
-      setProcessedData({ interpro, unintegrated, other });
       onMatchesLoaded?.(payload?.results || []);
       onFamiliesFound?.(interpro.filter((entry) => entry.type === 'family'));
     }
@@ -127,7 +134,8 @@ const DomainOnProteinWithoutData = ({
       return <EdgeCase text={edgeCaseText || ''} status={STATUS_TIMEOUT} />;
   }
   if (!processedData) return null;
-  const { interpro, unintegrated, other } = processedData;
+  const { interpro, unintegrated, other, representativeDomains } =
+    processedData;
   const groups = groupByEntryType(
     interpro as Array<{ accession: string; type: string }>
   );
@@ -139,6 +147,21 @@ const DomainOnProteinWithoutData = ({
     unintegrated: unintegrated as Array<MinimalFeature>,
   };
   if (other) mergedData.other_features = other;
+  if (representativeDomains?.length)
+    mergedData.representative_domains =
+      representativeDomains as MinimalFeature[];
+  // [
+  //     // {
+  //     //   accession: 'Representative Domains',
+  //     //   locations: representativeDomains.map((d) => ({
+  //     //     fragments: [{ start: d.start as number, end: d.end as number }],
+  //     //     accession: d.accession as string,
+  //     //     short_name: d.short_name,
+  //     //     source_database: d.source_database,
+  //     //   })),
+  //     // },
+  //     representativeDomains,
+  //   ];
 
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;
