@@ -41,11 +41,11 @@ export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
 };
 
 const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
+  const label = (entry.locations?.[0]?.fragments?.[0]?.seq_feature ||
+    entry.accession) as string;
+
   if (entry.source_database === 'mobidblt') {
-    const mobiLabel = `MobiDB-lite: ${(
-      (entry.locations?.[0]?.fragments?.[0]?.seq_feature ||
-        entry.accession) as string
-    ).replace('Mobidblt-', '')}`;
+    const mobiLabel = `MobiDB-lite: ${label.replace('Mobidblt-', '')}`;
     return isPrinting ? (
       <span>{mobiLabel}</span>
     ) : (
@@ -54,14 +54,14 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   }
   if (entry.source_database === 'funfam') {
     return isPrinting ? (
-      <span>{entry.accession}</span>
+      <span>{label}</span>
     ) : (
-      <FunFamLink accession={entry.accession}>{entry.accession}</FunFamLink>
+      <FunFamLink accession={entry.accession}>{label}</FunFamLink>
     );
   }
   if (entry.source_database === 'pfam-n') {
     return isPrinting ? (
-      <span>N: {entry.accession}</span>
+      <span>Pfam-N: {entry.accession}</span>
     ) : (
       <Link
         to={{
@@ -71,7 +71,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
           },
         }}
       >
-        Pfam-N: {entry.accession}
+        Pfam-N: {label}
       </Link>
     );
   }
@@ -86,11 +86,9 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   }
   if (entry.source_database === 'elm')
     return isPrinting ? (
-      <span>{entry.accession}</span>
+      <span>{label}</span>
     ) : (
-      <Link href={`http://elm.eu.org/${entry.accession}`}>
-        {entry.accession}
-      </Link>
+      <Link href={`http://elm.eu.org/${entry.accession}`}>{label}</Link>
     );
   if (entry.type === 'residue')
     return <span>{entry.locations?.[0]?.description || ''}</span>;
@@ -104,7 +102,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
         <span style={{ textTransform: 'capitalize' }}>
           {(entry.source_database || '').replace('_', ' ')}:
         </span>{' '}
-        {entry.accession}
+        {label}
       </>
     );
   if (entry.type === 'sequence_conservation') {
