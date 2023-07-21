@@ -34,6 +34,9 @@ import popper from './popper.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
 
+TracksInCategory.displayName = 'TracksInCategory';
+Header.displayName = 'TracksHeader';
+
 const css = cssBinder(style, grid, fonts, popper);
 
 const highlightColor = '#607D8B50';
