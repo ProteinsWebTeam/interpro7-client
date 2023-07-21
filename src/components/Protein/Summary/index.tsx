@@ -51,6 +51,31 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
+const FamilyHierarchy = ({
+  entriesCounter,
+  families,
+  matchesLoaded,
+}: {
+  entriesCounter: number;
+  families?: Record<string, unknown>[] | null;
+  matchesLoaded: boolean;
+}) => {
+  if (families?.length)
+    return (
+      //@ts-ignore
+      <ProteinEntryHierarchy entries={families} />
+    );
+  return (
+    <div className={css('margin-bottom-medium')}>
+      {entriesCounter === 0 || matchesLoaded ? (
+        'None predicted'
+      ) : (
+        <Loading inline />
+      )}
+    </div>
+  );
+};
+
 type Props = {
   data: {
     metadata: ProteinMetadata;
@@ -191,14 +216,11 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
               <tr>
                 <td>Family membership</td>
                 <td>
-                  {families?.length ? (
-                    //@ts-ignore
-                    <ProteinEntryHierarchy entries={families} />
-                  ) : (
-                    <div className={css('margin-bottom-medium')}>
-                      {matchesLoaded ? 'None predicted' : <Loading inline />}
-                    </div>
-                  )}
+                  <FamilyHierarchy
+                    entriesCounter={metadata.counters.entries as number}
+                    families={families}
+                    matchesLoaded={matchesLoaded}
+                  />
                 </td>
               </tr>
 
@@ -307,10 +329,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
         <IsoformViewer />
         <section>
           {isoform ? (
-            <IsoformHeader
-              accession="Canonical"
-              length={metadata.length}
-            />
+            <IsoformHeader accession="Canonical" length={metadata.length} />
           ) : null}
           <DomainsOnProtein
             mainData={data}

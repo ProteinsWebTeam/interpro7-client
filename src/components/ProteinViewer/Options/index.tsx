@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, Children, useState, useEffect } from 'react';
 import { createSelector } from 'reselect';
 
-import ReactToPrint from 'react-to-print';
+// import ReactToPrint from 'react-to-print';
 
 import NightingaleSaverCE from '@nightingale-elements/nightingale-saver';
 
@@ -31,7 +31,7 @@ import vfIproCSS from '!!raw-loader!styles/interpro-vf.css';
 import fontCSS from '!!raw-loader!styles/fonts.css';
 import colorsCSS from '!!raw-loader!styles/colors.css';
 
-const ONE_SEC = 1000;
+// const ONE_SEC = 1000;
 
 const css = cssBinder(localCSS, fonts);
 
@@ -54,7 +54,7 @@ type Props = PropsWithChildren<{
 
 const ProteinViewerOptions = ({
   children,
-  setPrintingMode,
+  // setPrintingMode,
   onZoomIn,
   onZoomOut,
   title,
@@ -218,26 +218,13 @@ const ProteinViewerOptions = ({
               <hr />
               <LabelBy />
               <hr />
-              <li>
+              {/* <li>
                 Snapshot
                 <ul className={css('nested-list')}>
                   <li>
-                    <NightingaleSaver
-                      element-id={componentsDivId}
-                      background-color={'#e5e5e5'}
-                      id={`${componentsDivId}Saver`}
-                      extra-height={12}
-                    >
-                      <button>
-                        <span
-                          className={css('icon', 'icon-common')}
-                          data-icon="&#xf030;"
-                        />{' '}
-                        Save as Image
-                      </button>
-                    </NightingaleSaver>
-                  </li>
-                  <li>
+
+                  </li> */}
+              {/* <li>
                     <ReactToPrint
                       trigger={() => (
                         <button
@@ -258,10 +245,27 @@ const ProteinViewerOptions = ({
                       content={() => parentReferences.componentsRef.current}
                       onAfterPrint={() => setPrintingMode(false)}
                     />
-                  </li>
-                </ul>
-              </li>
+                  </li> */}
+              {/* </ul>
+              </li> */}
               <hr />
+              <li>
+                <NightingaleSaver
+                  element-id={componentsDivId}
+                  background-color={'#e5e5e5'}
+                  id={`${componentsDivId}Saver`}
+                  extra-height={12}
+                  scale-factor={2}
+                >
+                  <button>
+                    <span
+                      className={css('icon', 'icon-common')}
+                      data-icon="&#xf030;"
+                    />{' '}
+                    Save as Image
+                  </button>
+                </NightingaleSaver>{' '}
+              </li>
               <li>
                 <button
                   onClick={toggleExpandAll}
