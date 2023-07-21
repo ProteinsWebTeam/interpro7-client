@@ -51,7 +51,7 @@ const mergeExtraFeatures = (
         if (accB.includes(mobiConsensus)) return 1;
         return 0;
       }
-      return dbA > dbB ? 1 : -1;
+      return dbA.localeCompare(dbB);
     });
   return data;
 };
