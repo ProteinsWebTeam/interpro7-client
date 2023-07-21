@@ -102,7 +102,7 @@ const DomainOnProteinWithoutData = ({
   } | null>(null);
   useEffect(() => {
     const payload = data?.payload as PayloadList<EntryProteinPayload>;
-    if (data && !data.loading && payload?.results) {
+    if (data && !data.loading) {
       const { interpro, unintegrated, other } = processData({
         data: data as unknown as RequestedData<
           PayloadList<ExpectedPayload<ProteinMetadata>>
@@ -110,7 +110,7 @@ const DomainOnProteinWithoutData = ({
         endpoint: 'protein',
       });
       setProcessedData({ interpro, unintegrated, other });
-      onMatchesLoaded?.(payload.results);
+      onMatchesLoaded?.(payload?.results || []);
       onFamiliesFound?.(interpro.filter((entry) => entry.type === 'family'));
     }
   }, [data]);

@@ -183,7 +183,11 @@ export const ProteinViewer = ({
       </div>
       <div>
         <NightingaleManager id="pv-manager">
-          <div className={css('protvista-grid')}>
+          <div
+            className={css('protvista-grid', {
+              printing: isPrinting,
+            })}
+          >
             <div className={css('view-options-wrap', 'track-sized')}>
               <Options
                 setPrintingMode={setPrinting}
@@ -223,6 +227,10 @@ export const ProteinViewer = ({
                 .filter(([_, tracks]) => tracks && tracks.length)
 
                 .map(([type, entries, component]) => {
+                  entries.forEach((entry: ExtendedFeature) => {
+                    entry.protein = protein.accession;
+                  });
+
                   const LabelComponent = component?.component;
                   return (
                     <div

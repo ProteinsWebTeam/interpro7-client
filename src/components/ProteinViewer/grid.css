@@ -2,10 +2,10 @@
   display: grid;
   font-size: 12px;
   grid-template-columns: 80% 20%;
+  background: white;
 }
 .protvista-grid.printing {
   width: 1000px;
-  background: white;
 }
 
 .protvista-grid .view-options-wrap {
