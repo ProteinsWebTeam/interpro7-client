@@ -1,7 +1,11 @@
-import React, { ReactNode, useRef, useEffect } from 'react';
+import React, { ReactNode, useRef, useEffect, useState } from 'react';
+
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
 import DomainPopup from 'components/ProteinViewer/Popup/RepresentativeDomain';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import { ExtendedFeature } from '..';
 
@@ -17,6 +21,7 @@ type Props = {
   highlightColor: string;
   hideCategory: boolean;
   length: number;
+  colorDomainsBy?: keyof typeof EntryColorMode;
   openTooltip: (element: HTMLElement | undefined, content: ReactNode) => void;
   closeTooltip: () => void;
 };
@@ -26,9 +31,11 @@ const RepresentativeDomainsTrack = ({
   highlightColor,
   hideCategory,
   length,
+  colorDomainsBy,
   openTooltip,
   closeTooltip,
 }: Props) => {
+  const [data, setData] = useState(entries);
   const containerRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     containerRef?.current?.addEventListener('change', (event) => {
@@ -41,6 +48,14 @@ const RepresentativeDomainsTrack = ({
       }
     });
   }, [containerRef]);
+  useEffect(() => {
+    setData(
+      entries.map((entry) => ({
+        ...entry,
+        color: getTrackColor(entry, colorDomainsBy),
+      }))
+    );
+  }, [entries, colorDomainsBy]);
   return (
     <>
       <div
@@ -51,7 +66,7 @@ const RepresentativeDomainsTrack = ({
       >
         <NightingaleInterProTrack
           length={length}
-          data={entries}
+          data={data}
           margin-color="#fafafa"
           id="Domains"
           shape="roundRectangle"
@@ -65,4 +80,11 @@ const RepresentativeDomainsTrack = ({
     </>
   );
 };
-export default RepresentativeDomainsTrack;
+
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.settings.ui,
+  (ui) => ({
+    colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
+  })
+);
+export default connect(mapStateToProps)(RepresentativeDomainsTrack);
