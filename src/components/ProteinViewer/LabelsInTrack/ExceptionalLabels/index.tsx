@@ -41,24 +41,27 @@ export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
 };
 
 const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
-  if (entry.source_database === 'mobidblt')
+  const label = (entry.locations?.[0]?.fragments?.[0]?.seq_feature ||
+    entry.accession) as string;
+
+  if (entry.source_database === 'mobidblt') {
+    const mobiLabel = `MobiDB-lite: ${label.replace('Mobidblt-', '')}`;
     return isPrinting ? (
-      <span>{entry.accession}</span>
+      <span>{mobiLabel}</span>
     ) : (
-      <Link href={`https://mobidb.org/${entry.protein}`}>
-        {entry.accession}
-      </Link>
+      <Link href={`https://mobidb.org/${entry.protein}`}>{mobiLabel}</Link>
     );
+  }
   if (entry.source_database === 'funfam') {
     return isPrinting ? (
-      <span>{entry.accession}</span>
+      <span>{label}</span>
     ) : (
-      <FunFamLink accession={entry.accession}>{entry.accession}</FunFamLink>
+      <FunFamLink accession={entry.accession}>{label}</FunFamLink>
     );
   }
   if (entry.source_database === 'pfam-n') {
     return isPrinting ? (
-      <span>N: {entry.accession}</span>
+      <span>Pfam-N: {entry.accession}</span>
     ) : (
       <Link
         to={{
@@ -68,7 +71,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
           },
         }}
       >
-        N: {entry.accession}
+        Pfam-N: {label}
       </Link>
     );
   }
@@ -83,11 +86,9 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   }
   if (entry.source_database === 'elm')
     return isPrinting ? (
-      <span>{entry.accession}</span>
+      <span>{label}</span>
     ) : (
-      <Link href={`http://elm.eu.org/${entry.accession}`}>
-        {entry.accession}
-      </Link>
+      <Link href={`http://elm.eu.org/${entry.accession}`}>{label}</Link>
     );
   if (entry.type === 'residue')
     return <span>{entry.locations?.[0]?.description || ''}</span>;
@@ -96,7 +97,14 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     entry.type === 'chain' ||
     entry.type === 'secondary_structure'
   )
-    return <>{entry.accession}</>;
+    return (
+      <>
+        <span style={{ textTransform: 'capitalize' }}>
+          {(entry.source_database || '').replace('_', ' ')}:
+        </span>{' '}
+        {label}
+      </>
+    );
   if (entry.type === 'sequence_conservation') {
     return (
       <Tooltip title={'Score calculated using Phmmer and HMM profile'}>
@@ -108,9 +116,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   }
   if (entry.accession && entry.accession.startsWith('G3D:')) {
     return isPrinting ? (
-      <span>
-        Genome3D: {entry.source_database}{' '}
-      </span>
+      <span>Genome3D: {entry.source_database} </span>
     ) : (
       <Genome3dLink id={entry.protein || ''}>
         Genome3D: [{entry.type}] {entry.source_database}

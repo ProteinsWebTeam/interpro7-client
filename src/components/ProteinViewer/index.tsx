@@ -46,7 +46,13 @@ type Residue = {
     }
   >;
 };
-export type ExtendedFeatureLocation = FeatureLocation & {
+export type ExtendedFeatureLocation = {
+  fragments: Array<{
+    start: number;
+    end: number;
+    [annotation: string]: unknown;
+  }>;
+} & {
   confidence?: number;
   description?: string;
   seq_feature?: string;
