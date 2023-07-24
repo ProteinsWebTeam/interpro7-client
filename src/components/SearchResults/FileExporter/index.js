@@ -8,7 +8,8 @@ import { downloadSelector } from 'reducers/download';
 import { downloadURL } from 'actions/creators';
 
 import { getQueryTerm } from 'components/SearchResults';
-import { FileButton } from 'components/File';
+// $FlowFixMe
+import FileButton from 'components/File/FileButton';
 import blockEvent from 'utils/block-event';
 
 /*::

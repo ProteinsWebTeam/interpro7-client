@@ -14,11 +14,11 @@
   max-width: 2000px;
   margin: 0 auto;
 
-  @nest & > * {
+  & > * {
     margin: 0 var(--spacing-medium);
     display: flex;
 
-    @nest & > * {
+    & > * {
       flex: 1;
     }
   }

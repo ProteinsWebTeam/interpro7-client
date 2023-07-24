@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import Accession from 'components/Accession';
+// $FlowFixMe
 import Species from 'components/Protein/Species';
 // $FlowFixMe
 import ProteomeLink from 'components/ExtLink/ProteomeLink';

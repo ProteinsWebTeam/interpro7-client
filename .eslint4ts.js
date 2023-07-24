@@ -23,6 +23,7 @@ module.exports = {
     'jest/no-identical-title': 'error',
     'jest/valid-expect': 'error',
     '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/ban-ts-comment': 'warn',
     '@typescript-eslint/no-unused-vars': [
       'warn',
       {

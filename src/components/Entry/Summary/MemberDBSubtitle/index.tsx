@@ -37,7 +37,10 @@ const MemberDBSubtitle = ({
                 },
               }}
             >
-              {dbInfo.name}{' '}
+              {dbInfo.name}
+              {metadata.source_database === 'ncbifam'
+                ? ' (includes TIGRFAMs) '
+                : ' '}
               <Tooltip
                 title={
                   dbInfo.description || `${dbInfo.name} (${dbInfo.version})`

@@ -9,7 +9,7 @@
   display: flex;
   flex-wrap: wrap;
 
-  /*@nest & > * {*/
+  /*& > * {*/
   /*break-inside: avoid;*/
   /*}*/
   & > div {

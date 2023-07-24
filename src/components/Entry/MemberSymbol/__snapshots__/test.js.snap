@@ -1,53 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<MemberSymbol /> should render 1`] = `
-<span
-  className="entry-member-db-icon"
-  data-testid="entry-member-db-icon"
+<Memo(Connect(Link))
+  href="http://smart.embl-heidelberg.de/"
+  target="_blank"
 >
-  <svg
-    className="md-sm"
-    id="md-smart"
-    viewBox="0 0 200 200"
-    xmlns="http://www.w3.org/2000/svg"
+  <span
+    className="entry-member-db-icon"
+    data-testid="entry-member-db-icon"
   >
-    <defs>
-      <clipPath
-        id="clip-0"
+    <svg
+      className="md-sm"
+      id="md-smart"
+      viewBox="0 0 200 200"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <clipPath
+          id="clip-0"
+        >
+          <rect
+            height="68"
+            width="68"
+            x="33%"
+            y="38%"
+          />
+        </clipPath>
+      </defs>
+      <text
+        className="md-server"
+        dx="-0.01em"
+        dy="0.4em"
+        textAnchor="middle"
+        x="50%"
+        y="50%"
       >
-        <rect
-          height="68"
-          width="68"
-          x="33%"
-          y="38%"
-        />
-      </clipPath>
-    </defs>
-    <text
-      className="md-server"
-      dx="-0.01em"
-      dy="0.4em"
-      textAnchor="middle"
-      x="50%"
-      y="50%"
-    >
-      D
-    </text>
-    <text
-      className="md-color"
-      dx="-0.01em"
-      dy="0.4em"
-      style={
-        {
-          "clipPath": "url(#clip-0)",
+        D
+      </text>
+      <text
+        className="md-color"
+        dx="-0.01em"
+        dy="0.4em"
+        style={
+          {
+            "clipPath": "url(#clip-0)",
+          }
         }
-      }
-      textAnchor="middle"
-      x="50%"
-      y="50%"
-    >
-      D
-    </text>
-  </svg>
-</span>
+        textAnchor="middle"
+        x="50%"
+        y="50%"
+      >
+        D
+      </text>
+    </svg>
+  </span>
+</Memo(Connect(Link))>
 `;

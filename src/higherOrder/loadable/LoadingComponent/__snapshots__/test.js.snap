@@ -22,7 +22,7 @@ exports[`<ErrorMessage /> should render error message 1`] = `
       Reload this page
     </button>
     <p>
-      If this error persists, please get in touch with us through our contact form.
+      If you continue to experience this error, please reach out to us using our contact form.
     </p>
     <Memo(Connect(Link))
       className="button"

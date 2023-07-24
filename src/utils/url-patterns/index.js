@@ -1,4 +1,5 @@
 // @flow
+import config from 'config';
 
 const ACCESSION_PATTERN = /{}/;
 const ACCESSION_CLEANUP = [
@@ -13,6 +14,8 @@ const ACCESSION_CLEANUP = [
 export const iproscan2urlDB = (db /*: string */) =>
   new Map([
     ['TIGRFAM', 'tigrfams'],
+    ['NCBIfam', 'ncbifam'],
+    ['AntiFam', 'antifam'],
     ['PROSITE_PROFILES', 'profile'],
     ['PROSITE_PATTERNS', 'prosite'],
     ['SUPERFAMILY', 'ssf'],
@@ -22,6 +25,8 @@ export const iproscan2urlDB = (db /*: string */) =>
 export const ebiSearch2urlDB = (db /*: string */) =>
   new Map([
     ['TIGRFAM', 'tigrfams'],
+    ['NCBIfam', 'ncbifam'],
+    ['AntiFam', 'antifam'],
     ['PROSITE profiles', 'profile'],
     ['PROSITE patterns', 'prosite'],
     ['SUPERFAMILY', 'ssf'],
@@ -37,6 +42,8 @@ export const ENTRY_DBS = [
   'profile',
   'smart',
   'tigrfams',
+  'ncbifam',
+  'antifam',
   'prosite',
   'prints',
   'hamap',
@@ -52,11 +59,14 @@ export const memberDbURL = new Map([
   ['panther', '//pantherdb.org/'],
   ['pfam', '//www.ebi.ac.uk/interpro/entry/pfam/'],
   ['pirsf', '//proteininformationresource.org/pirsf/'],
+  ['prints', `${config.root.readthedocs.href}prints.html`],
   ['profile', '//prosite.expasy.org/'],
   ['prosite', '//prosite.expasy.org/'],
   ['smart', 'http://smart.embl-heidelberg.de/'],
   ['ssf', 'http://supfam.org/SUPERFAMILY/'],
   ['tigrfams', 'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/tigrfams/'],
+  ['ncbifam', 'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/'],
+  ['antifam', '//www.ebi.ac.uk/interpro/entry/antifam/'],
 ]);
 
 export default (db /*: string */) => {
@@ -67,10 +77,6 @@ export default (db /*: string */) => {
     ['panther', 'http://www.pantherdb.org/panther/family.do?clsAccession={}'],
     ['pfam', '//www.ebi.ac.uk/interpro/entry/pfam/{}'],
     ['pirsf', '//pir.georgetown.edu/cgi-bin/ipcSF?id={}'],
-    [
-      'prints',
-      'http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn={}&display_opts=Prints&category=None&queryform=false&regexpr=off',
-    ],
     ['profile', '//prosite.expasy.org/{}'],
     ['prosite', '//prosite.expasy.org/{}'],
     ['sfld', 'http://sfld.rbvi.ucsf.edu/archive/django/{}'],
@@ -83,6 +89,11 @@ export default (db /*: string */) => {
       'tigrfams',
       'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/{}/',
     ],
+    [
+      'ncbifam',
+      'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/{}/',
+    ],
+    ['antifam', '//www.ebi.ac.uk/interpro/entry/antifam/{}'],
   ]);
   const pattern = patterns.get(db.toLowerCase()) || '';
   if (!pattern) return;

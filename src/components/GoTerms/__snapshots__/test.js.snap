@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`External links <GoTerms /> entry: interpro should render GOTerms component with empty subset 1`] = `
+exports[`External links <GoTerms /> entry: InterPro should render GOTerms component with empty subset 1`] = `
 <section
   data-testid="go-terms"
 >
@@ -31,7 +31,7 @@ exports[`External links <GoTerms /> entry: interpro should render GOTerms compon
 </section>
 `;
 
-exports[`External links <GoTerms /> entry: interpro should render GoTerms component 1`] = `
+exports[`External links <GoTerms /> entry: InterPro should render GoTerms component 1`] = `
 <section
   data-testid="go-terms"
 >
@@ -147,7 +147,7 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
 </section>
 `;
 
-exports[`External links <GoTerms /> entry: interpro should render GoTerms component 2`] = `
+exports[`External links <GoTerms /> entry: InterPro should render GoTerms component 2`] = `
 <section
   data-testid="go-terms"
 >
@@ -233,7 +233,7 @@ exports[`External links <GoTerms /> entry: interpro should render GoTerms compon
 </section>
 `;
 
-exports[`External links <GoTerms /> entry: pfam should render GOTerms component with empty subset 1`] = `
+exports[`External links <GoTerms /> entry: Pfam should render GOTerms component with empty subset 1`] = `
 <section
   data-testid="go-terms"
 >
@@ -241,7 +241,240 @@ exports[`External links <GoTerms /> entry: pfam should render GOTerms component 
     className="vf-stack"
   >
     <Tooltip
-      title="GO terms, as provided by pfam"
+      title="GO terms, as provided by Pfam"
+    >
+      <h4
+        className="title"
+      >
+        Pfam GO terms
+      </h4>
+    </Tooltip>
+  </div>
+  <div
+    className="vf-stack"
+  >
+    <div
+      className="go-columns"
+    >
+      <p>
+        No GO Terms
+      </p>
+    </div>
+  </div>
+</section>
+`;
+
+exports[`External links <GoTerms /> entry: Pfam should render GoTerms component 1`] = `
+<section
+  data-testid="go-terms"
+>
+  <div
+    className="vf-stack"
+  >
+    <Tooltip
+      title="GO terms, as provided by Pfam"
+    >
+      <h4
+        className="title"
+      >
+        Pfam GO terms
+      </h4>
+    </Tooltip>
+  </div>
+  <div
+    className="vf-stack"
+  >
+    <div
+      className="go-columns"
+    >
+      <div>
+        <p
+          className="bp go-title"
+        >
+          biological process
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li>
+            <Memo(Loadable)
+              data="GO:0004930"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext-link"
+              id="GO:0004930"
+            >
+              test1
+               (
+              GO:0004930
+              )
+            </GoLink>
+          </li>
+          <li>
+            <Memo(Loadable)
+              data="GO:0007186"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext-link"
+              id="GO:0007186"
+            >
+              test2
+               (
+              GO:0007186
+              )
+            </GoLink>
+          </li>
+          <li>
+            <Memo(Loadable)
+              data="GO:0016021"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext-link"
+              id="GO:0016021"
+            >
+              test3
+               (
+              GO:0016021
+              )
+            </GoLink>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
+        >
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+`;
+
+exports[`External links <GoTerms /> entry: Pfam should render GoTerms component 2`] = `
+<section
+  data-testid="go-terms"
+>
+  <div
+    className="vf-stack"
+  >
+    <Tooltip
+      title="GO terms, as provided by Pfam"
+    >
+      <h4
+        className="title"
+      >
+        Pfam GO terms
+      </h4>
+    </Tooltip>
+  </div>
+  <div
+    className="vf-stack"
+  >
+    <div
+      className="go-columns"
+    >
+      <div>
+        <p
+          className="bp go-title"
+        >
+          biological process
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="mf go-title"
+        >
+          molecular function
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li>
+            <Memo(Loadable)
+              data="GO:0004930"
+              processData={[Function]}
+            />
+            <GoLink
+              className="go-terms ext-link"
+              id="GO:0004930"
+            >
+              test2
+               (
+              GO:0004930
+              )
+            </GoLink>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p
+          className="cc go-title"
+        >
+          cellular component
+        </p>
+        <ul
+          className="go-list"
+        >
+          <li
+            className="no-goterm"
+          >
+            None
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+`;
+
+exports[`External links <GoTerms /> entry: InterPro should render GOTerms component with empty subset 1`] = `
+<section
+  data-testid="go-terms"
+>
+  <div
+    className="vf-stack"
+  >
+    <Tooltip
+      title="GO terms, annotated by InterPro curators"
     >
       <h4
         className="title"
@@ -264,7 +497,7 @@ exports[`External links <GoTerms /> entry: pfam should render GOTerms component 
 </section>
 `;
 
-exports[`External links <GoTerms /> entry: pfam should render GoTerms component 1`] = `
+exports[`External links <GoTerms /> entry: InterPro should render GoTerms component 1`] = `
 <section
   data-testid="go-terms"
 >
@@ -272,7 +505,7 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
     className="vf-stack"
   >
     <Tooltip
-      title="GO terms, as provided by pfam"
+      title="GO terms, annotated by InterPro curators"
     >
       <h4
         className="title"
@@ -380,7 +613,7 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
 </section>
 `;
 
-exports[`External links <GoTerms /> entry: pfam should render GoTerms component 2`] = `
+exports[`External links <GoTerms /> entry: InterPro should render GoTerms component 2`] = `
 <section
   data-testid="go-terms"
 >
@@ -388,7 +621,7 @@ exports[`External links <GoTerms /> entry: pfam should render GoTerms component 
     className="vf-stack"
   >
     <Tooltip
-      title="GO terms, as provided by pfam"
+      title="GO terms, annotated by InterPro curators"
     >
       <h4
         className="title"

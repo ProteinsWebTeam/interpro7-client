@@ -20,6 +20,7 @@ const TooltipAndRTDLink = ({
   return (
     <sup>
       <Tooltip
+        interactive
         title={
           <Link
             href={`${config.root.readthedocs.href}${rtdPage}`}

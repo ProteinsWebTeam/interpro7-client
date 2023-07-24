@@ -16,12 +16,12 @@
   overflow-y: auto;
   overscroll-behavior-y: contain;
 
-  @nest & ul {
+  & ul {
     list-style: none;
     margin: 0 0 0.5rem 0;
   }
 
-  @nest & a {
+  & a {
     display: block;
     padding: 0.4rem 0.6rem;
     font-size: 90%;

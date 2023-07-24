@@ -27,13 +27,13 @@ type ParserPart = {
   value: string | Record<string, string>;
 };
 const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
-  if (data.loading && !data.payload) return <Loading />;
+  if (data?.loading && !data?.payload) return <Loading />;
 
   const identifiers: Array<ParserPart> = [];
   const article: Record<string, string> = {};
   const properties = ['symbol', 'name', 'image', 'width', 'caption', 'pdb'];
 
-  const result = data.payload;
+  const result = data?.payload;
   if (!result) return null;
 
   const xmlParser = new XMLParser();
@@ -162,8 +162,8 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
 
 const getWikiUrl = createSelector(
   (state: GlobalState) => state.settings.wikipedia,
-  (_state: unknown, props?: WikipediaEntry) => props?.title,
-  ({ protocol, hostname, port, root }, title) => {
+  (_state: GlobalState, props?: WikipediaEntry) => props?.title,
+  ({ protocol, hostname, port, root }: ParsedURLServer, title?: string) => {
     return format({
       protocol,
       hostname,
@@ -179,4 +179,4 @@ const getWikiUrl = createSelector(
     });
   }
 );
-export default loadData({ getUrl: getWikiUrl } as Params)(Wikipedia);
+export default loadData(getWikiUrl as Params)(Wikipedia);

@@ -12,6 +12,7 @@ body {
     &:focus,
     &:hover,
     &:visited {
+      text-decoration: none;
       font-size: 0.9rem; /* same size as submenu */
       padding: var(--menuitem-padding, 0.4rem);
       color: black;

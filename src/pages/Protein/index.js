@@ -11,6 +11,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
+// $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
@@ -25,6 +26,7 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import File from 'components/File';
 
 import loadData from 'higherOrder/loadData';
@@ -528,6 +530,7 @@ class List extends PureComponent /*:: <ListProps> */ {
 const SummaryAsync = loadable({
   loader: () =>
     import(
+      // $FlowFixMe
       /* webpackChunkName: "protein-summary" */ 'components/Protein/Summary'
     ),
 });

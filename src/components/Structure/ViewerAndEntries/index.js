@@ -11,6 +11,7 @@ import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 
 import ProtVistaForStructure from './ProtVistaForStructures';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
+// $FlowFixMe
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 
@@ -161,7 +162,6 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
             else if (type === 'secondary_structure')
               this.setSelectionsForSecondaryStructure(feature);
             else if (accession && !accession.startsWith('G3D:'))
-              // TODO: Needs refactoring
               this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
             break;
           case 'mouseout':

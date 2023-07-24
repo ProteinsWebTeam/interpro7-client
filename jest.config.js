@@ -31,4 +31,5 @@ module.exports = {
     url: websiteURL.href,
   },
   testEnvironment: 'jsdom',
+  setupFiles: ['fake-indexeddb/auto'],
 };

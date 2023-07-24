@@ -9,18 +9,20 @@ import { createSelector } from 'reselect';
 
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-
-import { processData } from 'components/ProtVista/utils';
+// $FlowFixMe
+import { processData } from 'components/ProteinViewer/utils';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
+  // $FlowFixMe
 } from 'components/AlphaFold/selectors';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-const ProtVista = loadable({
+const ProteinViewer = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
+    // $FlowFixMe
+    import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
 });
 
 export const addConfidenceTrack = (dataConfidence, protein, tracks) => {
@@ -128,7 +130,7 @@ const ProtVistaForAlphaFold = (
   if (!dataProtein.payload?.metadata) return null;
   return (
     <div ref={containerRef}>
-      <ProtVista
+      <ProteinViewer
         protein={dataProtein.payload.metadata}
         data={tracks}
         title="Protein domains"
@@ -142,7 +144,7 @@ ProtVistaForAlphaFold.propTypes = {
   dataProtein: dataPropType,
   dataConfidence: dataPropType,
   onChangeSelection: T.func,
-  protein: T.string.isRequired,
+  protein: T.string,
   confidenceURL: T.string,
   isSplitScreen: T.bool,
 };

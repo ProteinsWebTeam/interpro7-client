@@ -77,7 +77,11 @@ export const ContributingSignatures = ({ contr, data }: Props) => {
         <ul className={css('md-list')}>
           {contrEntries.map(([db, signatures]) => (
             <li key={db}>
-              <MemberSymbol type={db} className={css('md-small')} svg={false} />
+              <MemberSymbol
+                type={db as MemberDB}
+                className={css('md-small')}
+                svg={false}
+              />
               <div className={css('db-label')}>
                 <span className={css('db-name')}>
                   {(metaDB[db] && metaDB[db].name) || db}:{' '}

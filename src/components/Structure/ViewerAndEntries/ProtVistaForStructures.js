@@ -7,8 +7,8 @@ import { createSelector } from 'reselect';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-
-import { processData } from 'components/ProtVista/utils';
+// $FlowFixMe
+import { processData } from 'components/ProteinViewer/utils';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 

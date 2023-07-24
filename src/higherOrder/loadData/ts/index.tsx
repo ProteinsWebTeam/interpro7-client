@@ -32,7 +32,9 @@ type ConnectedProps = {
   appState?: GlobalState;
 };
 
-const loadData = <Payload = unknown,>(params: Params) => {
+const loadData = <Payload = unknown, Namespace extends string = ''>(
+  params: Params
+) => {
   const {
     getUrl,
     fetchOptions,
@@ -53,7 +55,7 @@ const loadData = <Payload = unknown,>(params: Params) => {
     url,
   });
 
-  return <BaseProps extends LoadDataProps<Payload>>(
+  return <BaseProps extends LoadDataProps<Payload, Namespace>>(
     Wrapped: React.ComponentType<BaseProps>
   ) => {
     type WrapperProps = ReturnType<typeof mapStateToProps> &
@@ -186,7 +188,7 @@ const loadData = <Payload = unknown,>(params: Params) => {
           this.props.dataProgressInfo?.(this.#id, 1, weight);
 
           const msToRetry =
-            this.props.appState?.settings.navigation.secondsToRetry * MS;
+            (this.props.appState?.settings.navigation.secondsToRetry || 0) * MS;
           // Scheduling to retry because we got a 408
           if (response.status === TIMEOUT) {
             this.timeoutID = window.setTimeout(() => {
@@ -257,15 +259,13 @@ const loadData = <Payload = unknown,>(params: Params) => {
       addToast,
       ...mapDispatchToProps,
     };
-    return connect<
+    const connector = connect<
       ReturnType<typeof mapStateToProps>,
       typeof dispatchProps,
-      Diff<BaseProps, LoadDataProps<Payload>>,
+      Diff<BaseProps, LoadDataProps<Payload, Namespace>>,
       GlobalState
-    >(
-      mapStateToState,
-      dispatchProps
-    )(DataWrapper);
+    >(mapStateToState, dispatchProps);
+    return connector(DataWrapper) as React.ComponentType<BaseProps>;
   };
 };
 

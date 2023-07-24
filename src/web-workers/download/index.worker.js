@@ -280,7 +280,6 @@ const download = async (url, fileType, subset, endpoint) => {
         async ({ key, version }) => {
           // Finished getting all the content, generate a blob out of that
           // and get its URL
-          console.log('pruff', version);
           const newDownload = await saveInIndexedDB(
             key,
             content,

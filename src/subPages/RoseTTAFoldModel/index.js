@@ -13,6 +13,7 @@ import AlignmentViewer from '../EntryAlignments/Viewer';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
+import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 import '@nightingale-elements/nightingale-heatmap';
@@ -21,8 +22,9 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
+import buttonBar from 'components/Structure/ViewerAndEntries/button-bar.css';
 
-const f = foundationPartial(style, ipro, fonts);
+const f = foundationPartial(style, ipro, buttonBar, fonts);
 const DEFAULT_MIN_PROBABILITY = 0.9;
 const DEFAULT_MIN_DISTANCE = 5;
 const RED = 0xff0000;
@@ -32,6 +34,7 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
   const [minProbability, setMinProbability] = useState(DEFAULT_MIN_PROBABILITY);
   const [selections, setSelections] = useState(null);
   const [aln2str, setAln2str] = useState(null);
+  const [isSplitScreen, setSplitScreen] = useState(false);
 
   const container = useRef();
   const heatmap = useRef(null);
@@ -140,7 +143,7 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
   const handleProbabilityChange = (evt) => {
     setMinProbability(+evt.target.value);
   };
-
+  const splitContainerID = 'split-container';
   return (
     <div className={f('row', 'column')} ref={container}>
       <h3>RoseTTAFold structure prediction</h3>
@@ -153,61 +156,85 @@ const RoseTTAFoldModel = ({ data, dataContacts, urlForModel, accession }) => {
         </Link>
         ) using the UniProt multiple sequence alignment from Pfam.
       </div>
-
-      <PictureInPicturePanel
-        className={f('structure-viewer')}
-        testid="structure-3d-viewer"
-        OtherButtons={
-          <>
-            <Link
-              className={f('control')}
-              href={`${urlForModel}`}
-              download={`${accession || 'download'}.model.pdb`}
-            >
-              <span
-                className={f('icon', 'icon-common', 'icon-download')}
-                data-icon="&#xf019;"
-              />{' '}
-              Download
-            </Link>
-            <FullScreenButton
-              className={f('icon', 'icon-common', 'control')}
-              tooltip="View the structure in full screen mode"
-              element={elementId}
-            />{' '}
-          </>
-        }
+      <div
+        id={splitContainerID}
+        className={f({ 'split-screen': isSplitScreen })}
       >
-        <StructureViewer
-          id={'pfam'}
-          url={urlForModel}
-          elementId={elementId}
-          ext="pdb"
-          selections={selections}
-          theme={'residue'}
-        />
-      </PictureInPicturePanel>
-
-      <h3>SEED alignment with Contact Predictions</h3>
-      <p>
-        The visualizations show the contacts predicted with RoseTTAFold upon the
-        Pfam SEED alignment. In the alignment viewer, click on the coloured
-        circles above the alignment to view contact positions highlighted in the
-        alignment and structural model. Hovering on the heatmap highlights the
-        contacts in the 3D structural model.
-      </p>
-      <div className={f('nightingale-components')}>
-        <div className={f('heatmap')}>
-          <nightingale-heatmap
-            id="contact-map"
-            ref={heatmap}
-            width={500}
-            height={500}
-            symmetric={true}
-            margin-left={50}
-            margin-bottom={30}
+        <PictureInPicturePanel
+          className={f('structure-viewer')}
+          testid="structure-3d-viewer"
+          OtherButtons={
+            <div
+              style={{
+                display: isSplitScreen ? 'none' : 'block',
+              }}
+              className={f('button-bar')}
+            >
+              <Link
+                className={f('control')}
+                href={`${urlForModel}`}
+                download={`${accession || 'download'}.model.pdb`}
+              >
+                <span
+                  className={f('icon', 'icon-common', 'icon-download')}
+                  data-icon="&#xf019;"
+                />{' '}
+                Download
+              </Link>
+              <FullScreenButton
+                className={f('icon', 'icon-common', 'control')}
+                tooltip="View the structure in full screen mode"
+                element={elementId}
+              />{' '}
+              <FullScreenButton
+                className={f('icon', 'icon-common', 'control')}
+                tooltip="Split full screen"
+                dataIcon={'\uF0DB'}
+                element={splitContainerID}
+                onFullScreenHook={() => setSplitScreen(true)}
+                onExitFullScreenHook={() => setSplitScreen(false)}
+              />{' '}
+              <PIPToggleButton
+                className={f('icon', 'icon-common', 'control')}
+              />
+            </div>
+          }
+        >
+          <StructureViewer
+            id={'pfam'}
+            url={urlForModel}
+            elementId={elementId}
+            ext="pdb"
+            selections={selections}
+            theme={'residue'}
           />
+        </PictureInPicturePanel>
+
+        <section className={f('components-header')}>
+          <h3>SEED alignment with Contact Predictions</h3>
+          <p>
+            The visualizations show the contacts predicted with RoseTTAFold upon
+            the Pfam SEED alignment. In the alignment viewer, click on the
+            coloured circles above the alignment to view contact positions
+            highlighted in the alignment and structural model. Hovering on the
+            heatmap highlights the contacts in the 3D structural model.
+          </p>
+        </section>
+        <div className={f('nightingale-components')}>
+          <div className={f('heatmap')}>
+            <nightingale-heatmap
+              id="contact-map"
+              ref={heatmap}
+              width={500}
+              height={500}
+              symmetric={true}
+              margin-left={50}
+              margin-bottom={30}
+            />
+          </div>
         </div>
+      </div>
+      <div className={f('nightingale-components')}>
         <div className={f('alignment')}>
           <label>
             Probability threshold

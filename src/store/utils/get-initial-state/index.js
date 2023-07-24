@@ -23,11 +23,11 @@ const addNewDefaultSttings = (settings) => {
   });
 };
 
-export default (history) => {
+export default (historyWrapper) => {
   const {
     location: { pathname: p, search, hash },
-  } = history.history;
-  const pathname = p.replace(history.basename, '/');
+  } = historyWrapper.history;
+  const pathname = p.replace(historyWrapper.basename, '/');
   let settings;
   if (settingsStorage) {
     settings = settingsStorage.getValue() || undefined;
@@ -59,11 +59,19 @@ export default (history) => {
         port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
         root: config.root.genome3d.pathname,
       };
+      settings.repeatsDB = {
+        protocol: config.root.repeatsDB.protocol,
+        hostname: config.root.repeatsDB.hostname,
+        port: config.root.repeatsDB.port || DEFAULT_HTTP_PORT,
+        root: config.root.repeatsDB.pathname,
+      };
+      settings.disprot = {
+        protocol: config.root.disprot.protocol,
+        hostname: config.root.disprot.hostname,
+        port: config.root.disprot.port || DEFAULT_HTTP_PORT,
+        root: config.root.disprot.pathname,
+      };
     }
-  }
-  // TODO: remove this line when the logs show that users are now using /wwwapi/
-  if (settings?.api?.hostname === 'www.ebi.ac.uk') {
-    settings.api.root = settings.api.root.replace('/api/', '/wwwapi/');
   }
   let description = { other: ['NotFound'] };
   try {

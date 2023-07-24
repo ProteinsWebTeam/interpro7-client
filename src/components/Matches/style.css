@@ -6,7 +6,7 @@
   padding: 0;
   list-style: none;
 
-  @nest & > li {
+  & > li {
     margin-bottom: var(--spacing-medium);
 
     &:last-child {
@@ -40,7 +40,7 @@
     opacity: 1;
   }
 
-  @nest & text {
+  & text {
     opacity: 0.2;
     transition: opacity var(--timing-fast) ease-out;
     fill: var(--colors-gray);

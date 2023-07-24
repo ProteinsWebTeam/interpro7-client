@@ -21,7 +21,7 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import style from './style.css';
 import ClanViewer from '../ClanViewer';
-import protvistaOptions from 'components/ProtVista/Options/style.css';
+import protvistaOptions from 'components/ProteinViewer/Options/style.css';
 
 const f = foundationPartial(ebiGlobalStyles, style, protvistaOptions);
 

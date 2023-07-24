@@ -16,6 +16,7 @@ import { includeTaxonFocusedOnURL } from 'higherOrder/loadData/defaults';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
+// $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import Table, {
   Column,
@@ -25,6 +26,7 @@ import Table, {
   Exporter,
   HighlightToggler,
 } from 'components/Table';
+// $FlowFixMe
 import File from 'components/File';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';

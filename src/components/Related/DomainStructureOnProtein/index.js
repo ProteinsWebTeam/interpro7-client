@@ -14,9 +14,10 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-const ProtVista = loadable({
+const ProteinViewer = loadable({
   loader: () =>
-    import(/* webpackChunkName: "protvista" */ 'components/ProtVista'),
+    // $FlowFixMe
+    import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
 });
 
 const toArrayStructure = (locations) =>
@@ -165,13 +166,8 @@ class _StructureOnProtein extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const {
-      structures,
-      dataInterPro,
-      dataStructureInfo,
-      protein,
-      modelPage,
-    } = this.props;
+    const { structures, dataInterPro, dataStructureInfo, protein, modelPage } =
+      this.props;
     if (dataInterPro.loading || dataStructureInfo.loading) {
       return <Loading />;
     }
@@ -189,7 +185,11 @@ class _StructureOnProtein extends PureComponent /*:: <Props> */ {
       ]);
     const data = paginateStructureInfoData(mergedData, modelPage);
     return (
-      <ProtVista protein={protein} data={data} title="Structures on protein" />
+      <ProteinViewer
+        protein={protein}
+        data={data}
+        title="Structures on protein"
+      />
     );
   }
 }

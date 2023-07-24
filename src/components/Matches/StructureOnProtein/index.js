@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { foundationPartial } from 'styles/foundation';
 import ProtVistaMatches from '../ProtVistaMatches';
 
-import protvista from 'components/ProtVista/style.css';
+import protvista from 'components/ProteinViewer/style.css';
 
 const f = foundationPartial(protvista);
 

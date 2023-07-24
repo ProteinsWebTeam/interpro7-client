@@ -63,5 +63,14 @@ body {
   & input:checked ~ .switch-paddle {
     background: #2daec1;
   }
+  & a.white-color,
+  & a.white-color:visited {
+    color: var(--colors-vlightgray, #d4d4d4);
+  }
+  & a.white-color:hover,
+  & a.white-color:focus {
+    color: var(--colors-almost-white, #f8f8f8);
+    text-decoration: underline;
+  }
 }
 /* end */

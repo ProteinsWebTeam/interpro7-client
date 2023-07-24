@@ -47,8 +47,12 @@
 .md-su .md-color {
   fill: var(--colors-ssf);
 }
-.md-ti .md-color {
+.md-ti .md-color,
+.md-nf .md-color {
   fill: var(--colors-tigrfams);
+}
+.md-af .md-color {
+  fill: var(--colors-antifam);
 }
 .md-all .md-color {
   fill: var(--colors-all);

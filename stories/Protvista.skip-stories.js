@@ -2,7 +2,7 @@ import React from 'react';
 
 import { EntryColorMode } from 'utils/entry-color';
 
-import { ProtVista } from 'components/ProtVista';
+import { ProteinViewer } from 'components/ProteinViewer';
 import Provider from './Provider';
 import configureStore from './configuedStore.js';
 
@@ -11,7 +11,7 @@ const store = configureStore();
 const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
 
 export default {
-  title: 'InterPro UI/ProtVista',
+  title: 'InterPro UI/ProteinViewer',
   decorators: [withProvider],
 };
 const sequence =
@@ -65,14 +65,14 @@ const secondaryStructure = [
 ];
 
 export const JustSequence = () => (
-  <ProtVista
+  <ProteinViewer
     protein={{ sequence, length: sequence.length }}
     data={[]}
     showOptions={false} // Options require a laodData so the button won't be rendered.
   />
 );
 export const SequenceAndDomains = () => (
-  <ProtVista
+  <ProteinViewer
     protein={{ sequence, length: sequence.length }}
     data={[['Domains', domains]]}
     dataDB={{}}
@@ -81,7 +81,7 @@ export const SequenceAndDomains = () => (
   />
 );
 export const WithSecondaryStructure = () => (
-  <ProtVista
+  <ProteinViewer
     protein={{ sequence, length: sequence.length }}
     data={[
       ['Secondary Structure', secondaryStructure],

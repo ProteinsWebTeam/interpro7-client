@@ -73,6 +73,7 @@ const mdb1Values = new Set([
   'PrositeProfiles',
   'SMART',
   'TIGRFAM',
+  'NCBIfam',
   'PrositePatterns',
   'SFLD',
 ]);

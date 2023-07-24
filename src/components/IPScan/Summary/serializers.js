@@ -190,7 +190,8 @@ export const mergeData = (matches, sequenceLength) => {
       mergedData.other_features.push(mergedMatch);
     } else if (OTHER_RESIDUES_DBS.includes(mergedMatch.source_database)) {
       const residues = match2residues(mergedMatch);
-      mergedData.other_residues.push(residues[0]);
+      if (residues[0].locations.length !== 0)
+        mergedData.other_residues.push(residues[0]);
     } else {
       unintegrated[mergedMatch.accession] = mergedMatch;
     }

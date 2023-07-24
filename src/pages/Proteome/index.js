@@ -16,6 +16,7 @@ import Table, {
   Card,
   HighlightToggler,
 } from 'components/Table';
+// $FlowFixMe
 import File from 'components/File';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';

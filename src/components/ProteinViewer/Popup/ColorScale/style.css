@@ -1,0 +1,14 @@
+.color-scale {
+  display: inline-flex;
+  & .legend {
+    padding: 0 0.5rem;
+    vertical-align: top;
+    width: 3rem;
+    &.left {
+      text-align: right;
+    }
+    &.right {
+      text-align: left;
+    }
+  }
+}

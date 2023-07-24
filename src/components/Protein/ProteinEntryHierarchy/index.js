@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { isEqual } from 'lodash-es';
 import { goToCustomLocation } from 'actions/creators';
 
 import loadWebComponent from 'utils/load-web-component';
@@ -51,6 +52,7 @@ const ProteinEntryHierarchy = ({
   useEffect(() => {
     if (componentRef.current && ready) {
       // Making sure the same hierarchy only appears once.
+      if (isEqual(componentRef.current._hierarchy, hierarchy)) return;
       componentRef.current.hierarchy = hierarchy;
       // Adding the click event so it doesn't refresh the whole page,
       // but instead use the customLocation.

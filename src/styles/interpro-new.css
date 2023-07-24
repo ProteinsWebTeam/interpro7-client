@@ -657,6 +657,7 @@ body .tag.secondary {
 /* tag used on md signature page */
 body .tag.md-p {
   background-color: var(--colors-md-sub);
+  color: var(--colors-nearly-white);
 }
 
 /*used on ipscan search result*/
@@ -1032,113 +1033,7 @@ body .tag-sqc {
   right: 0.5em;
 }
 /* /CARDS */
-/* TABS */
-/* Tabs style main - homepage */
-.tabs.main-style {
-  border-bottom: 1px solid #e6e6e6;
-  border-right-width: 0;
-  border-top-width: 0;
-}
-.tabs.main-style .tabs-title {
-  margin-bottom: -1px;
-  & > button,
-  & > a {
-    color: var(--colors-graydark);
-    background: rgba(221, 221, 221, 0.54);
-    border-top: rgba(221, 221, 221, 0.54) 3px solid;
-  }
-  & > button:hover,
-  & > a:hover {
-    opacity: 1;
-    background: #ddd;
-  }
-}
-.tabs.main-style .tabs-title:last-of-type {
-  border-right: 1px #e6e6e6 solid;
-}
-/* tabs - is it used? */
-.tabs.main-style .tabs-title.is-active {
-  & > a,
-  & > a:focus,
-  & > button,
-  & > button:focus {
-    border-top: #36aac0 3px solid;
-    background: #fff;
-    color: #222;
-    outline: none;
-  }
-  & > button:hover {
-    background: white;
-  }
-}
-/* tabs main style (e.g search, homepage) */
-.tabs.main-style .tabs-title a.is-active {
-  border-top: #36aac0 3px solid;
-  background: #fff;
-  color: #222;
-  outline: none;
-}
-/* /Tabs style main */
-.tabs .tabs-title.is-active {
-  & > a,
-  & > a:focus,
-  & > button,
-  & > button:focus {
-    color: white;
-    background: #666;
-  }
-}
-.tabs .tabs-title {
-  & > button,
-  & > a {
-    color: #0a0a0a;
-    padding: 1.25rem 1.5rem;
-    font-size: 0.75rem;
-    line-height: 1;
-  }
-  & > button:hover,
-  & > a:hover {
-    opacity: 0.9;
-    background: #ddd;
-  }
-}
-/* important to keep otherwise become light grey like other tabs */
-.tabs .tabs-title.is-active {
-  & > button:hover {
-    background: #666;
-  }
-}
-/* Tabs style menu */
-.tabs.menu-style {
-  border: 0px solid #e6e6e6;
-  margin-bottom: 2rem;
-}
-.tabs.menu-style .tabs-title {
-  & {
-    margin: 0 1em 0 0;
-  }
-  & > a {
-    font-size: 0.9rem;
-    padding: 0.7rem 1rem;
-    line-height: inherit;
-  }
-  & > a:hover {
-    color: var(--colors-submain);
-    background-color: transparent;
-  }
-  & > a.is-active-tab {
-    font-weight: 700;
-    background: #1779ba;
-    color: #fff;
-  }
-}
-.tabs.menu-style ~ .tabs-content {
-  border: 0;
-}
-.tabs.menu-style ~ .tabs-content .tabs-panel {
-  padding: 0;
-}
-/* /Tabs style menu */
+
 /* ** ACCORDION MENU ** */
 details.accordion-style > summary {
   color: var(--colors-submain);

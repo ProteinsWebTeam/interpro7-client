@@ -5,6 +5,7 @@ import T from 'prop-types';
 import loadData from 'higherOrder/loadData';
 
 import { EntryMenuLinkWithoutData } from '.';
+// $FlowFixMe
 import { getAlphaFoldPredictionURL } from 'components/AlphaFold/selectors';
 
 const AlphaFoldMenuLink = (

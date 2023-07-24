@@ -66,6 +66,7 @@ const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
       title += 'annotated by InterPro curators';
     } else {
       title += `as provided by ${db}`;
+      label = `${db} ${label}`;
     }
   } else {
     title += 'as provided by the InterPro2GO pipeline';

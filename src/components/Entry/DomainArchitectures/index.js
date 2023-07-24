@@ -26,7 +26,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import pageStyle from './style.css';
-import protvista from 'components/ProtVista/style.css';
+import protvista from 'components/ProteinViewer/style.css';
 
 const f = foundationPartial(ebiGlobalStyles, pageStyle, protvista, fonts);
 

@@ -37,6 +37,12 @@ export class ViewerOnDemand extends PureComponent /*:: <Props, State> */ {
     id: T.string.isRequired,
     userActivatedVisible: T.bool.isRequired,
     changeSettingsRaw: T.func.isRequired,
+    url: T.string,
+    elementId: T.string,
+    ext: T.string,
+    theme: T.string,
+    shouldResetViewer: T.bool,
+    selections: T.array,
   };
 
   constructor(props /*: Props */) {

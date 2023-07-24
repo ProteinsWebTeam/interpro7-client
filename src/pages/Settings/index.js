@@ -597,9 +597,6 @@ const EBIEndpointSettings = connect(getStatusForEndpoint('ebi'))(
 const IPScanEndpointSettings = connect(getStatusForEndpoint('ipScan'))(
   EndpointSettings,
 );
-const Genome3DEndpointSettings = connect(getStatusForEndpoint('genome3d'))(
-  EndpointSettings,
-);
 const WikipediaEndpointSettings = connect(getStatusForEndpoint('wikipedia'))(
   EndpointSettings,
 );
@@ -736,6 +733,8 @@ type SettingsProps = {
     ebi: Object,
     ipScan: Object,
     genome3d: Object,
+    repeatsDB: Object,
+    disprot: Object,
     wikipedia: Object,
     alphafold: Object,
   },
@@ -759,7 +758,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
       api: T.object.isRequired,
       ebi: T.object.isRequired,
       ipScan: T.object.isRequired,
-      genome3d: T.object.isRequired,
       wikipedia: T.object.isRequired,
       alphafold: T.object.isRequired,
     }).isRequired,
@@ -809,7 +807,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
         api = {},
         ebi = {},
         ipScan = {},
-        genome3d = {},
         wikipedia = {},
         alphafold = {},
       },
@@ -891,13 +888,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
                     InterProScan Settings{' '}
                     {!DEV && '(modification temporarily disabled)'}
                   </IPScanEndpointSettings>
-                  <Genome3DEndpointSettings
-                    category="genome3d"
-                    endpointDetails={genome3d}
-                  >
-                    Genome3D Settings{' '}
-                    {!DEV && '(modification temporarily disabled)'}
-                  </Genome3DEndpointSettings>
                   <WikipediaEndpointSettings
                     category="wikipedia"
                     endpointDetails={wikipedia}
