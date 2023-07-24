@@ -35,7 +35,6 @@ const selectRepresentativeDomains = (domains: Record<string, unknown>[]) => {
       }
     }
   }
-  // const sortedDomains = flatDomains.sort((a, b) => b.length - a.length);
   for (const dom1 of flatDomains) {
     for (const dom2 of flatDomains) {
       if (dom1 === dom2 || !dom1.keep || !dom2.keep) continue;
@@ -43,10 +42,12 @@ const selectRepresentativeDomains = (domains: Record<string, unknown>[]) => {
         Math.min(dom1.end, dom2.end) - Math.max(dom1.start, dom2.start) + 1;
       if (overlap > 0) {
         if (overlap > 0.7 * dom1.length && overlap > 0.7 * dom2.length) {
-          if (dom1.length < dom2.length ||
-               (dom1.length === dom2.length && dom2.source_database === 'pfam')) {
+          if (
+            dom1.length < dom2.length ||
+            (dom1.length === dom2.length && dom2.source_database === 'pfam')
+          ) {
             dom1.keep = false;
-}
+          }
         } else if (overlap > 0.7 * dom1.length && overlap < 0.7 * dom2.length) {
           dom1.keep = false;
         }
