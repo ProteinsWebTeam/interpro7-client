@@ -24,8 +24,8 @@ import uniqueId from 'utils/cheap-unique-id';
 
 import cssBinder from 'styles/cssBinder';
 
-import style from '../../ProteinViewer/style.css';
-import grid from '../../ProteinViewer/grid.css';
+import style from '../style.css';
+import grid from '../grid.css';
 import { ExtendedFeature } from '..';
 import LabelsInTrack from '../LabelsInTrack';
 
