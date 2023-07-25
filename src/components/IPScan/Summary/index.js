@@ -21,6 +21,7 @@ import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 // $FlowFixMe
 import GoTerms from 'components/GoTerms';
 import Accession from 'components/Accession';
+// $FlowFixMe
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 // $FlowFixMe
 import Length from 'components/Protein/Length';
@@ -375,6 +376,7 @@ const SummaryIPScanJob = ({
     </div>
   );
 };
+
 SummaryIPScanJob.propTypes = {
   accession: T.string.isRequired,
   localID: T.string,

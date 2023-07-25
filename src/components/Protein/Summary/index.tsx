@@ -62,7 +62,6 @@ const FamilyHierarchy = ({
 }) => {
   if (families?.length)
     return (
-      //@ts-ignore
       <ProteinEntryHierarchy entries={families} />
     );
   return (

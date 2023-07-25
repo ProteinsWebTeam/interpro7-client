@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import T from 'prop-types';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
@@ -10,7 +10,7 @@ import pathToDescription from 'utils/processDescription/pathToDescription';
 
 import config from 'config';
 
-const webComponents = [];
+const webComponents: Promise<unknown>[] = [];
 
 const loadInterProWebComponents = () => {
   if (!webComponents.length) {
@@ -37,9 +37,17 @@ const loadInterProWebComponents = () => {
   return Promise.all(webComponents);
 };
 
-const getUniqueHierarchies = (hierarchies) =>
+const getUniqueHierarchies = (hierarchies: Array<InterProHierarchyType>) =>
   Array.from(new Map(hierarchies.map((h) => [h.accession, h])).values());
 
+type HierarchyProps = {
+  hierarchy:InterProHierarchyType,
+accessions: Array<string>,
+hrefroot: string,
+goToCustomLocation?: typeof goToCustomLocation,
+ready: boolean,
+includeChildren?: boolean,
+}
 const ProteinEntryHierarchy = ({
   hierarchy,
   accessions,
@@ -47,24 +55,24 @@ const ProteinEntryHierarchy = ({
   goToCustomLocation,
   ready,
   includeChildren = false,
-}) => {
-  const componentRef = useRef();
+}: HierarchyProps) => {
+  const componentRef = useRef<(HTMLElement&{hierarchy?:InterProHierarchyType,_hierarchy?:InterProHierarchyType})|null>(null);
   useEffect(() => {
     if (componentRef.current && ready) {
       // Making sure the same hierarchy only appears once.
-      if (isEqual(componentRef.current._hierarchy, hierarchy)) return;
+      if (isEqual((componentRef.current)?._hierarchy, hierarchy)) return;
       componentRef.current.hierarchy = hierarchy;
       // Adding the click event so it doesn't refresh the whole page,
       // but instead use the customLocation.
       componentRef.current.addEventListener('click', (e) => {
-        const target = (e.path || e.composedPath())[0];
+        const target = (e.composedPath())[0] as HTMLElement;
         if (target.classList.contains('link')) {
           e.preventDefault();
-          goToCustomLocation({
+          goToCustomLocation?.({
             description: pathToDescription(
               target
-                .getAttribute('href')
-                .replace(new RegExp(`^${config.root.website.path}`), ''),
+                ?.getAttribute('href')
+                ?.replace(new RegExp(`^${config.root.website.path}`), ''),
             ),
           });
         }
@@ -81,23 +89,20 @@ const ProteinEntryHierarchy = ({
     />
   );
 };
-ProteinEntryHierarchy.propTypes = {
-  hierarchy: T.object.isRequired,
-  accessions: T.array.isRequired,
-  hrefroot: T.string.isRequired,
-  goToCustomLocation: T.func.isRequired,
-  ready: T.bool.isRequired,
-  includeChildren: T.bool,
-};
+
+type Props ={
+  entries: Array<EntryMetadata>,
+  goToCustomLocation?: typeof goToCustomLocation,
+  includeChildren?: boolean,
+}
 
 const ProteinEntryHierarchies = ({
   entries,
   goToCustomLocation,
   includeChildren = false,
-}) => {
+}: Props) => {
   const [ready, setReady] = useState(false);
 
-  // eslint-disable-next-line func-style,require-jsdoc
   async function loadComponents() {
     return await loadInterProWebComponents();
   }
@@ -108,7 +113,7 @@ const ProteinEntryHierarchies = ({
     });
   }, []);
 
-  const hierarchies = getUniqueHierarchies(entries.map((e) => e.hierarchy));
+  const hierarchies = getUniqueHierarchies(entries.map((e) => e.hierarchy).filter(Boolean) as Array<InterProHierarchyType>);
   if (!ready) return null;
   return (
     <div>
@@ -127,17 +132,6 @@ const ProteinEntryHierarchies = ({
         : null}
     </div>
   );
-};
-ProteinEntryHierarchies.propTypes = {
-  entries: T.arrayOf(
-    T.shape({
-      accession: T.string.isRequired,
-      type: T.string.isRequired,
-      hierarchy: T.object.isRequired,
-    }),
-  ),
-  goToCustomLocation: T.func,
-  includeChildren: T.bool,
 };
 
 const mapStateToProps = createSelector(

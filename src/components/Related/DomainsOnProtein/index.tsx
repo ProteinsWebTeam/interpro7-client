@@ -115,10 +115,7 @@ const DomainOnProteinWithoutData = ({
     }
   }, [data]);
 
-  if (
-    (!data || data.loading) &&
-    (!dataFeatures || dataFeatures.loading || !dataFeatures.payload)
-  )
+  if (data?.loading && dataFeatures?.loading)
     return <Loading />;
   const payload = data?.payload as PayloadList<EntryProteinPayload>;
   if (!payload?.results) {

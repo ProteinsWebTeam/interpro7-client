@@ -85,7 +85,6 @@ const DomainsOnProteinLoaded = ({
   addConfidenceTrack(dataConfidence, protein.accession, sortedData);
 
   return (
-    <>
       <ProteinViewer
         protein={protein}
         data={sortedData}
@@ -97,7 +96,6 @@ const DomainsOnProteinLoaded = ({
       >
         {children}
       </ProteinViewer>
-    </>
   );
 };
 

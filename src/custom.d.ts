@@ -149,12 +149,13 @@ interface InterProHierarchyProps
     React.HTMLAttributes<HTMLElement>,
     HTMLElement
   > {
-  accession: string;
+  accession?: string;
   accessions: string | string[];
   displaymode: string;
-  hideafter: number;
+  hideafter?: number;
   hrefroot: string | null;
   hierarchy?: InterProHierarchyType;
+  _hierarchy?: InterProHierarchyType;
 }
 
 type InterProHierarchyType = {
@@ -550,15 +551,15 @@ type DisprotRegion = {
   released: string;
 };
 type DisprotConsensusRegion = {
-  start: number,
-  end: number,
+  start: number;
+  end: number;
   type: string;
 };
 type DisprotConsensus = {
-  full: Array<DisprotConsensusRegion>,
-  'Structural state': Array<object>,
-  'Structural transition': Array<object>,
-  'Biological process': Array<object>,
+  full: Array<DisprotConsensusRegion>;
+  'Structural state': Array<object>;
+  'Structural transition': Array<object>;
+  'Biological process': Array<object>;
 };
 type DisProtPayload = {
   acc: string;
