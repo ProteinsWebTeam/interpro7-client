@@ -6,5 +6,5 @@ overrides:
     singleQuotes: false
 - files: "src/**/*.js"
   options:
-    parser: babel
+    parser: typescript
     trailingComma: all
