@@ -47,7 +47,7 @@ const OtherSections = ({
       />
     )}
     {Object.keys(metadata.literature || []).length ? (
-      <section id="references" data-testid="entry-references">
+      <section id="references">
         <div className={css('vf-grid')}>
           <h4>
             {hasIntegratedCitations ? 'Supplementary References' : 'References'}
@@ -100,7 +100,7 @@ const SummaryEntry = ({
     (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
   );
   return (
-    <div className={css('vf-stack', 'vf-stack--200')}>
+    <div className={css('vf-stack', 'vf-stack--400')}>
       <section className={css('vf-grid', 'summary-grid')}>
         <div className={css('vf-stack')}>
           {metadata?.source_database?.toLowerCase() === 'interpro' ? (

@@ -285,6 +285,16 @@ interface ProteinMetadata extends Metadata {
     taxId: number;
   };
 }
+interface StructureMetadata extends Metadata {
+  name: {
+    name: string;
+  };
+  experiment_type: string;
+  release_date: string;
+  literature: Record<string, Reference>;
+  chains: Array<string>;
+  resolution: number;
+}
 type PayloadList<Payload> = {
   count: number;
   next?: string | null;
@@ -305,7 +315,7 @@ type ProteinEntryPayload = {
         model: string | null;
         score: number | null;
         subfamily: { accession: string };
-      }
+      },
     ];
     protein_length: number;
     source_database: string;
@@ -322,6 +332,31 @@ type EntryProteinPayload = {
     source_database: string;
     entry_type: string;
     entry_integrated: string | null;
+  }>;
+};
+type EntryStructurePayload = {
+  metadata: EntryMetadata;
+  structures: Array<{
+    accession: string;
+    structure_protein_locations: Array<ProtVistaLocation>;
+    entry_protein_locations: Array<ProtVistaLocation>;
+    protein_structure_mapping: Record<
+      string,
+      {
+        protein_start: number;
+        protein_end: number;
+        structure_start: number;
+        structure_end: number;
+        author_structure_start: number;
+        author_structure_end: number;
+      }
+    >;
+    protein: string;
+    protein_length: number;
+    resolution: number;
+    source_database: string;
+    chain: string;
+    experiment_type: string;
   }>;
 };
 
@@ -488,7 +523,7 @@ type ProteinViewerData<Feature = unknown> = Array<
   [
     string,
     Array<Feature>,
-    { component: string; attributes: Record<string, string> }
+    { component: string; attributes: Record<string, string> },
   ]
 >;
 type ProteinViewerDataObject<Feature = unknown> = Record<
