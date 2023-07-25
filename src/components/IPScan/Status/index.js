@@ -8,6 +8,7 @@ import Link from 'components/generic/Link';
 
 import { filterSubset, sortSubsetBy } from 'components/Table/FullyLoadedTable';
 import Table, { Column, ExtraOptions } from 'components/Table';
+// $FlowFixMe
 import TimeAgo from 'components/TimeAgo';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';

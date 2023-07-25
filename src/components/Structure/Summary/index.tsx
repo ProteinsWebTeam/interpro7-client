@@ -49,7 +49,7 @@ interface LoadedProps
   extends LoadDataProps<{ metadata: StructureMetadata }>,
     LoadDataProps<PayloadList<EntryStructurePayload>, 'Matches'> {}
 
-const SummaryStructure = ({ data, dataMatches }: LoadedProps) => {
+export const SummaryStructure = ({ data, dataMatches }: LoadedProps) => {
   const { loading, payload } = data || {};
   const { loading: loadingM, payload: payloadM } = dataMatches || {};
   if (loading || loadingM || !payload) return null;

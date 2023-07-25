@@ -18,7 +18,7 @@ exports[`<SummaryTaxonomy /> should render 1`] = `
           <td
             data-testid="taxonomy-taxid"
           >
-            <Memo(Connect(Accession))
+            <Accession
               accession="131567"
               title="Tax ID"
             />
