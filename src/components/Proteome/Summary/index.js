@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+// $FlowFixMe
 import Accession from 'components/Accession';
 // $FlowFixMe
 import Species from 'components/Protein/Species';

@@ -20,6 +20,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 // $FlowFixMe
 import GoTerms from 'components/GoTerms';
+// $FlowFixMe
 import Accession from 'components/Accession';
 // $FlowFixMe
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';

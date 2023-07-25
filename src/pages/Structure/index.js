@@ -64,6 +64,7 @@ const f = foundationPartial(
 const SummaryAsync = loadable({
   loader: () =>
     import(
+      // $FlowFixMe
       /* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'
     ),
 });

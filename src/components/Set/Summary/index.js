@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import Accession from 'components/Accession';
 // $FlowFixMe
 import Description from 'components/Description';
