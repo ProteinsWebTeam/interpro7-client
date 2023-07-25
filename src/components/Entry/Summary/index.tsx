@@ -8,20 +8,20 @@ import Literature, {
   splitCitations,
 } from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
-import InterProHierarchy from 'components/Entry/InterProHierarchy';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import MemberDBSubtitle from './MemberDBSubtitle';
 import SidePanel from './SidePanel';
-import OverlappingEntries from './OverlappingEntries';
 import Wikipedia from './Wikipedia';
 
 import cssBinder from 'styles/cssBinder';
 
 import ipro from 'styles/interpro-vf.css';
+import summary from 'styles/summary.css';
 import local from './style.css';
+import InterProSubtitle from './InterProSubtitle';
 
-const css = cssBinder(local, ipro);
+const css = cssBinder(local, ipro, summary);
 
 type OtherSectionsProps = {
   metadata: EntryMetadata;
@@ -68,22 +68,6 @@ const OtherSections = ({
   </>
 );
 
-type HierarchyProps = {
-  hierarchy?: InterProHierarchyType;
-  type: string;
-  accession: string;
-};
-
-const Hierarchy = ({ hierarchy, type, accession }: HierarchyProps) =>
-  hierarchy?.children?.length ? (
-    <div className={css('margin-bottom-large')}>
-      <h4 className={css('first-letter-cap')}>
-        {type.replace('_', ' ').toLowerCase()} relationships
-      </h4>
-      <InterProHierarchy accession={accession} hierarchy={hierarchy} />
-    </div>
-  ) : null;
-
 type SummaryEntryProps = {
   data: {
     metadata: EntryMetadata;
@@ -116,46 +100,38 @@ const SummaryEntry = ({
     (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
   );
   return (
-    <div className={css('sections')}>
+    <div className={css('vf-stack', 'vf-stack--200')}>
       <section className={css('vf-grid', 'summary-grid')}>
         <div className={css('vf-stack')}>
-          <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
-          {metadata?.source_database?.toLowerCase() === 'interpro' &&
-            metadata?.accession !== metadata?.name?.short && (
-              <p data-testid="entry-shortname">
-                Short name:&nbsp;
-                <i className={css('shortname')}>{metadata.name.short}</i>
-              </p>
-            )}
-          <OverlappingEntries metadata={metadata} />
-          <Hierarchy
-            hierarchy={metadata.hierarchy}
-            accession={metadata.accession}
-            type={metadata.type}
-          />
-
-          {
-            // doesn't work for some HAMAP as they have enpty <P> tag
-            (metadata.description || []).length ? (
-              <>
-                <h4>Description</h4>
-                <Description
-                  textBlocks={metadata.description}
-                  literature={included as Array<[string, Reference]>}
-                  accession={metadata.accession}
-                />
-              </>
-            ) : (
-              <DescriptionFromIntegrated
-                integrated={metadata.integrated}
-                setIntegratedCitations={setIntegratedCitations}
-              />
-            )
-          }
+          {metadata?.source_database?.toLowerCase() === 'interpro' ? (
+            <InterProSubtitle metadata={metadata} />
+          ) : (
+            <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
+          )}
         </div>
         <div className={css('vf-stack')}>
           <SidePanel metadata={metadata} dbInfo={dbInfo} />
         </div>
+      </section>
+      <section>
+        {
+          // doesn't work for some HAMAP as they have enpty <P> tag
+          (metadata.description || []).length ? (
+            <>
+              <h4>Description</h4>
+              <Description
+                textBlocks={metadata.description}
+                literature={included as Array<[string, Reference]>}
+                accession={metadata.accession}
+              />
+            </>
+          ) : (
+            <DescriptionFromIntegrated
+              integrated={metadata.integrated}
+              setIntegratedCitations={setIntegratedCitations}
+            />
+          )
+        }
       </section>
       <OtherSections
         metadata={metadata}

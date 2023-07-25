@@ -1,10 +1,10 @@
 singleQuote: true
 trailingComma: es5
-parser: typescript
 overrides:
 - files: "*.css"
   options:
     singleQuotes: false
 - files: "src/**/*.js"
   options:
+    parser: babel
     trailingComma: all
