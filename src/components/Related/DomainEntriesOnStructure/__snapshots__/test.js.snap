@@ -41,7 +41,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
           )
         </small>
       </h4>
-      <Memo(Connect(loadData(Connect(loadData(ProtVistaLoaded)))))
+      <Memo(Connect(loadData(ProteinViewerLoaded)))
         chain="A"
         fixedHighlight="208:366"
         id="A-p00735"

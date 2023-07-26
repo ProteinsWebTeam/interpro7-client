@@ -3,7 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 import loadData from 'higherOrder/loadData';
 import { createSelector } from 'reselect';
-
+// $FlowFixMe
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';

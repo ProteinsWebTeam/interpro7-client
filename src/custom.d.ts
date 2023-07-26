@@ -334,30 +334,40 @@ type EntryProteinPayload = {
     entry_integrated: string | null;
   }>;
 };
+type StructureLinkedObject = {
+  accession: string;
+  name: string;
+  short_name?: string;
+  structure_protein_locations: Array<ProtVistaLocation>;
+  entry_protein_locations: Array<ProtVistaLocation>;
+  protein_structure_mapping: Record<
+    string,
+    {
+      protein_start: number;
+      protein_end: number;
+      structure_start: number;
+      structure_end: number;
+      author_structure_start: number;
+      author_structure_end: number;
+    }
+  >;
+  protein: string;
+  protein_length: number;
+  resolution: number;
+  source_database: string;
+  chain: string;
+  experiment_type: string;
+  type?: string;
+  entry_type?: string;
+  children: unknown;
+};
 type EntryStructurePayload = {
   metadata: EntryMetadata;
-  structures: Array<{
-    accession: string;
-    structure_protein_locations: Array<ProtVistaLocation>;
-    entry_protein_locations: Array<ProtVistaLocation>;
-    protein_structure_mapping: Record<
-      string,
-      {
-        protein_start: number;
-        protein_end: number;
-        structure_start: number;
-        structure_end: number;
-        author_structure_start: number;
-        author_structure_end: number;
-      }
-    >;
-    protein: string;
-    protein_length: number;
-    resolution: number;
-    source_database: string;
-    chain: string;
-    experiment_type: string;
-  }>;
+  structures: Array<StructureLinkedObject>;
+};
+type SecondaryStructure = {
+  accession: string;
+  locations: ProtVistaLocation[];
 };
 
 type DBInfo = {
@@ -504,6 +514,7 @@ type ProtVistaFragment = {
   shape?: string;
   residues?: string;
   seq_feature?: string;
+  fill?: string;
 };
 
 type ProtVistaLocation = {
@@ -559,6 +570,24 @@ type Genome3DProteinPayload = {
     taxon_id: number;
     uniprot_acc: string;
   };
+  message: string;
+};
+type Genome3DStructurePayload = {
+  data: Array<{
+    annotations: Array<{
+      resource: string;
+      uniprot_acc: string;
+      confidence: number;
+      segments: Array<{
+        uniprot_start: number;
+        uniprot_stop: number;
+      }>;
+    }>;
+    sequence: string;
+    gene_name: string;
+    description: string;
+    taxon_id: number;
+  }>;
   message: string;
 };
 type RepeatsDBAnnotation = {

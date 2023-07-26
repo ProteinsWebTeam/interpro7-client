@@ -47,6 +47,7 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import pageStyle from '../style.css';
+// $FlowFixMe
 import { formatExperimentType } from 'components/Structure/utils';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import theme from 'styles/theme-interpro.css';
