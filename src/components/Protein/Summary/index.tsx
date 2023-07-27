@@ -60,10 +60,7 @@ const FamilyHierarchy = ({
   families?: Record<string, unknown>[] | null;
   matchesLoaded: boolean;
 }) => {
-  if (families?.length)
-    return (
-      <ProteinEntryHierarchy entries={families} />
-    );
+  if (families?.length) return <ProteinEntryHierarchy entries={families} />;
   return (
     <div className={css('margin-bottom-medium')}>
       {entriesCounter === 0 || matchesLoaded ? (
@@ -100,7 +97,9 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
 
   const minWidth = '200px';
 
-  const getSubfamiliesFromMatches = (results: EntryProteinPayload[]) => {
+  const getSubfamiliesFromMatches = (
+    results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[]
+  ) => {
     setMatchesLoaded(true);
     if (results?.length) {
       setSubfamilies(
@@ -111,7 +110,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
           )
           .map(({ proteins }) => {
             const subfamilies: Array<string | undefined> = [];
-            proteins.forEach((p) => {
+            (proteins as EntryProteinMatch[]).forEach((p) => {
               p.entry_protein_locations.forEach(({ subfamily }) => {
                 subfamilies.push(subfamily?.accession);
               });

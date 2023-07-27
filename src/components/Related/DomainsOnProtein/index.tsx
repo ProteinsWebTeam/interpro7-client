@@ -11,7 +11,7 @@ import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
 } from 'components/AlphaFold/selectors';
-import { processData } from 'components/ProteinViewer/utils';
+import { useProcessData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import EdgeCase from 'components/EdgeCase';
 
@@ -59,7 +59,9 @@ export const groupByEntryType = (
 
 type Props = PropsWithChildren<{
   mainData: { metadata: ProteinMetadata };
-  onMatchesLoaded?: (results: EntryProteinPayload[]) => void;
+  onMatchesLoaded?: (
+    results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[]
+  ) => void;
   onFamiliesFound?: (families: Record<string, unknown>[]) => void;
   title?: string;
 }>;
@@ -70,7 +72,9 @@ interface LoadedProps
     LoadDataProps<ResiduesPayload, 'Residues'>,
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
-    LoadDataProps<PayloadList<EntryProteinPayload> | ErrorPayload> {}
+    LoadDataProps<
+      PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
+    > {}
 
 const DomainOnProteinWithoutData = ({
   data,
@@ -100,24 +104,30 @@ const DomainOnProteinWithoutData = ({
     unintegrated: Record<string, unknown>[];
     other: Array<MinimalFeature>;
   } | null>(null);
+  const processData = useProcessData<EntryMetadata>({
+    data: data as RequestedData<
+      PayloadList<EndpointWithMatchesPayload<EntryMetadata, MatchI>>
+    >,
+    endpoint: 'protein',
+  });
   useEffect(() => {
-    const payload = data?.payload as PayloadList<EntryProteinPayload>;
+    const payload = data?.payload as PayloadList<
+      EndpointWithMatchesPayload<EntryMetadata>
+    >;
     if (data && !data.loading) {
-      const { interpro, unintegrated, other } = processData({
-        data: data as unknown as RequestedData<
-          PayloadList<ExpectedPayload<ProteinMetadata>>
-        >,
-        endpoint: 'protein',
-      });
-      setProcessedData({ interpro, unintegrated, other });
       onMatchesLoaded?.(payload?.results || []);
-      onFamiliesFound?.(interpro.filter((entry) => entry.type === 'family'));
+      if (processData) {
+        const { interpro, unintegrated, other } = processData;
+        setProcessedData({ interpro, unintegrated, other });
+        onFamiliesFound?.(interpro.filter((entry) => entry.type === 'family'));
+      }
     }
-  }, [data]);
+  }, [data, processData]);
 
-  if (data?.loading && dataFeatures?.loading)
-    return <Loading />;
-  const payload = data?.payload as PayloadList<EntryProteinPayload>;
+  if (data?.loading && dataFeatures?.loading) return <Loading />;
+  const payload = data?.payload as PayloadList<
+    EndpointWithMatchesPayload<EntryMetadata>
+  >;
   if (!payload?.results) {
     const edgeCaseText = edgeCases.get(STATUS_TIMEOUT);
     if ((data?.payload as ErrorPayload)?.detail === 'Query timed out')

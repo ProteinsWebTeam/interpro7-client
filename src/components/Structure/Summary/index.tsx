@@ -47,7 +47,10 @@ const EXTERNAL_LINKS = [
 
 interface LoadedProps
   extends LoadDataProps<{ metadata: StructureMetadata }>,
-    LoadDataProps<PayloadList<EntryStructurePayload>, 'Matches'> {}
+    LoadDataProps<
+      PayloadList<EndpointWithMatchesPayload<StructureMetadata>>,
+      'Matches'
+    > {}
 
 export const SummaryStructure = ({ data, dataMatches }: LoadedProps) => {
   const { loading, payload } = data || {};

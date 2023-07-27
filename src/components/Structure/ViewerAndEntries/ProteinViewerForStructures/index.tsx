@@ -1,23 +1,28 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
-import loadData from 'higherOrder/loadData';
 import { createSelector } from 'reselect';
-// $FlowFixMe
-import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import { format } from 'url';
+
+import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-// $FlowFixMe
-import { processData } from 'components/ProteinViewer/utils';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
+import { useProcessData } from 'components/ProteinViewer/utils';
 
-const ProtVistaForStructure = (
-  {
+type StructureWithSecondary = {
+  metadata: StructureMetadata;
+  extra_fields: { secondary_structures: Array<SecondaryStructure> };
+};
+export interface LoadedProps
+  extends LoadDataProps<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>>,
+    LoadDataProps<StructureWithSecondary, 'Secondary'> {}
+
+const ProtVistaForStructure = ({ data, dataSecondary }: LoadedProps) => {
+  const processedData = useProcessData({
     data,
-    dataSecondary,
-  } /*: { data: { loading: boolean, payload: Object }, dataSecondary: { loading: boolean, payload: Object }} */,
-) => {
+    endpoint: 'structure',
+  });
   if (!data || data.loading) return <Loading />;
 
   let secondaryData;
@@ -29,30 +34,17 @@ const ProtVistaForStructure = (
       secondaryData = dataSecondary.payload.extra_fields.secondary_structures;
     }
   }
-
-  const { interpro, unintegrated } = processData({
-    data: data.payload ? data : { payload: { results: [] } },
-    endpoint: 'structure',
-  });
+  if (!data.payload || !processedData) return null;
+  const { interpro, unintegrated } = processedData;
   return (
     <div>
       <EntriesOnStructure
-        entries={interpro.concat(unintegrated)}
+        entries={interpro.concat(unintegrated) as StructureLinkedObject[]}
         showChainMenu={true}
         secondaryStructures={secondaryData}
       />
     </div>
   );
-};
-ProtVistaForStructure.propTypes = {
-  data: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }).isRequired,
-  dataSecondary: T.shape({
-    loading: T.bool,
-    payload: T.object,
-  }),
 };
 
 export const getURLForMatches = createSelector(
@@ -72,7 +64,7 @@ export const getURLForMatches = createSelector(
         page_size: 200,
         extra_fields: 'short_name',
       },
-    }),
+    })
 );
 const getSecondaryStructureURL = createSelector(
   (state) => state.settings.api,
@@ -91,10 +83,14 @@ const getSecondaryStructureURL = createSelector(
         extra_fields: 'secondary_structures',
       },
     });
-  },
+  }
 );
 
-export default loadData({
+export default loadData<StructureWithSecondary, 'Secondary'>({
   propNamespace: 'Secondary',
   getUrl: getSecondaryStructureURL,
-})(loadData(getURLForMatches)(ProtVistaForStructure));
+} as Params)(
+  loadData<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>>(
+    getURLForMatches
+  )(ProtVistaForStructure)
+);

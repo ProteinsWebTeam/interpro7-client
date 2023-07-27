@@ -1,4 +1,3 @@
-// @flow
 import React, { useRef, useEffect, useState } from 'react';
 import T from 'prop-types';
 
@@ -10,7 +9,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 // $FlowFixMe
-import { processData } from 'components/ProteinViewer/utils';
+import { useProcessData } from 'components/ProteinViewer/utils';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
@@ -69,6 +68,10 @@ const ProtVistaForAlphaFold = (
   const [hoverSelection, _setHoverSelection] = useState([]);
   const hoverSelectionRef = useRef(hoverSelection);
   const fixedSelectionRef = useRef(fixedSelection);
+  const processedData = useProcessData({
+    data: data.payload ? data : { payload: { results: [] } },
+    endpoint: 'protein',
+  });
   const setFixedSelection = (data) => {
     fixedSelectionRef.current = data;
     _setFixedSelection(data);
@@ -83,8 +86,8 @@ const ProtVistaForAlphaFold = (
   }, [fixedSelection, hoverSelection]);
   useEffect(() => {
     containerRef.current?.addEventListener('change', (event /*: Event */) => {
-      if (!(event /*: any */).detail) return;
-      const { eventType, highlight } = (event /*: any */).detail;
+      if (!event /*: any */.detail) return;
+      const { eventType, highlight } = event /*: any */.detail;
       switch (eventType) {
         case 'click':
           if (fixedSelectionRef.current.length) {
@@ -96,7 +99,7 @@ const ProtVistaForAlphaFold = (
         case 'mouseover': {
           const colour =
             parseInt(
-              (event /*: any */)?.detail?.feature?.color
+              event /*: any */?.detail?.feature?.color
                 ?.substring(1),
               16,
             ) || 0;
@@ -119,12 +122,15 @@ const ProtVistaForAlphaFold = (
       }
     });
   }, [containerRef.current]);
-  if (!data || data.loading || !dataProtein || dataProtein.loading)
+  if (
+    !data ||
+    data.loading ||
+    !dataProtein ||
+    dataProtein.loading ||
+    !processedData
+  )
     return <Loading />;
-  const { interpro, unintegrated } = processData({
-    data: data.payload ? data : { payload: { results: [] } },
-    endpoint: 'protein',
-  });
+  const { interpro, unintegrated } = processedData;
   const tracks = [['Entries', interpro.concat(unintegrated)]];
   addConfidenceTrack(dataConfidence, protein, tracks);
   if (!dataProtein.payload?.metadata) return null;

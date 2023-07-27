@@ -9,7 +9,8 @@ import EntrySelection from './EntrySelection';
 import { NO_SELECTION } from './EntrySelection';
 import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 
-import ProtVistaForStructure from './ProtVistaForStructures';
+// $FlowFixMe
+import ProteinViewerForStructures from './ProteinViewerForStructures';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 // $FlowFixMe
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
@@ -494,7 +495,7 @@ class StructureView extends PureComponent /*:: <Props, State> */ {
           data-testid="structure-protvista"
           className={f('protvista-container')}
         >
-          <ProtVistaForStructure />
+          <ProteinViewerForStructures />
         </div>
       </div>
     );

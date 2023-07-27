@@ -58,7 +58,7 @@ export type DataForProteinChain = {
 
 const mergeData = (
   secondaryData: StructureLinkedObject[],
-  secondaryStructures: SecondaryStructure[]
+  secondaryStructures?: SecondaryStructure[]
 ) => {
   const out: Record<string, Record<string, DataForProteinChain>> = {};
   for (const entry of secondaryData) {
@@ -170,7 +170,7 @@ const protvistaPerChainProtein: Record<
 type Props = {
   entries: StructureLinkedObject[];
   showChainMenu: boolean;
-  secondaryStructures: SecondaryStructure[];
+  secondaryStructures?: SecondaryStructure[];
 };
 
 const EntriesOnStructure = ({

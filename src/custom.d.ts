@@ -323,17 +323,7 @@ type ProteinEntryPayload = {
     entry_integrated: string | null;
   }>;
 };
-type EntryProteinPayload = {
-  metadata: EntryMetadata;
-  proteins: Array<{
-    accession: string;
-    entry_protein_locations: Array<ProtVistaLocation>;
-    protein_length: number;
-    source_database: string;
-    entry_type: string;
-    entry_integrated: string | null;
-  }>;
-};
+
 type StructureLinkedObject = {
   accession: string;
   name: string;
@@ -660,13 +650,23 @@ type MinimalFeature = {
   children?: Array<{ accession: string; source_database: string }>;
   member_databases?: Record<string, unknown>;
 };
-type ExpectedPayload<M = Metadata> = {
-  metadata: M;
+type EndpointWithMatchesPayload<Meta = Metadata, Match = MatchI> = {
+  metadata: Meta;
   extra_fields?: Record<string, unknown>;
 } & {
-  [matches: string]: Array<Record<string, unknown>>;
+  [matches: string]: Array<Match>;
 };
-type Data<M = Metadata> = {
-  data: RequestedData<PayloadList<ExpectedPayload<M>>>;
+type Data<Meta = Metadata, Match = MatchI> = {
+  data?: RequestedData<PayloadList<EndpointWithMatchesPayload<Meta, Match>>>;
   endpoint: Endpoint;
 };
+type MatchI = {
+  accession: string;
+};
+interface EntryProteinMatch extends MatchI {
+  entry_protein_locations: Array<ProtVistaLocation>;
+  protein_length: number;
+  source_database: string;
+  entry_type: string;
+  entry_integrated: string | null;
+}
