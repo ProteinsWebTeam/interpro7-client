@@ -231,7 +231,7 @@ export const ProteinViewer = ({
                     entry.protein = protein.accession;
                   });
 
-                  const LabelComponent = component?.component;
+                  const LabelComponent = component?.component || 'span';
                   return (
                     <div
                       key={type}

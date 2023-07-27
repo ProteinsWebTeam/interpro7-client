@@ -521,11 +521,12 @@ type ProtVistaLocation = {
 };
 
 type ProteinViewerData<Feature = unknown> = Array<
-  [
-    string,
-    Array<Feature>,
-    { component: string; attributes: Record<string, string> },
-  ]
+  | [string, Array<Feature>]
+  | [
+      string,
+      Array<Feature>,
+      { component: string; attributes: Record<string, string> },
+    ]
 >;
 type ProteinViewerDataObject<Feature = unknown> = Record<
   string,

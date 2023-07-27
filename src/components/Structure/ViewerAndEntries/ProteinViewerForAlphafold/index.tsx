@@ -1,32 +1,33 @@
 import React, { useRef, useEffect, useState } from 'react';
-import T from 'prop-types';
 
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 import loadable from 'higherOrder/loadable';
-import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import { createSelector } from 'reselect';
 
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-// $FlowFixMe
 import { useProcessData } from 'components/ProteinViewer/utils';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
-  // $FlowFixMe
 } from 'components/AlphaFold/selectors';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { Params } from 'src/higherOrder/loadData/extract-params';
 
 const ProteinViewer = loadable({
   loader: () =>
-    // $FlowFixMe
     import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
+  loading: null,
 });
 
-export const addConfidenceTrack = (dataConfidence, protein, tracks) => {
+export const addConfidenceTrack = (
+  dataConfidence: RequestedData<AlphafoldConfidencePayload>,
+  protein: string,
+  tracks: ProteinViewerData
+) => {
   if (dataConfidence?.payload?.confidenceCategory?.length) {
-    const confidenceTrack = [
+    const confidenceTrack: [string, Array<unknown>] = [
       'AlphaFold confidence',
       [
         {
@@ -42,41 +43,41 @@ export const addConfidenceTrack = (dataConfidence, protein, tracks) => {
   }
 };
 
-/*::
-type Selection = { chain: string, start: number, end: number}
-  */
-const ProtVistaForAlphaFold = (
-  {
-    data,
-    protein,
-    dataProtein,
-    dataConfidence,
-    onChangeSelection,
-    isSplitScreen = false,
-  } /*: {
-  data: {loading: boolean, payload: ?Object},
-  protein: string,
-  dataProtein: {loading: boolean, payload: ?Object},
-  dataConfidence: {loading: boolean, payload: ?Object},
-  onChangeSelection: (Selection[]|null)=>void;
+export type Selection = { chain: string; start: number; end: number };
+
+type Props = {
+  protein: string;
+  onChangeSelection: (s: Selection[] | null) => void;
   isSplitScreen: boolean;
-}*/,
-) => {
-  const containerRef =
-    /* { current?: null | React$ElementRef<'div'>  }*/ useRef(null);
-  const [fixedSelection, _setFixedSelection] = useState([]);
-  const [hoverSelection, _setHoverSelection] = useState([]);
+};
+interface LoadedProps
+  extends Props,
+    LoadDataProps<{ metadata: ProteinMetadata }, 'Protein'>,
+    LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
+    LoadDataProps<AlphafoldPayload, 'Prediction'>,
+    LoadDataProps<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>> {}
+const ProteinViewerForAlphafold = ({
+  data,
+  protein,
+  dataProtein,
+  dataConfidence,
+  onChangeSelection,
+  isSplitScreen = false,
+}: LoadedProps) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [fixedSelection, _setFixedSelection] = useState<Selection[]>([]);
+  const [hoverSelection, _setHoverSelection] = useState<Selection[]>([]);
   const hoverSelectionRef = useRef(hoverSelection);
   const fixedSelectionRef = useRef(fixedSelection);
   const processedData = useProcessData({
-    data: data.payload ? data : { payload: { results: [] } },
+    data: data,
     endpoint: 'protein',
   });
-  const setFixedSelection = (data) => {
+  const setFixedSelection = (data: Selection[]) => {
     fixedSelectionRef.current = data;
     _setFixedSelection(data);
   };
-  const setHoverSelection = (data) => {
+  const setHoverSelection = (data: Selection[]) => {
     hoverSelectionRef.current = data;
     _setHoverSelection(data);
   };
@@ -85,9 +86,10 @@ const ProtVistaForAlphaFold = (
     onChangeSelection(selection.length ? selection : null);
   }, [fixedSelection, hoverSelection]);
   useEffect(() => {
-    containerRef.current?.addEventListener('change', (event /*: Event */) => {
-      if (!event /*: any */.detail) return;
-      const { eventType, highlight } = event /*: any */.detail;
+    containerRef.current?.addEventListener('change', (rawEvent: Event) => {
+      const event = rawEvent as CustomEvent;
+      if (!event.detail) return;
+      const { eventType, highlight } = event.detail;
       switch (eventType) {
         case 'click':
           if (fixedSelectionRef.current.length) {
@@ -98,14 +100,10 @@ const ProtVistaForAlphaFold = (
           break;
         case 'mouseover': {
           const colour =
-            parseInt(
-              event /*: any */?.detail?.feature?.color
-                ?.substring(1),
-              16,
-            ) || 0;
+            parseInt(event?.detail?.feature?.color?.substring(1), 16) || 0;
 
           const selection =
-            highlight?.split(',').map((block) => {
+            highlight?.split(',').map((block: string) => {
               const parts = block.split(':');
               const start = Number(parts?.[0]) || 1;
               const end = Number(parts?.[1]) || 1;
@@ -131,8 +129,10 @@ const ProtVistaForAlphaFold = (
   )
     return <Loading />;
   const { interpro, unintegrated } = processedData;
-  const tracks = [['Entries', interpro.concat(unintegrated)]];
-  addConfidenceTrack(dataConfidence, protein, tracks);
+  const tracks: ProteinViewerData = [
+    ['Entries', interpro.concat(unintegrated)],
+  ];
+  if (dataConfidence) addConfidenceTrack(dataConfidence, protein, tracks);
   if (!dataProtein.payload?.metadata) return null;
   return (
     <div ref={containerRef}>
@@ -144,15 +144,6 @@ const ProtVistaForAlphaFold = (
       />
     </div>
   );
-};
-ProtVistaForAlphaFold.propTypes = {
-  data: dataPropType,
-  dataProtein: dataPropType,
-  dataConfidence: dataPropType,
-  onChangeSelection: T.func,
-  protein: T.string,
-  confidenceURL: T.string,
-  isSplitScreen: T.bool,
 };
 
 const getProteinURL = createSelector(
@@ -169,7 +160,7 @@ const getProteinURL = createSelector(
       port,
       pathname: root + descriptionToPath(newDesc),
     });
-  },
+  }
 );
 const getInterproRelatedEntriesURL = createSelector(
   (state) => state.settings.api,
@@ -190,20 +181,24 @@ const getInterproRelatedEntriesURL = createSelector(
         extra_fields: 'short_name',
       },
     });
-  },
+  }
 );
 
-export default loadData({
+export default loadData<AlphafoldPayload, 'Prediction'>({
   getUrl: getAlphaFoldPredictionURL,
   propNamespace: 'Prediction',
-})(
-  loadData({
+} as Params)(
+  loadData<AlphafoldConfidencePayload, 'Confidence'>({
     getUrl: getConfidenceURLFromPayload('Prediction'),
     propNamespace: 'Confidence',
-  })(
-    loadData({
+  } as Params)(
+    loadData<{ metadata: ProteinMetadata }, 'Protein'>({
       getUrl: getProteinURL,
       propNamespace: 'Protein',
-    })(loadData(getInterproRelatedEntriesURL)(ProtVistaForAlphaFold)),
-  ),
+    } as Params)(
+      loadData(getInterproRelatedEntriesURL as Params)(
+        ProteinViewerForAlphafold
+      )
+    )
+  )
 );

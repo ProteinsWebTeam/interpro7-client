@@ -7,7 +7,9 @@ import ProteinTable, {
   getUrl,
   mapStateToPropsForModels,
 } from 'components/AlphaFold/ProteinTable';
-import ProtVistaForAlphaFold from 'components/Structure/ViewerAndEntries/ProtVistaForAlphaFold';
+import ProteinViewerForAlphafold, {
+  Selection,
+} from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import cssBinder from 'styles/cssBinder';
@@ -29,7 +31,7 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
   const mainType = description.main.key.toLowerCase();
   const container = useRef<HTMLDivElement>(null);
   const [selectionsInModel, setSelectionsInModel] =
-    useState<Array<unknown> | null>(null);
+    useState<Array<Selection> | null>(null);
   const [proteinAcc, setProteinAcc] = useState('');
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
@@ -77,10 +79,10 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
           data-testid="alphafold-protvista"
           className={css('protvista-container')}
         >
-          <ProtVistaForAlphaFold
+          <ProteinViewerForAlphafold
             // @ts-ignore
             protein={proteinAcc}
-            onChangeSelection={(selection: Array<unknown>) => {
+            onChangeSelection={(selection: null | Array<Selection>) => {
               setSelectionsInModel(selection);
             }}
             isSplitScreen={isSplitScreen}
