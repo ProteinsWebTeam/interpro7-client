@@ -80,7 +80,6 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
           className={css('protvista-container')}
         >
           <ProteinViewerForAlphafold
-            // @ts-ignore
             protein={proteinAcc}
             onChangeSelection={(selection: null | Array<Selection>) => {
               setSelectionsInModel(selection);

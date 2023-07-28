@@ -332,14 +332,14 @@ type StructureLinkedObject = {
   entry_protein_locations: Array<ProtVistaLocation>;
   protein_structure_mapping: Record<
     string,
-    {
+    Array<{
       protein_start: number;
       protein_end: number;
       structure_start: number;
       structure_end: number;
       author_structure_start: number;
       author_structure_end: number;
-    }
+    }>
   >;
   protein: string;
   protein_length: number;

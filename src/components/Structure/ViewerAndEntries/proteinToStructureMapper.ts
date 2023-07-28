@@ -1,6 +1,15 @@
 import { scaleLinear } from 'd3-scale';
 
-export default (mapCoordinates) => {
+export default (
+  mapCoordinates: Array<{
+    protein_start: number;
+    protein_end: number;
+    structure_start: number;
+    structure_end: number;
+    author_structure_start: number;
+    author_structure_end: number;
+  }>
+) => {
   const protein2structure = scaleLinear();
   const coord = mapCoordinates
     .sort(({ protein_start: a }, { protein_start: b }) => a - b)
@@ -25,7 +34,10 @@ export default (mapCoordinates) => {
         agg.range.push(end);
         return agg;
       },
-      { domain: [], range: [] },
+      { domain: [], range: [] } as {
+        domain: Array<number>;
+        range: Array<number>;
+      }
     );
   protein2structure.domain(coord.domain).range(coord.range);
   return protein2structure;
