@@ -28,7 +28,6 @@ const css = cssBinder(style, buttonBar, fonts);
 
 const RED = 0xff0000;
 
-/*:: import type { ColorMode } from 'utils/entry-color'; */
 type Props = {
   id: string;
   matches: EndpointWithMatchesPayload<EntryMetadata, StructureLinkedObject>[];
@@ -67,6 +66,7 @@ type State = {
   >;
   selectedEntry: string;
   selectedEntryToKeep?: SelectedEntry | null;
+  isReady: boolean;
   isSplitScreen: boolean;
   isSpinning: boolean;
   shouldResetViewer: boolean;
@@ -77,6 +77,7 @@ class StructureView extends PureComponent<Props, State> {
   _protein2structureMappers: Record<string, ScaleLinear<number, number, never>>;
   name: string;
   _protvista: RefObject<HTMLDivElement>;
+  _structureView: RefObject<HTMLDivElement>;
   _splitView: RefObject<HTMLDivElement>;
   splitViewStyle: Object;
   handlingSequenceHighlight?: boolean;
@@ -92,6 +93,7 @@ class StructureView extends PureComponent<Props, State> {
       isSpinning: false,
       shouldResetViewer: false,
       selectionsInStructure: null,
+      isReady: false,
     };
 
     this._protein2structureMappers = {};
@@ -99,6 +101,7 @@ class StructureView extends PureComponent<Props, State> {
 
     this._protvista = React.createRef();
     this._splitView = React.createRef();
+    this._structureView = React.createRef();
     this.splitViewStyle = {};
   }
 
@@ -522,7 +525,7 @@ class StructureView extends PureComponent<Props, State> {
               <FullScreenButton
                 className={css('icon', 'icon-common', 'as-link')}
                 tooltip="View the structure in full screen mode"
-                element={elementId}
+                element={this.state.isReady ? elementId : null}
               />
               <PIPToggleButton
                 className={css('icon', 'icon-common', 'as-link')}
@@ -536,7 +539,7 @@ class StructureView extends PureComponent<Props, State> {
             onStructureLoaded={() => {
               if (this.props.matches) {
                 const entryMap = this.createEntryMap();
-                this.setState({ entryMap });
+                this.setState({ entryMap, isReady: true });
               }
             }}
             isSpinning={isSpinning}

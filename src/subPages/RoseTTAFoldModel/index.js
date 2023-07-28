@@ -10,6 +10,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import AlignmentViewer from '../EntryAlignments/Viewer';
+// $FlowFixMe
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';

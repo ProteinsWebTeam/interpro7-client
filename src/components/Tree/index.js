@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
@@ -9,6 +8,7 @@ import ZoomOverlay from 'components/ZoomOverlay';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import styles from './style.css';
