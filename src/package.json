@@ -1,8 +1,0 @@
-{
-  "name": "src",
-  "version": "1.0.0",
-  "dependencies": {},
-  "devDependencies": {
-    "@types/d3-scale": "^4.0.3"
-  }
-}
