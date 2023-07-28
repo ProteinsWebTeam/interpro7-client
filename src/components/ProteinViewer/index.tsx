@@ -67,6 +67,7 @@ export type ExtendedFeature = Feature & {
   location2residue?: unknown;
   chain?: string;
   protein?: string;
+  integrated?: string;
   children?: Array<ExtendedFeature>;
   warnings?: Array<string>;
 };
