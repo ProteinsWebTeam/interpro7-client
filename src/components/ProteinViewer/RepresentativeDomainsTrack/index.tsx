@@ -52,7 +52,7 @@ const RepresentativeDomainsTrack = ({
     setData(
       entries.map((entry) => ({
         ...entry,
-        color: getTrackColor(entry, colorDomainsBy),
+        color:  getTrackColor(colorDomainsBy===EntryColorMode.DOMAIN_RELATIONSHIP?({parent:{accession:entry.integrated}}):entry, colorDomainsBy),
       }))
     );
   }, [entries, colorDomainsBy]);
