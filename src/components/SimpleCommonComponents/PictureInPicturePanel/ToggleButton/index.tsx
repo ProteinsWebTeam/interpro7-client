@@ -1,21 +1,20 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { changeSettingsRaw } from 'actions/creators';
 
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-/*:: type Props = {
-  isPIPEnabled: boolean,
-  changeSettingsRaw: function,
-  className?: string,
-} */
-const PIPToggleButton = (
-  { isPIPEnabled, changeSettingsRaw, className } /*: Props */,
-) => {
+type Props = {
+  isPIPEnabled: boolean;
+  changeSettingsRaw: typeof changeSettingsRaw;
+  className?: string;
+};
+const PIPToggleButton = ({
+  isPIPEnabled,
+  changeSettingsRaw,
+  className,
+}: Props) => {
   const togglePIP = () => {
     changeSettingsRaw('ui', 'isPIPEnabled', !isPIPEnabled);
   };
@@ -36,17 +35,12 @@ const PIPToggleButton = (
     </Tooltip>
   );
 };
-PIPToggleButton.propTypes = {
-  isPIPEnabled: T.bool.isRequired,
-  changeSettingsRaw: T.func,
-  className: T.string,
-};
 
 const mapStateToProps = createSelector(
-  (state) => state.settings.ui,
+  (state: GlobalState) => state.settings.ui,
   (ui) => ({
     isPIPEnabled: !!ui.isPIPEnabled,
-  }),
+  })
 );
 
 export default connect(mapStateToProps, { changeSettingsRaw })(PIPToggleButton);
