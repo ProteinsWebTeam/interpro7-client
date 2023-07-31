@@ -7,9 +7,8 @@ import ProteinTable, {
   getUrl,
   mapStateToPropsForModels,
 } from 'components/AlphaFold/ProteinTable';
-import ProteinViewerForAlphafold, {
-  Selection,
-} from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
+import ProteinViewerForAlphafold from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
+import { Selection } from 'components/Structure/ViewerAndEntries';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import cssBinder from 'styles/cssBinder';

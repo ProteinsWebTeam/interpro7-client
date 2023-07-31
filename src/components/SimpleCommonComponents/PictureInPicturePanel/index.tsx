@@ -29,8 +29,8 @@ type Props = {
   className: string;
   hideBar?: boolean;
   OtherControls?: {
-    bottom: ReactNode | null;
-    top: ReactNode | null;
+    bottom?: ReactNode | null;
+    top?: ReactNode | null;
   };
   OtherButtons?: ReactNode | null;
   onChangingMode?: () => void;

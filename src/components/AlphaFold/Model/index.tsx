@@ -13,6 +13,7 @@ import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPictureP
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
+import { Selection } from 'components/Structure/ViewerAndEntries';
 
 import SequenceCheck from './SequenceCheck';
 
@@ -53,7 +54,7 @@ type Props = {
   onModelChange: (value: string) => void;
   modelId: string | null;
   modelUrl?: string;
-  selections: unknown[] | null;
+  selections: Selection[] | null;
   parentElement?: HTMLElement | null;
   isSplitScreen: boolean;
   onSplitScreenChange?: (v: boolean) => void;

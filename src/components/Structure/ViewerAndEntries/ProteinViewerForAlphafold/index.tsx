@@ -11,6 +11,7 @@ import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
 } from 'components/AlphaFold/selectors';
+import { Selection } from 'components/Structure/ViewerAndEntries';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Params } from 'src/higherOrder/loadData/extract-params';
@@ -42,8 +43,6 @@ export const addConfidenceTrack = (
     tracks.splice(0, 0, confidenceTrack);
   }
 };
-
-export type Selection = { chain: string; start: number; end: number };
 
 type Props = {
   protein: string;

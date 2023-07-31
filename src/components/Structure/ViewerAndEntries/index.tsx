@@ -35,7 +35,7 @@ type Props = {
   colorDomainsBy: unknown;
 };
 
-type Selection = {
+export type Selection = {
   color: number;
   start: number;
   end: number;
@@ -457,8 +457,6 @@ class StructureView extends PureComponent<Props, State> {
       >
         <PictureInPicturePanel
           className={css('structure-viewer')}
-          testid="structure-3d-viewer"
-          // @ts-ignore
           OtherControls={{
             top: this.props.matches ? (
               <EntrySelection
