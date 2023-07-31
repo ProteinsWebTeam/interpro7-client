@@ -74,6 +74,7 @@ const AlphaFoldModel = ({
   onSplitScreenChange,
 }: LoadedProps) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
+  const [isReady, setReady] = useState(false);
   useEffect(() => {
     if (shouldResetViewer) {
       requestAnimationFrame(() => setShouldResetViewer(false));
@@ -250,16 +251,16 @@ const AlphaFoldModel = ({
                 />
                 <FullScreenButton
                   className={css('icon', 'icon-common', 'control')}
-                  tooltip="View the structure in full screen mode"
-                  element={elementId}
-                />{' '}
-                <FullScreenButton
-                  className={css('icon', 'icon-common', 'control')}
                   tooltip="Split full screen"
                   dataIcon={'\uF0DB'}
                   element={parentElement}
                   onFullScreenHook={() => onSplitScreenChange?.(true)}
                   onExitFullScreenHook={() => onSplitScreenChange?.(false)}
+                />{' '}
+                <FullScreenButton
+                  className={css('icon', 'icon-common', 'control')}
+                  tooltip="View the structure in full screen mode"
+                  element={isReady ? elementId : null}
                 />{' '}
                 <PIPToggleButton
                   className={css('icon', 'icon-common', 'control')}
@@ -275,6 +276,9 @@ const AlphaFoldModel = ({
               theme={'af'}
               shouldResetViewer={shouldResetViewer}
               selections={selections}
+              onStructureLoaded={() => {
+                setReady(true);
+              }}
             />
           </PictureInPicturePanel>
         </div>

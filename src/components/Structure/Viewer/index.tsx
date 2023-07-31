@@ -72,7 +72,7 @@ class StructureView extends PureComponent<Props> {
         ...DefaultPluginSpec(),
         layout: {
           initial: {
-            isExpanded: true,
+            isExpanded: false,
             showControls: true,
           },
         },
