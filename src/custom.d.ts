@@ -255,8 +255,14 @@ type MemberDB =
   | 'ssf'
   | 'tigrfams'
   | 'ncbifam';
+
+type NameObject = {
+  name: string;
+  short?: string;
+};
+
 interface EntryMetadata extends Metadata {
-  name: { name: string; short?: string };
+  name: NameObject;
   source_database: 'interpro' | MemberDB;
   type: string;
   integrated: string | null;
@@ -296,9 +302,7 @@ interface ProteinMetadata extends Metadata {
   };
 }
 interface StructureMetadata extends Metadata {
-  name: {
-    name: string;
-  };
+  name: NameObject;
   experiment_type: string;
   release_date: string;
   literature: Record<string, Reference>;
@@ -334,19 +338,15 @@ type ProteinEntryPayload = {
   }>;
 };
 
-type NameObject = {
-  name: string;
-  short: string;
-};
 interface TaxonomyMetadata extends Metadata {
   lineage: string;
   rank: string;
   children: Array<string>;
   parent: string;
-  name: NameObject;
+  name: Required<NameObject>;
 }
 type WithNames = {
-  names: Record<string, NameObject>;
+  names: Record<string, Required<NameObject>>;
 };
 type WithTaxonomyFilters = {
   children?: Record<
@@ -359,6 +359,15 @@ type WithTaxonomyFilters = {
     }
   >;
 };
+interface ProteomeMetadata extends Metadata {
+  is_reference: boolean;
+  strain: string;
+  assembly: string;
+  taxonomy: string;
+  lineage: string;
+  name: NameObject;
+  proteomeAccession?: string;
+}
 
 type StructureLinkedObject = {
   accession: string;
