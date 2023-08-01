@@ -2,22 +2,26 @@
 
 exports[`<SummaryTaxonomy /> should render 1`] = `
 <div
-  className="row"
+  className="vf-stack vf-stack--400"
 >
   <div
-    className="medium-12 columns"
+    className="vf-stack"
   >
     <table
-      className="light table-sum"
+      className="vf-table left-headers"
     >
       <tbody>
         <tr>
-          <td>
+          <td
+            style={
+              {
+                "maxWidth": "50%",
+              }
+            }
+          >
             Tax ID
           </td>
-          <td
-            data-testid="taxonomy-taxid"
-          >
+          <td>
             <Accession
               accession="131567"
               title="Tax ID"
@@ -30,7 +34,6 @@ exports[`<SummaryTaxonomy /> should render 1`] = `
           </td>
           <td
             className="text-up"
-            data-testid="taxonomy-rank"
           >
             no rank
           </td>

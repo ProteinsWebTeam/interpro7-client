@@ -18,6 +18,16 @@ declare module 'interpro-components' {
   let InterproEntry: InterProEntryProps;
   let InterproType: InterProTypeProps;
 }
+declare module 'taxonomy-visualisation' {
+  class TaxonomyVisualisation {
+    constructor(x: unknown, options: {});
+    addEventListener: (
+      type: string,
+      eventHandler: (accession: string) => void
+    ) => void;
+  }
+  export default TaxonomyVisualisation;
+}
 
 declare namespace JSX {
   interface IntrinsicElements {
@@ -82,7 +92,7 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
 };
 type InterProLocation = {
   description: InterProDescription;
-  search: Record<string, string>;
+  search: Record<string, string | boolean>;
   hash: string;
   state: Record<string, string>;
 };
@@ -322,6 +332,32 @@ type ProteinEntryPayload = {
     entry_type: string;
     entry_integrated: string | null;
   }>;
+};
+
+type NameObject = {
+  name: string;
+  short: string;
+};
+interface TaxonomyMetadata extends Metadata {
+  lineage: string;
+  rank: string;
+  children: Array<string>;
+  parent: string;
+  name: NameObject;
+}
+type WithNames = {
+  names: Record<string, NameObject>;
+};
+type WithTaxonomyFilters = {
+  children?: Record<
+    string,
+    {
+      entries: number;
+      proteomes: number;
+      proteins: number;
+      structures: number;
+    }
+  >;
 };
 
 type StructureLinkedObject = {

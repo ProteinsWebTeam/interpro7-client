@@ -1,5 +1,7 @@
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, {
+  PureComponent,
+  // RefObject
+} from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import TaxonomyVisualisation from 'taxonomy-visualisation';
@@ -12,22 +14,26 @@ import Children from 'components/Taxonomy/Children';
 import Tree from 'components/Tree';
 
 import loadable from 'higherOrder/loadable';
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.css';
 import memberSelectorStyle from 'components/Table/TotalNb/style.css';
+import { Params } from 'src/higherOrder/loadData/extract-params';
 
-const f = foundationPartial(ebiStyles, memberSelectorStyle);
+const css = cssBinder(memberSelectorStyle);
 
-export const parentRelationship = (
-  { taxId, name = null } /*: {taxId: string, name: string} */,
-) => ({
+export const parentRelationship = ({
+  taxId,
+  name = null,
+}: {
+  taxId: string;
+  name: string | null;
+}) => ({
   '@id': '@additionalProperty',
   '@type': 'PropertyValue',
   additionalType: 'http://semanticscience.org/resource/SIO_000095',
@@ -45,37 +51,28 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-/*:: type Props = {
-  dataNames: {
-    payload: {
-      metadata: Object,
-      names: Object
-    },
-    loading: boolean,
-  },
-  goToCustomLocation: function,
-  customLocation: Object
-}; */
+type Props = {
+  goToCustomLocation: typeof goToCustomLocation;
+  customLocation: InterProLocation;
+};
+type Payload = { metadata: TaxonomyMetadata } & WithNames & WithTaxonomyFilters;
 
-export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
-  /*::
-    _vis: any;
-    _ref: { current: ?HTMLElement };
-    loadingVis: boolean;
-  */
-  static propTypes = {
-    dataNames: T.shape({
-      payload: T.shape({
-        metadata: T.object.isRequired,
-        names: T.object,
-      }),
-      loading: T.bool,
-    }),
-    goToCustomLocation: T.func.isRequired,
-    customLocation: T.object.isRequired,
-  };
+interface LoadedProps extends Props, LoadDataProps<Payload, 'Names'> {}
 
-  constructor(props /*: Props */) {
+type TaxNode = {
+  name: string;
+  id: string;
+  children?: Array<TaxNode>;
+  hitcount?: number;
+};
+type State = { data?: TaxNode | null; focused?: string };
+
+export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
+  _vis: TaxonomyVisualisation;
+  // _ref: RefObject<HTMLDivElement>;
+  loadingVis = false;
+
+  constructor(props: Props) {
     super(props);
 
     this._vis = new TaxonomyVisualisation(undefined, {
@@ -84,33 +81,33 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     });
     this._vis.addEventListener('focus', this._handleFocus);
 
-    this._ref = React.createRef();
+    // this._ref = React.createRef();
 
     this.state = {};
   }
 
   componentDidMount() {
-    this._vis.tree = this._ref.current;
-    if (this.props.dataNames.payload) {
+    // this._vis.tree = this._ref.current;
+    if (this.props.dataNames?.payload) {
       this.loadingVis = true;
       this._populateData(this.props.dataNames.payload);
       this.loadingVis = false;
     }
   }
 
-  componentDidUpdate(prevProps /*: Props */) {
+  componentDidUpdate(prevProps: LoadedProps) {
     if (
       prevProps.dataNames !== this.props.dataNames &&
-      this.props.dataNames.payload
+      this.props.dataNames?.payload
     ) {
-      this._vis.tree = this._ref.current;
+      // this._vis.tree = this._ref.current;
       this.loadingVis = true;
       this._populateData(this.props.dataNames.payload);
       this.loadingVis = false;
     }
   }
 
-  _handleFocus = (accession) => {
+  _handleFocus = (accession: string) => {
     if (!this.loadingVis)
       this.props.goToCustomLocation({
         description: {
@@ -120,12 +117,12 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       });
   };
 
-  _populateData = ({ metadata: data, names, children }) => {
+  _populateData = ({ metadata: data, names, children }: Payload) => {
     const lineage = data.lineage.trim().split(/\s+/);
-    let root;
-    let currentNode;
+    let root: TaxNode | null = null;
+    let currentNode: TaxNode | null = null;
     for (const node of lineage) {
-      const newNode = {
+      const newNode: TaxNode = {
         name: names[node].short,
         id: node,
       };
@@ -136,20 +133,23 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
       }
       currentNode = newNode;
     }
-    currentNode.name = data.name.short || data.name.name || data.accession;
-    currentNode.hitcount = data?.counters?.proteins;
+    if (currentNode) {
+      currentNode.name = data.name.short || data.name.name || data.accession;
+      currentNode.hitcount = data?.counters?.proteins as number;
 
-    if (data.children) {
-      currentNode.children = data.children.map((id) => ({
-        name: names[id].short,
-        id,
-        hitcount: children?.[id]?.proteins,
-      }));
+      if (data.children) {
+        currentNode.children = data.children.map((id) => ({
+          name: names[id].short,
+          id,
+          hitcount: children?.[id]?.proteins,
+        }));
+      }
+      this.setState({ data: root, focused: `${data.accession}` });
     }
-    this.setState({ data: root, focused: `${data.accession}` });
   };
 
-  _handleChange = ({ target: { value } }) => {
+  _handleChange = (event: React.FormEvent) => {
+    const value = (event.target as HTMLSelectElement).value;
     const {
       customLocation: { description },
     } = this.props;
@@ -161,20 +161,22 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     });
   };
 
-  _isSelected = (currentDB) => {
+  _isSelected = (currentDB: DBInfo) => {
     const {
       customLocation: {
         search: { entry_db: db },
       },
     } = this.props;
-    return (db || 'all').toLowerCase() === currentDB.canonical.toLowerCase();
+    return (
+      ((db as string) || 'all').toLowerCase() ===
+      currentDB.canonical.toLowerCase()
+    );
   };
 
   render() {
     if (
-      this.props.dataNames.loading ||
-      !this.props.dataNames.payload ||
-      !this.props.dataNames.payload.metadata
+      this.props.dataNames?.loading ||
+      !this.props.dataNames?.payload?.metadata
     )
       return <Loading />;
     const { metadata, names } = this.props.dataNames.payload;
@@ -185,42 +187,39 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
     } = this.props;
 
     return (
-      <div className={f('row')}>
-        <div className={f('medium-12', 'columns')}>
-          <table className={f('light', 'table-sum')}>
+      <div className={css('vf-stack', 'vf-stack--400')}>
+        <div className={css('vf-stack')}>
+          <table className={css('vf-table', 'left-headers')}>
             <tbody>
               <tr>
-                <td>Tax ID</td>
-                <td data-testid="taxonomy-taxid">
+                <td style={{ maxWidth: '50%' }}>Tax ID</td>
+                <td>
                   <Accession accession={metadata.accession} title="Tax ID" />
                 </td>
               </tr>
               {metadata.rank && (
                 <tr>
                   <td>Rank</td>
-                  <td className={f('text-up')} data-testid="taxonomy-rank">
-                    {metadata.rank}
-                  </td>
+                  <td className={css('text-up')}>{metadata.rank}</td>
                 </tr>
               )}
 
-              {
-                // SP: is this still working ?
-                metadata.parent && (
-                  <SchemaOrgData
-                    data={{
-                      taxId: metadata.parent,
-                      name:
-                        names[metadata.parent] && names[metadata.parent].name,
-                    }}
-                    processData={parentRelationship}
-                  />
-                )
-              }
+              {metadata.parent && (
+                <SchemaOrgData
+                  data={{
+                    taxId: metadata.parent,
+                    name: names[metadata.parent] && names[metadata.parent].name,
+                  }}
+                  processData={parentRelationship}
+                />
+              )}
 
               <tr>
                 <td>Lineage</td>
-                <td className={f('ico-primary')} data-testid="taxonomy-lineage">
+                <td
+                  className={css('ico-primary')}
+                  data-testid="taxonomy-lineage"
+                >
                   <Lineage lineage={metadata.lineage} names={names} />
                 </td>
               </tr>
@@ -235,26 +234,31 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
               </tr>
             </tbody>
           </table>
-
-          <MemberDBSelector
-            contentType="taxonomy"
-            filterType="entry"
-            onChange={this._handleChange}
-            isSelected={this._isSelected}
-            hideCounters={true}
-          >
-            {(open) => (
-              <span
-                className={f('header-total-results', 'margin-bottom-medium', {
-                  selector: typeof open === 'boolean',
-                  open,
-                })}
-              >
-                Entry Database: {db || 'All'}
-              </span>
-            )}
-          </MemberDBSelector>
-
+          {
+            // @ts-ignore
+            <MemberDBSelector
+              contentType="taxonomy"
+              filterType="entry"
+              onChange={this._handleChange}
+              isSelected={this._isSelected}
+              hideCounters={true}
+            >
+              {(open: string) => (
+                <span
+                  className={css(
+                    'header-total-results',
+                    'margin-bottom-medium',
+                    {
+                      selector: typeof open === 'boolean',
+                      open,
+                    }
+                  )}
+                >
+                  Entry Database: {db || 'All'}
+                </span>
+              )}
+            </MemberDBSelector>
+          }
           <Tree
             data={this.state.data}
             focused={this.state.focused}
@@ -267,13 +271,13 @@ export class SummaryTaxonomy extends PureComponent /*:: <Props> */ {
 }
 
 const getUrl = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.description,
-  (state) => state.customLocation.search,
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.customLocation.description,
+  (state: GlobalState) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     const { entry_db: db, ..._search } = search;
     const hasFilters = Object.values(description).some(
-      (endpoint) => endpoint.isFilter,
+      (endpoint) => !!(endpoint as EndpointPartialLocation).isFilter
     );
     if (hasFilters || !db || db === 'all') _search.with_names = true;
     else _search.filter_by_entry_db = db;
@@ -284,11 +288,11 @@ const getUrl = createSelector(
       pathname: root + descriptionToPath(description),
       query: _search,
     });
-  },
+  }
 );
 
-export default loadData({
+export default loadData<{ metadata: TaxonomyMetadata } & WithNames, 'Names'>({
   getUrl,
   propNamespace: 'Names',
   mapDispatchToProps: { goToCustomLocation },
-})(SummaryTaxonomy);
+} as Params)(SummaryTaxonomy);
