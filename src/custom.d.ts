@@ -13,6 +13,11 @@ declare module '*.png' {
   const content: any;
   export default content;
 }
+declare module '*.svg' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
   let InterproEntry: InterProEntryProps;
@@ -20,11 +25,18 @@ declare module 'interpro-components' {
 }
 declare module 'taxonomy-visualisation' {
   class TaxonomyVisualisation {
+    tree: unknown;
+    data: unknown;
+    searchTerm: string;
+    fisheye: boolean;
     constructor(x: unknown, options: {});
     addEventListener: (
       type: string,
-      eventHandler: (accession: string) => void
+      eventHandler: (event: Event) => void
     ) => void;
+    focusNodeWithID: (id?: string) => void;
+    cleanup: () => void;
+    resetZoom: () => void;
   }
   export default TaxonomyVisualisation;
 }

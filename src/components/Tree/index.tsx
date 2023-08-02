@@ -1,80 +1,69 @@
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, { PureComponent, RefObject } from 'react';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 import TaxonomyVisualisation from 'taxonomy-visualisation';
 import ZoomOverlay from 'components/ZoomOverlay';
 
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-// $FlowFixMe
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
-import styles from './style.css';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import fisheyeOff from 'EBI-Icon-fonts/source/common/font-awesome/solid/dot-circle.svg';
 import fisheyeOn from 'EBI-Icon-fonts/source/common/font-awesome/solid/bullseye.svg';
 
+import cssBinder from 'styles/cssBinder';
+
+import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import { foundationPartial } from 'styles/foundation';
 
-/*:: type Props = {
-  data?: Object,
-  focused?: string,
-  changeFocus?: string => any,
-  labelClick?: string => any,
-  hideToggle?: boolean,
-  initialFisheye?: boolean,
-  search: string,
-}; */
-/*:: type State = {
-  fisheye: boolean,
-  isFullScreen: boolean,
-  searchTerm: string,
-}; */
+const css = cssBinder(styles, fonts);
 
-const f = foundationPartial(fonts);
+export type TaxNode = {
+  name: string;
+  id: string;
+  children?: Array<TaxNode>;
+  hitcount?: number;
+};
+type Props = {
+  data?: TaxNode | null;
+  focused?: string;
+  changeFocus?: (accession: string) => void;
+  labelClick?: (accession: string) => void;
+  hideToggle?: boolean;
+  initialFisheye?: boolean;
+  search: string;
+};
+type State = {
+  fisheye: boolean;
+  isFullScreen: boolean;
+  searchTerm: string;
+};
 
 const DEFAULT_WIDTH = 600;
 
-export class Tree extends PureComponent /*:: <Props, State> */ {
-  /* ::
-    _ref: { current: null | React$ElementRef<'svg'> };
-    _loadingVis: ?boolean;
-    _vis: typeof TaxonomyVisualisation;
-  */
-  static propTypes = {
-    data: T.object,
-    focused: T.string,
-    changeFocus: T.func,
-    labelClick: T.func,
-    hideToggle: T.bool,
-    initialFisheye: T.bool,
-    search: T.string,
-  };
+export class Tree extends PureComponent<Props, State> {
+  _loadingVis = false;
+  _ref: RefObject<SVGSVGElement>;
+  _vis: TaxonomyVisualisation | null = null;
 
   static defaultProps = {
     initialFisheye: true,
   };
 
-  constructor(props /*: Props */) {
+  constructor(props: Props) {
     super(props);
 
     const fisheye = !!props.initialFisheye;
     const search = props.search;
 
-    this._loadingVis = false;
     this._ref = React.createRef();
 
     this.state = { fisheye, searchTerm: search, isFullScreen: false };
   }
 
-  static getDerivedStateFromProps(
-    { search } /*: {search: string} */,
-    { searchTerm } /*: {searchTerm: string} */,
-  ) {
+  static getDerivedStateFromProps({ search }: Props, { searchTerm }: State) {
     if (search !== searchTerm) return { searchTerm: search };
     return null;
   }
@@ -103,43 +92,50 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
     this._loadingVis = false;
   }
 
-  componentDidUpdate({ data, focused } /*: Props */) {
+  componentDidUpdate({ data, focused }: Props) {
     if (data !== this.props.data) {
       this._loadingVis = true;
       this._populateData(this.props.data, this.props.focused);
       this._loadingVis = false;
     }
-    if (focused !== this.props.focused) {
-      this._vis.focusNodeWithID(this.props.focused);
+    if (this._vis) {
+      if (focused !== this.props.focused) {
+        this._vis.focusNodeWithID(this.props.focused);
+      }
+      this._vis.searchTerm = this.state.searchTerm;
+      this._vis.fisheye = this.state.fisheye;
     }
-    this._vis.searchTerm = this.state.searchTerm;
-    this._vis.fisheye = this.state.fisheye;
   }
 
   componentWillUnmount() {
-    this._vis.cleanup();
+    this._vis?.cleanup();
   }
 
   _handleClick = () => this.setState(({ fisheye }) => ({ fisheye: !fisheye }));
 
   _recenter = () => {
-    this._vis.resetZoom();
+    this._vis?.resetZoom();
   };
 
-  _handleFocus = ({ detail: { id } }) => {
-    if (!this._loadingVis && this.props.changeFocus) this.props.changeFocus(id);
-  };
-  _handleLabelClick = (evt) => {
+  _handleFocus = (evt: Event) => {
     const {
       detail: { id },
-    } = evt;
+    } = evt as CustomEvent;
+    if (!this._loadingVis && this.props.changeFocus) this.props.changeFocus(id);
+  };
+  _handleLabelClick = (evt: Event) => {
+    const {
+      detail: { id },
+    } = evt as CustomEvent;
     if (!this._loadingVis && this.props.labelClick) this.props.labelClick(id);
     else this._handleFocus(evt);
   };
 
-  _populateData = (data, focused) => {
-    this._vis.data = data;
-    this._vis.focusNodeWithID(focused);
+  _populateData = (data: TaxNode | null | undefined, focused?: string) => {
+    if (this._vis) {
+      this._vis.data = data;
+      this._vis.focusNodeWithID(focused);
+    }
   };
 
   render() {
@@ -152,7 +148,7 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
               tooltip="View the taxonomy tree in full screen mode"
               onFullScreenHook={() =>
                 requestAnimationFrame(() =>
-                  this.setState({ isFullScreen: true }),
+                  this.setState({ isFullScreen: true })
                 )
               }
               onExitFullScreenHook={() =>
@@ -176,7 +172,7 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
             <Tooltip title="Recenter">
               <button
                 onClick={this._recenter}
-                className={f('icon', 'icon-common', 'font-l')}
+                className={css('icon', 'icon-common', 'font-l')}
                 data-icon="&#xf05b;"
               />
             </Tooltip>
@@ -185,7 +181,7 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
 
         <ZoomOverlay elementId="treeDiv" />
         <ResizeObserverComponent measurements={['width']} element="div">
-          {({ width }) => (
+          {({ width }: { width: number }) => (
             <div className={styles.tree} data-testid="data-tree" id="treeDiv">
               <svg
                 className={styles.container}
@@ -205,8 +201,8 @@ export class Tree extends PureComponent /*:: <Props, State> */ {
   }
 }
 const mapStateToProps = createSelector(
-  (state) => state.customLocation.search.search,
-  (search) => ({ search }),
+  (state: GlobalState) => state.customLocation.search.search as string,
+  (search) => ({ search })
 );
 
 export default connect(mapStateToProps)(Tree);

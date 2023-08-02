@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import TaxonomyVisualisation from 'taxonomy-visualisation';
 
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData/ts';
@@ -12,7 +11,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Accession from 'components/Accession';
 import Lineage from 'components/Taxonomy/Lineage';
 import Children from 'components/Taxonomy/Children';
-import Tree from 'components/Tree';
+import Tree, { TaxNode } from 'components/Tree';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
@@ -58,29 +57,11 @@ type Payload = { metadata: TaxonomyMetadata } & WithNames & WithTaxonomyFilters;
 
 interface LoadedProps extends Props, LoadDataProps<Payload, 'Names'> {}
 
-type TaxNode = {
-  name: string;
-  id: string;
-  children?: Array<TaxNode>;
-  hitcount?: number;
-};
 type State = { data?: TaxNode | null; focused?: string };
 
 export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
-  _vis: TaxonomyVisualisation;
   loadingVis = false;
-
-  constructor(props: Props) {
-    super(props);
-
-    this._vis = new TaxonomyVisualisation(undefined, {
-      initialMaxNodes: +Infinity,
-      fisheye: true,
-    });
-    this._vis.addEventListener('focus', this._handleFocus);
-
-    this.state = {};
-  }
+  state: State = {};
 
   componentDidMount() {
     if (this.props.dataNames?.payload) {
