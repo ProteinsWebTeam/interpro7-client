@@ -51,6 +51,8 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
+const MIN_WIDTH = '200px';
+
 const FamilyHierarchy = ({
   entriesCounter,
   families,
@@ -94,8 +96,6 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
   }, [comparisonContainerRef]);
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
-
-  const minWidth = '200px';
 
   const getSubfamiliesFromMatches = (
     results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[]
@@ -290,7 +290,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 metadata.id || ''
               )}
               title="Search sequence with InterProScan"
-              minWidth={minWidth}
+              minWidth={MIN_WIDTH}
             />
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>
@@ -307,7 +307,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 fileType="tsv"
                 primary="entry"
                 secondary="protein"
-                minWidth={minWidth}
+                minWidth={MIN_WIDTH}
                 label="Download matches (TSV)"
               />
             </label>
