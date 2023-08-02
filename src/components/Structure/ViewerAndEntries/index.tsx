@@ -418,7 +418,7 @@ class StructureView extends PureComponent<Props, State> {
     }
 
     if (acc && acc.startsWith('Chain')) return; // Skip the keep procedure for secondary structure
-    const hits = this._collateHits(db || '', acc || '', ch, prot);
+    const hits = this._collateHits(db || '', acc || '', ch, prot?.toLowerCase());
     if (hits.length > 0) {
       const selections: Array<Selection> = [];
       hits.forEach((hit) => {
