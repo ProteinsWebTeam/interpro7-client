@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 
 import Accession from 'components/Accession';
 import Description from 'components/Description';
@@ -107,11 +105,10 @@ type Props = {
   data: {
     metadata: SetMetadata;
   };
-  db: string;
   loading: boolean;
 };
 
-const SummarySet = ({ data, db, loading }: Props) => {
+const SummarySet = ({ data, loading }: Props) => {
   const metadata: SetMetadata =
     loading || !data.metadata
       ? {
@@ -205,9 +202,4 @@ const SummarySet = ({ data, db, loading }: Props) => {
   );
 };
 
-const mapStateToProps = createSelector(
-  (state: GlobalState) => state.customLocation.description.set.db,
-  (db) => ({ db })
-);
-
-export default connect(mapStateToProps)(SummarySet);
+export default SummarySet;

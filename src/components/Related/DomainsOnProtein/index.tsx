@@ -29,7 +29,7 @@ import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 const css = cssBinder(ipro);
 
-const HTTP_OK = 200;
+// const HTTP_OK = 200;
 
 export const orderByAccession = (
   a: { accession: string },
