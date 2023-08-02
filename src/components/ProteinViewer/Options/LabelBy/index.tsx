@@ -32,9 +32,9 @@ const LabelBy = ({ labelContent, changeSettingsRaw }: Props) => {
     }
   };
   return (
-    <li>
-      Label by
-      <ul className={css('nested-list')}>
+    <section>
+      <header>Label by</header>
+      <ul className={css('nested-list', 'no-bullet')}>
         <li key={'accession'}>
           <label>
             <input
@@ -69,7 +69,7 @@ const LabelBy = ({ labelContent, changeSettingsRaw }: Props) => {
           </label>
         </li>
       </ul>
-    </li>
+    </section>
   );
 };
 

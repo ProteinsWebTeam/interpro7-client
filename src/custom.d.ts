@@ -195,8 +195,9 @@ type Reference = {
   URL: string | null;
   raw_pages?: string;
   rawPages?: string;
-  medline_journal: string;
-  ISO_journal: string;
+  medline_journal?: string;
+  journal?: string;
+  ISO_journal?: string;
   authors: Array<string>;
   DOI_URL: string | null;
 };
@@ -367,6 +368,27 @@ interface ProteomeMetadata extends Metadata {
   lineage: string;
   name: NameObject;
   proteomeAccession?: string;
+}
+interface SetMetadata extends Omit<Metadata, 'description'> {
+  id: string;
+  name: NameObject;
+  description: string;
+  relationships: {
+    nodes: Array<{
+      accession: string;
+      short_name: string;
+      name: string;
+      type: string;
+      score: number;
+    }>;
+    links: Array<{
+      source: string;
+      target: string;
+      score: number;
+    }>;
+  };
+  authors: Array<string> | null;
+  literature: Array<Reference>;
 }
 
 type StructureLinkedObject = {

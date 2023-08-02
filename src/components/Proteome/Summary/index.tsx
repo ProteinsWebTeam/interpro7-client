@@ -9,8 +9,9 @@ import cssBinder from 'styles/cssBinder';
 
 import memberSelectorStyle from 'components/Table/TotalNb/style.css';
 import summary from 'styles/summary.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(summary, memberSelectorStyle);
+const css = cssBinder(summary, memberSelectorStyle, ipro);
 
 type Props = {
   data: {

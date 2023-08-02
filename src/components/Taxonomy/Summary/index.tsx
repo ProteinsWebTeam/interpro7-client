@@ -1,10 +1,11 @@
-import React, {
-  PureComponent,
-  // RefObject
-} from 'react';
+import React, { PureComponent } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import TaxonomyVisualisation from 'taxonomy-visualisation';
+
+import loadable from 'higherOrder/loadable';
+import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'higherOrder/loadData/extract-params';
 
 import MemberDBSelector from 'components/MemberDBSelector';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -13,9 +14,6 @@ import Lineage from 'components/Taxonomy/Lineage';
 import Children from 'components/Taxonomy/Children';
 import Tree from 'components/Tree';
 
-import loadable from 'higherOrder/loadable';
-import loadData from 'higherOrder/loadData/ts';
-
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
@@ -23,9 +21,10 @@ import { goToCustomLocation } from 'actions/creators';
 import cssBinder from 'styles/cssBinder';
 
 import memberSelectorStyle from 'components/Table/TotalNb/style.css';
-import { Params } from 'src/higherOrder/loadData/extract-params';
+import summary from 'styles/summary.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(memberSelectorStyle);
+const css = cssBinder(memberSelectorStyle, summary, ipro);
 
 export const parentRelationship = ({
   taxId,
@@ -69,7 +68,6 @@ type State = { data?: TaxNode | null; focused?: string };
 
 export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
   _vis: TaxonomyVisualisation;
-  // _ref: RefObject<HTMLDivElement>;
   loadingVis = false;
 
   constructor(props: Props) {
@@ -81,13 +79,10 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
     });
     this._vis.addEventListener('focus', this._handleFocus);
 
-    // this._ref = React.createRef();
-
     this.state = {};
   }
 
   componentDidMount() {
-    // this._vis.tree = this._ref.current;
     if (this.props.dataNames?.payload) {
       this.loadingVis = true;
       this._populateData(this.props.dataNames.payload);
@@ -100,7 +95,6 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
       prevProps.dataNames !== this.props.dataNames &&
       this.props.dataNames?.payload
     ) {
-      // this._vis.tree = this._ref.current;
       this.loadingVis = true;
       this._populateData(this.props.dataNames.payload);
       this.loadingVis = false;
