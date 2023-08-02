@@ -68,10 +68,7 @@ const ProteinViewerForAlphafold = ({
   const [hoverSelection, _setHoverSelection] = useState<Selection[]>([]);
   const hoverSelectionRef = useRef(hoverSelection);
   const fixedSelectionRef = useRef(fixedSelection);
-  const processedData = useProcessData({
-    data: data,
-    endpoint: 'protein',
-  });
+  const processedData = useProcessData(data?.payload?.results, 'protein');
   const setFixedSelection = (data: Selection[]) => {
     fixedSelectionRef.current = data;
     _setFixedSelection(data);

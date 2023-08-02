@@ -19,10 +19,7 @@ export interface LoadedProps
     LoadDataProps<StructureWithSecondary, 'Secondary'> {}
 
 const ProtVistaForStructure = ({ data, dataSecondary }: LoadedProps) => {
-  const processedData = useProcessData({
-    data,
-    endpoint: 'structure',
-  });
+  const processedData = useProcessData(data?.payload?.results, 'structure');
   if (!data || data.loading) return <Loading />;
 
   let secondaryData;

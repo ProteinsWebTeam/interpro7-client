@@ -2,12 +2,13 @@ import { useMemo } from 'react';
 import { toPlural } from 'utils/pages/toPlural';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 
-export const useProcessData = <M = Metadata>(request: Data<M>) =>
+export const useProcessData = <M = Metadata>(
+  results: EndpointWithMatchesPayload<M, MatchI>[] | undefined,
+  endpoint: Endpoint
+) =>
   useMemo(() => {
-    return request.data
-      ? processData(request?.data?.payload?.results || [], request.endpoint)
-      : null;
-  }, [request]);
+    return processData(results || [], endpoint);
+  }, [results, endpoint]);
 
 const processData = <M = Metadata>(
   dataResults: EndpointWithMatchesPayload<M>[],

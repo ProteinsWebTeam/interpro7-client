@@ -15,11 +15,11 @@ import { useProcessData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import EdgeCase from 'components/EdgeCase';
 
-import ConservationProvider, {
-  mergeConservationData,
-  // Disabling Conservation until hmmer is working
-  // isConservationDataAvailable,
-} from './ConservationProvider';
+// import ConservationProvider, {
+//   mergeConservationData,
+//   // Disabling Conservation until hmmer is working
+//   // isConservationDataAvailable,
+// } from './ConservationProvider';
 import mergeExtraFeatures from './mergeExtraFeatures';
 import mergeResidues from './mergeResidues';
 import DomainsOnProteinLoaded from './DomainsOnProteinLoaded';
@@ -88,28 +88,30 @@ const DomainOnProteinWithoutData = ({
   externalSourcesData,
   title,
 }: LoadedProps) => {
-  const [conservation, setConservation] = useState<{
-    generateData: boolean;
-    showButton: boolean;
-    data: ConservationPayload | null;
-    error: string | null;
-  }>({
-    generateData: false,
-    showButton: false,
-    data: null,
-    error: null,
-  });
+  // const [conservation, setConservation] = useState<{
+  //   generateData: boolean;
+  //   showButton: boolean;
+  //   data: ConservationPayload | null;
+  //   error: string | null;
+  // }>({
+  //   generateData: false,
+  //   showButton: false,
+  //   data: null,
+  //   error: null,
+  // });
   const [processedData, setProcessedData] = useState<{
     interpro: Record<string, unknown>[];
     unintegrated: Record<string, unknown>[];
     other: Array<MinimalFeature>;
   } | null>(null);
-  const processData = useProcessData<EntryMetadata>({
-    data: data as RequestedData<
-      PayloadList<EndpointWithMatchesPayload<EntryMetadata, MatchI>>
-    >,
-    endpoint: 'protein',
-  });
+  const processData = useProcessData<EntryMetadata>(
+    (
+      data?.payload as PayloadList<
+        EndpointWithMatchesPayload<EntryMetadata, MatchI>
+      >
+    )?.results,
+    'protein'
+  );
   useEffect(() => {
     const payload = data?.payload as PayloadList<
       EndpointWithMatchesPayload<EntryMetadata>
@@ -157,9 +159,9 @@ const DomainOnProteinWithoutData = ({
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
     mergeExtraFeatures(mergedData, dataFeatures?.payload);
   }
-  if (conservation.data) {
-    mergeConservationData(mergedData, conservation.data);
-  }
+  // if (conservation.data) {
+  //   mergeConservationData(mergedData, conservation.data);
+  // }
   // Disabling Conservation until hmmer is working
   // const fetchConservationData = () => {
   //   setConservation({ ...conservation, generateData: true });
@@ -185,7 +187,7 @@ const DomainOnProteinWithoutData = ({
 
   return (
     <>
-      <ConservationProvider
+      {/* <ConservationProvider
         generateData={conservation.generateData}
         handleLoaded={(data) =>
           setConservation({
@@ -209,7 +211,7 @@ const DomainOnProteinWithoutData = ({
           });
         }}
       />
-
+*/}
       <DomainsOnProteinLoaded
         title={title}
         mainData={mainData}
