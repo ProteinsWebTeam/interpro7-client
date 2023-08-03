@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import includeProtein, { LoadedProps } from './ProteinViewerLoaded';
+import ProteinViewerForStructure from './ProteinViewerLoaded';
 import GoToProtVistaMenu from './GoToProtVistaMenu';
 
 import cssBinder from 'styles/cssBinder';
@@ -17,6 +17,10 @@ const toArrayStructure = (locations: Array<ProtVistaLocation>) =>
 export type DataForProteinChain = {
   protein: {
     accession: string;
+    length: number;
+  };
+  sequence: {
+    sequence: string;
     length: number;
   };
   data: {
@@ -33,17 +37,6 @@ export type DataForProteinChain = {
       protein: string;
       type: string;
     }>;
-    Chain: [
-      {
-        accession: string;
-        coordinates: number[][][];
-        locations: ProtVistaLocation[];
-        label: string;
-        source_database: string;
-        type: string;
-        protein: string;
-      },
-    ];
     'Secondary Structure': Array<{
       locations: ProtVistaLocation[];
       type: string;
@@ -84,7 +77,6 @@ const mergeData = (
               });
             });
             const newLocations = [];
-            // eslint-disable-next-line max-depth
             for (const f of allFragments) {
               // To be consistent with the expected structure loc = [{fragments: [{}]}]
               newLocations.push({ fragments: [{ ...f }] });
@@ -105,19 +97,12 @@ const mergeData = (
           accession: entry.protein,
           length: entry.protein_length,
         },
+        sequence: {
+          sequence: entry.sequence,
+          length: entry.sequence_length,
+        },
         data: {
           Entries: [],
-          Chain: [
-            {
-              accession: entry.chain,
-              coordinates: toArrayStructure(entry.structure_protein_locations),
-              locations: entry.structure_protein_locations,
-              label: `Chain ${entry.chain}`,
-              source_database: 'pdb',
-              type: 'chain',
-              protein: entry.protein,
-            },
-          ],
           'Secondary Structure': secondaryStructArray,
         },
         chain: entry.chain,
@@ -128,10 +113,15 @@ const mergeData = (
       name: entry.name,
       short_name: entry.short_name,
       source_database: entry.source_database as 'interpro' | MemberDB,
-      coordinates: toArrayStructure(entry.entry_protein_locations),
-      locations: entry.entry_protein_locations,
+      coordinates: toArrayStructure(entry.entry_structure_locations),
+      locations: entry.entry_structure_locations,
       link: `/entry/${entry.source_database}/${entry.accession}`,
-      children: entry.children,
+      children: entry.children?.map(
+        ({ entry_protein_locations, entry_structure_locations, ...child }) => ({
+          ...child,
+          locations: entry_structure_locations,
+        })
+      ),
       chain: entry.chain,
       protein: entry.protein,
       type: entry.type || entry.entry_type || '',
@@ -162,12 +152,8 @@ const tagChimericStructures = (data: DataForProteinChain[]) => {
   }
 };
 
-const protvistaPerChainProtein: Record<
-  string,
-  React.ComponentType<LoadedProps>
-> = {};
-
 type Props = {
+  structure: string;
   entries: StructureLinkedObject[];
   showChainMenu: boolean;
   secondaryStructures?: SecondaryStructure[];
@@ -177,6 +163,7 @@ const EntriesOnStructure = ({
   entries,
   showChainMenu = false,
   secondaryStructures,
+  structure,
 }: Props) => {
   const merged = mergeData(entries, secondaryStructures);
   tagChimericStructures(merged);
@@ -187,11 +174,10 @@ const EntriesOnStructure = ({
       )}
       <div className={css('row')}>
         {merged.map((e, i) => {
-          if (!protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`])
-            protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`] =
-              includeProtein(e.protein.accession);
-          const ProtVistaPlusProtein =
-            protvistaPerChainProtein[`${e.chain}-${e.protein.accession}`];
+          const sequenceData = {
+            accession: `${e.chain}-${structure}`,
+            ...e.sequence,
+          };
 
           const tracks = Object.entries(
             e.data as Record<string, Array<Record<string, unknown>>>
@@ -204,27 +190,29 @@ const EntriesOnStructure = ({
             <div key={i} className={css('columns')}>
               <h4 id={`protvista-${e.chain}-${e.protein.accession}`}>
                 Chain {e.chain}{' '}
-                <small>
-                  (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'protein' },
-                        protein: {
-                          db: 'uniprot',
-                          accession: e.protein.accession,
+                {e.protein?.accession && (
+                  <small>
+                    (
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'protein' },
+                          protein: {
+                            db: 'uniprot',
+                            accession: e.protein.accession,
+                          },
                         },
-                      },
-                    }}
-                  >
-                    <span
-                      className={css('icon', 'icon-conceptual')}
-                      data-icon="&#x50;"
-                    />{' '}
-                    {(e.protein.accession || '').toUpperCase()}
-                  </Link>
-                  )
-                </small>
+                      }}
+                    >
+                      <span
+                        className={css('icon', 'icon-conceptual')}
+                        data-icon="&#x50;"
+                      />{' '}
+                      {(e.protein.accession || '').toUpperCase()}
+                    </Link>
+                    )
+                  </small>
+                )}
                 {e.isChimeric && (
                   <Tooltip title="This chain maps to a Chimeric protein consisting of two or more proteins">
                     <div className={css('tag')}>
@@ -238,19 +226,11 @@ const EntriesOnStructure = ({
                   </Tooltip>
                 )}
               </h4>
-              <ProtVistaPlusProtein
+              <ProteinViewerForStructure
                 tracks={tracks}
                 chain={e.chain}
-                fixedHighlight={
-                  e.data.Chain &&
-                  e.data.Chain.length &&
-                  e.data.Chain[0].locations
-                    .map((l) =>
-                      l.fragments.map((f) => `${f.start}:${f.end}`).join(',')
-                    )
-                    .join(',')
-                }
                 id={`${e.chain}-${e.protein.accession}`}
+                protein={sequenceData}
               />
             </div>
           );

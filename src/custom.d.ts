@@ -409,6 +409,8 @@ type StructureLinkedObject = {
   short_name?: string;
   structure_protein_locations: Array<ProtVistaLocation>;
   entry_protein_locations: Array<ProtVistaLocation>;
+  entry_structure_locations: Array<ProtVistaLocation>;
+
   protein_structure_mapping: Record<
     string,
     Array<{
@@ -428,7 +430,14 @@ type StructureLinkedObject = {
   experiment_type: string;
   type?: string;
   entry_type?: string;
-  children: unknown;
+  children?: Array<
+    MinimalFeature & {
+      entry_protein_locations: unknown;
+      entry_structure_locations: unknown;
+    }
+  >;
+  sequence: string;
+  sequence_length: number;
 };
 type EntryStructurePayload = {
   metadata: EntryMetadata;

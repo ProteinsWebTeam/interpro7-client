@@ -60,10 +60,7 @@ type EntryHit = {
   color?: string;
 };
 type State = {
-  entryMap: Record<
-    string,
-    Record<string, Record<string, Record<string, EntryHit[]>>>
-  >;
+  entryMap: Record<string, Record<string, Record<string, EntryHit[]>>>;
   selectedEntry: string;
   selectedEntryToKeep?: SelectedEntry | null;
   isReady: boolean;
@@ -74,7 +71,6 @@ type State = {
 };
 
 class StructureView extends PureComponent<Props, State> {
-  _protein2structureMappers: Record<string, ScaleLinear<number, number, never>>;
   name: string;
   _protvista: RefObject<HTMLDivElement>;
   _structureView: RefObject<HTMLDivElement>;
@@ -96,7 +92,6 @@ class StructureView extends PureComponent<Props, State> {
       isReady: false,
     };
 
-    this._protein2structureMappers = {};
     this.name = `${this.props.id}`;
 
     this._protvista = React.createRef();
@@ -133,16 +128,12 @@ class StructureView extends PureComponent<Props, State> {
         case 'sequence-chain':
           if (highlight) {
             const [start, stop] = highlight.split(':');
-            const p2s =
-              this._protein2structureMappers[
-                `${protein}->${chain}`.toUpperCase()
-              ];
             this.setState({
               selectionsInStructure: [
                 {
                   color: RED,
-                  start: Math.round(p2s(start)),
-                  end: Math.round(p2s(stop)),
+                  start: Math.round(start),
+                  end: Math.round(stop),
                   chain: chain,
                 },
               ],
@@ -231,18 +222,14 @@ class StructureView extends PureComponent<Props, State> {
     }
   }
 
-  _getChainMap(
-    chain: string,
-    locations: ProtVistaLocation[],
-    p2s: ScaleLinear<number, number, never>
-  ) {
+  _getChainMap(chain: string, locations: ProtVistaLocation[]) {
     const chainMap = [];
     for (const location of locations) {
       for (const { start, end } of location.fragments) {
         chainMap.push({
           struct_asym_id: chain,
-          start_residue_number: p2s(start),
-          end_residue_number: p2s(end),
+          start_residue_number: start,
+          end_residue_number: end,
           accession: chain,
           source_database: 'pdb',
         });
@@ -252,30 +239,27 @@ class StructureView extends PureComponent<Props, State> {
   }
 
   _mapLocations(
-    map: Record<string, Record<string, Array<unknown>>>,
+    map: Record<string, Array<unknown>>,
     {
       chain,
-      protein,
       locations,
       entry,
       db,
       match,
     }: {
       chain: string;
-      protein: string;
       locations: ProtVistaLocation[];
       entry: string;
       db: string;
       match: { metadata: { integrated: string | null } };
-    },
-    p2s: ScaleLinear<number, number, never>
+    }
   ) {
     for (const location of locations) {
       for (const fragment of location.fragments) {
-        map[chain][protein].push({
+        map[chain].push({
           struct_asym_id: chain,
-          start_residue_number: Math.round(p2s(fragment.start)),
-          end_residue_number: Math.round(p2s(fragment.end)),
+          start_residue_number: Math.round(fragment.start),
+          end_residue_number: Math.round(fragment.end),
           accession: entry,
           source_database: db,
           parent: match.metadata.integrated
@@ -286,35 +270,14 @@ class StructureView extends PureComponent<Props, State> {
     }
   }
 
-  _collateHits(
-    database: string,
-    accession: string,
-    chain?: string | null,
-    protein?: string | null
-  ) {
+  _collateHits(database: string, accession: string, chain?: string | null) {
     let hits: Array<EntryHit> = [];
     if (database && accession) {
-      if (chain && protein) {
-        hits = hits.concat(
-          this.state.entryMap[database][accession][chain][protein]
-        );
-      } else if (chain) {
-        Object.keys(this.state.entryMap[database][accession][chain]).forEach(
-          (p) => {
-            hits = hits.concat(
-              this.state.entryMap[database][accession][chain][p]
-            );
-          }
-        );
+      if (chain) {
+        hits = hits.concat(...this.state.entryMap[database][accession][chain]);
       } else {
         Object.keys(this.state.entryMap[database][accession]).forEach((c) => {
-          Object.keys(this.state.entryMap[database][accession][c]).forEach(
-            (p) => {
-              hits = hits.concat(
-                this.state.entryMap[database][accession][c][p]
-              );
-            }
-          );
+          hits = hits.concat(this.state.entryMap[database][accession][c]);
         });
       }
     }
@@ -328,7 +291,7 @@ class StructureView extends PureComponent<Props, State> {
   createEntryMap() {
     const memberDBMap: Record<
       string,
-      Record<string, Record<string, Record<string, Array<EntryHit>>>>
+      Record<string, Record<string, Array<EntryHit>>>
     > = { pdb: {} };
 
     if (this.props.matches) {
@@ -341,39 +304,24 @@ class StructureView extends PureComponent<Props, State> {
 
         for (const structure of match.structures) {
           const chain = structure.chain;
-          const protein = structure.protein;
-          const p2s = getMapper(structure.protein_structure_mapping[chain]);
-          this._protein2structureMappers[`${protein}->${chain}`.toUpperCase()] =
-            p2s;
+
           if (!memberDBMap[db][entry][chain])
-            memberDBMap[db][entry][chain] = {};
-          if (!memberDBMap[db][entry][chain][protein])
-            memberDBMap[db][entry][chain][protein] = [];
-          this._mapLocations(
-            memberDBMap[db][entry],
-            {
-              chain,
-              protein,
-              locations: structure.entry_protein_locations,
-              entry,
-              db,
-              match,
-            },
-            p2s
-          );
+            memberDBMap[db][entry][chain] = [];
+          this._mapLocations(memberDBMap[db][entry], {
+            chain,
+            locations: structure.entry_structure_locations,
+            entry,
+            db,
+            match,
+          });
           // create PDB chain mapping
           if (!memberDBMap.pdb[structure.accession])
             memberDBMap.pdb[structure.accession] = {};
           if (!memberDBMap.pdb[structure.accession][chain]) {
-            memberDBMap.pdb[structure.accession][chain] = {};
-          }
-          if (!memberDBMap.pdb[structure.accession][chain][structure.protein]) {
-            memberDBMap.pdb[structure.accession][chain][structure.protein] =
-              this._getChainMap(
-                chain,
-                structure.structure_protein_locations,
-                p2s
-              );
+            memberDBMap.pdb[structure.accession][chain] = this._getChainMap(
+              chain,
+              structure.structure_protein_locations
+            );
           }
         }
       }
@@ -418,7 +366,7 @@ class StructureView extends PureComponent<Props, State> {
     }
 
     if (acc && acc.startsWith('Chain')) return; // Skip the keep procedure for secondary structure
-    const hits = this._collateHits(db || '', acc || '', ch, prot);
+    const hits = this._collateHits(db || '', acc || '', ch);
     if (hits.length > 0) {
       const selections: Array<Selection> = [];
       hits.forEach((hit) => {
@@ -553,7 +501,7 @@ class StructureView extends PureComponent<Props, State> {
           data-testid="structure-protvista"
           className={css('protvista-container')}
         >
-          <ProteinViewerForStructures />
+          <ProteinViewerForStructures structure={pdbId} />
         </div>
       </div>
     );

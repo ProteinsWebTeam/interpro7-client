@@ -76,7 +76,7 @@ export type ExtendedFeature = Feature & {
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = PropsWithChildren<{
-  protein: ProteinMetadata;
+  protein: { accession: string; length: number; sequence: string };
   title: string;
   data: ProteinViewerData;
   showConservationButton?: boolean;
