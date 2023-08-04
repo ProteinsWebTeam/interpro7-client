@@ -1,0 +1,24 @@
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.view-icon-div {
+  margin: 0.2rem 0;
+  padding: 0.2em 0;
+}
+
+.icon-count-organisms {
+  height: 3em; /*to align icon*/
+  width: 30px;
+  background-image: url('../../../images/icons/ico-species.svg');
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+}
+
+.view-link {
+  font-size: 160%;
+  border: none;
+  padding: 0.3em;
+}

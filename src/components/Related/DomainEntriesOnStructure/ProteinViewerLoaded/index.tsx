@@ -22,7 +22,6 @@ const ProteinViewerLoaded = ({ protein, tracks, chain, id }: Props) => {
   useEffect(() => {
     if (!protvistaEl.current || !protvistaEl.current.addEventListener) return;
     const handleMouseover = (event: Event) => {
-      console.log(event);
       const {
         detail: { eventType, highlight, feature },
       } = event as CustomEvent;
