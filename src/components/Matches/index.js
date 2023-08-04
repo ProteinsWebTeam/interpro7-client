@@ -12,9 +12,8 @@ import loadable from 'higherOrder/loadable';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import config from 'config';
 
-import EntriesOnProtein from './EntriesOnProtein';
-import EntriesOnStructure from './EntriesOnStructure';
-import StructureOnProtein from './StructureOnProtein';
+// $FlowFixMe
+import MatchesByPrimary from './MatchesByPrimary';
 // $FlowFixMe
 import ProteinDownloadRenderer from './ProteinDownloadRenderer';
 // $FlowFixMe
@@ -143,35 +142,6 @@ const propTypes = {
   }),
   actualSize: T.number,
 };
-
-const componentMatch = {
-  protein: {
-    entry: EntriesOnProtein,
-    structure: StructureOnProtein,
-  },
-  entry: {
-    protein: EntriesOnProtein,
-    structure: EntriesOnStructure,
-  },
-  structure: {
-    entry: EntriesOnStructure,
-    protein: StructureOnProtein,
-  },
-};
-
-// List of all matches for one `primary`, one to many
-const MatchesByPrimary = (
-  { matches, primary, secondary, ...props } /*: {
-  matches: Array<Object>,
-  primary: string,
-  secondary: string,
-  props: Array<any>,
-} */,
-) => {
-  const MatchComponent = componentMatch[primary][secondary];
-  return <MatchComponent {...props} matches={matches} />;
-};
-MatchesByPrimary.propTypes = propTypes;
 
 const includeAccessionSearch = (
   dataTable,
