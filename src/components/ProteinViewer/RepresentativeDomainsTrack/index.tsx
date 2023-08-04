@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
+import LabelsInTrack from 'components/ProteinViewer/LabelsInTrack';
 import DomainPopup from 'components/ProteinViewer/Popup/RepresentativeDomain';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
@@ -24,6 +25,7 @@ type Props = {
   colorDomainsBy?: keyof typeof EntryColorMode;
   openTooltip: (element: HTMLElement | undefined, content: ReactNode) => void;
   closeTooltip: () => void;
+  isPrinting: boolean;  
 };
 
 const RepresentativeDomainsTrack = ({
@@ -34,6 +36,7 @@ const RepresentativeDomainsTrack = ({
   colorDomainsBy,
   openTooltip,
   closeTooltip,
+  isPrinting,  
 }: Props) => {
   const [data, setData] = useState(entries);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -86,6 +89,14 @@ const RepresentativeDomainsTrack = ({
           use-ctrl-to-zoom
         />
       </div>
+      {entries.length === 1 ? (
+        <LabelsInTrack
+          entry={entries[0]}
+          hideCategory={hideCategory}
+          expandedTrack={true}
+          isPrinting={isPrinting}
+        />
+      ) : null}
     </>
   );
 };

@@ -17,19 +17,20 @@ const dbs4SingleDomain = [
 const selectRepresentativeDomains = (domains: Record<string, unknown>[]) => {
   const flatDomains = [];
   for (const domain of domains) {
-    const { accession, short_name, source_database, integrated } = domain;
+    const { accession, short_name, name, source_database, integrated } = domain;
     for (const location of domain.entry_protein_locations as Array<ProtVistaLocation>) {
       for (const fragment of location.fragments) {
         const { start, end } = fragment;
         flatDomains.push({
           accession,
           short_name,
+          name,
           source_database,
           integrated,
           start,
           end,
           color: getTrackColor({ source_database }, EntryColorMode.MEMBER_DB),
-          length: end - start,
+          length: end - start + 1,
           keep: true,
         });
       }

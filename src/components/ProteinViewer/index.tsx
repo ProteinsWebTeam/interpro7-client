@@ -277,6 +277,7 @@ export const ProteinViewer = ({
                           length={protein.sequence.length}
                           openTooltip={openTooltip}
                           closeTooltip={closeTooltip}
+                          isPrinting={isPrinting}
                         />
                       ) : (
                         <TracksInCategory
