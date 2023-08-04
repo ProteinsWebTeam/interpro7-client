@@ -4,10 +4,10 @@ import EntriesOnProtein from '../EntriesOnProtein';
 import EntriesOnStructure from '../EntriesOnStructure';
 import StructureOnProtein from '../StructureOnProtein';
 
-type Props = {
-  matches: Array<unknown>;
-  primary: LinkedEndpoints;
-  secondary: LinkedEndpoints;
+export type MatchesByPrimaryProps = {
+  matches: Array<Record<Endpoint, Metadata>>;
+  primary: Endpoint;
+  secondary: Endpoint;
   isStale: boolean;
   options: {
     baseSize: number;
@@ -17,15 +17,18 @@ type Props = {
   actualSize: number;
 };
 
-type LinkedEndpoints = 'protein' | 'entry' | 'structure';
-const componentMatch: Record<
-  LinkedEndpoints,
+const componentMatch: Partial<
   Record<
-    LinkedEndpoints,
-    | typeof EntriesOnProtein
-    | typeof StructureOnProtein
-    | typeof EntriesOnStructure
-    | undefined
+    Endpoint,
+    Partial<
+      Record<
+        Endpoint,
+        | typeof EntriesOnProtein
+        | typeof StructureOnProtein
+        | typeof EntriesOnStructure
+        | undefined
+      >
+    >
   >
 > = {
   protein: {
@@ -46,8 +49,13 @@ const componentMatch: Record<
 };
 
 // List of all matches for one `primary`, one to many
-const MatchesByPrimary = ({ matches, primary, secondary, ...props }: Props) => {
-  const MatchComponent = componentMatch[primary][secondary];
+const MatchesByPrimary = ({
+  matches,
+  primary,
+  secondary,
+  ...props
+}: MatchesByPrimaryProps) => {
+  const MatchComponent = componentMatch[primary]?.[secondary];
 
   return MatchComponent ? (
     <MatchComponent {...props} matches={matches} />

@@ -6,6 +6,7 @@ import InfoFilters from 'components/Related/Taxonomy/InfoFilters';
 
 import FiltersPanel from 'components/FiltersPanel';
 import CurationFilter from 'components/Protein/ProteinListFilters/CurationFilter';
+// $FlowFixMe
 import Matches from 'components/Matches';
 
 import { toPlural } from 'utils/pages';

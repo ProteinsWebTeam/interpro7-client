@@ -298,6 +298,11 @@ interface EntryMetadata extends Metadata {
     name: string;
   };
 }
+
+type SourceOrganism = {
+  fullName: string;
+  taxId: number;
+};
 interface ProteinMetadata extends Metadata {
   id?: string;
   name: string;
@@ -309,10 +314,7 @@ interface ProteinMetadata extends Metadata {
   protein_evidence: number;
   is_fragment: boolean;
   ida_accession: string;
-  source_organism: {
-    fullName: string;
-    taxId: number;
-  };
+  source_organism: SourceOrganism;
 }
 interface StructureMetadata extends Metadata {
   name: NameObject;

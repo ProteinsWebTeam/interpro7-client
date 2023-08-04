@@ -9,7 +9,6 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import { useProcessData } from 'components/ProteinViewer/utils';
-import metadata from 'src/reducers/jobs/metadata';
 
 type StructureWithSecondary = {
   metadata: StructureMetadata;

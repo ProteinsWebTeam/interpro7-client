@@ -14,15 +14,12 @@ import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPictureP
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 
-import getMapper from './proteinToStructureMapper';
-
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import cssBinder from 'styles/cssBinder';
 
 import style from './style.css';
 import buttonBar from './button-bar.css';
-import { ScaleLinear } from 'd3-scale';
 
 const css = cssBinder(style, buttonBar, fonts);
 
@@ -105,7 +102,7 @@ class StructureView extends PureComponent<Props, State> {
 
     this._protvista.current?.addEventListener('change', (event: Event) => {
       const {
-        detail: { eventType, highlight, feature, chain, protein },
+        detail: { eventType, highlight, feature, chain },
       } = event as CustomEvent;
       const {
         accession,
@@ -339,19 +336,16 @@ class StructureView extends PureComponent<Props, State> {
     let db: null | string | undefined;
     let acc: null | string | undefined;
     let ch: null | string | undefined;
-    let prot: null | string | undefined;
 
     // reset keep when 'no entry' is selected via selection input
     if (entry === NO_SELECTION && keep) {
       keep.db = null;
       keep.accession = null;
       keep.chain = null;
-      keep.protein = null;
     } else if (memberDB !== undefined && entry !== undefined) {
       db = memberDB;
       acc = entry;
       ch = chain;
-      prot = protein;
     } else if (
       keep &&
       keep.db !== null &&
@@ -362,7 +356,6 @@ class StructureView extends PureComponent<Props, State> {
       db = keep.db;
       acc = keep.accession;
       ch = keep.chain;
-      prot = keep.protein;
     }
 
     if (acc && acc.startsWith('Chain')) return; // Skip the keep procedure for secondary structure
