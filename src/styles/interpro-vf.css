@@ -10,6 +10,12 @@ body a {
   &:focus,
   &:hover {
     text-decoration: underline;
+    border-bottom-style: none;
+    border: 0;
+  }
+  &.icon:focus,
+  &.icon:hover {
+    text-decoration: none;
   }
 }
 

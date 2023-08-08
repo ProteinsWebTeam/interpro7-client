@@ -149,17 +149,17 @@ class StructureView extends PureComponent<Props, State> {
             selectedEntryToKeep:
               type === 'chain'
                 ? {
-                    accession: pdbid,
-                    db: 'pdb',
-                    chain: accession,
-                    protein: proteinD,
-                  }
+                  accession: pdbid,
+                  db: 'pdb',
+                  chain: accession,
+                  protein: proteinD,
+                }
                 : {
-                    accession: accession,
-                    db: sourceDB,
-                    chain: chainF,
-                    protein: proteinD,
-                  },
+                  accession: accession,
+                  db: sourceDB,
+                  chain: chainF,
+                  protein: proteinD,
+                },
           });
           break;
         case 'mouseover':
@@ -168,11 +168,11 @@ class StructureView extends PureComponent<Props, State> {
             return;
           }
           if (type === 'chain')
-            this.showEntryInStructure('pdb', pdbid, accession, proteinD);
+            this.showEntryInStructure('pdb', pdbid, accession);
           else if (type === 'secondary_structure')
             this.setSelectionsForSecondaryStructure(feature);
           else if (accession && !accession.startsWith('G3D:'))
-            this.showEntryInStructure(sourceDB, accession, chainF, proteinF);
+            this.showEntryInStructure(sourceDB, accession, chainF);
           break;
         case 'mouseout':
           if (type !== 'secondary_structure') this.showEntryInStructure();
@@ -330,7 +330,6 @@ class StructureView extends PureComponent<Props, State> {
     memberDB?: string | null,
     entry?: string,
     chain?: string,
-    protein?: string
   ) => {
     const keep = this.state.selectedEntryToKeep;
     let db: null | string | undefined;

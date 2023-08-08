@@ -4,8 +4,23 @@ import EntriesOnProtein from '../EntriesOnProtein';
 import EntriesOnStructure from '../EntriesOnStructure';
 import StructureOnProtein from '../StructureOnProtein';
 
+type MetadataWithLocations = Metadata & {
+  entry_protein_locations?: Array<ProtVistaLocation>;
+  protein_structure_locations?: Array<ProtVistaLocation>;
+}
+export type GenericMatch = {
+  entry?: MetadataWithLocations & {
+    name: string | NameObject;
+    entry_type: string;
+  };
+  protein?: MetadataWithLocations & {
+    sequence?: string;
+    length: number
+  };
+  structure?: MetadataWithLocations;
+}
 export type MatchesByPrimaryProps = {
-  matches: Array<Record<Endpoint, Metadata>>;
+  matches: Array<GenericMatch>;
   primary: Endpoint;
   secondary: Endpoint;
   isStale: boolean;

@@ -8,7 +8,7 @@ import loadable from 'higherOrder/loadable';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import config from 'config';
 
-import MatchesByPrimary, { MatchesByPrimaryProps } from './MatchesByPrimary';
+import MatchesByPrimary, { GenericMatch, MatchesByPrimaryProps } from './MatchesByPrimary';
 import ProteinDownloadRenderer from './ProteinDownloadRenderer';
 import FileExporter from './FileExporter';
 
@@ -184,6 +184,7 @@ type Props = MatchesByPrimaryProps & {
   previousAPICall: string;
   status: number;
 };
+type SupportedEndpoint = 'entry'|'protein'|'structure';
 // List of all matches, many to many
 const Matches = ({
   matches,
@@ -217,8 +218,8 @@ const Matches = ({
 
   let aggSize = actualSize;
   const dataTable = matches.map((e) => ({
-    ...e[primary],
-    accession: String(e[primary].accession),
+    ...e[primary as SupportedEndpoint],
+    accession: String(e[primary as SupportedEndpoint]?.accession),
     match: e,
   }));
   if (accessionSearch) {
@@ -517,7 +518,7 @@ const Matches = ({
           primary !== 'set' &&
           secondary !== 'set'
         }
-        renderer={(match: Record<Endpoint, Metadata>) => (
+        renderer={(match: GenericMatch) => (
           <Lazy>
             {(hasBeenVisible: boolean) =>
               hasBeenVisible ? (
