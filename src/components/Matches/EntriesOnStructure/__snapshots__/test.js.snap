@@ -1,39 +1,87 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<EntriesOnStructure /> should render 1`] = `
-<div
-  className="track-in-table"
->
-  <div
-    className="track-container"
-  >
-    <div
-      className="aligned-to-track-component"
-    >
-      <Yi
-        display-start={1}
-        height={30}
-        sequence=""
-        use-ctrl-to-zoom={true}
-      />
-    </div>
-  </div>
-  <div
-    className="track-component"
-  >
-    <Tooltip
-      title="<b>1a4w</b><br/>CRYSTAL STRUCTURES OF THROMBIN WITH THIAZOLE-CONTAINING INHIBITORS: PROBES OF THE S1' BINDING SITE<br/>"
-    >
-      <Memo(Kr)
-        data={[]}
-        display-start={1}
-        expanded={true}
-        id="track_1a4w"
-        margin-color="#fafafa"
-        shape="roundRectangle"
-        use-ctrl-to-zoom={true}
-      />
-    </Tooltip>
-  </div>
-</div>
+<section>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <div
+            className="track-in-table"
+          >
+            <div
+              className="track-container"
+            >
+              <div
+                className="aligned-to-track-component"
+              >
+                <Yi
+                  display-end={0}
+                  display-start={1}
+                  height={30}
+                  length={0}
+                  sequence=""
+                  use-ctrl-to-zoom={true}
+                />
+              </div>
+            </div>
+            <div
+              className="track-component"
+            >
+              <Tooltip
+                title="<b>1a4w</b><br/>CRYSTAL STRUCTURES OF THROMBIN WITH THIAZOLE-CONTAINING INHIBITORS: PROBES OF THE S1' BINDING SITE<br/><p>105-188</p><p>211-293</p>"
+              >
+                <Memo(Kr)
+                  data={
+                    [
+                      {
+                        "accession": "IPR000001",
+                        "color": "#2d865f",
+                        "entry_type": undefined,
+                        "locations": [
+                          {
+                            "fragments": [
+                              {
+                                "dc-status": "CONTINUOUS",
+                                "end": 188,
+                                "start": 105,
+                              },
+                            ],
+                          },
+                          {
+                            "fragments": [
+                              {
+                                "dc-status": "CONTINUOUS",
+                                "end": 293,
+                                "start": 211,
+                              },
+                            ],
+                          },
+                        ],
+                        "name": {
+                          "name": "Kringle",
+                          "short": "Kringle",
+                        },
+                        "source_database": "interpro",
+                        "type": "entry",
+                      },
+                    ]
+                  }
+                  display-end={0}
+                  display-start={1}
+                  expanded={true}
+                  id="track_1a4w"
+                  length={0}
+                  margin-color="#fafafa"
+                  shape="roundRectangle"
+                  use-ctrl-to-zoom={true}
+                />
+              </Tooltip>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 `;
