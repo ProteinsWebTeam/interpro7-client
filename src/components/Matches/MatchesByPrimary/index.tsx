@@ -34,7 +34,8 @@ export type Feature = {
   type: string;
 }
 export type MatchesByPrimaryProps = {
-  matches: Array<GenericMatch>;
+  match: GenericMatch;
+  innerMatches: Array<AnyMatch>;
   primary: Endpoint;
   secondary: Endpoint;
   isStale: boolean;
@@ -79,7 +80,8 @@ const componentMatch: Partial<
 
 // List of all matches for one `primary`, one to many
 const MatchesByPrimary = ({
-  matches,
+  match,
+  innerMatches,
   primary,
   secondary,
   ...props
@@ -87,7 +89,7 @@ const MatchesByPrimary = ({
   const MatchComponent = componentMatch[primary]?.[secondary];
 
   return MatchComponent ? (
-    <MatchComponent {...props} matches={matches} />
+    <MatchComponent {...props} match={match} matches={innerMatches} />
   ) : null;
 };
 

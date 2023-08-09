@@ -170,6 +170,7 @@ const includeAccessionSearch = (
 };
 
 type Props = MatchesByPrimaryProps & {
+  matches: Array<GenericMatch>
   search: Record<string, string | boolean>;
   description: InterProDescription;
   hash?: string;
@@ -184,7 +185,7 @@ type Props = MatchesByPrimaryProps & {
   previousAPICall: string;
   status: number;
 };
-type SupportedEndpoint = 'entry'|'protein'|'structure';
+type SupportedEndpoint = 'entry' | 'protein' | 'structure';
 // List of all matches, many to many
 const Matches = ({
   matches,
@@ -518,13 +519,14 @@ const Matches = ({
           primary !== 'set' &&
           secondary !== 'set'
         }
-        renderer={(match: GenericMatch) => (
+        renderer={(match: GenericMatch, { matches }: { matches: Array<AnyMatch> }) => (
           <Lazy>
             {(hasBeenVisible: boolean) =>
               hasBeenVisible ? (
                 <MatchesByPrimary
                   {...props}
-                  matches={[match]}
+                  match={match}
+                  innerMatches={matches}
                   primary={primary}
                   secondary={secondary}
                   isStale={isStale}
