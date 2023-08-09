@@ -14,26 +14,20 @@ import protvista from 'components/ProteinViewer/style.css';
 
 const css = cssBinder(protvista);
 
-type Props = { matches: Array<GenericMatch> }
+type Props = { match: GenericMatch; matches: Array<AnyMatch> };
 
-const EntriesOnProtein = ({ matches }: Props) => {
+const EntriesOnProtein = ({ matches, match }: Props) => {
   const [data, setData] = useState<Array<Feature> | null>(null);
-  const firstMatch = matches?.[0];
-  const { entry, protein } = firstMatch || {};
+  const { entry, protein } = match || {};
 
   useEffect(() => {
     if (!matches.length || !entry || !protein) return;
 
-    let locations: Array<ProtVistaLocation> = [];
-    if (entry?.entry_protein_locations)
-      locations = entry?.entry_protein_locations;
-    else if (protein && protein.entry_protein_locations)
-      locations = protein.entry_protein_locations;
-    setData(locations.map((loc) => ({
+    setData(matches.map((loc) => ({
       accession: entry.accession,
       name: entry.name,
       source_database: entry.source_database,
-      locations: [loc],
+      locations: loc.entry_protein_locations || [],
       color: getTrackColor(entry, EntryColorMode.ACCESSION),
       entry_type: entry.entry_type,
       type: 'entry',
@@ -42,19 +36,10 @@ const EntriesOnProtein = ({ matches }: Props) => {
   }, [entry, protein]);
 
 
-  if (matches.length > 1) {
-    console.error(
-      'There are several matches and this component is using only one',
-    );
-    console.table(matches);
-  }
   if (!matches.length || !entry || !protein) return null;
-
-
 
   return (
     <div className={css('track-in-table')}>
-      {/* <SchemaOrgData data={matches[0]} processData={schemaProcessData} />*/}
       <div className={css('track-container')}>
         <div className={css('aligned-to-track-component')}>
           <NightingaleSequence

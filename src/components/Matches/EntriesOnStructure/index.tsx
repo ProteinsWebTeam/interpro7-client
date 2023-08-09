@@ -39,7 +39,6 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
                 type: 'entry',
               },
             ];
-            console.count(`render${structure.accession}`);
             return (
               <tr>
                 {m.chain ? <td>{m.chain}</td> : null}
