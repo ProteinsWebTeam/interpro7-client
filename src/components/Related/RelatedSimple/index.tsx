@@ -10,18 +10,18 @@ import ObjectToList from '../ObjectToList';
 import classNames from 'classnames';
 
 type Props = {
-  secondaryData: Record<string, unknown>,
+  mainData: Metadata,
   mainType?: string,
   focusType?: string,
 };
 
-const RelatedSimple = ({ secondaryData, mainType, focusType }: Props) => {
+const RelatedSimple = ({ mainData, mainType, focusType }: Props) => {
 
   return (
     <div className={classNames('vf-stack', 'vf-stack--200')}>
       <p>This {mainType} is related to this:</p>
       <ObjectToList
-        obj={secondaryData}
+        obj={mainData as unknown as Record<string, unknown>}
         component={({ k: db, value }) => (
           <Link
             to={(customLocation) => ({

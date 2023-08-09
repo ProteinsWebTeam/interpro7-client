@@ -19,13 +19,15 @@ type Props = {
   mainType: string,
   actualSize: number,
   otherFilters?: Array<unknown>,
-  dataBase: {
-    payload: Object,
-    loading: boolean
-  },
+  dataBase: RequestedData<RootAPIPayload>,
   secondaryDataLoading: boolean,
   focusType?: string,
   focusDb?: string,
+  nextAPICall?: string | null;
+  previousAPICall?: string | null;
+  currentAPICall?: string | null;
+  status?: number | null;
+
 };
 
 const RelatedAdvanced = ({

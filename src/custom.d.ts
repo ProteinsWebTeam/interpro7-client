@@ -761,3 +761,25 @@ interface EntryProteinMatch extends MatchI {
   entry_type: string;
   entry_integrated: string | null;
 }
+interface StructureProteinMatch extends MatchI {
+  entry_protein_locations: Array<ProtVistaLocation>;
+  structure_protein_locations: Array<ProtVistaLocation>;
+  protein_length: number;
+  source_database: string;
+  entry_type: string;
+  chain: string;
+  entry_integrated: string | null;
+}
+interface EntryStructureMatch extends MatchI {
+  entry_structure_locations: Array<ProtVistaLocation>;
+  protein_length: number;
+  sequence_length: number;
+  sequence: string;
+  protein?: string;
+  source_database: string;
+  chain: string;
+  entry_type: string;
+  entry_integrated: string | null;
+}
+
+type AnyMatch = Partial<EntryProteinMatch> &Partial<EntryStructureMatch> &Partial<StructureProteinMatch> 
