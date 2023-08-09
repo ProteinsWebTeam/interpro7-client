@@ -18,6 +18,8 @@ import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
 import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
+import ObjectToList from './ObjectToList';
+
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
@@ -39,44 +41,6 @@ const filterIn = (
   // prettier-ignore
   (Object.entries(description) /*: any */)
     .filter(([_key, value]) => fn(value)) || [];
-
-/*:: type ObjectToListProps = {
-  obj: Object,
-  component: function,
-}; */
-
-class ObjectToList extends PureComponent /*:: <ObjectToListProps> */ {
-  static propTypes = {
-    obj: T.object.isRequired,
-    component: T.func.isRequired,
-  };
-
-  render() {
-    const { obj, component: Component } = this.props;
-    return (
-      <ul>
-        {Object.entries(obj)
-          .filter(
-            ([_, v]) =>
-              // value !== 0 or, if object, contains values
-              v && (typeof v !== 'object' || Object.keys(v).length),
-          )
-          .map(([k, value]) => (
-            <li key={k}>
-              {typeof value === 'object' ? (
-                <span>
-                  {`${k}: `}
-                  <ObjectToList obj={value} component={Component} />
-                </span>
-              ) : (
-                <Component value={value} k={k} />
-              )}
-            </li>
-          ))}
-      </ul>
-    );
-  }
-}
 
 /*:: type RelatedSimpleProps = {
   secondaryData: Object,
