@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import { location2html } from 'utils/text';
-import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
@@ -16,22 +16,26 @@ const css = cssBinder(protvista);
 
 type Props = { matches: Array<GenericMatch> }
 
-const EntriesOnProtein = ({ matches }: Props) => {
+
+const EntriesOnStructure = ({ matches }: Props) => {
   const [data, setData] = useState<Array<Feature> | null>(null);
   const firstMatch = matches?.[0];
-  const { entry, protein } = firstMatch || {};
+  const { entry, structure } = firstMatch || {};
 
   useEffect(() => {
-    if (!matches.length || !entry || !protein) return;
+    if (!matches.length || !entry || !structure) return;
 
     let locations: Array<ProtVistaLocation> = [];
-    if (entry?.entry_protein_locations)
-      locations = entry?.entry_protein_locations;
-    else if (protein && protein.entry_protein_locations)
-      locations = protein.entry_protein_locations;
+    if (entry && entry.entry_structure_locations)
+      locations = entry.entry_structure_locations;
+    else if (structure.entry_structure_locations)
+      locations = structure.entry_structure_locations;
+
+
     setData(locations.map((loc) => ({
       accession: entry.accession,
       name: entry.name,
+      // short_name: entry.short_name,
       source_database: entry.source_database,
       locations: [loc],
       color: getTrackColor(entry, EntryColorMode.ACCESSION),
@@ -39,8 +43,13 @@ const EntriesOnProtein = ({ matches }: Props) => {
       type: 'entry',
     }))
     );
-  }, [entry, protein]);
 
+  }, [entry, structure]);
+
+
+  // updateTracksWithData({ matches: data }) {
+
+  // }
 
   if (matches.length > 1) {
     console.error(
@@ -48,20 +57,21 @@ const EntriesOnProtein = ({ matches }: Props) => {
     );
     console.table(matches);
   }
-  if (!matches.length || !entry || !protein) return null;
 
+  if (!matches.length || !entry || !structure) return null;
 
+  const length = structure.sequence_length || entry.sequence_length;
+  const sequence = structure.sequence || entry.sequence || '\u00A0'.repeat(length);
 
   return (
     <div className={css('track-in-table')}>
-      {/* <SchemaOrgData data={matches[0]} processData={schemaProcessData} />*/}
       <div className={css('track-container')}>
         <div className={css('aligned-to-track-component')}>
           <NightingaleSequence
-            sequence={protein.sequence || '\u00A0'.repeat(protein.length)}
-            length={protein.length}
+            length={length}
+            sequence={sequence}
             display-start={1}
-            display-end={protein.length}
+            display-end={length}
             height={30}
             use-ctrl-to-zoom
           />
@@ -70,19 +80,21 @@ const EntriesOnProtein = ({ matches }: Props) => {
       <div className={css('track-component')}>
         <Tooltip
           title={location2html(
-            entry.entry_protein_locations || protein.entry_protein_locations || [],
-            entry.accession,
-            (entry?.name as NameObject)?.name || (entry?.name as NameObject)?.short || entry.name,
+            structure.entry_structure_locations ||
+            entry.entry_structure_locations || [],
+            structure.accession,
+            (structure?.name as NameObject)?.name ? (structure?.name as NameObject).name : structure.name,
           )}
         >
           <NightingaleInterProTrack
-            length={protein.length}
+            length={length}
             display-start={1}
-            display-end={protein.length}
+            display-end={length}
             margin-color="#fafafa"
-            id={`track_${entry.accession}`}
-            data={data || []}
+            id={`track_${structure.accession}`}
+            // ref={(e) => (this.web_tracks[structure.accession] = e)}
             shape="roundRectangle"
+            data={data || []}
             expanded
             use-ctrl-to-zoom
           />
@@ -92,4 +104,4 @@ const EntriesOnProtein = ({ matches }: Props) => {
   );
 }
 
-export default EntriesOnProtein;
+export default EntriesOnStructure;

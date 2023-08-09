@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -67,8 +66,7 @@ describe('<EntriesOnStructure />', () => {
                 },
               ],
               experiment_type: 'x-ray',
-              name:
-                "CRYSTAL STRUCTURES OF THROMBIN WITH THIAZOLE-CONTAINING INHIBITORS: PROBES OF THE S1' BINDING SITE",
+              name: "CRYSTAL STRUCTURES OF THROMBIN WITH THIAZOLE-CONTAINING INHIBITORS: PROBES OF THE S1' BINDING SITE",
               protein: 'p00734',
               protein_length: 622,
               resolution: 1.8,

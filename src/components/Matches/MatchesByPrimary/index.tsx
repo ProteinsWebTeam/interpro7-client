@@ -7,6 +7,10 @@ import StructureOnProtein from '../StructureOnProtein';
 type MetadataWithLocations = Metadata & {
   entry_protein_locations?: Array<ProtVistaLocation>;
   protein_structure_locations?: Array<ProtVistaLocation>;
+  entry_structure_locations?: Array<ProtVistaLocation>;
+  sequence_length: number,
+  sequence?: string,
+
 }
 export type GenericMatch = {
   entry?: MetadataWithLocations & {
@@ -14,10 +18,20 @@ export type GenericMatch = {
     entry_type: string;
   };
   protein?: MetadataWithLocations & {
-    sequence?: string;
     length: number
   };
-  structure?: MetadataWithLocations;
+  structure?: MetadataWithLocations & {
+    name: string | NameObject;
+  };
+}
+export type Feature = {
+  accession: string;
+  name: string | NameObject;
+  source_database: string;
+  locations: Array<ProtVistaLocation>,
+  color: string;
+  entry_type: string;
+  type: string;
 }
 export type MatchesByPrimaryProps = {
   matches: Array<GenericMatch>;

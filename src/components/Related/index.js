@@ -264,9 +264,15 @@ const RelatedAdvancedQuery = loadData({
             obj.counters = omit(x, ['metadata', plural]);
             // Given the reverse of the URL, and that we are querying by an accession
             // we can assume is only one, hence [0]
-            obj.entry_protein_locations = x[plural][0].entry_protein_locations;
-            obj.protein_length = x[plural][0].protein_length;
+
+            // 👆👆NOT true for multiple chains
             obj.protein = x[plural][0].protein;
+            obj.protein_length = x[plural][0].protein_length;
+            obj.sequence = x[plural][0].sequence;
+            obj.sequence_length = x[plural][0].sequence_length;
+            obj.entry_protein_locations = x[plural][0].entry_protein_locations;
+            obj.entry_structure_locations =
+              x[plural][0].entry_structure_locations;
             obj.structure_protein_locations =
               x[plural][0].structure_protein_locations;
             if (x[plural][0].chain) {
