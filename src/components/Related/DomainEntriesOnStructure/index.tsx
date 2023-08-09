@@ -155,7 +155,7 @@ const tagChimericStructures = (data: DataForProteinChain[]) => {
 type Props = {
   structure: string;
   entries: StructureLinkedObject[];
-  showChainMenu: boolean;
+  showChainMenu?: boolean;
   secondaryStructures?: SecondaryStructure[];
 };
 
