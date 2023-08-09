@@ -5,91 +5,27 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { omit } from 'lodash-es';
 
-import Link from 'components/generic/Link';
 import loadData from 'higherOrder/loadData';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import { toPlural } from 'utils/pages';
 
-import RelatedTable from 'components/Related/RelatedTable';
+import RelatedTable from './RelatedTable';
 // $FlowFixMe
-import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
-import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
+import EntriesOnStructure from './DomainEntriesOnStructure';
+// $FlowFixMe
+import RelatedSimple from './RelatedSimple';
+// $FlowFixMe
+import { findIn, filterIn } from 'utils/processDescription/filterFuncions';
+import StructureOnProtein from './DomainStructureOnProtein';
 import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
-
-import ObjectToList from './ObjectToList';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles);
-
-const findIn = (
-  description /*: {} */,
-  fn /*: ({isFilter:boolean, order:number})=> boolean*/,
-) =>
-  // prettier-ignore
-  (Object.entries(description) /*: any */)
-    .find(([_key, value]) => fn(value)) || [];
-
-const filterIn = (
-  description /*: {} */,
-  fn /*: ({isFilter:boolean, order:number})=> boolean*/,
-) =>
-  // prettier-ignore
-  (Object.entries(description) /*: any */)
-    .filter(([_key, value]) => fn(value)) || [];
-
-/*:: type RelatedSimpleProps = {
-  secondaryData: Object,
-  mainType: string,
-  focusType: string,
-}; */
-class _RelatedSimple extends PureComponent /*:: <RelatedSimpleProps> */ {
-  static propTypes = {
-    secondaryData: T.object.isRequired,
-    mainType: T.string.isRequired,
-    focusType: T.string.isRequired,
-  };
-
-  render() {
-    const { secondaryData, mainType, focusType } = this.props;
-    return (
-      <div className={f('row')}>
-        <p>This {mainType} is related to this:</p>
-        <ObjectToList
-          obj={secondaryData}
-          component={({ k: db, value }) => (
-            <Link
-              to={(customLocation) => ({
-                ...customLocation,
-                description: {
-                  main: { key: focusType },
-                  [focusType]: { db },
-                },
-              })}
-            >
-              {db}: {value}
-            </Link>
-          )}
-        />
-      </div>
-    );
-  }
-}
-
-const mapStateToPropsSimple = createSelector(
-  (state) => state.customLocation.description.main.key,
-  (state) =>
-    findIn(
-      state.customLocation.description,
-      (value /*: {isFilter:boolean, order:number} */) => value.isFilter,
-    ),
-  (mainType, focusType) => ({ mainType, focusType }),
-);
-const RelatedSimple = connect(mapStateToPropsSimple)(_RelatedSimple);
 
 /*:: type relatedAdvancedProps = {
   mainData: Object,
