@@ -1,41 +1,83 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<StructureOnProtein /> should render 1`] = `
-<div
-  className="track-in-table"
->
-  <div
-    className="track-container"
-  >
-    <div
-      className="aligned-to-track-component"
-    >
-      <nightingale-sequence
-        display-end={625}
-        display-start="1"
-        height="30"
-        length={625}
-        use-ctrl-to-zoom={true}
-      />
-    </div>
-  </div>
-  <div
-    className="track-component"
-  >
-    <Tooltip
-      title="<b>1a0h</b><br/>THE X-RAY CRYSTAL STRUCTURE OF PPACK-MEIZOTHROMBIN DESF1: KRINGLE/THROMBIN AND CARBOHYDRATE/KRINGLE/THROMBIN INTERACTIONS AND LOCATION OF THE LINKER CHAIN<br/>"
-    >
-      <nightingale-interpro-track
-        display-end={625}
-        display-start="1"
-        expanded={true}
-        id="track_1a0h"
-        length={625}
-        margin-color="#fafafa"
-        shape="rectangle"
-        use-ctrl-to-zoom={true}
-      />
-    </Tooltip>
-  </div>
-</div>
+<section>
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          A
+        </td>
+        <td>
+              
+          <div
+            className="track-in-table"
+          >
+            <div
+              className="track-container"
+            >
+              <div
+                className="aligned-to-track-component"
+              >
+                <Yi
+                  display-end={625}
+                  display-start={1}
+                  height={30}
+                  length={625}
+                  sequence="                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "
+                  use-ctrl-to-zoom={true}
+                />
+              </div>
+            </div>
+            <div
+              className="track-component"
+            >
+              <Tooltip
+                title="<b>1a0h</b><br/>THE X-RAY CRYSTAL STRUCTURE OF PPACK-MEIZOTHROMBIN DESF1: KRINGLE/THROMBIN AND CARBOHYDRATE/KRINGLE/THROMBIN INTERACTIONS AND LOCATION OF THE LINKER CHAIN<br/><p>1-203</p>"
+              >
+                <Memo(Kr)
+                  data={
+                    [
+                      {
+                        "accession": "1a0h",
+                        "color": "#b387c5",
+                        "entry_type": "chain",
+                        "locations": [
+                          {
+                            "fragments": [
+                              {
+                                "end": 203,
+                                "protein_end": 203,
+                                "protein_start": 1,
+                                "start": 1,
+                              },
+                            ],
+                          },
+                        ],
+                        "name": {
+                          "name": "THE X-RAY CRYSTAL STRUCTURE OF PPACK-MEIZOTHROMBIN DESF1: KRINGLE/THROMBIN AND CARBOHYDRATE/KRINGLE/THROMBIN INTERACTIONS AND LOCATION OF THE LINKER CHAIN",
+                          "short": null,
+                        },
+                        "source_database": "pdb",
+                        "type": "structure",
+                      },
+                    ]
+                  }
+                  display-end={625}
+                  display-start={1}
+                  expanded={true}
+                  id="track_1a0h_A"
+                  length={625}
+                  margin-color="#fafafa"
+                  shape="rectangle"
+                  use-ctrl-to-zoom={true}
+                />
+              </Tooltip>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 `;

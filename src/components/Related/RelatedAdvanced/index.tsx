@@ -5,10 +5,10 @@ import { createSelector } from 'reselect';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import RelatedTable from '../RelatedTable';
-// Disabling these viewers, has been mentioned before they are redundant. 
+// Disabling these viewers. It has been mentioned before they are redundant. 
 // especially now displaying multiple chains in the table
 // import EntriesOnStructure from '../DomainEntriesOnStructure';
-import StructureOnProtein from '../DomainStructureOnProtein';
+// import StructureOnProtein from '../DomainStructureOnProtein';
 
 import { findIn, filterIn } from "utils/processDescription/filterFuncions";
 
@@ -50,12 +50,12 @@ const RelatedAdvanced = ({
         <Loading />
       ) : (
         <div>
-          {mainType === 'protein' && focusType === 'structure' ? (
+          {/* {mainType === 'protein' && focusType === 'structure' ? (
             <StructureOnProtein
               structures={secondaryData}
               protein={mainData}
             />
-          ) : null}
+          ) : null} */}
           {/* {mainType === 'structure' && focusType === 'entry' ? (
             <EntriesOnStructure entries={secondaryData as StructureLinkedObject[]} structure={mainData.accession} />
           ) : null} */}

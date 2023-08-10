@@ -40,7 +40,7 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
               },
             ];
             return (
-              <tr>
+              <tr key={m.chain}>
                 {m.chain ? <td>{m.chain}</td> : null}
                 <td>
                   <div className={css('track-in-table')}>
@@ -73,7 +73,6 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
                           display-end={length}
                           margin-color="#fafafa"
                           id={`track_${structure.accession}`}
-                          // ref={(e) => (this.web_tracks[structure.accession] = e)}
                           shape="roundRectangle"
                           data={data || []}
                           expanded
