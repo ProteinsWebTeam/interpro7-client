@@ -22,7 +22,7 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
 
   return (
     <section>
-      <table>
+      <table className={css('matches-in-table')}>
         <tbody>
           {matches.map((m) => {
             const length = m.sequence_length || 0;
