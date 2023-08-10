@@ -32,6 +32,10 @@ import style from './style.css';
 import grid from './grid.css';
 import popper from './popper.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
+
+TracksInCategory.displayName = 'TracksInCategory';
+Header.displayName = 'TracksHeader';
 
 const css = cssBinder(style, grid, fonts, popper);
 
@@ -69,6 +73,7 @@ export type ExtendedFeature = Feature & {
   location2residue?: unknown;
   chain?: string;
   protein?: string;
+  integrated?: string;
   children?: Array<ExtendedFeature>;
   warnings?: Array<string>;
 };
@@ -270,19 +275,31 @@ export const ProteinViewer = ({
                           <LabelComponent {...(component?.attributes || {})} />
                         </div>
                       )}{' '}
-                      <TracksInCategory
-                        entries={entries}
-                        sequence={protein.sequence}
-                        hideCategory={hideCategory[type]}
-                        highlightColor={highlightColor}
-                        openTooltip={openTooltip}
-                        closeTooltip={closeTooltip}
-                        isPrinting={isPrinting}
-                        ref={(ref: ExpandedHandle) =>
-                          categoryRefs.current.push(ref)
-                        }
-                        databases={dataBase?.payload?.databases}
-                      />
+                      {type === 'representative domains' ? (
+                        <RepresentativeDomainsTrack
+                          hideCategory={hideCategory[type]}
+                          highlightColor={highlightColor}
+                          entries={entries}
+                          length={protein.sequence.length}
+                          openTooltip={openTooltip}
+                          closeTooltip={closeTooltip}
+                          isPrinting={isPrinting}
+                        />
+                      ) : (
+                        <TracksInCategory
+                          entries={entries}
+                          sequence={protein.sequence}
+                          hideCategory={hideCategory[type]}
+                          highlightColor={highlightColor}
+                          openTooltip={openTooltip}
+                          closeTooltip={closeTooltip}
+                          isPrinting={isPrinting}
+                          ref={(ref: ExpandedHandle) =>
+                            categoryRefs.current.push(ref)
+                          }
+                          databases={dataBase?.payload?.databases}
+                        />
+                      )}
                     </div>
                   );
                 })}
