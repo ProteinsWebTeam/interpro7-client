@@ -76,7 +76,7 @@ const LiteratureItem = ({
             {i}.
           </Link>
         ) : (
-          <span>[{i}]. </span>
+          <span>{i}. </span>
         ))}
       <span className={css('title')}>{r.title} </span>
       <span className={css('authors')}>{r.authors.join(', ')} </span>{' '}
@@ -116,39 +116,44 @@ type Props = {
   target: string;
 };
 const Literature = ({ included = [], extra = [], target }: Props) => (
-  <div className={css('vf-grid')}>
+  <>
     {included.length ? (
-      <div className={css('list', { 'single-entry': included.length === 1 })}>
-        {included.map(([pubID, ref], i) => (
-          <LiteratureItem
-            key={pubID}
-            reference={ref}
-            i={i + 1}
-            included
-            target={target === String(pubID)}
-          />
-        ))}
+      <div className={css('vf-grid')}>
+        <div className={css('list', { 'single-entry': included.length === 1 })}>
+          {included.map(([pubID, ref], i) => (
+            <LiteratureItem
+              key={pubID}
+              reference={ref}
+              i={i + 1}
+              included
+              target={target === String(pubID)}
+            />
+          ))}
+        </div>
       </div>
     ) : null}
+
     {/* Only display "Further reading" if there have been main references */}
     {included.length && extra.length ? <h5>Further reading</h5> : null}
     {extra.length ? (
-      <div
-        className={css('list', 'further', {
-          'single-entry': extra.length === 1,
-        })}
-      >
-        {extra.map(([pubID, ref], i) => (
-          <LiteratureItem
-            key={pubID}
-            reference={ref}
-            target={target === String(pubID)}
-            i={(included?.length || 0) + i + 1}
-          />
-        ))}
+      <div className={css('vf-grid')}>
+        <div
+          className={css('list', 'further', {
+            'single-entry': extra.length === 1,
+          })}
+        >
+          {extra.map(([pubID, ref], i) => (
+            <LiteratureItem
+              key={pubID}
+              reference={ref}
+              target={target === String(pubID)}
+              i={(included?.length || 0) + i + 1}
+            />
+          ))}
+        </div>
       </div>
     ) : null}
-  </div>
+  </>
 );
 
 const mapStateToProps = createSelector(hashSelector, (target) => ({ target }));

@@ -117,6 +117,7 @@ const images = {
       /* webpackChunkName: "member-logos" */ '../../../images/member_databases/tigrfams_logo.png'
     ),
   ],
+  antifam: [],
   ncbifam: [
     import(
       /* webpackChunkName: "member-logos" */ '../../../images/member_databases/nih_nlm_logo.avif'
@@ -149,6 +150,7 @@ const classNames = new Map([
   ['SSF', css('md-su')],
   ['TIGRFAMS', css('md-ti')],
   ['NCBIFAM', css('md-nf')],
+  ['ANTIFAM', css('md-af')],
   ['NEW', css('md-new')],
   ['ALL', css('md-all')],
   ['REMOVED', css('md-removed')],
@@ -178,8 +180,8 @@ const MemberSymbol = ({
   }, [type]);
   useEffect(() => {
     if (!svg) {
-      if (!avif) images?.[type]?.[0].then((src) => setAvif(src.default));
-      if (!png) images?.[type]?.[1].then((src) => setPng(src.default));
+      if (!avif) images?.[type]?.[0]?.then((src) => setAvif(src.default));
+      if (!png) images?.[type]?.[1]?.then((src) => setPng(src.default));
     }
   }, [svg, avif, png]);
   const MaybeLink = includeLink ? Link : 'span';

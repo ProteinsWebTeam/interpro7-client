@@ -67,14 +67,14 @@ type Props = PropsWithChildren<{
 }>;
 interface LoadedProps
   extends Props,
-    ExtenalSourcesProps,
-    LoadDataProps<ExtraFeaturesPayload, 'Features'>,
-    LoadDataProps<ResiduesPayload, 'Residues'>,
-    LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
-    LoadDataProps<AlphafoldPayload, 'Prediction'>,
-    LoadDataProps<
-      PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
-    > {}
+  ExtenalSourcesProps,
+  LoadDataProps<ExtraFeaturesPayload, 'Features'>,
+  LoadDataProps<ResiduesPayload, 'Residues'>,
+  LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
+  LoadDataProps<AlphafoldPayload, 'Prediction'>,
+  LoadDataProps<
+    PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
+  > { }
 
 const DomainOnProteinWithoutData = ({
   data,
@@ -101,6 +101,7 @@ const DomainOnProteinWithoutData = ({
   // });
   const [processedData, setProcessedData] = useState<{
     interpro: Record<string, unknown>[];
+    representativeDomains?: Record<string, unknown>[];
     unintegrated: Record<string, unknown>[];
     other: Array<MinimalFeature>;
   } | null>(null);
@@ -117,10 +118,15 @@ const DomainOnProteinWithoutData = ({
       EndpointWithMatchesPayload<EntryMetadata>
     >;
     if (data && !data.loading) {
-      onMatchesLoaded?.(payload?.results || []);
       if (processData) {
-        const { interpro, unintegrated, other } = processData;
-        setProcessedData({ interpro, unintegrated, other });
+        onMatchesLoaded?.(payload?.results || []);
+        const { interpro, unintegrated, representativeDomains, other } = processData;
+        setProcessedData({
+          interpro,
+          unintegrated,
+          representativeDomains,
+          other,
+        });
         onFamiliesFound?.(interpro.filter((entry) => entry.type === 'family'));
       }
     }
@@ -136,7 +142,8 @@ const DomainOnProteinWithoutData = ({
       return <EdgeCase text={edgeCaseText || ''} status={STATUS_TIMEOUT} />;
   }
   if (!processedData) return null;
-  const { interpro, unintegrated, other } = processedData;
+  const { interpro, unintegrated, other, representativeDomains } =
+    processedData;
   const groups = groupByEntryType(
     interpro as Array<{ accession: string; type: string }>
   );
@@ -148,6 +155,21 @@ const DomainOnProteinWithoutData = ({
     unintegrated: unintegrated as Array<MinimalFeature>,
   };
   if (other) mergedData.other_features = other;
+  if (representativeDomains?.length)
+    mergedData.representative_domains =
+      representativeDomains as MinimalFeature[];
+  // [
+  //     // {
+  //     //   accession: 'Representative Domains',
+  //     //   locations: representativeDomains.map((d) => ({
+  //     //     fragments: [{ start: d.start as number, end: d.end as number }],
+  //     //     accession: d.accession as string,
+  //     //     short_name: d.short_name,
+  //     //     source_database: d.source_database,
+  //     //   })),
+  //     // },
+  //     representativeDomains,
+  //   ];
 
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;
@@ -223,10 +245,10 @@ const DomainOnProteinWithoutData = ({
           dataResidues?.loading ||
           false
         }
-        // Disabling Conservation until hmmer is working
-        // conservationError={conservation.error}
-        // showConservationButton={showConservationButton}
-        // handleConservationLoad={fetchConservationData}
+      // Disabling Conservation until hmmer is working
+      // conservationError={conservation.error}
+      // showConservationButton={showConservationButton}
+      // handleConservationLoad={fetchConservationData}
       >
         {children}
       </DomainsOnProteinLoaded>

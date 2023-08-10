@@ -16,6 +16,7 @@ export const memberDBAccessions = [
   'SSF[0-9]{5,6}',
   'TIGR[0-9]{5}',
   'NF[0-9]{6}',
+  'ANF[0-9]{5}',
 ];
 
 export const speciesFeat = [

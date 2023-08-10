@@ -15,6 +15,7 @@ export const iproscan2urlDB = (db /*: string */) =>
   new Map([
     ['TIGRFAM', 'tigrfams'],
     ['NCBIfam', 'ncbifam'],
+    ['AntiFam', 'antifam'],
     ['PROSITE_PROFILES', 'profile'],
     ['PROSITE_PATTERNS', 'prosite'],
     ['SUPERFAMILY', 'ssf'],
@@ -25,6 +26,7 @@ export const ebiSearch2urlDB = (db /*: string */) =>
   new Map([
     ['TIGRFAM', 'tigrfams'],
     ['NCBIfam', 'ncbifam'],
+    ['AntiFam', 'antifam'],
     ['PROSITE profiles', 'profile'],
     ['PROSITE patterns', 'prosite'],
     ['SUPERFAMILY', 'ssf'],
@@ -41,6 +43,7 @@ export const ENTRY_DBS = [
   'smart',
   'tigrfams',
   'ncbifam',
+  'antifam',
   'prosite',
   'prints',
   'hamap',
@@ -63,6 +66,7 @@ export const memberDbURL = new Map([
   ['ssf', 'http://supfam.org/SUPERFAMILY/'],
   ['tigrfams', 'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/tigrfams/'],
   ['ncbifam', 'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/'],
+  ['antifam', '//www.ebi.ac.uk/interpro/entry/antifam/'],
 ]);
 
 export default (db /*: string */) => {
@@ -89,6 +93,7 @@ export default (db /*: string */) => {
       'ncbifam',
       'https://www.ncbi.nlm.nih.gov/genome/annotation_prok/evidence/{}/',
     ],
+    ['antifam', '//www.ebi.ac.uk/interpro/entry/antifam/{}'],
   ]);
   const pattern = patterns.get(db.toLowerCase()) || '';
   if (!pattern) return;
