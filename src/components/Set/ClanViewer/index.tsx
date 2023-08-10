@@ -10,7 +10,6 @@ import LabelBy from 'components/ProteinViewer/Options/LabelBy';
 
 import ClanViewerViz from 'clanviewer';
 import 'clanviewer/build/main.css';
-import ZoomOverlay from 'components/ZoomOverlay';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -114,7 +113,7 @@ class ClanViewer extends PureComponent<Props, State> {
     if (
       (this.state.showClanViewer ||
         this.props.data.metadata.relationships.nodes.length <=
-          MAX_NUMBER_OF_NODES) &&
+        MAX_NUMBER_OF_NODES) &&
       !this.loaded
     ) {
       const data = this.props.data.metadata.relationships;
@@ -162,21 +161,21 @@ class ClanViewer extends PureComponent<Props, State> {
     const metadata =
       this.props.loading || !this.props.data.metadata
         ? {
-            accession: '',
-            description: '',
-            id: '',
-            source_database: '',
-            authors: null,
-            literature: null,
-            relationships: null,
-          }
+          accession: '',
+          description: '',
+          id: '',
+          source_database: '',
+          authors: null,
+          literature: null,
+          relationships: null,
+        }
         : this.props.data.metadata;
 
     return (
       <div className={css('row')}>
         {!this.state.showClanViewer &&
           (metadata.relationships?.nodes?.length || 0) >
-            MAX_NUMBER_OF_NODES && (
+          MAX_NUMBER_OF_NODES && (
             <div
               className={css('flex-card')}
               style={{ width: '50%', padding: '1em' }}
@@ -205,7 +204,6 @@ class ClanViewer extends PureComponent<Props, State> {
           </DropDownButton>
         </div>
         <div className={css('clanviewer-container')}>
-          <ZoomOverlay elementId="clanViewerContainer" />
           <div
             ref={this._ref}
             style={{ minHeight: 500 }}
