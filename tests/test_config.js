@@ -19,6 +19,7 @@ export default {
       'ssf',
       'tigrfams',
       'ncbifam',
+      'antifam',
     ],
     entryTypes: [
       'domain',

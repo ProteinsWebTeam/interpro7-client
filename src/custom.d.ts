@@ -244,7 +244,8 @@ type MemberDB =
   | 'smart'
   | 'ssf'
   | 'tigrfams'
-  | 'ncbifam';
+  | 'ncbifam'
+  | 'antifam';
 interface EntryMetadata extends Metadata {
   name: { name: string; short?: string };
   source_database: 'interpro' | MemberDB;
