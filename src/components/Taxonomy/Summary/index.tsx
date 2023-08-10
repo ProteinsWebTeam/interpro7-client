@@ -167,15 +167,15 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
           <table className={css('vf-table', 'left-headers')}>
             <tbody>
               <tr>
-                <td style={{ maxWidth: '50%' }}>Tax ID</td>
+                <td style={{ maxWidth: '50%' }}>Taxon ID</td>
                 <td>
-                  <Accession accession={metadata.accession} title="Tax ID" />
+                  <Accession accession={metadata.accession} title="Taxon ID" />
                 </td>
               </tr>
               {metadata.rank && (
                 <tr>
                   <td>Rank</td>
-                  <td className={css('text-up')}>{metadata.rank}</td>
+                  <td className={css('first-letter-cap')}>{metadata.rank}</td>
                 </tr>
               )}
 
