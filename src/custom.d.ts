@@ -114,7 +114,7 @@ type SettingsState = {
 };
 type UISettings = {
   lowGraphics: boolean;
-  colorDomainsBy: string;
+  colorDomainsBy: 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP';
   labelContent: LabelUISettings;
   structureViewer: boolean;
   shouldHighlight: boolean;
@@ -295,18 +295,16 @@ type ProteinEntryPayload = {
   metadata: ProteinMetadata;
   entries: Array<{
     accession: string;
-    entry_protein_locations: [
-      {
-        fragments: Array<{
-          start: number;
-          end: number;
-          'dc-status'?: string;
-        }>;
-        model: string | null;
-        score: number | null;
-        subfamily: { accession: string };
-      }
-    ];
+    entry_protein_locations: Array<{
+      fragments: Array<{
+        start: number;
+        end: number;
+        'dc-status'?: string;
+      }>;
+      model: string | null;
+      score: number | null;
+      subfamily: { accession: string };
+    }>;
     protein_length: number;
     source_database: string;
     entry_type: string;
@@ -551,15 +549,15 @@ type DisprotRegion = {
   released: string;
 };
 type DisprotConsensusRegion = {
-  start: number,
-  end: number,
+  start: number;
+  end: number;
   type: string;
 };
 type DisprotConsensus = {
-  full: Array<DisprotConsensusRegion>,
-  'Structural state': Array<object>,
-  'Structural transition': Array<object>,
-  'Biological process': Array<object>,
+  full: Array<DisprotConsensusRegion>;
+  'Structural state': Array<object>;
+  'Structural transition': Array<object>;
+  'Biological process': Array<object>;
 };
 type DisProtPayload = {
   acc: string;
