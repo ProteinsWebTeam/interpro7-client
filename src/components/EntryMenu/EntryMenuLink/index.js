@@ -160,6 +160,7 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
       entryDB,
     } = this.props;
     let value = null;
+    let shouldPointToAll = false;
     if (!loading && payload && payload.metadata) {
       if (payload.metadata.counters) {
         if (counter) {
@@ -178,9 +179,11 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
           mainKey &&
           mainKey.toLowerCase() !== 'set'
         ) {
-          value = payload.metadata.counters.dbEntries.interpro
-            ? payload.metadata.counters.dbEntries.interpro
-            : value;
+          if (payload.metadata.counters.dbEntries.interpro) {
+            value = payload.metadata.counters.dbEntries.interpro;
+          } else {
+            shouldPointToAll = true;
+          }
           if (entryDB) {
             value = payload.metadata.counters.dbEntries[entryDB.toLowerCase()];
           }
@@ -219,13 +222,19 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
     }
 
     if (!isFirstLevel && !isNaN(value) && !value) return null;
-
+    const newTo = shouldPointToAll
+      ? (customLocation) => {
+          const newLocation = to(customLocation);
+          newLocation.description.entry.db = 'all';
+          return newLocation;
+        }
+      : to;
     return (
       <EntryMenuLinkWithoutData
         name={name}
         value={value}
         loading={loading}
-        to={to}
+        to={newTo}
         exact={exact}
         usedOnTheSide={usedOnTheSide}
         collapsed={collapsed}

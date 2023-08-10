@@ -69,7 +69,10 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
       <div className={f('md-list')} data-testid="by-member-database-box">
         <AnimatedEntry className={f('row')} element="div">
           {memberDB
-            .filter(({ canonical }) => !NOT_MEMBER_DBS.has(canonical))
+            .filter(
+              ({ canonical }) =>
+                !NOT_MEMBER_DBS.has(canonical) && canonical !== 'antifam',
+            )
             .sort((a, b) => {
               // sort list by alphabetical order
               if (a.canonical.toUpperCase() > b.canonical.toUpperCase())

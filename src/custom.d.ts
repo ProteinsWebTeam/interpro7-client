@@ -267,7 +267,8 @@ type MemberDB =
   | 'smart'
   | 'ssf'
   | 'tigrfams'
-  | 'ncbifam';
+  | 'ncbifam'
+  | 'antifam';
 
 type NameObject = {
   name: string;
