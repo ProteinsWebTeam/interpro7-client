@@ -11,6 +11,7 @@ describe('<EntriesOnStructure />', () => {
       <EntriesOnStructure
         matches={[
           {
+            chain: 'A',
             entry_structure_locations: [
               {
                 fragments: [

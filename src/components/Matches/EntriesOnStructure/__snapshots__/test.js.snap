@@ -8,6 +8,9 @@ exports[`<EntriesOnStructure /> should render 1`] = `
     <tbody>
       <tr>
         <td>
+          A
+        </td>
+        <td>
           <div
             className="track-in-table"
           >
