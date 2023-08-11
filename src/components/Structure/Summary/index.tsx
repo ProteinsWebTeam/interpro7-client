@@ -19,8 +19,9 @@ import { formatShortDate } from 'utils/date';
 import cssBinder from 'styles/cssBinder';
 
 import summary from 'styles/summary.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(summary);
+const css = cssBinder(summary, ipro);
 
 const EXTERNAL_LINKS = [
   { pattern: 'https://www.ebi.ac.uk/pdbe/entry/pdb/{id}', label: 'PDBe' },

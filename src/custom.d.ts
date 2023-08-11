@@ -13,10 +13,32 @@ declare module '*.png' {
   const content: any;
   export default content;
 }
+declare module '*.svg' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
   let InterproEntry: InterProEntryProps;
   let InterproType: InterProTypeProps;
+}
+declare module 'taxonomy-visualisation' {
+  class TaxonomyVisualisation {
+    tree: unknown;
+    data: unknown;
+    searchTerm: string;
+    fisheye: boolean;
+    constructor(x: unknown, options: {});
+    addEventListener: (
+      type: string,
+      eventHandler: (event: Event) => void
+    ) => void;
+    focusNodeWithID: (id?: string) => void;
+    cleanup: () => void;
+    resetZoom: () => void;
+  }
+  export default TaxonomyVisualisation;
 }
 
 declare namespace JSX {
@@ -82,7 +104,7 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
 };
 type InterProLocation = {
   description: InterProDescription;
-  search: Record<string, string>;
+  search: Record<string, string | boolean>;
   hash: string;
   state: Record<string, string>;
 };
@@ -185,8 +207,9 @@ type Reference = {
   URL: string | null;
   raw_pages?: string;
   rawPages?: string;
-  medline_journal: string;
-  ISO_journal: string;
+  medline_journal?: string;
+  journal?: string;
+  ISO_journal?: string;
   authors: Array<string>;
   DOI_URL: string | null;
 };
@@ -246,8 +269,14 @@ type MemberDB =
   | 'tigrfams'
   | 'ncbifam'
   | 'antifam';
+
+type NameObject = {
+  name: string;
+  short?: string;
+};
+
 interface EntryMetadata extends Metadata {
-  name: { name: string; short?: string };
+  name: NameObject;
   source_database: 'interpro' | MemberDB;
   type: string;
   integrated: string | null;
@@ -287,9 +316,7 @@ interface ProteinMetadata extends Metadata {
   };
 }
 interface StructureMetadata extends Metadata {
-  name: {
-    name: string;
-  };
+  name: NameObject;
   experiment_type: string;
   release_date: string;
   literature: Record<string, Reference>;
@@ -324,6 +351,58 @@ type ProteinEntryPayload = {
     entry_integrated: string | null;
   }>;
 };
+
+interface TaxonomyMetadata extends Metadata {
+  lineage: string;
+  rank: string;
+  children: Array<string>;
+  parent: string;
+  name: Required<NameObject>;
+}
+type WithNames = {
+  names: Record<string, Required<NameObject>>;
+};
+type WithTaxonomyFilters = {
+  children?: Record<
+    string,
+    {
+      entries: number;
+      proteomes: number;
+      proteins: number;
+      structures: number;
+    }
+  >;
+};
+interface ProteomeMetadata extends Metadata {
+  is_reference: boolean;
+  strain: string;
+  assembly: string;
+  taxonomy: string;
+  lineage: string;
+  name: NameObject;
+  proteomeAccession?: string;
+}
+interface SetMetadata extends Omit<Metadata, 'description'> {
+  id: string;
+  name: NameObject;
+  description: string;
+  relationships: {
+    nodes: Array<{
+      accession: string;
+      short_name: string;
+      name: string;
+      type: string;
+      score: number;
+    }>;
+    links: Array<{
+      source: string;
+      target: string;
+      score: number;
+    }>;
+  };
+  authors: Array<string> | null;
+  literature: Array<Reference>;
+}
 
 type StructureLinkedObject = {
   accession: string;

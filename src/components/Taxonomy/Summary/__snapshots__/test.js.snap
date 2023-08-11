@@ -2,129 +2,161 @@
 
 exports[`<SummaryTaxonomy /> should render 1`] = `
 <div
-  className="row"
+  className="vf-stack vf-stack--400"
 >
-  <div
-    className="medium-12 columns"
+  <section
+    className="vf-grid summary-grid"
   >
-    <table
-      className="light table-sum"
+    <div
+      className="vf-stack"
     >
-      <tbody>
-        <tr>
-          <td>
-            Tax ID
-          </td>
-          <td
-            data-testid="taxonomy-taxid"
-          >
-            <Accession
-              accession="131567"
-              title="Tax ID"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Rank
-          </td>
-          <td
-            className="text-up"
-            data-testid="taxonomy-rank"
-          >
-            no rank
-          </td>
-        </tr>
-        <Memo(Loadable)
-          data={
-            {
-              "name": "root",
-              "taxId": "1",
+      <table
+        className="vf-table left-headers"
+      >
+        <tbody>
+          <tr>
+            <td
+              style={
+                {
+                  "maxWidth": "50%",
+                }
+              }
+            >
+              Taxon ID
+            </td>
+            <td>
+              <Accession
+                accession="131567"
+                title="Taxon ID"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Rank
+            </td>
+            <td
+              className="first-letter-cap"
+            >
+              no rank
+            </td>
+          </tr>
+          <Memo(Loadable)
+            data={
+              {
+                "name": "root",
+                "taxId": "1",
+              }
             }
-          }
-          processData={[Function]}
-        />
-        <tr>
-          <td>
-            Lineage
-          </td>
-          <td
-            className="ico-primary"
-            data-testid="taxonomy-lineage"
-          >
-            <Lineage
-              lineage=" 1 131567 "
-              names={
-                {
-                  "1": {
-                    "name": "root",
-                    "short": "root",
-                  },
-                  "131567": {
-                    "name": "cellular organisms",
-                    "short": "cellular organisms",
-                  },
-                  "2": {
-                    "name": "Bacteria",
-                    "short": "Bacteria (eubacteria)",
-                  },
-                  "2157": {
-                    "name": "Archaea",
-                    "short": "Archaea",
-                  },
-                  "2759": {
-                    "name": "Eukaryota",
-                    "short": "Eukaryota (eucaryotes)",
-                  },
+            processData={[Function]}
+          />
+          <tr>
+            <td>
+              Lineage
+            </td>
+            <td
+              className="ico-primary"
+              data-testid="taxonomy-lineage"
+            >
+              <Lineage
+                lineage=" 1 131567 "
+                names={
+                  {
+                    "1": {
+                      "name": "root",
+                      "short": "root",
+                    },
+                    "131567": {
+                      "name": "cellular organisms",
+                      "short": "cellular organisms",
+                    },
+                    "2": {
+                      "name": "Bacteria",
+                      "short": "Bacteria (eubacteria)",
+                    },
+                    "2157": {
+                      "name": "Archaea",
+                      "short": "Archaea",
+                    },
+                    "2759": {
+                      "name": "Eukaryota",
+                      "short": "Eukaryota (eucaryotes)",
+                    },
+                  }
                 }
-              }
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Children
-          </td>
-          <td
-            data-testid="taxonomy-children"
-          >
-            <Children
-              names={
-                {
-                  "1": {
-                    "name": "root",
-                    "short": "root",
-                  },
-                  "131567": {
-                    "name": "cellular organisms",
-                    "short": "cellular organisms",
-                  },
-                  "2": {
-                    "name": "Bacteria",
-                    "short": "Bacteria (eubacteria)",
-                  },
-                  "2157": {
-                    "name": "Archaea",
-                    "short": "Archaea",
-                  },
-                  "2759": {
-                    "name": "Eukaryota",
-                    "short": "Eukaryota (eucaryotes)",
-                  },
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Children
+            </td>
+            <td
+              data-testid="taxonomy-children"
+            >
+              <Children
+                names={
+                  {
+                    "1": {
+                      "name": "root",
+                      "short": "root",
+                    },
+                    "131567": {
+                      "name": "cellular organisms",
+                      "short": "cellular organisms",
+                    },
+                    "2": {
+                      "name": "Bacteria",
+                      "short": "Bacteria (eubacteria)",
+                    },
+                    "2157": {
+                      "name": "Archaea",
+                      "short": "Archaea",
+                    },
+                    "2759": {
+                      "name": "Eukaryota",
+                      "short": "Eukaryota (eucaryotes)",
+                    },
+                  }
                 }
-              }
-              taxChildren={
-                [
-                  "2",
-                  "2157",
-                  "2759",
-                ]
-              }
-            />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+                taxChildren={
+                  [
+                    "2",
+                    "2157",
+                    "2759",
+                  ]
+                }
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      className="vf-stack"
+    >
+      <section>
+        <h5>
+          External Links
+        </h5>
+        <ul
+          className="no-bullet"
+        >
+          <li>
+            <BaseLink
+              className="ext"
+              id="131567"
+              pattern="https://www.uniprot.org/taxonomy/{id}"
+              target="_blank"
+            >
+              UniProt
+            </BaseLink>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </section>
+  <div>
     <OptMemberDBSelector
       contentType="taxonomy"
       filterType="entry"
