@@ -41,9 +41,6 @@ exports[`<Tree /> should render 1`] = `
       </Tooltip>
     </span>
   </div>
-  <Memo(Connect(ZoomOverlay))
-    elementId="treeDiv"
-  />
   <ResizeObserverComponent
     element="div"
     measurements={

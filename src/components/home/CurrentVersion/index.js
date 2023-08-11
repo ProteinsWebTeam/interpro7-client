@@ -11,6 +11,7 @@ import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import { formatLongDate } from 'utils/date';
 
 const f = foundationPartial(local);

@@ -62,6 +62,7 @@ table.left-headers {
     font-weight: 500;
     width: 25%;
     white-space: nowrap;
+    vertical-align: top;
   }
 }
 

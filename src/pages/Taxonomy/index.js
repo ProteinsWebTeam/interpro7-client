@@ -70,40 +70,39 @@ const f = foundationPartial(
   filtersAndTable,
 );
 
-const EntryAccessionsRenderer = (entryDB) => (taxId, _row, extra) =>
-  (
-    <File
-      fileType="accession"
-      name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
-      count={extra && extra.counters && extra.counters.entries}
-      customLocationDescription={{
-        main: { key: 'entry' },
-        entry: { db: entryDB || 'all' },
-        taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
-      }}
-    />
-  );
+const EntryAccessionsRenderer = (entryDB) => (taxId, _row, extra) => (
+  <File
+    fileType="accession"
+    name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
+    count={extra && extra.counters && extra.counters.entries}
+    customLocationDescription={{
+      main: { key: 'entry' },
+      entry: { db: entryDB || 'all' },
+      taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
+    }}
+  />
+);
 
-const ProteinFastasRenderer = (entryDB) => (taxId, _row, extra) =>
-  (
-    <File
-      fileType="fasta"
-      name={`protein-sequences${
-        entryDB ? `-matching-${entryDB}` : ''
-      }-for-${taxId}.fasta`}
-      count={extra && extra.counters && extra.counters.proteins}
-      customLocationDescription={{
-        main: { key: 'protein' },
-        protein: { db: 'UniProt' },
-        entry: { isFilter: true, db: entryDB || 'all' },
-        taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
-      }}
-    />
-  );
+const ProteinFastasRenderer = (entryDB) => (taxId, _row, extra) => (
+  <File
+    fileType="fasta"
+    name={`protein-sequences${
+      entryDB ? `-matching-${entryDB}` : ''
+    }-for-${taxId}.fasta`}
+    count={extra && extra.counters && extra.counters.proteins}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      entry: { isFilter: true, db: entryDB || 'all' },
+      taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
+    }}
+  />
+);
 
 const SummaryAsync = loadable({
   loader: () =>
     import(
+      // $FlowFixMe
       /* webpackChunkName: "taxonomy-summary" */ 'components/Taxonomy/Summary'
     ),
 });

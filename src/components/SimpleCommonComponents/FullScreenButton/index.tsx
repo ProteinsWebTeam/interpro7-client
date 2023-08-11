@@ -1,30 +1,37 @@
-// @flow
 import React, { useState, useEffect } from 'react';
-import T from 'prop-types';
 
 import { noop } from 'lodash-es';
 
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { foundationPartial } from 'styles/foundation';
 import { requestFullScreen, exitFullScreen } from 'utils/fullscreen';
+import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(fonts);
+const css = cssBinder(fonts);
 
-const FullScreenButton = (
-  {
-    element,
-    tooltip,
-    className,
-    dataIcon,
-    disabled = false,
-    onFullScreenHook = noop,
-    onExitFullScreenHook = noop,
-  } /*: {onFullScreenHook?: function,onExitFullScreenHook?: function, element?: any, tooltip: string, className?: string, dataIcon?: string, disabled?: boolean} */,
-) => {
+type Props = {
+  onFullScreenHook?: () => void;
+  onExitFullScreenHook?: () => void;
+  element?: string | HTMLElement | null;
+  tooltip: string;
+  className?: string;
+  dataIcon?: string;
+  disabled?: boolean;
+};
+const FullScreenButton = ({
+  element,
+  tooltip,
+  className,
+  dataIcon,
+  disabled = false,
+  onFullScreenHook = noop,
+  onExitFullScreenHook = noop,
+}: Props) => {
+  const [elementInDOM, setElementInDom] = useState<
+    HTMLElement | null | undefined
+  >(null);
   const [isFull, setFull] = useState(false);
   const onFullscreen = () => {
     if (document.fullscreenElement === null) {
@@ -36,9 +43,13 @@ const FullScreenButton = (
     document.addEventListener('fullscreenchange', onFullscreen);
     return () => document.removeEventListener('fullscreenchange', onFullscreen);
   }, []);
-  if (!element) return null;
-  const elementInDOM =
-    typeof element === 'string' ? document.getElementById(element) : element;
+  useEffect(() => {
+    setElementInDom(
+      typeof element === 'string' ? document.getElementById(element) : element
+    );
+  }, [element]);
+
+  if (!elementInDOM) return null;
   const _handleFullScreen = () => {
     if (isFull) {
       exitFullScreen();
@@ -49,7 +60,7 @@ const FullScreenButton = (
     setFull(!isFull);
   };
   const _className =
-    className || f('margin-bottom-none', 'icon', 'icon-common');
+    className || css('margin-bottom-none', 'icon', 'icon-common');
   const icon = dataIcon || (isFull ? 'G' : 'F');
   return (
     <Tooltip title={tooltip}>
@@ -62,17 +73,6 @@ const FullScreenButton = (
       />
     </Tooltip>
   );
-};
-
-FullScreenButton.propTypes = {
-  handleFullScreen: T.func,
-  onFullScreenHook: T.func,
-  onExitFullScreenHook: T.func,
-  element: T.any,
-  tooltip: T.string,
-  className: T.string,
-  dataIcon: T.string,
-  disabled: T.bool,
 };
 
 export default FullScreenButton;

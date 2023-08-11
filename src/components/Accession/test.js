@@ -1,8 +1,7 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { Accession } from '.';
+import Accession from '.';
 
 const renderer = new ShallowRenderer();
 

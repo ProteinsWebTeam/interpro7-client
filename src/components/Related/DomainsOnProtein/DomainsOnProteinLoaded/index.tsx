@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProtVistaForAlphaFold';
+import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import loadable from 'higherOrder/loadable';
 
 const ProteinViewer = loadable({
@@ -54,7 +54,7 @@ type Props = PropsWithChildren<{
         };
       };
   dataMerged: ProteinViewerDataObject;
-  dataConfidence?: Object;
+  dataConfidence?: RequestedData<AlphafoldConfidencePayload>;
   conservationError?: string | null;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
@@ -73,7 +73,7 @@ const DomainsOnProteinLoaded = ({
   children,
   title = 'Entry matches to this protein',
 }: Props) => {
-  const sortedData = Object.entries(dataMerged)
+  const sortedData: ProteinViewerData = Object.entries(dataMerged)
     .sort(byEntryType)
     // “Binding_site” -> “Binding site”
     .map(([key, value]) => [
@@ -83,22 +83,22 @@ const DomainsOnProteinLoaded = ({
   const protein =
     (mainData as ProteinEntryPayload).metadata ||
     (mainData as { payload: ProteinEntryPayload }).payload.metadata;
-  addConfidenceTrack(dataConfidence, protein.accession, sortedData);
+
+  if (dataConfidence)
+    addConfidenceTrack(dataConfidence, protein.accession, sortedData);
 
   return (
-    <>
-      <ProteinViewer
-        protein={protein}
-        data={sortedData}
-        title={title}
-        showConservationButton={showConservationButton}
-        handleConservationLoad={handleConservationLoad}
-        conservationError={conservationError}
-        loading={loading}
-      >
-        {children}
-      </ProteinViewer>
-    </>
+    <ProteinViewer
+      protein={protein}
+      data={sortedData}
+      title={title}
+      showConservationButton={showConservationButton}
+      handleConservationLoad={handleConservationLoad}
+      conservationError={conservationError}
+      loading={loading}
+    >
+      {children}
+    </ProteinViewer>
   );
 };
 

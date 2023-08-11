@@ -13,6 +13,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import { toPlural } from 'utils/pages';
 
 import RelatedTable from 'components/Related/RelatedTable';
+// $FlowFixMe
 import EntriesOnStructure from 'components/Related/DomainEntriesOnStructure';
 import StructureOnProtein from 'components/Related/DomainStructureOnProtein';
 import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';

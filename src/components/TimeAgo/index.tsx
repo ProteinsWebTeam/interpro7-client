@@ -1,6 +1,4 @@
-// @flow
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, { PureComponent, RefObject } from 'react';
 import { format } from 'timeago.js';
 import { sleep, schedule } from 'timing-functions';
 import { formatShortDate, formatLongDateTime } from 'utils/date';
@@ -9,26 +7,18 @@ import random from 'utils/random';
 
 const ONE_MINUTE = 60000;
 
-/*:: type Props = {
-  date: Date,
-  title?: string,
-  noTitle?: boolean,
-  noUpdate?: boolean,
-};*/
+type Props = {
+  date: Date;
+  title?: string;
+  noTitle?: boolean;
+  noUpdate?: boolean;
+};
 
-class TimeAgo extends PureComponent /*:: <Props> */ {
-  /* ::
-    _ref: { current: HTMLElement | null };
-    __delay: number;
-  */
-  static propTypes = {
-    date: T.instanceOf(Date).isRequired,
-    title: T.string,
-    noTitle: T.bool,
-    noUpdate: T.bool,
-  };
+class TimeAgo extends PureComponent<Props> {
+  _ref: RefObject<HTMLTimeElement>;
+  #delay = 0;
 
-  constructor(props /*: Props */) {
+  constructor(props: Props) {
     super(props);
     this._ref = React.createRef();
   }
@@ -48,8 +38,8 @@ class TimeAgo extends PureComponent /*:: <Props> */ {
 
   // delay before re-rendering will slowly grow everytime by up to 1 minute
   get _delay() {
-    this.__delay = (this.__delay || 0) + random(0, ONE_MINUTE);
-    return this.__delay;
+    this.#delay = (this.#delay || 0) + random(0, ONE_MINUTE);
+    return this.#delay;
   }
 
   render() {

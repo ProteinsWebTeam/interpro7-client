@@ -355,10 +355,6 @@ table.light.nolink tbody a,
   color: var(--colors-light-txt);
 }
 
-table.light.nolink tbody a:hover {
-  border-bottom: 1px solid var(--colors-light-txt);
-}
-
 table.light.sorting thead th {
   color: #a7b2b6;
 }
@@ -743,7 +739,8 @@ body .tag-sqc {
   transition: all var(--timing-really-fast) ease-out;
 
   &:hover {
-    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18),
+    box-shadow:
+      0 5px 11px 0 rgba(0, 0, 0, 0.18),
       0 4px 15px 0 rgba(0, 0, 0, 0.15);
 
     & .card-tag,
@@ -775,7 +772,9 @@ body .tag-sqc {
   ),
   url(images/backgrounds/bgd-banner-01.svg);*/
   background-repeat: no-repeat, repeat;
-  background-position: 0, 100% 0%;
+  background-position:
+    0,
+    100% 0%;
   background-size: 100%, 2030px;
   height: 160px;
   position: relative;
@@ -865,7 +864,8 @@ body .tag-sqc {
 
 /* nice multi bgd effect */
 .image-blog-iceberg {
-  background: url('../images/cover/blog/blog_iceberg.png') no-repeat 50% 56%,
+  background:
+    url('../images/cover/blog/blog_iceberg.png') no-repeat 50% 56%,
     linear-gradient(
       to bottom,
       #e8e9d0 0%,

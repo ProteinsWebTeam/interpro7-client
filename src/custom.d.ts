@@ -13,10 +13,32 @@ declare module '*.png' {
   const content: any;
   export default content;
 }
+declare module '*.svg' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
   let InterproEntry: InterProEntryProps;
   let InterproType: InterProTypeProps;
+}
+declare module 'taxonomy-visualisation' {
+  class TaxonomyVisualisation {
+    tree: unknown;
+    data: unknown;
+    searchTerm: string;
+    fisheye: boolean;
+    constructor(x: unknown, options: {});
+    addEventListener: (
+      type: string,
+      eventHandler: (event: Event) => void
+    ) => void;
+    focusNodeWithID: (id?: string) => void;
+    cleanup: () => void;
+    resetZoom: () => void;
+  }
+  export default TaxonomyVisualisation;
 }
 
 declare namespace JSX {
@@ -82,7 +104,7 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
 };
 type InterProLocation = {
   description: InterProDescription;
-  search: Record<string, string>;
+  search: Record<string, string | boolean>;
   hash: string;
   state: Record<string, string>;
 };
@@ -149,12 +171,13 @@ interface InterProHierarchyProps
     React.HTMLAttributes<HTMLElement>,
     HTMLElement
   > {
-  accession: string;
+  accession?: string;
   accessions: string | string[];
   displaymode: string;
-  hideafter: number;
+  hideafter?: number;
   hrefroot: string | null;
   hierarchy?: InterProHierarchyType;
+  _hierarchy?: InterProHierarchyType;
 }
 
 type InterProHierarchyType = {
@@ -184,8 +207,9 @@ type Reference = {
   URL: string | null;
   raw_pages?: string;
   rawPages?: string;
-  medline_journal: string;
-  ISO_journal: string;
+  medline_journal?: string;
+  journal?: string;
+  ISO_journal?: string;
   authors: Array<string>;
   DOI_URL: string | null;
 };
@@ -245,8 +269,14 @@ type MemberDB =
   | 'tigrfams'
   | 'ncbifam'
   | 'antifam';
+
+type NameObject = {
+  name: string;
+  short?: string;
+};
+
 interface EntryMetadata extends Metadata {
-  name: { name: string; short?: string };
+  name: NameObject;
   source_database: 'interpro' | MemberDB;
   type: string;
   integrated: string | null;
@@ -285,6 +315,14 @@ interface ProteinMetadata extends Metadata {
     taxId: number;
   };
 }
+interface StructureMetadata extends Metadata {
+  name: NameObject;
+  experiment_type: string;
+  release_date: string;
+  literature: Record<string, Reference>;
+  chains: Array<string>;
+  resolution: number;
+}
 type PayloadList<Payload> = {
   count: number;
   next?: string | null;
@@ -295,32 +333,111 @@ type ProteinEntryPayload = {
   metadata: ProteinMetadata;
   entries: Array<{
     accession: string;
-    entry_protein_locations: Array<{
-      fragments: Array<{
-        start: number;
-        end: number;
-        'dc-status'?: string;
-      }>;
-      model: string | null;
-      score: number | null;
-      subfamily: { accession: string };
-    }>;
+    entry_protein_locations: [
+      {
+        fragments: Array<{
+          start: number;
+          end: number;
+          'dc-status'?: string;
+        }>;
+        model: string | null;
+        score: number | null;
+        subfamily: { accession: string };
+      },
+    ];
     protein_length: number;
     source_database: string;
     entry_type: string;
     entry_integrated: string | null;
   }>;
 };
-type EntryProteinPayload = {
+
+interface TaxonomyMetadata extends Metadata {
+  lineage: string;
+  rank: string;
+  children: Array<string>;
+  parent: string;
+  name: Required<NameObject>;
+}
+type WithNames = {
+  names: Record<string, Required<NameObject>>;
+};
+type WithTaxonomyFilters = {
+  children?: Record<
+    string,
+    {
+      entries: number;
+      proteomes: number;
+      proteins: number;
+      structures: number;
+    }
+  >;
+};
+interface ProteomeMetadata extends Metadata {
+  is_reference: boolean;
+  strain: string;
+  assembly: string;
+  taxonomy: string;
+  lineage: string;
+  name: NameObject;
+  proteomeAccession?: string;
+}
+interface SetMetadata extends Omit<Metadata, 'description'> {
+  id: string;
+  name: NameObject;
+  description: string;
+  relationships: {
+    nodes: Array<{
+      accession: string;
+      short_name: string;
+      name: string;
+      type: string;
+      score: number;
+    }>;
+    links: Array<{
+      source: string;
+      target: string;
+      score: number;
+    }>;
+  };
+  authors: Array<string> | null;
+  literature: Array<Reference>;
+}
+
+type StructureLinkedObject = {
+  accession: string;
+  name: string;
+  short_name?: string;
+  structure_protein_locations: Array<ProtVistaLocation>;
+  entry_protein_locations: Array<ProtVistaLocation>;
+  protein_structure_mapping: Record<
+    string,
+    Array<{
+      protein_start: number;
+      protein_end: number;
+      structure_start: number;
+      structure_end: number;
+      author_structure_start: number;
+      author_structure_end: number;
+    }>
+  >;
+  protein: string;
+  protein_length: number;
+  resolution: number;
+  source_database: string;
+  chain: string;
+  experiment_type: string;
+  type?: string;
+  entry_type?: string;
+  children: unknown;
+};
+type EntryStructurePayload = {
   metadata: EntryMetadata;
-  proteins: Array<{
-    accession: string;
-    entry_protein_locations: Array<ProtVistaLocation>;
-    protein_length: number;
-    source_database: string;
-    entry_type: string;
-    entry_integrated: string | null;
-  }>;
+  structures: Array<StructureLinkedObject>;
+};
+type SecondaryStructure = {
+  accession: string;
+  locations: ProtVistaLocation[];
 };
 
 type DBInfo = {
@@ -467,6 +584,7 @@ type ProtVistaFragment = {
   shape?: string;
   residues?: string;
   seq_feature?: string;
+  fill?: string;
 };
 
 type ProtVistaLocation = {
@@ -483,11 +601,12 @@ type ProtVistaLocation = {
 };
 
 type ProteinViewerData<Feature = unknown> = Array<
-  [
-    string,
-    Array<Feature>,
-    { component: string; attributes: Record<string, string> }
-  ]
+  | [string, Array<Feature>]
+  | [
+      string,
+      Array<Feature>,
+      { component: string; attributes: Record<string, string> },
+    ]
 >;
 type ProteinViewerDataObject<Feature = unknown> = Record<
   string,
@@ -522,6 +641,24 @@ type Genome3DProteinPayload = {
     taxon_id: number;
     uniprot_acc: string;
   };
+  message: string;
+};
+type Genome3DStructurePayload = {
+  data: Array<{
+    annotations: Array<{
+      resource: string;
+      uniprot_acc: string;
+      confidence: number;
+      segments: Array<{
+        uniprot_start: number;
+        uniprot_stop: number;
+      }>;
+    }>;
+    sequence: string;
+    gene_name: string;
+    description: string;
+    taxon_id: number;
+  }>;
   message: string;
 };
 type RepeatsDBAnnotation = {
@@ -594,13 +731,23 @@ type MinimalFeature = {
   children?: Array<{ accession: string; source_database: string }>;
   member_databases?: Record<string, unknown>;
 };
-type ExpectedPayload<M = Metadata> = {
-  metadata: M;
+type EndpointWithMatchesPayload<Meta = Metadata, Match = MatchI> = {
+  metadata: Meta;
   extra_fields?: Record<string, unknown>;
 } & {
-  [matches: string]: Array<Record<string, unknown>>;
+  [matches: string]: Array<Match>;
 };
-type Data<M = Metadata> = {
-  data: RequestedData<PayloadList<ExpectedPayload<M>>>;
+type Data<Meta = Metadata, Match = MatchI> = {
+  data?: RequestedData<PayloadList<EndpointWithMatchesPayload<Meta, Match>>>;
   endpoint: Endpoint;
 };
+type MatchI = {
+  accession: string;
+};
+interface EntryProteinMatch extends MatchI {
+  entry_protein_locations: Array<ProtVistaLocation>;
+  protein_length: number;
+  source_database: string;
+  entry_type: string;
+  entry_integrated: string | null;
+}

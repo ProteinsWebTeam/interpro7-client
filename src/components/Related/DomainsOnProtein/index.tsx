@@ -11,15 +11,15 @@ import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
 } from 'components/AlphaFold/selectors';
-import { processData } from 'components/ProteinViewer/utils';
+import { useProcessData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import EdgeCase from 'components/EdgeCase';
 
-import ConservationProvider, {
-  mergeConservationData,
-  // Disabling Conservation until hmmer is working
-  // isConservationDataAvailable,
-} from './ConservationProvider';
+// import ConservationProvider, {
+//   mergeConservationData,
+//   // Disabling Conservation until hmmer is working
+//   // isConservationDataAvailable,
+// } from './ConservationProvider';
 import mergeExtraFeatures from './mergeExtraFeatures';
 import mergeResidues from './mergeResidues';
 import DomainsOnProteinLoaded from './DomainsOnProteinLoaded';
@@ -29,7 +29,7 @@ import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 const css = cssBinder(ipro);
 
-const HTTP_OK = 200;
+// const HTTP_OK = 200;
 
 export const orderByAccession = (
   a: { accession: string },
@@ -59,18 +59,22 @@ export const groupByEntryType = (
 
 type Props = PropsWithChildren<{
   mainData: { metadata: ProteinMetadata };
-  onMatchesLoaded?: (results: EntryProteinPayload[]) => void;
+  onMatchesLoaded?: (
+    results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[]
+  ) => void;
   onFamiliesFound?: (families: Record<string, unknown>[]) => void;
   title?: string;
 }>;
 interface LoadedProps
   extends Props,
-    ExtenalSourcesProps,
-    LoadDataProps<ExtraFeaturesPayload, 'Features'>,
-    LoadDataProps<ResiduesPayload, 'Residues'>,
-    LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
-    LoadDataProps<AlphafoldPayload, 'Prediction'>,
-    LoadDataProps<PayloadList<EntryProteinPayload> | ErrorPayload> {}
+  ExtenalSourcesProps,
+  LoadDataProps<ExtraFeaturesPayload, 'Features'>,
+  LoadDataProps<ResiduesPayload, 'Residues'>,
+  LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
+  LoadDataProps<AlphafoldPayload, 'Prediction'>,
+  LoadDataProps<
+    PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
+  > { }
 
 const DomainOnProteinWithoutData = ({
   data,
@@ -84,50 +88,54 @@ const DomainOnProteinWithoutData = ({
   externalSourcesData,
   title,
 }: LoadedProps) => {
-  const [conservation, setConservation] = useState<{
-    generateData: boolean;
-    showButton: boolean;
-    data: ConservationPayload | null;
-    error: string | null;
-  }>({
-    generateData: false,
-    showButton: false,
-    data: null,
-    error: null,
-  });
+  // const [conservation, setConservation] = useState<{
+  //   generateData: boolean;
+  //   showButton: boolean;
+  //   data: ConservationPayload | null;
+  //   error: string | null;
+  // }>({
+  //   generateData: false,
+  //   showButton: false,
+  //   data: null,
+  //   error: null,
+  // });
   const [processedData, setProcessedData] = useState<{
     interpro: Record<string, unknown>[];
-    representativeDomains: Record<string, unknown>[];
+    representativeDomains?: Record<string, unknown>[];
     unintegrated: Record<string, unknown>[];
     other: Array<MinimalFeature>;
   } | null>(null);
+  const processData = useProcessData<EntryMetadata>(
+    (
+      data?.payload as PayloadList<
+        EndpointWithMatchesPayload<EntryMetadata, MatchI>
+      >
+    )?.results,
+    'protein'
+  );
   useEffect(() => {
-    const payload = data?.payload as PayloadList<EntryProteinPayload>;
+    const payload = data?.payload as PayloadList<
+      EndpointWithMatchesPayload<EntryMetadata>
+    >;
     if (data && !data.loading) {
-      const { interpro, unintegrated, other, representativeDomains } =
-        processData({
-          data: data as unknown as RequestedData<
-            PayloadList<ExpectedPayload<ProteinMetadata>>
-          >,
-          endpoint: 'protein',
+      if (processData) {
+        onMatchesLoaded?.(payload?.results || []);
+        const { interpro, unintegrated, representativeDomains, other } = processData;
+        setProcessedData({
+          interpro,
+          unintegrated,
+          representativeDomains,
+          other,
         });
-      setProcessedData({
-        interpro,
-        unintegrated,
-        representativeDomains,
-        other,
-      });
-      onMatchesLoaded?.(payload?.results || []);
-      onFamiliesFound?.(interpro.filter((entry) => entry.type === 'family'));
+        onFamiliesFound?.(interpro.filter((entry) => entry.type === 'family'));
+      }
     }
-  }, [data]);
+  }, [data, processData]);
 
-  if (
-    (!data || data.loading) &&
-    (!dataFeatures || dataFeatures.loading || !dataFeatures.payload)
-  )
-    return <Loading />;
-  const payload = data?.payload as PayloadList<EntryProteinPayload>;
+  if (data?.loading && dataFeatures?.loading) return <Loading />;
+  const payload = data?.payload as PayloadList<
+    EndpointWithMatchesPayload<EntryMetadata>
+  >;
   if (!payload?.results) {
     const edgeCaseText = edgeCases.get(STATUS_TIMEOUT);
     if ((data?.payload as ErrorPayload)?.detail === 'Query timed out')
@@ -173,9 +181,9 @@ const DomainOnProteinWithoutData = ({
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
     mergeExtraFeatures(mergedData, dataFeatures?.payload);
   }
-  if (conservation.data) {
-    mergeConservationData(mergedData, conservation.data);
-  }
+  // if (conservation.data) {
+  //   mergeConservationData(mergedData, conservation.data);
+  // }
   // Disabling Conservation until hmmer is working
   // const fetchConservationData = () => {
   //   setConservation({ ...conservation, generateData: true });
@@ -201,7 +209,7 @@ const DomainOnProteinWithoutData = ({
 
   return (
     <>
-      <ConservationProvider
+      {/* <ConservationProvider
         generateData={conservation.generateData}
         handleLoaded={(data) =>
           setConservation({
@@ -225,7 +233,7 @@ const DomainOnProteinWithoutData = ({
           });
         }}
       />
-
+*/}
       <DomainsOnProteinLoaded
         title={title}
         mainData={mainData}
@@ -237,10 +245,10 @@ const DomainOnProteinWithoutData = ({
           dataResidues?.loading ||
           false
         }
-        // Disabling Conservation until hmmer is working
-        // conservationError={conservation.error}
-        // showConservationButton={showConservationButton}
-        // handleConservationLoad={fetchConservationData}
+      // Disabling Conservation until hmmer is working
+      // conservationError={conservation.error}
+      // showConservationButton={showConservationButton}
+      // handleConservationLoad={fetchConservationData}
       >
         {children}
       </DomainsOnProteinLoaded>
