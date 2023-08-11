@@ -50,7 +50,8 @@ const mergeResidues = (
   const residues: Record<string, ResidueEntry> =
     mergePIRSFRResidues(residuesPayload);
 
-  Object.values(data).forEach(
+  const { representative_domains: _, ...otherGroups } = data;
+  Object.values(otherGroups).forEach(
     (
       group /*: Array<{accession:string, residues: Array<Object>, children: any}> */
     ) =>

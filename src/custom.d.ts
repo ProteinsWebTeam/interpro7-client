@@ -136,7 +136,7 @@ type SettingsState = {
 };
 type UISettings = {
   lowGraphics: boolean;
-  colorDomainsBy: string;
+  colorDomainsBy: 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP';
   labelContent: LabelUISettings;
   structureViewer: boolean;
   shouldHighlight: boolean;

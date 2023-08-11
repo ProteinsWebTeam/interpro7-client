@@ -6,16 +6,17 @@ import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData/ts';
 import { Params } from 'higherOrder/loadData/extract-params';
 
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { goToCustomLocation } from 'actions/creators';
+
 import MemberDBSelector from 'components/MemberDBSelector';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Accession from 'components/Accession';
 import Lineage from 'components/Taxonomy/Lineage';
 import Children from 'components/Taxonomy/Children';
 import Tree, { TaxNode } from 'components/Tree';
+import BaseLink from 'components/ExtLink/BaseLink';
 
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
-
-import { goToCustomLocation } from 'actions/creators';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -55,7 +56,7 @@ type Props = {
 };
 type Payload = { metadata: TaxonomyMetadata } & WithNames & WithTaxonomyFilters;
 
-interface LoadedProps extends Props, LoadDataProps<Payload, 'Names'> {}
+interface LoadedProps extends Props, LoadDataProps<Payload, 'Names'> { }
 
 type State = { data?: TaxNode | null; focused?: string };
 
@@ -163,52 +164,74 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
 
     return (
       <div className={css('vf-stack', 'vf-stack--400')}>
-        <div className={css('vf-stack')}>
-          <table className={css('vf-table', 'left-headers')}>
-            <tbody>
-              <tr>
-                <td style={{ maxWidth: '50%' }}>Tax ID</td>
-                <td>
-                  <Accession accession={metadata.accession} title="Tax ID" />
-                </td>
-              </tr>
-              {metadata.rank && (
+        <section className={css('vf-grid', 'summary-grid')}>
+          <div className={css('vf-stack')}>
+            <table className={css('vf-table', 'left-headers')}>
+              <tbody>
                 <tr>
-                  <td>Rank</td>
-                  <td className={css('text-up')}>{metadata.rank}</td>
+                  <td style={{ maxWidth: '50%' }}>Taxon ID</td>
+                  <td>
+                    <Accession accession={metadata.accession} title="Taxon ID" />
+                  </td>
                 </tr>
-              )}
+                {metadata.rank && (
+                  <tr>
+                    <td>Rank</td>
+                    <td className={css('first-letter-cap')}>{metadata.rank}</td>
+                  </tr>
+                )}
 
-              {metadata.parent && (
-                <SchemaOrgData
-                  data={{
-                    taxId: metadata.parent,
-                    name: names[metadata.parent] && names[metadata.parent].name,
-                  }}
-                  processData={parentRelationship}
-                />
-              )}
-
-              <tr>
-                <td>Lineage</td>
-                <td
-                  className={css('ico-primary')}
-                  data-testid="taxonomy-lineage"
-                >
-                  <Lineage lineage={metadata.lineage} names={names} />
-                </td>
-              </tr>
-              <tr>
-                <td>Children</td>
-                <td data-testid="taxonomy-children">
-                  <Children
-                    taxChildren={metadata.children || []}
-                    names={names}
+                {metadata.parent && (
+                  <SchemaOrgData
+                    data={{
+                      taxId: metadata.parent,
+                      name: names[metadata.parent] && names[metadata.parent].name,
+                    }}
+                    processData={parentRelationship}
                   />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                )}
+
+                <tr>
+                  <td>Lineage</td>
+                  <td
+                    className={css('ico-primary')}
+                    data-testid="taxonomy-lineage"
+                  >
+                    <Lineage lineage={metadata.lineage} names={names} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Children</td>
+                  <td data-testid="taxonomy-children">
+                    <Children
+                      taxChildren={metadata.children || []}
+                      names={names}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className={css('vf-stack')}>
+            <section>
+              <h5>External Links</h5>
+              <ul className={css('no-bullet')}>
+                <li>
+                  <BaseLink
+                    id={metadata.accession}
+                    target='_blank'
+                    pattern="https://www.uniprot.org/taxonomy/{id}"
+                    className={css('ext')}
+                  >
+                    UniProt
+                  </BaseLink>
+
+                </li>
+              </ul>
+            </section>
+          </div>
+        </section>
+        <div>
           {
             // @ts-ignore
             <MemberDBSelector

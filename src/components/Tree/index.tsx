@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 import TaxonomyVisualisation from 'taxonomy-visualisation';
-import ZoomOverlay from 'components/ZoomOverlay';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
@@ -179,7 +178,6 @@ export class Tree extends PureComponent<Props, State> {
           </span>
         </div>
 
-        <ZoomOverlay elementId="treeDiv" />
         <ResizeObserverComponent measurements={['width']} element="div">
           {({ width }: { width: number }) => (
             <div className={styles.tree} data-testid="data-tree" id="treeDiv">

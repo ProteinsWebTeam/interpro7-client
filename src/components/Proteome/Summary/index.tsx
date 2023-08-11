@@ -45,19 +45,12 @@ const SummaryProteome = ({ data, loading }: Props) => {
                 </tr>
               )}
               <tr>
-                <td>Species</td>
+                <td>Taxonomy</td>
                 <td data-testid="proteome-species">
                   <Species
                     fullName={metadata.name.name}
                     taxID={metadata.taxonomy}
                   />
-                </td>
-              </tr>
-              <tr>
-                <td>Proteome type</td>
-                <td data-testid="proteome-type">
-                  {metadata.is_reference ? 'Reference' : 'Non-reference'}{' '}
-                  proteome
                 </td>
               </tr>
             </tbody>

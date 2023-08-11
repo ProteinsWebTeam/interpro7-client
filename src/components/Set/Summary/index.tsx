@@ -69,7 +69,7 @@ const SetLiterature = ({ literature }: { literature: Array<Reference> }) => {
   });
   return (
     <>
-      <h4>Literature</h4>
+      <h4>References</h4>
       <Literature extra={literatureEntries} />
     </>
   );
@@ -92,7 +92,7 @@ const SetDescription = ({
 };
 
 const SetAuthors = ({ authors }: { authors: Array<string> }) => {
-  if (!authors) return null;
+  if (authors.length === 0) return null;
   return (
     <tr>
       <td>Authors</td>
@@ -157,10 +157,6 @@ const SummarySet = ({ data, loading }: Props) => {
                 </td>
               </tr>
               <tr>
-                <td>Data type</td>
-                <td data-testid="set-type">Set</td>
-              </tr>
-              <tr>
                 <td style={{ width: '200px' }} data-testid="set-memberdb">
                   Member database
                 </td>
@@ -182,7 +178,7 @@ const SummarySet = ({ data, loading }: Props) => {
                     target="_blank"
                     pattern={currentSet.url_template}
                   >
-                    View {metadata.accession} in {currentSet.dbName}
+                    {currentSet.dbName}
                   </BaseLink>
                 </li>
               </ul>

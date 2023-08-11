@@ -2,14 +2,15 @@
 
 exports[`<StructureOnProtein /> should render 1`] = `
 <section>
-  <table>
+  <table
+    className="matches-in-table"
+  >
     <tbody>
       <tr>
         <td>
           A
         </td>
         <td>
-              
           <div
             className="track-in-table"
           >
