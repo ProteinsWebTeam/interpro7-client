@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { location2html } from 'utils/text';
 import { EntryColorMode, getTrackColor } from 'utils/entry-color';
 
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import TooltipForTrack from 'components/SimpleCommonComponents/Tooltip/ForTrack';
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
 import NightingaleSequence from 'components/Nightingale/Sequence';
 import { GenericMatch, Feature } from '../MatchesByPrimary';
@@ -11,6 +10,7 @@ import { GenericMatch, Feature } from '../MatchesByPrimary';
 import cssBinder from 'styles/cssBinder';
 
 import protvista from 'components/ProteinViewer/style.css';
+import EntryPopup from 'components/SimpleCommonComponents/Tooltip/EntryPopup';
 
 const css = cssBinder(protvista);
 
@@ -18,6 +18,7 @@ type Props = { match: GenericMatch; matches: Array<AnyMatch> };
 
 const EntriesOnProtein = ({ matches, match }: Props) => {
   const [data, setData] = useState<Array<Feature> | null>(null);
+  const [locationHovered, setLocationHovered] = useState<Array<ProtVistaLocation>>([]);
   const { entry, protein } = match || {};
 
   useEffect(() => {
@@ -53,12 +54,18 @@ const EntriesOnProtein = ({ matches, match }: Props) => {
         </div>
       </div>
       <div className={css('track-component')}>
-        <Tooltip
-          title={location2html(
-            entry.entry_protein_locations || protein.entry_protein_locations || [],
-            entry.accession,
-            (entry?.name as NameObject)?.name || (entry?.name as NameObject)?.short || entry.name,
-          )}
+        <TooltipForTrack
+          message={
+            <EntryPopup
+              locations={locationHovered}
+              accession={entry.accession}
+              dbName={entry.source_database}
+              name={(entry?.name as NameObject)?.short || (entry.name as string) || ''}
+            />
+          }
+          onMouseOverFeature={(locations: Array<ProtVistaLocation>) => {
+            setLocationHovered(locations)
+          }}
         >
           <NightingaleInterProTrack
             length={protein.length}
@@ -71,7 +78,7 @@ const EntriesOnProtein = ({ matches, match }: Props) => {
             expanded
             use-ctrl-to-zoom
           />
-        </Tooltip>
+        </TooltipForTrack>
       </div>
     </div>
   );
