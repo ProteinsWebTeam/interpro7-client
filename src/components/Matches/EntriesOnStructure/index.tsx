@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
-import { location2html } from 'utils/text';
 
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import TooltipForTrack from 'components/SimpleCommonComponents/Tooltip/ForTrack';
+import EntryPopup from 'components/SimpleCommonComponents/Tooltip/EntryPopup';
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
 import NightingaleSequence from 'components/Nightingale/Sequence';
-import { GenericMatch } from '../MatchesByPrimary';
+import { GenericMatch, Feature } from '../MatchesByPrimary';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -17,7 +17,28 @@ const css = cssBinder(protvista);
 type Props = { match: GenericMatch; matches: Array<AnyMatch> };
 
 const EntriesOnStructure = ({ matches, match }: Props) => {
+  const [data, setData] = useState<Record<string, Array<Feature>> | null>(null);
+  const [locationHovered, setLocationHovered] = useState<Array<ProtVistaLocation>>([]);
   const { entry, structure } = match || {};
+
+  useEffect(() => {
+    if (!matches.length || !entry || !structure) return;
+
+    setData(Object.fromEntries(
+      matches.map((m) => ([m.chain, [{
+        accession: entry.accession,
+        name: entry.name,
+        // short_name: entry.short_name,
+        source_database: entry.source_database,
+        locations: m.entry_structure_locations || [],
+        color: getTrackColor(entry, EntryColorMode.ACCESSION),
+        entry_type: entry.entry_type,
+        type: 'entry',
+      }]])))
+    );
+  }, [entry, structure]);
+
+
   if (!matches.length || !entry || !structure) return null;
 
   return (
@@ -27,18 +48,6 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
           {matches.map((m) => {
             const length = m.sequence_length || 0;
             const sequence = m.sequence || '\u00A0'.repeat(length);
-            const data = [
-              {
-                accession: entry.accession,
-                name: entry.name,
-                // short_name: entry.short_name,
-                source_database: entry.source_database,
-                locations: m.entry_structure_locations || [],
-                color: getTrackColor(entry, EntryColorMode.ACCESSION),
-                entry_type: entry.entry_type,
-                type: 'entry',
-              },
-            ];
             return (
               <tr key={m.chain}>
                 {m.chain ? <td>{m.chain}</td> : null}
@@ -58,14 +67,18 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
                     </div>
 
                     <div className={css('track-component')}>
-                      <Tooltip
-                        title={location2html(
-                          m.entry_structure_locations || [],
-                          structure.accession,
-                          (structure?.name as NameObject)?.name
-                            ? (structure?.name as NameObject).name
-                            : structure.name
-                        )}
+                      <TooltipForTrack
+                        message={
+                          <EntryPopup
+                            locations={locationHovered}
+                            accession={entry.accession}
+                            dbName={entry.source_database}
+                            name={(entry?.name as NameObject)?.short || (entry.name as string) || ''}
+                          />
+                        }
+                        onMouseOverFeature={(locations: Array<ProtVistaLocation>) => {
+                          setLocationHovered(locations)
+                        }}
                       >
                         <NightingaleInterProTrack
                           length={length}
@@ -74,11 +87,11 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
                           margin-color="#fafafa"
                           id={`track_${structure.accession}`}
                           shape="roundRectangle"
-                          data={data || []}
+                          data={data?.[m.chain || ''] || []}
                           expanded
                           use-ctrl-to-zoom
                         />
-                      </Tooltip>
+                      </TooltipForTrack>
                     </div>
                   </div>
                 </td>

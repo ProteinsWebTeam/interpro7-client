@@ -33,37 +33,19 @@ exports[`<StructureOnProtein /> should render 1`] = `
             <div
               className="track-component"
             >
-              <Tooltip
-                title="<b>1a0h</b><br/>THE X-RAY CRYSTAL STRUCTURE OF PPACK-MEIZOTHROMBIN DESF1: KRINGLE/THROMBIN AND CARBOHYDRATE/KRINGLE/THROMBIN INTERACTIONS AND LOCATION OF THE LINKER CHAIN<br/><p>1-203</p>"
+              <TooltipForTrack
+                message={
+                  <EntryPopup
+                    accession="1a0h"
+                    dbName="pdb"
+                    locations={[]}
+                    name="THE X-RAY CRYSTAL STRUCTURE OF PPACK-MEIZOTHROMBIN DESF1: KRINGLE/THROMBIN AND CARBOHYDRATE/KRINGLE/THROMBIN INTERACTIONS AND LOCATION OF THE LINKER CHAIN"
+                  />
+                }
+                onMouseOverFeature={[Function]}
               >
                 <Memo(Kr)
-                  data={
-                    [
-                      {
-                        "accession": "1a0h",
-                        "color": "#b387c5",
-                        "entry_type": "chain",
-                        "locations": [
-                          {
-                            "fragments": [
-                              {
-                                "end": 203,
-                                "protein_end": 203,
-                                "protein_start": 1,
-                                "start": 1,
-                              },
-                            ],
-                          },
-                        ],
-                        "name": {
-                          "name": "THE X-RAY CRYSTAL STRUCTURE OF PPACK-MEIZOTHROMBIN DESF1: KRINGLE/THROMBIN AND CARBOHYDRATE/KRINGLE/THROMBIN INTERACTIONS AND LOCATION OF THE LINKER CHAIN",
-                          "short": null,
-                        },
-                        "source_database": "pdb",
-                        "type": "structure",
-                      },
-                    ]
-                  }
+                  data={[]}
                   display-end={625}
                   display-start={1}
                   expanded={true}
@@ -73,7 +55,7 @@ exports[`<StructureOnProtein /> should render 1`] = `
                   shape="rectangle"
                   use-ctrl-to-zoom={true}
                 />
-              </Tooltip>
+              </TooltipForTrack>
             </div>
           </div>
         </td>

@@ -23,8 +23,16 @@ exports[`<EntriesOnProtein /> should render 1`] = `
   <div
     className="track-component"
   >
-    <Tooltip
-      title="<b>IPR000001</b><br/>Kringle<br/>"
+    <TooltipForTrack
+      message={
+        <EntryPopup
+          accession="IPR000001"
+          dbName="interpro"
+          locations={[]}
+          name="Kringle"
+        />
+      }
+      onMouseOverFeature={[Function]}
     >
       <Memo(Kr)
         data={[]}
@@ -37,7 +45,7 @@ exports[`<EntriesOnProtein /> should render 1`] = `
         shape="roundRectangle"
         use-ctrl-to-zoom={true}
       />
-    </Tooltip>
+    </TooltipForTrack>
   </div>
 </div>
 `;

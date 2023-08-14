@@ -33,45 +33,19 @@ exports[`<EntriesOnStructure /> should render 1`] = `
             <div
               className="track-component"
             >
-              <Tooltip
-                title="<b>1a4w</b><br/>CRYSTAL STRUCTURES OF THROMBIN WITH THIAZOLE-CONTAINING INHIBITORS: PROBES OF THE S1' BINDING SITE<br/><p>105-188</p><p>211-293</p>"
+              <TooltipForTrack
+                message={
+                  <EntryPopup
+                    accession="IPR000001"
+                    dbName="interpro"
+                    locations={[]}
+                    name="Kringle"
+                  />
+                }
+                onMouseOverFeature={[Function]}
               >
                 <Memo(Kr)
-                  data={
-                    [
-                      {
-                        "accession": "IPR000001",
-                        "color": "#2d865f",
-                        "entry_type": undefined,
-                        "locations": [
-                          {
-                            "fragments": [
-                              {
-                                "dc-status": "CONTINUOUS",
-                                "end": 188,
-                                "start": 105,
-                              },
-                            ],
-                          },
-                          {
-                            "fragments": [
-                              {
-                                "dc-status": "CONTINUOUS",
-                                "end": 293,
-                                "start": 211,
-                              },
-                            ],
-                          },
-                        ],
-                        "name": {
-                          "name": "Kringle",
-                          "short": "Kringle",
-                        },
-                        "source_database": "interpro",
-                        "type": "entry",
-                      },
-                    ]
-                  }
+                  data={[]}
                   display-end={0}
                   display-start={1}
                   expanded={true}
@@ -81,7 +55,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
                   shape="roundRectangle"
                   use-ctrl-to-zoom={true}
                 />
-              </Tooltip>
+              </TooltipForTrack>
             </div>
           </div>
         </td>

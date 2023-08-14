@@ -88,7 +88,6 @@ const DynamicTooltip = (
     children,
     databases,
     locations,
-    ...rest
   }: Props,
 ) => {
   const [shouldLoad, setShouldLoad] = useState(false);

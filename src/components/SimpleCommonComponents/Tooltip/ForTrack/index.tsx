@@ -21,15 +21,6 @@ const TooltipForTrack = ({
       // d3 sets the data of an elemen in __data__ - This needs to be check on major updates of d3
       if (target?.__data__) {
         onMouseOverFeature?.([target.__data__]);
-        // setCurrentLocation([target.__data__]);
-        // setMessage(()=>(
-        //   <EntryPopup
-        //   locations={[target.__data__]}
-        //   accession={accession}
-        //   dbName={dbName||''}
-        //   name={name||''}
-        //   />
-        // ))
         setReference(target);
         setShowTooltip(true);
       }
