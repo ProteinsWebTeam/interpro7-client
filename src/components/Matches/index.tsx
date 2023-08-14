@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
-import { toPlural } from 'utils/pages';
+import { toPlural } from 'utils/pages/toPlural';
 import loadable from 'higherOrder/loadable';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import config from 'config';
@@ -154,7 +154,6 @@ const includeAccessionSearch = (
       [primary]: accessionSearch.metadata,
       [secondary]: {
         ...mainData,
-        // @ts-ignore
         ...accessionSearch[toPlural(secondary) as Endpoint][0],
       },
     },

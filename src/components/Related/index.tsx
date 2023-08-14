@@ -7,7 +7,7 @@ import loadData from 'higherOrder/loadData/ts';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import { toPlural } from 'utils/pages';
+import { toPlural } from 'utils/pages/toPlural';
 
 import RelatedSimple from './RelatedSimple';
 import RelatedAdvanced from './RelatedAdvanced';
@@ -53,7 +53,6 @@ const _RelatedAdvancedQuery = ({ data, mainType, mainData, isStale, dataBase, ..
     payload && payload.results
       ? payload.results.map((x) => {
         const obj: Omit<Metadata, 'counters'> & Record<string, unknown> = { ...x.metadata };
-        // @ts-ignore
         const plural: string = toPlural(mainType || '');
         obj.counters = omit(x, ['metadata', plural]);
 
