@@ -1,18 +1,37 @@
-import React, { useState, useRef, useEffect } from 'react';
-import T from 'prop-types';
-import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
+import React, { useState, useRef, useEffect, PropsWithChildren } from 'react';
 
-import loadData from 'higherOrder/loadData';
-import PopperJS from 'popper.js';
+import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'higherOrder/loadData/extract-params';
+import {
+  useFloating,
+  FloatingArrow,
+  FloatingPortal,
+  autoPlacement,
+  arrow,
+  offset,
+} from '@floating-ui/react';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import { foundationPartial } from 'styles/foundation';
-import local from './style.css';
-import ipro from 'styles/interpro-new.css';
+import cssBinder from 'styles/cssBinder';
+import style from 'components/SimpleCommonComponents/Tooltip/style.css';
 
-const f = foundationPartial(ipro, local);
+const css = cssBinder(style);
+
+type ProviderProps = {
+  accession: string,
+  type: string,
+  source: string,
+  onLoad: (x: () => React.JSX.Element) => void,
+  databases: Record<string, { name: string }>,
+  locations: Array<ProtVistaLocation>,
+};
+
+interface LoadedProps
+  extends ProviderProps,
+  LoadDataProps<{ metadata: EntryMetadata }> { }
+
 
 const _DataProvider = (
   {
@@ -20,7 +39,7 @@ const _DataProvider = (
     onLoad,
     databases,
     locations,
-  } /*: {data?: {loading: boolean, payload: Object}, onLoad: function, databases: Object} */,
+  }: LoadedProps,
 ) => {
   useEffect(() => {
     if (data && !data.loading && data.payload && data.payload.metadata) {
@@ -30,9 +49,8 @@ const _DataProvider = (
         source_database: db,
       } = data.payload.metadata;
 
-      /* eslint-disable react/prop-types */
       const message = () => (
-        <section className={f('entry-popup')}>
+        <section className={css('entry-popup')}>
           <h6>
             {databases[db].name} - {accession}
           </h6>
@@ -41,7 +59,7 @@ const _DataProvider = (
             <ul>
               {locations.map((l, i) => (
                 <li key={i}>
-                  <button className={f('button', 'secondary', 'coordinates')}>
+                  <button className={css('button', 'secondary', 'coordinates')}>
                     {l.fragments
                       .map(({ start, end }) => `${start}-${end}`)
                       .join(',')}
@@ -52,36 +70,16 @@ const _DataProvider = (
           )}
         </section>
       );
-      /* eslint-enable react/prop-types */
 
       onLoad(message);
     }
   });
   return null;
 };
-_DataProvider.propTypes = {
-  data: dataPropType,
-  onLoad: T.func.isRequired,
-  databases: T.objectOf(
-    T.shape({
-      name: T.string,
-    }),
-  ),
-  locations: T.arrayOf(
-    T.shape({
-      fragments: T.arrayOf(
-        T.shape({
-          start: T.number,
-          end: T.number,
-        }),
-      ),
-    }),
-  ),
-};
 
 const getUrlFor = createSelector(
-  (state) => state.settings.api,
-  (_, props) => props,
+  (state: GlobalState) => state.settings.api,
+  (_: GlobalState, props: Props) => props,
   ({ protocol, hostname, port, root }, props) => {
     const description = {
       main: { key: props.type },
@@ -96,8 +94,16 @@ const getUrlFor = createSelector(
   },
 );
 
-const dataProviders = {};
+const dataProviders: Record<string, React.ComponentType<LoadedProps>> = {};
 
+
+type Props = PropsWithChildren<{
+  accession: string,
+  type: string,
+  source: string,
+  databases: Record<string, { name: string }>,
+  locations: Array<ProtVistaLocation>
+}>
 const DynamicTooltip = (
   {
     type,
@@ -107,30 +113,43 @@ const DynamicTooltip = (
     databases,
     locations,
     ...rest
-  } /*: {type: string, source: string, accession: string, children: Object, databases: Object, locations: Array<{}>} */,
+  }: Props,
 ) => {
   const [shouldLoad, setShouldLoad] = useState(false);
   const [message, setMessage] = useState(() => <b>{accession}</b>);
-  const popperContainer = useRef(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const popupTargetClass = 'feature';
-  const [DataProvider, setDataProvider] = useState(null);
-  const [currentLocation, setCurrentLocation] = useState(locations);
+  const [DataProvider, setDataProvider] = useState<null | React.ComponentType<LoadedProps>>(null);
+  const [currentLocation, setCurrentLocation] = useState<Array<ProtVistaLocation>>(locations);
+  const arrowRef = useRef(null);
+  const { refs, floatingStyles, context } = useFloating({
+    middleware: [
+      autoPlacement(),
+      offset({
+        mainAxis: 10,
+      }),
+      arrow({
+        element: arrowRef,
+      }),
+    ],
+  });
+
   useEffect(() => {
     if (shouldLoad) {
       if (!(accession in dataProviders)) {
-        dataProviders[accession] = loadData(getUrlFor)(_DataProvider);
+        dataProviders[accession] = loadData<{ metadata: Metadata }>(getUrlFor as Params)(_DataProvider);
       }
       setDataProvider(dataProviders[accession]);
     }
   });
-  const _handleMouseOver = (e) => {
-    if (e.target.classList.contains(popupTargetClass)) {
-      const _popper = new PopperJS(e.target, popperContainer.current);
+  const _handleMouseOver = (e: React.MouseEvent | React.FocusEvent) => {
+    const target = e.target as SVGElement & { __data__: ProtVistaLocation };
+    if (target?.classList?.contains(popupTargetClass)) {
       // d3 sets the data of an elemen in __data__ - This needs to be check on major updates of d3
-      if (e?.target?.__data__) {
-        setCurrentLocation([e.target.__data__]);
+      if (target?.__data__) {
+        setCurrentLocation([target.__data__]);
       }
+      refs.setReference(target);
       setShowTooltip(true);
     }
     setShouldLoad(true);
@@ -155,30 +174,28 @@ const DynamicTooltip = (
       <div
         style={{ display: 'inline' }}
         {...rest}
-        onMouseOver={(e) => _handleMouseOver(e)}
-        onFocus={(e) => _handleMouseOver(e)}
+        onMouseOver={(e: React.MouseEvent) => _handleMouseOver(e)}
+        onFocus={(e: React.FocusEvent) => _handleMouseOver(e)}
         onMouseOut={_handleMouseOut}
         onBlur={_handleMouseOut}
       >
         {children}
       </div>
-      <div
-        ref={popperContainer}
-        className={f('popper', { hide: !showTooltip })}
-      >
-        <div className={f('popper__arrow')} />
-        <div>{message}</div>
-      </div>
+      <FloatingPortal>
+        {showTooltip ? (
+          <div
+            ref={refs.setFloating}
+            style={floatingStyles}
+            className={css('popper')}
+          >
+            <FloatingArrow ref={arrowRef} context={context} />
+            <div>{message}</div>
+          </div>
+        ) : null}
+      </FloatingPortal>
     </>
   );
 };
-DynamicTooltip.propTypes = {
-  type: T.string.isRequired,
-  source: T.string.isRequired,
-  accession: T.string.isRequired,
-  databases: T.object.isRequired,
-  locations: T.arrayOf(T.object),
-  children: T.object,
-};
+
 
 export default DynamicTooltip;

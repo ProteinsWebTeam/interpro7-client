@@ -13,9 +13,9 @@ const TOOLTIP_DELAY = 300;
 
 import cssBinder from 'styles/cssBinder';
 
-import popper from 'components/ProteinViewer/popper.css';
+import style from 'components/SimpleCommonComponents/Tooltip/style.css';
 
-const css = cssBinder(popper);
+const css = cssBinder(style);
 
 const Tooltip = ({
   html,
