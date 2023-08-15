@@ -20,7 +20,7 @@ type Props = {
   isStale: boolean,
   mainType: Endpoint,
   actualSize: number,
-  otherFilters?: Array<unknown>,
+  otherFilters?: Array<EndpointFilter>,
   dataBase: RequestedData<RootAPIPayload>,
   secondaryDataLoading: boolean,
   focusType: Endpoint,
@@ -95,7 +95,7 @@ const mapStateToPropsAdvanced = createSelector(
     mainType,
     focusType: focusType as Endpoint,
     focusDB: (focusObj as EndpointLocation)?.db,
-    otherFilters,
+    otherFilters: otherFilters as Array<EndpointFilter>,
   }),
 );
 export default connect(mapStateToPropsAdvanced)(RelatedAdvanced);

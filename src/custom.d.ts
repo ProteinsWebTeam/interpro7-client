@@ -108,6 +108,7 @@ type InterProLocation = {
   hash: string;
   state: Record<string, string>;
 };
+type EndpointFilter = [endpoint: Endpoint, location: EndpointPartialLocation]
 
 type SettingsState = {
   navigation: {

@@ -123,7 +123,7 @@ type RelatedTableProps = {
   isStale: boolean,
   focusType: Endpoint,
   actualSize: number,
-  otherFilters?: Array<unknown>,
+  otherFilters?: Array<EndpointFilter>,
   dataBase: RequestedData<RootAPIPayload>,
   otherProps: Record<string, unknown>,
 };
