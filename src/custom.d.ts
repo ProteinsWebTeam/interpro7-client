@@ -108,7 +108,7 @@ type InterProLocation = {
   hash: string;
   state: Record<string, string>;
 };
-type EndpointFilter = [endpoint: Endpoint, location: EndpointPartialLocation]
+type EndpointFilter = [endpoint: Endpoint, location: EndpointPartialLocation];
 
 type SettingsState = {
   navigation: {
@@ -616,9 +616,9 @@ type MetadataWithLocations = Metadata & {
   protein_structure_locations?: Array<ProtVistaLocation>;
   entry_structure_locations?: Array<ProtVistaLocation>;
   coordinates?: Array<ProtVistaLocation>;
-  sequence_length?: number,
-  sequence?: string,
-}
+  sequence_length?: number;
+  sequence?: string;
+};
 
 type ProteinViewerData<Feature = unknown> = Array<
   | [string, Array<Feature>]
@@ -640,6 +640,21 @@ type ResidueMetadata = {
 };
 type ResiduesPayload = Record<string, ResidueMetadata>;
 
+type TaxaPayload = {
+  taxa: Taxon;
+};
+type Taxon = {
+  id: string;
+  rank: string;
+  name: string;
+  lineage?: Array<{
+    name: string;
+    id: string;
+  }>;
+  proteins: number;
+  species: number;
+  children: Array<Taxon>;
+};
 type Genome3DAnnotation = {
   accession: string;
   metadata: {
@@ -792,4 +807,6 @@ interface EntryStructureMatch extends MatchI {
   entry_integrated: string | null;
 }
 
-type AnyMatch = Partial<EntryProteinMatch> &Partial<EntryStructureMatch> &Partial<StructureProteinMatch> 
+type AnyMatch = Partial<EntryProteinMatch> &
+  Partial<EntryStructureMatch> &
+  Partial<StructureProteinMatch>;
