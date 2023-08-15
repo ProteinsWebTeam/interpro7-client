@@ -18,24 +18,26 @@ type Props = { match: GenericMatch; matches: Array<AnyMatch> };
 
 const EntriesOnProtein = ({ matches, match }: Props) => {
   const [data, setData] = useState<Array<Feature> | null>(null);
-  const [locationHovered, setLocationHovered] = useState<Array<ProtVistaLocation>>([]);
+  const [locationHovered, setLocationHovered] = useState<
+    Array<ProtVistaLocation>
+  >([]);
   const { entry, protein } = match || {};
 
   useEffect(() => {
     if (!matches.length || !entry || !protein) return;
 
-    setData(matches.map((loc) => ({
-      accession: entry.accession,
-      name: entry.name,
-      source_database: entry.source_database,
-      locations: loc.entry_protein_locations || [],
-      color: getTrackColor(entry, EntryColorMode.ACCESSION),
-      entry_type: entry.entry_type,
-      type: 'entry',
-    }))
+    setData(
+      matches.map((loc) => ({
+        accession: entry.accession,
+        name: entry.name,
+        source_database: entry.source_database,
+        locations: loc.entry_protein_locations || [],
+        color: getTrackColor(entry, EntryColorMode.ACCESSION),
+        entry_type: entry.entry_type,
+        type: 'entry',
+      }))
     );
   }, [entry, protein]);
-
 
   if (!matches.length || !entry || !protein) return null;
 
@@ -60,11 +62,15 @@ const EntriesOnProtein = ({ matches, match }: Props) => {
               locations={locationHovered}
               accession={entry.accession}
               dbName={entry.source_database}
-              name={(entry?.name as NameObject)?.short || (entry.name as string) || ''}
+              name={
+                (entry?.name as NameObject)?.short ||
+                (entry.name as string) ||
+                ''
+              }
             />
           }
           onMouseOverFeature={(locations: Array<ProtVistaLocation>) => {
-            setLocationHovered(locations)
+            setLocationHovered(locations);
           }}
         >
           <NightingaleInterProTrack
@@ -82,6 +88,6 @@ const EntriesOnProtein = ({ matches, match }: Props) => {
       </div>
     </div>
   );
-}
+};
 
 export default EntriesOnProtein;

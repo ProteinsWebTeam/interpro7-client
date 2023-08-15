@@ -16,13 +16,13 @@ import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 const mapStateToPropsAdvancedQuery = createSelector(
   (state: GlobalState) => state.customLocation.description.main.key,
-  (mainType) => ({ mainType }),
+  (mainType) => ({ mainType })
 );
 
 interface TaxonomyProps extends LoadDataProps<RootAPIPayload, 'Base'> {
-  mainData: Metadata,
-  mainType?: string,
-  actualSize?: number,
+  mainData: Metadata;
+  mainType?: string;
+  actualSize?: number;
 }
 
 const RelatedTaxonomy = loadData<RootAPIPayload, 'Base'>({
@@ -42,34 +42,43 @@ const RelatedTaxonomy = loadData<RootAPIPayload, 'Base'>({
   ) : null;
 });
 
-interface AdvancedQProps extends LoadDataProps<PayloadList<EndpointWithMatchesPayload<Metadata, AnyMatch>>>, LoadDataProps<RootAPIPayload, 'Base'> {
+interface AdvancedQProps
+  extends LoadDataProps<
+      PayloadList<EndpointWithMatchesPayload<Metadata, AnyMatch>>
+    >,
+    LoadDataProps<RootAPIPayload, 'Base'> {
   mainType?: Endpoint;
   mainData: Metadata;
 }
 
-const _RelatedAdvancedQuery = ({ data, mainType, mainData, isStale, dataBase, ...props }: AdvancedQProps) => {
+const _RelatedAdvancedQuery = ({
+  data,
+  mainType,
+  mainData,
+  isStale,
+  dataBase,
+  ...props
+}: AdvancedQProps) => {
   const { payload, loading, url, status } = data || {};
   const _secondaryData =
     payload && payload.results
       ? payload.results.map((x) => {
-        const obj: Record<string, unknown> = { ...x.metadata };
-        const plural: string = toPlural(mainType || '');
-        obj.counters = omit(x, ['metadata', plural]);
+          const obj: Record<string, unknown> = { ...x.metadata };
+          const plural: string = toPlural(mainType || '');
+          obj.counters = omit(x, ['metadata', plural]);
 
-        obj.matches = x[plural].map(match => ({
-          protein: match.protein,
-          protein_length: match.protein_length,
-          sequence: match.sequence,
-          sequence_length: match.sequence_length,
-          entry_protein_locations: match.entry_protein_locations,
-          entry_structure_locations:
-            match.entry_structure_locations,
-          structure_protein_locations:
-            match.structure_protein_locations,
-          chain: match.chain,
-        }))
-        return obj as unknown as MetadataWithLocations;
-      })
+          obj.matches = x[plural].map((match) => ({
+            protein: match.protein,
+            protein_length: match.protein_length,
+            sequence: match.sequence,
+            sequence_length: match.sequence_length,
+            entry_protein_locations: match.entry_protein_locations,
+            entry_structure_locations: match.entry_structure_locations,
+            structure_protein_locations: match.structure_protein_locations,
+            chain: match.chain,
+          }));
+          return obj as unknown as MetadataWithLocations;
+        })
       : [];
   const c = payload ? payload.count : 0;
   return dataBase ? (
@@ -87,7 +96,7 @@ const _RelatedAdvancedQuery = ({ data, mainType, mainData, isStale, dataBase, ..
       {...props}
     />
   ) : null;
-}
+};
 const RelatedAdvancedQuery = loadData<RootAPIPayload, 'Base'>({
   getUrl: getUrlForMeta,
   propNamespace: 'Base',
@@ -95,44 +104,47 @@ const RelatedAdvancedQuery = loadData<RootAPIPayload, 'Base'>({
   loadData<PayloadList<EndpointWithMatchesPayload<Metadata, AnyMatch>>>({
     getUrl: getReversedUrl,
     mapStateToProps: mapStateToPropsAdvancedQuery,
-  })(_RelatedAdvancedQuery),
+  })(_RelatedAdvancedQuery)
 );
 
 type Props = {
-  data: RequestedData<{ metadata: Metadata }>,
-  focusType?: string,
-  hash?: string,
-  hasSecondary: boolean,
+  data: RequestedData<{ metadata: Metadata }>;
+  focusType?: string;
+  hash?: string;
+  hasSecondary: boolean;
 };
 const Related = ({ data, focusType, hasSecondary, hash, ...props }: Props) => {
   if (data.loading) return <Loading />;
   if (!data?.payload?.metadata) return null;
   if (hasSecondary) {
     if (focusType === 'taxonomy' && hash !== 'table')
+      return <RelatedTaxonomy mainData={data.payload.metadata} {...props} />;
+    else
       return (
-        <RelatedTaxonomy mainData={data.payload.metadata} {...props} />
-      )
-    else return (
-      <RelatedAdvancedQuery mainData={data.payload.metadata} {...props} />
-    )
+        <RelatedAdvancedQuery mainData={data.payload.metadata} {...props} />
+      );
   }
 
   return <RelatedSimple mainData={data.payload.metadata} {...props} />;
-}
+};
 
 const mapStateToPropsDefault = createSelector(
   (state: GlobalState) =>
     findIn(
       state.customLocation.description,
-      (value: EndpointPartialLocation) =>
-        !!value.isFilter && value.order === 1,
+      (value: EndpointPartialLocation) => !!value.isFilter && value.order === 1
     ),
   (state: GlobalState) => state.customLocation.hash,
   ([focusType, filter], hash) => ({
     focusType,
-    hasSecondary: !!(filter && (!!(filter as EndpointLocation).db || !!(filter as EndpointLocation & { integration: string | null }).integration)),
+    hasSecondary: !!(
+      filter &&
+      (!!(filter as EndpointLocation).db ||
+        !!(filter as EndpointLocation & { integration: string | null })
+          .integration)
+    ),
     hash,
-  }),
+  })
 );
 
 export default connect(mapStateToPropsDefault)(Related);

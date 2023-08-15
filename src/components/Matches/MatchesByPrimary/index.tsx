@@ -10,21 +10,21 @@ export type GenericMatch = {
     entry_type: string;
   };
   protein?: MetadataWithLocations & {
-    length: number
+    length: number;
   };
   structure?: MetadataWithLocations & {
     name: string | NameObject;
   };
-}
+};
 export type Feature = {
   accession: string;
   name: string | NameObject;
   source_database: string;
-  locations: Array<ProtVistaLocation>,
+  locations: Array<ProtVistaLocation>;
   color: string;
   entry_type: string;
   type: string;
-}
+};
 export type MatchesByPrimaryProps = {
   match: GenericMatch;
   innerMatches: Array<AnyMatch>;
@@ -73,7 +73,8 @@ const MatchesByPrimary = ({
   secondary,
   ...props
 }: MatchesByPrimaryProps) => {
-  const MatchComponent = primary && secondary && componentMatch[primary]?.[secondary || ''];
+  const MatchComponent =
+    primary && secondary && componentMatch[primary]?.[secondary || ''];
 
   return MatchComponent ? (
     <MatchComponent {...props} match={match} matches={innerMatches} />

@@ -19,21 +19,30 @@ type Props = { match: GenericMatch; matches: Array<AnyMatch> };
 
 const StructureOnProtein = ({ matches, match }: Props) => {
   const [data, setData] = useState<Record<string, Array<Feature>> | null>(null);
-  const [locationHovered, setLocationHovered] = useState<Array<ProtVistaLocation>>([]);
+  const [locationHovered, setLocationHovered] = useState<
+    Array<ProtVistaLocation>
+  >([]);
   const { structure, protein } = match || {};
   useEffect(() => {
     if (!matches.length || !protein || !structure) return;
 
-    setData(Object.fromEntries(
-      matches.map((m) => ([m.chain, [{
-        accession: structure.accession,
-        name: structure.name,
-        source_database: structure.source_database,
-        locations: m.structure_protein_locations || [],
-        color: getTrackColor(structure, EntryColorMode.ACCESSION),
-        type: 'structure',
-        entry_type: 'chain',
-      }]])))
+    setData(
+      Object.fromEntries(
+        matches.map((m) => [
+          m.chain,
+          [
+            {
+              accession: structure.accession,
+              name: structure.name,
+              source_database: structure.source_database,
+              locations: m.structure_protein_locations || [],
+              color: getTrackColor(structure, EntryColorMode.ACCESSION),
+              type: 'structure',
+              entry_type: 'chain',
+            },
+          ],
+        ])
+      )
     );
   }, [protein, structure]);
 
@@ -70,11 +79,18 @@ const StructureOnProtein = ({ matches, match }: Props) => {
                             locations={locationHovered}
                             accession={structure.accession}
                             dbName={structure.source_database}
-                            name={(structure?.name as NameObject)?.short || (structure?.name as NameObject)?.name || (structure.name as string) || ''}
+                            name={
+                              (structure?.name as NameObject)?.short ||
+                              (structure?.name as NameObject)?.name ||
+                              (structure.name as string) ||
+                              ''
+                            }
                           />
                         }
-                        onMouseOverFeature={(locations: Array<ProtVistaLocation>) => {
-                          setLocationHovered(locations)
+                        onMouseOverFeature={(
+                          locations: Array<ProtVistaLocation>
+                        ) => {
+                          setLocationHovered(locations);
                         }}
                       >
                         <NightingaleInterProTrack

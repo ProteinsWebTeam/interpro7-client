@@ -62,14 +62,16 @@ const FileExporter = ({
     <File
       className={className}
       fileType={fileType}
-      name={`${primary}-matching-${(description[description.main.key] as EndpointLocation).accession
-        }.${fileType}`}
+      name={`${primary}-matching-${
+        (description[description.main.key] as EndpointLocation).accession
+      }.${fileType}`}
       count={count}
       customLocationDescription={customLocationDescription}
       search={{
         ...search,
-        extra_fields: `counters${search.extra_fields ? `,${search.extra_fields}` : ''
-          }`,
+        extra_fields: `counters${
+          search.extra_fields ? `,${search.extra_fields}` : ''
+        }`,
       }}
       endpoint={(endpoint?.[primary]?.[secondary] as string) || primary}
       minWidth={minWidth}

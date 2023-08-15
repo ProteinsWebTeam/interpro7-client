@@ -14,10 +14,18 @@ import { GenericMatch } from 'src/components/Matches/MatchesByPrimary';
 
 const f = cssBinder(filtersAndTable);
 
-const primariesAndSecondaries: Record<Endpoint, Partial<Record<Endpoint, {
-  primary: Endpoint,
-  secondary: Endpoint,
-}>>> = {
+const primariesAndSecondaries: Record<
+  Endpoint,
+  Partial<
+    Record<
+      Endpoint,
+      {
+        primary: Endpoint;
+        secondary: Endpoint;
+      }
+    >
+  >
+> = {
   entry: {
     protein: {
       primary: 'protein',
@@ -117,29 +125,27 @@ const primariesAndSecondaries: Record<Endpoint, Partial<Record<Endpoint, {
 };
 
 type RelatedTableProps = {
-  mainType: Endpoint,
-  mainData: MetadataWithLocations,
-  secondaryData: Array<MetadataWithLocations>,
-  isStale: boolean,
-  focusType: Endpoint,
-  actualSize: number,
-  otherFilters?: Array<EndpointFilter>,
-  dataBase: RequestedData<RootAPIPayload>,
-  otherProps: Record<string, unknown>,
+  mainType: Endpoint;
+  mainData: MetadataWithLocations;
+  secondaryData: Array<MetadataWithLocations>;
+  isStale: boolean;
+  focusType: Endpoint;
+  actualSize: number;
+  otherFilters?: Array<EndpointFilter>;
+  dataBase: RequestedData<RootAPIPayload>;
+  otherProps: Record<string, unknown>;
 };
-const RelatedTable = (
-  {
-    mainType,
-    mainData,
-    secondaryData,
-    isStale,
-    focusType,
-    actualSize,
-    otherFilters,
-    dataBase,
-    otherProps,
-  }: RelatedTableProps,
-) => {
+const RelatedTable = ({
+  mainType,
+  mainData,
+  secondaryData,
+  isStale,
+  focusType,
+  actualSize,
+  otherFilters,
+  dataBase,
+  otherProps,
+}: RelatedTableProps) => {
   const hasFilters = focusType === 'protein';
   const databases =
     (dataBase &&
@@ -148,7 +154,8 @@ const RelatedTable = (
       dataBase.payload.databases) ||
     {};
 
-  const { primary, secondary } = primariesAndSecondaries?.[mainType]?.[focusType] || {};
+  const { primary, secondary } =
+    primariesAndSecondaries?.[mainType]?.[focusType] || {};
   return (
     <>
       <p>
@@ -177,7 +184,7 @@ const RelatedTable = (
             'columns',
             'small-12',
             hasFilters ? 'medium-9' : 'medium-12',
-            hasFilters ? 'large-10' : 'large-12',
+            hasFilters ? 'large-10' : 'large-12'
           )}
         >
           <Matches
@@ -187,13 +194,13 @@ const RelatedTable = (
             matches={secondaryData.reduce(
               (prev, { coordinates, ...secondaryData }) => [
                 ...prev,
-                ({
+                {
                   [mainType]: mainData,
                   [focusType]: secondaryData,
                   coordinates,
-                } as GenericMatch),
+                } as GenericMatch,
               ],
-              [] as Array<GenericMatch>,
+              [] as Array<GenericMatch>
             )}
             isStale={isStale}
             databases={databases}
@@ -205,6 +212,5 @@ const RelatedTable = (
     </>
   );
 };
-
 
 export default RelatedTable;

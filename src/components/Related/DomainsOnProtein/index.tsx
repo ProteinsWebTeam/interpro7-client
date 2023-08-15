@@ -67,14 +67,14 @@ type Props = PropsWithChildren<{
 }>;
 interface LoadedProps
   extends Props,
-  ExtenalSourcesProps,
-  LoadDataProps<ExtraFeaturesPayload, 'Features'>,
-  LoadDataProps<ResiduesPayload, 'Residues'>,
-  LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
-  LoadDataProps<AlphafoldPayload, 'Prediction'>,
-  LoadDataProps<
-    PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
-  > { }
+    ExtenalSourcesProps,
+    LoadDataProps<ExtraFeaturesPayload, 'Features'>,
+    LoadDataProps<ResiduesPayload, 'Residues'>,
+    LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
+    LoadDataProps<AlphafoldPayload, 'Prediction'>,
+    LoadDataProps<
+      PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
+    > {}
 
 const DomainOnProteinWithoutData = ({
   data,
@@ -120,7 +120,8 @@ const DomainOnProteinWithoutData = ({
     if (data && !data.loading) {
       if (processData) {
         onMatchesLoaded?.(payload?.results || []);
-        const { interpro, unintegrated, representativeDomains, other } = processData;
+        const { interpro, unintegrated, representativeDomains, other } =
+          processData;
         setProcessedData({
           interpro,
           unintegrated,
@@ -245,10 +246,10 @@ const DomainOnProteinWithoutData = ({
           dataResidues?.loading ||
           false
         }
-      // Disabling Conservation until hmmer is working
-      // conservationError={conservation.error}
-      // showConservationButton={showConservationButton}
-      // handleConservationLoad={fetchConservationData}
+        // Disabling Conservation until hmmer is working
+        // conservationError={conservation.error}
+        // showConservationButton={showConservationButton}
+        // handleConservationLoad={fetchConservationData}
       >
         {children}
       </DomainsOnProteinLoaded>

@@ -171,7 +171,7 @@ const includeAccessionSearch = (
 type Props = {
   primary?: Endpoint;
   secondary?: Endpoint;
-  matches: Array<GenericMatch>
+  matches: Array<GenericMatch>;
   search?: Record<string, string | boolean>;
   description?: InterProDescription;
   hash?: string;
@@ -353,12 +353,14 @@ const Matches = ({
                 cellContent
               ) : (
                 <Link
-                  to={primary && ({
-                    description: {
-                      main: { key: primary },
-                      [primary]: { db: sourceDatabase, accession: acc },
-                    },
-                  })}
+                  to={
+                    primary && {
+                      description: {
+                        main: { key: primary },
+                        [primary]: { db: sourceDatabase, accession: acc },
+                      },
+                    }
+                  }
                 >
                   {cellContent}
                 </Link>
@@ -392,12 +394,14 @@ const Matches = ({
               <HighlightedText text={name} textToHighlight={search?.search} />
             ) : (
               <Link
-                to={primary && ({
-                  description: {
-                    main: { key: primary },
-                    [primary]: { db: sourceDatabase, accession },
-                  },
-                })}
+                to={
+                  primary && {
+                    description: {
+                      main: { key: primary },
+                      [primary]: { db: sourceDatabase, accession },
+                    },
+                  }
+                }
               >
                 <HighlightedText text={name} textToHighlight={search?.search} />
               </Link>
@@ -416,12 +420,14 @@ const Matches = ({
           }: { accession: string; source_database: string }
         ) => (
           <Link
-            to={primary && ({
-              description: {
-                main: { key: primary },
-                [primary]: { db: sourceDatabase, accession },
-              },
-            })}
+            to={
+              primary && {
+                description: {
+                  main: { key: primary },
+                  [primary]: { db: sourceDatabase, accession },
+                },
+              }
+            }
           >
             <HighlightedText text={name} textToHighlight={search?.search} />
           </Link>
@@ -525,7 +531,10 @@ const Matches = ({
           primary !== 'set' &&
           secondary !== 'set'
         }
-        renderer={(match: GenericMatch, { matches }: { matches: Array<AnyMatch> }) => (
+        renderer={(
+          match: GenericMatch,
+          { matches }: { matches: Array<AnyMatch> }
+        ) => (
           <Lazy>
             {(hasBeenVisible: boolean) =>
               hasBeenVisible ? (

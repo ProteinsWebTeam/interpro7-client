@@ -1,35 +1,34 @@
-import React, { } from "react";
+import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import RelatedTable from '../RelatedTable';
-// Disabling these viewers. It has been mentioned before they are redundant. 
+// Disabling these viewers. It has been mentioned before they are redundant.
 // especially now displaying multiple chains in the table
 // import EntriesOnStructure from '../DomainEntriesOnStructure';
 // import StructureOnProtein from '../DomainStructureOnProtein';
 
-import { findIn, filterIn } from "utils/processDescription/filterFuncions";
+import { findIn, filterIn } from 'utils/processDescription/filterFuncions';
 
 import classNames from 'classnames';
 
 type Props = {
-  mainData: Metadata,
-  secondaryData: Array<MetadataWithLocations>,
-  isStale: boolean,
-  mainType: Endpoint,
-  actualSize: number,
-  otherFilters?: Array<EndpointFilter>,
-  dataBase: RequestedData<RootAPIPayload>,
-  secondaryDataLoading: boolean,
-  focusType: Endpoint,
-  focusDb?: string,
+  mainData: Metadata;
+  secondaryData: Array<MetadataWithLocations>;
+  isStale: boolean;
+  mainType: Endpoint;
+  actualSize: number;
+  otherFilters?: Array<EndpointFilter>;
+  dataBase: RequestedData<RootAPIPayload>;
+  secondaryDataLoading: boolean;
+  focusType: Endpoint;
+  focusDb?: string;
   nextAPICall?: string | null;
   previousAPICall?: string | null;
   currentAPICall?: string | null;
   status?: number | null;
-
 };
 
 const RelatedAdvanced = ({
@@ -74,28 +73,25 @@ const RelatedAdvanced = ({
       )}
     </div>
   );
-}
-
+};
 
 const mapStateToPropsAdvanced = createSelector(
   (state: GlobalState) => state.customLocation.description.main.key as Endpoint,
   (state: GlobalState) =>
     findIn(
       state.customLocation.description,
-      (value: EndpointPartialLocation) =>
-        !!value.isFilter && value.order === 1,
+      (value: EndpointPartialLocation) => !!value.isFilter && value.order === 1
     ),
   (state: GlobalState) =>
     filterIn(
       state.customLocation.description,
-      (value: EndpointPartialLocation) =>
-        !!value.isFilter && value.order !== 1,
+      (value: EndpointPartialLocation) => !!value.isFilter && value.order !== 1
     ),
   (mainType, [focusType, focusObj], otherFilters) => ({
     mainType,
     focusType: focusType as Endpoint,
     focusDB: (focusObj as EndpointLocation)?.db,
     otherFilters: otherFilters as Array<EndpointFilter>,
-  }),
+  })
 );
 export default connect(mapStateToPropsAdvanced)(RelatedAdvanced);
