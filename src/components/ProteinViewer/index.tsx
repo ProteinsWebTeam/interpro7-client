@@ -89,7 +89,7 @@ type Props = PropsWithChildren<{
   conservationError?: string;
   loading: boolean;
 }>;
-interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> { }
+interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
 
 type CategoryVisibility = { [name: string]: boolean };
 

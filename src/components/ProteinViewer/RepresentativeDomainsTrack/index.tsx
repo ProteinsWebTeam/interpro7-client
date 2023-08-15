@@ -25,7 +25,7 @@ type Props = {
   colorDomainsBy?: keyof typeof EntryColorMode;
   openTooltip: (element: HTMLElement | undefined, content: ReactNode) => void;
   closeTooltip: () => void;
-  isPrinting: boolean;  
+  isPrinting: boolean;
 };
 
 const RepresentativeDomainsTrack = ({
@@ -36,7 +36,7 @@ const RepresentativeDomainsTrack = ({
   colorDomainsBy,
   openTooltip,
   closeTooltip,
-  isPrinting,  
+  isPrinting,
 }: Props) => {
   const [data, setData] = useState(entries);
   const containerRef = useRef<HTMLDivElement | null>(null);

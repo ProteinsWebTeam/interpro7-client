@@ -11,7 +11,7 @@
 .icon-count-organisms {
   height: 3em; /*to align icon*/
   width: 30px;
-  background-image: url('../../../images/icons/ico-species.svg');
+  background-image: url("../../../images/icons/ico-species.svg");
   background-position-y: 59%;
   background-repeat: no-repeat;
   opacity: 0.8;

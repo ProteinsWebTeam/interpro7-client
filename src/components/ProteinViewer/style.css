@@ -1,6 +1,6 @@
-@import '../../styles/fonts.css';
-@import '../../styles/colors.css';
-@import '../../styles/timing.css';
+@import "../../styles/fonts.css";
+@import "../../styles/colors.css";
+@import "../../styles/timing.css";
 
 :root {
   --track-space: 70vw;

@@ -46,7 +46,7 @@ const ConservationMockupTrack = ({
       <div className={css('track')}>
         <div
           className={css('conservation-placeholder-component')}
-        // ref={this._conservationTrackRef}
+          // ref={this._conservationTrackRef}
         >
           {conservationError ? (
             <div className={css('conservation-error')}>
