@@ -1,5 +1,9 @@
 // @flow
 /* eslint-disable no-param-reassign */
+
+/*  This file is currently not in use. It has been disabled fromRelated Advanced in 15/08/2023
+    Give it a few months otherwise delete!
+*/
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';

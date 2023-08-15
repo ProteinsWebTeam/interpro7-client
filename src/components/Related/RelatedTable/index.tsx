@@ -1,23 +1,23 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 
 import InfoFilters from 'components/Related/Taxonomy/InfoFilters';
 
 import FiltersPanel from 'components/FiltersPanel';
 import CurationFilter from 'components/Protein/ProteinListFilters/CurationFilter';
-// $FlowFixMe
 import Matches from 'components/Matches';
 
-import { toPlural } from 'utils/pages';
+import { toPlural } from 'utils/pages/toPlural';
 
-import { foundationPartial } from 'styles/foundation';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import cssBinder from 'styles/cssBinder';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
+import { GenericMatch } from 'src/components/Matches/MatchesByPrimary';
 
-const f = foundationPartial(ebiGlobalStyles, filtersAndTable);
+const f = cssBinder(filtersAndTable);
 
-const primariesAndSecondaries = {
+const primariesAndSecondaries: Record<Endpoint, Partial<Record<Endpoint, {
+  primary: Endpoint,
+  secondary: Endpoint,
+}>>> = {
   entry: {
     protein: {
       primary: 'protein',
@@ -115,20 +115,18 @@ const primariesAndSecondaries = {
     },
   },
 };
-/*:: type RelatedTableProps = {
-  mainType: string,
-  mainData: Object,
-  secondaryData: Array<Object>,
+
+type RelatedTableProps = {
+  mainType: Endpoint,
+  mainData: MetadataWithLocations,
+  secondaryData: Array<MetadataWithLocations>,
   isStale: boolean,
-  focusType: string,
+  focusType: Endpoint,
   actualSize: number,
-  otherFilters?: Array<Object>,
-  dataBase: {
-    payload: Object,
-    loading: boolean
-  },
-  otherProps: Object,
-}; */
+  otherFilters?: Array<unknown>,
+  dataBase: RequestedData<RootAPIPayload>,
+  otherProps: Record<string, unknown>,
+};
 const RelatedTable = (
   {
     mainType,
@@ -140,7 +138,7 @@ const RelatedTable = (
     otherFilters,
     dataBase,
     otherProps,
-  } /*: RelatedTableProps */,
+  }: RelatedTableProps,
 ) => {
   const hasFilters = focusType === 'protein';
   const databases =
@@ -150,6 +148,7 @@ const RelatedTable = (
       dataBase.payload.databases) ||
     {};
 
+  const { primary, secondary } = primariesAndSecondaries?.[mainType]?.[focusType] || {};
   return (
     <>
       <p>
@@ -183,40 +182,29 @@ const RelatedTable = (
         >
           <Matches
             {...otherProps}
+            mainData={mainData}
             actualSize={actualSize}
             matches={secondaryData.reduce(
               (prev, { coordinates, ...secondaryData }) => [
                 ...prev,
-                {
+                ({
                   [mainType]: mainData,
                   [focusType]: secondaryData,
                   coordinates,
-                },
+                } as GenericMatch),
               ],
-              [],
+              [] as Array<GenericMatch>,
             )}
             isStale={isStale}
             databases={databases}
-            {...primariesAndSecondaries[mainType][focusType]}
+            primary={primary}
+            secondary={secondary}
           />
         </section>
       </div>
     </>
   );
 };
-RelatedTable.propTypes = {
-  mainType: T.string.isRequired,
-  mainData: T.object.isRequired,
-  secondaryData: T.arrayOf(T.object).isRequired,
-  isStale: T.bool.isRequired,
-  focusType: T.string.isRequired,
-  actualSize: T.number,
-  otherFilters: T.array,
-  dataBase: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-  }).isRequired,
-  otherProps: T.object,
-};
+
 
 export default RelatedTable;

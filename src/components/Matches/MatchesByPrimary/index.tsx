@@ -4,14 +4,6 @@ import EntriesOnProtein from '../EntriesOnProtein';
 import EntriesOnStructure from '../EntriesOnStructure';
 import StructureOnProtein from '../StructureOnProtein';
 
-type MetadataWithLocations = Metadata & {
-  entry_protein_locations?: Array<ProtVistaLocation>;
-  protein_structure_locations?: Array<ProtVistaLocation>;
-  entry_structure_locations?: Array<ProtVistaLocation>;
-  sequence_length: number,
-  sequence?: string,
-
-}
 export type GenericMatch = {
   entry?: MetadataWithLocations & {
     name: string | NameObject;
@@ -36,14 +28,9 @@ export type Feature = {
 export type MatchesByPrimaryProps = {
   match: GenericMatch;
   innerMatches: Array<AnyMatch>;
-  primary: Endpoint;
-  secondary: Endpoint;
+  primary?: Endpoint;
+  secondary?: Endpoint;
   isStale: boolean;
-  options: {
-    baseSize: number;
-    offset: number;
-    niceRatio: number;
-  };
   actualSize: number;
 };
 
@@ -86,7 +73,7 @@ const MatchesByPrimary = ({
   secondary,
   ...props
 }: MatchesByPrimaryProps) => {
-  const MatchComponent = componentMatch[primary]?.[secondary];
+  const MatchComponent = primary && secondary && componentMatch[primary]?.[secondary || ''];
 
   return MatchComponent ? (
     <MatchComponent {...props} match={match} matches={innerMatches} />

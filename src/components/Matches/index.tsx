@@ -8,7 +8,7 @@ import loadable from 'higherOrder/loadable';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import config from 'config';
 
-import MatchesByPrimary, { GenericMatch, MatchesByPrimaryProps } from './MatchesByPrimary';
+import MatchesByPrimary, { GenericMatch } from './MatchesByPrimary';
 import ProteinDownloadRenderer from './ProteinDownloadRenderer';
 import FileExporter from './FileExporter';
 
@@ -137,7 +137,7 @@ const includeAccessionSearch = (
   accessionSearch: AccSearchData,
   primary: Endpoint,
   secondary: Endpoint,
-  mainData: Record<string, unknown>
+  mainData: MetadataWithLocations
 ) => {
   const indexInPayload = dataTable.findIndex(
     ({ accession }) => accession === accessionSearch.metadata.accession
@@ -168,21 +168,25 @@ const includeAccessionSearch = (
   dataTable.splice(0, 0, accMatch);
 };
 
-type Props = MatchesByPrimaryProps & {
+type Props = {
+  primary?: Endpoint;
+  secondary?: Endpoint;
   matches: Array<GenericMatch>
-  search: Record<string, string | boolean>;
-  description: InterProDescription;
+  search?: Record<string, string | boolean>;
+  description?: InterProDescription;
   hash?: string;
-  state: GlobalState;
+  state?: GlobalState;
   databases: Record<string, { name: string }>;
   dbCounters?: Object;
-  mainData: Record<string, unknown>;
-  accessionSearch: AccSearchData;
+  mainData: MetadataWithLocations;
+  accessionSearch?: AccSearchData;
   focusType?: string;
-  currentAPICall: string;
-  nextAPICall: string;
-  previousAPICall: string;
-  status: number;
+  currentAPICall?: string;
+  nextAPICall?: string;
+  previousAPICall?: string;
+  status?: number;
+  actualSize: number;
+  isStale: boolean;
 };
 type SupportedEndpoint = 'entry' | 'protein' | 'structure';
 // List of all matches, many to many
@@ -222,7 +226,7 @@ const Matches = ({
     accession: String(e[primary as SupportedEndpoint]?.accession),
     match: e,
   }));
-  if (accessionSearch) {
+  if (accessionSearch && primary && secondary) {
     const prevSize = dataTable.length;
     includeAccessionSearch(
       dataTable,
@@ -260,46 +264,50 @@ const Matches = ({
         isTaxonomySubpage && ['sunburst', 'keyspecies'].includes(hash || '')
       ) && <SearchBox loading={isStale} />}
       <HighlightToggler />
-      {description.main.key !== 'result' &&
+      {description?.main.key !== 'result' &&
         !(
           isTaxonomySubpage && ['sunburst', 'keyspecies'].includes(hash || '')
         ) && (
           <Exporter>
             <div className={css('menu-grid')}>
-              {primary === 'protein' && (
+              {primary && secondary && (
                 <>
-                  <label htmlFor="fasta">FASTA</label>
+                  {primary === 'protein' && (
+                    <>
+                      <label htmlFor="fasta">FASTA</label>
+                      <FileExporter
+                        description={description}
+                        count={actualSize}
+                        search={search}
+                        fileType="fasta"
+                        primary={primary}
+                        secondary={secondary}
+                        focused={focused}
+                      />
+                    </>
+                  )}
+                  <label htmlFor="tsv">TSV</label>
                   <FileExporter
                     description={description}
                     count={actualSize}
                     search={search}
-                    fileType="fasta"
+                    fileType="tsv"
+                    primary={primary}
+                    secondary={secondary}
+                    focused={focused}
+                  />
+                  <label htmlFor="json">JSON</label>
+                  <FileExporter
+                    description={description}
+                    count={actualSize}
+                    search={search}
+                    fileType="json"
                     primary={primary}
                     secondary={secondary}
                     focused={focused}
                   />
                 </>
               )}
-              <label htmlFor="tsv">TSV</label>
-              <FileExporter
-                description={description}
-                count={actualSize}
-                search={search}
-                fileType="tsv"
-                primary={primary}
-                secondary={secondary}
-                focused={focused}
-              />
-              <label htmlFor="json">JSON</label>
-              <FileExporter
-                description={description}
-                count={actualSize}
-                search={search}
-                fileType="json"
-                primary={primary}
-                secondary={secondary}
-                focused={focused}
-              />
               <label htmlFor="api">API</label>
               <Link
                 target="_blank"
@@ -332,7 +340,7 @@ const Matches = ({
                   dimension=".8em"
                 />
               ) : null}
-              <HighlightedText text={acc} textToHighlight={search.search} />
+              <HighlightedText text={acc} textToHighlight={search?.search} />
             </span>
           );
           return (
@@ -345,12 +353,12 @@ const Matches = ({
                 cellContent
               ) : (
                 <Link
-                  to={{
+                  to={primary && ({
                     description: {
                       main: { key: primary },
                       [primary]: { db: sourceDatabase, accession: acc },
                     },
-                  }}
+                  })}
                 >
                   {cellContent}
                 </Link>
@@ -381,17 +389,17 @@ const Matches = ({
         ) => (
           <>
             {focusType === 'taxonomy' || focusType === 'proteome' ? (
-              <HighlightedText text={name} textToHighlight={search.search} />
+              <HighlightedText text={name} textToHighlight={search?.search} />
             ) : (
               <Link
-                to={{
+                to={primary && ({
                   description: {
                     main: { key: primary },
                     [primary]: { db: sourceDatabase, accession },
                   },
-                }}
+                })}
               >
-                <HighlightedText text={name} textToHighlight={search.search} />
+                <HighlightedText text={name} textToHighlight={search?.search} />
               </Link>
             )}
           </>
@@ -408,14 +416,14 @@ const Matches = ({
           }: { accession: string; source_database: string }
         ) => (
           <Link
-            to={{
+            to={primary && ({
               description: {
                 main: { key: primary },
                 [primary]: { db: sourceDatabase, accession },
               },
-            }}
+            })}
           >
-            <HighlightedText text={name} textToHighlight={search.search} />
+            <HighlightedText text={name} textToHighlight={search?.search} />
           </Link>
         )}
       >

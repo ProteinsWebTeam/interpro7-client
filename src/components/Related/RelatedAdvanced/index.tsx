@@ -16,14 +16,14 @@ import classNames from 'classnames';
 
 type Props = {
   mainData: Metadata,
-  secondaryData: Array<Record<string, unknown>>,
+  secondaryData: Array<MetadataWithLocations>,
   isStale: boolean,
-  mainType: string,
+  mainType: Endpoint,
   actualSize: number,
   otherFilters?: Array<unknown>,
   dataBase: RequestedData<RootAPIPayload>,
   secondaryDataLoading: boolean,
-  focusType?: string,
+  focusType: Endpoint,
   focusDb?: string,
   nextAPICall?: string | null;
   previousAPICall?: string | null;
@@ -63,7 +63,7 @@ const RelatedAdvanced = ({
             mainType={mainType}
             mainData={mainData}
             secondaryData={secondaryData}
-            focusType={focusType || ''}
+            focusType={focusType}
             otherFilters={otherFilters}
             dataBase={dataBase}
             isStale={isStale}
@@ -93,7 +93,7 @@ const mapStateToPropsAdvanced = createSelector(
     ),
   (mainType, [focusType, focusObj], otherFilters) => ({
     mainType,
-    focusType,
+    focusType: focusType as Endpoint,
     focusDB: (focusObj as EndpointLocation)?.db,
     otherFilters,
   }),

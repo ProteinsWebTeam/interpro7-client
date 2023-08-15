@@ -52,7 +52,7 @@ const _RelatedAdvancedQuery = ({ data, mainType, mainData, isStale, dataBase, ..
   const _secondaryData =
     payload && payload.results
       ? payload.results.map((x) => {
-        const obj: Omit<Metadata, 'counters'> & Record<string, unknown> = { ...x.metadata };
+        const obj: Record<string, unknown> = { ...x.metadata };
         const plural: string = toPlural(mainType || '');
         obj.counters = omit(x, ['metadata', plural]);
 
@@ -68,7 +68,7 @@ const _RelatedAdvancedQuery = ({ data, mainType, mainData, isStale, dataBase, ..
             match.structure_protein_locations,
           chain: match.chain,
         }))
-        return obj;
+        return obj as unknown as MetadataWithLocations;
       })
       : [];
   const c = payload ? payload.count : 0;

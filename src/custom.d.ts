@@ -610,6 +610,14 @@ type ProtVistaLocation = {
   accession?: string;
   [other: string]: unknown;
 };
+type MetadataWithLocations = Metadata & {
+  entry_protein_locations?: Array<ProtVistaLocation>;
+  protein_structure_locations?: Array<ProtVistaLocation>;
+  entry_structure_locations?: Array<ProtVistaLocation>;
+  coordinates?: Array<ProtVistaLocation>;
+  sequence_length?: number,
+  sequence?: string,
+}
 
 type ProteinViewerData<Feature = unknown> = Array<
   | [string, Array<Feature>]
