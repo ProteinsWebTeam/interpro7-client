@@ -7,17 +7,11 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 const f = cssBinder(ebiGlobalStyles);
 
 type Props = {
-  filters?: Array<EndpointFilter>,
-  focusType: Endpoint,
-  databases: DBsInfo,
-}
-const InfoFilters = (
-  {
-    filters,
-    focusType,
-    databases,
-  }: Props,
-) => {
+  filters?: Array<EndpointFilter>;
+  focusType: Endpoint;
+  databases: DBsInfo;
+};
+const InfoFilters = ({ filters, focusType, databases }: Props) => {
   if (!filters || filters.length === 0) return null;
   return (
     <div className={f('callout', 'info', 'withicon')}>
@@ -36,10 +30,7 @@ const InfoFilters = (
             {db && (
               <span>
                 {' '}
-                from the <b>
-                  {(databases?.[db]?.name) || db}
-                </b>{' '}
-                database
+                from the <b>{databases?.[db]?.name || db}</b> database
               </span>
             )}
             .
