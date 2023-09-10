@@ -11,10 +11,9 @@ import Link from 'components/generic/Link';
 import BaseLink from 'components/ExtLink/BaseLink';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Literature from 'components/Entry/Literature';
-import TimeAgo from 'components/TimeAgo';
 import ViewerOnDemand from 'components/Structure/ViewerAndEntries';
 import { formatExperimentType } from 'components/Structure/utils';
-import { formatShortDate } from 'utils/date';
+import { formatLongDate } from 'utils/date';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -119,13 +118,7 @@ export const SummaryStructure = ({ data, dataMatches }: LoadedProps) => {
                 </tr>
                 <tr>
                   <td>Released</td>
-                  <td>
-                    <TimeAgo
-                      date={date}
-                      noUpdate
-                      title={formatShortDate(date)}
-                    />
-                  </td>
+                  <td>{formatLongDate(date)}</td>
                 </tr>
               </tbody>
             </table>
