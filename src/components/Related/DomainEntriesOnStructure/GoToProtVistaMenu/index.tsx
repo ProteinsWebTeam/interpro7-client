@@ -12,7 +12,7 @@ const GoToProtVistaMenu = ({ entries }: { entries: DataForProteinChain[] }) => (
   <DropDownButton label="Jump To" icon="&#xf124;">
     <ul>
       {entries.map((e, i) => {
-        const elementID = `protvista-${e.chain}-${e.protein.accession}`;
+        const elementID = `protvista-${e.chain}-${e.protein.accession || '0'}`;
         return (
           <li key={i}>
             <Link
@@ -22,7 +22,8 @@ const GoToProtVistaMenu = ({ entries }: { entries: DataForProteinChain[] }) => (
               })}
               onClick={() => scrollToElementByID(elementID)}
             >
-              Chain {e.chain} ({e.protein.accession})
+              Chain {e.chain}
+              {e.protein.accession !== null ? ` (${e.protein.accession})` : ''}
             </Link>
           </li>
         );
