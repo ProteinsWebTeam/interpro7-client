@@ -33,7 +33,7 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         labelContent: {
           accession: true,
           name: false,
-          short: false,
+          short: true,
         },
         structureViewer: false,
         shouldHighlight: true,
