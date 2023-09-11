@@ -9,6 +9,7 @@ import {
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import Link from 'components/generic/Link';
+import ContentFromRTD from 'components/ContentFromRTD';
 // $FlowFixMe
 import GoLink from 'components/ExtLink/GoLink';
 import Description from 'components/Description';
@@ -532,6 +533,9 @@ class List extends PureComponent /*:: <Props> */ {
               processData={schemaProcessDataTable}
             />
           )}
+          {db && ['prints', 'sfld'].includes(db) ? (
+            <ContentFromRTD page={`${db}.rst`} />
+          ) : null}
           <Table
             dataTable={_payload.results}
             contentType="entry"
