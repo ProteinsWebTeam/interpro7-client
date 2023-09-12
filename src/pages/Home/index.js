@@ -318,7 +318,7 @@ class Home extends PureComponent {
           </div>
         </div>
 
-        <Announcement />
+        {/*<Announcement />*/}
         <div className={f('row')}>
           <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
             <Tabs>
