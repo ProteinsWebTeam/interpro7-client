@@ -108,30 +108,30 @@ const SummaryEntry = ({
           ) : (
             <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
           )}
+          <section>
+            {
+              // doesn't work for some HAMAP as they have enpty <P> tag
+              (metadata.description || []).length ? (
+                <>
+                  <h4>Description</h4>
+                  <Description
+                    textBlocks={metadata.description}
+                    literature={included as Array<[string, Reference]>}
+                    accession={metadata.accession}
+                  />
+                </>
+              ) : (
+                <DescriptionFromIntegrated
+                  integrated={metadata.integrated}
+                  setIntegratedCitations={setIntegratedCitations}
+                />
+              )
+            }
+          </section>
         </div>
         <div className={css('vf-stack')}>
           <SidePanel metadata={metadata} dbInfo={dbInfo} />
         </div>
-      </section>
-      <section>
-        {
-          // doesn't work for some HAMAP as they have enpty <P> tag
-          (metadata.description || []).length ? (
-            <>
-              <h4>Description</h4>
-              <Description
-                textBlocks={metadata.description}
-                literature={included as Array<[string, Reference]>}
-                accession={metadata.accession}
-              />
-            </>
-          ) : (
-            <DescriptionFromIntegrated
-              integrated={metadata.integrated}
-              setIntegratedCitations={setIntegratedCitations}
-            />
-          )
-        }
       </section>
       <OtherSections
         metadata={metadata}
