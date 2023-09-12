@@ -415,6 +415,45 @@ class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
   }
 }
 
+const ArchiveCallout = ({ name, page }) => (
+  <div className={f('row')}>
+    <div className={f('columns', 'large-12')}>
+      <div
+        className={f('callout', 'info')}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <span
+          style={{
+            fontSize: '2em',
+            color: 'darkblue',
+            paddingRight: '1rem',
+          }}
+          className={f('small', 'icon', 'icon-common', 'icon-info')}
+        />{' '}
+        <p>
+          <strong>{name} has retired</strong>
+          <br />
+          While {name} is no longer receiving updates, InterPro now serves as an
+          archival source, granting continued access to its data.
+          <br />
+          Further information about {name} can be found{' '}
+          <Link
+            href={config.root.readthedocs.href + page + '.html'}
+            className={f('ext')}
+            target="_blank"
+          >
+            in our documentation
+          </Link>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+);
+
 const AllEntriesDownload = (
   {
     description,
@@ -532,6 +571,9 @@ class List extends PureComponent /*:: <Props> */ {
               processData={schemaProcessDataTable}
             />
           )}
+          {db && ['prints', 'sfld'].includes(db) ? (
+            <ArchiveCallout name={db.toUpperCase()} page={db.toLowerCase()} />
+          ) : null}
           <Table
             dataTable={_payload.results}
             contentType="entry"
