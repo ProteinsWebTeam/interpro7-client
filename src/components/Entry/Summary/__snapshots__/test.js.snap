@@ -51,6 +51,22 @@ exports[`<SummaryEntry /> should render 1`] = `
           }
         }
       />
+      <section>
+        <React.Fragment>
+          <h4>
+            Description
+          </h4>
+          <Description
+            accession="IPR000001"
+            literature={[]}
+            textBlocks={
+              [
+                "<p>Kringle</p>",
+              ]
+            }
+          />
+        </React.Fragment>
+      </section>
     </div>
     <div
       className="vf-stack"
@@ -98,22 +114,6 @@ exports[`<SummaryEntry /> should render 1`] = `
         }
       />
     </div>
-  </section>
-  <section>
-    <React.Fragment>
-      <h4>
-        Description
-      </h4>
-      <Description
-        accession="IPR000001"
-        literature={[]}
-        textBlocks={
-          [
-            "<p>Kringle</p>",
-          ]
-        }
-      />
-    </React.Fragment>
   </section>
   <OtherSections
     citations={
