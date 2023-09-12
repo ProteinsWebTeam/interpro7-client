@@ -60,12 +60,18 @@
 
 .protvista-grid .track-label {
   grid-column: 2 / 3;
-  overflow-x: scroll;
+  overflow-x: auto;
   line-height: 1;
   white-space: nowrap;
   font-family: var(--fonts-system);
   padding-left: 0.5rem;
   scrollbar-color: lightgray transparent;
+}
+.protvista-grid .track-label::-webkit-scrollbar:horizontal {
+  background-color: transparent;
+}
+.protvista-grid .track-label::-webkit-scrollbar-thumb:horizontal {
+  background: lightgray;
 }
 .protvista-grid .track-label > a,
 .protvista-grid .track-label > a:focus,
@@ -87,9 +93,6 @@
 .protvista-grid .track-label .track-accession-child > a:visited {
   font-size: 90%;
   color: var(--colors-graydark);
-}
-.protvista-grid .track-label::-webkit-scrollbar {
-  background-color: transparent;
 }
 .protvista-grid .tracks-container {
   grid-column: 1 / 3;

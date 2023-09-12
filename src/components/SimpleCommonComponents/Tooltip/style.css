@@ -8,6 +8,7 @@
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   padding: 0.6rem;
   margin: 4px;
+  z-index: var(--z-index-tooltips);
 
   & h5 {
     text-transform: uppercase;

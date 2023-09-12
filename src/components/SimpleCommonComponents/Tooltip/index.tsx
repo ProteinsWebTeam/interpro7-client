@@ -9,7 +9,7 @@ import {
 } from '@floating-ui/react';
 import useStateRef from 'utils/hooks/useStateRef';
 
-const TOOLTIP_DELAY = 300;
+const TOOLTIP_DELAY = 150;
 
 import cssBinder from 'styles/cssBinder';
 
@@ -35,7 +35,7 @@ const Tooltip = ({
   const arrowRef = useRef(null);
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
   const intervalId = useRef<NodeJS.Timer | null>(null);
-  const [hide, setHide] = useState(true)
+  const [hide, setHide] = useState(true);
   const { refs, floatingStyles, context } = useFloating({
     middleware: [
       autoPlacement(),
@@ -81,15 +81,16 @@ const Tooltip = ({
           </div>
         )}
       </FloatingPortal>
-      <div {...rest} ref={refs.setReference}
+      <div
+        {...rest}
+        ref={refs.setReference}
         onMouseEnter={() => setHide(false)}
-        onMouseLeave={() => interactive ? scheduleHide() : setHide(true)}
-        style={useContext ? {} : { display: 'inline' }}>
+        onMouseLeave={() => (interactive ? scheduleHide() : setHide(true))}
+        style={useContext ? {} : { display: 'inline' }}
+      >
         {children}
       </div>
-
     </>
-
   );
 };
 

@@ -169,9 +169,9 @@ const EntriesOnStructure = ({
   tagChimericStructures(merged);
   return (
     <>
-      {showChainMenu && merged.length > 1 && (
-        <GoToProtVistaMenu entries={merged} />
-      )}
+      {/*{showChainMenu && merged.length > 1 && (*/}
+      {/*  <GoToProtVistaMenu entries={merged} />*/}
+      {/*)}*/}
       <div className={css('row')}>
         {merged.map((e, i) => {
           const sequenceData = {
