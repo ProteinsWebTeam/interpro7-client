@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+// $FlowFixMe
 import Tree from 'components/Tree';
 import NumberComponent from 'components/NumberComponent';
 import abbreviateNumber from 'components/NumberComponent/utils/number-to-display-text';

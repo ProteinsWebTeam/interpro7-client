@@ -31,7 +31,7 @@ class InterProGraphicAnim extends PureComponent {
     this.t1.stop();
     this.t1.tween({
       to: { opacity: 0.2, y: 160 },
-      step: this._step,
+      render: this._step,
     });
   };
 
@@ -40,7 +40,7 @@ class InterProGraphicAnim extends PureComponent {
     this.t1.stop();
     this.t1.tween({
       to: { opacity: 1, y: 0 },
-      step: this._step,
+      render: this._step,
     });
   };
 

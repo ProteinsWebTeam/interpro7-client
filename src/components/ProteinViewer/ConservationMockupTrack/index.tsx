@@ -6,9 +6,9 @@ import cssBinder from 'styles/cssBinder';
 import style from '../../ProteinViewer/style.css';
 import grid from '../../ProteinViewer/grid.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import popper from '../popper.css';
+import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 
-const css = cssBinder(style, grid, fonts, popper);
+const css = cssBinder(style, grid, fonts, tooltip);
 
 type Props = {
   showConservationButton?: boolean;

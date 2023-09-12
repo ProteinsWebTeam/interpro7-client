@@ -2,224 +2,206 @@
 
 exports[`<SummaryStructure /> should render 1`] = `
 <div
-  className="sections"
+  className="vf-stack vf-stack--400"
 >
-  <section>
+  <section
+    className="vf-grid summary-grid"
+  >
     <div
-      className="row"
+      className="vf-stack"
     >
-      <div
-        className="medium-9 columns margin-bottom-large"
+      <table
+        className="vf-table left-headers"
       >
-        <table
-          className="light table-sum"
-        >
-          <tbody>
-            <tr>
-              <td>
-                Accession
-              </td>
-              <td
-                data-testid="structure-accession"
-              >
-                <Memo(Connect(Accession))
-                  accession="102m"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Experiment type
-              </td>
-              <td
-                className="text-cap"
-                data-testid="structure-experiment-type"
-              >
-                <Memo(Connect(Link))
-                  to={
-                    {
-                      "description": {
-                        "entry": {
-                          "db": "InterPro",
-                          "isFilter": true,
-                        },
-                        "main": {
-                          "key": "structure",
-                        },
-                        "structure": {
-                          "db": "PDB",
-                        },
-                      },
-                      "search": {
-                        "experiment_type": "x-ray",
-                      },
-                    }
-                  }
-                >
-                  X-ray
-                </Memo(Connect(Link))>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Resolution
-              </td>
-              <td
-                data-testid="structure-resolution"
-              >
-                1.84
-                 Å
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Chains
-              </td>
-              <td
-                data-testid="structure-chains"
-              >
-                A
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Released
-              </td>
-              <td
-                data-testid="structure-date"
-              >
-                <TimeAgo
-                  date={1998-04-08T00:00:00.000Z}
-                  noUpdate={true}
-                  title="08/04/1998"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div
-        className="medium-3 columns"
-      >
-        <div
-          className="panel"
-        >
-          <h5>
-            External Links
-          </h5>
-          <ul
-            className="no-bullet"
-            data-testid="structure-external-links"
-          >
-            <li>
-              <BaseLink
-                className="ext"
-                id="102m"
-                pattern="https://www.ebi.ac.uk/pdbe/entry/pdb/{id}"
-                target="_blank"
-              >
-                PDBe
-              </BaseLink>
-            </li>
-            <li>
-              <BaseLink
-                className="ext"
-                id="102m"
-                pattern="https://www.rcsb.org/structure/{id}"
-                target="_blank"
-              >
-                RCSB PDB
-              </BaseLink>
-            </li>
-            <li>
-              <BaseLink
-                className="ext"
-                id="102m"
-                pattern="http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode={id}"
-                target="_blank"
-              >
-                PDBsum
-              </BaseLink>
-            </li>
-            <li>
-              <BaseLink
-                className="ext"
-                id="102m"
-                pattern="https://www.cathdb.info/pdb/{id}"
-                target="_blank"
-              >
-                CATH
-              </BaseLink>
-            </li>
-            <li>
-              <BaseLink
-                className="ext"
-                id="102m"
-                pattern="http://scop.mrc-lmb.cam.ac.uk/search?t=txt;q={id}"
-                target="_blank"
-              >
-                SCOP
-              </BaseLink>
-            </li>
-            <li>
-              <BaseLink
-                className="ext"
-                id="102m"
-                pattern="http://prodata.swmed.edu/ecod/complete/search?kw={id}"
-                target="_blank"
-              >
-                ECOD
-              </BaseLink>
-            </li>
-            <li>
-              <BaseLink
-                className="ext"
-                id="102m"
-                pattern="https://proteopedia.org/wiki/index.php/{id}"
-                target="_blank"
-              >
-                Proteopedia
-              </BaseLink>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <Memo(Connect(UnconnectedErrorBoundary))>
-      <div
-        className="row"
-      >
-        <div
-          className="columns"
-        >
-          <Memo(Connect(StructureView))
-            id="102m"
-            matches={
-              [
+        <tbody>
+          <tr>
+            <td
+              style={
                 {
-                  "metadata": {
-                    "accession": "G3DSA:1.10.490.10",
-                    "go_terms": null,
-                    "integrated": "IPR012292",
-                    "member_databases": null,
-                    "name": "Globins",
-                    "source_database": "cathgene3d",
-                    "type": "homologous_superfamily",
-                  },
-                  "structures": [
-                    {
-                      "accession": "102m",
-                      "chain": "A",
+                  "maxWidth": "50%",
+                }
+              }
+            >
+              Accession
+            </td>
+            <td>
+              <Accession
+                accession="102m"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Experiment type
+            </td>
+            <td
+              className="text-cap"
+            >
+              <Memo(Connect(Link))
+                to={
+                  {
+                    "description": {
+                      "entry": {
+                        "db": "InterPro",
+                        "isFilter": true,
+                      },
+                      "main": {
+                        "key": "structure",
+                      },
+                      "structure": {
+                        "db": "PDB",
+                      },
                     },
-                  ],
-                },
-              ]
-            }
-          />
-        </div>
-      </div>
-    </Memo(Connect(UnconnectedErrorBoundary))>
+                    "search": {
+                      "experiment_type": "x-ray",
+                    },
+                  }
+                }
+              >
+                X-ray
+              </Memo(Connect(Link))>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Resolution
+            </td>
+            <td>
+              1.84
+               Å
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Chains
+            </td>
+            <td>
+              A
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Released
+            </td>
+            <td>
+              8 April 1998
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      className="vf-stack"
+    >
+      <section>
+        <h5>
+          External Links
+        </h5>
+        <ul
+          className="no-bullet"
+        >
+          <li>
+            <BaseLink
+              className="ext"
+              id="102m"
+              pattern="https://www.ebi.ac.uk/pdbe/entry/pdb/{id}"
+              target="_blank"
+            >
+              PDBe
+            </BaseLink>
+          </li>
+          <li>
+            <BaseLink
+              className="ext"
+              id="102m"
+              pattern="https://www.rcsb.org/structure/{id}"
+              target="_blank"
+            >
+              RCSB PDB
+            </BaseLink>
+          </li>
+          <li>
+            <BaseLink
+              className="ext"
+              id="102m"
+              pattern="http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode={id}"
+              target="_blank"
+            >
+              PDBsum
+            </BaseLink>
+          </li>
+          <li>
+            <BaseLink
+              className="ext"
+              id="102m"
+              pattern="https://www.cathdb.info/pdb/{id}"
+              target="_blank"
+            >
+              CATH
+            </BaseLink>
+          </li>
+          <li>
+            <BaseLink
+              className="ext"
+              id="102m"
+              pattern="http://scop.mrc-lmb.cam.ac.uk/search?t=txt;q={id}"
+              target="_blank"
+            >
+              SCOP
+            </BaseLink>
+          </li>
+          <li>
+            <BaseLink
+              className="ext"
+              id="102m"
+              pattern="http://prodata.swmed.edu/ecod/complete/search?kw={id}"
+              target="_blank"
+            >
+              ECOD
+            </BaseLink>
+          </li>
+          <li>
+            <BaseLink
+              className="ext"
+              id="102m"
+              pattern="https://proteopedia.org/wiki/index.php/{id}"
+              target="_blank"
+            >
+              Proteopedia
+            </BaseLink>
+          </li>
+        </ul>
+      </section>
+    </div>
   </section>
+  <Memo(Connect(UnconnectedErrorBoundary))>
+    <div>
+      <Memo(Connect(StructureView))
+        id="102m"
+        matches={
+          [
+            {
+              "metadata": {
+                "accession": "G3DSA:1.10.490.10",
+                "go_terms": null,
+                "integrated": "IPR012292",
+                "member_databases": null,
+                "name": "Globins",
+                "source_database": "cathgene3d",
+                "type": "homologous_superfamily",
+              },
+              "structures": [
+                {
+                  "accession": "102m",
+                  "chain": "A",
+                },
+              ],
+            },
+          ]
+        }
+      />
+    </div>
+  </Memo(Connect(UnconnectedErrorBoundary))>
   <div />
 </div>
 `;

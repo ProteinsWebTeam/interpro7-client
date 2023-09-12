@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import T from 'prop-types';
-
+// $FlowFixMe
 import Related from 'components/Related';
 
 const StructureSubPage = ({ data } /*: {data: Object} */) => (

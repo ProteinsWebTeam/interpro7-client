@@ -210,7 +210,7 @@ export const getUrl = (includeSearch: boolean) =>
 export const mapStateToPropsForModels = createSelector(
   (state: GlobalState) => state.customLocation.description,
   (state: GlobalState) => state.customLocation.search,
-  (description: InterProDescription, search: Record<string, string>) => ({
+  (description, search) => ({
     description,
     search,
   })

@@ -8,7 +8,6 @@
 .*/node_modules/babel.*
 .*/node_modules/@babel.*
 .*/node_modules/draft-js
-.*/node_modules/@popperjs
 .*/node_modules/.*json
 .*/node_modules/eslint-plugin*
 .*/node_modules/timing-functions
@@ -18,7 +17,6 @@
 .*/node_modules/flow-coverage-report*
 .*/node_modules/@emotion*
 .*/node_modules/emotion-theming*
-.*/node_modules/react-popper*
 .*/node_modules/react-hotkeys*
 .*/node_modules/react-select*
 .*/node_modules/create-emotion*

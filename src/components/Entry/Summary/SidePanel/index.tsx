@@ -93,98 +93,104 @@ const SidePanel = ({
 
   return (
     <section>
-      <div>
-        <Tooltip
-          title={
-            'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
-            'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
-            'helpful if you can include literature references supporting your annotation suggestion.'
-          }
-        >
-          <DropDownButton
-            label="Add your annotation"
-            icon="&#xf303;"
-            extraClasses={css('annotation')}
-          >
-            <form
-              onSubmit={handleSubmit}
-              className={css('vf-stack', 'vf-stack--200')}
-            >
-              <label
-                className={css('vf-form__label', 'vf-form__label--required')}
-                htmlFor="message"
-              >
-                Your annotation
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={message}
-                onChange={handleFields}
-                className={css('vf-form__textarea')}
-                rows={5}
-                required
-              />
-              <label
-                className={css('vf-form__label', 'vf-form__label--required')}
-                htmlFor="from_email"
-              >
-                Email address
-              </label>
-              <input
-                id="from_email"
-                name="from_email"
-                type="email"
-                value={email}
-                onChange={handleFields}
-                className={css('vf-form__input')}
-                required
-              />
-              <div className={css('flex-space-evenly')}>
-                <button
-                  className={css(
-                    'vf-button',
-                    'vf-button--primary',
-                    'vf-button--sm'
-                  )}
-                >
-                  Submit
-                </button>
-                <button
-                  className={css(
-                    'vf-button',
-                    'vf-button--secondary',
-                    'vf-button--sm'
-                  )}
-                  onClick={clearFields}
-                >
-                  Clear
-                </button>
-              </div>
-            </form>
-          </DropDownButton>
-        </Tooltip>
-      </div>
-      {metadata.integrated && <Integration intr={metadata.integrated} />}
-      {!['interpro', 'pfam'].includes(
+      {['interpro', 'pfam'].includes(
+        // Only receiving new annotations for pfam and interpro
         metadata.source_database.toLowerCase()
-      ) && url && (
-        <section>
-          <h5>External Links</h5>
-          <ul className={css('no-bullet')}>
-            <li>
-              <Link
-                className={css('ext-link')}
-                target="_blank"
-                href={url(metadata.accession)}
+      ) && (
+        <div>
+          <Tooltip
+            title={
+              'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
+              'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
+              'helpful if you can include literature references supporting your annotation suggestion.'
+            }
+          >
+            <DropDownButton
+              label="Add your annotation"
+              icon="&#xf303;"
+              extraClasses={css('annotation')}
+            >
+              <form
+                onSubmit={handleSubmit}
+                className={css('vf-stack', 'vf-stack--200')}
               >
-                View {metadata.accession} in{' '}
-                {(dbInfo && dbInfo.name) || metadata.source_database}
-              </Link>
-            </li>
-          </ul>
-        </section>
+                <label
+                  className={css('vf-form__label', 'vf-form__label--required')}
+                  htmlFor="message"
+                >
+                  Your annotation
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={message}
+                  onChange={handleFields}
+                  className={css('vf-form__textarea')}
+                  rows={5}
+                  required
+                />
+                <label
+                  className={css('vf-form__label', 'vf-form__label--required')}
+                  htmlFor="from_email"
+                >
+                  Email address
+                </label>
+                <input
+                  id="from_email"
+                  name="from_email"
+                  type="email"
+                  value={email}
+                  onChange={handleFields}
+                  className={css('vf-form__input')}
+                  required
+                />
+                <div className={css('flex-space-evenly')}>
+                  <button
+                    className={css(
+                      'vf-button',
+                      'vf-button--primary',
+                      'vf-button--sm'
+                    )}
+                  >
+                    Submit
+                  </button>
+                  <button
+                    className={css(
+                      'vf-button',
+                      'vf-button--secondary',
+                      'vf-button--sm'
+                    )}
+                    onClick={clearFields}
+                  >
+                    Clear
+                  </button>
+                </div>
+              </form>
+            </DropDownButton>
+          </Tooltip>
+        </div>
       )}
+      {metadata.integrated && <Integration intr={metadata.integrated} />}
+      {!['interpro', 'pfam', 'antifam'].includes(
+        metadata.source_database.toLowerCase()
+      ) &&
+        url && (
+          <section>
+            <h5>External Links</h5>
+            <ul className={css('no-bullet')}>
+              <li>
+                <Link
+                  className={css('ext-link')}
+                  target="_blank"
+                  href={url(metadata.accession)}
+                >
+                  View {metadata.accession} in{' '}
+                  {(dbInfo && dbInfo.name) || metadata.source_database}
+                </Link>
+              </li>
+            </ul>
+          </section>
+        )}
       {metadata.member_databases &&
       Object.keys(metadata.member_databases).length ? (
         <ContributingSignatures contr={metadata.member_databases} />

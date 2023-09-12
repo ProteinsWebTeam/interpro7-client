@@ -25,3 +25,9 @@ section.summary-row {
 .summary-grid {
   grid-template-columns: 3fr 1fr;
 }
+/* Small screen only */
+@media screen and (max-width: 50em) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}

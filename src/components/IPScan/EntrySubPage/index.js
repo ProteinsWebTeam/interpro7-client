@@ -5,7 +5,8 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 // import { flattenDeep } from 'lodash-es';
 
-import { _RelatedAdvanced as Related } from 'components/Related';
+// $FlowFixMe
+import Related from 'components/Related/RelatedAdvanced';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Redirect from 'components/generic/Redirect';
 

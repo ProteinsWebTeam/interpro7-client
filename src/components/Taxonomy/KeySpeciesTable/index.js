@@ -12,7 +12,8 @@ import { getReversedUrl } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Column } from 'components/Table';
 import Table from 'components/Table/SimpleTable';
-import { ProteinDownloadRenderer } from 'components/Matches';
+// $FlowFixMe
+import ProteinDownloadRenderer from 'components/Matches/ProteinDownloadRenderer';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
@@ -91,7 +92,7 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
         defaultKey="proteinFastas"
         headerClassName={f('table-center')}
         cellClassName={f('table-center')}
-        renderer={ProteinDownloadRenderer((description /*: any */))}
+        renderer={ProteinDownloadRenderer(description)}
       >
         Actions
       </Column>

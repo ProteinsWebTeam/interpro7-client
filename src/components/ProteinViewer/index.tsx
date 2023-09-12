@@ -30,10 +30,14 @@ import cssBinder from 'styles/cssBinder';
 
 import style from './style.css';
 import grid from './grid.css';
-import popper from './popper.css';
+import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
 
-const css = cssBinder(style, grid, fonts, popper);
+TracksInCategory.displayName = 'TracksInCategory';
+Header.displayName = 'TracksHeader';
+
+const css = cssBinder(style, grid, fonts, tooltip);
 
 const highlightColor = '#607D8B50';
 const TOOLTIP_DELAY = 300;
@@ -46,7 +50,13 @@ type Residue = {
     }
   >;
 };
-export type ExtendedFeatureLocation = FeatureLocation & {
+export type ExtendedFeatureLocation = {
+  fragments: Array<{
+    start: number;
+    end: number;
+    [annotation: string]: unknown;
+  }>;
+} & {
   confidence?: number;
   description?: string;
   seq_feature?: string;
@@ -63,6 +73,7 @@ export type ExtendedFeature = Feature & {
   location2residue?: unknown;
   chain?: string;
   protein?: string;
+  integrated?: string;
   children?: Array<ExtendedFeature>;
   warnings?: Array<string>;
 };
@@ -70,7 +81,7 @@ export type ExtendedFeature = Feature & {
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = PropsWithChildren<{
-  protein: ProteinMetadata;
+  protein: { accession: string; length: number; sequence: string };
   title: string;
   data: ProteinViewerData;
   showConservationButton?: boolean;
@@ -177,7 +188,11 @@ export const ProteinViewer = ({
       </div>
       <div>
         <NightingaleManager id="pv-manager">
-          <div className={css('protvista-grid')}>
+          <div
+            className={css('protvista-grid', {
+              printing: isPrinting,
+            })}
+          >
             <div className={css('view-options-wrap', 'track-sized')}>
               <Options
                 setPrintingMode={setPrinting}
@@ -217,7 +232,11 @@ export const ProteinViewer = ({
                 .filter(([_, tracks]) => tracks && tracks.length)
 
                 .map(([type, entries, component]) => {
-                  const LabelComponent = component?.component;
+                  entries.forEach((entry: ExtendedFeature) => {
+                    entry.protein = protein.accession;
+                  });
+
+                  const LabelComponent = component?.component || 'span';
                   return (
                     <div
                       key={type}
@@ -256,19 +275,31 @@ export const ProteinViewer = ({
                           <LabelComponent {...(component?.attributes || {})} />
                         </div>
                       )}{' '}
-                      <TracksInCategory
-                        entries={entries}
-                        sequence={protein.sequence}
-                        hideCategory={hideCategory[type]}
-                        highlightColor={highlightColor}
-                        openTooltip={openTooltip}
-                        closeTooltip={closeTooltip}
-                        isPrinting={isPrinting}
-                        ref={(ref: ExpandedHandle) =>
-                          categoryRefs.current.push(ref)
-                        }
-                        databases={dataBase?.payload?.databases}
-                      />
+                      {type === 'representative domains' ? (
+                        <RepresentativeDomainsTrack
+                          hideCategory={hideCategory[type]}
+                          highlightColor={highlightColor}
+                          entries={entries}
+                          length={protein.sequence.length}
+                          openTooltip={openTooltip}
+                          closeTooltip={closeTooltip}
+                          isPrinting={isPrinting}
+                        />
+                      ) : (
+                        <TracksInCategory
+                          entries={entries}
+                          sequence={protein.sequence}
+                          hideCategory={hideCategory[type]}
+                          highlightColor={highlightColor}
+                          openTooltip={openTooltip}
+                          closeTooltip={closeTooltip}
+                          isPrinting={isPrinting}
+                          ref={(ref: ExpandedHandle) =>
+                            categoryRefs.current.push(ref)
+                          }
+                          databases={dataBase?.payload?.databases}
+                        />
+                      )}
                     </div>
                   );
                 })}
