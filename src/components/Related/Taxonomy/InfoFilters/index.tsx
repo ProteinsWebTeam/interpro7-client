@@ -1,20 +1,17 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
-import { toPlural } from 'utils/pages';
+import { toPlural } from 'utils/pages/toPlural';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
-const f = foundationPartial(ebiGlobalStyles);
+const f = cssBinder(ebiGlobalStyles);
 
-const InfoFilters = (
-  {
-    filters,
-    focusType,
-    databases,
-  } /*: {filters?: Array<Object>, focusType: string, databases: Object} */,
-) => {
+type Props = {
+  filters?: Array<EndpointFilter>;
+  focusType: Endpoint;
+  databases: DBsInfo;
+};
+const InfoFilters = ({ filters, focusType, databases }: Props) => {
   if (!filters || filters.length === 0) return null;
   return (
     <div className={f('callout', 'info', 'withicon')}>
@@ -33,10 +30,7 @@ const InfoFilters = (
             {db && (
               <span>
                 {' '}
-                from the <b>
-                  {(databases[db] && databases[db].name) || db}
-                </b>{' '}
-                database
+                from the <b>{databases?.[db]?.name || db}</b> database
               </span>
             )}
             .
@@ -45,11 +39,6 @@ const InfoFilters = (
       </ul>
     </div>
   );
-};
-InfoFilters.propTypes = {
-  databases: T.object.isRequired,
-  focusType: T.string.isRequired,
-  filters: T.array,
 };
 
 export default InfoFilters;

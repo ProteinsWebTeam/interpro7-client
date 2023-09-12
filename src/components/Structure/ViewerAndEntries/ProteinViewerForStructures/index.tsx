@@ -16,9 +16,15 @@ type StructureWithSecondary = {
 };
 export interface LoadedProps
   extends LoadDataProps<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>>,
-    LoadDataProps<StructureWithSecondary, 'Secondary'> {}
+    LoadDataProps<StructureWithSecondary, 'Secondary'> {
+  structure: string;
+}
 
-const ProtVistaForStructure = ({ data, dataSecondary }: LoadedProps) => {
+const ProteinViewerForStructure = ({
+  structure,
+  data,
+  dataSecondary,
+}: LoadedProps) => {
   const processedData = useProcessData(data?.payload?.results, 'structure');
   if (!data || data.loading) return <Loading />;
 
@@ -36,6 +42,7 @@ const ProtVistaForStructure = ({ data, dataSecondary }: LoadedProps) => {
   return (
     <div>
       <EntriesOnStructure
+        structure={structure}
         entries={interpro.concat(unintegrated) as StructureLinkedObject[]}
         showChainMenu={true}
         secondaryStructures={secondaryData}
@@ -89,5 +96,5 @@ export default loadData<StructureWithSecondary, 'Secondary'>({
 } as Params)(
   loadData<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>>(
     getURLForMatches
-  )(ProtVistaForStructure)
+  )(ProteinViewerForStructure)
 );

@@ -30,14 +30,14 @@ import cssBinder from 'styles/cssBinder';
 
 import style from './style.css';
 import grid from './grid.css';
-import popper from './popper.css';
+import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
 
 TracksInCategory.displayName = 'TracksInCategory';
 Header.displayName = 'TracksHeader';
 
-const css = cssBinder(style, grid, fonts, popper);
+const css = cssBinder(style, grid, fonts, tooltip);
 
 const highlightColor = '#607D8B50';
 const TOOLTIP_DELAY = 300;
@@ -81,7 +81,7 @@ export type ExtendedFeature = Feature & {
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = PropsWithChildren<{
-  protein: ProteinMetadata;
+  protein: { accession: string; length: number; sequence: string };
   title: string;
   data: ProteinViewerData;
   showConservationButton?: boolean;

@@ -20,10 +20,10 @@ module.exports = {
       test.toString().includes('.css')
     );
 
-    cssRule.exclude = /((tippy)|(clanviewer))\.css$/i;
+    cssRule.exclude = /((clanviewer))\.css$/i;
 
     config.module.rules.push({
-      test: /((tippy)|(clanviewer))\.css$/i,
+      test: /((clanviewer))\.css$/i,
       use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
     });
     config.module.rules.push({

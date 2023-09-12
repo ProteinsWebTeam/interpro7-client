@@ -41,42 +41,18 @@ exports[`<EntriesOnStructure /> should render 1`] = `
           )
         </small>
       </h4>
-      <Memo(Connect(loadData(ProteinViewerLoaded)))
+      <ProteinViewerLoaded
         chain="A"
-        fixedHighlight="208:366"
         id="A-p00735"
+        protein={
+          {
+            "accession": "A-undefined",
+            "length": undefined,
+            "sequence": undefined,
+          }
+        }
         tracks={
           [
-            [
-              "Chain",
-              [
-                {
-                  "accession": "A",
-                  "coordinates": [
-                    [
-                      [
-                        208,
-                        366,
-                      ],
-                    ],
-                  ],
-                  "label": "Chain A",
-                  "locations": [
-                    {
-                      "fragments": [
-                        {
-                          "end": 366,
-                          "start": 208,
-                        },
-                      ],
-                    },
-                  ],
-                  "protein": "p00735",
-                  "source_database": "pdb",
-                  "type": "chain",
-                },
-              ],
-            ],
             [
               "Secondary Structure",
               [],

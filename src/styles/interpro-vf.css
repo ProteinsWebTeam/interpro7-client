@@ -8,8 +8,14 @@ body a {
   text-decoration: none;
   border: 0;
   &:focus,
-  &:hover {
+  &:hover:not(.vf-button) {
     text-decoration: underline;
+    border-bottom-style: none;
+    border: 0;
+  }
+  &.icon:focus,
+  &.icon:hover {
+    text-decoration: none;
   }
 }
 

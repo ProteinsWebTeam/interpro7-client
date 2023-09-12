@@ -1,6 +1,6 @@
-@import '../../styles/fonts.css';
-@import '../../styles/colors.css';
-@import '../../styles/timing.css';
+@import "../../styles/fonts.css";
+@import "../../styles/colors.css";
+@import "../../styles/timing.css";
 
 :root {
   --track-space: 70vw;
@@ -132,6 +132,19 @@ g:global(.child-location-group.clg-5) path {
 }
 .fullscreenable {
   overflow: scroll;
+}
+table.matches-in-table {
+  margin: 0;
+}
+body table.matches-in-table tr td {
+  padding: 0.1rem;
+  border-bottom: 0;
+}
+body table.matches-in-table tr:first-of-type td {
+  border-top: 0;
+}
+.track-in-table {
+  max-width: 400px;
 }
 .track-in-table text {
   fill: var(--colors-graydark);

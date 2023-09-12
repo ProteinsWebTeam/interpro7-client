@@ -108,6 +108,7 @@ type InterProLocation = {
   hash: string;
   state: Record<string, string>;
 };
+type EndpointFilter = [endpoint: Endpoint, location: EndpointPartialLocation];
 
 type SettingsState = {
   navigation: {
@@ -299,6 +300,11 @@ interface EntryMetadata extends Metadata {
     name: string;
   };
 }
+
+type SourceOrganism = {
+  fullName: string;
+  taxId: number;
+};
 interface ProteinMetadata extends Metadata {
   id?: string;
   name: string;
@@ -310,10 +316,7 @@ interface ProteinMetadata extends Metadata {
   protein_evidence: number;
   is_fragment: boolean;
   ida_accession: string;
-  source_organism: {
-    fullName: string;
-    taxId: number;
-  };
+  source_organism: SourceOrganism;
 }
 interface StructureMetadata extends Metadata {
   name: NameObject;
@@ -410,6 +413,8 @@ type StructureLinkedObject = {
   short_name?: string;
   structure_protein_locations: Array<ProtVistaLocation>;
   entry_protein_locations: Array<ProtVistaLocation>;
+  entry_structure_locations: Array<ProtVistaLocation>;
+
   protein_structure_mapping: Record<
     string,
     Array<{
@@ -429,7 +434,14 @@ type StructureLinkedObject = {
   experiment_type: string;
   type?: string;
   entry_type?: string;
-  children: unknown;
+  children?: Array<
+    MinimalFeature & {
+      entry_protein_locations: unknown;
+      entry_structure_locations: unknown;
+    }
+  >;
+  sequence: string;
+  sequence_length: number;
 };
 type EntryStructurePayload = {
   metadata: EntryMetadata;
@@ -599,6 +611,14 @@ type ProtVistaLocation = {
   accession?: string;
   [other: string]: unknown;
 };
+type MetadataWithLocations = Metadata & {
+  entry_protein_locations?: Array<ProtVistaLocation>;
+  protein_structure_locations?: Array<ProtVistaLocation>;
+  entry_structure_locations?: Array<ProtVistaLocation>;
+  coordinates?: Array<ProtVistaLocation>;
+  sequence_length?: number;
+  sequence?: string;
+};
 
 type ProteinViewerData<Feature = unknown> = Array<
   | [string, Array<Feature>]
@@ -620,6 +640,21 @@ type ResidueMetadata = {
 };
 type ResiduesPayload = Record<string, ResidueMetadata>;
 
+type TaxaPayload = {
+  taxa: Taxon;
+};
+type Taxon = {
+  id: string;
+  rank: string;
+  name: string;
+  lineage?: Array<{
+    name: string;
+    id: string;
+  }>;
+  proteins: number;
+  species: number;
+  children: Array<Taxon>;
+};
 type Genome3DAnnotation = {
   accession: string;
   metadata: {
@@ -751,3 +786,27 @@ interface EntryProteinMatch extends MatchI {
   entry_type: string;
   entry_integrated: string | null;
 }
+interface StructureProteinMatch extends MatchI {
+  entry_protein_locations: Array<ProtVistaLocation>;
+  structure_protein_locations: Array<ProtVistaLocation>;
+  protein_length: number;
+  source_database: string;
+  entry_type: string;
+  chain: string;
+  entry_integrated: string | null;
+}
+interface EntryStructureMatch extends MatchI {
+  entry_structure_locations: Array<ProtVistaLocation>;
+  protein_length: number;
+  sequence_length: number;
+  sequence: string;
+  protein?: string;
+  source_database: string;
+  chain: string;
+  entry_type: string;
+  entry_integrated: string | null;
+}
+
+type AnyMatch = Partial<EntryProteinMatch> &
+  Partial<EntryStructureMatch> &
+  Partial<StructureProteinMatch>;

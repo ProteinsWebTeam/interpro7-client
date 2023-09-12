@@ -1,6 +1,8 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
+
+// $FlowFixMe
 import Related from 'components/Related';
 
 class ProteomeSubPage extends PureComponent /*:: <{data: Object, customLocation: Object}> */ {

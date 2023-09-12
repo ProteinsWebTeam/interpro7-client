@@ -140,7 +140,7 @@ const AlignmentViewer = ({
                 data-icon="&#xf146;"
                 title={'Click or use CTRL + mouse wheel down to zoom out'}
                 onClick={() => {
-                  (navigationTrack.current /*: any */)
+                  navigationTrack.current /*: any */
                     ?.zoomOut();
                 }}
               />
@@ -150,7 +150,7 @@ const AlignmentViewer = ({
                 data-icon="&#xf0fe;"
                 title={'Click or use CTRL + mouse wheel up to to zoom in'}
                 onClick={() => {
-                  (navigationTrack.current /*: any */)
+                  navigationTrack.current /*: any */
                     ?.zoomIn();
                 }}
               />

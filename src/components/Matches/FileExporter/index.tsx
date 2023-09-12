@@ -2,38 +2,33 @@ import React from 'react';
 import File from 'components/File';
 import { SupportedExtensions } from 'components/File/FileButton';
 
-type SupportedEndpoints = 'entry' | 'protein' | 'structure';
-const endpoint: Record<
-  SupportedEndpoints,
-  Record<SupportedEndpoints, string | undefined>
+const endpoint: Partial<
+  Record<Endpoint, Partial<Record<Endpoint, string | undefined>>>
 > = {
   protein: {
     entry: 'proteinEntry',
-    protein: undefined,
     structure: 'proteinStructure',
   },
   structure: {
     entry: 'structureEntry',
     protein: 'structureProtein',
-    structure: undefined,
   },
   entry: {
-    entry: undefined,
     protein: 'entryProtein',
     structure: 'entryStructure',
   },
 };
 
 type Props = {
-  description: InterProPartialDescription;
+  description?: InterProPartialDescription;
   search?: {
     extra_fields?: string;
   };
   count: number;
   minWidth?: number | string;
   fileType: SupportedExtensions;
-  primary: SupportedEndpoints;
-  secondary: SupportedEndpoints;
+  primary: Endpoint;
+  secondary: Endpoint;
   label?: string;
   focused?: string | null;
   className?: string;
@@ -50,6 +45,7 @@ const FileExporter = ({
   focused = null,
   minWidth,
 }: Props) => {
+  if (!description) return null;
   const customLocationDescription = {
     ...description,
     main: { key: primary },

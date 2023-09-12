@@ -1,4 +1,6 @@
 button.coordinates {
   padding: 0.3rem 0.7rem;
   margin: 0;
+  background-color: #777;
+  color: #fefefe;
 }

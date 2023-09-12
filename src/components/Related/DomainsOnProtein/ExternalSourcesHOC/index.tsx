@@ -13,7 +13,7 @@ export type ExtenalSourcesProps = {
   externalSourcesData: MinimalFeature[];
 };
 export function loadExternalSources<
-  T extends ExtenalSourcesProps = ExtenalSourcesProps
+  T extends ExtenalSourcesProps = ExtenalSourcesProps,
 >(WrappedComponent: React.ComponentType<T>) {
   // Try to create a nice displayName for React Dev Tools.
   const displayName =

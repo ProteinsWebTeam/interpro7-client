@@ -1,6 +1,6 @@
-@import '../../styles/colors.css';
-@import '../../styles/spacing.css';
-@import '../../styles/timing.css';
+@import "../../styles/colors.css";
+@import "../../styles/spacing.css";
+@import "../../styles/timing.css";
 
 .list {
   padding: 0;
@@ -87,28 +87,4 @@
     min-width: 10em;
     color: var(--colors-gray);
   }
-}
-
-.actions {
-  display: flex;
-  justify-content: center;
-}
-
-.view-icon-div {
-  margin: 0.2rem 0;
-  padding: 0.2em 0;
-}
-
-.view-link {
-  font-size: 160%;
-  border: none;
-  padding: 0.3em;
-}
-
-.icon-count-organisms {
-  height: 3em; /*to align icon*/
-  width: 30px;
-  background-image: url('../../images/icons/ico-species.svg');
-  background-position-y: 59%;
-  background-repeat: no-repeat;
 }

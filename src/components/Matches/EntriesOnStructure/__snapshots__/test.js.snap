@@ -1,59 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<EntriesOnStructure /> should render 1`] = `
-<div
-  className="track-in-table"
->
-  <div
-    className="track-container"
+<section>
+  <table
+    className="matches-in-table"
   >
-    <div
-      className="aligned-to-track-component"
-    >
-      <nightingale-sequence
-        displayend={622}
-        displaystart="1"
-        height="30"
-        length={622}
-        use-ctrl-to-zoom={true}
-      />
-    </div>
-  </div>
-  <div
-    className="track-component"
-  >
-    <Tooltip
-      title="<b>1a4w</b><br/>CRYSTAL STRUCTURES OF THROMBIN WITH THIAZOLE-CONTAINING INHIBITORS: PROBES OF THE S1' BINDING SITE<br/>"
-    >
-      <nightingale-interpro-track
-        display-end={622}
-        display-start="1"
-        expanded={true}
-        id="track_1a4w"
-        length={622}
-        margin-color="#fafafa"
-        shape="rectangle"
-        use-ctrl-to-zoom={true}
-      />
-    </Tooltip>
-  </div>
-  <div
-    className="track-component"
-  >
-    <Tooltip
-      title="<b>IPR000001</b><br/>Kringle<br/><p>105-188</p><p>211-293</p>"
-    >
-      <nightingale-interpro-track
-        display-end={622}
-        display-start="1"
-        expanded={true}
-        id="track_IPR000001"
-        length={622}
-        margin-color="#fafafa"
-        shape="roundRectangle"
-        use-ctrl-to-zoom={true}
-      />
-    </Tooltip>
-  </div>
-</div>
+    <tbody>
+      <tr>
+        <td>
+          A
+        </td>
+        <td>
+          <div
+            className="track-in-table"
+          >
+            <div
+              className="track-container"
+            >
+              <div
+                className="aligned-to-track-component"
+              >
+                <Yi
+                  display-end={0}
+                  display-start={1}
+                  height={30}
+                  length={0}
+                  sequence=""
+                  use-ctrl-to-zoom={true}
+                />
+              </div>
+            </div>
+            <div
+              className="track-component"
+            >
+              <TooltipForTrack
+                message={
+                  <EntryPopup
+                    accession="IPR000001"
+                    dbName="interpro"
+                    locations={[]}
+                    name="Kringle"
+                  />
+                }
+                onMouseOverFeature={[Function]}
+              >
+                <Memo(Kr)
+                  data={[]}
+                  display-end={0}
+                  display-start={1}
+                  expanded={true}
+                  id="track_1a4w"
+                  length={0}
+                  margin-color="#fafafa"
+                  shape="roundRectangle"
+                  use-ctrl-to-zoom={true}
+                />
+              </TooltipForTrack>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 `;
