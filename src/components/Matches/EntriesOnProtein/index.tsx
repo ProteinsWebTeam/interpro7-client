@@ -24,7 +24,7 @@ const EntriesOnProtein = ({ matches, match }: Props) => {
   const { entry, protein } = match || {};
 
   useEffect(() => {
-    if (!matches.length || !entry || !protein) return;
+    if (matches === undefined || !matches.length || !entry || !protein) return;
 
     setData(
       matches.map((loc) => ({
@@ -39,7 +39,8 @@ const EntriesOnProtein = ({ matches, match }: Props) => {
     );
   }, [entry, protein]);
 
-  if (!matches.length || !entry || !protein) return null;
+  if (matches === undefined || !matches.length || !entry || !protein)
+    return null;
 
   return (
     <div className={css('track-in-table')}>

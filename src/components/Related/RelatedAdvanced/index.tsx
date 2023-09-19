@@ -88,7 +88,8 @@ const mapStateToPropsAdvanced = createSelector(
       (value: EndpointPartialLocation) => !!value.isFilter && value.order !== 1
     ),
   (mainType, [focusType, focusObj], otherFilters) => ({
-    mainType,
+    mainType:
+      (mainType as string) === 'result' ? ('protein' as Endpoint) : mainType,
     focusType: focusType as Endpoint,
     focusDB: (focusObj as EndpointLocation)?.db,
     otherFilters: otherFilters as Array<EndpointFilter>,
