@@ -299,6 +299,7 @@ interface EntryMetadata extends Metadata {
     accession: string;
     name: string;
   };
+  is_removed?: boolean;
 }
 
 type SourceOrganism = {
