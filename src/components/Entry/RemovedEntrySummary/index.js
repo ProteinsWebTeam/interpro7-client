@@ -36,7 +36,7 @@ const RemovedEntrySummary = ({
     description:
       formerNames.length !== 0
         ? ['Former names:', `<ul>${formerNames.map(listWrap).join('')}</ul>`]
-        : null,
+        : [],
   };
   const message = `${metadata.accession} has been retired in ${date}.`;
   return (
