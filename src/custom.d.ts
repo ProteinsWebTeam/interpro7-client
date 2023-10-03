@@ -299,6 +299,7 @@ interface EntryMetadata extends Metadata {
     accession: string;
     name: string;
   };
+  llm_description: string | null;
 }
 
 type SourceOrganism = {
