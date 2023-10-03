@@ -300,6 +300,7 @@ interface EntryMetadata extends Metadata {
     name: string;
   };
   llm_description: string | null;
+  is_removed?: boolean;
 }
 
 type SourceOrganism = {
