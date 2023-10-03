@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DescriptionLLM /> should render 1`] = `
+<React.Fragment>
+  <h4>
+    Description
+  </h4>
+  <div
+    className="row"
+  >
+    <div
+      className="columns large-12"
+    >
+      <div
+        className="callout warning"
+        style={
+          {
+            "alignItems": "center",
+            "display": "flex",
+          }
+        }
+      >
+        <span
+          className="small icon icon-common icon-exclamation-triangle"
+          style={
+            {
+              "color": "#664d03",
+              "fontSize": "2em",
+              "paddingRight": "1rem",
+            }
+          }
+        />
+         
+        <p>
+          <strong>
+            Unreviewed Protein Family Description
+          </strong>
+          <br />
+          This description has been automatically generated using
+           
+          <Memo(Connect(Link))
+            className="ext"
+            href="https://openai.com/research/gpt-4"
+            target="_blank"
+          >
+            GPT-4
+          </Memo(Connect(Link))>
+          , an AI language model, and has not undergone a thorough review by curators.
+          <br />
+          Please exercise discretion when interpreting the information provided and consider it as preliminary.
+        </p>
+      </div>
+    </div>
+  </div>
+  <Description
+    textBlocks={
+      [
+        "<p>The function of the family is not clear.</p>",
+      ]
+    }
+  />
+</React.Fragment>
+`;
