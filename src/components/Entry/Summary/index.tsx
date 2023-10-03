@@ -80,7 +80,7 @@ type SummaryEntryProps = {
 
 const SummaryEntry = ({
   data: { metadata },
-  headerText = 'Description',
+  headerText,
   dbInfo,
   loading,
 }: SummaryEntryProps) => {
@@ -107,7 +107,7 @@ const SummaryEntry = ({
     if ((metadata.description || []).length) {
       return (
         <>
-          <h4>{headerText}</h4>
+          <h4>{headerText || 'Description'}</h4>
           <Description
             textBlocks={metadata.description}
             literature={included as Array<[string, Reference]>}
@@ -120,10 +120,16 @@ const SummaryEntry = ({
         <DescriptionFromIntegrated
           integrated={metadata.integrated}
           setIntegratedCitations={setIntegratedCitations}
+          headerText={headerText || 'Description'}
         />
       );
     } else if (metadata.llm_description) {
-      return <DescriptionLLM text={metadata.llm_description} />;
+      return (
+        <>
+          <h4>{headerText || 'Description'}</h4>
+          <DescriptionLLM text={metadata.llm_description} />
+        </>
+      );
     }
     return null;
   };

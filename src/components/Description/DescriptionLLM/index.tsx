@@ -20,7 +20,6 @@ class DescriptionLLM extends PureComponent<Props> {
 
     return (
       <>
-        <h4>Description</h4>
         <div className={css('row')}>
           <div className={css('columns', 'large-12')}>
             <div
