@@ -35,7 +35,7 @@ const RemovedEntrySummary = ({
     member_databases: history?.signatures,
     description:
       formerNames.length !== 0
-        ? ['Former names:', `<ul>${formerNames.map(listWrap).join('')}</ul>`]
+        ? [`<ul>${formerNames.map(listWrap).join('')}</ul>`]
         : [],
     is_removed: true,
   };
@@ -47,6 +47,7 @@ const RemovedEntrySummary = ({
         <Title metadata={metadata} mainType="entry" />
         <SummaryEntry
           data={{ metadata: metadata }}
+          headerText={'Former names'}
           loading={false}
           dbInfo={dbInfo}
         />
