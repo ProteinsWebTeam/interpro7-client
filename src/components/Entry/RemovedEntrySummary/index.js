@@ -17,7 +17,7 @@ const RemovedEntrySummary = ({
   type,
   name,
   short_name,
-  date,
+  deletion_date,
   history,
   dbInfo,
 }) => {
@@ -39,6 +39,10 @@ const RemovedEntrySummary = ({
         : [],
     is_removed: true,
   };
+  const date = new Date(deletion_date).toLocaleDateString('en-GB', {
+    month: 'long',
+    year: 'numeric',
+  });
   const message = `${metadata.accession} has been retired in ${date}.`;
   return (
     <div className={f('row')}>
@@ -62,7 +66,7 @@ RemovedEntrySummary.propTypes = {
   type: T.string,
   name: T.string,
   short_name: T.string,
-  date: T.string,
+  deletion_date: T.string,
   history: T.shape({
     names: T.arrayOf(T.string),
     short_names: T.arrayOf(T.string),
