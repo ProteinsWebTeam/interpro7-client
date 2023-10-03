@@ -2,9 +2,6 @@
 
 exports[`<DescriptionLLM /> should render 1`] = `
 <React.Fragment>
-  <h4>
-    Description
-  </h4>
   <div
     className="row"
   >
