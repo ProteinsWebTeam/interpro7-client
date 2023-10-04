@@ -72,12 +72,14 @@ type SummaryEntryProps = {
   data: {
     metadata: EntryMetadata;
   };
+  headerText?: string;
   loading: boolean;
   dbInfo: DBInfo;
 };
 
 const SummaryEntry = ({
   data: { metadata },
+  headerText = 'Description',
   dbInfo,
   loading,
 }: SummaryEntryProps) => {
@@ -113,7 +115,7 @@ const SummaryEntry = ({
               // doesn't work for some HAMAP as they have enpty <P> tag
               (metadata.description || []).length ? (
                 <>
-                  <h4>Description</h4>
+                  <h4>{headerText}</h4>
                   <Description
                     textBlocks={metadata.description}
                     literature={included as Array<[string, Reference]>}

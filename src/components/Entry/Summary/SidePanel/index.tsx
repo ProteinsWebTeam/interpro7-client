@@ -98,10 +98,11 @@ const SidePanel = ({
       {['interpro', 'pfam'].includes(
         // Only receiving new annotations for pfam and interpro
         metadata.source_database.toLowerCase()
-      ) && (
-        <div>
-          <Tooltip
-            title={`You can suggest annotation updates for this entry using the provided form.
+      ) &&
+        !metadata.is_removed && (
+          <div>
+            <Tooltip
+              title={`You can suggest annotation updates for this entry using the provided form.
               Our curators will review and, if suitable, include them in the next
               ${
                 metadata.source_database.toLowerCase() === 'interpro'
@@ -109,73 +110,79 @@ const SidePanel = ({
                   : 'Pfam'
               } release.
               Please include supporting literature references for better accuracy.`}
-            classNames={['fixed']}
-          >
-            <DropDownButton
-              label="Add your annotation"
-              icon="&#xf303;"
-              extraClasses={css('annotation')}
+              classNames={['fixed']}
             >
-              <form
-                onSubmit={handleSubmit}
-                className={css('vf-stack', 'vf-stack--200')}
+              <DropDownButton
+                label="Add your annotation"
+                icon="&#xf303;"
+                extraClasses={css('annotation')}
               >
-                <label
-                  className={css('vf-form__label', 'vf-form__label--required')}
-                  htmlFor="message"
+                <form
+                  onSubmit={handleSubmit}
+                  className={css('vf-stack', 'vf-stack--200')}
                 >
-                  Your annotation
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={message}
-                  onChange={handleFields}
-                  className={css('vf-form__textarea')}
-                  rows={5}
-                  required
-                />
-                <label
-                  className={css('vf-form__label', 'vf-form__label--required')}
-                  htmlFor="from_email"
-                >
-                  Email address
-                </label>
-                <input
-                  id="from_email"
-                  name="from_email"
-                  type="email"
-                  value={email}
-                  onChange={handleFields}
-                  className={css('vf-form__input')}
-                  required
-                />
-                <div className={css('flex-space-evenly')}>
-                  <button
+                  <label
                     className={css(
-                      'vf-button',
-                      'vf-button--primary',
-                      'vf-button--sm'
+                      'vf-form__label',
+                      'vf-form__label--required'
                     )}
+                    htmlFor="message"
                   >
-                    Submit
-                  </button>
-                  <button
+                    Your annotation
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={message}
+                    onChange={handleFields}
+                    className={css('vf-form__textarea')}
+                    rows={5}
+                    required
+                  />
+                  <label
                     className={css(
-                      'vf-button',
-                      'vf-button--secondary',
-                      'vf-button--sm'
+                      'vf-form__label',
+                      'vf-form__label--required'
                     )}
-                    onClick={clearFields}
+                    htmlFor="from_email"
                   >
-                    Clear
-                  </button>
-                </div>
-              </form>
-            </DropDownButton>
-          </Tooltip>
-        </div>
-      )}
+                    Email address
+                  </label>
+                  <input
+                    id="from_email"
+                    name="from_email"
+                    type="email"
+                    value={email}
+                    onChange={handleFields}
+                    className={css('vf-form__input')}
+                    required
+                  />
+                  <div className={css('flex-space-evenly')}>
+                    <button
+                      className={css(
+                        'vf-button',
+                        'vf-button--primary',
+                        'vf-button--sm'
+                      )}
+                    >
+                      Submit
+                    </button>
+                    <button
+                      className={css(
+                        'vf-button',
+                        'vf-button--secondary',
+                        'vf-button--sm'
+                      )}
+                      onClick={clearFields}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </form>
+              </DropDownButton>
+            </Tooltip>
+          </div>
+        )}
       {metadata.integrated && <Integration intr={metadata.integrated} />}
       {!['interpro', 'pfam', 'antifam'].includes(
         metadata.source_database.toLowerCase()
