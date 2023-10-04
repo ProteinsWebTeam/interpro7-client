@@ -43,7 +43,7 @@ const RemovedEntrySummary = ({
     month: 'long',
     year: 'numeric',
   });
-  const message = `${metadata.accession} has been retired in ${date}.`;
+  const message = `${metadata.accession} is obsolete since ${date}.`;
   return (
     <div className={f('row')}>
       <div className={f('medium-12', 'large-12', 'columns')}>
