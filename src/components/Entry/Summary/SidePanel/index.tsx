@@ -110,7 +110,7 @@ const SidePanel = ({
                   : 'Pfam'
               } release.
               Please include supporting literature references for better accuracy.`}
-              classNames={['fixed']}
+              classNames={['fixed', 'left-aligned']}
             >
               <DropDownButton
                 label="Add your annotation"
