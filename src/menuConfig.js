@@ -164,7 +164,7 @@ export const entities /*: Array<Object> */ = [
         hash: customLocation.hash,
       };
     },
-    name: 'By Set',
+    name: 'By Clan/Set',
   },
 ];
 
