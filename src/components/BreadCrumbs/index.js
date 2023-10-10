@@ -55,10 +55,7 @@ const locationType = T.shape({
   other: T.arrayOf(T.string),
 });
 const BreadCrumb = (
-  {
-    to,
-    children,
-  } /*: {
+  { to, children } /*: {
     children: any,
     to?: function | {description: Object}} */,
 ) => {
@@ -107,7 +104,7 @@ const BreadCrumbsForSearchOrResult = (
   { location } /*: {location: Location} */,
 ) => {
   if (!['search', 'result'].includes(location?.main?.key)) return null;
-  const key /*: 'search' | 'result' */ = (location.main.key /*: any */);
+  const key /*: 'search' | 'result' */ = location.main.key /*: any */;
   const { type, value, accession } = location[key];
   return (
     <>
@@ -224,10 +221,10 @@ BreadCrumbForEntityDetail.propTypes = {
 const BreadCrumbForSecondPart = ({ location } /*: {location: Location} */) => {
   const { accession, detail } = location[location.main.key];
   const filters = Object.keys(location)
-    .filter((ep) => (location[ep] /*: any */)?.isFilter)
+    .filter((ep) => location[ep] /*: any */?.isFilter)
     .sort(
       (ep1, ep2) =>
-        (location[ep1] /*: any */)?.order - (location[ep2] /*: any */).order,
+        location[ep1] /*: any */?.order - location[ep2] /*: any */.order,
     );
   return (
     <section className={f('secondary')}>
@@ -266,7 +263,10 @@ const BreadCrumbsForBrowse = ({ location } /*: {location: Location} */) => {
             description: { main: { key: endpoint }, [endpoint]: { db } },
           }}
         >
-          By {endpoint}{' '}
+          By{' '}
+          {db && db.toLowerCase() === 'pfam' && endpoint.toLowerCase() === 'set'
+            ? 'clan'
+            : endpoint}{' '}
         </BreadCrumb>
         <BreadCrumb
           to={{
