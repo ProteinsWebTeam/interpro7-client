@@ -10,6 +10,14 @@
   margin: 4px;
   z-index: var(--z-index-tooltips);
 
+  &.fixed {
+    max-width: 400px;
+  }
+
+  &.left-aligned {
+    text-align: left;
+  }
+
   & h5 {
     text-transform: uppercase;
     font-weight: bold;

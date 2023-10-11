@@ -24,6 +24,7 @@ const Tooltip = ({
   children,
   distance = 0,
   interactive = false,
+  classNames = [],
   ...rest
 }: PropsWithChildren<{
   html?: React.ReactElement | string | number;
@@ -31,6 +32,7 @@ const Tooltip = ({
   useContext?: boolean;
   distance?: number;
   interactive?: boolean;
+  classNames?: string[];
 }>) => {
   const arrowRef = useRef(null);
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
@@ -72,7 +74,7 @@ const Tooltip = ({
           <div
             ref={refs.setFloating}
             style={floatingStyles}
-            className={css('popper')}
+            className={css('popper', ...classNames)}
             onMouseEnter={() => setOverTooltip(true)}
             onMouseLeave={() => setOverTooltip(false)}
           >

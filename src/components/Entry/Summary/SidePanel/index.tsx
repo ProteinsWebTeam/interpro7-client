@@ -48,12 +48,14 @@ const SidePanel = ({
     pathname: `${root}/mail/`,
   });
   const entry = `${metadata.name.name} (${metadata.accession})`;
+  const queue = metadata.source_database.toLowerCase();
 
   const handleSubmit = (event: FormEvent) => {
     if (!event.target) return;
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
     data.append('subject', `Add annotation, ${entry}`);
+    data.append('queue', queue);
     fetch(apiUrl, {
       method: 'POST',
       body: data,
@@ -100,11 +102,15 @@ const SidePanel = ({
         !metadata.is_removed && (
           <div>
             <Tooltip
-              title={
-                'You may suggest updates to the annotation of this entry using this form. Suggestions will be sent to ' +
-                'our curators for review and, if acceptable, will be included in the next public release of InterPro. It is ' +
-                'helpful if you can include literature references supporting your annotation suggestion.'
-              }
+              title={`You can suggest annotation updates for this entry using the provided form.
+              Our curators will review and, if suitable, include them in the next
+              ${
+                metadata.source_database.toLowerCase() === 'interpro'
+                  ? 'InterPro'
+                  : 'Pfam'
+              } release.
+              Please include supporting literature references for better accuracy.`}
+              classNames={['fixed', 'left-aligned']}
             >
               <DropDownButton
                 label="Add your annotation"
