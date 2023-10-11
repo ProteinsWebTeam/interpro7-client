@@ -117,7 +117,7 @@ exports[`<DynamicMenu /> should render 1`] = `
             "to": [Function],
           },
           {
-            "name": "By Set",
+            "name": "By Clan/Set",
             "to": [Function],
           },
         ]
