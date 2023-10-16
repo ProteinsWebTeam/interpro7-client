@@ -45,9 +45,7 @@ exports[`<DescriptionLLM /> should render 1`] = `
           >
             UniProtKB/Swiss-Prot
           </Memo(Connect(Link))>
-          . It has not undergone a thorough review by curators.
-           
-          Please exercise discretion when interpreting the information provided and consider it as preliminary.
+          . It has not undergone a thorough review by curators. Please exercise discretion when interpreting the information provided and consider it as preliminary.
           <br />
           <Memo(Connect(Link))
             href="https://interpro-documentation.readthedocs.io/en/latest/llm_description.html"
