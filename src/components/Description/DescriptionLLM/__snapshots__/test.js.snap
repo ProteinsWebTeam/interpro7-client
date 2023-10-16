@@ -29,22 +29,32 @@ exports[`<DescriptionLLM /> should render 1`] = `
         />
          
         <p>
-          <strong>
-            Unreviewed Protein Family Description
-          </strong>
-          <br />
           This description has been automatically generated using
            
           <Memo(Connect(Link))
-            className="ext"
             href="https://openai.com/research/gpt-4"
             target="_blank"
           >
             GPT-4
           </Memo(Connect(Link))>
-          , an AI language model, and has not undergone a thorough review by curators.
-          <br />
+          , an AI language model, and is based on data extracted from
+           
+          <Memo(Connect(Link))
+            href="https://www.uniprot.org"
+            target="_blank"
+          >
+            UniProtKB/Swiss-Prot
+          </Memo(Connect(Link))>
+          . It has not undergone a thorough review by curators.
+           
           Please exercise discretion when interpreting the information provided and consider it as preliminary.
+          <br />
+          <Memo(Connect(Link))
+            href="https://interpro-documentation.readthedocs.io/en/latest/llm_description.html"
+            target="_blank"
+          >
+            Read more on description generation
+          </Memo(Connect(Link))>
         </p>
       </div>
     </div>
