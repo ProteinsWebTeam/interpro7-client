@@ -57,7 +57,7 @@ class DescriptionLLM extends PureComponent<Props> {
                 and consider it as preliminary.
                 <br />
                 <Link
-                  href={`${config.root.readthedocs.href}llm_description.html`}
+                  href={`${config.root.readthedocs.href}llm_descriptions.html`}
                   target="_blank"
                 >
                   Read more on description generation

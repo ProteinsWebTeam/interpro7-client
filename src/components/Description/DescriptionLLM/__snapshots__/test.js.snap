@@ -48,7 +48,7 @@ exports[`<DescriptionLLM /> should render 1`] = `
           . It has not undergone a thorough review by curators. Please exercise discretion when interpreting the information provided and consider it as preliminary.
           <br />
           <Memo(Connect(Link))
-            href="https://interpro-documentation.readthedocs.io/en/latest/llm_description.html"
+            href="https://interpro-documentation.readthedocs.io/en/latest/llm_descriptions.html"
             target="_blank"
           >
             Read more on description generation
