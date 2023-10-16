@@ -6,6 +6,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import Link from 'components/generic/Link';
 
 import Description from '..';
+import config from 'config';
 
 const css = cssBinder(globalStyles, fonts);
 
@@ -43,21 +44,24 @@ class DescriptionLLM extends PureComponent<Props> {
                 )}
               />{' '}
               <p>
-                <strong>Unreviewed Protein Family Description</strong>
-                <br />
                 This description has been automatically generated using{' '}
-                <Link
-                  href="https://openai.com/research/gpt-4"
-                  className={css('ext')}
-                  target="_blank"
-                >
+                <Link href="https://openai.com/research/gpt-4" target="_blank">
                   GPT-4
                 </Link>
-                , an AI language model, and has not undergone a thorough review
-                by curators.
+                , an AI language model, and is based on data extracted from{' '}
+                <Link href="https://www.uniprot.org" target="_blank">
+                  UniProtKB/Swiss-Prot
+                </Link>
+                . It has not undergone a thorough review by curators. Please
+                exercise discretion when interpreting the information provided
+                and consider it as preliminary.
                 <br />
-                Please exercise discretion when interpreting the information
-                provided and consider it as preliminary.
+                <Link
+                  href={`${config.root.readthedocs.href}llm_description.html`}
+                  target="_blank"
+                >
+                  Read more on description generation
+                </Link>
               </p>
             </div>
           </div>
