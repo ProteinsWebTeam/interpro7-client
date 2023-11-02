@@ -599,6 +599,7 @@ type ProtVistaFragment = {
   residues?: string;
   seq_feature?: string;
   fill?: string;
+  representative?: boolean;
 };
 
 type ProtVistaLocation = {
