@@ -114,22 +114,31 @@ class Summary extends PureComponent {
       },
     } = customLocation;
 
-    if (loading || (!locationhasDetailOrFilter(customLocation) && !payload)) {
+    if (loading) {
       return <Loading />;
     }
 
-    const db =
-      (!loadingDB &&
-        payloadDB &&
-        payloadDB.databases &&
-        payloadDB.databases[customLocation.description.entry.db]) ||
-      {};
+    if (payload && status === STATUS_GONE) {
+      const db =
+        (!loadingDB &&
+          payloadDB &&
+          payloadDB.databases &&
+          payloadDB.databases[customLocation.description.entry.db]) ||
+        {};
 
-    if (status === STATUS_GONE) {
       return <RemovedEntrySummary {...payload} dbInfo={db} />;
     }
-    const edgeCaseText = edgeCases.get(status);
-    if (edgeCaseText) return <EdgeCase text={edgeCaseText} status={status} />;
+
+    if (edgeCases.has(status)) {
+      const edgeCaseText = edgeCases.get(status);
+      if (edgeCaseText) {
+        return <EdgeCase text={edgeCaseText} status={status} />;
+      }
+    }
+
+    if (!locationhasDetailOrFilter(customLocation) && !payload) {
+      return <Loading />;
+    }
 
     return (
       <>
