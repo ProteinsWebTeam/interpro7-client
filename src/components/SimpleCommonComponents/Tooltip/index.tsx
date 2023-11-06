@@ -6,6 +6,7 @@ import {
   autoPlacement,
   arrow,
   offset,
+  size,
 } from '@floating-ui/react';
 import useStateRef from 'utils/hooks/useStateRef';
 
@@ -46,6 +47,14 @@ const Tooltip = ({
       }),
       arrow({
         element: arrowRef,
+      }),
+      size({
+        apply({ availableWidth, availableHeight, elements }) {
+          Object.assign(elements.floating.style, {
+            maxWidth: `${availableWidth}px`,
+            maxHeight: `${availableHeight}px`,
+          });
+        },
       }),
     ],
   });
