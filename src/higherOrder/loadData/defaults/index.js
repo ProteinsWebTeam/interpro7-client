@@ -176,7 +176,7 @@ export const getReversedUrl = createSelector(
       },
     });
     if (description.main.key === 'set' && description?.entry?.isFilter) {
-      url = url.replace('counters', 'counters,short_name');
+      url = url.replace('counters', 'short_name');
     }
     if (description.main.key === 'entry' && newMain === 'taxonomy') {
       url = url.replace('/entry/', '/protein/entry/');
