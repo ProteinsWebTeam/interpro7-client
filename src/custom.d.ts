@@ -299,6 +299,8 @@ interface EntryMetadata extends Metadata {
     accession: string;
     name: string;
   };
+  llm_description: string | null;
+  is_removed?: boolean;
 }
 
 type SourceOrganism = {
@@ -597,6 +599,7 @@ type ProtVistaFragment = {
   residues?: string;
   seq_feature?: string;
   fill?: string;
+  representative?: boolean;
 };
 
 type ProtVistaLocation = {

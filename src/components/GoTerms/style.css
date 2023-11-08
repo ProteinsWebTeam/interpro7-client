@@ -15,6 +15,7 @@ body a.go-terms:focus {
 
 body a.go-terms:hover {
   border-bottom: 1px #222 solid;
+  text-decoration: none;
 }
 
 .go-title {

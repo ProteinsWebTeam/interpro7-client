@@ -82,6 +82,7 @@
 
 .protvista-grid .track-label a:hover {
   border-bottom: 1px var(--colors-dark) solid;
+  text-decoration: none;
 }
 
 .protvista-grid .track-label .track-accession-child {

@@ -6,6 +6,7 @@ import {
   autoPlacement,
   arrow,
   offset,
+  size,
 } from '@floating-ui/react';
 import useStateRef from 'utils/hooks/useStateRef';
 
@@ -24,6 +25,7 @@ const Tooltip = ({
   children,
   distance = 0,
   interactive = false,
+  classNames = [],
   ...rest
 }: PropsWithChildren<{
   html?: React.ReactElement | string | number;
@@ -31,6 +33,7 @@ const Tooltip = ({
   useContext?: boolean;
   distance?: number;
   interactive?: boolean;
+  classNames?: string[];
 }>) => {
   const arrowRef = useRef(null);
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
@@ -44,6 +47,14 @@ const Tooltip = ({
       }),
       arrow({
         element: arrowRef,
+      }),
+      size({
+        apply({ availableWidth, availableHeight, elements }) {
+          Object.assign(elements.floating.style, {
+            maxWidth: `${availableWidth}px`,
+            maxHeight: `${availableHeight}px`,
+          });
+        },
       }),
     ],
   });
@@ -72,7 +83,7 @@ const Tooltip = ({
           <div
             ref={refs.setFloating}
             style={floatingStyles}
-            className={css('popper')}
+            className={css('popper', ...classNames)}
             onMouseEnter={() => setOverTooltip(true)}
             onMouseLeave={() => setOverTooltip(false)}
           >

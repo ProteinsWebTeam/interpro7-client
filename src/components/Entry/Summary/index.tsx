@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
 import DescriptionFromIntegrated from 'components/Description/DescriptionFromIntegrated';
+import DescriptionLLM from 'components/Description/DescriptionLLM';
 import Literature, {
   getLiteratureIdsFromDescription,
   splitCitations,
@@ -72,12 +73,14 @@ type SummaryEntryProps = {
   data: {
     metadata: EntryMetadata;
   };
+  headerText?: string;
   loading: boolean;
   dbInfo: DBInfo;
 };
 
 const SummaryEntry = ({
   data: { metadata },
+  headerText,
   dbInfo,
   loading,
 }: SummaryEntryProps) => {
@@ -99,6 +102,38 @@ const SummaryEntry = ({
   (included as Array<[string, Reference]>).sort(
     (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
   );
+
+  const selectDescriptionComponent = () => {
+    if ((metadata.description || []).length) {
+      return (
+        <>
+          <h4>{headerText || 'Description'}</h4>
+          <Description
+            textBlocks={metadata.description}
+            literature={included as Array<[string, Reference]>}
+            accession={metadata.accession}
+          />
+        </>
+      );
+    } else if (metadata.integrated) {
+      return (
+        <DescriptionFromIntegrated
+          integrated={metadata.integrated}
+          setIntegratedCitations={setIntegratedCitations}
+          headerText={headerText || 'Description'}
+        />
+      );
+    } else if (metadata.llm_description) {
+      return (
+        <>
+          <h4>{headerText || 'Description'}</h4>
+          <DescriptionLLM text={metadata.llm_description} />
+        </>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
       <section className={css('vf-grid', 'summary-grid')}>
@@ -108,26 +143,7 @@ const SummaryEntry = ({
           ) : (
             <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
           )}
-          <section>
-            {
-              // doesn't work for some HAMAP as they have enpty <P> tag
-              (metadata.description || []).length ? (
-                <>
-                  <h4>Description</h4>
-                  <Description
-                    textBlocks={metadata.description}
-                    literature={included as Array<[string, Reference]>}
-                    accession={metadata.accession}
-                  />
-                </>
-              ) : (
-                <DescriptionFromIntegrated
-                  integrated={metadata.integrated}
-                  setIntegratedCitations={setIntegratedCitations}
-                />
-              )
-            }
-          </section>
+          <section>{selectDescriptionComponent()}</section>
         </div>
         <div className={css('vf-stack')}>
           <SidePanel metadata={metadata} dbInfo={dbInfo} />

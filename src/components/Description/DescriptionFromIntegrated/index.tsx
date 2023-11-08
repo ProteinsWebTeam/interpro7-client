@@ -25,7 +25,7 @@ const css = cssBinder(ipro, local, fonts);
 const ImportedTag = ({ accession }: { accession: string }) => {
   return (
     <Tooltip
-      title={`The member database didn't provide a description for this signature. 
+      title={`The member database didn't provide a description for this signature.
             The description displayed has been imported from ${accession}, the InterPro entry in which the signature is integrated.`}
     >
       <span className={css('tag')}>
@@ -57,6 +57,7 @@ const ImportedTag = ({ accession }: { accession: string }) => {
 type Props = {
   integrated: string | null;
   setIntegratedCitations?: (citations: string[]) => void;
+  headerText?: string;
 };
 
 interface IntegratedProps
@@ -67,6 +68,7 @@ const DescriptionFromIntegrated = ({
   integrated,
   data,
   setIntegratedCitations = (_: string[]) => null,
+  headerText,
 }: IntegratedProps) => {
   const { loading, payload } = data || {};
   useEffect(() => {
@@ -87,7 +89,7 @@ const DescriptionFromIntegrated = ({
     return (
       <>
         <h4>
-          Description <ImportedTag accession={integrated} />
+          {headerText || 'Description'} <ImportedTag accession={integrated} />
         </h4>
         <Description
           textBlocks={payload.metadata.description}

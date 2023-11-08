@@ -158,13 +158,13 @@ export const entities /*: Array<Object> */ = [
               customLocation.description?.entry?.db?.toLowerCase(),
             )
               ? customLocation.description.entry.db
-              : 'All',
+              : 'Pfam',
           },
         },
         hash: customLocation.hash,
       };
     },
-    name: 'By Set',
+    name: 'By Clan/Set',
   },
 ];
 
