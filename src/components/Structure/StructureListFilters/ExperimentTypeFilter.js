@@ -15,6 +15,7 @@ import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
 import style from 'components/FiltersPanel/style.css';
+// $FlowFixMe
 import { formatExperimentType } from 'components/Structure/utils';
 
 const f = foundationPartial(style);

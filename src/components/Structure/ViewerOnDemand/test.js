@@ -1,8 +1,7 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { ViewerOnDemand } from '.';
+import { ViewerOnDemand } from './index';
 
 const renderer = new ShallowRenderer();
 

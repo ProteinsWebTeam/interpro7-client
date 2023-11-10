@@ -130,7 +130,7 @@ export class NumberComponent extends PureComponent /*:: <ComponentProps> */ {
       to: { value: to },
       // duration,
       easing: 'easeOutQuart',
-      step: ({ value }) => {
+      render: ({ value }) => {
         if (!this._ref.current) return;
         this._ref.current.textContent = `${
           numberToDisplayText(value, this.props.abbr, this.props.scaleMargin) ||

@@ -588,6 +588,7 @@ class List extends PureComponent /*:: <ListProps> */ {
 
 const SummaryAsync = loadable({
   loader: () =>
+    // $FlowFixMe
     import(/* webpackChunkName: "set-summary" */ 'components/Set/Summary'),
 });
 

@@ -55,7 +55,7 @@ exports[`<EntitiesMenu /> should render 1`] = `
       activeClass="active"
       to={[Function]}
     >
-      By Set
+      By Clan/Set
     </Memo(Connect(MenuItem))>
   </li>
 </ul>

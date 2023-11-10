@@ -70,7 +70,11 @@ const MemberDBSubtitle = ({
         )}
         {metadata?.counters?.sets ? (
           <tr>
-            <td>Set</td>
+            <td>
+              {metadata.source_database.toLowerCase() === 'pfam'
+                ? 'Clan'
+                : 'Set'}
+            </td>
             <td>
               {metadata.set_info ? (
                 <Link

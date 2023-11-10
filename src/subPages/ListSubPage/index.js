@@ -9,7 +9,7 @@ import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-
+// $FlowFixMe
 import Related from 'components/Related';
 import { Object } from 'core-js';
 
@@ -19,9 +19,9 @@ const _AccessionSearch = ({ data, onSearchComplete }) => {
 };
 
 const getURLFromState = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, { search }) => {
     const filters = Object.entries(description).filter(([_, v]) => v.isFilter);
     if (filters.length !== 1) return;
@@ -69,7 +69,7 @@ ListSubPage.propTypes = {
   }),
 };
 const mapStateToProps = createSelector(
-  state => state.customLocation.search,
-  search => ({ search }),
+  (state) => state.customLocation.search,
+  (search) => ({ search }),
 );
 export default connect(mapStateToProps)(ListSubPage);

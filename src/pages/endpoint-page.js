@@ -104,8 +104,7 @@ class Summary extends PureComponent {
   render() {
     const {
       data: { status, loading, payload },
-      // dataOrganism: { loading: loadingOrg, payload: payloadOrg },
-      dataBase,
+      dataBase: { payload: payloadDB, loading: loadingDB },
       customLocation,
       subPagesForEndpoint,
     } = this.props;
@@ -114,15 +113,33 @@ class Summary extends PureComponent {
         main: { key: endpoint },
       },
     } = customLocation;
-    const databases = dataBase?.payload?.databases;
-    if (status === STATUS_GONE) {
-      return <RemovedEntrySummary {...payload} dbInfo={databases} />;
-    }
-    const edgeCaseText = edgeCases.get(status);
-    if (edgeCaseText) return <EdgeCase text={edgeCaseText} status={status} />;
-    if (loading || (!locationhasDetailOrFilter(customLocation) && !payload)) {
+
+    if (loading) {
       return <Loading />;
     }
+
+    if (payload && status === STATUS_GONE) {
+      const db =
+        (!loadingDB &&
+          payloadDB &&
+          payloadDB.databases &&
+          payloadDB.databases[customLocation.description.entry.db]) ||
+        {};
+
+      return <RemovedEntrySummary {...payload} dbInfo={db} />;
+    }
+
+    if (edgeCases.has(status)) {
+      const edgeCaseText = edgeCases.get(status);
+      if (edgeCaseText) {
+        return <EdgeCase text={edgeCaseText} status={status} />;
+      }
+    }
+
+    if (!locationhasDetailOrFilter(customLocation) && !payload) {
+      return <Loading />;
+    }
+
     return (
       <>
         {payload?.metadata?.accession && (

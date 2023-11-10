@@ -105,7 +105,7 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
         }
       }
       isFirstLevel={true}
-      name="By Set"
+      name="By Clan/Set"
       to={[Function]}
     />
   </li>

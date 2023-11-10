@@ -33,13 +33,13 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         labelContent: {
           accession: true,
           name: false,
-          short: false,
+          short: true,
         },
         structureViewer: false,
         shouldHighlight: true,
         idaAccessionDB: 'interpro',
         idaLabel: 'name',
-        isPIPEnabled: true,
+        isPIPEnabled: false,
       };
     case 'cache':
       return {

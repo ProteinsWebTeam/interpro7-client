@@ -51,6 +51,8 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
+const MIN_WIDTH = '200px';
+
 const FamilyHierarchy = ({
   entriesCounter,
   families,
@@ -60,11 +62,7 @@ const FamilyHierarchy = ({
   families?: Record<string, unknown>[] | null;
   matchesLoaded: boolean;
 }) => {
-  if (families?.length)
-    return (
-      //@ts-ignore
-      <ProteinEntryHierarchy entries={families} />
-    );
+  if (families?.length) return <ProteinEntryHierarchy entries={families} />;
   return (
     <div className={css('margin-bottom-medium')}>
       {entriesCounter === 0 || matchesLoaded ? (
@@ -99,9 +97,9 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
 
-  const minWidth = '200px';
-
-  const getSubfamiliesFromMatches = (results: EntryProteinPayload[]) => {
+  const getSubfamiliesFromMatches = (
+    results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[]
+  ) => {
     setMatchesLoaded(true);
     if (results?.length) {
       setSubfamilies(
@@ -112,7 +110,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
           )
           .map(({ proteins }) => {
             const subfamilies: Array<string | undefined> = [];
-            proteins.forEach((p) => {
+            (proteins as EntryProteinMatch[]).forEach((p) => {
               p.entry_protein_locations.forEach(({ subfamily }) => {
                 subfamilies.push(subfamily?.accession);
               });
@@ -292,7 +290,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 metadata.id || ''
               )}
               title="Search sequence with InterProScan"
-              minWidth={minWidth}
+              minWidth={MIN_WIDTH}
             />
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label>
@@ -309,7 +307,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 fileType="tsv"
                 primary="entry"
                 secondary="protein"
-                minWidth={minWidth}
+                minWidth={MIN_WIDTH}
                 label="Download matches (TSV)"
               />
             </label>

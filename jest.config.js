@@ -25,7 +25,7 @@ module.exports = {
   coverageReporters: ['json-summary', 'lcov', 'text-summary'],
   coverageDirectory: 'reports/jest-coverage',
   transformIgnorePatterns: [
-    'node_modules/(?!lodash-es|timing-functions|taxonomy-visualisation|protvista|react-syntax-highlighter|@nightingale)',
+    'node_modules/(?!lodash-es|timing-functions|taxonomy-visualisation|protvista|react-syntax-highlighter|@nightingale|@lit-labs)',
   ],
   testEnvironmentOptions: {
     url: websiteURL.href,

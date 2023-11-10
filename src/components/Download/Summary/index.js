@@ -15,7 +15,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Actions from 'components/Download/Actions';
 // $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
-
+// $FlowFixMe
 import { formatLongDate } from 'utils/date';
 import { downloadSelector } from 'reducers/download';
 

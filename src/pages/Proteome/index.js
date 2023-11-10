@@ -51,36 +51,34 @@ const f = foundationPartial(
   exporterStyle,
 );
 
-const EntryAccessionsRenderer = (entryDB) => (accession, _row, extra) =>
-  (
-    <File
-      fileType="accession"
-      name={`${entryDB || 'all'}-entry-accessions-for-${accession}.txt`}
-      count={extra && extra.counters && extra.counters.entries}
-      customLocationDescription={{
-        main: { key: 'entry' },
-        entry: { db: entryDB || 'all' },
-        proteome: { isFilter: true, db: 'UniProt', accession },
-      }}
-    />
-  );
+const EntryAccessionsRenderer = (entryDB) => (accession, _row, extra) => (
+  <File
+    fileType="accession"
+    name={`${entryDB || 'all'}-entry-accessions-for-${accession}.txt`}
+    count={extra && extra.counters && extra.counters.entries}
+    customLocationDescription={{
+      main: { key: 'entry' },
+      entry: { db: entryDB || 'all' },
+      proteome: { isFilter: true, db: 'UniProt', accession },
+    }}
+  />
+);
 
-const ProteinFastasRenderer = (entryDB) => (accession, _row, extra) =>
-  (
-    <File
-      fileType="fasta"
-      name={`protein-sequences${
-        entryDB ? `-matching-${entryDB}` : ''
-      }-for-${accession}.fasta`}
-      count={extra && extra.counters && extra.counters.proteins}
-      customLocationDescription={{
-        main: { key: 'protein' },
-        protein: { db: 'UniProt' },
-        entry: { isFilter: true, db: entryDB || 'all' },
-        proteome: { isFilter: true, db: 'UniProt', accession },
-      }}
-    />
-  );
+const ProteinFastasRenderer = (entryDB) => (accession, _row, extra) => (
+  <File
+    fileType="fasta"
+    name={`protein-sequences${
+      entryDB ? `-matching-${entryDB}` : ''
+    }-for-${accession}.fasta`}
+    count={extra && extra.counters && extra.counters.proteins}
+    customLocationDescription={{
+      main: { key: 'protein' },
+      protein: { db: 'UniProt' },
+      entry: { isFilter: true, db: entryDB || 'all' },
+      proteome: { isFilter: true, db: 'UniProt', accession },
+    }}
+  />
+);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -90,6 +88,7 @@ const SchemaOrgData = loadable({
 const SummaryAsync = loadable({
   loader: () =>
     import(
+      // $FlowFixMe
       /* webpackChunkName: "proteome-summary" */ 'components/Proteome/Summary'
     ),
 });

@@ -84,6 +84,7 @@ const KeySpecies = loadable({
 const Sunburst = loadable({
   loader: () =>
     import(
+      // $FlowFixMe
       /* webpackChunkName: "sunburst-view" */ 'components/Related/Taxonomy/Sunburst'
     ),
 });

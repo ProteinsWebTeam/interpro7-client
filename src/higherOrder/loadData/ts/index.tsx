@@ -33,7 +33,7 @@ type ConnectedProps = {
 };
 
 const loadData = <Payload = unknown, Namespace extends string = ''>(
-  params: Params
+  params?: Params
 ) => {
   const {
     getUrl,

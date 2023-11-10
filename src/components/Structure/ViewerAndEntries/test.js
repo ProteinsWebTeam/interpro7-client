@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-magic-numbers */
 import getMapper from './proteinToStructureMapper';
 

@@ -10,11 +10,12 @@ exports[`<EntriesOnProtein /> should render 1`] = `
     <div
       className="aligned-to-track-component"
     >
-      <nightingale-sequence
+      <Yi
         display-end={882}
-        display-start="1"
-        height="30"
+        display-start={1}
+        height={30}
         length={882}
+        sequence="                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  "
         use-ctrl-to-zoom={true}
       />
     </div>
@@ -22,12 +23,21 @@ exports[`<EntriesOnProtein /> should render 1`] = `
   <div
     className="track-component"
   >
-    <Tooltip
-      title="<b>IPR000001</b><br/>Kringle<br/><p>300-380</p>"
+    <TooltipForTrack
+      message={
+        <EntryPopup
+          accession="IPR000001"
+          dbName="interpro"
+          locations={[]}
+          name="Kringle"
+        />
+      }
+      onMouseOverFeature={[Function]}
     >
-      <nightingale-interpro-track
+      <Memo(Kr)
+        data={[]}
         display-end={882}
-        display-start="1"
+        display-start={1}
         expanded={true}
         id="track_IPR000001"
         length={882}
@@ -35,7 +45,7 @@ exports[`<EntriesOnProtein /> should render 1`] = `
         shape="roundRectangle"
         use-ctrl-to-zoom={true}
       />
-    </Tooltip>
+    </TooltipForTrack>
   </div>
 </div>
 `;

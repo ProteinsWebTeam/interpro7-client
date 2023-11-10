@@ -1,4 +1,4 @@
-@import '../../../styles/timing.css';
+@import "../../../styles/timing.css";
 
 :root {
   /*GAL*/
@@ -12,7 +12,7 @@ body {
     &:focus,
     &:hover,
     &:visited {
-      text-decoration: none;
+      text-decoration: none !important;
       font-size: 0.9rem; /* same size as submenu */
       padding: var(--menuitem-padding, 0.4rem);
       color: black;

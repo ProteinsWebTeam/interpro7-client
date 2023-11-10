@@ -27,6 +27,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
+// $FlowFixMe
 import { formatISODate } from 'utils/date';
 import VersionBadge from 'components/VersionBadge';
 

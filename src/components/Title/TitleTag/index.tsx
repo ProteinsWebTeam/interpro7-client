@@ -27,7 +27,12 @@ type Props = {
 
 const TitleTag = ({ db, mainType, dbLabel }: Props) => {
   const isEntry = mainType === 'entry';
-  const isInterPro = db && db.toLowerCase() === 'interpro';
+  let isInterPro = false;
+  let isPfam = false;
+  if (db) {
+    if (db.toLowerCase() === 'interpro') isInterPro = true;
+    else if (db.toLowerCase() === 'pfam') isPfam = true;
+  }
   let rtdLink = '';
   if (isEntry) {
     rtdLink = rtdLinks.entry[isInterPro ? 'interpro' : 'dbs'];
@@ -43,11 +48,15 @@ const TitleTag = ({ db, mainType, dbLabel }: Props) => {
             'md-p': isEntry && !isInterPro,
           })}
         >
-          {dbLabel} {mainType}
+          {dbLabel} {mainType === 'set' && isPfam ? 'clan' : mainType}
           {
             // Set
             mainType === 'set' && (
-              <Tooltip title="A set is defined as a group of evolutionary related entries">
+              <Tooltip
+                title={`A ${
+                  isPfam ? 'clan' : 'set'
+                } is defined as a group of evolutionary related entries`}
+              >
                 {' '}
                 <span
                   className={css('small', 'icon', 'icon-common')}

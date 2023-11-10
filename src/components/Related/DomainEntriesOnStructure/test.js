@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -14,7 +13,7 @@ describe('<EntriesOnStructure />', () => {
           {
             accession: 'IPR038178',
             chain: 'A',
-            entry_protein_locations: [
+            entry_structure_locations: [
               {
                 fragments: [{ 'dc-status': 'CONTINUOUS', start: 44, end: 199 }],
               },

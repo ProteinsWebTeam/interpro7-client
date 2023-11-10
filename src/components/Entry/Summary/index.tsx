@@ -3,25 +3,26 @@ import React, { useState, useEffect } from 'react';
 import GoTerms from 'components/GoTerms';
 import Description from 'components/Description';
 import DescriptionFromIntegrated from 'components/Description/DescriptionFromIntegrated';
+import DescriptionLLM from 'components/Description/DescriptionLLM';
 import Literature, {
   getLiteratureIdsFromDescription,
   splitCitations,
 } from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
-import InterProHierarchy from 'components/Entry/InterProHierarchy';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import MemberDBSubtitle from './MemberDBSubtitle';
 import SidePanel from './SidePanel';
-import OverlappingEntries from './OverlappingEntries';
 import Wikipedia from './Wikipedia';
 
 import cssBinder from 'styles/cssBinder';
 
 import ipro from 'styles/interpro-vf.css';
+import summary from 'styles/summary.css';
 import local from './style.css';
+import InterProSubtitle from './InterProSubtitle';
 
-const css = cssBinder(local, ipro);
+const css = cssBinder(local, ipro, summary);
 
 type OtherSectionsProps = {
   metadata: EntryMetadata;
@@ -47,7 +48,7 @@ const OtherSections = ({
       />
     )}
     {Object.keys(metadata.literature || []).length ? (
-      <section id="references" data-testid="entry-references">
+      <section id="references">
         <div className={css('vf-grid')}>
           <h4>
             {hasIntegratedCitations ? 'Supplementary References' : 'References'}
@@ -68,32 +69,18 @@ const OtherSections = ({
   </>
 );
 
-type HierarchyProps = {
-  hierarchy?: InterProHierarchyType;
-  type: string;
-  accession: string;
-};
-
-const Hierarchy = ({ hierarchy, type, accession }: HierarchyProps) =>
-  hierarchy?.children?.length ? (
-    <div className={css('margin-bottom-large')}>
-      <h4 className={css('first-letter-cap')}>
-        {type.replace('_', ' ').toLowerCase()} relationships
-      </h4>
-      <InterProHierarchy accession={accession} hierarchy={hierarchy} />
-    </div>
-  ) : null;
-
 type SummaryEntryProps = {
   data: {
     metadata: EntryMetadata;
   };
+  headerText?: string;
   loading: boolean;
   dbInfo: DBInfo;
 };
 
 const SummaryEntry = ({
   data: { metadata },
+  headerText,
   dbInfo,
   loading,
 }: SummaryEntryProps) => {
@@ -115,43 +102,48 @@ const SummaryEntry = ({
   (included as Array<[string, Reference]>).sort(
     (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
   );
+
+  const selectDescriptionComponent = () => {
+    if ((metadata.description || []).length) {
+      return (
+        <>
+          <h4>{headerText || 'Description'}</h4>
+          <Description
+            textBlocks={metadata.description}
+            literature={included as Array<[string, Reference]>}
+            accession={metadata.accession}
+          />
+        </>
+      );
+    } else if (metadata.integrated) {
+      return (
+        <DescriptionFromIntegrated
+          integrated={metadata.integrated}
+          setIntegratedCitations={setIntegratedCitations}
+          headerText={headerText || 'Description'}
+        />
+      );
+    } else if (metadata.llm_description) {
+      return (
+        <>
+          <h4>{headerText || 'Description'}</h4>
+          <DescriptionLLM text={metadata.llm_description} />
+        </>
+      );
+    }
+    return null;
+  };
+
   return (
-    <div className={css('sections')}>
+    <div className={css('vf-stack', 'vf-stack--400')}>
       <section className={css('vf-grid', 'summary-grid')}>
         <div className={css('vf-stack')}>
-          <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
-          {metadata?.source_database?.toLowerCase() === 'interpro' &&
-            metadata?.accession !== metadata?.name?.short && (
-              <p data-testid="entry-shortname">
-                Short name:&nbsp;
-                <i className={css('shortname')}>{metadata.name.short}</i>
-              </p>
-            )}
-          <OverlappingEntries metadata={metadata} />
-          <Hierarchy
-            hierarchy={metadata.hierarchy}
-            accession={metadata.accession}
-            type={metadata.type}
-          />
-
-          {
-            // doesn't work for some HAMAP as they have enpty <P> tag
-            (metadata.description || []).length ? (
-              <>
-                <h4>Description</h4>
-                <Description
-                  textBlocks={metadata.description}
-                  literature={included as Array<[string, Reference]>}
-                  accession={metadata.accession}
-                />
-              </>
-            ) : (
-              <DescriptionFromIntegrated
-                integrated={metadata.integrated}
-                setIntegratedCitations={setIntegratedCitations}
-              />
-            )
-          }
+          {metadata?.source_database?.toLowerCase() === 'interpro' ? (
+            <InterProSubtitle metadata={metadata} />
+          ) : (
+            <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
+          )}
+          <section>{selectDescriptionComponent()}</section>
         </div>
         <div className={css('vf-stack')}>
           <SidePanel metadata={metadata} dbInfo={dbInfo} />

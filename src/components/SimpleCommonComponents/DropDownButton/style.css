@@ -1,6 +1,6 @@
-@import '../../../styles/timing.css';
-@import '../../../styles/colors.css';
-@import '../../../styles/z-index.css';
+@import "../../../styles/timing.css";
+@import "../../../styles/colors.css";
+@import "../../../styles/z-index.css";
 
 .dropdown-container {
   display: inline-flex;
@@ -27,7 +27,7 @@
     position: absolute;
     top: 100%;
     width: initial;
-    padding: 1rem 0.5rem;
+    padding: 1rem 1.5rem 1rem 0.5rem;
     transform: scaleY(0);
     transform-origin: top;
     transition: transform var(--timing-really-fast) ease-in-out;
@@ -60,6 +60,13 @@
         }
       }
     }
+  }
+}
+
+.dropdown-container.right-aligned {
+  & .dropdown-content {
+    left: auto;
+    right: 0;
   }
 }
 

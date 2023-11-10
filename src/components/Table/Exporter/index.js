@@ -57,6 +57,7 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
           icon="&#x3d;"
           color={entryDB ? config.colors.get(entryDB) : backgroundColor}
           disabled={disabled}
+          extraClasses={'right-aligned'}
         >
           {children}
         </DropDownButton>
