@@ -26,7 +26,7 @@ exports[`<Documentation /> should render 1`] = `
           <InterProLogo />
            
           <h5>
-            Interpro
+            Interpro & Pfam
           </h5>
           <li>
             <ul>
@@ -36,7 +36,16 @@ exports[`<Documentation /> should render 1`] = `
                   href="https://interpro-documentation.readthedocs.io/en/latest/"
                   target="_blank"
                 >
-                  Website documentation
+                  InterPro documentation
+                </Memo(Connect(Link))>
+              </li>
+              <li>
+                <Memo(Connect(Link))
+                  className="ext"
+                  href="https://pfam-docs.readthedocs.io/en/latest/"
+                  target="_blank"
+                >
+                  Pfam documentation
                 </Memo(Connect(Link))>
               </li>
             </ul>
