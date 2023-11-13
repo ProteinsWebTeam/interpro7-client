@@ -15,9 +15,13 @@ const f = foundationPartial(theme, ipro);
 export const LoadingMessage = () => <Loading />;
 LoadingMessage.displayName = 'LoadingMessage';
 
-const reload = () => {
+async function reload() {
+  const names = await caches.keys();
+  if (names.length > 0) {
+    await Promise.all(names.map((name) => caches.delete(name)));
+  }
   location.reload();
-};
+}
 
 export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
   static displayName = 'ErrorMessage';
