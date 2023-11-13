@@ -512,24 +512,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
-    'alignments',
-    {
-      to(customLocation) {
-        return {
-          description: {
-            ...getEmptyDescription(),
-            main: { key: 'set' },
-            set: {
-              ...customLocation.description.set,
-              detail: 'alignments',
-            },
-          },
-        };
-      },
-      name: 'Alignments',
-    },
-  ],
-  [
     'subfamilies',
     {
       to(customLocation) {

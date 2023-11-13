@@ -45,10 +45,6 @@ const EntryAlignments = loadable({
       /* webpackChunkName: "entry-alignments-subpage" */ './EntryAlignments'
     ),
 });
-const SetAlignments = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "set-alignments-subpage" */ './SetAlignments'),
-});
 const SimilarProteins = loadable({
   loader: () =>
     import(
@@ -214,7 +210,6 @@ const subPages = new Map([
   ['subfamilies', SubfamiliesSubPage],
   ['rosettafold', RoseTTAFoldModel],
   ['alphafold', AlphaFoldModelSubPage],
-  ['alignments', SetAlignments],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
