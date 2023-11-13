@@ -37,7 +37,7 @@ body a.vf-button {
   position: relative;
   width: 9px;
   height: 9px;
-  content: '';
+  content: "";
   margin-left: 0.2rem;
 }
 
@@ -92,14 +92,24 @@ table.left-headers {
 
 /*CALLOUT info & alert messages*/
 
+.callout {
+  position: relative;
+  margin: 0 0 1rem 0;
+  padding: 1rem;
+  border: 1px solid rgba(10, 10, 10, 0.25);
+  border-radius: 0;
+  background-color: white;
+  color: #0a0a0a;
+}
+
 .callout.info {
   background-color: #c6e9ff;
 }
 
 .callout.info.withicon::before,
 .callout.info-alt.withicon::before {
-  content: '';
-  font-family: 'EBI-Common';
+  content: "";
+  font-family: "EBI-Common";
   color: #7fb0d1;
   margin-right: 0.5rem;
 }
@@ -111,9 +121,13 @@ table.left-headers {
   border-radius: 0.25rem;
 }
 
+.callout.alert {
+  background-color: #fce6e2;
+}
+
 .callout.alert.withicon::before {
-  content: '';
-  font-family: 'EBI-Common';
+  content: "";
+  font-family: "EBI-Common";
   color: #d1847f;
   margin-right: 0.5rem;
 }
@@ -126,8 +140,8 @@ table.left-headers {
 }
 
 .callout.alert-alt.withicon::before {
-  content: '';
-  font-family: 'EBI-Common';
+  content: "";
+  font-family: "EBI-Common";
   color: #d72b3f;
   margin-right: 0.5rem;
 }

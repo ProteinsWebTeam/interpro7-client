@@ -10,6 +10,7 @@ import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Footer from 'components/Table/Footer';
 import { edgeCases } from 'utils/server-message';
+// $FlowFixMe
 import EdgeCase from 'components/EdgeCase';
 
 import IDAOptions from './Options';

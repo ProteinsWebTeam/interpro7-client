@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import T from 'prop-types';
+import React, { useState, useEffect } from 'react';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -7,33 +6,28 @@ import { createSelector } from 'reselect';
 import ProgressButton from 'components/ProgressButton';
 import { goToCustomLocation } from 'actions/creators';
 
-import { foundationPartial } from 'styles/foundation';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-const f = foundationPartial(ebiGlobalStyles);
+import useInterval from 'utils/hooks/useInterval';
 
-const useInterval = (callback, delay) => {
-  const savedCallback = useRef();
+import cssBinder from 'styles/cssBinder';
 
-  // Remember the latest callback.
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
+import ipro from 'styles/interpro-vf.css';
 
-  // Set up the interval.
-  useEffect(() => {
-    const tick = () => savedCallback.current();
-    if (delay !== null) {
-      const id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-};
+const css = cssBinder(ipro);
 
 const ONE_SECOND = 1000;
 const HERTZ = 10;
 
 export const STATUS_TIMEOUT = 408;
 export const STATUS_GONE = 410;
+
+type Props = {
+  text: string;
+  accession: string;
+  status: number;
+  shouldRedirect?: boolean;
+  secondsToRetry: number;
+  goToCustomLocation: typeof goToCustomLocation;
+};
 
 const EdgeCase = ({
   text,
@@ -42,12 +36,11 @@ const EdgeCase = ({
   accession,
   secondsToRetry,
   goToCustomLocation,
-}) => {
+}: Props) => {
   const [count, setCount] = useState(0);
   const limit = HERTZ * secondsToRetry;
 
   useInterval(() => {
-    // Your custom logic here
     setCount(count + 1 > limit ? 0 : count + 1);
   }, ONE_SECOND / HERTZ);
 
@@ -64,7 +57,7 @@ const EdgeCase = ({
   const seconds = Math.ceil((limit - count) / HERTZ);
   return (
     <div
-      className={f('callout', 'withicon', {
+      className={css('callout', 'withicon', {
         info: status !== STATUS_GONE,
         alert: status === STATUS_GONE,
       })}
@@ -91,24 +84,17 @@ const EdgeCase = ({
     </div>
   );
 };
-EdgeCase.propTypes = {
-  text: T.string.isRequired,
-  accession: T.string,
-  status: T.number,
-  shouldRedirect: T.bool,
-  secondsToRetry: T.number,
-  goToCustomLocation: T.func.isRequired,
-};
+
 const mapStateToProps = createSelector(
-  state => state.customLocation.description,
-  state => state.settings.navigation.secondsToRetry,
+  (state: GlobalState) => state.customLocation.description,
+  (state: GlobalState) => state.settings.navigation.secondsToRetry,
   (description, secondsToRetry) => {
     const { key } = description.main;
     return {
-      accession: description[key].accession,
+      accession: (description[key] as EndpointLocation).accession,
       secondsToRetry,
     };
-  },
+  }
 );
 
 export default connect(mapStateToProps, {
