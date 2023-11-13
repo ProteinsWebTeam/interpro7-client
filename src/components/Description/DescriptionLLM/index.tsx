@@ -2,14 +2,13 @@ import React, { PureComponent } from 'react';
 
 import cssBinder from 'styles/cssBinder';
 import globalStyles from 'styles/interpro-vf.css';
-import localStyles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import Link from 'components/generic/Link';
 
 import Description from '..';
 import config from 'config';
 
-const css = cssBinder(globalStyles, localStyles, fonts);
+const css = cssBinder(globalStyles, fonts);
 
 type Props = {
   accession: string;
