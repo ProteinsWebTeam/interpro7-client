@@ -51,7 +51,19 @@ exports[`<DescriptionLLM /> should render 1`] = `
             href="https://interpro-documentation.readthedocs.io/en/latest/llm_descriptions.html"
             target="_blank"
           >
-            Read more on description generation
+            Read more on description generation.
+          </Memo(Connect(Link))>
+          <br />
+          <Memo(Connect(Link))
+            className="vf-button vf-button--secondary vf-button--sm"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=PTHR48251"
+            target="_blank"
+          >
+            <span
+              className="small icon icon-common icon-pencil-alt"
+            />
+             
+            Provide feedback
           </Memo(Connect(Link))>
         </p>
       </div>
