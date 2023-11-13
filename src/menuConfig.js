@@ -413,26 +413,6 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
     },
   ],
   [
-    'rosettafold',
-    {
-      to(customLocation) {
-        const { key } = customLocation.description.main;
-        return {
-          description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: 'rosettafold',
-            },
-          },
-        };
-      },
-      name: 'RoseTTAFold',
-      counter: 'structural_models.rosettafold',
-    },
-  ],
-  [
     'alphafold',
     {
       to(customLocation) {

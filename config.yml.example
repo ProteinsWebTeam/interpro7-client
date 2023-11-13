@@ -39,7 +39,6 @@ pages:
       - structure
       - taxonomy
       - proteome
-      - rosettafold
       - alphafold
       - logo
       - entry_alignments

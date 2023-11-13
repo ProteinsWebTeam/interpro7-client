@@ -60,12 +60,6 @@ const Genome3d = loadable({
 const Curation = loadable({
   loader: () => import(/* webpackChunkName: "curation-subpage" */ './Curation'),
 });
-const RoseTTAFoldModel = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "rosettafold-model-subpage" */ './RoseTTAFoldModel'
-    ),
-});
 const AlphaFoldModelSubPage = loadable({
   loader: () =>
     import(
@@ -208,7 +202,6 @@ const subPages = new Map([
     loadData(getDBModifierURL('InterPro', 'pathways'))(PathwaysSubPage),
   ],
   ['subfamilies', SubfamiliesSubPage],
-  ['rosettafold', RoseTTAFoldModel],
   ['alphafold', AlphaFoldModelSubPage],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],

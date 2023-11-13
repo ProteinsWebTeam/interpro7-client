@@ -7,7 +7,15 @@ export const removedPages: Array<{
       main: { key: 'set' },
       set: { detail: 'alignments' },
     },
-    message: 'Sets/Clans alignment pages were removed on InterPro 80.0',
+    message: 'Sets/Clans alignment pages were removed on InterPro 98.0',
+  },
+  {
+    description: {
+      main: { key: 'entry' },
+      entry: { detail: 'rosettafold' },
+    },
+    message:
+      'RosseTTaFold pages were removed on InterPro 96.0. You can use the AlphaFold models instead.',
   },
 ];
 
