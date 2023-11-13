@@ -4,7 +4,6 @@ import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import ProteinViewerForStructure from './ProteinViewerLoaded';
-import GoToProtVistaMenu from './GoToProtVistaMenu';
 
 import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -155,13 +154,11 @@ const tagChimericStructures = (data: DataForProteinChain[]) => {
 type Props = {
   structure: string;
   entries: StructureLinkedObject[];
-  showChainMenu?: boolean;
   secondaryStructures?: SecondaryStructure[];
 };
 
 const EntriesOnStructure = ({
   entries,
-  showChainMenu = false,
   secondaryStructures,
   structure,
 }: Props) => {
@@ -169,9 +166,6 @@ const EntriesOnStructure = ({
   tagChimericStructures(merged);
   return (
     <>
-      {/*{showChainMenu && merged.length > 1 && (*/}
-      {/*  <GoToProtVistaMenu entries={merged} />*/}
-      {/*)}*/}
       <div className={css('row')}>
         {merged.map((e, i) => {
           const sequenceData = {

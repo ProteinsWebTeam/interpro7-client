@@ -177,49 +177,6 @@ const description = `
 InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites. To classify proteins in this way, InterPro uses predictive models, known as signatures, provided by several different databases (referred to as member databases) that make up the InterPro consortium. We combine protein signatures from these member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.
 `.trim();
 
-const Announcement = () => (
-  <div className={f('row')}>
-    <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
-      <div
-        className={f('callout', 'info')}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <span
-          style={{
-            fontSize: '2em',
-            color: 'darkblue',
-            paddingRight: '1rem',
-          }}
-          className={f('small', 'icon', 'icon-common', 'icon-announcement')}
-        />{' '}
-        <p>
-          <strong>InterPro is the new home of Pfam</strong>
-          <br />
-          The Pfam website (
-          <span href="//pfam.xfam.org" className={f('link', 'disabled')}>
-            pfam.xfam.org
-          </span>
-          ) was shut down on October 5th, but InterPro offers the same
-          functionality and data.
-          <br />A legacy version of Pfam is available at{' '}
-          <Link
-            href="//pfam-legacy.xfam.org/"
-            className={f('ext')}
-            target="_blank"
-          >
-            https://pfam-legacy.xfam.org/
-          </Link>{' '}
-          but will not receive any updates and will be decommissioned in Spring
-          2023.
-        </p>
-      </div>
-    </div>
-  </div>
-);
-
 // eslint-disable-next-line
 function supportsES6() {
   try {
@@ -318,7 +275,7 @@ class Home extends PureComponent {
           </div>
         </div>
 
-        {/*<Announcement />*/}
+        {/* <Announcement />*/}
         <div className={f('row')}>
           <div className={f('columns', 'large-12', 'margin-bottom-xlarge')}>
             <Tabs>
