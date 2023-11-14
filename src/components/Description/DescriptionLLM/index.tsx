@@ -2,13 +2,14 @@ import React, { PureComponent } from 'react';
 
 import cssBinder from 'styles/cssBinder';
 import globalStyles from 'styles/interpro-vf.css';
+import localStyles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import Link from 'components/generic/Link';
 
 import Description from '..';
 import config from 'config';
 
-const css = cssBinder(globalStyles, fonts);
+const css = cssBinder(globalStyles, localStyles, fonts);
 
 type Props = {
   accession: string;
@@ -64,7 +65,6 @@ class DescriptionLLM extends PureComponent<Props> {
                 >
                   Read more on description generation.
                 </Link>
-                <br />
                 <Link
                   href={`https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=${accession}`}
                   target="_blank"
