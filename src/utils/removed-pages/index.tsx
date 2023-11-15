@@ -52,7 +52,7 @@ export const doesObjectFits = (
   object: Record<string, unknown>,
   template: Record<string, unknown>
 ): boolean => {
-  for (let [key, value] of Object.entries(template)) {
+  for (const [key, value] of Object.entries(template)) {
     if (key in object) {
       if (Array.isArray(value) && Array.isArray(object[key])) {
         if (!doesArrayFits(object[key] as Array<unknown>, value)) return false;
@@ -104,7 +104,7 @@ export const doesArrayFits = (
 export const getMessageIflocationRemoved = (
   location: InterProDescription
 ): ReactElement | null => {
-  for (let page of removedPages) {
+  for (const page of removedPages) {
     if (doesObjectFits(location, page.description)) {
       return page.getMessage(location);
     }
