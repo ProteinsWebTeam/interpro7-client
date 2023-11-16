@@ -3,12 +3,15 @@ import { toPlural } from 'utils/pages/toPlural';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
-const selectRepresentativeDomains = (domains: Record<string, unknown>[]) => {
+export const selectRepresentativeDomains = (
+  domains: Record<string, unknown>[],
+  locationKey: string = 'entry_protein_locations',
+) => {
   const flatDomains = [];
   for (const domain of domains) {
     const { accession, short_name, name, source_database, integrated, chain } =
       domain;
-    for (const location of domain.entry_protein_locations as Array<ProtVistaLocation>) {
+    for (const location of domain[locationKey] as Array<ProtVistaLocation>) {
       for (const fragment of location.fragments) {
         const { start, end, representative } = fragment;
         if (representative) {
