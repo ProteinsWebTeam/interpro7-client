@@ -101,7 +101,7 @@ export const doesArrayFits = (
   return true;
 };
 
-export const getMessageIflocationRemoved = (
+export const getMessageIfLocationRemoved = (
   location: InterProDescription
 ): ReactElement | null => {
   for (const page of removedPages) {
