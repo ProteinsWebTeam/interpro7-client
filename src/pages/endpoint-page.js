@@ -21,7 +21,7 @@ import EntryMenu from 'components/EntryMenu';
 import RemovedEntrySummary from 'components/Entry/RemovedEntrySummary';
 import Title from 'components/Title';
 import EdgeCase from 'components/EdgeCase';
-import { getMessageIflocationRemoved } from 'utils/removed-pages';
+import { getMessageIfLocationRemoved } from 'utils/removed-pages';
 
 import {
   // schemaProcessDataRecord,
@@ -130,7 +130,7 @@ class Summary extends PureComponent {
       return <RemovedEntrySummary {...payload} dbInfo={db} />;
     }
 
-    const removedPageMesagge = getMessageIflocationRemoved(
+    const removedPageMesagge = getMessageIfLocationRemoved(
       customLocation.description,
     );
     if (removedPageMesagge) {

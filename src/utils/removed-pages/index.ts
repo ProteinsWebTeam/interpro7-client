@@ -75,7 +75,7 @@ export const doesArrayFits = (
   return true;
 };
 
-export const getMessageIflocationRemoved = (
+export const getMessageIfLocationRemoved = (
   location: InterProDescription
 ): string | null => {
   for (let page of removedPages) {
