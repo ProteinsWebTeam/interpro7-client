@@ -56,31 +56,36 @@ const EdgeCase = ({
   });
   const seconds = Math.ceil((limit - count) / HERTZ);
   return (
-    <div
-      className={css('callout', 'withicon', {
-        info: status !== STATUS_GONE,
-        alert: status === STATUS_GONE,
-      })}
-    >
-      <b>{text}</b>
-      {(shouldRedirect || status === STATUS_TIMEOUT) && !isNaN(seconds) && (
-        <>
-          <br />
-          <span>
-            {status === STATUS_TIMEOUT
-              ? 'Checking again in '
-              : 'Redirecting to Search in '}
-            {seconds} seconds.
-          </span>
-          <ProgressButton
-            downloading={true}
-            success={true}
-            progress={count / limit}
-            failed={true}
-            showIcon={false}
-          />
-        </>
-      )}
+    // TODO: replace by grid/flex layout
+    <div className={css('row')}>
+      <div className={css('medium-12', 'large-12', 'columns')}>
+        <div
+          className={css('callout', 'withicon', {
+            info: status !== STATUS_GONE,
+            alert: status === STATUS_GONE,
+          })}
+        >
+          <b>{text}</b>
+          {(shouldRedirect || status === STATUS_TIMEOUT) && !isNaN(seconds) && (
+            <>
+              <br />
+              <span>
+                {status === STATUS_TIMEOUT
+                  ? 'Checking again in '
+                  : 'Redirecting to Search in '}
+                {seconds} seconds.
+              </span>
+              <ProgressButton
+                downloading={true}
+                success={true}
+                progress={count / limit}
+                failed={true}
+                showIcon={false}
+              />
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
