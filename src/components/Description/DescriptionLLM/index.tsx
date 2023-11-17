@@ -66,7 +66,7 @@ class DescriptionLLM extends PureComponent<Props> {
                   Read more on description generation.
                 </Link>
                 <Link
-                  href={`https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=${accession}`}
+                  href={`${config.root.LLMFeedback.href}${accession}`}
                   target="_blank"
                   className={css(
                     'vf-button',

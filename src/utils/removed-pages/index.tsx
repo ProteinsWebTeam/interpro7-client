@@ -10,7 +10,7 @@ export const removedPages: Array<{
       main: { key: 'set' },
       set: { detail: 'alignments' },
     },
-    getMessage: (location) => {
+    getMessage: () => {
       return (
         <>Profile-profile alignments have been removed in InterPro 98.0.</>
       );
