@@ -1,21 +1,47 @@
+import Link from 'components/generic/Link';
+import React, { ReactElement } from 'react';
+
 export const removedPages: Array<{
   description: InterProPartialDescription;
-  message: string;
+  getMessage: (location: InterProPartialDescription) => ReactElement;
 }> = [
   {
     description: {
       main: { key: 'set' },
       set: { detail: 'alignments' },
     },
-    message: 'Sets/Clans alignment pages were removed on InterPro 98.0',
+    getMessage: (location) => {
+      return (
+        <>Profile-profile alignments have been removed in InterPro 98.0.</>
+      );
+    },
   },
   {
     description: {
       main: { key: 'entry' },
       entry: { detail: 'rosettafold' },
     },
-    message:
-      'RosseTTaFold pages were removed on InterPro 96.0. You can use the AlphaFold models instead.',
+    getMessage: (location) => {
+      return (
+        <>
+          RosseTTaFold models have been removed in InterPro 96.0. You can use{' '}
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  ...location.entry,
+                  detail: 'alphafold',
+                },
+              },
+            }}
+          >
+            AlphaFold models
+          </Link>{' '}
+          instead.
+        </>
+      );
+    },
   },
 ];
 
@@ -26,7 +52,7 @@ export const doesObjectFits = (
   object: Record<string, unknown>,
   template: Record<string, unknown>
 ): boolean => {
-  for (let [key, value] of Object.entries(template)) {
+  for (const [key, value] of Object.entries(template)) {
     if (key in object) {
       if (Array.isArray(value) && Array.isArray(object[key])) {
         if (!doesArrayFits(object[key] as Array<unknown>, value)) return false;
@@ -75,11 +101,13 @@ export const doesArrayFits = (
   return true;
 };
 
-export const getMessageIflocationRemoved = (
+export const getMessageIfLocationRemoved = (
   location: InterProDescription
-): string | null => {
-  for (let page of removedPages) {
-    if (doesObjectFits(location, page.description)) return page.message;
+): ReactElement | null => {
+  for (const page of removedPages) {
+    if (doesObjectFits(location, page.description)) {
+      return page.getMessage(location);
+    }
   }
   return null;
 };

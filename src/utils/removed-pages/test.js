@@ -1,4 +1,4 @@
-import { doesObjectFits, doesArrayFits } from './index.ts';
+import { doesObjectFits, doesArrayFits } from './index.tsx';
 
 describe('removed pages', () => {
   test('object fits', () => {
