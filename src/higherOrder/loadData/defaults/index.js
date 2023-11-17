@@ -176,7 +176,7 @@ export const getReversedUrl = createSelector(
       },
     });
     if (description.main.key === 'set' && description?.entry?.isFilter) {
-      url = url.replace('counters', 'counters,short_name');
+      url = url.replace('counters', 'short_name');
     }
     if (description.main.key === 'entry' && newMain === 'taxonomy') {
       url = url.replace('/entry/', '/protein/entry/');
@@ -197,10 +197,8 @@ export const includeTaxonFocusedOnURL = (url, focused) => {
 
 export const getUrlForApi = (...parameters) =>
   getUrl('api')(...parameters)
-    .replace('/alignments', '/')
     .replace('/entry_alignments', '/')
     .replace('/logo', '/')
-    .replace('/rosettafold', '/')
     .replace('/alphafold', '/')
     .replace('/domain_architecture', '/')
     .replace('/interactions', '/')

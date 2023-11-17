@@ -104,7 +104,7 @@ const BreadCrumbsForSearchOrResult = (
   { location } /*: {location: Location} */,
 ) => {
   if (!['search', 'result'].includes(location?.main?.key)) return null;
-  //$FlowFixMe[incompatible-type]
+  // $FlowFixMe[incompatible-type]
   const key /*: 'search' | 'result' */ = location.main.key;
   const { type, value, accession } = location[key];
   return (
@@ -222,11 +222,11 @@ BreadCrumbForEntityDetail.propTypes = {
 const BreadCrumbForSecondPart = ({ location } /*: {location: Location} */) => {
   const { accession, detail } = location[location.main.key];
   const filters = Object.keys(location)
-    //$FlowFixMe[prop-missing]
+    // $FlowFixMe[prop-missing]
     .filter((ep) => location[ep]?.isFilter)
     .sort(
       (ep1, ep2) =>
-        //$FlowFixMe[prop-missing]
+        // $FlowFixMe[prop-missing]
         location[ep1]?.order - location[ep2].order,
     );
   return (

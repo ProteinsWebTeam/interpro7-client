@@ -92,6 +92,16 @@ table.left-headers {
 
 /*CALLOUT info & alert messages*/
 
+.callout {
+  position: relative;
+  margin: 0 0 1rem 0;
+  padding: 1rem;
+  border: 1px solid rgba(10, 10, 10, 0.25);
+  border-radius: 0;
+  background-color: white;
+  color: #0a0a0a;
+}
+
 .callout.info {
   background-color: #c6e9ff;
 }
@@ -109,6 +119,10 @@ table.left-headers {
   border: 1px solid var(--colors-nearly-white);
   border-left: #7fb0d1 4px solid;
   border-radius: 0.25rem;
+}
+
+.callout.alert {
+  background-color: #fce6e2;
 }
 
 .callout.alert.withicon::before {

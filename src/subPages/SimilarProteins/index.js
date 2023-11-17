@@ -57,15 +57,29 @@ const schemaProcessData = (data) => {
 
 const formatDomainsPayload = (payload, loading, ida) => {
   if (loading || !payload) return null;
+  const namesMap = {};
+  payload.results.forEach((result) => {
+    if (result.metadata.source_database.toLowerCase() === 'interpro') {
+      const acc = result.metadata.accession;
+      namesMap[acc.toLowerCase()] = result?.extra_fields?.short_name || acc;
+    }
+  });
+
   const domainsMap = {};
   payload.results.forEach((result) => {
-    domainsMap[result.metadata.accession.toLowerCase()] = [
-      ...result.proteins[0].entry_protein_locations,
-    ];
-    if (result.metadata.integrated) {
-      domainsMap[result.metadata.integrated.toLowerCase()] = [
+    if (result.metadata.source_database.toLowerCase() === 'pfam') {
+      const acc = result.metadata.accession;
+      namesMap[acc.toLowerCase()] = result?.extra_fields?.short_name || acc;
+
+      domainsMap[acc.toLowerCase()] = [
         ...result.proteins[0].entry_protein_locations,
       ];
+
+      if (result.metadata.integrated) {
+        domainsMap[result.metadata.integrated.toLowerCase()] = [
+          ...result.proteins[0].entry_protein_locations,
+        ];
+      }
     }
   });
   const domains = [];
@@ -73,8 +87,7 @@ const formatDomainsPayload = (payload, loading, ida) => {
     domains.push({
       entry: domain.toUpperCase(),
       coordinates: domainsMap[domain.toLowerCase()].splice(0, 1),
-      name:
-        payload.results?.[0]?.extra_fields?.short_name || domain.toUpperCase(),
+      name: namesMap[domain.toLowerCase()] || domain,
     });
   });
   return {
@@ -158,14 +171,14 @@ const getUrlForIDA = createSelector(
     });
   },
 );
-const getUrlForPfamDomains = createSelector(
+const getUrlForDomains = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description,
   (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description) => {
     const newDescription = {
       main: { key: 'entry' },
-      entry: { db: 'pfam' },
+      entry: { db: 'all' },
       protein: {
         accession: description.protein.accession,
         db: 'uniprot',
@@ -180,6 +193,7 @@ const getUrlForPfamDomains = createSelector(
       pathname: root + descriptionToPath(newDescription),
       query: {
         extra_fields: 'short_name',
+        page_size: 100,
       },
     });
   },
@@ -194,7 +208,7 @@ const mapStateToPropsAccessionDB = createSelector(
 );
 
 const SimilarProteinsHeader = loadData({
-  getUrl: getUrlForPfamDomains,
+  getUrl: getUrlForDomains,
   propNamespace: 'Domain',
 })(
   loadData({

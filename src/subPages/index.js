@@ -45,10 +45,6 @@ const EntryAlignments = loadable({
       /* webpackChunkName: "entry-alignments-subpage" */ './EntryAlignments'
     ),
 });
-const SetAlignments = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "set-alignments-subpage" */ './SetAlignments'),
-});
 const SimilarProteins = loadable({
   loader: () =>
     import(
@@ -63,12 +59,6 @@ const Genome3d = loadable({
 });
 const Curation = loadable({
   loader: () => import(/* webpackChunkName: "curation-subpage" */ './Curation'),
-});
-const RoseTTAFoldModel = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "rosettafold-model-subpage" */ './RoseTTAFoldModel'
-    ),
 });
 const AlphaFoldModelSubPage = loadable({
   loader: () =>
@@ -212,9 +202,7 @@ const subPages = new Map([
     loadData(getDBModifierURL('InterPro', 'pathways'))(PathwaysSubPage),
   ],
   ['subfamilies', SubfamiliesSubPage],
-  ['rosettafold', RoseTTAFoldModel],
   ['alphafold', AlphaFoldModelSubPage],
-  ['alignments', SetAlignments],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
