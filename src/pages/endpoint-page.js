@@ -21,6 +21,7 @@ import EntryMenu from 'components/EntryMenu';
 import RemovedEntrySummary from 'components/Entry/RemovedEntrySummary';
 import Title from 'components/Title';
 import EdgeCase from 'components/EdgeCase';
+import { getMessageIfLocationRemoved } from 'utils/removed-pages';
 
 import {
   // schemaProcessDataRecord,
@@ -127,6 +128,19 @@ class Summary extends PureComponent {
         {};
 
       return <RemovedEntrySummary {...payload} dbInfo={db} />;
+    }
+
+    const removedPageMesagge = getMessageIfLocationRemoved(
+      customLocation.description,
+    );
+    if (removedPageMesagge) {
+      return (
+        <EdgeCase
+          text={removedPageMesagge}
+          status={410}
+          shouldRedirect={false}
+        />
+      );
     }
 
     if (edgeCases.has(status)) {

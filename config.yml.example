@@ -39,7 +39,6 @@ pages:
       - structure
       - taxonomy
       - proteome
-      - rosettafold
       - alphafold
       - logo
       - entry_alignments
@@ -82,7 +81,6 @@ pages:
       - structure
       - taxonomy
       - proteome
-      - alignments
   result:
 pagination:
   pageSize: 20
