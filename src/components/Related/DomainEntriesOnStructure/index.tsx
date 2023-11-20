@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -50,7 +50,7 @@ export type DataForProteinChain = {
 
 const mergeData = (
   secondaryData: StructureLinkedObject[],
-  secondaryStructures?: SecondaryStructure[]
+  secondaryStructures?: SecondaryStructure[],
 ) => {
   const out: Record<string, Record<string, DataForProteinChain>> = {};
   for (const entry of secondaryData) {
@@ -119,7 +119,7 @@ const mergeData = (
         ({ entry_protein_locations, entry_structure_locations, ...child }) => ({
           ...child,
           locations: entry_structure_locations,
-        })
+        }),
       ),
       chain: entry.chain,
       protein: entry.protein,
@@ -131,7 +131,7 @@ const mergeData = (
   const chains = Object.keys(out).sort((a, b) => (a ? a.localeCompare(b) : -1));
   for (const chain of chains) {
     const proteins = Object.keys(out[chain]).sort((a, b) =>
-      a ? a.localeCompare(b) : -1
+      a ? a.localeCompare(b) : -1,
     );
     for (const protein of proteins) {
       entries.push(out[chain][protein]);
@@ -151,22 +151,50 @@ const tagChimericStructures = (data: DataForProteinChain[]) => {
   }
 };
 
+const getRepresentativesPerChain = (
+  representativeDomains?: Record<string, unknown>[],
+) => {
+  const representativesPerChain: Record<string, Array<MinimalFeature>> = {};
+  if (representativeDomains?.length) {
+    representativeDomains.forEach((domain) => {
+      if (domain.chain) {
+        if (!representativesPerChain[domain.chain as string])
+          representativesPerChain[domain.chain as string] = [];
+        representativesPerChain[domain.chain as string].push(
+          domain as MinimalFeature,
+        );
+      }
+    });
+  }
+  return representativesPerChain;
+};
+
 type Props = {
   structure: string;
   entries: StructureLinkedObject[];
   secondaryStructures?: SecondaryStructure[];
+  representativeDomains?: Record<string, unknown>[];
 };
 
 const EntriesOnStructure = ({
   entries,
   secondaryStructures,
   structure,
+  representativeDomains,
 }: Props) => {
-  const merged = mergeData(entries, secondaryStructures);
-  tagChimericStructures(merged);
+  const merged = useMemo(() => {
+    const data = mergeData(entries, secondaryStructures);
+    tagChimericStructures(data);
+    return data;
+  }, [entries, secondaryStructures]);
+  const representativesPerChain = useMemo(
+    () => getRepresentativesPerChain(representativeDomains),
+    [representativeDomains],
+  );
+
   return (
     <>
-      <div className={css('row')}>
+      <div className={css('vf-stack', 'vf-stack--400')}>
         {merged.map((e, i) => {
           const sequenceData = {
             accession: `${e.chain}-${structure}`,
@@ -174,14 +202,20 @@ const EntriesOnStructure = ({
           };
 
           const tracks = Object.entries(
-            e.data as Record<string, Array<Record<string, unknown>>>
+            e.data as Record<string, Array<Record<string, unknown>>>,
           ).sort(([a], [b]) => {
             if (a && a.toLowerCase() === 'chain') return -1;
             if (b && b.toLowerCase() === 'chain') return 1;
             return b ? b.localeCompare(a) : -1;
           });
+          if (representativesPerChain[e.chain]) {
+            tracks.splice(0, 0, [
+              'representative domains',
+              representativesPerChain[e.chain],
+            ]);
+          }
           return (
-            <div key={i} className={css('columns')}>
+            <div key={i} className={css('vf-stack')}>
               <h4 id={`protvista-${e.chain}-${e.protein.accession}`}>
                 Chain {e.chain}{' '}
                 {e.protein?.accession && (
