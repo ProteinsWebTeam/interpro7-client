@@ -2,7 +2,7 @@
 
 exports[`<Twitter /> should render 1`] = `
 <div
-  className="twitter-block callout"
+  className="twitter-block"
 >
   <div
     className="icon icon-common"
@@ -16,6 +16,7 @@ exports[`<Twitter /> should render 1`] = `
     href="https://twitter.com/InterProDB"
     target="_blank"
   >
+     
     Tweets by @InterProDB
   </Memo(Connect(Link))>
 </div>

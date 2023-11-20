@@ -361,6 +361,7 @@ class Home extends PureComponent {
         }
         <div className={f('row', 'columns')}>
           <h3 className={f('light')}>In the spotlight</h3>
+          <Twitter />
           <BlogEntries />
         </div>
         {
@@ -376,9 +377,6 @@ class Home extends PureComponent {
 
         <ToolCards />
 
-        <ErrorBoundary>
-          <Twitter />
-        </ErrorBoundary>
         <div className={f('row')}>
           <span className={f('elixir-title')}>This service funded by</span>
           <img src={embl} className={f('image-funding')} alt="EMBL logo" />

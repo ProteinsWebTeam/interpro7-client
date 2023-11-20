@@ -1,9 +1,5 @@
 .twitter-block {
-  text-align: center;
-  background-color: #eee;
-  padding: 0.6em;
   & .icon-common {
     color: #007bb6;
-    font-size: 340%;
   }
 }

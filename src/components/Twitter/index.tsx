@@ -10,7 +10,7 @@ const css = cssBinder(fonts, local);
 
 const Twitter = () => {
   return (
-    <div className={css('twitter-block', 'callout')}>
+    <div className={css('twitter-block')}>
       <div className={css('icon', 'icon-common')} data-icon="&#xf099;" />
       <Link
         data-dnt="true"
@@ -20,6 +20,7 @@ const Twitter = () => {
         href="https://twitter.com/InterProDB"
         target="_blank"
       >
+        {' '}
         Tweets by @InterProDB
       </Link>
     </div>
