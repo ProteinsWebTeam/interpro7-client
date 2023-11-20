@@ -65,25 +65,27 @@ class DescriptionLLM extends PureComponent<Props> {
                 >
                   Read more on description generation.
                 </Link>
-                <Link
-                  href={`${config.root.LLMFeedback.href}${accession}`}
-                  target="_blank"
-                  className={css(
-                    'vf-button',
-                    'vf-button--secondary',
-                    'vf-button--sm'
-                  )}
-                >
-                  <span
+                {config.root?.LLMFeedback?.href ? (
+                  <Link
+                    href={`${config.root.LLMFeedback.href}${accession}`}
+                    target="_blank"
                     className={css(
-                      'small',
-                      'icon',
-                      'icon-common',
-                      'icon-pencil-alt'
+                      'vf-button',
+                      'vf-button--secondary',
+                      'vf-button--sm'
                     )}
-                  />{' '}
-                  Provide feedback
-                </Link>
+                  >
+                    <span
+                      className={css(
+                        'small',
+                        'icon',
+                        'icon-common',
+                        'icon-pencil-alt'
+                      )}
+                    />{' '}
+                    Provide feedback
+                  </Link>
+                ) : null}
               </p>
             </div>
           </div>
