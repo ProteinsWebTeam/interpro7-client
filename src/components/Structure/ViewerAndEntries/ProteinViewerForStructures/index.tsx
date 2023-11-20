@@ -44,7 +44,6 @@ const ProteinViewerForStructure = ({
       <EntriesOnStructure
         structure={structure}
         entries={interpro.concat(unintegrated) as StructureLinkedObject[]}
-        showChainMenu={true}
         secondaryStructures={secondaryData}
       />
     </div>
