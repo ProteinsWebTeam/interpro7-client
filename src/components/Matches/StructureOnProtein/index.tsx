@@ -35,21 +35,34 @@ const StructureOnProtein = ({ matches, match }: Props) => {
               accession: structure.accession,
               name: structure.name,
               source_database: structure.source_database,
-              locations: m.structure_protein_locations || [],
+              locations: (m.structure_protein_locations || []).map(
+                ({ fragments }) => {
+                  return {
+                    fragments: fragments.map(
+                      ({ protein_start, protein_end }) => {
+                        return {
+                          start: protein_start,
+                          end: protein_end,
+                        };
+                      },
+                    ),
+                  };
+                },
+              ),
               color: getTrackColor(structure, EntryColorMode.ACCESSION),
               type: 'structure',
               entry_type: 'chain',
             },
           ],
-        ])
-      )
+        ]),
+      ),
     );
   }, [protein, structure]);
 
   if (!matches.length || !structure || !protein) return null;
   const length = protein.length || 0;
   const sequence = protein.sequence || '\u00A0'.repeat(length);
-
+  console.log(data);
   return (
     <section>
       <table className={css('matches-in-table')}>
@@ -88,7 +101,7 @@ const StructureOnProtein = ({ matches, match }: Props) => {
                           />
                         }
                         onMouseOverFeature={(
-                          locations: Array<ProtVistaLocation>
+                          locations: Array<ProtVistaLocation>,
                         ) => {
                           setLocationHovered(locations);
                         }}
