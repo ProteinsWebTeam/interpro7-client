@@ -2,38 +2,22 @@
 
 exports[`<Twitter /> should render 1`] = `
 <div
-  className="expanded row"
+  className="twitter-block"
 >
   <div
-    className="columns"
-    style={
-      {
-        "padding": 0,
-      }
-    }
+    className="icon icon-common"
+    data-icon=""
+  />
+  <Memo(Connect(Link))
+    className="twitter-timeline"
+    data-chrome="nofooter noborders noheader noscrollbar transparent"
+    data-dnt="true"
+    data-tweet-limit="1"
+    href="https://twitter.com/InterProDB"
+    target="_blank"
   >
-    <div
-      className="jumbo-news"
-    >
-      <div
-        className="jumbo-news-container"
-      >
-        <div
-          className="icon icon-common"
-          data-icon=""
-        />
-        <Memo(Connect(Link))
-          className="twitter-timeline"
-          data-chrome="nofooter noborders noheader noscrollbar transparent"
-          data-dnt="true"
-          data-tweet-limit="1"
-          href="https://twitter.com/InterProDB"
-          target="_blank"
-        >
-          Tweets by @InterProDB
-        </Memo(Connect(Link))>
-      </div>
-    </div>
-  </div>
+     
+    Tweets by @InterProDB
+  </Memo(Connect(Link))>
 </div>
 `;
