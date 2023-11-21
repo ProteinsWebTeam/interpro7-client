@@ -4,6 +4,7 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { foundationPartial } from 'styles/foundation';
 
