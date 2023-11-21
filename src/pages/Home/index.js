@@ -46,6 +46,7 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import embl from '../../images/thirdparty/funding/logo_embl.png';
 import wellcome from '../../images/thirdparty/funding/logo_wellcome.jpg';
 import bbsrc from '../../images/thirdparty/funding/logo_bbsrc.png';
+import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
 // Bind css with style object
 const f = foundationPartial(
@@ -252,7 +253,7 @@ class Home extends PureComponent {
           />
         ) : null}
         <GeneralWarning />
-
+        <ErrorMessage />
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData
