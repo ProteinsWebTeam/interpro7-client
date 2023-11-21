@@ -25,12 +25,17 @@ async function reload() {
 export const ErrorMessage = () => {
   return (
     <div className={css('vf-stack', 'vf-stack--400', 'callout', 'alert')}>
-      <div className={css('callout', 'info', 'withicon')}>
+      <div>
+        <span
+          className={css('icon', 'icon-common')}
+          data-icon="&#xf071;"
+          style={{ color: '#de6158', fontSize: '2em' }}
+        />{' '}
         An error was encountered while trying to load an element on this page.
       </div>
       <p>
-        Please try reloading the page using the button below to see if this
-        resolves the problem.
+        Please use the button below to clear your web browser's cache and reload
+        the page. This may resolve the issue.
       </p>
       <button
         onClick={reload}
@@ -39,63 +44,52 @@ export const ErrorMessage = () => {
         Clear the cache & reload
       </button>
       <div>
-        You can also try to hard-refresh your browser{' '}
-        <Tooltip
-          interactive
-          title={
-            <div>
-              <h5>Chrome</h5>
-              <ul>
-                <li>
-                  <b>Windows/Linux: </b>
-                  Hold down Ctrl and click the reload button. Or, hold down Ctrl
-                  and press F5
-                </li>
-                <li>
-                  <b>Mac: </b>
-                  Hold ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd
-                  and ⇧ Shift key and then press R.
-                </li>
-              </ul>
-              <hr />
-              <h5>Mozilla Firefox</h5>
-              <ul>
-                <li>
-                  <b>Windows/Linux: </b>
-                  Hold the Ctrl key and press the F5 key. Or, hold down Ctrl and
-                  ⇧ Shift and then press R.
-                </li>
-                <li>
-                  <b>Mac: </b>
-                  Hold down the ⇧ Shift and click the reload button. Or, hold
-                  down ⌘ Cmd and ⇧ Shift and then press R.
-                </li>
-              </ul>
-            </div>
-          }
-        >
-          <span
-            className={css('small', 'icon', 'icon-common')}
-            data-icon="&#xf129;"
-          />
-        </Tooltip>
+        <p>If this does not solve the issue, clear the cache manually</p>
+        <details className={css('read-more')}>
+          <summary>Instructions</summary>
+          <div className={css('callout')}>
+            <h5>Chrome</h5>
+            <ul>
+              <li>
+                <b>Windows/Linux: </b>
+                Hold down Ctrl and click the reload button. Or, hold down Ctrl
+                and press F5
+              </li>
+              <li>
+                <b>Mac: </b>
+                Hold ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd
+                and ⇧ Shift key and then press R.
+              </li>
+            </ul>
+            <hr />
+            <h5>Mozilla Firefox</h5>
+            <ul>
+              <li>
+                <b>Windows/Linux: </b>
+                Hold the Ctrl key and press the F5 key. Or, hold down Ctrl and ⇧
+                Shift and then press R.
+              </li>
+              <li>
+                <b>Mac: </b>
+                Hold down the ⇧ Shift and click the reload button. Or, hold down
+                ⌘ Cmd and ⇧ Shift and then press R.
+              </li>
+            </ul>
+          </div>
+        </details>
       </div>
       <hr style={{ margin: '1em', borderColor: 'grey' }} />
       <div>
-        If you continue to experience this error, please reach out to us using
-        our contact form.
+        If neither options solve the error, please{' '}
+        <Link
+          href="https://www.ebi.ac.uk/support/interpro"
+          target="_blank"
+          withReferrer
+        >
+          ️ contact us
+        </Link>
+        .
       </div>
-      <Link
-        className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
-        href="https://www.ebi.ac.uk/support/interpro"
-        target="_blank"
-        withReferrer
-      >
-        <span role="img" aria-label="email">
-          ✉
-        </span>
-        ️ Contact form
-      </Link>
     </div>
   );
 };

@@ -4,13 +4,22 @@ exports[`<ErrorMessage /> should render error message 1`] = `
 <div
   className="vf-stack vf-stack--400 callout alert"
 >
-  <div
-    className="callout info withicon"
-  >
+  <div>
+    <span
+      className="icon icon-common"
+      data-icon=""
+      style={
+        {
+          "color": "#de6158",
+          "fontSize": "2em",
+        }
+      }
+    />
+     
     An error was encountered while trying to load an element on this page.
   </div>
   <p>
-    Please try reloading the page using the button below to see if this resolves the problem.
+    Please use the button below to clear your web browser's cache and reload the page. This may resolve the issue.
   </p>
   <button
     className="vf-button vf-button--secondary vf-button--sm"
@@ -19,55 +28,55 @@ exports[`<ErrorMessage /> should render error message 1`] = `
     Clear the cache & reload
   </button>
   <div>
-    You can also try to hard-refresh your browser
-     
-    <Tooltip
-      interactive={true}
-      title={
-        <div>
-          <h5>
-            Chrome
-          </h5>
-          <ul>
-            <li>
-              <b>
-                Windows/Linux: 
-              </b>
-              Hold down Ctrl and click the reload button. Or, hold down Ctrl and press F5
-            </li>
-            <li>
-              <b>
-                Mac: 
-              </b>
-              Hold ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd and ⇧ Shift key and then press R.
-            </li>
-          </ul>
-          <hr />
-          <h5>
-            Mozilla Firefox
-          </h5>
-          <ul>
-            <li>
-              <b>
-                Windows/Linux: 
-              </b>
-              Hold the Ctrl key and press the F5 key. Or, hold down Ctrl and ⇧ Shift and then press R.
-            </li>
-            <li>
-              <b>
-                Mac: 
-              </b>
-              Hold down the ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd and ⇧ Shift and then press R.
-            </li>
-          </ul>
-        </div>
-      }
+    <p>
+      If this does not solve the issue, clear the cache manually
+    </p>
+    <details
+      className="read-more"
     >
-      <span
-        className="small icon icon-common"
-        data-icon=""
-      />
-    </Tooltip>
+      <summary>
+        Instructions
+      </summary>
+      <div
+        className="callout"
+      >
+        <h5>
+          Chrome
+        </h5>
+        <ul>
+          <li>
+            <b>
+              Windows/Linux: 
+            </b>
+            Hold down Ctrl and click the reload button. Or, hold down Ctrl and press F5
+          </li>
+          <li>
+            <b>
+              Mac: 
+            </b>
+            Hold ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd and ⇧ Shift key and then press R.
+          </li>
+        </ul>
+        <hr />
+        <h5>
+          Mozilla Firefox
+        </h5>
+        <ul>
+          <li>
+            <b>
+              Windows/Linux: 
+            </b>
+            Hold the Ctrl key and press the F5 key. Or, hold down Ctrl and ⇧ Shift and then press R.
+          </li>
+          <li>
+            <b>
+              Mac: 
+            </b>
+            Hold down the ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd and ⇧ Shift and then press R.
+          </li>
+        </ul>
+      </div>
+    </details>
   </div>
   <hr
     style={
@@ -78,22 +87,17 @@ exports[`<ErrorMessage /> should render error message 1`] = `
     }
   />
   <div>
-    If you continue to experience this error, please reach out to us using our contact form.
-  </div>
-  <Memo(Connect(Link))
-    className="vf-button vf-button--secondary vf-button--sm"
-    href="https://www.ebi.ac.uk/support/interpro"
-    target="_blank"
-    withReferrer={true}
-  >
-    <span
-      aria-label="email"
-      role="img"
+    If neither options solve the error, please
+     
+    <Memo(Connect(Link))
+      href="https://www.ebi.ac.uk/support/interpro"
+      target="_blank"
+      withReferrer={true}
     >
-      ✉
-    </span>
-    ️ Contact form
-  </Memo(Connect(Link))>
+      ️ contact us
+    </Memo(Connect(Link))>
+    .
+  </div>
 </div>
 `;
 
