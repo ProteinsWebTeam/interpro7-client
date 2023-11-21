@@ -10,20 +10,79 @@ exports[`<ErrorMessage /> should render error message 1`] = `
     <div
       className="callout info withicon"
     >
-      An error was encountered while trying to load an element of this page.
+      An error was encountered while trying to load an element on this page.
     </div>
     <p>
-      Please try reloading the page to see if this resolves the problem.
+      Please try reloading the page using the button below to see if this resolves the problem.
     </p>
     <button
       className="button"
       onClick={[Function]}
     >
-      Reload this page
+      Clear the cache & reload
     </button>
-    <p>
+    <div>
+      You can also try to hard-refresh your browser
+       
+      <Tooltip
+        interactive={true}
+        title={
+          <div>
+            <h5>
+              Chrome
+            </h5>
+            <ul>
+              <li>
+                <b>
+                  Windows/Linux: 
+                </b>
+                Hold down Ctrl and click the reload button. Or, hold down Ctrl and press F5
+              </li>
+              <li>
+                <b>
+                  Mac: 
+                </b>
+                Hold ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd and ⇧ Shift key and then press R.
+              </li>
+            </ul>
+            <hr />
+            <h5>
+              Mozilla Firefox
+            </h5>
+            <ul>
+              <li>
+                <b>
+                  Windows/Linux: 
+                </b>
+                Hold the Ctrl key and press the F5 key. Or, hold down Ctrl and ⇧ Shift and then press R.
+              </li>
+              <li>
+                <b>
+                  Mac: 
+                </b>
+                Hold down the ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd and ⇧ Shift and then press R.
+              </li>
+            </ul>
+          </div>
+        }
+      >
+        <span
+          className="small icon icon-common"
+          data-icon=""
+        />
+      </Tooltip>
+    </div>
+    <hr
+      style={
+        {
+          "borderColor": "grey",
+          "margin": "1em",
+        }
+      }
+    />
+    <div>
       If you continue to experience this error, please reach out to us using our contact form.
-    </p>
+    </div>
     <Memo(Connect(Link))
       className="button"
       href="https://www.ebi.ac.uk/support/interpro"
