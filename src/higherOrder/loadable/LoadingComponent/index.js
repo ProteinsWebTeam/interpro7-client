@@ -4,13 +4,14 @@ import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import theme from 'styles/theme-interpro.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(theme, ipro);
+const f = foundationPartial(theme, ipro, fonts);
 
 export const LoadingMessage = () => <Loading />;
 LoadingMessage.displayName = 'LoadingMessage';
@@ -31,19 +32,63 @@ export const ErrorMessage = class extends PureComponent /*:: <{}>*/ {
       <div className={f('row')}>
         <div className={f('columns')}>
           <div className={f('callout', 'info', 'withicon')}>
-            An error was encountered while trying to load an element of this
+            An error was encountered while trying to load an element on this
             page.
           </div>
           <p>
-            Please try reloading the page to see if this resolves the problem.
+            Please try reloading the page using the button below to see if this
+            resolves the problem.
           </p>
           <button onClick={reload} className={f('button')}>
-            Reload this page
+            Clear the cache & reload
           </button>
-          <p>
+          <div>
+            You can also try to hard-refresh your browser{' '}
+            <Tooltip
+              interactive
+              title={
+                <div>
+                  <h5>Chrome</h5>
+                  <ul>
+                    <li>
+                      <b>Windows/Linux: </b>
+                      Hold down Ctrl and click the reload button. Or, hold down
+                      Ctrl and press F5
+                    </li>
+                    <li>
+                      <b>Mac: </b>
+                      Hold ⇧ Shift and click the reload button. Or, hold down ⌘
+                      Cmd and ⇧ Shift key and then press R.
+                    </li>
+                  </ul>
+                  <hr />
+                  <h5>Mozilla Firefox</h5>
+                  <ul>
+                    <li>
+                      <b>Windows/Linux: </b>
+                      Hold the Ctrl key and press the F5 key. Or, hold down Ctrl
+                      and ⇧ Shift and then press R.
+                    </li>
+                    <li>
+                      <b>Mac: </b>
+                      Hold down the ⇧ Shift and click the reload button. Or,
+                      hold down ⌘ Cmd and ⇧ Shift and then press R.
+                    </li>
+                  </ul>
+                </div>
+              }
+            >
+              <span
+                className={f('small', 'icon', 'icon-common')}
+                data-icon="&#xf129;"
+              />
+            </Tooltip>
+          </div>
+          <hr style={{ margin: '1em', borderColor: 'grey' }} />
+          <div>
             If you continue to experience this error, please reach out to us
             using our contact form.
-          </p>
+          </div>
           <Link
             className={f('button')}
             href="https://www.ebi.ac.uk/support/interpro"
