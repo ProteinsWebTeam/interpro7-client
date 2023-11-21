@@ -33,14 +33,14 @@ const css = cssBinder(ipro);
 
 export const orderByAccession = (
   a: { accession: string },
-  b: { accession: string }
+  b: { accession: string },
 ) => (a.accession > b.accession ? 1 : -1);
 
 export const groupByEntryType = (
   interpro: Array<{
     accession: string;
     type: string;
-  }>
+  }>,
 ) => {
   const groups: Record<
     string,
@@ -60,7 +60,7 @@ export const groupByEntryType = (
 type Props = PropsWithChildren<{
   mainData: { metadata: ProteinMetadata };
   onMatchesLoaded?: (
-    results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[]
+    results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[],
   ) => void;
   onFamiliesFound?: (families: Record<string, unknown>[]) => void;
   title?: string;
@@ -111,7 +111,7 @@ const DomainOnProteinWithoutData = ({
         EndpointWithMatchesPayload<EntryMetadata, MatchI>
       >
     )?.results,
-    'protein'
+    'protein',
   );
   useEffect(() => {
     const payload = data?.payload as PayloadList<
@@ -146,10 +146,10 @@ const DomainOnProteinWithoutData = ({
   const { interpro, unintegrated, other, representativeDomains } =
     processedData;
   const groups = groupByEntryType(
-    interpro as Array<{ accession: string; type: string }>
+    interpro as Array<{ accession: string; type: string }>,
   );
   (unintegrated as Array<{ accession: string; type: string }>).sort(
-    orderByAccession
+    orderByAccession,
   );
   const mergedData: ProteinViewerDataObject<MinimalFeature> = {
     ...groups,
@@ -159,18 +159,6 @@ const DomainOnProteinWithoutData = ({
   if (representativeDomains?.length)
     mergedData.representative_domains =
       representativeDomains as MinimalFeature[];
-  // [
-  //     // {
-  //     //   accession: 'Representative Domains',
-  //     //   locations: representativeDomains.map((d) => ({
-  //     //     fragments: [{ start: d.start as number, end: d.end as number }],
-  //     //     accession: d.accession as string,
-  //     //     short_name: d.short_name,
-  //     //     source_database: d.source_database,
-  //     //   })),
-  //     // },
-  //     representativeDomains,
-  //   ];
 
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;
@@ -276,7 +264,7 @@ const getRelatedEntriesURL = createSelector(
         extra_fields: 'hierarchy,short_name',
       },
     });
-  }
+  },
 );
 
 const getExtraURL = (query: string) =>
@@ -285,7 +273,7 @@ const getExtraURL = (query: string) =>
     (state: GlobalState) => state.customLocation.description,
     (
       { protocol, hostname, port, root }: ParsedURLServer,
-      description: InterProDescription
+      description: InterProDescription,
     ) => {
       const url = format({
         protocol,
@@ -297,7 +285,7 @@ const getExtraURL = (query: string) =>
         },
       });
       return url;
-    }
+    },
   );
 
 export default loadExternalSources(
@@ -317,9 +305,9 @@ export default loadExternalSources(
           getUrl: getExtraURL('residues'),
           propNamespace: 'Residues',
         } as Params)(
-          loadData(getRelatedEntriesURL as Params)(DomainOnProteinWithoutData)
-        )
-      )
-    )
-  )
+          loadData(getRelatedEntriesURL as Params)(DomainOnProteinWithoutData),
+        ),
+      ),
+    ),
+  ),
 );

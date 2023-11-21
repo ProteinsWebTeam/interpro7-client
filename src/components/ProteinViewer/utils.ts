@@ -3,16 +3,21 @@ import { toPlural } from 'utils/pages/toPlural';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
-const selectRepresentativeDomains = (domains: Record<string, unknown>[]) => {
+export const selectRepresentativeDomains = (
+  domains: Record<string, unknown>[],
+  locationKey: string,
+) => {
   const flatDomains = [];
   for (const domain of domains) {
-    const { accession, short_name, name, source_database, integrated } = domain;
-    for (const location of domain.entry_protein_locations as Array<ProtVistaLocation>) {
+    const { accession, short_name, name, source_database, integrated, chain } =
+      domain;
+    for (const location of domain[locationKey] as Array<ProtVistaLocation>) {
       for (const fragment of location.fragments) {
         const { start, end, representative } = fragment;
         if (representative) {
           flatDomains.push({
             accession,
+            chain,
             short_name,
             name,
             source_database,
@@ -31,7 +36,7 @@ const selectRepresentativeDomains = (domains: Record<string, unknown>[]) => {
 };
 export const useProcessData = <M = Metadata>(
   results: EndpointWithMatchesPayload<M, MatchI>[] | undefined,
-  endpoint: Endpoint
+  endpoint: Endpoint,
 ) =>
   useMemo(() => {
     return processData(results || [], endpoint);
@@ -39,7 +44,7 @@ export const useProcessData = <M = Metadata>(
 
 const processData = <M = Metadata>(
   dataResults: EndpointWithMatchesPayload<M>[],
-  endpoint: Endpoint
+  endpoint: Endpoint,
 ) => {
   const results: Record<string, unknown>[] = [];
   for (const item of dataResults) {
@@ -50,29 +55,36 @@ const processData = <M = Metadata>(
         ...match,
         ...item.metadata,
         ...(item.extra_fields || {}),
-      }))
+      })),
     );
   }
   const interpro = results.filter(
     (entry) =>
       (entry as unknown as Metadata).source_database.toLowerCase() ===
-      'interpro'
+      'interpro',
   );
 
-  const representativeDomains = selectRepresentativeDomains(results);
+  const locationKey =
+    endpoint === 'structure'
+      ? 'entry_structure_locations'
+      : 'entry_protein_locations';
+  const representativeDomains = selectRepresentativeDomains(
+    results,
+    locationKey,
+  );
   const interproMap = new Map(
     interpro.map((ipro) => [
       `${ipro.accession}-${ipro.chain}-${ipro.protein}`,
       ipro,
-    ])
+    ]),
   );
   const integrated = results.filter((entry) => entry.integrated);
   const unintegrated = results.filter(
     (entry) =>
       interpro.concat(integrated).indexOf(entry) === -1 &&
       !NOT_MEMBER_DBS.has(
-        (entry as unknown as Metadata).source_database.toLowerCase()
-      )
+        (entry as unknown as Metadata).source_database.toLowerCase(),
+      ),
   );
   integrated.forEach((entry) => {
     const ipro: Record<string, unknown> & {
@@ -84,7 +96,7 @@ const processData = <M = Metadata>(
     if (ipro.children.indexOf(entry) === -1) ipro.children.push(entry);
   });
   integrated.sort((a, b) =>
-    a.chain ? (a.chain as string).localeCompare(b.chain as string) : -1
+    a.chain ? (a.chain as string).localeCompare(b.chain as string) : -1,
   );
   return {
     interpro,
