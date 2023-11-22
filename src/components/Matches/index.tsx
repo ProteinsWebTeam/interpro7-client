@@ -377,6 +377,9 @@ const Matches = ({
             </>
           );
         }}
+        cellStyle={{
+          whiteSpace: 'nowrap',
+        }}
       >
         {focusType === 'taxonomy' ? 'Tax ID' : 'Accession'}
       </Column>

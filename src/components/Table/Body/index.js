@@ -7,6 +7,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Row from '../Row';
 
 import { edgeCases } from 'utils/server-message';
+// $FlowFixMe
 import EdgeCase from 'components/EdgeCase';
 
 import ColorHash from 'color-hash';
@@ -43,7 +44,7 @@ class NoRows extends PureComponent /*:: <Props> */ {
     // $FlowFixMe method-unbinding
     if (!(this._ref.current && this._ref.current.animate)) return;
     this._ref.current.animate(
-      { opacity: ([0, 1] /*: Array<number|null> */) },
+      { opacity: [0, 1] },
       { duration: 500, delay: 500, easing: 'ease-in-out', fill: 'both' },
     );
   }
