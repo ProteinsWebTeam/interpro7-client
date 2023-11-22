@@ -15,7 +15,13 @@ import { Selection } from 'components/Structure/ViewerAndEntries';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Params } from 'src/higherOrder/loadData/extract-params';
+import {
+  groupByEntryType,
+  orderByAccession,
+} from 'components/Related/DomainsOnProtein';
+import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
+const UNDERSCORE = /_/g;
 const ProteinViewer = loadable({
   loader: () =>
     import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
@@ -125,14 +131,28 @@ const ProteinViewerForAlphafold = ({
   )
     return <Loading />;
   const { interpro, unintegrated, representativeDomains } = processedData;
-  const tracks: ProteinViewerData = [
-    ['Entries', interpro.concat(unintegrated)],
-  ];
+  const groups = groupByEntryType(
+    interpro as Array<{ accession: string; type: string }>,
+  );
+  (unintegrated as Array<{ accession: string; type: string }>).sort(
+    orderByAccession,
+  );
+  const mergedData: ProteinViewerDataObject<MinimalFeature> = {
+    ...groups,
+    unintegrated: unintegrated as Array<MinimalFeature>,
+  };
+  if (representativeDomains?.length)
+    mergedData.representative_domains =
+      representativeDomains as MinimalFeature[];
+  const tracks: ProteinViewerData = Object.entries(mergedData)
+    .sort(byEntryType)
+    // “Binding_site” -> “Binding site”
+    .map(([key, value]) => [
+      key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
+      value,
+    ]);
   if (dataConfidence) addConfidenceTrack(dataConfidence, protein, tracks);
   if (!dataProtein.payload?.metadata) return null;
-  if (representativeDomains?.length) {
-    tracks.splice(1, 0, ['representative domains', representativeDomains]);
-  }
   return (
     <div ref={containerRef}>
       <ProteinViewer
