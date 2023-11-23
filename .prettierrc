@@ -4,7 +4,10 @@ overrides:
 - files: "*.css"
   options:
     singleQuote: false
-- files: "src/**/*.js"
+- files: 
+  - "src/**/*.js"
+  - "src/**/*.ts"
+  - "src/**/*.tsx"
   options:
     parser: typescript
     trailingComma: all

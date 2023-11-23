@@ -80,7 +80,7 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
     numberOfFilters?: 0;
   };
   entry?: Location & {
-    integration: string | null;
+    integration?: string | null;
     memberDB?: string | null;
     memberDBAccession?: string | null;
   };

@@ -206,21 +206,23 @@ export class Pages extends PureComponent /*:: <Props> */ {
     const { stuck, top, ...props } = this.props;
     return (
       <div className={f('main', { stuck })}>
-        <TigrfamsRedirect />
-        <ErrorBoundary>
-          <div className={f('row', 'large-12', 'columns', 'breadcrumb')}>
-            <BreadCrumbs />
-          </div>
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <Switch
-            {...props}
-            locationSelector={locationSelector2}
-            indexRoute={HomeOrOther}
-            childRoutes={pages}
-            catchAll={NotFound}
-          />
-        </ErrorBoundary>
+        <div className={f('row', 'large-12', 'columns')}>
+          <TigrfamsRedirect />
+          <ErrorBoundary>
+            <div className={f('row', 'large-12', 'columns', 'breadcrumb')}>
+              <BreadCrumbs />
+            </div>
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Switch
+              {...props}
+              locationSelector={locationSelector2}
+              indexRoute={HomeOrOther}
+              childRoutes={pages}
+              catchAll={NotFound}
+            />
+          </ErrorBoundary>
+        </div>
       </div>
     );
   }

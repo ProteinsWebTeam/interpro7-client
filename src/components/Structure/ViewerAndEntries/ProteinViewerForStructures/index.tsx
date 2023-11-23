@@ -38,14 +38,14 @@ const ProteinViewerForStructure = ({
     }
   }
   if (!data.payload || !processedData) return null;
-  const { interpro, unintegrated } = processedData;
+  const { interpro, unintegrated, representativeDomains } = processedData;
   return (
     <div>
       <EntriesOnStructure
         structure={structure}
         entries={interpro.concat(unintegrated) as StructureLinkedObject[]}
-        showChainMenu={true}
         secondaryStructures={secondaryData}
+        representativeDomains={representativeDomains}
       />
     </div>
   );
@@ -68,7 +68,7 @@ export const getURLForMatches = createSelector(
         page_size: 200,
         extra_fields: 'short_name',
       },
-    })
+    }),
 );
 const getSecondaryStructureURL = createSelector(
   (state) => state.settings.api,
@@ -87,7 +87,7 @@ const getSecondaryStructureURL = createSelector(
         extra_fields: 'secondary_structures',
       },
     });
-  }
+  },
 );
 
 export default loadData<StructureWithSecondary, 'Secondary'>({
@@ -95,6 +95,6 @@ export default loadData<StructureWithSecondary, 'Secondary'>({
   getUrl: getSecondaryStructureURL,
 } as Params)(
   loadData<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>>(
-    getURLForMatches
-  )(ProteinViewerForStructure)
+    getURLForMatches,
+  )(ProteinViewerForStructure),
 );

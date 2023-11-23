@@ -25,7 +25,7 @@ const ProteinViewer = loadable({
 export const addConfidenceTrack = (
   dataConfidence: RequestedData<AlphafoldConfidencePayload>,
   protein: string,
-  tracks: ProteinViewerData
+  tracks: ProteinViewerData,
 ) => {
   if (dataConfidence?.payload?.confidenceCategory?.length) {
     const confidenceTrack: [string, Array<unknown>] = [
@@ -124,12 +124,15 @@ const ProteinViewerForAlphafold = ({
     !processedData
   )
     return <Loading />;
-  const { interpro, unintegrated } = processedData;
+  const { interpro, unintegrated, representativeDomains } = processedData;
   const tracks: ProteinViewerData = [
     ['Entries', interpro.concat(unintegrated)],
   ];
   if (dataConfidence) addConfidenceTrack(dataConfidence, protein, tracks);
   if (!dataProtein.payload?.metadata) return null;
+  if (representativeDomains?.length) {
+    tracks.splice(1, 0, ['representative domains', representativeDomains]);
+  }
   return (
     <div ref={containerRef}>
       <ProteinViewer
@@ -156,7 +159,7 @@ const getProteinURL = createSelector(
       port,
       pathname: root + descriptionToPath(newDesc),
     });
-  }
+  },
 );
 const getInterproRelatedEntriesURL = createSelector(
   (state) => state.settings.api,
@@ -177,7 +180,7 @@ const getInterproRelatedEntriesURL = createSelector(
         extra_fields: 'short_name',
       },
     });
-  }
+  },
 );
 
 export default loadData<AlphafoldPayload, 'Prediction'>({
@@ -193,8 +196,8 @@ export default loadData<AlphafoldPayload, 'Prediction'>({
       propNamespace: 'Protein',
     } as Params)(
       loadData(getInterproRelatedEntriesURL as Params)(
-        ProteinViewerForAlphafold
-      )
-    )
-  )
+        ProteinViewerForAlphafold,
+      ),
+    ),
+  ),
 );

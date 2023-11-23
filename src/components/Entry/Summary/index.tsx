@@ -127,7 +127,10 @@ const SummaryEntry = ({
       return (
         <>
           <h4>{headerText || 'Description'}</h4>
-          <DescriptionLLM text={metadata.llm_description} />
+          <DescriptionLLM
+            accession={metadata.accession}
+            text={metadata.llm_description}
+          />
         </>
       );
     }

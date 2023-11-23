@@ -1,32 +1,5 @@
-/*this doesn't work on my local*/
-.jumbo-news {
-  text-align: center;
-  background-color: #eee;
-  padding: 2em 0 1em 0;
-}
-
-.jumbo-news-container {
-  padding: 0;
-  color: #454545;
-  width: 30%;
-  margin: 0 auto;
-}
-
-.jumbo-news-container .icon-common {
-  color: #007bb6;
-  font-size: 340%;
-}
-
-.jumbo-news-container iframe {
-  opacity: 0;
-  transform: translateX(50%);
-  transition-property: opacity, transform;
-  transition-duration: 750ms;
-  transition-timing-function: ease-in-out;
-}
-
-@media screen and (max-width: 39.9375em) {
-  .jumbo-news-container {
-    width: 90%;
+.twitter-block {
+  & .icon-common {
+    color: #007bb6;
   }
 }

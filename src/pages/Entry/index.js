@@ -441,7 +441,7 @@ const ArchiveCallout = ({ name, page }) => (
           <br />
           Further information about {name} can be found{' '}
           <Link
-            href={config.root.readthedocs.href + page + '.html'}
+            href={`${config.root.readthedocs.href + page}.html`}
             className={f('ext')}
             target="_blank"
           >

@@ -8,6 +8,7 @@ import { createSelector } from 'reselect';
 
 import { customLocationSelector } from 'reducers/custom-location';
 
+// $FlowFixMe
 import { ErrorMessage } from 'higherOrder/loadable/LoadingComponent';
 
 /*:: import typeof CustomLocation from 'reducers/custom-location/index.js'; */

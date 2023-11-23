@@ -10,6 +10,7 @@ root:
   alphafold: https://alphafold.ebi.ac.uk/
   repeatsDB: https://repeatsdb.bio.unipd.it/api/search
   disprot: https://disprot.org/api/
+  LLMFeedback: https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=
   
 title: InterPro
 
@@ -39,7 +40,6 @@ pages:
       - structure
       - taxonomy
       - proteome
-      - rosettafold
       - alphafold
       - logo
       - entry_alignments
@@ -82,7 +82,6 @@ pages:
       - structure
       - taxonomy
       - proteome
-      - alignments
   result:
 pagination:
   pageSize: 20

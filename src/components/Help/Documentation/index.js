@@ -37,7 +37,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
           <div className={f('columns', 'large-8')}>
             <div className={f('flex-container')}>
               <div className={f('flex-box')}>
-                <InterProLogo /> <h5>Interpro</h5>
+                <InterProLogo /> <h5>Interpro & Pfam</h5>
                 <li>
                   <ul>
                     <li>
@@ -46,7 +46,16 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                         className={f('ext')}
                         target="_blank"
                       >
-                        Website documentation
+                        InterPro documentation
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="https://pfam-docs.readthedocs.io/en/latest/"
+                        className={f('ext')}
+                        target="_blank"
+                      >
+                        Pfam documentation
                       </Link>
                     </li>
                   </ul>

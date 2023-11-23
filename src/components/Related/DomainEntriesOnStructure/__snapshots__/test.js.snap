@@ -3,10 +3,10 @@
 exports[`<EntriesOnStructure /> should render 1`] = `
 <React.Fragment>
   <div
-    className="row"
+    className="vf-stack vf-stack--400"
   >
     <div
-      className="columns"
+      className="vf-stack"
     >
       <h4
         id="protvista-A-p00735"

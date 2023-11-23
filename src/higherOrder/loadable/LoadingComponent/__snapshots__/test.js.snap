@@ -2,43 +2,89 @@
 
 exports[`<ErrorMessage /> should render error message 1`] = `
 <div
-  className="row"
+  className="vf-stack vf-stack--400 callout alert"
 >
-  <div
-    className="columns"
+  <p>
+    <span
+      className="icon icon-common"
+      data-icon=""
+      style={
+        {
+          "color": "#842029",
+        }
+      }
+    />
+     
+    <b>
+      An error was encountered while trying to load an element on this page
+    </b>
+    <br />
+    Please use the button below to clear your web browser's cache and reload the page. This may resolve the issue.
+  </p>
+  <button
+    className="vf-button vf-button--secondary vf-button--sm"
+    onClick={[Function]}
   >
-    <div
-      className="callout info withicon"
-    >
-      An error was encountered while trying to load an element of this page.
+    Clear the cache & reload
+  </button>
+  <p>
+    If this does not solve the issue, clear the cache manually.
+  </p>
+  <details
+    className="read-more"
+  >
+    <summary>
+      Instructions
+    </summary>
+    <div>
+      <h5>
+        Chrome
+      </h5>
+      <ul>
+        <li>
+          <b>
+            Windows/Linux: 
+          </b>
+          Hold down Ctrl and click the reload button. Or, hold down Ctrl and press F5
+        </li>
+        <li>
+          <b>
+            Mac: 
+          </b>
+          Hold ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd and ⇧ Shift key and then press R.
+        </li>
+      </ul>
+      <h5>
+        Mozilla Firefox
+      </h5>
+      <ul>
+        <li>
+          <b>
+            Windows/Linux: 
+          </b>
+          Hold the Ctrl key and press the F5 key. Or, hold down Ctrl and ⇧ Shift and then press R.
+        </li>
+        <li>
+          <b>
+            Mac: 
+          </b>
+          Hold down the ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd and ⇧ Shift and then press R.
+        </li>
+      </ul>
     </div>
-    <p>
-      Please try reloading the page to see if this resolves the problem.
-    </p>
-    <button
-      className="button"
-      onClick={[Function]}
-    >
-      Reload this page
-    </button>
-    <p>
-      If you continue to experience this error, please reach out to us using our contact form.
-    </p>
+  </details>
+  <p>
+    If neither options solve the error, please
+     
     <Memo(Connect(Link))
-      className="button"
       href="https://www.ebi.ac.uk/support/interpro"
       target="_blank"
       withReferrer={true}
     >
-      <span
-        aria-label="email"
-        role="img"
-      >
-        ✉
-      </span>
-      ️ Contact form
+      contact us
     </Memo(Connect(Link))>
-  </div>
+    .
+  </p>
 </div>
 `;
 

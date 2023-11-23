@@ -9,6 +9,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import NumberComponent from 'components/NumberComponent';
 import { groupByEntryType } from 'components/Related/DomainsOnProtein';
 import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+import { selectRepresentativeDomains } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -58,17 +59,31 @@ const features2protvista = (features: FeatureMap) => {
   }
 
   const interpro = featArray.filter(({ accession }) =>
-    accession.toLowerCase().startsWith('ipr')
+    accession.toLowerCase().startsWith('ipr'),
   );
   const groups = groupByEntryType(interpro);
   const unintegrated = featArray.filter(
-    (f) => interpro.indexOf(f) === -1 && integrated.indexOf(f) === -1
+    (f) => interpro.indexOf(f) === -1 && integrated.indexOf(f) === -1,
   );
   const categories: Array<[string, unknown]> = [
     ...(Object.entries(groups) as Array<[string, unknown]>),
     ['unintegrated', unintegrated],
   ];
-  return categories.sort(byEntryType);
+
+  const sortedCategories = categories.sort(byEntryType);
+  const representativeDomains = selectRepresentativeDomains(
+    featArray,
+    'locations',
+  );
+
+  if (representativeDomains?.length) {
+    sortedCategories.splice(0, 0, [
+      'representative domains',
+      representativeDomains,
+    ]);
+  }
+
+  return sortedCategories;
 };
 type Props = {
   isoform?: string;
@@ -113,7 +128,7 @@ const Viewer = ({ isoform, data }: LoadedProps) => {
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.search,
-  ({ isoform }) => ({ isoform })
+  ({ isoform }) => ({ isoform }),
 );
 
 const getIsoformURL = createSelector(
@@ -123,7 +138,7 @@ const getIsoformURL = createSelector(
   (
     { protocol, hostname, port, root },
     { protein: { accession } },
-    { isoform }
+    { isoform },
   ) => {
     const description = {
       main: { key: 'protein' },
@@ -139,8 +154,8 @@ const getIsoformURL = createSelector(
         isoforms: isoform,
       },
     });
-  }
+  },
 );
 export default loadData({ getUrl: getIsoformURL, mapStateToProps } as Params)(
-  Viewer
+  Viewer,
 );

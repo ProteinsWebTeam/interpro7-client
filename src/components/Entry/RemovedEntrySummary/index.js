@@ -11,6 +11,7 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts);
 
+/* eslint-disable camelcase */
 const RemovedEntrySummary = ({
   accession,
   source_database,
@@ -34,11 +35,12 @@ const RemovedEntrySummary = ({
     type: type,
     member_databases: history?.signatures,
     description:
-      formerNames.length !== 0
-        ? [`<ul>${formerNames.map(listWrap).join('')}</ul>`]
-        : [],
+      formerNames.length === 0
+        ? []
+        : [`<ul>${formerNames.map(listWrap).join('')}</ul>`],
     is_removed: true,
   };
+  /* eslint-enable camelcase */
   const date = new Date(deletion_date).toLocaleDateString('en-GB', {
     month: 'long',
     year: 'numeric',

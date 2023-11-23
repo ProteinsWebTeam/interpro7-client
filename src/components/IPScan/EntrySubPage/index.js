@@ -23,30 +23,46 @@ import { iproscan2urlDB } from 'utils/url-patterns';
 }*/
 
 const flatMatchesFromIPScanPayload = function* (ipScanMatches, proteinLength) {
-  const protein = { protein: { length: proteinLength } };
   for (const match of ipScanMatches) {
     if (match.signature.entry) {
       yield {
         accession: match.signature.entry.accession,
-        name: match.signature.entry.name,
+        name: match.signature.entry.description,
         source_database: 'InterPro',
-        entry_protein_locations: match.locations.map((location) => ({
-          fragments: [location],
-        })),
-        match: protein,
+        matches: [
+          {
+            protein_length: proteinLength,
+            entry_protein_locations: match.locations.map((loc) => ({
+              ...loc,
+              model_acc: match['model-ac'],
+              fragments:
+                loc['location-fragments'] && loc['location-fragments'].length
+                  ? loc['location-fragments']
+                  : [{ start: loc.start, end: loc.end }],
+            })),
+          },
+        ],
       };
     }
     yield {
       accession: match.signature.accession,
-      name: match.signature.name || '',
+      name: match.signature.description || '',
       source_database: iproscan2urlDB(
         match.signature.signatureLibraryRelease.library,
       ),
-      entry_protein_locations: match.locations.map((location) => ({
-        model_acc: match['model-ac'],
-        fragments: [location],
-      })),
-      match: protein,
+      matches: [
+        {
+          protein_length: proteinLength,
+          entry_protein_locations: match.locations.map((loc) => ({
+            ...loc,
+            model_acc: match['model-ac'],
+            fragments:
+              loc['location-fragments'] && loc['location-fragments'].length
+                ? loc['location-fragments']
+                : [{ start: loc.start, end: loc.end }],
+          })),
+        },
+      ],
     };
   }
 };
@@ -67,10 +83,7 @@ const mergeEntries = (matches) => {
   for (const match of matches) {
     const _match = map.get(match.accession);
     if (_match) {
-      _match.entry_protein_locations = [
-        ..._match.entry_protein_locations,
-        ...match.entry_protein_locations,
-      ];
+      _match.matches = [..._match.matches, ...match.matches];
     }
     map.set(match.accession, _match || match);
   }

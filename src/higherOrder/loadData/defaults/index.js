@@ -197,10 +197,8 @@ export const includeTaxonFocusedOnURL = (url, focused) => {
 
 export const getUrlForApi = (...parameters) =>
   getUrl('api')(...parameters)
-    .replace('/alignments', '/')
     .replace('/entry_alignments', '/')
     .replace('/logo', '/')
-    .replace('/rosettafold', '/')
     .replace('/alphafold', '/')
     .replace('/domain_architecture', '/')
     .replace('/interactions', '/')

@@ -4,70 +4,74 @@ exports[`<Pages /> should render 1`] = `
 <div
   className="main stuck"
 >
-  <Memo(Connect(TigrfamsRedirectConnected)) />
-  <Memo(Connect(UnconnectedErrorBoundary))>
-    <div
-      className="row large-12 columns breadcrumb"
-    >
-      <Memo(Connect(BreadCrumbs)) />
-    </div>
-  </Memo(Connect(UnconnectedErrorBoundary))>
-  <Memo(Connect(UnconnectedErrorBoundary))>
-    <Memo(Connect(_Switch))
-      catchAll={
-        {
-          "$$typeof": Symbol(react.memo),
-          "compare": null,
-          "type": [Function],
+  <div
+    className="row large-12 columns"
+  >
+    <Memo(Connect(TigrfamsRedirectConnected)) />
+    <Memo(Connect(UnconnectedErrorBoundary))>
+      <div
+        className="row large-12 columns breadcrumb"
+      >
+        <Memo(Connect(BreadCrumbs)) />
+      </div>
+    </Memo(Connect(UnconnectedErrorBoundary))>
+    <Memo(Connect(UnconnectedErrorBoundary))>
+      <Memo(Connect(_Switch))
+        catchAll={
+          {
+            "$$typeof": Symbol(react.memo),
+            "compare": null,
+            "type": [Function],
+          }
         }
-      }
-      childRoutes={
-        Map {
-          "entry" => {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          },
-          "protein" => {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          },
-          "structure" => {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          },
-          "taxonomy" => {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          },
-          "proteome" => {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          },
-          "set" => {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          },
-          "search" => {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          },
-          "result" => {
-            "$$typeof": Symbol(react.memo),
-            "compare": null,
-            "type": [Function],
-          },
+        childRoutes={
+          Map {
+            "entry" => {
+              "$$typeof": Symbol(react.memo),
+              "compare": null,
+              "type": [Function],
+            },
+            "protein" => {
+              "$$typeof": Symbol(react.memo),
+              "compare": null,
+              "type": [Function],
+            },
+            "structure" => {
+              "$$typeof": Symbol(react.memo),
+              "compare": null,
+              "type": [Function],
+            },
+            "taxonomy" => {
+              "$$typeof": Symbol(react.memo),
+              "compare": null,
+              "type": [Function],
+            },
+            "proteome" => {
+              "$$typeof": Symbol(react.memo),
+              "compare": null,
+              "type": [Function],
+            },
+            "set" => {
+              "$$typeof": Symbol(react.memo),
+              "compare": null,
+              "type": [Function],
+            },
+            "search" => {
+              "$$typeof": Symbol(react.memo),
+              "compare": null,
+              "type": [Function],
+            },
+            "result" => {
+              "$$typeof": Symbol(react.memo),
+              "compare": null,
+              "type": [Function],
+            },
+          }
         }
-      }
-      indexRoute={[Function]}
-      locationSelector={[Function]}
-    />
-  </Memo(Connect(UnconnectedErrorBoundary))>
+        indexRoute={[Function]}
+        locationSelector={[Function]}
+      />
+    </Memo(Connect(UnconnectedErrorBoundary))>
+  </div>
 </div>
 `;
