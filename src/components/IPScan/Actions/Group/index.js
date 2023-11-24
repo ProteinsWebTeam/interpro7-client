@@ -7,6 +7,7 @@ import { createSelector } from 'reselect';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import { deleteJob, goToCustomLocation } from 'actions/creators';
 import getTableAccess, { IPScanJobsData } from 'storage/idb';
@@ -119,12 +120,7 @@ const GroupActions = (
 
   return (
     <nav className={f('buttons')}>
-      <DropDownButton
-        label="Group Actions"
-        icon="&#xf03a;"
-        color="rgb(249, 249, 249)"
-        hollow
-      >
+      <DropDownButton label="Group Actions" icon="&#xf03a;">
         <ul>
           <li>
             <Tooltip

@@ -11,7 +11,7 @@
     cursor: pointer;
   }
   & .dropdown-button {
-    background: var(--colors-interpro);
+    background: var(--colors-nearly-white);
     & .icon-caret-down {
       margin-left: 1rem;
       padding: 0;
@@ -41,6 +41,7 @@
 
   & .dropdown-pane {
     z-index: var(--z-index-over-plus); /* so sticky header stay on top*/
+    border: 2px solid var(--vf-color--blue);
     & ul {
       list-style-type: none;
       margin: 0;
