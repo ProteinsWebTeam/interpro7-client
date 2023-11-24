@@ -2,7 +2,6 @@ import React from 'react';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import cssBinder from 'styles/cssBinder';
 
