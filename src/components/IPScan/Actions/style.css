@@ -2,15 +2,36 @@
   margin-bottom: 0;
 }
 
-.buttons {
+body nav.buttons {
   display: flex;
-  & button {
+  & button,
+  & a.group,
+  & a.group:visited,
+  & a.group:hover,
+  & a,
+  & a:visited,
+  & a:hover {
     margin: 0 0.5rem;
     cursor: pointer;
     white-space: nowrap;
+    text-decoration: none;
+    font-style: normal;
+    background-size: contain;
+    font-weight: 400;
+    color: var(--colors-ebidark);
+  }
+  & span.icon {
+    color: var(--colors-progress);
+  }
+  & button:hover,
+  & a:hover {
+    & span.icon {
+      color: var(--colors-ebidark);
+    }
   }
 }
 
-button.group::before {
+button.group::before,
+a.group::before {
   color: var(--colors-progress, #1f6ca2);
 }

@@ -1,9 +1,9 @@
-@import '../../styles/timing.css';
-@import '../../styles/colors.css';
+@import "../../styles/timing.css";
+@import "../../styles/colors.css";
 
 table th {
   top: 98px;
-  position: sticky;
+  /* position: sticky; */
 }
 
 .result-page .table-results-filtering {

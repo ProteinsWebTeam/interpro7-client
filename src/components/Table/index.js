@@ -224,7 +224,7 @@ TableViewButtons.propTypes = {
   withSunburst: T.bool,
   withKeySpecies: T.bool,
 };
-export default class Table extends PureComponent /*:: <Props> */ {
+class Table extends PureComponent /*:: <Props> */ {
   static propTypes = {
     dataTable: T.array,
     rowKey: T.string,
@@ -248,7 +248,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     showTableIcon: T.bool,
     shouldGroup: T.bool,
     onFocusChanged: T.func,
-    groupActions: T.func,
+    groupActions: T.elementType,
   };
 
   render() {
@@ -401,6 +401,7 @@ export default class Table extends PureComponent /*:: <Props> */ {
     );
   }
 }
+export default React.memo(Table);
 
 export const Header = _Header;
 export const PageSizeSelector = _PageSizeSelector;
