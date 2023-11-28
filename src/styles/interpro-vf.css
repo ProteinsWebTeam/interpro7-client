@@ -172,3 +172,8 @@ button.as-text {
     text-decoration: none;
   }
 }
+details.read-more {
+  & summary {
+    cursor: pointer;
+  }
+}
