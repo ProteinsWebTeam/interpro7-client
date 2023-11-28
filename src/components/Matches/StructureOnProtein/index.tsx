@@ -62,7 +62,6 @@ const StructureOnProtein = ({ matches, match }: Props) => {
   if (!matches.length || !structure || !protein) return null;
   const length = protein.length || 0;
   const sequence = protein.sequence || '\u00A0'.repeat(length);
-  console.log(data);
   return (
     <section>
       <table className={css('matches-in-table')}>
