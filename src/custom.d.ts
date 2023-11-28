@@ -32,7 +32,7 @@ declare module 'taxonomy-visualisation' {
     constructor(x: unknown, options: {});
     addEventListener: (
       type: string,
-      eventHandler: (event: Event) => void
+      eventHandler: (event: Event) => void,
     ) => void;
     focusNodeWithID: (id?: string) => void;
     cleanup: () => void;
@@ -588,7 +588,7 @@ type LoadDataProps<Payload = unknown, Namespace extends string = ''> = {
 
 type GetUrl<Props = unknown> = (
   params: GlobalState | {},
-  props?: Props
+  props?: Props,
 ) => string | null;
 
 type ProtVistaFragment = {
@@ -813,3 +813,54 @@ interface EntryStructureMatch extends MatchI {
 type AnyMatch = Partial<EntryProteinMatch> &
   Partial<EntryStructureMatch> &
   Partial<StructureProteinMatch>;
+
+type Iprscan5Result = {
+  sequence: string;
+  md5: string;
+  matches: Array<{
+    signature: {
+      accession: string;
+    };
+    locations: Array<{
+      start: number;
+      end: number;
+      hmmStart: number;
+      hmmEnd: number;
+      hmmLength: number;
+      hmmBounds: string;
+      evalue: number;
+      score: number;
+      envelopeStart: number;
+      envelopeEnd: number;
+      postProcessed: true;
+      'location-fragments': Array<{
+        start: number;
+        end: number;
+        'dc-status': string;
+      }>;
+    }>;
+    evalue?: number;
+    score?: number;
+    'model-ac'?: string;
+  }>;
+  xref: Array<{
+    name: string;
+    id: string;
+  }>;
+};
+type Iprscan5Payload = {
+  'interproscan-version': string;
+  results: Array<Iprscan5Result>;
+};
+
+type IprscanMetaIDB = {
+  group: string;
+  hasResults: boolean;
+  saved: boolean;
+  localID: string;
+  remoteID: string;
+  localTitle: string;
+  status: string;
+  type: string;
+  times: Record<string, number>;
+};

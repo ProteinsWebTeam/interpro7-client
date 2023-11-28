@@ -27,7 +27,7 @@
     position: absolute;
     top: 100%;
     width: initial;
-    padding: 1rem 1.5rem 1rem 0.5rem;
+    padding: 0.5rem 0.2rem;
     transform: scaleY(0);
     transform-origin: top;
     transition: transform var(--timing-really-fast) ease-in-out;
@@ -47,7 +47,7 @@
       margin: 0;
       padding: 0;
       & li {
-        padding: 0.3rem 1rem;
+        padding: 0.3rem 0.5rem;
         text-align: left;
         &:hover {
           background-color: lightgray;
@@ -75,26 +75,5 @@
   & .dropdown-button {
     background: var(--colors-gray);
     cursor: not-allowed;
-  }
-}
-
-@media screen and (min-width: 40em) and (max-width: 63.9375em) {
-  .dropdown-container .dropdown-content {
-    width: 212px; /*temp value*/
-  }
-  .dropdown-container .dropdown-content.left {
-    right: 1px;
-  }
-}
-
-@media screen and (max-width: 39.9375em) {
-  .dropdown-container .dropdown-button .icon-caret-down {
-    display: none; /*remove select arrow for small screens*/
-  }
-  .dropdown-container .dropdown-content {
-    width: 182px; /*temp value*/
-  }
-  .dropdown-container .dropdown-content.left {
-    right: 1px;
   }
 }

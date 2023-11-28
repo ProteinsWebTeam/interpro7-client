@@ -15,10 +15,11 @@ import config from 'config';
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import optionsCSS from 'components/ProteinViewer/Options/style.css';
 import s from './style.css';
 import theme from 'styles/theme-interpro.css';
 
-const fPlus = foundationPartial(s, fonts, theme);
+const fPlus = foundationPartial(s, fonts, optionsCSS, theme);
 
 /*:: type Props = {
   entryDB: string,
@@ -58,7 +59,7 @@ class Exporter extends PureComponent /*:: <Props, State> */ {
           icon="&#x3d;"
           color={entryDB ? config.colors.get(entryDB) : backgroundColor}
           disabled={disabled}
-          extraClasses={'right-aligned'}
+          extraClasses={fPlus('right-aligned', 'protvista-menu')}
         >
           {children}
         </DropDownButton>

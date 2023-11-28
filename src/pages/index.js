@@ -203,7 +203,7 @@ export class Pages extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const { stuck, top, ...props } = this.props;
+    const { stuck } = this.props;
     return (
       <div className={f('main', { stuck })}>
         <div className={f('row', 'large-12', 'columns')}>
@@ -215,7 +215,6 @@ export class Pages extends PureComponent /*:: <Props> */ {
           </ErrorBoundary>
           <ErrorBoundary>
             <Switch
-              {...props}
               locationSelector={locationSelector2}
               indexRoute={HomeOrOther}
               childRoutes={pages}
