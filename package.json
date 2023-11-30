@@ -125,7 +125,7 @@
     "intersection-observer": "0.12.2",
     "isomorphic-fetch": "3.0.0",
     "lodash-es": "4.17.21",
-    "molstar": "3.38.1",
+    "molstar": "3.42.0",
     "pako": "2.1.0",
     "papaparse": "5.4.1",
     "postcss": "8.4.27",

@@ -32,7 +32,7 @@ declare module 'taxonomy-visualisation' {
     constructor(x: unknown, options: {});
     addEventListener: (
       type: string,
-      eventHandler: (event: Event) => void
+      eventHandler: (event: Event) => void,
     ) => void;
     focusNodeWithID: (id?: string) => void;
     cleanup: () => void;
@@ -588,7 +588,7 @@ type LoadDataProps<Payload = unknown, Namespace extends string = ''> = {
 
 type GetUrl<Props = unknown> = (
   params: GlobalState | {},
-  props?: Props
+  props?: Props,
 ) => string | null;
 
 type ProtVistaFragment = {
@@ -600,6 +600,8 @@ type ProtVistaFragment = {
   seq_feature?: string;
   fill?: string;
   representative?: boolean;
+  protein_start?: number;
+  protein_end?: number;
 };
 
 type ProtVistaLocation = {
