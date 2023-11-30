@@ -600,6 +600,8 @@ type ProtVistaFragment = {
   seq_feature?: string;
   fill?: string;
   representative?: boolean;
+  protein_start?: number;
+  protein_end?: number;
 };
 
 type ProtVistaLocation = {
