@@ -3,7 +3,7 @@
 
 table th {
   top: 98px;
-  /* position: sticky; */
+  position: sticky;
 }
 
 .result-page .table-results-filtering {
