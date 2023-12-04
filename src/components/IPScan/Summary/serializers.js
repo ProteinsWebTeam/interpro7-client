@@ -137,6 +137,7 @@ export const mergeData = (matches, sequenceLength) => {
   const otherFeatures = {};
   let integrated = new Map();
   const signatures = new Map();
+  const representativeDomains = [];
   for (const match of matches) {
     const { library } = match.signature.signatureLibraryRelease;
     const processedMatch = {
@@ -157,6 +158,16 @@ export const mergeData = (matches, sequenceLength) => {
       residues: undefined,
       signature: undefined,
     };
+    const representativeLocations = processedMatch.locations.filter(
+      (loc) => loc.representative,
+    );
+    if (representativeLocations.length) {
+      representativeDomains.push({
+        ...processedMatch,
+        locations: representativeLocations,
+      });
+    }
+
     const residues = match2residues(match);
     if (
       residues.length > 0 &&
@@ -196,8 +207,8 @@ export const mergeData = (matches, sequenceLength) => {
       unintegrated[mergedMatch.accession] = mergedMatch;
     }
   }
-  mergedData.unintegrated = (Object.values(unintegrated) /*: any */);
-  mergedData.other_features.push(...(Object.values(otherFeatures) /*: any */));
+  mergedData.unintegrated = Object.values(unintegrated) /*: any */;
+  mergedData.other_features.push(...Object.values(otherFeatures) /*: any */);
   integrated = Array.from(integrated.values()).map((m) => {
     // prettier-ignore
     const locations = condenseLocations((m.children/*: any */));
@@ -206,11 +217,15 @@ export const mergeData = (matches, sequenceLength) => {
       locations,
     };
   });
-  (mergedData.unintegrated /*: any[] */)
+  mergedData.unintegrated /*: any[] */
     .sort((m1, m2) => m2.score - m1.score);
   for (const entry of integrated) {
     if (!mergedData[entry.type]) mergedData[entry.type] = [];
     mergedData[entry.type].push(entry);
   }
+  if (representativeDomains?.length) {
+    mergedData.representative_domains = representativeDomains;
+  }
+
   return mergedData;
 };
