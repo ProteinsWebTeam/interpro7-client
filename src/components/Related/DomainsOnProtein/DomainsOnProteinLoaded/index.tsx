@@ -15,6 +15,7 @@ const ProteinViewer = loadable({
 const UNDERSCORE = /_/g;
 const FIRST_IN_ORDER = [
   'representative_domains',
+  'secondary_structure',
   'family',
   'domain',
   'homologous_superfamily',
