@@ -16,12 +16,10 @@ import { Selection } from 'components/Structure/ViewerAndEntries';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Params } from 'src/higherOrder/loadData/extract-params';
 import {
-  groupByEntryType,
-  orderByAccession,
-} from 'components/Related/DomainsOnProtein';
-import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+  flattenTracksObject,
+  makeTracks,
+} from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
-const UNDERSCORE = /_/g;
 const ProteinViewer = loadable({
   loader: () =>
     import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
@@ -131,26 +129,12 @@ const ProteinViewerForAlphafold = ({
   )
     return <Loading />;
   const { interpro, unintegrated, representativeDomains } = processedData;
-  const groups = groupByEntryType(
-    interpro as Array<{ accession: string; type: string }>,
-  );
-  (unintegrated as Array<{ accession: string; type: string }>).sort(
-    orderByAccession,
-  );
-  const mergedData: ProteinViewerDataObject<MinimalFeature> = {
-    ...groups,
+  const groups = makeTracks({
+    interpro: interpro as Array<{ accession: string; type: string }>,
     unintegrated: unintegrated as Array<MinimalFeature>,
-  };
-  if (representativeDomains?.length)
-    mergedData.representative_domains =
-      representativeDomains as MinimalFeature[];
-  const tracks: ProteinViewerData = Object.entries(mergedData)
-    .sort(byEntryType)
-    // “Binding_site” -> “Binding site”
-    .map(([key, value]) => [
-      key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
-      value,
-    ]);
+    representativeDomains: representativeDomains as Array<MinimalFeature>,
+  });
+  const tracks = flattenTracksObject(groups);
   if (dataConfidence) addConfidenceTrack(dataConfidence, protein, tracks);
   if (!dataProtein.payload?.metadata) return null;
   return (
