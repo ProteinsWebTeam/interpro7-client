@@ -127,11 +127,13 @@ export const mergeData = (matches, sequenceLength) => {
     other_features: any[],
     residues: any[],
     other_residues: any[],
+    representative_domains: any[],
   } */ = {
     unintegrated: [],
     other_features: [],
     residues: [],
     other_residues: [],
+    representative_domains: [],
   };
   const unintegrated = {};
   const otherFeatures = {};
@@ -207,8 +209,8 @@ export const mergeData = (matches, sequenceLength) => {
       unintegrated[mergedMatch.accession] = mergedMatch;
     }
   }
-  mergedData.unintegrated = Object.values(unintegrated) /*: any */;
-  mergedData.other_features.push(...Object.values(otherFeatures) /*: any */);
+  mergedData.unintegrated = Object.values(unintegrated);
+  mergedData.other_features.push(...Object.values(otherFeatures));
   integrated = Array.from(integrated.values()).map((m) => {
     // prettier-ignore
     const locations = condenseLocations((m.children/*: any */));
@@ -217,8 +219,7 @@ export const mergeData = (matches, sequenceLength) => {
       locations,
     };
   });
-  mergedData.unintegrated /*: any[] */
-    .sort((m1, m2) => m2.score - m1.score);
+  mergedData.unintegrated.sort((m1, m2) => m2.score - m1.score);
   for (const entry of integrated) {
     if (!mergedData[entry.type]) mergedData[entry.type] = [];
     mergedData[entry.type].push(entry);

@@ -7,7 +7,7 @@ body a:focus {
 body a {
   text-decoration: none;
   border: 0;
-  &:focus,
+  &:focus:not(.vf-button),
   &:hover:not(.vf-button) {
     text-decoration: underline;
     border-bottom-style: none;
@@ -170,5 +170,10 @@ button.as-text {
   &:hover,
   &:focus {
     text-decoration: none;
+  }
+}
+details.read-more {
+  & summary {
+    cursor: pointer;
   }
 }

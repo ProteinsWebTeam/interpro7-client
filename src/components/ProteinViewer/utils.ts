@@ -5,7 +5,7 @@ import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 export const selectRepresentativeDomains = (
   domains: Record<string, unknown>[],
-  locationKey: string = 'entry_protein_locations',
+  locationKey: string,
 ) => {
   const flatDomains = [];
   for (const domain of domains) {
@@ -64,7 +64,14 @@ const processData = <M = Metadata>(
       'interpro',
   );
 
-  const representativeDomains = selectRepresentativeDomains(results);
+  const locationKey =
+    endpoint === 'structure'
+      ? 'entry_structure_locations'
+      : 'entry_protein_locations';
+  const representativeDomains = selectRepresentativeDomains(
+    results,
+    locationKey,
+  );
   const interproMap = new Map(
     interpro.map((ipro) => [
       `${ipro.accession}-${ipro.chain}-${ipro.protein}`,

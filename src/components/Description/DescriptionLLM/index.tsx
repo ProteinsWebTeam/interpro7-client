@@ -2,22 +2,25 @@ import React, { PureComponent } from 'react';
 
 import cssBinder from 'styles/cssBinder';
 import globalStyles from 'styles/interpro-vf.css';
+import localStyles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import Link from 'components/generic/Link';
 
 import Description from '..';
 import config from 'config';
 
-const css = cssBinder(globalStyles, fonts);
+const css = cssBinder(globalStyles, localStyles, fonts);
 
 type Props = {
+  accession: string;
   text: string;
 };
 
 class DescriptionLLM extends PureComponent<Props> {
   render() {
+    const accession = this.props.accession || '';
     const text = this.props.text || '';
-    if (text.length === 0) return null;
+    if (accession.length === 0 || text.length === 0) return null;
 
     return (
       <>
@@ -60,8 +63,29 @@ class DescriptionLLM extends PureComponent<Props> {
                   href={`${config.root.readthedocs.href}llm_descriptions.html`}
                   target="_blank"
                 >
-                  Read more on description generation
+                  Read more on description generation.
                 </Link>
+                {config.root?.LLMFeedback?.href ? (
+                  <Link
+                    href={`${config.root.LLMFeedback.href}${accession}`}
+                    target="_blank"
+                    className={css(
+                      'vf-button',
+                      'vf-button--secondary',
+                      'vf-button--sm'
+                    )}
+                  >
+                    <span
+                      className={css(
+                        'small',
+                        'icon',
+                        'icon-common',
+                        'icon-pencil-alt'
+                      )}
+                    />{' '}
+                    Provide feedback
+                  </Link>
+                ) : null}
               </p>
             </div>
           </div>

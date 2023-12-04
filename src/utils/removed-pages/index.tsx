@@ -10,9 +10,9 @@ export const removedPages: Array<{
       main: { key: 'set' },
       set: { detail: 'alignments' },
     },
-    getMessage: (location) => {
+    getMessage: () => {
       return (
-        <>Profile-profile alignments have been removed in InterPro 98.0.</>
+        <>Profile-profile alignments have been removed in InterPro 97.0.</>
       );
     },
   },
@@ -50,7 +50,7 @@ const isObject = (item: unknown): boolean =>
 
 export const doesObjectFits = (
   object: Record<string, unknown>,
-  template: Record<string, unknown>
+  template: Record<string, unknown>,
 ): boolean => {
   for (const [key, value] of Object.entries(template)) {
     if (key in object) {
@@ -60,7 +60,7 @@ export const doesObjectFits = (
         if (
           !doesObjectFits(
             object[key] as Record<string, unknown>,
-            value as Record<string, unknown>
+            value as Record<string, unknown>,
           )
         )
           return false;
@@ -75,14 +75,14 @@ export const doesObjectFits = (
 };
 export const doesArrayFits = (
   array: Array<unknown>,
-  template: Array<unknown>
+  template: Array<unknown>,
 ): boolean => {
   for (let i = 0; i < template.length; i++) {
     if (Array.isArray(template[i]) && Array.isArray(array[i])) {
       if (
         !doesArrayFits(
           array[i] as Array<unknown>,
-          template[i] as Array<unknown>
+          template[i] as Array<unknown>,
         )
       )
         return false;
@@ -90,7 +90,7 @@ export const doesArrayFits = (
       if (
         !doesObjectFits(
           array[i] as Record<string, unknown>,
-          template[i] as Record<string, unknown>
+          template[i] as Record<string, unknown>,
         )
       )
         return false;
@@ -102,7 +102,7 @@ export const doesArrayFits = (
 };
 
 export const getMessageIfLocationRemoved = (
-  location: InterProDescription
+  location: InterProDescription,
 ): ReactElement | null => {
   for (const page of removedPages) {
     if (doesObjectFits(location, page.description)) {
