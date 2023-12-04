@@ -30,6 +30,7 @@ describe('<EntriesOnStructure />', () => {
             type: 'homologous_superfamily',
           },
         ]}
+        unintegrated={[]}
         secondaryStructures={[]}
       />,
     );
