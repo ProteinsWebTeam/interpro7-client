@@ -111,10 +111,10 @@ const GroupActions = ({
             <Tooltip
               title={
                 <div>
-                  <b>Delete All Jobs</b>: This will remove the stored data of
-                  all the sequences associated with this job from your browser.
-                  Remember that search results are only retained on our servers
-                  for 7 days
+                  Delete all the stored data related to the
+                  sequences associated with this job from your browser.
+                  Please note that search results are stored
+                  on our servers for only 7 days.
                 </div>
               }
             >
@@ -138,9 +138,7 @@ const GroupActions = ({
             <Tooltip
               title={
                 <div>
-                  <b>Re-run All Sequences</b>: This will take you to the
-                  sequence search for prepopulating all values with the ones
-                  used for this job.
+                  Open a new sequence search, with all values prepopulated with those previously used for this job.
                 </div>
               }
             >
@@ -148,10 +146,10 @@ const GroupActions = ({
                 className={css('icon', 'icon-common', 'ico-neutral', 'group')}
                 onClick={handleReRun}
                 data-icon="&#xf019;"
-                aria-label="Re run all sequences"
+                aria-label="Resubmit all sequences"
               >
                 {' '}
-                Re-run All
+                Resubmit All
               </button>
             </Tooltip>
           </li>

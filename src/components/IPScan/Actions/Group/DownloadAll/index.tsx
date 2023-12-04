@@ -49,13 +49,13 @@ const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
   };
   const thereDataInServers = remoteID && data?.payload === 'FINISHED';
   return thereDataInServers ? (
-    ['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
+    ['sequence', 'tsv', 'json', 'xml', 'gff'].map((type) => (
       <li key={type}>
         <Tooltip
           title={
             <div>
               This will download the data that was originally loaded to our
-              servers. This is only available for 7 days after runnin the job.
+              servers. This is only available for 7 days after running the job.
             </div>
           }
         >
@@ -66,7 +66,7 @@ const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
             className={css('group')}
           >
             <span className={css('icon', 'icon-common')} data-icon="&#xf019;" />{' '}
-            Download All [{type.toUpperCase()}]
+            {type === 'sequence' ? 'FASTA input' : `${type.toUpperCase()} output`}
           </Link>
         </Tooltip>
       </li>
@@ -88,7 +88,7 @@ const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
           aria-label="Download group results"
         >
           {' '}
-          Download All [JSON]
+          JSON output
         </button>
       </Tooltip>
     </li>

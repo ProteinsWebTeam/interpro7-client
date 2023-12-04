@@ -11,7 +11,7 @@
     cursor: pointer;
   }
   & .dropdown-button {
-    background: var(--colors-nearly-white);
+    background: #ffffff;
     & .icon-caret-down {
       margin-left: 1rem;
       padding: 0;

@@ -102,7 +102,7 @@ const ProteinViewerOptions = ({
             base.appendChild(style);
           } else
             console.warn(
-              "Couldn't setups the style for the nightingale-saver snapshot ",
+              "Couldn't set up the style for the nightingale-saver snapshot ",
             );
         };
         saver.postSave = () => {
