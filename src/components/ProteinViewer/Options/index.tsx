@@ -175,7 +175,7 @@ const ProteinViewerOptions = ({
 
         <DropDownButton
           label={
-            <Tooltip title={'More options to customise the protein viewer'}>
+            <Tooltip title={'Additional customization options'}>
               Options
             </Tooltip>
           }
