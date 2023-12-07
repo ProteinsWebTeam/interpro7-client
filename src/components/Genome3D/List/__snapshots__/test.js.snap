@@ -35,7 +35,7 @@ exports[`<List /> should render 1`] = `
       }
       processData={[Function]}
     />
-    <Table
+    <Memo(Table)
       actualSize={1649}
       dataTable={
         [
@@ -130,7 +130,7 @@ exports[`<List /> should render 1`] = `
       >
         Matches
       </Column>
-    </Table>
+    </Memo(Table)>
   </div>
 </div>
 `;
