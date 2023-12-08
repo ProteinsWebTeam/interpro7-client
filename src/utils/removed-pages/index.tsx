@@ -43,6 +43,34 @@ export const removedPages: Array<{
       );
     },
   },
+  {
+    description: {
+      main: { key: 'entry' },
+      entry: { detail: 'genome3d' },
+    },
+    getMessage: (location) => {
+      return (
+        <>
+          Genome3D models for an InterPro entry have been removed in InterPro
+          98.0. You can use{' '}
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  ...location.entry,
+                  detail: 'alphafold',
+                },
+              },
+            }}
+          >
+            AlphaFold models
+          </Link>{' '}
+          instead.
+        </>
+      );
+    },
+  },
 ];
 
 const isObject = (item: unknown): boolean =>
