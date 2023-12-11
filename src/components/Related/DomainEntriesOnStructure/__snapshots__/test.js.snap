@@ -54,11 +54,11 @@ exports[`<EntriesOnStructure /> should render 1`] = `
         tracks={
           [
             [
-              "Secondary Structure",
+              "secondary structure",
               [],
             ],
             [
-              "Entries",
+              "homologous superfamily",
               [
                 {
                   "accession": "IPR038178",

@@ -15,6 +15,10 @@ import { Selection } from 'components/Structure/ViewerAndEntries';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { Params } from 'src/higherOrder/loadData/extract-params';
+import {
+  flattenTracksObject,
+  makeTracks,
+} from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -125,14 +129,14 @@ const ProteinViewerForAlphafold = ({
   )
     return <Loading />;
   const { interpro, unintegrated, representativeDomains } = processedData;
-  const tracks: ProteinViewerData = [
-    ['Entries', interpro.concat(unintegrated)],
-  ];
+  const groups = makeTracks({
+    interpro: interpro as Array<{ accession: string; type: string }>,
+    unintegrated: unintegrated as Array<MinimalFeature>,
+    representativeDomains: representativeDomains as Array<MinimalFeature>,
+  });
+  const tracks = flattenTracksObject(groups);
   if (dataConfidence) addConfidenceTrack(dataConfidence, protein, tracks);
   if (!dataProtein.payload?.metadata) return null;
-  if (representativeDomains?.length) {
-    tracks.splice(1, 0, ['representative domains', representativeDomains]);
-  }
   return (
     <div ref={containerRef}>
       <ProteinViewer

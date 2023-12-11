@@ -7,6 +7,8 @@ import ProteinViewerForStructure from './ProteinViewerLoaded';
 
 import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import { orderByAccession } from 'components/Related/DomainsOnProtein';
+import { flattenTracksObject } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
 const css = cssBinder(fonts);
 
@@ -23,25 +25,18 @@ export type DataForProteinChain = {
     length: number;
   };
   data: {
-    Entries: Array<{
+    [key: string]: Array<{
       accession: string;
-      name: string;
+      name?: string;
       short_name?: string;
-      coordinates: number[][][];
+      coordinates?: number[][][];
       source_database: string;
       locations: ProtVistaLocation[];
-      link: string;
-      children: unknown;
+      link?: string;
+      children?: unknown;
       chain: string;
-      protein: string;
+      protein?: string;
       type: string;
-    }>;
-    'Secondary Structure': Array<{
-      locations: ProtVistaLocation[];
-      type: string;
-      accession: string;
-      source_database: string;
-      chain: string;
     }>;
   };
   chain: string;
@@ -101,13 +96,21 @@ const mergeData = (
           length: entry.sequence_length,
         },
         data: {
-          Entries: [],
-          'Secondary Structure': secondaryStructArray,
+          secondary_structure: secondaryStructArray,
         },
         chain: entry.chain,
       };
     }
-    out[entry.chain][entry.protein].data.Entries.push({
+
+    const dataType =
+      entry.source_database.toLowerCase() === 'interpro'
+        ? entry.type
+        : 'unintegrated';
+    if (!out[entry.chain][entry.protein].data[dataType as string]) {
+      out[entry.chain][entry.protein].data[dataType as string] = [];
+    }
+
+    out[entry.chain][entry.protein].data[dataType as string].push({
       accession: entry.accession,
       name: entry.name,
       short_name: entry.short_name,
@@ -134,6 +137,9 @@ const mergeData = (
       a ? a.localeCompare(b) : -1,
     );
     for (const protein of proteins) {
+      Object.values(out[chain][protein].data).forEach((g) =>
+        g.sort(orderByAccession),
+      );
       entries.push(out[chain][protein]);
     }
   }
@@ -172,21 +178,23 @@ const getRepresentativesPerChain = (
 type Props = {
   structure: string;
   entries: StructureLinkedObject[];
+  unintegrated: StructureLinkedObject[];
   secondaryStructures?: SecondaryStructure[];
   representativeDomains?: Record<string, unknown>[];
 };
 
 const EntriesOnStructure = ({
   entries,
+  unintegrated,
   secondaryStructures,
   structure,
   representativeDomains,
 }: Props) => {
   const merged = useMemo(() => {
-    const data = mergeData(entries, secondaryStructures);
+    const data = mergeData(entries.concat(unintegrated), secondaryStructures);
     tagChimericStructures(data);
     return data;
-  }, [entries, secondaryStructures]);
+  }, [entries, unintegrated, secondaryStructures]);
   const representativesPerChain = useMemo(
     () => getRepresentativesPerChain(representativeDomains),
     [representativeDomains],
@@ -201,13 +209,7 @@ const EntriesOnStructure = ({
             ...e.sequence,
           };
 
-          const tracks = Object.entries(
-            e.data as Record<string, Array<Record<string, unknown>>>,
-          ).sort(([a], [b]) => {
-            if (a && a.toLowerCase() === 'chain') return -1;
-            if (b && b.toLowerCase() === 'chain') return 1;
-            return b ? b.localeCompare(a) : -1;
-          });
+          const tracks = flattenTracksObject(e.data);
           if (representativesPerChain[e.chain]) {
             tracks.splice(0, 0, [
               'representative domains',
@@ -255,7 +257,9 @@ const EntriesOnStructure = ({
                 )}
               </h4>
               <ProteinViewerForStructure
-                tracks={tracks}
+                tracks={
+                  tracks as Array<[string, Array<Record<string, unknown>>]>
+                }
                 chain={e.chain}
                 id={`${e.chain}-${e.protein.accession}`}
                 protein={sequenceData}
