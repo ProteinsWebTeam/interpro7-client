@@ -11,6 +11,7 @@ import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import DomainButton from './DomainButton';
 import IdaEntry from './IdaEntry';
+// $FlowFixMe
 import ToggleSwitch from 'components/ToggleSwitch';
 
 import { foundationPartial } from 'styles/foundation';

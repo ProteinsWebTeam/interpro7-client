@@ -14,6 +14,7 @@ import Link from 'components/generic/Link';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import loadable from 'higherOrder/loadable';
+// $FlowFixMe
 import ToggleSwitch from 'components/ToggleSwitch';
 
 // import loadWebComponent from 'utils/load-web-component';
