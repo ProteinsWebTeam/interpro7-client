@@ -15,7 +15,9 @@ import EdgeCase from 'components/EdgeCase';
 
 // $FlowFixMe
 import IDAOptions from './Options';
+// $FlowFixMe
 import IDAProtVista from './IDAProtVista';
+// $FlowFixMe
 import TextIDA from './TextIDA';
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';

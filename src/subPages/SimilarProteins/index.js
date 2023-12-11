@@ -32,9 +32,11 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
 import { ida2json } from 'components/Entry/DomainArchitectures';
+// $FlowFixMe
 import IDAProtVista from 'components/Entry/DomainArchitectures/IDAProtVista';
 // $FlowFixMe
 import IDAOptions from 'components/Entry/DomainArchitectures/Options';
+// $FlowFixMe
 import TextIDA from 'components/Entry/DomainArchitectures/TextIDA';
 
 const f = foundationPartial(fonts, localStyle, exporterStyle);

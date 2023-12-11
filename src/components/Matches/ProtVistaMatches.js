@@ -1,3 +1,4 @@
+// TODO: DELETE after checking is not been used anymore (currently ony genome3d) and that will dissapear in another PR
 // @flow
 import { PureComponent } from 'react';
 import T from 'prop-types';
