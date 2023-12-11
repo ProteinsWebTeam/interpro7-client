@@ -32,6 +32,7 @@ import loadData from 'higherOrder/loadData';
 
 import { ida2json } from 'components/Entry/DomainArchitectures';
 import IDAProtVista from 'components/Entry/DomainArchitectures/IDAProtVista';
+// $FlowFixMe
 import IDAOptions from 'components/Entry/DomainArchitectures/Options';
 import TextIDA from 'components/Entry/DomainArchitectures/TextIDA';
 
@@ -104,14 +105,12 @@ const SimilarProteinsHeaderWithData = (
     dataDomain: { payload: payloadDomain, loading: loadingDomain },
     databases,
     idaAccessionDB,
-    idaLabel,
   } /*: {
       accession: string,
       data: {payload: Object, loading: boolean},
       dataDomain: {payload: Object, loading: boolean},
       databases: Object,
       idaAccessionDB: string,
-      idaLabel: string,
     } */,
 ) => {
   if (loading || !payload) return <Loading />;
@@ -135,7 +134,6 @@ const SimilarProteinsHeaderWithData = (
         length={idaObj?.length || FAKE_PROTEIN_LENGTH}
         maxLength={idaObj?.length || FAKE_PROTEIN_LENGTH}
         databases={databases}
-        attributeForLabel={idaLabel}
       />
       <br />
     </div>
@@ -147,7 +145,6 @@ SimilarProteinsHeaderWithData.propTypes = {
   dataDomain: dataPropType,
   databases: T.object,
   idaAccessionDB: T.string,
-  idaLabel: T.string,
   changeSettingsRaw: T.func,
 };
 
@@ -201,9 +198,8 @@ const getUrlForDomains = createSelector(
 
 const mapStateToPropsAccessionDB = createSelector(
   (state) => state.settings.ui,
-  ({ idaAccessionDB, idaLabel }) => ({
+  ({ idaAccessionDB }) => ({
     idaAccessionDB,
-    idaLabel,
   }),
 );
 

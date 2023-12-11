@@ -13,6 +13,7 @@ import { edgeCases } from 'utils/server-message';
 // $FlowFixMe
 import EdgeCase from 'components/EdgeCase';
 
+// $FlowFixMe
 import IDAOptions from './Options';
 import IDAProtVista from './IDAProtVista';
 import TextIDA from './TextIDA';
@@ -133,7 +134,6 @@ const getMaxLength = (idaResults) => {
   search: Object,
   highlight: Array<string>,
   idaAccessionDB: string,
-  idaLabel: string,
   database: string,
 }
 */
@@ -145,7 +145,6 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
     dataDB: T.object.isRequired,
     highlight: T.arrayOf(T.string),
     idaAccessionDB: T.string,
-    idaLabel: T.string,
     database: T.string,
   };
 
@@ -157,7 +156,6 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
       dataDB,
       highlight = [],
       idaAccessionDB,
-      idaLabel,
       database,
     } = this.props;
     if (loading || dataDB.loading) return <Loading />;
@@ -263,7 +261,6 @@ class _DomainArchitecturesWithData extends PureComponent /*:: <DomainArchitectur
                   maxLength={maxLength}
                   databases={dataDB.payload.databases}
                   highlight={toHighlight}
-                  attributeForLabel={idaLabel}
                 />
                 {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
               </div>
@@ -312,11 +309,10 @@ const mapStateToProps = createSelector(
       .accession,
   (state) => state.customLocation.search,
   (state) => state.settings.ui,
-  (mainAccession, search, { idaAccessionDB, idaLabel }) => ({
+  (mainAccession, search, { idaAccessionDB }) => ({
     mainAccession,
     search,
     idaAccessionDB,
-    idaLabel,
   }),
 );
 

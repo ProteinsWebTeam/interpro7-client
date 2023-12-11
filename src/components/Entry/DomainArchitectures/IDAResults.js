@@ -20,11 +20,10 @@ const mapStateToProps = createSelector(
       .accession,
   (state) => state.customLocation.search,
   (state) => state.settings.ui,
-  (mainAccession, search, { idaAccessionDB, idaLabel }) => ({
+  (mainAccession, search, { idaAccessionDB }) => ({
     mainAccession,
     search,
     idaAccessionDB,
-    idaLabel,
   }),
 );
 

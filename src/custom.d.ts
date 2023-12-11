@@ -142,7 +142,6 @@ type UISettings = {
   structureViewer: boolean;
   shouldHighlight: boolean;
   idaAccessionDB: string;
-  idaLabel: string;
   isPIPEnabled: boolean;
 };
 type LabelUISettings = {

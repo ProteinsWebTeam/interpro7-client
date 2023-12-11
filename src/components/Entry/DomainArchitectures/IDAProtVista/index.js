@@ -18,7 +18,6 @@ const HEIGHT_OF_TRACKS = 22;
   matches: Array<Object>,
   highlight: Array<string>,
   databases: Object,
-  attributeForLabel: 'name'|'accession',
   length: number,
   maxLength: number,
 }
@@ -28,7 +27,6 @@ class IDAProtVista extends ProtVistaMatches /*:: <Props> */ {
     matches: T.arrayOf(T.object).isRequired,
     databases: T.object.isRequired,
     highlight: T.arrayOf(T.string),
-    attributeForLabel: T.string,
     length: T.number,
     maxLength: T.number,
   };
@@ -62,7 +60,6 @@ class IDAProtVista extends ProtVistaMatches /*:: <Props> */ {
       maxLength,
       databases,
       highlight = [],
-      attributeForLabel,
     } = this.props;
 
     const width = `${(MAX_PERC_WIDTH * length) / maxLength}%`;
@@ -119,7 +116,7 @@ class IDAProtVista extends ProtVistaMatches /*:: <Props> */ {
                   },
                 }}
               >
-                {d[attributeForLabel]}
+                {d.name}
               </Link>
             </div>
           </div>
