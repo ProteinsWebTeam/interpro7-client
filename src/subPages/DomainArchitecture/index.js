@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 // $FlowFixMe
 import DomainsOnProtein from 'components/Related/DomainsOnProtein';
+// $FlowFixMe
 import DomainArchitectures from 'components/Entry/DomainArchitectures';
 import Loading from 'components/SimpleCommonComponents/Loading';
 

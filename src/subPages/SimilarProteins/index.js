@@ -31,6 +31,7 @@ import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
+// $FlowFixMe
 import { ida2json } from 'components/Entry/DomainArchitectures';
 // $FlowFixMe
 import IDAProtVista from 'components/Entry/DomainArchitectures/IDAProtVista';

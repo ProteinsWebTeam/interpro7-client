@@ -659,6 +659,32 @@ type Taxon = {
   species: number;
   children: Array<Taxon>;
 };
+
+type IDAResult = {
+  ida: string;
+  ida_id: string;
+  representative: {
+    accession: string;
+    length: number;
+    domains: Array<{
+      accession: string;
+      name: string;
+      coordinates: [
+        {
+          fragments: [
+            {
+              start: number;
+              end: number;
+            },
+          ];
+        },
+      ];
+    }>;
+  };
+  unique_proteins: number;
+};
+type IDAPayload = PayloadList<IDAResult>;
+
 type Genome3DAnnotation = {
   accession: string;
   metadata: {

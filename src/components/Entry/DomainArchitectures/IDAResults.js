@@ -11,7 +11,8 @@ import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
-import { DomainArchitecturesWithData } from 'components/Entry/DomainArchitectures/index';
+// $FlowFixMe
+import { DomainArchitecturesWithData } from '.';
 
 const mapStateToProps = createSelector(
   (state) =>
