@@ -51,8 +51,8 @@ export const removedPages: Array<{
     getMessage: (location) => {
       return (
         <>
-          Genome3D models for an InterPro entry have been removed in InterPro
-          98.0. You can use{' '}
+          Genome3D models have been removed in InterPro 98.0.
+          You can use{' '}
           <Link
             to={{
               description: {
