@@ -1,6 +1,4 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -11,16 +9,18 @@ import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
-// $FlowFixMe
-import { DomainArchitecturesWithData } from '.';
+import { DomainArchitecturesWithData } from '../';
 
 const mapStateToProps = createSelector(
-  (state) =>
+  (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
-  (state) => state.customLocation.search,
-  (state) => state.settings.ui,
+    (
+      state.customLocation.description[
+        state.customLocation.description.main.key
+      ] as EndpointLocation
+    ).accession,
+  (state: GlobalState) => state.customLocation.search,
+  (state: GlobalState) => state.settings.ui,
   (mainAccession, search, { idaAccessionDB }) => ({
     mainAccession,
     search,
@@ -29,8 +29,8 @@ const mapStateToProps = createSelector(
 );
 
 const getUrlForIDASearch = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.search,
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.customLocation.search,
   ({ protocol, hostname, port, root }, search) => {
     // omit from search
     const description = {
@@ -46,12 +46,12 @@ const getUrlForIDASearch = createSelector(
     });
   },
 );
-const IDAResults = (
-  {
-    searchFromURL,
-    ignoreFromURL,
-  } /*: {searchFromURL: string , ignoreFromURL: string} */,
-) => {
+
+type Props = {
+  searchFromURL: string;
+  ignoreFromURL: string;
+};
+const IDAResults = ({ searchFromURL, ignoreFromURL }: Props) => {
   if (!searchFromURL) return null; // Empty search
   const entries = searchFromURL.split(',').map((e) => e.trim());
   const ignore = ignoreFromURL
@@ -72,16 +72,12 @@ const IDAResults = (
   );
   return <Results highlight={entries} />;
 };
-IDAResults.propTypes = {
-  searchFromURL: T.string,
-  ignoreFromURL: T.string,
-};
 
 const mapSearchStateToProps = createSelector(
-  (state) => state.customLocation.search,
+  (state: GlobalState) => state.customLocation.search,
   ({ ida_search: searchFromURL, ida_ignore: ignoreFromURL }) => ({
-    searchFromURL,
-    ignoreFromURL,
+    searchFromURL: searchFromURL as string,
+    ignoreFromURL: ignoreFromURL as string,
   }),
 );
 export default connect(mapSearchStateToProps)(IDAResults);
