@@ -139,10 +139,10 @@ const getMaxLength = (
 };
 
 type Props = {
-  mainAccession: string;
-  search: Record<string, string>;
-  highlight: Array<string>;
-  idaAccessionDB: string;
+  mainAccession?: string;
+  search?: Record<string, string>;
+  highlight?: Array<string>;
+  idaAccessionDB?: string;
   database: string;
 };
 interface LoadedProps
@@ -171,7 +171,7 @@ export const DomainArchitecturesWithData = ({
 
   let messageContent;
   if (payload.count === 0) {
-    const searchEntries = search.ida_search.split(',');
+    const searchEntries = (search?.ida_search || '').split(',');
     const invalidEntries: Array<string> = [];
     searchEntries.forEach((entry) => {
       const matches = entry.match(new RegExp(/(ipr|pf)/, 'ig'));
@@ -210,7 +210,7 @@ export const DomainArchitecturesWithData = ({
       <div className={css('columns')}>
         {messageContent}
         {(payload.results || []).map((obj) => {
-          const currentDB = (database || idaAccessionDB).toLowerCase();
+          const currentDB = (database || idaAccessionDB || '').toLowerCase();
           const idaObj = ida2json(obj.ida, obj.representative, currentDB);
           const representativeAcc = obj?.representative?.accession;
           return (
@@ -272,7 +272,7 @@ export const DomainArchitecturesWithData = ({
         <Footer
           withPageSizeSelector={true}
           actualSize={payload.count}
-          pagination={search}
+          pagination={search || {}}
           nextAPICall={payload.next}
           previousAPICall={payload.previous}
           notFound={false}
