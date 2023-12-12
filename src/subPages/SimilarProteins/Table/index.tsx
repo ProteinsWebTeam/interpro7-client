@@ -17,11 +17,11 @@ import AllProteinDownload from './AllProteinDownload';
 
 import cssBinder from 'styles/cssBinder';
 
-import localStyle from '../style.css';
+import allProteinsButtons from './AllProteinDownload/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 
-const css = cssBinder(fonts, localStyle, exporterStyle);
+const css = cssBinder(fonts, allProteinsButtons, exporterStyle);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -127,12 +127,17 @@ const SimilarProteinTable = ({
             <Link
               target="_blank"
               href={getAPIURLForSimilarProteins(api, ida, db)}
-              className={css('button', 'hollow', 'imitate-progress-button')}
+              className={css(
+                'vf-button',
+                'vf-button--secondary',
+                'vf-button--sm',
+                'generate-button',
+              )}
             >
               <span
                 className={css('icon', 'icon-common', 'icon-export')}
                 data-icon="&#xf233;"
-              />
+              />{' '}
               <span className={css('file-label')}>Web View</span>
             </Link>
           </div>

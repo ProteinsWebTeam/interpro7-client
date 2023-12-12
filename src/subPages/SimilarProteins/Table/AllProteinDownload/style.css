@@ -1,0 +1,8 @@
+body a.generate-button,
+body a:visited.generate-button,
+body div.generate-button,
+body button.generate-button {
+  font-size: 0.8rem;
+  box-shadow: none;
+  color: var(--colors-graydark);
+}
