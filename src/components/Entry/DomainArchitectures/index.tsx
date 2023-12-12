@@ -72,7 +72,7 @@ type ProcessedDomain = {
 export const ida2json = (
   ida: string,
   representative: Representative,
-  entry: string,
+  entry?: string,
 ): {
   length: number;
   domains: Array<ProcessedDomain>;

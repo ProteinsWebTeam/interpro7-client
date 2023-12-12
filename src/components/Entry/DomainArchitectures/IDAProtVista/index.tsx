@@ -20,7 +20,7 @@ type Props = {
     locations: ProtVistaLocation[];
     name: string;
   }>;
-  highlight: Array<string>;
+  highlight?: Array<string>;
   databases: DBsInfo;
   length: number;
   maxLength: number;
