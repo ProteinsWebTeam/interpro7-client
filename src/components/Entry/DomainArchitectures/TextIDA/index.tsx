@@ -1,20 +1,18 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 import Link from 'components/generic/Link';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 import local from './style.css';
 
-const f = foundationPartial(local);
+const css = cssBinder(local);
 
-const TextIDA = ({ accessions } /*: {accessions: Array<string>} */) => (
+const TextIDA = ({ accessions }: { accessions: Array<string> }) => (
   <div style={{ display: 'flex' }}>
     <div>
       {accessions.map((accession, i) => (
         <React.Fragment key={i}>
           {i !== 0 && ' - '}
-          <span className={f('ida-text-domain')}>
+          <span className={css('ida-text-domain')}>
             <Link
               to={{
                 description: {
@@ -37,9 +35,5 @@ const TextIDA = ({ accessions } /*: {accessions: Array<string>} */) => (
     </div>
   </div>
 );
-
-TextIDA.propTypes = {
-  accessions: T.arrayOf(T.string),
-};
 
 export default TextIDA;

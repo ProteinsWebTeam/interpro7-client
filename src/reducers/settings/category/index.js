@@ -38,7 +38,6 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         structureViewer: false,
         shouldHighlight: true,
         idaAccessionDB: 'interpro',
-        idaLabel: 'name',
         isPIPEnabled: false,
       };
     case 'cache':

@@ -78,8 +78,8 @@ const Tooltip = ({
   };
   return (
     <>
-      <FloatingPortal>
-        {hide ? null : (
+      {hide ? null : (
+        <FloatingPortal>
           <div
             ref={refs.setFloating}
             style={floatingStyles}
@@ -90,8 +90,8 @@ const Tooltip = ({
             <FloatingArrow ref={arrowRef} context={context} />
             {content}
           </div>
-        )}
-      </FloatingPortal>
+        </FloatingPortal>
+      )}
       <div
         {...rest}
         ref={refs.setReference}
