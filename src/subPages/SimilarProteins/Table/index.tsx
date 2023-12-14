@@ -19,9 +19,17 @@ import cssBinder from 'styles/cssBinder';
 
 import allProteinsButtons from './AllProteinDownload/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import fileStyle from 'components/File/FileButton/style.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
+import ipro from 'styles/interpro-vf.css';
 
-const css = cssBinder(fonts, allProteinsButtons, exporterStyle);
+const css = cssBinder(
+  ipro,
+  fonts,
+  allProteinsButtons,
+  exporterStyle,
+  fileStyle,
+);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -124,22 +132,31 @@ const SimilarProteinTable = ({
               fileType="tsv"
             />
             <label htmlFor="api">API</label>
-            <Link
-              target="_blank"
-              href={getAPIURLForSimilarProteins(api, ida, db)}
-              className={css(
-                'vf-button',
-                'vf-button--secondary',
-                'vf-button--sm',
-                'generate-button',
-              )}
-            >
-              <span
-                className={css('icon', 'icon-common', 'icon-export')}
-                data-icon="&#xf233;"
-              />{' '}
-              <span className={css('file-label')}>Web View</span>
-            </Link>
+            <Tooltip title="See the raw response from the InterPro API">
+              <Link
+                target="_blank"
+                href={getAPIURLForSimilarProteins(api, ida, db)}
+                className={css('no-decoration')}
+              >
+                <div
+                  className={css(
+                    'file-button',
+                    'vf-button',
+                    'vf-button--secondary',
+                    'vf-button--sm',
+                    'generate-button',
+                  )}
+                >
+                  <span className={css('as-progress-button')}>
+                    <span
+                      className={css('icon', 'icon-common', 'icon-export')}
+                      data-icon="&#xf233;"
+                    />
+                  </span>{' '}
+                  <span className={css('file-label')}>Web View</span>
+                </div>
+              </Link>
+            </Tooltip>
           </div>
         </Exporter>
 
