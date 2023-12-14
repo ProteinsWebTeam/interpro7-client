@@ -45,7 +45,6 @@ pages:
       - entry_alignments
       - interactions
       - pathways
-      - genome3d
       - curation
       - subfamilies
   protein:

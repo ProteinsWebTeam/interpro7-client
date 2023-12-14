@@ -162,16 +162,7 @@ const getFirstPage = (url, fileType, endpoint) => {
 };
 
 const mutatePayloadTo3rdPartyAPI = (payload, endpoint, page) => {
-  // Mapping genome3d responses to the InterPro format.
-  if (endpoint === 'genome3d') {
-    page.query.page++;
-    payload.results = payload.data;
-    payload.count = payload.pager.total_entries;
-    payload.next =
-      payload.pager.total_pages > payload.pager.current_page
-        ? format(page)
-        : null;
-  } else if (endpoint === 'ebisearch') {
+  if (endpoint === 'ebisearch') {
     payload.results = payload.entries;
     payload.count = payload.hitCount;
     if (page.query.page * MAX_EBI_PAGE_SIZE < payload.hitCount) {
