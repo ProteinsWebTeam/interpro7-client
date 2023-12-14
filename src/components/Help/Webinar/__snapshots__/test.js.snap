@@ -373,18 +373,6 @@ exports[`<Webinar /> should render 1`] = `
         className="card-content"
       >
         <div
-          className="card-title"
-        >
-          <h4>
-            <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
-              target="_blank"
-            >
-              Genome 3D annotations in InterPro webinar
-            </Memo(Connect(Link))>
-          </h4>
-        </div>
-        <div
           className="card-info"
         >
           <div
@@ -424,21 +412,6 @@ exports[`<Webinar /> should render 1`] = `
         >
           This webinar presents the new InterPro entry type, Homologous superfamily, as well as describing domain and structure predictions from Genome3D annotations, and how they are integrated in InterPro.
         </div>
-      </div>
-      <div
-        className="card-more"
-      >
-        <Memo(Connect(Link))
-          href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
-          target="_blank"
-        >
-          <div
-            className="button-more icon icon-common icon-right"
-            data-icon=""
-          >
-            Watch it here
-          </div>
-        </Memo(Connect(Link))>
       </div>
     </div>
   </div>

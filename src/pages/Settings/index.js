@@ -732,7 +732,6 @@ type SettingsProps = {
     api: Object,
     ebi: Object,
     ipScan: Object,
-    genome3d: Object,
     repeatsDB: Object,
     disprot: Object,
     wikipedia: Object,

@@ -205,6 +205,5 @@ export const getUrlForApi = (...parameters) =>
     .replace('/subfamilies', '/')
     .replace('/pathways', '/')
     .replace('/sequence', '/')
-    .replace('/genome3d', '/')
     .replace('/similar_proteins', '/')
     .replace('/curation', '/');
