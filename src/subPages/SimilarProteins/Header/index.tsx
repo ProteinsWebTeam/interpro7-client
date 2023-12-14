@@ -94,8 +94,9 @@ const SimilarProteinsHeaderWithData = ({
   return (
     <div>
       <header>
-        All the proteins in this page share the domain architecture below with
-        the protein with accession <b>{accession}</b>.
+        All proteins featured on this page exhibit the same 
+        domain architecture as the protein identified 
+        by the accession <b>{accession}</b>.
         <IDAOptions />
       </header>
       <TextIDA accessions={idaObj.accessions} />

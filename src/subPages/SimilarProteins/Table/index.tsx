@@ -161,7 +161,7 @@ const SimilarProteinTable = ({
                 {acc}
               </Link>{' '}
               {sourceDatabase === 'reviewed' && (
-                <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                <Tooltip title="Reviewed by UniProtKB curators">
                   <span
                     className={css('icon', 'icon-common')}
                     data-icon="&#xf00c;"

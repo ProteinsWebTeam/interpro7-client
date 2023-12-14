@@ -30,7 +30,7 @@ const IDAOptions = ({ changeSettingsRaw, idaAccessionDB }: PropsIDAOptions) => {
       <div className={css('accession-selector-panel')}>
         <label>
           Database:{' '}
-          <Tooltip title="Toogle between domain architectures based on Pfam and InterPro entries">
+          <Tooltip title="Switch between domain architectures based on Pfam and InterPro entries">
             <ToggleSwitch
               switchCond={idaAccessionDB === 'pfam'}
               name={'accessionDB'}

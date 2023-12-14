@@ -39,15 +39,15 @@ const SimilarProteins = ({
       />
 
       <div className={css('similar-proteins-selector-panel')}>
-        <p>The below table lists the similar proteins from</p>
+        <p>The table below lists similar proteins from</p>
         <Tooltip title="Switch to view similar proteins from UniProt or Reviewed databases">
           <ToggleSwitch
             switchCond={similarProtDb === 'uniprot'}
             name={'proteinDB'}
             id={'proteinDB-input'}
             SRLabel={'View proteins from'}
-            onValue={'UniProt'}
-            offValue={'Reviewed'}
+            onValue={'UniProtKB'}
+            offValue={'Reviewed (Swiss-Prot)'}
             handleChange={() =>
               setSimilarProtDb(
                 similarProtDb === 'uniprot' ? 'reviewed' : 'uniprot',

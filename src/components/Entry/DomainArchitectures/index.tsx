@@ -171,35 +171,16 @@ export const DomainArchitecturesWithData = ({
 
   let messageContent;
   if (payload.count === 0) {
-    const searchEntries = (search?.ida_search || '').split(',');
-    const invalidEntries: Array<string> = [];
-    searchEntries.forEach((entry) => {
-      const matches = entry.match(new RegExp(/(ipr|pf)/, 'ig'));
-      if (!matches) invalidEntries.push(entry);
-    });
-
     messageContent = (
-      <div className={css('callout', 'info', 'withicon')}>
-        <b>No Domain architectures found</b>. They are calculated for InterPro
-        entries of type <b>Domain</b>. Please make sure the type is Domain for
-        the accessions you are searching for.
-        {invalidEntries.length > 0 ? (
-          <div style={{ margin: '1rem' }}>
-            Please check if the following are valid <b>InterPro</b> or{' '}
-            <b>Pfam</b> accessions:
-            <ul>
-              {invalidEntries.map((e) => (
-                <li key={e}>{e}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
+      <div className={css('callout', 'warning')}>
+        No domain architectures found. Domain architectures are calculated for InterPro entries of type Domain.
+        Please ensure that the entries you are searching are of type Domain.
       </div>
     );
   } else {
     messageContent = (
       <>
-        <h4>{payload.count} domain architectures found.</h4>
+        <h4>{payload.count} domain architectures</h4>
         {!database && <IDAOptions />}
       </>
     );
