@@ -1,4 +1,4 @@
-@import '../../../styles/colors.css';
+@import "../../../styles/colors.css";
 
 .exporter {
   margin: 0 0 0 0.5rem;
@@ -32,4 +32,17 @@
       color: var(--colors-graydark);
     }
   }
+}
+
+body a.generate-button,
+body a:visited.generate-button,
+body div.generate-button,
+body button.generate-button {
+  font-size: 0.8rem;
+  box-shadow: none;
+  color: var(--colors-graydark);
+}
+
+span.file-label {
+  color: var(--colors-gray);
 }

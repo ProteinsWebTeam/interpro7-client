@@ -40,6 +40,15 @@ const locationsToString = (
         )
         .join(',')
     : '';
+const IDADomainsToString = (domains) =>
+  domains
+    ? domains
+        .map(
+          ({ accession, name, coordinates }) =>
+            `${accession}(${name})[${coordinates[0].fragments[0].start}-${coordinates[0].fragments[0].end}]`,
+        )
+        .join('\t')
+    : '';
 
 export const columns /*: {
   entry: Object,
@@ -146,6 +155,18 @@ export const columns /*: {
       serializer: decodeDescription,
     },
     { name: 'Source Database', selector: 'fields.source_database[0]' },
+  ],
+  ida: [
+    { name: 'IDA ID', selector: 'ida_id' },
+    { name: 'IDA Text', selector: 'ida' },
+    { name: 'Unique Proteins', selector: 'unique_proteins' },
+    { name: 'Representative Accession', selector: 'representative.accession' },
+    { name: 'Representative Length', selector: 'representative.length' },
+    {
+      name: 'Representative Domains',
+      selector: 'representative.domains',
+      serializer: IDADomainsToString,
+    },
   ],
 };
 columns.proteinEntry = [
