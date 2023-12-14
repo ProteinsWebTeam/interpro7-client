@@ -7,13 +7,14 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
   <div
     className="columns"
   >
-    <React.Fragment>
-      <h4>
-        511
-         domain architectures
-      </h4>
-      <Memo(Connect(IDAOptions)) />
-    </React.Fragment>
+    <h4>
+      511
+       domain architectures
+    </h4>
+    <Memo(Connect(IDAOptions))
+      count={511}
+      showDBSelector={true}
+    />
     <div
       className="margin-bottom-large"
     >

@@ -22,14 +22,22 @@ const css = cssBinder(local, exporterStyle);
 type PropsIDAOptions = {
   changeSettingsRaw: typeof changeSettingsRaw;
   idaAccessionDB: string;
+  showDBSelector?: boolean;
+  showExporter?: boolean;
   api?: ParsedURLServer;
+  entryLocation?: EndpointLocation;
   search?: Record<string, string | boolean>;
+  count?: number;
 };
 const IDAOptions = ({
   changeSettingsRaw,
   idaAccessionDB,
   api,
+  count = 0,
+  showDBSelector = true,
+  showExporter = true,
   search,
+  entryLocation,
 }: PropsIDAOptions) => {
   const toggleDomainEntry = () => {
     changeSettingsRaw(
@@ -41,69 +49,73 @@ const IDAOptions = ({
 
   return (
     <nav className={css('options-panel')}>
-      <div className={css('accession-selector-panel')}>
-        <label>
-          Database:{' '}
-          <Tooltip title="Switch between domain architectures based on Pfam and InterPro entries">
-            <ToggleSwitch
-              switchCond={idaAccessionDB === 'pfam'}
-              name={'accessionDB'}
-              id={'accessionDB-input'}
-              SRLabel={'Use accessions from'}
-              onValue={'Pfam'}
-              offValue={'InterPro'}
-              handleChange={toggleDomainEntry}
-              addAccessionStyle={true}
-            />
-          </Tooltip>
-        </label>
-      </div>
-      {search && (
+      {showDBSelector && (
+        <div className={css('accession-selector-panel')}>
+          <label>
+            Database:{' '}
+            <Tooltip title="Switch between domain architectures based on Pfam and InterPro entries">
+              <ToggleSwitch
+                switchCond={idaAccessionDB === 'pfam'}
+                name={'accessionDB'}
+                id={'accessionDB-input'}
+                SRLabel={'Use accessions from'}
+                onValue={'Pfam'}
+                offValue={'InterPro'}
+                handleChange={toggleDomainEntry}
+                addAccessionStyle={true}
+              />
+            </Tooltip>
+          </label>
+        </div>
+      )}
+      {showExporter && (
         <Exporter>
           <div className={css('menu-grid')}>
             <label htmlFor="json">JSON</label>
-            <AllIDADownload
-              search={search as Record<string, string>}
-              count={10}
-              fileType="json"
-            />
+            <AllIDADownload count={count} fileType="json" />
             <label htmlFor="json">TSV</label>
-            <AllIDADownload
-              search={search as Record<string, string>}
-              count={10}
-              fileType="tsv"
-            />
+            <AllIDADownload count={count} fileType="tsv" />
             <label htmlFor="api">API</label>
-            {api && <APIViewButton url={getAPIURL(api, search)} />}
+            {api && (
+              <APIViewButton url={getAPIURL(api, entryLocation, search)} />
+            )}
           </div>
         </Exporter>
       )}
     </nav>
   );
 };
+
 const getAPIURL = (
   { protocol, hostname, port, root }: ParsedURLServer,
-  search: Record<string, string | boolean>,
+  entryLocation?: EndpointLocation,
+  search?: Record<string, string | boolean>,
 ) => {
   const description = {
     main: { key: 'entry' },
+    entry: {
+      ...(entryLocation || {}),
+      detail: undefined,
+    },
   };
-  // build URL
   return format({
     protocol,
     hostname,
     port,
     pathname: root + descriptionToPath(description),
-    query: search,
+    query: entryLocation?.accession ? { ida: '' } : search,
   });
 };
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.api,
+  (state: GlobalState) =>
+    state.customLocation.description.entry as EndpointLocation,
   (state: GlobalState) => state.customLocation.search,
   (state: GlobalState) => state.settings.ui,
-  (api, search, { idaAccessionDB }) => ({
+  (api, entryLocation, search, { idaAccessionDB }) => ({
     api,
+    entryLocation,
     search,
     idaAccessionDB,
   }),

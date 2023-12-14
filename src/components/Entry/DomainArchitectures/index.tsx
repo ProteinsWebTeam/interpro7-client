@@ -173,23 +173,20 @@ export const DomainArchitecturesWithData = ({
   if (payload.count === 0) {
     messageContent = (
       <div className={css('callout', 'warning')}>
-        No domain architectures found. Domain architectures are calculated for InterPro entries of type Domain.
-        Please ensure that the entries you are searching are of type Domain.
+        No domain architectures found. Domain architectures are calculated for
+        InterPro entries of type Domain. Please ensure that the entries you are
+        searching are of type Domain.
       </div>
     );
   } else {
-    messageContent = (
-      <>
-        <h4>{payload.count} domain architectures</h4>
-        {!database && <IDAOptions />}
-      </>
-    );
+    messageContent = <h4>{payload.count} domain architectures</h4>;
   }
   const maxLength = getMaxLength(payload.results || []);
   return (
     <div className={css('row')}>
       <div className={css('columns')}>
         {messageContent}
+        <IDAOptions showDBSelector={!database} count={payload.count} />
         {(payload.results || []).map((obj) => {
           const currentDB = (database || idaAccessionDB || '').toLowerCase();
           const idaObj = ida2json(obj.ida, obj.representative, currentDB);
