@@ -153,6 +153,7 @@ export const mergeData = (
   let integrated = new Map<string, IpScanEntry>();
   const signatures = new Map<string, IpScanMatch>();
   const representativeDomains = [];
+
   for (const match of matches) {
     const { library } = match.signature.signatureLibraryRelease;
     const processedMatch: IpScanMatch = {
@@ -173,15 +174,6 @@ export const mergeData = (
       residues: undefined,
       signature: undefined,
     };
-    const representativeLocations = processedMatch.locations.filter(
-      (loc) => loc.representative,
-    );
-    if (representativeLocations.length) {
-      representativeDomains.push({
-        ...processedMatch,
-        locations: representativeLocations,
-      });
-    }
 
     const residues = match2residues(match);
     if (
@@ -222,7 +214,19 @@ export const mergeData = (
     } else {
       unintegrated[mergedMatch.accession] = mergedMatch;
     }
+
+    const representativeLocations = processedMatch.locations.filter(
+      (loc) => loc.representative,
+    );
+    if (representativeLocations.length) {
+      representativeDomains.push({
+        ...processedMatch,
+        locations: representativeLocations,
+        integrated: match.signature?.entry?.accession,
+      });
+    }
   }
+
   mergedData.unintegrated = Object.values(unintegrated);
   mergedData.other_features.push(...Object.values(otherFeatures));
   const integratedList = Array.from(integrated.values()).map((m) => {
