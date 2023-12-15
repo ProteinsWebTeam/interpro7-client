@@ -191,7 +191,7 @@ const SummarySet = ({ data, loading }: Props) => {
         description={metadata?.description}
       />
       <SetLiterature literature={metadata?.literature} />
-      <div className={css('row', 'columns')}>
+      <div className={css('vf-stack', 'vf-stack-400')}>
         <ClanViewer data={data} loading={loading} />
       </div>
     </div>

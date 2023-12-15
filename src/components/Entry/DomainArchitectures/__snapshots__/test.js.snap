@@ -2,175 +2,171 @@
 
 exports[`<DomainArchitecturesWithData /> should render 1`] = `
 <div
-  className="row"
+  className="vf-stack vf-stack--400"
 >
+  <h4>
+    511
+     domain architectures
+  </h4>
+  <Memo(Connect(IDAOptions))
+    count={511}
+    showDBSelector={true}
+  />
   <div
-    className="columns"
+    className="margin-bottom-large"
   >
-    <h4>
-      511
-       domain architectures
-    </h4>
-    <Memo(Connect(IDAOptions))
-      count={511}
-      showDBSelector={true}
+    <Memo(Loadable)
+      data={
+        {
+          "ida": "PF00594:IPR000294-PF00051:IPR000001-PF00051:IPR000001-PF09396:IPR018992-PF00089:IPR001254",
+          "ida_id": "f4536d89e1b17ef8000602879b888026d22d1348",
+          "unique_proteins": 301,
+        }
+      }
+      processData={[Function]}
     />
-    <div
-      className="margin-bottom-large"
-    >
-      <Memo(Loadable)
-        data={
+    <div>
+      <Memo(Connect(Link))
+        to={
           {
-            "ida": "PF00594:IPR000294-PF00051:IPR000001-PF00051:IPR000001-PF09396:IPR018992-PF00089:IPR001254",
-            "ida_id": "f4536d89e1b17ef8000602879b888026d22d1348",
-            "unique_proteins": 301,
-          }
-        }
-        processData={[Function]}
-      />
-      <div>
-        <Memo(Connect(Link))
-          to={
-            {
-              "description": {
-                "entry": {
-                  "accession": "IPR000001",
-                  "db": "pfam",
-                },
-                "main": {
-                  "key": "protein",
-                },
-                "protein": {
-                  "db": "UniProt",
-                },
+            "description": {
+              "entry": {
+                "accession": "IPR000001",
+                "db": "pfam",
               },
-              "search": {
-                "ida": "f4536d89e1b17ef8000602879b888026d22d1348",
+              "main": {
+                "key": "protein",
               },
-            }
-          }
-        >
-          There 
-          are
-           
-          301
-           
-          proteins
-           
-        </Memo(Connect(Link))>
-        with this architecture
-        :
-      </div>
-      <TextIDA
-        accessions={
-          [
-            "PF00594",
-            "PF00051",
-            "PF00051",
-            "PF09396",
-            "PF00089",
-          ]
-        }
-      />
-      <IDAProtVista
-        databases={
-          {
-            "interpro": {
-              "canonical": "interpro",
-              "name": "InterPro",
-              "releaseDate": "2019-07-04T00:00:00Z",
-              "type": "entry",
-              "version": "75.0",
+              "protein": {
+                "db": "UniProt",
+              },
+            },
+            "search": {
+              "ida": "f4536d89e1b17ef8000602879b888026d22d1348",
             },
           }
         }
-        highlight={
-          [
-            "IPR000001",
-          ]
-        }
-        length={1000}
-        matches={
-          [
-            {
-              "accession": "PF00594",
-              "locations": [
-                {
-                  "fragments": [
-                    {
-                      "end": 199,
-                      "start": 5,
-                    },
-                  ],
-                },
-              ],
-              "name": "PF00594",
-              "unintegrated": false,
-            },
-            {
-              "accession": "PF00051",
-              "locations": [
-                {
-                  "fragments": [
-                    {
-                      "end": 398,
-                      "start": 204,
-                    },
-                  ],
-                },
-                {
-                  "fragments": [
-                    {
-                      "end": 597,
-                      "start": 403,
-                    },
-                  ],
-                },
-              ],
-              "name": "PF00051",
-              "unintegrated": false,
-            },
-            {
-              "accession": "PF09396",
-              "locations": [
-                {
-                  "fragments": [
-                    {
-                      "end": 796,
-                      "start": 602,
-                    },
-                  ],
-                },
-              ],
-              "name": "PF09396",
-              "unintegrated": false,
-            },
-            {
-              "accession": "PF00089",
-              "locations": [
-                {
-                  "fragments": [
-                    {
-                      "end": 995,
-                      "start": 801,
-                    },
-                  ],
-                },
-              ],
-              "name": "PF00089",
-              "unintegrated": false,
-            },
-          ]
-        }
-        maxLength={1000}
-      />
+      >
+        There 
+        are
+         
+        301
+         
+        proteins
+         
+      </Memo(Connect(Link))>
+      with this architecture
+      :
     </div>
-    <Footer
-      actualSize={511}
-      notFound={false}
-      pagination={{}}
-      withPageSizeSelector={true}
+    <TextIDA
+      accessions={
+        [
+          "PF00594",
+          "PF00051",
+          "PF00051",
+          "PF09396",
+          "PF00089",
+        ]
+      }
+    />
+    <IDAProtVista
+      databases={
+        {
+          "interpro": {
+            "canonical": "interpro",
+            "name": "InterPro",
+            "releaseDate": "2019-07-04T00:00:00Z",
+            "type": "entry",
+            "version": "75.0",
+          },
+        }
+      }
+      highlight={
+        [
+          "IPR000001",
+        ]
+      }
+      length={1000}
+      matches={
+        [
+          {
+            "accession": "PF00594",
+            "locations": [
+              {
+                "fragments": [
+                  {
+                    "end": 199,
+                    "start": 5,
+                  },
+                ],
+              },
+            ],
+            "name": "PF00594",
+            "unintegrated": false,
+          },
+          {
+            "accession": "PF00051",
+            "locations": [
+              {
+                "fragments": [
+                  {
+                    "end": 398,
+                    "start": 204,
+                  },
+                ],
+              },
+              {
+                "fragments": [
+                  {
+                    "end": 597,
+                    "start": 403,
+                  },
+                ],
+              },
+            ],
+            "name": "PF00051",
+            "unintegrated": false,
+          },
+          {
+            "accession": "PF09396",
+            "locations": [
+              {
+                "fragments": [
+                  {
+                    "end": 796,
+                    "start": 602,
+                  },
+                ],
+              },
+            ],
+            "name": "PF09396",
+            "unintegrated": false,
+          },
+          {
+            "accession": "PF00089",
+            "locations": [
+              {
+                "fragments": [
+                  {
+                    "end": 995,
+                    "start": 801,
+                  },
+                ],
+              },
+            ],
+            "name": "PF00089",
+            "unintegrated": false,
+          },
+        ]
+      }
+      maxLength={1000}
     />
   </div>
+  <Footer
+    actualSize={511}
+    notFound={false}
+    pagination={{}}
+    withPageSizeSelector={true}
+  />
 </div>
 `;
