@@ -11,8 +11,12 @@ import styles from './style.css';
 
 const css = cssBinder(styles);
 
+export const getDescriptionText = (
+  description: string | StructuredDescription,
+) => (typeof description === 'string' ? description : description.text);
+
 type Props = {
-  textBlocks: Array<string>;
+  textBlocks: Array<string | StructuredDescription>;
   literature?: Array<[string, Reference]>;
   accession?: string;
   withoutIDs?: boolean;
@@ -21,7 +25,7 @@ class Description extends PureComponent<Props> {
   render() {
     const { textBlocks, literature, withoutIDs } = this.props;
     const sections = textBlocks.map((e) => {
-      return transformFormatted(e) as string[];
+      return transformFormatted(getDescriptionText(e)) as string[];
     });
 
     return (
@@ -43,8 +47,8 @@ class Description extends PureComponent<Props> {
                   prev.length ? <br key={key} /> : null,
                   curr,
                 ],
-                [] as (JSX.Element | null)[]
-              )
+                [] as (JSX.Element | null)[],
+              ),
           )
           .reduce(
             (prev, curr, key) => [
@@ -54,7 +58,7 @@ class Description extends PureComponent<Props> {
               ) : null,
               curr,
             ],
-            [] as ((JSX.Element | null)[] | JSX.Element | null)[]
+            [] as ((JSX.Element | null)[] | JSX.Element | null)[],
           )}
       </div>
     );

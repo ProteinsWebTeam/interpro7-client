@@ -10,6 +10,7 @@ import Literature, {
 } from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { getDescriptionText } from 'components/Description';
 
 import MemberDBSubtitle from './MemberDBSubtitle';
 import SidePanel from './SidePanel';
@@ -94,13 +95,16 @@ const SummaryEntry = ({
   const filterIntegratedCites = Object.fromEntries(
     Object.keys(metadata.literature || {})
       .filter((cite) => !integratedCitations.includes(cite))
-      .map((cite) => [cite, metadata.literature[cite]])
+      .map((cite) => [cite, metadata.literature[cite]]),
   );
   const [included, extra] = splitCitations(filterIntegratedCites, citations);
 
-  const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
+  const desc = (metadata.description || []).reduce(
+    (e, acc) => getDescriptionText(e) + acc,
+    '',
+  ) as string;
   (included as Array<[string, Reference]>).sort(
-    (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
+    (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]),
   );
 
   const selectDescriptionComponent = () => {
