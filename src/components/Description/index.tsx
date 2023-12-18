@@ -15,6 +15,28 @@ export const getDescriptionText = (
   description: string | StructuredDescription,
 ) => (typeof description === 'string' ? description : description.text);
 
+export enum DESCRIPTION_TYPE {
+  EMPTY,
+  CURATED,
+  LLM_CHECKED,
+  LLM_UNCHECKED,
+}
+export const getDescriptionType = (
+  description: Array<string | StructuredDescription>,
+): DESCRIPTION_TYPE => {
+  if (!description?.length) return DESCRIPTION_TYPE.EMPTY;
+  if (typeof description?.[0] === 'string') return DESCRIPTION_TYPE.CURATED;
+  const llmDescrpitions = description.filter(
+    (desc) => (desc as StructuredDescription).llm,
+  );
+  const isLLM = !!llmDescrpitions.length;
+  if (isLLM) {
+    return (llmDescrpitions?.[0] as StructuredDescription).checked
+      ? DESCRIPTION_TYPE.LLM_CHECKED
+      : DESCRIPTION_TYPE.LLM_UNCHECKED;
+  }
+  return DESCRIPTION_TYPE.CURATED;
+};
 type Props = {
   textBlocks: Array<string | StructuredDescription>;
   literature?: Array<[string, Reference]>;

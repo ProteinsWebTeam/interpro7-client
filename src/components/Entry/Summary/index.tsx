@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 import GoTerms from 'components/GoTerms';
-import Description from 'components/Description';
+import Description, {
+  getDescriptionType,
+  getDescriptionText,
+  DESCRIPTION_TYPE,
+} from 'components/Description';
 import DescriptionFromIntegrated from 'components/Description/DescriptionFromIntegrated';
 import DescriptionLLM from 'components/Description/DescriptionLLM';
 import Literature, {
@@ -10,7 +14,6 @@ import Literature, {
 } from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { getDescriptionText } from 'components/Description';
 
 import MemberDBSubtitle from './MemberDBSubtitle';
 import SidePanel from './SidePanel';
@@ -108,7 +111,8 @@ const SummaryEntry = ({
   );
 
   const selectDescriptionComponent = () => {
-    if ((metadata.description || []).length) {
+    const descriptionType = getDescriptionType(metadata.description || []);
+    if (descriptionType === DESCRIPTION_TYPE.CURATED) {
       return (
         <>
           <h4>{headerText || 'Description'}</h4>
@@ -127,13 +131,16 @@ const SummaryEntry = ({
           headerText={headerText || 'Description'}
         />
       );
-    } else if (metadata.llm_description) {
+    } else if (
+      descriptionType === DESCRIPTION_TYPE.LLM_CHECKED ||
+      descriptionType === DESCRIPTION_TYPE.LLM_UNCHECKED
+    ) {
       return (
         <>
           <h4>{headerText || 'Description'}</h4>
           <DescriptionLLM
             accession={metadata.accession}
-            text={metadata.llm_description}
+            text={metadata.description.map(getDescriptionText).join(' ')}
           />
         </>
       );

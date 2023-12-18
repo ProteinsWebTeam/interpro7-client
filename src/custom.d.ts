@@ -303,7 +303,6 @@ interface EntryMetadata extends Metadata {
     accession: string;
     name: string;
   };
-  llm_description: string | null;
   is_removed?: boolean;
 }
 
