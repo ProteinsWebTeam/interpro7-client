@@ -3,69 +3,71 @@
 exports[`<DescriptionLLM /> should render 1`] = `
 <React.Fragment>
   <div
-    className="row"
+    className="vf-stack vf-stack--400"
   >
     <div
-      className="columns large-12"
+      className="callout warning"
+      style={
+        {
+          "alignItems": "center",
+          "display": "flex",
+        }
+      }
     >
-      <div
-        className="callout warning"
+      <span
+        className="small icon icon-common icon-exclamation-triangle"
         style={
           {
-            "alignItems": "center",
-            "display": "flex",
+            "color": "#664d03",
+            "fontSize": "2em",
+            "paddingRight": "1rem",
           }
         }
-      >
-        <span
-          className="small icon icon-common icon-exclamation-triangle"
-          style={
-            {
-              "color": "#664d03",
-              "fontSize": "2em",
-              "paddingRight": "1rem",
-            }
-          }
-        />
+      />
+       
+      <p>
+        This description has been automatically generated using
          
-        <p>
-          This description has been automatically generated using
+        <Memo(Connect(Link))
+          href="https://openai.com/research/gpt-4"
+          target="_blank"
+        >
+          GPT-4
+        </Memo(Connect(Link))>
+        , an AI language model, and is based on data extracted from
+         
+        <Memo(Connect(Link))
+          href="https://www.uniprot.org"
+          target="_blank"
+        >
+          UniProtKB/Swiss-Prot
+        </Memo(Connect(Link))>
+        .
+         
+        <b>
+          It has not undergone a thorough review by curators. 
+        </b>
+         
+        Please exercise discretion when interpreting the information provided and consider it as preliminary.
+        <br />
+        <Memo(Connect(Link))
+          href="https://interpro-documentation.readthedocs.io/en/latest/llm_descriptions.html"
+          target="_blank"
+        >
+          Read more on description generation.
+        </Memo(Connect(Link))>
+        <Memo(Connect(Link))
+          className="vf-button vf-button--secondary vf-button--sm"
+          href="https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=PTHR48251"
+          target="_blank"
+        >
+          <span
+            className="small icon icon-common icon-pencil-alt"
+          />
            
-          <Memo(Connect(Link))
-            href="https://openai.com/research/gpt-4"
-            target="_blank"
-          >
-            GPT-4
-          </Memo(Connect(Link))>
-          , an AI language model, and is based on data extracted from
-           
-          <Memo(Connect(Link))
-            href="https://www.uniprot.org"
-            target="_blank"
-          >
-            UniProtKB/Swiss-Prot
-          </Memo(Connect(Link))>
-          . It has not undergone a thorough review by curators. Please exercise discretion when interpreting the information provided and consider it as preliminary.
-          <br />
-          <Memo(Connect(Link))
-            href="https://interpro-documentation.readthedocs.io/en/latest/llm_descriptions.html"
-            target="_blank"
-          >
-            Read more on description generation.
-          </Memo(Connect(Link))>
-          <Memo(Connect(Link))
-            className="vf-button vf-button--secondary vf-button--sm"
-            href="https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=PTHR48251"
-            target="_blank"
-          >
-            <span
-              className="small icon icon-common icon-pencil-alt"
-            />
-             
-            Provide feedback
-          </Memo(Connect(Link))>
-        </p>
-      </div>
+          Provide feedback
+        </Memo(Connect(Link))>
+      </p>
     </div>
   </div>
   <Description

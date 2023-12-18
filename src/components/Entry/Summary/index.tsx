@@ -141,6 +141,7 @@ const SummaryEntry = ({
           <DescriptionLLM
             accession={metadata.accession}
             text={metadata.description.map(getDescriptionText).join(' ')}
+            checked={descriptionType === DESCRIPTION_TYPE.LLM_CHECKED}
           />
         </>
       );
