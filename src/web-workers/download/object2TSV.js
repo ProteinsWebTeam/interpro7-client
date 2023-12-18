@@ -40,15 +40,27 @@ const locationsToString = (
         )
         .join(',')
     : '';
-const IDADomainsToString = (domains) =>
-  domains
-    ? domains
-        .map(
-          ({ accession, name, coordinates }) =>
-            `${accession}(${name})[${coordinates[0].fragments[0].start}-${coordinates[0].fragments[0].end}]`,
-        )
-        .join('\t')
-    : '';
+
+const domains2string = (pfam, ipro) =>
+  `${pfam.accession}(${pfam.name})${
+    ipro ? `:${ipro.accession}(${ipro.name})` : ''
+  }[${pfam.coordinates[0].fragments[0].start}-${
+    pfam.coordinates[0].fragments[0].end
+  }]`;
+
+const IDADomainsToString = (domains) => {
+  if (!domains?.length) return '';
+  const pfamDomain = domains[0];
+  const iproDomain = domains?.[1];
+  if (!iproDomain) return domains2string(pfamDomain).trim();
+  if (iproDomain.accession.startsWith('PF'))
+    return `${domains2string(pfamDomain)}\t${IDADomainsToString(
+      domains.slice(1),
+    )}`.trim();
+  return `${domains2string(pfamDomain, iproDomain)}\t${IDADomainsToString(
+    domains.slice(2),
+  )}`.trim();
+};
 
 export const columns /*: {
   entry: Object,
