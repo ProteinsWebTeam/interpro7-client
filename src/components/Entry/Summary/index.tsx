@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import GoTerms from 'components/GoTerms';
 import Description, {
-  getDescriptionType,
+  hasLLMParagraphs,
   getDescriptionText,
-  DESCRIPTION_TYPE,
 } from 'components/Description';
 import DescriptionFromIntegrated from 'components/Description/DescriptionFromIntegrated';
 import DescriptionLLM from 'components/Description/DescriptionLLM';
@@ -111,11 +110,13 @@ const SummaryEntry = ({
   );
 
   const selectDescriptionComponent = () => {
-    const descriptionType = getDescriptionType(metadata.description || []);
-    if (descriptionType === DESCRIPTION_TYPE.CURATED) {
+    if ((metadata.description || []).length) {
       return (
         <>
           <h4>{headerText || 'Description'}</h4>
+          {hasLLMParagraphs(metadata.description || []) ? (
+            <DescriptionLLM accession={metadata.accession} />
+          ) : null}
           <Description
             textBlocks={metadata.description}
             literature={included as Array<[string, Reference]>}
@@ -130,20 +131,6 @@ const SummaryEntry = ({
           setIntegratedCitations={setIntegratedCitations}
           headerText={headerText || 'Description'}
         />
-      );
-    } else if (
-      descriptionType === DESCRIPTION_TYPE.LLM_CHECKED ||
-      descriptionType === DESCRIPTION_TYPE.LLM_UNCHECKED
-    ) {
-      return (
-        <>
-          <h4>{headerText || 'Description'}</h4>
-          <DescriptionLLM
-            accession={metadata.accession}
-            text={metadata.description.map(getDescriptionText).join(' ')}
-            checked={descriptionType === DESCRIPTION_TYPE.LLM_CHECKED}
-          />
-        </>
       );
     }
     return null;

@@ -1,5 +1,5 @@
-@import '../../styles/timing.css';
-@import '../../styles/colors.css';
+@import "../../styles/timing.css";
+@import "../../styles/colors.css";
 
 @supports (initial-letter: 2) {
   .paragraph::first-letter {
@@ -22,4 +22,18 @@ a.text-high:focus {
 
 .description hr {
   margin: 0.75em;
+}
+
+div.llm {
+  background-color: rgb(255, 241, 213, 0.3);
+}
+
+div.llm.checked {
+  background-color: rgb(236, 255, 224, 0.3);
+}
+div.llm .icon {
+  color: lightslategray;
+  &:hover {
+    color: inherit;
+  }
 }
