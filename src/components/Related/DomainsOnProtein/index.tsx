@@ -22,7 +22,7 @@ import EdgeCase from 'components/EdgeCase';
 // } from './ConservationProvider';
 import mergeExtraFeatures from './mergeExtraFeatures';
 import mergeResidues from './mergeResidues';
-import DomainsOnProteinLoaded from './DomainsOnProteinLoaded';
+import DomainsOnProteinLoaded, { makeTracks } from './DomainsOnProteinLoaded';
 import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
 
 import cssBinder from 'styles/cssBinder';
@@ -145,21 +145,12 @@ const DomainOnProteinWithoutData = ({
   if (!processedData) return null;
   const { interpro, unintegrated, other, representativeDomains } =
     processedData;
-  const groups = groupByEntryType(
-    interpro as Array<{ accession: string; type: string }>,
-  );
-  (unintegrated as Array<{ accession: string; type: string }>).sort(
-    orderByAccession,
-  );
-  const mergedData: ProteinViewerDataObject<MinimalFeature> = {
-    ...groups,
-    unintegrated: unintegrated as Array<MinimalFeature>,
-  };
-  if (other) mergedData.other_features = other;
-  if (representativeDomains?.length)
-    mergedData.representative_domains =
-      representativeDomains as MinimalFeature[];
-
+  const mergedData = makeTracks({
+    interpro: interpro as Array<{ accession: string; type: string }>,
+    unintegrated: unintegrated as Array<{ accession: string; type: string }>,
+    other: other as Array<MinimalFeature>,
+    representativeDomains: representativeDomains as Array<MinimalFeature>,
+  });
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;
   }

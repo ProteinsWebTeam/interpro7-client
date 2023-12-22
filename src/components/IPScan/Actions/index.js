@@ -14,11 +14,10 @@ import {
 } from 'actions/creators';
 import { foundationPartial } from 'styles/foundation';
 
-import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
-const f = foundationPartial(fonts, ipro, local);
+const f = foundationPartial(fonts, local);
 
 /*:: type Props = {
   localID: string,

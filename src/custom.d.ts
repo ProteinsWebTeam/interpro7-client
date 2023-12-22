@@ -142,7 +142,6 @@ type UISettings = {
   structureViewer: boolean;
   shouldHighlight: boolean;
   idaAccessionDB: string;
-  idaLabel: string;
   isPIPEnabled: boolean;
 };
 type LabelUISettings = {
@@ -240,10 +239,15 @@ type LiteratureMetadata = {
   [PubID: string]: Reference;
 };
 
+type StructuredDescription = {
+  text: string;
+  llm: boolean;
+  checked: boolean;
+};
 interface Metadata {
   accession: string;
   source_database: string;
-  description: Array<string>;
+  description: Array<string | StructuredDescription>;
   counters: {
     [resource: string]:
       | number
@@ -299,7 +303,6 @@ interface EntryMetadata extends Metadata {
     accession: string;
     name: string;
   };
-  llm_description: string | null;
   is_removed?: boolean;
 }
 
@@ -310,6 +313,7 @@ type SourceOrganism = {
 interface ProteinMetadata extends Metadata {
   id?: string;
   name: string;
+  description: Array<string>;
   source_database: 'uniprot' | 'reviewed' | 'unreviewed';
   length: number;
   sequence: string;
@@ -660,6 +664,32 @@ type Taxon = {
   species: number;
   children: Array<Taxon>;
 };
+
+type IDAResult = {
+  ida: string;
+  ida_id: string;
+  representative: {
+    accession: string;
+    length: number;
+    domains: Array<{
+      accession: string;
+      name: string;
+      coordinates: [
+        {
+          fragments: [
+            {
+              start: number;
+              end: number;
+            },
+          ];
+        },
+      ];
+    }>;
+  };
+  unique_proteins: number;
+};
+type IDAPayload = PayloadList<IDAResult>;
+
 type Genome3DAnnotation = {
   accession: string;
   metadata: {
@@ -815,3 +845,54 @@ interface EntryStructureMatch extends MatchI {
 type AnyMatch = Partial<EntryProteinMatch> &
   Partial<EntryStructureMatch> &
   Partial<StructureProteinMatch>;
+
+type Iprscan5Result = {
+  sequence: string;
+  md5: string;
+  matches: Array<{
+    signature: {
+      accession: string;
+    };
+    locations: Array<{
+      start: number;
+      end: number;
+      hmmStart: number;
+      hmmEnd: number;
+      hmmLength: number;
+      hmmBounds: string;
+      evalue: number;
+      score: number;
+      envelopeStart: number;
+      envelopeEnd: number;
+      postProcessed: true;
+      'location-fragments': Array<{
+        start: number;
+        end: number;
+        'dc-status': string;
+      }>;
+    }>;
+    evalue?: number;
+    score?: number;
+    'model-ac'?: string;
+  }>;
+  xref: Array<{
+    name: string;
+    id: string;
+  }>;
+};
+type Iprscan5Payload = {
+  'interproscan-version': string;
+  results: Array<Iprscan5Result>;
+};
+
+type IprscanMetaIDB = {
+  group: string;
+  hasResults: boolean;
+  saved: boolean;
+  localID: string;
+  remoteID: string;
+  localTitle: string;
+  status: string;
+  type: string;
+  times: Record<string, number>;
+};

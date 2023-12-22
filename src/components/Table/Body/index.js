@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -75,7 +74,7 @@ class NoRows extends PureComponent /*:: <Props> */ {
   columns: Array<string>,
   rowClassName:string | function,
   groups?: Array<string>,
-  groupActions?: (string)=>any,
+  groupActions?: React$Element<any>,
   notFound: boolean
 } */
 
@@ -90,7 +89,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
     notFound: T.bool,
     rowClassName: T.oneOfType([T.string, T.func]),
     groups: T.arrayOf(T.string),
-    groupActions: T.func,
+    groupActions: T.elementType,
   };
 
   static defaultProps = {
@@ -141,7 +140,7 @@ class Body extends PureComponent /*:: <BodyProps> */ {
             groups?.length && row.group && curentGroup !== row.group;
           if (shouldRenderGroupHeader) {
             curentGroup = row.group;
-            GroupActions = groupActions?.(row.group);
+            GroupActions = groupActions;
           }
           return (
             <React.Fragment key={rowData[rowKey] || index}>
@@ -152,17 +151,18 @@ class Body extends PureComponent /*:: <BodyProps> */ {
                       color: 'var(--colors-progress, #1f6ca2)',
                       textAlign: 'start',
                       backgroundColor: colorHash.hex(row.group),
+                      position: 'unset',
                     }}
                   >
                     {row.group}
                   </th>
-                  {GroupActions && (
+                  {!!GroupActions && (
                     <>
                       {columns.slice(2).map((_, i) => (
-                        <th key={i} />
+                        <th key={i} style={{ position: 'unset' }} />
                       ))}
-                      <th>
-                        <GroupActions />
+                      <th style={{ position: 'unset' }}>
+                        <GroupActions group={row.group} />
                       </th>
                     </>
                   )}

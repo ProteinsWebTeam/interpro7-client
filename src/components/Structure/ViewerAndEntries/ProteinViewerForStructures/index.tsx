@@ -43,7 +43,8 @@ const ProteinViewerForStructure = ({
     <div>
       <EntriesOnStructure
         structure={structure}
-        entries={interpro.concat(unintegrated) as StructureLinkedObject[]}
+        entries={interpro as StructureLinkedObject[]}
+        unintegrated={unintegrated as StructureLinkedObject[]}
         secondaryStructures={secondaryData}
         representativeDomains={representativeDomains}
       />

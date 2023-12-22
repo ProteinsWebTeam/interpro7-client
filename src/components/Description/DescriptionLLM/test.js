@@ -5,13 +5,10 @@ import DescriptionLLM from '.';
 
 const renderer = new ShallowRenderer();
 const accession = 'PTHR48251';
-const description = '<p>The function of the family is not clear.</p>';
 
 describe('<DescriptionLLM />', () => {
   test('should render', () => {
-    renderer.render(
-      <DescriptionLLM accession={accession} text={description} />,
-    );
+    renderer.render(<DescriptionLLM accession={accession} />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 });

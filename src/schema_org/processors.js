@@ -1,5 +1,6 @@
 import config from 'config';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { getDescriptionText } from 'components/Description';
 
 const INTERPRO_DESCRIPTION =
   'InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites';
@@ -175,7 +176,9 @@ export const endpoint2type = {
 };
 
 const cleanUpDescription = (description /*: string */) =>
-  ((Array.isArray(description) ? description[0] : description) || '')
+  getDescriptionText(
+    (Array.isArray(description) ? description[0] : description) || '',
+  )
     .replace(/\r/g, '')
     .replace(/\n/g, '')
     .replace(/<\/?[a-zA-Z]+>/g, '')

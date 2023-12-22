@@ -321,16 +321,6 @@ export default class Webinar extends PureComponent /*:: <{}> */ {
             </div>
 
             <div className={f('card-content')}>
-              <div className={f('card-title')}>
-                <h4>
-                  <Link
-                    href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
-                    target="_blank"
-                  >
-                    Genome 3D annotations in InterPro webinar
-                  </Link>
-                </h4>
-              </div>
               <div className={f('card-info')}>
                 <div className={f('card-info-author')}>
                   <em
@@ -360,25 +350,6 @@ export default class Webinar extends PureComponent /*:: <{}> */ {
                 predictions from Genome3D annotations, and how they are
                 integrated in InterPro.
               </div>
-            </div>
-
-            <div className={f('card-more')}>
-              <Link
-                href="//www.ebi.ac.uk/training/online/course/genome3d-annotations-interpro-webinar"
-                target="_blank"
-              >
-                <div
-                  className={f(
-                    'button-more',
-                    'icon',
-                    'icon-common',
-                    'icon-right',
-                  )}
-                  data-icon="&#xf061;"
-                >
-                  Watch it here
-                </div>
-              </Link>
             </div>
           </div>
         </div>

@@ -68,24 +68,12 @@ const _ConnectedSortButton = ({
     if (sortBy === `-${field}`) mode = SORT_DOWN;
   }
   const handleClick = () => {
-    let newMode = (mode + 1) % NUMBER_OF_SORT_MODES;
+    const newMode = (mode + 1) % NUMBER_OF_SORT_MODES;
 
-    // For Genome3D multiple columns can be sorted
-    if (description[description.main.key].detail === 'genome3d') {
-      newMode = (mode + 1) % 2;
-      if (newMode) {
-        search.sort_by = search.sort_by ? `${search.sort_by},${field}` : field;
-      } else {
-        const oldSet = search.sort_by.split(',');
-        oldSet.splice(oldSet.indexOf(field), 1);
-        search.sort_by = oldSet.join(',');
-      }
+    if (newMode > 0) {
+      search.sort_by = `${newMode === SORT_DOWN ? '-' : ''}${field}`;
     } else {
-      if (newMode > 0) {
-        search.sort_by = `${newMode === SORT_DOWN ? '-' : ''}${field}`;
-      } else {
-        delete search.sort_by;
-      }
+      delete search.sort_by;
     }
     goToCustomLocation({ description: description, search: { ...search } });
   };

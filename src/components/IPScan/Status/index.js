@@ -178,7 +178,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           showTableIcon={false}
           shouldGroup={true}
           // eslint-disable-next-line react/display-name
-          groupActions={(group) => () => <GroupActions group={group} />}
+          groupActions={GroupActions}
         >
           <ExtraOptions>
             <DropDownButton label="Clear All" icon="&#xf1f8;">

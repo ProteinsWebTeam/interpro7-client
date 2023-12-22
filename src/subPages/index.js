@@ -51,12 +51,6 @@ const SimilarProteins = loadable({
       /* webpackChunkName: "similar-proteins-subpage" */ './SimilarProteins'
     ),
 });
-const Genome3d = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "genome3d-subpage" */ 'components/Genome3D/List'
-    ),
-});
 const Curation = loadable({
   loader: () => import(/* webpackChunkName: "curation-subpage" */ './Curation'),
 });
@@ -128,39 +122,6 @@ const mapStateToPropsForHMMModel = createSelector(
   },
 );
 
-const g3dVariables = {
-  accession: 'uniprot',
-  evidences: 'resource',
-};
-const getGenome3dURL = createSelector(
-  (state) => state.settings.genome3d,
-  (state) => state.customLocation.search,
-  (state) => state.settings.navigation.pageSize,
-  (state) => state.customLocation.description.entry.accession,
-  ({ protocol, hostname, port, root }, search, settingsPageSize, accession) => {
-    const query = {
-      rows: search.page_size || settingsPageSize,
-    };
-    if (search.page) query.page = search.page;
-    if (search.accession) query.filter_uniprot = search.accession.toUpperCase();
-    if (search.evidences) query.filter_resource = search.evidences;
-    if (search.confidence) query.filter_min_confidence = search.confidence;
-
-    if (search.sort_by) {
-      const variables = search.sort_by.split(',');
-      query.order_by = variables
-        .map((term) => g3dVariables[term] || term)
-        .join(',');
-    }
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}interpro/ipr/${accession}`,
-      query,
-    });
-  },
-);
 const getDBModifierURL = (db, modifier) =>
   createSelector(
     (state) => state.settings.api,
@@ -206,12 +167,6 @@ const subPages = new Map([
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
-  [
-    'genome3d',
-    loadData({
-      getUrl: getGenome3dURL,
-    })(Genome3d),
-  ],
   ['similar_proteins', SimilarProteins],
   ['curation', Curation],
 ]);

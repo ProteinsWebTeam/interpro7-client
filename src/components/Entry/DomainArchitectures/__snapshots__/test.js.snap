@@ -10,7 +10,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
     <React.Fragment>
       <h4>
         511
-         domain architectures found.
+         domain architectures
       </h4>
       <Memo(Connect(IDAOptions)) />
     </React.Fragment>

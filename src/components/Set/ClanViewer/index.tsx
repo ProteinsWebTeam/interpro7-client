@@ -71,7 +71,7 @@ class ClanViewer extends PureComponent<Props, State> {
     )
       this.setState({ showClanViewer: true });
     this._ref.current?.addEventListener('click', (evt: Event) =>
-      this._handleClick(evt)
+      this._handleClick(evt),
     );
     this.updateLocationIfAllDB();
   }
@@ -113,7 +113,7 @@ class ClanViewer extends PureComponent<Props, State> {
     if (
       (this.state.showClanViewer ||
         this.props.data.metadata.relationships.nodes.length <=
-        MAX_NUMBER_OF_NODES) &&
+          MAX_NUMBER_OF_NODES) &&
       !this.loaded
     ) {
       const data = this.props.data.metadata.relationships;
@@ -161,21 +161,21 @@ class ClanViewer extends PureComponent<Props, State> {
     const metadata =
       this.props.loading || !this.props.data.metadata
         ? {
-          accession: '',
-          description: '',
-          id: '',
-          source_database: '',
-          authors: null,
-          literature: null,
-          relationships: null,
-        }
+            accession: '',
+            description: '',
+            id: '',
+            source_database: '',
+            authors: null,
+            literature: null,
+            relationships: null,
+          }
         : this.props.data.metadata;
 
     return (
-      <div className={css('row')}>
+      <div className={css('vf-stack', 'vf-stack--400')}>
         {!this.state.showClanViewer &&
           (metadata.relationships?.nodes?.length || 0) >
-          MAX_NUMBER_OF_NODES && (
+            MAX_NUMBER_OF_NODES && (
             <div
               className={css('flex-card')}
               style={{ width: '50%', padding: '1em' }}
@@ -236,7 +236,7 @@ class ClanViewer extends PureComponent<Props, State> {
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.description.set.db,
   (state: GlobalState) => state.settings.ui,
-  (db, ui) => ({ db, label: ui.labelContent })
+  (db, ui) => ({ db, label: ui.labelContent }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(ClanViewer);

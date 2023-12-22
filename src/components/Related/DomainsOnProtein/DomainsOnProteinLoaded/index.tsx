@@ -1,6 +1,10 @@
 import React, { PropsWithChildren } from 'react';
 import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import loadable from 'higherOrder/loadable';
+import {
+  groupByEntryType,
+  orderByAccession,
+} from 'components/Related/DomainsOnProtein';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -11,6 +15,7 @@ const ProteinViewer = loadable({
 const UNDERSCORE = /_/g;
 const FIRST_IN_ORDER = [
   'representative_domains',
+  'secondary_structure',
   'family',
   'domain',
   'homologous_superfamily',
@@ -30,7 +35,7 @@ const LASTS_IN_ORDER = [
 ];
 export const byEntryType = (
   [a, _]: [string, unknown],
-  [b, __]: [string, unknown]
+  [b, __]: [string, unknown],
 ) => {
   for (const label of FIRST_IN_ORDER) {
     if (a.toLowerCase() === label) return -1;
@@ -41,6 +46,43 @@ export const byEntryType = (
     if (b.toLowerCase() === l) return -1;
   }
   return a > b ? 1 : 0;
+};
+type tracksProps = {
+  interpro: Array<{ accession: string; type: string }>;
+  unintegrated: Array<MinimalFeature>;
+  other?: Array<MinimalFeature>;
+  representativeDomains?: Array<MinimalFeature>;
+};
+export const makeTracks = ({
+  interpro,
+  unintegrated,
+  other,
+  representativeDomains,
+}: tracksProps): ProteinViewerDataObject<MinimalFeature> => {
+  const groups = groupByEntryType(interpro);
+  unintegrated.sort(orderByAccession);
+  const mergedData: ProteinViewerDataObject<MinimalFeature> = {
+    ...groups,
+    unintegrated: unintegrated,
+  };
+  if (other) mergedData.other_features = other;
+  if (representativeDomains?.length)
+    mergedData.representative_domains = representativeDomains;
+  return mergedData;
+};
+
+export const flattenTracksObject = (
+  tracksObject: ProteinViewerDataObject,
+): ProteinViewerData => {
+  return (
+    Object.entries(tracksObject)
+      .sort(byEntryType)
+      // “Binding_site” -> “Binding site”
+      .map(([key, value]) => [
+        key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
+        value,
+      ])
+  );
 };
 
 type Props = PropsWithChildren<{
@@ -73,13 +115,7 @@ const DomainsOnProteinLoaded = ({
   children,
   title = 'Entry matches to this protein',
 }: Props) => {
-  const sortedData: ProteinViewerData = Object.entries(dataMerged)
-    .sort(byEntryType)
-    // “Binding_site” -> “Binding site”
-    .map(([key, value]) => [
-      key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
-      value,
-    ]);
+  const sortedData = flattenTracksObject(dataMerged);
   const protein =
     (mainData as ProteinEntryPayload).metadata ||
     (mainData as { payload: ProteinEntryPayload }).payload.metadata;

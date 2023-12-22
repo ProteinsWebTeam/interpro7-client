@@ -73,7 +73,7 @@ const ProteinViewerOptions = ({
   useEffect(() => {
     customElements.whenDefined('nightingale-saver').then(() => {
       const saver = document.getElementById(
-        `${componentsDivId}Saver`
+        `${componentsDivId}Saver`,
       ) as NightingaleSaverCE;
       if (saver) {
         saver.preSave = () => {
@@ -92,7 +92,7 @@ const ProteinViewerOptions = ({
               Object.keys(item).forEach((key) => {
                 str = str.replace(
                   new RegExp(`\\.${key}([:,[.\\s])`, 'gm'),
-                  `.${item[key]}$1`
+                  `.${item[key]}$1`,
                 );
               });
             });
@@ -102,7 +102,7 @@ const ProteinViewerOptions = ({
             base.appendChild(style);
           } else
             console.warn(
-              "Couldn't setups the style for the nightingale-saver snapshot "
+              "Couldn't set up the style for the nightingale-saver snapshot ",
             );
         };
         saver.postSave = () => {
@@ -122,7 +122,7 @@ const ProteinViewerOptions = ({
   let ExporterButton = null;
   if (children) {
     ExporterButton = Children.toArray(children).filter(
-      (child) => (child as unknown as { type: unknown }).type === Exporter
+      (child) => (child as unknown as { type: unknown }).type === Exporter,
     )?.[0];
   }
 
@@ -131,7 +131,7 @@ const ProteinViewerOptions = ({
       changeSettingsRaw(
         'ui',
         'colorDomainsBy',
-        (evt.target as HTMLInputElement)?.value
+        (evt.target as HTMLInputElement)?.value,
       );
   };
   const toggleExpandAll = () => {
@@ -172,59 +172,66 @@ const ProteinViewerOptions = ({
             )}
           </div>
         </div>
-        <Tooltip title={'More options to customise the protein viewer'}>
-          <DropDownButton label="Options" extraClasses={css('protvista-menu')}>
-            <ul className={css('menu-options')}>
-              <li>
-                Colour By
-                <ul className={css('nested-list')}>
-                  <li>
-                    <label>
-                      <input
-                        type="radio"
-                        onChange={changeColor}
-                        value={EntryColorMode.ACCESSION}
-                        checked={colorDomainsBy === EntryColorMode.ACCESSION}
-                      />{' '}
-                      Accession
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input
-                        type="radio"
-                        onChange={changeColor}
-                        value={EntryColorMode.MEMBER_DB}
-                        checked={colorDomainsBy === EntryColorMode.MEMBER_DB}
-                      />{' '}
-                      Member Database
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input
-                        type="radio"
-                        onChange={changeColor}
-                        value={EntryColorMode.DOMAIN_RELATIONSHIP}
-                        checked={
-                          colorDomainsBy === EntryColorMode.DOMAIN_RELATIONSHIP
-                        }
-                      />{' '}
-                      Domain Relationship
-                    </label>
-                  </li>
-                </ul>
-              </li>
-              <hr />
-              <LabelBy />
-              <hr />
-              {/* <li>
+
+        <DropDownButton
+          label={
+            <Tooltip title={'Additional customization options'}>
+              Options
+            </Tooltip>
+          }
+          extraClasses={css('protvista-menu')}
+        >
+          <ul className={css('menu-options')}>
+            <li>
+              Colour By
+              <ul className={css('nested-list')}>
+                <li>
+                  <label>
+                    <input
+                      type="radio"
+                      onChange={changeColor}
+                      value={EntryColorMode.ACCESSION}
+                      checked={colorDomainsBy === EntryColorMode.ACCESSION}
+                    />{' '}
+                    Accession
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input
+                      type="radio"
+                      onChange={changeColor}
+                      value={EntryColorMode.MEMBER_DB}
+                      checked={colorDomainsBy === EntryColorMode.MEMBER_DB}
+                    />{' '}
+                    Member Database
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input
+                      type="radio"
+                      onChange={changeColor}
+                      value={EntryColorMode.DOMAIN_RELATIONSHIP}
+                      checked={
+                        colorDomainsBy === EntryColorMode.DOMAIN_RELATIONSHIP
+                      }
+                    />{' '}
+                    Domain Relationship
+                  </label>
+                </li>
+              </ul>
+            </li>
+            <hr />
+            <LabelBy />
+            <hr />
+            {/* <li>
                 Snapshot
                 <ul className={css('nested-list')}>
                   <li>
 
                   </li> */}
-              {/* <li>
+            {/* <li>
                     <ReactToPrint
                       trigger={() => (
                         <button
@@ -246,48 +253,47 @@ const ProteinViewerOptions = ({
                       onAfterPrint={() => setPrintingMode(false)}
                     />
                   </li> */}
-              {/* </ul>
+            {/* </ul>
               </li> */}
-              <hr />
-              <li>
-                <NightingaleSaver
-                  element-id={componentsDivId}
-                  background-color={'#e5e5e5'}
-                  id={`${componentsDivId}Saver`}
-                  extra-height={12}
-                  scale-factor={2}
-                >
-                  <button>
-                    <span
-                      className={css('icon', 'icon-common')}
-                      data-icon="&#xf030;"
-                    />{' '}
-                    Save as Image
-                  </button>
-                </NightingaleSaver>{' '}
-              </li>
-              <li>
-                <button
-                  onClick={toggleExpandAll}
-                  aria-label={`${expanded ? 'Collapse' : 'Expand'} all tracks`}
-                >
-                  {expanded ? 'Collapse' : 'Expand'} All Tracks
-                </button>
-              </li>
-              <hr />
-              <li key={'tooltip'}>
-                <label>
-                  <input
-                    type="checkbox"
-                    onChange={() => setTooltipEnabled(!tooltipEnabled)}
-                    checked={tooltipEnabled}
+            <hr />
+            <li>
+              <NightingaleSaver
+                element-id={componentsDivId}
+                background-color={'#e5e5e5'}
+                id={`${componentsDivId}Saver`}
+                extra-height={12}
+                scale-factor={2}
+              >
+                <button>
+                  <span
+                    className={css('icon', 'icon-common')}
+                    data-icon="&#xf030;"
                   />{' '}
-                  Tooltip {tooltipEnabled ? 'Active' : 'Inactive'}
-                </label>
-              </li>
-            </ul>
-          </DropDownButton>
-        </Tooltip>
+                  Save as Image
+                </button>
+              </NightingaleSaver>{' '}
+            </li>
+            <li>
+              <button
+                onClick={toggleExpandAll}
+                aria-label={`${expanded ? 'Collapse' : 'Expand'} all tracks`}
+              >
+                {expanded ? 'Collapse' : 'Expand'} All Tracks
+              </button>
+            </li>
+            <hr />
+            <li key={'tooltip'}>
+              <label>
+                <input
+                  type="checkbox"
+                  onChange={() => setTooltipEnabled(!tooltipEnabled)}
+                  checked={tooltipEnabled}
+                />{' '}
+                Tooltip {tooltipEnabled ? 'Active' : 'Inactive'}
+              </label>
+            </li>
+          </ul>
+        </DropDownButton>
 
         {ExporterButton ? (
           <div className={css('exporter')}>{ExporterButton}</div>
@@ -302,9 +308,9 @@ const mapStateToProps = createSelector(
   (ui: Record<string, unknown>) => ({
     colorDomainsBy:
       (ui.colorDomainsBy as string) || EntryColorMode.DOMAIN_RELATIONSHIP,
-  })
+  }),
 );
 
 export default connect(mapStateToProps, { changeSettingsRaw })(
-  ProteinViewerOptions
+  ProteinViewerOptions,
 );
