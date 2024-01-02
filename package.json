@@ -90,7 +90,7 @@
   "dependencies": {
     "@floating-ui/react": "0.26.4",
     "@floating-ui/react-dom": "2.0.4",
-    "@lit-labs/react": "1.2.1",
+    "@lit/react": "1.0.2",
     "@nightingale-elements/nightingale-colored-sequence": "4.5.0-alpha.0",
     "@nightingale-elements/nightingale-heatmap": "4.5.0-alpha.0",
     "@nightingale-elements/nightingale-interpro-track": "4.5.0-alpha.0",
