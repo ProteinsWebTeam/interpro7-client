@@ -262,6 +262,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
               <Tooltip title={`Job ${status}`}>
                 {(status === 'running' ||
                   status === 'created' ||
+                  status === 'queued' ||
                   status === 'submitted') && (
                   <div>
                     <SpinningCircle />

@@ -4,6 +4,7 @@
 
 body nav.buttons {
   display: flex;
+  justify-content: space-evenly;
   & button,
   & a.group,
   & a.group:visited,

@@ -15,6 +15,7 @@ const f = foundationPartial(fonts, style);
 const _StatusTooltip = ({ status /*: string */ }) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
+      status === 'queued' ||
       status === 'created' ||
       status === 'importing' ||
       status === 'submitted') && (
