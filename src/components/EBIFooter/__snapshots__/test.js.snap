@@ -287,7 +287,7 @@ exports[`<EBIFooter /> should render 1`] = `
         className="legal"
       >
         Copyright © EMBL-EBI 
-        2023
+        2024
          | EMBL-EBI is 
         <Memo(Connect(Link))
           href="//www.embl.org/"

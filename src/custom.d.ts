@@ -338,22 +338,25 @@ type PayloadList<Payload> = {
   previous?: string | null;
   results: Array<Payload>;
 };
+type Fragment = {
+  start: number;
+  end: number;
+  'dc-status'?: string;
+};
+type BaseLocation = {
+  fragments: Array<Fragment>;
+};
 type ProteinEntryPayload = {
   metadata: ProteinMetadata;
   entries: Array<{
     accession: string;
-    entry_protein_locations: [
-      {
-        fragments: Array<{
-          start: number;
-          end: number;
-          'dc-status'?: string;
-        }>;
+    entry_protein_locations: Array<
+      BaseLocation & {
         model: string | null;
         score: number | null;
         subfamily: { accession: string };
-      },
-    ];
+      }
+    >;
     protein_length: number;
     source_database: string;
     entry_type: string;
@@ -846,35 +849,57 @@ type AnyMatch = Partial<EntryProteinMatch> &
   Partial<EntryStructureMatch> &
   Partial<StructureProteinMatch>;
 
+type Iprscan5Signature = {
+  accession: string;
+  description: string;
+  name: string;
+  signatureLibraryRelease: {
+    library: string;
+    version: string;
+  };
+  entry: Iprscan5Entry;
+};
+type Iprscan5Entry = {
+  accession: string;
+  name: string;
+  description: string;
+  type: string;
+  goXRefs: unknown[];
+  pathwayXRefs: unknown[];
+};
+type Iprscan5Location = {
+  start: number;
+  end: number;
+  hmmStart: number;
+  hmmEnd: number;
+  hmmLength: number;
+  hmmBounds: string;
+  evalue: number;
+  score: number;
+  envelopeStart: number;
+  envelopeEnd: number;
+  postProcessed: true;
+  'location-fragments': Array<Fragment>;
+  representative?: boolean;
+  sites?: Array<{
+    label?: string;
+    description?: string;
+    siteLocations: Array<Fragment>;
+  }>;
+};
+type Iprscan5Match = {
+  signature: Iprscan5Signature;
+  locations: Array<Iprscan5Location>;
+  evalue?: number;
+  score?: number;
+  'model-ac'?: string;
+  accession?: string;
+  source_database?: string;
+};
 type Iprscan5Result = {
   sequence: string;
   md5: string;
-  matches: Array<{
-    signature: {
-      accession: string;
-    };
-    locations: Array<{
-      start: number;
-      end: number;
-      hmmStart: number;
-      hmmEnd: number;
-      hmmLength: number;
-      hmmBounds: string;
-      evalue: number;
-      score: number;
-      envelopeStart: number;
-      envelopeEnd: number;
-      postProcessed: true;
-      'location-fragments': Array<{
-        start: number;
-        end: number;
-        'dc-status': string;
-      }>;
-    }>;
-    evalue?: number;
-    score?: number;
-    'model-ac'?: string;
-  }>;
+  matches: Array<Iprscan5Match>;
   xref: Array<{
     name: string;
     id: string;
