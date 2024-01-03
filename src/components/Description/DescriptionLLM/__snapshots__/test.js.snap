@@ -25,7 +25,7 @@ exports[`<DescriptionLLM /> should render 1`] = `
     />
      
     <p>
-      Some paragraphs of this description have been automatically generated using
+      The description below includes sections that have been automatically generated using
        
       <Memo(Connect(Link))
         href="https://openai.com/research/gpt-4"
@@ -42,22 +42,6 @@ exports[`<DescriptionLLM /> should render 1`] = `
         UniProtKB/Swiss-Prot
       </Memo(Connect(Link))>
       .
-       
-      <b>
-        Check the icon
-         
-        <span
-          className="small icon icon-common icon-magic"
-        />
-         
-        at the top of each paragraph to identify generated paragraphs. An additional
-         
-        <span
-          className="small icon icon-common icon-check"
-        />
-         
-        icon indicates that a curator has approved the generated text.
-      </b>
        
       Please exercise discretion when interpreting the information provided and consider it as preliminary.
       <br />
