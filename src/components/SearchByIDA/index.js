@@ -9,7 +9,9 @@ import { customLocationSelector } from 'reducers/custom-location';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
+// $FlowFixMe
 import DomainButton from './DomainButton';
+// $FlowFixMe
 import IdaEntry from './IdaEntry';
 // $FlowFixMe
 import ToggleSwitch from 'components/ToggleSwitch';

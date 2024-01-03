@@ -1,30 +1,27 @@
-// @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Select from 'react-select';
+import Select, { CSSObjectWithLabel } from 'react-select';
 
-// $FlowFixMe
 import getFetch from 'higherOrder/loadData/getFetch';
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
-import { foundationPartial } from 'styles/foundation';
-import local from './style.css';
+import cssBinder from 'styles/cssBinder';
+import local from '../style.css';
 
-const f = foundationPartial(local);
+const css = cssBinder(local);
 
 const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
 const getUrlForAutocomplete = (
-  { protocol, hostname, port, root },
-  entryDB,
-  search,
+  { protocol, hostname, port, root }: ParsedURLServer,
+  entryDB: string,
+  search: string,
 ) => {
   const description = {
     main: { key: 'entry' },
@@ -39,47 +36,29 @@ const getUrlForAutocomplete = (
   });
 };
 
-/*:: type Props = {
-  entry: string,
-  draggable: boolean,
-  changeEntryHandler: function,
-  removeEntryHandler: function,
-  handleMoveMarker: function,
-  handleMoveEntry: function,
-  mergeResults: function,
-  options: {},
-  api: {
-    protocol: string,
-    hostname: string,
-    port: number,
-    root: string,
-  },
-}; */
-/*:: type State = {
-  draggable: boolean,
-  loadingPfamOptions: boolean,
-  loadingInterProOptions: boolean,
-}; */
-/*:: type DataType = {
-  ok: bool,
-  payload: Object,
-}; */
-class IdaEntry extends PureComponent /*:: <Props, State> */ {
-  /*:: container: { current: null | React$ElementRef<'div'> }; */
-  /*:: startPos: number; */
-  /*:: currentWidth: number; */
-  static propTypes = {
-    entry: T.string,
-    changeEntryHandler: T.func,
-    removeEntryHandler: T.func,
-    handleMoveMarker: T.func,
-    handleMoveEntry: T.func,
-    mergeResults: T.func,
-    api: T.object,
-    draggable: T.bool,
-    options: T.object,
-  };
-  constructor(props) {
+type Props = {
+  entry: string;
+  draggable: boolean;
+  changeEntryHandler: (value: string) => void;
+  removeEntryHandler: (event: React.FormEvent) => void;
+  handleMoveMarker: (delta: number | null) => void;
+  handleMoveEntry: (delta: number) => void;
+  mergeResults: (data: unknown) => void;
+  options: Record<string, { accession: string; name: string }>;
+  api: ParsedURLServer;
+};
+type State = {
+  draggable: boolean;
+  loadingPfamOptions: boolean;
+  loadingInterProOptions: boolean;
+};
+
+class IdaEntry extends PureComponent<Props, State> {
+  container: React.RefObject<HTMLDivElement>;
+  startPos: number;
+  currentWidth: number;
+
+  constructor(props: Props) {
     super(props);
     this.container = React.createRef();
     this.startPos = 0;
@@ -94,16 +73,24 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     if (this.props.entry) this._handleOnChange(this.props.entry);
   }
 
-  _handleOnChange = (rawValue /*: {value: string}|string */) => {
-    const value = rawValue?.value || rawValue;
+  _handleOnChange = (rawValue: unknown) => {
+    const value =
+      (rawValue as { value: string })?.value || (rawValue as string);
     if (!value) return;
     this.props.changeEntryHandler(value);
+  };
+
+  _handleOnInputChange = (rawValue: { value: string } | string) => {
+    const value =
+      (rawValue as { value: string })?.value || (rawValue as string);
+    if (!value) return;
+    // this.props.changeEntryHandler(value);
     this.setState({
       loadingPfamOptions: true,
       loadingInterProOptions: true,
     });
     fetchFun(getUrlForAutocomplete(this.props.api, 'interpro', value)).then(
-      (data /*: DataType */) => {
+      (data) => {
         this.props.mergeResults(data);
         this.setState({
           loadingInterProOptions: false,
@@ -112,7 +99,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     );
 
     fetchFun(getUrlForAutocomplete(this.props.api, 'pfam', value)).then(
-      (data /*: DataType */) => {
+      (data) => {
         this.props.mergeResults(data);
         this.setState({
           loadingPfamOptions: false,
@@ -121,21 +108,21 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
     );
   };
 
-  _getDeltaFromDragging = (event) => {
+  _getDeltaFromDragging = (event: React.DragEvent) => {
     let delta = Math.floor(
       (event.pageX - (this.startPos || 0)) / this.currentWidth,
     );
     if (delta <= 0) delta++;
     return delta;
   };
-  _handleStartDragging = (event) => {
+  _handleStartDragging = (event: React.DragEvent) => {
     this.currentWidth = this.container?.current?.offsetWidth || 1;
     this.startPos = event.pageX;
   };
-  _handleDragging = (event) => {
+  _handleDragging = (event: React.DragEvent) => {
     this.props.handleMoveMarker(this._getDeltaFromDragging(event));
   };
-  _handleEndDragging = (event) => {
+  _handleEndDragging = (event: React.DragEvent) => {
     let delta = this._getDeltaFromDragging(event);
     this.props.handleMoveMarker(null);
     if (delta > 0) delta--;
@@ -152,7 +139,9 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
       draggable = false,
       options = {},
     } = this.props;
-    const style = options[this.props.entry]
+    const style: Record<string, { background?: string }> = options[
+      this.props.entry
+    ]
       ? {
           background: getTrackColor(
             { accession: this.props.entry, source_database: '' },
@@ -162,7 +151,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
       : {};
     return (
       <div
-        className={f('ida-entry')}
+        className={css('ida-entry')}
         draggable={this.state.draggable}
         onDragStart={this._handleStartDragging}
         onDragEnd={this._handleEndDragging}
@@ -171,47 +160,45 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
         style={style}
       >
         <Select
-          options={
-            // prettier-ignore
-            (Object.values(options) /*: any */)
-            .map((
-              { accession, name } /*: { accession: string, name: string } */,
-            ) => ({
-              value: accession,
-              label: name,
-            }))
-          }
+          options={Object.values(options).map(({ accession, name }) => ({
+            value: accession,
+            label: name,
+          }))}
           isLoading={
             this.state.loadingInterProOptions || this.state.loadingPfamOptions
           }
-          onInputChange={this._handleOnChange}
+          onInputChange={this._handleOnInputChange}
           onChange={this._handleOnChange}
-          className={f('react-select-container')}
+          className={css('react-select-container')}
           value={{
             value: entry,
             label: options?.[entry]?.name,
           }}
           styles={{
-            menuList: (provided) => ({
-              ...provided,
-              background: 'white',
-            }),
-            menu: (provided) => ({
-              ...provided,
-              top: null,
-              width: 'var(--entry-width)',
-              marginTop: 0,
-            }),
-            control: (provided) => ({
-              ...provided,
-              background: 'transparent',
-              border: 0,
-              boxShadow: null,
-            }),
-            input: (provided) => ({
-              ...provided,
-              color: 'white',
-            }),
+            menuList: (provided: CSSObjectWithLabel) =>
+              ({
+                ...provided,
+                background: 'white',
+              }) as CSSObjectWithLabel,
+            menu: (provided: CSSObjectWithLabel) =>
+              ({
+                ...provided,
+                top: undefined,
+                width: 'var(--entry-width)',
+                marginTop: 0,
+              }) as CSSObjectWithLabel,
+            control: (provided: CSSObjectWithLabel) =>
+              ({
+                ...provided,
+                background: 'transparent',
+                border: 0,
+                boxShadow: undefined,
+              }) as CSSObjectWithLabel,
+            input: (provided: CSSObjectWithLabel) =>
+              ({
+                ...provided,
+                color: 'white',
+              }) as CSSObjectWithLabel,
           }}
           formatOptionLabel={({ value, label }, { context }) => {
             return (
@@ -220,12 +207,12 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
                   color: context === 'menu' ? 'black' : 'white',
                   cursor: context === 'menu' ? 'pointer' : 'text',
                 }}
-                className={f('react-select-labels')}
+                className={css('react-select-labels')}
                 key={value}
               >
-                <div className={f('react-select-label-header')}>{value}</div>
+                <div className={css('react-select-label-header')}>{value}</div>
                 {label && (
-                  <div className={f('react-select-label-body')}>{label}</div>
+                  <div className={css('react-select-label-body')}>{label}</div>
                 )}
               </div>
             );
@@ -233,14 +220,14 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
         />
         {draggable && (
           <button
-            className={f('drag', { nodata: !options[entry] })}
+            className={css('drag', { nodata: !options[entry] })}
             onMouseEnter={() => this.setState({ draggable: true })}
             onMouseLeave={() => this.setState({ draggable: false })}
           >
             |||
           </button>
         )}
-        <button className={f('close')} onClick={removeEntryHandler}>
+        <button className={css('close')} onClick={removeEntryHandler}>
           ✖
         </button>
       </div>
@@ -249,7 +236,7 @@ class IdaEntry extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  (state) => state.settings.api,
+  (state: GlobalState) => state.settings.api,
   (api) => ({ api }),
 );
 export default connect(mapStateToProps)(IdaEntry);
