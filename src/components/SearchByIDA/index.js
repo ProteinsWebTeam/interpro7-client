@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ import { schemaProcessDataPageSection } from 'schema_org/processors';
 // $FlowFixMe
 import DomainButton from './DomainButton';
 // $FlowFixMe
-import IdaEntry from './IdaEntry';
+import PanelIDA from './PanelIDA';
 // $FlowFixMe
 import ToggleSwitch from 'components/ToggleSwitch';
 
@@ -29,106 +29,6 @@ const SchemaOrgData = loadable({
 });
 
 const f = foundationPartial(interproTheme, ipro, local, search);
-
-const PanelIDA = (
-  {
-    entryList,
-    ignoreList,
-    isOrdered,
-    removeEntryHandler,
-    changeEntryHandler,
-    changeIgnoreHandler,
-    removeIgnoreHandler,
-    mergeResults,
-    options,
-    markerBeforeEntry = null,
-    markerAfterEntry = null,
-    handleMoveMarker,
-    handleMoveEntry,
-  } /*: {
-  entryList: Array<string>,
-  ignoreList: Array<string>,
-  isOrdered: boolean,
-  removeEntryHandler: function,
-  changeEntryHandler: function,
-  changeIgnoreHandler: function,
-  removeIgnoreHandler: function,
-  mergeResults: function,
-  options: {},
-  markerBeforeEntry: ?string,
-  markerAfterEntry: ?string,
-  handleMoveMarker: function,
-  handleMoveEntry: function,
-  } */,
-) => (
-  <div className={f('panels')}>
-    <div className={f('ida-panel')}>
-      <header>Architectures must include</header>
-      <div>
-        <ul className={f('ida-list', { ordered: isOrdered })}>
-          {entryList &&
-            entryList.map((e, i) => (
-              <Fragment key={i}>
-                {markerBeforeEntry === e && <div>|</div>}
-                <li>
-                  <IdaEntry
-                    position={i}
-                    entry={e}
-                    active={true}
-                    draggable={isOrdered}
-                    handleMoveMarker={handleMoveMarker(i)}
-                    handleMoveEntry={handleMoveEntry(i)}
-                    removeEntryHandler={() => removeEntryHandler(i)}
-                    changeEntryHandler={(name) => changeEntryHandler(i, name)}
-                    mergeResults={mergeResults}
-                    options={options}
-                  />
-                </li>
-                {markerAfterEntry === e && <div>|</div>}
-              </Fragment>
-            ))}
-        </ul>
-      </div>
-    </div>
-    <div className={f('ida-ignore')}>
-      <header>
-        Architectures must <u>not</u> include
-      </header>
-      <ul className={f('ida-list', 'ignore')}>
-        {ignoreList &&
-          ignoreList.map((e, i) => (
-            <li key={i}>
-              <IdaEntry
-                position={i}
-                entry={e}
-                active={true}
-                removeEntryHandler={() => removeIgnoreHandler(i)}
-                changeEntryHandler={(name) => changeIgnoreHandler(i, name)}
-                mergeResults={mergeResults}
-                options={options}
-              />
-            </li>
-          ))}
-      </ul>
-    </div>
-  </div>
-);
-PanelIDA.propTypes = {
-  entryList: T.arrayOf(T.string),
-  ignoreList: T.arrayOf(T.string),
-  isOrdered: T.bool,
-  removeEntryHandler: T.func,
-  removeIgnoreHandler: T.func,
-  changeEntryHandler: T.func,
-  changeIgnoreHandler: T.func,
-  goToCustomLocation: T.func,
-  markerBeforeEntry: T.string,
-  markerAfterEntry: T.string,
-  handleMoveMarker: T.func,
-  handleMoveEntry: T.func,
-  mergeResults: T.func,
-  options: T.object,
-};
 
 /*:: type Props = {
   customLocation: {

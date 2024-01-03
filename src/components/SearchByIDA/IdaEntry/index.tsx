@@ -38,11 +38,11 @@ const getUrlForAutocomplete = (
 
 type Props = {
   entry: string;
-  draggable: boolean;
+  draggable?: boolean;
   changeEntryHandler: (value: string) => void;
   removeEntryHandler: (event: React.FormEvent) => void;
-  handleMoveMarker: (delta: number | null) => void;
-  handleMoveEntry: (delta: number) => void;
+  handleMoveMarker?: (delta: number | null) => void;
+  handleMoveEntry?: (delta: number) => void;
   mergeResults: (data: unknown) => void;
   options: Record<string, { accession: string; name: string }>;
   api: ParsedURLServer;
@@ -120,14 +120,14 @@ class IdaEntry extends PureComponent<Props, State> {
     this.startPos = event.pageX;
   };
   _handleDragging = (event: React.DragEvent) => {
-    this.props.handleMoveMarker(this._getDeltaFromDragging(event));
+    this.props.handleMoveMarker?.(this._getDeltaFromDragging(event));
   };
   _handleEndDragging = (event: React.DragEvent) => {
     let delta = this._getDeltaFromDragging(event);
-    this.props.handleMoveMarker(null);
+    this.props.handleMoveMarker?.(null);
     if (delta > 0) delta--;
     if (delta !== 0) {
-      this.props.handleMoveEntry(delta);
+      this.props.handleMoveEntry?.(delta);
     }
     this.currentWidth = 1;
     this.startPos = 0;
