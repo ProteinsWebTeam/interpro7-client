@@ -43,7 +43,9 @@ type Props = {
   removeEntryHandler: (event: React.FormEvent) => void;
   handleMoveMarker?: (delta: number | null) => void;
   handleMoveEntry?: (delta: number) => void;
-  mergeResults: (data: unknown) => void;
+  mergeResults: (
+    data: RequestedData<PayloadList<{ metadata: EntryMetadata }>>,
+  ) => void;
   options: Record<string, { accession: string; name: string }>;
   api: ParsedURLServer;
 };
@@ -91,7 +93,11 @@ class IdaEntry extends PureComponent<Props, State> {
     });
     fetchFun(getUrlForAutocomplete(this.props.api, 'interpro', value)).then(
       (data) => {
-        this.props.mergeResults(data);
+        this.props.mergeResults(
+          data as unknown as RequestedData<
+            PayloadList<{ metadata: EntryMetadata }>
+          >,
+        );
         this.setState({
           loadingInterProOptions: false,
         });
@@ -100,7 +106,11 @@ class IdaEntry extends PureComponent<Props, State> {
 
     fetchFun(getUrlForAutocomplete(this.props.api, 'pfam', value)).then(
       (data) => {
-        this.props.mergeResults(data);
+        this.props.mergeResults(
+          data as unknown as RequestedData<
+            PayloadList<{ metadata: EntryMetadata }>
+          >,
+        );
         this.setState({
           loadingPfamOptions: false,
         });

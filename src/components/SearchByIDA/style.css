@@ -1,5 +1,5 @@
-@import '../../styles/fonts.css';
-@import '../../styles/colors.css';
+@import "../../styles/fonts.css";
+@import "../../styles/colors.css";
 :root {
   --entry-width: 180px;
   --entry-padding: 1em;
@@ -123,8 +123,6 @@ ul.ordered {
     font-size: 0.8em;
     right: 0.4em;
     top: -0.3em;
-    //border-radius: 0.8em;
-    //border: black solid 1px;
     width: 1em;
   }
   & button.drag {
@@ -208,4 +206,10 @@ input:checked ~ .switch-paddle {
   & .switch-active {
     display: block;
   }
+}
+
+.ida-search {
+  background-color: var(--colors-nearly-white);
+  border: 1px solid var(--colors-ulightgray);
+  padding: 0.5rem;
 }

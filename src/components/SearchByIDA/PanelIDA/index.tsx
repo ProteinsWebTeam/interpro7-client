@@ -15,7 +15,9 @@ type Props = {
   changeEntryHandler: (n: number, name: string) => void;
   changeIgnoreHandler: (n: number, name: string) => void;
   removeIgnoreHandler: (n: number) => void;
-  mergeResults: (data: unknown) => void;
+  mergeResults: (
+    data: RequestedData<PayloadList<{ metadata: EntryMetadata }>>,
+  ) => void;
   options: {};
   markerBeforeEntry?: string | null;
   markerAfterEntry?: string | null;
