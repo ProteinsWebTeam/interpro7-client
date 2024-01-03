@@ -150,14 +150,10 @@ const otherPages = new Map([
   top: number,
 }; */
 
-const locationSelector2 = createSelector(
-  (customLocation) => customLocation.description.main.key,
-  (value) => value,
-);
-const locationSelectorForOther = createSelector(
-  (customLocation) => customLocation.description.other[0],
-  (value) => value,
-);
+const locationSelector2 = (customLocation) =>
+  customLocation.description.main.key;
+const locationSelectorForOther = (customLocation) =>
+  customLocation.description.other[0];
 
 class HomeOrOther extends PureComponent /*:: <Props> */ {
   render() {

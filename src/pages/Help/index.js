@@ -1,6 +1,5 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { createSelector } from 'reselect';
 import { Helmet } from 'react-helmet-async';
 
 import Switch from 'components/generic/Switch';
@@ -47,10 +46,8 @@ const Documentation = loadable({
 
 const innerRoutes = new Map([['publication', Publication]]);
 
-const innerLocationSelector = createSelector(
-  (customLocation) => customLocation.description.other[2],
-  (value) => value,
-);
+const innerLocationSelector = (customLocation) =>
+  customLocation.description.other[2];
 
 class InnerSwitch extends PureComponent /*:: <{}> */ {
   render() {
@@ -75,10 +72,8 @@ const routes = new Map([
   ['protein_families_game', Game],
 ]);
 
-const locationSelector = createSelector(
-  (customLocation) => customLocation.description.other[1],
-  (value) => value,
-);
+const locationSelector = (customLocation) =>
+  customLocation.description.other[1];
 
 const RedirectToDefault = () => (
   <Redirect to={{ description: { other: ['help', 'tutorial'] } }} />
