@@ -40,7 +40,7 @@ const DescriptionLLM = ({ accession }: Props) => {
           )}
         />{' '}
         <p>
-          Some paragraphs of this description have been automatically generated
+          The description below includes sections that have been automatically generated
           using{' '}
           <Link href="https://openai.com/research/gpt-4" target="_blank">
             GPT-4
@@ -50,18 +50,6 @@ const DescriptionLLM = ({ accession }: Props) => {
             UniProtKB/Swiss-Prot
           </Link>
           .{' '}
-          <b>
-            Check the icon{' '}
-            <span
-              className={css('small', 'icon', 'icon-common', 'icon-magic')}
-            />{' '}
-            at the top of each paragraph to identify generated paragraphs. An
-            additional{' '}
-            <span
-              className={css('small', 'icon', 'icon-common', 'icon-check')}
-            />{' '}
-            icon indicates that a curator has approved the generated text.
-          </b>{' '}
           Please exercise discretion when interpreting the information provided
           and consider it as preliminary.
           <br />
