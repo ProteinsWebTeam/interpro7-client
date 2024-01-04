@@ -11,3 +11,6 @@ div.button-group {
   padding: 0.5em;
   font-size: inherit;
 }
+.table-center {
+  text-align: center;
+}

@@ -38,6 +38,7 @@ import { Exporter } from 'components/Table';
 import { updateJobTitle } from 'actions/creators';
 
 import StatusTooltip from './StatusTooltip';
+// $FlowFixMe
 import { mergeData } from './serializers';
 
 import { foundationPartial } from 'styles/foundation';

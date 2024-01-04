@@ -1,4 +1,3 @@
-// @flow
 /*:: import type { Middleware } from 'redux'; */
 /*:: import type { JobMetadata } from 'reducers/jobs/metadata'; */
 /*::
@@ -234,6 +233,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     if (
       meta.status === 'submitted' ||
       meta.status === 'running' ||
+      meta.status === 'queued' ||
       meta.status === 'importing'
     ) {
       const ipScanInfo = getState().settings.ipScan;
@@ -357,13 +357,10 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
 
     try {
       const metaT = await metaTA;
-      for (const [
-        localID,
-        meta,
-      ] /*: [string, JobMetadata] */ of (Object.entries(
+      for (const [localID, meta] /*: [string, JobMetadata] */ of Object.entries(
         await metaT.getAll(),
         // prettier-ignore
-      ) /*: any */)) {
+      ) /*: any */) {
         await processJob(localID, meta);
       }
     } catch (error) {

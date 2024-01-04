@@ -1,5 +1,5 @@
 import React from 'react';
-import { createComponent } from '@lit-labs/react';
+import { createComponent } from '@lit/react';
 import NightingaleNavigationCE from '@nightingale-elements/nightingale-navigation';
 
 export const NightingaleNavigation = createComponent({

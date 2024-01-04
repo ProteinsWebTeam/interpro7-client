@@ -1,5 +1,5 @@
 import React from 'react';
-import { createComponent } from '@lit-labs/react';
+import { createComponent } from '@lit/react';
 import NightingaleManagerCE from '@nightingale-elements/nightingale-manager';
 
 export const NightingaleManager = createComponent({

@@ -1,28 +1,43 @@
-// @flow
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { iproscan2urlDB } from 'utils/url-patterns';
-
-/*::
-type Fragment = {
-  start: number,
-  end: number,
-}
-type Location = {
-  fragments: Fragment[]
-}
-*/
 
 const OTHER_FEATURES_DBS = ['funfam'];
 const OTHER_RESIDUES_DBS = ['pirsr'];
 
-const mergeMatch = (match1, match2) => {
+type IpScanEntry = {
+  accession: string;
+  name: string;
+  short_name: string;
+  source_database: string;
+  _children: Record<string, IpScanMatch>;
+  children: Array<IpScanMatch>;
+  type: string;
+};
+type IpScanMatch = {
+  accession: string;
+  name: string;
+  short_name: string;
+  source_database: string;
+  protein_length: number;
+  locations: Array<BaseLocation & Iprscan5Location>;
+  score?: number;
+  residues: undefined;
+  signature?: Iprscan5Signature;
+};
+
+const mergeMatch = (match1: IpScanMatch | undefined, match2: IpScanMatch) => {
   if (!match1) return match2;
-  match1.locations = match1.locations.concat(match2.locations);
+  match1.locations = match1.locations.concat(match2?.locations);
   return match1;
 };
-const integrateSignature = (signature, interpro, integrated) => {
+
+const integrateSignature = (
+  signature: IpScanMatch,
+  interpro: Iprscan5Entry,
+  integrated: Map<string, IpScanEntry>,
+) => {
   const accession = interpro.accession;
-  const entry = integrated.get(accession) || {
+  const entry: IpScanEntry = integrated.get(accession) || {
     accession,
     name: interpro.description,
     short_name: interpro.name,
@@ -36,7 +51,7 @@ const integrateSignature = (signature, interpro, integrated) => {
   integrated.set(accession, entry);
 };
 
-const match2residues = (match) => {
+const match2residues = (match: Iprscan5Match | IpScanMatch) => {
   return match.locations
     .map(({ sites }) =>
       sites
@@ -58,7 +73,7 @@ const match2residues = (match) => {
     .filter(Boolean);
 };
 
-const condenseFragments = (location /*: Location */) => {
+const condenseFragments = (location: BaseLocation): [number, number] => {
   let start = Infinity;
   let end = -Infinity;
   location.fragments.forEach((fr) => {
@@ -67,13 +82,14 @@ const condenseFragments = (location /*: Location */) => {
   });
   return [start, end];
 };
-// const getEdgeCoordinates = ()
+
 const minOverlap = 0.1;
+
 const condenseLocations = (
-  children /*: {accession: string, locations: Location[]}[] */,
+  children: Array<{ accession: string; locations: BaseLocation[] }>,
 ) => {
-  const signatures = [];
-  // condensin Fragments for all the signatures and simplyfing the structure to [start, end]
+  const signatures: Array<[number, number]> = [];
+  // condensing Fragments for all the signatures and simplyfing the structure to [start, end]
   children.forEach(({ locations }) => {
     signatures.push(...locations.map(condenseFragments));
   });
@@ -84,8 +100,8 @@ const condenseLocations = (
     else if (a[1] < b[1]) return -1;
     return 1;
   });
-  const iprLocations /*: [number, number][] */ = [];
-  let currentLocation /*: [number, number] | null */ = null;
+  const iprLocations: Array<[number, number]> = [];
+  let currentLocation: [number, number] | null = null;
   signatures.forEach(([s, e]) => {
     // First location become the current location
     if (currentLocation === null) {
@@ -112,7 +128,7 @@ const condenseLocations = (
     currentLocation = [s, e];
   });
   // Adding last location
-  iprLocations.push([...(currentLocation || [0, 0])]);
+  iprLocations.push([...(currentLocation || [0, 0])] as [number, number]);
 
   // Reformating the locations in the expected structure with fragments
   return iprLocations.map(([start, end]) => ({
@@ -121,25 +137,26 @@ const condenseLocations = (
 };
 
 // eslint-disable-next-line max-statements
-export const mergeData = (matches, sequenceLength) => {
-  const mergedData /*: {
-    unintegrated:any[],
-    other_features: any[],
-    residues: any[],
-    other_residues: any[],
-  } */ = {
+export const mergeData = (
+  matches: Array<Iprscan5Match>,
+  sequenceLength: number,
+) => {
+  const mergedData: Record<string, Record<string, unknown>[]> = {
     unintegrated: [],
     other_features: [],
     residues: [],
     other_residues: [],
+    representative_domains: [],
   };
-  const unintegrated = {};
-  const otherFeatures = {};
-  let integrated = new Map();
-  const signatures = new Map();
+  const unintegrated: Record<string, IpScanMatch> = {};
+  const otherFeatures: Record<string, IpScanMatch> = {};
+  let integrated = new Map<string, IpScanEntry>();
+  const signatures = new Map<string, IpScanMatch>();
+  const representativeDomains = [];
+
   for (const match of matches) {
     const { library } = match.signature.signatureLibraryRelease;
-    const processedMatch = {
+    const processedMatch: IpScanMatch = {
       accession: match.signature.accession,
       name: match.signature.description || match.signature.name,
       short_name: match.signature.name,
@@ -157,10 +174,11 @@ export const mergeData = (matches, sequenceLength) => {
       residues: undefined,
       signature: undefined,
     };
+
     const residues = match2residues(match);
     if (
       residues.length > 0 &&
-      !OTHER_RESIDUES_DBS.includes(residues?.[0].source_database)
+      !OTHER_RESIDUES_DBS.includes(residues?.[0]?.source_database || '')
     ) {
       mergedData.residues.push({
         ...processedMatch,
@@ -183,6 +201,7 @@ export const mergeData = (matches, sequenceLength) => {
       signatures.get(processedMatch.accession),
       processedMatch,
     );
+
     signatures.set(mergedMatch.accession, mergedMatch);
     if (match.signature.entry) {
       integrateSignature(mergedMatch, match.signature.entry, integrated);
@@ -190,27 +209,44 @@ export const mergeData = (matches, sequenceLength) => {
       mergedData.other_features.push(mergedMatch);
     } else if (OTHER_RESIDUES_DBS.includes(mergedMatch.source_database)) {
       const residues = match2residues(mergedMatch);
-      if (residues[0].locations.length !== 0)
+      if (residues[0] && residues[0].locations.length !== 0)
         mergedData.other_residues.push(residues[0]);
     } else {
       unintegrated[mergedMatch.accession] = mergedMatch;
     }
+
+    const representativeLocations = processedMatch.locations.filter(
+      (loc) => loc.representative,
+    );
+    if (representativeLocations.length) {
+      representativeDomains.push({
+        ...processedMatch,
+        locations: representativeLocations,
+        integrated: match.signature?.entry?.accession,
+      });
+    }
   }
-  mergedData.unintegrated = (Object.values(unintegrated) /*: any */);
-  mergedData.other_features.push(...(Object.values(otherFeatures) /*: any */));
-  integrated = Array.from(integrated.values()).map((m) => {
-    // prettier-ignore
-    const locations = condenseLocations((m.children/*: any */));
+
+  mergedData.unintegrated = Object.values(unintegrated);
+  mergedData.other_features.push(...Object.values(otherFeatures));
+  const integratedList = Array.from(integrated.values()).map((m) => {
+    const locations = condenseLocations(m.children);
     return {
       ...m,
       locations,
     };
   });
-  (mergedData.unintegrated /*: any[] */)
-    .sort((m1, m2) => m2.score - m1.score);
-  for (const entry of integrated) {
+  mergedData.unintegrated.sort(
+    (m1, m2) =>
+      (m2 as { score: number }).score - (m1 as { score: number }).score,
+  );
+  for (const entry of integratedList) {
     if (!mergedData[entry.type]) mergedData[entry.type] = [];
     mergedData[entry.type].push(entry);
   }
+  if (representativeDomains?.length) {
+    mergedData.representative_domains = representativeDomains;
+  }
+
   return mergedData;
 };

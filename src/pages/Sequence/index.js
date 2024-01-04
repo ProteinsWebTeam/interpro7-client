@@ -50,19 +50,16 @@ const subPagesForSequence = new Map([
   ['sequence', SequenceSubPage],
 ]);
 
-const locationSelector = createSelector(
-  (customLocation) => {
-    const { key } = customLocation.description.main;
-    return (
-      // prettier-ignore
-      customLocation.description[key].detail ||
+const locationSelector = (customLocation) => {
+  const { key } = customLocation.description.main;
+  return (
+    // prettier-ignore
+    customLocation.description[key].detail ||
       ((Object.entries(customLocation.description)/*: any */).find(
         ([_key, value]/*: [string, {isFilter: boolean}] */) => value.isFilter,
       ) || [])[0]
-    );
-  },
-  (value) => value,
-);
+  );
+};
 export const countInterProFromMatches = (matches) =>
   Array.from(
     new Set(matches.map((m) => (m.signature.entry || {}).accession)).values(),

@@ -6,9 +6,13 @@ exports[`<Description /> should render 1`] = `
   data-testid="description"
 >
   <div
-    className=""
+    className="content"
   >
-     
+    <span
+      className="vf-badge vf-badge--tertiary"
+    >
+      Expert-curated
+    </span>
     <Paragraph
       literature={[]}
       p="a"
@@ -22,9 +26,13 @@ exports[`<Description /> should render 1`] = `
     }
   />
   <div
-    className=""
+    className="content"
   >
-     
+    <span
+      className="vf-badge vf-badge--tertiary"
+    >
+      Expert-curated
+    </span>
     <Paragraph
       literature={[]}
       p="b"
@@ -38,9 +46,13 @@ exports[`<Description /> should render 1`] = `
     }
   />
   <div
-    className=""
+    className="content"
   >
-     
+    <span
+      className="vf-badge vf-badge--tertiary"
+    >
+      Expert-curated
+    </span>
     <Paragraph
       literature={[]}
       p="c"

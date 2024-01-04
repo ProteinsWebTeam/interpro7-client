@@ -58,10 +58,8 @@ const RedirectToIPScan = () => (
   />
 );
 
-const jobAccessionSelector = createSelector(
-  (customLocation) => customLocation.description.result.accession,
-  (value) => value,
-);
+const jobAccessionSelector = (customLocation) =>
+  customLocation.description.result.accession;
 
 const _IPScanResultSafeGuardIfNotRehydratedYet = (
   { jobs, ...props } /*: {jobs: Object} */,
@@ -93,10 +91,7 @@ const InterProScanInnerSwitch = (props) => (
   </Wrapper>
 );
 
-const downloadSelector = createSelector(
-  (customLocation) => customLocation.hash,
-  (hash) => hash,
-);
+const downloadSelector = (customLocation) => customLocation.hash;
 
 const downloadRoutes = new Map([[/^\//, DownloadForm]]);
 
@@ -150,10 +145,8 @@ class Wrapper extends PureComponent /*:: <Props> */ {
   }
 }
 
-const jobTypeSelector = createSelector(
-  (customLocation) => customLocation.description.result.type,
-  (value) => value,
-);
+const jobTypeSelector = (customLocation) =>
+  customLocation.description.result.type;
 
 const Jobs = () => (
   <>

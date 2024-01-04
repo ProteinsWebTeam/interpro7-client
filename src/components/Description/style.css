@@ -23,17 +23,26 @@ a.text-high:focus {
 .description hr {
   margin: 0.75em;
 }
-
-div.llm {
-  background-color: rgb(255, 241, 213, 0.3);
+.description .content {
+  border-left: 4px solid transparent;
+  padding-left: 1em;
 }
-
-div.llm.checked {
-  background-color: rgb(236, 255, 224, 0.3);
+.description .content.llm:not(.checked) {
+  border-left-color: #f0ad4e;
 }
-div.llm .icon {
-  color: lightslategray;
-  &:hover {
-    color: inherit;
-  }
+.vf-badge--tertiary {
+  background: #e8e8e8;
+  border-color: transparent;
+  border-radius: 0.3em;
+  color: rgba(0,0,0,.6);
+  font-size: .85em;
+  text-transform: none;
+  user-select: none;
+}
+.vf-badge--tertiary:hover, .vf-badge--tertiary:visited {
+  color: rgba(0,0,0,.6);
+}
+.vf-badge > .details {
+  margin-left: 1em;
+  opacity: .8;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createComponent } from '@lit-labs/react';
+import { createComponent } from '@lit/react';
 import NightingaleTrackCE from '@nightingale-elements/nightingale-track';
 
 export const NightingaleTrack = createComponent({

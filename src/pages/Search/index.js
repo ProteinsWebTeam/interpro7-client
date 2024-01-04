@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import T from 'prop-types';
-import { createSelector } from 'reselect';
 import { Helmet } from 'react-helmet-async';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -223,10 +222,8 @@ Wrapper.propTypes = {
   children: T.node.isRequired,
 };
 
-const locationSelector = createSelector(
-  (customLocation) => customLocation.description.search.type,
-  (value) => value,
-);
+const locationSelector = (customLocation) =>
+  customLocation.description.search.type;
 
 const Search = () => (
   <Switch

@@ -6,7 +6,7 @@ import {
   IMPORT_JOB_FROM_DATA,
 } from 'actions/types';
 
-/*:: type JobStatus = 'created' | 'submitted' | 'failed' | 'importing' | 'imported file' | 'saved in browser' | 'running' | 'finished'; */
+/*:: type JobStatus = 'created' | 'submitted' | 'failed' | 'importing' | 'imported file' | 'saved in browser' | 'running' | 'finished' | 'queued'; */
 
 /*:: export type JobMetadata = {|
   localID: ?string,
