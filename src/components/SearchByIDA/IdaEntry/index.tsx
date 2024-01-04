@@ -13,8 +13,11 @@ import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import cssBinder from 'styles/cssBinder';
 import local from '../style.css';
+import { DebouncedFunc, debounce } from 'lodash-es';
 
 const css = cssBinder(local);
+
+export const DEBOUNCE_RATE = 300;
 
 const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
@@ -59,12 +62,14 @@ class IdaEntry extends PureComponent<Props, State> {
   container: React.RefObject<HTMLDivElement>;
   startPos: number;
   currentWidth: number;
+  debouncedFetchOptions: DebouncedFunc<(value: string) => void>;
 
   constructor(props: Props) {
     super(props);
     this.container = React.createRef();
     this.startPos = 0;
     this.currentWidth = 1;
+    this.debouncedFetchOptions = debounce(this.fetchOptions, DEBOUNCE_RATE);
   }
   state = {
     draggable: false,
@@ -86,7 +91,10 @@ class IdaEntry extends PureComponent<Props, State> {
     const value =
       (rawValue as { value: string })?.value || (rawValue as string);
     if (!value) return;
-    // this.props.changeEntryHandler(value);
+    this.debouncedFetchOptions(value);
+  };
+
+  fetchOptions = (value: string) => {
     this.setState({
       loadingPfamOptions: true,
       loadingInterProOptions: true,
