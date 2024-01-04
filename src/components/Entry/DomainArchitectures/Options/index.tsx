@@ -69,7 +69,7 @@ const IDAOptions = ({
         </div>
       )}
       {showExporter && (
-        <Exporter>
+        <Exporter includeSettings={false}>
           <div className={css('menu-grid')}>
             <label htmlFor="json">JSON</label>
             <AllIDADownload count={count} fileType="json" />

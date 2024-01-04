@@ -42,8 +42,8 @@ const locationsToString = (
     : '';
 
 const domains2string = (pfam, ipro) =>
-  `${pfam.accession}(${pfam.name})${
-    ipro ? `:${ipro.accession}(${ipro.name})` : ''
+  `${pfam.accession}{${pfam.name}}${
+    ipro ? `:${ipro.accession}{${ipro.name}}` : ''
   }[${pfam.coordinates[0].fragments[0].start}-${
     pfam.coordinates[0].fragments[0].end
   }]`;
@@ -52,14 +52,14 @@ const IDADomainsToString = (domains) => {
   if (!domains?.length) return '';
   const pfamDomain = domains[0];
   const iproDomain = domains?.[1];
-  if (!iproDomain) return domains2string(pfamDomain).trim();
+  if (!iproDomain) return domains2string(pfamDomain).replace(/,$/, '');
   if (iproDomain.accession.startsWith('PF'))
-    return `${domains2string(pfamDomain)}\t${IDADomainsToString(
+    return `${domains2string(pfamDomain)},${IDADomainsToString(
       domains.slice(1),
-    )}`.trim();
-  return `${domains2string(pfamDomain, iproDomain)}\t${IDADomainsToString(
+    )}`.replace(/,$/, '');
+  return `${domains2string(pfamDomain, iproDomain)},${IDADomainsToString(
     domains.slice(2),
-  )}`.trim();
+  )}`.replace(/,$/, '');
 };
 
 export const columns /*: {

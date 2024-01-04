@@ -1,7 +1,7 @@
 .options-panel {
   display: flex;
   column-gap: 1rem;
-  flex-direction: row-reverse;
+  justify-content: flex-end;
   & .accession-selector-panel {
     display: flex;
     align-items: flex-start;

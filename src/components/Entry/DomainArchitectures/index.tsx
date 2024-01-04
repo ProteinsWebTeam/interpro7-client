@@ -241,7 +241,6 @@ export const DomainArchitecturesWithData = ({
               databases={dataDB?.payload?.databases || {}}
               highlight={toHighlight}
             />
-            {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
           </div>
         );
       })}
