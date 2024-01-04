@@ -13,7 +13,8 @@ import Literature, {
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import Description from 'components/Description';
+import Description, { hasLLMParagraphs } from 'components/Description';
+import DescriptionLLM from '../DescriptionLLM';
 
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
@@ -79,22 +80,27 @@ const DescriptionFromIntegrated = ({
 
   if (payload?.metadata?.description?.length) {
     const citations = getLiteratureIdsFromDescription(
-      payload.metadata.description
+      payload.metadata.description,
     );
     const [included, extra] = splitCitations(
       payload.metadata.literature,
-      citations
+      citations,
     );
+    const hasLLM = hasLLMParagraphs(payload.metadata.description || []);
 
     return (
       <>
         <h4>
           {headerText || 'Description'} <ImportedTag accession={integrated} />
         </h4>
+        {hasLLM ? (
+          <DescriptionLLM accession={payload.metadata.accession} />
+        ) : null}
         <Description
           textBlocks={payload.metadata.description}
           literature={included}
           accession={payload.metadata.accession}
+          showBadges={hasLLM}
         />
         <h4>
           References <ImportedTag accession={integrated} />
@@ -123,7 +129,7 @@ const getUrlFor = createSelector(
           entry: { db: 'interpro', accession },
         }),
     });
-  }
+  },
 );
 
 export default loadData(getUrlFor as Params)(DescriptionFromIntegrated);
