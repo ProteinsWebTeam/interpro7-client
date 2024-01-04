@@ -2,7 +2,6 @@
 /* eslint react/jsx-pascal-case: 0 */
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
-import { createSelector } from 'reselect';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -131,10 +130,7 @@ const footerChildRoutes = new Map([
   ['sunburst', () => null],
   ['keyspecies', () => null],
 ]);
-const hashSelector = createSelector(
-  (customLocation) => customLocation.hash,
-  (value) => value,
-);
+const hashSelector = (customLocation) => customLocation.hash;
 
 const TableViewButtons = (
   { tableIcon, card, withTree, withSunburst, withKeySpecies } /*: {
