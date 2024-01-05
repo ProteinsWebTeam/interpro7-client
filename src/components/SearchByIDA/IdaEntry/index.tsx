@@ -12,10 +12,11 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import cssBinder from 'styles/cssBinder';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../style.css';
 import { DebouncedFunc, debounce } from 'lodash-es';
 
-const css = cssBinder(local);
+const css = cssBinder(fonts, local);
 
 export const DEBOUNCE_RATE = 300;
 
@@ -242,7 +243,7 @@ class IdaEntry extends PureComponent<Props, State> {
             onMouseEnter={() => this.setState({ draggable: true })}
             onMouseLeave={() => this.setState({ draggable: false })}
           >
-            |||
+            <i className={css('icon', 'icon-common', 'icon-ellipsis-v')}></i>
           </button>
         )}
         <button className={css('close')} onClick={removeEntryHandler}>
