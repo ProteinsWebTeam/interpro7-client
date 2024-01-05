@@ -8,7 +8,11 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 const css = cssBinder(fonts, local);
 
-const Twitter = () => {
+type Props = {
+  handler?: string;
+};
+
+const Twitter = ({ handler = 'InterProDB' }: Props) => {
   return (
     <div className={css('twitter-block')}>
       <div className={css('icon', 'icon-common')} data-icon="&#xf099;" />
@@ -17,11 +21,11 @@ const Twitter = () => {
         data-chrome={'nofooter noborders noheader noscrollbar transparent'}
         data-tweet-limit="1"
         className={css('twitter-timeline')}
-        href="https://twitter.com/InterProDB"
+        href={`https://twitter.com/${handler}`}
         target="_blank"
       >
         {' '}
-        Tweets by @InterProDB
+        Tweets by @{handler}
       </Link>
     </div>
   );
