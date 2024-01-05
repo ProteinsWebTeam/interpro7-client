@@ -12,13 +12,17 @@
   }
   & .dropdown-button {
     background: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     & .icon-caret-down {
       margin-left: 1rem;
       padding: 0;
     }
   }
   & button {
-    margin-bottom: 1px;
+    margin-bottom: 1rem;
   }
   & span.icon {
     padding-right: 0.5em;

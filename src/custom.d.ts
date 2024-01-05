@@ -239,10 +239,15 @@ type LiteratureMetadata = {
   [PubID: string]: Reference;
 };
 
+type StructuredDescription = {
+  text: string;
+  llm: boolean;
+  checked: boolean;
+};
 interface Metadata {
   accession: string;
   source_database: string;
-  description: Array<string>;
+  description: Array<string | StructuredDescription>;
   counters: {
     [resource: string]:
       | number
@@ -298,7 +303,6 @@ interface EntryMetadata extends Metadata {
     accession: string;
     name: string;
   };
-  llm_description: string | null;
   is_removed?: boolean;
 }
 
@@ -309,6 +313,7 @@ type SourceOrganism = {
 interface ProteinMetadata extends Metadata {
   id?: string;
   name: string;
+  description: Array<string>;
   source_database: 'uniprot' | 'reviewed' | 'unreviewed';
   length: number;
   sequence: string;

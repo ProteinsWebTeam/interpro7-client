@@ -15,24 +15,25 @@ import cssBinder from 'styles/cssBinder';
 
 import ipro from 'styles/interpro-vf.css';
 import refStyles from './style.css';
+import { getDescriptionText } from 'components/Description';
 
 const css = cssBinder(refStyles, ipro);
 
 export const getLiteratureIdsFromDescription = (
-  description: Array<string>
+  description: Array<string | StructuredDescription>,
 ): Array<string> =>
   (description || []).reduce(
     (acc, part) => [
       ...acc,
-      ...(part.match(/\[cite:(PUB\d+)\]/gi) || []).map((t) =>
-        t.replace(/(^\[cite:)|(]$)/g, '')
+      ...(getDescriptionText(part).match(/\[cite:(PUB\d+)\]/gi) || []).map(
+        (t) => t.replace(/(^\[cite:)|(]$)/g, ''),
       ),
     ],
-    [] as string[]
+    [] as string[],
   );
 export const splitCitations = (
   literature: LiteratureMetadata,
-  citations: string[]
+  citations: string[],
 ) =>
   partition(Object.entries(literature || {}), ([id]) => citations.includes(id));
 
