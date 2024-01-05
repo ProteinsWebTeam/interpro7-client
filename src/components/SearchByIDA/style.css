@@ -139,19 +139,13 @@ ul.ordered {
   & button.drag {
     position: absolute;
     background: transparent;
-    font-size: 0.8em;
     left: 1.5em;
-    top: 1.7em;
-    color: var(--colors-ulightgray);
+    top: 0;
+    height: 100%;
     width: 1em;
-    cursor: grabbing;
-    text-shadow: 1px 1px slategrey;
-  }
-  & button.nodata {
-    top: 0.5em;
-  }
-  & button.drag {
+    cursor: grab;
     color: var(--colors-nearly-white);
+    text-shadow: 1px 1px slategrey;
   }
   & .react-select-container {
     width: var(--entry-width);
