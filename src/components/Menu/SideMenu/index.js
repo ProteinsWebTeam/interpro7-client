@@ -9,6 +9,7 @@ import { sideNavSelector } from 'reducers/ui/sideNav';
 
 // $FlowFixMe
 import EBIMenu from 'components/Menu/EBIMenu';
+// $FlowFixMe
 import InterProMenu from 'components/Menu/InterProMenu';
 import EntryMenu from 'components/EntryMenu';
 import ServerStatus from './ServerStatus';
