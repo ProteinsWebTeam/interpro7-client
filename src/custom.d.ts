@@ -75,7 +75,7 @@ type InterProDescription = Required<
   InterProPartialDescription<EndpointLocation>
 >;
 type InterProPartialDescription<Location = EndpointPartialLocation> = {
-  main: {
+  main?: {
     key: Endpoint | 'search' | 'result' | 'other';
     numberOfFilters?: 0;
   };
@@ -93,12 +93,12 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   set?: Location;
   search?: {
     type: string | null;
-    value: string | null;
+    value?: string | null;
   };
   result?: {
     type: string | null;
-    accession: string | null;
-    detail: string | null;
+    accession?: string | null;
+    detail?: string | null;
   };
   other?: string[];
 };
@@ -107,6 +107,12 @@ type InterProLocation = {
   search: Record<string, string | boolean>;
   hash: string;
   state: Record<string, string>;
+};
+type InterProPartialLocation = {
+  description: InterProPartialDescription;
+  search?: Record<string, string | boolean>;
+  hash?: string;
+  state?: Record<string, string>;
 };
 type EndpointFilter = [endpoint: Endpoint, location: EndpointPartialLocation];
 
