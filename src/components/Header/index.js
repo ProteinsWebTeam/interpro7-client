@@ -13,6 +13,7 @@ import { openSideNav } from 'actions/creators';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 import TextSearchBox, {

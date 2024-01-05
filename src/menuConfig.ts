@@ -7,7 +7,7 @@ export type ActiveClass =
   | string
   | ((customLocation: InterProLocation) => string | boolean);
 
-export type MenuItem = {
+export type MenuItemProps = {
   href?: string;
   icon?: string;
   name: string;
@@ -16,10 +16,10 @@ export type MenuItem = {
   activeClass?: ActiveClass;
   exact?: boolean;
   counter?: string;
-  entities?: Array<MenuItem>;
+  entities?: Array<MenuItemProps>;
 };
 
-export const EBI: Array<MenuItem> = [
+export const EBI: Array<MenuItemProps> = [
   {
     href: 'https://www.ebi.ac.uk',
     icon: '',
@@ -66,7 +66,7 @@ const getTaxonomyForFilter = ({ taxonomy, main }: InterProDescription) => {
   }
 };
 
-export const entities: Array<MenuItem> = [
+export const entities: Array<MenuItemProps> = [
   // for Browse menu
   {
     to(customLocation: InterProLocation) {
@@ -177,7 +177,7 @@ export const entities: Array<MenuItem> = [
   },
 ];
 
-export const singleEntity: Map<string, MenuItem> = new Map([
+export const singleEntity: Map<string, MenuItemProps> = new Map([
   [
     'overview',
     {
@@ -539,7 +539,7 @@ export const singleEntity: Map<string, MenuItem> = new Map([
   ],
 ]);
 
-const search: Array<MenuItem> = [
+const search: Array<MenuItemProps> = [
   {
     name: 'By Sequence',
     to: {
@@ -590,7 +590,7 @@ const search: Array<MenuItem> = [
   },
 ];
 
-const results: Array<MenuItem> = [
+const results: Array<MenuItemProps> = [
   {
     to: {
       description: {
@@ -625,7 +625,7 @@ const results: Array<MenuItem> = [
   },
 ];
 
-const help: Array<MenuItem> = [
+const help: Array<MenuItemProps> = [
   {
     name: 'Tutorials & Webinars',
     to: { description: { other: ['help', 'tutorial'] } },
@@ -652,7 +652,7 @@ const help: Array<MenuItem> = [
     activeClass: css('is-active'),
   },
 ];
-const about: Array<MenuItem> = [
+const about: Array<MenuItemProps> = [
   {
     name: 'InterPro',
     to: { description: { other: ['about', 'interpro'] } },
@@ -689,7 +689,7 @@ const about: Array<MenuItem> = [
     activeClass: css('is-active'),
   },
 ];
-export const InterPro: Array<MenuItem> = [
+export const InterPro: Array<MenuItemProps> = [
   {
     to: { description: {} },
     icon: 'H',
