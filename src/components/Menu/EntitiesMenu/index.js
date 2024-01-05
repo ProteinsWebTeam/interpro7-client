@@ -2,6 +2,7 @@
 import React from 'react';
 import T from 'prop-types';
 
+// $FlowFixMe
 import MenuItem from 'components/Menu/MenuItem';
 
 // $FlowFixMe

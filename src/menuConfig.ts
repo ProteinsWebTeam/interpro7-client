@@ -3,13 +3,17 @@ import getEmptyDescription from 'utils/processDescription/emptyDescription';
 import cssBinder from 'styles/cssBinder';
 const css = cssBinder();
 
-type MenuItem = {
+export type ActiveClass =
+  | string
+  | ((customLocation: InterProLocation) => string | boolean);
+
+export type MenuItem = {
   href?: string;
   icon?: string;
   name: string;
   iconClass?: string;
   to?: InterProPartialLocation | ((customLocation: InterProLocation) => void);
-  activeClass?: string | ((customLocation: InterProLocation) => void);
+  activeClass?: ActiveClass;
   exact?: boolean;
   counter?: string;
   entities?: Array<MenuItem>;
@@ -739,6 +743,7 @@ export const InterPro: Array<MenuItem> = [
       if (main.key && main.key !== 'search' && main.key !== 'result') {
         return css('is-active');
       }
+      return false;
     },
     icon: 'b',
     name: 'Browse',
