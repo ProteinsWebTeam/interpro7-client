@@ -1,6 +1,7 @@
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 
-import f from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
+const css = cssBinder();
 
 type MenuItem = {
   href?: string;
@@ -548,7 +549,7 @@ const search: Array<MenuItem> = [
         search: { type },
       },
     }) {
-      return type === 'InterProScan' && f('is-active');
+      return type === 'InterProScan' && css('is-active');
     },
   },
   {
@@ -564,7 +565,7 @@ const search: Array<MenuItem> = [
         search: { type },
       },
     }) {
-      return type === 'download' && f('is-active');
+      return type === 'download' && css('is-active');
     },
   },
   {
@@ -580,7 +581,7 @@ const search: Array<MenuItem> = [
         search: { type },
       },
     }) {
-      return type === 'download' && f('is-active');
+      return type === 'download' && css('is-active');
     },
   },
 ];
@@ -598,7 +599,7 @@ const results: Array<MenuItem> = [
         result: { type },
       },
     }) {
-      return type === 'InterProScan' && f('is-active');
+      return type === 'InterProScan' && css('is-active');
     },
     name: 'Your InterProScan searches',
   },
@@ -615,7 +616,7 @@ const results: Array<MenuItem> = [
         result: { type },
       },
     }) {
-      return type === 'download' && f('is-active');
+      return type === 'download' && css('is-active');
     },
   },
 ];
@@ -624,64 +625,64 @@ const help: Array<MenuItem> = [
   {
     name: 'Tutorials & Webinars',
     to: { description: { other: ['help', 'tutorial'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Training',
     to: { description: { other: ['help', 'training'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'FAQs',
     to: { description: { other: ['help', 'faqs'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Protein families game',
     to: { description: { other: ['help', 'protein_families_game'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Documentation',
     to: { description: { other: ['help', 'documentation'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
 ];
 const about: Array<MenuItem> = [
   {
     name: 'InterPro',
     to: { description: { other: ['about', 'interpro'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'InterProScan',
     to: { description: { other: ['about', 'interproscan'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'The InterPro Consortium',
     to: { description: { other: ['about', 'consortium'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Funding',
     to: { description: { other: ['about', 'funding'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'License',
     to: { description: { other: ['about', 'license'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Privacy',
     to: { description: { other: ['about', 'privacy'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Team',
     to: { description: { other: ['about', 'team'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
 ];
 export const InterPro: Array<MenuItem> = [
@@ -736,7 +737,7 @@ export const InterPro: Array<MenuItem> = [
     },
     activeClass({ description: { main } }) {
       if (main.key && main.key !== 'search' && main.key !== 'result') {
-        return f('is-active');
+        return css('is-active');
       }
     },
     icon: 'b',
