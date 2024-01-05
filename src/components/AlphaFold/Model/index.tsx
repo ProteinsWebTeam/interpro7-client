@@ -136,9 +136,9 @@ const AlphaFoldModel = ({
         alphaFoldCreationDate={models?.[0]?.modelCreatedDate}
       />
 
-      <div className={css('row')}>
+      <div className={css('af-container')}>
         {!isSplitScreen && (
-          <div className={css('column', 'small-12', 'medium-3')}>
+          <div className={css('panel-legends')}>
             <h5>Information</h5>
             <ul className={css('information')}>
               <li>
@@ -204,13 +204,7 @@ const AlphaFoldModel = ({
             </ul>
           </div>
         )}
-        <div
-          className={css({
-            column: !isSplitScreen,
-            'small-12': !isSplitScreen,
-            'medium-9': !isSplitScreen,
-          })}
-        >
+        <div className={css('panel-component')}>
           <PictureInPicturePanel
             className={css({ 'structure-viewer-split': isSplitScreen })}
             data-testid="structure-3d-viewer"
@@ -297,7 +291,7 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
     },
     (
       { protocol, hostname, port, root, query }: ParsedURLServer,
-      accession: string
+      accession: string,
     ) => {
       const modelUrl = format({
         protocol,
@@ -310,7 +304,7 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
       });
       if (isUrlToApi) return modelUrl;
       return { modelUrl };
-    }
+    },
   );
 
 export default loadData({

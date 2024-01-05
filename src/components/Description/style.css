@@ -34,15 +34,16 @@ a.text-high:focus {
   background: #e8e8e8;
   border-color: transparent;
   border-radius: 0.3em;
-  color: rgba(0,0,0,.6);
-  font-size: .85em;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.85em;
   text-transform: none;
   user-select: none;
 }
-.vf-badge--tertiary:hover, .vf-badge--tertiary:visited {
-  color: rgba(0,0,0,.6);
+.vf-badge--tertiary:hover,
+.vf-badge--tertiary:visited {
+  color: rgba(0, 0, 0, 0.6);
 }
 .vf-badge > .details {
   margin-left: 1em;
-  opacity: .8;
+  opacity: 0.8;
 }

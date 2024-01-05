@@ -173,92 +173,85 @@ export const DomainArchitecturesWithData = ({
   if (payload.count === 0) {
     messageContent = (
       <div className={css('callout', 'warning')}>
-        No domain architectures found. Domain architectures are calculated for InterPro entries of type Domain.
-        Please ensure that the entries you are searching are of type Domain.
+        No domain architectures found. Domain architectures are calculated for
+        InterPro entries of type Domain. Please ensure that the entries you are
+        searching are of type Domain.
       </div>
     );
   } else {
-    messageContent = (
-      <>
-        <h4>{payload.count} domain architectures</h4>
-        {!database && <IDAOptions />}
-      </>
-    );
+    messageContent = <h4>{payload.count} domain architectures</h4>;
   }
   const maxLength = getMaxLength(payload.results || []);
   return (
-    <div className={css('row')}>
-      <div className={css('columns')}>
-        {messageContent}
-        {(payload.results || []).map((obj) => {
-          const currentDB = (database || idaAccessionDB || '').toLowerCase();
-          const idaObj = ida2json(obj.ida, obj.representative, currentDB);
-          const representativeAcc = obj?.representative?.accession;
-          return (
-            <div key={obj.ida_id} className={css('margin-bottom-large')}>
-              <SchemaOrgData data={obj} processData={schemaProcessData} />
-              <div>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'protein' },
-                      protein: { db: 'UniProt' },
-                      entry: {
-                        db: database || idaAccessionDB,
-                        accession: mainAccession,
-                      },
+    <div className={css('vf-stack', 'vf-stack--400')}>
+      {messageContent}
+      <IDAOptions showDBSelector={!database} count={payload.count} />
+      {(payload.results || []).map((obj) => {
+        const currentDB = (database || idaAccessionDB || '').toLowerCase();
+        const idaObj = ida2json(obj.ida, obj.representative, currentDB);
+        const representativeAcc = obj?.representative?.accession;
+        return (
+          <div key={obj.ida_id} className={css('margin-bottom-large')}>
+            <SchemaOrgData data={obj} processData={schemaProcessData} />
+            <div>
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'protein' },
+                    protein: { db: 'UniProt' },
+                    entry: {
+                      db: database || idaAccessionDB,
+                      accession: mainAccession,
                     },
-                    search: { ida: obj.ida_id },
-                  }}
-                >
-                  There {obj.unique_proteins > 1 ? 'are' : 'is'}{' '}
-                  {obj.unique_proteins}{' '}
-                  {toPlural('protein', obj.unique_proteins)}{' '}
-                </Link>
-                with this architecture
-                {representativeAcc && (
-                  <>
-                    {' '}
-                    (represented by{' '}
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'protein' },
-                          protein: {
-                            db: 'uniprot',
-                            accession: representativeAcc,
-                          },
+                  },
+                  search: { ida: obj.ida_id },
+                }}
+              >
+                There {obj.unique_proteins > 1 ? 'are' : 'is'}{' '}
+                {obj.unique_proteins} {toPlural('protein', obj.unique_proteins)}{' '}
+              </Link>
+              with this architecture
+              {representativeAcc && (
+                <>
+                  {' '}
+                  (represented by{' '}
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'protein' },
+                        protein: {
+                          db: 'uniprot',
+                          accession: representativeAcc,
                         },
-                      }}
-                    >
-                      {representativeAcc}
-                    </Link>
-                    )
-                  </>
-                )}
-                :
-              </div>
-              <TextIDA accessions={idaObj.accessions} />
-              <IDAProtVista
-                matches={idaObj.domains}
-                length={idaObj.length}
-                maxLength={maxLength}
-                databases={dataDB?.payload?.databases || {}}
-                highlight={toHighlight}
-              />
-              {/* <pre>{JSON.stringify(idaObj, null, ' ')}</pre>*/}
+                      },
+                    }}
+                  >
+                    {representativeAcc}
+                  </Link>
+                  )
+                </>
+              )}
+              :
             </div>
-          );
-        })}
-        <Footer
-          withPageSizeSelector={true}
-          actualSize={payload.count}
-          pagination={search || {}}
-          nextAPICall={payload.next}
-          previousAPICall={payload.previous}
-          notFound={false}
-        />
-      </div>
+            <TextIDA accessions={idaObj.accessions} />
+            <IDAProtVista
+              matches={idaObj.domains}
+              length={idaObj.length}
+              maxLength={maxLength}
+              databases={dataDB?.payload?.databases || {}}
+              highlight={toHighlight}
+            />
+          </div>
+        );
+      })}
+      <Footer
+        withPageSizeSelector={true}
+        actualSize={payload.count}
+        pagination={search || {}}
+        nextAPICall={payload.next}
+        previousAPICall={payload.previous}
+        notFound={false}
+      />
     </div>
   );
 };

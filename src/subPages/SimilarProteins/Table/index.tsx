@@ -14,6 +14,7 @@ import Link from 'components/generic/Link';
 import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 
 import AllProteinDownload from './AllProteinDownload';
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -132,31 +133,7 @@ const SimilarProteinTable = ({
               fileType="tsv"
             />
             <label htmlFor="api">API</label>
-            <Tooltip title="See the raw response from the InterPro API">
-              <Link
-                target="_blank"
-                href={getAPIURLForSimilarProteins(api, ida, db)}
-                className={css('no-decoration')}
-              >
-                <div
-                  className={css(
-                    'file-button',
-                    'vf-button',
-                    'vf-button--secondary',
-                    'vf-button--sm',
-                    'generate-button',
-                  )}
-                >
-                  <span className={css('as-progress-button')}>
-                    <span
-                      className={css('icon', 'icon-common', 'icon-export')}
-                      data-icon="&#xf233;"
-                    />
-                  </span>{' '}
-                  <span className={css('file-label')}>Web View</span>
-                </div>
-              </Link>
-            </Tooltip>
+            <APIViewButton url={getAPIURLForSimilarProteins(api, ida, db)} />
           </div>
         </Exporter>
 

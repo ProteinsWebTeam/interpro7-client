@@ -40,8 +40,8 @@ const DescriptionLLM = ({ accession }: Props) => {
           )}
         />{' '}
         <p>
-          The description below includes sections that have been automatically generated
-          using{' '}
+          The description below includes sections that have been automatically
+          generated using{' '}
           <Link href="https://openai.com/research/gpt-4" target="_blank">
             GPT-4
           </Link>
@@ -49,9 +49,8 @@ const DescriptionLLM = ({ accession }: Props) => {
           <Link href="https://www.uniprot.org" target="_blank">
             UniProtKB/Swiss-Prot
           </Link>
-          .{' '}
-          Please exercise discretion when interpreting the information provided
-          and consider it as preliminary.
+          . Please exercise discretion when interpreting the information
+          provided and consider it as preliminary.
           <br />
           <Link
             href={`${config.root.readthedocs.href}llm_descriptions.html`}
