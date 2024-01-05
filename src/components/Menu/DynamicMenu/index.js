@@ -6,6 +6,7 @@ import MenuItem from 'components/Menu/MenuItem';
 
 import { schedule, sleep } from 'timing-functions';
 
+// $FlowFixMe
 import { InterPro } from 'menuConfig';
 
 import { foundationPartial } from 'styles/foundation';

@@ -4,6 +4,7 @@ import T from 'prop-types';
 
 import MenuItem from 'components/Menu/MenuItem';
 
+// $FlowFixMe
 import { EBI } from 'menuConfig';
 
 import { foundationPartial } from 'styles/foundation';

@@ -4,6 +4,7 @@ import T from 'prop-types';
 
 import MenuItem from 'components/Menu/MenuItem';
 
+// $FlowFixMe
 import { entities } from 'menuConfig';
 
 import ebiStyles from 'ebi-framework/css/ebi-global.css';

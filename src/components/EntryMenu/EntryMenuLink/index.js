@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 
+// $FlowFixMe
 import { singleEntity } from 'menuConfig';
 
 import { foundationPartial } from 'styles/foundation';
