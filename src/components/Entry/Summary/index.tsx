@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 import GoTerms from 'components/GoTerms';
-import Description from 'components/Description';
+import Description, {
+  hasLLMParagraphs,
+  getDescriptionText,
+} from 'components/Description';
 import DescriptionFromIntegrated from 'components/Description/DescriptionFromIntegrated';
 import DescriptionLLM from 'components/Description/DescriptionLLM';
 import Literature, {
@@ -94,24 +97,30 @@ const SummaryEntry = ({
   const filterIntegratedCites = Object.fromEntries(
     Object.keys(metadata.literature || {})
       .filter((cite) => !integratedCitations.includes(cite))
-      .map((cite) => [cite, metadata.literature[cite]])
+      .map((cite) => [cite, metadata.literature[cite]]),
   );
   const [included, extra] = splitCitations(filterIntegratedCites, citations);
 
-  const desc = (metadata.description || []).reduce((e, acc) => e + acc, '');
+  const desc = (metadata.description || []).reduce(
+    (e, acc) => getDescriptionText(e) + acc,
+    '',
+  ) as string;
   (included as Array<[string, Reference]>).sort(
-    (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0])
+    (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]),
   );
 
   const selectDescriptionComponent = () => {
     if ((metadata.description || []).length) {
+      const hasLLM = hasLLMParagraphs(metadata.description || []);
       return (
         <>
           <h4>{headerText || 'Description'}</h4>
+          {hasLLM ? <DescriptionLLM accession={metadata.accession} /> : null}
           <Description
             textBlocks={metadata.description}
             literature={included as Array<[string, Reference]>}
             accession={metadata.accession}
+            showBadges={hasLLM}
           />
         </>
       );
@@ -122,16 +131,6 @@ const SummaryEntry = ({
           setIntegratedCitations={setIntegratedCitations}
           headerText={headerText || 'Description'}
         />
-      );
-    } else if (metadata.llm_description) {
-      return (
-        <>
-          <h4>{headerText || 'Description'}</h4>
-          <DescriptionLLM
-            accession={metadata.accession}
-            text={metadata.llm_description}
-          />
-        </>
       );
     }
     return null;
@@ -146,7 +145,9 @@ const SummaryEntry = ({
           ) : (
             <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
           )}
-          <section>{selectDescriptionComponent()}</section>
+          <section className={css('vf-stack')}>
+            {selectDescriptionComponent()}
+          </section>
         </div>
         <div className={css('vf-stack')}>
           <SidePanel metadata={metadata} dbInfo={dbInfo} />

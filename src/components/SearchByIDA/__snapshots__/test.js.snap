@@ -2,116 +2,112 @@
 
 exports[`<SearchByIDA /> should render 1`] = `
 <div
-  className="row"
+  className="vf-stack vf-stack--400"
 >
   <div
-    className="large-12 columns margin-bottom-medium"
+    className="ida-search"
   >
-    <div
-      className="secondary callout border margin-bottom-none"
-    >
-      <Memo(Loadable)
-        data={
-          {
-            "description": "Search proteins which match a domain architecture",
-            "name": "Search By Domain Architecture IDA",
-          }
+    <Memo(Loadable)
+      data={
+        {
+          "description": "Search proteins which match a domain architecture",
+          "name": "Search By Domain Architecture IDA",
         }
-        processData={[Function]}
-      />
+      }
+      processData={[Function]}
+    />
+    <div
+      className="vf-stack vf-stack--400"
+    >
       <div
-        className="row"
+        className="search-input"
       >
-        <div
-          className="large-12 columns search-input"
+        <h3
+          className="light"
         >
-          <h3
-            className="light"
+          Search for proteins with a specific domain architecture
+        </h3>
+        <div
+          className="description"
+        >
+          <p>
+            Domain architectures are derived from matches to Pfam models. You can select domains to either be included or excluded from your search results. The results will include all proteins which match the domain architecture selected below. Domains can be selected using either a Pfam accession, or an InterPro accession, where that InterPro entry includes a Pfam model.
+          </p>
+        </div>
+        <div
+          className="ida-workspace"
+        >
+          <PanelIDA
+            changeEntryHandler={[Function]}
+            changeIgnoreHandler={[Function]}
+            entryList={[]}
+            handleMoveEntry={[Function]}
+            handleMoveMarker={[Function]}
+            ignoreList={[]}
+            isOrdered={false}
+            markerAfterEntry={null}
+            markerBeforeEntry={null}
+            mergeResults={[Function]}
+            options={{}}
+            removeEntryHandler={[Function]}
+            removeIgnoreHandler={[Function]}
+          />
+        </div>
+        <div
+          className="ida-controls"
+        >
+          <button
+            className="button secondary"
+            onClick={[Function]}
           >
-            Search for proteins with a specific domain architecture
-          </h3>
-          <div
-            className="description"
-          >
-            <p>
-              Domain architectures are derived from matches to Pfam models. You can select domains to either be included or excluded from your search results. The results will include all proteins which match the domain architecture selected below. Domains can be selected using either a Pfam accession, or an InterPro accession, where that InterPro entry includes a Pfam model.
-            </p>
-          </div>
-          <div
-            className="ida-workspace"
-          >
-            <PanelIDA
-              changeEntryHandler={[Function]}
-              changeIgnoreHandler={[Function]}
-              entryList={[]}
-              handleMoveEntry={[Function]}
-              handleMoveMarker={[Function]}
-              ignoreList={[]}
-              isOrdered={false}
-              markerAfterEntry={null}
-              markerBeforeEntry={null}
-              mergeResults={[Function]}
-              options={{}}
-              removeEntryHandler={[Function]}
-              removeIgnoreHandler={[Function]}
+            <DomainButton
+              fill="#75bf40"
+              label="➕"
+              stroke="#75bf40"
             />
-          </div>
-          <div
-            className="ida-controls"
+             
+            <span>
+              Add Domain to include
+            </span>
+          </button>
+          <button
+            className="button secondary"
+            onClick={[Function]}
           >
-            <button
-              className="button secondary"
-              onClick={[Function]}
-            >
-              <DomainButton
-                fill="#75bf40"
-                label="➕"
-                stroke="#75bf40"
-              />
-               
-              <span>
-                Add Domain to include
-              </span>
-            </button>
-            <button
-              className="button secondary"
-              onClick={[Function]}
-            >
-              <DomainButton
-                fill="#bf4540"
-                label="✖️️"
-                stroke="#bf4540"
-              />
-               
-              <span>
-                Add Domain to exclude
-              </span>
-            </button>
-            <div
-              className="options"
-            >
-              <ToggleSwitch
-                handleChange={[Function]}
-                id="ordered"
-                label="Order of domain matters: "
-                name="order"
-                offValue="No"
-                onValue="Yes"
-                size="tiny"
-                switchCond={false}
-              />
-              <ToggleSwitch
-                disabled={true}
-                handleChange={[Function]}
-                id="exact"
-                label="Exact match:"
-                name="exact"
-                offValue="No"
-                onValue="Yes"
-                size="tiny"
-                switchCond={false}
-              />
-            </div>
+            <DomainButton
+              fill="#bf4540"
+              label="✖️️"
+              stroke="#bf4540"
+            />
+             
+            <span>
+              Add Domain to exclude
+            </span>
+          </button>
+          <div
+            className="options"
+          >
+            <ToggleSwitch
+              handleChange={[Function]}
+              id="ordered"
+              label="Order of domain matters: "
+              name="order"
+              offValue="No"
+              onValue="Yes"
+              size="tiny"
+              switchCond={false}
+            />
+            <ToggleSwitch
+              disabled={true}
+              handleChange={[Function]}
+              id="exact"
+              label="Exact match:"
+              name="exact"
+              offValue="No"
+              onValue="Yes"
+              size="tiny"
+              switchCond={false}
+            />
           </div>
         </div>
       </div>

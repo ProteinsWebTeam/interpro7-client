@@ -1,5 +1,5 @@
-@import '../../styles/timing.css';
-@import '../../styles/colors.css';
+@import "../../styles/timing.css";
+@import "../../styles/colors.css";
 
 @supports (initial-letter: 2) {
   .paragraph::first-letter {
@@ -22,4 +22,28 @@ a.text-high:focus {
 
 .description hr {
   margin: 0.75em;
+}
+.description .content {
+  border-left: 4px solid transparent;
+  padding-left: 1em;
+}
+.description .content.llm:not(.checked) {
+  border-left-color: #f0ad4e;
+}
+.vf-badge--tertiary {
+  background: #e8e8e8;
+  border-color: transparent;
+  border-radius: 0.3em;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.85em;
+  text-transform: none;
+  user-select: none;
+}
+.vf-badge--tertiary:hover,
+.vf-badge--tertiary:visited {
+  color: rgba(0, 0, 0, 0.6);
+}
+.vf-badge > .details {
+  margin-left: 1em;
+  opacity: 0.8;
 }

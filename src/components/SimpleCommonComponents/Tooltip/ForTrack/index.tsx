@@ -1,4 +1,4 @@
-import React, { useState, useEffect, PropsWithChildren } from 'react';
+import React, { useState, PropsWithChildren } from 'react';
 import TooltipWithoutChildren from '../WithoutChildren';
 
 type Props = PropsWithChildren<{

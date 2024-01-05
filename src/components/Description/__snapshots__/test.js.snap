@@ -5,10 +5,14 @@ exports[`<Description /> should render 1`] = `
   className="description"
   data-testid="description"
 >
-  <Paragraph
-    literature={[]}
-    p="a"
-  />
+  <div
+    className="content"
+  >
+    <Paragraph
+      literature={[]}
+      p="a"
+    />
+  </div>
   <hr
     style={
       {
@@ -16,10 +20,14 @@ exports[`<Description /> should render 1`] = `
       }
     }
   />
-  <Paragraph
-    literature={[]}
-    p="b"
-  />
+  <div
+    className="content"
+  >
+    <Paragraph
+      literature={[]}
+      p="b"
+    />
+  </div>
   <hr
     style={
       {
@@ -27,9 +35,13 @@ exports[`<Description /> should render 1`] = `
       }
     }
   />
-  <Paragraph
-    literature={[]}
-    p="c"
-  />
+  <div
+    className="content"
+  >
+    <Paragraph
+      literature={[]}
+      p="c"
+    />
+  </div>
 </div>
 `;
