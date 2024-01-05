@@ -75,6 +75,7 @@ const Settings = loadable({
   loader: () => import(/* webpackChunkName: "settings-page" */ './Settings'),
 });
 const Contact = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "contact-page" */ './Contact'),
 });
 
