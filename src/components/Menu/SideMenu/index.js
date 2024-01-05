@@ -7,6 +7,7 @@ import { createSelector } from 'reselect';
 import { closeSideNav } from 'actions/creators';
 import { sideNavSelector } from 'reducers/ui/sideNav';
 
+// $FlowFixMe
 import EBIMenu from 'components/Menu/EBIMenu';
 import InterProMenu from 'components/Menu/InterProMenu';
 import EntryMenu from 'components/EntryMenu';

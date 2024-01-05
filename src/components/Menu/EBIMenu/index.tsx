@@ -1,21 +1,18 @@
-// @flow
-import React from 'react';
-import T from 'prop-types';
+import React, { PropsWithChildren } from 'react';
 
-// $FlowFixMe
 import MenuItem from 'components/Menu/MenuItem';
 
-// $FlowFixMe
 import { EBI } from 'menuConfig';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const iconStyle = foundationPartial(fonts);
+const iconStyle = cssBinder(fonts);
 
-const EBIMenu = (
-  { className, children } /*: {className?: string, children?: any} */,
-) => (
+const EBIMenu = ({
+  className,
+  children,
+}: PropsWithChildren<{ className?: string }>) => (
   <ul className={className}>
     {children}
     {EBI.map(({ href, name, icon, iconClass = 'generic' }) => (
@@ -33,9 +30,5 @@ const EBIMenu = (
     ))}
   </ul>
 );
-EBIMenu.propTypes = {
-  className: T.string,
-  children: T.any,
-};
 
 export default EBIMenu;
