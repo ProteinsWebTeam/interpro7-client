@@ -12,6 +12,7 @@ import EBIMenu from 'components/Menu/EBIMenu';
 // $FlowFixMe
 import InterProMenu from 'components/Menu/InterProMenu';
 import EntryMenu from 'components/EntryMenu';
+// $FlowFixMe
 import ServerStatus from './ServerStatus';
 import Tip from 'components/Tip';
 

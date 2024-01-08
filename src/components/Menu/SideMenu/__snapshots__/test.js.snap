@@ -57,7 +57,7 @@ exports[`<SideMenu /> should render 1`] = `
           >
             Connection status
           </span>
-          <Memo(Connect(_ServerStatuses)) />
+          <Memo(Connect(ServerStatuses)) />
         </li>
       </ul>
     </nav>
