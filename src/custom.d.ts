@@ -18,6 +18,7 @@ declare module '*.svg' {
   const content: any;
   export default content;
 }
+
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
   let InterproEntry: InterProEntryProps;
