@@ -41,6 +41,27 @@ const locationsToString = (
         .join(',')
     : '';
 
+const domains2string = (pfam, ipro) =>
+  `${pfam.accession}{${pfam.name}}${
+    ipro ? `:${ipro.accession}{${ipro.name}}` : ''
+  }[${pfam.coordinates[0].fragments[0].start}-${
+    pfam.coordinates[0].fragments[0].end
+  }]`;
+
+const IDADomainsToString = (domains) => {
+  if (!domains?.length) return '';
+  const pfamDomain = domains[0];
+  const iproDomain = domains?.[1];
+  if (!iproDomain) return domains2string(pfamDomain).replace(/,$/, '');
+  if (iproDomain.accession.startsWith('PF'))
+    return `${domains2string(pfamDomain)},${IDADomainsToString(
+      domains.slice(1),
+    )}`.replace(/,$/, '');
+  return `${domains2string(pfamDomain, iproDomain)},${IDADomainsToString(
+    domains.slice(2),
+  )}`.replace(/,$/, '');
+};
+
 export const columns /*: {
   entry: Object,
   protein: Object,
@@ -146,6 +167,18 @@ export const columns /*: {
       serializer: decodeDescription,
     },
     { name: 'Source Database', selector: 'fields.source_database[0]' },
+  ],
+  ida: [
+    { name: 'IDA ID', selector: 'ida_id' },
+    { name: 'IDA Text', selector: 'ida' },
+    { name: 'Unique Proteins', selector: 'unique_proteins' },
+    { name: 'Representative Accession', selector: 'representative.accession' },
+    { name: 'Representative Length', selector: 'representative.length' },
+    {
+      name: 'Representative Domains',
+      selector: 'representative.domains',
+      serializer: IDADomainsToString,
+    },
   ],
 };
 columns.proteinEntry = [

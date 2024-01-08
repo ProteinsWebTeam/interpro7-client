@@ -93,7 +93,7 @@ const Sunburst = ({ data, description }: LoadedProps) => {
   useEffect(() => {
     const waitForWC = async () => {
       const promises = ['nightingale-sunburst'].map((localName) =>
-        customElements.whenDefined(localName)
+        customElements.whenDefined(localName),
       );
       await Promise.all(promises);
     };
@@ -108,7 +108,7 @@ const Sunburst = ({ data, description }: LoadedProps) => {
       sunburst.current?.topOptions?.map((name) => [
         name || '',
         sunburst.current?.getColorBySuperKingdom(name || '') || '',
-      ]) || []
+      ]) || [],
     );
     sunburst.current.addEventListener('taxon-hover', (evt: Event) => {
       setCurrentNode((evt as CustomEvent).detail as Taxon);
@@ -122,8 +122,8 @@ const Sunburst = ({ data, description }: LoadedProps) => {
 
   return (
     <div>
-      <div className={css('row', 'sunburst')}>
-        <div className={css('column', 'small-12', 'medium-9')}>
+      <div className={css('sunburst')}>
+        <div className={css('panel-component')}>
           {(payload?.taxa?.species || 0) > MAX_NUM_SPECIES_FOR_FULL_DEPTH && (
             <div className={css('callout', 'info', 'withicon')}>
               The number of species for this sunburst is{' '}
@@ -152,7 +152,7 @@ const Sunburst = ({ data, description }: LoadedProps) => {
             }}
           </ResizeObserverComponent>
         </div>
-        <div className={css('column', 'small-12', 'medium-3')}>
+        <div className={css('panel-legends')}>
           {legends && (
             <div>
               <h5>Legends</h5>
@@ -323,12 +323,12 @@ const getUrl = createSelector(
         taxa: '',
       },
     });
-  }
+  },
 );
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.description,
-  (description) => ({ description })
+  (description) => ({ description }),
 );
 
 export default loadData<TaxaPayload>({

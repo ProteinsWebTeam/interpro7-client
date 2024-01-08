@@ -1,4 +1,14 @@
 .sunburst {
+  display: flex;
+  flex-wrap: wrap;
+
+  & .panel-component {
+    flex-grow: 2;
+  }
+  & .panel-legends {
+    width: 30%;
+    padding-left: 1em;
+  }
   & h5 {
     font-weight: normal;
     margin: 0.5em 0;

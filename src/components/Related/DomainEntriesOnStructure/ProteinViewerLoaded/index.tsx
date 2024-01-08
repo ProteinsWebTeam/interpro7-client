@@ -36,7 +36,7 @@ const ProteinViewerLoaded = ({ protein, tracks, chain, id }: Props) => {
             },
             bubbles: true,
             cancelable: true,
-          })
+          }),
         );
       }
     };
@@ -52,7 +52,12 @@ const ProteinViewerLoaded = ({ protein, tracks, chain, id }: Props) => {
 
   return (
     <div ref={protvistaEl}>
-      <ProteinViewer protein={protein} data={enrichedTracks} id={id} />
+      <ProteinViewer
+        protein={protein}
+        data={enrichedTracks}
+        id={id}
+        title="Domains in the chain"
+      />
     </div>
   );
 };

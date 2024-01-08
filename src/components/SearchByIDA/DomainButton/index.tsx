@@ -1,39 +1,36 @@
-// @flow
-import T from 'prop-types';
 import React from 'react';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-import local from './style.css';
+import local from '../style.css';
 
-const f = foundationPartial(local);
+const css = cssBinder(local);
 
 const DEFAULT_DOMAIN_WIDTH = 30;
 const DEFAULT_DOMAIN_HEIGHT = 18;
 const DEFAULT_LINE_WIDTH = 7;
-/*:: type Props = {
-  label: string,
-  fill?: string,
-  stroke?: string,
-  width?: number,
-  height?: number,
-  lineW?: number,
-}; */
 
-const DomainButton = (
-  {
-    label,
-    fill = '#aaa',
-    stroke = '#333',
-    width = DEFAULT_DOMAIN_WIDTH,
-    height = DEFAULT_DOMAIN_HEIGHT,
-    lineW = DEFAULT_LINE_WIDTH,
-  } /*: Props */,
-) => {
+type Props = {
+  label: string;
+  fill?: string;
+  stroke?: string;
+  width?: number;
+  height?: number;
+  lineW?: number;
+};
+
+const DomainButton = ({
+  label,
+  fill = '#aaa',
+  stroke = '#333',
+  width = DEFAULT_DOMAIN_WIDTH,
+  height = DEFAULT_DOMAIN_HEIGHT,
+  lineW = DEFAULT_LINE_WIDTH,
+}: Props) => {
   const midY = height / 2;
   return (
     <svg
-      className={f('ida-button')}
+      className={css('ida-button')}
       width={width + 2 * lineW + 2 * midY}
       height={height + 2}
     >
@@ -52,19 +49,11 @@ const DomainButton = (
         stroke={stroke}
         transform={`translate(${lineW}, 0)`}
       />
-      <text x={lineW + midY + width / 2} y={height - 1} textAnchor="middle">
+      <text x={lineW + midY + width / 2} y={height - 2} textAnchor="middle">
         {label}
       </text>
     </svg>
   );
-};
-DomainButton.propTypes = {
-  label: T.string,
-  fill: T.string,
-  stroke: T.string,
-  width: T.number,
-  height: T.number,
-  lineW: T.number,
 };
 
 export default DomainButton;

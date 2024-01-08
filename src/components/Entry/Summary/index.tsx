@@ -111,16 +111,16 @@ const SummaryEntry = ({
 
   const selectDescriptionComponent = () => {
     if ((metadata.description || []).length) {
+      const hasLLM = hasLLMParagraphs(metadata.description || []);
       return (
         <>
           <h4>{headerText || 'Description'}</h4>
-          {hasLLMParagraphs(metadata.description || []) ? (
-            <DescriptionLLM accession={metadata.accession} />
-          ) : null}
+          {hasLLM ? <DescriptionLLM accession={metadata.accession} /> : null}
           <Description
             textBlocks={metadata.description}
             literature={included as Array<[string, Reference]>}
             accession={metadata.accession}
+            showBadges={hasLLM}
           />
         </>
       );
@@ -145,7 +145,9 @@ const SummaryEntry = ({
           ) : (
             <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
           )}
-          <section>{selectDescriptionComponent()}</section>
+          <section className={css('vf-stack')}>
+            {selectDescriptionComponent()}
+          </section>
         </div>
         <div className={css('vf-stack')}>
           <SidePanel metadata={metadata} dbInfo={dbInfo} />

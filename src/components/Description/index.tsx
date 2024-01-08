@@ -32,10 +32,11 @@ type Props = {
   literature?: Array<[string, Reference]>;
   accession?: string;
   withoutIDs?: boolean;
+  showBadges?: boolean;
 };
 class Description extends PureComponent<Props> {
   render() {
-    const { textBlocks, literature, withoutIDs } = this.props;
+    const { textBlocks, literature, withoutIDs, showBadges } = this.props;
     const sections = textBlocks.map((e) => {
       return (transformFormatted(getDescriptionText(e)) as string[]).map(
         (text) => ({
@@ -52,17 +53,23 @@ class Description extends PureComponent<Props> {
           .map((section, i) =>
             section
               .map(({ text, llm, checked }, j) => (
-                <div className={css('content', { llm, checked })} key={`${i}_${j}`}>
-                  {llm ? (
-                    <span className={css('vf-badge', 'vf-badge--tertiary')}>
-                      AI-generated
-                      <span className={css('details')}>{checked ? 'Reviewed' : 'Unreviewed'}</span>
-                    </span>
-                  ) : (
-                    <span className={css('vf-badge', 'vf-badge--tertiary')}>
-                      Expert-curated
-                    </span>
-                  )}
+                <div
+                  className={css('content', { llm, checked })}
+                  key={`${i}_${j}`}
+                >
+                  {showBadges &&
+                    (llm ? (
+                      <span className={css('vf-badge', 'vf-badge--tertiary')}>
+                        AI-generated
+                        <span className={css('details')}>
+                          {checked ? 'Reviewed' : 'Unreviewed'}
+                        </span>
+                      </span>
+                    ) : (
+                      <span className={css('vf-badge', 'vf-badge--tertiary')}>
+                        Expert-curated
+                      </span>
+                    ))}
                   <Paragraph
                     key={`${i}.${j}`}
                     p={text}

@@ -56,7 +56,9 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
     mainType === 'entry' && (data?.payload?.count || 0) > 1;
   return (
     <div
-      className={css('row', 'column', { 'split-view': isSplitScreen })}
+      className={css('vf-stack', 'vf-stack-400', {
+        'split-view': isSplitScreen,
+      })}
       ref={container}
     >
       {proteinAcc && (

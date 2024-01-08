@@ -11,27 +11,20 @@ import TooltipForTrack from '../Tooltip/ForTrack';
 import EntryPopup from '../Tooltip/EntryPopup';
 
 type ProviderProps = {
-  accession: string,
-  type: string,
-  source: string,
-  onLoad: (x: () => React.JSX.Element) => void,
-  databases: Record<string, { name: string }>,
-  locations: Array<ProtVistaLocation>,
+  accession: string;
+  type: string;
+  source: string;
+  onLoad: (x: () => React.JSX.Element) => void;
+  databases: Record<string, { name: string }>;
+  locations: Array<ProtVistaLocation>;
+  shouldLoad: boolean;
 };
 
 interface LoadedProps
   extends ProviderProps,
-  LoadDataProps<{ metadata: EntryMetadata }> { }
+    LoadDataProps<{ metadata: EntryMetadata }> {}
 
-
-const _DataProvider = (
-  {
-    data,
-    onLoad,
-    databases,
-    locations,
-  }: LoadedProps,
-) => {
+const _DataProvider = ({ data, onLoad, databases, locations }: LoadedProps) => {
   useEffect(() => {
     if (data && !data.loading && data.payload && data.payload.metadata) {
       const {
@@ -55,8 +48,9 @@ const _DataProvider = (
 
 const getUrlFor = createSelector(
   (state: GlobalState) => state.settings.api,
-  (_: GlobalState, props: Props) => props,
+  (_: GlobalState, props: ProviderProps) => props,
   ({ protocol, hostname, port, root }, props) => {
+    if (!props.shouldLoad) return null;
     const description = {
       main: { key: props.type },
       [props.type]: { accession: props.accession, db: props.source },
@@ -70,64 +64,52 @@ const getUrlFor = createSelector(
   },
 );
 
-const dataProviders: Record<string, React.ComponentType<LoadedProps>> = {};
-
+const DataProvider = loadData<{ metadata: Metadata }>(getUrlFor as Params)(
+  _DataProvider,
+);
 
 type Props = PropsWithChildren<{
-  accession: string,
-  type: string,
-  source: string,
-  databases: Record<string, { name: string }>,
-  locations: Array<ProtVistaLocation>
-}>
-const DynamicTooltip = (
-  {
-    type,
-    source,
-    accession,
-    children,
-    databases,
-    locations,
-  }: Props,
-) => {
+  accession: string;
+  type: string;
+  source: string;
+  databases: Record<string, { name: string }>;
+  locations: Array<ProtVistaLocation>;
+}>;
+const DynamicTooltip = ({
+  type,
+  source,
+  accession,
+  children,
+  databases,
+  locations,
+}: Props) => {
   const [shouldLoad, setShouldLoad] = useState(false);
   const [message, setMessage] = useState(() => <b>{accession}</b>);
-  const [DataProvider, setDataProvider] = useState<null | React.ComponentType<LoadedProps>>(null);
-  const [currentLocation, setCurrentLocation] = useState<Array<ProtVistaLocation>>(locations);
-
-  useEffect(() => {
-    if (shouldLoad) {
-      if (!(accession in dataProviders)) {
-        dataProviders[accession] = loadData<{ metadata: Metadata }>(getUrlFor as Params)(_DataProvider);
-      }
-      setDataProvider(dataProviders[accession]);
-    }
-  });
+  const [currentLocation, setCurrentLocation] =
+    useState<Array<ProtVistaLocation>>(locations);
 
   return (
     <>
-      {DataProvider && (
-        <DataProvider
-          accession={accession}
-          type={type}
-          source={source}
-          onLoad={setMessage}
-          databases={databases}
-          locations={currentLocation}
-        />
-      )}
       <TooltipForTrack
         message={message}
         onMouseOverFeature={(locations: Array<ProtVistaLocation>) => {
           setShouldLoad(true);
-          setCurrentLocation(locations)
+          setCurrentLocation(locations);
         }}
       >
         {children}
       </TooltipForTrack>
+      <DataProvider
+        accession={accession}
+        type={type}
+        source={source}
+        onLoad={setMessage}
+        databases={databases}
+        locations={currentLocation}
+        shouldLoad={shouldLoad}
+      />
     </>
   );
 };
-
 
 export default DynamicTooltip;

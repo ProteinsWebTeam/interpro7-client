@@ -23,6 +23,7 @@ const f = foundationPartial(fonts, local);
   localID: string,
   status: string,
   withTitle: boolean,
+  forStatus?: boolean,
   versionMismatch?: boolean,
   jobs: Object,
   updateJob: function,
@@ -40,6 +41,7 @@ export class Actions extends PureComponent /*:: <Props> */ {
     localID: T.string.isRequired,
     status: T.string,
     withTitle: T.bool,
+    forStatus: T.bool,
     versionMismatch: T.bool,
     jobs: T.object.isRequired,
     updateJob: T.func.isRequired,
@@ -91,11 +93,17 @@ export class Actions extends PureComponent /*:: <Props> */ {
 
   render() {
     // const { localID, withTitle, jobs } = this.props;
-    const { withTitle, status, localID, keepJobAsLocal, versionMismatch } =
-      this.props;
+    const {
+      withTitle,
+      forStatus,
+      status,
+      localID,
+      keepJobAsLocal,
+      versionMismatch,
+    } = this.props;
     // const { saved } = (jobs[localID] || {}).metadata || {};
     return (
-      <nav className={f('buttons')}>
+      <nav className={f('buttons', { centered: forStatus })}>
         {withTitle && 'Actions: '}
         {/* <Tooltip title="Save job"> */}
         {/* <button */}

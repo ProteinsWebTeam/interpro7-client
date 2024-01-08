@@ -42,8 +42,8 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
               type: 'entry',
             },
           ],
-        ])
-      )
+        ]),
+      ),
     );
   }, [entry, structure]);
 
@@ -81,15 +81,11 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
                             locations={locationHovered}
                             accession={entry.accession}
                             dbName={entry.source_database}
-                            name={
-                              (entry?.name as NameObject)?.short ||
-                              (entry.name as string) ||
-                              ''
-                            }
+                            name={(entry?.name as NameObject)?.short || ''}
                           />
                         }
                         onMouseOverFeature={(
-                          locations: Array<ProtVistaLocation>
+                          locations: Array<ProtVistaLocation>,
                         ) => {
                           setLocationHovered(locations);
                         }}
