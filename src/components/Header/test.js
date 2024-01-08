@@ -12,49 +12,49 @@ const renderer = new ShallowRenderer();
 
 describe('<HamburgerBtn />', () => {
   test('open, svg, stuck', () => {
-    renderer.render(<HamburgerBtn openSideNav={() => {}} open svg stuck />);
+    renderer.render(<HamburgerBtn toggleSideNav={() => {}} open svg stuck />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('open, svg, unstuck', () => {
     renderer.render(
-      <HamburgerBtn openSideNav={() => {}} open svg stuck={false} />,
+      <HamburgerBtn toggleSideNav={() => {}} open svg stuck={false} />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('open, nosvg, stuck', () => {
     renderer.render(
-      <HamburgerBtn openSideNav={() => {}} open svg={false} stuck />,
+      <HamburgerBtn toggleSideNav={() => {}} open svg={false} stuck />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('open, nosvg, unstuck', () => {
     renderer.render(
-      <HamburgerBtn openSideNav={() => {}} open svg={false} stuck />,
+      <HamburgerBtn toggleSideNav={() => {}} open svg={false} stuck />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('closed, svg, stuck', () => {
     renderer.render(
-      <HamburgerBtn openSideNav={() => {}} open={false} svg stuck />,
+      <HamburgerBtn toggleSideNav={() => {}} open={false} svg stuck />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('closed, svg, unstuck', () => {
     renderer.render(
-      <HamburgerBtn openSideNav={() => {}} open={false} svg stuck={false} />,
+      <HamburgerBtn toggleSideNav={() => {}} open={false} svg stuck={false} />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('closed, nosvg, stuck', () => {
     renderer.render(
-      <HamburgerBtn openSideNav={() => {}} open={false} svg={false} stuck />,
+      <HamburgerBtn toggleSideNav={() => {}} open={false} svg={false} stuck />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
   test('closed, nosvg, unstuck', () => {
     renderer.render(
       <HamburgerBtn
-        openSideNav={() => {}}
+        toggleSideNav={() => {}}
         open={false}
         svg={false}
         stuck={false}

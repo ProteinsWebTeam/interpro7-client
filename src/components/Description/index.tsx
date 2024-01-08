@@ -9,7 +9,6 @@ import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import Tooltip from '../SimpleCommonComponents/Tooltip';
 
 const css = cssBinder(styles, fonts);
 

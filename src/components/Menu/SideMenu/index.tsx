@@ -119,7 +119,7 @@ export class SideMenu extends PureComponent<Props, State> {
     }
     return (
       <aside
-        // @ts-ignore
+        // @ts-expect-error inert attribute is not defined in TS, so if one day this doen's causes an error is because they added it!
         inert={visible ? undefined : ''}
         aria-hidden={!visible}
         className={css('container', { visible })}

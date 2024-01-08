@@ -62,7 +62,7 @@ export const MenuItem = (props: Props) => {
       to={to}
       href={href}
       onClick={closeEverything}
-      //@ts-ignore until LInk has been migrated to TS
+      //@ts-expect-error until LInk has been migrated to TS
       activeClass={_activeClass}
       exact={exact}
       className={cn(className, css('menu-item', { disabled }))}
