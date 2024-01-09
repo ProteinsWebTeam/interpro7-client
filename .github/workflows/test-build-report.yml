@@ -15,8 +15,6 @@ jobs:
           cp config.yml.example config.yml
           npm i -g npm@9.3.1
           npm ci
-          head node_modules/sharp/package.json
-          head node_modules/favicons/package.json
       - name: 🧪 | 🏗 - Test and Build
         run: |
           npm run deploy:production
