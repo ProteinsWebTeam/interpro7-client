@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getMismatchedFavourites } from 'utils/compare-favourites';
 import getTableAccess, { FavEntries } from 'storage/idb';
 
-import ReactDiffViewer from 'react-diff-viewer';
+import ReactDiffViewer from 'react-diff-viewer-continued';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';

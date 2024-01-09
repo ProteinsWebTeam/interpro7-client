@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import ReactDiffViewer from 'react-diff-viewer';
+import ReactDiffViewer from 'react-diff-viewer-continued';
 
 import loadData from 'higherOrder/loadData/ts';
 import { Params } from 'higherOrder/loadData/extract-params';
@@ -84,7 +84,7 @@ const getUrlForProtein = createSelector(
           protein: { db: 'uniprot', accession },
         }),
     });
-  }
+  },
 );
 
 export default loadData(getUrlForProtein as Params)(SequenceCheck);
