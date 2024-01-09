@@ -98,7 +98,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
   const metadata = data.metadata;
 
   const getSubfamiliesFromMatches = (
-    results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[]
+    results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[],
   ) => {
     setMatchesLoaded(true);
     if (results?.length) {
@@ -106,7 +106,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
         results
           .filter(
             ({ metadata: { source_database: db } }) =>
-              db?.toLowerCase() === 'panther'
+              db?.toLowerCase() === 'panther',
           )
           .map(({ proteins }) => {
             const subfamilies: Array<string | undefined> = [];
@@ -117,7 +117,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
             });
             return subfamilies.filter(Boolean) as Array<string>;
           })
-          .flat()
+          .flat(),
       );
       return;
     }
@@ -190,6 +190,12 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                   </td>
                 </tr>
               )}
+              {metadata.gene && (
+                <tr>
+                  <td>Gene</td>
+                  <td>{metadata.gene}</td>
+                </tr>
+              )}
               {metadata.description && metadata.description.length ? (
                 <tr>
                   <td data-testid="protein-function">
@@ -249,7 +255,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                           'comparison-button',
                           'icon',
                           'icon-common',
-                          { disabled: !isoform }
+                          { disabled: !isoform },
                         )}
                         disabled={!isoform}
                         dataIcon={'\uF0DB'}
@@ -287,7 +293,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
             <IPScanButton
               sequence={splitSequenceByChunks(
                 metadata.sequence,
-                metadata.id || ''
+                metadata.id || '',
               )}
               title="Search sequence with InterProScan"
               minWidth={MIN_WIDTH}
@@ -346,7 +352,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
 
 const mapStateToProps = createSelector(
   (state) => state.customLocation.search,
-  ({ isoform }) => ({ isoform })
+  ({ isoform }) => ({ isoform }),
 );
 
 export default connect(mapStateToProps)(SummaryProtein);
