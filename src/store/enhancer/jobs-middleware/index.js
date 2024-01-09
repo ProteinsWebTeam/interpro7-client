@@ -1,5 +1,3 @@
-/*:: import type { Middleware } from 'redux'; */
-/*:: import type { JobMetadata } from 'reducers/jobs/metadata'; */
 /*::
   type ImportedParametersPayload = {
     execution: {

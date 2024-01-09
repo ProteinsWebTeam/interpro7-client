@@ -1,5 +1,5 @@
-// flow-typed signature: e5943b73ab5a7e87ce78d833ac522e54
-// flow-typed version: a913c9ae5a/classnames_v2.x.x/flow_>=v0.104.x
+// flow-typed signature: 459665f9f4a22212c955ae9e8c6180ae
+// flow-typed version: 02d4f1d2c5/classnames_v2.x.x/flow_>=v0.104.x <=v0.200.x
 
 type $npm$classnames$Classes =
   | string

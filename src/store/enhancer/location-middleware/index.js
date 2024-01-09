@@ -1,7 +1,4 @@
-// @flow
 /* global gtag: false */
-/*:: import type { Middleware } from 'redux'; */
-/*:: import type { BrowserHistory, Location } from 'history'; */
 /*:: declare var gtag: (str: string, str: string, obj: {}) => void; */
 import { format } from 'url';
 
@@ -22,8 +19,8 @@ const middleware =
       // Dispatch new action only when history actually changes
       // Build new action from scratch
       async ({ location } /*: {location: Location} */) => {
-        if (!(location?.state /*: any */)?.customLocation) return;
-        const { customLocation, state } = (location.state /*: any */);
+        if (!location?.state /*: any */?.customLocation) return;
+        const { customLocation, state } = location.state /*: any */;
         await Promise.resolve();
         return dispatch(
           customLocationChangeFromHistory(customLocation, {
