@@ -63,6 +63,9 @@
   "lighthouse": {
     "threshold": 20
   },
+  "overrides": {
+    "core-js": "3.35.0"
+  },
   "dependencies": {
     "@floating-ui/react": "0.26.4",
     "@floating-ui/react-dom": "2.0.4",
