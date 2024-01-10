@@ -19,8 +19,8 @@ const middleware =
       // Dispatch new action only when history actually changes
       // Build new action from scratch
       async ({ location } /*: {location: Location} */) => {
-        if (!location?.state /*: any */?.customLocation) return;
-        const { customLocation, state } = location.state /*: any */;
+        if (!location?.state?.customLocation) return;
+        const { customLocation, state } = location.state;
         await Promise.resolve();
         return dispatch(
           customLocationChangeFromHistory(customLocation, {
