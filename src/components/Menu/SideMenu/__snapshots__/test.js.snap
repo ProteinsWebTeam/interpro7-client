@@ -17,9 +17,9 @@ exports[`<SideMenu /> should render 1`] = `
     role="menu"
   >
     <Memo(Connect(Tip))
-      body="The green signal is displayed when an external dependency is available whist a red signal indicates that InterPro cannot connect to the resource."
+      body="A green signal indicates that the external service is online and available. A red signal indicates that InterPro is unable to connect to the external resource."
       settingsName="showConnectionStatusToast"
-      title="💡 What is the status of external dependencies?"
+      title="💡 What is the status of external services?"
       toastID="connectivity"
     />
     <button
