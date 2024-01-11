@@ -7,6 +7,7 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 const css = cssBinder(fonts, local);
+import xlogo from 'images/x-logo.svg';
 
 type Props = {
   handler?: string;
@@ -15,7 +16,7 @@ type Props = {
 const Twitter = ({ handler = 'InterProDB' }: Props) => {
   return (
     <div className={css('twitter-block')}>
-      <div className={css('icon', 'icon-common')} data-icon="&#xf099;" />
+      <img src={xlogo} className={css('inline-logo')} alt="X logo" />
       <Link
         data-dnt="true"
         data-chrome={'nofooter noborders noheader noscrollbar transparent'}
@@ -25,7 +26,7 @@ const Twitter = ({ handler = 'InterProDB' }: Props) => {
         target="_blank"
       >
         {' '}
-        Tweets by @{handler}
+        Posts by @{handler}
       </Link>
     </div>
   );

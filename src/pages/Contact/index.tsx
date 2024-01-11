@@ -33,12 +33,6 @@ const Contact = () => {
           </Link>
         </li>
         <li>
-          <Link href="mailto: interhelp@ebi.ac.uk">
-            <span className={css('icon', 'icon-common')} data-icon="&#xf0e0;" />{' '}
-            interhelp@ebi.ac.uk
-          </Link>
-        </li>
-        <li>
           <Twitter />
         </li>
         <li>
@@ -63,12 +57,6 @@ const Contact = () => {
           >
             <span className={css('icon', 'icon-common')} data-icon="&#x6e;" />{' '}
             Submit a ticket
-          </Link>
-        </li>
-        <li>
-          <Link href="mailto: pfam-help@ebi.ac.uk">
-            <span className={css('icon', 'icon-common')} data-icon="&#xf0e0;" />{' '}
-            pfam-help@ebi.ac.uk
           </Link>
         </li>
         <li>

@@ -4,9 +4,10 @@ exports[`<Twitter /> should render 1`] = `
 <div
   className="twitter-block"
 >
-  <div
-    className="icon icon-common"
-    data-icon=""
+  <img
+    alt="X logo"
+    className="inline-logo"
+    src={{}}
   />
   <Memo(Connect(Link))
     className="twitter-timeline"
@@ -17,7 +18,7 @@ exports[`<Twitter /> should render 1`] = `
     target="_blank"
   >
      
-    Tweets by @
+    Posts by @
     InterProDB
   </Memo(Connect(Link))>
 </div>
