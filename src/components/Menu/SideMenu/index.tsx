@@ -61,8 +61,8 @@ export class SideMenu extends PureComponent<Props, State> {
         <div role="menu">
           {this.props.visible && this.props.showConnectionStatusToast ? (
             <Tip
-              title="💡 What is the status of external dependencies?"
-              body="The green signal is displayed when an external dependency is available whist a red signal indicates that InterPro cannot connect to the resource."
+              title="💡 What is the status of external services?"
+              body="A green signal indicates that the external service is online and available. A red signal indicates that InterPro is unable to connect to the external resource."
               toastID="connectivity"
               settingsName="showConnectionStatusToast"
             />
