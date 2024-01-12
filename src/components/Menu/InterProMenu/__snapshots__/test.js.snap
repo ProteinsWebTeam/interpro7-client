@@ -154,5 +154,24 @@ exports[`<InterProMenu /> should render 1`] = `
       Settings
     </Memo(Connect(MenuItem))>
   </li>
+  <li>
+    <Memo(Connect(MenuItem))
+      to={
+        {
+          "description": {
+            "other": [
+              "contact",
+            ],
+          },
+        }
+      }
+    >
+      <i
+        className="icon icon-common"
+        data-icon=""
+      />
+      Contact us
+    </Memo(Connect(MenuItem))>
+  </li>
 </ul>
 `;
