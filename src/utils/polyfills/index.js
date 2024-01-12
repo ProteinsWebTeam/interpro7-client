@@ -2,7 +2,6 @@
 // import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter';
 import {
   webComponents as supportsWebComponents,
-  detailsTag as supportsDetailsTag,
   inert as supportsInert,
   intersectionObserver as supprtsIntersectionObserver,
 } from 'utils/support';
@@ -45,19 +44,6 @@ export const webComponents = ()/*: Promise<boolean> */ => {
     'webComponents',
     supportsWebComponents,
   ) || Promise.resolve(true);
-};
-
-export const detailsTag = () /*: Promise<boolean> */ => {
-  return (
-    loadPolyfillIfNeeded(
-      async () =>
-        await import(
-          /* webpackChunkName: "detailstags-polyfill" */ 'details-element-polyfill'
-        ),
-      'detailsTag',
-      supportsDetailsTag,
-    ) || Promise.resolve(true)
-  );
 };
 
 export const intersectionObserver = () /*: Promise<boolean> */ => {

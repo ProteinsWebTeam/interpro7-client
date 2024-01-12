@@ -74,18 +74,17 @@ const Help = loadable({
 const Settings = loadable({
   loader: () => import(/* webpackChunkName: "settings-page" */ './Settings'),
 });
+const Contact = loadable({
+  // $FlowFixMe
+  loader: () => import(/* webpackChunkName: "contact-page" */ './Contact'),
+});
 
 const NotFound = loadable({
   loader: () =>
     import(/* webpackChunkName: "not-found-page" */ './error/NotFound'),
 });
-const Coronavirus = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "coronavirus-page" */ './Coronavirus'),
-});
 const FavouriteUpdates = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "coronavirus-page" */ './FavouriteUpdates'),
+  loader: () => import(/* webpackChunkName: "fav-page" */ './FavouriteUpdates'),
 });
 
 const RedirectToBlog = ({
@@ -136,9 +135,9 @@ const otherPages = new Map([
   ['release_notes', ReleaseNotes],
   ['download', Download],
   ['about', About],
+  ['contact', Contact],
   ['help', Help],
   ['settings', Settings],
-  ['covid-19', Coronavirus],
   ['fav-updates', FavouriteUpdates],
   ['potm', RedirectToBlog],
   ['downloads', RedirectToBlog],

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ReactHtmlParser from 'react-html-parser';
+import { convertHtmlToReact } from '@hedgedoc/html-to-react';
 import { XMLParser } from 'fast-xml-parser';
 
 import { createSelector } from 'reselect';
@@ -53,7 +53,7 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
           parts = obj.part;
           infoStatus = true;
         }
-      }
+      },
     );
   }
 
@@ -90,7 +90,7 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
             </Link>{' '}
             <div className={css('tag')}>Wikipedia</div>
           </h4>
-          {ReactHtmlParser(extract)}
+          {convertHtmlToReact(extract)}
         </div>
         <div className={css('columns')}>
           <table className={css('infobox')}>
@@ -177,6 +177,6 @@ const getWikiUrl = createSelector(
         prop: 'parsetree',
       },
     });
-  }
+  },
 );
 export default loadData(getWikiUrl as Params)(Wikipedia);

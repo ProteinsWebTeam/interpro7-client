@@ -14,11 +14,6 @@ export const webAnimations =
     window.document.body &&
     'animate' in window.document.body);
 
-export const detailsTag = (window => {
-  if (!window) return true; // no need for a polyfill if not in browser
-  return window.document.createElement('details').open !== undefined;
-})(window);
-
 export const inert = !window || 'inert' in HTMLElement.prototype;
 
 export const intersectionObserver = !window || 'IntersectionObserver' in window;

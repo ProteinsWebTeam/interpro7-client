@@ -8,11 +8,12 @@ import classnames from 'classnames/bind';
 
 import { stuckSelector } from 'reducers/ui/stuck';
 import { sideNavSelector } from 'reducers/ui/sideNav';
-import { openSideNav } from 'actions/creators';
+import { toggleSideNav } from 'actions/creators';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 import TextSearchBox, {
@@ -33,7 +34,7 @@ const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
 const reducedStyleBundle = classnames.bind(styles);
 
 /*:: type Props = {
-  openSideNav: function,
+  toggleSideNav: function,
   open: boolean,
   svg: boolean,
   stuck: boolean
@@ -41,20 +42,20 @@ const reducedStyleBundle = classnames.bind(styles);
 
 export class _HamburgerBtn extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    openSideNav: T.func.isRequired,
+    toggleSideNav: T.func.isRequired,
     open: T.bool.isRequired,
     svg: T.bool.isRequired,
     stuck: T.bool.isRequired,
   };
 
   render() {
-    const { openSideNav, open, svg, stuck } = this.props;
+    const { toggleSideNav, open, svg, stuck } = this.props;
     if (!svg) {
       return (
         <span>
           <button
             className={styles.top_level_hamburger}
-            onClick={openSideNav}
+            onClick={toggleSideNav}
             aria-label="Show the InterPro Menu"
           >
             ☰
@@ -64,7 +65,7 @@ export class _HamburgerBtn extends PureComponent /*:: <Props> */ {
     }
     return (
       <svg
-        onClick={openSideNav}
+        onClick={toggleSideNav}
         viewBox="0 0 10 10"
         width="2em"
         height="2em"
@@ -99,7 +100,7 @@ export class _HamburgerBtn extends PureComponent /*:: <Props> */ {
 const mapStateToPropsHamburger = createSelector(sideNavSelector, (open) => ({
   open,
 }));
-const HamburgerBtn = connect(mapStateToPropsHamburger, { openSideNav })(
+const HamburgerBtn = connect(mapStateToPropsHamburger, { toggleSideNav })(
   _HamburgerBtn,
 );
 

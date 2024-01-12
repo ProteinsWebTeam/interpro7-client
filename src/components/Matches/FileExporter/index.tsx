@@ -45,7 +45,7 @@ const FileExporter = ({
   focused = null,
   minWidth,
 }: Props) => {
-  if (!description) return null;
+  if (!description?.main) return null;
   const customLocationDescription = {
     ...description,
     main: { key: primary },

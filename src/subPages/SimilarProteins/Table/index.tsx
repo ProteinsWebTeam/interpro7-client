@@ -210,6 +210,7 @@ const SimilarProteinTable = ({
           Organism
         </Column>
         <Column dataKey="length">Length</Column>
+        <Column dataKey="gene">Gene</Column>
       </Table>
     </>
   );

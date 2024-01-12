@@ -95,7 +95,7 @@ type CategoryVisibility = { [name: string]: boolean };
 
 const switchCategoryVisibility = (
   categories: CategoryVisibility,
-  name: string
+  name: string,
 ): CategoryVisibility => {
   return {
     ...categories,
@@ -145,13 +145,13 @@ export const ProteinViewer = ({
 
   const openTooltip = (
     element: HTMLElement | undefined,
-    content: ReactNode
+    content: ReactNode,
   ) => {
     if (element && tooltipEnabledRef.current) {
       refs.setReference(element);
       setTooltipContent(content);
       if (intervalId.current) {
-        clearInterval(intervalId.current);
+        clearInterval(intervalId.current as unknown as number);
         intervalId.current = null;
       }
     }
@@ -162,7 +162,7 @@ export const ProteinViewer = ({
         if (!overTooltipRef.current) {
           setTooltipContent(null);
           if (intervalId.current) {
-            clearInterval(intervalId.current);
+            clearInterval(intervalId.current as unknown as number);
             intervalId.current = null;
           }
         }
@@ -246,14 +246,14 @@ export const ProteinViewer = ({
                         'protvista-grid',
                         {
                           printing: isPrinting,
-                        }
+                        },
                       )}
                     >
                       <header>
                         <button
                           onClick={() =>
                             setHideCategory(
-                              switchCategoryVisibility(hideCategory, type)
+                              switchCategoryVisibility(hideCategory, type),
                             )
                           }
                           className={css('as-text')}
@@ -264,7 +264,7 @@ export const ProteinViewer = ({
                               'icon-common',
                               hideCategory[type]
                                 ? 'icon-caret-right'
-                                : 'icon-caret-down'
+                                : 'icon-caret-down',
                             )}
                           />{' '}
                           {type}

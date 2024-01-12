@@ -131,6 +131,14 @@ exports[`<SummaryProtein /> should render 1`] = `
           </tr>
           <tr>
             <td>
+              Gene
+            </td>
+            <td>
+              moeA5
+            </td>
+          </tr>
+          <tr>
+            <td>
               Family membership
             </td>
             <td>

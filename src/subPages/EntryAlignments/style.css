@@ -34,6 +34,11 @@
   & a {
     margin-left: 4px;
     background: var(--colors-interpro);
+    &.download {
+      background-color: white;
+      align-self: baseline;
+      font-size: 0.9rem;
+    }
   }
   & .disabled {
     color: var(--colors-ulightgray);

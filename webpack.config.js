@@ -131,11 +131,7 @@ const getBabelLoader = (mode) => ({
       ],
       ['@babel/react', { development: mode === 'development' }],
     ],
-    plugins: [
-      '@babel/plugin-syntax-dynamic-import',
-      ['@babel/plugin-proposal-class-properties', { loose: true }],
-      ['@babel/plugin-proposal-optional-chaining', { loose: true }],
-    ],
+    plugins: [],
     env: {
       dev: {
         // better sourcemaps for JSX code

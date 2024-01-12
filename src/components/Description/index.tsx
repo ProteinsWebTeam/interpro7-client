@@ -9,7 +9,6 @@ import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import Tooltip from '../SimpleCommonComponents/Tooltip';
 
 const css = cssBinder(styles, fonts);
 
@@ -54,7 +53,11 @@ class Description extends PureComponent<Props> {
             section
               .map(({ text, llm, checked }, j) => (
                 <div
-                  className={css('content', { llm, checked })}
+                  className={css('content', {
+                    llm,
+                    checked,
+                    bordered: showBadges,
+                  })}
                   key={`${i}_${j}`}
                 >
                   {showBadges &&

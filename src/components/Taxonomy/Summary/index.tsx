@@ -17,7 +17,6 @@ import Children from 'components/Taxonomy/Children';
 import Tree, { TaxNode } from 'components/Tree';
 import BaseLink from 'components/ExtLink/BaseLink';
 
-
 import cssBinder from 'styles/cssBinder';
 
 import memberSelectorStyle from 'components/Table/TotalNb/style.css';
@@ -56,7 +55,7 @@ type Props = {
 };
 type Payload = { metadata: TaxonomyMetadata } & WithNames & WithTaxonomyFilters;
 
-interface LoadedProps extends Props, LoadDataProps<Payload, 'Names'> { }
+interface LoadedProps extends Props, LoadDataProps<Payload, 'Names'> {}
 
 type State = { data?: TaxNode | null; focused?: string };
 
@@ -171,7 +170,10 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
                 <tr>
                   <td style={{ maxWidth: '50%' }}>Taxon ID</td>
                   <td>
-                    <Accession accession={metadata.accession} title="Taxon ID" />
+                    <Accession
+                      accession={metadata.accession}
+                      title="Taxon ID"
+                    />
                   </td>
                 </tr>
                 {metadata.rank && (
@@ -185,7 +187,8 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
                   <SchemaOrgData
                     data={{
                       taxId: metadata.parent,
-                      name: names[metadata.parent] && names[metadata.parent].name,
+                      name:
+                        names[metadata.parent] && names[metadata.parent].name,
                     }}
                     processData={parentRelationship}
                   />
@@ -219,13 +222,12 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
                 <li>
                   <BaseLink
                     id={metadata.accession}
-                    target='_blank'
+                    target="_blank"
                     pattern="https://www.uniprot.org/taxonomy/{id}"
                     className={css('ext')}
                   >
                     UniProt
                   </BaseLink>
-
                 </li>
               </ul>
             </section>
@@ -233,7 +235,7 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
         </section>
         <div>
           {
-            // @ts-ignore
+            // @ts-expect-error until MemberDB is migrated to TS
             <MemberDBSelector
               contentType="taxonomy"
               filterType="entry"
@@ -249,7 +251,7 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
                     {
                       selector: typeof open === 'boolean',
                       open,
-                    }
+                    },
                   )}
                 >
                   Entry Database: {db || 'All'}
@@ -275,7 +277,7 @@ const getUrl = createSelector(
   ({ protocol, hostname, port, root }, description, search) => {
     const { entry_db: db, ..._search } = search;
     const hasFilters = Object.values(description).some(
-      (endpoint) => !!(endpoint as EndpointPartialLocation).isFilter
+      (endpoint) => !!(endpoint as EndpointPartialLocation).isFilter,
     );
     if (hasFilters || !db || db === 'all') _search.with_names = true;
     else _search.filter_by_entry_db = db;
@@ -286,7 +288,7 @@ const getUrl = createSelector(
       pathname: root + descriptionToPath(description),
       query: _search,
     });
-  }
+  },
 );
 
 export default loadData<{ metadata: TaxonomyMetadata } & WithNames, 'Names'>({
