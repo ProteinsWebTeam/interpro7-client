@@ -392,6 +392,24 @@ exports[`<DynamicMenu /> should render 1`] = `
       }
     />
   </li>
+  <li
+    className="menu-item visible"
+    data-name="Contact us"
+    data-testid="menu-tab-contact_us"
+  >
+    <MenuItemWithEntities
+      name="Contact us"
+      to={
+        {
+          "description": {
+            "other": [
+              "contact",
+            ],
+          },
+        }
+      }
+    />
+  </li>
   <ul
     className="menu-item view-more"
     role="tree"

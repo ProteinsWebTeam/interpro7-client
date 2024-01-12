@@ -795,6 +795,12 @@ export const InterPro: Array<MenuItemProps> = [
     name: 'Settings',
     iconClass: 'common',
   },
+  {
+    to: { description: { other: ['contact'] } },
+    icon: '',
+    name: 'Contact us',
+    iconClass: 'common',
+  },
 ];
 
 const _NOT_MEMBER_DBS = [
