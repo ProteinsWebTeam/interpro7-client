@@ -10,18 +10,20 @@ export const useInterval = (callback: Fun, delay: number) => {
     savedCallback.current = callback;
   }, [callback]);
 
-  const clear = ()=>{
-    if (id){
-    clearInterval(id);
-    setId(undefined);
-  }
-  }
+  const clear = () => {
+    if (id) {
+      clearInterval(id as unknown as number);
+      setId(undefined);
+    }
+  };
   // Set up the interval.
   React.useEffect(() => {
     const tick = () => savedCallback?.current?.();
     if (delay !== null) {
-      setId( setInterval(tick, delay));
-      return () => {clear()}
+      setId(setInterval(tick, delay));
+      return () => {
+        clear();
+      };
     }
   }, [delay]);
   return [clear];
