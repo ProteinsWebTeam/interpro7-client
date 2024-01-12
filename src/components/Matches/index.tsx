@@ -137,10 +137,10 @@ const includeAccessionSearch = (
   accessionSearch: AccSearchData,
   primary: Endpoint,
   secondary: Endpoint,
-  mainData: MetadataWithLocations
+  mainData: MetadataWithLocations,
 ) => {
   const indexInPayload = dataTable.findIndex(
-    ({ accession }) => accession === accessionSearch.metadata.accession
+    ({ accession }) => accession === accessionSearch.metadata.accession,
   );
   const accMatch = {
     ...accessionSearch.metadata,
@@ -216,7 +216,7 @@ const Matches = ({
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then((m) => m.InterproType)
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }, []);
 
@@ -233,7 +233,7 @@ const Matches = ({
       accessionSearch,
       primary,
       secondary,
-      mainData
+      mainData,
     );
     aggSize += prevSize - dataTable.length;
   }
@@ -312,7 +312,7 @@ const Matches = ({
               <Link
                 target="_blank"
                 href={toPublicAPI(
-                  includeTaxonFocusedOnURL(getReversedUrl(state), focused)
+                  includeTaxonFocusedOnURL(getReversedUrl(state), focused),
                 )}
                 className={css('button', 'hollow', 'imitate-progress-button')}
               >
@@ -329,7 +329,7 @@ const Matches = ({
         dataKey="accession"
         renderer={(
           acc: string,
-          obj: { source_database: string; type: string }
+          obj: { source_database: string; type: string },
         ) => {
           const { source_database: sourceDatabase } = obj;
           const cellContent = (
@@ -390,7 +390,7 @@ const Matches = ({
           {
             accession,
             source_database: sourceDatabase,
-          }: { accession: string; source_database: string }
+          }: { accession: string; source_database: string },
         ) => (
           <>
             {focusType === 'taxonomy' || focusType === 'proteome' ? (
@@ -420,7 +420,7 @@ const Matches = ({
           {
             accession,
             source_database: sourceDatabase,
-          }: { accession: string; source_database: string }
+          }: { accession: string; source_database: string },
         ) => (
           <Link
             to={
@@ -523,6 +523,9 @@ const Matches = ({
       >
         Structure
       </Column>
+      <Column dataKey="gene" displayIf={primary === 'protein'}>
+        Gene
+      </Column>
       <Column
         dataKey="match"
         headerClassName={css('matchColumn')}
@@ -536,7 +539,7 @@ const Matches = ({
         }
         renderer={(
           match: GenericMatch,
-          { matches }: { matches: Array<AnyMatch> }
+          { matches }: { matches: Array<AnyMatch> },
         ) => (
           <Lazy>
             {(hasBeenVisible: boolean) =>
@@ -647,7 +650,7 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.description,
   (state: GlobalState) => state.customLocation.hash,
   (state: GlobalState) => state,
-  (search, description, hash, state) => ({ search, description, hash, state })
+  (search, description, hash, state) => ({ search, description, hash, state }),
 );
 
 export default connect(mapStateToProps)(Matches);

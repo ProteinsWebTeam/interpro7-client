@@ -1,56 +1,47 @@
-// @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 
 import MenuItem from 'components/Menu/MenuItem';
 
 import { schedule, sleep } from 'timing-functions';
 
-import { InterPro } from 'menuConfig';
+import { InterPro, MenuItemProps } from 'menuConfig';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import interproStyles from 'styles/interpro-new.css';
 import styles from './styles.css';
 
 import dotsvg from 'images/icons/ico-more.svg';
 
-const f = foundationPartial(fonts, interproStyles, styles);
+const css = cssBinder(fonts, styles);
 
 const RECHECK_AFTER_MOUNT = 500; // ms
 const MAX_DELAY_BEFORE_CHECKING_FIT = 200; // ms
 
 const InterProMin = InterPro.filter((item) => item.name !== 'Settings');
 
-const MenuItemWithEntities = (
-  { to, activeClass, exact, name, entities, nested } /*: {
-      to: Object| function,
-      name: string,
-      activeClass?: string | function,
-      exact:boolean,
-      nested?:boolean,
-      entities?: Array<{
-        to:{},
-        name: string,
-        exact:boolean,
-      }>
-    } */,
-) =>
+const MenuItemWithEntities = ({
+  to,
+  activeClass,
+  exact,
+  name,
+  entities,
+  nested,
+}: MenuItemProps & { nested?: boolean }) =>
   entities ? (
-    <div className={f('dropdown')}>
+    <div className={css('dropdown')}>
       <MenuItem to={to} activeClass={activeClass} exact={exact}>
-        <span className={f('arrow')}>▾</span> {name}
+        <span className={css('arrow')}>▾</span> {name}
       </MenuItem>
-      <ul role="tree" tabIndex="0" className={f({ nested })}>
+      <ul role="tree" tabIndex={0} className={css({ nested })}>
         {entities.map(({ to, name, exact }) => (
           <li
             key={name}
-            className={f('menu-item')}
+            className={css('menu-item')}
             role="treeitem"
             aria-selected="false"
           >
-            <MenuItem to={to} activeClass={f('reactive')} exact={exact}>
+            <MenuItem to={to} activeClass={css('reactive')} exact={exact}>
               {name}
             </MenuItem>
           </li>
@@ -63,39 +54,29 @@ const MenuItemWithEntities = (
     </MenuItem>
   );
 
-MenuItemWithEntities.propTypes = {
-  exact: T.bool,
-  name: T.string,
-  entities: T.arrayOf(T.object),
-  activeClass: T.oneOfType([T.string, T.func]),
-  to: T.oneOfType([T.object, T.func]),
-  nested: T.bool,
+type Props = {
+  width: number;
 };
-/*:: type Props = {
-  width: number,
-}; */
-/*:: type State = {
-  [key: string]: boolean,
-}; */
+type State = {
+  [key: string]: boolean;
+};
 
-class DynamicMenu extends PureComponent /*:: <Props, State> */ {
-  static propTypes = {
-    width: T.number.isRequired,
-  };
-  /*:: _menuItems: Set<HTMLElement>; */
-  /*:: _dotdotdotRef: { current: null | React$ElementRef<'span'> }; */
+class DynamicMenu extends PureComponent<Props, State> {
+  private _menuItems: Set<HTMLElement>;
+  private _dotdotdotRef: React.RefObject<HTMLSpanElement>;
 
   static defaultProps = {
     width: +Infinity,
   };
 
-  constructor(props /*: Props */) {
+  constructor(props: Props) {
     super(props);
 
-    this.state = {};
+    const state: State = {};
     for (const { name } of InterProMin) {
-      this.state[name] = true;
+      state[name] = true;
     }
+    this.state = state;
 
     this._menuItems = new Set();
     this._dotdotdotRef = React.createRef();
@@ -110,7 +91,7 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
     this._checkSizes(this.props.width);
   }
 
-  _checkSizes = async (width /*: number */) => {
+  _checkSizes = async (width: number) => {
     await schedule(MAX_DELAY_BEFORE_CHECKING_FIT);
     let remainingWidth =
       width - (this._dotdotdotRef.current?.getBoundingClientRect().width || 0);
@@ -118,29 +99,27 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
       if (remainingWidth > 0) {
         const { width } = menuItem.getBoundingClientRect();
         remainingWidth -= width;
-        // eslint-disable-next-line react/no-did-update-set-state
-        this.setState({ [menuItem.dataset.name]: remainingWidth >= 0 });
+        this.setState({ [menuItem.dataset.name || '']: remainingWidth >= 0 });
       } else {
-        // eslint-disable-next-line react/no-did-update-set-state
-        this.setState({ [menuItem.dataset.name]: false });
+        this.setState({ [menuItem.dataset.name || '']: false });
       }
     }
   };
 
-  _setMenuItemInMap = (node) => {
+  _setMenuItemInMap = (node: unknown) => {
     if (node instanceof HTMLElement) this._menuItems.add(node);
   };
 
   render() {
     const hiddenItems = InterProMin.filter(({ name }) => !this.state[name]);
     return (
-      <ul className={f('menu')}>
+      <ul className={css('menu')}>
         {InterProMin.map(({ to, name, activeClass, exact, entities }) => (
           <li
             key={name}
             ref={this._setMenuItemInMap}
             data-name={name}
-            className={f('menu-item', { visible: this.state[name] || false })}
+            className={css('menu-item', { visible: this.state[name] || false })}
             data-testid={`menu-tab-${name.toLowerCase().replace(/\s+/g, '_')}`}
           >
             <MenuItemWithEntities
@@ -153,20 +132,20 @@ class DynamicMenu extends PureComponent /*:: <Props, State> */ {
           </li>
         ))}
         <ul
-          className={f('menu-item', 'view-more', {
+          className={css('menu-item', 'view-more', {
             visible: hiddenItems.length,
           })}
           role="tree"
-          tabIndex="0"
+          tabIndex={0}
         >
-          <span className={f('more-icon-container')} ref={this._dotdotdotRef}>
+          <span className={css('more-icon-container')} ref={this._dotdotdotRef}>
             <img src={dotsvg} width="30px" alt="view all menu items" />
           </span>
 
           {hiddenItems.map(({ to, name, activeClass, exact, entities }) => (
             <li
               key={name}
-              className={f('menu-item')}
+              className={css('menu-item')}
               role="treeitem"
               aria-selected="false"
             >
