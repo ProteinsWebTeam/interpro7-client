@@ -7,21 +7,26 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 const css = cssBinder(fonts, local);
+import xlogo from 'images/x-logo.svg';
 
-const Twitter = () => {
+type Props = {
+  handler?: string;
+};
+
+const Twitter = ({ handler = 'InterProDB' }: Props) => {
   return (
     <div className={css('twitter-block')}>
-      <div className={css('icon', 'icon-common')} data-icon="&#xf099;" />
+      <img src={xlogo} className={css('inline-logo')} alt="X logo" />
       <Link
         data-dnt="true"
         data-chrome={'nofooter noborders noheader noscrollbar transparent'}
         data-tweet-limit="1"
         className={css('twitter-timeline')}
-        href="https://twitter.com/InterProDB"
+        href={`https://twitter.com/${handler}`}
         target="_blank"
       >
         {' '}
-        Tweets by @InterProDB
+        Posts by @{handler}
       </Link>
     </div>
   );
