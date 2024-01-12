@@ -507,6 +507,14 @@ class List extends PureComponent /*:: <ListProps> */ {
               Species
             </Column>
             <Column
+              dataKey="gene"
+              renderer={(gene /*: string */) => (
+                <span aria-label="gene">{gene}</span>
+              )}
+            >
+              Gene
+            </Column>
+            <Column
               dataKey="length"
               headerClassName={f('text-right')}
               cellClassName={f('text-right')}
