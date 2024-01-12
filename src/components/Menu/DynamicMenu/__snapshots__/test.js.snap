@@ -413,7 +413,7 @@ exports[`<DynamicMenu /> should render 1`] = `
   <ul
     className="menu-item view-more"
     role="tree"
-    tabIndex="0"
+    tabIndex={0}
   >
     <span
       className="more-icon-container"

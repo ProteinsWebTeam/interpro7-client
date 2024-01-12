@@ -7,6 +7,7 @@ import { format } from 'url';
 import BrowseTabsLink from './BrowseTabsLink';
 
 import config from 'config';
+// $FlowFixMe
 import { entities, singleEntity } from 'menuConfig';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -73,7 +74,7 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
           // used for both InterProScan result page (TEMP) and on top of browse
         }
         {children}
-        {tabs.map(e => (
+        {tabs.map((e) => (
           <li className={f('tabs-title')} key={e.name}>
             <BrowseTabsLink
               to={e.to}
@@ -92,8 +93,8 @@ export class BrowseTabsWithoutData extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.main.key,
-  state =>
+  (state) => state.customLocation.description.main.key,
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .db,
@@ -110,13 +111,13 @@ const mapStateToProps = createSelector(
 );
 
 const mapStateToUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description.main.key,
-  state =>
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.main.key,
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .db,
-  state =>
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,

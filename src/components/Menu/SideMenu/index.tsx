@@ -1,6 +1,4 @@
-// @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
@@ -15,44 +13,35 @@ import Tip from 'components/Tip';
 
 import { inert as inertPolyfill } from 'utils/polyfills';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-import ebiStyles from 'ebi-framework/css/ebi-global.css';
-import interproStyles from 'styles/interpro-new.css';
+// import ebiStyles from 'ebi-framework/css/ebi-global.css';
+// import interproStyles from 'styles/interpro-new.css';
 import helperClasses from 'styles/helper-classes.css';
 import style from './style.css';
 
-const f = foundationPartial(ebiStyles, interproStyles, helperClasses, style);
+const css = cssBinder(helperClasses, style);
 
-/*:: type Props = {
-  visible: boolean,
-  mainAccession?: string,
-  mainType?: string,
-  closeSideNav: function,
-  showConnectionStatusToast: boolean,
-}; */
-/*:: type State = {
-  hasRendered: boolean,
-}; */
+type Props = {
+  visible: boolean;
+  mainAccession?: string;
+  mainType?: string;
+  closeSideNav: typeof closeSideNav;
+  showConnectionStatusToast: boolean;
+};
+type State = {
+  hasRendered: boolean;
+};
 
-export class SideMenu extends PureComponent /*:: <Props, State> */ {
-  static propTypes = {
-    visible: T.bool.isRequired,
-    mainAccession: T.string,
-    mainType: T.string,
-    closeSideNav: T.func.isRequired,
-    showConnectionStatusToast: T.bool.isRequired,
-  };
-
-  constructor(props /*: Props */) {
+export class SideMenu extends PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
-
     this.state = { hasRendered: false };
   }
 
   static getDerivedStateFromProps(
-    { visible } /*: {visible: boolean} */,
-    { hasRendered } /*: {hasRendered: boolean} */,
+    { visible }: { visible: boolean },
+    { hasRendered }: { hasRendered: boolean },
   ) {
     if (hasRendered || !visible) return null;
     return { hasRendered: true };
@@ -72,15 +61,14 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
         <div role="menu">
           {this.props.visible && this.props.showConnectionStatusToast ? (
             <Tip
-              title="💡 What is the status of external dependencies?"
-              body="The green signal is displayed when an external dependency is available whist a red signal indicates
-              that InterPro cannot connect to the resource."
+              title="💡 What is the status of external services?"
+              body="A green signal indicates that the external service is online and available. A red signal indicates that InterPro is unable to connect to the external resource."
               toastID="connectivity"
               settingsName="showConnectionStatusToast"
             />
           ) : null}
           <button
-            className={f('exit')}
+            className={css('exit')}
             title="Close side menu"
             onClick={closeSideNav}
             aria-hidden="true"
@@ -91,33 +79,35 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
             <ul>
               {mainType === 'result'
                 ? mainAccession && (
-                    <div className={f('sidemenu')}>
-                      <span className={f('menu-label', 'cursor-default')}>
+                    <div className={css('sidemenu')}>
+                      <span className={css('menu-label', 'cursor-default')}>
                         {mainType} menu ({mainAccession})
                       </span>
                     </div>
                   )
                 : mainAccession && (
-                    <EntryMenu className={f('sidemenu')} usedOnTheSide>
-                      <span className={f('menu-label', 'cursor-default')}>
+                    <EntryMenu className={css('sidemenu')} usedOnTheSide>
+                      <span className={css('menu-label', 'cursor-default')}>
                         {mainType} menu ({mainAccession})
                       </span>
                     </EntryMenu>
                   )}
 
-              <InterProMenu className={f('secondary', 'is-drilldown')}>
-                <span className={f('menu-label', 'cursor-default')}>
+              <InterProMenu className={css('secondary', 'is-drilldown')}>
+                <span className={css('menu-label', 'cursor-default')}>
                   InterPro menu
                 </span>
               </InterProMenu>
-              <EBIMenu className={f('tertiary')}>
-                <span className={f('menu-label', 'cursor-default')}>
+              <EBIMenu className={css('tertiary')}>
+                <span className={css('menu-label', 'cursor-default')}>
                   EBI menu
                 </span>
               </EBIMenu>
               <span />
               <li>
-                <span className={f('menu-label', 'cursor-default', 'tertiary')}>
+                <span
+                  className={css('menu-label', 'cursor-default', 'tertiary')}
+                >
                   Connection status
                 </span>
                 <ServerStatus />
@@ -129,9 +119,10 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
     }
     return (
       <aside
+        // @ts-expect-error inert attribute is not defined in TS, so if one day this doen's causes an error is because they added it!
         inert={visible ? undefined : ''}
         aria-hidden={!visible}
-        className={f('container', { visible })}
+        className={css('container', { visible })}
       >
         {content}
       </aside>
@@ -141,12 +132,16 @@ export class SideMenu extends PureComponent /*:: <Props, State> */ {
 
 const mapStateToProps = createSelector(
   sideNavSelector,
-  (state) => state.customLocation.description.main.key,
-  (state) =>
+  (state: GlobalState) => state.customLocation.description.main.key,
+  (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
-  (state) => state.settings.notifications.showConnectionStatusToast,
+    (
+      state.customLocation.description[
+        state.customLocation.description.main.key
+      ] as EndpointLocation
+    ).accession,
+  (state: GlobalState) =>
+    state.settings.notifications.showConnectionStatusToast,
   (visible, mainType, mainAccession, showConnectionStatusToast) => ({
     visible,
     mainType,

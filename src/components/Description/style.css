@@ -24,8 +24,12 @@ a.text-high:focus {
   margin: 0.75em;
 }
 .description .content {
-  border-left: 4px solid transparent;
-  padding-left: 1em;
+  border-left: 0;
+  padding-left: 0;
+  &.bordered {
+    border-left: 4px solid transparent;
+    padding-left: 1em;
+  }
 }
 .description .content.llm:not(.checked) {
   border-left-color: #f0ad4e;

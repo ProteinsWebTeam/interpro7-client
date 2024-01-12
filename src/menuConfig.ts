@@ -1,17 +1,25 @@
-// @flow
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 
-import f from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
+const css = cssBinder();
 
-/* ::
-  type Location = {|
-    description: {|[key: string]: {|[key: string | number]: string | boolean|}|},
-    search: {|[key: string]: string|},
-    hash: string,
-  |};
-*/
+export type ActiveClass =
+  | string
+  | ((customLocation: InterProLocation) => string | boolean);
 
-export const EBI /*: Array<Object> */ = [
+export type MenuItemProps = {
+  href?: string;
+  icon?: string;
+  name: string;
+  iconClass?: string;
+  to?: InterProPartialLocation | ((customLocation: InterProLocation) => void);
+  activeClass?: ActiveClass;
+  exact?: boolean;
+  counter?: string;
+  entities?: Array<MenuItemProps>;
+};
+
+export const EBI: Array<MenuItemProps> = [
   {
     href: 'https://www.ebi.ac.uk',
     icon: '',
@@ -44,23 +52,24 @@ export const EBI /*: Array<Object> */ = [
   },
 ];
 
-const getEntryForFilter = ({ _main, entry }) => {
+const getEntryForFilter = ({ entry }: InterProDescription) => {
   if (entry.db) {
     return { db: entry.db, isFilter: true };
   }
   // Default to selecting the InterPro DB, making ALl proteins a manual chioce.
   return { db: 'InterPro', isFilter: true };
 };
-const getTaxonomyForFilter = ({ taxonomy, main }) => {
+
+const getTaxonomyForFilter = ({ taxonomy, main }: InterProDescription) => {
   if (main.key !== 'taxonomy' && taxonomy.db) {
     return { ...taxonomy, isFilter: true };
   }
 };
 
-export const entities /*: Array<Object> */ = [
+export const entities: Array<MenuItemProps> = [
   // for Browse menu
   {
-    to(customLocation) {
+    to(customLocation: InterProLocation) {
       return {
         description: {
           main: { key: 'entry' },
@@ -74,7 +83,7 @@ export const entities /*: Array<Object> */ = [
     name: 'By InterPro',
   },
   {
-    to(customLocation) {
+    to(customLocation: InterProLocation) {
       const db = customLocation.description.entry.db?.toLowerCase();
       return {
         description: {
@@ -90,7 +99,7 @@ export const entities /*: Array<Object> */ = [
     name: 'By Member DB',
   },
   {
-    to(customLocation) {
+    to(customLocation: InterProLocation) {
       return {
         description: {
           main: { key: 'protein' },
@@ -104,7 +113,7 @@ export const entities /*: Array<Object> */ = [
     name: 'By Protein',
   },
   {
-    to(customLocation) {
+    to(customLocation: InterProLocation) {
       return {
         description: {
           main: { key: 'structure' },
@@ -117,7 +126,7 @@ export const entities /*: Array<Object> */ = [
     name: 'By Structure',
   },
   {
-    to(customLocation) {
+    to(customLocation: InterProLocation) {
       return {
         description: {
           main: { key: 'taxonomy' },
@@ -132,7 +141,7 @@ export const entities /*: Array<Object> */ = [
     name: 'By Taxonomy',
   },
   {
-    to(customLocation) {
+    to(customLocation: InterProLocation) {
       return {
         description: {
           main: { key: 'proteome' },
@@ -147,7 +156,7 @@ export const entities /*: Array<Object> */ = [
     name: 'By Proteome',
   },
   {
-    to(customLocation) {
+    to(customLocation: InterProLocation) {
       return {
         description: {
           main: { key: 'set' },
@@ -168,11 +177,11 @@ export const entities /*: Array<Object> */ = [
   },
 ];
 
-export const singleEntity /*: Map<string, Object> */ = new Map([
+export const singleEntity: Map<string, MenuItemProps> = new Map([
   [
     'overview',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -192,7 +201,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'entry',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -217,7 +226,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'protein',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -241,7 +250,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'structure',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -265,7 +274,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'taxonomy',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -289,7 +298,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'proteome',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -313,7 +322,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'set',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -325,7 +334,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
             },
             set: {
               isFilter: true,
-              db: customLocation.description[key].db,
+              db: (customLocation.description[key] as EndpointLocation).db,
             },
           },
         };
@@ -337,7 +346,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'sequence',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -356,7 +365,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'domain_architecture',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -376,7 +385,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'similar_proteins',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -396,7 +405,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'logo',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -415,7 +424,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'alphafold',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -435,7 +444,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'entry_alignments',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -454,7 +463,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'interactions',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -474,7 +483,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'pathways',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         const { key } = customLocation.description.main;
         return {
           description: {
@@ -494,7 +503,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'subfamilies',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         return {
           description: {
             ...getEmptyDescription(),
@@ -513,7 +522,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   [
     'curation',
     {
-      to(customLocation) {
+      to(customLocation: InterProLocation) {
         return {
           description: {
             ...getEmptyDescription(),
@@ -530,7 +539,7 @@ export const singleEntity /*: Map<string, Object> */ = new Map([
   ],
 ]);
 
-const search = [
+const search: Array<MenuItemProps> = [
   {
     name: 'By Sequence',
     to: {
@@ -544,7 +553,7 @@ const search = [
         search: { type },
       },
     }) {
-      return type === 'InterProScan' && f('is-active');
+      return type === 'InterProScan' && css('is-active');
     },
   },
   {
@@ -560,7 +569,7 @@ const search = [
         search: { type },
       },
     }) {
-      return type === 'download' && f('is-active');
+      return type === 'download' && css('is-active');
     },
   },
   {
@@ -576,12 +585,12 @@ const search = [
         search: { type },
       },
     }) {
-      return type === 'download' && f('is-active');
+      return type === 'download' && css('is-active');
     },
   },
 ];
 
-const results = [
+const results: Array<MenuItemProps> = [
   {
     to: {
       description: {
@@ -594,7 +603,7 @@ const results = [
         result: { type },
       },
     }) {
-      return type === 'InterProScan' && f('is-active');
+      return type === 'InterProScan' && css('is-active');
     },
     name: 'Your InterProScan searches',
   },
@@ -611,76 +620,76 @@ const results = [
         result: { type },
       },
     }) {
-      return type === 'download' && f('is-active');
+      return type === 'download' && css('is-active');
     },
   },
 ];
 
-const help = [
+const help: Array<MenuItemProps> = [
   {
     name: 'Tutorials & Webinars',
     to: { description: { other: ['help', 'tutorial'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Training',
     to: { description: { other: ['help', 'training'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'FAQs',
     to: { description: { other: ['help', 'faqs'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Protein families game',
     to: { description: { other: ['help', 'protein_families_game'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Documentation',
     to: { description: { other: ['help', 'documentation'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
 ];
-const about = [
+const about: Array<MenuItemProps> = [
   {
     name: 'InterPro',
     to: { description: { other: ['about', 'interpro'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'InterProScan',
     to: { description: { other: ['about', 'interproscan'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'The InterPro Consortium',
     to: { description: { other: ['about', 'consortium'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Funding',
     to: { description: { other: ['about', 'funding'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'License',
     to: { description: { other: ['about', 'license'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Privacy',
     to: { description: { other: ['about', 'privacy'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
   {
     name: 'Team',
     to: { description: { other: ['about', 'team'] } },
-    activeClass: f('is-active'),
+    activeClass: css('is-active'),
   },
 ];
-export const InterPro /*: Array<Object> */ = [
+export const InterPro: Array<MenuItemProps> = [
   {
     to: { description: {} },
     icon: 'H',
@@ -695,7 +704,7 @@ export const InterPro /*: Array<Object> */ = [
     entities: search,
   },
   {
-    to(customLocation) {
+    to(customLocation: InterProLocation) {
       const { key } = customLocation.description.main;
       if (!key || key === 'search' || key === 'result') {
         return {
@@ -720,7 +729,9 @@ export const InterPro /*: Array<Object> */ = [
         description: {
           ...getEmptyDescription(),
           main: { key },
-          [key]: { db: customLocation.description[key].db },
+          [key]: {
+            db: (customLocation.description[key] as EndpointLocation).db,
+          },
           entry: {
             isFilter: key !== 'entry',
             db: customLocation.description.entry.db || 'InterPro',
@@ -728,10 +739,11 @@ export const InterPro /*: Array<Object> */ = [
         },
       };
     },
-    activeClass({ description: { main } } /*: Location */) {
+    activeClass({ description: { main } }) {
       if (main.key && main.key !== 'search' && main.key !== 'result') {
-        return f('is-active');
+        return css('is-active');
       }
+      return false;
     },
     icon: 'b',
     name: 'Browse',
@@ -816,6 +828,7 @@ const _NOT_MEMBER_DBS = [
   'ALPHAFOLD',
   'ELM',
 ];
-export const NOT_MEMBER_DBS /*: Set<string> */ = new Set(
+
+export const NOT_MEMBER_DBS = new Set(
   _NOT_MEMBER_DBS.concat(_NOT_MEMBER_DBS.map((x) => x.toLowerCase())),
 );
