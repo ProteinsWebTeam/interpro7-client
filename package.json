@@ -143,7 +143,6 @@
     "@storybook/addon-essentials": "^7.6.7",
     "@storybook/addon-interactions": "^7.6.7",
     "@storybook/addon-links": "^7.6.7",
-    "@storybook/addon-onboarding": "^1.0.10",
     "@storybook/addon-styling-webpack": "^0.0.6",
     "@storybook/blocks": "^7.6.7",
     "@storybook/manager-api": "^7.6.7",
