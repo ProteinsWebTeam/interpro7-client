@@ -13,7 +13,7 @@
   "scripts": {
     "preanalyze": "mkdirp reports/webpack-stats && webpack --profile --json > reports/webpack-stats/stats.json",
     "analyze": "npx webpack-bundle-analyzer reports/webpack-stats/stats.json",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build  --output-dir dist/storybook",
     "bundle": "webpack --progress",
     "clean": "rimraf dist",
     "clean:report": "rimraf reports && rimraf .lighthouseci && mkdirp reports",

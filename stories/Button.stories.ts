@@ -26,6 +26,7 @@ type ButtonStory = StoryObj<typeof meta>;
 export const Primary: ButtonStory = {
   args: {
     primary: true,
+    icon: 'icon-coffee',
     children: 'Button',
   },
 };
@@ -37,16 +38,16 @@ export const Secondary: ButtonStory = {
   },
 };
 
-// export const Large: ButtonStory = {
-//   args: {
-//     size: 'large',
-//     label: 'Button',
-//   },
-// };
+export const Large: ButtonStory = {
+  args: {
+    size: 'large',
+    children: 'Button',
+  },
+};
 
-// export const Small: ButtonStory = {
-//   args: {
-//     size: 'small',
-//     label: 'Button',
-//   },
-// };
+export const Small: ButtonStory = {
+  args: {
+    size: 'small',
+    children: 'Button',
+  },
+};
