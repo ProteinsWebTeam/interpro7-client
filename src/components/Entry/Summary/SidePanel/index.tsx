@@ -94,7 +94,7 @@ const SidePanel = ({
   };
 
   return (
-    <section>
+    <>
       {['interpro', 'pfam'].includes(
         // Only receiving new annotations for pfam and interpro
         metadata.source_database.toLowerCase(),
@@ -209,7 +209,7 @@ const SidePanel = ({
           name={metadata.representative_structure.name}
         />
       )}
-    </section>
+    </>
   );
 };
 

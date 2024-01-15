@@ -22,7 +22,7 @@
     }
   }
   & button {
-    margin-bottom: 1rem;
+    margin-bottom: 0;
   }
   & span.icon {
     padding-right: 0.5em;
@@ -31,7 +31,7 @@
     position: absolute;
     top: 100%;
     width: initial;
-    padding: 0.5rem 0.2rem;
+    padding: 0.5rem 0.8rem;
     transform: scaleY(0);
     transform-origin: top;
     transition: transform var(--timing-really-fast) ease-in-out;
