@@ -3,6 +3,7 @@ import * as path from 'path';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import postCSSImport from 'postcss-import';
 import postcssPresetEnv from 'postcss-preset-env';
+import { RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
   stories: [
@@ -75,16 +76,16 @@ const config: StorybookConfig = {
     ];
     config.resolve.modules.push(path.resolve('.', 'src'));
 
-    // const cssRule = config.module.rules.find((rule) =>
-    //   ((rule as RuleSetRule).test||'').toString().includes('.css')
-    // );
+    const cssRule = config.module.rules.find((rule) =>
+      ((rule as RuleSetRule).test || '').toString().includes('.css')
+    );
 
-    // (cssRule as RuleSetRule).exclude = /((clanviewer))\.css$/i;
+    (cssRule as RuleSetRule).exclude = /((clanviewer))\.css$/i;
 
-    // config.module.rules.push({
-    //   test: /((clanviewer))\.css$/i,
-    //   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
-    // });
+    config.module.rules.push({
+      test: /((clanviewer))\.css$/i,
+      use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+    });
     config.module.rules.push({
       test: /\.yml$/i,
       use: [{ loader: 'yaml-loader' }],
@@ -100,18 +101,10 @@ const config: StorybookConfig = {
     //     },
     //   ],
     // });
-    // config.module.rules.push({
-    //   test: /\.avif$/i,
-    //   use: [
-    //     {
-    //       loader: 'file-loader',
-    //       options: {
-    //         name: 'static/media/[name].[hash:8].[ext]',
-    //         esModule: false,
-    //       },
-    //     },
-    //   ],
-    // });
+    config.module.rules.push({
+      test: /\.(jpe?g|png|gif|svg|avif)$/i,
+      type: 'asset/resource',
+    });
     // console.log((cssRule as RuleSetRule)?.use?.[1]);
     return config;
   },

@@ -18,7 +18,9 @@ type DropDownButtonStory = StoryObj<typeof meta>;
 
 export const Base: DropDownButtonStory = {
   args: {
-    label: 'YEBO',
+    label: 'Select',
+    fontSize: '0.8em',
+    color: 'pink',
     children: (
       <>
         <Button icon="icon-coffee" size="small">
