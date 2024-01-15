@@ -65,11 +65,15 @@ const config: StorybookConfig = {
   async webpackFinal(config) {
     // do mutation to the config
     if (!config.resolve) config.resolve = {};
-    // if (!config.resolve.modules) config.resolve.modules = [];
-    // if (!config.module) config.module = {};
-    // if (!config.module.rules) config.module.rules = [];
-    config.resolve.plugins = [new TsconfigPathsPlugin()];
-    // config.resolve.modules.push(path.resolve('.', 'src'));
+    if (!config.resolve.modules) config.resolve.modules = [];
+    if (!config.module) config.module = {};
+    if (!config.module.rules) config.module.rules = [];
+    config.resolve.plugins = [
+      new TsconfigPathsPlugin({
+        configFile: path.resolve('.', 'stories', 'tsconfig.json'),
+      }),
+    ];
+    config.resolve.modules.push(path.resolve('.', 'src'));
 
     // const cssRule = config.module.rules.find((rule) =>
     //   ((rule as RuleSetRule).test||'').toString().includes('.css')
@@ -81,10 +85,10 @@ const config: StorybookConfig = {
     //   test: /((clanviewer))\.css$/i,
     //   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
     // });
-    // config.module.rules.push({
-    //   test: /\.yml$/i,
-    //   use: [{ loader: 'yaml-loader' }],
-    // });
+    config.module.rules.push({
+      test: /\.yml$/i,
+      use: [{ loader: 'yaml-loader' }],
+    });
     // config.module.rules.push({
     //   test: /\.ts$/,
     //   use: [
