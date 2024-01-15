@@ -149,17 +149,17 @@ class StructureView extends PureComponent<Props, State> {
             selectedEntryToKeep:
               type === 'chain'
                 ? {
-                  accession: pdbid,
-                  db: 'pdb',
-                  chain: accession,
-                  protein: proteinD,
-                }
+                    accession: pdbid,
+                    db: 'pdb',
+                    chain: accession,
+                    protein: proteinD,
+                  }
                 : {
-                  accession: accession,
-                  db: sourceDB,
-                  chain: chainF,
-                  protein: proteinD,
-                },
+                    accession: accession,
+                    db: sourceDB,
+                    chain: chainF,
+                    protein: proteinD,
+                  },
           });
           break;
         case 'mouseover':
@@ -249,7 +249,7 @@ class StructureView extends PureComponent<Props, State> {
       entry: string;
       db: string;
       match: { metadata: { integrated: string | null } };
-    }
+    },
   ) {
     for (const location of locations) {
       for (const fragment of location.fragments) {
@@ -280,7 +280,7 @@ class StructureView extends PureComponent<Props, State> {
     }
 
     hits.forEach(
-      (hit) => (hit.color = getTrackColor(hit, this.props.colorDomainsBy))
+      (hit) => (hit.color = getTrackColor(hit, this.props.colorDomainsBy)),
     );
     return hits;
   }
@@ -317,7 +317,7 @@ class StructureView extends PureComponent<Props, State> {
           if (!memberDBMap.pdb[structure.accession][chain]) {
             memberDBMap.pdb[structure.accession][chain] = this._getChainMap(
               chain,
-              structure.structure_protein_locations
+              structure.entry_structure_locations,
             );
           }
         }
@@ -504,7 +504,7 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui,
   (ui) => ({
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
-  })
+  }),
 );
 
 export default connect(mapStateToProps)(StructureView);
