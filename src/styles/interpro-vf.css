@@ -167,10 +167,10 @@ button.as-text {
 }
 
 .no-decoration {
-  text-decoration: none;
+  text-decoration: none !important;
   &:hover,
   &:focus {
-    text-decoration: none;
+    text-decoration: none !important;
   }
 }
 details.read-more {

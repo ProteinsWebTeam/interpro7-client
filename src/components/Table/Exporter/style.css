@@ -46,3 +46,6 @@ body button.generate-button {
 span.file-label {
   color: var(--colors-gray);
 }
+.protvista-menu {
+  margin-top: 0;
+}
