@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 
 import cssBinder from '../src/styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import { unescape } from 'lodash-es';
+
 const css = cssBinder(fonts);
 
 interface ButtonProps {

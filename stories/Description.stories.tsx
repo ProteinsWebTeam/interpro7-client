@@ -9,15 +9,12 @@ const store = configureStore({ pathname: '/entry/interpro/ipr999999' });
 import Description from 'components/Description';
 import Literature from 'components/Entry/Literature';
 
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
   title: 'Basic UI/Description',
   component: Description,
   parameters: {
-    // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered',
   },
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   decorators: [
     (Story) => (
