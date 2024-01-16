@@ -4,15 +4,13 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { goToCustomLocation } from 'actions/creators';
-
 import Table, {
   Column,
-  Card,
   PageSizeSelector,
   SearchBox,
   HighlightToggler,
 } from 'components/Table';
+
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import Provider from './Provider';
@@ -49,6 +47,7 @@ const basicData = [
   { id: 3, name: 'Third', extra: 0.75, group: 'B group' },
   { id: 4, name: 'Fourth', extra: 0.5, group: 'B group' },
 ];
+
 export const TheTable: TableStory = {
   args: {
     actualSize: basicData.length,
