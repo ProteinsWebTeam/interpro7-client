@@ -35,9 +35,21 @@ const schemaProcessData = (data: string) => ({
 });
 
 type GoTermsProps = {
+  /**
+   * List of GO terms to display.
+   */
   terms: Array<GOTerm>;
+  /**
+   * Is the GO term related to an `entry`, `protein`, `structure`, etc.
+   */
   type: string;
+  /**
+   * Which database provided the GO term. e.g. interpro, panther, etc.
+   */
   db?: string;
+  /**
+   * Remove the title if `true`
+   */
   withoutTitle?: boolean;
 };
 const GoTerms = ({ terms, type, db, withoutTitle = false }: GoTermsProps) => {
