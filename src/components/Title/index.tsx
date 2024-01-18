@@ -25,8 +25,8 @@ type Props = {
   metadata: Metadata;
   mainType: Endpoint;
   entries?: Array<string>;
-  markFavourite: typeof markFavourite;
-  unmarkFavourite: typeof unmarkFavourite;
+  markFavourite?: typeof markFavourite;
+  unmarkFavourite?: typeof unmarkFavourite;
 };
 
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload> {}
@@ -36,15 +36,15 @@ export class Title extends PureComponent<LoadedProps> {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then((m) => m.InterproType)
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
 
   manageFavourites(metadata: Metadata) {
     if ((this.props.entries || []).includes(metadata.accession)) {
-      this.props.unmarkFavourite(metadata.accession);
+      this.props.unmarkFavourite?.(metadata.accession);
     } else {
-      this.props.markFavourite(metadata.accession, { metadata });
+      this.props.markFavourite?.(metadata.accession, { metadata });
     }
   }
 
@@ -150,7 +150,7 @@ export class Title extends PureComponent<LoadedProps> {
                         'icon-common',
                         (this.props.entries || []).includes(metadata.accession)
                           ? 'favourite'
-                          : 'normal'
+                          : 'normal',
                       )}
                       data-icon="&#xf005;"
                     />
@@ -174,9 +174,9 @@ export class Title extends PureComponent<LoadedProps> {
 }
 const mapStateToProps = createSelector(
   (state: { favourites: { entries: string[] } }) => state.favourites.entries,
-  (entries: string[]) => ({ entries })
+  (entries: string[]) => ({ entries }),
 );
 
 export default connect(mapStateToProps, { markFavourite, unmarkFavourite })(
-  loadData(getUrlForMeta)(Title)
+  loadData(getUrlForMeta)(Title),
 );

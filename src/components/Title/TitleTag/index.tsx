@@ -39,35 +39,27 @@ const TitleTag = ({ db, mainType, dbLabel }: Props) => {
   } else {
     rtdLink = (rtdLinks?.[mainType.toLowerCase() as Endpoint] as string) || '';
   }
+  const clanOrSetLabel = `A ${
+    isPfam ? 'clan' : 'set'
+  } is defined as a group of evolutionary related entries. `;
   return (
     <div className={css('title-tag')} data-testid="title">
       {db && (
         <div
-          className={css('tag', {
+          className={css('vf-badge', 'vf-badge--primary', {
             secondary: !isEntry || isInterPro,
             'md-p': isEntry && !isInterPro,
           })}
         >
           {dbLabel} {mainType === 'set' && isPfam ? 'clan' : mainType}
-          {
-            // Set
-            mainType === 'set' && (
-              <Tooltip
-                title={`A ${
-                  isPfam ? 'clan' : 'set'
-                } is defined as a group of evolutionary related entries`}
-              >
-                {' '}
-                <span
-                  className={css('small', 'icon', 'icon-common')}
-                  data-icon="&#xf129;"
-                />
-              </Tooltip>
-            )
-          }
         </div>
       )}{' '}
-      <TooltipAndRTDLink rtdPage={`browse.html#${rtdLink}`} />
+      <TooltipAndRTDLink
+        rtdPage={`browse.html#${rtdLink}`}
+        label={`${
+          mainType === 'set' ? clanOrSetLabel : ''
+        }Visit our documentation for more information.`}
+      />
     </div>
   );
 };
