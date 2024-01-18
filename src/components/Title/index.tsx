@@ -22,10 +22,25 @@ import styles from './style.css';
 const css = cssBinder(fonts, ipro, styles);
 
 type Props = {
+  /**
+   * The metadata object from the payload of the respective entity.
+   */
   metadata: Metadata;
+  /**
+   * The endpoint od fthe entity. i.e. `'entry' | 'protein' | 'structure' | 'taxonomy' | 'proteome' | 'set'`
+   */
   mainType: Endpoint;
+  /**
+   * List of previously tagged as favourite entries
+   */
   entries?: Array<string>;
+  /**
+   * function to get call when the entry needs to be mark as favourite
+   */
   markFavourite?: typeof markFavourite;
+  /**
+   * function to get call when the entry needs to be unmark as favourite
+   */
   unmarkFavourite?: typeof unmarkFavourite;
 };
 

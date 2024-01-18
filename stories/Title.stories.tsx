@@ -19,8 +19,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  // TODO: Enable when Link gets migrated to TS to be able to include TS
-  // tags: ['autodocs'],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <Provider store={store}>

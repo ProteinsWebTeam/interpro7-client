@@ -1,5 +1,4 @@
 import React from 'react';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
 import cssBinder from 'styles/cssBinder';
