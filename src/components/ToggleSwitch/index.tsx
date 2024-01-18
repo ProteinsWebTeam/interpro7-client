@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { noop } from 'lodash-es';
 
@@ -12,7 +12,7 @@ const css = cssBinder(fonts, local);
 type Props = {
   name?: string;
   id: string;
-  size?: string;
+  size?: 'large' | 'small' | 'tiny';
   switchCond: boolean;
   disabled?: boolean;
   label?: string;
@@ -33,19 +33,30 @@ const ToggleSwitch = ({
   SRLabel,
   onValue = 'On',
   offValue = 'Off',
-  handleChange = noop,
+  handleChange,
   addAccessionStyle = false,
 }: Props) => {
+  const [isOn, setIsOn] = useState(switchCond);
+  useEffect(() => {
+    setIsOn(switchCond);
+  }, [switchCond]);
+  const onInputChange = (evt?: React.ChangeEvent) => {
+    if (handleChange) {
+      handleChange(evt);
+    } else {
+      setIsOn(!isOn);
+    }
+  };
   return (
-    <div className={css('switch', size)}>
+    <div className={css('new-switch', size)}>
       <label htmlFor={id}>
         <input
           type="checkbox"
-          checked={switchCond}
+          checked={isOn}
           className={css('switch-input')}
           name={name}
           id={id}
-          onChange={handleChange}
+          onChange={onInputChange}
           disabled={disabled}
         />
         {label}
