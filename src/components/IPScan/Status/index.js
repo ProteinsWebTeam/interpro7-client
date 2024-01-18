@@ -178,7 +178,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           showTableIcon={false}
           shouldGroup={true}
           // eslint-disable-next-line react/display-name
-          groupActions={(group) => () => <GroupActions group={group} />}
+          groupActions={GroupActions}
         >
           <ExtraOptions>
             <DropDownButton label="Clear All" icon="&#xf1f8;">
@@ -262,6 +262,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
               <Tooltip title={`Job ${status}`}>
                 {(status === 'running' ||
                   status === 'created' ||
+                  status === 'queued' ||
                   status === 'submitted') && (
                   <div>
                     <SpinningCircle />
@@ -318,7 +319,9 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
             defaultKey="actions"
             headerClassName={f('table-center')}
             cellClassName={f('table-center', 'font-ml')}
-            renderer={(localID /*: string */) => <Actions localID={localID} />}
+            renderer={(localID /*: string */) => (
+              <Actions localID={localID} forStatus={true} />
+            )}
           >
             Action
           </Column>

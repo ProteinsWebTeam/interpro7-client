@@ -23,6 +23,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
 import { foundationPartial } from 'styles/foundation';
+// $FlowFixMe
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Tip from 'components/Tip';
 
@@ -487,53 +488,53 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
                 {
                   // prettier-ignore
                   (Object.entries(countersToShow)/*: any */)
-                  .map(([endpoint, [plural, db]]/*: [string, [string, number]] */) => {
-                    if (
-                      endpoint === mainEndpoint ||
-                      typeof currentNode?.counters?.[plural] === 'undefined'
-                    )
-                      return null;
-                    const to = {
-                      ...cloneDeep(description),
-                      [endpoint]: {
-                        isFilter: true,
-                        db,
-                        order: 1,
-                      },
-                    };
-
-                    if (description.main.key === 'taxonomy') {
-                      to.taxonomy.accession = this.state.focused;
-                      if (endpoint !== 'entry')
-                        to.entry.order = 2;
-                    } else {
-                      to.taxonomy = {
-                        db: 'uniprot',
-                        isFilter: true,
-                        order: 2,
-                        accession: this.state.focused,
+                    .map(([endpoint, [plural, db]]/*: [string, [string, number]] */) => {
+                      if (
+                        endpoint === mainEndpoint ||
+                        typeof currentNode?.counters?.[plural] === 'undefined'
+                      )
+                        return null;
+                      const to = {
+                        ...cloneDeep(description),
+                        [endpoint]: {
+                          isFilter: true,
+                          db,
+                          order: 1,
+                        },
                       };
-                    }
-                    return (
-                      <li key={endpoint}>
-                        <Link
-                          className={f('no-decoration', {
-                            disable: !currentNode?.counters?.[plural],
-                          })}
-                          to={{
-                            description: to,
-                          }}
-                        >
-                          <NumberComponent duration={ANIMATION_DURATION}>
-                            {currentNode?.counters?.[plural]}
-                          </NumberComponent>{' '}
-                          {plural}
-                        </Link>{' '}
-                        -
-                      </li>
-                    );
-                  })
-                  .filter(Boolean)
+
+                      if (description.main.key === 'taxonomy') {
+                        to.taxonomy.accession = this.state.focused;
+                        if (endpoint !== 'entry')
+                          to.entry.order = 2;
+                      } else {
+                        to.taxonomy = {
+                          db: 'uniprot',
+                          isFilter: true,
+                          order: 2,
+                          accession: this.state.focused,
+                        };
+                      }
+                      return (
+                        <li key={endpoint}>
+                          <Link
+                            className={f('no-decoration', {
+                              disable: !currentNode?.counters?.[plural],
+                            })}
+                            to={{
+                              description: to,
+                            }}
+                          >
+                            <NumberComponent duration={ANIMATION_DURATION}>
+                              {currentNode?.counters?.[plural]}
+                            </NumberComponent>{' '}
+                            {plural}
+                          </Link>{' '}
+                          -
+                        </li>
+                      );
+                    })
+                    .filter(Boolean)
                 }
               </ul>
             ) : (

@@ -18,6 +18,7 @@ declare module '*.svg' {
   const content: any;
   export default content;
 }
+
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
   let InterproEntry: InterProEntryProps;
@@ -75,7 +76,7 @@ type InterProDescription = Required<
   InterProPartialDescription<EndpointLocation>
 >;
 type InterProPartialDescription<Location = EndpointPartialLocation> = {
-  main: {
+  main?: {
     key: Endpoint | 'search' | 'result' | 'other';
     numberOfFilters?: 0;
   };
@@ -93,12 +94,12 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   set?: Location;
   search?: {
     type: string | null;
-    value: string | null;
+    value?: string | null;
   };
   result?: {
     type: string | null;
-    accession: string | null;
-    detail: string | null;
+    accession?: string | null;
+    detail?: string | null;
   };
   other?: string[];
 };
@@ -107,6 +108,12 @@ type InterProLocation = {
   search: Record<string, string | boolean>;
   hash: string;
   state: Record<string, string>;
+};
+type InterProPartialLocation = {
+  description: InterProPartialDescription;
+  search?: Record<string, string | boolean>;
+  hash?: string;
+  state?: Record<string, string>;
 };
 type EndpointFilter = [endpoint: Endpoint, location: EndpointPartialLocation];
 
@@ -142,7 +149,6 @@ type UISettings = {
   structureViewer: boolean;
   shouldHighlight: boolean;
   idaAccessionDB: string;
-  idaLabel: string;
   isPIPEnabled: boolean;
 };
 type LabelUISettings = {
@@ -240,10 +246,15 @@ type LiteratureMetadata = {
   [PubID: string]: Reference;
 };
 
+type StructuredDescription = {
+  text: string;
+  llm: boolean;
+  checked: boolean;
+};
 interface Metadata {
   accession: string;
   source_database: string;
-  description: Array<string>;
+  description: Array<string | StructuredDescription>;
   counters: {
     [resource: string]:
       | number
@@ -299,7 +310,6 @@ interface EntryMetadata extends Metadata {
     accession: string;
     name: string;
   };
-  llm_description: string | null;
   is_removed?: boolean;
 }
 
@@ -310,6 +320,7 @@ type SourceOrganism = {
 interface ProteinMetadata extends Metadata {
   id?: string;
   name: string;
+  description: Array<string>;
   source_database: 'uniprot' | 'reviewed' | 'unreviewed';
   length: number;
   sequence: string;
@@ -334,22 +345,25 @@ type PayloadList<Payload> = {
   previous?: string | null;
   results: Array<Payload>;
 };
+type Fragment = {
+  start: number;
+  end: number;
+  'dc-status'?: string;
+};
+type BaseLocation = {
+  fragments: Array<Fragment>;
+};
 type ProteinEntryPayload = {
   metadata: ProteinMetadata;
   entries: Array<{
     accession: string;
-    entry_protein_locations: [
-      {
-        fragments: Array<{
-          start: number;
-          end: number;
-          'dc-status'?: string;
-        }>;
+    entry_protein_locations: Array<
+      BaseLocation & {
         model: string | null;
         score: number | null;
         subfamily: { accession: string };
-      },
-    ];
+      }
+    >;
     protein_length: number;
     source_database: string;
     entry_type: string;
@@ -660,6 +674,32 @@ type Taxon = {
   species: number;
   children: Array<Taxon>;
 };
+
+type IDAResult = {
+  ida: string;
+  ida_id: string;
+  representative: {
+    accession: string;
+    length: number;
+    domains: Array<{
+      accession: string;
+      name: string;
+      coordinates: [
+        {
+          fragments: [
+            {
+              start: number;
+              end: number;
+            },
+          ];
+        },
+      ];
+    }>;
+  };
+  unique_proteins: number;
+};
+type IDAPayload = PayloadList<IDAResult>;
+
 type Genome3DAnnotation = {
   accession: string;
   metadata: {
@@ -815,3 +855,76 @@ interface EntryStructureMatch extends MatchI {
 type AnyMatch = Partial<EntryProteinMatch> &
   Partial<EntryStructureMatch> &
   Partial<StructureProteinMatch>;
+
+type Iprscan5Signature = {
+  accession: string;
+  description: string;
+  name: string;
+  signatureLibraryRelease: {
+    library: string;
+    version: string;
+  };
+  entry: Iprscan5Entry;
+};
+type Iprscan5Entry = {
+  accession: string;
+  name: string;
+  description: string;
+  type: string;
+  goXRefs: unknown[];
+  pathwayXRefs: unknown[];
+};
+type Iprscan5Location = {
+  start: number;
+  end: number;
+  hmmStart: number;
+  hmmEnd: number;
+  hmmLength: number;
+  hmmBounds: string;
+  evalue: number;
+  score: number;
+  envelopeStart: number;
+  envelopeEnd: number;
+  postProcessed: true;
+  'location-fragments': Array<Fragment>;
+  representative?: boolean;
+  sites?: Array<{
+    label?: string;
+    description?: string;
+    siteLocations: Array<Fragment>;
+  }>;
+};
+type Iprscan5Match = {
+  signature: Iprscan5Signature;
+  locations: Array<Iprscan5Location>;
+  evalue?: number;
+  score?: number;
+  'model-ac'?: string;
+  accession?: string;
+  source_database?: string;
+};
+type Iprscan5Result = {
+  sequence: string;
+  md5: string;
+  matches: Array<Iprscan5Match>;
+  xref: Array<{
+    name: string;
+    id: string;
+  }>;
+};
+type Iprscan5Payload = {
+  'interproscan-version': string;
+  results: Array<Iprscan5Result>;
+};
+
+type IprscanMetaIDB = {
+  group: string;
+  hasResults: boolean;
+  saved: boolean;
+  localID: string;
+  remoteID: string;
+  localTitle: string;
+  status: string;
+  type: string;
+  times: Record<string, number>;
+};

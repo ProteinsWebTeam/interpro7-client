@@ -1,4 +1,3 @@
-// @flow
 /*:: import type { Store } from 'redux'; */
 /*:: import type { BrowserHistory } from 'history'; */
 import { createStore } from 'redux';

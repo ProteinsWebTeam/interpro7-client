@@ -51,7 +51,9 @@ exports[`<SummaryEntry /> should render 1`] = `
           }
         }
       />
-      <section>
+      <section
+        className="vf-stack"
+      >
         <React.Fragment>
           <h4>
             Description
@@ -59,6 +61,7 @@ exports[`<SummaryEntry /> should render 1`] = `
           <Description
             accession="IPR000001"
             literature={[]}
+            showBadges={false}
             textBlocks={
               [
                 "<p>Kringle</p>",

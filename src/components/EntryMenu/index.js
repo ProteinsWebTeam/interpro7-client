@@ -10,7 +10,6 @@ import { entities, singleEntity } from 'menuConfig';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import Genome3dMenuLink from './EntryMenuLink/Genome3dMenuLink';
 import AlphaFoldMenuLink from './EntryMenuLink/AlphaFoldMenuLink';
 import { foundationPartial } from 'styles/foundation';
 
@@ -138,7 +137,6 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     if (loading || !payload || !payload.metadata) {
       return <Loading />;
     }
-    const genome3d = singleEntity.get('genome3d');
     const alphafold = singleEntity.get('alphafold');
     return (
       <ul
@@ -189,15 +187,6 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             collapsed={this.state.isCollapsed}
           />
         ))}
-        {mainType === 'entry' && !isSignature && genome3d && (
-          <Genome3dMenuLink
-            to={genome3d.to}
-            exact={genome3d.exact}
-            name={genome3d.name}
-            usedOnTheSide={usedOnTheSide}
-            collapsed={this.state.isCollapsed}
-          />
-        )}
         {mainType === 'protein' && alphafold && (
           <AlphaFoldMenuLink
             to={alphafold.to}

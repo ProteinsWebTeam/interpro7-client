@@ -4,13 +4,9 @@ import TooltipWithoutChildren from '../WithoutChildren';
 type Props = PropsWithChildren<{
   message: React.ReactNode;
   onMouseOverFeature?: (locations: Array<ProtVistaLocation>) => void;
-}>
+}>;
 
-const TooltipForTrack = ({
-  children,
-  onMouseOverFeature,
-  message,
-}: Props) => {
+const TooltipForTrack = ({ children, onMouseOverFeature, message }: Props) => {
   const [reference, setReference] = useState<Element | null>(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const popupTargetClass = 'feature';
@@ -22,10 +18,11 @@ const TooltipForTrack = ({
       if (target?.__data__) {
         onMouseOverFeature?.([target.__data__]);
         setReference(target);
-        setShowTooltip(true);
+        requestAnimationFrame(() => {
+          setShowTooltip(true);
+        });
       }
     }
-    // setShouldoad(true);
   };
   const _handleMouseOut = () => {
     setShowTooltip(false);
@@ -49,5 +46,5 @@ const TooltipForTrack = ({
       />
     </>
   );
-}
+};
 export default TooltipForTrack;

@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import ToggleSwitch from 'components/ToggleSwitch';
 import { DEV } from 'config';
 
@@ -732,7 +733,6 @@ type SettingsProps = {
     api: Object,
     ebi: Object,
     ipScan: Object,
-    genome3d: Object,
     repeatsDB: Object,
     disprot: Object,
     wikipedia: Object,

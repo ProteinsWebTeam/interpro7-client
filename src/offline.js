@@ -1,4 +1,3 @@
-// @flow
 import { Workbox, messageSW } from 'workbox-window';
 
 import { sleep, schedule } from 'timing-functions';

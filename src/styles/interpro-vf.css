@@ -7,8 +7,9 @@ body a:focus {
 body a {
   text-decoration: none;
   border: 0;
-  &:focus:not(.vf-button),
-  &:hover:not(.vf-button) {
+  &:visited:not(:global(.vf-button)),
+  &:focus:not(:global(.vf-button)),
+  &:hover:not(:global(.vf-button)) {
     text-decoration: underline;
     border-bottom-style: none;
     border: 0;
@@ -166,10 +167,10 @@ button.as-text {
 }
 
 .no-decoration {
-  text-decoration: none;
+  text-decoration: none !important;
   &:hover,
   &:focus {
-    text-decoration: none;
+    text-decoration: none !important;
   }
 }
 details.read-more {

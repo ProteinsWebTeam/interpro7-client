@@ -8,20 +8,42 @@ import Paragraph from './Paragraph';
 import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const css = cssBinder(styles);
+const css = cssBinder(styles, fonts);
 
+export const getDescriptionText = (
+  description: string | StructuredDescription,
+) => (typeof description === 'string' ? description : description.text);
+
+export const hasLLMParagraphs = (
+  description: Array<string | StructuredDescription>,
+): boolean => {
+  if (description.length === 0) return false;
+  if (typeof description[0] === 'string') return false;
+  const llmDescrpitions = description.filter(
+    (desc) => (desc as StructuredDescription).llm,
+  );
+  return llmDescrpitions.length > 0;
+};
 type Props = {
-  textBlocks: Array<string>;
+  textBlocks: Array<string | StructuredDescription>;
   literature?: Array<[string, Reference]>;
   accession?: string;
   withoutIDs?: boolean;
+  showBadges?: boolean;
 };
 class Description extends PureComponent<Props> {
   render() {
-    const { textBlocks, literature, withoutIDs } = this.props;
+    const { textBlocks, literature, withoutIDs, showBadges } = this.props;
     const sections = textBlocks.map((e) => {
-      return transformFormatted(e) as string[];
+      return (transformFormatted(getDescriptionText(e)) as string[]).map(
+        (text) => ({
+          text,
+          llm: typeof e === 'string' ? false : e.llm,
+          checked: typeof e === 'string' ? false : e.checked,
+        }),
+      );
     });
 
     return (
@@ -29,13 +51,35 @@ class Description extends PureComponent<Props> {
         {sections
           .map((section, i) =>
             section
-              .map((p, j) => (
-                <Paragraph
-                  key={`${i}.${j}`}
-                  p={p}
-                  literature={literature || []}
-                  withoutIDs={withoutIDs}
-                />
+              .map(({ text, llm, checked }, j) => (
+                <div
+                  className={css('content', {
+                    llm,
+                    checked,
+                    bordered: showBadges,
+                  })}
+                  key={`${i}_${j}`}
+                >
+                  {showBadges &&
+                    (llm ? (
+                      <span className={css('vf-badge', 'vf-badge--tertiary')}>
+                        AI-generated
+                        <span className={css('details')}>
+                          {checked ? 'Reviewed' : 'Unreviewed'}
+                        </span>
+                      </span>
+                    ) : (
+                      <span className={css('vf-badge', 'vf-badge--tertiary')}>
+                        Expert-curated
+                      </span>
+                    ))}
+                  <Paragraph
+                    key={`${i}.${j}`}
+                    p={text}
+                    literature={literature || []}
+                    withoutIDs={withoutIDs}
+                  />
+                </div>
               ))
               .reduce(
                 (prev, curr, key) => [
@@ -43,8 +87,8 @@ class Description extends PureComponent<Props> {
                   prev.length ? <br key={key} /> : null,
                   curr,
                 ],
-                [] as (JSX.Element | null)[]
-              )
+                [] as (JSX.Element | null)[],
+              ),
           )
           .reduce(
             (prev, curr, key) => [
@@ -54,7 +98,7 @@ class Description extends PureComponent<Props> {
               ) : null,
               curr,
             ],
-            [] as ((JSX.Element | null)[] | JSX.Element | null)[]
+            [] as ((JSX.Element | null)[] | JSX.Element | null)[],
           )}
       </div>
     );

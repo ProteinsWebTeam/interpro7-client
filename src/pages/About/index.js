@@ -1,6 +1,5 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { createSelector } from 'reselect';
 import { Helmet } from 'react-helmet-async';
 
 import Switch from 'components/generic/Switch';
@@ -46,10 +45,8 @@ const routes = new Map([
   ['team', Team],
 ]);
 
-const locationSelector = createSelector(
-  (customLocation) => customLocation.description.other[1],
-  (value) => value,
-);
+const locationSelector = (customLocation) =>
+  customLocation.description.other[1];
 
 const RedirectToDefault = () => (
   <Redirect to={{ description: { other: ['about', 'interpro'] } }} />

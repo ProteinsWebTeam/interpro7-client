@@ -1,4 +1,3 @@
-// @flow
 /*:: import type { BrowserHistory } from 'history'; */
 
 import { applyMiddleware, compose } from 'redux';

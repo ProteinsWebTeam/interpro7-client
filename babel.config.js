@@ -17,11 +17,11 @@ module.exports = {
         ],
         '@babel/react',
       ],
-      plugins: [
-        'babel-plugin-dynamic-import-node',
-        '@babel/plugin-proposal-class-properties',
-        '@babel/plugin-proposal-optional-chaining',
-      ],
+      // plugins: [
+      //   'babel-plugin-dynamic-import-node',
+      //   '@babel/plugin-proposal-class-properties',
+      //   '@babel/plugin-proposal-optional-chaining',
+      // ],
     },
   },
 };

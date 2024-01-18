@@ -70,7 +70,7 @@ const Tooltip = ({
         if (!overTooltipRef.current) {
           setHide(true);
           if (intervalId.current) {
-            clearInterval(intervalId.current);
+            clearInterval(intervalId.current as unknown as number);
             intervalId.current = null;
           }
         }
@@ -78,8 +78,8 @@ const Tooltip = ({
   };
   return (
     <>
-      <FloatingPortal>
-        {hide ? null : (
+      {hide ? null : (
+        <FloatingPortal>
           <div
             ref={refs.setFloating}
             style={floatingStyles}
@@ -90,8 +90,8 @@ const Tooltip = ({
             <FloatingArrow ref={arrowRef} context={context} />
             {content}
           </div>
-        )}
-      </FloatingPortal>
+        </FloatingPortal>
+      )}
       <div
         {...rest}
         ref={refs.setReference}

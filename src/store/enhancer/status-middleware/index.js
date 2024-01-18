@@ -1,4 +1,3 @@
-// @flow
 /*:: import type { Middleware } from 'redux'; */
 import { format } from 'url';
 import { schedule } from 'timing-functions';

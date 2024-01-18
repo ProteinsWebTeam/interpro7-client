@@ -1,5 +1,5 @@
 import React from 'react';
-import { createComponent } from '@lit-labs/react';
+import { createComponent } from '@lit/react';
 import NightingaleSunburstCE from '@nightingale-elements/nightingale-sunburst';
 
 export const NightingaleSunburst = createComponent({

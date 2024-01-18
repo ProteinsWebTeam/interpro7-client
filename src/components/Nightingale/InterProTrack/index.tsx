@@ -1,5 +1,5 @@
 import React from 'react';
-import { createComponent } from '@lit-labs/react';
+import { createComponent } from '@lit/react';
 import NightingaleInterproTrackCE from '@nightingale-elements/nightingale-interpro-track';
 
 export const NightingaleInterproTrack = createComponent({
