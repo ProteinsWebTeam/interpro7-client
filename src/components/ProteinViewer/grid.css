@@ -116,3 +116,6 @@
   stroke-width: 0;
   fill-opacity: 0.45; /*fill: black;*/
 }
+.popper.hide {
+  display: none;
+}
