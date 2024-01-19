@@ -41,12 +41,23 @@ declare module 'taxonomy-visualisation' {
   }
   export default TaxonomyVisualisation;
 }
+declare module 'skylign' {
+  let Skylign: SkylignProps;
+}
+interface SkylignProps
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLElement>,
+    HTMLElement
+  > {
+  logo: string;
+}
 
 declare namespace JSX {
   interface IntrinsicElements {
     'interpro-type': InterProTypeProps;
     'interpro-hierarchy': InterProHierarchyProps;
     'interpro-entry': InterProEntryProps;
+    'skylign-component': SkylignProps;
   }
 }
 
