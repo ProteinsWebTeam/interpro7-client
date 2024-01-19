@@ -20,7 +20,7 @@ const defaultIcons = {
   announcement: 'icon-announcement',
 };
 const Callout = ({ type, customIcon, alt = false, children }: Props) => {
-  let icon = customIcon ? customIcon : defaultIcons[type];
+  const icon = customIcon ? customIcon : defaultIcons[type];
   return (
     <div className={css('new-callout', type, { alt })}>
       {icon && (

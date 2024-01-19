@@ -13,7 +13,7 @@
 
 .new-callout > .icon {
   font-size: 2rem;
-  color: black;
+  align-self: flex-start;
 }
 
 .new-callout.alt.alt {
@@ -24,6 +24,7 @@
 
 .new-callout.info {
   background-color: #c6e9ff;
+  color: #0d3c61;
 }
 
 .new-callout.info.alt {
@@ -39,7 +40,8 @@
 }
 
 .new-callout.warning {
-  background-color: #ffddaa;
+  background-color: #fff3d9;
+  color: var(--colors-light-title);
 }
 
 .new-callout.warning.alt {

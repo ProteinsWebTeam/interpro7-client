@@ -5,6 +5,7 @@ import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Callout from 'components/SimpleCommonComponents/Callout';
 import Footer from 'components/Table/Footer';
 import { edgeCases } from 'utils/server-message';
 import EdgeCase from 'components/EdgeCase';
@@ -172,11 +173,11 @@ export const DomainArchitecturesWithData = ({
   let messageContent;
   if (payload.count === 0) {
     messageContent = (
-      <div className={css('callout', 'warning')}>
+      <Callout type="warning">
         No domain architectures found. Domain architectures are calculated for
         InterPro entries of type Domain. Please ensure that the entries you are
         searching are of type Domain.
-      </div>
+      </Callout>
     );
   } else {
     messageContent = <h4>{payload.count} domain architectures</h4>;

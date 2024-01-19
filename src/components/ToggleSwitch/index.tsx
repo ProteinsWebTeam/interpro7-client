@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import { noop } from 'lodash-es';
-
 import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
