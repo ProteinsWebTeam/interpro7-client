@@ -28,7 +28,7 @@ const Callout = ({ type, customIcon, alt = false, children }: Props) => {
           <span className={css('icon', 'icon-common', icon)} />
         </>
       )}
-      {children}
+      <div>{children}</div>
     </div>
   );
 };

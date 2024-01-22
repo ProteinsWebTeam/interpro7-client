@@ -7,8 +7,9 @@ import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 import localStyles from './style.css';
+import blocks from 'styles/blocks.css';
 
-const s = foundationPartial(localStyles);
+const s = foundationPartial(localStyles, blocks);
 
 const GRANULARITY = 250; // 250ms, time frequency of ttl update
 const ANIMATION_DURATION = 500; // 500ms
@@ -112,7 +113,7 @@ export default class Toast extends PureComponent /*:: <Props> */ {
     } = this.props;
     return (
       <li
-        className={s('callout', 'toast', className || 'primary')}
+        className={s('simple-box', 'toast', className || 'primary')}
         role="presentation"
         onClick={this._close}
         onKeyPress={this._close}

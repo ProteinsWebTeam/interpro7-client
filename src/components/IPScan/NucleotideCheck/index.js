@@ -3,6 +3,8 @@ import React from 'react';
 import T from 'prop-types';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -24,7 +26,7 @@ const NucleotideCheck = ({ fileContent } /*: Props */) => {
   if (!fileContent) return <Loading inline={true} />;
   if (isNucleotideFile(fileContent)) {
     return (
-      <div className={f('callout', 'secondary', 'withicon')}>
+      <Callout type="info">
         <b>Nucleotide Sequence</b>
         <p>
           We have detected this file as an InterProScan search result using a
@@ -33,7 +35,7 @@ const NucleotideCheck = ({ fileContent } /*: Props */) => {
         <p>
           We will display it in the results as one result per open reading frame
         </p>
-      </div>
+      </Callout>
     );
   }
   return null;

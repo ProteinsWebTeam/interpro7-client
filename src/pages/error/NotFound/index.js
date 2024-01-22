@@ -34,7 +34,6 @@ class NotFound extends PureComponent /*:: <{}> */ {
   }
 
   render() {
-    const fromIP6 = document.URL.includes(BASE_URL_FOR_IP6);
     const newUrlParts = getNewPartsFromOldURL(window.location.pathname);
     return (
       <section className={f('error-msg')}>
@@ -46,11 +45,6 @@ class NotFound extends PureComponent /*:: <{}> */ {
               We are sorry, no data associated with your request could be found
               in InterPro.
             </h5>
-            {fromIP6 && (
-              <div className={f('callout', 'withicon', 'alert')}>
-                <b>Note:</b> The legacy website has been shutdown.
-              </div>
-            )}
             {newUrlParts && (
               <div className={f('timer')}>
                 <div>

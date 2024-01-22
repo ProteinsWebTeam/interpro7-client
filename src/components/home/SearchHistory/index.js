@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 
 import searchStorage from 'storage/searchStorage';
 import Link from 'components/generic/Link';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import { foundationPartial } from 'styles/foundation';
-
+x;
 import ipro from 'styles/interpro-new.css';
 import theme from 'styles/theme-interpro.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
@@ -75,11 +77,11 @@ export const SearchHistory = () => {
           </div>
         </div>
       ) : (
-        <div className={f('callout', 'info', 'withicon')}>
+        <Callout type="info">
           <span style={{ fontWeight: 'bold' }}>
             There has been no recent searches.
           </span>
-        </div>
+        </Callout>
       )}
     </>
   );

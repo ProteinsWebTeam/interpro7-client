@@ -19,6 +19,8 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 // $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
+// $FlowFixMe
 import GoTerms from 'components/GoTerms';
 // $FlowFixMe
 import Accession from 'components/Accession';
@@ -236,9 +238,7 @@ const SummaryIPScanJob = ({
     <div className={f('sections')}>
       <section>
         {!data.payload && payload?.['interproscan-version'] ? (
-          <div className={f('callout', 'info', 'withicon')}>
-            Using data stored in your browser
-          </div>
+          <Callout type="info">Using data stored in your browser</Callout>
         ) : null}
         <IPScanVersionCheck
           ipScanVersion={payload['interproscan-version']}

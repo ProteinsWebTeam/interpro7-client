@@ -2,6 +2,8 @@
 import React, { Fragment, useState } from 'react';
 import T from 'prop-types';
 import Link from 'components/generic/Link';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -58,9 +60,8 @@ ListOfProteins.propTypes = {
   gene: string,
 }; */
 const ExactGeneMatchWrapper = ({ matches, gene }) => (
-  <div className={f('callout', 'warning', 'margin-bottom-medium')}>
-    <span className={f('icon', 'icon-common')} data-icon="&#xf35a;">
-      {' '}
+  <Callout type="warning" customIcon="icon-arrow-alt-circle-right">
+    <span>
       Found an exact gene match for <b>{gene}</b> in the following key species:
     </span>{' '}
     <ul>
@@ -70,7 +71,7 @@ const ExactGeneMatchWrapper = ({ matches, gene }) => (
         </li>
       ))}
     </ul>
-  </div>
+  </Callout>
 );
 ExactGeneMatchWrapper.propTypes = {
   matches: T.arrayOf(

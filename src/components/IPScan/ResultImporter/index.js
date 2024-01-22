@@ -6,6 +6,8 @@ import { importJob } from 'actions/creators';
 import loadData from 'higherOrder/loadData';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 import id from 'utils/cheap-unique-id';
 import { IPscanRegex } from 'utils/processDescription/handlers';
 
@@ -57,14 +59,14 @@ const ResultImporter = ({
   if (data.loading) return <Loading />;
   if (data.status !== STATUS_OK || data.payload !== 'FINISHED') {
     return (
-      <div className={f('callout', 'info', 'withicon')}>
+      <Callout type="alert">
         There was an error retrieving the InterProScan Job with ID {accession}
         {data.status === STATUS_OK && (
           <div>
             Server response: <code>{data.payload}</code>
           </div>
         )}
-      </div>
+      </Callout>
     );
   }
   return null;

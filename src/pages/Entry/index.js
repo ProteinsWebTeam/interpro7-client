@@ -7,6 +7,8 @@ import {
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import Link from 'components/generic/Link';
 // $FlowFixMe
@@ -418,21 +420,7 @@ class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
 const ArchiveCallout = ({ name, page }) => (
   <div className={f('row')}>
     <div className={f('columns', 'large-12')}>
-      <div
-        className={f('callout', 'info')}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <span
-          style={{
-            fontSize: '2em',
-            color: 'darkblue',
-            paddingRight: '1rem',
-          }}
-          className={f('small', 'icon', 'icon-common', 'icon-info')}
-        />{' '}
+      <Callout type="info">
         <p>
           <strong>{name} has retired</strong>
           <br />
@@ -449,7 +437,7 @@ const ArchiveCallout = ({ name, page }) => (
           </Link>
           .
         </p>
-      </div>
+      </Callout>
     </div>
   </div>
 );

@@ -7,16 +7,10 @@ import loadData from 'higherOrder/loadData';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
 import ExactGeneMatchWrapper from './Gene';
-
-import { foundationPartial } from 'styles/foundation';
-
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-import ipro from 'styles/interpro-new.css';
-
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro);
 
 const INTERPRO_ACCESSION_PADDING = 6;
 
@@ -39,13 +33,9 @@ class ExactMatchWrapper extends PureComponent /*:: <EMWProps> */ {
   render() {
     const { to, children } = this.props;
     return (
-      <div className={f('callout', 'warning', 'margin-bottom-medium')}>
-        <span className={f('icon', 'icon-common')} data-icon="&#xf35a;">
-          {' '}
-          Found an exact match:
-        </span>{' '}
-        <Link to={to}>{children}</Link>
-      </div>
+      <Callout type="warning" customIcon="icon-arrow-alt-circle-right">
+        <span>Found an exact match:</span> <Link to={to}>{children}</Link>
+      </Callout>
     );
   }
 }
