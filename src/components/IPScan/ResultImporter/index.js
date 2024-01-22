@@ -11,12 +11,6 @@ import Callout from 'components/SimpleCommonComponents/Callout';
 import id from 'utils/cheap-unique-id';
 import { IPscanRegex } from 'utils/processDescription/handlers';
 
-import { foundationPartial } from 'styles/foundation';
-import ipro from 'styles/interpro-new.css';
-import theme from 'styles/theme-interpro.css';
-
-const f = foundationPartial(theme, ipro);
-
 const STATUS_OK = 200;
 
 const getBaseIPScanID = (accession) => {

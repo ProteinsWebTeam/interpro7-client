@@ -7,14 +7,13 @@ import Link from 'components/generic/Link';
 import Callout from 'components/SimpleCommonComponents/Callout';
 
 import { foundationPartial } from 'styles/foundation';
-x;
+
 import ipro from 'styles/interpro-new.css';
 import theme from 'styles/theme-interpro.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './styles.css';
 
-const f = foundationPartial(ebiGlobalStyles, theme, fonts, ipro, styles);
+const f = foundationPartial(ebiGlobalStyles, theme, ipro, styles);
 
 export const SearchHistory = () => {
   const [searchTerms, setSearchTerms] = useState([]);

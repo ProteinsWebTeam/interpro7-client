@@ -16,7 +16,6 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 const f = foundationPartial(ebiGlobalStyles, styles);
 
 const A_LITTLE_WHILE = 4000;
-const BASE_URL_FOR_IP6 = '/interpro/legacy';
 
 class NotFound extends PureComponent /*:: <{}> */ {
   async componentDidMount() {

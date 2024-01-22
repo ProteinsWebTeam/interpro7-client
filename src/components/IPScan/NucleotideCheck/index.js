@@ -6,12 +6,6 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 // $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
 
-import { foundationPartial } from 'styles/foundation';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-
-const f = foundationPartial(ebiGlobalStyles, fonts);
-
 /*::
   import type {ProteinFile, NucleotideFile} from 'components/IPScan/ImportResultSearch/LoadedFileDialog'
   type Props = {
