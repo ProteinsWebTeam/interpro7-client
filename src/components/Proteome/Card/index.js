@@ -9,10 +9,13 @@ import {
 import Link from 'components/generic/Link';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Card from 'components/SimpleCommonComponents/Card';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
 
-import { SpeciesIcon } from 'pages/Taxonomy';
+// $FlowFixMe
+import SpeciesIcon from 'components/Organism/SpeciesIcon';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import { toPlural } from 'utils/pages';
@@ -159,50 +162,44 @@ const ProteomeCard = (
     entryDB,
   } /*: {data: Object, search: string, entryDB: string} */,
 ) => (
-  <>
-    <div className={f('card-header')}>
-      <div className={f('card-image')}>
-        {data.metadata && data.metadata.lineage && (
-          <SpeciesIcon lineage={data.metadata.lineage} />
-        )}
-      </div>
-      <div className={f('card-title')}>
-        <h6>
-          <Link
-            to={{
-              description: {
-                main: { key: 'proteome' },
-                proteome: {
-                  db: data.metadata.source_database,
-                  accession: `${data.metadata.accession}`,
-                },
-              },
-            }}
-          >
-            <HighlightedText
-              text={data.metadata.name.name || data.metadata.name}
-              textToHighlight={search}
-            />
-          </Link>
-        </h6>
-      </div>
-    </div>
-
+  <Card
+    imageComponent={
+      data.metadata &&
+      data.metadata.lineage && (
+        <SpeciesIcon lineage={data.metadata.lineage} fontSize="3rem" />
+      )
+    }
+    title={
+      <Link
+        to={{
+          description: {
+            main: { key: 'proteome' },
+            proteome: {
+              db: data.metadata.source_database,
+              accession: `${data.metadata.accession}`,
+            },
+          },
+        }}
+      >
+        <HighlightedText
+          text={data.metadata.name.name || data.metadata.name}
+          textToHighlight={search}
+        />
+      </Link>
+    }
+    footer={
+      <HighlightedText
+        text={data.metadata.accession || ''}
+        textToHighlight={search}
+      />
+    }
+  >
     <SummaryCounterProteome
       entryDB={entryDB}
       metadata={data.metadata}
       counters={data.metadata.counters || data.extra_fields.counters}
     />
-
-    <div className={f('card-footer')}>
-      <div>
-        <HighlightedText
-          text={data.metadata.accession || ''}
-          textToHighlight={search}
-        />
-      </div>
-    </div>
-  </>
+  </Card>
 );
 
 ProteomeCard.propTypes = {

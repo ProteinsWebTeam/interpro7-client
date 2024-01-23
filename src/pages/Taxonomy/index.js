@@ -30,14 +30,15 @@ import Table, {
 import File from 'components/File';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+import SpeciesIcon from 'components/Organism/SpeciesIcon';
 
 import loadable from 'higherOrder/loadable';
 
 import { toPlural } from 'utils/pages';
-import getColor from 'utils/taxonomy/get-color';
-import getIcon from 'utils/taxonomy/get-icon';
 import getNodeSpotlight from 'utils/taxonomy/get-node-spotlight';
 import getSuperKingdom from 'utils/taxonomy/get-super-kingdom';
 
@@ -130,25 +131,6 @@ const subPagesForTaxonomy = new Map();
 for (const subPage of config.pages.taxonomy.subPages) {
   subPagesForTaxonomy.set(subPage, subPages.get(subPage));
 }
-
-export const SpeciesIcon = ({ lineage } /*: {lineage: string} */) => {
-  let icon = '.';
-  let color;
-  if (lineage) {
-    icon = getIcon(lineage) || '.';
-    color = getColor(lineage);
-  }
-  return (
-    <span
-      style={{ color }}
-      className={f('small', 'icon', 'icon-species')}
-      data-icon={icon}
-    />
-  );
-};
-SpeciesIcon.propTypes = {
-  lineage: T.string.isRequired,
-};
 
 /*:: type SummaryCounterOrgProps = {
   entryDB: string,
@@ -324,54 +306,49 @@ const TaxonomyCard = (
     entryDB,
   } /*: {data: Object, search: string, entryDB: string} */,
 ) => (
-  <>
-    <div className={f('card-header')}>
-      <div className={f('card-image')}>
-        {data.extra_fields && data.extra_fields.lineage && (
-          <SpeciesIcon lineage={data.extra_fields.lineage} />
+  <NewCard
+    imageComponent={
+      data.extra_fields &&
+      data.extra_fields.lineage && (
+        <SpeciesIcon lineage={data.extra_fields.lineage} fontSize="3rem" />
+      )
+    }
+    title={
+      <Link
+        to={{
+          description: {
+            main: { key: 'taxonomy' },
+            taxonomy: {
+              db: data.metadata.source_database,
+              accession: `${data.metadata.accession}`,
+            },
+          },
+        }}
+      >
+        <HighlightedText text={data.metadata.name} textToHighlight={search} />
+      </Link>
+    }
+    footer={
+      <>
+        {data?.extra_fields?.lineage && (
+          <Lineage lineage={data.extra_fields.lineage} />
         )}
-      </div>
-      <div className={f('card-title')}>
-        <h6>
-          <Link
-            to={{
-              description: {
-                main: { key: 'taxonomy' },
-                taxonomy: {
-                  db: data.metadata.source_database,
-                  accession: `${data.metadata.accession}`,
-                },
-              },
-            }}
-          >
-            <HighlightedText
-              text={data.metadata.name}
-              textToHighlight={search}
-            />
-          </Link>
-        </h6>
-      </div>
-    </div>
-
+        <div>
+          Tax ID:{' '}
+          <HighlightedText
+            text={data.metadata.accession}
+            textToHighlight={search}
+          />
+        </div>
+      </>
+    }
+  >
     <SummaryCounterOrg
       entryDB={entryDB}
       metadata={data.metadata}
       counters={data?.extra_fields?.counters || {}}
     />
-
-    <div className={f('card-footer')}>
-      {data?.extra_fields?.lineage && (
-        <Lineage lineage={data.extra_fields.lineage} />
-      )}
-      <div>
-        Tax ID:{' '}
-        <HighlightedText
-          text={data.metadata.accession}
-          textToHighlight={search}
-        />
-      </div>
-    </div>
-  </>
+  </NewCard>
 );
 TaxonomyCard.propTypes = {
   data: T.object,

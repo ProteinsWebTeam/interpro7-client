@@ -1,6 +1,6 @@
-@import '../styles/timing.css';
-@import '../styles/colors.css';
-@import '../styles/fonts.css';
+@import "../styles/timing.css";
+@import "../styles/colors.css";
+@import "../styles/fonts.css";
 /************************************home.js************************************/
 .intro-wrapper {
   display: flex;
@@ -249,6 +249,7 @@
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+  gap: 0.7rem;
 
   & .container,
   & a {
@@ -322,7 +323,7 @@
 .icon-count-proteome {
   width: 18px;
   height: 47px;
-  background-image: url('../images/icons/ico-proteome.svg');
+  background-image: url("../images/icons/ico-proteome.svg");
   background-position-y: 40%;
   background-repeat: no-repeat;
 }
@@ -330,7 +331,7 @@
 .icon-count-species {
   height: 3em; /* to align icon */
   width: 30px;
-  background-image: url('../images/icons/ico-species.svg');
+  background-image: url("../images/icons/ico-species.svg");
   background-size: 100%;
   background-position-y: 59%;
   background-repeat: no-repeat;
@@ -339,7 +340,7 @@
 .icon-count-ida {
   height: 3em;
   width: 38px;
-  background-image: url('../images/icons/ico-ida.svg');
+  background-image: url("../images/icons/ico-ida.svg");
   background-size: 100%;
   background-position-y: 59%;
   background-repeat: no-repeat;
@@ -348,7 +349,7 @@
 .icon-count-set {
   height: 3em;
   width: 26px;
-  background-image: url('../images/icons/ico-set.svg');
+  background-image: url("../images/icons/ico-set.svg");
   background-size: 100%;
   background-position-y: 59%;
   background-repeat: no-repeat;
@@ -357,7 +358,7 @@
 .icon-count-hmm {
   height: 3em;
   width: 26px;
-  background-image: url('../images/icons/ico-hmm.svg');
+  background-image: url("../images/icons/ico-hmm.svg");
   background-size: 100%;
   background-position-y: 59%;
   background-repeat: no-repeat;

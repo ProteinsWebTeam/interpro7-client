@@ -1,0 +1,94 @@
+.new-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px rgba(0, 0, 0, 0.2) solid;
+  transition: all var(--timing-really-fast) ease-out;
+
+  padding: 1rem;
+  color: #606060;
+  font-family: var(--fonts-system);
+
+  &:hover {
+    box-shadow:
+      0 5px 11px 0 rgba(0, 0, 0, 0.18),
+      0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  & header {
+    text-align: center;
+    & .image {
+      width: 100%;
+      position: relative;
+      transition: opacity var(--timing-really-fast) ease-out;
+    }
+    & .image.icon {
+      background-color: white;
+      background-repeat: no-repeat, repeat;
+      background-position:
+        0,
+        100% 0%;
+      background-size: 100%, 2030px;
+      height: 160px;
+      opacity: 0.8;
+    }
+    & .title {
+      font-size: 120%;
+      font-weight: 600;
+      & h5 {
+      }
+    }
+  }
+  & .content {
+    flex-grow: 1;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  & .footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 80%;
+
+    & > div:first-child {
+      flex-grow: 1;
+    }
+    & > div:last-child {
+      text-align: right;
+    }
+  }
+
+  & .card-more {
+    opacity: 0.5;
+    align-self: flex-end;
+
+    & .button-more {
+      font-weight: 900;
+      color: var(--colors-gray);
+      position: relative;
+      min-width: 182px;
+      /* for small screens */
+      border: 2px solid var(--colors-gray);
+      background-color: transparent;
+      padding: 0.85em 1em;
+      /* different unit to be consistent with button class */
+      margin: 0 0 1rem 0;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1;
+      vertical-align: middle;
+      &:hover {
+        color: var(--colors-dark);
+      }
+    }
+    & .icon.button-more {
+      font-weight: 600; /* bold on just text */
+      &::after,
+      &::before {
+        font-weight: 300; /* keep the icon unbold */
+      }
+    }
+  }
+}
