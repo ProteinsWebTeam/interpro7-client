@@ -38,8 +38,16 @@ type CardStory = StoryObj<typeof meta>;
 export const Base: CardStory = {
   args: {
     title: 'The Card',
+    subHeader: 'Subtitle',
     children: 'A message to show',
-    footer: 'The footnote',
+  },
+};
+export const Compact: CardStory = {
+  args: {
+    title: 'The Card',
+    subHeader: 'Subtitle',
+    compact: true,
+    children: 'A message to show',
   },
 };
 export const TitleJSX: CardStory = {

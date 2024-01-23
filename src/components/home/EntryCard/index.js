@@ -3,6 +3,8 @@ import T from 'prop-types';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Card from 'components/SimpleCommonComponents/Card';
 import { toPlural } from 'utils/pages';
 
 import Link from 'components/generic/Link';
@@ -78,12 +80,40 @@ export class EntryCard extends PureComponent /*:: <Props> */ {
   render() {
     const { entry } = this.props;
     return (
-      <div
-        className={f('grid-card', 'card-shrink')}
-        data-testid="by-latest-entries-box"
-      >
-        <div className={f('list-body')}>
-          <div className={f('card-header')}>
+      <Card
+        compact={true}
+        title={
+          <>
+            <Tooltip title={`${entry.metadata.type} type`}>
+              <interpro-type
+                dimension="1.5em"
+                type={entry.metadata.type.replace('_', ' ')}
+                role="link"
+                aria-label={`Entry type ${entry.metadata.type}`}
+              >
+                {
+                  // IE11 fallback for icons
+                }
+                <span
+                  className={f('icon-type', {
+                    ['icon-family']: entry.metadata.type === 'Family',
+                    ['icon-domain']: entry.metadata.type === 'Domain',
+                    ['icon-repeat']: entry.metadata.type === 'Repeat',
+                    ['icon-hh']:
+                      entry.metadata.type === 'Homologous Superfamily',
+                    ['icon-site']: entry.metadata.type === 'Site',
+                  })}
+                >
+                  {entry.metadata.type === 'Family' ? 'F' : null}
+                  {entry.metadata.type === 'Domain' ? 'D' : null}
+                  {entry.metadata.type === 'Repeat' ? 'R' : null}
+                  {entry.metadata.type === 'Homologous Superfamily'
+                    ? 'H'
+                    : null}
+                  {entry.metadata.type === 'Site' ? 'S' : null}
+                </span>
+              </interpro-type>
+            </Tooltip>
             <Link
               to={{
                 description: {
@@ -95,230 +125,174 @@ export class EntryCard extends PureComponent /*:: <Props> */ {
                 },
               }}
             >
-              <Tooltip title={`${entry.metadata.type} type`}>
-                <interpro-type
-                  dimension="1.5em"
-                  type={entry.metadata.type.replace('_', ' ')}
-                  role="link"
-                  aria-label={`Entry type ${entry.metadata.type}`}
-                >
-                  {
-                    // IE11 fallback for icons
-                  }
-                  <span
-                    className={f('icon-type', {
-                      ['icon-family']: entry.metadata.type === 'Family',
-                      ['icon-domain']: entry.metadata.type === 'Domain',
-                      ['icon-repeat']: entry.metadata.type === 'Repeat',
-                      ['icon-hh']:
-                        entry.metadata.type === 'Homologous Superfamily',
-                      ['icon-site']: entry.metadata.type === 'Site',
-                    })}
-                  >
-                    {entry.metadata.type === 'Family' ? 'F' : null}
-                    {entry.metadata.type === 'Domain' ? 'D' : null}
-                    {entry.metadata.type === 'Repeat' ? 'R' : null}
-                    {entry.metadata.type === 'Homologous Superfamily'
-                      ? 'H'
-                      : null}
-                    {entry.metadata.type === 'Site' ? 'S' : null}
-                  </span>
-                </interpro-type>
-              </Tooltip>
-
-              <div>
-                <span className={f('card-title')}>{entry.metadata.name}</span>
-              </div>
-
-              <span className={f('name-ac')}>{entry.metadata.accession}</span>
+              <span className={f('card-title')}>{entry.metadata.name}</span>
             </Link>
-          </div>
-
-          <div
-            // key={c}
-            className={f('card-block', 'card-counter', 'label-off', 'label-h')}
-          >
-            {' '}
-            <div className={f('count-4', 'count-proteins')}>
-              <Tooltip
-                title={`${numberToDisplayText(
-                  entry.extra_fields.counters.proteins,
-                  true,
-                )} ${toPlural(
-                  'protein',
-                  entry.extra_fields.counters.proteins,
-                )} matching ${entry.metadata.name}`}
-              >
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: 'InterPro',
-                        accession: entry.metadata.accession,
-                      },
-                      protein: { isFilter: true, db: 'UniProt' },
+          </>
+        }
+        subHeader={entry.metadata.accession}
+      >
+        <div className={f('card-counter', 'label-h')}>
+          {' '}
+          <div className={f('count-4', 'count-proteins')}>
+            <Tooltip
+              title={`${numberToDisplayText(
+                entry.extra_fields.counters.proteins,
+                true,
+              )} ${toPlural(
+                'protein',
+                entry.extra_fields.counters.proteins,
+              )} matching ${entry.metadata.name}`}
+            >
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: 'InterPro',
+                      accession: entry.metadata.accession,
                     },
-                  }}
-                  disabled={!entry.extra_fields.counters.proteins}
-                >
-                  <div
-                    className={f('icon', 'icon-conceptual', 'icon-wrapper')}
-                    data-icon="&#x50;"
-                  >
-                    <div className={f('icon-over-anim')} />
-                  </div>
-                  <NumberComponent abbr noTitle>
-                    {entry.extra_fields.counters.proteins}
-                  </NumberComponent>
-                  <span className={f('label-number')}>
-                    {toPlural('protein', entry.extra_fields.counters.proteins)}
-                  </span>
-                </Link>
-              </Tooltip>
-            </div>
-            <div className={f('count-4', 'count-architectures')}>
-              <Tooltip
-                title={`${numberToDisplayText(
-                  entry.extra_fields.counters.domain_architectures,
-                  true,
-                )} ${toPlural(
-                  'domain architecture',
-                  entry.extra_fields.counters.domain_architectures,
-                  true,
-                )} matching ${entry.metadata.name}`}
+                    protein: { isFilter: true, db: 'UniProt' },
+                  },
+                }}
+                disabled={!entry.extra_fields.counters.proteins}
               >
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: 'InterPro',
-                        accession: entry.metadata.accession,
-                        detail: 'domain_architecture',
-                      },
-                    },
-                  }}
-                  disabled={!entry.extra_fields.counters.domain_architectures}
-                >
-                  <div className={f('icon', 'icon-count-ida', 'icon-wrapper')}>
-                    <div className={f('icon-over-anim')} />
-                  </div>
-                  <NumberComponent abbr noTitle>
-                    {entry.extra_fields.counters.domain_architectures}
-                  </NumberComponent>
-                  <span className={f('label-number')}>
-                    domain architectures
-                  </span>
-                </Link>
-              </Tooltip>
-            </div>
-            <div className={f('count-4', 'count-organisms')}>
-              <Tooltip
-                title={`${numberToDisplayText(
-                  entry.extra_fields.counters.taxa,
-                  true,
-                )} ${toPlural(
-                  'taxonomy',
-                  entry.extra_fields.counters.taxa,
-                  true,
-                )} matching ${entry.metadata.name}`}
-              >
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: 'InterPro',
-                        accession: entry.metadata.accession,
-                      },
-                      taxonomy: { isFilter: true, db: 'uniprot' },
-                    },
-                  }}
-                  disabled={!entry.extra_fields.counters.taxa}
-                >
-                  <div
-                    className={f(
-                      'icon',
-                      'icon-count-organisms',
-                      'icon-wrapper',
-                    )}
-                  >
-                    <div className={f('icon-over-anim')} />
-                  </div>
-                  <NumberComponent abbr noTitle>
-                    {entry.extra_fields.counters.taxa}
-                  </NumberComponent>
-                  <span className={f('label-number')}>
-                    {toPlural('taxonomy', entry.extra_fields.counters.taxa)}
-                  </span>
-                </Link>
-              </Tooltip>
-            </div>
-            <div className={f('count-4', 'count-structures')}>
-              <Tooltip
-                title={`${numberToDisplayText(
-                  entry.extra_fields.counters.structures,
-                  true,
-                )} ${toPlural(
-                  'structure',
-                  entry.extra_fields.counters.structures,
-                )} matching ${entry.metadata.name}`}
-              >
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'entry' },
-                      entry: {
-                        db: 'InterPro',
-                        accession: entry.metadata.accession,
-                      },
-                      structure: { isFilter: true, db: 'PDB' },
-                    },
-                  }}
-                  disabled={!entry.extra_fields.counters.structures}
-                >
-                  <div
-                    className={f('icon', 'icon-conceptual', 'icon-wrapper')}
-                    data-icon="s"
-                  >
-                    {entry.extra_fields.counters.structures !== 0 && (
-                      <div className={f('icon-over-anim')} />
-                    )}
-                  </div>
-                  <NumberComponent abbr noTitle>
-                    {entry.extra_fields.counters.structures}
-                  </NumberComponent>
-                  <span className={f('label-number')}>
-                    {toPlural(
-                      'structure',
-                      entry.extra_fields.counters.structures,
-                    )}
-                  </span>
-                </Link>
-              </Tooltip>
-            </div>
-            {
-              // OPTION COUNT SIGNATURES - ICON SVG
-              Object.keys(entry.metadata.member_databases).map((key) => (
                 <div
-                  className={f('icon-count-signatures')}
-                  key={Object.keys(entry.metadata.member_databases[key])[0]}
+                  className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+                  data-icon="&#x50;"
                 >
-                  <Tooltip
-                    title={`${key} signature:  ${
-                      Object.keys(entry.metadata.member_databases[key])[0]
-                    }`}
-                  >
-                    {' '}
-                    <MemberSymbol type={key} className={f('md-small')} />
-                  </Tooltip>
+                  <div className={f('icon-over-anim')} />
                 </div>
-              ))
-            }
+                <NumberComponent abbr noTitle>
+                  {entry.extra_fields.counters.proteins}
+                </NumberComponent>
+              </Link>
+            </Tooltip>
           </div>
+          <div className={f('count-4', 'count-architectures')}>
+            <Tooltip
+              title={`${numberToDisplayText(
+                entry.extra_fields.counters.domain_architectures,
+                true,
+              )} ${toPlural(
+                'domain architecture',
+                entry.extra_fields.counters.domain_architectures,
+                true,
+              )} matching ${entry.metadata.name}`}
+            >
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: 'InterPro',
+                      accession: entry.metadata.accession,
+                      detail: 'domain_architecture',
+                    },
+                  },
+                }}
+                disabled={!entry.extra_fields.counters.domain_architectures}
+              >
+                <div className={f('icon', 'icon-count-ida', 'icon-wrapper')}>
+                  <div className={f('icon-over-anim')} />
+                </div>
+                <NumberComponent abbr noTitle>
+                  {entry.extra_fields.counters.domain_architectures}
+                </NumberComponent>
+              </Link>
+            </Tooltip>
+          </div>
+          <div className={f('count-4', 'count-organisms')}>
+            <Tooltip
+              title={`${numberToDisplayText(
+                entry.extra_fields.counters.taxa,
+                true,
+              )} ${toPlural(
+                'taxonomy',
+                entry.extra_fields.counters.taxa,
+                true,
+              )} matching ${entry.metadata.name}`}
+            >
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: 'InterPro',
+                      accession: entry.metadata.accession,
+                    },
+                    taxonomy: { isFilter: true, db: 'uniprot' },
+                  },
+                }}
+                disabled={!entry.extra_fields.counters.taxa}
+              >
+                <div
+                  className={f('icon', 'icon-count-organisms', 'icon-wrapper')}
+                >
+                  <div className={f('icon-over-anim')} />
+                </div>
+                <NumberComponent abbr noTitle>
+                  {entry.extra_fields.counters.taxa}
+                </NumberComponent>
+              </Link>
+            </Tooltip>
+          </div>
+          <div className={f('count-4', 'count-structures')}>
+            <Tooltip
+              title={`${numberToDisplayText(
+                entry.extra_fields.counters.structures,
+                true,
+              )} ${toPlural(
+                'structure',
+                entry.extra_fields.counters.structures,
+              )} matching ${entry.metadata.name}`}
+            >
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'entry' },
+                    entry: {
+                      db: 'InterPro',
+                      accession: entry.metadata.accession,
+                    },
+                    structure: { isFilter: true, db: 'PDB' },
+                  },
+                }}
+                disabled={!entry.extra_fields.counters.structures}
+              >
+                <div
+                  className={f('icon', 'icon-conceptual', 'icon-wrapper')}
+                  data-icon="s"
+                >
+                  {entry.extra_fields.counters.structures !== 0 && (
+                    <div className={f('icon-over-anim')} />
+                  )}
+                </div>
+                <NumberComponent abbr noTitle>
+                  {entry.extra_fields.counters.structures}
+                </NumberComponent>
+              </Link>
+            </Tooltip>
+          </div>
+          {
+            // OPTION COUNT SIGNATURES - ICON SVG
+            Object.keys(entry.metadata.member_databases).map((key) => (
+              <div
+                className={f('icon-count-signatures')}
+                key={Object.keys(entry.metadata.member_databases[key])[0]}
+              >
+                <Tooltip
+                  title={`${key} signature:  ${
+                    Object.keys(entry.metadata.member_databases[key])[0]
+                  }`}
+                >
+                  {' '}
+                  <MemberSymbol type={key} className={f('md-small')} />
+                </Tooltip>
+              </div>
+            ))
+          }
         </div>
-      </div>
+      </Card>
     );
   }
 }
