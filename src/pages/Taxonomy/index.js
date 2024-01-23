@@ -34,6 +34,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import SpeciesIcon from 'components/Organism/SpeciesIcon';
 
 import loadable from 'higherOrder/loadable';
