@@ -11,6 +11,8 @@ import MemberSymbol from 'components/Entry/MemberSymbol';
 import LazyImage from 'components/LazyImage';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 import Table, {
   Column,
@@ -337,40 +339,37 @@ class StructureCard extends PureComponent /*:: <StructureCardProps, StructureCar
     const { data, search, entryDB } = this.props;
     const { TaxnameStructuresWithData } = this.state;
     return (
-      <>
-        <div className={f('card-header')}>
-          <div className={f('card-image')}>
-            <Tooltip
-              title={`3D visualisation for ${data.metadata.accession} structure`}
-            >
-              <LazyImage
-                src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${data.metadata.accession}&file=traces.jpg`}
-                alt={`structure with accession ${data.metadata.accession}`}
-              />
-            </Tooltip>
-          </div>
-          <div className={f('card-title', 'font-sm')}>
-            <h6>
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'structure' },
-                    structure: {
-                      db: data.metadata.source_database,
-                      accession: data.metadata.accession,
-                    },
-                  },
-                }}
-              >
-                <HighlightedText
-                  text={data.metadata.name}
-                  textToHighlight={search}
-                />
-              </Link>
-            </h6>
-          </div>
-
-          <div className={f('card-subheader')}>
+      <NewCard
+        title={
+          <Link
+            to={{
+              description: {
+                main: { key: 'structure' },
+                structure: {
+                  db: data.metadata.source_database,
+                  accession: data.metadata.accession,
+                },
+              },
+            }}
+          >
+            <HighlightedText
+              text={data.metadata.name}
+              textToHighlight={search}
+            />
+          </Link>
+        }
+        imageComponent={
+          <Tooltip
+            title={`3D visualisation for ${data.metadata.accession} structure`}
+          >
+            <LazyImage
+              src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${data.metadata.accession}&file=traces.jpg`}
+              alt={`structure with accession ${data.metadata.accession}`}
+            />
+          </Tooltip>
+        }
+        subHeader={
+          <>
             {
               // INFO RESOLUTION BL - browse structures - Xray
               data.metadata.experiment_type === 'x-ray' && (
@@ -391,9 +390,20 @@ class StructureCard extends PureComponent /*:: <StructureCardProps, StructureCar
                 </Tooltip>
               )
             }
-          </div>
-        </div>
-
+          </>
+        }
+        footer={
+          <>
+            <TaxnameStructuresWithData />
+            <div>
+              <HighlightedText
+                text={data.metadata.accession || ''}
+                textToHighlight={search}
+              />
+            </div>
+          </>
+        }
+      >
         {data.extra_fields && data.metadata && data.extra_fields.counters && (
           <SummaryCounterStructures
             metadata={data.metadata}
@@ -401,17 +411,7 @@ class StructureCard extends PureComponent /*:: <StructureCardProps, StructureCar
             counters={data.extra_fields.counters}
           />
         )}
-        <div className={f('card-footer')}>
-          <TaxnameStructuresWithData />
-
-          <div>
-            <HighlightedText
-              text={data.metadata.accession || ''}
-              textToHighlight={search}
-            />
-          </div>
-        </div>
-      </>
+      </NewCard>
     );
   }
 }

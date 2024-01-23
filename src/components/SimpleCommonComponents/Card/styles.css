@@ -34,13 +34,16 @@
     & .title {
       font-size: 120%;
       font-weight: 600;
-      & h5 {
-      }
     }
   }
+  & .subheader {
+    text-align: center;
+    font-size: 80%;
+  }
+
   & .content {
     flex-grow: 1;
-    padding: 1rem 1.5rem;
+    padding: 0.3rem 0.5rem;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -50,6 +53,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 80%;
+    color: #a0a0a0;
 
     & > div:first-child {
       flex-grow: 1;

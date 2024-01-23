@@ -13,6 +13,7 @@ type Props = PropsWithChildren<{
   title?: ReactElement | string;
   imageIconClass?: string;
   imageComponent?: ReactElement;
+  subHeader?: ReactElement;
   footer?: ReactElement | string;
   linkForMore?: string;
   labelForMore?: string;
@@ -22,6 +23,7 @@ export const Card = ({
   title,
   imageComponent,
   imageIconClass,
+  subHeader,
   footer,
   linkForMore,
   labelForMore,
@@ -29,7 +31,7 @@ export const Card = ({
 }: Props) => {
   return (
     <div className={css('new-card')}>
-      {(imageComponent || imageIconClass || title) && (
+      {(imageComponent || imageIconClass || title || subHeader) && (
         <header>
           {(imageComponent || imageIconClass) && (
             <div
@@ -45,6 +47,7 @@ export const Card = ({
               <h5>{title}</h5>
             </div>
           )}
+          {subHeader && <div className={css('subheader')}>{subHeader}</div>}
         </header>
       )}
       <section className={css('content')}>{children}</section>

@@ -8,6 +8,8 @@ import {
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
@@ -158,43 +160,50 @@ const ProteinCard = (
     entryDB,
   } /*: {data: Object, search: string, entryDB: string} */,
 ) => (
-  <>
-    <div className={f('card-header')}>
-      <div className={f('card-title')}>
+  <NewCard
+    title={
+      <>
         {data.metadata.source_database === 'reviewed' ? (
-          <>
-            <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-              <span
-                className={f('icon', 'icon-common')}
-                data-icon="&#xf00c;"
-                aria-label="reviewed"
-              />
-            </Tooltip>
-          </>
+          <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+            <span
+              className={f('icon', 'icon-common')}
+              data-icon="&#xf00c;"
+              aria-label="reviewed"
+            />{' '}
+          </Tooltip>
         ) : null}
-        <h6>
-          <Link
-            to={{
-              description: {
-                main: { key: 'protein' },
-                protein: {
-                  db: data.metadata.source_database,
-                  accession: data.metadata.accession,
-                },
+        <Link
+          to={{
+            description: {
+              main: { key: 'protein' },
+              protein: {
+                db: data.metadata.source_database,
+                accession: data.metadata.accession,
               },
-            }}
-          >
-            <HighlightedText
-              text={data.metadata.name}
-              textToHighlight={search}
-            />
-          </Link>
-        </h6>
-      </div>
-    </div>
-
-    <div className={f('card-subheader')}>{data.metadata.length} AA</div>
-
+            },
+          }}
+        >
+          <HighlightedText text={data.metadata.name} textToHighlight={search} />
+        </Link>
+      </>
+    }
+    subHeader={<span>{data.metadata.length} AA</span>}
+    footer={
+      <>
+        <Tooltip
+          title={`${data.metadata.source_organism.fullName} (Tax ID: ${data.metadata.source_organism.taxId})`}
+        >
+          {data.metadata.source_organism.fullName}
+        </Tooltip>
+        <div>
+          <HighlightedText
+            text={data.metadata.accession || ''}
+            textToHighlight={search}
+          />
+        </div>
+      </>
+    }
+  >
     {data.extra_fields ? (
       <SummaryCounterProteins
         metadata={data.metadata}
@@ -204,21 +213,7 @@ const ProteinCard = (
     ) : (
       <Loading />
     )}
-
-    <div className={f('card-footer')}>
-      <Tooltip
-        title={`${data.metadata.source_organism.fullName} (Tax ID: ${data.metadata.source_organism.taxId})`}
-      >
-        {data.metadata.source_organism.fullName}
-      </Tooltip>
-      <div>
-        <HighlightedText
-          text={data.metadata.accession || ''}
-          textToHighlight={search}
-        />
-      </div>
-    </div>
-  </>
+  </NewCard>
 );
 ProteinCard.propTypes = {
   data: dataPropType.object,

@@ -7,6 +7,8 @@ import {
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 
 import Link from 'components/generic/Link';
 // $FlowFixMe
@@ -279,7 +281,7 @@ class DescriptionEntries extends PureComponent /*:: <DescriptionEntriesProps> */
 
     const desc = description[0];
 
-    const citations = description2IDs(desc);
+    const citations = description2IDs(desc.text);
     const included = Object.entries(literature || {})
       .filter(([id]) => citations.includes(id))
       .sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
@@ -313,104 +315,104 @@ class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
   render() {
     const { data, search, entryDB } = this.props;
     return (
-      <>
-        <div className={f('card-header')}>
-          <div className={f('card-image')}>
-            {entryDB.toLowerCase() === 'interpro' ? (
-              <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
-                <interpro-type
-                  dimension="2em"
-                  type={data.metadata.type.replace('_', ' ')}
-                  aria-label="Entry type"
-                />
-              </Tooltip>
-            ) : (
-              <Tooltip title={`${entryDB} database`}>
-                <MemberSymbol
-                  size="2em"
-                  type={entryDB}
-                  aria-label="Database type"
-                  className={f('md-small')}
-                />
-              </Tooltip>
-            )}
-          </div>
-          <div className={f('card-title')}>
-            <h6>
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'entry' },
-                    entry: {
-                      db: data.metadata.source_database,
-                      accession: data.metadata.accession,
-                    },
-                  },
-                }}
-              >
-                <HighlightedText
-                  text={data.metadata.name || ''}
-                  textToHighlight={search}
-                />
-              </Link>
-            </h6>
-          </div>
-        </div>
-
-        {data.extra_fields ? (
-          <SummaryCounterEntries
-            entryDB={entryDB}
-            metadata={data.metadata}
-            counters={data.extra_fields.counters}
-          />
-        ) : (
-          <Loading />
-        )}
-        {data.extra_fields ? (
-          <DescriptionEntries
-            db={data.metadata.source_database}
-            accession={data.metadata.accession}
-            description={data.extra_fields.description}
-            literature={data.extra_fields.literature}
-          />
-        ) : (
-          <Loading />
-        )}
-        <div className={f('card-footer')}>
-          {entryDB.toLowerCase() === 'interpro' ? (
-            <div>{data.metadata.type.replace('_', ' ')}</div>
+      <NewCard
+        imageComponent={
+          entryDB.toLowerCase() === 'interpro' ? (
+            <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
+              <interpro-type
+                dimension="2em"
+                type={data.metadata.type.replace('_', ' ')}
+                aria-label="Entry type"
+              />
+            </Tooltip>
           ) : (
-            <div>
-              {data.metadata.integrated ? (
-                <div>
-                  Integrated into{' '}
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: {
-                          db: 'InterPro',
-                          accession: data.metadata.integrated,
-                        },
-                      },
-                    }}
-                  >
-                    {data.metadata.integrated}
-                  </Link>
-                </div>
-              ) : (
-                'Not integrated'
-              )}
-            </div>
-          )}
-          <div>
+            <Tooltip title={`${entryDB} database`}>
+              <MemberSymbol
+                size="2em"
+                type={entryDB}
+                aria-label="Database type"
+                className={f('md-small')}
+              />
+            </Tooltip>
+          )
+        }
+        title={
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: data.metadata.source_database,
+                  accession: data.metadata.accession,
+                },
+              },
+            }}
+          >
             <HighlightedText
-              text={data.metadata.accession || ''}
+              text={data.metadata.name || ''}
               textToHighlight={search}
             />
-          </div>
+          </Link>
+        }
+        footer={
+          <>
+            {entryDB.toLowerCase() === 'interpro' ? (
+              <div>{data.metadata.type.replace('_', ' ')}</div>
+            ) : (
+              <div>
+                {data.metadata.integrated ? (
+                  <div>
+                    Integrated into{' '}
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: {
+                            db: 'InterPro',
+                            accession: data.metadata.integrated,
+                          },
+                        },
+                      }}
+                    >
+                      {data.metadata.integrated}
+                    </Link>
+                  </div>
+                ) : (
+                  'Not integrated'
+                )}
+              </div>
+            )}
+            <div>
+              <HighlightedText
+                text={data.metadata.accession || ''}
+                textToHighlight={search}
+              />
+            </div>
+          </>
+        }
+      >
+        <div>
+          {data.extra_fields ? (
+            <SummaryCounterEntries
+              entryDB={entryDB}
+              metadata={data.metadata}
+              counters={data.extra_fields.counters}
+            />
+          ) : (
+            <Loading />
+          )}
+          {data.extra_fields ? (
+            <DescriptionEntries
+              db={data.metadata.source_database}
+              accession={data.metadata.accession}
+              description={data.extra_fields.description}
+              literature={data.extra_fields.literature}
+            />
+          ) : (
+            <Loading />
+          )}
         </div>
-      </>
+      </NewCard>
     );
   }
 }

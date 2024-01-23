@@ -20,6 +20,8 @@ import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 // $FlowFixMe
+import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
+// $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import NumberComponent from 'components/NumberComponent';
 // $FlowFixMe
@@ -249,30 +251,29 @@ const SetCard = (
   } /*: {data: Object, search: string, entryDB: string} */,
 ) => {
   return (
-    <>
-      <div className={f('card-header')}>
-        <div className={f('card-title')}>
-          <h6>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'set' },
-                  set: {
-                    db: data.metadata.source_database,
-                    accession: `${data.metadata.accession}`,
-                  },
-                },
-              }}
-            >
-              <HighlightedText
-                text={data.metadata.name}
-                textToHighlight={search}
-              />
-            </Link>
-          </h6>
-        </div>
-      </div>
-
+    <NewCard
+      title={
+        <Link
+          to={{
+            description: {
+              main: { key: 'set' },
+              set: {
+                db: data.metadata.source_database,
+                accession: `${data.metadata.accession}`,
+              },
+            },
+          }}
+        >
+          <HighlightedText text={data.metadata.name} textToHighlight={search} />
+        </Link>
+      }
+      footer={
+        <HighlightedText
+          text={data.metadata.accession || ''}
+          textToHighlight={search}
+        />
+      }
+    >
       <SummaryCounterSet
         entryDB={entryDB}
         metadata={data.metadata}
@@ -280,16 +281,7 @@ const SetCard = (
           (data && data.extra_fields && data.extra_fields.counters) || {}
         }
       />
-
-      <div className={f('card-footer')}>
-        <div>
-          <HighlightedText
-            text={data.metadata.accession || ''}
-            textToHighlight={search}
-          />
-        </div>
-      </div>
-    </>
+    </NewCard>
   );
 };
 
