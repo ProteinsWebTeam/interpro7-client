@@ -18,7 +18,7 @@ type Props = {
   count: number;
   endpoint: Endpoint | 'domain architecture';
   name: string;
-  to: InterProPartialLocation;
+  to?: InterProPartialLocation;
   db?: MemberDB;
 };
 
@@ -33,6 +33,8 @@ const icon: Record<Endpoint | 'domain architecture', string> = {
 };
 
 const CounterIcon = ({ count, endpoint, name, to, db }: Props) => {
+  const MaybeLink = to ? Link : 'span';
+
   return (
     <Tooltip
       title={`${count} ${toPlural(endpoint, count, true)} matching ${name}`}
@@ -42,7 +44,7 @@ const CounterIcon = ({ count, endpoint, name, to, db }: Props) => {
       <Link
         to={to}
         className={css(count ? null : 'ico-disabled')}
-        disabled={!count}
+        disabled={!count || !to}
       >
         <div
           className={css(

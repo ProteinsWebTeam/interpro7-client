@@ -14,6 +14,8 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 // $FlowFixMe
 import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 import StructureListFilters from 'components/Structure/StructureListFilters';
+// $FlowFixMe
+import SummaryCounterStructures from 'components/Structure/SummaryCounterStructures';
 import Table, {
   Column,
   Card,
@@ -123,114 +125,6 @@ const Overview = (
 };
 Overview.propTypes = propTypes;
 
-/*:: type SummaryCounterStructuresProps = {
-  entryDB: string,
-  metadata: Object,
-  counters: Object
-};*/
-
-class SummaryCounterStructures extends PureComponent /*:: <SummaryCounterStructuresProps> */ {
-  static propTypes = {
-    entryDB: T.string,
-    metadata: T.object.isRequired,
-    counters: T.object.isRequired,
-  };
-
-  render() {
-    const { entryDB, metadata, counters } = this.props;
-
-    const { entries, proteins, taxa } = counters;
-
-    return (
-      <div className={f('card-block', 'card-counter', 'label-off')}>
-        <Tooltip
-          title={`${entries} ${entryDB} ${toPlural(
-            'entry',
-            entries,
-          )} matching ${metadata.name}`}
-          className={f('count-entries')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'structure' },
-                structure: {
-                  db: 'pdb',
-                  accession: metadata.accession.toString(),
-                },
-                entry: { isFilter: true, db: entryDB || 'all' },
-              },
-            }}
-          >
-            <div className={f('icon-wrapper')}>
-              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-              {entries !== 0 && (
-                <div className={f('icon-over-anim', 'mod-img-pos')} />
-              )}
-            </div>
-            <NumberComponent abbr>{entries}</NumberComponent>
-
-            <span className={f('label-number')}>
-              {toPlural('entry', entries)}
-            </span>
-          </Link>
-        </Tooltip>
-
-        <Tooltip
-          title={`${proteins} ${toPlural('protein', proteins)} matching ${
-            metadata.name
-          }`}
-          className={f('count-proteins')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'structure' },
-                structure: {
-                  db: 'pdb',
-                  accession: metadata.accession.toString(),
-                },
-                protein: { isFilter: true, db: 'UniProt' },
-              },
-            }}
-          >
-            <div
-              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
-              data-icon="&#x50;"
-            >
-              {proteins !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-            <NumberComponent abbr>{proteins}</NumberComponent>
-            <span className={f('label-number')}>
-              {toPlural('protein', proteins)}
-            </span>
-          </Link>
-        </Tooltip>
-
-        <Tooltip
-          title={`${taxa} ${toPlural('taxonomy', taxa)} matching ${
-            metadata.name
-          }`}
-          className={f('count-organisms')}
-          style={{ display: 'flex' }}
-        >
-          <div className={f('container')}>
-            <div className={f('icon', 'icon-count-species', 'icon-wrapper')}>
-              {taxa !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-
-            <NumberComponent abbr>{taxa}</NumberComponent>
-            <span className={f('label-number')}>
-              {toPlural('taxonomy', taxa)}
-            </span>
-          </div>
-        </Tooltip>
-      </div>
-    );
-  }
-}
 /*:: type TaxnameStructuresProps = {
   data: {
     loading: boolean,
@@ -406,7 +300,8 @@ class StructureCard extends PureComponent /*:: <StructureCardProps, StructureCar
       >
         {data.extra_fields && data.metadata && data.extra_fields.counters && (
           <SummaryCounterStructures
-            metadata={data.metadata}
+            structureName={data.metadata.name}
+            structureAccession={data.metadata.accession}
             entryDB={entryDB}
             counters={data.extra_fields.counters}
           />
