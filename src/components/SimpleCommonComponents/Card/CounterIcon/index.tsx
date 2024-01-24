@@ -3,6 +3,7 @@ import React from 'react';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
+import MemberSymbol from 'components/Entry/MemberSymbol';
 
 import { toPlural } from 'utils/pages/toPlural';
 
@@ -18,6 +19,7 @@ type Props = {
   endpoint: Endpoint | 'domain architecture';
   name: string;
   to: InterProPartialLocation;
+  db?: MemberDB;
 };
 
 // TODO: change to endpoint
@@ -58,14 +60,18 @@ const style: Record<
   },
 };
 
-const CounterIcon = ({ count, endpoint, name, to }: Props) => {
+const CounterIcon = ({ count, endpoint, name, to, db }: Props) => {
   return (
     <Tooltip
       title={`${count} ${toPlural(endpoint, count, true)} matching ${name}`}
       className={css('icon-link', style[endpoint].className)}
       style={{ display: 'flex' }}
     >
-      <Link to={to} className={css(count ? null : 'ico-disabled')}>
+      <Link
+        to={to}
+        className={css(count ? null : 'ico-disabled')}
+        disabled={!count}
+      >
         <div
           className={css(
             'icon',
@@ -74,6 +80,18 @@ const CounterIcon = ({ count, endpoint, name, to }: Props) => {
             style[endpoint].icon,
           )}
         >
+          {endpoint === 'entry' && (
+            <div
+              style={{
+                // UGLY hack be better Gustavo
+                position: 'relative',
+                top: '7px',
+                left: '-2px',
+              }}
+            >
+              <MemberSymbol type={db || 'all'} className={css('md-small')} />
+            </div>
+          )}
           {count !== 0 && <div className={css('icon-over-animation')} />}
         </div>
         <NumberComponent abbr>{count}</NumberComponent>

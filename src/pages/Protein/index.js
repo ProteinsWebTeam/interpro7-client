@@ -15,6 +15,8 @@ import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
+// $FlowFixMe
+import CounterIcon from 'components/SimpleCommonComponents/Card/CounterIcon';
 
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
@@ -82,72 +84,37 @@ class SummaryCounterProteins extends PureComponent /*:: <Props> */ {
 
     return (
       <div className={f('card-block', 'card-counter', 'label-off')}>
-        <Tooltip
-          title={`${entries} ${entryDB} ${toPlural(
-            'entry',
-            entries,
-          )} matching ${metadata.name}`}
-          className={f('count-entries')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'protein' },
-                protein: {
-                  db: 'uniprot',
-                  accession: metadata.accession,
-                },
-                entry: { isFilter: true, db: entryDB || 'all' },
+        <CounterIcon
+          endpoint="entry"
+          count={entries}
+          name={metadata.name}
+          db={entryDB}
+          to={{
+            description: {
+              main: { key: 'protein' },
+              protein: {
+                db: 'uniprot',
+                accession: metadata.accession,
               },
-            }}
-          >
-            <div className={f('icon-wrapper')}>
-              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-              {entries !== 0 && (
-                <div className={f('icon-over-anim', 'mod-img-pos')} />
-              )}
-            </div>
-            <NumberComponent abbr>{entries}</NumberComponent>
-
-            <span className={f('label-number')}>
-              {toPlural('entry', entries)}
-            </span>
-          </Link>
-        </Tooltip>
-
-        <Tooltip
-          title={`${structures} ${toPlural('structure', structures)} matching ${
-            metadata.name
-          }`}
-          className={f('count-structures')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'protein' },
-                protein: {
-                  db: 'uniprot',
-                  accession: metadata.accession,
-                },
-                structure: { isFilter: true, db: 'PDB' },
+              entry: { isFilter: true, db: entryDB || 'all' },
+            },
+          }}
+        />
+        <CounterIcon
+          endpoint="structure"
+          count={structures}
+          name={metadata.name}
+          to={{
+            description: {
+              main: { key: 'protein' },
+              protein: {
+                db: 'uniprot',
+                accession: metadata.accession,
               },
-            }}
-            disabled={!structures}
-          >
-            <div
-              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
-              data-icon="s"
-            >
-              {structures !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-            <NumberComponent abbr>{structures}</NumberComponent>
-            <span className={f('label-number')}>
-              {toPlural('structure', structures)}
-            </span>
-          </Link>
-        </Tooltip>
+              structure: { isFilter: true, db: 'PDB' },
+            },
+          }}
+        />
       </div>
     );
   }

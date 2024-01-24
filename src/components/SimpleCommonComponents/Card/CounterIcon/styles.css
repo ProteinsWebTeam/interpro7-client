@@ -22,6 +22,13 @@ body .icon-link.icon-link {
   & .icon-wrapper {
     position: relative;
     font-size: 2rem;
+    & .md-small {
+      display: flex;
+      width: 2rem;
+      & text {
+        font-size: 12rem;
+      }
+    }
     & .icon-over-animation {
       position: absolute;
       top: 26%;
