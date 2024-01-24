@@ -22,6 +22,8 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 // $FlowFixMe
 import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 // $FlowFixMe
+import SummaryCounterSet from 'components/Set/SummaryCounterSet';
+// $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import NumberComponent from 'components/NumberComponent';
 // $FlowFixMe
@@ -64,7 +66,7 @@ const f = foundationPartial(
   metadata: Object,
   counters: Object
 };*/
-class SummaryCounterSet extends PureComponent /*:: <Props> */ {
+class SummaryCounterSetOld extends PureComponent /*:: <Props> */ {
   static propTypes = {
     entryDB: T.string,
     metadata: metadataPropType.isRequired,
@@ -276,7 +278,9 @@ const SetCard = (
     >
       <SummaryCounterSet
         entryDB={entryDB}
-        metadata={data.metadata}
+        setName={data.metadata.name}
+        setDB={data.metadata.source_database}
+        setAccession={data.metadata.accession}
         counters={
           (data && data.extra_fields && data.extra_fields.counters) || {}
         }

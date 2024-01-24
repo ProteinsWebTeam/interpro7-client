@@ -65,6 +65,10 @@ body .icon-link.icon-link {
   &.icon-count-set {
     background-image: url("../../../../images/icons/ico-set.svg");
   }
+  &.icon-count-proteome {
+    width: 22px;
+    background-image: url("../../../../images/icons/ico-proteome.svg");
+  }
 }
 
 .card-counter-block {
