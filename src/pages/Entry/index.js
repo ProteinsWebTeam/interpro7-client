@@ -1,16 +1,13 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import {
-  dataPropType,
-  metadataPropType,
-} from 'higherOrder/loadData/dataPropTypes';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 // $FlowFixMe
 import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 // $FlowFixMe
-import CounterIcon from 'components/SimpleCommonComponents/Card/CounterIcon';
+import SummaryCounterEntries from 'components/Entry/SummaryCounterEntries';
 
 import Link from 'components/generic/Link';
 // $FlowFixMe
@@ -69,125 +66,11 @@ const GO_COLORS = new Map([
   ['C', '#f5ddd3'],
 ]);
 
-/*:: type SummaryCounterEntriesProps = {
-  entryDB: string,
-  metadata: Object,
-  counters: Object
-};*/
-class SummaryCounterEntries extends PureComponent /*:: <SummaryCounterEntriesProps> */ {
-  static propTypes = {
-    entryDB: T.string,
-    metadata: metadataPropType.isRequired,
-    counters: T.object.isRequired,
-  };
-
-  render() {
-    const { entryDB, metadata, counters } = this.props;
-    const {
-      proteins,
-      domain_architectures: domainArchitectures,
-      taxa,
-      structures,
-      sets,
-    } = counters;
-
-    return (
-      <div className={f('card-block', 'card-counter', 'label-off')}>
-        <CounterIcon
-          endpoint="protein"
-          count={proteins}
-          name={metadata.name}
-          to={{
-            description: {
-              main: { key: 'entry' },
-              entry: {
-                db: entryDB,
-                accession: metadata.accession,
-              },
-              protein: { isFilter: true, db: 'UniProt' },
-            },
-          }}
-        />
-
-        <CounterIcon
-          endpoint="domain architecture"
-          count={domainArchitectures}
-          name={metadata.name}
-          to={{
-            description: {
-              main: { key: 'entry' },
-              entry: {
-                db: entryDB,
-                accession: metadata.accession,
-                detail: 'domain_architecture',
-              },
-            },
-          }}
-        />
-
-        <CounterIcon
-          endpoint="taxonomy"
-          count={taxa}
-          name={metadata.name}
-          to={{
-            description: {
-              main: { key: 'entry' },
-              entry: {
-                db: entryDB,
-                accession: metadata.accession,
-              },
-              taxonomy: { isFilter: true, db: 'uniprot' },
-            },
-          }}
-        />
-
-        <CounterIcon
-          endpoint="structure"
-          count={structures}
-          name={metadata.name}
-          to={{
-            description: {
-              main: { key: 'entry' },
-              entry: {
-                db: entryDB,
-                accession: metadata.accession,
-              },
-              structure: { isFilter: true, db: 'PDB' },
-            },
-          }}
-        />
-
-        {
-          // show sets counter + icon only when available
-          entryDB.toLowerCase() === 'cdd' ||
-          entryDB.toLowerCase() === 'pfam' ||
-          entryDB.toLowerCase() === 'pirsf' ? (
-            <CounterIcon
-              endpoint="set"
-              count={sets}
-              name={metadata.name}
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: {
-                    db: entryDB,
-                    accession: metadata.accession,
-                  },
-                  set: { isFilter: true, db: entryDB },
-                },
-              }}
-            />
-          ) : null
-        }
-      </div>
-    );
-  }
-}
-
 const description2IDs = (description) =>
   (description.match(/"(PUB\d+)"/gi) || []).map((t) =>
     t.replace(/(^")|("$)/g, ''),
   );
+
 /*:: type DescriptionEntriesProps = {
   description: Array<string>,
   literature: Object,
@@ -321,7 +204,8 @@ class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
           {data.extra_fields ? (
             <SummaryCounterEntries
               entryDB={entryDB}
-              metadata={data.metadata}
+              entryAccession={data.metadata.accession}
+              entryName={data.metadata.name}
               counters={data.extra_fields.counters}
             />
           ) : (

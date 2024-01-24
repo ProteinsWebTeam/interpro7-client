@@ -15,22 +15,30 @@ const css = cssBinder(local, fonts);
 
 type Props = {
   count: number;
-  endpoint: Endpoint;
+  endpoint: Endpoint | 'domain architecture';
   name: string;
   to: InterProPartialLocation;
 };
 
 // TODO: change to endpoint
 const style: Record<
-  string,
+  Endpoint | 'domain architecture',
   {
     className: string;
     icon: string;
   }
 > = {
+  entry: {
+    className: 'count-entries',
+    icon: 'icon-entries',
+  },
   protein: {
     className: 'count-proteins',
     icon: 'icon-proteins',
+  },
+  proteome: {
+    className: 'count-proteomes',
+    icon: 'icon-proteomes',
   },
   taxonomy: {
     className: 'count-taxonomy',

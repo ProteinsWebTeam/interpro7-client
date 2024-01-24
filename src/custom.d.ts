@@ -262,17 +262,19 @@ type StructuredDescription = {
   llm: boolean;
   checked: boolean;
 };
+
+type MetadataCounters = {
+  [resource: string]:
+    | number
+    | {
+        [db: string]: number;
+      };
+};
 interface Metadata {
   accession: string;
   source_database: string;
   description: Array<string | StructuredDescription>;
-  counters: {
-    [resource: string]:
-      | number
-      | {
-          [db: string]: number;
-        };
-  };
+  counters: MetadataCounters;
   go_terms?: Array<GOTerm>;
 }
 
