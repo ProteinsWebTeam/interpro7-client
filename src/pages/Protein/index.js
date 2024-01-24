@@ -1,10 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import {
-  dataPropType,
-  metadataPropType,
-} from 'higherOrder/loadData/dataPropTypes';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -14,9 +11,7 @@ import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
-import MemberSymbol from 'components/Entry/MemberSymbol';
-// $FlowFixMe
-import CounterIcon from 'components/SimpleCommonComponents/Card/CounterIcon';
+import SummaryCounterProteins from 'components/Protein/SummaryCounterProteins';
 
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
@@ -29,7 +24,6 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import NumberComponent from 'components/NumberComponent';
 // $FlowFixMe
 import File from 'components/File';
 
@@ -64,61 +58,6 @@ import {
   schemaProcessDataTableRow,
 } from 'schema_org/processors';
 import { toPlural } from 'utils/pages';
-
-/*:: type Props = {
-  metadata: Object,
-  counters: Object,
-  entryDB: string
-};*/
-
-class SummaryCounterProteins extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    metadata: metadataPropType.isRequired,
-    counters: T.object.isRequired,
-    entryDB: T.string.isRequired,
-  };
-
-  render() {
-    const { entryDB, metadata, counters } = this.props;
-    const { entries, structures } = counters;
-
-    return (
-      <div className={f('card-block', 'card-counter', 'label-off')}>
-        <CounterIcon
-          endpoint="entry"
-          count={entries}
-          name={metadata.name}
-          db={entryDB}
-          to={{
-            description: {
-              main: { key: 'protein' },
-              protein: {
-                db: 'uniprot',
-                accession: metadata.accession,
-              },
-              entry: { isFilter: true, db: entryDB || 'all' },
-            },
-          }}
-        />
-        <CounterIcon
-          endpoint="structure"
-          count={structures}
-          name={metadata.name}
-          to={{
-            description: {
-              main: { key: 'protein' },
-              protein: {
-                db: 'uniprot',
-                accession: metadata.accession,
-              },
-              structure: { isFilter: true, db: 'PDB' },
-            },
-          }}
-        />
-      </div>
-    );
-  }
-}
 
 const ProteinCard = (
   {

@@ -22,49 +22,21 @@ type Props = {
   db?: MemberDB;
 };
 
-// TODO: change to endpoint
-const style: Record<
-  Endpoint | 'domain architecture',
-  {
-    className: string;
-    icon: string;
-  }
-> = {
-  entry: {
-    className: 'count-entries',
-    icon: 'icon-entries',
-  },
-  protein: {
-    className: 'count-proteins',
-    icon: 'icon-proteins',
-  },
-  proteome: {
-    className: 'count-proteomes',
-    icon: 'icon-proteomes',
-  },
-  taxonomy: {
-    className: 'count-taxonomy',
-    icon: 'icon-count-species',
-  },
-  structure: {
-    className: 'count-structure',
-    icon: 'icon-structures',
-  },
-  set: {
-    className: 'count-set',
-    icon: 'icon-count-set',
-  },
-  'domain architecture': {
-    className: 'count-architectures',
-    icon: 'icon-count-ida',
-  },
+const icon: Record<Endpoint | 'domain architecture', string> = {
+  entry: 'icon-entries',
+  protein: 'icon-proteins',
+  proteome: 'icon-proteomes',
+  taxonomy: 'icon-count-species',
+  structure: 'icon-structures',
+  set: 'icon-count-set',
+  'domain architecture': 'icon-count-ida',
 };
 
 const CounterIcon = ({ count, endpoint, name, to, db }: Props) => {
   return (
     <Tooltip
       title={`${count} ${toPlural(endpoint, count, true)} matching ${name}`}
-      className={css('icon-link', style[endpoint].className)}
+      className={css('icon-link')}
       style={{ display: 'flex' }}
     >
       <Link
@@ -77,7 +49,7 @@ const CounterIcon = ({ count, endpoint, name, to, db }: Props) => {
             'icon',
             'icon-conceptual',
             'icon-wrapper',
-            style[endpoint].icon,
+            icon[endpoint],
           )}
         >
           {endpoint === 'entry' && (
