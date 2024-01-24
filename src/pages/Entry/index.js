@@ -9,6 +9,8 @@ import {
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 // $FlowFixMe
 import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
+// $FlowFixMe
+import CounterIcon from 'components/SimpleCommonComponents/Card/CounterIcon';
 
 import Link from 'components/generic/Link';
 // $FlowFixMe
@@ -29,10 +31,8 @@ import Table, {
   HighlightToggler,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import NumberComponent from 'components/NumberComponent';
 
 import getExtUrlFor from 'utils/url-patterns';
-import { toPlural } from 'utils/pages';
 import loadWebComponent from 'utils/load-web-component';
 import loadable from 'higherOrder/loadable';
 
@@ -93,164 +93,90 @@ class SummaryCounterEntries extends PureComponent /*:: <SummaryCounterEntriesPro
 
     return (
       <div className={f('card-block', 'card-counter', 'label-off')}>
-        <Tooltip
-          title={`${proteins} ${toPlural('protein', proteins)} matching ${
-            metadata.name
-          }`}
-          className={f('count-proteins')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: entryDB,
-                  accession: metadata.accession,
-                },
-                protein: { isFilter: true, db: 'UniProt' },
+        <CounterIcon
+          endpoint="protein"
+          count={proteins}
+          name={metadata.name}
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: {
+                db: entryDB,
+                accession: metadata.accession,
               },
-            }}
-            className={f(proteins ? null : 'ico-disabled')}
-          >
-            <div
-              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
-              data-icon="&#x50;"
-            >
-              {proteins !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-            <NumberComponent abbr>{proteins}</NumberComponent>
-            <span className={f('label-number')}>
-              {toPlural('protein', proteins)}
-            </span>
-          </Link>
-        </Tooltip>
+              protein: { isFilter: true, db: 'UniProt' },
+            },
+          }}
+        />
 
-        <Tooltip
-          title={`${domainArchitectures} domain architectures matching ${metadata.name}`}
-          className={f('count-architectures')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: entryDB,
-                  accession: metadata.accession,
-                  detail: 'domain_architecture',
-                },
+        <CounterIcon
+          endpoint="domain architecture"
+          count={domainArchitectures}
+          name={metadata.name}
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: {
+                db: entryDB,
+                accession: metadata.accession,
+                detail: 'domain_architecture',
               },
-            }}
-            className={f(domainArchitectures ? null : 'ico-disabled')}
-          >
-            <div className={f('icon', 'icon-count-ida', 'icon-wrapper')}>
-              {domainArchitectures !== 0 && (
-                <div className={f('icon-over-anim', 'mod-img-pos')} />
-              )}
-            </div>
-            <NumberComponent abbr>{domainArchitectures}</NumberComponent>
-            <span className={f('label-number')}>domain architectures</span>
-          </Link>
-        </Tooltip>
+            },
+          }}
+        />
 
-        <Tooltip
-          title={`${taxa} ${toPlural('taxonomy', taxa)} matching ${
-            metadata.name
-          }`}
-          className={f('count-organisms')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: entryDB,
-                  accession: metadata.accession,
-                },
-                taxonomy: { isFilter: true, db: 'uniprot' },
+        <CounterIcon
+          endpoint="taxonomy"
+          count={taxa}
+          name={metadata.name}
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: {
+                db: entryDB,
+                accession: metadata.accession,
               },
-            }}
-            className={f(taxa ? null : 'ico-disabled')}
-          >
-            <div className={f('icon', 'icon-count-species', 'icon-wrapper')}>
-              {taxa !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-            <NumberComponent abbr>{taxa}</NumberComponent>
-            <span className={f('label-number')}>
-              {toPlural('taxonomy', taxa)}
-            </span>
-          </Link>
-        </Tooltip>
+              taxonomy: { isFilter: true, db: 'uniprot' },
+            },
+          }}
+        />
 
-        <Tooltip
-          title={`${structures} ${toPlural('structure', structures)} matching ${
-            metadata.name
-          }`}
-          className={f('count-structures')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: entryDB,
-                  accession: metadata.accession,
-                },
-                structure: { isFilter: true, db: 'PDB' },
+        <CounterIcon
+          endpoint="structure"
+          count={structures}
+          name={metadata.name}
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: {
+                db: entryDB,
+                accession: metadata.accession,
               },
-            }}
-            className={f(structures ? null : 'ico-disabled')}
-          >
-            <div
-              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
-              data-icon="s"
-            >
-              {structures !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-            <NumberComponent abbr>{structures}</NumberComponent>
-            <span className={f('label-number')}>
-              {toPlural('structure', structures)}
-            </span>
-          </Link>
-        </Tooltip>
+              structure: { isFilter: true, db: 'PDB' },
+            },
+          }}
+        />
 
         {
           // show sets counter + icon only when available
           entryDB.toLowerCase() === 'cdd' ||
           entryDB.toLowerCase() === 'pfam' ||
           entryDB.toLowerCase() === 'pirsf' ? (
-            <Tooltip
-              title={`${sets} ${toPlural('set', sets)} matching ${
-                metadata.name
-              }`}
-              className={f('count-sets')}
-              style={{ display: 'flex' }}
-            >
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'entry' },
-                    entry: {
-                      db: entryDB,
-                      accession: metadata.accession,
-                    },
-                    set: { isFilter: true, db: entryDB },
+            <CounterIcon
+              endpoint="set"
+              count={sets}
+              name={metadata.name}
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: entryDB,
+                    accession: metadata.accession,
                   },
-                }}
-                className={f(sets ? null : 'ico-disabled')}
-              >
-                <div className={f('icon', 'icon-count-set', 'icon-wrapper')}>
-                  {sets !== 0 && <div className={f('icon-over-anim')} />}
-                </div>
-                <NumberComponent abbr>{sets}</NumberComponent>
-                <span className={f('label-number')}>
-                  {toPlural('set', sets)}
-                </span>
-              </Link>
-            </Tooltip>
+                  set: { isFilter: true, db: entryDB },
+                },
+              }}
+            />
           ) : null
         }
       </div>

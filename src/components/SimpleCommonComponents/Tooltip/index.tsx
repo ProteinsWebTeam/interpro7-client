@@ -31,6 +31,7 @@ type Props = PropsWithChildren<{
   interactive?: boolean;
   /** Array of extra classes to include in the tooltip.*/
   classNames?: string[];
+  [otherProp: string]: unknown;
 }>;
 
 const Tooltip = ({
