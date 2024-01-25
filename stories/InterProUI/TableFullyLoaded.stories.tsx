@@ -3,8 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import FullyLoadedTable from 'components/Table/FullyLoadedTable';
 
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 const store = configureStore({
   pathname: '/protein/uniprot/',
   search: '?page_size=2',

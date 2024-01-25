@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { _MemberDBSelector as MemberDBSelector } from '../src/components/MemberDBSelector';
+import { _MemberDBSelector as MemberDBSelector } from 'components/MemberDBSelector';
 
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 import { noop } from 'lodash-es';
 
 const store = configureStore();

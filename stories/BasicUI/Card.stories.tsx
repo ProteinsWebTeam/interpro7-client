@@ -5,8 +5,8 @@ import Card from 'components/SimpleCommonComponents/Card';
 import LazyImage from 'components/LazyImage';
 import SpeciesIcon from 'components/Organism/SpeciesIcon';
 
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 
 import cssBinder from 'styles/cssBinder';
 

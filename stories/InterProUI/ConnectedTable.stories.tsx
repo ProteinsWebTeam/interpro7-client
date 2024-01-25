@@ -13,8 +13,8 @@ import Table, {
 
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 
 const store = configureStore({
   pathname: '/protein/uniprot/',

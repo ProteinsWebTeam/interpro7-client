@@ -4,8 +4,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Title } from 'components/Title';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 
 const store = configureStore({
   pathname: '/protein/uniprot/',

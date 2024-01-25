@@ -2,8 +2,8 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import NumberComponent from 'components/NumberComponent';
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 
 const store = configureStore({ pathname: '/entry/interpro/ipr999999' });
 

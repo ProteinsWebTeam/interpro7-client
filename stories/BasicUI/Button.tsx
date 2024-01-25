@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import cssBinder from '../src/styles/cssBinder';
+import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const css = cssBinder(fonts);

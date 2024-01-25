@@ -3,10 +3,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { ProteinViewer } from 'components/ProteinViewer';
 
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 
 const store = configureStore();
+
+// TODO: There is a problem when loading this stories twice
 
 const meta = {
   title: 'InterPro UI/ProteinViewer',

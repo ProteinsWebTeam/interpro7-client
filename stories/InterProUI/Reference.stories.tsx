@@ -1,10 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Literature from '../src/components/Entry/Literature';
+import Literature from 'components/Entry/Literature';
 
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 
 const store = configureStore();
 

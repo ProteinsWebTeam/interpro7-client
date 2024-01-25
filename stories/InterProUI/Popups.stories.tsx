@@ -7,8 +7,8 @@ import Entry from 'components/ProteinViewer/Popup/Entry';
 import Residue from 'components/ProteinViewer/Popup/Residue';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 
 const store = configureStore({ pathname: '/entry/interpro/ipr999999' });
 

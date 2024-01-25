@@ -6,8 +6,8 @@ import { createSelector } from 'reselect';
 import { noop } from 'lodash-es';
 
 import Link, { _Link as RawLink } from 'components/generic/Link';
-import Provider from './Provider';
-import configureStore from './configureStore';
+import Provider from '../Provider';
+import configureStore from '../configureStore';
 
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
