@@ -22,6 +22,7 @@ import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import ProteomeCard from 'components/Proteome/Card';
 
 import loadable from 'higherOrder/loadable';

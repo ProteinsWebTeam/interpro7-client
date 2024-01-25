@@ -295,10 +295,12 @@ type MemberDB =
   | 'ncbifam'
   | 'antifam';
 
-type NameObject = {
-  name: string;
-  short?: string;
-};
+type NameObject =
+  | {
+      name: string;
+      short?: string;
+    }
+  | string;
 
 interface EntryMetadata extends Metadata {
   name: NameObject;
