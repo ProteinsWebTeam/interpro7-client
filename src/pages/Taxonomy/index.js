@@ -39,7 +39,6 @@ import SpeciesIcon from 'components/Organism/SpeciesIcon';
 
 import loadable from 'higherOrder/loadable';
 
-import { toPlural } from 'utils/pages';
 import getNodeSpotlight from 'utils/taxonomy/get-node-spotlight';
 import getSuperKingdom from 'utils/taxonomy/get-super-kingdom';
 

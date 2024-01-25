@@ -4,19 +4,13 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-// $FlowFixMe
-import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
-// $FlowFixMe
-import SummaryCounterEntries from 'components/Entry/SummaryCounterEntries';
 
 import Link from 'components/generic/Link';
 // $FlowFixMe
 import GoLink from 'components/ExtLink/GoLink';
-import Description from 'components/Description';
 import MemberDBSelector from 'components/MemberDBSelector';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
-import Loading from 'components/SimpleCommonComponents/Loading';
 import File from 'components/File';
 
 import Table, {
@@ -46,6 +40,7 @@ import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
+import EntryCard from 'components/Entry/Card';
 
 const f = foundationPartial(
   pageStyle,
@@ -65,167 +60,6 @@ const GO_COLORS = new Map([
   ['F', '#e0f2d1'],
   ['C', '#f5ddd3'],
 ]);
-
-const description2IDs = (description) =>
-  (description.match(/"(PUB\d+)"/gi) || []).map((t) =>
-    t.replace(/(^")|("$)/g, ''),
-  );
-
-/*:: type DescriptionEntriesProps = {
-  description: Array<string>,
-  literature: Object,
-  accession: string
-};*/
-class DescriptionEntries extends PureComponent /*:: <DescriptionEntriesProps> */ {
-  static propTypes = {
-    description: T.arrayOf(T.string),
-    literature: T.object,
-    accession: T.string.isRequired,
-  };
-
-  render() {
-    const { description, literature, accession } = this.props;
-
-    if (!(description && description.length)) return null;
-
-    const desc = description[0];
-
-    const citations = description2IDs(desc.text);
-    const included = Object.entries(literature || {})
-      .filter(([id]) => citations.includes(id))
-      .sort((a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]));
-
-    return (
-      <>
-        <div className={f('card-description', 'card-block')}>
-          <Description
-            textBlocks={[desc]}
-            literature={included}
-            accession={accession}
-            withoutIDs
-          />
-        </div>
-      </>
-    );
-  }
-}
-/*:: type EntryCardProps = {
-  data: Object,
-  search: string,
-  entryDB: string
-};*/
-class EntryCard extends PureComponent /*:: <EntryCardProps> */ {
-  static propTypes = {
-    data: dataPropType,
-    search: T.string,
-    entryDB: T.string,
-  };
-
-  render() {
-    const { data, search, entryDB } = this.props;
-    return (
-      <NewCard
-        imageComponent={
-          entryDB.toLowerCase() === 'interpro' ? (
-            <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
-              <interpro-type
-                dimension="2em"
-                type={data.metadata.type.replace('_', ' ')}
-                aria-label="Entry type"
-              />
-            </Tooltip>
-          ) : (
-            <Tooltip title={`${entryDB} database`}>
-              <MemberSymbol
-                size="2em"
-                type={entryDB}
-                aria-label="Database type"
-                className={f('md-small')}
-              />
-            </Tooltip>
-          )
-        }
-        title={
-          <Link
-            to={{
-              description: {
-                main: { key: 'entry' },
-                entry: {
-                  db: data.metadata.source_database,
-                  accession: data.metadata.accession,
-                },
-              },
-            }}
-          >
-            <HighlightedText
-              text={data.metadata.name || ''}
-              textToHighlight={search}
-            />
-          </Link>
-        }
-        footer={
-          <>
-            {entryDB.toLowerCase() === 'interpro' ? (
-              <div>{data.metadata.type.replace('_', ' ')}</div>
-            ) : (
-              <div>
-                {data.metadata.integrated ? (
-                  <div>
-                    Integrated into{' '}
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'entry' },
-                          entry: {
-                            db: 'InterPro',
-                            accession: data.metadata.integrated,
-                          },
-                        },
-                      }}
-                    >
-                      {data.metadata.integrated}
-                    </Link>
-                  </div>
-                ) : (
-                  'Not integrated'
-                )}
-              </div>
-            )}
-            <div>
-              <HighlightedText
-                text={data.metadata.accession || ''}
-                textToHighlight={search}
-              />
-            </div>
-          </>
-        }
-      >
-        <div>
-          {data.extra_fields ? (
-            <SummaryCounterEntries
-              entryDB={entryDB}
-              entryAccession={data.metadata.accession}
-              entryName={data.metadata.name}
-              counters={data.extra_fields.counters}
-            />
-          ) : (
-            <Loading />
-          )}
-          {data.extra_fields ? (
-            <DescriptionEntries
-              db={data.metadata.source_database}
-              accession={data.metadata.accession}
-              description={data.extra_fields.description}
-              literature={data.extra_fields.literature}
-            />
-          ) : (
-            <Loading />
-          )}
-        </div>
-      </NewCard>
-    );
-  }
-}
 
 const ArchiveCallout = ({ name, page }) => (
   <div className={f('row')}>
