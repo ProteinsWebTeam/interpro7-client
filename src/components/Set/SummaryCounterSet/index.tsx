@@ -15,7 +15,7 @@ import cardStyle from 'components/SimpleCommonComponents/Card/CounterIcon/styles
 
 const css = cssBinder(cardStyle);
 
-const SummaryCounterEntries = ({
+const SummaryCounterSets = ({
   entryDB,
   setDB,
   setName,
@@ -108,4 +108,4 @@ const SummaryCounterEntries = ({
   );
 };
 
-export default SummaryCounterEntries;
+export default SummaryCounterSets;

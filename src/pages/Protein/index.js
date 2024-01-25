@@ -57,7 +57,6 @@ import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
 } from 'schema_org/processors';
-import { toPlural } from 'utils/pages';
 
 const ProteinCard = (
   {
