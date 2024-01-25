@@ -2,10 +2,11 @@ import React from 'react';
 import CounterIcon from 'components/SimpleCommonComponents/Card/CounterIcon';
 
 type Props = {
-  entryDB: string;
+  entryDB: MemberDB;
   entryName: string;
   entryAccession: string;
   counters: MetadataCounters;
+  memberDBs?: ContributingEntries;
 };
 
 import cssBinder from 'styles/cssBinder';
@@ -19,6 +20,7 @@ const SummaryCounterEntries = ({
   entryName,
   entryAccession,
   counters,
+  memberDBs,
 }: Props) => {
   const {
     proteins,
@@ -116,6 +118,28 @@ const SummaryCounterEntries = ({
           />
         ) : null
       }
+      {memberDBs &&
+        // OPTION COUNT SIGNATURES - ICON SVG
+        Object.keys(memberDBs).map((db) =>
+          Object.keys(memberDBs[db]).map((acc) => (
+            <CounterIcon
+              endpoint="entry"
+              count={1}
+              name={entryName}
+              db={db as MemberDB}
+              signature={acc}
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db,
+                    accession: acc,
+                  },
+                },
+              }}
+            />
+          )),
+        )}
     </div>
   );
 };

@@ -20,6 +20,7 @@ type Props = {
   name: string;
   to?: InterProPartialLocation;
   db?: MemberDB;
+  signature?: string;
 };
 
 const icon: Record<Endpoint | 'domain architecture', string> = {
@@ -32,10 +33,14 @@ const icon: Record<Endpoint | 'domain architecture', string> = {
   'domain architecture': 'icon-count-ida',
 };
 
-const CounterIcon = ({ count, endpoint, name, to, db }: Props) => {
+const CounterIcon = ({ count, endpoint, name, to, db, signature }: Props) => {
   return (
     <Tooltip
-      title={`${count} ${toPlural(endpoint, count, true)} matching ${name}`}
+      title={
+        signature
+          ? `${db} signature: ${signature}`
+          : `${count} ${toPlural(endpoint, count, true)} matching ${name}`
+      }
       className={css('icon-link')}
       style={{ display: 'flex' }}
     >
@@ -66,7 +71,7 @@ const CounterIcon = ({ count, endpoint, name, to, db }: Props) => {
           )}
           {count !== 0 && <div className={css('icon-over-animation')} />}
         </div>
-        <NumberComponent abbr>{count}</NumberComponent>
+        {!signature && <NumberComponent abbr>{count}</NumberComponent>}
       </Link>
     </Tooltip>
   );

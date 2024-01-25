@@ -72,10 +72,11 @@ body .icon-link.icon-link {
 }
 
 .card-counter-block {
+  flex-grow: 1;
   color: #333;
   margin-bottom: 0.5rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: stretch;
   gap: 0.7rem;
 }
