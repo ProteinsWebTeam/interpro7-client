@@ -18,8 +18,6 @@ type Props = {
     metadata: ProteinMetadata;
     extra_fields?: {
       counters: MetadataCounters;
-      description: Array<StructuredDescription>;
-      literature?: Record<string, Reference>;
     };
   };
   search: string;
