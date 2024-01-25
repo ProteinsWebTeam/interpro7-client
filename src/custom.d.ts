@@ -295,12 +295,10 @@ type MemberDB =
   | 'ncbifam'
   | 'antifam';
 
-type NameObject =
-  | {
-      name: string;
-      short?: string;
-    }
-  | string;
+type NameObject = {
+  name: string;
+  short?: string;
+};
 
 interface EntryMetadata extends Metadata {
   name: NameObject;
@@ -413,7 +411,7 @@ interface ProteomeMetadata extends Metadata {
   assembly: string;
   taxonomy: string;
   lineage: string;
-  name: NameObject;
+  name: NameObject | string;
   proteomeAccession?: string;
 }
 interface SetMetadata extends Omit<Metadata, 'description'> {

@@ -17,7 +17,7 @@ import { includeTaxonFocusedOnURL } from 'higherOrder/loadData/defaults';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
-import MemberSymbol from 'components/Entry/MemberSymbol';
+import SummaryCounterOrg from 'components/Taxonomy/SummaryCounterOrg';
 import Table, {
   Column,
   Card,
@@ -133,160 +133,6 @@ for (const subPage of config.pages.taxonomy.subPages) {
   subPagesForTaxonomy.set(subPage, subPages.get(subPage));
 }
 
-/*:: type SummaryCounterOrgProps = {
-  entryDB: string,
-  metadata: Object,
-  counters: Object
-};*/
-class SummaryCounterOrg extends PureComponent /*:: <SummaryCounterOrgProps> */ {
-  static propTypes = {
-    entryDB: T.string,
-    metadata: T.object.isRequired,
-    counters: T.object.isRequired,
-  };
-
-  render() {
-    const { entryDB, metadata, counters } = this.props;
-
-    const { entries, proteins, structures, proteomes } = counters;
-
-    return (
-      <div className={f('card-block', 'card-counter', 'label-off')}>
-        <Tooltip
-          title={`${entries} ${entryDB || ''} ${toPlural(
-            'entry',
-            entries,
-          )} matching ${metadata.name}`}
-          className={f('count-entries')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'taxonomy' },
-                taxonomy: {
-                  db: 'uniprot',
-                  accession: metadata.accession.toString(),
-                },
-                entry: { isFilter: true, db: entryDB || 'all' },
-              },
-            }}
-            disabled={!entries}
-          >
-            <div className={f('icon-wrapper')}>
-              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-              {entries !== 0 && (
-                <div className={f('icon-over-anim', 'mod-img-pos')} />
-              )}
-            </div>
-            <NumberComponent abbr>{entries}</NumberComponent>
-            <span className={f('label-number')}>
-              {toPlural('entry', entries)}
-            </span>
-          </Link>
-        </Tooltip>
-
-        <Tooltip
-          title={`${proteins}  ${toPlural('protein', proteins)} matching ${
-            metadata.name
-          }`}
-          className={f('count-proteins')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'taxonomy' },
-                taxonomy: {
-                  db: 'uniprot',
-                  accession: metadata.accession.toString(),
-                },
-                protein: { isFilter: true, db: 'UniProt' },
-              },
-            }}
-            disabled={!proteins}
-          >
-            <div
-              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
-              data-icon="&#x50;"
-            >
-              {proteins !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-            <NumberComponent abbr>{proteins}</NumberComponent>
-            <span className={f('label-number')}>
-              {' '}
-              {toPlural('protein', proteins)}
-            </span>
-          </Link>
-        </Tooltip>
-
-        <Tooltip
-          title={`${structures} ${toPlural('structure', structures)} matching ${
-            metadata.name
-          }`}
-          className={f('count-structures')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'taxonomy' },
-                taxonomy: {
-                  db: 'uniprot',
-                  accession: `${metadata.accession}`,
-                },
-                structure: { isFilter: true, db: 'PDB' },
-              },
-            }}
-            disabled={!structures}
-          >
-            <div
-              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
-              data-icon="&#x73;"
-            >
-              {structures !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-            <NumberComponent abbr>{structures}</NumberComponent>{' '}
-            <span className={f('label-number')}>structures</span>
-          </Link>
-        </Tooltip>
-
-        <Tooltip
-          title={`${proteomes} proteomes matching ${metadata.name}`}
-          className={f('count-proteomes')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'taxonomy' },
-                taxonomy: {
-                  db: 'uniprot',
-                  accession: `${metadata.accession}`,
-                },
-                proteome: { isFilter: true, db: 'uniprot' },
-              },
-            }}
-            disabled={!proteomes}
-          >
-            <div
-              className={f(
-                'icon',
-                'icon-common',
-                'icon-count-proteome',
-                'icon-wrapper',
-              )}
-            >
-              {proteomes !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-            <NumberComponent abbr>{proteomes}</NumberComponent>{' '}
-            <span className={f('label-number')}>proteomes</span>
-          </Link>
-        </Tooltip>
-      </div>
-    );
-  }
-}
 const Lineage = ({ lineage } /*: {lineage: string} */) => {
   const superkingdom = getSuperKingdom(lineage) || 'N/A';
   const nodespot = getNodeSpotlight(lineage);
@@ -346,7 +192,8 @@ const TaxonomyCard = (
   >
     <SummaryCounterOrg
       entryDB={entryDB}
-      metadata={data.metadata}
+      taxName={data.metadata.name}
+      taxAccession={data.metadata.accession}
       counters={data?.extra_fields?.counters || {}}
     />
   </NewCard>
