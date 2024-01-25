@@ -19,7 +19,7 @@ type Props = {
   endpoint: Endpoint | 'domain architecture';
   name: string;
   to?: InterProPartialLocation;
-  db?: MemberDB;
+  db?: MemberDB | 'interpro';
   signature?: string;
 };
 

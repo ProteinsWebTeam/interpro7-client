@@ -11,7 +11,7 @@ import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
-import SummaryCounterProteins from 'components/Protein/SummaryCounterProteins';
+import ProteinCard from 'components/Protein/Card';
 
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
@@ -57,74 +57,6 @@ import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
 } from 'schema_org/processors';
-
-const ProteinCard = (
-  {
-    data,
-    search,
-    entryDB,
-  } /*: {data: Object, search: string, entryDB: string} */,
-) => (
-  <NewCard
-    title={
-      <>
-        {data.metadata.source_database === 'reviewed' ? (
-          <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-            <span
-              className={f('icon', 'icon-common')}
-              data-icon="&#xf00c;"
-              aria-label="reviewed"
-            />{' '}
-          </Tooltip>
-        ) : null}
-        <Link
-          to={{
-            description: {
-              main: { key: 'protein' },
-              protein: {
-                db: data.metadata.source_database,
-                accession: data.metadata.accession,
-              },
-            },
-          }}
-        >
-          <HighlightedText text={data.metadata.name} textToHighlight={search} />
-        </Link>
-      </>
-    }
-    subHeader={<span>{data.metadata.length} AA</span>}
-    footer={
-      <>
-        <Tooltip
-          title={`${data.metadata.source_organism.fullName} (Tax ID: ${data.metadata.source_organism.taxId})`}
-        >
-          {data.metadata.source_organism.fullName}
-        </Tooltip>
-        <div>
-          <HighlightedText
-            text={data.metadata.accession || ''}
-            textToHighlight={search}
-          />
-        </div>
-      </>
-    }
-  >
-    {data.extra_fields ? (
-      <SummaryCounterProteins
-        metadata={data.metadata}
-        counters={data.extra_fields.counters}
-        entryDB={entryDB}
-      />
-    ) : (
-      <Loading />
-    )}
-  </NewCard>
-);
-ProteinCard.propTypes = {
-  data: dataPropType.object,
-  search: T.string,
-  entryDB: T.string,
-};
 
 const propTypes = {
   data: dataPropType.isRequired,
