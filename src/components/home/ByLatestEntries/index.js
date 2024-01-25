@@ -6,6 +6,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
+// $FlowFixMe
 import EntryCard from 'components/home/EntryCard';
 import loadData from 'higherOrder/loadData';
 

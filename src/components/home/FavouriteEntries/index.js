@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import T from 'prop-types';
 
 import AnimatedEntry from 'components/AnimatedEntry';
+// $FlowFixMe
 import EntryCard from 'components/home/EntryCard';
 import Link from 'components/generic/Link';
 import { getMismatchedFavourites } from 'utils/compare-favourites';
