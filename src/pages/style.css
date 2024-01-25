@@ -192,57 +192,6 @@
   background: var(--colors-go-cc);
 }
 
-.card-counter {
-  color: #333;
-  margin-bottom: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 0.7rem;
-
-  & .container,
-  & a {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  & a,
-  & a:visited,
-  & a:hover {
-    color: #333;
-  }
-}
-
-/* small screens */
-@media screen and (max-width: 39.9375em) {
-  .card-counter {
-    flex-wrap: wrap;
-  }
-}
-
-.card-counter .icon-conceptual::before {
-  font-size: 210%; /* EBI icon size */
-}
-
-.count-entries,
-.count-proteins,
-.count-structures,
-.count-proteomes,
-.count-architectures,
-.count-organisms,
-.count-sets {
-  text-align: center;
-  display: flex;
-  position: relative;
-
-  &:hover .icon-over-anim {
-    transform: scale(2.2);
-    opacity: 1;
-    transition: all var(--timing-really-fast) cubic-bezier(0.4, 0, 0.2, 1); /*to keep to do the animation on mouse leave too*/
-  }
-}
-
 .icon-wrapper {
   position: relative;
 
@@ -260,70 +209,8 @@
   }
 }
 
-.icon-over-anim.mod-img-pos {
-  top: 30%;
-  left: 24%;
-}
-
-.count-proteomes {
-  padding: 0 0.5rem;
-}
-
-.icon-count-proteome {
-  width: 18px;
-  height: 47px;
-  background-image: url("../images/icons/ico-proteome.svg");
-  background-position-y: 40%;
-  background-repeat: no-repeat;
-}
-
-.icon-count-species {
-  height: 3em; /* to align icon */
-  width: 30px;
-  background-image: url("../images/icons/ico-species.svg");
-  background-size: 100%;
-  background-position-y: 59%;
-  background-repeat: no-repeat;
-}
-
-.icon-count-ida {
-  height: 3em;
-  width: 38px;
-  background-image: url("../images/icons/ico-ida.svg");
-  background-size: 100%;
-  background-position-y: 59%;
-  background-repeat: no-repeat;
-}
-
-.icon-count-set {
-  height: 3em;
-  width: 26px;
-  background-image: url("../images/icons/ico-set.svg");
-  background-size: 100%;
-  background-position-y: 59%;
-  background-repeat: no-repeat;
-}
-
-.icon-count-hmm {
-  height: 3em;
-  width: 26px;
-  background-image: url("../images/icons/ico-hmm.svg");
-  background-size: 100%;
-  background-position-y: 59%;
-  background-repeat: no-repeat;
-}
-
-.label-off .label-number {
-  display: none;
-}
-
 .icon-species {
   color: #e47471; /* default color for most of the icons */
-}
-
-.card-counter .md-small {
-  display: flex;
-  width: 46px;
 }
 
 .card-description {
