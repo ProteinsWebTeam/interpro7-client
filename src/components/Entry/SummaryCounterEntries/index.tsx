@@ -119,10 +119,10 @@ const SummaryCounterEntries = ({
         ) : null
       }
       {memberDBs &&
-        // OPTION COUNT SIGNATURES - ICON SVG
         Object.keys(memberDBs).map((db) =>
           Object.keys(memberDBs[db]).map((acc) => (
             <CounterIcon
+              key={`${db}-${acc}`}
               endpoint="entry"
               count={1}
               name={entryName}

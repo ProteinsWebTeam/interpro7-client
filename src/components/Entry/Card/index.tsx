@@ -30,7 +30,7 @@ type Props = {
     };
   };
   search: string;
-  entryDB: MemberDB;
+  entryDB: MemberDB | 'interpro';
   showDescription?: boolean;
 };
 const EntryCard = ({
@@ -146,13 +146,18 @@ const EntryCard = ({
         ) : (
           <Loading />
         )}
-        {showDescription && desc && included ? (
-          <div className={css('new-card-description')}>
-            <Description textBlocks={[desc]} literature={included} withoutIDs />
-          </div>
-        ) : (
-          <Loading />
-        )}
+        {showDescription &&
+          (desc && included ? (
+            <div className={css('new-card-description')}>
+              <Description
+                textBlocks={[desc]}
+                literature={included}
+                withoutIDs
+              />
+            </div>
+          ) : (
+            <Loading />
+          ))}
       </div>
     </Card>
   );
