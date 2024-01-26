@@ -15,11 +15,21 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 const css = cssBinder(local, fonts);
 
 type Props = {
+  /** How many of this entity */
   count: number;
+  /** One of the InterPro endpoints */
   endpoint: Endpoint | 'domain architecture';
+  /** name of the entity */
   name: string;
+  /** New location to add as link. If not added the ocon will appear disabled */
   to?: InterProPartialLocation;
+  /** The database of the entity */
   db?: MemberDB | 'interpro';
+  /**
+   * In case it is used to represent a signature of an entry.
+   * In this case the counter won't be showed as it will represent a single signature
+   * Currently iused in the EntryCard that are in the New entreies of the home page
+   * */
   signature?: string;
 };
 
