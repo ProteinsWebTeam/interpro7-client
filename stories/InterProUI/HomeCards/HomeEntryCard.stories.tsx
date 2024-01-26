@@ -9,7 +9,7 @@ import configureStore from '../../configureStore';
 const store = configureStore();
 
 const meta = {
-  title: 'InterPro UI/Counter Cards/Home Entry Card',
+  title: 'InterPro UI/Home Cards/Entry Card',
   component: EntryCard,
   parameters: {
     layout: 'centered',

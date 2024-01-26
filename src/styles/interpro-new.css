@@ -780,54 +780,6 @@ body .tag-sqc {
 }
 
 /*img tool + focus&blog homepage - background-position for 4 cards - temp*/
-.image-blog-default {
-  background: url("../images/cover/blog/blog_default.png") no-repeat 50% 0%;
-  background-size: 100%;
-}
-.image-blog-biology {
-  background: url("../images/cover/blog/blog_biology.png") no-repeat 50% 0%;
-  background-size: 100%;
-}
-.image-blog-protein {
-  background: url("../images/cover/blog/blog_protein.png") no-repeat 50% 0%;
-  background-size: 100%;
-}
-.image-blog-technical {
-  background: url("../images/cover/blog/blog_technical.png") no-repeat 50% 0%;
-  background-size: 100%;
-}
-.image-blog-website {
-  background: url("../images/cover/blog/blog_website.png") no-repeat 50% 0%;
-  background-size: 100%;
-}
-
-.image-blog-newweb {
-  background: url("../images/cover/blog/blog_newinterpro.png") no-repeat 50% 0%;
-  background-size: 100%;
-}
-
-.image-blog-newskin {
-  background: url("../images/cover/blog/blog_interpro_newskin.png") no-repeat
-    50% 56%;
-  background-size: 100%;
-}
-
-/* nice multi bgd effect */
-.image-blog-iceberg {
-  background:
-    url("../images/cover/blog/blog_iceberg.png") no-repeat 50% 56%,
-    linear-gradient(
-      to bottom,
-      #e8e9d0 0%,
-      #e8e9d0 32%,
-      #b8c1c9 32%,
-      #b8c1c9 100%
-    );
-}
-.image-blog-type {
-  background: #fff url("../images/cover/blog/blog_type.png") no-repeat 50% 56%;
-  background-size: 36%;
-}
 .image-focus-ape {
   background: url("../images/cover/focus/focus_ape.png") no-repeat 50% 16%;
   background-size: 100%;

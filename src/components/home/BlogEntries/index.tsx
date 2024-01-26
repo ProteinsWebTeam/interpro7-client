@@ -26,7 +26,16 @@ type BlogEntryProps = {
   title: string;
   url: string;
   published?: string;
-  image_category: string;
+  image_category:
+    | 'default'
+    | 'biology'
+    | 'protein'
+    | 'technical'
+    | 'website'
+    | 'newweb'
+    | 'newskin'
+    | 'iceberg'
+    | 'type';
 };
 
 export const BlogEntry = ({
@@ -41,7 +50,7 @@ export const BlogEntry = ({
   const maxString = 10;
   return (
     <Card
-      imageIconClass={`image-blog-${imageCategory || 'default'}`}
+      imageIconClass={css(`image-blog-${imageCategory || 'default'}`)}
       imageComponent={
         <div
           className={css(
