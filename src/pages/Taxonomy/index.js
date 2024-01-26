@@ -17,7 +17,7 @@ import { includeTaxonFocusedOnURL } from 'higherOrder/loadData/defaults';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
-import SummaryCounterOrg from 'components/Taxonomy/SummaryCounterOrg';
+import TaxonomyCard from 'components/Taxonomy/Card';
 import Table, {
   Column,
   Card,
@@ -30,17 +30,10 @@ import Table, {
 import File from 'components/File';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-// $FlowFixMe
-import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
-// $FlowFixMe
-import SpeciesIcon from 'components/Organism/SpeciesIcon';
 
 import loadable from 'higherOrder/loadable';
-
-import getNodeSpotlight from 'utils/taxonomy/get-node-spotlight';
-import getSuperKingdom from 'utils/taxonomy/get-super-kingdom';
 
 import {
   schemaProcessDataTable,
@@ -131,78 +124,6 @@ const subPagesForTaxonomy = new Map();
 for (const subPage of config.pages.taxonomy.subPages) {
   subPagesForTaxonomy.set(subPage, subPages.get(subPage));
 }
-
-const Lineage = ({ lineage } /*: {lineage: string} */) => {
-  const superkingdom = getSuperKingdom(lineage) || 'N/A';
-  const nodespot = getNodeSpotlight(lineage);
-  return (
-    <Tooltip title={`Lineage: ${lineage}`}>
-      {superkingdom} {nodespot && `(${nodespot})`}
-    </Tooltip>
-  );
-};
-Lineage.propTypes = {
-  lineage: T.string.isRequired,
-};
-
-const TaxonomyCard = (
-  {
-    data,
-    search,
-    entryDB,
-  } /*: {data: Object, search: string, entryDB: string} */,
-) => (
-  <NewCard
-    imageComponent={
-      data.extra_fields &&
-      data.extra_fields.lineage && (
-        <SpeciesIcon lineage={data.extra_fields.lineage} fontSize="3rem" />
-      )
-    }
-    title={
-      <Link
-        to={{
-          description: {
-            main: { key: 'taxonomy' },
-            taxonomy: {
-              db: data.metadata.source_database,
-              accession: `${data.metadata.accession}`,
-            },
-          },
-        }}
-      >
-        <HighlightedText text={data.metadata.name} textToHighlight={search} />
-      </Link>
-    }
-    footer={
-      <>
-        {data?.extra_fields?.lineage && (
-          <Lineage lineage={data.extra_fields.lineage} />
-        )}
-        <div>
-          Tax ID:{' '}
-          <HighlightedText
-            text={data.metadata.accession}
-            textToHighlight={search}
-          />
-        </div>
-      </>
-    }
-  >
-    <SummaryCounterOrg
-      entryDB={entryDB}
-      taxName={data.metadata.name}
-      taxAccession={data.metadata.accession}
-      counters={data?.extra_fields?.counters || {}}
-    />
-  </NewCard>
-);
-TaxonomyCard.propTypes = {
-  data: T.object,
-  search: T.string,
-  entryDB: T.string,
-};
-
 const AllTaxDownload = (
   {
     description,
