@@ -1,19 +1,13 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React from 'react';
 import T from 'prop-types';
-import { createSelector } from 'reselect';
-import { format } from 'url';
 
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import LazyImage from 'components/LazyImage';
-// $FlowFixMe
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-// $FlowFixMe
-import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 import StructureListFilters from 'components/Structure/StructureListFilters';
 // $FlowFixMe
-import SummaryCounterStructures from 'components/Structure/SummaryCounterStructures';
+import StructureCard from 'components/Structure/Card';
 import Table, {
   Column,
   Card,
@@ -28,9 +22,6 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 // $FlowFixMe
 import File from 'components/File';
 
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
-
-import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 
 import {
@@ -121,191 +112,6 @@ const Overview = (
 };
 Overview.propTypes = propTypes;
 
-/*:: type TaxnameStructuresProps = {
-  data: {
-    loading: boolean,
-    payload: Object
-  }
-};*/
-class TaxnameStructures extends PureComponent /*:: <TaxnameStructuresProps> */ {
-  static propTypes = {
-    data: T.shape({
-      loading: T.bool,
-      payload: T.shape({
-        results: T.arrayOf(
-          T.shape({
-            metadata: T.object,
-          }),
-        ),
-      }),
-    }).isRequired,
-  };
-
-  render() {
-    const {
-      data: { loading, payload },
-    } = this.props;
-
-    return (
-      // TODO: get values when more than 2 species
-      <Tooltip
-        title={`${loading ? '' : payload.results[0].metadata.name} (Tax ID: ${
-          loading ? '' : payload.results[0].metadata.accession
-        })`}
-      >
-        {loading || payload.results[0].metadata.name}
-      </Tooltip>
-    );
-  }
-}
-
-const getUrlForStructTaxname = (accession) =>
-  createSelector(
-    (state) => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname:
-          root +
-          descriptionToPath({
-            main: { key: 'taxonomy' },
-            taxonomy: { db: 'uniprot' },
-            structure: {
-              isFilter: true,
-              db: 'pdb',
-              accession: accession,
-            },
-          }),
-      }),
-  );
-/*:: type StructureCardProps = {
-  data: Object,
-  search: string,
-  entryDB: string
-};*/
-
-/*:: type StructureCardState = {
-  TaxnameStructuresWithData: function,
-  accession: string
-};*/
-class StructureCard extends PureComponent /*:: <StructureCardProps, StructureCardState> */ {
-  static propTypes = {
-    data: T.object,
-    search: T.string,
-    entryDB: T.string,
-  };
-
-  constructor(props /*: StructureCardProps */) {
-    super(props);
-
-    const accession = props.data.metadata.accession;
-    this.state = {
-      TaxnameStructuresWithData: loadData(getUrlForStructTaxname(accession))(
-        TaxnameStructures,
-      ),
-      accession,
-    };
-  }
-
-  static getDerivedStateFromProps(
-    nextProps /*: StructureCardProps */,
-    prevState /*: StructureCardState */,
-  ) {
-    const nextAccession = nextProps.data.metadata.accession;
-
-    if (nextAccession === prevState.accession) return null;
-
-    return {
-      TaxnameStructuresWithData: loadData(
-        getUrlForStructTaxname(nextAccession),
-      )(TaxnameStructures),
-      accession: nextAccession,
-    };
-  }
-
-  render() {
-    const { data, search, entryDB } = this.props;
-    const { TaxnameStructuresWithData } = this.state;
-    return (
-      <NewCard
-        title={
-          <Link
-            to={{
-              description: {
-                main: { key: 'structure' },
-                structure: {
-                  db: data.metadata.source_database,
-                  accession: data.metadata.accession,
-                },
-              },
-            }}
-          >
-            <HighlightedText
-              text={data.metadata.name}
-              textToHighlight={search}
-            />
-          </Link>
-        }
-        imageComponent={
-          <Tooltip
-            title={`3D visualisation for ${data.metadata.accession} structure`}
-          >
-            <LazyImage
-              src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${data.metadata.accession}&file=traces.jpg`}
-              alt={`structure with accession ${data.metadata.accession}`}
-            />
-          </Tooltip>
-        }
-        subHeader={
-          <>
-            {
-              // INFO RESOLUTION BL - browse structures - Xray
-              data.metadata.experiment_type === 'x-ray' && (
-                <Tooltip
-                  title={`X-ray, resolution ${data.metadata.resolution} Å`}
-                >
-                  {data.metadata.experiment_type}
-                  {': '}
-                  {data.metadata.resolution}Å
-                </Tooltip>
-              )
-            }
-            {
-              // INFO TYPE BL - browse structures -NMR
-              data.metadata.experiment_type === 'nmr' && (
-                <Tooltip title="Nuclear Magnetic Resonance">
-                  {data.metadata.experiment_type}
-                </Tooltip>
-              )
-            }
-          </>
-        }
-        footer={
-          <>
-            <TaxnameStructuresWithData />
-            <div>
-              <HighlightedText
-                text={data.metadata.accession || ''}
-                textToHighlight={search}
-              />
-            </div>
-          </>
-        }
-      >
-        {data.extra_fields && data.metadata && data.extra_fields.counters && (
-          <SummaryCounterStructures
-            structureName={data.metadata.name}
-            structureAccession={data.metadata.accession}
-            entryDB={entryDB}
-            counters={data.extra_fields.counters}
-          />
-        )}
-      </NewCard>
-    );
-  }
-}
 const AllStructuresDownload = (
   {
     description,

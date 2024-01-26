@@ -345,7 +345,7 @@ interface ProteinMetadata extends Metadata {
   source_organism: SourceOrganism;
 }
 interface StructureMetadata extends Metadata {
-  name: NameObject;
+  name: NameObject | string;
   experiment_type: string;
   release_date: string;
   literature: Record<string, Reference>;
