@@ -576,6 +576,7 @@ type ParsedURLServer = {
 type FetchOptions = {
   method?: string;
   responseType?: string;
+  useCache?: boolean;
 };
 
 type CancelableRequest<Response = BasicResponse> = {
