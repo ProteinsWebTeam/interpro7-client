@@ -5,8 +5,6 @@ import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
-// import MemberDBSelector from 'components/MemberDBSelector';
-// import ProteomeListFilters from 'components/Proteome/ProteomeListFilters';
 
 import Table, {
   Column,

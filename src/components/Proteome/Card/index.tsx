@@ -14,7 +14,7 @@ type Props = {
     };
   };
   search: string;
-  entryDB: MemberDB;
+  entryDB: MemberDB | 'interpro';
 };
 const ProteomeCard = ({ data, search, entryDB }: Props) => {
   const name =
