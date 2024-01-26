@@ -15,9 +15,7 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 // $FlowFixMe
-import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
-// $FlowFixMe
-import SummaryCounterSet from 'components/Set/SummaryCounterSet';
+import SetCard from 'components/Set/Card';
 import NumberComponent from 'components/NumberComponent';
 // $FlowFixMe
 import File from 'components/File';
@@ -52,56 +50,6 @@ const f = foundationPartial(
   exporterStyle,
   filtersAndTable,
 );
-
-const SetCard = (
-  {
-    data,
-    search,
-    entryDB,
-  } /*: {data: Object, search: string, entryDB: string} */,
-) => {
-  return (
-    <NewCard
-      title={
-        <Link
-          to={{
-            description: {
-              main: { key: 'set' },
-              set: {
-                db: data.metadata.source_database,
-                accession: `${data.metadata.accession}`,
-              },
-            },
-          }}
-        >
-          <HighlightedText text={data.metadata.name} textToHighlight={search} />
-        </Link>
-      }
-      footer={
-        <HighlightedText
-          text={data.metadata.accession || ''}
-          textToHighlight={search}
-        />
-      }
-    >
-      <SummaryCounterSet
-        entryDB={entryDB}
-        setName={data.metadata.name}
-        setDB={data.metadata.source_database}
-        setAccession={data.metadata.accession}
-        counters={
-          (data && data.extra_fields && data.extra_fields.counters) || {}
-        }
-      />
-    </NewCard>
-  );
-};
-
-SetCard.propTypes = {
-  data: dataPropType,
-  search: T.string,
-  entryDB: T.string,
-};
 
 const propTypes = {
   data: dataPropType.isRequired,
