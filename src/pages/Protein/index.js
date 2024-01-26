@@ -5,8 +5,6 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-// $FlowFixMe
-import { Card as NewCard } from 'components/SimpleCommonComponents/Card';
 import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
@@ -23,7 +21,6 @@ import Table, {
   HighlightToggler,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import Loading from 'components/SimpleCommonComponents/Loading';
 // $FlowFixMe
 import File from 'components/File';
 
