@@ -9,9 +9,10 @@ import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import cards from 'components/SimpleCommonComponents/Card/styles.css';
 import local from './style.css';
 
-const f = foundationPartial(local, fonts, ipro);
+const f = foundationPartial(local, fonts, ipro, cards);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),

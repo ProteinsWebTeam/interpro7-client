@@ -12,9 +12,10 @@ import EBIGlobal from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import helper from 'styles/helper-classes.css';
+import cards from 'components/SimpleCommonComponents/Card/styles.css';
 import local from './style.css';
 
-const f = foundationPartial(EBIGlobal, fonts, ipro, helper, local);
+const f = foundationPartial(EBIGlobal, fonts, ipro, helper, local, cards);
 
 const data4InterPro2020 = {
   url: 'https://doi.org/10.1093/nar/gkaa977',

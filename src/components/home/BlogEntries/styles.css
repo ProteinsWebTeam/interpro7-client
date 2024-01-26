@@ -1,4 +1,4 @@
-@import '../../../styles/colors.css';
+@import "../../../styles/colors.css";
 
 .content {
   font-style: italic;
@@ -15,5 +15,18 @@
   justify-content: center;
   & div {
     min-width: 182px;
+  }
+}
+
+.blogs-container {
+  gap: 1rem;
+  width: 100%;
+  & > * {
+    min-width: 270px;
+    flex-grow: 1;
+  }
+  & .description {
+    overflow: hidden;
+    height: 6em; /*better for alignment description + counter*/
   }
 }

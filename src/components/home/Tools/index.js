@@ -11,8 +11,9 @@ import interpro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import theme from 'styles/theme-interpro.css';
+import cards from 'components/SimpleCommonComponents/Card/styles.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, interpro, theme);
+const f = foundationPartial(ebiGlobalStyles, fonts, interpro, theme, cards);
 
 const content = [
   {

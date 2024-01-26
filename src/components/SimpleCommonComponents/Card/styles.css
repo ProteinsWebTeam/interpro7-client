@@ -112,3 +112,62 @@
     justify-content: space-between;
   }
 }
+
+.card-tag {
+  position: absolute;
+  font-size: 70%;
+  color: white;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  bottom: -8px;
+  left: 7%;
+  background-color: var(--colors-submain); /*default color*/
+  opacity: 0.9;
+  transition: opacity var(--timing-really-fast) ease-out;
+  min-width: 100px;
+  text-align: center;
+}
+
+/*to move to colors?*/
+.card-tag.tag-publi {
+  background-color: #5daace;
+}
+.card-tag.tag-tuto {
+  background-color: #fab700;
+}
+
+.card-tag.tag-tool {
+  background-color: #3886c1;
+  /*background-color: var(--colors-submain);*/
+  /*background-color: var(--colors-main);*/
+}
+
+.card-tag.tag-focus {
+  /*background-color: #c29880;*/
+  background-color: #ef5f57;
+}
+
+.card-tag.tag-blog {
+  /*background-color: #97a7b4;*/
+  background-color: var(--colors-interpro);
+}
+
+body a.white-link {
+  &,
+  &:active,
+  &:focus,
+  &:hover {
+    color: white;
+  }
+}
+
+.card-info-author .button.hollow.secondary {
+  border-color: transparent;
+  padding: 0.4rem 0;
+}
+.card-info-author .button.hollow.secondary i {
+  display: none;
+}
+.card-info-author .margin-bottom-large {
+  margin: 0;
+}

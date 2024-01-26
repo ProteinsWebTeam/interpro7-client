@@ -7,19 +7,19 @@ import loadData from 'higherOrder/loadData';
 import Link from 'components/generic/Link';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Card from 'components/SimpleCommonComponents/Card';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import { unescape } from 'utils/text';
 
 import { foundationPartial } from 'styles/foundation';
 
-import interpro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
+import cards from 'components/SimpleCommonComponents/Card/styles.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, interpro, theme, local);
+const f = foundationPartial(fonts, local, cards);
 
 const BLOG_ROOT = 'https://proteinswebteam.github.io/interpro-blog';
 
@@ -56,14 +56,9 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
     } = this.props;
     const maxString = 10;
     return (
-      <div className={f('flex-card')} data-testid="blog-entries-box">
-        <div
-          className={f(
-            'card-image',
-            // TODO imageCategory options are technical, biological and general. Image name would be like 'image-blog-technical'
-            `image-blog-${imageCategory || 'default'}`,
-          )}
-        >
+      <Card
+        imageIconClass={`image-blog-${imageCategory || 'default'}`}
+        imageComponent={
           <div
             className={f(
               'card-tag',
@@ -84,17 +79,14 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
               </Link>
             </Tooltip>
           </div>
-        </div>
-
-        <div className={f('card-content')}>
-          <div className={f('card-title')}>
-            <h4>
-              <Link href={url} target="_blank">
-                {title}
-              </Link>
-            </h4>
-          </div>
-          <div className={f('card-info')}>
+        }
+        title={
+          <Link href={url} target="_blank">
+            {title}
+          </Link>
+        }
+        subHeader={
+          <>
             {author && (
               <div className={f('card-info-author')}>
                 <em className={f('icon', 'icon-common')} data-icon="&#xf007;" />{' '}
@@ -104,7 +96,7 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
 
             {published && (
               <div
-                className={f('card-info-date', 'icon', 'icon-common')}
+                className={f('icon', 'icon-common')}
                 data-icon="&#xf073;"
                 aria-label="Date"
               >
@@ -112,22 +104,17 @@ export class BlogEntry extends PureComponent /*:: <BlogEntryProps> */ {
                 {published.substring(0, maxString)}
               </div>
             )}
-          </div>
-          <div
-            className={f('card-description')}
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: unescape(excerpt) }}
-          />
-        </div>
-        <Link href={url} target="_blank" className={f('card-more')}>
-          <div
-            className={f('button-more', 'icon', 'icon-common', 'icon-right')}
-            data-icon="&#xf061;"
-          >
-            Read more
-          </div>
-        </Link>
-      </div>
+          </>
+        }
+        linkForMore={url}
+      >
+        <div></div>
+        <div
+          className={f('description')}
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: unescape(excerpt) }}
+        />
+      </Card>
     );
   }
 }
@@ -161,7 +148,7 @@ export class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
       <section>
         <ResizeObserverComponent measurements={['width']} element="div">
           {({ width }) => (
-            <div className={f('flex-column')}>
+            <div className={f('blogs-container', 'vf-grid')}>
               {Object.entries(payload)
                 .slice(0, Math.min(width / minWidth))
                 .map(([type, content]) => (
@@ -171,7 +158,7 @@ export class BlogEntries extends PureComponent /*:: <BlogEntriesProps> */ {
             </div>
           )}
         </ResizeObserverComponent>
-        <div className={f('flex-column', 'read-all')}>
+        <div className={f('blogs-container', 'vf-grid', 'read-all')}>
           <Link href={`${BLOG_ROOT}`} target="_blank">
             <div className={f('button', 'margin-bottom-none')}>
               Read all articles
