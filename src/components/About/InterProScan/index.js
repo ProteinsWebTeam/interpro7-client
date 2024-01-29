@@ -4,17 +4,18 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
 
+import loadData from 'higherOrder/loadData';
+import { getUrlForRelease } from 'higherOrder/loadData/defaults';
+import Loading from 'components/SimpleCommonComponents/Loading';
+import Card from 'components/SimpleCommonComponents/Card';
+// $FlowFixMe
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import style from './style.css';
-
-import loadData from 'higherOrder/loadData';
-import { getUrlForRelease } from 'higherOrder/loadData/defaults';
-import Loading from 'components/SimpleCommonComponents/Loading';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-// $FlowFixMe
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 const f = foundationPartial(ipro, style, fonts);
 
@@ -73,23 +74,25 @@ export const InterProScan = (
           </ul>
         </small>
       </div>
-      <div className={f('download', 'flex-card')}>
-        <Link
-          className={f('button')}
-          href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
-          target="_blank"
-        >
-          Download InterProScan
-        </Link>
-        {metadata.size && (
-          <div className={f('metadata')}>
-            Version {version} - {metadata.CPU} {metadata.OS} - {metadata.size}
-          </div>
-        )}
-        {metadata.MD5 && (
-          <div className={f('metadata')}>MD5: {metadata.MD5}</div>
-        )}
-      </div>
+      <Card>
+        <div className={f('download')}>
+          <Link
+            className={f('button')}
+            href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+            target="_blank"
+          >
+            Download InterProScan
+          </Link>
+          {metadata.size && (
+            <div className={f('metadata')}>
+              Version {version} - {metadata.CPU} {metadata.OS} - {metadata.size}
+            </div>
+          )}
+          {metadata.MD5 && (
+            <div className={f('metadata')}>MD5: {metadata.MD5}</div>
+          )}
+        </div>
+      </Card>
     </section>
   );
 };
