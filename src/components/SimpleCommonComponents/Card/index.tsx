@@ -17,6 +17,7 @@ type Props = PropsWithChildren<{
   footer?: ReactElement | string;
   linkForMore?: string;
   labelForMore?: string;
+  className?: string;
   compact?: boolean;
 }>;
 
@@ -29,10 +30,11 @@ export const Card = ({
   linkForMore,
   labelForMore,
   compact = false,
+  className = '',
   children,
 }: Props) => {
   return (
-    <div className={css('new-card', { compact })}>
+    <div className={css('new-card', className, { compact })}>
       {(imageComponent || imageIconClass || title || subHeader) && (
         <header>
           {(imageComponent || imageIconClass) && (

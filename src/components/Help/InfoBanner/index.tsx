@@ -1,12 +1,13 @@
 import React from 'react';
-import T from 'prop-types';
-import { foundationPartial } from 'styles/foundation';
+import Card from 'components/SimpleCommonComponents/Card';
+
+import cssBinder from 'styles/cssBinder';
 
 import style from './style.css';
 import cards from 'components/SimpleCommonComponents/Card/styles.css';
-import ipro from 'styles/interpro-new.css';
+import tools from 'components/home/Tools/styles.css';
 
-const f = foundationPartial(style, ipro, cards);
+const css = cssBinder(style, cards, tools);
 
 const infoTopics = {
   InterProScan: {
@@ -21,24 +22,28 @@ const infoTopics = {
     text: 'InterPro text search is powered by the EBI Search, a scalable text search engine that provides easy and uniform access to the biological data resources hosted at the European Bioinformatics Institute (EMBL-EBI).',
     image: 'image-tool-textsearch',
   },
-  default: {},
+  default: {
+    text: '',
+    image: '',
+  },
 };
 
-export const InfoBanner = ({ topic } /*: {topic: string} */) => {
-  const current = infoTopics[topic] || infoTopics.default;
-  return (
-    <div className={f('help-banner', 'flex-card')}>
-      <div className={f('card-image', current.image)}>
-        <div className={f('card-tag', 'tag-tool')}>{topic}</div>
-      </div>
-      <div className={f('card-content')}>
-        <div className={f('card-description')}>{current.text}</div>
-      </div>
-    </div>
-  );
+type Props = {
+  topic?: keyof typeof infoTopics;
 };
-InfoBanner.propTypes = {
-  topic: T.string,
+export const InfoBanner = ({ topic = 'default' }: Props) => {
+  const current = infoTopics[topic];
+  return (
+    <Card
+      className={css('help-banner')}
+      imageIconClass={css(current.image)}
+      imageComponent={
+        <div className={css('card-tag', 'tag-tool')}>{topic}</div>
+      }
+    >
+      <div className={css('description')}>{current.text}</div>
+    </Card>
+  );
 };
 
 export default React.memo(InfoBanner);
