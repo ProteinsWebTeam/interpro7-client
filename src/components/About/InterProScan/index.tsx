@@ -1,39 +1,44 @@
-// @flow
 import React from 'react';
-import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
 
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'higherOrder/loadData/extract-params';
 import { getUrlForRelease } from 'higherOrder/loadData/defaults';
+
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Card from 'components/SimpleCommonComponents/Card';
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-import ipro from 'styles/interpro-new.css';
 import style from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ipro, style, fonts);
+const f = cssBinder(style, fonts);
 
-const parseBody = (text) =>
+const parseBody = (text: string) =>
   text
     .trim()
     .split('\n')
-    .reduce((agg, line) => {
-      const [k, v] = line.split(':');
-      agg[k] = v;
-      return agg;
-    }, {});
+    .reduce(
+      (agg, line: string) => {
+        const [k, v] = line.split(':');
+        agg[k] = v;
+        return agg;
+      },
+      {} as Record<string, string>,
+    );
 
-export const InterProScan = (
-  {
-    data: { loading, payload },
-  } /*: {data: {loading: boolean, payload: ?Object}}*/,
-) => {
+interface LoadedProps
+  extends LoadDataProps<{
+    tag_name: string;
+    body: string;
+  }> {}
+
+export const InterProScan = ({ data }: LoadedProps) => {
+  if (!data) return null;
+  const { loading, payload } = data;
   if (loading || !payload) return <Loading />;
   const { tag_name: version, body } = payload;
   const metadata = parseBody(body);
@@ -96,8 +101,5 @@ export const InterProScan = (
     </section>
   );
 };
-InterProScan.propTypes = {
-  data: dataPropType,
-};
 
-export default loadData(getUrlForRelease('IPScan'))(InterProScan);
+export default loadData(getUrlForRelease('IPScan') as Params)(InterProScan);
