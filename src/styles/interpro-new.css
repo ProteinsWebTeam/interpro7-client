@@ -709,38 +709,6 @@ body .tag-sqc {
 }
 /****************************** END TITLE - TEXT *********************************/
 
-/****************************** OTHERS *********************************/
-/*CARDS*/
-.flex-column {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -1rem; /*to align with global grid*/
-}
-
-.flex-card {
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 20%;
-  min-width: 270px;
-  /*margin: 0.5rem;*/
-  margin: 1rem; /*to align with grid*/
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  transition: all var(--timing-really-fast) ease-out;
-
-  &:hover {
-    box-shadow:
-      0 5px 11px 0 rgba(0, 0, 0, 0.18),
-      0 4px 15px 0 rgba(0, 0, 0, 0.15);
-
-    & .card-tag,
-    & .card-info,
-    & .card-image,
-    & .card-more {
-      opacity: 1;
-    }
-  }
-}
-
 /* ** ACCORDION MENU ** */
 details.accordion-style > summary {
   color: var(--colors-submain);
