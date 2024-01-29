@@ -43,7 +43,7 @@ export class ByLatestEntries extends PureComponent /*:: <EntriesProps> */ {
         <div className={f('feat-entry-list')}>
           <div className={f('row')}>
             <div className={f('columns')}>
-              <AnimatedEntry className={f('card-wrapper')} element="div">
+              <AnimatedEntry className={f('wrapper')} element="div">
                 {newEntries.map((e) => (
                   <EntryCard entry={e} key={e.metadata.accession} />
                 ))}

@@ -51,23 +51,26 @@ export const Card = ({
       <section className={css('content')}>{children}</section>
       {(footer || linkForMore) && (
         <>
-          <div className={css('footer')}>{footer}</div>
-          {linkForMore && (
-            <div className={css('card-more')}>
-              <Link href={linkForMore} target="_blank">
-                <div
-                  className={css(
-                    'button-more',
-                    'icon',
-                    'icon-common',
-                    'icon-right',
-                  )}
-                >
-                  {labelForMore || 'See more'}
-                </div>
-              </Link>
-            </div>
-          )}
+          <div className={css('footer')}>
+            {footer}
+            {linkForMore && (
+              <div className={css('card-more')}>
+                <Link href={linkForMore} target="_blank">
+                  <div
+                    className={css(
+                      'button-more',
+                      'icon',
+                      'icon-common',
+                      'icon-right',
+                    )}
+                    data-icon="&#xf061;"
+                  >
+                    {labelForMore || 'See more'}
+                  </div>
+                </Link>
+              </div>
+            )}{' '}
+          </div>
         </>
       )}
     </div>

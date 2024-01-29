@@ -33,7 +33,7 @@ class GridView extends PureComponent /*:: <Props> */ {
     if (card) {
       return (
         <AnimatedEntry
-          className={f('card-wrapper')}
+          className={f('wrapper')}
           element="div"
           data-testid="data-grid"
         >

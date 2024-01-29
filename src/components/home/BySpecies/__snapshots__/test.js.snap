@@ -207,7 +207,7 @@ exports[`<Species /> Species 1`] = `
     />
     <br />
     <span
-      className="card-title"
+      className="title"
     >
       Human
     </span>

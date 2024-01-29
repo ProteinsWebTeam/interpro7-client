@@ -22,7 +22,6 @@
       transition: opacity var(--timing-really-fast) ease-out;
     }
     & .image.icon {
-      background-color: white;
       background-repeat: no-repeat, repeat;
       background-position:
         0,
@@ -61,6 +60,8 @@
     font-size: 80%;
     color: #a0a0a0;
     gap: 0.5rem;
+    align-items: center;
+    padding: 0.7rem 0;
 
     & > div:first-child {
       flex-grow: 1;
@@ -75,6 +76,9 @@
     opacity: 0.5;
     align-self: flex-end;
 
+    &:hover {
+      opacity: 1;
+    }
     & .button-more {
       font-weight: 900;
       color: var(--colors-gray);
@@ -85,7 +89,7 @@
       background-color: transparent;
       padding: 0.85em 1em;
       /* different unit to be consistent with button class */
-      margin: 0 0 1rem 0;
+      margin: 0;
       font-size: 0.9rem;
       cursor: pointer;
       text-align: center;
