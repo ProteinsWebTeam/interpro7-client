@@ -33,7 +33,7 @@ class ExactMatchWrapper extends PureComponent /*:: <EMWProps> */ {
   render() {
     const { to, children } = this.props;
     return (
-      <Callout type="warning" customIcon="icon-arrow-alt-circle-right">
+      <Callout type="warning" icon="icon-arrow-alt-circle-right">
         <span>Found an exact match:</span> <Link to={to}>{children}</Link>
       </Callout>
     );
