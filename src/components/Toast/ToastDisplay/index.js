@@ -73,7 +73,7 @@ class ToastDisplay extends PureComponent /*:: <Props, State> */ {
       <ul
         className={styles['toast-display']}
         onMouseEnter={this._handleMouseEnter}
-        // onMouseLeave={this._handleMouseLeave}
+        onMouseLeave={this._handleMouseLeave}
         ref={this._ref}
       >
         {Object.entries(toasts).map(([id, toast], i) => (
