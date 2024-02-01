@@ -167,6 +167,15 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       InterPro Publications
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href="https://pfam-docs.readthedocs.io/en/latest/citing-pfam.html"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      Pfam publications
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
