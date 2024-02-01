@@ -164,7 +164,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       className={f('ext')}
                       target="_blank"
                     >
-                      InterPro Publications
+                      Citing InterPro
                     </Link>
                   </li>
                   <li>
@@ -173,7 +173,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       className={f('ext')}
                       target="_blank"
                     >
-                      Pfam publications
+                      Citing Pfam
                     </Link>
                   </li>
                 </ul>
