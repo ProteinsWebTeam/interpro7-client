@@ -22,7 +22,7 @@
 
 .new-callout.alt.alt {
   background-color: transparent;
-  border: 1px solid var(--colors-nearly-white);
+  border: 1px solid #e9ecef;
   border-radius: 0.25rem;
 }
 
