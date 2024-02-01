@@ -14,6 +14,16 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    type: {
+      options: ['entry', 'protein', 'structure', 'taxonomy', 'proteome', 'set'],
+      control: { type: 'radio' },
+    },
+    db: {
+      options: ['interpro', 'panther', 'pfam', 'cdd', 'uniprot', 'pdb'],
+      control: { type: 'radio' },
+    },
+  },
   decorators: [
     (Story) => (
       <Provider store={store}>

@@ -101,7 +101,7 @@ const config: StorybookConfig = {
     //   ],
     // });
     config.module.rules.push({
-      test: /\.(jpe?g|png|gif|svg|avif)$/i,
+      test: /\.(jpe?g|png|gif|svg|avif|json)$/i,
       type: 'asset/resource',
     });
     // console.log((cssRule as RuleSetRule)?.use?.[1]);
