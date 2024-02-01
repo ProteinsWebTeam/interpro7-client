@@ -37,7 +37,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
           <div className={f('columns', 'large-8')}>
             <div className={f('flex-container')}>
               <div className={f('flex-box')}>
-                <InterProLogo /> <h5>Interpro & Pfam</h5>
+                <span
+                  className={f('icon', 'icon-common', 'xl')}
+                  data-icon="&#xf02d;"
+                />{' '}
+                <h5>Documentations</h5>
                 <li>
                   <ul>
                     <li>
@@ -154,7 +158,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
               <div className={f('flex-box')}>
                 <span
                   className={f('icon', 'icon-common', 'xl')}
-                  data-icon="&#xf02d;"
+                  data-icon="&#xf10d;"
                 />{' '}
                 <h5>Publications</h5>
                 <ul>
