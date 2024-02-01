@@ -60,7 +60,7 @@ ListOfProteins.propTypes = {
   gene: string,
 }; */
 const ExactGeneMatchWrapper = ({ matches, gene }) => (
-  <Callout type="warning" customIcon="icon-arrow-alt-circle-right">
+  <Callout type="warning" icon="icon-arrow-alt-circle-right">
     <span>
       Found an exact gene match for <b>{gene}</b> in the following key species:
     </span>{' '}
