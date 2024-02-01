@@ -137,8 +137,8 @@ const GroupActions = ({
             <Tooltip
               title={
                 <div>
-                  Open a new sequence search, with all values prepopulated with
-                  those previously used for this job.
+                  Start a new sequence search using the same sequences as this
+                  job.
                 </div>
               }
             >
