@@ -174,9 +174,8 @@ export const DomainArchitecturesWithData = ({
   if (payload.count === 0) {
     messageContent = (
       <Callout type="warning">
-        No domain architectures found. Domain architectures are calculated for
-        InterPro entries of type Domain. Please ensure that the entries you are
-        searching are of type Domain.
+        No domain architectures found. Domain architectures are determined for
+        Pfam entries, and InterPro entries that integrate Pfam entries.
       </Callout>
     );
   } else {

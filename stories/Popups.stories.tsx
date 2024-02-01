@@ -5,6 +5,7 @@ import Popup from 'components/ProteinViewer/Popup';
 import Conservation from 'components/ProteinViewer/Popup/Conservation';
 import Entry from 'components/ProteinViewer/Popup/Entry';
 import Residue from 'components/ProteinViewer/Popup/Residue';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 import Provider from './Provider';
@@ -75,12 +76,28 @@ const currentLocation: InterProLocation = {
 
 export const ConservationPopup = () => (
   <section>
-    <h5>Conservation</h5>
+    <h5>
+      <Tooltip title={<Conservation detail={conservationDetail} />}>
+        Conservation
+      </Tooltip>
+    </h5>
     <div style={{ border: '1px solid grey' }}>
       <Conservation detail={conservationDetail} />
     </div>
     <hr />
-    <h5>Conservation via Popup</h5>
+    <h5>
+      <Tooltip
+        title={
+          <Popup
+            detail={conservationDetail}
+            sourceDatabase="DB"
+            currentLocation={currentLocation}
+          />
+        }
+      >
+        Conservation via Popup
+      </Tooltip>
+    </h5>
     <div style={{ border: '1px solid grey' }}>
       <Popup
         detail={conservationDetail}
@@ -93,7 +110,19 @@ export const ConservationPopup = () => (
 
 export const EntryPopup = () => (
   <section>
-    <h5>Entry</h5>
+    <h5>
+      <Tooltip
+        title={
+          <Entry
+            detail={entryDetail}
+            sourceDatabase="DB"
+            currentLocation={currentLocation}
+          />
+        }
+      >
+        Entry
+      </Tooltip>
+    </h5>
     <div style={{ border: '1px solid grey' }}>
       <Entry
         detail={entryDetail}
@@ -102,7 +131,19 @@ export const EntryPopup = () => (
       />
     </div>
     <hr />
-    <h5>Entry via Popup</h5>
+    <h5>
+      <Tooltip
+        title={
+          <Popup
+            detail={entryDetail}
+            sourceDatabase="DB"
+            currentLocation={currentLocation}
+          />
+        }
+      >
+        Entry via Popup
+      </Tooltip>
+    </h5>
     <div style={{ border: '1px solid grey' }}>
       <Popup
         detail={entryDetail}
@@ -116,12 +157,28 @@ export const EntryPopup = () => (
 export const ResiduePopup = () => {
   return (
     <section>
-      <h5>Entry</h5>
+      <h5>
+        <Tooltip title={<Residue detail={residueDetail} sourceDatabase="DB" />}>
+          Residue
+        </Tooltip>
+      </h5>
       <div style={{ border: '1px solid grey' }}>
         <Residue detail={residueDetail} sourceDatabase="DB" />
       </div>
       <hr />
-      <h5>Entry via Popup</h5>
+      <h5>
+        <Tooltip
+          title={
+            <Popup
+              detail={residueDetail}
+              sourceDatabase="DB"
+              currentLocation={currentLocation}
+            />
+          }
+        >
+          Residue via Popup
+        </Tooltip>
+      </h5>
       <div style={{ border: '1px solid grey' }}>
         <Popup
           detail={residueDetail}

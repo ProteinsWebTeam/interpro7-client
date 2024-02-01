@@ -31,7 +31,7 @@ type State = {
   activeTab: number;
 };
 /**
- * Children of this component will be cosider as the content of the tabs
+ * Children of this component will be considered as the content of the tabs
  * and the title on each element will be the label of the tab.
  * e.g.
  * ```

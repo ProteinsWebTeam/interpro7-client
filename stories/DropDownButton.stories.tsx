@@ -11,6 +11,13 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <div style={{ height: '150px' }}>
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof DropDownButton>;
 
 export default meta;
@@ -24,7 +31,7 @@ export const Base: DropDownButtonStory = {
     children: (
       <>
         <Button icon="icon-coffee" size="small">
-          Cooffee
+          Coffee
         </Button>
         <Button icon="icon-beer" size="small">
           Beer

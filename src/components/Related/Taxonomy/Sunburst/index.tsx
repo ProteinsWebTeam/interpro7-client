@@ -125,7 +125,7 @@ const Sunburst = ({ data, description }: LoadedProps) => {
     <div>
       {(payload?.taxa?.species || 0) > MAX_NUM_SPECIES_FOR_FULL_DEPTH && (
         <Callout type="info">
-          The number of species for this sunburst is {payload?.taxa?.species}.
+          There are {payload?.taxa?.species} species represented in this sunburst chart.
           The depth of the visualisation has been limited. You can modify this
           with the controller in the right side. however, please note this might
           affect the performance in your browser.

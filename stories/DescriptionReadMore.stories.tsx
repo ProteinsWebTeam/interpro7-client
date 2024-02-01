@@ -6,7 +6,7 @@ const meta = {
   title: 'Basic UI/Description Read More',
   component: DescriptionReadMore,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
   tags: ['autodocs'],
 } satisfies Meta<typeof DescriptionReadMore>;
