@@ -27,7 +27,7 @@ type Props = {
    */
   metadata: Metadata;
   /**
-   * The endpoint od fthe entity. i.e. `'entry' | 'protein' | 'structure' | 'taxonomy' | 'proteome' | 'set'`
+   * The endpoint of the entity, i.e. `'entry' | 'protein' | 'structure' | 'taxonomy' | 'proteome' | 'set'`
    */
   mainType: Endpoint;
   /**

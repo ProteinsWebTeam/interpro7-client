@@ -11,6 +11,10 @@
   gap: 1rem;
 }
 
+.new-callout > *:last-child {
+  margin-bottom: 0;
+}
+
 .new-callout > .icon {
   font-size: 2rem;
   align-self: flex-start;

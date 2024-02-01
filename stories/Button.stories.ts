@@ -11,6 +11,10 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     backgroundColor: { control: 'color' },
+    size: {
+      options: ["medium", "small"],
+      control: { type: "radio" },
+    },
   },
 } satisfies Meta<typeof Button>;
 
@@ -22,6 +26,7 @@ export const Primary: ButtonStory = {
     primary: true,
     icon: 'icon-coffee',
     children: 'Button',
+    size: 'medium',
   },
 };
 
@@ -29,6 +34,7 @@ export const Secondary: ButtonStory = {
   args: {
     primary: false,
     children: 'Button',
+    size: 'medium',
   },
 };
 
@@ -48,5 +54,6 @@ export const Small: ButtonStory = {
 export const JustIcon: ButtonStory = {
   args: {
     icon: 'icon-coffee',
+    size: 'medium',
   },
 };
