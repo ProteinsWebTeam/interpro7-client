@@ -269,7 +269,7 @@ const SummaryIPScanJob = ({
             <Accession accession={accession} title="Job ID" />{' '}
             <CopyToClipboard
               textToCopy={getIProScanURL(accession)}
-              tooltipText="CopyURL"
+              tooltipText="Copy URL"
             />
           </section>
         </section>
