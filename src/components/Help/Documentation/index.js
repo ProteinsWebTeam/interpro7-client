@@ -83,11 +83,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                   </li>
                   <li>
                     <Link
-                      href="//www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation"
+                      href="//www.ebi.ac.uk/jdispatcher/docs/"
                       className={f('ext')}
                       target="_blank"
                     >
-                      Web services
+                      Job Dispatcher documentation
                     </Link>
                   </li>
                 </ul>
@@ -143,14 +143,13 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       Privacy and security
                     </Link>
                   </li>
-
                   <li>
                     <Link
-                      href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
+                      href="//www.ebi.ac.uk/ebisearch/documentation"
                       className={f('ext')}
                       target="_blank"
                     >
-                      Search documentation (EBI)
+                      EBI Search documentation
                     </Link>
                   </li>
                 </ul>
