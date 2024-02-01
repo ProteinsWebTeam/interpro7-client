@@ -78,7 +78,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       className={f('ext')}
                       target="_blank"
                     >
-                      InterProScan Documentation
+                      InterProScan documentation
                     </Link>
                   </li>
                   <li>
