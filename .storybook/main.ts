@@ -28,7 +28,6 @@ const config: StorybookConfig = {
               {
                 loader: require.resolve('css-loader'),
                 options: {
-                  // Want to add more CSS Modules options? Read more here: https://github.com/webpack-contrib/css-loader#modules
                   modules: {
                     mode: 'local',
                     localIdentName: '[folder]_[name]__[local]___[hash:2]',
@@ -89,22 +88,10 @@ const config: StorybookConfig = {
       test: /\.yml$/i,
       use: [{ loader: 'yaml-loader' }],
     });
-    // config.module.rules.push({
-    //   test: /\.ts$/,
-    //   use: [
-    //     {
-    //       loader: 'ts-loader',
-    //       options: {
-    //         transpileOnly: true,
-    //       },
-    //     },
-    //   ],
-    // });
     config.module.rules.push({
       test: /\.(jpe?g|png|gif|svg|avif|json)$/i,
       type: 'asset/resource',
     });
-    // console.log((cssRule as RuleSetRule)?.use?.[1]);
     return config;
   },
 };

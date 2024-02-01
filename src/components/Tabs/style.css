@@ -14,6 +14,7 @@
       color: var(--colors-graydark);
       background: rgba(221, 221, 221, 0.54);
       border-top: rgba(221, 221, 221, 0.54) 3px solid;
+      cursor: pointer;
     }
     & > button:hover,
     & > a:hover {
