@@ -47,7 +47,7 @@ export const Button = ({
     <button
       type="button"
       className={css('vf-button', mode, sizeClass)}
-      style={{ backgroundColor }}
+      style={{ backgroundColor, whiteSpace: 'nowrap' }}
       {...props}
     >
       {icon && (

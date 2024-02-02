@@ -17,6 +17,12 @@
     /*negative values as the viewbox is not well defined*/
     margin: 0 0.4rem;
   }
+  & .vf-badge {
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    padding: 0.2rem;
+    text-transform: none;
+  }
 }
 
 /* temp to test - version with notag*/
@@ -73,12 +79,6 @@
 }
 .title-id-md.white {
   color: var(--colors-nearly-white);
-}
-
-.vf-badge {
-  margin-bottom: 1rem;
-  font-size: 0.8rem;
-  padding: 0.2rem;
 }
 
 .title-fav {

@@ -18,6 +18,8 @@ type CalloutStory = StoryObj<typeof meta>;
 export const Base: CalloutStory = {
   args: {
     type: 'info',
-    children: 'A message to show',
+    children: 'A simple message',
+    icon: '',
+    alt: false,
   },
 };

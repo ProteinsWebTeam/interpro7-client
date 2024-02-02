@@ -27,7 +27,7 @@ type Props = {
    */
   metadata: Metadata;
   /**
-   * The endpoint od fthe entity. i.e. `'entry' | 'protein' | 'structure' | 'taxonomy' | 'proteome' | 'set'`
+   * The endpoint of the entity, i.e. `'entry' | 'protein' | 'structure' | 'taxonomy' | 'proteome' | 'set'`
    */
   mainType: Endpoint;
   /**
@@ -35,11 +35,11 @@ type Props = {
    */
   entries?: Array<string>;
   /**
-   * function to get call when the entry needs to be mark as favourite
+   * function to call when the entry needs to be marked as favourite
    */
   markFavourite?: typeof markFavourite;
   /**
-   * function to get call when the entry needs to be unmark as favourite
+   * function to call when the entry needs to be unmarked as favourite
    */
   unmarkFavourite?: typeof unmarkFavourite;
 };
