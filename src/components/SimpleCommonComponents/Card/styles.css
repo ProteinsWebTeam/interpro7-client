@@ -20,6 +20,9 @@
       width: 100%;
       position: relative;
       transition: opacity var(--timing-really-fast) ease-out;
+      &:has(.card-tag) {
+        margin-bottom: 0.5rem;
+      }
     }
     & .image.icon {
       background-repeat: no-repeat, repeat;
