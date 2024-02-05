@@ -17,10 +17,11 @@ import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
+import blocks from 'styles/blocks.css';
 import local from './style.css';
 import loadable from 'higherOrder/loadable';
 
-const f = foundationPartial(interproTheme, ipro, local);
+const f = foundationPartial(interproTheme, ipro, local, blocks);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -60,14 +61,7 @@ export class SearchByText extends PureComponent /*:: <Props> */ {
         />
         <div className={f('large-12', 'columns', 'margin-bottom-medium')}>
           <form onSubmit={(e) => e.preventDefault()} data-category="navigation">
-            <div
-              className={f(
-                'secondary',
-                'callout',
-                'border',
-                'margin-bottom-none',
-              )}
-            >
+            <div className={f('simple-box', 'border', 'margin-bottom-none')}>
               <div className={f('row')}>
                 <div className={f('large-12', 'columns', 'search-input')}>
                   <h3 className={f('light')}>

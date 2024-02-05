@@ -1,9 +1,10 @@
-@import '../../../styles/z-index.css';
+@import "../../../styles/z-index.css";
 
 .toast {
   position: relative;
-  /*float: right;*/
-  margin: -8.5em 0 0 0;
+  &.simple-box {
+    margin: -8.5em 0 0 0;
+  }
   pointer-events: auto;
   border-radius: 0.2em;
   max-width: calc(50vw - 2rem);
@@ -20,7 +21,7 @@
   }
 
   &::after {
-    content: '✖';
+    content: "✖";
     position: absolute;
     right: 0.2em;
     top: 0;

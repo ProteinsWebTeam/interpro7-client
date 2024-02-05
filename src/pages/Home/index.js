@@ -308,7 +308,7 @@ class Home extends PureComponent {
           )}
         >
           <div className={f('columns')}>
-            <div className={f('callout-box', 'pp-browse-by')}>
+            <div className={f('pp-browse-by')}>
               <Tabs>
                 <div
                   title="Member Database"
@@ -330,7 +330,7 @@ class Home extends PureComponent {
             {
               // Browse by latest entries or most popular
             }
-            <div className={f('callout-box')}>
+            <div>
               <Tabs>
                 <div title="Latest entries">
                   <ByLatestEntries />
@@ -343,9 +343,6 @@ class Home extends PureComponent {
                 </div>
               </Tabs>
             </div>
-            {
-              // end callout
-            }
           </div>
           {
             // end entry-list

@@ -1,5 +1,5 @@
-@import '../../../styles/fonts.css';
-@import '../../../styles/colors.css';
+@import "../../../styles/fonts.css";
+@import "../../../styles/colors.css";
 
 .editor {
   height: auto;
@@ -17,7 +17,7 @@
     font-family: var(--fonts-ebi);
   }
 
-  & div[data-block='true'] {
+  & div[data-block="true"] {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 }
@@ -49,7 +49,7 @@
     }
   }
   & .ipscan-block {
-    background-color: #fafafa;
+    background-color: var(--colors-nearly-white);
   }
 }
 .description {

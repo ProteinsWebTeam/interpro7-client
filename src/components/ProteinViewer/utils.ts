@@ -11,6 +11,9 @@ export const selectRepresentativeDomains = (
   for (const domain of domains) {
     const { accession, short_name, name, source_database, integrated, chain } =
       domain;
+    if (domain[locationKey] === null) {
+      continue;
+    }
     for (const location of domain[locationKey] as Array<ProtVistaLocation>) {
       for (const fragment of location.fragments) {
         const { start, end, representative } = fragment;

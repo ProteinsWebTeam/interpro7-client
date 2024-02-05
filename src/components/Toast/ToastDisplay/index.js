@@ -46,12 +46,8 @@ class ToastDisplay extends PureComponent /*:: <Props, State> */ {
 
     const { x, y } = this._lastMousePos;
     this._lastMousePos = null; // Resets the value, to avoid infinite loop
-    const {
-      top,
-      right,
-      bottom,
-      left,
-    } = this._ref.current.getBoundingClientRect();
+    const { top, right, bottom, left } =
+      this._ref.current.getBoundingClientRect();
     // Detects if outside of the boundaries of the toast container
     if (x < left || x > right || y < top || y > bottom) {
       // Yes, I know what I'm doing

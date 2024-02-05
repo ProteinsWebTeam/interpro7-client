@@ -10,6 +10,8 @@ import loadData from 'higherOrder/loadData';
 import { STATUS_OK } from 'utils/server-message';
 import { getReversedUrl } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 import { Column } from 'components/Table';
 import Table from 'components/Table/SimpleTable';
 // $FlowFixMe
@@ -42,9 +44,9 @@ const _KeySpeciesTableWithData = (props /*: DataProps */) => {
   } = props;
   if (!loading && status !== STATUS_OK)
     return (
-      <div className={f('callout', 'info')}>
+      <Callout type="info">
         There is no key species associated with this accession
-      </div>
+      </Callout>
     );
   if (loading || !payload) return <Loading />;
   return (

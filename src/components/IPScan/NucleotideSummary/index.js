@@ -5,6 +5,8 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -33,14 +35,14 @@ const NucleotideSummary = ({ payload } /*: Props */) => {
   if (hasNucleotideData(payload)) {
     return (
       <>
-        <div className={f('callout', 'secondary', 'withicon')}>
+        <Callout type="info">
           <b>Nucleotide Sequence</b>
           <p>
             This analysis was the result of an InterProScan execution over a
             nucleotide sequence <code>ID: {payload.group}</code>. The data in
             this page correspond to a single ORF from such sequence.
           </p>
-        </div>
+        </Callout>
         <section className={f('summary-row')}>
           <header>DNA Sequence ID</header>
           <section>{payload.group}</section>

@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import { downloadURL, downloadDelete } from 'actions/creators';
 
@@ -95,9 +97,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
     return (
       <>
         {count > SOFT_LIMIT && !isStale && (
-          <div
-            className={f('callout', count > HARD_LIMIT ? 'alert' : 'warning')}
-          >
+          <Callout type={count > HARD_LIMIT ? 'alert' : 'warning'}>
             We expect this file to contain{' '}
             <NumberComponent abbr>{count}</NumberComponent> distinct{' '}
             {toPlural(entityType)}.{' '}
@@ -106,7 +106,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
               : 'If you encounter any problems during the creation of this file'}
             , please check the “Code snippet” section of this page for to see
             how to download the data directly onto your computer.
-          </div>
+          </Callout>
         )}
         {count < HARD_LIMIT ? (
           <div className={f('text')}>
@@ -114,7 +114,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
           </div>
         ) : null}
         {interProVersion > version && (
-          <div className={f('callout', 'alert', 'withicon')}>
+          <Callout type="alert">
             <h5>The existing download is outdated.</h5>
             <p>
               It was obtained using InterPro version <i>{version}</i>, while the
@@ -129,7 +129,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
                 Remove the current download
               </Link>
             </p>
-          </div>
+          </Callout>
         )}
         <div className={f('container')}>
           <button

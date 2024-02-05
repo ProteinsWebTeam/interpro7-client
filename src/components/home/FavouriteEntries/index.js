@@ -8,6 +8,8 @@ import AnimatedEntry from 'components/AnimatedEntry';
 // $FlowFixMe
 import EntryCard from 'components/home/EntryCard';
 import Link from 'components/generic/Link';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 import { getMismatchedFavourites } from 'utils/compare-favourites';
 
 import { foundationPartial } from 'styles/foundation';
@@ -96,7 +98,7 @@ export class FavouriteEntries extends PureComponent /*:: <Props> */ {
       );
     }
     return (
-      <div className={f('callout', 'info', 'withicon')}>
+      <Callout type="info">
         <span style={{ fontWeight: 'bold' }}>
           You don&apos;t have any entry tagged as favourite.
         </span>
@@ -109,7 +111,7 @@ export class FavouriteEntries extends PureComponent /*:: <Props> */ {
           />{' '}
           icon in the title of an entry page.
         </div>
-      </div>
+      </Callout>
     );
   }
 }
