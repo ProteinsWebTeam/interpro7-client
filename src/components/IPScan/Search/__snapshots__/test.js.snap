@@ -32,7 +32,7 @@ exports[`<IPScanSearch /> should render 1`] = `
               <h3
                 className="light"
               >
-                Sequence search
+                Sequence, in FASTA format
               </h3>
               <Memo(Loadable)
                 data={
