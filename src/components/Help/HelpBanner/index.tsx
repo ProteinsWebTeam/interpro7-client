@@ -73,7 +73,7 @@ export const HelpBanner = ({ topic }: Props) => {
     >
       <div className={css('help-banner')}>
         <div>
-          If you need more info on {topic}, you can either look at the:
+          Available {topic} resources:
           <br />
           <span
             className={css('icon', 'icon-common', 'font-l')}
@@ -83,7 +83,7 @@ export const HelpBanner = ({ topic }: Props) => {
             {...current.documentation}
             className={css({ ext: current.documentation.target })}
           >
-            Documentation page
+            Documentation
           </Link>
           <br />
           {current.training && (
@@ -96,19 +96,21 @@ export const HelpBanner = ({ topic }: Props) => {
                 {...current.training}
                 className={css({ ext: current.training.target })}
               >
-                Online training course
+                Online training courses
               </Link>
               <br />
             </>
           )}
-          or{' '}
+          <span
+            className={css('icon', 'icon-common', 'font-l')}
+            data-icon="&#xf0e0;"
+          />{' '}
           <Link
-            href="http://www.ebi.ac.uk/support/interpro-general-query"
+            href="https://www.ebi.ac.uk/support/interpro-general-query"
             target="_blank"
           >
-            contact us
-          </Link>{' '}
-          directly with your question.
+            Contact us
+          </Link>
         </div>
       </div>
     </Card>
