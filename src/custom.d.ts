@@ -262,17 +262,19 @@ type StructuredDescription = {
   llm: boolean;
   checked: boolean;
 };
+
+type MetadataCounters = {
+  [resource: string]:
+    | number
+    | {
+        [db: string]: number;
+      };
+};
 interface Metadata {
   accession: string;
   source_database: string;
   description: Array<string | StructuredDescription>;
-  counters: {
-    [resource: string]:
-      | number
-      | {
-          [db: string]: number;
-        };
-  };
+  counters: MetadataCounters;
   go_terms?: Array<GOTerm>;
 }
 
@@ -343,7 +345,7 @@ interface ProteinMetadata extends Metadata {
   source_organism: SourceOrganism;
 }
 interface StructureMetadata extends Metadata {
-  name: NameObject;
+  name: NameObject | string;
   experiment_type: string;
   release_date: string;
   literature: Record<string, Reference>;
@@ -409,7 +411,7 @@ interface ProteomeMetadata extends Metadata {
   assembly: string;
   taxonomy: string;
   lineage: string;
-  name: NameObject;
+  name: NameObject | string;
   proteomeAccession?: string;
 }
 interface SetMetadata extends Omit<Metadata, 'description'> {
@@ -574,6 +576,7 @@ type ParsedURLServer = {
 type FetchOptions = {
   method?: string;
   responseType?: string;
+  useCache?: boolean;
 };
 
 type CancelableRequest<Response = BasicResponse> = {

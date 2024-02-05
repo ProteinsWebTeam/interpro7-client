@@ -1,11 +1,12 @@
-@import '../../../styles/timing.css';
-@import '../../../styles/fonts.css';
+@import "../../../styles/timing.css";
+@import "../../../styles/fonts.css";
 
 .species-list {
   font-size: 80%;
 
   & .column:hover {
-    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18),
+    box-shadow:
+      0 5px 11px 0 rgba(0, 0, 0, 0.18),
       0 4px 15px 0 rgba(0, 0, 0, 0.15);
     transition: all var(--timing-really-fast) ease-out;
   }
@@ -13,18 +14,16 @@
     font-size: 520%;
   }
 
-  & .card-title {
+  & .title {
     line-height: 1.1;
     font-family: var(--fonts-system);
     font-weight: 600;
     font-size: 120%;
-    border-bottom: 2px white solid;
     padding-bottom: 2px;
     transition: border 0.3s ease-in-out;
     color: #0a0a0a;
 
     &:hover {
-      border-bottom: 2px #4e4e4e solid;
       padding-bottom: 2px;
     }
   }

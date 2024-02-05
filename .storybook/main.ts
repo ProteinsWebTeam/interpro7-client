@@ -89,7 +89,7 @@ const config: StorybookConfig = {
       use: [{ loader: 'yaml-loader' }],
     });
     config.module.rules.push({
-      test: /\.(jpe?g|png|gif|svg|avif|json)$/i,
+      test: /\.(jpe?g|png|gif|svg|avif)$/i,
       type: 'asset/resource',
     });
     return config;

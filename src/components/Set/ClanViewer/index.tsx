@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+import Card from 'components/SimpleCommonComponents/Card';
 import { getTextForLabel } from 'utils/text';
 import LabelBy from 'components/ProteinViewer/Options/LabelBy';
 
@@ -176,24 +177,24 @@ class ClanViewer extends PureComponent<Props, State> {
         {!this.state.showClanViewer &&
           (metadata.relationships?.nodes?.length || 0) >
             MAX_NUMBER_OF_NODES && (
-            <div
-              className={css('flex-card')}
-              style={{ width: '50%', padding: '1em' }}
-            >
-              <h3>ClanViewer</h3>
+            <Card title="ClanViewer">
               <section>
                 The selected clan has {metadata.relationships?.nodes.length}{' '}
                 member entries. Displaying more than {MAX_NUMBER_OF_NODES} nodes
                 in this visualisation can affect the performance of your
                 browser.
                 <button
-                  className={css('button')}
+                  className={css(
+                    'vf-button',
+                    'vf-button--secondary',
+                    'vf-button--sm',
+                  )}
                   onClick={() => this.setState({ showClanViewer: true })}
                 >
                   Visualise it
                 </button>
               </section>
-            </div>
+            </Card>
           )}
         <div>
           <DropDownButton

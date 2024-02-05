@@ -64,7 +64,7 @@ export class Species extends PureComponent /*:: <SpeciesProps> */ {
             data-icon={species.icon}
           />
           <br />
-          <span className={f('card-title')}>{species.title}</span>
+          <span className={f('title')}>{species.title}</span>
         </Link>
         <div className={f('list-detail')}>
           <p>
@@ -154,7 +154,7 @@ export class BySpecies extends PureComponent /*:: <Props> */ {
               if (a.title.toUpperCase() < b.title.toUpperCase()) return -1;
               return 0;
             })
-            .map(species => {
+            .map((species) => {
               const { tax_id: taxID } = species;
               return (
                 <Species
@@ -191,9 +191,9 @@ export class BySpecies extends PureComponent /*:: <Props> */ {
   }
 }
 
-const mapStateToUrl = endpoint =>
+const mapStateToUrl = (endpoint) =>
   createSelector(
-    state => state.settings.api,
+    (state) => state.settings.api,
     ({ protocol, hostname, port, root }) =>
       format({
         protocol,

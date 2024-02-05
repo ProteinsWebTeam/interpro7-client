@@ -1,6 +1,6 @@
-@import '../../styles/colors.css';
-@import '../../styles/timing.css';
-@import '../../styles/fonts.css';
+@import "../../styles/colors.css";
+@import "../../styles/timing.css";
+@import "../../styles/fonts.css";
 
 .count {
   color: var(--colors-graydark);
@@ -29,7 +29,7 @@
     display: block;
   }
 
-  & .card-title {
+  & .title {
     line-height: 1.1;
     font-family: var(--fonts-system);
     font-weight: 600;
@@ -39,7 +39,6 @@
     transition: border 0.3s ease-in-out;
 
     &:hover {
-      border-bottom: 2px #4e4e4e solid;
       padding-bottom: 2px;
     }
   }
@@ -63,7 +62,9 @@
 }
 
 .md-list .memberdb-block:hover {
-  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 5px 11px 0 rgba(0, 0, 0, 0.18),
+    0 4px 15px 0 rgba(0, 0, 0, 0.15);
   & div {
     filter: none;
   }

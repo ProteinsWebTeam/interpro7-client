@@ -117,7 +117,6 @@ const images = {
       /* webpackChunkName: "member-logos" */ '../../../images/member_databases/tigrfams_logo.png'
     ),
   ],
-  antifam: [],
   ncbifam: [
     import(
       /* webpackChunkName: "member-logos" */ '../../../images/member_databases/nih_nlm_logo.avif'
@@ -126,6 +125,9 @@ const images = {
       /* webpackChunkName: "member-logos" */ '../../../images/member_databases/nih_nlm_logo.png'
     ),
   ],
+  antifam: [],
+  interpro: [],
+  all: [],
 };
 
 const classNames = new Map([
@@ -157,7 +159,7 @@ const classNames = new Map([
 ]);
 
 type Props = {
-  type: MemberDB;
+  type: MemberDB | 'interpro' | 'all';
   className?: string;
   svg?: boolean;
   filter?: boolean;
