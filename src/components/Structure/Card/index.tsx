@@ -39,7 +39,7 @@ const StructureCard = ({ data, search, entryDB }: Props) => {
       }
       imageComponent={
         <Tooltip
-          title={`3D visualisation for ${data.metadata.accession} structure`}
+          title={`3D visualisation of ${data.metadata.accession}`}
         >
           <LazyImage
             src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${data.metadata.accession}&file=traces.jpg`}

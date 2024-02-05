@@ -67,7 +67,7 @@ export const HelpBanner = ({ topic }: Props) => {
             className={css('icon', 'icon-common', 'font-l')}
             data-icon="&#xf059;"
           />{' '}
-          Need more Help?
+          Help & Support
         </span>
       }
     >

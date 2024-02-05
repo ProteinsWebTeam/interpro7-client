@@ -83,7 +83,7 @@ export const InterProScan = ({ data }: LoadedProps) => {
         <div className={f('download')}>
           <Link
             className={f('button')}
-            href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+            href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
             target="_blank"
           >
             Download InterProScan

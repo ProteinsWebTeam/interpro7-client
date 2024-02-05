@@ -15,7 +15,7 @@ const css = cssBinder(local, fonts, cards);
 export const content = [
   {
     type: 'tool',
-    link: '//github.com/ebi-pf-team/interproscan/wiki',
+    link: '//interproscan-docs.readthedocs.io/en/latest/',
     title: 'InterProScan',
     description: `InterProScan is the software package that allows sequences
     (protein and nucleic) to be scanned against InterPro&apos;s
