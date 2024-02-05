@@ -1,10 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import {
-  dataPropType,
-  metadataPropType,
-} from 'higherOrder/loadData/dataPropTypes';
+import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -12,7 +9,7 @@ import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
-import MemberSymbol from 'components/Entry/MemberSymbol';
+import ProteinCard from 'components/Protein/Card';
 
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
@@ -24,8 +21,6 @@ import Table, {
   HighlightToggler,
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import Loading from 'components/SimpleCommonComponents/Loading';
-import NumberComponent from 'components/NumberComponent';
 // $FlowFixMe
 import File from 'components/File';
 
@@ -59,172 +54,6 @@ import {
   schemaProcessDataTable,
   schemaProcessDataTableRow,
 } from 'schema_org/processors';
-import { toPlural } from 'utils/pages';
-
-/*:: type Props = {
-  metadata: Object,
-  counters: Object,
-  entryDB: string
-};*/
-
-class SummaryCounterProteins extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    metadata: metadataPropType.isRequired,
-    counters: T.object.isRequired,
-    entryDB: T.string.isRequired,
-  };
-
-  render() {
-    const { entryDB, metadata, counters } = this.props;
-    const { entries, structures } = counters;
-
-    return (
-      <div className={f('card-block', 'card-counter', 'label-off')}>
-        <Tooltip
-          title={`${entries} ${entryDB} ${toPlural(
-            'entry',
-            entries,
-          )} matching ${metadata.name}`}
-          className={f('count-entries')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'protein' },
-                protein: {
-                  db: 'uniprot',
-                  accession: metadata.accession,
-                },
-                entry: { isFilter: true, db: entryDB || 'all' },
-              },
-            }}
-          >
-            <div className={f('icon-wrapper')}>
-              <MemberSymbol type={entryDB || 'all'} className={f('md-small')} />
-              {entries !== 0 && (
-                <div className={f('icon-over-anim', 'mod-img-pos')} />
-              )}
-            </div>
-            <NumberComponent abbr>{entries}</NumberComponent>
-
-            <span className={f('label-number')}>
-              {toPlural('entry', entries)}
-            </span>
-          </Link>
-        </Tooltip>
-
-        <Tooltip
-          title={`${structures} ${toPlural('structure', structures)} matching ${
-            metadata.name
-          }`}
-          className={f('count-structures')}
-          style={{ display: 'flex' }}
-        >
-          <Link
-            to={{
-              description: {
-                main: { key: 'protein' },
-                protein: {
-                  db: 'uniprot',
-                  accession: metadata.accession,
-                },
-                structure: { isFilter: true, db: 'PDB' },
-              },
-            }}
-            disabled={!structures}
-          >
-            <div
-              className={f('icon', 'icon-conceptual', 'icon-wrapper')}
-              data-icon="s"
-            >
-              {structures !== 0 && <div className={f('icon-over-anim')} />}
-            </div>
-            <NumberComponent abbr>{structures}</NumberComponent>
-            <span className={f('label-number')}>
-              {toPlural('structure', structures)}
-            </span>
-          </Link>
-        </Tooltip>
-      </div>
-    );
-  }
-}
-
-const ProteinCard = (
-  {
-    data,
-    search,
-    entryDB,
-  } /*: {data: Object, search: string, entryDB: string} */,
-) => (
-  <>
-    <div className={f('card-header')}>
-      <div className={f('card-title')}>
-        {data.metadata.source_database === 'reviewed' ? (
-          <>
-            <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
-              <span
-                className={f('icon', 'icon-common')}
-                data-icon="&#xf00c;"
-                aria-label="reviewed"
-              />
-            </Tooltip>
-          </>
-        ) : null}
-        <h6>
-          <Link
-            to={{
-              description: {
-                main: { key: 'protein' },
-                protein: {
-                  db: data.metadata.source_database,
-                  accession: data.metadata.accession,
-                },
-              },
-            }}
-          >
-            <HighlightedText
-              text={data.metadata.name}
-              textToHighlight={search}
-            />
-          </Link>
-        </h6>
-      </div>
-    </div>
-
-    <div className={f('card-subheader')}>{data.metadata.length} AA</div>
-
-    {data.extra_fields ? (
-      <SummaryCounterProteins
-        metadata={data.metadata}
-        counters={data.extra_fields.counters}
-        entryDB={entryDB}
-      />
-    ) : (
-      <Loading />
-    )}
-
-    <div className={f('card-footer')}>
-      <Tooltip
-        title={`${data.metadata.source_organism.fullName} (Tax ID: ${data.metadata.source_organism.taxId})`}
-      >
-        {data.metadata.source_organism.fullName}
-      </Tooltip>
-      <div>
-        <HighlightedText
-          text={data.metadata.accession || ''}
-          textToHighlight={search}
-        />
-      </div>
-    </div>
-  </>
-);
-ProteinCard.propTypes = {
-  data: dataPropType.object,
-  search: T.string,
-  entryDB: T.string,
-};
 
 const propTypes = {
   data: dataPropType.isRequired,

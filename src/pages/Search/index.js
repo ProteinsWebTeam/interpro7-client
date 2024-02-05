@@ -205,6 +205,7 @@ const Wrapper = (
                   {
                     <>
                       <InfoBanner topic={topic} />
+                      <br />
                       <HelpBanner topic={topic} />
                     </>
                   }

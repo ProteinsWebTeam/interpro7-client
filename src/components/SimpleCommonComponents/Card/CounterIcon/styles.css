@@ -1,0 +1,92 @@
+body .icon-link.icon-link {
+  & a {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #333;
+    text-align: center;
+    position: relative;
+
+    &:hover .icon-over-animation {
+      transform: scale(2.2);
+      opacity: 1;
+      transition: all var(--timing-really-fast) cubic-bezier(0.4, 0, 0.2, 1); /*to keep to do the animation on mouse leave too*/
+    }
+  }
+  & a:focused,
+  & a:visited,
+  & a:hover {
+    color: #333;
+  }
+
+  & .icon-wrapper {
+    position: relative;
+    font-size: 2rem;
+    & .md-small {
+      display: flex;
+      width: 2rem;
+      & text {
+        font-size: 12rem;
+      }
+    }
+    & .icon-over-animation {
+      position: absolute;
+      top: 26%;
+      left: 10%;
+      background-color: rgba(0, 0, 0, 0.1);
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      display: block;
+      opacity: 0;
+      transition: all var(--timing-really-fast) cubic-bezier(0.4, 0, 0.2, 1);
+
+      &.mod-img-pos {
+        top: 30%;
+        left: 24%;
+      }
+    }
+  }
+}
+
+.icon {
+  height: 3rem; /* to align icon */
+  width: 30px;
+  background-size: 100%;
+  background-position-y: 59%;
+  background-repeat: no-repeat;
+
+  &.icon-count-species {
+    background-image: url("../../../../images/icons/ico-species.svg");
+  }
+  &.icon-count-ida {
+    background-image: url("../../../../images/icons/ico-ida.svg");
+  }
+  &.icon-count-set {
+    background-image: url("../../../../images/icons/ico-set.svg");
+  }
+  &.icon-count-hmm {
+    background-image: url("../../../../images/icons/ico-hmm.svg");
+  }
+  &.icon-count-proteome {
+    width: 22px;
+    background-image: url("../../../../images/icons/ico-proteome.svg");
+  }
+}
+
+.card-counter-block {
+  flex-grow: 1;
+  color: #333;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: stretch;
+  gap: 0.7rem;
+}
+
+/* small screens */
+@media screen and (max-width: 39.9375em) {
+  .card-counter-block {
+    flex-wrap: wrap;
+  }
+}

@@ -48,7 +48,11 @@ const SummaryProteome = ({ data, loading }: Props) => {
                 <td>Taxonomy</td>
                 <td data-testid="proteome-species">
                   <Species
-                    fullName={metadata.name.name}
+                    fullName={
+                      typeof metadata.name === 'string'
+                        ? metadata.name
+                        : metadata.name.name
+                    }
                     taxID={metadata.taxonomy}
                   />
                 </td>

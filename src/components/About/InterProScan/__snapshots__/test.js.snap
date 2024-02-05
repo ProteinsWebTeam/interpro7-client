@@ -47,34 +47,36 @@ exports[`<InterProScan /> should render with data 1`] = `
       </ul>
     </small>
   </div>
-  <div
-    className="download flex-card"
-  >
-    <Memo(Connect(Link))
-      className="button"
-      href="http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
-      target="_blank"
-    >
-      Download InterProScan
-    </Memo(Connect(Link))>
+  <Card>
     <div
-      className="metadata"
+      className="download"
     >
-      Version 
-      5.35-74.0
-       - 
-       64 bit
-       
-       Linux
-       - 
-       9.0GB
+      <Memo(Connect(Link))
+        className="button"
+        href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
+        target="_blank"
+      >
+        Download InterProScan
+      </Memo(Connect(Link))>
+      <div
+        className="metadata"
+      >
+        Version 
+        5.35-74.0
+         - 
+         64 bit
+         
+         Linux
+         - 
+         9.0GB
+      </div>
+      <div
+        className="metadata"
+      >
+        MD5: 
+         fc003f262608423ab4c96ec099384ca6
+      </div>
     </div>
-    <div
-      className="metadata"
-    >
-      MD5: 
-       fc003f262608423ab4c96ec099384ca6
-    </div>
-  </div>
+  </Card>
 </section>
 `;
