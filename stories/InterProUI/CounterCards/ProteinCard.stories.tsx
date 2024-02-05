@@ -33,7 +33,8 @@ const data = {
     source_database: 'UniProt',
     accession: 'P12345',
     source_organism: {
-      fullName: 'dog',
+      fullName: 'Canis lupus familiaris (dog)',
+      taxId: 9615
     },
   } as unknown as ProteinMetadata,
   extra_fields: {
