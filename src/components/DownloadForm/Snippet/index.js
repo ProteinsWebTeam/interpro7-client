@@ -10,6 +10,8 @@ import js from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
 import perl from 'react-syntax-highlighter/dist/esm/languages/hljs/perl';
 import docco from 'react-syntax-highlighter/dist/esm/styles/hljs/docco';
 
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 import blockEvent from 'utils/block-event';
 
 import { addToast } from 'actions/creators';
@@ -183,11 +185,11 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
             Download script file
           </a>
           {language === 'js' && (
-            <div className={f('callout', 'info', 'withicon')}>
+            <Callout type="info">
               This script requires the packages: <code>node-fetch</code> and{' '}
               <code>timing-functions</code> either globally or in the local{' '}
               <code>node_modules</code>
-            </div>
+            </Callout>
           )}
           <SyntaxHighlighter language={lut.get(language).syntax} style={docco}>
             {code}

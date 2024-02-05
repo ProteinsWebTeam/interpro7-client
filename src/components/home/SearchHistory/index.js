@@ -3,16 +3,17 @@ import React, { useState, useEffect } from 'react';
 
 import searchStorage from 'storage/searchStorage';
 import Link from 'components/generic/Link';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import theme from 'styles/theme-interpro.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './styles.css';
 
-const f = foundationPartial(ebiGlobalStyles, theme, fonts, ipro, styles);
+const f = foundationPartial(ebiGlobalStyles, theme, ipro, styles);
 
 export const SearchHistory = () => {
   const [searchTerms, setSearchTerms] = useState([]);
@@ -75,11 +76,11 @@ export const SearchHistory = () => {
           </div>
         </div>
       ) : (
-        <div className={f('callout', 'info', 'withicon')}>
+        <Callout type="info">
           <span style={{ fontWeight: 'bold' }}>
             There has been no recent searches.
           </span>
-        </div>
+        </Callout>
       )}
     </>
   );

@@ -21,7 +21,7 @@ exports[`<SearchByText /> should render 1`] = `
       onSubmit={[Function]}
     >
       <div
-        className="secondary callout border margin-bottom-none"
+        className="simple-box border margin-bottom-none"
       >
         <div
           className="row"
