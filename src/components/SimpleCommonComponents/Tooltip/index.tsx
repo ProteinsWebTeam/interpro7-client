@@ -18,6 +18,21 @@ import style from 'components/SimpleCommonComponents/Tooltip/style.css';
 
 const css = cssBinder(style);
 
+type Props = PropsWithChildren<{
+  /** Content of the tooltip, accepts strings or JSX elements */
+  title?: React.ReactElement | string | number;
+  /** (Deprecated in favor of `title`) Content of the tooltip  */
+  html?: React.ReactElement | string | number;
+  /** try setting this to `true` if the popopu is misaligned with the expected component */
+  useContext?: boolean;
+  /** offset distance from the target element to the tooltip. */
+  distance?: number;
+  /**  Do you expect the user to interact with the content of the tooltip? a button or something in it?. Then set this to `true`*/
+  interactive?: boolean;
+  /** Array of extra classes to include in the tooltip.*/
+  classNames?: string[];
+}>;
+
 const Tooltip = ({
   html,
   title,
@@ -27,14 +42,7 @@ const Tooltip = ({
   interactive = false,
   classNames = [],
   ...rest
-}: PropsWithChildren<{
-  html?: React.ReactElement | string | number;
-  title?: React.ReactElement | string | number;
-  useContext?: boolean;
-  distance?: number;
-  interactive?: boolean;
-  classNames?: string[];
-}>) => {
+}: Props) => {
   const arrowRef = useRef(null);
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
   const intervalId = useRef<NodeJS.Timer | null>(null);

@@ -252,7 +252,6 @@ class Home extends PureComponent {
           />
         ) : null}
         <GeneralWarning />
-
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
             <SchemaOrgData

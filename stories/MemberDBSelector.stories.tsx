@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
-import { withKnobs, boolean } from '@storybook/addon-knobs';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { _MemberDBSelector as MemberDBSelector } from '../src/components/MemberDBSelector';
 
 import Provider from './Provider';
-import configureStore from './configuedStore.js';
+import configureStore from './configureStore';
+import { noop } from 'lodash-es';
 
 const store = configureStore();
 
-const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
-
-export default {
+const meta = {
   title: 'InterPro UI/MemberDBSelector',
-  decorators: [withProvider, withKnobs],
-};
+  component: MemberDBSelector,
+  parameters: {
+    layout: 'centered',
+  },
+  // TODO: Enable when MemberDBSelector gets migrated to TS to be able to include TS
+  // tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <Provider store={store}>
+        <Story />
+      </Provider>
+    ),
+  ],
+} satisfies Meta<typeof MemberDBSelector>;
+
+export default meta;
 
 const intialLocation = {
   description: {
@@ -69,13 +82,26 @@ const dataDBCount = {
     },
   },
 };
+
+type MemberDBSelectorStory = StoryObj<typeof meta>;
+
+export const Base: MemberDBSelectorStory = {
+  args: {
+    contentType: 'entry',
+    customLocation: intialLocation,
+    dataDB: dataDB,
+    dataDBCount: dataDBCount,
+    lowGraphics: false,
+    goToCustomLocation: { noop },
+  },
+};
 export const AsSideMenu = () => {
   // local state emulating the location in the redux state
   const [location, setLocation] = useState(intialLocation);
   return (
     <MemberDBSelector
       contentType={'entry'}
-      lowGraphics={boolean('lowGraphics', false)}
+      lowGraphics={false}
       goToCustomLocation={setLocation}
       customLocation={location}
       dataDB={dataDB}
@@ -90,7 +116,7 @@ export const AsSelect = () => {
   return (
     <MemberDBSelector
       contentType={'entry'}
-      lowGraphics={boolean('lowGraphics', false)}
+      lowGraphics={false}
       goToCustomLocation={setLocation}
       customLocation={location}
       dataDB={dataDB}

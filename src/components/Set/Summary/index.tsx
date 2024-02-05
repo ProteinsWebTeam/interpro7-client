@@ -86,7 +86,7 @@ const SetDescription = ({
   return (
     <>
       <h4>Description</h4>
-      <Description textBlocks={[description]} accession={accession} />
+      <Description textBlocks={[description]} />
     </>
   );
 };

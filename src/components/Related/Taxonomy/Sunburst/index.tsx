@@ -7,6 +7,7 @@ import NightingaleSunburstCE from '@nightingale-elements/nightingale-sunburst';
 import loadData from 'higherOrder/loadData/ts';
 import NightingaleSunburst from 'components/Nightingale/Sunburst';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Callout from 'components/SimpleCommonComponents/Callout';
 import Link from 'components/generic/Link';
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
@@ -122,18 +123,16 @@ const Sunburst = ({ data, description }: LoadedProps) => {
 
   return (
     <div>
+      {(payload?.taxa?.species || 0) > MAX_NUM_SPECIES_FOR_FULL_DEPTH && (
+        <Callout type="info">
+          There are {payload?.taxa?.species} species represented in this sunburst chart.
+          The depth of the visualisation has been limited. You can modify this
+          with the controller in the right side. however, please note this might
+          affect the performance in your browser.
+        </Callout>
+      )}
       <div className={css('sunburst')}>
         <div className={css('panel-component')}>
-          {(payload?.taxa?.species || 0) > MAX_NUM_SPECIES_FOR_FULL_DEPTH && (
-            <div className={css('callout', 'info', 'withicon')}>
-              The number of species for this sunburst is{' '}
-              {payload?.taxa?.species}. The depth of the visualisation has been
-              limited. You can modify this with the controller in the right
-              side. however, please note this might affect the performance in
-              your browser.
-            </div>
-          )}
-
           <ResizeObserverComponent measurements={['width']} element="div">
             {({ width }: { width: number }) => {
               return (

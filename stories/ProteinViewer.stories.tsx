@@ -1,19 +1,31 @@
 import React from 'react';
-
-import { EntryColorMode } from 'utils/entry-color';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { ProteinViewer } from 'components/ProteinViewer';
+
 import Provider from './Provider';
-import configureStore from './configuedStore.js';
+import configureStore from './configureStore';
 
 const store = configureStore();
 
-const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
-
-export default {
+const meta = {
   title: 'InterPro UI/ProteinViewer',
-  decorators: [withProvider],
-};
+  component: ProteinViewer,
+  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <Provider store={store}>
+        <div style={{ width: '100dvw' }}>
+          <Story />
+        </div>
+      </Provider>
+    ),
+  ],
+} satisfies Meta<typeof ProteinViewer>;
+
+export default meta;
+type ProteinViewerStory = StoryObj<typeof meta>;
+
 const sequence =
   'MDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTNHFHVALEREPAEPHGKEDAVLFTSGYSANEGSLSVLAGA';
 
@@ -64,31 +76,30 @@ const secondaryStructure = [
   },
 ];
 
-export const JustSequence = () => (
-  <ProteinViewer
-    protein={{ sequence, length: sequence.length }}
-    data={[]}
-    showOptions={false} // Options require a laodData so the button won't be rendered.
-  />
-);
-export const SequenceAndDomains = () => (
-  <ProteinViewer
-    protein={{ sequence, length: sequence.length }}
-    data={[['Domains', domains]]}
-    dataDB={{}}
-    colorDomainsBy={EntryColorMode.ACCESSION}
-    showOptions={false} // Options require a laodData so the button won't be rendered.
-  />
-);
-export const WithSecondaryStructure = () => (
-  <ProteinViewer
-    protein={{ sequence, length: sequence.length }}
-    data={[
+export const JustSequence: ProteinViewerStory = {
+  args: {
+    protein: { accession: 'test', sequence, length: sequence.length },
+    data: [],
+    title: 'Viewer for SB',
+    loading: false,
+  },
+};
+export const SequenceAndDomains: ProteinViewerStory = {
+  args: {
+    protein: { accession: 'test', sequence, length: sequence.length },
+    data: [['Domains', domains]],
+    title: 'Viewer for SB with Domains',
+    loading: false,
+  },
+};
+export const WithSecondaryStructure: ProteinViewerStory = {
+  args: {
+    protein: { accession: 'test', sequence, length: sequence.length },
+    data: [
       ['Secondary Structure', secondaryStructure],
       ['Domains', domains],
-    ]}
-    dataDB={{}}
-    colorDomainsBy={EntryColorMode.DOMAIN_RELATIONSHIP}
-    showOptions={false} // Options require a laodData so the button won't be rendered.
-  />
-);
+    ],
+    title: 'Viewer for SB with Domains',
+    loading: false,
+  },
+};

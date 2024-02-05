@@ -119,7 +119,6 @@ const SummaryEntry = ({
           <Description
             textBlocks={metadata.description}
             literature={included as Array<[string, Reference]>}
-            accession={metadata.accession}
             showBadges={hasLLM}
           />
         </>

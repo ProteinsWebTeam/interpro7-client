@@ -1,19 +1,33 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+
 import Literature from '../src/components/Entry/Literature';
 
 import Provider from './Provider';
-import configureStore from './configuedStore.js';
+import configureStore from './configureStore';
 
 const store = configureStore();
 
-const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
+const meta = {
+  title: 'InterPro UI/References',
+  component: Literature,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <Provider store={store}>
+        <Story />
+      </Provider>
+    ),
+  ],
+} satisfies Meta<typeof Literature>;
 
-export default {
-  title: 'InterPro UI/Reference',
-  decorators: [withProvider],
-};
+export default meta;
+type LiteratureStory = StoryObj<typeof meta>;
 
-const citation = {
+const citation: Record<string, Array<[string, Reference]>> = {
   extra: [
     [
       'PUB00019074',
@@ -37,6 +51,9 @@ const citation = {
   included: [],
 };
 
-export const Basic = () => (
-  <Literature extra={citation.extra} included={citation.included} />
-);
+export const Base: LiteratureStory = {
+  args: {
+    extra: citation.extra,
+    included: citation.included,
+  },
+};
