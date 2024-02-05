@@ -61,7 +61,19 @@ const ProteinCard = ({ data, search, entryDB }: Props) => {
           <Tooltip
             title={`${data.metadata.source_organism.fullName} (Tax ID: ${data.metadata.source_organism.taxId})`}
           >
-            {data.metadata.source_organism.fullName}
+            <Link
+              to={{
+                description: {
+                  main: { key: 'taxonomy' },
+                  taxonomy: {
+                    db: 'uniprot',
+                    accession: data.metadata.source_organism.taxId,
+                  },
+                },
+              }}
+            >
+              {data.metadata.source_organism.fullName}
+            </Link>
           </Tooltip>
           <div>
             <HighlightedText

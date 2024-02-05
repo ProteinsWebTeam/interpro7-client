@@ -21,6 +21,7 @@
       position: relative;
       transition: opacity var(--timing-really-fast) ease-out;
       &:has(.card-tag) {
+        min-width: 10rem;
         margin-bottom: 0.5rem;
       }
     }
