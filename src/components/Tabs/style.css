@@ -1,7 +1,11 @@
-.tabs.main-style {
-  border-bottom: 1px solid #e6e6e6;
-  border-right-width: 0;
+.new-tabs.main-style {
+  border: 1px solid #e6e6e6;
   border-top-width: 0;
+  border-right-width: 0;
+  margin: 0;
+
+  display: flex;
+  list-style: none;
 
   & .tabs-title {
     margin-bottom: -1px;
@@ -10,6 +14,7 @@
       color: var(--colors-graydark);
       background: rgba(221, 221, 221, 0.54);
       border-top: rgba(221, 221, 221, 0.54) 3px solid;
+      cursor: pointer;
     }
     & > button:hover,
     & > a:hover {
@@ -42,7 +47,7 @@
   }
 }
 
-.tabs {
+.new-tabs {
   & .tabs-title {
     & > button,
     & > a {
@@ -69,4 +74,10 @@
       }
     }
   }
+}
+
+.tab-content {
+  border: 1px solid #e6e6e6;
+  border-top-width: 0;
+  padding: 0.5rem;
 }

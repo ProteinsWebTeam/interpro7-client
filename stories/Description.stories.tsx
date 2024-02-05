@@ -1,22 +1,33 @@
 import React from 'react';
-import { withKnobs, number } from '@storybook/addon-knobs';
-
-import Description from 'components/Description';
-// $FlowFixMe
-import DescriptionReadMore from 'components/Description/DescriptionReadMore';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import Provider from './Provider';
-import configureStore from './configuedStore.js';
-import Literature from 'components/Entry/Literature';
+import configureStore from './configureStore';
 
 const store = configureStore({ pathname: '/entry/interpro/ipr999999' });
 
-const withProvider = (story) => <Provider store={store}>{story()}</Provider>;
+import Description from 'components/Description';
+import Literature from 'components/Entry/Literature';
 
-export default {
+const meta = {
   title: 'Basic UI/Description',
-  decorators: [withProvider, withKnobs],
-};
+  component: Description,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <Provider store={store}>
+        <Story />
+      </Provider>
+    ),
+  ],
+} satisfies Meta<typeof Description>;
+
+export default meta;
+type DescriptionStory = StoryObj<typeof meta>;
+
 const description = `
 InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites. To classify proteins in this way, InterPro uses predictive models, known as signatures, provided by several different databases (referred to as member databases) that make up the InterPro consortium. We combine protein signatures from these member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.
 `.trim();
@@ -24,7 +35,7 @@ InterPro provides functional analysis of proteins by classifying them into famil
 const descriptionWithCitations = `
 InterPro provides functional analysis of proteins by classifying them into families and predicting domains and important sites [[cite:PUB1]]. To classify proteins in this way, InterPro uses predictive models, known as signatures, provided by several different databases (referred to as member databases) that make up the InterPro consortium. We combine protein signatures from these member databases into a single searchable resource, capitalising on their individual strengths to produce a powerful integrated database and diagnostic tool.
 `.trim();
-const citations = [
+const citations: Array<[string, Reference]> = [
   [
     'PUB1',
     {
@@ -43,22 +54,23 @@ const citations = [
   ],
 ];
 
-export const Basic = () => <Description textBlocks={[description]} />;
-
-export const WithReferences = () => (
-  <>
-    <Description
-      textBlocks={[descriptionWithCitations]}
-      literature={citations}
-    />
-    <hr />
-    <Literature included={citations} />
-  </>
-);
-
-export const ReadMore = () => (
-  <DescriptionReadMore
-    text={description}
-    minNumberOfCharToShow={number('minNumberOfCharToShow', 100)}
-  />
-);
+export const Base: DescriptionStory = {
+  args: {
+    textBlocks: [description],
+  },
+};
+export const WithReferences: DescriptionStory = {
+  args: {
+    textBlocks: [descriptionWithCitations],
+    literature: citations,
+  },
+  decorators: [
+    (Story) => (
+      <>
+        <Story />
+        <hr />
+        <Literature included={citations} />
+      </>
+    ),
+  ],
+};

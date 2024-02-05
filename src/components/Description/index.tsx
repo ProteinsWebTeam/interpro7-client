@@ -27,10 +27,21 @@ export const hasLLMParagraphs = (
   return llmDescrpitions.length > 0;
 };
 type Props = {
+  /**
+   * Array of strings or objects. Each willbe represented as a paragraph
+   */
   textBlocks: Array<string | StructuredDescription>;
+  /**
+   * If the description has inline references, the literature can be included here to coordinate the numbering with the `<Literature>` component.
+   */
   literature?: Array<[string, Reference]>;
-  accession?: string;
+  /**
+   * To exclude the creation of IDs in the link elements
+   */
   withoutIDs?: boolean;
+  /**
+   * To display the badges for AI-Generated or Expert curated paragraphs
+   */
   showBadges?: boolean;
 };
 class Description extends PureComponent<Props> {

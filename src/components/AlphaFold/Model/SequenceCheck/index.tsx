@@ -8,6 +8,7 @@ import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
@@ -36,37 +37,39 @@ const SequenceCheck = ({
   const uniprotSequence = payload?.metadata?.sequence || '';
   if (alphaFoldSequence === uniprotSequence) return null;
   return (
-    <div className={css('callout', 'warning', 'margin-bottom-medium')}>
-      <span className={css('icon', 'icon-common')} data-icon="&#xf071;"></span>{' '}
-      <b>AlphaFold Prediction Mismatch</b>
-      <p>
-        The AlphaFold prediction displayed below was generated on{' '}
-        {new Date(alphaFoldCreationDate || '').toLocaleDateString()} using a
-        sequence that has since been updated in the UniProt database. Please
-        note that the displayed prediction may not accurately represent the
-        current structure of the protein due to the sequence mismatch.
-      </p>
-      <button
-        className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
-        onClick={() => setShowDiff(!showDiff)}
-        style={{ width: '10rem' }}
-      >
-        {showDiff ? 'Hide' : 'Show'} Diff
-      </button>
-      {showDiff && (
-        <div style={{ overflow: 'scroll', maxWidth: 'min(65vw,60em)' }}>
-          <ReactDiffViewer
-            oldValue={alphaFoldSequence}
-            newValue={uniprotSequence}
-            splitView={false}
-            leftTitle={'AlphaFold / Uniprot'}
-            hideLineNumbers={true}
-          />
-        </div>
-      )}
-    </div>
+    <Callout type="warning">
+      <div>
+        <b>AlphaFold Prediction Mismatch</b>
+        <p>
+          The AlphaFold prediction displayed below was generated on{' '}
+          {new Date(alphaFoldCreationDate || '').toLocaleDateString()} using a
+          sequence that has since been updated in the UniProt database. Please
+          note that the displayed prediction may not accurately represent the
+          current structure of the protein due to the sequence mismatch.
+        </p>
+        <button
+          className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
+          onClick={() => setShowDiff(!showDiff)}
+          style={{ width: '10rem' }}
+        >
+          {showDiff ? 'Hide' : 'Show'} Diff
+        </button>
+        {showDiff && (
+          <div style={{ overflow: 'scroll', maxWidth: 'min(65vw,60em)' }}>
+            <ReactDiffViewer
+              oldValue={alphaFoldSequence}
+              newValue={uniprotSequence}
+              splitView={false}
+              leftTitle={'AlphaFold / Uniprot'}
+              hideLineNumbers={true}
+            />
+          </div>
+        )}
+      </div>
+    </Callout>
   );
 };
+
 const getUrlForProtein = createSelector(
   (state: GlobalState) => state.settings.api,
   (_state: GlobalState, props?: Props) => props?.proteinAccession || '',

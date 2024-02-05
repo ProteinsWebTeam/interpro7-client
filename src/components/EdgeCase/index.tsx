@@ -8,11 +8,7 @@ import { goToCustomLocation } from 'actions/creators';
 
 import useInterval from 'utils/hooks/useInterval';
 
-import cssBinder from 'styles/cssBinder';
-
-import ipro from 'styles/interpro-vf.css';
-
-const css = cssBinder(ipro);
+import Callout from '../SimpleCommonComponents/Callout';
 
 const ONE_SECOND = 1000;
 const HERTZ = 10;
@@ -55,14 +51,10 @@ const EdgeCase = ({
     }
   });
   const seconds = Math.ceil((limit - count) / HERTZ);
+  const calloutType = status === STATUS_GONE ? 'alert' : 'warning';
   return (
-    <div className={css('vf-stack', 'vf-stack--400')}>
-      <div
-        className={css('callout', 'withicon', {
-          info: status !== STATUS_GONE,
-          alert: status === STATUS_GONE,
-        })}
-      >
+    <Callout type={calloutType}>
+      <p>
         <b>{text}</b>
         {(shouldRedirect || status === STATUS_TIMEOUT) && !isNaN(seconds) && (
           <>
@@ -82,8 +74,8 @@ const EdgeCase = ({
             />
           </>
         )}
-      </div>
-    </div>
+      </p>
+    </Callout>
   );
 };
 
@@ -96,7 +88,7 @@ const mapStateToProps = createSelector(
       accession: (description[key] as EndpointLocation).accession,
       secondsToRetry,
     };
-  }
+  },
 );
 
 export default connect(mapStateToProps, {

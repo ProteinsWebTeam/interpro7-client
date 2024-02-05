@@ -2,8 +2,8 @@
 
 exports[`<Controls /> should render 1`] = `
 <React.Fragment>
-  <div
-    className="callout warning"
+  <Callout
+    type="warning"
   >
     We expect this file to contain
      
@@ -19,7 +19,7 @@ exports[`<Controls /> should render 1`] = `
      
     If you encounter any problems during the creation of this file
     , please check the “Code snippet” section of this page for to see how to download the data directly onto your computer.
-  </div>
+  </Callout>
   <div
     className="text"
   >

@@ -1,41 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`server-message should render 1`] = `
-<div
-  className="callout withicon info"
+<Callout
+  type="info"
 >
   There is no data associated with this request
-</div>
+</Callout>
 `;
 
 exports[`server-message should render 2`] = `
-<div
-  className="callout withicon alert"
+<Callout
+  type="alert"
 >
   There was an error, this is not a valid request to the server
-</div>
+</Callout>
 `;
 
 exports[`server-message should render 3`] = `
-<div
-  className="callout withicon alert"
+<Callout
+  type="alert"
 >
   There was an error, this is not a known resource on the server
-</div>
+</Callout>
 `;
 
 exports[`server-message should render 4`] = `
-<div
-  className="callout withicon alert"
+<Callout
+  type="alert"
 >
   The query is still running in the background. We will update the page once the data is ready
-</div>
+</Callout>
 `;
 
 exports[`server-message should render 5`] = `
-<div
-  className="callout withicon alert"
+<Callout
+  type="alert"
 >
   The API reported an error, but the cause has not been determined
-</div>
+</Callout>
 `;

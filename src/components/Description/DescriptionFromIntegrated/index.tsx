@@ -99,7 +99,6 @@ const DescriptionFromIntegrated = ({
         <Description
           textBlocks={payload.metadata.description}
           literature={included}
-          accession={payload.metadata.accession}
           showBadges={hasLLM}
         />
         {included.length !== 0 || extra.length !== 0 ? (
