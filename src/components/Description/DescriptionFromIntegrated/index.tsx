@@ -101,10 +101,14 @@ const DescriptionFromIntegrated = ({
           literature={included}
           showBadges={hasLLM}
         />
-        <h4>
-          References <ImportedTag accession={integrated} />
-        </h4>
-        <Literature included={included} extra={extra} />
+        {included.length !== 0 || extra.length !== 0 ? (
+          <>
+            <h4>
+              References <ImportedTag accession={integrated} />
+            </h4>
+            <Literature included={included} extra={extra} />
+          </>
+        ) : null}
       </>
     );
   }

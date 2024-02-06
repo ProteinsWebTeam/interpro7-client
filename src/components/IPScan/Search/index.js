@@ -596,7 +596,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                       data={{
                         name: 'Search By Sequence',
                         description:
-                          'Search for InterPro matches in your seqeunce',
+                          'Search for InterPro matches in your sequences',
                       }}
                       processData={schemaProcessDataPageSection}
                     />
@@ -606,27 +606,21 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                           <title>InterProScan</title>
                         </Helmet>
                         <p>
-                          This form allows you to scan your sequence for matches
-                          against the InterPro protein signature databases,
-                          using InterProScan tool. Enter or paste a protein
-                          sequence in FASTA format (complete or not - e.g.{' '}
-                          <span className={f('sequence')}>
-                            PMPIGSKERPTFFEIFKTRCNKADLGPISLN
-                          </span>
-                          ), with a maximum length of 40,000 amino acids.
-                        </p>
-                        <p>
-                          Please note that can scan up {MAX_NUMBER_OF_SEQUENCES}{' '}
-                          sequences at a time. Alternatively, read{' '}
+                          This form enables you to submit sequences to the
+                          InterProScan web service for scanning against the
+                          InterPro protein signature databases.
+                          <br />
+                          Please note that you can submit up to{' '}
+                          {MAX_NUMBER_OF_SEQUENCES} sequences at a time.
+                          Alternatively, you can{' '}
                           <Link
                             to={{
                               description: { other: ['about', 'interproscan'] },
                             }}
                           >
-                            more about InterProScan
+                            download InterProScan
                           </Link>{' '}
-                          for other ways of running sequences through
-                          InterProScan.
+                          to scan your sequences locally.
                         </p>
                       </div>
                     )}

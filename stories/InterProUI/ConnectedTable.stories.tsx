@@ -170,8 +170,10 @@ export const TheSearchableTable: TableStory = {
         const size = Number(search.page_size || pageSize);
         const page = Number(search?.page || 1);
         const filteredData: Array<Record<string, unknown>> = search?.search
-          ? args.dataTable.filter(({ id, name }: { id: number, name: string }) =>
-              id.toString().includes(search.search as string) || name.includes(search.search as string)
+          ? args.dataTable.filter(
+              ({ id, name }: { id: number; name: string }) =>
+                id.toString().includes(search.search as string) ||
+                name.includes(search.search as string)
             )
           : args.dataTable;
         const data = filteredData.slice((page - 1) * size, page * size);

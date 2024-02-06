@@ -12,8 +12,8 @@ const meta = {
   argTypes: {
     backgroundColor: { control: 'color' },
     size: {
-      options: ["medium", "small"],
-      control: { type: "radio" },
+      options: ['medium', 'small'],
+      control: { type: 'radio' },
     },
   },
 } satisfies Meta<typeof Button>;
