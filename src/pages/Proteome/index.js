@@ -121,7 +121,7 @@ const AllProteomesDownload = (
     name={`proteomes.${fileType}`}
     count={count}
     customLocationDescription={description}
-    search={{ ...search, extra_fields: 'counters' }}
+    search={{ ...search, extra_fields: 'counters:entry-protein' }}
     endpoint={'proteome'}
   />
 );

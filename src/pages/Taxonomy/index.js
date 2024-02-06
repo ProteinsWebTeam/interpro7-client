@@ -143,7 +143,7 @@ const AllTaxDownload = (
       name={`taxon.${fileType}`}
       count={count}
       customLocationDescription={newDescription}
-      search={{ ...search, extra_fields: 'counters' }}
+      search={{ ...search, extra_fields: 'counters:entry-protein' }}
       endpoint={'taxonomy'}
     />
   );

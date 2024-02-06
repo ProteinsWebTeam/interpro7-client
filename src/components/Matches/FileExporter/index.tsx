@@ -1,6 +1,7 @@
 import React from 'react';
 import File from 'components/File';
 import { SupportedExtensions } from 'components/File/FileButton';
+import { getNeededCountersForSubpages } from 'higherOrder/loadData/defaults/relatedCounters';
 
 const endpoint: Partial<
   Record<Endpoint, Partial<Record<Endpoint, string | undefined>>>
@@ -58,6 +59,10 @@ const FileExporter = ({
   if (focused && +focused !== 1 && customLocationDescription.taxonomy) {
     customLocationDescription.taxonomy.accession = focused;
   }
+  const counters = getNeededCountersForSubpages(secondary, primary, true);
+  const extraFields = `${counters}${search.extra_fields || ''}` || undefined;
+  const newSearch = { ...search };
+  if (extraFields) newSearch.extra_fields = extraFields;
   return (
     <File
       className={className}
@@ -67,12 +72,7 @@ const FileExporter = ({
       }.${fileType}`}
       count={count}
       customLocationDescription={customLocationDescription}
-      search={{
-        ...search,
-        extra_fields: `counters${
-          search.extra_fields ? `,${search.extra_fields}` : ''
-        }`,
-      }}
+      search={newSearch}
       endpoint={(endpoint?.[primary]?.[secondary] as string) || primary}
       minWidth={minWidth}
       label={label}
