@@ -4,34 +4,29 @@ exports[`<DescriptionLLM /> should render 1`] = `
 <Callout
   type="warning"
 >
-  <p>
-    The description below includes sections that have been automatically generated using
-     
-    <Memo(Connect(Link))
-      href="https://openai.com/research/gpt-4"
-      target="_blank"
-    >
-      GPT-4
-    </Memo(Connect(Link))>
-    , an AI language model, and is based on data extracted from
-     
-    <Memo(Connect(Link))
-      href="https://www.uniprot.org"
-      target="_blank"
-    >
-      UniProtKB/Swiss-Prot
-    </Memo(Connect(Link))>
-    . Please exercise discretion when interpreting the information provided and consider it as preliminary.
-    <br />
+  <div>
+    The description below includes sections that have been automatically generated using an AI language model. Please exercise discretion when interpreting the information provided.
+  </div>
+  <div
+    style={
+      {
+        "display": "flex",
+        "justifyContent": "space-evenly",
+        "paddingTop": "0.4em",
+      }
+    }
+  >
     <Memo(Connect(Link))
       href="https://interpro-documentation.readthedocs.io/en/latest/llm_descriptions.html"
       target="_blank"
     >
+      <span
+        className="small icon icon-common icon-book"
+      />
+       
       Read more on description generation.
     </Memo(Connect(Link))>
-     
     <Memo(Connect(Link))
-      className="vf-button vf-button--secondary vf-button--sm"
       href="https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=PTHR48251"
       target="_blank"
     >
@@ -41,6 +36,6 @@ exports[`<DescriptionLLM /> should render 1`] = `
        
       Provide feedback
     </Memo(Connect(Link))>
-  </p>
+  </div>
 </Callout>
 `;

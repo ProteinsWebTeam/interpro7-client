@@ -20,34 +20,30 @@ const DescriptionLLM = ({ accession }: Props) => {
 
   return (
     <Callout type="warning">
-      <p>
+      <div>
         The description below includes sections that have been automatically
-        generated using{' '}
-        <Link href="https://openai.com/research/gpt-4" target="_blank">
-          GPT-4
-        </Link>
-        , an AI language model, and is based on data extracted from{' '}
-        <Link href="https://www.uniprot.org" target="_blank">
-          UniProtKB/Swiss-Prot
-        </Link>
-        . Please exercise discretion when interpreting the information provided
-        and consider it as preliminary.
-        <br />
+        generated using an AI language model. Please exercise discretion when
+        interpreting the information provided.
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-evenly',
+          paddingTop: '0.4em',
+        }}
+      >
         <Link
           href={`${config.root.readthedocs.href}llm_descriptions.html`}
           target="_blank"
         >
+          <span className={css('small', 'icon', 'icon-common', 'icon-book')} />{' '}
           Read more on description generation.
-        </Link>{' '}
+        </Link>
+
         {config.root?.LLMFeedback?.href ? (
           <Link
             href={`${config.root.LLMFeedback.href}${accession}`}
             target="_blank"
-            className={css(
-              'vf-button',
-              'vf-button--secondary',
-              'vf-button--sm',
-            )}
           >
             <span
               className={css('small', 'icon', 'icon-common', 'icon-pencil-alt')}
@@ -55,7 +51,7 @@ const DescriptionLLM = ({ accession }: Props) => {
             Provide feedback
           </Link>
         ) : null}
-      </p>
+      </div>
     </Callout>
   );
 };
