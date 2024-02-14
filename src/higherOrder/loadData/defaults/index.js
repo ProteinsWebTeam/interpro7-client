@@ -4,8 +4,11 @@ import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import config from 'config';
+import { getNeededCountersForSubpages } from './relatedCounters';
 
 const MULTIPLE_SLASHES = /([^:])\/{2,}/g;
+
+const DBS_WITH_SETS = ['pfam', 'cdd', 'pirsf'];
 
 export const cleanUpMultipleSlashes = (str = '') =>
   str.replace(MULTIPLE_SLASHES, '$1/');
@@ -70,16 +73,29 @@ export const getUrl = createSelector(
         if (hash === 'grid') {
           switch (description.main.key) {
             case 'entry':
-              _search.extra_fields = 'description,literature,counters';
+              _search.extra_fields =
+                'description,literature,counters:protein-ida-taxonomy-structure';
+              if (DBS_WITH_SETS.includes(description.entry.db))
+                _search.extra_fields += '-set';
+              break;
+            case 'protein':
+              _search.extra_fields = 'counters:entry-structure';
+              break;
+            case 'structure':
+              _search.extra_fields = 'counters:entry-protein-taxonomy';
               break;
             case 'taxonomy':
-              _search.extra_fields = 'lineage,counters';
+              _search.extra_fields =
+                'lineage,counters:entry-protein-structure-proteome';
+              break;
+            case 'proteome':
+              _search.extra_fields = 'counters:entry-protein-structure';
               break;
             case 'set':
               _search.extra_fields = 'counters,description';
               break;
             default:
-              _search.extra_fields = 'counters';
+              _search.extra_fields = undefined;
               break;
           }
         }
@@ -87,10 +103,10 @@ export const getUrl = createSelector(
           switch (description.main.key) {
             case 'taxonomy':
             case 'proteome':
-              _search.extra_fields = 'counters';
+              _search.extra_fields = 'counters:entry-protein';
               break;
             case 'set':
-              _search.extra_fields = 'counters,description';
+              _search.extra_fields = 'counters:entry,description';
               break;
             default:
               break;
@@ -164,20 +180,30 @@ export const getReversedUrl = createSelector(
     }
     newDesc[description.main.key].isFilter = true;
     newDesc.main.key = newMain;
+    const newQuery = {
+      ..._search,
+      extra_fields: undefined,
+      page_size: search.page_size || settingsPageSize,
+    };
+    if (description.main.key === 'set' && description?.entry?.isFilter) {
+      newQuery.extra_fields = 'short_name';
+    }
+    const counters = getNeededCountersForSubpages(
+      description.main.key,
+      newMain,
+    );
+    if (counters) {
+      if (newQuery.extra_fields) newQuery.extra_fields += `,${counters}`;
+      else newQuery.extra_fields = counters;
+    }
+
     let url = format({
       protocol,
       hostname,
       port,
       pathname: root + descriptionToPath(newDesc),
-      query: {
-        ..._search,
-        extra_fields: 'counters',
-        page_size: search.page_size || settingsPageSize,
-      },
+      query: newQuery,
     });
-    if (description.main.key === 'set' && description?.entry?.isFilter) {
-      url = url.replace('counters', 'short_name');
-    }
     if (description.main.key === 'entry' && newMain === 'taxonomy') {
       url = url.replace('/entry/', '/protein/entry/');
     }
