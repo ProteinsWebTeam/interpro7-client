@@ -59,6 +59,13 @@ const FileExporter = ({
   if (focused && +focused !== 1 && customLocationDescription.taxonomy) {
     customLocationDescription.taxonomy.accession = focused;
   }
+  /*
+   * Not a mistake: the filtering/secondary endpoint in the client (subpage)
+   * becomes the main endpoint when exporting data.
+   * e.g. InterPro entry IPR000001 > Proteins
+   *   client: `/entry/interpro/IPR000001/protein/uniprot`
+   *   export: `/api/protein/uniprot/entry/interpro/IPR000001/`
+   */
   const counters = getNeededCountersForSubpages(secondary, primary, true);
   const extraFields = `${counters}${search.extra_fields || ''}` || undefined;
   const newSearch = { ...search };

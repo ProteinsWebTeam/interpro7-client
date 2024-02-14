@@ -52,6 +52,21 @@ function delay(milliseconds) {
 }
 
 (async () => {
+  if (process.argv.length > 2) {
+    const shouldRun = new Set();
+    for (const argv of process.argv.slice(2)) {
+      const key = argv.substring(2).toLowerCase();
+      if (SHOULD_RUN[key] !== undefined)
+        shouldRun.add(key);
+      else {
+        console.error(`Error: invalid argument: ${argv}`);
+        process.exit(1);
+      }
+    }
+    for (const key of Object.keys(SHOULD_RUN)) {
+      SHOULD_RUN[key] = shouldRun.has(key);
+    }
+  }
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
   page.setDefaultTimeout(TIMEOUT);
