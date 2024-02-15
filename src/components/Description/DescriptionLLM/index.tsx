@@ -28,7 +28,7 @@ const DescriptionLLM = ({ accession }: Props) => {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-evenly',
+          gap: '2em',
           paddingTop: '0.4em',
         }}
       >
@@ -37,7 +37,7 @@ const DescriptionLLM = ({ accession }: Props) => {
           target="_blank"
         >
           <span className={css('small', 'icon', 'icon-common', 'icon-book')} />{' '}
-          Read more on description generation.
+          Read more on description generation
         </Link>
 
         {config.root?.LLMFeedback?.href ? (
