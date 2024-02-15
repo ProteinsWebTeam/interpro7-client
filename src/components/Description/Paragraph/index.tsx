@@ -21,11 +21,9 @@ const REMOVE_TRAILING_COMMA_REGEX = /,\s*(?=\])/;
 
 const xReferenceURL = {
   cazy: 'http://www.cazy.org/{}.html',
-  cog: 'https://ftp.ncbi.nih.gov/pub/COG/COG2020/data/',
-  intenz: 'https://enzyme.expasy.org/EC/{}',
+  ec: 'https://enzyme.expasy.org/EC/{}',
   genprop: 'https://www.ebi.ac.uk/interpro/genomeproperties/genome-property/{}',
   superfamily: 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid={}',
-  enzyme: 'https://enzyme.expasy.org/EC/{}',
   omim: 'https://www.omim.org/entry/{}',
 };
 
