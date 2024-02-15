@@ -11,7 +11,7 @@ exports[`<DescriptionLLM /> should render 1`] = `
     style={
       {
         "display": "flex",
-        "justifyContent": "space-evenly",
+        "gap": "2em",
         "paddingTop": "0.4em",
       }
     }
@@ -24,7 +24,7 @@ exports[`<DescriptionLLM /> should render 1`] = `
         className="small icon icon-common icon-book"
       />
        
-      Read more on description generation.
+      Read more on description generation
     </Memo(Connect(Link))>
     <Memo(Connect(Link))
       href="https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=PTHR48251"
