@@ -20,11 +20,11 @@ const CITATIONS_REGEX = `(\\[(${CITATION_REGEX})+\\])`;
 const REMOVE_TRAILING_COMMA_REGEX = /,\s*(?=\])/;
 
 const xReferenceURL = {
-  cazy: 'http://www.cazy.org/fam/{}.html',
-  cog: 'https://ftp.ncbi.nih.gov/pub/COG/COG2014/static/byCOG/{}.html',
-  intenz: 'http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec={}',
-  genprop: 'https://www.ebi.ac.uk/interpro/genomeproperties/#{}',
+  cazy: 'http://www.cazy.org/{}.html',
+  ec: 'https://enzyme.expasy.org/EC/{}',
+  genprop: 'https://www.ebi.ac.uk/interpro/genomeproperties/genome-property/{}',
   superfamily: 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid={}',
+  omim: 'https://www.omim.org/entry/{}',
 };
 
 type Props = {
@@ -116,7 +116,7 @@ export const Paragraph = ({
               <Link
                 href={xReferenceURL[type as keyof typeof xReferenceURL].replace(
                   '{}',
-                  tagValue
+                  tagValue,
                 )}
                 target="_blank"
                 className={css('ext-link')}
@@ -141,7 +141,7 @@ export const Paragraph = ({
                   .replace(/<\/li>/g, '<br>')
                   .replace(/<ul>/g, '<br>')
                   .replace(/<\/ul>/g, '<br>')
-                  .replace(/<\/li>/g, '')
+                  .replace(/<\/li>/g, ''),
               ),
             }}
           />
