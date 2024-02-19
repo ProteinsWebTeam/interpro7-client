@@ -141,15 +141,20 @@ class ClanViewer extends PureComponent<Props, State> {
       .filter((e) => (e as HTMLElement).nodeName === 'g')
       .filter((e) => (e as HTMLElement).classList.contains('node'))?.[0];
     if (g) {
-      this.props.goToCustomLocation({
-        description: {
-          main: { key: 'entry' },
-          entry: {
-            db: this.props.db,
-            accession: (g as HTMLElement).dataset.accession,
+      const accession = (g as HTMLElement).dataset.accession;
+      if ((event as MouseEvent).metaKey || (event as MouseEvent).altKey) {
+        window.open(`/entry/${this.props.db}/${accession}`, '_blank')?.focus();
+      } else {
+        this.props.goToCustomLocation({
+          description: {
+            main: { key: 'entry' },
+            entry: {
+              db: this.props.db,
+              accession,
+            },
           },
-        },
-      });
+        });
+      }
     }
   };
   _refreshLabels = () => {
