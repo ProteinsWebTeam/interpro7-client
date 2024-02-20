@@ -10,7 +10,6 @@ import { entities, singleEntity } from 'menuConfig';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import AlphaFoldMenuLink from './EntryMenuLink/AlphaFoldMenuLink';
 import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -137,7 +136,6 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     if (loading || !payload || !payload.metadata) {
       return <Loading />;
     }
-    const alphafold = singleEntity.get('alphafold');
     return (
       <ul
         className={f('tabs', className, {
@@ -187,15 +185,6 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
             collapsed={this.state.isCollapsed}
           />
         ))}
-        {mainType === 'protein' && alphafold && (
-          <AlphaFoldMenuLink
-            to={alphafold.to}
-            exact={alphafold.exact}
-            name={alphafold.name}
-            usedOnTheSide={usedOnTheSide}
-            collapsed={this.state.isCollapsed}
-          />
-        )}
       </ul>
     );
   }

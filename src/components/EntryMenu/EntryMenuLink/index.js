@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
@@ -189,6 +188,12 @@ export class EntryMenuLink extends PureComponent /*:: <Props> */ {
             value = payload.metadata.counters.dbEntries[entryDB.toLowerCase()];
           }
         }
+      }
+      if (
+        mainKey.toLowerCase() === 'protein' &&
+        name.toLowerCase() === 'alphafold'
+      ) {
+        value = payload.metadata.in_alphafold ? 1 : 0;
       }
 
       /**
