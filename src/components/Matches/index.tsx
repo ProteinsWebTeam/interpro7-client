@@ -527,6 +527,29 @@ const Matches = ({
         Gene
       </Column>
       <Column
+        dataKey="in_alphafold"
+        displayIf={primary === 'protein'}
+        renderer={(inAlphafold: boolean, { accession }: ProteinMetadata) =>
+          inAlphafold ? (
+            <Link
+              to={{
+                description: {
+                  main: { key: 'protein' },
+                  protein: { db: 'uniprot', accession, detail: 'alphafold' },
+                },
+              }}
+            >
+              <span
+                className={css('icon', 'icon-common', 'icon-check-circle')}
+              />{' '}
+              Link
+            </Link>
+          ) : null
+        }
+      >
+        Alphafold
+      </Column>
+      <Column
         dataKey="match"
         headerClassName={css('matchColumn')}
         displayIf={
