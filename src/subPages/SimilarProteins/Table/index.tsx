@@ -211,6 +211,28 @@ const SimilarProteinTable = ({
         </Column>
         <Column dataKey="length">Length</Column>
         <Column dataKey="gene">Gene</Column>
+        <Column
+          dataKey="in_alphafold"
+          renderer={(inAlphafold: boolean, { accession }: ProteinMetadata) =>
+            inAlphafold ? (
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'protein' },
+                    protein: { db: 'uniprot', accession, detail: 'alphafold' },
+                  },
+                }}
+              >
+                <span
+                  className={css('icon', 'icon-common', 'icon-check-circle')}
+                />{' '}
+                Link
+              </Link>
+            ) : null
+          }
+        >
+          AlphaFold
+        </Column>
       </Table>
     </>
   );
