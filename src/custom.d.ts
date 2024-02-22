@@ -263,12 +263,13 @@ type StructuredDescription = {
   checked: boolean;
 };
 
+type MetadataCounter =
+  | number
+  | {
+      [db: string]: number;
+    };
 type MetadataCounters = {
-  [resource: string]:
-    | number
-    | {
-        [db: string]: number;
-      };
+  [resource: string]: MetadataCounter;
 };
 interface Metadata {
   accession: string;
@@ -324,6 +325,8 @@ interface EntryMetadata extends Metadata {
     name: string;
   };
   is_removed?: boolean;
+  in_alphafold?: boolean;
+  entry_annotations?: Record<string, unknown>;
 }
 
 type SourceOrganism = {
