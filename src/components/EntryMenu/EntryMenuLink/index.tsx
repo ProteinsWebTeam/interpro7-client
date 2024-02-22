@@ -97,7 +97,10 @@ export const EntryMenuLink = ({
     const annotations = (payload.metadata as EntryMetadata)?.entry_annotations;
     if (
       annotations &&
-      (annotations.hasOwnProperty(singleEntityNames.get(name) || '') ||
+      (Object.prototype.hasOwnProperty.call(
+        annotations,
+        singleEntityNames.get(name) || '',
+      ) ||
         hasAlignments(name, entryDB || '', annotations))
     ) {
       value = NaN;
