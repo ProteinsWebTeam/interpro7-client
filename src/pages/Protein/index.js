@@ -274,10 +274,10 @@ class List extends PureComponent /*:: <ListProps> */ {
                   {row.source_database === 'reviewed' ? (
                     <>
                       {'\u00A0' /* non-breakable space */}
-                      <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                      <Tooltip title="Reviewed by UniProtKB curators">
                         <span
                           className={f('icon', 'icon-common')}
-                          data-icon="&#xf00c;"
+                          data-icon="&#xf2f0;"
                           aria-label="reviewed"
                         />
                       </Tooltip>
