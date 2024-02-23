@@ -30,9 +30,9 @@ const icons = new Map([
 type Props = {
   name: string;
   loading: boolean;
-  to:
+  to?:
     | InterProPartialLocation
-    | ((location: InterProPartialLocation) => InterProPartialLocation);
+    | ((customLocation: InterProLocation) => InterProPartialLocation);
   value?: number;
   exact?: boolean;
   collapsed?: boolean;

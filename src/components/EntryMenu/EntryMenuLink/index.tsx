@@ -23,18 +23,18 @@ const hasAlignments = (
   return false;
 };
 type Props = {
-  to:
+  to?:
     | InterProPartialLocation
-    | ((location: InterProPartialLocation) => InterProPartialLocation);
+    | ((customLocation: InterProLocation) => InterProPartialLocation);
   exact?: boolean;
   name: string;
-  counter: string;
+  counter?: string;
   data: RequestedData<{ metadata: Metadata }>;
   isFirstLevel?: boolean;
   usedOnTheSide?: boolean;
   collapsed?: boolean;
   mainKey?: string;
-  entryDB?: string;
+  entryDB?: string | null;
 };
 
 export const EntryMenuLink = ({
@@ -125,9 +125,12 @@ export const EntryMenuLink = ({
 
   if (!isFirstLevel && !value && !isNaN(value as number)) return null;
   const newTo = shouldPointToAll
-    ? (customLocation: InterProPartialLocation) => {
-        const newLocation = typeof to === 'function' ? to(customLocation) : to;
-        if (newLocation.description.entry)
+    ? (customLocation: InterProLocation) => {
+        const newLocation =
+          typeof to === 'function'
+            ? to(customLocation)
+            : (to as InterProPartialLocation);
+        if (newLocation?.description.entry)
           newLocation.description.entry.db = 'all';
         return newLocation;
       }

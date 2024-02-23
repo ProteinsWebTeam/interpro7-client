@@ -78,9 +78,9 @@ type Endpoint =
 type EndpointLocation = Required<EndpointPartialLocation>;
 type EndpointPartialLocation = {
   isFilter?: boolean | null;
-  db?: string;
-  accession?: string;
-  detail?: string;
+  db?: string | null;
+  accession?: string | null;
+  detail?: string | null;
   order?: number | null;
 };
 type InterProDescription = Required<

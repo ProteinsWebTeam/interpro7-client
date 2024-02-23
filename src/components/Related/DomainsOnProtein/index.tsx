@@ -234,7 +234,10 @@ const DomainOnProteinWithoutData = ({
 const getRelatedEntriesURL = createSelector(
   (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.customLocation.description.protein.accession,
-  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+  (
+    { protocol, hostname, port, root }: ParsedURLServer,
+    accession: string | null,
+  ) => {
     const newDesc = {
       main: { key: 'entry' },
       protein: { isFilter: true, db: 'uniprot', accession },
