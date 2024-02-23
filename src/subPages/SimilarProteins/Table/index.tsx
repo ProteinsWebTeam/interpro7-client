@@ -223,10 +223,7 @@ const SimilarProteinTable = ({
                   },
                 }}
               >
-                <span
-                  className={css('icon', 'icon-common', 'icon-check-circle')}
-                />{' '}
-                Link
+                View predicted structure
               </Link>
             ) : null
           }
