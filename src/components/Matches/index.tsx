@@ -366,10 +366,10 @@ const Matches = ({
                 </Link>
               )}
               {primary === 'protein' && sourceDatabase === 'reviewed' ? (
-                <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                <Tooltip title="Reviewed by UniProtKB curators">
                   <span
                     className={css('icon', 'icon-common')}
-                    data-icon="&#xf00c;"
+                    data-icon="&#xf2f0;"
                     aria-label="reviewed"
                   />
                 </Tooltip>
@@ -474,16 +474,10 @@ const Matches = ({
         }
         renderer={(db: string) =>
           db === 'reviewed' ? (
-            <Tooltip
-              title={
-                db === 'reviewed'
-                  ? `${db} by curators (Swiss-Prot)`
-                  : 'Not reviewed by curators (TrEMBL)'
-              }
-            >
+            <Tooltip title="Reviewed by UniProtKB curators">
               <span
                 className={css('icon', 'icon-common')}
-                data-icon="&#xf00c;"
+                data-icon="&#xf2f0;"
                 aria-label="reviewed"
               />
             </Tooltip>

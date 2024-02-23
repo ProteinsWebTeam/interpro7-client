@@ -158,7 +158,7 @@ const SimilarProteinTable = ({
                 <Tooltip title="Reviewed by UniProtKB curators">
                   <span
                     className={css('icon', 'icon-common')}
-                    data-icon="&#xf00c;"
+                    data-icon="&#xf2f0;"
                     aria-label="reviewed"
                   />
                 </Tooltip>
