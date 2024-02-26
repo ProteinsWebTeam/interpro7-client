@@ -24,6 +24,7 @@ import ipro from 'styles/interpro-vf.css';
 import summary from 'styles/summary.css';
 import local from './style.css';
 import InterProSubtitle from './InterProSubtitle';
+import BadgeAI from '../BadgeAI';
 
 const css = cssBinder(local, ipro, summary);
 
@@ -88,6 +89,7 @@ const SummaryEntry = ({
   loading,
 }: SummaryEntryProps) => {
   const [integratedCitations, setIntegratedCitations] = useState<string[]>([]);
+  const [hasIntegratedLLM, setHasIntegratedLLM] = useState(false);
   useEffect(() => {
     setIntegratedCitations([]);
   }, [metadata]);
@@ -109,13 +111,11 @@ const SummaryEntry = ({
     (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]),
   );
 
-  const selectDescriptionComponent = () => {
+  const selectDescriptionComponent = (hasLLM: boolean) => {
     if ((metadata.description || []).length) {
-      const hasLLM = hasLLMParagraphs(metadata.description || []);
       return (
         <>
           <h4>{headerText || 'Description'}</h4>
-          {hasLLM ? <DescriptionLLM accession={metadata.accession} /> : null}
           <Description
             textBlocks={metadata.description}
             literature={included as Array<[string, Reference]>}
@@ -129,23 +129,36 @@ const SummaryEntry = ({
           integrated={metadata.integrated}
           setIntegratedCitations={setIntegratedCitations}
           headerText={headerText || 'Description'}
+          handleLLMParagraphs={setHasIntegratedLLM}
         />
       );
     }
     return null;
   };
-
+  const hasLLM = hasLLMParagraphs(metadata.description || []);
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
       <section className={css('vf-grid', 'summary-grid')}>
         <div className={css('vf-stack')}>
+          {metadata?.is_llm ? (
+            <BadgeAI checked={!!metadata?.is_reviewed_llm} />
+          ) : null}
           {metadata?.source_database?.toLowerCase() === 'interpro' ? (
             <InterProSubtitle metadata={metadata} />
           ) : (
             <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
           )}
+
+          {hasLLM || hasIntegratedLLM || metadata?.is_llm ? (
+            <DescriptionLLM
+              accession={metadata.accession}
+              hasLLMParagraphs={hasLLM || hasIntegratedLLM}
+              hasLLMMetadata={!!metadata?.is_llm}
+            />
+          ) : null}
+
           <section className={css('vf-stack')}>
-            {selectDescriptionComponent()}
+            {selectDescriptionComponent(hasLLM)}
           </section>
         </div>
         <div className={css('vf-stack')}>

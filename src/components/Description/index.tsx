@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 
 import { transformFormatted } from 'utils/text';
 
+import BadgeAI, { BadgeCurated } from 'components/Entry/BadgeAI';
 import Paragraph from './Paragraph';
 
 import cssBinder from 'styles/cssBinder';
@@ -72,18 +73,7 @@ class Description extends PureComponent<Props> {
                   key={`${i}_${j}`}
                 >
                   {showBadges &&
-                    (llm ? (
-                      <span className={css('vf-badge', 'vf-badge--tertiary')}>
-                        AI-generated
-                        <span className={css('details')}>
-                          {checked ? 'Reviewed' : 'Unreviewed'}
-                        </span>
-                      </span>
-                    ) : (
-                      <span className={css('vf-badge', 'vf-badge--tertiary')}>
-                        Expert-curated
-                      </span>
-                    ))}
+                    (llm ? <BadgeAI checked={checked} /> : <BadgeCurated />)}
                   <Paragraph
                     key={`${i}.${j}`}
                     p={text}

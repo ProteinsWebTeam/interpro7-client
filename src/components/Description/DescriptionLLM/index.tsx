@@ -13,17 +13,37 @@ const css = cssBinder(globalStyles, localStyles, fonts);
 
 type Props = {
   accession: string;
+  hasLLMParagraphs: boolean;
+  hasLLMMetadata: boolean;
 };
 
-const DescriptionLLM = ({ accession }: Props) => {
+const DescriptionLLM = ({
+  accession,
+  hasLLMParagraphs,
+  hasLLMMetadata,
+}: Props) => {
   if ((accession || '').length === 0) return null;
 
   return (
     <Callout type="warning">
       <div>
-        The description below includes sections that have been automatically
-        generated using an AI language model. Please exercise discretion when
-        interpreting the information provided.
+        {hasLLMMetadata && (
+          <>
+            Some of the fields of this entry{' '}
+            {hasLLMParagraphs && (
+              <>
+                (including sections of the <b>description</b>)
+              </>
+            )}{' '}
+          </>
+        )}
+        {hasLLMParagraphs && !hasLLMMetadata && (
+          <>
+            The <b>description</b> below includes sections that{' '}
+          </>
+        )}
+        have been automatically generated using an AI language model. Please
+        exercise discretion when interpreting the information provided.
       </div>
       <div
         style={{

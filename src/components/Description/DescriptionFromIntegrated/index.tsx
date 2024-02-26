@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
@@ -59,6 +59,7 @@ type Props = {
   integrated: string | null;
   setIntegratedCitations?: (citations: string[]) => void;
   headerText?: string;
+  handleLLMParagraphs?: (hasLLM: boolean) => void;
 };
 
 interface IntegratedProps
@@ -69,12 +70,19 @@ const DescriptionFromIntegrated = ({
   integrated,
   data,
   setIntegratedCitations = (_: string[]) => null,
+  handleLLMParagraphs,
   headerText,
 }: IntegratedProps) => {
   const { loading, payload } = data || {};
+  const [hasLLM, setHasLLM] = useState(false);
   useEffect(() => {
     setIntegratedCitations(Object.keys(payload?.metadata?.literature || {}));
   }, [payload?.metadata?.literature]);
+  useEffect(() => {
+    const newHasLLM = hasLLMParagraphs(payload?.metadata.description || []);
+    setHasLLM(newHasLLM);
+    handleLLMParagraphs?.(newHasLLM);
+  }, [payload?.metadata.description]);
   if (!integrated) return null;
   if (loading) return <Loading />;
 
@@ -86,16 +94,12 @@ const DescriptionFromIntegrated = ({
       payload.metadata.literature,
       citations,
     );
-    const hasLLM = hasLLMParagraphs(payload.metadata.description || []);
 
     return (
       <>
         <h4>
           {headerText || 'Description'} <ImportedTag accession={integrated} />
         </h4>
-        {hasLLM ? (
-          <DescriptionLLM accession={payload.metadata.accession} />
-        ) : null}
         <Description
           textBlocks={payload.metadata.description}
           literature={included}
