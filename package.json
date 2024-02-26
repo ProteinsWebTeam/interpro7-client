@@ -150,6 +150,7 @@
     "@storybook/react-webpack5": "^7.6.10",
     "@storybook/test": "^7.6.10",
     "@storybook/theming": "^7.6.10",
+    "@types/color-hash": "^1.0.5",
     "@types/d3-scale": "4.0.8",
     "@types/dompurify": "3.0.5",
     "@types/gtag.js": "0.0.18",
