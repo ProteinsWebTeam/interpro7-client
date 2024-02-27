@@ -158,7 +158,7 @@ const SimilarProteinTable = ({
                 <Tooltip title="Reviewed by UniProtKB curators">
                   <span
                     className={css('icon', 'icon-common')}
-                    data-icon="&#xf00c;"
+                    data-icon="&#xf2f0;"
                     aria-label="reviewed"
                   />
                 </Tooltip>
@@ -211,6 +211,25 @@ const SimilarProteinTable = ({
         </Column>
         <Column dataKey="length">Length</Column>
         <Column dataKey="gene">Gene</Column>
+        <Column
+          dataKey="in_alphafold"
+          renderer={(inAlphafold: boolean, { accession }: ProteinMetadata) =>
+            inAlphafold ? (
+              <Link
+                to={{
+                  description: {
+                    main: { key: 'protein' },
+                    protein: { db: 'uniprot', accession, detail: 'alphafold' },
+                  },
+                }}
+              >
+                View predicted structure
+              </Link>
+            ) : null
+          }
+        >
+          AlphaFold
+        </Column>
       </Table>
     </>
   );
