@@ -11,7 +11,6 @@ const css = cssBinder(localStyles);
 // default values for version 1.X of colorhash
 /* eslint-disable no-magic-numbers */
 const colorHash = new ColorHash({
-  // hash: 'bkdr',
   saturation: [0.65, 0.35, 0.5],
   lightness: [0.65, 0.35, 0.5],
 });
@@ -44,7 +43,7 @@ export const VersionBadge = ({ version, side = DEFAULT_SIDE }: Props) => {
       points.push(`${r + x},${r - y}`);
     }
   }
-  const celebration = version === '99.0';
+  const celebration = version === '100.0';
   // The conditional is to adjust for versions 100.0 upwards
   const proportionTextFigure = version.length < 5 ? 0.4 : 0.32;
   const yCoordForText = version.length < 5 ? 0.65 : 0.6;
