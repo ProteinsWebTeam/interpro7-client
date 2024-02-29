@@ -1,5 +1,8 @@
 .new-switch {
-  height: 2rem;
+  --paddle-side: 1.5rem;
+  --gap: 0.25rem;
+  --height: calc(var(--paddle-side) + var(--gap) + var(--gap));
+  height: var(--height);
   position: relative;
   margin-bottom: 1rem;
   outline: 0;
@@ -26,7 +29,7 @@
   position: relative;
   display: block;
   width: 4rem;
-  height: 2rem;
+  height: var(--height);
   border-radius: 0;
   background: #777;
   transition: all 0.25s ease-out;
@@ -42,11 +45,11 @@ input + .switch-paddle {
 
 .switch-paddle::after {
   position: absolute;
-  top: 0.25rem;
-  left: 0.25rem;
+  top: var(--gap);
+  left: var(--gap);
   display: block;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--paddle-side);
+  height: var(--paddle-side);
   transform: translate3d(0, 0, 0);
   border-radius: 0;
   background: #fefefe;
@@ -58,7 +61,7 @@ input:checked ~ .switch-paddle {
 }
 
 input:checked ~ .switch-paddle::after {
-  left: 2.25rem;
+  left: calc(100% - var(--paddle-side) - var(--gap));
 }
 input:disabled ~ .switch-paddle {
   cursor: not-allowed;
@@ -92,57 +95,27 @@ input:checked + label > .switch-inactive {
 }
 
 .new-switch.tiny {
-  height: 1.5rem;
+  --paddle-side: 1rem;
 }
 .new-switch.tiny .switch-paddle {
   width: 3rem;
-  height: 1.5rem;
   font-size: 0.625rem;
-}
-.new-switch.tiny .switch-paddle::after {
-  top: 0.25rem;
-  left: 0.25rem;
-  width: 1rem;
-  height: 1rem;
-}
-.new-switch.tiny input:checked ~ .switch-paddle::after {
-  left: 1.75rem;
 }
 
 .new-switch.small {
-  height: 1.75rem;
+  --paddle-side: 1.25rem;
 }
 .new-switch.small .switch-paddle {
   width: 3.5rem;
-  height: 1.75rem;
   font-size: 0.75rem;
-}
-.new-switch.small .switch-paddle::after {
-  top: 0.25rem;
-  left: 0.25rem;
-  width: 1.25rem;
-  height: 1.25rem;
-}
-.new-switch.small input:checked ~ .switch-paddle::after {
-  left: 2rem;
 }
 
 .new-switch.large {
-  height: 2.5rem;
+  --paddle-side: 1.5rem;
 }
 .new-switch.large .switch-paddle {
   width: 5rem;
-  height: 2.5rem;
   font-size: 1rem;
-}
-.new-switch.large .switch-paddle::after {
-  top: 0.25rem;
-  left: 0.25rem;
-  width: 2rem;
-  height: 2rem;
-}
-.new-switch.large input:checked ~ .switch-paddle::after {
-  left: 2.75rem;
 }
 
 .disabled {
@@ -154,8 +127,4 @@ input:checked + label > .switch-inactive {
   & span.switch-inactive {
     right: 1em;
   }
-}
-
-.new-switch input:checked ~ label.switch-paddle.accession-selector::after {
-  left: 5.75rem;
 }
