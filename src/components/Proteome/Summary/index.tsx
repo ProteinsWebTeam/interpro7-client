@@ -5,6 +5,8 @@ import Species from 'components/Protein/Species';
 import ProteomeLink from 'components/ExtLink/ProteomeLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+import UniProtDescription from './UniProtDescription';
+
 import cssBinder from 'styles/cssBinder';
 
 import memberSelectorStyle from 'components/Table/TotalNb/style.css';
@@ -59,6 +61,7 @@ const SummaryProteome = ({ data, loading }: Props) => {
               </tr>
             </tbody>
           </table>
+          <UniProtDescription />
         </div>
         <div className={css('vf-stack')}>
           <section>
