@@ -22,7 +22,6 @@ const getProteomeUrl = createSelector(
   (state: GlobalState) => state.customLocation.description.proteome.accession,
   (accession) => {
     if (!accession) return null;
-    console.log(config.root);
     return `${config.root.UniProt.href}/proteomes/${accession}`;
   },
 );

@@ -547,6 +547,11 @@ type UniProtProteomesPayload = {
   description: string;
   [key: string]: unknown;
 };
+type RfamPayload = {
+  hitCount: number;
+  entries: Array<unknown>;
+  [key: string]: unknown;
+};
 
 type AlphafoldPayload = Array<{
   entryId: string;

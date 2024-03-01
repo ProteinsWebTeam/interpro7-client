@@ -6,6 +6,7 @@ import ProteomeLink from 'components/ExtLink/ProteomeLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import UniProtDescription from './UniProtDescription';
+import RFamLink from './RfamLink';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -72,6 +73,7 @@ const SummaryProteome = ({ data, loading }: Props) => {
                   UniProt
                 </ProteomeLink>
               </li>
+              <RFamLink accession={metadata.accession} className={css('ext')} />
             </ul>
           </section>
         </div>
