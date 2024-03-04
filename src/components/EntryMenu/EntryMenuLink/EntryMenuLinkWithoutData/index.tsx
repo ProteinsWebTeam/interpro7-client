@@ -24,7 +24,6 @@ const icons = new Map([
   ['Alignments', { icon: '\uF1DE', class: 'icon-common' }],
   ['Sequence', { icon: '\uF120', class: 'icon-common' }],
   ['Curation', { icon: undefined, class: 'icon-common' }],
-  ['New Structural Model', { icon: undefined, class: 'icon-common' }],
 ]);
 
 type Props = {
