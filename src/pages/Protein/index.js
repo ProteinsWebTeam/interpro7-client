@@ -274,10 +274,10 @@ class List extends PureComponent /*:: <ListProps> */ {
                   {row.source_database === 'reviewed' ? (
                     <>
                       {'\u00A0' /* non-breakable space */}
-                      <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                      <Tooltip title="Reviewed by UniProtKB curators">
                         <span
                           className={f('icon', 'icon-common')}
-                          data-icon="&#xf00c;"
+                          data-icon="&#xf2f0;"
                           aria-label="reviewed"
                         />
                       </Tooltip>
@@ -286,7 +286,6 @@ class List extends PureComponent /*:: <ListProps> */ {
                 </>
               )}
             />
-
             <Column
               dataKey="name"
               renderer={(
@@ -357,6 +356,29 @@ class List extends PureComponent /*:: <ListProps> */ {
             >
               Length
             </Column>
+            <Column
+              dataKey="in_alphafold"
+              renderer={(inAlphafold, { accession }) =>
+                inAlphafold ? (
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'protein' },
+                        protein: {
+                          db: 'uniprot',
+                          accession,
+                          detail: 'alphafold',
+                        },
+                      },
+                    }}
+                  >
+                    View predicted structure
+                  </Link>
+                ) : null
+              }
+            >
+              AlphaFold
+            </Column>{' '}
           </Table>
         </section>
       </div>
