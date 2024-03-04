@@ -529,6 +529,67 @@ type ConservationPayload = Record<
   }
 >;
 
+type OpenAPIReference = {
+  $ref?: string;
+};
+
+type OpenAPIParameterSchema = {
+  type: string;
+  enum?: Array<string>;
+  allowReserved?: boolean;
+  explode?: boolean;
+  style?: string;
+  pattern?: string;
+};
+type OpenAPIParameter = {
+  description: string;
+  in: string;
+  name: string;
+  schema: OpenAPIParameterSchema | OpenAPIReference;
+  allowEmptyValue?: boolean;
+};
+type OpenAPIComponents = {
+  parameters: Record<string, OpenAPIParameter>;
+  responses: Record<string, unknown>;
+  schemas: Record<
+    string,
+    {
+      type: string;
+      enum?: Array<string>;
+    }
+  >;
+};
+type OpenAPIPayload = {
+  components: OpenAPIComponents;
+  info: {
+    description: string;
+    title: string;
+    version: string;
+  };
+  openapi: string;
+  paths: Record<
+    string,
+    {
+      get: {
+        parameters: Array<{
+          $ref?: string;
+          description?: string;
+          name?: string;
+          in?: string;
+          required?: boolean;
+        }>;
+        responses;
+        summary: string;
+        tags: Array<string>;
+      };
+    }
+  >;
+  servers: Array<{
+    description: string;
+    url: string;
+  }>;
+};
+
 type WikipediaPayload = {
   parse: {
     title: string;
