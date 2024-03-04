@@ -18,7 +18,7 @@ export const STATUS_GONE = 410;
 
 type Props = {
   text: string;
-  accession: string;
+  accession: string | null;
   status: number;
   shouldRedirect?: boolean;
   secondsToRetry: number;

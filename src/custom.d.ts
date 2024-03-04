@@ -78,9 +78,9 @@ type Endpoint =
 type EndpointLocation = Required<EndpointPartialLocation>;
 type EndpointPartialLocation = {
   isFilter?: boolean | null;
-  db?: string;
-  accession?: string;
-  detail?: string;
+  db?: string | null;
+  accession?: string | null;
+  detail?: string | null;
   order?: number | null;
 };
 type InterProDescription = Required<
@@ -263,12 +263,13 @@ type StructuredDescription = {
   checked: boolean;
 };
 
+type MetadataCounter =
+  | number
+  | {
+      [db: string]: number;
+    };
 type MetadataCounters = {
-  [resource: string]:
-    | number
-    | {
-        [db: string]: number;
-      };
+  [resource: string]: MetadataCounter;
 };
 interface Metadata {
   accession: string;
@@ -324,6 +325,8 @@ interface EntryMetadata extends Metadata {
     name: string;
   };
   is_removed?: boolean;
+  in_alphafold?: boolean;
+  entry_annotations?: Record<string, unknown>;
 }
 
 type SourceOrganism = {

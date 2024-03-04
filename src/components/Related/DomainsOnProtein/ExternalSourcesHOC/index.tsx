@@ -72,15 +72,19 @@ export function loadExternalSources<
       loadData<Genome3DProteinPayload, 'Genome3D'>({
         getUrl: getGenome3dURL,
         propNamespace: 'Genome3D',
-      } as Params)(ComponentWithExternalData)
-    )
+      } as Params)(ComponentWithExternalData),
+    ),
   );
 }
 
 const getGenome3dURL = createSelector(
   (state: GlobalState) => state.settings.genome3d,
   (state: GlobalState) => state.customLocation.description.protein.accession,
-  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+  (
+    { protocol, hostname, port, root }: ParsedURLServer,
+    accession: string | null,
+  ) => {
+    if (!accession) return null;
     return format({
       protocol,
       hostname,
@@ -90,13 +94,17 @@ const getGenome3dURL = createSelector(
         protvista: true,
       },
     });
-  }
+  },
 );
 
 const getRepeatsDBURL = createSelector(
   (state: GlobalState) => state.settings.repeatsDB,
   (state: GlobalState) => state.customLocation.description.protein.accession,
-  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+  (
+    { protocol, hostname, port, root }: ParsedURLServer,
+    accession: string | null,
+  ) => {
+    if (!accession) return null;
     return format({
       protocol,
       hostname,
@@ -106,12 +114,16 @@ const getRepeatsDBURL = createSelector(
         query: `uniprot_id:${accession}`,
       },
     });
-  }
+  },
 );
 const getDisProtURL = createSelector(
   (state: GlobalState) => state.settings.disprot,
   (state: GlobalState) => state.customLocation.description.protein.accession,
-  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+  (
+    { protocol, hostname, port, root }: ParsedURLServer,
+    accession: string | null,
+  ) => {
+    if (!accession) return null;
     return format({
       protocol,
       hostname,
@@ -121,7 +133,7 @@ const getDisProtURL = createSelector(
         format: 'json',
       },
     });
-  }
+  },
 );
 
 export default loadExternalSources;

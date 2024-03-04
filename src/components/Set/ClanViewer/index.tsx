@@ -24,7 +24,7 @@ type Props = {
   data: {
     metadata: SetMetadata;
   };
-  db?: string;
+  db?: string | null;
   goToCustomLocation: typeof goToCustomLocation;
   loading: boolean;
   label?: {
