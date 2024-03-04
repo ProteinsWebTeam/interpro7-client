@@ -5,19 +5,24 @@ exports[`<DescriptionLLM /> should render 1`] = `
   type="warning"
 >
   <div>
-    <React.Fragment>
-      Some of the fields of this entry
-       
-      <React.Fragment>
-        (including sections of the 
-        <b>
-          description
-        </b>
-        )
-      </React.Fragment>
-       
-    </React.Fragment>
-    have been automatically generated using an AI language model. Please exercise discretion when interpreting the information provided.
+    This entry contains information
+    <Tooltip
+      title="Description, Name and Short name"
+    >
+      <sup>
+        <span
+          className="icon icon-common"
+          data-icon=""
+          style={
+            {
+              "fontSize": "0.6rem",
+            }
+          }
+        />
+      </sup>
+    </Tooltip>
+     
+    that has been generated using an AI language model. Please exercise discretion when interpreting the information provided.
   </div>
   <div
     style={
@@ -57,12 +62,24 @@ exports[`<DescriptionLLM /> should render 2`] = `
   type="warning"
 >
   <div>
-    <React.Fragment>
-      Some of the fields of this entry
-       
-       
-    </React.Fragment>
-    have been automatically generated using an AI language model. Please exercise discretion when interpreting the information provided.
+    This entry contains information
+    <Tooltip
+      title="Name and Short name"
+    >
+      <sup>
+        <span
+          className="icon icon-common"
+          data-icon=""
+          style={
+            {
+              "fontSize": "0.6rem",
+            }
+          }
+        />
+      </sup>
+    </Tooltip>
+     
+    that has been generated using an AI language model. Please exercise discretion when interpreting the information provided.
   </div>
   <div
     style={
@@ -102,15 +119,24 @@ exports[`<DescriptionLLM /> should render 3`] = `
   type="warning"
 >
   <div>
-    <React.Fragment>
-      The 
-      <b>
-        description
-      </b>
-       below includes sections that
-       
-    </React.Fragment>
-    have been automatically generated using an AI language model. Please exercise discretion when interpreting the information provided.
+    This entry contains information
+    <Tooltip
+      title="Description"
+    >
+      <sup>
+        <span
+          className="icon icon-common"
+          data-icon=""
+          style={
+            {
+              "fontSize": "0.6rem",
+            }
+          }
+        />
+      </sup>
+    </Tooltip>
+     
+    that has been generated using an AI language model. Please exercise discretion when interpreting the information provided.
   </div>
   <div
     style={

@@ -6,6 +6,7 @@ import localStyles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import Link from 'components/generic/Link';
 import Callout from 'components/SimpleCommonComponents/Callout';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import config from 'config';
 
@@ -27,23 +28,22 @@ const DescriptionLLM = ({
   return (
     <Callout type="warning">
       <div>
-        {hasLLMMetadata && (
-          <>
-            Some of the fields of this entry{' '}
-            {hasLLMParagraphs && (
-              <>
-                (including sections of the <b>description</b>)
-              </>
-            )}{' '}
-          </>
-        )}
-        {hasLLMParagraphs && !hasLLMMetadata && (
-          <>
-            The <b>description</b> below includes sections that{' '}
-          </>
-        )}
-        have been automatically generated using an AI language model. Please
-        exercise discretion when interpreting the information provided.
+        This entry contains information
+        <Tooltip
+          title={`${hasLLMParagraphs ? 'Description' : ''}${
+            hasLLMParagraphs && hasLLMMetadata ? ', ' : ''
+          }${hasLLMMetadata ? 'Name and Short name' : ''}`}
+        >
+          <sup>
+            <span
+              className={css('icon', 'icon-common')}
+              data-icon="&#xf129;"
+              style={{ fontSize: '0.6rem' }}
+            />
+          </sup>
+        </Tooltip>{' '}
+        that has been generated using an AI language model. Please exercise
+        discretion when interpreting the information provided.
       </div>
       <div
         style={{

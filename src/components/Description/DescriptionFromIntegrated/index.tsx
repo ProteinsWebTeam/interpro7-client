@@ -14,7 +14,6 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Description, { hasLLMParagraphs } from 'components/Description';
-import DescriptionLLM from '../DescriptionLLM';
 
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';

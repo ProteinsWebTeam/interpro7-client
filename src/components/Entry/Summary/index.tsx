@@ -24,7 +24,6 @@ import ipro from 'styles/interpro-vf.css';
 import summary from 'styles/summary.css';
 import local from './style.css';
 import InterProSubtitle from './InterProSubtitle';
-import BadgeAI from '../BadgeAI';
 
 const css = cssBinder(local, ipro, summary);
 
@@ -140,15 +139,6 @@ const SummaryEntry = ({
     <div className={css('vf-stack', 'vf-stack--400')}>
       <section className={css('vf-grid', 'summary-grid')}>
         <div className={css('vf-stack')}>
-          {metadata?.is_llm ? (
-            <BadgeAI checked={!!metadata?.is_reviewed_llm} />
-          ) : null}
-          {metadata?.source_database?.toLowerCase() === 'interpro' ? (
-            <InterProSubtitle metadata={metadata} />
-          ) : (
-            <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
-          )}
-
           {hasLLM || hasIntegratedLLM || metadata?.is_llm ? (
             <DescriptionLLM
               accession={metadata.accession}
@@ -156,6 +146,11 @@ const SummaryEntry = ({
               hasLLMMetadata={!!metadata?.is_llm}
             />
           ) : null}
+          {metadata?.source_database?.toLowerCase() === 'interpro' ? (
+            <InterProSubtitle metadata={metadata} />
+          ) : (
+            <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
+          )}
 
           <section className={css('vf-stack')}>
             {selectDescriptionComponent(hasLLM)}
