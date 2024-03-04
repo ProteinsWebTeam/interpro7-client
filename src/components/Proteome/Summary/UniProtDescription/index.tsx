@@ -15,7 +15,12 @@ const UniProtDescription = ({ data }: LoadedProps) => {
   if (!data) return null;
   const { loading, payload } = data;
   if (loading || !payload) return <Loading />;
-  return <div>{data.payload?.description}</div>;
+  return data.payload?.description ? (
+    <>
+      <h4>Description</h4>
+      <p>{data.payload?.description}</p>
+    </>
+  ) : null;
 };
 
 const getProteomeUrl = createSelector(
