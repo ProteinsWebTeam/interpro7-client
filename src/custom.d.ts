@@ -152,6 +152,8 @@ type SettingsState = {
   disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
+  uniprot: ParsedURLServer;
+  rfam: ParsedURLServer;
 };
 type UISettings = {
   lowGraphics: boolean;
@@ -542,6 +544,18 @@ type WikipediaPayload = {
     };
   };
 };
+
+type UniProtProteomesPayload = {
+  id: string;
+  description: string;
+  [key: string]: unknown;
+};
+type RfamPayload = {
+  hitCount: number;
+  entries: Array<unknown>;
+  [key: string]: unknown;
+};
+
 type AlphafoldPayload = Array<{
   entryId: string;
   gene: string;
