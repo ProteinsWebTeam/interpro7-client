@@ -1,23 +1,25 @@
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, { PureComponent, PropsWithChildren } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-import EntryMenuLink from './EntryMenuLink';
-import Loading from 'components/SimpleCommonComponents/Loading';
 import config from 'config';
-import { entities, singleEntity } from 'menuConfig';
-import loadData from 'higherOrder/loadData';
+import { MenuItemProps, entities, singleEntity } from 'menuConfig';
+
+import loadData from 'higherOrder/loadData/ts';
+import { Params } from 'src/higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import { foundationPartial } from 'styles/foundation';
+import Loading from 'components/SimpleCommonComponents/Loading';
+import EntryMenuLink from './EntryMenuLink';
+
+import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from './style.css';
 
 import entryMenuLinkClasses from './EntryMenuLink/style.css';
 
-const f = foundationPartial(styles, fonts);
+const css = cssBinder(styles, fonts);
 
 const mapNameToClass = new Map([
   ['domain', 'menu-domain'],
@@ -30,40 +32,27 @@ const mapNameToClass = new Map([
   ['homologous_superfamily', 'menu-hh'],
 ]);
 
-/*:: type Props = {
-  mainType: ?string,
-  mainDB: ?string,
-  mainAccession: ?string,
-  isSignature: boolean,
-  data: {
-    loading: boolean,
-    payload?: ?Object,
-  },
-  children: ?any,
-  className: ?string,
-  lowGraphics: boolean,
-  usedOnTheSide?: boolean,
-  width?: number,
-}; */
+type Props = PropsWithChildren<{
+  mainType?: string;
+  mainDB?: string;
+  mainAccession?: string;
+  isSignature?: boolean;
+  className?: string;
+  lowGraphics?: boolean;
+  usedOnTheSide?: boolean;
+  width?: number;
+}>;
 
-export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    mainType: T.string,
-    mainDB: T.string,
-    mainAccession: T.string,
-    isSignature: T.bool.isRequired,
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.any,
-    }).isRequired,
-    children: T.any,
-    className: T.string,
-    lowGraphics: T.bool.isRequired,
-    usedOnTheSide: T.bool,
-    width: T.number,
-  };
+type State = {
+  topBorder: number;
+  isCollapsed: boolean;
+};
+interface LoadedProps extends Props, LoadDataProps<{ metadata: Metadata }> {}
 
-  constructor(props /*: Props */) {
+export class EntryMenuWithoutData extends PureComponent<LoadedProps, State> {
+  _ref = React.createRef<HTMLUListElement>();
+
+  constructor(props: LoadedProps) {
     super(props);
 
     this._ref = React.createRef();
@@ -77,17 +66,13 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     this._moveFakeBorder();
   }
 
-  componentDidUpdate(_, prevState) {
+  componentDidUpdate(_: LoadedProps, prevState: State) {
     const DELAY = 300;
     if (this.state.isCollapsed === prevState.isCollapsed) {
       this._moveFakeBorder();
     } else {
       setTimeout(() => this._moveFakeBorder(), DELAY);
     }
-  }
-
-  componentWillUnmount() {
-    if (this._animation) this._animation.cancel();
   }
 
   _moveFakeBorder = () => {
@@ -121,11 +106,12 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
       data,
       isSignature,
       children,
-      data: { loading, payload },
       className,
       usedOnTheSide,
     } = this.props;
-    let tabs = entities;
+    if (!data) return null;
+    const { loading, payload } = data;
+    let tabs: Array<MenuItemProps | undefined> = entities;
     if (mainAccession && mainType && config.pages[mainType]) {
       tabs = [singleEntity.get('overview')];
       for (const subPage of config.pages[mainType].subPages) {
@@ -138,7 +124,7 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
     }
     return (
       <ul
-        className={f('tabs', className, {
+        className={css('tabs', className, {
           sign: isSignature,
           onside: usedOnTheSide,
           collapsed: this.state.isCollapsed,
@@ -147,9 +133,9 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
         data-testid="menu"
       >
         {!usedOnTheSide && (
-          <nav className={f('collapse-bar')}>
+          <nav className={css('collapse-bar')}>
             <button
-              className={f('icon', 'icon-common', 'icon-backward')}
+              className={css('icon', 'icon-common', 'icon-backward')}
               onClick={() =>
                 this.setState({ isCollapsed: !this.state.isCollapsed })
               }
@@ -158,10 +144,10 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
         )}
         <span
           data-testid="entry-menu"
-          className={f(
+          className={css(
             'fake-border',
             payload.metadata.source_database.toLowerCase() === 'interpro'
-              ? mapNameToClass.get(payload.metadata.type)
+              ? mapNameToClass.get((payload.metadata as EntryMetadata).type)
               : null,
             { ['is-signature']: isSignature },
           )}
@@ -170,13 +156,12 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
           }}
         />
         {children}
-        {tabs.map((e) => (
+        {(tabs as Array<MenuItemProps>).map((e) => (
           <EntryMenuLink
             key={e.name}
-            metadata={payload.metadata}
             to={e.to}
             exact={e.exact}
-            activeClass={e.activeClass}
+            // activeClass={e.activeClass}
             name={e.name}
             data={data}
             counter={e.counter}
@@ -191,29 +176,33 @@ export class EntryMenuWithoutData extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  (state) => state.customLocation.description.main.key,
-  (state) =>
+  (state: GlobalState) => state.customLocation.description.main.key,
+  (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .db,
-  (state) =>
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
-  (state) =>
-    state.customLocation.description[state.customLocation.description.main.key]
-      .detail,
-  (state) =>
+    (
+      state.customLocation.description[
+        state.customLocation.description.main.key
+      ] as EndpointLocation
+    ).db,
+  (state: GlobalState) =>
+    (
+      state.customLocation.description[
+        state.customLocation.description.main.key
+      ] as EndpointLocation
+    ).accession,
+  (state: GlobalState) =>
     Object.entries(state.customLocation.description)
-      .filter(([_, { isFilter }]) => isFilter)
+      .filter(
+        ([_, endpoint]) =>
+          !Array.isArray(endpoint) && (endpoint as EndpointLocation)?.isFilter,
+      )
       .map(([f]) => f),
 
-  (state) => state.settings.ui.lowGraphics,
-  (mainType, mainDB, mainAccession, mainDetail, filters, lowGraphics) => ({
+  (state: GlobalState) => state.settings.ui.lowGraphics,
+  (mainType, mainDB, mainAccession, lowGraphics) => ({
     mainType,
     mainDB,
     mainAccession,
-    mainDetail,
-    filters,
     isSignature: !!(
       mainType === 'entry' &&
       mainDB !== 'InterPro' &&
@@ -224,15 +213,21 @@ const mapStateToProps = createSelector(
 );
 
 const mapStateToUrl = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.description.main.key,
-  (state) =>
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.customLocation.description.main.key,
+  (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .db,
-  (state) =>
-    state.customLocation.description[state.customLocation.description.main.key]
-      .accession,
+    (
+      state.customLocation.description[
+        state.customLocation.description.main.key
+      ] as EndpointLocation
+    ).db,
+  (state: GlobalState) =>
+    (
+      state.customLocation.description[
+        state.customLocation.description.main.key
+      ] as EndpointLocation
+    ).accession,
   ({ protocol, hostname, port, root }, mainType, db, accession) => {
     if (!accession) return;
     return format({
@@ -252,6 +247,6 @@ const mapStateToUrl = createSelector(
   },
 );
 
-export default loadData({ getUrl: mapStateToUrl, mapStateToProps })(
+export default loadData({ getUrl: mapStateToUrl, mapStateToProps } as Params)(
   EntryMenuWithoutData,
 );

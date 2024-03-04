@@ -78,9 +78,9 @@ type Endpoint =
 type EndpointLocation = Required<EndpointPartialLocation>;
 type EndpointPartialLocation = {
   isFilter?: boolean | null;
-  db?: string;
-  accession?: string;
-  detail?: string;
+  db?: string | null;
+  accession?: string | null;
+  detail?: string | null;
   order?: number | null;
 };
 type InterProDescription = Required<
@@ -152,6 +152,8 @@ type SettingsState = {
   disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
+  uniprot: ParsedURLServer;
+  rfam: ParsedURLServer;
 };
 type UISettings = {
   lowGraphics: boolean;
@@ -263,12 +265,13 @@ type StructuredDescription = {
   checked: boolean;
 };
 
+type MetadataCounter =
+  | number
+  | {
+      [db: string]: number;
+    };
 type MetadataCounters = {
-  [resource: string]:
-    | number
-    | {
-        [db: string]: number;
-      };
+  [resource: string]: MetadataCounter;
 };
 interface Metadata {
   accession: string;
@@ -326,6 +329,8 @@ interface EntryMetadata extends Metadata {
   is_removed?: boolean;
   is_llm?: boolean;
   is_reviewed_llm?: boolean;
+  in_alphafold?: boolean;
+  entry_annotations?: Record<string, unknown>;
 }
 
 type SourceOrganism = {
@@ -541,6 +546,18 @@ type WikipediaPayload = {
     };
   };
 };
+
+type UniProtProteomesPayload = {
+  id: string;
+  description: string;
+  [key: string]: unknown;
+};
+type RfamPayload = {
+  hitCount: number;
+  entries: Array<unknown>;
+  [key: string]: unknown;
+};
+
 type AlphafoldPayload = Array<{
   entryId: string;
   gene: string;
