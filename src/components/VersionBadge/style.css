@@ -26,22 +26,22 @@
 
 @keyframes color-animation {
   0% {
-    fill: #2daec1;
+    fill: #b54e5d;
   }
   10% {
-    fill: red;
+    fill: #b5813f;
   }
   40% {
-    fill: green;
+    fill: #69a746;
   }
   60% {
-    fill: orange;
+    fill: #669b90;
   }
   70% {
-    fill: #2daec1;
+    fill: #b54e5d;
   }
   100% {
-    fill: #2daec1;
+    fill: #b54e5d;
   }
 }
 @keyframes shake-animation {
