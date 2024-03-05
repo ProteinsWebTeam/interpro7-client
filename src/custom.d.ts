@@ -578,7 +578,7 @@ type OpenAPIPayload = {
           in?: string;
           required?: boolean;
         }>;
-        responses;
+        responses: unknown;
         summary: string;
         tags: Array<string>;
       };
