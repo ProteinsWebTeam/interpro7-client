@@ -64,6 +64,7 @@ declare namespace JSX {
 type GlobalState = {
   customLocation: InterProLocation;
   settings: SettingsState;
+  download: DownloadState;
   [other: string]: any;
 }; // TODO: replace for redux state type
 
@@ -166,6 +167,15 @@ type LabelUISettings = {
   accession: boolean;
   name: boolean;
   short: boolean;
+};
+
+type DownloadState = Record<string, DownloadProgress>;
+
+type DownloadProgress = {
+  progress: number;
+  successful: null | boolean;
+  blobURL: unknown;
+  size: null | number;
 };
 interface InterProTypeProps
   extends React.DetailedHTMLProps<
