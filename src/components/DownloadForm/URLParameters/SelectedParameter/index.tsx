@@ -7,6 +7,7 @@ import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../../style.css';
+import InputGroup from '../../InputGroup';
 
 const css = cssBinder(local, fonts);
 
@@ -62,58 +63,64 @@ const SelectedParameter = ({
 
   const name = `search.${data.name}`;
   return (
-    <label className={css('new-input-group')}>
-      <span className={css('new-input-group-label')}>
-        {data.name}{' '}
-        <Tooltip title={`<pre>${data.description}</pre>`}>
-          <span
-            className={css('small', 'icon', 'icon-common')}
-            data-icon="&#xf129;"
-            aria-label={`description for attribute: ${data.name}`}
-          />
-        </Tooltip>
-      </span>
-      {inputType === 'select' && (
-        <select
-          className={css('new-input-group-field')}
-          name={name}
-          value={value}
-          onChange={noop}
-          onBlur={noop}
-        >
-          {(schema as OpenAPIParameterSchema).enum?.map((option) => (
-            <option key={option}>{option}</option>
-          ))}
-        </select>
-      )}
-      {inputType === 'checkbox' && (
-        <input
-          name={name}
-          type="text"
-          readOnly
-          className={css('new-input-group-field')}
-          value={data.name}
-        />
-      )}
-      {inputType === 'text' && (
-        <input
-          value={value}
-          onChange={validatePattern}
-          onBlur={noop}
-          name={name}
-          type="text"
-          style={{
-            backgroundColor: valid ? 'inherit' : '#fa7e6e',
-          }}
-          className={css('new-input-group-field')}
-        />
-      )}
-      <div className={css('new-input-group-button')}>
+    <InputGroup
+      label={
+        <>
+          {data.name}{' '}
+          <Tooltip title={`<pre>${data.description}</pre>`}>
+            <span
+              className={css('small', 'icon', 'icon-common')}
+              data-icon="&#xf129;"
+              aria-label={`description for attribute: ${data.name}`}
+            />
+          </Tooltip>
+        </>
+      }
+      input={
+        <>
+          {inputType === 'select' && (
+            <select
+              className={css('new-input-group-field')}
+              name={name}
+              value={value}
+              onChange={noop}
+              onBlur={noop}
+            >
+              {(schema as OpenAPIParameterSchema).enum?.map((option) => (
+                <option key={option}>{option}</option>
+              ))}
+            </select>
+          )}
+          {inputType === 'checkbox' && (
+            <input
+              name={name}
+              type="text"
+              readOnly
+              className={css('new-input-group-field')}
+              value={data.name}
+            />
+          )}
+          {inputType === 'text' && (
+            <input
+              value={value}
+              onChange={validatePattern}
+              onBlur={noop}
+              name={name}
+              type="text"
+              style={{
+                backgroundColor: valid ? 'inherit' : '#fa7e6e',
+              }}
+              className={css('new-input-group-field')}
+            />
+          )}
+        </>
+      }
+      button={
         <button onClick={onRemove} className={css('button')} ref={buttonEl}>
           X
         </button>
-      </div>
-    </label>
+      }
+    />
   );
 };
 
