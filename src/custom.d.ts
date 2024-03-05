@@ -526,6 +526,11 @@ type RootAPIPayload = {
   };
 };
 
+type EndpointPayload = Record<
+  string,
+  Record<string, number | Record<string, number>>
+>;
+
 type ConservationValue = {
   position: number;
   value: string | number | null;
