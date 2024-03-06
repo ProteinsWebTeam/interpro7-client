@@ -62,6 +62,7 @@ exports[`<DownloadForm /> should render 1`] = `
       </select>
     </label>
     <Memo(Connect(loadData(DBChoiceInputWithoutData)))
+      databases={{}}
       name="description.entry.db"
       onClick={[Function]}
       type="entry"

@@ -62,6 +62,12 @@ const TTL = 3000; // keep notification about copy to clipboard for 3 seconds
 
 type Props = {
   addToast: typeof addToast;
+  fileType: string;
+  url: string;
+  subset: boolean;
+  columns: Array<string>;
+  path2code: (path: string, varName: string) => string;
+  path2perl: (path: string, varName: string) => string;
 };
 
 type State = {

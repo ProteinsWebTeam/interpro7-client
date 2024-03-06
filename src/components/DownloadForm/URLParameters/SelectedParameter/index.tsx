@@ -19,7 +19,7 @@ type Props = {
   dataComponents?: OpenAPIComponents;
   value?: string;
   onRemove: () => void;
-  onChange: (evt: { target: null | HTMLElement }) => void;
+  onChange: (event: FormEvent) => void;
 };
 
 const SelectedParameter = ({
@@ -31,7 +31,7 @@ const SelectedParameter = ({
 }: Props) => {
   const buttonEl = useRef(null);
   useEffect(() => {
-    onChange({ target: buttonEl.current });
+    onChange({ target: buttonEl.current } as unknown as FormEvent);
   }, []);
   if (!data || !dataComponents) return null;
   let schema = data.schema;

@@ -180,8 +180,9 @@ type DownloadState = Record<string, DownloadProgress>;
 type DownloadProgress = {
   progress: number;
   successful: null | boolean;
-  blobURL: unknown;
+  blobURL: string;
   size: null | number;
+  version: number;
 };
 interface InterProTypeProps
   extends React.DetailedHTMLProps<

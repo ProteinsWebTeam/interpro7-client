@@ -25,12 +25,7 @@ type Props = {
   fileType: string;
   subset: boolean;
   entityType: string;
-  download: {
-    progress: number;
-    successful: boolean;
-    blobURL: string;
-    version: number;
-  };
+  download?: DownloadProgress;
   downloadURL?: typeof downloadURL;
   downloadDelete?: typeof downloadDelete;
   isStale?: boolean;
@@ -65,12 +60,14 @@ export class Controls extends PureComponent<Props> {
     const {
       fileType,
       entityType,
-      download: { progress, successful, blobURL, version },
+      download,
       count,
       noData,
       isStale,
       interProVersion,
     } = this.props;
+    if (!download) return null;
+    const { progress, successful, blobURL, version } = download;
     const downloading = Number.isFinite(progress) && !successful;
     return (
       <>

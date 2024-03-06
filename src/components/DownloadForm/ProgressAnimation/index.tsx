@@ -6,17 +6,14 @@ import styles from './style.css';
 const css = cssBinder(styles);
 
 type Props = {
-  download: {
-    progress: number;
-    successful: boolean;
-  };
+  download?: DownloadProgress;
 };
 
 export default class ProgressAnimation extends PureComponent<Props> {
   render() {
-    const {
-      download: { progress, successful },
-    } = this.props;
+    const { download } = this.props;
+    if (!download) return null;
+    const { progress, successful } = download;
     const downloading = Number.isFinite(progress) && !successful;
     let visualProgress = 0;
     if (downloading) {

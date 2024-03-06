@@ -18,7 +18,7 @@ const css = cssBinder(local);
 type Props = {
   type: string;
   search?: Record<string, string>;
-  onChange: (evt: { target: null | HTMLElement }) => void;
+  onChange: (event: FormEvent) => void;
 };
 interface LoadedProps extends Props, LoadDataProps<OpenAPIPayload> {}
 
@@ -30,7 +30,10 @@ const URLParameters = ({ type, data, search, onChange }: LoadedProps) => {
     if (toAdd) setToAdd(null);
   });
   useEffect(() => {
-    return () => (payloadIsReady ? onChange({ target: null }) : undefined);
+    return () =>
+      payloadIsReady
+        ? onChange({ target: null } as unknown as FormEvent)
+        : undefined;
   }, [toRemove]);
   const selectedParameters = Object.keys(search || {});
   if (toAdd) {

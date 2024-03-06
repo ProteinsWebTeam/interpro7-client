@@ -1,11 +1,15 @@
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, { FormEvent, PureComponent, RefObject } from 'react';
+
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import { set } from 'lodash-es';
 
+import loadData from 'higherOrder/loadData/ts';
 import loadable from 'higherOrder/loadable';
+import { Params } from 'higherOrder/loadData/extract-params';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
+import { goToCustomLocation } from 'actions/creators';
 
 import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
@@ -15,39 +19,43 @@ import Estimate from './Estimate';
 import Snippet from './Snippet';
 import Controls from './Controls';
 import ProgressAnimation from './ProgressAnimation';
+import FormatSelector from './FormatSelector';
 import URLParameters from './URLParameters';
 
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-
 import { toPublicAPI } from 'utils/url';
 
 import { columns } from 'web-workers/download/object2TSV';
 
-import { goToCustomLocation } from 'actions/creators';
-import { customLocationSelector } from 'reducers/custom-location';
-import { getUrlForMeta } from 'higherOrder/loadData/defaults';
-import FormatSelector from './FormatSelector';
-import loadData from 'higherOrder/loadData';
-
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import local from './style.css';
 
-const f = foundationPartial(local);
+const css = cssBinder(local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 
-const extractDataFromHash = (hash) => {
+type FileTypes = 'fasta' | 'json' | 'accession' | 'tsv' | '';
+
+const extractDataFromHash = (hash: string) => {
   const [path, fileType, subset] = hash
     .replaceAll('%7C', '|')
     .replaceAll('%26', '&')
     .replaceAll('%3F', '?')
     .split('|');
-  const output = { fileType, subset: !!subset };
+  const validFileTypes = ['fasta', 'json', 'accession', 'tsv'];
+  if (!validFileTypes.includes(fileType))
+    throw new Error('The filetypoe in the URL is invalid');
+  const output: {
+    fileType?: FileTypes;
+    subset: boolean;
+    description?: InterProDescription;
+    search?: Record<string, string>;
+  } = { fileType: fileType as FileTypes, subset: !!subset };
   const [href, params] = path.split('?');
   try {
     output.description = pathToDescription(href);
@@ -62,64 +70,65 @@ const extractDataFromHash = (hash) => {
   return output;
 };
 
-/*:: type Props = {
-  matched: string,
-  api: Object,
-  lowGraphics: boolean,
-  customLocation: Object,
-  goToCustomLocation: function
-}*/
+type Props = {
+  matched: string;
+  api?: ParsedURLServer;
+  lowGraphics?: boolean;
+  customLocation?: InterProLocation;
+  goToCustomLocation?: typeof goToCustomLocation;
+};
 
-export class DownloadForm extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    matched: T.string.isRequired,
-    api: T.object.isRequired,
-    lowGraphics: T.bool.isRequired,
-    customLocation: T.object.isRequired,
-    goToCustomLocation: T.func.isRequired,
-    data: T.shape({
-      loading: T.bool,
-      payload: T.object,
-    }),
-  };
+interface LoadedProps extends Props, LoadDataProps<RootAPIPayload> {}
 
-  /*::  _ref: { current: null | React$ElementRef<'form'> } */
-  constructor(props /*: Props */) {
+export class DownloadForm extends PureComponent<LoadedProps> {
+  _ref: RefObject<HTMLFormElement>;
+  memberDB: DBsInfo;
+
+  constructor(props: LoadedProps) {
     super(props);
     this._ref = React.createRef();
-    this.memberDb = {};
+    this.memberDB = {};
   }
 
   /**
    * This method nadles all the changes of the form in a centralized way.
    * The value of all the elements of the form is read, and use to create the hash of the current URL.
    * The URL formed in the hash is the corresponding API call to the selections in the form.
-   * @param {Event} e The triggered event
+   * @param {Event} event The triggered event
    */
   // eslint-disable-next-line complexity, max-statements
-  _handleChange = (e) => {
+  _handleChange = (event?: FormEvent) => {
     if (!this._ref.current) return;
-    const object = {};
+    const object: {
+      description: InterProPartialDescription;
+      search?: Record<string, string>;
+      subset?: boolean;
+      fileType?: string;
+    } = {
+      description: {},
+    };
+    const target = event?.target as HTMLElement;
     // Only the add filters buttons trigger this method directly
-    if (e.target instanceof HTMLButtonElement) {
-      set(object, e.target.dataset.key, !!e.target.dataset.value);
+    if (target instanceof HTMLButtonElement) {
+      set(object, target.dataset.key || '', !!target.dataset.value);
       // To remove a filter
-      if (!e.target.dataset.value) {
+      if (!target.dataset.value) {
         for (const input of this._ref.current.querySelectorAll(
-          `input[data-reset="${e.target.dataset.reset}"], input[name="${e.target.dataset.key}"], select[name="${e.target.dataset.key}"]`,
+          `input[data-reset="${target.dataset.reset}"], input[name="${target.dataset.key}"], select[name="${target.dataset.key}"]`,
         )) {
-          input.value = '';
+          (input as HTMLInputElement).value = '';
         }
       }
     }
-    for (const { name, value, type, checked } of this._ref.current.elements) {
+    for (const element of this._ref.current.elements) {
+      const { name, value, type, checked } = element as HTMLInputElement;
       if (name) {
         // Form names use dot notation that correespond to the custom location.
         // e.g description.main.key => {description: {main: {key: value}}}
         set(object, name, type === 'checkbox' ? checked : value);
       }
     }
-    if (e.target?.name === 'description.main.key') {
+    if ((target as HTMLSelectElement)?.name === 'description.main.key') {
       // reset the search parameters if there is a change of main type.
       object.search = {};
     }
@@ -132,14 +141,19 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
       object.description.entry.integration = null;
     }
     // The main cannot be a filter:
-    set(object.description, [object.description.main.key, 'isFilter'], null);
+    set(
+      object.description,
+      [object.description.main?.key || '', 'isFilter'],
+      null,
+    );
     let path;
+    const classNames = css('invalid-accession').split(' ');
     try {
       // create a path based in the constructed object
       path = descriptionToPath(object.description);
-      e?.target?.classList && e.target.classList.remove(f('invalid-accession'));
+      target?.classList && target.classList.remove(...classNames);
     } catch {
-      e?.target?.classList && e.target.classList.add(f('invalid-accession'));
+      target?.classList && target.classList.add(...classNames);
       return;
     }
     if (object.search && Object.keys(object.search).length) {
@@ -154,22 +168,23 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
       object.subset &&
       !(
         object.fileType === 'fasta' &&
-        object.description.entry.isFilter &&
-        object.description.entry.accession
+        object.description.entry?.isFilter &&
+        object.description.entry?.accession
       )
     ) {
       object.subset = false;
     }
     if (
       object.fileType === 'fasta' &&
-      object.description.main.key !== 'protein'
+      object.description.main?.key !== 'protein'
     ) {
       // Since we can only have fasta type for proteins, change type to default
       object.fileType = 'accession';
     }
     if (
       (object.fileType === 'fasta' || object.fileType === 'accession') &&
-      !object.description[object.description.main.key].db
+      object.description.main &&
+      !(object.description[object.description.main.key] as EndpointLocation)?.db
     ) {
       // Since we can only have counter objects in JSON, change type to default
       object.fileType = 'json';
@@ -177,8 +192,8 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     const nextHash = [path, object.fileType, object.subset && 'subset']
       .filter(Boolean)
       .join('|');
-    if (nextHash !== this.props.customLocation.hash) {
-      this.props.goToCustomLocation({
+    if (nextHash !== this.props.customLocation?.hash) {
+      this.props.goToCustomLocation?.({
         ...this.props.customLocation,
         hash: nextHash,
       });
@@ -187,10 +202,16 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
 
   render() {
     const { matched, api, lowGraphics, data } = this.props;
-
-    const { description, search, fileType, subset } =
-      extractDataFromHash(matched);
+    if (!data || !api) return null;
+    const {
+      description,
+      search,
+      fileType: ft,
+      subset,
+    } = extractDataFromHash(matched);
     if (!description) return null;
+
+    const fileType = ft || 'json';
 
     const endpoint = toPublicAPI(
       format({
@@ -206,20 +227,24 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
     );
 
     const typeObjects = Object.entries(description).filter(
-      ([, { isFilter }]) => isFilter !== undefined,
+      ([, ep]) => (ep as EndpointLocation).isFilter !== undefined,
     );
 
-    const filters = typeObjects.filter(([, type]) => type.isFilter);
+    const filters = typeObjects.filter(
+      ([, type]) => (type as EndpointLocation).isFilter,
+    );
 
     const main = description.main.key || 'entry';
-    const secondary = filters.length && filters[0][0];
+    const secondary = filters.length && (filters[0][0] as Endpoint);
     let columnKey =
       secondary && description[secondary].accession
         ? `${main}${secondary[0].toUpperCase()}${secondary.slice(1)}`
         : main;
-    if (!columns[columnKey]) columnKey = main;
+    // @ts-ignore: Needs to be updated when the object2TSV is migrated
+    const endpointColumns = columns[columnKey];
+    if (!endpointColumns) columnKey = main;
 
-    const path2code = (path, varName) => {
+    const path2code = (path: string, varName: string) => {
       const parts = path.split('[*]');
       const selector = parts[0]
         .split(/(\[\d\])/)
@@ -239,7 +264,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
       data?.payload?.databases?.interpro?.version || 0,
     );
 
-    const path2perl = (path, varName) => {
+    const path2perl = (path: string, varName: string) => {
       const parts = path.split('[*]');
       const selector = parts[0]
         .split(/(\[\d\])/)
@@ -248,16 +273,18 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
         .map((part) => (part.startsWith('[') ? part : `->{"${part}"}`))
         .join('');
       if (parts.length > 1) {
-        return `${parts[1]}, ${varName}${selector}`.replace(/[\[\]]/g, '');
+        return `${parts[1]}, ${varName}${selector}`.replace(/[[]]/g, '');
       }
       return `${varName}${selector}`;
     };
+
+    const mainEndpoint = description[main] as EndpointLocation;
 
     return (
       <form
         onChange={this._handleChange}
         ref={this._ref}
-        className={f('download-form')}
+        className={css('download-form')}
       >
         <h4>Select data</h4>
         <SchemaOrgData
@@ -268,7 +295,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
           }}
           processData={schemaProcessDataPageSection}
         />
-        <fieldset className={f('fieldset')}>
+        <fieldset className={css('fieldset')}>
           <legend>Main data type</legend>
           <label>
             Choose a main data type:
@@ -282,10 +309,8 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
           </label>
           <DBChoiceInput
             type={main}
-            value={(description[main].db || '').toLowerCase()}
-            valueIntegration={(
-              description[main].integration || ''
-            ).toLowerCase()}
+            value={(mainEndpoint.db || '').toLowerCase()}
+            valueIntegration={(mainEndpoint.integration || '').toLowerCase()}
             name={`description.${main}.db`}
             onClick={this._handleChange}
             databases={this.memberDB}
@@ -296,20 +321,21 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
             onChange={this._handleChange}
           />
         </fieldset>
-        <fieldset className={f('fieldset')}>
+        <fieldset className={css('fieldset')}>
           <legend>Filters</legend>
           <div>
             Add a filter:
-            <div className={f('button-group')}>
+            <div className={css('button-group')}>
               {typeObjects
                 .filter(
-                  ([type]) => type !== main && !description[type].isFilter,
+                  ([type]) =>
+                    type !== main && !description[type as Endpoint].isFilter,
                 )
                 .map(([type]) => (
                   <button
                     key={type}
                     type="button"
-                    className={f('button')}
+                    className={css('button')}
                     value={type}
                     data-key={`description.${type}.isFilter`}
                     data-value
@@ -319,13 +345,13 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                   </button>
                 ))}
             </div>
-            <ul className={f('no-bullet')}>
+            <ul className={css('no-bullet')}>
               {filters.map(([key, value]) => (
                 <li key={key}>
-                  <fieldset className={f('fieldset')}>
+                  <fieldset className={css('fieldset')}>
                     <legend>{key}</legend>
-                    <label className={f('input-group')}>
-                      <span className={f('input-group-label')}>
+                    <label className={css('input-group')}>
+                      <span className={css('input-group-label')}>
                         filter type:
                       </span>
                       <input
@@ -333,13 +359,13 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                         readOnly
                         value={key}
                         name={`description.${key}.isFilter`}
-                        className={f('input-group-field')}
+                        className={css('input-group-field')}
                       />
-                      <div className={f('input-group-button')}>
+                      <div className={css('input-group-button')}>
                         <button
                           type="button"
                           data-key={`description.${key}.isFilter`}
-                          className={f('button')}
+                          className={css('button')}
                           onClick={this._handleChange}
                         >
                           x
@@ -348,28 +374,33 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                     </label>
                     <DBChoiceInput
                       type={key}
-                      value={(value.db || '').toLowerCase()}
-                      valueIntegration={(value.integration || '').toLowerCase()}
+                      value={(
+                        (value as EndpointLocation).db || ''
+                      ).toLowerCase()}
+                      valueIntegration={(
+                        (value as EndpointLocation).integration || ''
+                      ).toLowerCase()}
                       name={`description.${key}.db`}
                       onClick={this._handleChange}
+                      databases={this.memberDB}
                     />
-                    <label className={f('input-group')}>
-                      <span className={f('input-group-label')}>
+                    <label className={css('input-group')}>
+                      <span className={css('input-group-label')}>
                         {key} accession:
                       </span>
                       <input
                         type="text"
-                        disabled={!description[key].db}
-                        defaultValue={value.accession}
+                        disabled={!description[key as Endpoint].db}
+                        defaultValue={(value as EndpointLocation).accession}
                         name={`description.${key}.accession`}
-                        className={f('input-group-field')}
+                        className={css('input-group-field')}
                         data-reset={`description.${key}`}
                       />
-                      <div className={f('input-group-button')}>
+                      <div className={css('input-group-button')}>
                         <button
                           type="button"
                           data-key={`description.${key}.accession`}
-                          className={f('button')}
+                          className={css('button')}
                           onClick={this._handleChange}
                         >
                           x
@@ -385,10 +416,10 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
         <h4>Select Output Format</h4>
         <FormatSelector
           fileType={fileType}
-          mainEndpoint={description.main.key}
-          hasSelectedDB={!!description?.[description.main.key]?.db}
+          mainEndpoint={description.main.key as Endpoint}
+          hasSelectedDB={!!description?.[description.main.key as Endpoint]?.db}
           hasSelectedAccession={
-            !!description?.[description.main.key]?.accession
+            !!description?.[description.main.key as Endpoint]?.accession
           }
         />
 
@@ -400,20 +431,21 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
           subset={subset}
         >
           {({ data, download, isStale }) => {
+            if (!data) return null;
             const count = (data.payload && data.payload.count) || 0;
-            const { db, integration } = description[main];
+            const { db, integration } = mainEndpoint;
             const noData = count === 0 && (db !== null || integration !== null);
             return (
               <>
                 <Estimate data={data} isStale={isStale} />
                 {/* Only display if the response from the API is a list of items */}
-                {description[main].db && !description[main].accession && (
+                {mainEndpoint.db && !mainEndpoint.accession && (
                   <Snippet
                     fileType={fileType}
                     url={endpoint}
                     subset={subset}
-                    columns={columns[columnKey].map(
-                      (c) =>
+                    columns={endpointColumns.map(
+                      (c: { selector: string; selectorInGroup?: string }) =>
                         `${c.selector}${
                           c.selectorInGroup ? `[*]["${c.selectorInGroup}"]` : ''
                         }`,
@@ -429,7 +461,7 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
                     fileType={fileType}
                     description={description}
                     subset={subset}
-                    isStale={isStale}
+                    isStale={!!isStale}
                     count={count}
                     noData={noData}
                   />
@@ -456,9 +488,9 @@ export class DownloadForm extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  customLocationSelector,
-  (state) => state.settings.api,
-  (state) => state.settings.ui.lowGraphics,
+  (state: GlobalState) => state.customLocation,
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.settings.ui.lowGraphics,
   (customLocation, api, lowGraphics) => ({ customLocation, api, lowGraphics }),
 );
 
@@ -466,4 +498,4 @@ export default loadData({
   getUrl: getUrlForMeta,
   mapStateToProps,
   mapDispatchToProps: { goToCustomLocation },
-})(DownloadForm);
+} as Params)(DownloadForm);

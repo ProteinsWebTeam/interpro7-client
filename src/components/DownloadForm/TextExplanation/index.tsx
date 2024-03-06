@@ -137,7 +137,7 @@ const TextExplanation = ({
     } else {
       explanation = (
         <p>
-          This {format2label[fileType || 'accession']} file will contain{' '}
+          This <b>{format2label[fileType || 'accession']}</b> file will contain{' '}
           {getMainFragment(description, count)} {filterText}.
         </p>
       );

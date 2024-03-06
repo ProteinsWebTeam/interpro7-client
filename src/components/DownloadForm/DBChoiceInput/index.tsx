@@ -48,7 +48,7 @@ const payloadToOptions = (
 type Props = {
   type: string;
   onClick: () => void;
-  isIntegration: boolean;
+  isIntegration?: boolean;
   name: string;
   value: string;
   valueIntegration: string;
@@ -62,7 +62,7 @@ export const DBChoiceInputWithoutData = (props: LoadedProps) => {
     type,
     data,
     onClick,
-    isIntegration,
+    isIntegration = false,
     name,
     value,
     valueIntegration,

@@ -4,7 +4,7 @@ import loadData from 'higherOrder/loadData/ts';
 import { Params } from 'higherOrder/loadData/extract-params';
 
 type ChildrenFnProps = {
-  data?: RequestedData<unknown>;
+  data?: RequestedData<PayloadList<unknown>>;
   download?: DownloadProgress;
   isStale?: boolean;
 };
@@ -18,7 +18,7 @@ type Props = {
   [otherProp: string]: unknown;
 };
 
-interface LoadedProps extends Props, LoadDataProps<unknown> {}
+interface LoadedProps extends Props, LoadDataProps<PayloadList<unknown>> {}
 
 export const DataPreviewProviderWithoutData = ({
   children,

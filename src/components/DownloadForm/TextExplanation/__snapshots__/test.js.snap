@@ -7,7 +7,9 @@ exports[`<TextExplanation /> should render 1`] = `
   </h6>
   <p>
     This 
-    Text (List of Accessions)
+    <b>
+      Text (List of Accessions)
+    </b>
      file will contain
      
     <React.Fragment>
