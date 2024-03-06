@@ -1,28 +1,18 @@
-// @flow
-/* eslint-disable no-magic-numbers */
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
-import classnames from 'classnames/bind';
+import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
 
-const s = classnames.bind(styles);
+const css = cssBinder(styles);
 
-/*:: type Props = {
+type Props = {
   download: {
-    progress: number,
-    successful: boolean
-  }
-};
-*/
-export default class ProgressAnimation extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    download: T.shape({
-      progress: T.number,
-      successful: T.bool,
-    }).isRequired,
+    progress: number;
+    successful: boolean;
   };
+};
 
+export default class ProgressAnimation extends PureComponent<Props> {
   render() {
     const {
       download: { progress, successful },
@@ -60,25 +50,25 @@ export default class ProgressAnimation extends PureComponent /*:: <Props> */ {
           </defs>
         </svg>
         <div
-          className={s('main-container')}
+          className={css('main-container')}
           style={{ opacity: downloading ? 1 : 0 }}
         >
-          <div className={s('filter-container', 'absolute')}>
-            <div className={s('left', 'side', 'absolute')} />
+          <div className={css('filter-container', 'absolute')}>
+            <div className={css('left', 'side', 'absolute')} />
             <div
-              className={s('moving-container', 'absolute')}
+              className={css('moving-container', 'absolute')}
               style={{ transform: `translateX(${visualProgress * 100}%)` }}
             >
-              <div className={s('trail', 'absolute')} />
-              <div className={s('trail', 'ball', 'absolute')} />
-              <div className={s('progress', 'ball', 'absolute')}>
+              <div className={css('trail', 'absolute')} />
+              <div className={css('trail', 'ball', 'absolute')} />
+              <div className={css('progress', 'ball', 'absolute')}>
                 <span>{Math.floor((progress || 0) * 100)}%</span>
               </div>
             </div>
-            <div className={s('right', 'side', 'absolute')} />
+            <div className={css('right', 'side', 'absolute')} />
           </div>
-          <div className={s('left', 'side', 'absolute')} />
-          <div className={s('right', 'side', 'absolute')} />
+          <div className={css('left', 'side', 'absolute')} />
+          <div className={css('right', 'side', 'absolute')} />
         </div>
       </>
     );
