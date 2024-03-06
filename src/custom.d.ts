@@ -88,6 +88,7 @@ type EndpointPartialLocation = {
   accession?: string;
   detail?: string;
   order?: number | null;
+  integration?: string | null;
 };
 type InterProDescription = Required<
   InterProPartialDescription<EndpointLocation>

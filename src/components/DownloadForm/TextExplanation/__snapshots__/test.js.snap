@@ -11,9 +11,9 @@ exports[`<TextExplanation /> should render 1`] = `
      file will contain
      
     <React.Fragment>
-      <Highlight>
+      <b>
         a list
-      </Highlight>
+      </b>
        of approximately
        
       <Memo(Connect(NumberComponent))
@@ -22,13 +22,13 @@ exports[`<TextExplanation /> should render 1`] = `
         36713
       </Memo(Connect(NumberComponent))>
        
-      <Highlight>
+      <b>
         InterPro
-      </Highlight>
+      </b>
        
-      <Highlight>
+      <b>
         entries
-      </Highlight>
+      </b>
     </React.Fragment>
      
     

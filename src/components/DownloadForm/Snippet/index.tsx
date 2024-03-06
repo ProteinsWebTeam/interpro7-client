@@ -9,10 +9,8 @@ import js from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
 import perl from 'react-syntax-highlighter/dist/esm/languages/hljs/perl';
 import docco from 'react-syntax-highlighter/dist/esm/styles/hljs/docco';
 
-// $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
 import blockEvent from 'utils/block-event';
-
 import { addToast } from 'actions/creators';
 
 import jsRaw from 'raw-loader!../../../snippets/template.js.tmpl';
