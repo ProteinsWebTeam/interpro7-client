@@ -509,6 +509,7 @@ type RequestedData<Payload> = {
   status: null | number;
   payload: null | Payload;
   url: string;
+  headers?: Headers;
 };
 
 type RootAPIPayload = {
@@ -664,7 +665,7 @@ type CancelableRequest<Response = BasicResponse> = {
 type BasicResponse = {
   status: number;
   ok: boolean;
-  headers: Set<string>;
+  headers: Headers;
 };
 
 type BaseLinkProps = {
