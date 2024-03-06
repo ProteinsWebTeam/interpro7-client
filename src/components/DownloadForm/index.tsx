@@ -31,6 +31,7 @@ import { columns } from 'web-workers/download/object2TSV';
 import cssBinder from 'styles/cssBinder';
 
 import local from './style.css';
+import InputGroup from './InputGroup';
 
 const css = cssBinder(local);
 
@@ -350,18 +351,18 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                 <li key={key}>
                   <fieldset className={css('fieldset')}>
                     <legend>{key}</legend>
-                    <label className={css('input-group')}>
-                      <span className={css('input-group-label')}>
-                        filter type:
-                      </span>
-                      <input
-                        type="text"
-                        readOnly
-                        value={key}
-                        name={`description.${key}.isFilter`}
-                        className={css('input-group-field')}
-                      />
-                      <div className={css('input-group-button')}>
+                    <InputGroup
+                      label="filter type:"
+                      input={
+                        <input
+                          type="text"
+                          readOnly
+                          value={key}
+                          name={`description.${key}.isFilter`}
+                          className={css('input-group-field')}
+                        />
+                      }
+                      button={
                         <button
                           type="button"
                           data-key={`description.${key}.isFilter`}
@@ -370,8 +371,8 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                         >
                           x
                         </button>
-                      </div>
-                    </label>
+                      }
+                    />
                     <DBChoiceInput
                       type={key}
                       value={(
@@ -384,19 +385,19 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                       onClick={this._handleChange}
                       databases={this.memberDB}
                     />
-                    <label className={css('input-group')}>
-                      <span className={css('input-group-label')}>
-                        {key} accession:
-                      </span>
-                      <input
-                        type="text"
-                        disabled={!description[key as Endpoint].db}
-                        defaultValue={(value as EndpointLocation).accession}
-                        name={`description.${key}.accession`}
-                        className={css('input-group-field')}
-                        data-reset={`description.${key}`}
-                      />
-                      <div className={css('input-group-button')}>
+                    <InputGroup
+                      label={`${key} accession:`}
+                      input={
+                        <input
+                          type="text"
+                          disabled={!description[key as Endpoint].db}
+                          defaultValue={(value as EndpointLocation).accession}
+                          name={`description.${key}.accession`}
+                          className={css('input-group-field')}
+                          data-reset={`description.${key}`}
+                        />
+                      }
+                      button={
                         <button
                           type="button"
                           data-key={`description.${key}.accession`}
@@ -405,8 +406,8 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                         >
                           x
                         </button>
-                      </div>
-                    </label>
+                      }
+                    />
                   </fieldset>
                 </li>
               ))}

@@ -5,6 +5,7 @@
   display: flex;
   width: 100%;
   height: var(--group-height);
+  margin-bottom: 3px;
   & > * {
     height: var(--group-height);
     line-height: var(--group-height);
@@ -20,6 +21,7 @@
   color: var(--colors-almost-white);
   background-color: var(--colors-submain);
   border: 1px solid var(--colors-slightgray);
+  margin-left: 2px;
   font-weight: bold;
   padding: 0 1rem;
   &:hover {
