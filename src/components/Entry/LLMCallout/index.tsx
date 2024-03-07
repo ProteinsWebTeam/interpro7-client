@@ -6,7 +6,6 @@ import localStyles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import Link from 'components/generic/Link';
 import Callout from 'components/SimpleCommonComponents/Callout';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import config from 'config';
 
@@ -14,36 +13,17 @@ const css = cssBinder(globalStyles, localStyles, fonts);
 
 type Props = {
   accession: string;
-  hasLLMParagraphs: boolean;
-  hasLLMMetadata: boolean;
 };
 
-const DescriptionLLM = ({
-  accession,
-  hasLLMParagraphs,
-  hasLLMMetadata,
-}: Props) => {
+const LLMCallout = ({ accession }: Props) => {
   if ((accession || '').length === 0) return null;
 
   return (
     <Callout type="warning">
       <div>
-        This entry contains information
-        <Tooltip
-          title={`${hasLLMParagraphs ? 'Description' : ''}${
-            hasLLMParagraphs && hasLLMMetadata ? ', ' : ''
-          }${hasLLMMetadata ? 'Name and Short name' : ''}`}
-        >
-          <sup>
-            <span
-              className={css('icon', 'icon-common')}
-              data-icon="&#xf129;"
-              style={{ fontSize: '0.6rem' }}
-            />
-          </sup>
-        </Tooltip>{' '}
-        that has been generated using an AI language model. Please exercise
-        discretion when interpreting the information provided.
+        This entry contains information that has been generated using an AI
+        language model. Please exercise discretion when interpreting the
+        information provided.
       </div>
       <div
         style={{
@@ -76,4 +56,4 @@ const DescriptionLLM = ({
   );
 };
 
-export default DescriptionLLM;
+export default LLMCallout;

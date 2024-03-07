@@ -6,7 +6,7 @@ import Description, {
   getDescriptionText,
 } from 'components/Description';
 import DescriptionFromIntegrated from 'components/Description/DescriptionFromIntegrated';
-import DescriptionLLM from 'components/Description/DescriptionLLM';
+import LLMCallout from 'components/Entry/LLMCallout';
 import Literature, {
   getLiteratureIdsFromDescription,
   splitCitations,
@@ -140,16 +140,16 @@ const SummaryEntry = ({
       <section className={css('vf-grid', 'summary-grid')}>
         <div className={css('vf-stack')}>
           {hasLLM || hasIntegratedLLM || metadata?.is_llm ? (
-            <DescriptionLLM
-              accession={metadata.accession}
-              hasLLMParagraphs={hasLLM || hasIntegratedLLM}
-              hasLLMMetadata={!!metadata?.is_llm}
-            />
+            <LLMCallout accession={metadata.accession} />
           ) : null}
           {metadata?.source_database?.toLowerCase() === 'interpro' ? (
-            <InterProSubtitle metadata={metadata} />
+            <InterProSubtitle metadata={metadata} hasLLM={metadata?.is_llm} />
           ) : (
-            <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
+            <MemberDBSubtitle
+              metadata={metadata}
+              dbInfo={dbInfo}
+              hasLLM={metadata?.is_llm}
+            />
           )}
 
           <section className={css('vf-stack')}>

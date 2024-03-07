@@ -6,6 +6,10 @@
   font-size: 0.85em;
   text-transform: none;
   user-select: none;
+  &.mini {
+    font-size: 0.7rem;
+    padding: 2px;
+  }
 }
 .vf-badge--tertiary:hover,
 .vf-badge--tertiary:visited {

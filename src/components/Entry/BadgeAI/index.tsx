@@ -26,5 +26,12 @@ const BadgeAI = ({ checked }: Props) => {
     </span>
   );
 };
+export const MiniBadgeAI = () => {
+  return (
+    <sup>
+      <span className={css('vf-badge', 'vf-badge--tertiary', 'mini')}>AI</span>
+    </sup>
+  );
+};
 
 export default BadgeAI;

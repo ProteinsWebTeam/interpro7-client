@@ -18,6 +18,7 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-vf.css';
 import styles from './style.css';
+import { MiniBadgeAI } from '../Entry/BadgeAI';
 
 const css = cssBinder(fonts, ipro, styles);
 
@@ -144,7 +145,7 @@ export class Title extends PureComponent<LoadedProps> {
                 'margin-bottom-large': isIPScanResult,
               })}
             >
-              {longName}{' '}
+              {longName} {(metadata as EntryMetadata).is_llm && <MiniBadgeAI />}
             </h3>
             {
               // Showing Favourites only for InterPro entries for now
