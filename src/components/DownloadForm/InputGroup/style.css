@@ -14,6 +14,10 @@
   & > input {
     padding: 0;
     border: 1px solid var(--colors-slightgray);
+    &[readOnly] {
+      background-color: var(--colors-nearly-white);
+      padding-left: 1rem;
+    }
   }
 }
 .new-input-group-button button {

@@ -359,7 +359,6 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                           readOnly
                           value={key}
                           name={`description.${key}.isFilter`}
-                          className={css('input-group-field')}
                         />
                       }
                       button={
