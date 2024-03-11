@@ -50,13 +50,13 @@ const SelectedParameter = ({
   if (ref) {
     const key = getTextAfterLastSlash(ref || '');
     schema = dataComponents.schemas[key];
-  } else {
-    const type = (schema as OpenAPIParameterSchema).type;
-    const options = (schema as OpenAPIParameterSchema).enum;
-    if (type === 'string' && options) {
-      inputType = options.length === 1 ? 'checkbox' : 'select';
-    }
   }
+  const type = (schema as OpenAPIParameterSchema).type;
+  const options = (schema as OpenAPIParameterSchema).enum;
+  if (type === 'string' && options) {
+    inputType = options.length === 1 ? 'checkbox' : 'select';
+  }
+
   const validatePattern = (event: FormEvent) => {
     setValid(isValid((event.target as HTMLInputElement).value));
   };

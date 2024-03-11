@@ -29,23 +29,26 @@ export const DataPreviewProviderWithoutData = ({
   return children({ data, download, isStale });
 };
 
-const getMapStateToProps = () =>
-  createSelector(
-    (state: GlobalState) => state.download,
-    (_: GlobalState, { url, fileType, subset }: Props) => ({
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.download,
+  (_: GlobalState, { url, fileType, subset }: Props) => {
+    return {
       url,
       fileType,
       subset,
-    }),
-    (downloads, { url, fileType, subset }) => ({
+    };
+  },
+  (downloads, { url, fileType, subset }) => {
+    return {
       download:
         downloads[
           [url, fileType, subset && 'subset'].filter(Boolean).join('|')
         ] || {},
-    }),
-  );
+    };
+  },
+);
 
 export default loadData({
   getUrl: (_, { url }) => url,
-  mapStateToProps: getMapStateToProps(),
+  mapStateToProps,
 } as Params)(DataPreviewProviderWithoutData);
