@@ -327,6 +327,8 @@ interface EntryMetadata extends Metadata {
     name: string;
   };
   is_removed?: boolean;
+  is_llm?: boolean;
+  is_reviewed_llm?: boolean;
   in_alphafold?: boolean;
   entry_annotations?: Record<string, unknown>;
 }
