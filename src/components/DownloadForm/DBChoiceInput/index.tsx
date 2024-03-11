@@ -118,7 +118,7 @@ export const DBChoiceInputWithoutData = (props: LoadedProps) => {
             className={css('button')}
             onClick={onClick}
           >
-            x
+            Clear
           </button>
         }
       />

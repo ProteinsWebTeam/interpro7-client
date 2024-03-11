@@ -117,7 +117,7 @@ const SelectedParameter = ({
       }
       button={
         <button onClick={onRemove} className={css('button')} ref={buttonEl}>
-          X
+          Remove
         </button>
       }
     />

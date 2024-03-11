@@ -176,14 +176,14 @@ export class Snippet extends PureComponent<Props, State> {
             className={css('button', 'hollow')}
             ref={this._ref}
           >
-            Copy code to clipboard
+            Copy to clipboard
           </button>
           <a
             className={css('button', 'hollow')}
             download={`script-InterPro.${language}`}
             href={href || ''}
           >
-            Download script file
+            Download
           </a>
           {language === 'js' && (
             <Callout type="info">

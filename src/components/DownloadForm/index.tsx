@@ -368,7 +368,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                           className={css('button')}
                           onClick={this._handleChange}
                         >
-                          x
+                          Remove
                         </button>
                       }
                     />
@@ -403,7 +403,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                           className={css('button')}
                           onClick={this._handleChange}
                         >
-                          x
+                          Remove
                         </button>
                       }
                     />
