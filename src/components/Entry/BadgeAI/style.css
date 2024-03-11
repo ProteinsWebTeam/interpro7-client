@@ -1,8 +1,8 @@
 .vf-badge--tertiary {
-  background: #e8e8e8;
+  background: rgba(255, 220, 220, 0.5);
   border-color: transparent;
   border-radius: 0.3em;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(159, 58, 56, 1);
   font-size: 0.85em;
   text-transform: none;
   user-select: none;
@@ -13,7 +13,7 @@
 }
 .vf-badge--tertiary:hover,
 .vf-badge--tertiary:visited {
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(159, 58, 56, 1);
 }
 .vf-badge > .details {
   margin-left: 1em;
