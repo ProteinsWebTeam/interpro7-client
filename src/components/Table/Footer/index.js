@@ -2,10 +2,10 @@
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,2,3,4] }]*/
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import Link from 'components/generic/Link';
 
 import PageSizeSelector from '../PageSizeSelector';
-
+// $FlowFixMe
+import PaginationItem from './PaginationItem';
 import { getCursor } from 'utils/url';
 
 import config from 'config';
@@ -16,59 +16,6 @@ import s from '../style.css';
 
 const f = foundationPartial(s);
 
-const toFunctionFor =
-  (value, key = 'page') =>
-  (customLocation) => ({
-    ...customLocation,
-    // $FlowFixMe
-    search: { ...customLocation.search, [key]: value },
-  });
-
-const scrollToTop = () => {
-  window.scrollTo(0, 0);
-};
-/*:: type Props = {
-  className?: string,
-  value?: number | string,
-  noLink?: boolean,
-  children?: number| string,
-  attributeName?: string,
-}; */
-class PaginationItem extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    className: T.string,
-    attributeName: T.string,
-    value: T.oneOfType([T.number, T.string]),
-    noLink: T.bool,
-    children: T.oneOfType([T.number, T.string]),
-  };
-
-  render() {
-    const {
-      className,
-      attributeName = 'page',
-      value,
-      noLink,
-      children,
-    } = this.props;
-    const LinkOrSpan = !value || noLink ? 'span' : Link;
-    const props = {};
-    if (value) {
-      if (noLink) {
-        props.className = f('no-link');
-      } else {
-        props.to = toFunctionFor(value, attributeName);
-      }
-    }
-    return (
-      <li className={className}>
-        <LinkOrSpan {...props} onClick={() => !noLink && scrollToTop()}>
-          {children || value}
-        </LinkOrSpan>
-      </li>
-    );
-  }
-}
 /*:: type PreviousTextProps = {
   previous: number,
   current: number,
