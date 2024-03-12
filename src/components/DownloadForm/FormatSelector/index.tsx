@@ -1,5 +1,4 @@
 import React from 'react';
-import T from 'prop-types';
 import { noop } from 'lodash-es';
 
 export const format2label = {
@@ -8,12 +7,18 @@ export const format2label = {
   json: 'JSON',
   tsv: 'TSV',
 };
+type Props = {
+  fileType: keyof typeof format2label;
+  mainEndpoint: Endpoint;
+  hasSelectedDB: boolean;
+  hasSelectedAccession: boolean;
+};
 const FormatSelector = ({
   fileType,
   mainEndpoint,
   hasSelectedDB,
   hasSelectedAccession,
-}) => (
+}: Props) => (
   <select
     name="fileType"
     value={fileType || 'accession'}
@@ -28,18 +33,10 @@ const FormatSelector = ({
       {format2label.fasta}
     </option>
     <option value="json">{format2label.json}</option>
-    {/* <option value="ndjson">Newline-delimited JSON</option> */}
     <option value="tsv" disabled={!hasSelectedDB || hasSelectedAccession}>
       {format2label.tsv}
     </option>
-    {/* <option value="xml">XML</option> */}
   </select>
 );
-FormatSelector.propTypes = {
-  fileType: T.string,
-  mainEndpoint: T.string,
-  hasSelectedDB: T.bool,
-  hasSelectedAccession: T.bool,
-};
 
 export default FormatSelector;

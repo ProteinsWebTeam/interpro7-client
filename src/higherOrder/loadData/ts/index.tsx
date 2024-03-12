@@ -21,7 +21,7 @@ const MS = 1000;
 
 const mapStateToState = createSelector(
   (state: unknown) => state,
-  (appState) => ({ appState })
+  (appState) => ({ appState }),
 );
 
 // Props to connect to the wrapper component that are not injected in the wrapped one
@@ -33,7 +33,7 @@ type ConnectedProps = {
 };
 
 const loadData = <Payload = unknown, Namespace extends string = ''>(
-  params?: Params
+  params?: Params,
 ) => {
   const {
     getUrl,
@@ -56,7 +56,7 @@ const loadData = <Payload = unknown, Namespace extends string = ''>(
   });
 
   return <BaseProps extends LoadDataProps<Payload, Namespace>>(
-    Wrapped: React.ComponentType<BaseProps>
+    Wrapped: React.ComponentType<BaseProps>,
   ) => {
     type WrapperProps = ReturnType<typeof mapStateToProps> &
       typeof mapDispatchToProps &
@@ -95,7 +95,7 @@ const loadData = <Payload = unknown, Namespace extends string = ''>(
 
       static getDerivedStateFromProps(
         nextProps: WrapperProps,
-        prevState: WrapperState
+        prevState: WrapperState,
       ) {
         // get potential new url in state according to props
         const url = getUrl?.(nextProps.appState || {}, nextProps) || '';
@@ -157,8 +157,8 @@ const loadData = <Payload = unknown, Namespace extends string = ''>(
             url,
             { ...fetchOptions, signal },
             this._progress,
-            this.props.addToast
-          )
+            this.props.addToast,
+          ),
         );
         // We keep a hold on *this* request, because it might change
         const request = this.#request;
@@ -247,7 +247,10 @@ const loadData = <Payload = unknown, Namespace extends string = ''>(
             <Wrapped
               {...(rest as BaseProps)}
               {...passedProps}
-              {...(mapStateToProps?.(appState, passedProps) || {})}
+              {...(mapStateToProps?.(appState, {
+                ...(rest as BaseProps),
+                ...passedProps,
+              }) || {})}
             />
           </UnconnectedErrorBoundary>
         );

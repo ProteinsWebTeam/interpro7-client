@@ -1,12 +1,20 @@
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React from 'react';
 import { filesize } from 'filesize';
 
 import NumberComponent from 'components/NumberComponent';
 
 const NO_CONTENT = 204;
 
-const getText = ({ loading, payload, ok, status, headers }, isStale) => {
+const getText = (
+  {
+    loading,
+    payload,
+    ok,
+    status,
+    headers,
+  }: RequestedData<PayloadList<unknown>>,
+  isStale: boolean,
+) => {
   if (loading || isStale) return 'Calculating estimate…';
 
   if (!ok) return 'There was an error whilst fetching data.';
@@ -28,7 +36,7 @@ const getText = ({ loading, payload, ok, status, headers }, isStale) => {
     );
   }
 
-  let size = +headers.get('content-length');
+  let size = +(headers?.get('content-length') || 0);
   if (!size) {
     size = JSON.stringify(payload, null, 2).length;
   }
@@ -49,39 +57,16 @@ const getText = ({ loading, payload, ok, status, headers }, isStale) => {
   return 'No estimate available.';
 };
 
-/*:: type Props = {
-  data: {
-   loading: boolean,
-   payload: {
-      count: number,
-      next: any,
-      previous: any
-      },
-      ok: boolean,
-      status: number,
-      headers?: Object
-  },
-   isStale: boolean
-}; */
+interface LoadedProps extends LoadDataProps<PayloadList<unknown>> {}
 
-export default class Estimate extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    data: T.shape({
-      loading: T.bool.isRequired,
-      payload: T.oneOfType([T.arrayOf(T.object), T.object]),
-      ok: T.bool,
-      status: T.number,
-      headers: T.object, // TODO: change back instanceOf(Headers),
-    }).isRequired,
-    isStale: T.bool.isRequired,
-  };
+const Estimate = ({ data, isStale }: LoadedProps) => {
+  if (!data) return null;
+  return (
+    <section>
+      <h6>Estimate</h6>
+      {getText(data, !!isStale)}
+    </section>
+  );
+};
 
-  render() {
-    return (
-      <section>
-        <h6>Estimate</h6>
-        {getText(this.props.data, this.props.isStale)}
-      </section>
-    );
-  }
-}
+export default Estimate;
