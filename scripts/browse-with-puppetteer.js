@@ -7,11 +7,15 @@
  * one generated from the previous release.
  */
 
+/* eslint-disable complexity */
+/* eslint-disable max-statements */
+/* eslint-disable max-depth */
 const puppeteer = require('puppeteer'); // v20.7.4 or later
 
 const DELAY_ON_EACH_PAGE = 1000;
 const NUMBER_OF_RETRIES = 3;
 const TIMEOUT = 30000;
+const WAIT_FOR_COOKIE_BANNER = 6000;
 
 const SHOULD_RUN = {
   interpro: false,
@@ -56,11 +60,11 @@ function delay(milliseconds) {
     const shouldRun = new Set();
     for (const argv of process.argv.slice(2)) {
       const key = argv.substring(2).toLowerCase();
-      if (SHOULD_RUN[key] !== undefined)
-        shouldRun.add(key);
-      else {
+      if (SHOULD_RUN[key] === undefined) {
         console.error(`Error: invalid argument: ${argv}`);
         process.exit(1);
+      } else {
+        shouldRun.add(key);
       }
     }
     for (const key of Object.keys(SHOULD_RUN)) {
@@ -86,7 +90,7 @@ function delay(milliseconds) {
   const clickCookieBanner = async () => {
     const targetPage = page;
     console.log('cookie banner');
-    await delay(6000);
+    await delay(WAIT_FOR_COOKIE_BANNER);
     await locatorRaceClickWithRetries([
       targetPage.locator('::-p-text(I agree, dismiss this banner)'),
     ]);
@@ -328,7 +332,8 @@ function delay(milliseconds) {
             for (const seqStatus of sequenceStatus) {
               console.log(` > > > > Sequence Status: ${seqStatus}`);
               await clickSequenceStatus(seqStatus);
-              // Organisms list is variable so needs to bre treated differently
+              // Organisms list is variable so needs to be treated differently
+              // eslint-disable-next-line no-magic-numbers
               await delay(DELAY_ON_EACH_PAGE * 3);
               await scrollToTop();
               const orgInputs = await page.$$('.list-taxonomy label input');
@@ -450,7 +455,12 @@ function delay(milliseconds) {
       await clickBrowseOption('By Proteome');
       await clickTableView(view);
       console.log(` > View: ${view}`);
-      await delay(DELAY_ON_EACH_PAGE * 2);
+      await delay(DELAY_ON_EACH_PAGE);
+      for (const db of DBS) {
+        console.log(` > > Member DB: ${db}`);
+        await clickMemberDB(db);
+        await delay(DELAY_ON_EACH_PAGE * 2);
+      }
     }
   }
 
@@ -477,6 +487,7 @@ function delay(milliseconds) {
   }
 
   // wait a bit before closing to give time to any pending URL requests
+  // eslint-disable-next-line no-magic-numbers
   await delay(DELAY_ON_EACH_PAGE * 10);
 
   await browser.close();
