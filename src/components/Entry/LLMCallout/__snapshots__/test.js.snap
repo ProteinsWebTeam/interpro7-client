@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<DescriptionLLM /> should render 1`] = `
+exports[`<LLMCallout /> should render 1`] = `
 <Callout
   type="warning"
 >
   <div>
-    The description below includes sections that have been automatically generated using an AI language model. Please exercise discretion when interpreting the information provided.
+    This entry contains information that has been generated using an AI language model. Please exercise discretion when interpreting the information provided.
   </div>
   <div
     style={

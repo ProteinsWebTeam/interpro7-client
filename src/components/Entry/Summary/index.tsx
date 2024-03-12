@@ -6,7 +6,7 @@ import Description, {
   getDescriptionText,
 } from 'components/Description';
 import DescriptionFromIntegrated from 'components/Description/DescriptionFromIntegrated';
-import DescriptionLLM from 'components/Description/DescriptionLLM';
+import LLMCallout from 'components/Entry/LLMCallout';
 import Literature, {
   getLiteratureIdsFromDescription,
   splitCitations,
@@ -88,6 +88,7 @@ const SummaryEntry = ({
   loading,
 }: SummaryEntryProps) => {
   const [integratedCitations, setIntegratedCitations] = useState<string[]>([]);
+  const [hasIntegratedLLM, setHasIntegratedLLM] = useState(false);
   useEffect(() => {
     setIntegratedCitations([]);
   }, [metadata]);
@@ -109,13 +110,11 @@ const SummaryEntry = ({
     (a, b) => desc.indexOf(a[0]) - desc.indexOf(b[0]),
   );
 
-  const selectDescriptionComponent = () => {
+  const selectDescriptionComponent = (hasLLM: boolean) => {
     if ((metadata.description || []).length) {
-      const hasLLM = hasLLMParagraphs(metadata.description || []);
       return (
         <>
           <h4>{headerText || 'Description'}</h4>
-          {hasLLM ? <DescriptionLLM accession={metadata.accession} /> : null}
           <Description
             textBlocks={metadata.description}
             literature={included as Array<[string, Reference]>}
@@ -129,23 +128,32 @@ const SummaryEntry = ({
           integrated={metadata.integrated}
           setIntegratedCitations={setIntegratedCitations}
           headerText={headerText || 'Description'}
+          handleLLMParagraphs={setHasIntegratedLLM}
         />
       );
     }
     return null;
   };
-
+  const hasLLM = hasLLMParagraphs(metadata.description || []);
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
       <section className={css('vf-grid', 'summary-grid')}>
         <div className={css('vf-stack')}>
+          {hasLLM || hasIntegratedLLM || metadata?.is_llm ? (
+            <LLMCallout accession={metadata.accession} />
+          ) : null}
           {metadata?.source_database?.toLowerCase() === 'interpro' ? (
-            <InterProSubtitle metadata={metadata} />
+            <InterProSubtitle metadata={metadata} hasLLM={metadata?.is_llm} />
           ) : (
-            <MemberDBSubtitle metadata={metadata} dbInfo={dbInfo} />
+            <MemberDBSubtitle
+              metadata={metadata}
+              dbInfo={dbInfo}
+              hasLLM={metadata?.is_llm}
+            />
           )}
+
           <section className={css('vf-stack')}>
-            {selectDescriptionComponent()}
+            {selectDescriptionComponent(hasLLM)}
           </section>
         </div>
         <div className={css('vf-stack')}>

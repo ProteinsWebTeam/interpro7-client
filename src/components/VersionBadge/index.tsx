@@ -3,10 +3,14 @@ import T from 'prop-types';
 
 import ColorHash from 'color-hash';
 
+import cssBinder from 'styles/cssBinder';
+import localStyles from './style.css';
+
+const css = cssBinder(localStyles);
+
 // default values for version 1.X of colorhash
 /* eslint-disable no-magic-numbers */
 const colorHash = new ColorHash({
-  hash: 'bkdr',
   saturation: [0.65, 0.35, 0.5],
   lightness: [0.65, 0.35, 0.5],
 });
@@ -15,10 +19,12 @@ const colorHash = new ColorHash({
 const DEFAULT_SIDE = 30;
 const CHANGE_FIGURE_EVERY = 10;
 
-export const VersionBadge = (
-  { version, side = DEFAULT_SIDE } /*: {version: string, side?: number} */,
-) => {
-  const n = parseInt(version / CHANGE_FIGURE_EVERY, 10) - 1;
+type Props = {
+  version: string;
+  side?: number;
+};
+export const VersionBadge = ({ version, side = DEFAULT_SIDE }: Props) => {
+  const n = parseInt(version, 10) / CHANGE_FIGURE_EVERY - 1;
   const r = side / 2;
   const circ = (Math.PI * 2) / n;
   const points = [];
@@ -37,11 +43,16 @@ export const VersionBadge = (
       points.push(`${r + x},${r - y}`);
     }
   }
-  const proportionTextFigure = 0.4;
-  const yCoordForText = 0.65;
+  const celebration = version === '100.0';
+  // The conditional is to adjust for versions 100.0 upwards
+  const proportionTextFigure = version.length < 5 ? 0.4 : 0.32;
+  const yCoordForText = version.length < 5 ? 0.65 : 0.6;
   return (
-    <svg width={side} height={side}>
-      <polygon points={points.join(' ')} fill={colorHash.hex(version)} />
+    <svg width={side} height={side} className={css({ celebration })}>
+      <polygon
+        points={points.join(' ')}
+        fill={celebration ? undefined : colorHash.hex(version)}
+      />
       <text
         x={r}
         y={side * yCoordForText}

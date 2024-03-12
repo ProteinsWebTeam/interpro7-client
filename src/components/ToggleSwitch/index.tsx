@@ -19,6 +19,7 @@ type Props = {
   offValue?: string;
   handleChange?: (evt?: React.ChangeEvent) => void;
   addAccessionStyle?: boolean;
+  width?: string;
 };
 
 const ToggleSwitch = ({
@@ -33,6 +34,7 @@ const ToggleSwitch = ({
   offValue = 'Off',
   handleChange,
   addAccessionStyle = false,
+  width,
 }: Props) => {
   const [isOn, setIsOn] = useState(switchCond);
   useEffect(() => {
@@ -45,6 +47,7 @@ const ToggleSwitch = ({
       setIsOn(!isOn);
     }
   };
+  const paddleStyle = width ? { width } : {};
   return (
     <div className={css('new-switch', size)}>
       <label htmlFor={id}>
@@ -64,6 +67,7 @@ const ToggleSwitch = ({
             addAccessionStyle ? 'accession-selector' : '',
             disabled ? 'disabled' : '',
           )}
+          style={{ ...paddleStyle }}
           htmlFor={id}
         >
           {SRLabel ? (

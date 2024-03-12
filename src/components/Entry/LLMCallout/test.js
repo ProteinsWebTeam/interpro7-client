@@ -1,14 +1,14 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import DescriptionLLM from '.';
+import LLMCallout from '.';
 
 const renderer = new ShallowRenderer();
 const accession = 'PTHR48251';
 
-describe('<DescriptionLLM />', () => {
+describe('<LLMCallout />', () => {
   test('should render', () => {
-    renderer.render(<DescriptionLLM accession={accession} />);
+    renderer.render(<LLMCallout accession={accession} />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 });

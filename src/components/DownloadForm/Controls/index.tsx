@@ -1,72 +1,45 @@
-// @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
-// $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
 
 import { downloadURL, downloadDelete } from 'actions/creators';
 
 import { askNotificationPermission } from 'utils/browser-notifications';
 import blockEvent from 'utils/block-event';
-import { toPlural } from 'utils/pages';
+import { toPlural } from 'utils/pages/toPlural';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
 
-const f = foundationPartial(styles);
+const css = cssBinder(styles);
 
 export const HARD_LIMIT = 50000;
 export const SOFT_LIMIT = 10000;
 
-/*:: type Props = {
-  url: string,
-  fileType: string,
-  subset: boolean,
-  entityType: string,
-  download: {
-    progress: number,
-    successful: boolean,
-    blobURL: string,
-    version: number,
-  },
-  downloadURL: function,
-  downloadDelete: function,
-  isStale?: boolean,
-  count: number,
-  interProVersion: number,
-  noData: boolean
-};*/
+type Props = {
+  url: string;
+  fileType: string;
+  subset: boolean;
+  entityType: string;
+  download?: DownloadProgress;
+  downloadURL?: typeof downloadURL;
+  downloadDelete?: typeof downloadDelete;
+  isStale?: boolean;
+  count: number;
+  interProVersion: number;
+  noData: boolean;
+};
 
-export class Controls extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    url: T.string.isRequired,
-    fileType: T.string,
-    subset: T.bool.isRequired,
-    entityType: T.string.isRequired,
-    download: T.shape({
-      progress: T.number,
-      successful: T.bool,
-      blobURL: T.string,
-      version: T.string,
-    }).isRequired,
-    downloadURL: T.func.isRequired,
-    downloadDelete: T.func.isRequired,
-    isStale: T.bool,
-    count: T.number.isRequired,
-    interProVersion: T.number.isRequired,
-    noData: T.bool.isRequired,
-  };
-
+export class Controls extends PureComponent<Props> {
   _handleGenerateClick = blockEvent(() => {
     // Request browser notification
     askNotificationPermission();
 
-    this.props.downloadURL(
+    this.props.downloadURL?.(
       this.props.url,
       this.props.fileType,
       this.props.subset,
@@ -74,25 +47,27 @@ export class Controls extends PureComponent /*:: <Props> */ {
     );
   });
 
-  _handleCancelClick = blockEvent(() =>
-    this.props.downloadDelete(
-      this.props.url,
-      this.props.fileType,
-      this.props.subset,
-      this.props.entityType,
-    ),
+  _handleCancelClick = blockEvent(
+    () =>
+      this.props.downloadDelete?.(
+        this.props.url,
+        this.props.fileType,
+        this.props.subset,
+      ),
   );
 
   render() {
     const {
       fileType,
       entityType,
-      download: { progress, successful, blobURL, version },
+      download,
       count,
       noData,
       isStale,
       interProVersion,
     } = this.props;
+    if (!download) return null;
+    const { progress, successful, blobURL, version } = download;
     const downloading = Number.isFinite(progress) && !successful;
     return (
       <>
@@ -109,7 +84,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
           </Callout>
         )}
         {count < HARD_LIMIT ? (
-          <div className={f('text')}>
+          <div className={css('text')}>
             Please generate the file in order to download it.
           </div>
         ) : null}
@@ -123,7 +98,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
             </p>
             <p>
               <Link
-                className={f('button', 'hollow')}
+                className={css('button', 'hollow')}
                 onClick={this._handleCancelClick}
               >
                 Remove the current download
@@ -131,18 +106,19 @@ export class Controls extends PureComponent /*:: <Props> */ {
             </p>
           </Callout>
         )}
-        <div className={f('container')}>
+        <div className={css('container')}>
           <button
             type="button"
-            className={f('button', 'hollow', { warning: count > SOFT_LIMIT })}
+            className={css('button', 'hollow', { warning: count > SOFT_LIMIT })}
             onClick={this._handleGenerateClick}
-            disabled={progress || count > HARD_LIMIT || isStale || noData}
+            disabled={!!progress || count > HARD_LIMIT || isStale || noData}
           >
             Generate
           </button>
           <Link
-            type="button"
-            className={f('button', 'hollow', { warning: count >= SOFT_LIMIT })}
+            className={css('button', 'hollow', {
+              warning: count >= SOFT_LIMIT,
+            })}
             disabled={!successful || count > HARD_LIMIT}
             href={blobURL}
             download={`export.${fileType === 'accession' ? 'txt' : fileType}`}
@@ -152,7 +128,7 @@ export class Controls extends PureComponent /*:: <Props> */ {
           {downloading && (
             <button
               type="button"
-              className={f('button', 'hollow')}
+              className={css('button', 'hollow')}
               onClick={this._handleCancelClick}
             >
               Cancel

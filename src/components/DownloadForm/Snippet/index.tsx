@@ -1,5 +1,4 @@
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, { FormEvent, PureComponent, RefObject } from 'react';
 import { connect } from 'react-redux';
 import { template } from 'lodash-es';
 import ClipboardJS from 'clipboard';
@@ -10,22 +9,21 @@ import js from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
 import perl from 'react-syntax-highlighter/dist/esm/languages/hljs/perl';
 import docco from 'react-syntax-highlighter/dist/esm/styles/hljs/docco';
 
-// $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
 import blockEvent from 'utils/block-event';
-
 import { addToast } from 'actions/creators';
 
 import jsRaw from 'raw-loader!../../../snippets/template.js.tmpl';
 import pythonRaw from 'raw-loader!../../../snippets/template.py.tmpl';
 import perlRaw from 'raw-loader!../../../snippets/template.pl.tmpl';
 
+import cssBinder from 'styles/cssBinder';
+
 import style from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import { foundationPartial } from 'styles/foundation';
 
-const f = foundationPartial(style, fonts, ebiGlobalStyles);
+const css = cssBinder(style, fonts, ebiGlobalStyles);
 
 SyntaxHighlighter.registerLanguage('javascript', js);
 SyntaxHighlighter.registerLanguage('python', python);
@@ -62,38 +60,40 @@ const lut = new Map([
 
 const TTL = 3000; // keep notification about copy to clipboard for 3 seconds
 
-/*:: type Props= {|
-  addToast: function
-|};*/
+type Props = {
+  addToast: typeof addToast;
+  fileType: string;
+  url: string;
+  subset: boolean;
+  columns: Array<string>;
+  path2code: (path: string, varName: string) => string;
+  path2perl: (path: string, varName: string) => string;
+};
 
-/*:: type State= {|
-  language: string,
-  code: ?string,
-  href: ?string
-|};*/
+type State = {
+  language: string;
+  code?: string | null;
+  href?: string | null;
+};
 
-export class Snippet extends PureComponent /*:: <Props, State> */ {
-  /*::
-    _ref: React$ElementRef<'button'>
-    _clipboard: ClipboardJS;
-  */
-  static propTypes = {
-    addToast: T.func.isRequired,
-  };
+export class Snippet extends PureComponent<Props, State> {
+  _ref: RefObject<HTMLButtonElement>;
+  _clipboard?: ClipboardJS;
 
-  constructor(props /*: Props*/) {
+  constructor(props: Props) {
     super(props);
     this.state = { language: 'py', code: null, href: null };
     this._ref = React.createRef();
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     const langInfo = lut.get(prevState.language);
+    if (!langInfo) return null;
     const code = langInfo.template(nextProps).replace(/\n{2,}/g, '\n\n');
 
     if (code === prevState.code) return null;
 
-    URL.revokeObjectURL(prevState.href);
+    if (prevState.href) URL.revokeObjectURL(prevState.href);
     const href = URL.createObjectURL(new Blob([code], { type: langInfo.type }));
 
     return { code, href };
@@ -102,7 +102,7 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
   componentDidMount() {
     if (!this._ref.current) return;
     this._clipboard = new ClipboardJS(this._ref.current, {
-      text: () => this.state.code,
+      text: () => this.state.code || '',
     });
     this._clipboard.on('success', () =>
       this.props.addToast(
@@ -120,7 +120,7 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
           title: 'Error while copying',
           body: 'An error was encountered while trying to copy this snippet of code in your clipboard',
           ttl: TTL,
-          className: f('alert'),
+          className: css('alert'),
         },
         'clipboard',
       ),
@@ -131,9 +131,10 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
     if (this._clipboard) this._clipboard.destroy();
   }
 
-  _handleChange = blockEvent(({ target: { value: language } }) =>
-    this.setState({ language }),
-  );
+  _handleChange = blockEvent(({ target }: FormEvent<HTMLSelectElement>) => {
+    const { value: language } = target as HTMLSelectElement;
+    this.setState({ language });
+  });
 
   render() {
     const { language, code, href } = this.state;
@@ -172,17 +173,17 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
           </label>
           <button
             type="button"
-            className={f('button', 'hollow')}
+            className={css('button', 'hollow')}
             ref={this._ref}
           >
-            Copy code to clipboard
+            Copy to clipboard
           </button>
           <a
-            className={f('button', 'hollow')}
+            className={css('button', 'hollow')}
             download={`script-InterPro.${language}`}
-            href={href}
+            href={href || ''}
           >
-            Download script file
+            Download
           </a>
           {language === 'js' && (
             <Callout type="info">
@@ -191,8 +192,8 @@ export class Snippet extends PureComponent /*:: <Props, State> */ {
               <code>node_modules</code>
             </Callout>
           )}
-          <SyntaxHighlighter language={lut.get(language).syntax} style={docco}>
-            {code}
+          <SyntaxHighlighter language={lut.get(language)?.syntax} style={docco}>
+            {code || ''}
           </SyntaxHighlighter>
         </div>
       </section>

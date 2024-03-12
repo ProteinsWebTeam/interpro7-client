@@ -40,7 +40,6 @@ exports[`<Controls /> should render 1`] = `
       className="button hollow warning"
       disabled={true}
       download="export.undefined"
-      type="button"
     >
       Download
     </Memo(Connect(Link))>

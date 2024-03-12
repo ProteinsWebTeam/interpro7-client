@@ -18,6 +18,11 @@ declare module '*.svg' {
   const content: any;
   export default content;
 }
+declare module '*.tmpl' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
 
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
@@ -64,6 +69,7 @@ declare namespace JSX {
 type GlobalState = {
   customLocation: InterProLocation;
   settings: SettingsState;
+  download: DownloadState;
   [other: string]: any;
 }; // TODO: replace for redux state type
 
@@ -78,10 +84,11 @@ type Endpoint =
 type EndpointLocation = Required<EndpointPartialLocation>;
 type EndpointPartialLocation = {
   isFilter?: boolean | null;
-  db?: string;
-  accession?: string;
-  detail?: string;
+  db?: string | null;
+  accession?: string | null;
+  detail?: string | null;
   order?: number | null;
+  integration?: string | null;
 };
 type InterProDescription = Required<
   InterProPartialDescription<EndpointLocation>
@@ -168,6 +175,16 @@ type LabelUISettings = {
   accession: boolean;
   name: boolean;
   short: boolean;
+};
+
+type DownloadState = Record<string, DownloadProgress>;
+
+type DownloadProgress = {
+  progress: number;
+  successful: null | boolean;
+  blobURL: string;
+  size: null | number;
+  version: number;
 };
 interface InterProTypeProps
   extends React.DetailedHTMLProps<
@@ -265,12 +282,13 @@ type StructuredDescription = {
   checked: boolean;
 };
 
+type MetadataCounter =
+  | number
+  | {
+      [db: string]: number;
+    };
 type MetadataCounters = {
-  [resource: string]:
-    | number
-    | {
-        [db: string]: number;
-      };
+  [resource: string]: MetadataCounter;
 };
 interface Metadata {
   accession: string;
@@ -326,6 +344,10 @@ interface EntryMetadata extends Metadata {
     name: string;
   };
   is_removed?: boolean;
+  is_llm?: boolean;
+  is_reviewed_llm?: boolean;
+  in_alphafold?: boolean;
+  entry_annotations?: Record<string, unknown>;
 }
 
 type SourceOrganism = {
@@ -501,6 +523,7 @@ type RequestedData<Payload> = {
   status: null | number;
   payload: null | Payload;
   url: string;
+  headers?: Headers;
 };
 
 type RootAPIPayload = {
@@ -518,6 +541,11 @@ type RootAPIPayload = {
   };
 };
 
+type EndpointPayload = Record<
+  string,
+  Record<string, number | Record<string, number>>
+>;
+
 type ConservationValue = {
   position: number;
   value: string | number | null;
@@ -530,6 +558,67 @@ type ConservationPayload = Record<
     warnings: Array<string>;
   }
 >;
+
+type OpenAPIReference = {
+  $ref?: string;
+};
+
+type OpenAPIParameterSchema = {
+  type: string;
+  enum?: Array<string>;
+  allowReserved?: boolean;
+  explode?: boolean;
+  style?: string;
+  pattern?: string;
+};
+type OpenAPIParameter = {
+  description: string;
+  in: string;
+  name: string;
+  schema: OpenAPIParameterSchema | OpenAPIReference;
+  allowEmptyValue?: boolean;
+};
+type OpenAPIComponents = {
+  parameters: Record<string, OpenAPIParameter>;
+  responses: Record<string, unknown>;
+  schemas: Record<
+    string,
+    {
+      type: string;
+      enum?: Array<string>;
+    }
+  >;
+};
+type OpenAPIPayload = {
+  components: OpenAPIComponents;
+  info: {
+    description: string;
+    title: string;
+    version: string;
+  };
+  openapi: string;
+  paths: Record<
+    string,
+    {
+      get: {
+        parameters: Array<{
+          $ref?: string;
+          description?: string;
+          name?: string;
+          in?: string;
+          required?: boolean;
+        }>;
+        responses: unknown;
+        summary: string;
+        tags: Array<string>;
+      };
+    }
+  >;
+  servers: Array<{
+    description: string;
+    url: string;
+  }>;
+};
 
 type WikipediaPayload = {
   parse: {
@@ -602,7 +691,7 @@ type CancelableRequest<Response = BasicResponse> = {
 type BasicResponse = {
   status: number;
   ok: boolean;
-  headers: Set<string>;
+  headers: Headers;
 };
 
 type BaseLinkProps = {

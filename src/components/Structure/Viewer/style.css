@@ -9,10 +9,15 @@
       align-items: center;
       justify-content: center;
       height: 88%;
+      max-width: 80vw;
     }
 
     & .structure-label {
       height: 1em;
     }
   }
+}
+
+:global(.split-view) .structure-viewer-ref {
+  max-width: 50vw;
 }

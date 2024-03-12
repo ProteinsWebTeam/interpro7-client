@@ -15,15 +15,15 @@ type Props = {
   accession: string;
 };
 
-const DescriptionLLM = ({ accession }: Props) => {
+const LLMCallout = ({ accession }: Props) => {
   if ((accession || '').length === 0) return null;
 
   return (
     <Callout type="warning">
       <div>
-        The description below includes sections that have been automatically
-        generated using an AI language model. Please exercise discretion when
-        interpreting the information provided.
+        This entry contains information that has been generated using an AI
+        language model. Please exercise discretion when interpreting the
+        information provided.
       </div>
       <div
         style={{
@@ -56,4 +56,4 @@ const DescriptionLLM = ({ accession }: Props) => {
   );
 };
 
-export default DescriptionLLM;
+export default LLMCallout;
