@@ -222,7 +222,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                 {row.remoteID && !row.remoteID.startsWith('imported') && (
                   <CopyToClipboard
                     textToCopy={getIProScanURL(row.remoteID)}
-                    tooltipText="CopyURL"
+                    tooltipText="Copy URL"
                   />
                 )}
               </>

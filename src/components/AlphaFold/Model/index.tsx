@@ -11,6 +11,7 @@ import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 import { Selection } from 'components/Structure/ViewerAndEntries';
@@ -119,16 +120,10 @@ const AlphaFoldModel = ({
         </>
       )}
       {hasMultipleProteins && !isSplitScreen ? (
-        <div className={css('callout', 'primary', 'info')}>
-          <p>
-            <span
-              className={css('icon', 'icon-common', 'icon-info')}
-              data-icon="&#xf129;"
-            />
-            This entry matches several proteins with structure predictions. Use
-            the table below the structure viewer to select another protein.
-          </p>
-        </div>
+        <Callout type="info">
+          This entry matches several proteins with structure predictions. Use
+          the table below the structure viewer to select another protein.
+        </Callout>
       ) : null}
       <SequenceCheck
         proteinAccession={proteinAcc}

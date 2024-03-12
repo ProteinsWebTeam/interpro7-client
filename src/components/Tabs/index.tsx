@@ -14,13 +14,41 @@ import style from './style.css';
 const css = cssBinder(fonts, ipro, style);
 
 type Props = PropsWithChildren<{
+  /**
+   * string that matches one of the children's titles to select that as the active tab
+   */
   selectedTab?: string;
+  /**
+   * Overwriting the funcionality of the tabs to give another functionality when the tab is selected.
+   * Used currently, when the tabs change the URL.
+   * @param tab string that matches one of the children's titles
+   * @returns void
+   */
   onTabSelected?: (tab: string) => void;
 }>;
 
 type State = {
   activeTab: number;
 };
+/**
+ * Children of this component will be considered as the content of the tabs
+ * and the title on each element will be the label of the tab.
+ * e.g.
+ * ```
+ * <Tabs>
+ *       <div title="X">content X</div>,
+ *       <div title="Y">content Y</div>,
+ * </Tabs>
+ * ```
+ * will create something like:
+ * ```
+ * ---------
+ * | X | Y |
+ * -----------------
+ * | Content X     |
+ * -----------------
+ * ```
+ */
 export default class Tabs extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -45,33 +73,26 @@ export default class Tabs extends PureComponent<Props, State> {
     const index = _children.findIndex(
       (ch) =>
         (ch as ReactElement).props.title.toLowerCase() ===
-        selectedTab?.toLowerCase()
+        selectedTab?.toLowerCase(),
     );
     const activeTab = index >= 0 ? index : this.state.activeTab;
     const _child = _children[activeTab] as ReactElement;
     return (
       <div>
-        <ul className={css('tabs', 'main-style')}>
+        <ul className={css('new-tabs', 'main-style')}>
           {_children.map((child, i) => (
             <li
               className={css('tabs-title', { 'is-active': activeTab === i })}
               key={i}
             >
-              <button
-                onClick={this._handleChangeTab(i)}
-                data-testid={
-                  'data-testid' in (child as ReactElement).props
-                    ? (child as ReactElement).props['data-testid']
-                    : null
-                }
-              >
+              <button onClick={this._handleChangeTab(i)}>
                 {(child as ReactElement).props.title}
               </button>
             </li>
           ))}
         </ul>
 
-        <div className={css('tabs', 'tabs-content')}>
+        <div className={css('tab-content')}>
           <div
             className={[
               css('tabs-panel', 'is-active'),

@@ -119,7 +119,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
                       data-testid={`member-database-${canonical}`}
                     >
                       {' '}
-                      <span className={f('card-title')}>{name} </span>
+                      <span className={f('title')}>{name} </span>
                     </Link>
                     <Tooltip title={description}>
                       <span

@@ -114,7 +114,7 @@ export class ByEntryType extends PureComponent /*:: <Props> */ {
                       : null}
                   </span>
                 </interpro-type>
-                <span className={f('card-title')}>{type}</span>
+                <span className={f('title')}>{type}</span>
               </Tooltip>
               <p>
                 <span

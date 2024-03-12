@@ -1,0 +1,181 @@
+.new-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px rgba(0, 0, 0, 0.2) solid;
+  transition: all var(--timing-really-fast) ease-out;
+
+  padding: 1rem;
+  color: #606060;
+  font-family: var(--fonts-system);
+
+  &:hover {
+    box-shadow:
+      0 5px 11px 0 rgba(0, 0, 0, 0.18),
+      0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  & header {
+    text-align: center;
+    & .image {
+      width: 100%;
+      position: relative;
+      transition: opacity var(--timing-really-fast) ease-out;
+      &:has(.card-tag) {
+        min-width: 10rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+    & .image.icon {
+      background-repeat: no-repeat, repeat;
+      background-position:
+        0,
+        100% 0%;
+      background-size: 100%, 2030px;
+      height: 160px;
+      opacity: 0.8;
+    }
+    & .title {
+      font-size: 120%;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      & * {
+        flex-grow: 1;
+      }
+    }
+  }
+  & .subheader {
+    text-align: center;
+    font-size: 80%;
+  }
+
+  & .content {
+    flex-grow: 1;
+    padding: 0.3rem 0.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  & .footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 80%;
+    color: #a0a0a0;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.7rem 0;
+
+    & > div:first-child {
+      flex-grow: 1;
+    }
+    & > div:last-child {
+      text-align: right;
+      text-wrap: nowrap;
+    }
+  }
+
+  & .card-more {
+    opacity: 0.5;
+    align-self: flex-end;
+
+    &:hover {
+      opacity: 1;
+    }
+    & .button-more {
+      font-weight: 900;
+      color: var(--colors-gray);
+      position: relative;
+      min-width: 182px;
+      /* for small screens */
+      border: 2px solid var(--colors-gray);
+      background-color: transparent;
+      padding: 0.85em 1em;
+      /* different unit to be consistent with button class */
+      margin: 0;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1;
+      vertical-align: middle;
+      &:hover {
+        color: var(--colors-dark);
+      }
+    }
+    & .icon.button-more {
+      font-weight: 600; /* bold on just text */
+      &::after,
+      &::before {
+        font-weight: 300; /* keep the icon unbold */
+      }
+    }
+  }
+}
+
+.new-card.compact {
+  padding: 0.5rem 1rem;
+  & header {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.card-tag {
+  position: absolute;
+  font-size: 70%;
+  color: white;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  bottom: -8px;
+  left: 7%;
+  background-color: var(--colors-submain); /*default color*/
+  opacity: 0.9;
+  transition: opacity var(--timing-really-fast) ease-out;
+  min-width: 100px;
+  text-align: center;
+}
+
+/*to move to colors?*/
+.card-tag.tag-publi {
+  background-color: #5daace;
+}
+.card-tag.tag-tuto {
+  background-color: #fab700;
+}
+
+.card-tag.tag-tool {
+  background-color: #3886c1;
+  /*background-color: var(--colors-submain);*/
+  /*background-color: var(--colors-main);*/
+}
+
+.card-tag.tag-focus {
+  /*background-color: #c29880;*/
+  background-color: #ef5f57;
+}
+
+.card-tag.tag-blog {
+  /*background-color: #97a7b4;*/
+  background-color: var(--colors-interpro);
+}
+
+body a.white-link {
+  &,
+  &:active,
+  &:focus,
+  &:hover {
+    color: white;
+  }
+}
+
+.card-info-author .button.hollow.secondary {
+  border-color: transparent;
+  padding: 0.4rem 0;
+}
+.card-info-author .button.hollow.secondary i {
+  display: none;
+}
+.card-info-author .margin-bottom-large {
+  margin: 0;
+}

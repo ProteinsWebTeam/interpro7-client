@@ -7,13 +7,15 @@ exports[`<TextExplanation /> should render 1`] = `
   </h6>
   <p>
     This 
-    Text (List of Accessions)
+    <b>
+      Text (List of Accessions)
+    </b>
      file will contain
      
     <React.Fragment>
-      <Highlight>
+      <b>
         a list
-      </Highlight>
+      </b>
        of approximately
        
       <Memo(Connect(NumberComponent))
@@ -22,13 +24,13 @@ exports[`<TextExplanation /> should render 1`] = `
         36713
       </Memo(Connect(NumberComponent))>
        
-      <Highlight>
+      <b>
         InterPro
-      </Highlight>
+      </b>
        
-      <Highlight>
+      <b>
         entries
-      </Highlight>
+      </b>
     </React.Fragment>
      
     

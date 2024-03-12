@@ -35,7 +35,7 @@ const EntriesOnProtein = ({ matches, match }: Props) => {
         color: getTrackColor(entry, EntryColorMode.ACCESSION),
         entry_type: entry.entry_type,
         type: 'entry',
-      }))
+      })),
     );
   }, [entry, protein]);
 
@@ -63,11 +63,7 @@ const EntriesOnProtein = ({ matches, match }: Props) => {
               locations={locationHovered}
               accession={entry.accession}
               dbName={entry.source_database}
-              name={
-                (entry?.name as NameObject)?.short ||
-                (entry.name as string) ||
-                ''
-              }
+              name={(entry?.name as NameObject)?.short || ''}
             />
           }
           onMouseOverFeature={(locations: Array<ProtVistaLocation>) => {

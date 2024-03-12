@@ -1,0 +1,27 @@
+.container {
+  width: 90%;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  &:has(.marquee) {
+    height: 2rem;
+  }
+  & .marquee {
+    top: 0em;
+    position: relative;
+    box-sizing: border-box;
+    animation: marquee 3s linear infinite;
+    &:hover {
+      animation-play-state: paused;
+    }
+  }
+}
+
+@keyframes marquee {
+  0% {
+    top: 2rem;
+  }
+  100% {
+    top: calc(-2rem + -100%);
+  }
+}

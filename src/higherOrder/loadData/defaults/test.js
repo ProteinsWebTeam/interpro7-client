@@ -182,7 +182,7 @@ describe('getUrlForApi', () => {
       );
       expect(url).toEqual(
         expect.stringMatching(
-          /[?&]extra_fields=description,literature,counters(&|$)/,
+          /[?&]extra_fields=description,literature,counters(:([a-z]+-?)+)?(&|$)/,
         ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page_size=10(&|$)/));
@@ -208,7 +208,7 @@ describe('getUrlForApi', () => {
       );
       expect(url).toEqual(
         expect.stringMatching(
-          /[?&]extra_fields=description,literature,counters(&|$)/,
+          /[?&]extra_fields=description,literature,counters(:([a-z]+-?)+)?(&|$)/,
         ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page=2(&|$)/));
@@ -273,7 +273,9 @@ describe('getUrlForApi', () => {
         ),
       );
       expect(url).toEqual(
-        expect.stringMatching(/[?&]extra_fields=counters(&|$)/),
+        expect.stringMatching(
+          /[?&]extra_fields=counters((:|%3A)([a-z]+-?)+)?(&|$)/,
+        ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page_size=10(&|$)/));
       expect(url.match(/&/g).length).toBe(1);
@@ -293,7 +295,9 @@ describe('getUrlForApi', () => {
         ),
       );
       expect(url).toEqual(
-        expect.stringMatching(/[?&]extra_fields=lineage,counters(&|$)/),
+        expect.stringMatching(
+          /[?&]extra_fields=lineage,counters(:([a-z]+-?)+)?(&|$)/,
+        ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page_size=10(&|$)/));
       expect(url.match(/&/g).length).toBe(1);
@@ -320,7 +324,9 @@ describe('getUrlForApi', () => {
         ),
       );
       expect(url).toEqual(
-        expect.stringMatching(/[?&]extra_fields=counters(&|$)/),
+        expect.stringMatching(
+          /[?&]extra_fields=counters((:|%3A)([a-z]+-?)+)?(&|$)/,
+        ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page_size=10(&|$)/));
       expect(url.match(/&/g).length).toBe(1);
@@ -340,7 +346,9 @@ describe('getUrlForApi', () => {
         ),
       );
       expect(url).toEqual(
-        expect.stringMatching(/[?&]extra_fields=counters(&|$)/),
+        expect.stringMatching(
+          /[?&]extra_fields=counters((:|%3A)([a-z]+-?)+)?(&|$)/,
+        ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page_size=10(&|$)/));
       expect(url.match(/&/g).length).toBe(1);

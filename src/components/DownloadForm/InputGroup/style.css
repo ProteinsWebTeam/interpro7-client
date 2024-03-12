@@ -1,0 +1,41 @@
+@import "../../../styles/colors.css";
+
+.new-input-group {
+  --group-height: 2.5rem;
+  display: flex;
+  width: 100%;
+  height: var(--group-height);
+  margin-bottom: 3px;
+  & > * {
+    height: var(--group-height);
+    line-height: var(--group-height);
+    margin: 0;
+  }
+  & > input {
+    padding: 0;
+    border: 1px solid var(--colors-slightgray);
+    &[readOnly] {
+      background-color: var(--colors-nearly-white);
+      padding-left: 1rem;
+    }
+  }
+}
+.new-input-group-button button {
+  height: var(--group-height);
+  color: var(--colors-almost-white);
+  background-color: var(--colors-submain);
+  border: 1px solid var(--colors-slightgray);
+  margin-left: 2px;
+  font-weight: bold;
+  padding: 0 1rem;
+  &:hover {
+    background-color: var(--colors-submain-darker);
+  }
+}
+.new-input-group-label {
+  padding: 0 1rem;
+  border: 1px solid #cacaca;
+  background: #e6e6e6;
+  color: #0a0a0a;
+  white-space: nowrap;
+}

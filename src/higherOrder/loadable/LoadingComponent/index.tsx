@@ -6,9 +6,9 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import cssBinder from 'styles/cssBinder';
 
 import ipro from 'styles/interpro-vf.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
+import Callout from 'components/SimpleCommonComponents/Callout';
 
-const css = cssBinder(ipro, fonts);
+const css = cssBinder(ipro);
 
 export const LoadingMessage = () => <Loading />;
 LoadingMessage.displayName = 'LoadingMessage';
@@ -23,70 +23,68 @@ async function reload() {
 
 export const ErrorMessage = () => {
   return (
-    <div className={css('vf-stack', 'vf-stack--400', 'callout', 'alert')}>
-      <p>
-        <span
-          className={css('icon', 'icon-common')}
-          data-icon="&#xf071;"
-          style={{ color: '#842029' }}
-        />{' '}
-        <b>
-          An error was encountered while trying to load an element on this page
-        </b>
-        <br />
-        Please use the button below to clear your web browser's cache and reload
-        the page. This may resolve the issue.
-      </p>
-      <button
-        onClick={reload}
-        className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
-      >
-        Clear the cache & reload
-      </button>
-      <p>If this does not solve the issue, clear the cache manually.</p>
-      <details className={css('read-more')}>
-        <summary>Instructions</summary>
-        <div>
-          <h5>Chrome</h5>
-          <ul>
-            <li>
-              <b>Windows/Linux: </b>
-              Hold down Ctrl and click the reload button. Or, hold down Ctrl and
-              press F5
-            </li>
-            <li>
-              <b>Mac: </b>
-              Hold ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd and
-              ⇧ Shift key and then press R.
-            </li>
-          </ul>
-          <h5>Mozilla Firefox</h5>
-          <ul>
-            <li>
-              <b>Windows/Linux: </b>
-              Hold the Ctrl key and press the F5 key. Or, hold down Ctrl and ⇧
-              Shift and then press R.
-            </li>
-            <li>
-              <b>Mac: </b>
-              Hold down the ⇧ Shift and click the reload button. Or, hold down ⌘
-              Cmd and ⇧ Shift and then press R.
-            </li>
-          </ul>
-        </div>
-      </details>
-      <p>
-        If neither options solve the error, please{' '}
-        <Link
-          href="https://www.ebi.ac.uk/support/interpro"
-          target="_blank"
-          withReferrer
+    <Callout type="alert">
+      <div className={css('vf-stack', 'vf-stack--400')}>
+        <p>
+          <b>
+            An error was encountered while trying to load an element on this
+            page
+          </b>
+          <br />
+          Please use the button below to clear your web browser's cache and
+          reload the page. This may resolve the issue.
+        </p>
+        <button
+          onClick={reload}
+          className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
         >
-          contact us
-        </Link>
-        .
-      </p>
-    </div>
+          Clear the cache & reload
+        </button>
+        <p>If this does not solve the issue, clear the cache manually.</p>
+        <details className={css('read-more')}>
+          <summary>Instructions</summary>
+          <div>
+            <h5>Chrome</h5>
+            <ul>
+              <li>
+                <b>Windows/Linux: </b>
+                Hold down Ctrl and click the reload button. Or, hold down Ctrl
+                and press F5
+              </li>
+              <li>
+                <b>Mac: </b>
+                Hold ⇧ Shift and click the reload button. Or, hold down ⌘ Cmd
+                and ⇧ Shift key and then press R.
+              </li>
+            </ul>
+            <h5>Mozilla Firefox</h5>
+            <ul>
+              <li>
+                <b>Windows/Linux: </b>
+                Hold the Ctrl key and press the F5 key. Or, hold down Ctrl and ⇧
+                Shift and then press R.
+              </li>
+              <li>
+                <b>Mac: </b>
+                Hold down the ⇧ Shift and click the reload button. Or, hold down
+                ⌘ Cmd and ⇧ Shift and then press R.
+              </li>
+            </ul>
+          </div>
+        </details>
+        <p>
+          If neither options solve the error, please{' '}
+          <Link
+            href="https://www.ebi.ac.uk/support/interpro"
+            target="_blank"
+            withReferrer
+          >
+            contact us
+          </Link>
+          .
+        </p>
+      </div>
+    </Callout>
   );
 };
 ErrorMessage.displayName = 'ErrorMessage';

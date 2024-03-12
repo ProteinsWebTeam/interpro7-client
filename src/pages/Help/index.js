@@ -30,13 +30,6 @@ const Game = () => (
   <ContentFromRTD page="protein_families_game.rst" format="faq" />
 );
 
-const Publication = loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "help-publication" */ 'components/Help/Publication'
-    ),
-});
-
 const Documentation = loadable({
   loader: () =>
     import(
@@ -44,31 +37,11 @@ const Documentation = loadable({
     ),
 });
 
-const innerRoutes = new Map([['publication', Publication]]);
-
-const innerLocationSelector = (customLocation) =>
-  customLocation.description.other[2];
-
-class InnerSwitch extends PureComponent /*:: <{}> */ {
-  render() {
-    return (
-      <ErrorBoundary>
-        <Switch
-          {...this.props}
-          locationSelector={innerLocationSelector}
-          indexRoute={Documentation}
-          childRoutes={innerRoutes}
-        />
-      </ErrorBoundary>
-    );
-  }
-}
-
 const routes = new Map([
   ['tutorial', Tutorials],
   ['training', Training],
   ['faqs', Faqs],
-  ['documentation', InnerSwitch],
+  ['documentation', Documentation],
   ['protein_families_game', Game],
 ]);
 

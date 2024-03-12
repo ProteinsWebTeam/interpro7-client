@@ -1,6 +1,6 @@
-@import '../../../styles/colors.css';
-@import '../../../styles/timing.css';
-@import '../../../styles/z-index.css';
+@import "../../../styles/colors.css";
+@import "../../../styles/timing.css";
+@import "../../../styles/z-index.css";
 
 .reference {
   /*padding-top: 0.2rem;*/
@@ -27,7 +27,7 @@
   position: relative;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     bottom: 0;
@@ -67,4 +67,7 @@
   & > * {
     break-inside: avoid;
   }
+}
+.margin-right-medium {
+  margin-right: 0.5rem;
 }

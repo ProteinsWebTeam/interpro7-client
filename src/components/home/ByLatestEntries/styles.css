@@ -1,10 +1,10 @@
-.card-wrapper {
+.wrapper {
   display: grid;
   grid-gap: 0.5rem; /* was .8rem*/
   grid-template-columns: 1fr;
 }
 
-.card-wrapper.grid-2col {
+.wrapper.grid-2col {
   grid-template-columns: 1fr 1fr;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }

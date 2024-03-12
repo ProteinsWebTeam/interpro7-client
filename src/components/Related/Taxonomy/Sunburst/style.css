@@ -3,9 +3,11 @@
   flex-wrap: wrap;
 
   & .panel-component {
-    flex-grow: 2;
+    flex-grow: 1;
+    width: 70%;
   }
   & .panel-legends {
+    flex-grow: 1;
     width: 30%;
     padding-left: 1em;
   }
@@ -38,6 +40,15 @@
     & input {
       margin-left: 0.7em;
       margin-right: 0.7em;
+      width: 100%;
+    }
+  }
+}
+
+/* small screen only*/
+@media screen and (max-width: 40em) {
+  .sunburst {
+    & .panel-component {
       width: 100%;
     }
   }

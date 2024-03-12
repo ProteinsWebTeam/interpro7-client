@@ -13,14 +13,14 @@ exports[`<BlogEntries /> Blog entries 1`] = `
     [Function]
   </ResizeObserverComponent>
   <div
-    className="flex-column read-all"
+    className="blogs-container vf-grid read-all"
   >
     <Memo(Connect(Link))
       href="https://proteinswebteam.github.io/interpro-blog"
       target="_blank"
     >
       <div
-        className="button margin-bottom-none"
+        className="vf-button vf-button--secondary vf-button--sm margin-bottom-none"
       >
         Read all articles
       </div>
@@ -30,13 +30,8 @@ exports[`<BlogEntries /> Blog entries 1`] = `
 `;
 
 exports[`<BlogEntry /> Blog entry 1`] = `
-<div
-  className="flex-card"
-  data-testid="blog-entries-box"
->
-  <div
-    className="card-image image-blog-biological"
-  >
+<Card
+  imageComponent={
     <div
       className="card-tag tag-blog"
     >
@@ -52,45 +47,26 @@ exports[`<BlogEntry /> Blog entry 1`] = `
         </Memo(Connect(Link))>
       </Tooltip>
     </div>
-  </div>
+  }
+  imageIconClass="image-blog-biological"
+  linkForMore="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
+  subHeader={<React.Fragment />}
+  title={
+    <Memo(Connect(Link))
+      href="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
+      target="_blank"
+    >
+      Protein Families classification
+    </Memo(Connect(Link))>
+  }
+>
   <div
-    className="card-content"
-  >
-    <div
-      className="card-title"
-    >
-      <h4>
-        <Memo(Connect(Link))
-          href="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
-          target="_blank"
-        >
-          Protein Families classification
-        </Memo(Connect(Link))>
-      </h4>
-    </div>
-    <div
-      className="card-info"
-    />
-    <div
-      className="card-description"
-      dangerouslySetInnerHTML={
-        {
-          "__html": "About InterPro",
-        }
+    className="description"
+    dangerouslySetInnerHTML={
+      {
+        "__html": "About InterPro",
       }
-    />
-  </div>
-  <Memo(Connect(Link))
-    className="card-more"
-    href="https://proteinswebteam.github.io/interpro-blog/2017/10/03/Homologous-superfamily/"
-    target="_blank"
-  >
-    <div
-      className="button-more icon icon-common icon-right"
-      data-icon=""
-    >
-      Read more
-    </div>
-  </Memo(Connect(Link))>
-</div>
+    }
+  />
+</Card>
 `;

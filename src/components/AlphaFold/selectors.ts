@@ -4,10 +4,7 @@ import { format } from 'url';
 export const getAlphaFoldPredictionURL = createSelector(
   (state: GlobalState) => state.settings.alphafold,
   (state: GlobalState) => state.customLocation.description.protein.accession,
-  (
-    { protocol, hostname, port, root, query }: ParsedURLServer,
-    accession: string
-  ) => {
+  ({ protocol, hostname, port, root, query }, accession) => {
     return format({
       protocol,
       hostname,
@@ -15,19 +12,19 @@ export const getAlphaFoldPredictionURL = createSelector(
       pathname: `${root}api/prediction/${accession}`,
       query: query,
     });
-  }
+  },
 );
 type StartsWithData = `data${string}`;
 export const getConfidenceURLFromPayload = (namespace: string) =>
   createSelector(
     (
       _: GlobalState,
-      props: { [d: StartsWithData]: RequestedData<AlphafoldPayload> }
+      props: { [d: StartsWithData]: RequestedData<AlphafoldPayload> },
     ) => props[`data${namespace}`],
     (dataPrediction: RequestedData<AlphafoldPayload>) => {
       const cifURL = dataPrediction?.payload?.[0]?.cifUrl;
       return cifURL?.length
         ? cifURL.replace('-model', '-confidence').replace('.cif', '.json')
         : null;
-    }
+    },
   );

@@ -1,7 +1,7 @@
-@import '../../../../styles/timing.css';
-@import '../../../../styles/fonts.css';
+@import "../../../../styles/timing.css";
+@import "../../../../styles/fonts.css";
 
-.card-wrapper {
+.wrapper {
   display: grid;
   grid-gap: 14px;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -20,5 +20,7 @@
 }
 
 .grid-card:hover {
-  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 5px 11px 0 rgba(0, 0, 0, 0.18),
+    0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }

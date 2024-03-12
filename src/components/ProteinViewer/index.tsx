@@ -81,12 +81,19 @@ export type ExtendedFeature = Feature & {
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = PropsWithChildren<{
+  /** data for the protein to display */
   protein: { accession: string; length: number; sequence: string };
+  /** The title at the top left corner */
   title: string;
+  /** The data of the entry matches */
   data: ProteinViewerData;
+  /** `DISABLED` - conservation data is currently disabled */
   showConservationButton?: boolean;
+  /** `DISABLED` - conservation data is currently disabled */
   handleConservationLoad?: () => void;
+  /** `DISABLED` - conservation data is currently disabled */
   conservationError?: string;
+  /** TO include loading animation in the header */
   loading: boolean;
 }>;
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}

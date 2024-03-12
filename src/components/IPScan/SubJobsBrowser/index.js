@@ -10,9 +10,10 @@ import Link from 'components/generic/Link';
 
 import { foundationPartial } from 'styles/foundation';
 import theme from 'styles/theme-interpro.css';
+import blocks from 'styles/blocks.css';
 import style from './style.css';
 
-const f = foundationPartial(theme, style);
+const f = foundationPartial(theme, style, blocks);
 
 /*::
 type Props ={
@@ -52,7 +53,7 @@ const SubJobsBrowser = ({ jobs, accession } /*: Props */) => {
   const scrollNext = () => scroll(true);
   const scrollPrev = () => scroll(false);
   return (
-    <section className={f('callout', 'jobs-browser')}>
+    <section className={f('simple-box', 'jobs-browser')}>
       <header>
         This result was part of a multiple ({jobs.length}) sequence job. You can
         choose another sequence below:

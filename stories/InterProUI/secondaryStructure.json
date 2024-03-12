@@ -1,0 +1,20 @@
+[
+  {
+    "locations": [
+      {
+        "fragments": [
+          { "shape": "helix", "start": 4, "end": 19, "fill": "transparent" }
+        ]
+      },
+      {
+        "fragments": [
+          { "shape": "strand", "start": 34, "end": 79, "fill": "red" }
+        ]
+      }
+    ],
+    "type": "secondary_structure",
+    "accession": "Chain A",
+    "source_database": "PDB",
+    "chain": "A"
+  }
+]

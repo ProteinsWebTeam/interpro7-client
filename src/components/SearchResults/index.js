@@ -14,6 +14,8 @@ import Table, {
 } from 'components/Table';
 import ExactMatch from 'components/SearchResults/ExactMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
@@ -89,10 +91,10 @@ export class SearchResults extends PureComponent /*:: <Props> */ {
       return (
         <>
           <ExactMatch searchValue={searchValue} />
-          <div className={f('callout', 'info', 'withicon')}>
+          <Callout type="info">
             Your search for <strong>{searchValue}</strong> did not match any
             InterPro entries.
-          </div>
+          </Callout>
         </>
       );
     }

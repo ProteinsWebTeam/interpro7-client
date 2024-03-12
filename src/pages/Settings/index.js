@@ -6,6 +6,8 @@ import { createSelector } from 'reselect';
 
 // $FlowFixMe
 import ToggleSwitch from 'components/ToggleSwitch';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 import { DEV } from 'config';
 
 import { noop } from 'lodash-es';
@@ -148,11 +150,11 @@ const NotificationSettings = (
       <div className={f('row')}>
         <div className={f('medium-12', 'column')}>
           {status === 'answered' ? (
-            <div className={f('callout')}>
+            <Callout type="info">
               The browser notification has been {Notification.permission}{' '}
               permission. If you wish to change the preference, it has to be
               done in the browser settings.
-            </div>
+            </Callout>
           ) : (
             <>
               <p>

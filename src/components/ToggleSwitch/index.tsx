@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { noop } from 'lodash-es';
+import React, { useState, useEffect } from 'react';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -12,7 +10,7 @@ const css = cssBinder(fonts, local);
 type Props = {
   name?: string;
   id: string;
-  size?: string;
+  size?: 'large' | 'small' | 'tiny';
   switchCond: boolean;
   disabled?: boolean;
   label?: string;
@@ -21,6 +19,7 @@ type Props = {
   offValue?: string;
   handleChange?: (evt?: React.ChangeEvent) => void;
   addAccessionStyle?: boolean;
+  width?: string;
 };
 
 const ToggleSwitch = ({
@@ -33,19 +32,32 @@ const ToggleSwitch = ({
   SRLabel,
   onValue = 'On',
   offValue = 'Off',
-  handleChange = noop,
+  handleChange,
   addAccessionStyle = false,
+  width,
 }: Props) => {
+  const [isOn, setIsOn] = useState(switchCond);
+  useEffect(() => {
+    setIsOn(switchCond);
+  }, [switchCond]);
+  const onInputChange = (evt?: React.ChangeEvent) => {
+    if (handleChange) {
+      handleChange(evt);
+    } else {
+      setIsOn(!isOn);
+    }
+  };
+  const paddleStyle = width ? { width } : {};
   return (
-    <div className={css('switch', size)}>
+    <div className={css('new-switch', size)}>
       <label htmlFor={id}>
         <input
           type="checkbox"
-          checked={switchCond}
+          checked={isOn}
           className={css('switch-input')}
           name={name}
           id={id}
-          onChange={handleChange}
+          onChange={onInputChange}
           disabled={disabled}
         />
         {label}
@@ -55,6 +67,7 @@ const ToggleSwitch = ({
             addAccessionStyle ? 'accession-selector' : '',
             disabled ? 'disabled' : '',
           )}
+          style={{ ...paddleStyle }}
           htmlFor={id}
         >
           {SRLabel ? (

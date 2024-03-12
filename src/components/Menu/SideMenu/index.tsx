@@ -24,7 +24,7 @@ const css = cssBinder(helperClasses, style);
 
 type Props = {
   visible: boolean;
-  mainAccession?: string;
+  mainAccession?: string | null;
   mainType?: string;
   closeSideNav: typeof closeSideNav;
   showConnectionStatusToast: boolean;

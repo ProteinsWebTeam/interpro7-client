@@ -1,11 +1,9 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import Estimate from '.';
 
 const renderer = new ShallowRenderer();
-// const myHeaders = new Headers({'client-cache': true});
 
 describe('<Estimate />', () => {
   test('should render', () => {
@@ -20,7 +18,6 @@ describe('<Estimate />', () => {
           },
           ok: true,
           status: 200,
-          // headers: myHeaders
         }}
         isStale={false}
       />,

@@ -33,7 +33,7 @@ type SectionProps = {
 const ReferenceSection = ({ accessions, name, description }: SectionProps) =>
   name !== 'pdb' ? (
     <li className={css('xref-section', 'small')}>
-      <h5 className={css('text-up')}>
+      <h5>
         {name}{' '}
         <Tooltip title={description}>
           <span
@@ -57,7 +57,7 @@ type Props = {
 export default class CrossReferences extends PureComponent<Props> {
   render() {
     const databases = Object.entries(this.props.xRefs).sort(
-      ([_, a], [__, b]) => a.rank - b.rank
+      ([_, a], [__, b]) => a.rank - b.rank,
     );
     return (
       <div className={css('vf-grid')}>
@@ -74,7 +74,7 @@ export default class CrossReferences extends PureComponent<Props> {
                 description={description}
                 accessions={accessions}
               />
-            )
+            ),
           )}
         </AnimatedEntry>
       </div>

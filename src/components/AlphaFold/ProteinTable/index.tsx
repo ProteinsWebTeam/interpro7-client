@@ -75,10 +75,10 @@ const ProteinTable = ({
               {row.source_database === 'reviewed' ? (
                 <>
                   {'\u00A0' /* non-breakable space */}
-                  <Tooltip title="Reviewed by UniProt curators (Swiss-Prot)">
+                  <Tooltip title="Reviewed by UniProtKB curators">
                     <span
                       className={f('icon', 'icon-common')}
-                      data-icon="&#xf00c;"
+                      data-icon="&#xf2f0;"
                       aria-label="reviewed"
                     />
                   </Tooltip>
@@ -173,7 +173,7 @@ export const getUrl = (includeSearch: boolean) =>
     (
       { protocol, hostname, port, root }: ParsedURLServer,
       description,
-      search
+      search,
     ) => {
       if (description.main.key === 'entry') {
         const _description = {
@@ -204,7 +204,7 @@ export const getUrl = (includeSearch: boolean) =>
       // return {
       //   accession: description[description.main.key].accession,
       // };
-    }
+    },
   );
 
 export const mapStateToPropsForModels = createSelector(
@@ -213,7 +213,7 @@ export const mapStateToPropsForModels = createSelector(
   (description, search) => ({
     description,
     search,
-  })
+  }),
 );
 
 export default loadData({

@@ -59,7 +59,6 @@ exports[`<SummaryEntry /> should render 1`] = `
             Description
           </h4>
           <Description
-            accession="IPR000001"
             literature={[]}
             showBadges={false}
             textBlocks={

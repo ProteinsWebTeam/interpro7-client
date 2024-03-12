@@ -13,6 +13,7 @@ import Link from 'components/generic/Link';
 const InterProScan = loadable({
   loader: () =>
     import(
+      // $FlowFixMe
       /* webpackChunkName: "about-interproscan" */ 'components/About/InterProScan'
     ),
 });

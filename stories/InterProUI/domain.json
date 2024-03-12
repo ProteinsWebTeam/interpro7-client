@@ -1,0 +1,30 @@
+[
+  {
+    "accession": "IPR999999",
+    "protein_length": 119,
+    "source_database": "interpro",
+    "entry_protein_locations": [
+      {
+        "fragments": [{ "start": 41, "end": 95 }]
+      }
+    ],
+    "name": "Aminotransferase, class I/classII",
+    "type": "domain",
+    "integrated": null,
+    "children": [
+      {
+        "accession": "PF99999",
+        "protein_length": 119,
+        "source_database": "pfam",
+        "entry_protein_locations": [
+          {
+            "fragments": [{ "start": 41, "end": 95, "dc-status": "CONTINUOUS" }]
+          }
+        ],
+        "name": "Aminotransferase class I and II",
+        "type": "domain",
+        "integrated": "IPR999999"
+      }
+    ]
+  }
+]

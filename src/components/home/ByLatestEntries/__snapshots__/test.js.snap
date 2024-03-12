@@ -11,7 +11,7 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
       className="columns"
     >
       <Memo(Connect(AnimatedEntry))
-        className="card-wrapper"
+        className="wrapper"
         element="div"
       >
         <EntryCard

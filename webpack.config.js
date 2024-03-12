@@ -161,6 +161,7 @@ const getConfigFor = (env, mode) => {
     mode,
     output: {
       publicPath,
+      // workerPublicPath: `${publicPath}js/workers/`,
       filename: path.join('js', `[id].${name}.[name].[fullhash:3].js`),
       chunkFilename: path.join('js', `[id].${name}.[name].[chunkhash:3].js`),
       globalObject: 'self',
@@ -201,7 +202,7 @@ const getConfigFor = (env, mode) => {
     module: {
       rules: [
         {
-          test: /\.worker\.js$/i,
+          test: /\.worker\.[jt]s$/i,
           use: [
             {
               loader: 'worker-loader',

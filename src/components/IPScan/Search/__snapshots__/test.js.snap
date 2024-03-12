@@ -21,7 +21,7 @@ exports[`<IPScanSearch /> should render 1`] = `
     >
       <div>
         <div
-          className="secondary callout border margin-bottom-none ipscan-block"
+          className="simple-box border margin-bottom-none ipscan-block"
         >
           <div
             className="row"
@@ -37,7 +37,7 @@ exports[`<IPScanSearch /> should render 1`] = `
               <Memo(Loadable)
                 data={
                   {
-                    "description": "Search for InterPro matches in your seqeunce",
+                    "description": "Search for InterPro matches in your sequences",
                     "name": "Search By Sequence",
                   }
                 }

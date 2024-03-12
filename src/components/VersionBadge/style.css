@@ -1,0 +1,75 @@
+.celebration {
+  animation: shake-animation 1s ease 4;
+
+  & polygon {
+    fill: #2daec1;
+    animation:
+      spin 2s linear 2,
+      color-animation 1s ease 4;
+    transform-origin: center;
+    filter: drop-shadow(0 0 0.1rem gold);
+  }
+  &:hover {
+    animation: shake-animation 1s ease infinite;
+    & polygon {
+      animation:
+        spin 2s linear infinite,
+        color-animation 1s ease infinite;
+    }
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes color-animation {
+  0% {
+    fill: #b54e5d;
+  }
+  10% {
+    fill: #b5813f;
+  }
+  40% {
+    fill: #69a746;
+  }
+  60% {
+    fill: #669b90;
+  }
+  70% {
+    fill: #b54e5d;
+  }
+  100% {
+    fill: #b54e5d;
+  }
+}
+@keyframes shake-animation {
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(0.2rem, 0);
+  }
+  20% {
+    transform: translate(0, 0.1rem);
+  }
+  30% {
+    transform: translate(0.2rem, 0);
+  }
+  40% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0.2rem, 0.1rem);
+  }
+  60% {
+    transform: translate(0, 0);
+  }
+  70% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}

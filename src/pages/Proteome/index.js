@@ -5,8 +5,6 @@ import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
-// import MemberDBSelector from 'components/MemberDBSelector';
-// import ProteomeListFilters from 'components/Proteome/ProteomeListFilters';
 
 import Table, {
   Column,
@@ -22,6 +20,7 @@ import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import ProteomeCard from 'components/Proteome/Card';
 
 import loadable from 'higherOrder/loadable';
@@ -122,7 +121,7 @@ const AllProteomesDownload = (
     name={`proteomes.${fileType}`}
     count={count}
     customLocationDescription={description}
-    search={{ ...search, extra_fields: 'counters' }}
+    search={{ ...search, extra_fields: 'counters:entry-protein' }}
     endpoint={'proteome'}
   />
 );

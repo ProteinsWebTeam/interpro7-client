@@ -1,8 +1,8 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { EntryMenuLinkWithoutData, EntryMenuLink } from '.';
+import { EntryMenuLink } from '.';
+import EntryMenuLinkWithoutData from './EntryMenuLinkWithoutData';
 
 const renderer = new ShallowRenderer();
 

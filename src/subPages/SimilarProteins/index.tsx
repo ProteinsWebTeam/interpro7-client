@@ -19,7 +19,7 @@ const css = cssBinder(localStyle);
 type Props = {
   data: RequestedData<{ metadata: ProteinMetadata }>;
   dataBase: RequestedData<RootAPIPayload>;
-  proteinAccession?: string;
+  proteinAccession?: string | null;
 };
 
 const SimilarProteins = ({
@@ -54,6 +54,7 @@ const SimilarProteins = ({
               )
             }
             addAccessionStyle={true}
+            width="14rem"
           />
         </Tooltip>
       </div>

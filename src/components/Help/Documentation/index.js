@@ -13,8 +13,6 @@ import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import local from './style.css';
 
-import { InterProLogo } from 'components/Header/Title';
-
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, local);
 
 const SchemaOrgData = loadable({
@@ -37,7 +35,11 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
           <div className={f('columns', 'large-8')}>
             <div className={f('flex-container')}>
               <div className={f('flex-box')}>
-                <InterProLogo /> <h5>Interpro & Pfam</h5>
+                <span
+                  className={f('icon', 'icon-common', 'xl')}
+                  data-icon="&#xf02d;"
+                />{' '}
+                <h5>Documentations</h5>
                 <li>
                   <ul>
                     <li>
@@ -74,16 +76,16 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       className={f('ext')}
                       target="_blank"
                     >
-                      InterProScan Documentation
+                      InterProScan documentation
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="//www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation"
+                      href="//www.ebi.ac.uk/jdispatcher/docs/"
                       className={f('ext')}
                       target="_blank"
                     >
-                      Web services
+                      Job Dispatcher documentation
                     </Link>
                   </li>
                 </ul>
@@ -139,14 +141,13 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       Privacy and security
                     </Link>
                   </li>
-
                   <li>
                     <Link
-                      href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
+                      href="//www.ebi.ac.uk/ebisearch/documentation"
                       className={f('ext')}
                       target="_blank"
                     >
-                      Search documentation (EBI)
+                      EBI Search documentation
                     </Link>
                   </li>
                 </ul>
@@ -154,7 +155,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
               <div className={f('flex-box')}>
                 <span
                   className={f('icon', 'icon-common', 'xl')}
-                  data-icon="&#xf02d;"
+                  data-icon="&#xf10d;"
                 />{' '}
                 <h5>Publications</h5>
                 <ul>
@@ -164,7 +165,16 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                       className={f('ext')}
                       target="_blank"
                     >
-                      InterPro Publications
+                      Citing InterPro
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="https://pfam-docs.readthedocs.io/en/latest/citing-pfam.html"
+                      className={f('ext')}
+                      target="_blank"
+                    >
+                      Citing Pfam
                     </Link>
                   </li>
                 </ul>

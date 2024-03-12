@@ -12,7 +12,9 @@ export type MenuItemProps = {
   icon?: string;
   name: string;
   iconClass?: string;
-  to?: InterProPartialLocation | ((customLocation: InterProLocation) => void);
+  to?:
+    | InterProPartialLocation
+    | ((customLocation: InterProLocation) => InterProPartialLocation);
   activeClass?: ActiveClass;
   exact?: boolean;
   counter?: string;
@@ -164,7 +166,7 @@ export const entities: Array<MenuItemProps> = [
           entry: {
             isFilter: true,
             db: ['cdd', 'panther', 'pfam', 'pirsf'].includes(
-              customLocation.description?.entry?.db?.toLowerCase(),
+              (customLocation.description?.entry?.db || '').toLowerCase(),
             )
               ? customLocation.description.entry.db
               : 'Pfam',

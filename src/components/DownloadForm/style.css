@@ -1,5 +1,5 @@
-@import '../../styles/fonts.css';
-@import '../../styles/colors.css';
+@import "../../styles/fonts.css";
+@import "../../styles/colors.css";
 
 .controls {
   padding: 1ch;
@@ -19,6 +19,13 @@
 
   & h6 {
     font-weight: bold;
+  }
+  button {
+    color: var(--colors-almost-white);
+    background-color: var(--colors-submain);
+    &:hover {
+      background-color: var(--colors-submain-darker);
+    }
   }
   & .button.hollow {
     color: var(--colors-submain);

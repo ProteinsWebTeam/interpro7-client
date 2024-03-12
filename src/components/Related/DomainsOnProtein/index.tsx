@@ -13,6 +13,7 @@ import {
 } from 'components/AlphaFold/selectors';
 import { useProcessData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Callout from 'components/SimpleCommonComponents/Callout';
 import EdgeCase from 'components/EdgeCase';
 
 // import ConservationProvider, {
@@ -24,12 +25,6 @@ import mergeExtraFeatures from './mergeExtraFeatures';
 import mergeResidues from './mergeResidues';
 import DomainsOnProteinLoaded, { makeTracks } from './DomainsOnProteinLoaded';
 import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
-
-import cssBinder from 'styles/cssBinder';
-import ipro from 'styles/interpro-vf.css';
-const css = cssBinder(ipro);
-
-// const HTTP_OK = 200;
 
 export const orderByAccession = (
   a: { accession: string },
@@ -178,7 +173,7 @@ const DomainOnProteinWithoutData = ({
     !dataFeatures?.loading &&
     !dataResidues?.loading
   ) {
-    return <div className={css('callout')}>No entries match this protein.</div>;
+    return <Callout type="info">No entries match this protein.</Callout>;
   }
   // Disabling Conservation until hmmer is working
   // const showConservationButton =
@@ -239,7 +234,10 @@ const DomainOnProteinWithoutData = ({
 const getRelatedEntriesURL = createSelector(
   (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.customLocation.description.protein.accession,
-  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+  (
+    { protocol, hostname, port, root }: ParsedURLServer,
+    accession: string | null,
+  ) => {
     const newDesc = {
       main: { key: 'entry' },
       protein: { isFilter: true, db: 'uniprot', accession },

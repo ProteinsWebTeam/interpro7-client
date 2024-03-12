@@ -7,15 +7,18 @@ import cssBinder from 'styles/cssBinder';
 
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import { MiniBadgeAI } from '../../BadgeAI';
 
 const css = cssBinder(ipro, fonts);
 
 const MemberDBSubtitle = ({
   metadata,
   dbInfo,
+  hasLLM = false,
 }: {
   metadata: EntryMetadata;
   dbInfo: DBInfo;
+  hasLLM?: boolean;
 }) => {
   if (
     !metadata.source_database ||
@@ -64,7 +67,8 @@ const MemberDBSubtitle = ({
           <tr>
             <td>Short name</td>
             <td>
-              <i className={css('shortname')}>{metadata.name.short}</i>
+              <i className={css('shortname')}>{metadata.name.short}</i>{' '}
+              {hasLLM && <MiniBadgeAI />}
             </td>
           </tr>
         )}

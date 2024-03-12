@@ -5,12 +5,8 @@ import T from 'prop-types';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import Loading from 'components/SimpleCommonComponents/Loading';
-
-import { foundationPartial } from 'styles/foundation';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-
-const f = foundationPartial(ebiGlobalStyles, fonts);
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 const DAYS_TO_UPDATE_IPSCAN = 5;
 /*::
@@ -47,8 +43,8 @@ const IPScanVersionCheck = ({ data, ipScanVersion, callback } /*: Props */) => {
   );
   if (currentVersion !== jobVersion) {
     return (
-      <div className={f('callout', 'info', 'withicon')}>
-        <h4 style={{ display: 'inline-block' }}>Mismatched Version</h4>
+      <Callout type="info">
+        <h4>Mismatched Version</h4>
         <p>
           InterProScan version: <code>{ipScanVersion}</code>.
         </p>
@@ -68,7 +64,7 @@ const IPScanVersionCheck = ({ data, ipScanVersion, callback } /*: Props */) => {
             recently submitted jobs.
           </p>
         ) : null}
-      </div>
+      </Callout>
     );
   }
   return null;

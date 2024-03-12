@@ -111,7 +111,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
           .map(({ proteins }) => {
             const subfamilies: Array<string | undefined> = [];
             (proteins as EntryProteinMatch[]).forEach((p) => {
-              p.entry_protein_locations.forEach(({ subfamily }) => {
+              (p.entry_protein_locations || []).forEach(({ subfamily }) => {
                 subfamilies.push(subfamily?.accession);
               });
             });

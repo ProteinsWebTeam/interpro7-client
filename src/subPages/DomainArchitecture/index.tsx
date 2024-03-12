@@ -6,11 +6,11 @@ import DomainArchitectures from 'components/Entry/DomainArchitectures';
 
 type Props = {
   mainType: string;
-  database: string;
+  database: string | null;
 };
 
 const DomainArchitectureSubPage = ({ mainType, database }: Props) => {
-  return mainType === 'entry' ? (
+  return mainType === 'entry' && database ? (
     <DomainArchitectures database={database} />
   ) : null;
 };

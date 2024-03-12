@@ -11,8 +11,17 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 const css = cssBinder(styles, fonts, ipro);
 
 type DescriptionReadMoreProps = {
+  /**
+   * Text to display
+   */
   text: string;
+  /**
+   * The number of character to show when the description is compacted.
+   */
   minNumberOfCharToShow: number;
+  /**
+   * A `string` or `regex` that needs to be removed on the whole document. Currently used to remove reference marks when unnecessary.
+   */
   patternToRemove?: string;
 };
 
@@ -49,7 +58,7 @@ class DescriptionReadMore extends PureComponent<
             className={css(
               'vf-button',
               'vf-button--secondary',
-              'vf-button--sm'
+              'vf-button--sm',
             )}
             onClick={() => this.setState({ showMore: !showMore })}
           >

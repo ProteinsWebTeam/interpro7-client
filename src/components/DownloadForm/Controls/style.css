@@ -14,7 +14,7 @@
   line-height: initial;
 }
 
-.callout .button {
+.new-callout .button {
   background-color: #eeeeee;
   &:hover {
     background-color: white;

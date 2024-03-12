@@ -1,5 +1,5 @@
-@import './spacing.css';
-@import './z-index.css';
+@import "./spacing.css";
+@import "./z-index.css";
 
 .card {
   position: relative;
@@ -22,4 +22,14 @@
       flex: 1;
     }
   }
+}
+
+.simple-box {
+  position: relative;
+  margin: 0 0 1rem 0;
+  padding: 1rem;
+  border: 1px solid rgba(10, 10, 10, 0.25);
+  border-radius: 0;
+  background-color: var(--colors-nearly-white);
+  color: #0a0a0a;
 }

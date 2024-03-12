@@ -1,6 +1,6 @@
-@import '../../styles/colors.css';
-@import '../../styles/timing.css';
-@import '../../styles/z-index.css';
+@import "../../styles/colors.css";
+@import "../../styles/timing.css";
+@import "../../styles/z-index.css";
 
 .input-group {
   display: flex;
@@ -36,7 +36,7 @@
   position: relative;
 }
 
-.search-input [type='text'] {
+.search-input [type="text"] {
   height: 2.5rem; /*to match height with right-hand side search button*/
   margin-bottom: 0;
 }
@@ -47,7 +47,7 @@
   position: absolute;
 
   &:after {
-    content: 'X';
+    content: "X";
     display: block;
     width: 15px;
     height: 15px;
@@ -72,18 +72,6 @@
 
 .action-row {
   margin-top: 1em;
-}
-
-.settings {
-  opacity: 0.2;
-  flex-direction: column;
-  transition: opacity var(--timing-slow) ease-in-out var(--timing-really-slow);
-}
-
-.callout:hover .settings {
-  opacity: 1;
-  transition-duration: var(--timing-fast);
-  transition-delay: 0s;
 }
 
 .visible-label {

@@ -1,20 +1,17 @@
 import React from 'react';
 import T from 'prop-types';
 import loadData from 'higherOrder/loadData';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
-import { foundationPartial } from 'styles/foundation';
-
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-
-const f = foundationPartial(ebiGlobalStyles);
 const STATUS_OK = 200;
 const GeneralWarning = ({ data }) => {
   const message = data?.payload;
   if (data?.status !== STATUS_OK || (message || '').trim() === '') return null;
   return (
-    <div className={f('callout', 'withicon', 'alert')}>
+    <Callout type="alert">
       <b>{message}</b>
-    </div>
+    </Callout>
   );
 };
 GeneralWarning.propTypes = {

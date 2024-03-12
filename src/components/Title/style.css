@@ -1,7 +1,8 @@
-@import '../../styles/colors.css';
+@import "../../styles/colors.css";
 
 .title {
   display: flex;
+  align-items: center;
 
   & .title-name {
     &.ipscan {
@@ -15,6 +16,12 @@
   & .icon-container {
     /*negative values as the viewbox is not well defined*/
     margin: 0 0.4rem;
+  }
+  & .vf-badge {
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    padding: 0.2rem;
+    text-transform: none;
   }
 }
 
@@ -74,10 +81,6 @@
   color: var(--colors-nearly-white);
 }
 
-.tag {
-  margin-bottom: 1rem;
-}
-
 .title-fav {
   display: flex;
   align-items: center;
@@ -108,7 +111,7 @@
     margin-right: 1rem;
   }
   /*reduce tag font*/
-  .title-tag .tag {
+  .title-tag .vf-badge {
     font-size: 70%;
   }
   .title-id {
