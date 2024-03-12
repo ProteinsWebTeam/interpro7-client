@@ -16,11 +16,13 @@ import s from '../style.css';
 
 const f = foundationPartial(s);
 
-const toFunctionFor = (value, key = 'page') => customLocation => ({
-  ...customLocation,
-  // $FlowFixMe
-  search: { ...customLocation.search, [key]: value },
-});
+const toFunctionFor =
+  (value, key = 'page') =>
+  (customLocation) => ({
+    ...customLocation,
+    // $FlowFixMe
+    search: { ...customLocation.search, [key]: value },
+  });
 
 const scrollToTop = () => {
   window.scrollTo(0, 0);
@@ -100,6 +102,22 @@ class First extends PureComponent /*:: <FirstProps> */ {
     const { first, current } = this.props;
     if (first === current) return null;
     return <PaginationItem value={first} />;
+  }
+}
+/*:: type LastProps = {
+  last: number,
+  current: number,
+}; */
+class Last extends PureComponent /*:: <LastProps> */ {
+  static propTypes = {
+    last: T.number.isRequired,
+    current: T.number.isRequired,
+  };
+
+  render() {
+    const { last, current } = this.props;
+    if (last === current || last === 1) return null;
+    return <PaginationItem value={last} />;
   }
 }
 /*:: type PreviousDotDotProps = {
@@ -215,15 +233,56 @@ const NumberedPaginationLinks = ({ pagination, actualSize }) => {
   const previous = Math.max(current - 1, first);
   const next = Math.min(current + 1, last);
 
+  const firstPivot = Math.ceil(current / 2);
+  const secondPivot = Math.floor((current + last + 1) / 2);
+
+  const showFirstPivot = firstPivot > 2;
+  const showSecondPivot = secondPivot < last - 2;
+  const SHOW_ALL_FOR = 10;
   return (
     <>
       <PreviousText previous={previous} current={current} />
-      <First first={first} current={current} />
-      <PreviousDotDotDot first={first} previous={previous} />
-      <Previous first={first} previous={previous} current={current} />
-      <Current current={current} />
-      <Next current={current} next={next} last={last} />
-      <NextDotDotDot next={next} last={last} />
+      {last <= SHOW_ALL_FOR &&
+        Array.from(Array(last).keys()).map((n) => {
+          return (
+            <PaginationItem
+              key={n}
+              value={n + 1}
+              noLink={n + 1 === current}
+              className={f({ current: n + 1 === current })}
+            />
+          );
+        })}
+      {last > SHOW_ALL_FOR && (
+        <>
+          <First first={first} current={current} />
+          {showFirstPivot && (
+            <>
+              <PreviousDotDotDot first={first} previous={firstPivot} />
+              <PaginationItem value={firstPivot} />
+            </>
+          )}
+          <PreviousDotDotDot
+            first={showFirstPivot ? firstPivot : first}
+            previous={previous}
+          />
+          <Previous first={first} previous={previous} current={current} />
+          <Current current={current} />
+          <Next current={current} next={next} last={last - 1} />
+          <NextDotDotDot
+            next={next}
+            last={showSecondPivot ? secondPivot : last}
+          />
+          {showSecondPivot && (
+            <>
+              <PaginationItem value={secondPivot} />
+              <NextDotDotDot next={next} last={last} />
+            </>
+          )}
+
+          <Last last={last} current={current} />
+        </>
+      )}
       <NextText current={current} next={next} />
     </>
   );
