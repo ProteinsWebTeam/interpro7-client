@@ -17,6 +17,7 @@
 }
 .track-component {
   width: var(--track-space, 80%);
+  max-height: 2rem;
   background: #fafafa;
   cursor: move;
 }

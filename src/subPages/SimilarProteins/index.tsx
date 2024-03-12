@@ -54,6 +54,7 @@ const SimilarProteins = ({
               )
             }
             addAccessionStyle={true}
+            width="14rem"
           />
         </Tooltip>
       </div>

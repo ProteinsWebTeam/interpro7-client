@@ -119,11 +119,12 @@ SelectedParameter.propTypes = {
 const URLParameters = ({ type, data, search, onChange }) => {
   const [toAdd, setToAdd] = useState(null);
   const [toRemove, setToRemove] = useState(null);
+  const payloadIsReady = data && !data.loading && data.ok && data.payload;
   useEffect(() => {
     if (toAdd) setToAdd(null);
   });
   useEffect(() => {
-    return () => onChange({ target: null });
+    return () => payloadIsReady && onChange({ target: null });
   }, [toRemove]);
   const selectedParameters = Object.keys(search || {});
   if (toAdd) {
@@ -137,7 +138,7 @@ const URLParameters = ({ type, data, search, onChange }) => {
       setToRemove(null);
     }
   }
-  if (data.loading || !data.ok || !data.payload) return null;
+  if (!payloadIsReady) return null;
   const parameters = Object.fromEntries(
     (data.payload.paths?.[`/${type}/{sourceDB}`]?.get?.parameters || [])
       .filter((p) => p.$ref)

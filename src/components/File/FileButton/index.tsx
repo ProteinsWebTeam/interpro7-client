@@ -39,6 +39,7 @@ export type FileButtonProps = {
   handleClick: (event: Event) => void;
   shouldLinkToResults?: boolean;
   showIcon?: boolean;
+  search?: Record<string, string>;
 };
 
 const FileButton = ({
@@ -56,6 +57,7 @@ const FileButton = ({
   shouldLinkToResults = true,
   showIcon,
   minWidth,
+  search,
 }: FileButtonProps) => {
   const downloading = Number.isFinite(progress) && !successful;
   const failed = successful === false;
@@ -93,6 +95,7 @@ const FileButton = ({
           shouldLinkToResults={shouldLinkToResults}
           subpath={subpath}
           fileType={fileType}
+          search={search}
         />
       }
     >

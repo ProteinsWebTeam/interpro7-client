@@ -7,12 +7,19 @@ import local from './style.css';
 
 const css = cssBinder(local);
 
+const getSearchString = (search?: Record<string, string>): string => {
+  const entries = Object.entries(search || []);
+  if (entries.length === 0) return '';
+  return `?${entries.map(([k, v]) => `${k}=${v}`).join('&')}`;
+};
+
 type Props = {
   shouldLinkToResults: boolean;
   title: string;
   count: number;
   subpath?: string;
   fileType: string;
+  search?: Record<string, string>;
 };
 
 const TooltipContent = ({
@@ -21,6 +28,7 @@ const TooltipContent = ({
   count,
   subpath,
   fileType,
+  search,
 }: Props) => {
   return count === 0 ? (
     <div>
@@ -39,13 +47,13 @@ const TooltipContent = ({
                 main: { key: 'result' },
                 result: { type: 'download' },
               },
-              hash: `${subpath || ''}|${fileType}`,
+              hash: `${subpath || ''}${getSearchString(search)}|${fileType}`,
             }}
             className={css(
               'vf-button',
               'vf-button--tertiary',
               'vf-button--sm',
-              'in-popup'
+              'in-popup',
             )}
           >
             See more download options

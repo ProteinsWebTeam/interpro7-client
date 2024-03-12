@@ -13,8 +13,6 @@ import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import local from './style.css';
 
-import { InterProLogo } from 'components/Header/Title';
-
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, local);
 
 const SchemaOrgData = loadable({

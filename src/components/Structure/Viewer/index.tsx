@@ -88,25 +88,25 @@ class StructureView extends PureComponent<Props> {
       ) {
         this.viewer.initViewer(
           this._structureViewerCanvas.current,
-          this._structureViewer.current
+          this._structureViewer.current,
         );
         if (ColorByResidueLddtTheme.colorThemeProvider)
           this.viewer.representation.structure.themes.colorThemeRegistry.add(
-            ColorByResidueLddtTheme.colorThemeProvider
+            ColorByResidueLddtTheme.colorThemeProvider,
           );
         if (ColorByResidueLddtTheme.labelProvider)
           this.viewer.managers.lociLabels.addProvider(
-            ColorByResidueLddtTheme.labelProvider
+            ColorByResidueLddtTheme.labelProvider,
           );
         this.viewer.customModelProperties.register(
           ColorByResidueLddtTheme.propertyProvider,
-          true
+          true,
         );
 
         this.viewer.customModelProperties.register(AfConfidenceProvider, true);
         // this.viewer.managers.lociLabels.addProvider(this.labelAfConfScore);
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
-          AfConfidenceColorThemeProvider
+          AfConfidenceColorThemeProvider,
         );
       }
       // mouseover ?????
@@ -116,12 +116,12 @@ class StructureView extends PureComponent<Props> {
     if (this.props.url) {
       this.loadStructureInViewer(
         this.props.url,
-        this.props.ext || DEFAULT_EXTENSION
+        this.props.ext || DEFAULT_EXTENSION,
       );
     } else {
       this.loadStructureInViewer(
         `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
-        'mmcif'
+        'mmcif',
       );
     }
   }
@@ -132,12 +132,12 @@ class StructureView extends PureComponent<Props> {
       if (this.props.url) {
         this.loadStructureInViewer(
           this.props.url,
-          this.props.ext || DEFAULT_EXTENSION
+          this.props.ext || DEFAULT_EXTENSION,
         );
       } else {
         this.loadStructureInViewer(
           `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
-          'mmcif'
+          'mmcif',
         );
       }
     }
@@ -167,12 +167,12 @@ class StructureView extends PureComponent<Props> {
           await this.viewer.clear();
           const data = await this.viewer.builders.data.download(
             { url: url },
-            { state: { isGhost: false } }
+            { state: { isGhost: false } },
           );
           const trajectory =
             await this.viewer.builders.structure.parseTrajectory(
               data,
-              format as BuiltInTrajectoryFormat
+              format as BuiltInTrajectoryFormat,
             );
           const outcome = this.viewer.builders.structure.hierarchy.applyPreset(
             trajectory,
@@ -184,7 +184,7 @@ class StructureView extends PureComponent<Props> {
               },
               showUnitcell: false,
               representationPreset: 'auto',
-            }
+            },
           );
           if (outcome)
             outcome.then(() => {
@@ -232,7 +232,7 @@ class StructureView extends PureComponent<Props> {
             s.components,
             {
               color: UniformColorThemeProvider.name,
-            }
+            },
           );
         }
       })
@@ -251,7 +251,7 @@ class StructureView extends PureComponent<Props> {
                 PluginCommands.Canvas3D.SetSettings(this.viewer, {
                   settings: (props) => {
                     props.renderer.selectColor = Color(
-                      selection.color as number
+                      selection.color as number,
                     );
                     props.renderer.selectStrength = 0.8;
                     props.marking.enabled = false;
@@ -274,7 +274,7 @@ class StructureView extends PureComponent<Props> {
                   MS.set(...positions),
                   MS.ammp('auth_seq_id'),
                 ]),
-              })
+              }),
             );
           }
           return MS.struct.combinator.merge(atomGroups);
@@ -306,7 +306,7 @@ class StructureView extends PureComponent<Props> {
           s.components,
           {
             color: colouringTheme as typeof ChainIdColorThemeProvider.name,
-          }
+          },
         );
       }
     });
