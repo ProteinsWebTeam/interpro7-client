@@ -6,6 +6,8 @@ import T from 'prop-types';
 import PageSizeSelector from '../PageSizeSelector';
 // $FlowFixMe
 import PaginationItem from './PaginationItem';
+// $FlowFixMe
+import CursorPaginationLinks from './CursorPaginationLinks';
 import { getCursor } from 'utils/url';
 
 import config from 'config';
@@ -237,27 +239,6 @@ const NumberedPaginationLinks = ({ pagination, actualSize }) => {
 NumberedPaginationLinks.propTypes = {
   actualSize: T.number,
   pagination: T.object.isRequired,
-};
-
-const CursorPaginationItem = ({ cursor, label }) => (
-  <PaginationItem value={cursor || '_'} noLink={!cursor} attributeName="cursor">
-    {label}
-  </PaginationItem>
-);
-CursorPaginationItem.propTypes = {
-  cursor: T.string,
-  label: T.string,
-};
-
-const CursorPaginationLinks = ({ next, previous }) => (
-  <>
-    <CursorPaginationItem cursor={previous} label="Previous" />
-    <CursorPaginationItem cursor={next} label="Next" />
-  </>
-);
-CursorPaginationLinks.propTypes = {
-  next: T.string,
-  previous: T.string,
 };
 
 const Footer = (
