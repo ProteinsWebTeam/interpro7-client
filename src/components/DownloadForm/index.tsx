@@ -390,7 +390,9 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                         <input
                           type="text"
                           disabled={!description[key as Endpoint].db}
-                          defaultValue={(value as EndpointLocation).accession}
+                          defaultValue={
+                            (value as EndpointLocation).accession || ''
+                          }
                           name={`description.${key}.accession`}
                           className={css('input-group-field')}
                           data-reset={`description.${key}`}
