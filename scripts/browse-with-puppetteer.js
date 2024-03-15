@@ -61,7 +61,15 @@ function delay(milliseconds) {
     for (const argv of process.argv.slice(2)) {
       const key = argv.substring(2).toLowerCase();
       if (SHOULD_RUN[key] === undefined) {
-        console.error(`Error: invalid argument: ${argv}`);
+        console.error(`Error: invalid argument: [${argv}]`);
+        console.error(`List of valid arguments:`);
+        console.error(`  --interpro`);
+        console.error(`  --dbs`);
+        console.error(`  --protein`);
+        console.error(`  --structure`);
+        console.error(`  --taxonomy`);
+        console.error(`  --proteome`);
+        console.error(`  --set`);
         process.exit(1);
       } else {
         shouldRun.add(key);
@@ -347,6 +355,7 @@ function delay(milliseconds) {
                 await delay(DELAY_ON_EACH_PAGE);
               }
               // Reset to all
+              // TODO: sometimes All is not in  position 0 and is not reseting
               orgInputs?.[0]?.click();
               await delay(DELAY_ON_EACH_PAGE);
             }
