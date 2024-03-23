@@ -7,6 +7,7 @@ import _Header from './Header';
 import _Body from './Body';
 import _Column from './Column';
 import _Row from './Row';
+// $FlowFixMe
 import _Footer from './Footer';
 
 import { foundationPartial } from 'styles/foundation';

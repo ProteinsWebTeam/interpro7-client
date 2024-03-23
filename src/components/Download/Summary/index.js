@@ -104,7 +104,13 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
             <Column
               dataKey="date"
               defaultKey="date"
-              renderer={(date /*: string */) => formatLongDate(new Date(date))}
+              renderer={(
+                date /*: string */,
+                { progress } /*: { progress: number } */,
+              ) => {
+                if (progress < 1) return 'Currently running';
+                return formatLongDate(new Date(date));
+              }}
             >
               Date
             </Column>

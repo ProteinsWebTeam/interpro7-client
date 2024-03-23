@@ -5,6 +5,9 @@ import Species from 'components/Protein/Species';
 import ProteomeLink from 'components/ExtLink/ProteomeLink';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+import UniProtDescription from './UniProtDescription';
+import RFamLink from './RfamLink';
+
 import cssBinder from 'styles/cssBinder';
 
 import memberSelectorStyle from 'components/Table/TotalNb/style.css';
@@ -48,13 +51,18 @@ const SummaryProteome = ({ data, loading }: Props) => {
                 <td>Taxonomy</td>
                 <td data-testid="proteome-species">
                   <Species
-                    fullName={metadata.name.name}
+                    fullName={
+                      typeof metadata.name === 'string'
+                        ? metadata.name
+                        : metadata.name.name
+                    }
                     taxID={metadata.taxonomy}
                   />
                 </td>
               </tr>
             </tbody>
           </table>
+          <UniProtDescription />
         </div>
         <div className={css('vf-stack')}>
           <section>
@@ -65,6 +73,7 @@ const SummaryProteome = ({ data, loading }: Props) => {
                   UniProt
                 </ProteomeLink>
               </li>
+              <RFamLink accession={metadata.accession} className={css('ext')} />
             </ul>
           </section>
         </div>

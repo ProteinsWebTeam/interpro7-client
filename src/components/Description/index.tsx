@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 
 import { transformFormatted } from 'utils/text';
 
+import BadgeAI, { BadgeCurated } from 'components/Entry/BadgeAI';
 import Paragraph from './Paragraph';
 
 import cssBinder from 'styles/cssBinder';
@@ -27,10 +28,21 @@ export const hasLLMParagraphs = (
   return llmDescrpitions.length > 0;
 };
 type Props = {
+  /**
+   * Array of strings or objects. Each willbe represented as a paragraph
+   */
   textBlocks: Array<string | StructuredDescription>;
+  /**
+   * If the description has inline references, the literature can be included here to coordinate the numbering with the `<Literature>` component.
+   */
   literature?: Array<[string, Reference]>;
-  accession?: string;
+  /**
+   * To exclude the creation of IDs in the link elements
+   */
   withoutIDs?: boolean;
+  /**
+   * To display the badges for AI-Generated or Expert curated paragraphs
+   */
   showBadges?: boolean;
 };
 class Description extends PureComponent<Props> {
@@ -61,18 +73,7 @@ class Description extends PureComponent<Props> {
                   key={`${i}_${j}`}
                 >
                   {showBadges &&
-                    (llm ? (
-                      <span className={css('vf-badge', 'vf-badge--tertiary')}>
-                        AI-generated
-                        <span className={css('details')}>
-                          {checked ? 'Reviewed' : 'Unreviewed'}
-                        </span>
-                      </span>
-                    ) : (
-                      <span className={css('vf-badge', 'vf-badge--tertiary')}>
-                        Expert-curated
-                      </span>
-                    ))}
+                    (llm ? <BadgeAI checked={checked} /> : <BadgeCurated />)}
                   <Paragraph
                     key={`${i}.${j}`}
                     p={text}

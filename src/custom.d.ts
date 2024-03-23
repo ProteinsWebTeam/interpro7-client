@@ -18,6 +18,11 @@ declare module '*.svg' {
   const content: any;
   export default content;
 }
+declare module '*.tmpl' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
 
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
@@ -41,18 +46,30 @@ declare module 'taxonomy-visualisation' {
   }
   export default TaxonomyVisualisation;
 }
+declare module 'skylign' {
+  let Skylign: SkylignProps;
+}
+interface SkylignProps
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLElement>,
+    HTMLElement
+  > {
+  logo: string;
+}
 
 declare namespace JSX {
   interface IntrinsicElements {
     'interpro-type': InterProTypeProps;
     'interpro-hierarchy': InterProHierarchyProps;
     'interpro-entry': InterProEntryProps;
+    'skylign-component': SkylignProps;
   }
 }
 
 type GlobalState = {
   customLocation: InterProLocation;
   settings: SettingsState;
+  download: DownloadState;
   [other: string]: any;
 }; // TODO: replace for redux state type
 
@@ -67,10 +84,11 @@ type Endpoint =
 type EndpointLocation = Required<EndpointPartialLocation>;
 type EndpointPartialLocation = {
   isFilter?: boolean | null;
-  db?: string;
-  accession?: string;
-  detail?: string;
+  db?: string | null;
+  accession?: string | null;
+  detail?: string | null;
   order?: number | null;
+  integration?: string | null;
 };
 type InterProDescription = Required<
   InterProPartialDescription<EndpointLocation>
@@ -141,6 +159,8 @@ type SettingsState = {
   disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
+  uniprot: ParsedURLServer;
+  rfam: ParsedURLServer;
 };
 type UISettings = {
   lowGraphics: boolean;
@@ -155,6 +175,16 @@ type LabelUISettings = {
   accession: boolean;
   name: boolean;
   short: boolean;
+};
+
+type DownloadState = Record<string, DownloadProgress>;
+
+type DownloadProgress = {
+  progress: number;
+  successful: null | boolean;
+  blobURL: string;
+  size: null | number;
+  version: number;
 };
 interface InterProTypeProps
   extends React.DetailedHTMLProps<
@@ -251,17 +281,20 @@ type StructuredDescription = {
   llm: boolean;
   checked: boolean;
 };
+
+type MetadataCounter =
+  | number
+  | {
+      [db: string]: number;
+    };
+type MetadataCounters = {
+  [resource: string]: MetadataCounter;
+};
 interface Metadata {
   accession: string;
   source_database: string;
   description: Array<string | StructuredDescription>;
-  counters: {
-    [resource: string]:
-      | number
-      | {
-          [db: string]: number;
-        };
-  };
+  counters: MetadataCounters;
   go_terms?: Array<GOTerm>;
 }
 
@@ -311,6 +344,10 @@ interface EntryMetadata extends Metadata {
     name: string;
   };
   is_removed?: boolean;
+  is_llm?: boolean;
+  is_reviewed_llm?: boolean;
+  in_alphafold?: boolean;
+  entry_annotations?: Record<string, unknown>;
 }
 
 type SourceOrganism = {
@@ -332,7 +369,7 @@ interface ProteinMetadata extends Metadata {
   source_organism: SourceOrganism;
 }
 interface StructureMetadata extends Metadata {
-  name: NameObject;
+  name: NameObject | string;
   experiment_type: string;
   release_date: string;
   literature: Record<string, Reference>;
@@ -398,7 +435,7 @@ interface ProteomeMetadata extends Metadata {
   assembly: string;
   taxonomy: string;
   lineage: string;
-  name: NameObject;
+  name: NameObject | string;
   proteomeAccession?: string;
 }
 interface SetMetadata extends Omit<Metadata, 'description'> {
@@ -486,6 +523,7 @@ type RequestedData<Payload> = {
   status: null | number;
   payload: null | Payload;
   url: string;
+  headers?: Headers;
 };
 
 type RootAPIPayload = {
@@ -503,6 +541,11 @@ type RootAPIPayload = {
   };
 };
 
+type EndpointPayload = Record<
+  string,
+  Record<string, number | Record<string, number>>
+>;
+
 type ConservationValue = {
   position: number;
   value: string | number | null;
@@ -516,6 +559,67 @@ type ConservationPayload = Record<
   }
 >;
 
+type OpenAPIReference = {
+  $ref?: string;
+};
+
+type OpenAPIParameterSchema = {
+  type: string;
+  enum?: Array<string>;
+  allowReserved?: boolean;
+  explode?: boolean;
+  style?: string;
+  pattern?: string;
+};
+type OpenAPIParameter = {
+  description: string;
+  in: string;
+  name: string;
+  schema: OpenAPIParameterSchema | OpenAPIReference;
+  allowEmptyValue?: boolean;
+};
+type OpenAPIComponents = {
+  parameters: Record<string, OpenAPIParameter>;
+  responses: Record<string, unknown>;
+  schemas: Record<
+    string,
+    {
+      type: string;
+      enum?: Array<string>;
+    }
+  >;
+};
+type OpenAPIPayload = {
+  components: OpenAPIComponents;
+  info: {
+    description: string;
+    title: string;
+    version: string;
+  };
+  openapi: string;
+  paths: Record<
+    string,
+    {
+      get: {
+        parameters: Array<{
+          $ref?: string;
+          description?: string;
+          name?: string;
+          in?: string;
+          required?: boolean;
+        }>;
+        responses: unknown;
+        summary: string;
+        tags: Array<string>;
+      };
+    }
+  >;
+  servers: Array<{
+    description: string;
+    url: string;
+  }>;
+};
+
 type WikipediaPayload = {
   parse: {
     title: string;
@@ -526,6 +630,18 @@ type WikipediaPayload = {
     };
   };
 };
+
+type UniProtProteomesPayload = {
+  id: string;
+  description: string;
+  [key: string]: unknown;
+};
+type RfamPayload = {
+  hitCount: number;
+  entries: Array<unknown>;
+  [key: string]: unknown;
+};
+
 type AlphafoldPayload = Array<{
   entryId: string;
   gene: string;
@@ -563,6 +679,7 @@ type ParsedURLServer = {
 type FetchOptions = {
   method?: string;
   responseType?: string;
+  useCache?: boolean;
 };
 
 type CancelableRequest<Response = BasicResponse> = {
@@ -574,7 +691,7 @@ type CancelableRequest<Response = BasicResponse> = {
 type BasicResponse = {
   status: number;
   ok: boolean;
-  headers: Set<string>;
+  headers: Headers;
 };
 
 type BaseLinkProps = {

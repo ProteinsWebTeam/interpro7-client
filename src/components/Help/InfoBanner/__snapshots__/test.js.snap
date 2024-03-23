@@ -2,21 +2,25 @@
 
 exports[`<InfoBanner /> should render 1`] = `
 <div
-  className="help-banner flex-card"
+  className="new-card help-banner"
 >
-  <div
-    className="card-image"
+  <header>
+    <div
+      className="image"
+    >
+      <div
+        className="card-tag tag-tool"
+      >
+        default
+      </div>
+    </div>
+  </header>
+  <section
+    className="content"
   >
     <div
-      className="card-tag tag-tool"
+      className="description"
     />
-  </div>
-  <div
-    className="card-content"
-  >
-    <div
-      className="card-description"
-    />
-  </div>
+  </section>
 </div>
 `;

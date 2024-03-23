@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -27,6 +26,7 @@ describe('<DownloadForm />', () => {
           },
         }}
         goToCustomLocation={() => {}}
+        data={{}}
       />,
     );
     expect(renderer.getRenderOutput()).toMatchSnapshot();

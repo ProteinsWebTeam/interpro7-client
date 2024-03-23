@@ -16,6 +16,7 @@ import { foundationPartial } from 'styles/foundation';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import ipro from 'styles/interpro-new.css';
 import style from './style.css';
+// TODO: consider changing to completely use the Tabs component
 import tabs from 'components/Tabs/style.css';
 import InfoBanner from 'components/Help/InfoBanner';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -133,7 +134,7 @@ const Wrapper = (
       />
       <div className={f('columns', 'margin-bottom-large')}>
         <h3>Search InterPro</h3>
-        <ul className={f('tabs', 'main-style', 'margin-top-large')}>
+        <ul className={f('new-tabs', 'main-style', 'margin-top-large')}>
           <li className={f('tabs-title')}>
             <Link
               to={{
@@ -178,7 +179,7 @@ const Wrapper = (
             </Link>
           </li>
         </ul>
-        <div className={f('tabs', 'tabs-content')}>
+        <div className={f('tab-content')}>
           <div className={f('tabs-panel', 'is-active')}>
             <ErrorBoundary>
               <div className={f('tabs-panel-content')}>
@@ -204,6 +205,7 @@ const Wrapper = (
                   {
                     <>
                       <InfoBanner topic={topic} />
+                      <br />
                       <HelpBanner topic={topic} />
                     </>
                   }

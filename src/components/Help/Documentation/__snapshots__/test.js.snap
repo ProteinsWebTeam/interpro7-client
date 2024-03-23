@@ -23,10 +23,13 @@ exports[`<Documentation /> should render 1`] = `
         <div
           className="flex-box"
         >
-          <InterProLogo />
+          <span
+            className="icon icon-common xl"
+            data-icon=""
+          />
            
           <h5>
-            Interpro & Pfam
+            Documentations
           </h5>
           <li>
             <ul>
@@ -69,16 +72,16 @@ exports[`<Documentation /> should render 1`] = `
                 href="https://interproscan-docs.readthedocs.io/"
                 target="_blank"
               >
-                InterProScan Documentation
+                InterProScan documentation
               </Memo(Connect(Link))>
             </li>
             <li>
               <Memo(Connect(Link))
                 className="ext"
-                href="//www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation"
+                href="//www.ebi.ac.uk/jdispatcher/docs/"
                 target="_blank"
               >
-                Web services
+                Job Dispatcher documentation
               </Memo(Connect(Link))>
             </li>
           </ul>
@@ -148,10 +151,10 @@ exports[`<Documentation /> should render 1`] = `
             <li>
               <Memo(Connect(Link))
                 className="ext"
-                href="//www.ebi.ac.uk/ebisearch/documentation.ebi"
+                href="//www.ebi.ac.uk/ebisearch/documentation"
                 target="_blank"
               >
-                Search documentation (EBI)
+                EBI Search documentation
               </Memo(Connect(Link))>
             </li>
           </ul>
@@ -161,7 +164,7 @@ exports[`<Documentation /> should render 1`] = `
         >
           <span
             className="icon icon-common xl"
-            data-icon=""
+            data-icon=""
           />
            
           <h5>
@@ -174,7 +177,16 @@ exports[`<Documentation /> should render 1`] = `
                 href="https://interpro-documentation.readthedocs.io/en/latest/citing.html"
                 target="_blank"
               >
-                InterPro Publications
+                Citing InterPro
+              </Memo(Connect(Link))>
+            </li>
+            <li>
+              <Memo(Connect(Link))
+                className="ext"
+                href="https://pfam-docs.readthedocs.io/en/latest/citing-pfam.html"
+                target="_blank"
+              >
+                Citing Pfam
               </Memo(Connect(Link))>
             </li>
           </ul>

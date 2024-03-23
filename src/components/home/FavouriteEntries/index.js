@@ -5,8 +5,11 @@ import { connect } from 'react-redux';
 import T from 'prop-types';
 
 import AnimatedEntry from 'components/AnimatedEntry';
+// $FlowFixMe
 import EntryCard from 'components/home/EntryCard';
 import Link from 'components/generic/Link';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 import { getMismatchedFavourites } from 'utils/compare-favourites';
 
 import { foundationPartial } from 'styles/foundation';
@@ -72,7 +75,7 @@ export class FavouriteEntries extends PureComponent /*:: <Props> */ {
         <div className={f('feat-entry-list')}>
           <div className={f('row')}>
             <div className={f('columns')}>
-              <AnimatedEntry className={f('card-wrapper')} element="div">
+              <AnimatedEntry className={f('wrapper')} element="div">
                 {this.state.fav.map((f) => (
                   <EntryCard entry={f} key={f.metadata.accession} />
                 ))}
@@ -95,7 +98,7 @@ export class FavouriteEntries extends PureComponent /*:: <Props> */ {
       );
     }
     return (
-      <div className={f('callout', 'info', 'withicon')}>
+      <Callout type="info">
         <span style={{ fontWeight: 'bold' }}>
           You don&apos;t have any entry tagged as favourite.
         </span>
@@ -108,7 +111,7 @@ export class FavouriteEntries extends PureComponent /*:: <Props> */ {
           />{' '}
           icon in the title of an entry page.
         </div>
-      </div>
+      </Callout>
     );
   }
 }

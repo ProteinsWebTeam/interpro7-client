@@ -2,11 +2,8 @@
 /* eslint-disable no-magic-numbers */
 import React from 'react';
 
-import { foundationPartial } from 'styles/foundation';
-
-import ipro from 'styles/interpro-new.css';
-
-const f = foundationPartial(ipro);
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 export const STATUS_OK = 200;
 export const STATUS_NO_CONTENT = 204;
@@ -38,7 +35,7 @@ export const edgeCases /*: Map<number, string>*/ = new Map([
 ]);
 
 const message = (text, info = false) => (
-  <div className={f('callout', 'withicon', { info, alert: !info })}>{text}</div>
+  <Callout type={info ? 'info' : 'alert'}>{text}</Callout>
 );
 
 const statusMessages = new Map([

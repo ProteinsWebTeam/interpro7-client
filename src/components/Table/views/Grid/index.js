@@ -33,18 +33,14 @@ class GridView extends PureComponent /*:: <Props> */ {
     if (card) {
       return (
         <AnimatedEntry
-          className={f('card-wrapper')}
+          className={f('wrapper')}
           element="div"
           data-testid="data-grid"
         >
           {dataTable.map((data, i) => (
-            <div
-              key={data?.metadata?.accession || i}
-              className={f('grid-card')}
-              data-testid="grid-entity"
-            >
-              <ErrorBoundary>{renderer(data)}</ErrorBoundary>
-            </div>
+            <ErrorBoundary key={data?.metadata?.accession || i}>
+              {renderer(data)}
+            </ErrorBoundary>
           ))}
         </AnimatedEntry>
       );

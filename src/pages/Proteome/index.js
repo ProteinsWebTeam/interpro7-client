@@ -5,8 +5,6 @@ import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import Link from 'components/generic/Link';
-// import MemberDBSelector from 'components/MemberDBSelector';
-// import ProteomeListFilters from 'components/Proteome/ProteomeListFilters';
 
 import Table, {
   Column,
@@ -22,6 +20,9 @@ import File from 'components/File';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+import MemberDBSelector from 'components/MemberDBSelector';
+
+// $FlowFixMe
 import ProteomeCard from 'components/Proteome/Card';
 
 import loadable from 'higherOrder/loadable';
@@ -42,6 +43,7 @@ import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
+import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 
 const f = foundationPartial(
   ebiGlobalStyles,
@@ -49,6 +51,7 @@ const f = foundationPartial(
   styles,
   fonts,
   exporterStyle,
+  filtersAndTable,
 );
 
 const EntryAccessionsRenderer = (entryDB) => (accession, _row, extra) => (
@@ -122,7 +125,7 @@ const AllProteomesDownload = (
     name={`proteomes.${fileType}`}
     count={count}
     customLocationDescription={description}
-    search={{ ...search, extra_fields: 'counters' }}
+    search={{ ...search, extra_fields: 'counters:entry-protein' }}
     endpoint={'proteome'}
   />
 );
@@ -178,16 +181,8 @@ class List extends PureComponent /*:: <Props> */ {
       };
     }
     return (
-      <div className={f('row')}>
-        {/* <div
-          className={f(
-            'columns',
-            'small-12',
-            'medium-3',
-            'large-2',
-            'no-padding',
-          )}
-        >
+      <div className={f('row', 'filters-and-table')}>
+        <nav>
           <div className={f('browse-side-panel')}>
             <div className={f('selector-container')}>
               <MemberDBSelector
@@ -197,8 +192,8 @@ class List extends PureComponent /*:: <Props> */ {
             </div>
             <hr style={{ paddingTop: '0.5rem' }} />
           </div>
-        </div> */}
-        <div className={f('columns')}>
+        </nav>
+        <section>
           {databases && (
             <SchemaOrgData
               data={{
@@ -409,7 +404,7 @@ class List extends PureComponent /*:: <Props> */ {
               FASTA
             </Column>
           </Table>
-        </div>
+        </section>
       </div>
     );
   }

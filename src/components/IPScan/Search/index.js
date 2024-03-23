@@ -16,6 +16,8 @@ import {
 import AdvancedOptions from 'components/IPScan/AdvancedOptions';
 import Redirect from 'components/generic/Redirect';
 import Link from 'components/generic/Link';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 import getId from 'utils/cheap-unique-id';
 
 import { createJob, goToCustomLocation } from 'actions/creators';
@@ -29,12 +31,13 @@ import { askNotificationPermission } from 'utils/browser-notifications';
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
+import blocks from 'styles/blocks.css';
 import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 import local from './style.css';
 
 import example from './example.fasta';
 
-const f = foundationPartial(interproTheme, ipro, local);
+const f = foundationPartial(interproTheme, ipro, local, blocks);
 
 export const MAX_NUMBER_OF_SEQUENCES = 100;
 
@@ -560,8 +563,7 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
             <div>
               <div
                 className={f(
-                  'secondary',
-                  'callout',
+                  'simple-box',
                   'border',
                   'margin-bottom-none',
                   'ipscan-block',
@@ -569,31 +571,32 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
               >
                 <div className={f('row')}>
                   <div className={f('large-12', 'columns', 'search-input')}>
-                    {this.props.main === 'search' && this.state.submittedJob && (
-                      <div className={f('callout')}>
-                        Your search job(
-                        <span className={f('mono')}>
-                          {this.state.submittedJob}
-                        </span>
-                        ) has been submitted. You can check its state in the{' '}
-                        <Link
-                          to={{
-                            description: {
-                              main: { key: 'result' },
-                              result: { type: 'InterProScan' },
-                            },
-                          }}
-                        >
-                          Results page
-                        </Link>
-                      </div>
-                    )}
+                    {this.props.main === 'search' &&
+                      this.state.submittedJob && (
+                        <Callout type="info">
+                          Your search job(
+                          <span className={f('mono')}>
+                            {this.state.submittedJob}
+                          </span>
+                          ) has been submitted. You can check its state in the{' '}
+                          <Link
+                            to={{
+                              description: {
+                                main: { key: 'result' },
+                                result: { type: 'InterProScan' },
+                              },
+                            }}
+                          >
+                            Results page
+                          </Link>
+                        </Callout>
+                      )}
                     <h3 className={f('light')}>Sequence, in FASTA format</h3>
                     <SchemaOrgData
                       data={{
                         name: 'Search By Sequence',
                         description:
-                          'Search for InterPro matches in your seqeunce',
+                          'Search for InterPro matches in your sequences',
                       }}
                       processData={schemaProcessDataPageSection}
                     />
@@ -603,27 +606,21 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                           <title>InterProScan</title>
                         </Helmet>
                         <p>
-                          This form allows you to scan your sequence for matches
-                          against the InterPro protein signature databases,
-                          using InterProScan tool. Enter or paste a protein
-                          sequence in FASTA format (complete or not - e.g.{' '}
-                          <span className={f('sequence')}>
-                            PMPIGSKERPTFFEIFKTRCNKADLGPISLN
-                          </span>
-                          ), with a maximum length of 40,000 amino acids.
-                        </p>
-                        <p>
-                          Please note that can scan up {MAX_NUMBER_OF_SEQUENCES}{' '}
-                          sequences at a time. Alternatively, read{' '}
+                          This form enables you to submit sequences to the
+                          InterProScan web service for scanning against the
+                          InterPro protein signature databases.
+                          <br />
+                          Please note that you can submit up to{' '}
+                          {MAX_NUMBER_OF_SEQUENCES} sequences at a time.
+                          Alternatively, you can{' '}
                           <Link
                             to={{
                               description: { other: ['about', 'interproscan'] },
                             }}
                           >
-                            more about InterProScan
+                            download InterProScan
                           </Link>{' '}
-                          for other ways of running sequences through
-                          InterProScan.
+                          to scan your sequences locally.
                         </p>
                       </div>
                     )}

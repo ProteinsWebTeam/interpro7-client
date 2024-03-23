@@ -12,12 +12,35 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 const css = cssBinder(fonts);
 
 type Props = {
+  /**
+   * Hook that is call when the full screen action gets trigger
+   * @returns void
+   */
   onFullScreenHook?: () => void;
+  /**
+   * Hook that is call when exiting the full screen action
+   * @returns void
+   */
   onExitFullScreenHook?: () => void;
+  /**
+   * Either the id, or directly the DOM element to be send to full screen
+   */
   element?: string | HTMLElement | null;
+  /**
+   * Content of the tooltip that appears when hovering this button
+   */
   tooltip: string;
+  /**
+   * Extra CSS classes to add
+   */
   className?: string;
+  /**
+   * Should we change the icon for one from https://www.ebi.ac.uk/style-lab/general/fonts/v1.3/
+   */
   dataIcon?: string;
+  /**
+   * To disable the component
+   */
   disabled?: boolean;
 };
 const FullScreenButton = ({
@@ -45,7 +68,7 @@ const FullScreenButton = ({
   }, []);
   useEffect(() => {
     setElementInDom(
-      typeof element === 'string' ? document.getElementById(element) : element
+      typeof element === 'string' ? document.getElementById(element) : element,
     );
   }, [element]);
 

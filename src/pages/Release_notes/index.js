@@ -13,6 +13,8 @@ import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Callout from 'components/SimpleCommonComponents/Callout';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 import MemberSymbol from 'components/Entry/MemberSymbol';
@@ -418,18 +420,13 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               </li>
             </ul>
             {content?.notes?.length ? (
-              <div
-                className={f('callout', 'info', 'withicon')}
-                style={{
-                  display: 'flex',
-                }}
-              >
+              <Callout type="info">
                 <div>
                   {content.notes.map((note, i) => (
                     <p key={i}>{note}</p>
                   ))}
                 </div>
-              </div>
+              </Callout>
             ) : null}
 
             <h4>Contents and coverage</h4>

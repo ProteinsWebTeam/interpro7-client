@@ -18,15 +18,31 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-vf.css';
 import styles from './style.css';
+import { MiniBadgeAI } from '../Entry/BadgeAI';
 
 const css = cssBinder(fonts, ipro, styles);
 
 type Props = {
+  /**
+   * The metadata object from the payload of the respective entity.
+   */
   metadata: Metadata;
+  /**
+   * The endpoint of the entity, i.e. `'entry' | 'protein' | 'structure' | 'taxonomy' | 'proteome' | 'set'`
+   */
   mainType: Endpoint;
+  /**
+   * List of previously tagged as favourite entries
+   */
   entries?: Array<string>;
-  markFavourite: typeof markFavourite;
-  unmarkFavourite: typeof unmarkFavourite;
+  /**
+   * function to call when the entry needs to be marked as favourite
+   */
+  markFavourite?: typeof markFavourite;
+  /**
+   * function to call when the entry needs to be unmarked as favourite
+   */
+  unmarkFavourite?: typeof unmarkFavourite;
 };
 
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload> {}
@@ -36,15 +52,15 @@ export class Title extends PureComponent<LoadedProps> {
     loadWebComponent(() =>
       import(
         /* webpackChunkName: "interpro-components" */ 'interpro-components'
-      ).then((m) => m.InterproType)
+      ).then((m) => m.InterproType),
     ).as('interpro-type');
   }
 
   manageFavourites(metadata: Metadata) {
     if ((this.props.entries || []).includes(metadata.accession)) {
-      this.props.unmarkFavourite(metadata.accession);
+      this.props.unmarkFavourite?.(metadata.accession);
     } else {
-      this.props.markFavourite(metadata.accession, { metadata });
+      this.props.markFavourite?.(metadata.accession, { metadata });
     }
   }
 
@@ -129,7 +145,7 @@ export class Title extends PureComponent<LoadedProps> {
                 'margin-bottom-large': isIPScanResult,
               })}
             >
-              {longName}{' '}
+              {longName} {(metadata as EntryMetadata).is_llm && <MiniBadgeAI />}
             </h3>
             {
               // Showing Favourites only for InterPro entries for now
@@ -150,7 +166,7 @@ export class Title extends PureComponent<LoadedProps> {
                         'icon-common',
                         (this.props.entries || []).includes(metadata.accession)
                           ? 'favourite'
-                          : 'normal'
+                          : 'normal',
                       )}
                       data-icon="&#xf005;"
                     />
@@ -174,9 +190,9 @@ export class Title extends PureComponent<LoadedProps> {
 }
 const mapStateToProps = createSelector(
   (state: { favourites: { entries: string[] } }) => state.favourites.entries,
-  (entries: string[]) => ({ entries })
+  (entries: string[]) => ({ entries }),
 );
 
 export default connect(mapStateToProps, { markFavourite, unmarkFavourite })(
-  loadData(getUrlForMeta)(Title)
+  loadData(getUrlForMeta)(Title),
 );

@@ -81,7 +81,7 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
           >
              
             <span
-              className="card-title"
+              className="title"
             >
               Pfam
                

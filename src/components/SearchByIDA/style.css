@@ -206,4 +206,5 @@ input:checked ~ .switch-paddle {
   background-color: var(--colors-nearly-white);
   border: 1px solid var(--colors-ulightgray);
   padding: 0.5rem;
+  margin-bottom: 0.5rem;
 }

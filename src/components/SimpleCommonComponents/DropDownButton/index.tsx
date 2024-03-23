@@ -8,11 +8,29 @@ import s from './style.css';
 const css = cssBinder(s, fonts);
 
 type Props = PropsWithChildren<{
+  /**
+   * What should be the label of the component. It supports nested react element
+   */
   label: ReactElement | string;
+  /**
+   * Should we add an icon from https://www.ebi.ac.uk/style-lab/general/fonts/v1.3/
+   */
   icon?: string;
+  /**
+   *  What color to use for the border
+   */
   color?: string;
+  /**
+   *  The size of the font to use. Any CSS supported value is valid. e.g. 16px, 1.2em
+   */
   fontSize?: string;
+  /**
+   * Do you want to add any other css class to this component
+   */
   extraClasses?: string;
+  /**
+   * To disable the component
+   */
   disabled?: boolean;
 }>;
 

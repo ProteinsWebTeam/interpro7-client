@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+import Card from 'components/SimpleCommonComponents/Card';
 import { getTextForLabel } from 'utils/text';
 import LabelBy from 'components/ProteinViewer/Options/LabelBy';
 
@@ -23,7 +24,7 @@ type Props = {
   data: {
     metadata: SetMetadata;
   };
-  db?: string;
+  db?: string | null;
   goToCustomLocation: typeof goToCustomLocation;
   loading: boolean;
   label?: {
@@ -140,15 +141,20 @@ class ClanViewer extends PureComponent<Props, State> {
       .filter((e) => (e as HTMLElement).nodeName === 'g')
       .filter((e) => (e as HTMLElement).classList.contains('node'))?.[0];
     if (g) {
-      this.props.goToCustomLocation({
-        description: {
-          main: { key: 'entry' },
-          entry: {
-            db: this.props.db,
-            accession: (g as HTMLElement).dataset.accession,
+      const accession = (g as HTMLElement).dataset.accession;
+      if ((event as MouseEvent).metaKey || (event as MouseEvent).ctrlKey) {
+        window.open(`/entry/${this.props.db}/${accession}`, '_blank')?.focus();
+      } else {
+        this.props.goToCustomLocation({
+          description: {
+            main: { key: 'entry' },
+            entry: {
+              db: this.props.db,
+              accession,
+            },
           },
-        },
-      });
+        });
+      }
     }
   };
   _refreshLabels = () => {
@@ -176,24 +182,24 @@ class ClanViewer extends PureComponent<Props, State> {
         {!this.state.showClanViewer &&
           (metadata.relationships?.nodes?.length || 0) >
             MAX_NUMBER_OF_NODES && (
-            <div
-              className={css('flex-card')}
-              style={{ width: '50%', padding: '1em' }}
-            >
-              <h3>ClanViewer</h3>
+            <Card title="ClanViewer">
               <section>
                 The selected clan has {metadata.relationships?.nodes.length}{' '}
                 member entries. Displaying more than {MAX_NUMBER_OF_NODES} nodes
                 in this visualisation can affect the performance of your
                 browser.
                 <button
-                  className={css('button')}
+                  className={css(
+                    'vf-button',
+                    'vf-button--secondary',
+                    'vf-button--sm',
+                  )}
                   onClick={() => this.setState({ showClanViewer: true })}
                 >
                   Visualise it
                 </button>
               </section>
-            </div>
+            </Card>
           )}
         <div>
           <DropDownButton
