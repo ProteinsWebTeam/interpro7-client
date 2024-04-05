@@ -237,7 +237,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
 
     const main = description.main.key || 'entry';
     const secondary = filters.length && (filters[0][0] as Endpoint);
-    let columnKey =
+    const columnKey =
       secondary && description[secondary].accession
         ? `${main}${secondary[0].toUpperCase()}${secondary.slice(1)}`
         : main;
