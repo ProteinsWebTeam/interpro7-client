@@ -237,13 +237,12 @@ export class DownloadForm extends PureComponent<LoadedProps> {
 
     const main = description.main.key || 'entry';
     const secondary = filters.length && (filters[0][0] as Endpoint);
-    let columnKey =
+    const columnKey =
       secondary && description[secondary].accession
         ? `${main}${secondary[0].toUpperCase()}${secondary.slice(1)}`
         : main;
     // @ts-ignore: Needs to be updated when the object2TSV is migrated
-    const endpointColumns = columns[columnKey];
-    if (!endpointColumns) columnKey = main;
+    const endpointColumns = columns[columnKey] || columns[main];
 
     const path2code = (path: string, varName: string) => {
       const parts = path.split('[*]');
