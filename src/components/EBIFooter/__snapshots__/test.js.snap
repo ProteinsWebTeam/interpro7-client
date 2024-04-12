@@ -1,124 +1,148 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<EBIFooter /> should render 1`] = `
-<div
-  className="global-footer"
-  id="global-footer"
+<footer
+  className="vf-footer"
 >
-  <nav
-    className="global-nav-expanded row"
-    id="global-nav-expanded"
+  <div
+    className="vf-footer__inner"
   >
-    <div
-      className="columns small-12"
+    <p
+      className="vf-footer__notice"
     >
-      <h4
-        className="inline-block"
+      <Memo(Connect(Link))
+        className="vf-footer__link"
+        href="//www.ebi.ac.uk/about/our-impact"
       >
-        <Memo(Connect(Link))
-          href="//www.ebi.ac.uk"
-          title="EMBL-EBI"
-        >
-          EMBL-EBI
-        </Memo(Connect(Link))>
-      </h4>
-      <span
-        className="small inline-block padding-left-large"
-      >
-        <Memo(Connect(Link))
-          className="readmore"
-          href="//intranet.ebi.ac.uk"
-        >
-          <span
-            className="icon icon-functional"
-            data-icon="L"
-          />
-           
-          Intranet for staff
-        </Memo(Connect(Link))>
-      </span>
-    </div>
+        EMBL-EBI is the home for big data in biology.
+      </Memo(Connect(Link))>
+    </p>
+    <p
+      className="vf-footer__notice"
+    >
+      We help scientists exploit complex information to make discoveries that benefit humankind.
+    </p>
     <div
-      className="medium-up-5 small-up-2"
+      className="vf-footer__links-group | vf-grid"
     >
       <div
-        className="column"
+        className="vf-links"
       >
-        <h5
-          className="research"
+        <h4
+          className="vf-links__heading"
         >
           <Memo(Connect(Link))
+            className="vf-heading__link"
             href="//www.ebi.ac.uk/services"
           >
             Services
           </Memo(Connect(Link))>
-        </h5>
-        <ul>
+        </h4>
+        <ul
+          className="vf-links__list | vf-list"
+        >
           <li
-            className="first"
+            className="vf-list__item vf-footer__notice"
           >
             <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/services"
+              className="vf-list__link"
+              href="//www.ebi.ac.uk/services/data-resources-and-tools"
             >
-              By topic
-            </Memo(Connect(Link))>
-          </li>
-          <li>
-            <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/services/all"
-            >
-              By name (A-Z)
+              Data resources and tools
             </Memo(Connect(Link))>
           </li>
           <li
-            className="last"
+            className="vf-list__item vf-footer__notice"
           >
             <Memo(Connect(Link))
+              className="vf-list__link"
+              href="//www.ebi.ac.uk/submission"
+            >
+              Data submission
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
+            <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/support"
             >
-              Help & Support
+              Support and feedback
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
+            <Memo(Connect(Link))
+              className="vf-list__link"
+              href="//www.ebi.ac.uk/licencing"
+            >
+              Licensing
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
+            <Memo(Connect(Link))
+              className="vf-list__link"
+              href="//www.ebi.ac.uk/long-term-data-preservation"
+            >
+              Long-term data preservation
             </Memo(Connect(Link))>
           </li>
         </ul>
       </div>
       <div
-        className="column"
+        className="vf-links"
       >
-        <h5
-          className="research"
+        <h4
+          className="vf-links__heading"
         >
-          <a
+          <Memo(Connect(Link))
+            className="vf-heading__link"
             href="//www.ebi.ac.uk/research"
           >
             Research
-          </a>
-        </h5>
-        <ul>
-          <li>
+          </Memo(Connect(Link))>
+        </h4>
+        <ul
+          className="vf-links__list | vf-list"
+        >
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
             <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/research/publications"
             >
               Publications
             </Memo(Connect(Link))>
           </li>
-          <li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
             <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/research/groups"
             >
               Research groups
             </Memo(Connect(Link))>
           </li>
           <li
-            className="last"
+            className="vf-list__item vf-footer__notice"
           >
             <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/research/postdocs"
             >
               Postdocs
             </Memo(Connect(Link))>
              
-            & 
+            and
+             
             <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/research/eipp"
             >
               PhDs
@@ -127,43 +151,56 @@ exports[`<EBIFooter /> should render 1`] = `
         </ul>
       </div>
       <div
-        className="column"
+        className="vf-links"
       >
-        <h5
-          className="training"
+        <h4
+          className="vf-links__heading"
         >
           <Memo(Connect(Link))
+            className="vf-heading__link"
             href="//www.ebi.ac.uk/training"
           >
             Training
           </Memo(Connect(Link))>
-        </h5>
-        <ul>
-          <li>
+        </h4>
+        <ul
+          className="vf-links__list | vf-list"
+        >
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
             <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/training/handson"
+              className="vf-list__link"
+              href="//www.ebi.ac.uk/training/live-events"
             >
-              Train at EBI
-            </Memo(Connect(Link))>
-          </li>
-          <li>
-            <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/training/roadshow"
-            >
-              Train outside EBI
-            </Memo(Connect(Link))>
-          </li>
-          <li>
-            <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/training/online"
-            >
-              Train online
+              Live training
             </Memo(Connect(Link))>
           </li>
           <li
-            className="last"
+            className="vf-list__item vf-footer__notice"
           >
             <Memo(Connect(Link))
+              className="vf-list__link"
+              href="//www.ebi.ac.uk/training/on-demand"
+            >
+              On-demand training
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
+            <Memo(Connect(Link))
+              className="vf-list__link"
+              href="//www.ebi.ac.uk/training/trainer-support"
+            >
+              Support for trainers
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
+            <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/training/contact-us"
             >
               Contact organisers
@@ -172,139 +209,188 @@ exports[`<EBIFooter /> should render 1`] = `
         </ul>
       </div>
       <div
-        className="column"
+        className="vf-links"
       >
-        <h5
-          className="industry"
+        <h4
+          className="vf-links__heading"
         >
           <Memo(Connect(Link))
+            className="vf-heading__link"
             href="//www.ebi.ac.uk/industry"
           >
             Industry
           </Memo(Connect(Link))>
-        </h5>
-        <ul>
-          <li>
+        </h4>
+        <ul
+          className="vf-links__list | vf-list"
+        >
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
             <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/industry/private"
+              className="vf-list__link"
+              href="//www.ebi.ac.uk/industry/private/members-area/"
             >
               Members Area
             </Memo(Connect(Link))>
           </li>
-          <li>
-            <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/industry/workshops"
-            >
-              Workshops
-            </Memo(Connect(Link))>
-          </li>
-          <li>
-            <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/industry/sme-forum"
-            >
-              SME Forum
-            </Memo(Connect(Link))>
-          </li>
           <li
-            className="last"
+            className="vf-list__item vf-footer__notice"
           >
             <Memo(Connect(Link))
-              href="//www.ebi.ac.uk/industry/contact"
+              className="vf-list__link"
+              href="//www.ebi.ac.uk/industry/contact-us"
             >
-              Contact Industry programme
+              Contact Industry team
             </Memo(Connect(Link))>
           </li>
         </ul>
       </div>
       <div
-        className="column"
+        className="vf-links"
       >
-        <h5
-          className="about"
+        <h4
+          className="vf-links__heading"
         >
           <Memo(Connect(Link))
+            className="vf-heading__link"
             href="//www.ebi.ac.uk/about"
           >
             About
           </Memo(Connect(Link))>
-        </h5>
-        <ul>
-          <li>
+        </h4>
+        <ul
+          className="vf-links__list | vf-list"
+        >
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
             <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/about/contact"
             >
               Contact us
             </Memo(Connect(Link))>
           </li>
-          <li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
             <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/about/events"
             >
               Events
             </Memo(Connect(Link))>
           </li>
-          <li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
             <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/about/jobs"
-              title="Jobs, postdocs, PhDs..."
             >
               Jobs
             </Memo(Connect(Link))>
           </li>
           <li
-            className="first"
+            className="vf-list__item vf-footer__notice"
           >
             <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/about/news"
             >
               News
             </Memo(Connect(Link))>
           </li>
-          <li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
             <Memo(Connect(Link))
+              className="vf-list__link"
               href="//www.ebi.ac.uk/about/people"
             >
-              People & groups
+              People and groups
+            </Memo(Connect(Link))>
+          </li>
+          <li
+            className="vf-list__item vf-footer__notice"
+          >
+            <Memo(Connect(Link))
+              className="vf-list__link"
+              href="//intranet.ebi.ac.uk"
+            >
+              Intranet for staff
             </Memo(Connect(Link))>
           </li>
         </ul>
       </div>
     </div>
-  </nav>
-  <section
-    className="ebi-footer-meta row"
-    id="ebi-footer-meta"
-  >
-    <div
-      className="columns"
+    <p
+      className="vf-footer__legal"
     >
-      <p
-        className="address"
+      <span
+        className="vf-footer__legal-text"
       >
-        EMBL-EBI, Wellcome Genome Campus, Hinxton, Cambridgeshire, CB10 1SD, UK. +44 (0)1223 49 44 44
-      </p>
-      <p
-        className="legal"
-      >
-        Copyright © EMBL-EBI 
-        2024
-         | EMBL-EBI is 
         <Memo(Connect(Link))
-          href="//www.embl.org/"
-          rel="noopener"
+          className="vf-footer__link"
+          href="//www.google.co.uk/maps/place/Hinxton,+Saffron+Walden+CB10+1SD/@52.0815334,0.1891518,17z/data=!3m1!4b1!4m5!3m4!1s0x47d87ccbfbd2538b:0x7bbdb4cde2779ff3!8m2!3d52.0800838!4d0.186415"
         >
-          part of the European Molecular Biology Laboratory
+          EMBL-EBI, Wellcome Genome Campus, Hinxton, Cambridgeshire, CB10 1SD, UK.
         </Memo(Connect(Link))>
-         
-        |
+      </span>
+      <span
+        className="vf-footer__legal-text"
+      >
+        <Memo(Connect(Link))
+          className="vf-footer__link"
+          href="tel:00441223494444"
+        >
+          Tel: +44 (0)1223 49 44 44
+        </Memo(Connect(Link))>
+      </span>
+      <span
+        className="vf-footer__legal-text"
+      >
+        <Memo(Connect(Link))
+          className="vf-footer__link"
+          href="//www.ebi.ac.uk/about/contact"
+        >
+          Full contact details
+        </Memo(Connect(Link))>
+      </span>
+    </p>
+    <p
+      className="vf-footer__legal"
+    >
+      <span
+        className="vf-footer__legal-text"
+      >
+        Copyright © EMBL 
+        2024
+      </span>
+      <span
+        className="vf-footer__legal-text"
+      >
+        EMBL-EBI is part of the
          
         <Memo(Connect(Link))
+          className="vf-footer__link"
+          href="//www.embl.org"
+        >
+          European Molecular Biology Laboratory
+        </Memo(Connect(Link))>
+      </span>
+      <span
+        className="vf-footer__legal-text"
+      >
+        <Memo(Connect(Link))
+          className="vf-footer__link"
           href="//www.ebi.ac.uk/about/terms-of-use"
         >
           Terms of use
         </Memo(Connect(Link))>
-      </p>
-    </div>
-  </section>
-</div>
+      </span>
+    </p>
+  </div>
+</footer>
 `;
