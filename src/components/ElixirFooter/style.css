@@ -1,46 +1,14 @@
-.ribbon {
-  display: flex;
-  justify-content: space-between;
-  align-content: stretch;
-  flex-wrap: wrap;
-  row-gap: 2rem;
-  padding: 1rem 0;
-  font-family: Helvetica, Arial, FreeSans, 'Liberation Sans', sans-serif;
-  border-top: 1px solid #f6f6f6;
+.vf-u-fullbleed {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
 
-  & > * {
-    flex-grow: 2;
-  }
-  & .stakeholder {
-    display: flex;
-    gap: 1rem;
+.logo {
+  height: 60px;
+}
 
-    & .logo {
-      height: 60px;
-    }
-
-    &.right {
-      flex-direction: row-reverse;
-      & .text {
-        text-align: right;
-      }
-    }
-  }
-
-  & .title {
-    font-size: 1.3rem;
-  }
-
-  &,
-  & .title,
-  & a,
-  & a:active,
-  & a:hover {
-    color: rgb(77, 77, 72);
-    text-decoration: none;
-  }
-
-  & a:hover {
-    opacity: 0.8;
+.readmore {
+  &::after {
+    /* override ebi-globals */
+    content: none !important;
   }
 }
