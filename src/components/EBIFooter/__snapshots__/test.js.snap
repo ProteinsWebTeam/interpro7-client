@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<EBIFooter /> should render 1`] = `
-<footer
+<div
   className="vf-footer"
 >
   <div
@@ -392,5 +392,5 @@ exports[`<EBIFooter /> should render 1`] = `
       </span>
     </p>
   </div>
-</footer>
+</div>
 `;
