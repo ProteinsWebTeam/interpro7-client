@@ -7,7 +7,7 @@ const css = cssBinder(local);
 const EBIFooter = () => {
   const year: string = new Date().getFullYear().toString();
   return (
-    <footer className="vf-footer">
+    <div className="vf-footer">
       <div className="vf-footer__inner">
         <p className="vf-footer__notice">
           <Link
@@ -289,7 +289,7 @@ const EBIFooter = () => {
           </span>
         </p>
       </div>
-    </footer>
+    </div>
   );
 };
 
