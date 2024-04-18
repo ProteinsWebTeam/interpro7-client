@@ -21,7 +21,7 @@ const EBIFooter = () => {
           We help scientists exploit complex information to make discoveries
           that benefit humankind.
         </p>
-        <div className="vf-footer__links-group | vf-grid">
+        <div className="vf-footer__links-group vf-grid">
           <div className="vf-links">
             <h4 className="vf-links__heading">
               <Link
@@ -31,7 +31,7 @@ const EBIFooter = () => {
                 Services
               </Link>
             </h4>
-            <ul className="vf-links__list | vf-list">
+            <ul className="vf-links__list vf-list">
               <li className={css('vf-list__item', 'vf-footer__notice')}>
                 <Link
                   href="//www.ebi.ac.uk/services/data-resources-and-tools"
@@ -81,7 +81,7 @@ const EBIFooter = () => {
                 Research
               </Link>
             </h4>
-            <ul className="vf-links__list | vf-list">
+            <ul className="vf-links__list vf-list">
               <li className={css('vf-list__item', 'vf-footer__notice')}>
                 <Link
                   href="//www.ebi.ac.uk/research/publications"
@@ -125,7 +125,7 @@ const EBIFooter = () => {
                 Training
               </Link>
             </h4>
-            <ul className="vf-links__list | vf-list">
+            <ul className="vf-links__list vf-list">
               <li className={css('vf-list__item', 'vf-footer__notice')}>
                 <Link
                   href="//www.ebi.ac.uk/training/live-events"
@@ -170,7 +170,7 @@ const EBIFooter = () => {
                 Industry
               </Link>
             </h4>
-            <ul className="vf-links__list | vf-list">
+            <ul className="vf-links__list vf-list">
               <li className={css('vf-list__item', 'vf-footer__notice')}>
                 <Link
                   href="//www.ebi.ac.uk/industry/private/members-area/"
@@ -196,7 +196,7 @@ const EBIFooter = () => {
                 About
               </Link>
             </h4>
-            <ul className="vf-links__list | vf-list">
+            <ul className="vf-links__list vf-list">
               <li className={css('vf-list__item', 'vf-footer__notice')}>
                 <Link
                   href="//www.ebi.ac.uk/about/contact"
