@@ -58,12 +58,12 @@ class Sentinel extends PureComponent /*:: <Props> */ {
     const io = new IntersectionObserver(
       ([{ intersectionRatio: notStuck }]) => {
         // If the EBI header is visible, display full banner
-        const samePage = this.props.path === prevPage;
-        if (notStuck) {
-          samePage ? stick() : unstick();
-        } else stick();
+        // const samePage = this.props.path === prevPage;
+        // if (notStuck) {
+        //   samePage ? stick() : unstick();
+        // } else stick();
 
-        // notStuck ? unstick() : stick();
+        notStuck ? unstick() : stick();
         prevPage = this.props.path;
       },
       { threshold: [1] },
@@ -81,21 +81,19 @@ class Sentinel extends PureComponent /*:: <Props> */ {
     let isStuck = false;
     let prevPage = null;
     const checkStickyness = () => {
-      console.log(this.props);
       const isNowStuck = window.scrollY > top;
       // Detect if stickyness status has changed
       if (isNowStuck !== isStuck) {
         // Trigger reducers if it has changed
 
-        const samePage = this.props.path === prevPage;
-        if (isNowStuck) {
-          stick();
-        } else {
-          samePage ? stick() : unstick();
-        }
-
+        // const samePage = this.props.path === prevPage;
+        // if (isNowStuck) {
+        //   stick();
+        // } else {
+        //   samePage ? stick() : unstick();
+        // }
+        isNowStuck ? unstick() : stick();
         prevPage = this.props.path;
-
         isStuck = isNowStuck;
       }
     };
@@ -124,13 +122,10 @@ class Sentinel extends PureComponent /*:: <Props> */ {
 }
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description,
-  description => ({
+  (state) => state.customLocation.description,
+  (description) => ({
     path: descriptionToPath(description).split('/')?.[1],
   }),
 );
 
-export default connect(
-  mapStateToProps,
-  { stick, unstick },
-)(Sentinel);
+export default connect(mapStateToProps, { stick, unstick })(Sentinel);
