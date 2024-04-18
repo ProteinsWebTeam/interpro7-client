@@ -1,25 +1,36 @@
-.masthead-black-bar a:visited {
-  color: white;
-}
-
 /* Overwrite EBI guidelines styles… */
-.global-nav > * {
-  float: initial !important;
+.masthead-black-bar {
+  & .global-nav {
+    & > li {
+      float: initial !important;
 
-  &.embl-selector {
-    float: right !important;
+      & > a {
+        color: white;
 
-    & > button {
-      cursor: pointer !important;
+        &:not(.float-right):hover {
+          color: #373a36;
+          background-color: #d0d0ce !important;
+          border-bottom: none;
+          text-decoration: underline;
+        }
+      }
 
-      &::after {
-        content: none !important;
+      &.embl-selector {
+        float: right !important;
+
+        & > a {
+          cursor: pointer !important;
+
+          &:hover {
+            margin: 1px 1px 0 1px !important;
+            text-decoration: none;
+          }
+
+          &::after {
+            content: none !important;
+          }
+        }
       }
     }
   }
-}
-
-.home-mobile a {
-  color: transparent !important;
-  user-select: none;
 }
