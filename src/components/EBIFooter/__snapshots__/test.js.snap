@@ -23,7 +23,7 @@ exports[`<EBIFooter /> should render 1`] = `
       We help scientists exploit complex information to make discoveries that benefit humankind.
     </p>
     <div
-      className="vf-footer__links-group | vf-grid"
+      className="vf-footer__links-group vf-grid"
     >
       <div
         className="vf-links"
@@ -39,7 +39,7 @@ exports[`<EBIFooter /> should render 1`] = `
           </Memo(Connect(Link))>
         </h4>
         <ul
-          className="vf-links__list | vf-list"
+          className="vf-links__list vf-list"
         >
           <li
             className="vf-list__item vf-footer__notice"
@@ -107,7 +107,7 @@ exports[`<EBIFooter /> should render 1`] = `
           </Memo(Connect(Link))>
         </h4>
         <ul
-          className="vf-links__list | vf-list"
+          className="vf-links__list vf-list"
         >
           <li
             className="vf-list__item vf-footer__notice"
@@ -164,7 +164,7 @@ exports[`<EBIFooter /> should render 1`] = `
           </Memo(Connect(Link))>
         </h4>
         <ul
-          className="vf-links__list | vf-list"
+          className="vf-links__list vf-list"
         >
           <li
             className="vf-list__item vf-footer__notice"
@@ -222,7 +222,7 @@ exports[`<EBIFooter /> should render 1`] = `
           </Memo(Connect(Link))>
         </h4>
         <ul
-          className="vf-links__list | vf-list"
+          className="vf-links__list vf-list"
         >
           <li
             className="vf-list__item vf-footer__notice"
@@ -260,7 +260,7 @@ exports[`<EBIFooter /> should render 1`] = `
           </Memo(Connect(Link))>
         </h4>
         <ul
-          className="vf-links__list | vf-list"
+          className="vf-links__list vf-list"
         >
           <li
             className="vf-list__item vf-footer__notice"
