@@ -63,17 +63,6 @@ const SideMenuAsync = loadable({
   loading: NullComponent,
 });
 
-const EMBLDropdownAsync = loadable({
-  loader: () =>
-    schedule(2 * DEFAULT_SCHEDULE_DELAY).then(
-      () =>
-        import(
-          /* webpackChunkName: "embl-dropdown" */ 'components/EMBLDropdown'
-        ),
-    ),
-  loading: NullComponent,
-});
-
 const ElixirFooterAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(
@@ -136,7 +125,6 @@ const Root = () => (
       <SchemaOrgData processData={schemaProcessInterProCitation} />
       <LoadingBarAsync />
       <Overlay />
-      <EMBLDropdownAsync />
       <SideMenuAsync />
       <header>
         <EBIHeader />
