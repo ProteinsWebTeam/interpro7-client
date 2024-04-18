@@ -41,17 +41,12 @@ export const EBIHeader = () => (
               'embl-ebi',
             )}
           >
-            <button
+            <Link
               className={css('button', 'float-right')}
-              type="button"
-              aria-expanded="false"
-              aria-label="EMBL dropdown"
-              style={{
-                outlineStyle: 'none',
-              }}
+              href={'//www.ebi.ac.uk/'}
             >
               &nbsp;
-            </button>
+            </Link>
           </li>
         </ul>
       </nav>
