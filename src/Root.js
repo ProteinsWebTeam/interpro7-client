@@ -26,6 +26,7 @@ const Pages = loadable({
 
 const EBIHeader = loadable({
   loader: () =>
+    // $FlowFixMe
     import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
   loading: () => <div className="tmp-ebi-header" />,
 });
