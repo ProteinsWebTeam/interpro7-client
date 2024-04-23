@@ -365,6 +365,7 @@ interface ProteinMetadata extends Metadata {
   gene: string;
   protein_evidence: number;
   is_fragment: boolean;
+  in_alphafold: boolean;
   ida_accession: string;
   source_organism: SourceOrganism;
 }
