@@ -2,7 +2,7 @@
 
 exports[`<ElixirFooter /> should render 1`] = `
 <div
-  className="vf-u-fullbleed"
+  className="vf-u-fullbleed elixir-footer"
 >
   <div
     className="vf-footer__inner"
