@@ -368,6 +368,7 @@ exports[`<EBIFooter /> should render 1`] = `
         Copyright © EMBL 
         2024
       </span>
+       
       <span
         className="vf-footer__legal-text"
       >
@@ -380,6 +381,7 @@ exports[`<EBIFooter /> should render 1`] = `
           European Molecular Biology Laboratory
         </Memo(Connect(Link))>
       </span>
+       
       <span
         className="vf-footer__legal-text"
       >

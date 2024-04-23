@@ -7,7 +7,7 @@ const css = cssBinder(local);
 const EBIFooter = () => {
   const year: string = new Date().getFullYear().toString();
   return (
-    <div className="vf-footer">
+    <div className={css('vf-footer')}>
       <div className="vf-footer__inner">
         <p className="vf-footer__notice">
           <Link
@@ -272,13 +272,13 @@ const EBIFooter = () => {
         <p className="vf-footer__legal">
           <span className="vf-footer__legal-text">
             Copyright &copy; EMBL {year}
-          </span>
+          </span>{' '}
           <span className="vf-footer__legal-text">
             EMBL-EBI is part of the{' '}
             <Link className="vf-footer__link" href="//www.embl.org">
               European Molecular Biology Laboratory
             </Link>
-          </span>
+          </span>{' '}
           <span className="vf-footer__legal-text">
             <Link
               className="vf-footer__link"

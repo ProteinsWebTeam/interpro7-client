@@ -1,4 +1,9 @@
-.vf-list__item {
-  font-size: 16px !important;
-  line-height: 1.71 !important;
+.vf-footer {
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  & .vf-list__item {
+    font-size: 16px;
+    line-height: 1.71;
+  }
 }

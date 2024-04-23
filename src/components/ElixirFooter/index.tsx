@@ -9,7 +9,7 @@ const css = cssBinder(local);
 
 const ElixirFooter = () => {
   return (
-    <div className={css('vf-u-fullbleed')}>
+    <div className={css('vf-u-fullbleed', 'elixir-footer')}>
       <div className="vf-footer__inner">
         <div className="vf-grid vf-grid__col-2">
           <div className="vf-banner">
