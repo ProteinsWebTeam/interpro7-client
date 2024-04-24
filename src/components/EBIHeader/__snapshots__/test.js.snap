@@ -2,130 +2,70 @@
 
 exports[`<EBIHeader /> should render 1`] = `
 <header
-  className="clearfix masthead-black-bar tmp-ebi-header"
+  className="ebi-header-footer masthead-black-bar tmp-ebi-header vf-content vf-u-fullbleed"
   id="masthead-black-bar"
 >
-  <div>
-    <nav
-      className="row"
+  <nav>
+    <ul
+      className="menu global-nav text-right"
+      id="global-nav"
     >
-      <ul
-        className="menu global-nav text-right"
-        id="global-nav"
+      <li
+        className="ebi"
       >
-        <li
-          className="home-mobile show-for-small-only"
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk"
         >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk"
-          />
-        </li>
-        <li
-          className="embl hide"
+          EMBL-EBI
+        </Memo(Connect(Link))>
+      </li>
+      <li
+        className="services"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/services"
         >
-          <Memo(Connect(Link))
-            href="//www.embl.org/"
-          >
-            EMBL
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="barcelona hide"
+          Services
+        </Memo(Connect(Link))>
+      </li>
+      <li
+        className="research"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/research"
         >
-          <Memo(Connect(Link))
-            href="//www.embl-barcelona.es/"
-          >
-            Barcelona
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="hamburg hide"
+          Research
+        </Memo(Connect(Link))>
+      </li>
+      <li
+        className="training"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/training"
         >
-          <Memo(Connect(Link))
-            href="//www.embl-hamburg.de/"
-          >
-            Hamburg
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="heidelberg hide"
+          Training
+        </Memo(Connect(Link))>
+      </li>
+      <li
+        className="about"
+      >
+        <Memo(Connect(Link))
+          href="//www.ebi.ac.uk/about"
         >
-          <Memo(Connect(Link))
-            href="//www.embl.de/"
-          >
-            Heidelberg
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="grenoble hide"
+          About us
+        </Memo(Connect(Link))>
+      </li>
+      <li
+        className="float-right show-for-medium embl-selector embl-ebi"
+      >
+        <Memo(Connect(Link))
+          className="button float-right"
+          href="//www.ebi.ac.uk/"
         >
-          <Memo(Connect(Link))
-            href="//www.embl.fr/"
-          >
-            Grenoble
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="rome hide"
-        >
-          <Memo(Connect(Link))
-            href="//www.embl.it/"
-          >
-            Rome
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="ebi"
-        >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk"
-          >
-            EMBL-EBI
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="services"
-        >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/services"
-          >
-            Services
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="research"
-        >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/research"
-          >
-            Research
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="training"
-        >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/training"
-          >
-            Training
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="about"
-        >
-          <Memo(Connect(Link))
-            href="//www.ebi.ac.uk/about"
-          >
-            About us
-          </Memo(Connect(Link))>
-        </li>
-        <li
-          className="float-right show-for-medium embl-selector embl-ebi"
-        >
-          <Memo(Connect(_EmblButton)) />
-        </li>
-      </ul>
-    </nav>
-  </div>
+           
+        </Memo(Connect(Link))>
+      </li>
+    </ul>
+  </nav>
 </header>
 `;

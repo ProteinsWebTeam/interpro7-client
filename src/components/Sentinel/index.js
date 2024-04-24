@@ -53,7 +53,7 @@ class Sentinel extends PureComponent /*:: <Props> */ {
   };
   // Default, use IntersectionObserver
   _listenScrolledIO = (element, { stick, unstick }) => {
-    let prevPage = null;
+    // let prevPage = null;
     // IntersectionObserver to be used on the EBI header
     const io = new IntersectionObserver(
       ([{ intersectionRatio: notStuck }]) => {
@@ -64,7 +64,7 @@ class Sentinel extends PureComponent /*:: <Props> */ {
         // } else stick();
 
         notStuck ? unstick() : stick();
-        prevPage = this.props.path;
+        // prevPage = this.props.path;
       },
       { threshold: [1] },
     );
@@ -79,7 +79,7 @@ class Sentinel extends PureComponent /*:: <Props> */ {
   // Fallback to event listener
   _listenScrolledEventListener = ({ stick, unstick, top }) => {
     let isStuck = false;
-    let prevPage = null;
+    // let prevPage = null;
     const checkStickyness = () => {
       const isNowStuck = window.scrollY > top;
       // Detect if stickyness status has changed
@@ -93,7 +93,7 @@ class Sentinel extends PureComponent /*:: <Props> */ {
         //   samePage ? stick() : unstick();
         // }
         isNowStuck ? unstick() : stick();
-        prevPage = this.props.path;
+        // prevPage = this.props.path;
         isStuck = isNowStuck;
       }
     };

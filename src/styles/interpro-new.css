@@ -50,19 +50,6 @@ body .main a.button {
   white-space: inherit; /* default is nowrap in ebi css - bug for small screens*/
 }
 
-/* move the EMBL button - temp - not in the v1.3 ebi-global but it is live (lab)*/
-@media screen and (max-width: 53em) {
-  .masthead-black-bar li.embl-selector {
-    padding-left: 0.5rem;
-  }
-  .masthead-black-bar li.embl-selector .button {
-    padding-right: 1rem;
-    &:hover {
-      padding-right: 1rem;
-    }
-  }
-}
-
 /* custom TAB onglets and tab content*/
 .tabs {
   border-top-width: 0;
