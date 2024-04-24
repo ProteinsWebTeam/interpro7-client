@@ -2,76 +2,100 @@
 
 exports[`<ElixirFooter /> should render 1`] = `
 <div
-  className="row columns"
+  className="vf-u-fullbleed elixir-footer"
 >
   <div
-    className="ribbon"
+    className="vf-footer__inner"
   >
-    <div>
-      <Memo(Connect(Link))
-        href="https://www.elixir-europe.org/about-us/who-we-are/nodes/embl-ebi"
-        target="_blank"
+    <div
+      className="vf-grid vf-grid__col-2"
+    >
+      <div
+        className="vf-banner"
       >
         <div
-          className="stakeholder"
+          className="vf-flag vf-flag--middle vf-flag--400"
         >
-          <LazyImage
-            alt="Elixir logo"
-            className="logo"
-            src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.4/images/logos/ELIXIR/elixir-cdr.gif"
-          />
           <div
-            className="text"
+            className="vf-flag__media"
           >
-            <span
-              className="title"
+            <LazyImage
+              alt="Elixir logo"
+              className="logo"
+              src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.4/images/logos/ELIXIR/elixir-cdr.gif"
+            />
+          </div>
+          <div
+            className="vf-flag__body"
+          >
+            <h4
+              className="vf-banner__text--lg"
             >
-              This service is part of the ELIXIR infrastructure
-            </span>
-            <br />
-            <small>
-              <span
-                className="elixir-banner-description"
+              <Memo(Connect(Link))
+                className="vf-link"
+                href="//www.elixir-europe.org/"
               >
-                InterPro is an ELIXIR Core Data Resource
-              </span>
-            </small>
+                InterPro is part of the ELIXIR infrastructure
+              </Memo(Connect(Link))>
+            </h4>
+            <p
+              className="vf-banner__text"
+            >
+              InterPro is an ELIXIR Core Data Resource.
+               
+              <Memo(Connect(Link))
+                className="readmore vf-link"
+                href="//www.elixir-europe.org/platforms/data/core-data-resources"
+              >
+                Learn more ›
+              </Memo(Connect(Link))>
+            </p>
           </div>
         </div>
-      </Memo(Connect(Link))>
-    </div>
-    <div>
-      <Memo(Connect(Link))
-        href="https://globalbiodata.org/scientific-activities/global-core-biodata-resources/"
-        target="_blank"
+      </div>
+      <div
+        className="vf-banner"
       >
         <div
-          className="stakeholder right"
+          className="vf-flag vf-flag--middle vf-flag--400"
         >
-          <LazyImage
-            alt="Glogal biodata coalition logo"
-            className="logo"
-            src={{}}
-          />
           <div
-            className="text"
+            className="vf-flag__body"
           >
-            <span
-              className="title"
+            <h4
+              className="vf-banner__text--lg"
             >
-              This service is part of the GBC
-            </span>
-            <br />
-            <small>
-              <span
-                className="elixir-banner-description"
+              <Memo(Connect(Link))
+                className="vf-link"
+                href="//globalbiodata.org/"
               >
-                InterPro is a Global Core Biodata Resource
-              </span>
-            </small>
+                InterPro is part of the Global Biodata Coalition
+              </Memo(Connect(Link))>
+            </h4>
+            <p
+              className="vf-banner__text"
+            >
+              InterPro is a Global Core Biodata Resource.
+               
+              <Memo(Connect(Link))
+                className="readmore vf-link"
+                href="//globalbiodata.org/what-we-do/global-core-biodata-resources/"
+              >
+                Learn more ›
+              </Memo(Connect(Link))>
+            </p>
+          </div>
+          <div
+            className="vf-flag__media"
+          >
+            <img
+              alt="Glogal biodata coalition logo"
+              className="logo"
+              src={{}}
+            />
           </div>
         </div>
-      </Memo(Connect(Link))>
+      </div>
     </div>
   </div>
 </div>

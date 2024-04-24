@@ -101,6 +101,9 @@ export const getUrl = createSelector(
         }
         if (hash === 'table') {
           switch (description.main.key) {
+            case 'entry':
+              _search.extra_fields = 'short_name';
+              break;
             case 'taxonomy':
             case 'proteome':
               _search.extra_fields = 'counters:entry-protein';
@@ -185,7 +188,7 @@ export const getReversedUrl = createSelector(
       extra_fields: undefined,
       page_size: search.page_size || settingsPageSize,
     };
-    if (description.main.key === 'set' && description?.entry?.isFilter) {
+    if (newMain === 'entry') {
       newQuery.extra_fields = 'short_name';
     }
     const counters = getNeededCountersForSubpages(

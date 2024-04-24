@@ -62,14 +62,14 @@ function delay(milliseconds) {
       const key = argv.substring(2).toLowerCase();
       if (SHOULD_RUN[key] === undefined) {
         console.error(`Error: invalid argument: [${argv}]`);
-        console.error(`List of valid arguments:`);
-        console.error(`  --interpro`);
-        console.error(`  --dbs`);
-        console.error(`  --protein`);
-        console.error(`  --structure`);
-        console.error(`  --taxonomy`);
-        console.error(`  --proteome`);
-        console.error(`  --set`);
+        console.error('List of valid arguments:');
+        console.error('  --interpro');
+        console.error('  --dbs');
+        console.error('  --protein');
+        console.error('  --structure');
+        console.error('  --taxonomy');
+        console.error('  --proteome');
+        console.error('  --set');
         process.exit(1);
       } else {
         shouldRun.add(key);

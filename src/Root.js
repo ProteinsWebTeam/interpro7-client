@@ -69,6 +69,7 @@ const ElixirFooterAsync = loadable({
     schedule(DEFAULT_SCHEDULE_DELAY).then(
       () =>
         import(
+          // $FlowFixMe
           /* webpackChunkName: "elixir-footer", webpackPreload: true */ 'components/ElixirFooter'
         ),
     ),
@@ -80,6 +81,7 @@ const EBIFooterAsync = loadable({
     schedule(DEFAULT_SCHEDULE_DELAY).then(
       () =>
         import(
+          // $FlowFixMe
           /* webpackChunkName: "ebi-footer", webpackPreload: true */ 'components/EBIFooter'
         ),
     ),

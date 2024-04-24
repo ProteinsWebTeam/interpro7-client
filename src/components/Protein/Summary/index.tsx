@@ -43,6 +43,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-vf.css';
 import local from './style.css';
 import summary from 'styles/summary.css';
+import BaseLink from 'components/ExtLink/BaseLink';
 
 const css = cssBinder(summary, fonts, ipro, local);
 
@@ -280,6 +281,30 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                     UniProt
                   </UniProtLink>
                 </li>
+                {metadata.in_alphafold ? (
+                  <>
+                    <li>
+                      <BaseLink
+                        id={metadata.accession}
+                        target={'_blank'}
+                        pattern="https://alphafold.ebi.ac.uk/entry/{id}"
+                        className={css('ext')}
+                      >
+                        AlphaFold
+                      </BaseLink>
+                    </li>
+                    <li>
+                      <BaseLink
+                        id={metadata.accession}
+                        target={'_blank'}
+                        pattern="https://search.foldseek.com/search?accession={id}&source=AlphaFoldDB"
+                        className={css('ext')}
+                      >
+                        Foldseek
+                      </BaseLink>
+                    </li>
+                  </>
+                ) : null}
               </ul>
             </section>
             <hr style={{ margin: '0.8em' }} />
