@@ -12,12 +12,11 @@ import Tabs from 'components/Tabs';
 import Description from 'components/Description';
 import CurrentVersion from 'components/home/CurrentVersion';
 import GeneralWarning from 'components/home/GeneralWarning';
+import EBISurvey from 'components/home/EBISurvey';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
 import { PrintedInterPro2022 } from 'components/Help/Publication';
 import Tip from 'components/Tip';
 import Toast from 'components/Toast/Toast';
-// $FlowFixMe
-import Callout from 'components/SimpleCommonComponents/Callout';
 
 import Link from 'components/generic/Link';
 
@@ -254,22 +253,7 @@ class Home extends PureComponent {
           />
         ) : null}
         <GeneralWarning />
-        <Callout type="warning">
-          <div>
-            Do data resources managed by EMBL-EBI and our collaborators make a
-            difference to your work?
-            <br /> Please take 10 minutes to fill in our{' '}
-            <Link
-              href="https://www.surveymonkey.com/r/HJKYKTT?channel=[webpage]"
-              className={f('ext')}
-              target="_blank"
-            >
-              annual user survey
-            </Link>
-            , and help us make the case for why sustaining open data resources
-            is critical for life sciences research.
-          </div>
-        </Callout>
+        <EBISurvey />
 
         <div className={f('row')}>
           <div className={f('columns', 'large-12')}>
