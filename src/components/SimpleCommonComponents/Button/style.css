@@ -1,6 +1,7 @@
 button.vf-button {
   box-shadow: none;
   transform: none;
+  margin: 0;
   &.vf-button--primary {
     --vf-button-background-color: #1779ba;
     --vf-button-border-color: #1779ba;

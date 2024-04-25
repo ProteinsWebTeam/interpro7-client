@@ -8,16 +8,17 @@ import loadData from 'higherOrder/loadData/ts';
 import { Params } from 'higherOrder/loadData/extract-params';
 
 import Link from 'components/generic/Link';
+import { Button } from 'components/SimpleCommonComponents/Button';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Table, { Column, PageSizeSelector, SearchBox } from 'components/Table';
 
 import cssBinder from 'styles/cssBinder';
+
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import style from './style.css';
 
-const f = cssBinder(style, ipro, fonts);
+const css = cssBinder(ipro, fonts);
 
 type Props = {
   search?: Record<string, string>;
@@ -68,7 +69,7 @@ const ProteinTable = ({
                   },
                   search: {},
                 }}
-                className={f('acc-row')}
+                className={css('acc-row')}
               >
                 {accession}
               </Link>
@@ -77,7 +78,7 @@ const ProteinTable = ({
                   {'\u00A0' /* non-breakable space */}
                   <Tooltip title="Reviewed by UniProtKB curators">
                     <span
-                      className={f('icon', 'icon-common')}
+                      className={css('icon', 'icon-common')}
                       data-icon="&#xf2f0;"
                       aria-label="reviewed"
                     />
@@ -102,7 +103,7 @@ const ProteinTable = ({
                   },
                   search: {},
                 }}
-                className={f('acc-row')}
+                className={css('acc-row')}
               >
                 {name}
               </Link>
@@ -139,24 +140,25 @@ const ProteinTable = ({
         </Column>
         <Column
           dataKey="length"
-          headerClassName={f('text-right')}
-          cellClassName={f('text-right')}
+          headerClassName={css('text-right')}
+          cellClassName={css('text-right')}
           renderer={(length: number) => length.toLocaleString()}
         >
           Length
         </Column>
         <Column
           dataKey={''}
-          headerClassName={f('text-right')}
-          cellClassName={f('text-right')}
+          headerClassName={css('text-right')}
+          cellClassName={css('text-right')}
           renderer={(_: string, row: Record<string, string>) => {
             return (
-              <button
-                className={f('button')}
+              <Button
+                type="secondary"
+                size="small"
                 onClick={() => onProteinChange(row.accession)}
               >
                 Show prediction
-              </button>
+              </Button>
             );
           }}
         />
