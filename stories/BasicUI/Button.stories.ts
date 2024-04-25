@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button } from './Button';
+import { Button } from 'components/SimpleCommonComponents/Button';
 
 const meta = {
   title: 'Basic UI/Button',
@@ -12,7 +12,7 @@ const meta = {
   argTypes: {
     backgroundColor: { control: 'color' },
     size: {
-      options: ['medium', 'small'],
+      // options: ['medium', 'small'],
       control: { type: 'radio' },
     },
   },
@@ -23,7 +23,7 @@ type ButtonStory = StoryObj<typeof meta>;
 
 export const Primary: ButtonStory = {
   args: {
-    primary: true,
+    type: 'primary',
     icon: 'icon-coffee',
     children: 'Button',
     size: 'medium',
@@ -32,9 +32,20 @@ export const Primary: ButtonStory = {
 
 export const Secondary: ButtonStory = {
   args: {
-    primary: false,
+    type: 'secondary',
     children: 'Button',
-    size: 'medium',
+  },
+};
+export const Tertiary: ButtonStory = {
+  args: {
+    type: 'tertiary',
+    children: 'Button',
+  },
+};
+export const Hollow: ButtonStory = {
+  args: {
+    type: 'hollow',
+    children: 'Button',
   },
 };
 

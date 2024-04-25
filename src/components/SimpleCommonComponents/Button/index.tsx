@@ -2,18 +2,27 @@ import React, { PropsWithChildren } from 'react';
 
 import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
 
-const css = cssBinder(fonts);
+const css = cssBinder(fonts, local);
 
 interface ButtonProps {
   /**
    * Is this the principal call to action on the page?
    */
-  primary?: boolean;
+  type?: 'primary' | 'secondary' | 'tertiary' | 'hollow';
   /**
    * What background color to use
    */
   backgroundColor?: string;
+  /**
+   * What text color to use
+   */
+  textColor?: string;
+  /**
+   * What border color to use
+   */
+  borderColor?: string;
   /**
    * How large should the button be?
    */
@@ -32,14 +41,16 @@ interface ButtonProps {
  * Primary UI component for user interaction
  */
 export const Button = ({
-  primary = false,
+  type = 'primary',
   size = 'medium',
   backgroundColor,
+  textColor,
+  borderColor,
   icon,
   children,
   ...props
 }: PropsWithChildren<ButtonProps>) => {
-  const mode = primary ? 'vf-button--primary' : 'vf-button--secondary';
+  const mode = `vf-button--${type}`;
   let sizeClass = '';
   if (size === 'small') sizeClass = 'vf-button--sm';
   if (size === 'large') sizeClass = 'vf-button--lg';
@@ -47,7 +58,12 @@ export const Button = ({
     <button
       type="button"
       className={css('vf-button', mode, sizeClass)}
-      style={{ backgroundColor, whiteSpace: 'nowrap' }}
+      style={{
+        backgroundColor,
+        color: textColor,
+        borderColor,
+        whiteSpace: 'nowrap',
+      }}
       {...props}
     >
       {icon && (

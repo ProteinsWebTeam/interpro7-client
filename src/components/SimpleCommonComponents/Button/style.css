@@ -1,0 +1,34 @@
+button.vf-button {
+  box-shadow: none;
+  transform: none;
+  &.vf-button--primary {
+    --vf-button-background-color: #1779ba;
+    --vf-button-border-color: #1779ba;
+    --vf-button-text-color: white;
+  }
+  &.vf-button--secondary {
+    --vf-button-background-color: white;
+    --vf-button-border-color: #1779ba;
+    --vf-button-text-color: #1779ba;
+  }
+  &.vf-button--tertiary {
+    --vf-button-background-color: #6a6a6a;
+    --vf-button-border-color: #6a6a6a;
+    --vf-button-text-color: white;
+  }
+  &.vf-button--hollow {
+    --vf-button-background-color: transparent;
+    --vf-button-border-color: transparent;
+    --vf-button-text-color: #1779ba;
+  }
+}
+button.vf-button:hover,
+button.vf-button:active,
+button.vf-button:focus {
+  box-shadow: none;
+  transform: none;
+  opacity: 0.8;
+}
+button.vf-button--lg {
+  font-size: 2rem;
+}
