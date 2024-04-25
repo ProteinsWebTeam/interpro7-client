@@ -5,6 +5,7 @@
   /* border-top: 0 solid #eee; */
 
   & > nav {
+    max-width: var(--vf-body-width, 80em);
     & .global-nav {
       & > li {
         font-size: 14.4px;
@@ -29,14 +30,12 @@
 
           & > a {
             cursor: pointer !important;
-            width: 105px;
             &:hover,
             &:active,
             &:focus {
               border: 1px solid transparent;
               border-bottom: 0;
               text-decoration: none;
-              width: 105px;
               opacity: 1;
             }
 
@@ -53,7 +52,10 @@
   }
 }
 
-@media screen and (max-width: 53em) {
+@media screen and (max-width: 39.9375em) {
+  .masthead-black-bar {
+    height: 3em;
+  }
   .masthead-black-bar li.embl-selector {
     padding-left: 0.5rem;
   }
