@@ -34,6 +34,8 @@ interface ButtonProps {
   /**
    * Optional click handler
    */
+  style?: React.CSSProperties;
+
   onClick?: () => void;
 }
 
@@ -48,6 +50,7 @@ export const Button = ({
   borderColor,
   icon,
   children,
+  style,
   ...props
 }: PropsWithChildren<ButtonProps>) => {
   const mode = `vf-button--${type}`;
@@ -63,6 +66,7 @@ export const Button = ({
         color: textColor,
         borderColor,
         whiteSpace: 'nowrap',
+        ...(style || {}),
       }}
       {...props}
     >
