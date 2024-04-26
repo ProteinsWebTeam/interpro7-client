@@ -50,7 +50,6 @@ const SequenceCheck = ({
         </p>
         <Button
           type="secondary"
-          size="small"
           onClick={() => setShowDiff(!showDiff)}
           style={{ width: '10rem' }}
         >

@@ -154,7 +154,6 @@ const ProteinTable = ({
             return (
               <Button
                 type="secondary"
-                size="small"
                 onClick={() => onProteinChange(row.accession)}
               >
                 Show prediction

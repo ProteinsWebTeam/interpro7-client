@@ -56,7 +56,6 @@ class DescriptionReadMore extends PureComponent<
         <Description textBlocks={[textToShow]} {...this.props} />
         {minNumberOfCharToShow < text.length && (
           <Button
-            size="small"
             type="tertiary"
             onClick={() => this.setState({ showMore: !showMore })}
           >
