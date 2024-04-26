@@ -173,7 +173,7 @@ export class Snippet extends PureComponent<Props, State> {
               <option value="js">JavaScript (node, version ≥ 10)</option>
             </select>
           </label>
-          <Button type="secondary" ref={this._ref}>
+          <Button type="secondary" ref={this._ref} icon="icon-copy">
             Copy to clipboard
           </Button>{' '}
           <a
@@ -185,6 +185,14 @@ export class Snippet extends PureComponent<Props, State> {
             download={`script-InterPro.${language}`}
             href={href || ''}
           >
+            <span
+              className={css(
+                'icon',
+                'icon-common',
+                'ico-neutral',
+                'icon-download',
+              )}
+            ></span>{' '}
             Download
           </a>
           {language === 'js' && (

@@ -28,14 +28,15 @@ exports[`<Controls /> should render 1`] = `
   <div
     className="container"
   >
-    <button
-      className="button hollow warning"
+    <ForwardRef
+      backgroundColor="white"
+      borderColor="orange"
       disabled={false}
       onClick={[Function]}
-      type="button"
+      textColor="orange"
     >
       Generate
-    </button>
+    </ForwardRef>
     <Memo(Connect(Link))
       className="button hollow warning"
       disabled={true}

@@ -11,12 +11,6 @@ import { Button } from 'components/SimpleCommonComponents/Button';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';
 
-import cssBinder from 'styles/cssBinder';
-import ipro from 'styles/interpro-vf.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-
-const css = cssBinder(ipro, fonts);
-
 type Props = {
   proteinAccession: string;
   alphaFoldSequence?: string;
