@@ -31,8 +31,18 @@ interface ButtonProps {
    * Should we add an icon from https://www.ebi.ac.uk/style-lab/general/fonts/v1.3/
    */
   icon?: string;
+  /**
+   * Any aditional CSS class to add to the button
+   */
   className?: string;
+  /**
+   * Object of React CSS properties to add to the button
+   */
   style?: React.CSSProperties;
+  /**
+   * Should use as submit button
+   */
+  submit?: boolean;
 
   /**
    * Optional click handler
@@ -59,6 +69,7 @@ export const Button = forwardRef<Ref, PropsWithChildren<ButtonProps>>(
       children,
       className,
       style,
+      submit = false,
       ...props
     },
     ref,
@@ -70,7 +81,7 @@ export const Button = forwardRef<Ref, PropsWithChildren<ButtonProps>>(
     return (
       <button
         ref={ref}
-        type="button"
+        type={submit ? 'submit' : 'button'}
         className={`${css('vf-button', mode, sizeClass)} ${className || ''}`}
         style={{
           backgroundColor,
@@ -89,3 +100,4 @@ export const Button = forwardRef<Ref, PropsWithChildren<ButtonProps>>(
     );
   },
 );
+export default Button;

@@ -12,7 +12,11 @@ const meta = {
   argTypes: {
     backgroundColor: { control: 'color' },
     size: {
-      // options: ['medium', 'small'],
+      options: ['large', 'medium', 'small'],
+      control: { type: 'radio' },
+    },
+    type: {
+      options: ['primary', 'secondary', 'tertiary', 'hollow'],
       control: { type: 'radio' },
     },
   },
