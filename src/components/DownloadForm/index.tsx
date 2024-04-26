@@ -10,6 +10,7 @@ import { Params } from 'higherOrder/loadData/extract-params';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 import { goToCustomLocation } from 'actions/creators';
+import { Button } from 'components/SimpleCommonComponents/Button';
 
 import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
@@ -332,17 +333,15 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                     type !== main && !description[type as Endpoint].isFilter,
                 )
                 .map(([type]) => (
-                  <button
+                  <Button
                     key={type}
-                    type="button"
-                    className={css('button')}
                     value={type}
                     data-key={`description.${type}.isFilter`}
                     data-value
                     onClick={this._handleChange}
                   >
                     {type.charAt(0).toUpperCase() + type.slice(1)}
-                  </button>
+                  </Button>
                 ))}
             </div>
             <ul className={css('no-bullet')}>
@@ -361,14 +360,12 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                         />
                       }
                       button={
-                        <button
-                          type="button"
+                        <Button
                           data-key={`description.${key}.isFilter`}
-                          className={css('button')}
                           onClick={this._handleChange}
                         >
                           Remove
-                        </button>
+                        </Button>
                       }
                     />
                     <DBChoiceInput
@@ -398,14 +395,12 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                         />
                       }
                       button={
-                        <button
-                          type="button"
+                        <Button
                           data-key={`description.${key}.accession`}
-                          className={css('button')}
                           onClick={this._handleChange}
                         >
                           Remove
-                        </button>
+                        </Button>
                       }
                     />
                   </fieldset>
