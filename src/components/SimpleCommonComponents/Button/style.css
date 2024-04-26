@@ -1,4 +1,5 @@
-button.vf-button {
+button.vf-button,
+a.vf-button {
   box-shadow: none;
   transform: none;
   margin: 0;
@@ -22,14 +23,26 @@ button.vf-button {
     --vf-button-border-color: transparent;
     --vf-button-text-color: #1779ba;
   }
-}
-button.vf-button:hover,
-button.vf-button:active,
-button.vf-button:focus {
-  box-shadow: none;
-  transform: none;
-  opacity: 0.8;
-}
-button.vf-button--lg {
-  font-size: 2rem;
+  &.vf-button--lg {
+    font-size: 2rem;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    box-shadow: none;
+    transform: none;
+    opacity: 0.8;
+  }
+
+  &[disabled] {
+    --vf-button-background-color: #999;
+    --vf-button-border-color: #aaa;
+    --vf-color__text--primary: #ddd;
+    &:hover,
+    &:active,
+    &:focus {
+      opacity: 1;
+    }
+  }
 }

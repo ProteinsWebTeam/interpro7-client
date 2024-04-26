@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, forwardRef } from 'react';
 
 import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -31,49 +31,61 @@ interface ButtonProps {
    * Should we add an icon from https://www.ebi.ac.uk/style-lab/general/fonts/v1.3/
    */
   icon?: string;
+  className?: string;
+  style?: React.CSSProperties;
+
   /**
    * Optional click handler
    */
-  style?: React.CSSProperties;
-
   onClick?: () => void;
+
+  [otherProp: string]: unknown;
 }
+
+export type Ref = HTMLButtonElement;
 
 /**
  * Primary UI component for user interaction
  */
-export const Button = ({
-  type = 'primary',
-  size = 'medium',
-  backgroundColor,
-  textColor,
-  borderColor,
-  icon,
-  children,
-  style,
-  ...props
-}: PropsWithChildren<ButtonProps>) => {
-  const mode = `vf-button--${type}`;
-  let sizeClass = '';
-  if (size === 'small') sizeClass = 'vf-button--sm';
-  if (size === 'large') sizeClass = 'vf-button--lg';
-  return (
-    <button
-      type="button"
-      className={css('vf-button', mode, sizeClass)}
-      style={{
-        backgroundColor,
-        color: textColor,
-        borderColor,
-        whiteSpace: 'nowrap',
-        ...(style || {}),
-      }}
-      {...props}
-    >
-      {icon && (
-        <span className={css('icon', 'icon-common', 'ico-neutral', icon)} />
-      )}{' '}
-      {children}
-    </button>
-  );
-};
+export const Button = forwardRef<Ref, PropsWithChildren<ButtonProps>>(
+  (
+    {
+      type = 'primary',
+      size = 'small',
+      backgroundColor,
+      textColor,
+      borderColor,
+      icon,
+      children,
+      className,
+      style,
+      ...props
+    },
+    ref,
+  ) => {
+    const mode = `vf-button--${type}`;
+    let sizeClass = '';
+    if (size === 'small') sizeClass = 'vf-button--sm';
+    if (size === 'large') sizeClass = 'vf-button--lg';
+    return (
+      <button
+        ref={ref}
+        type="button"
+        className={`${css('vf-button', mode, sizeClass)} ${className || ''}`}
+        style={{
+          backgroundColor,
+          color: textColor,
+          borderColor,
+          whiteSpace: 'nowrap',
+          ...(style || {}),
+        }}
+        {...props}
+      >
+        {icon && (
+          <span className={css('icon', 'icon-common', 'ico-neutral', icon)} />
+        )}{' '}
+        {children}
+      </button>
+    );
+  },
+);
