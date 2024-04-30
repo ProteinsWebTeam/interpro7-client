@@ -73,20 +73,20 @@ exports[`<AdvancedOptions /> should render 1`] = `
         A number of different protein sequence applications are launched, These applications search against specific databases and have preconfigured cut off thresholds.
       </p>
       <div
-        className="button-group"
+        className="button-group line-with-buttons"
       >
-        <button
-          className="button secondary"
+        <ForwardRef
           onClick={[Function]}
+          type="tertiary"
         >
           Select all
-        </button>
-        <button
-          className="button secondary"
+        </ForwardRef>
+        <ForwardRef
           onClick={[Function]}
+          type="tertiary"
         >
           Unselect all
-        </button>
+        </ForwardRef>
       </div>
       <fieldset
         className="fieldset"

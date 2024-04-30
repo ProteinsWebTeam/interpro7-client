@@ -237,8 +237,11 @@ exports[`<IPScanSearch /> should render 1`] = `
                 className="button-group line-with-buttons"
               >
                 <label
-                  className="hollow button tertiary user-select-none"
+                  className="vf-button vf-button vf-button--secondary vf-button--sm user-select-none"
                 >
+                  <span
+                    className="icon icon-common icon-folder-open"
+                  />
                   Choose file
                   <input
                     hidden={true}
@@ -246,20 +249,21 @@ exports[`<IPScanSearch /> should render 1`] = `
                     type="file"
                   />
                 </label>
-                <button
-                  className="hollow button secondary user-select-none"
+                <ForwardRef
+                  className="user-select-none"
                   onClick={[Function]}
-                  type="button"
+                  type="secondary"
                 >
                   Example protein sequence
-                </button>
-                <button
-                  className="button alert hidden"
+                </ForwardRef>
+                <ForwardRef
+                  backgroundColor="var(--colors-alert-main)"
+                  borderColor="var(--colors-alert-main)"
+                  className="hidden"
                   onClick={[Function]}
-                  type="button"
                 >
                   Automatic FASTA clean up
-                </button>
+                </ForwardRef>
               </div>
             </div>
           </div>
@@ -272,20 +276,22 @@ exports[`<IPScanSearch /> should render 1`] = `
             className="row"
           >
             <div
-              className="large-8 columns stacked-for-small button-group margin-bottom-none"
+              className="large-8 columns stacked-for-small button-group margin-bottom-none line-with-buttons"
             >
-              <input
-                className="button"
+              <ForwardRef
+                className=""
                 disabled={true}
-                type="submit"
+                submit={true}
                 value="Search"
-              />
-              <input
-                className="secondary hollow button"
+              >
+                Search
+              </ForwardRef>
+              <ForwardRef
                 onClick={[Function]}
-                type="button"
-                value="Clear"
-              />
+                type="secondary"
+              >
+                Clear
+              </ForwardRef>
             </div>
             <div
               className="large-4 columns show-for-medium search-adv"
