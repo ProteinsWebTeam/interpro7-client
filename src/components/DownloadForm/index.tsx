@@ -242,7 +242,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
       secondary && description[secondary].accession
         ? `${main}${secondary[0].toUpperCase()}${secondary.slice(1)}`
         : main;
-    // @ts-ignore: Needs to be updated when the object2TSV is migrated
+    // @ts-expect-error: Needs to be updated when the object2TSV is migrated
     const endpointColumns = columns[columnKey] || columns[main];
 
     const path2code = (path: string, varName: string) => {

@@ -6,12 +6,6 @@ import { connect } from 'react-redux';
 import File from 'components/File';
 import { SupportedExtensions } from 'components/File/FileButton';
 
-import cssBinder from 'styles/cssBinder';
-
-import exporterStyle from 'components/Table/Exporter/style.css';
-
-const css = cssBinder(exporterStyle);
-
 type Props = {
   entryLocation?: EndpointLocation;
   search?: Record<string, string>;

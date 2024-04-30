@@ -206,10 +206,11 @@ const EntryAlignments = ({
               </>
             )}
             <Link
-              className={
-                f('vf-button', 'vf-button--secondary', 'vf-button--sm') +
-                ' vf-button'
-              }
+              className={`${f(
+                'vf-button',
+                'vf-button--secondary',
+                'vf-button--sm',
+              )} vf-button`}
               href={`${url}${tag}${alignmentType}&download`}
               download={`${
                 data?.payload?.metadata?.accession || 'download'
