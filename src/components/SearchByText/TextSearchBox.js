@@ -100,9 +100,12 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
       }
     }
 
-    if (value && !this.state.searchHistory.includes(value))
-      this.setState({ searchHistory: [value, ...this.state.searchHistory] });
-    searchStorage.setValue(this.state.searchHistory);
+    let tmpSearchHistory = this.state.searchHistory;
+    if (value && !this.state.searchHistory.includes(value)) {
+      tmpSearchHistory = [value, ...this.state.searchHistory];
+      this.setState({ searchHistory: tmpSearchHistory });
+    }
+    searchStorage.setValue(tmpSearchHistory);
 
     // Finally just trigger a search
     this.props.goToCustomLocation(

@@ -677,15 +677,12 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                   <div className={f('columns')}>
                     <div className={f('button-group', 'line-with-buttons')}>
                       <label
-                        className={
-                          'vf-button ' +
-                          f(
-                            'vf-button',
-                            'vf-button--secondary',
-                            'vf-button--sm',
-                            'user-select-none',
-                          )
-                        }
+                        className={`vf-button ${f(
+                          'vf-button',
+                          'vf-button--secondary',
+                          'vf-button--sm',
+                          'user-select-none',
+                        )}`}
                       >
                         <span
                           className={f(

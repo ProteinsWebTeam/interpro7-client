@@ -6,6 +6,8 @@ import { createSelector } from 'reselect';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 import {
   updateJob,
   deleteJob,
@@ -105,16 +107,6 @@ export class Actions extends PureComponent /*:: <Props> */ {
     return (
       <nav className={f('buttons', { centered: forStatus })}>
         {withTitle && 'Actions: '}
-        {/* <Tooltip title="Save job"> */}
-        {/* <button */}
-        {/* className={f('button', 'tiny', saved ? 'warning' : 'secondary')} */}
-        {/* type="button" */}
-        {/* onClick={this._handleSaveToggle} */}
-        {/* aria-label="Save job" */}
-        {/* > */}
-        {/* ★ */}
-        {/* </button> */}
-        {/* </Tooltip> */}
         <Tooltip
           title={
             <div>
@@ -124,11 +116,12 @@ export class Actions extends PureComponent /*:: <Props> */ {
             </div>
           }
         >
-          <button
-            className={f('icon', 'icon-common', 'ico-neutral')}
+          <Button
+            type="hollow"
+            icon="icon-trash"
             onClick={this._handleDelete}
-            data-icon="&#xf1f8;"
             aria-label="Delete Results"
+            textColor="var(--colors-light-txt)"
           />
         </Tooltip>
         {status === 'finished' && (
@@ -141,11 +134,12 @@ export class Actions extends PureComponent /*:: <Props> */ {
               </div>
             }
           >
-            <button
-              className={f('icon', 'icon-common', 'ico-neutral')}
-              data-icon="&#x53;"
+            <Button
+              type="hollow"
+              icon="icon-save"
               onClick={() => keepJobAsLocal(localID)}
               aria-label="Save results in Browser"
+              textColor="var(--colors-light-txt)"
             />
           </Tooltip>
         )}
@@ -159,11 +153,12 @@ export class Actions extends PureComponent /*:: <Props> */ {
               </div>
             }
           >
-            <button
-              className={f('icon', 'icon-common', 'ico-neutral')}
-              data-icon="&#xf1da;"
+            <Button
+              type="hollow"
+              icon="icon-history"
               onClick={this._handleReRun}
               aria-label="Execute the job again"
+              textColor="var(--colors-light-txt)"
             />
           </Tooltip>
         )}

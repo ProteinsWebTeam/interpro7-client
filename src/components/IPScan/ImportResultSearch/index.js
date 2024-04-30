@@ -7,6 +7,8 @@ import LoadedFileDialog from './LoadedFileDialog';
 
 import { foundationPartial } from 'styles/foundation';
 import blockEvent from 'utils/block-event';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
@@ -117,14 +119,14 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
         onChange={handleChange}
         onKeyPress={handleKeyPress}
       />
-      <button
+      <Button
         disabled={!isValid}
-        className={f('button')}
+        // className={f('button')}
         aria-label={`${TITLE} from server with ID`}
         onClick={handleImport}
-      >
-        <span className={f('icon', 'icon-common')} data-icon="&#xf381;" />
-      </button>
+        icon="icon-cloud-download-alt"
+      />
+
       <label
         aria-label={`${TITLE} from file`}
         className={f('button', 'icon', 'icon-common')}

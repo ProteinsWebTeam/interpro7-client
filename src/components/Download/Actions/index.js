@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import Link from 'components/generic/Link';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { downloadDelete } from 'actions/creators';
 
@@ -14,8 +16,9 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const f = foundationPartial(fonts, ipro, local);
+const f = foundationPartial(fonts, ipro, local, buttonCSS);
 
 /*:: type Props = {
   localID: string,
@@ -51,29 +54,32 @@ class Actions extends PureComponent /*:: <Props> */ {
       .replace(/\|(.+)$/, '.$1');
 
     return (
-      <div>
+      <div id="dassd" style={{ whiteSpace: 'nowrap' }}>
         <Tooltip title="Download job">
           <Link
-            className={f('icon', 'icon-common', 'ico-neutral')}
+            className={f(
+              'vf-button',
+              'vf-button--hollow',
+              'vf-button--sm',
+              'icon',
+              'icon-common',
+              'ico-neutral',
+              'icon-download',
+            )}
             href={blobURL}
             download={fileName}
             disabled={!blobURL}
             aria-label="Download job"
-            data-icon="&#x3d;"
-            style={{ fontSize: '160%', border: 'none' }}
+            style={{ color: 'var(--colors-light-txt)' }}
           />
         </Tooltip>
         <Tooltip title="Delete job">
-          <button
-            style={{ fontSize: '120%' }}
-            className={f(
-              'icon',
-              'icon-common',
-              'ico-neutral',
-              'margin-left-large',
-            )}
+          <Button
+            type="hollow"
+            icon="icon-trash"
+            textColor="var(--colors-light-txt)"
+            className={f('margin-left-large')}
             onClick={this._handleDelete}
-            data-icon="&#xf1f8;"
             aria-label="Delete job"
           />
         </Tooltip>

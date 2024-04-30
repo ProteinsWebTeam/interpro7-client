@@ -7,11 +7,9 @@ import { connect } from 'react-redux';
 import { deleteJob } from 'actions/creators';
 
 import Modal from 'components/SimpleCommonComponents/Modal';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
-import { foundationPartial } from 'styles/foundation';
-import ipro from 'styles/interpro-new.css';
-
-const f = foundationPartial(ipro);
 /*::
   type Props = {
     show: Boolean,
@@ -41,9 +39,7 @@ const ClearAllDialog = (
             that were loaded from {from}.
           </p>
           <div style={{ textAlign: 'right' }}>
-            <button className={f('button')} onClick={deleteJobs}>
-              Delete
-            </button>
+            <Button onClick={deleteJobs}>Delete</Button>
           </div>
         </>
       ) : (
