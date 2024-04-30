@@ -15,6 +15,7 @@ import cssBinder from 'styles/cssBinder';
 
 import local from './style.css';
 import search from 'components/IPScan/Search/style.css';
+import Button from 'components/SimpleCommonComponents/Button';
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -212,8 +213,8 @@ export class SearchByIDA extends PureComponent<Props, State> {
                 />
               </div>
               <div className={css('ida-controls')}>
-                <button
-                  className={css('button', 'secondary')}
+                <Button
+                  className={css('ida-button')}
                   onClick={() =>
                     this._handleSubmit({
                       entries: entries.concat(''),
@@ -224,9 +225,9 @@ export class SearchByIDA extends PureComponent<Props, State> {
                 >
                   <DomainButton label="➕" fill="#75bf40" stroke="#75bf40" />{' '}
                   <span>Add Domain to include</span>
-                </button>
-                <button
-                  className={css('button', 'secondary')}
+                </Button>
+                <Button
+                  className={css('ida-button')}
                   onClick={() =>
                     this._handleSubmit({
                       ignore: ignore.concat(''),
@@ -237,7 +238,7 @@ export class SearchByIDA extends PureComponent<Props, State> {
                 >
                   <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
                   <span>Add Domain to exclude</span>
-                </button>
+                </Button>
                 <div className={css('options')}>
                   <ToggleSwitch
                     switchCond={order}

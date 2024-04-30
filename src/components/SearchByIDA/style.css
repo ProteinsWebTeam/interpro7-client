@@ -54,12 +54,9 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  & button.button.secondary {
+  & .ida-button {
     & * {
       vertical-align: middle;
-    }
-    & span {
-      font-size: 1.2em;
     }
   }
   & label {
