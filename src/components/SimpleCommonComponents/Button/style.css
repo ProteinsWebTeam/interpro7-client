@@ -1,8 +1,10 @@
 button.vf-button,
-a.vf-button {
+a.vf-button,
+div.vf-button {
   box-shadow: none;
   transform: none;
   margin: 0;
+  align-self: baseline;
   &.vf-button--primary {
     --vf-button-background-color: #1779ba;
     --vf-button-border-color: #1779ba;
@@ -44,5 +46,9 @@ a.vf-button {
     &:focus {
       opacity: 1;
     }
+  }
+  & .icon::before {
+    color: inherit;
+    margin-right: 0.5rem;
   }
 }

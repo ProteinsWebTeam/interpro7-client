@@ -12,6 +12,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  padding-bottom: 0.2rem;
 }
 .protvista-grid header {
   background: #fafafa;

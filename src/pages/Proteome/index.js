@@ -21,6 +21,8 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
 import MemberDBSelector from 'components/MemberDBSelector';
+// $FlowFixMe
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
 
 // $FlowFixMe
 import ProteomeCard from 'components/Proteome/Card';
@@ -237,18 +239,7 @@ class List extends PureComponent /*:: <Props> */ {
                   name="tsv"
                 />
                 <label htmlFor="api">API</label>
-                <Link
-                  target="_blank"
-                  href={url}
-                  className={f('button', 'hollow', 'imitate-progress-button')}
-                  name="api"
-                >
-                  <span
-                    className={f('icon', 'icon-common', 'icon-export')}
-                    data-icon="&#xf233;"
-                  />
-                  <span className={f('file-label')}>Web View</span>
-                </Link>
+                <APIViewButton url={url} />
               </div>
             </Exporter>
             <PageSizeSelector />

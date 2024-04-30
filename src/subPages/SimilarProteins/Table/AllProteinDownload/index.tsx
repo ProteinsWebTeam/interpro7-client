@@ -34,7 +34,6 @@ const AllProteinDownload = ({
     }}
     search={{ ida }}
     endpoint="protein"
-    className={css('generate-button')}
   />
 );
 

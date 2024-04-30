@@ -6,12 +6,10 @@ import Link from 'components/generic/Link';
 import cssBinder from 'styles/cssBinder';
 
 import local from './style.css';
-import exporterStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import fileStyle from 'components/File/FileButton/style.css';
-import ipro from 'styles/interpro-vf.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const css = cssBinder(ipro, exporterStyle, fonts, local, fileStyle);
+const css = cssBinder(local, fonts, buttonCSS);
 
 type Props = {
   url: string;
@@ -21,13 +19,7 @@ const APIViewButton = ({ url }: Props) => {
     <Tooltip title="See the raw response from the InterPro API">
       <Link target="_blank" href={url} className={css('no-decoration')}>
         <div
-          className={css(
-            'file-button',
-            'vf-button',
-            'vf-button--secondary',
-            'vf-button--sm',
-            'generate-button',
-          )}
+          className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
         >
           <span className={css('as-progress-button')}>
             <span

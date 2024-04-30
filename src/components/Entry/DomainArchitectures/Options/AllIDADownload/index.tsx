@@ -33,7 +33,6 @@ const AllIDADownload = ({ entryLocation, search, fileType, count }: Props) => (
     }}
     search={entryLocation?.accession ? { ida: '' } : search}
     endpoint="ida"
-    className={css('generate-button')}
   />
 );
 

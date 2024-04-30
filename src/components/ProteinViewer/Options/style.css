@@ -60,9 +60,8 @@
 }
 
 .protvista-menu {
-  margin: 0.5rem 0 0.5rem 0;
   & button {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
   & ul.menu-options {
     list-style-type: none;

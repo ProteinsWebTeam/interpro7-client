@@ -6,11 +6,12 @@ import local from './style.css';
 
 const css = cssBinder(fonts, local);
 
+export type ButtonTypes = 'primary' | 'secondary' | 'tertiary' | 'hollow';
 interface ButtonProps {
   /**
    * Is this the principal call to action on the page?
    */
-  type?: 'primary' | 'secondary' | 'tertiary' | 'hollow';
+  type?: ButtonTypes;
   /**
    * What background color to use
    */
@@ -94,7 +95,7 @@ export const Button = forwardRef<Ref, PropsWithChildren<ButtonProps>>(
       >
         {icon && (
           <span className={css('icon', 'icon-common', 'ico-neutral', icon)} />
-        )}{' '}
+        )}
         {children}
       </button>
     );
