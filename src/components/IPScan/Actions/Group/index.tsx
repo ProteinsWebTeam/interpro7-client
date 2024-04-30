@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { deleteJob, goToCustomLocation } from 'actions/creators';
 import getTableAccess, { IPScanJobsData } from 'storage/idb';
@@ -105,7 +106,7 @@ const GroupActions = ({
 
   return (
     <nav className={css('buttons')}>
-      <DropDownButton label="Group Actions" icon="&#xf03a;">
+      <DropDownButton label="Group Actions" icon="icon-list">
         <ul>
           <li>
             <Tooltip
@@ -117,15 +118,15 @@ const GroupActions = ({
                 </div>
               }
             >
-              <button
-                className={css('icon', 'icon-common', 'ico-neutral', 'group')}
+              <Button
+                className={css('group')}
+                type="hollow"
                 onClick={handleDelete}
-                data-icon="&#xf1f8;"
+                icon="icon-trash"
                 aria-label="Delete Results"
               >
-                {' '}
                 Delete All
-              </button>
+              </Button>
             </Tooltip>
           </li>
           <DownloadAll
@@ -142,15 +143,15 @@ const GroupActions = ({
                 </div>
               }
             >
-              <button
-                className={css('icon', 'icon-common', 'ico-neutral', 'group')}
+              <Button
+                // className={css('icon', 'icon-common', 'ico-neutral', 'group')}
+                type="hollow"
                 onClick={handleReRun}
-                data-icon="&#xf0e2;"
+                icon="icon-undo"
                 aria-label="Resubmit all sequences"
               >
-                {' '}
                 Resubmit All
-              </button>
+              </Button>
             </Tooltip>
           </li>
         </ul>

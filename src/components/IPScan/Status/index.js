@@ -21,6 +21,7 @@ import GroupActions from 'components/IPScan/Actions/Group';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -181,18 +182,20 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           groupActions={GroupActions}
         >
           <ExtraOptions>
-            <DropDownButton label="Clear All" icon="&#xf1f8;">
+            <DropDownButton label="Clear All" icon="icon-trash">
               <ul>
                 <li>
-                  <button onClick={() => this.deleteAll('file')}>
+                  <Button type="hollow" onClick={() => this.deleteAll('file')}>
                     Loaded from File
-                  </button>
+                  </Button>
                 </li>
                 <li>
-                  {' '}
-                  <button onClick={() => this.deleteAll('server')}>
+                  <Button
+                    type="hollow"
+                    onClick={() => this.deleteAll('server')}
+                  >
                     Loaded from Servers
-                  </button>
+                  </Button>
                 </li>
               </ul>
             </DropDownButton>

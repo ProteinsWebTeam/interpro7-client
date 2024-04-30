@@ -18,8 +18,9 @@ import { foundationPartial } from 'styles/foundation';
 import localStyle from './style.css';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const f = foundationPartial(localStyle, ipro, fonts);
+const f = foundationPartial(localStyle, ipro, fonts, buttonCSS);
 
 const Alignment = ({
   type,
@@ -205,12 +206,10 @@ const EntryAlignments = ({
               </>
             )}
             <Link
-              className={f(
-                'vf-button',
-                'vf-button--secondary',
-                'vf-button--sm',
-                'download',
-              )}
+              className={
+                f('vf-button', 'vf-button--secondary', 'vf-button--sm') +
+                ' vf-button'
+              }
               href={`${url}${tag}${alignmentType}&download`}
               download={`${
                 data?.payload?.metadata?.accession || 'download'

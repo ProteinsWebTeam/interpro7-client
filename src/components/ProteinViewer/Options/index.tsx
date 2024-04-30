@@ -181,7 +181,7 @@ const ProteinViewerOptions = ({
           }
           extraClasses={css('protvista-menu')}
         >
-          <ul className={css('menu-options')}>
+          <ul className={css('menu-options', 'vf-content')}>
             <li>
               Colour By
               <ul className={css('nested-list')}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -17,7 +17,14 @@ type Props = {
 };
 
 type LabelOptions = 'accession' | 'name' | 'short';
+const labelMap: Array<[LabelOptions, string]> = [
+  ['accession', 'Accession'],
+  ['name', 'Name'],
+  ['short', 'Short Name'],
+];
+
 const LabelBy = ({ labelContent, changeSettingsRaw }: Props) => {
+  const id = useId();
   const updateLabel = (evt: React.FormEvent) => {
     const opt = (evt.target as HTMLInputElement).value;
     if (['accession', 'name', 'short'].includes(opt)) {
@@ -33,41 +40,29 @@ const LabelBy = ({ labelContent, changeSettingsRaw }: Props) => {
   };
   return (
     <section>
-      <header>Label by</header>
       <ul className={css('nested-list', 'no-bullet')}>
-        <li key={'accession'}>
-          <label>
-            <input
-              type="checkbox"
-              onChange={updateLabel}
-              value={'accession'}
-              checked={labelContent.accession}
-            />{' '}
-            Accession
-          </label>
-        </li>
-        <li key={'name'}>
-          <label>
-            <input
-              type="checkbox"
-              onChange={updateLabel}
-              value={'name'}
-              checked={labelContent.name}
-            />{' '}
-            Name
-          </label>
-        </li>
-        <li key={'shortname'}>
-          <label>
-            <input
-              type="checkbox"
-              onChange={updateLabel}
-              value={'short'}
-              checked={labelContent.short}
-            />{' '}
-            Short Name
-          </label>
-        </li>
+        {labelMap.map(([key, label]) => (
+          <li key={key}>
+            <div
+              className={css('vf-form__item', 'vf-form__item--checkbox')}
+              style={{
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <input
+                className="vf-form__checkbox"
+                type="checkbox"
+                onChange={updateLabel}
+                value={key}
+                checked={labelContent[key]}
+                id={`${id}-key`}
+              />
+              <label className={css('vf-form__label')} htmlFor={`${id}-key`}>
+                {label}
+              </label>
+            </div>
+          </li>
+        ))}
       </ul>
     </section>
   );
@@ -77,7 +72,7 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui,
   (ui: UISettings) => ({
     labelContent: ui.labelContent,
-  })
+  }),
 );
 
 export default connect(mapStateToProps, { changeSettingsRaw })(LabelBy);
