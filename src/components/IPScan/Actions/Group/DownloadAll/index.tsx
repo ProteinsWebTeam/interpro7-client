@@ -5,6 +5,7 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
 import { Params } from 'higherOrder/loadData/extract-params';
 
+import Button from 'components/SimpleCommonComponents/Button';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 
@@ -14,8 +15,9 @@ import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../../style.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const css = cssBinder(fonts, local);
+const css = cssBinder(fonts, local, buttonCSS);
 
 const downloadFile = (jsonContent: Record<string, unknown>, name: string) => {
   const downloadContent = JSON.stringify(jsonContent);
@@ -63,10 +65,12 @@ const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
             target="_blank"
             href={`${dataURL}/${remoteID}/${type}`}
             download={`InterProScan-${remoteID}.${type}`}
-            className={css('group')}
+            className={css('vf-button', 'vf-button--hollow', 'vf-button--sm')}
           >
             <span className={css('icon', 'icon-common')} data-icon="&#xf019;" />{' '}
-            {type === 'sequence' ? 'FASTA input' : `${type.toUpperCase()} output`}
+            {type === 'sequence'
+              ? 'FASTA input'
+              : `${type.toUpperCase()} output`}
           </Link>
         </Tooltip>
       </li>
@@ -81,15 +85,15 @@ const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
           </div>
         }
       >
-        <button
-          className={css('icon', 'icon-common', 'ico-neutral', 'group')}
+        <Button
+          className={css('group')}
+          type="hollow"
           onClick={handleDownload}
-          data-icon="&#xf019;"
+          icon="icon-download"
           aria-label="Download group results"
         >
-          {' '}
           JSON output
-        </button>
+        </Button>
       </Tooltip>
     </li>
   );
