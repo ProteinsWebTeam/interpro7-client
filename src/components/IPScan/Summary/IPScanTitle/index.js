@@ -2,6 +2,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import T from 'prop-types';
 
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
+
 import { foundationPartial } from 'styles/foundation';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from '../style.css';
@@ -76,7 +79,9 @@ const IPScanTitle = (
           onChange={(event) => setTitle(event.target.value)}
         />
         {['finished', 'imported file', 'saved in browser'].includes(status) ? (
-          <button
+          <Button
+            type="hollow"
+            textColor="var(--colors-light-txt)"
             onClick={() =>
               changeTitle(
                 localID,
@@ -87,21 +92,9 @@ const IPScanTitle = (
                 setReadable,
               )
             }
-          >
-            {readable ? (
-              <span
-                className={f('icon', 'icon-common')}
-                data-icon="&#xf303;"
-                title={'Rename'}
-              />
-            ) : (
-              <span
-                className={f('icon', 'icon-common')}
-                data-icon="&#x53;"
-                title={'Save'}
-              />
-            )}
-          </button>
+            icon={readable ? 'icon-pencil-alt' : 'icon-save'}
+            title={readable ? 'Rename' : 'Save'}
+          ></Button>
         ) : null}
       </section>
     </section>

@@ -3,20 +3,22 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
-import LoadedFileDialog from './LoadedFileDialog';
+import { goToCustomLocation } from 'actions/creators';
 
-import { foundationPartial } from 'styles/foundation';
+import LoadedFileDialog from './LoadedFileDialog';
 import blockEvent from 'utils/block-event';
 // $FlowFixMe
 import Button from 'components/SimpleCommonComponents/Button';
+
+import { foundationPartial } from 'styles/foundation';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
-import { goToCustomLocation } from 'actions/creators';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const f = foundationPartial(interproTheme, fonts, local, ipro);
+const f = foundationPartial(interproTheme, fonts, local, ipro, buttonCSS);
 
 const TITLE = 'Import Result';
 const ImportResultSearch = ({ goToCustomLocation }) => {
@@ -129,7 +131,16 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
 
       <label
         aria-label={`${TITLE} from file`}
-        className={f('button', 'icon', 'icon-common')}
+        className={
+          'vf-button ' +
+          f(
+            'icon',
+            'icon-common',
+            'vf-button',
+            'vf-button--primary',
+            'vf-button--sm',
+          )
+        }
         data-icon="&#xf093;"
       >
         {' '}

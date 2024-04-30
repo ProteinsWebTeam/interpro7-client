@@ -12,6 +12,8 @@ import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideCheck, {
   isNucleotideFile,
 } from 'components/IPScan/NucleotideCheck';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -168,9 +170,7 @@ const LoadedFileDialog = (
           />
           <NucleotideCheck fileContent={fileContent} />
           <div style={{ textAlign: 'right' }}>
-            <button className={f('button')} onClick={saveFileInIndexDB}>
-              OK
-            </button>
+            <Button onClick={saveFileInIndexDB}>OK</Button>
           </div>
         </>
       ) : (

@@ -22,6 +22,7 @@ import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Button from 'components/SimpleCommonComponents/Button';
+import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -38,9 +39,9 @@ import interproTheme from 'styles/theme-interpro.css'; /* needed for custom butt
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
-import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const f = foundationPartial(interproTheme, fonts, ipro, local);
+const f = foundationPartial(interproTheme, fonts, ipro, local, buttonCSS);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -72,7 +73,14 @@ const GoToNewSearch = () => (
         search: { type: 'sequence' },
       },
     }}
-    className={f('button')}
+    className={
+      'vf-button ' + f('vf-button', 'vf-button--primary', 'vf-button--sm')
+    }
+    style={{
+      marginRight: '0.2rem',
+      color: 'var(--vf-button-text-color)',
+      borderColor: 'var(--vf-button-border-color)',
+    }}
   >
     Submit a new search
   </Link>
