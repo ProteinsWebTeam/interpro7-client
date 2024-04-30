@@ -6,6 +6,7 @@
 
   & > nav {
     max-width: var(--vf-body-width, 80em);
+    margin: 0 auto;
     & .global-nav {
       & > li {
         font-size: 14.4px;
@@ -18,8 +19,8 @@
             color: white;
           }
           &:not(.float-right):hover {
-            color: #373a36;
-            background-color: #d0d0ce !important;
+            color: var(--vf-color--grey--darkest);
+            background-color: var(--vf-color--grey--lightest);
             border-bottom: none;
             text-decoration: underline;
           }
