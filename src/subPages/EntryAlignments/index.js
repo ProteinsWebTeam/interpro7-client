@@ -13,6 +13,8 @@ import Link from 'components/generic/Link';
 import Tip from 'components/Tip';
 import AlignmentViewer from './Viewer';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { foundationPartial } from 'styles/foundation';
 import localStyle from './style.css';
@@ -60,9 +62,7 @@ const Alignment = ({
           </p>
           <p>
             If you still want to display it, press{' '}
-            <button className={f('button')} onClick={() => setForceShow(true)}>
-              HERE
-            </button>
+            <Button onClick={() => setForceShow(true)}>HERE</Button>
           </p>
         </div>
       )}

@@ -8,6 +8,8 @@ import { createSelector } from 'reselect';
 import ToggleSwitch from 'components/ToggleSwitch';
 // $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 import { DEV } from 'config';
 
 import { noop } from 'lodash-es';
@@ -34,13 +36,9 @@ import { EntryColorMode } from 'utils/entry-color';
 
 import { foundationPartial } from 'styles/foundation';
 
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-
-import theme from 'styles/theme-interpro.css';
 import local from './styles.css';
 
-const f = foundationPartial(ebiGlobalStyles, fonts, theme, local);
+const f = foundationPartial(local);
 
 const DEFAULT_SEC = 20;
 const offsetForStickyHeader = 95;
@@ -161,17 +159,14 @@ const NotificationSettings = (
                 Allow us to send you browser notifications when one of your Jobs
                 or Downloads finishes.
               </p>
-              <button
-                type="button"
-                className={f('button')}
-                onClick={() => askNotificationPermission(setStatus)}
-              >
+              <Button onClick={() => askNotificationPermission(setStatus)}>
                 Enable notifications
-              </button>
+              </Button>
             </>
           )}
         </div>
-        <div className={f('medium-12', 'column')}>
+
+        <div className={f('medium-12', 'column')} style={{ marginTop: '2em' }}>
           <p>
             There are few tips shown in the website on how to use features
             efficiently. It can be turned on/off.
@@ -436,8 +431,11 @@ UISettings.propTypes = {
   changeSettingsRaw: T.func,
 };
 
-const CacheSettings = (
-  { cache: { enabled } } /*: {cache: {enabled: boolean}} */,
+const _CacheSettings = (
+  {
+    cache: { enabled },
+    addToast,
+  } /*: {cache: {enabled: boolean}, addToast: function} */,
 ) => (
   <form data-category="cache">
     <h4 id="settings-cache">Cache settings</h4>
@@ -458,25 +456,32 @@ const CacheSettings = (
           SRLabel={'Caching'}
         />
         <div>
-          <button
-            type="button"
-            className={f('button')}
+          <Button
             onClick={() => {
               window.sessionStorage.clear();
+              addToast(
+                {
+                  title: 'Cache Cleared',
+                  ttl: 1000,
+                },
+                'cache',
+              );
             }}
           >
             Clear Local Cache
-          </button>
+          </Button>
         </div>
       </div>
     </div>
   </form>
 );
-CacheSettings.propTypes = {
+_CacheSettings.propTypes = {
   cache: T.shape({
     enabled: T.bool,
   }).isRequired,
+  addToast: T.func.isRequired,
 };
+const CacheSettings = connect(undefined, { addToast })(_CacheSettings);
 
 const getStatusText = (status) => {
   if (status === null) return 'Unknown';
@@ -685,13 +690,7 @@ class _AddToHomeScreen extends PureComponent /*:: <Props,State> */ {
       <div className={f('row')}>
         <div className={f('columns', 'large-12')}>
           <h3>Add InterPro to your home screen or desktop</h3>
-          <button
-            type="button"
-            className={f('button')}
-            onClick={this._handleClick}
-          >
-            Add it!
-          </button>
+          <Button onClick={this._handleClick}>Add it!</Button>
         </div>
       </div>
     );
@@ -817,8 +816,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
     } = this.props;
     return (
       <>
-        <AddToHomeScreen />
-
         <div className={f('row')}>
           <SchemaOrgData
             data={{
@@ -867,6 +864,8 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
               </nav>
               <section>
                 <section onChange={changeSettings}>
+                  <AddToHomeScreen />
+                  <hr />
                   <NavigationSettings navigation={navigation} />
                   <hr />
                   <NotificationSettings notifications={notifications} />
@@ -905,9 +904,9 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
                     {!DEV && '(modification temporarily disabled)'}
                   </AlphaFoldEndpointSettings>
 
-                  <button onClick={this._handleReset} className={f('button')}>
+                  <Button onClick={this._handleReset}>
                     Reset settings to default values
-                  </button>
+                  </Button>
                 </section>
                 <hr />
                 <h4 id="settings-devs">Developer Information</h4>
