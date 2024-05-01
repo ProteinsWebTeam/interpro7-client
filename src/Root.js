@@ -26,6 +26,7 @@ const Pages = loadable({
 
 const EBIHeader = loadable({
   loader: () =>
+    // $FlowFixMe
     import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
   loading: () => <div className="tmp-ebi-header" />,
 });
@@ -59,17 +60,6 @@ const SideMenuAsync = loadable({
       () =>
         // $FlowFixMe
         import(/* webpackChunkName: "side-menu" */ 'components/Menu/SideMenu'),
-    ),
-  loading: NullComponent,
-});
-
-const EMBLDropdownAsync = loadable({
-  loader: () =>
-    schedule(2 * DEFAULT_SCHEDULE_DELAY).then(
-      () =>
-        import(
-          /* webpackChunkName: "embl-dropdown" */ 'components/EMBLDropdown'
-        ),
     ),
   loading: NullComponent,
 });
@@ -138,7 +128,6 @@ const Root = () => (
       <SchemaOrgData processData={schemaProcessInterProCitation} />
       <LoadingBarAsync />
       <Overlay />
-      <EMBLDropdownAsync />
       <SideMenuAsync />
       <header>
         <EBIHeader />
