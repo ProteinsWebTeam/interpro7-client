@@ -16,7 +16,7 @@ import style from '../../style.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, style);
 
-const NUMBER_OF_PROTEINS_TO_SHOW = 10;
+const NUMBER_OF_PROTEINS_TO_SHOW = 2;
 
 const ListOfProteins = ({ accessions } /*: {accessions: string[]} */) => {
   const [showMore, setShowMore] = useState(false);
@@ -42,11 +42,7 @@ const ListOfProteins = ({ accessions } /*: {accessions: string[]} */) => {
         </Fragment>
       ))}
       {accessions.length > NUMBER_OF_PROTEINS_TO_SHOW && !showMore && (
-        <Button
-          type="hollow"
-          style={{ padding: 0, border: 0 }}
-          onClick={() => setShowMore(true)}
-        >
+        <Button type="inline" onClick={() => setShowMore(true)}>
           ... and {accessions.length - NUMBER_OF_PROTEINS_TO_SHOW} proteins more
           (click to show).
         </Button>

@@ -18,8 +18,7 @@ exports[`<Actions /> should render 1`] = `
       aria-label="Delete Results"
       icon="icon-trash"
       onClick={[Function]}
-      textColor="var(--colors-light-txt)"
-      type="hollow"
+      type="inline"
     />
   </Tooltip>
   <Tooltip
@@ -36,8 +35,7 @@ exports[`<Actions /> should render 1`] = `
       aria-label="Save results in Browser"
       icon="icon-save"
       onClick={[Function]}
-      textColor="var(--colors-light-txt)"
-      type="hollow"
+      type="inline"
     />
   </Tooltip>
 </nav>

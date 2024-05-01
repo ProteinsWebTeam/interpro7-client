@@ -6,7 +6,12 @@ import local from './style.css';
 
 const css = cssBinder(fonts, local);
 
-export type ButtonTypes = 'primary' | 'secondary' | 'tertiary' | 'hollow';
+export type ButtonTypes =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'hollow'
+  | 'inline';
 interface ButtonProps {
   /**
    * Is this the principal call to action on the page?

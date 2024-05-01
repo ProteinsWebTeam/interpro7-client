@@ -80,8 +80,7 @@ const IPScanTitle = (
         />
         {['finished', 'imported file', 'saved in browser'].includes(status) ? (
           <Button
-            type="hollow"
-            textColor="var(--colors-light-txt)"
+            type="inline"
             onClick={() =>
               changeTitle(
                 localID,

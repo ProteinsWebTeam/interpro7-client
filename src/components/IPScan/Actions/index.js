@@ -117,11 +117,10 @@ export class Actions extends PureComponent /*:: <Props> */ {
           }
         >
           <Button
-            type="hollow"
+            type="inline"
             icon="icon-trash"
             onClick={this._handleDelete}
             aria-label="Delete Results"
-            textColor="var(--colors-light-txt)"
           />
         </Tooltip>
         {status === 'finished' && (
@@ -135,11 +134,10 @@ export class Actions extends PureComponent /*:: <Props> */ {
             }
           >
             <Button
-              type="hollow"
+              type="inline"
               icon="icon-save"
               onClick={() => keepJobAsLocal(localID)}
               aria-label="Save results in Browser"
-              textColor="var(--colors-light-txt)"
             />
           </Tooltip>
         )}

@@ -26,6 +26,14 @@ div.vf-button {
     --vf-button-border-color: transparent;
     --vf-button-text-color: #1779ba;
   }
+  &.vf-button--inline {
+    --vf-button-background-color: transparent;
+    --vf-button-border-color: transparent;
+    --vf-button-text-color: var(--colors-light-txt, gray);
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
   &.vf-button--lg {
     font-size: 2rem;
   }

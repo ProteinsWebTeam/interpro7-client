@@ -144,7 +144,6 @@ const GroupActions = ({
               }
             >
               <Button
-                // className={css('icon', 'icon-common', 'ico-neutral', 'group')}
                 type="hollow"
                 onClick={handleReRun}
                 icon="icon-undo"
