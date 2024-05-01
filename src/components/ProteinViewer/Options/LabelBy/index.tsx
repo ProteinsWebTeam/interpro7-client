@@ -41,6 +41,7 @@ const LabelBy = ({ labelContent, changeSettingsRaw }: Props) => {
   return (
     <section>
       <ul className={css('nested-list', 'no-bullet')}>
+        <header>Label by</header>
         {labelMap.map(([key, label]) => (
           <li key={key}>
             <div

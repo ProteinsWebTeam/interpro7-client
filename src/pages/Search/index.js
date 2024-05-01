@@ -7,6 +7,8 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 import HelpBanner from 'components/Help/HelpBanner';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataWebPage } from 'schema_org/processors';
@@ -187,19 +189,14 @@ const Wrapper = (
                   {Array.isArray(children) ? children[0] : children}
                 </div>
                 <div>
-                  <button onClick={toggleShowHelp} className={f('hollow')}>
-                    <span
-                      className={f(
-                        'icon',
-                        'icon-common',
-                        'show-help',
-                        //   {
-                        //   expanded: showHelp,
-                        // }
-                      )}
-                      data-icon="&#xf129;"
-                    />
-                  </button>
+                  <Button
+                    type="inline"
+                    onClick={toggleShowHelp}
+                    icon="icon-info"
+                    style={{
+                      color: showHelp ? 'grey' : undefined,
+                    }}
+                  />
                 </div>
                 <div className={f('help-col', { removed: !showHelp })}>
                   {

@@ -10,11 +10,6 @@ import { addToast } from 'actions/creators';
 // $FlowFixMe
 import Button from 'components/SimpleCommonComponents/Button';
 
-import { foundationPartial } from 'styles/foundation';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-
-const f = foundationPartial(ebiGlobalStyles, fonts);
 const TTL = 1000;
 
 const CopyToClipboard = ({ textToCopy, tooltipText, addToast }) => {

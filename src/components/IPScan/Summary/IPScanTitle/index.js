@@ -93,7 +93,7 @@ const IPScanTitle = (
             }
             icon={readable ? 'icon-pencil-alt' : 'icon-save'}
             title={readable ? 'Rename' : 'Save'}
-          ></Button>
+          />
         ) : null}
       </section>
     </section>

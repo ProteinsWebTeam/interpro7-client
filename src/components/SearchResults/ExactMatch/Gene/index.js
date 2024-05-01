@@ -7,15 +7,6 @@ import Callout from 'components/SimpleCommonComponents/Callout';
 // $FlowFixMe
 import Button from 'components/SimpleCommonComponents/Button';
 
-import { foundationPartial } from 'styles/foundation';
-
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-import ipro from 'styles/interpro-new.css';
-import style from '../../style.css';
-
-const f = foundationPartial(ebiGlobalStyles, fonts, ipro, style);
-
 const NUMBER_OF_PROTEINS_TO_SHOW = 2;
 
 const ListOfProteins = ({ accessions } /*: {accessions: string[]} */) => {

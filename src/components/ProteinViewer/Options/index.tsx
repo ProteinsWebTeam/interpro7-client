@@ -1,4 +1,10 @@
-import React, { PropsWithChildren, Children, useState, useEffect } from 'react';
+import React, {
+  PropsWithChildren,
+  Children,
+  // useState,
+  useEffect,
+  useId,
+} from 'react';
 import { createSelector } from 'reselect';
 
 // import ReactToPrint from 'react-to-print';
@@ -16,6 +22,7 @@ import { Exporter } from 'components/Table';
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 import NightingaleSaver from 'components/Nightingale/Saver';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import LabelBy from './LabelBy';
 
@@ -61,15 +68,16 @@ const ProteinViewerOptions = ({
   parentReferences,
   colorDomainsBy,
   changeSettingsRaw,
-  setExpandedAllTracks,
+  // setExpandedAllTracks,
   tooltipEnabled,
   setTooltipEnabled,
   loading = false,
 }: Props) => {
-  const [expanded, setExpanded] = useState(true);
+  // const [expanded, setExpanded] = useState(true);
   const componentsDivId =
     parentReferences.componentsRef.current?.getAttribute('id');
 
+  const id = useId();
   useEffect(() => {
     customElements.whenDefined('nightingale-saver').then(() => {
       const saver = document.getElementById(
@@ -134,10 +142,16 @@ const ProteinViewerOptions = ({
         (evt.target as HTMLInputElement)?.value,
       );
   };
-  const toggleExpandAll = () => {
-    setExpandedAllTracks(!expanded);
-    setExpanded(!expanded);
-  };
+  // Currently disabled
+  // const toggleExpandAll = () => {
+  //   setExpandedAllTracks(!expanded);
+  //   setExpanded(!expanded);
+  // };
+  const colorOptions = [
+    [EntryColorMode.ACCESSION, 'Accession'],
+    [EntryColorMode.MEMBER_DB, 'Member Database'],
+    [EntryColorMode.DOMAIN_RELATIONSHIP, 'Domain Relationship'],
+  ];
   return (
     <>
       <div className={css('view-options-title')}>
@@ -155,17 +169,19 @@ const ProteinViewerOptions = ({
         <div className={css('viewer-options')}>
           <div style={{ marginRight: '0.4rem' }}>
             {onZoomOut && (
-              <button
-                className={css('icon', 'icon-common', 'zoom-button')}
-                data-icon="&#xf146;"
+              <Button
+                type="inline"
+                icon="icon-minus-square"
+                className={css('zoom-button')}
                 title={'Click to zoom out      Ctrl+Scroll'}
                 onClick={onZoomOut}
               />
             )}
             {onZoomIn && (
-              <button
-                className={css('icon', 'icon-common', 'zoom-button')}
-                data-icon="&#xf0fe;"
+              <Button
+                type="inline"
+                icon="icon-plus-square"
+                className={css('zoom-button')}
                 title={'Click to zoom in      Ctrl+Scroll'}
                 onClick={onZoomIn}
               />
@@ -182,79 +198,38 @@ const ProteinViewerOptions = ({
           extraClasses={css('protvista-menu')}
         >
           <ul className={css('menu-options', 'vf-content')}>
-            <li>
-              Colour By
+            <section>
               <ul className={css('nested-list')}>
-                <li>
-                  <label>
-                    <input
-                      type="radio"
-                      onChange={changeColor}
-                      value={EntryColorMode.ACCESSION}
-                      checked={colorDomainsBy === EntryColorMode.ACCESSION}
-                    />{' '}
-                    Accession
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input
-                      type="radio"
-                      onChange={changeColor}
-                      value={EntryColorMode.MEMBER_DB}
-                      checked={colorDomainsBy === EntryColorMode.MEMBER_DB}
-                    />{' '}
-                    Member Database
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input
-                      type="radio"
-                      onChange={changeColor}
-                      value={EntryColorMode.DOMAIN_RELATIONSHIP}
-                      checked={
-                        colorDomainsBy === EntryColorMode.DOMAIN_RELATIONSHIP
-                      }
-                    />{' '}
-                    Domain Relationship
-                  </label>
-                </li>
+                <header>Colour By</header>
+                {colorOptions.map(([mode, label]) => (
+                  <li key={mode}>
+                    <div
+                      className={css('vf-form__item', 'vf-form__item--radio')}
+                      style={{
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      <input
+                        className="vf-form__radio"
+                        type="radio"
+                        onChange={changeColor}
+                        value={mode}
+                        checked={colorDomainsBy === mode}
+                        id={`${id}-color-${mode}`}
+                      />
+                      <label
+                        className={css('vf-form__label')}
+                        htmlFor={`${id}-color-${mode}`}
+                      >
+                        {label}
+                      </label>
+                    </div>
+                  </li>
+                ))}
               </ul>
-            </li>
+            </section>
             <hr />
             <LabelBy />
-            <hr />
-            {/* <li>
-                Snapshot
-                <ul className={css('nested-list')}>
-                  <li>
-
-                  </li> */}
-            {/* <li>
-                    <ReactToPrint
-                      trigger={() => (
-                        <button
-                          className={css('icon', 'icon-common')}
-                          data-icon="&#x50;"
-                        >
-                          {' '}
-                          Print
-                        </button>
-                      )}
-                      onBeforeGetContent={() => {
-                        setPrintingMode(true);
-                        return new Promise<void>((resolve) => {
-                          setTimeout(() => resolve(), ONE_SEC);
-                          return;
-                        });
-                      }}
-                      content={() => parentReferences.componentsRef.current}
-                      onAfterPrint={() => setPrintingMode(false)}
-                    />
-                  </li> */}
-            {/* </ul>
-              </li> */}
             <hr />
             <li>
               <NightingaleSaver
@@ -264,33 +239,50 @@ const ProteinViewerOptions = ({
                 extra-height={12}
                 scale-factor={2}
               >
-                <button>
-                  <span
-                    className={css('icon', 'icon-common')}
-                    data-icon="&#xf030;"
-                  />{' '}
+                <Button
+                  type="inline"
+                  icon="icon-camera"
+                  style={{
+                    fontWeight: 500,
+                  }}
+                >
                   Save as Image
-                </button>
+                </Button>
               </NightingaleSaver>{' '}
             </li>
+            {/* 
+             this is misbehaving, so I'm disabling it until we get a fix for it
             <li>
-              <button
+              <Button
+              type="inline"
                 onClick={toggleExpandAll}
                 aria-label={`${expanded ? 'Collapse' : 'Expand'} all tracks`}
               >
                 {expanded ? 'Collapse' : 'Expand'} All Tracks
-              </button>
-            </li>
+              </Button>
+            </li> */}
             <hr />
             <li key={'tooltip'}>
-              <label>
+              <div
+                className={css('vf-form__item', 'vf-form__item--checkbox')}
+                style={{
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 <input
+                  className="vf-form__checkbox"
                   type="checkbox"
                   onChange={() => setTooltipEnabled(!tooltipEnabled)}
                   checked={tooltipEnabled}
+                  id={`${id}-tooltip`}
                 />{' '}
-                Tooltip {tooltipEnabled ? 'Active' : 'Inactive'}
-              </label>
+                <label
+                  className={css('vf-form__label')}
+                  htmlFor={`${id}-tooltip`}
+                >
+                  Tooltip {tooltipEnabled ? 'Active' : 'Inactive'}
+                </label>
+              </div>
             </li>
           </ul>
         </DropDownButton>

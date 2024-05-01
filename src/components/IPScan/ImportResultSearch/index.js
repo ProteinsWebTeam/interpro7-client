@@ -131,16 +131,13 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
 
       <label
         aria-label={`${TITLE} from file`}
-        className={
-          'vf-button ' +
-          f(
-            'icon',
-            'icon-common',
-            'vf-button',
-            'vf-button--primary',
-            'vf-button--sm',
-          )
-        }
+        className={`vf-button ${f(
+          'icon',
+          'icon-common',
+          'vf-button',
+          'vf-button--primary',
+          'vf-button--sm',
+        )}`}
         data-icon="&#xf093;"
       >
         {' '}

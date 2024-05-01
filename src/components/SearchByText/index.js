@@ -132,10 +132,11 @@ export class SearchByText extends PureComponent /*:: <Props> */ {
                     Search
                   </Button>
                   <Link
-                    className={
-                      'vf-button ' +
-                      f('vf-button', 'vf-button--secondary', 'vf-button--sm')
-                    }
+                    className={`vf-button ${f(
+                      'vf-button',
+                      'vf-button--secondary',
+                      'vf-button--sm',
+                    )}`}
                     to={{
                       description: {
                         main: { key: 'search' },

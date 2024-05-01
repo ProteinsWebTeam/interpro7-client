@@ -14,13 +14,13 @@
   justify-content: space-between;
   padding-bottom: 0.2rem;
 }
-.protvista-grid header {
+.protvista-grid > header {
   background: #fafafa;
   padding: 0.5rem 0.3rem;
   border-top: 3px solid rgba(195, 195, 195, 0.4);
 }
 
-.protvista-grid header button {
+.protvista-grid > header button {
   outline: 0;
   fill: var(--colors-dark);
   text-transform: capitalize;

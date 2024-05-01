@@ -12,6 +12,7 @@ import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPi
 import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 import { Selection } from 'components/Structure/ViewerAndEntries';
@@ -241,10 +242,11 @@ const AlphaFoldModel = ({
                   />
                   &nbsp;mmCIF file
                 </Link>
-                <button
-                  className={css('icon', 'icon-common', 'control')}
+                <Button
+                  type="inline"
+                  icon="icon-redo"
+                  className={css('control')}
                   onClick={() => setShouldResetViewer(true)}
-                  data-icon="}"
                   title="Reset image"
                 />
                 <FullScreenButton

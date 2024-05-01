@@ -15,11 +15,6 @@ import NucleotideCheck, {
 // $FlowFixMe
 import Button from 'components/SimpleCommonComponents/Button';
 
-import { foundationPartial } from 'styles/foundation';
-import ipro from 'styles/interpro-new.css';
-
-const f = foundationPartial(ipro);
-
 const isValid = (fileObj) => {
   return (
     typeof fileObj === 'object' &&

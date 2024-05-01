@@ -73,9 +73,11 @@ const GoToNewSearch = () => (
         search: { type: 'sequence' },
       },
     }}
-    className={
-      'vf-button ' + f('vf-button', 'vf-button--primary', 'vf-button--sm')
-    }
+    className={`vf-button ${f(
+      'vf-button',
+      'vf-button--primary',
+      'vf-button--sm',
+    )}`}
     style={{
       marginRight: '0.2rem',
       color: 'var(--vf-button-text-color)',
