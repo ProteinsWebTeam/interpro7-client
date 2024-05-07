@@ -79,6 +79,13 @@ export const getDefaultSettingsFor = (category /*: Category */) => {
         port: config.root.repeatsDB.port || DEFAULT_HTTP_PORT,
         root: config.root.repeatsDB.pathname,
       };
+    case 'proteinsAPI':
+      return {
+        protocol: config.root.proteinsAPI.protocol,
+        hostname: config.root.proteinsAPI.hostname,
+        port: config.root.proteinsAPI.port || DEFAULT_HTTP_PORT,
+        root: config.root.proteinsAPI.pathname,
+      };
     case 'disprot':
       return {
         protocol: config.root.disprot.protocol,

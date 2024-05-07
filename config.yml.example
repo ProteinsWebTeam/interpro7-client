@@ -13,6 +13,7 @@ root:
   LLMFeedback: https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=
   Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
   UniProt: https://rest.uniprot.org/
+  proteinsAPI: https://www.ebi.ac.uk/proteins/api/
   EBISurvey: 
 
 title: InterPro
