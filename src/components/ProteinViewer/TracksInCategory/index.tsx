@@ -333,6 +333,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           highlight-color={highlightColor}
                           className="variation"
                           use-ctrl-to-zoom
+                          colorConfig={() => '#990000'}
                           protein-api
                         />
                       )}
