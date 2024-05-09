@@ -61,8 +61,7 @@ const Alignment = ({
             issues in your browser.
           </p>
           <p>
-            If you still want to display it, press{' '}
-            <Button onClick={() => setForceShow(true)}>HERE</Button>
+            <Button onClick={() => setForceShow(true)}>Open alignment</Button>
           </p>
         </div>
       )}

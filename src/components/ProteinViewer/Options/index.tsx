@@ -200,7 +200,7 @@ const ProteinViewerOptions = ({
           <ul className={css('menu-options', 'vf-content')}>
             <section>
               <ul className={css('nested-list')}>
-                <header>Colour By</header>
+                <header>Colour by</header>
                 {colorOptions.map(([mode, label]) => (
                   <li key={mode}>
                     <div

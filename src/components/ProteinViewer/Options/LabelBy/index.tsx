@@ -56,9 +56,9 @@ const LabelBy = ({ labelContent, changeSettingsRaw }: Props) => {
                 onChange={updateLabel}
                 value={key}
                 checked={labelContent[key]}
-                id={`${id}-key`}
+                id={`${id}-${key}`}
               />
-              <label className={css('vf-form__label')} htmlFor={`${id}-key`}>
+              <label className={css('vf-form__label')} htmlFor={`${id}-${key}`}>
                 {label}
               </label>
             </div>

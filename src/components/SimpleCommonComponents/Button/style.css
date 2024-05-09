@@ -56,8 +56,12 @@ div.vf-button {
       opacity: 1;
     }
   }
-  & .icon::before {
-    color: inherit;
-    margin-right: 0.5rem;
+  & .icon {
+    &::before {
+      color: inherit;
+    }
+    &:not(:last-child)::before {
+      margin-right: 0.5rem;
+    }
   }
 }
