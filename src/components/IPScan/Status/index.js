@@ -39,9 +39,8 @@ import interproTheme from 'styles/theme-interpro.css'; /* needed for custom butt
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
-import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const f = foundationPartial(interproTheme, fonts, ipro, local, buttonCSS);
+const f = foundationPartial(interproTheme, fonts, ipro, local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -73,16 +72,7 @@ const GoToNewSearch = () => (
         search: { type: 'sequence' },
       },
     }}
-    className={`vf-button ${f(
-      'vf-button',
-      'vf-button--primary',
-      'vf-button--sm',
-    )}`}
-    style={{
-      marginRight: '0.2rem',
-      color: 'var(--vf-button-text-color)',
-      borderColor: 'var(--vf-button-border-color)',
-    }}
+    buttonType="primary"
   >
     Submit a new search
   </Link>

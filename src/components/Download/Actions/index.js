@@ -16,9 +16,8 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
-import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const f = foundationPartial(fonts, ipro, local, buttonCSS);
+const f = foundationPartial(fonts, ipro, local);
 
 /*:: type Props = {
   localID: string,
@@ -57,15 +56,8 @@ class Actions extends PureComponent /*:: <Props> */ {
       <div id="dassd" style={{ whiteSpace: 'nowrap' }}>
         <Tooltip title="Download job">
           <Link
-            className={f(
-              'vf-button',
-              'vf-button--hollow',
-              'vf-button--sm',
-              'icon',
-              'icon-common',
-              'ico-neutral',
-              'icon-download',
-            )}
+            buttonType="hollow"
+            className={f('icon', 'icon-common', 'ico-neutral', 'icon-download')}
             href={blobURL}
             download={fileName}
             disabled={!blobURL}

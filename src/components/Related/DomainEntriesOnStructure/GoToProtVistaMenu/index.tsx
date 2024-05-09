@@ -4,12 +4,6 @@ import Link from 'components/generic/Link';
 
 import { DataForProteinChain } from '../';
 
-import cssBinder from 'styles/cssBinder';
-
-import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
-
-const css = cssBinder(buttonCSS);
-
 const scrollToElementByID = (id: string) => {
   document.getElementById(id)?.scrollIntoView();
 };
@@ -22,7 +16,7 @@ const GoToProtVistaMenu = ({ entries }: { entries: DataForProteinChain[] }) => (
         return (
           <li key={i}>
             <Link
-              className={css('vf-button', 'vf-button--hollow', 'vf-button--sm')}
+              buttonType="hollow"
               to={(customLocation) => ({
                 ...customLocation,
                 hash: elementID,

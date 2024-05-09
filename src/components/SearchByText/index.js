@@ -22,9 +22,8 @@ import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
 import blocks from 'styles/blocks.css';
 import local from './style.css';
-import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const f = foundationPartial(interproTheme, ipro, local, blocks, buttonCSS);
+const f = foundationPartial(interproTheme, ipro, local, blocks);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -132,11 +131,7 @@ export class SearchByText extends PureComponent /*:: <Props> */ {
                     Search
                   </Button>
                   <Link
-                    className={`vf-button ${f(
-                      'vf-button',
-                      'vf-button--secondary',
-                      'vf-button--sm',
-                    )}`}
+                    buttonType="secondary"
                     to={{
                       description: {
                         main: { key: 'search' },

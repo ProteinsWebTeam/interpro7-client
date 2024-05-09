@@ -1,5 +1,6 @@
 button.vf-button,
 a.vf-button,
+a.vf-button:visited,
 label.vf-button,
 div.vf-button {
   box-shadow: none;

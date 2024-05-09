@@ -324,7 +324,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
               minWidth={MIN_WIDTH}
             />
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label>
+            <label style={{ marginBottom: '0.4rem' }}>
               <FileExporter
                 description={{
                   main: { key: 'protein' },

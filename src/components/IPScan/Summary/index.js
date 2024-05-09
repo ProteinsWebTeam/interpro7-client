@@ -49,16 +49,8 @@ import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import style from './style.css';
 import summary from 'styles/summary.css';
 import theme from 'styles/theme-interpro.css';
-import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const f = foundationPartial(
-  summary,
-  theme,
-  ebiGlobalStyles,
-  fonts,
-  style,
-  buttonCSS,
-);
+const f = foundationPartial(summary, theme, ebiGlobalStyles, fonts, style);
 
 const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
@@ -369,11 +361,7 @@ const SummaryIPScanJob = ({
                           ? dataURL
                           : `${dataURL}/${rootAccession}/${type}`
                       }
-                      className={f(
-                        'vf-button',
-                        'vf-button--secondary',
-                        'vf-button--sm',
-                      )}
+                      buttonType="secondary"
                       download={`InterProScan.${type}`}
                       disabled={expired && type !== 'json'}
                     >

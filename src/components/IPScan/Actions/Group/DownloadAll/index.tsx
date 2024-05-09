@@ -15,9 +15,8 @@ import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../../style.css';
-import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const css = cssBinder(fonts, local, buttonCSS);
+const css = cssBinder(fonts, local);
 
 const downloadFile = (jsonContent: Record<string, unknown>, name: string) => {
   const downloadContent = JSON.stringify(jsonContent);
@@ -65,7 +64,7 @@ const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
             target="_blank"
             href={`${dataURL}/${remoteID}/${type}`}
             download={`InterProScan-${remoteID}.${type}`}
-            className={css('vf-button', 'vf-button--hollow', 'vf-button--sm')}
+            buttonType="hollow"
           >
             <span className={css('icon', 'icon-common')} data-icon="&#xf019;" />{' '}
             {type === 'sequence'
