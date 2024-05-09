@@ -59,6 +59,9 @@ div.vf-button {
   }
   & .icon::before {
     color: inherit;
-    margin-right: 0.5rem;
+    margin: 0 0.3rem;
   }
+}
+.vf-button + .vf-button {
+  margin-left: 0.2rem;
 }
