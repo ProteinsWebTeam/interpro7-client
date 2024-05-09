@@ -115,7 +115,7 @@ exports[`<SearchByText /> should render 1`] = `
               Search
             </ForwardRef>
             <Memo(Connect(Link))
-              className="vf-button vf-button vf-button--secondary vf-button--sm"
+              buttonType="secondary"
               to={
                 {
                   "description": {

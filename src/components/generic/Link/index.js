@@ -52,6 +52,7 @@ const getNextLocation = (customLocation, to) =>
   className?: string,
   activeClass?: function | string,
   withReferrer?: boolean,
+  buttonType?: string,
 }; */
 
 export class _Link extends PureComponent /*:: <Props> */ {
