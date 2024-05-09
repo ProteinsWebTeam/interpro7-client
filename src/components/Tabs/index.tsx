@@ -10,6 +10,7 @@ import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
+import Button from '../SimpleCommonComponents/Button';
 
 const css = cssBinder(fonts, ipro, style);
 
@@ -85,9 +86,9 @@ export default class Tabs extends PureComponent<Props, State> {
               className={css('tabs-title', { 'is-active': activeTab === i })}
               key={i}
             >
-              <button onClick={this._handleChangeTab(i)}>
+              <Button type="hollow" onClick={this._handleChangeTab(i)}>
                 {(child as ReactElement).props.title}
-              </button>
+              </Button>
             </li>
           ))}
         </ul>

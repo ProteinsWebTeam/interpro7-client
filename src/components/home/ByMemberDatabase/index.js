@@ -164,7 +164,7 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
               entry: { db: 'InterPro' },
             },
           }}
-          className={f('button', 'margin-bottom-none', 'margin-top-large')}
+          buttonType="primary"
         >
           View InterPro entries
         </Link>
