@@ -100,7 +100,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
         href={`https://www.uniprot.org/uniprotkb/${entry.protein}/variant-viewer`}
         target="_blank"
       >
-        See more at UniProt
+        Go to UniProt
       </Link>
     );
   if (entry.type === 'residue')

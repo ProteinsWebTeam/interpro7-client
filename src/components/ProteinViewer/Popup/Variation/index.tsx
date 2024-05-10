@@ -10,14 +10,14 @@ type Props = {
 
 const ProtVistaVariationPopup = ({ detail }: Props) => {
   if (!detail?.feature) return null;
-  const { accession, wildType, variant, start, size } = detail.feature;
+  const { accession, wildType, variant, start, size, consequenceType } = detail.feature;
 
   const hasMultiple = size !== undefined && (size || 0) > 1;
   return (
     <section>
       <h6>{accession}</h6>
       <p>
-        {wildType} &gt; {variant}
+        {wildType}&gt;{variant} - {consequenceType}
       </p>
       <div>
         Position{hasMultiple && 's'}: {start}

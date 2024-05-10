@@ -92,7 +92,7 @@ export const addVariationTrack = (
 ) => {
   if (variationPayload?.features?.length) {
     const variationTrack: [string, Array<unknown>] = [
-      'Variation (pathogenic or likely pathogenic)',
+      'Pathogenic and likely pathogenic variants',
       [
         {
           accession: `variation_${protein}`,
