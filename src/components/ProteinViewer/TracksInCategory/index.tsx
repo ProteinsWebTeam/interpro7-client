@@ -328,7 +328,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           id={getTrackAccession(entry.accession)}
                           data={entry.data as ProteinsAPIVariation}
                           length={sequence.length}
-                          height={300}
+                          row-height={14}
                           margin-color="#fafafa"
                           margin-left={20}
                           highlight-event="onmouseover"
@@ -336,6 +336,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           className="variation"
                           use-ctrl-to-zoom
                           colorConfig={() => '#990000'}
+                          condensed-view
                           protein-api
                         />
                       )}
