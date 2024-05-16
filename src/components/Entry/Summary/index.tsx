@@ -13,6 +13,7 @@ import Literature, {
 } from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Tabs from 'components/Tabs';
 
 import MemberDBSubtitle from './MemberDBSubtitle';
 import SidePanel from './SidePanel';
@@ -171,14 +172,18 @@ const SummaryEntry = ({
         hasIntegratedCitations={integratedCitations?.length > 0}
       />
       <section>
-        {metadata.source_database === 'pfam' &&
-          (metadata.wikipedia || []).map((wiki) => (
-            <Wikipedia
-              title={wiki.title}
-              extract={wiki.extract}
-              thumbnail={wiki.thumbnail}
-            />
-          ))}
+        <Tabs>
+          {metadata.source_database === 'pfam' &&
+            (metadata.wikipedia || []).map((wiki, key) => (
+              <div key={key} title={wiki.title.replaceAll('_', ' ')}>
+                <Wikipedia
+                  title={wiki.title}
+                  extract={wiki.extract}
+                  thumbnail={wiki.thumbnail}
+                />
+              </div>
+            ))}
+        </Tabs>
       </section>
     </div>
   );
