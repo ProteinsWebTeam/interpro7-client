@@ -1,6 +1,6 @@
 /* overlapping entries Tree : to align exactly with title */
-@import '../../../styles/colors.css';
-@import '../../../styles/timing.css';
+@import "../../../styles/colors.css";
+@import "../../../styles/timing.css";
 
 .list-items {
   padding-left: 1px;
@@ -20,7 +20,7 @@
 .wiki-article {
   font-family: sans-serif;
   font-size: 0.875em;
-  /*margin: 0.2rem;*/
+  margin-bottom: 1rem;
 
   & .th-infobox {
     text-align: center;

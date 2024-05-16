@@ -171,13 +171,14 @@ const SummaryEntry = ({
         hasIntegratedCitations={integratedCitations?.length > 0}
       />
       <section>
-        {metadata.source_database === 'pfam' && metadata.wikipedia ? (
-          <Wikipedia
-            title={metadata.wikipedia.title}
-            extract={metadata.wikipedia.extract}
-            thumbnail={metadata.wikipedia.thumbnail}
-          />
-        ) : null}
+        {metadata.source_database === 'pfam' &&
+          (metadata.wikipedia || []).map((wiki) => (
+            <Wikipedia
+              title={wiki.title}
+              extract={wiki.extract}
+              thumbnail={wiki.thumbnail}
+            />
+          ))}
       </section>
     </div>
   );
