@@ -136,6 +136,8 @@ const SummaryEntry = ({
     return null;
   };
   const hasLLM = hasLLMParagraphs(metadata.description || []);
+  const hasWiki =
+    metadata.source_database === 'pfam' && !!metadata.wikipedia?.length;
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
       <section className={css('vf-grid', 'summary-grid')}>
@@ -171,10 +173,10 @@ const SummaryEntry = ({
         }
         hasIntegratedCitations={integratedCitations?.length > 0}
       />
-      <section>
-        <Tabs>
-          {metadata.source_database === 'pfam' &&
-            (metadata.wikipedia || []).map((wiki, key) => (
+      {hasWiki && (
+        <section>
+          <Tabs>
+            {(metadata.wikipedia || []).map((wiki, key) => (
               <div key={key} title={wiki.title.replaceAll('_', ' ')}>
                 <Wikipedia
                   title={wiki.title}
@@ -183,8 +185,9 @@ const SummaryEntry = ({
                 />
               </div>
             ))}
-        </Tabs>
-      </section>
+          </Tabs>
+        </section>
+      )}
     </div>
   );
 };
