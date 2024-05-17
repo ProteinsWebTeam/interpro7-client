@@ -34,12 +34,12 @@ export const getTooltipContentFormMetadata = (metadata: EntryMetadata) => {
   let badgeTooltip: string | undefined = undefined;
   if (metadata.is_reviewed_llm) {
     if (metadata.is_updated_llm) {
-      badgeTooltip = 'AI-generated reviewed and updated';
+      badgeTooltip = 'AI-generated | Reviewed and updated';
     } else {
-      badgeTooltip = 'AI-generated reviewed';
+      badgeTooltip = 'AI-generated | Reviewed';
     }
   } else {
-    badgeTooltip = 'AI-generated unreviewed';
+    badgeTooltip = 'AI-generated | Unreviewed';
   }
   return badgeTooltip;
 };
