@@ -159,7 +159,7 @@ describe('getUrlForApi', () => {
       };
 
       expect(getUrlForApi(state)).toBe(
-        'https://www.example.com:443/basename/entry/InterPro/?page_size=50',
+        'https://www.example.com:443/basename/entry/InterPro/?page_size=50&extra_fields=short_name',
       );
     });
 

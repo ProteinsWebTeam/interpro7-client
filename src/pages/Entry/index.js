@@ -314,6 +314,33 @@ class List extends PureComponent /*:: <Props> */ {
             </Column>
 
             <Column
+              dataKey="counters.extra_fields.short_name"
+              renderer={(_, meta, extra) =>
+                extra.short_name ? (
+                  <Link
+                    to={(customLocation) => ({
+                      description: {
+                        ...customLocation.description,
+                        entry: {
+                          ...customLocation.description.entry,
+                          accession: meta.accession,
+                        },
+                      },
+                      search: {},
+                    })}
+                  >
+                    <HighlightedText
+                      text={extra.short_name}
+                      textToHighlight={search.search}
+                    />
+                  </Link>
+                ) : null
+              }
+            >
+              Short name
+            </Column>
+
+            <Column
               dataKey="name"
               renderer={(
                 name /*: string */,

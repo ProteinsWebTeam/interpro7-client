@@ -290,3 +290,7 @@ div.breadcrumb {
     background: var(--colors-filter-background);
   }
 }
+
+.row {
+  max-width: 81.25em;
+}

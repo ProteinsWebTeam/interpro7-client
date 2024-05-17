@@ -164,6 +164,15 @@ const AlphaFoldModel = ({
                   >
                     UniProtKB
                   </UniProtLink>
+                  <br />
+                  Find similar structures with{' '}
+                  <Link
+                    href={`https://search.foldseek.com/search?accession=${modelInfo.uniprotAccession}&source=AlphaFoldDB`}
+                    className={css('ext')}
+                    target="_blank"
+                  >
+                    Foldseek
+                  </Link>
                 </span>
               </li>
               <li>

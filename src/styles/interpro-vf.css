@@ -1,3 +1,36 @@
+body,
+:global(body.interpro) {
+  margin: 0;
+  padding: 0;
+  background: white;
+  font-family: "IBM Plex Sans", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  line-height: 1.5;
+  color: #0a0a0a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  & h1 {
+    font-weight: 600;
+  }
+
+  & h2 {
+    font-weight: 600;
+  }
+
+  & h3 {
+    font-weight: 600;
+  }
+
+  & h4 {
+    font-weight: 600;
+  }
+
+  & h5 {
+    font-weight: 500;
+  }
+}
+
 /* links color */
 body a,
 body a:visited,

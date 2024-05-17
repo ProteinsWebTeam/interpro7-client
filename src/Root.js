@@ -26,6 +26,7 @@ const Pages = loadable({
 
 const EBIHeader = loadable({
   loader: () =>
+    // $FlowFixMe
     import(/* webpackChunkName: "ebi-header" */ 'components/EBIHeader'),
   loading: () => <div className="tmp-ebi-header" />,
 });
@@ -63,22 +64,12 @@ const SideMenuAsync = loadable({
   loading: NullComponent,
 });
 
-const EMBLDropdownAsync = loadable({
-  loader: () =>
-    schedule(2 * DEFAULT_SCHEDULE_DELAY).then(
-      () =>
-        import(
-          /* webpackChunkName: "embl-dropdown" */ 'components/EMBLDropdown'
-        ),
-    ),
-  loading: NullComponent,
-});
-
 const ElixirFooterAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(
       () =>
         import(
+          // $FlowFixMe
           /* webpackChunkName: "elixir-footer", webpackPreload: true */ 'components/ElixirFooter'
         ),
     ),
@@ -90,6 +81,7 @@ const EBIFooterAsync = loadable({
     schedule(DEFAULT_SCHEDULE_DELAY).then(
       () =>
         import(
+          // $FlowFixMe
           /* webpackChunkName: "ebi-footer", webpackPreload: true */ 'components/EBIFooter'
         ),
     ),
@@ -136,7 +128,6 @@ const Root = () => (
       <SchemaOrgData processData={schemaProcessInterProCitation} />
       <LoadingBarAsync />
       <Overlay />
-      <EMBLDropdownAsync />
       <SideMenuAsync />
       <header>
         <EBIHeader />
