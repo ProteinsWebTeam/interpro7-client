@@ -175,6 +175,7 @@ const SummaryEntry = ({
       />
       {hasWiki && (
         <section>
+          <h4>Wikipedia</h4>        
           <Tabs>
             {(metadata.wikipedia || []).map((wiki, key) => (
               <div key={key} title={wiki.title.replaceAll('_', ' ')}>
