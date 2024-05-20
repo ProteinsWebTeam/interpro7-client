@@ -189,7 +189,7 @@ export class _Link extends PureComponent /*:: <Props> */ {
       };
     }
     const _rel = generateRel(rel, target, href, withReferrer);
-    let buttonClassName = buttonType
+    const buttonClassName = buttonType
       ? ['vf-button', `vf-button--${buttonType}`, 'vf-button--sm']
       : [];
     return (
