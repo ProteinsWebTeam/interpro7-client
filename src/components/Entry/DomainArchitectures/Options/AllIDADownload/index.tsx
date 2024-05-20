@@ -6,12 +6,6 @@ import { connect } from 'react-redux';
 import File from 'components/File';
 import { SupportedExtensions } from 'components/File/FileButton';
 
-import cssBinder from 'styles/cssBinder';
-
-import exporterStyle from 'components/Table/Exporter/style.css';
-
-const css = cssBinder(exporterStyle);
-
 type Props = {
   entryLocation?: EndpointLocation;
   search?: Record<string, string>;
@@ -33,7 +27,6 @@ const AllIDADownload = ({ entryLocation, search, fileType, count }: Props) => (
     }}
     search={entryLocation?.accession ? { ida: '' } : search}
     endpoint="ida"
-    className={css('generate-button')}
   />
 );
 

@@ -7,6 +7,8 @@ import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
 import { SearchBox } from 'components/Table';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -24,26 +26,22 @@ const OPACITY_OFF = 0.4;
 export const SortButton = (
   { mode, onClick } /*: {mode: number, onClick: function} */,
 ) => {
-  let icon = '&#xf0dd;';
   let iconClass = 'icon-sort';
   if (SORT_UP === mode) {
-    icon = '&#xf0de;';
     iconClass = 'icon-sort-up';
   }
   if (SORT_DOWN === mode) {
-    icon = '&#xf0dd;';
     iconClass = 'icon-sort-down';
   }
   return (
-    <button onClick={onClick}>
-      <span
-        className={f(iconClass, 'icon', 'icon-common')}
-        data-icon={icon}
-        style={{
-          opacity: mode === SORT_OFF ? OPACITY_OFF : 1,
-        }}
-      />
-    </button>
+    <Button
+      type="inline"
+      style={{
+        opacity: mode === SORT_OFF ? OPACITY_OFF : 1,
+      }}
+      onClick={onClick}
+      icon={iconClass}
+    />
   );
 };
 SortButton.propTypes = {
@@ -103,15 +101,14 @@ export const FilterButton = (
   { isOpen, onClick } /*: {isOpen: boolean, onClick?: ?function} */,
 ) => {
   return (
-    <button onClick={onClick}>
-      <span
-        className={f('icon-filter', 'icon', 'icon-common')}
-        data-icon="f"
-        style={{
-          opacity: isOpen ? 1 : OPACITY_OFF,
-        }}
-      />
-    </button>
+    <Button
+      type="inline"
+      style={{
+        opacity: isOpen ? 1 : OPACITY_OFF,
+      }}
+      onClick={onClick}
+      icon="icon-filter"
+    />
   );
 };
 

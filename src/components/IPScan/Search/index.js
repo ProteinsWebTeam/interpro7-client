@@ -18,6 +18,8 @@ import Redirect from 'components/generic/Redirect';
 import Link from 'components/generic/Link';
 // $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 import getId from 'utils/cheap-unique-id';
 
 import { createJob, goToCustomLocation } from 'actions/creators';
@@ -34,10 +36,19 @@ import ipro from 'styles/interpro-new.css';
 import blocks from 'styles/blocks.css';
 import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 import local from './style.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
 import example from './example.fasta';
 
-const f = foundationPartial(interproTheme, ipro, local, blocks);
+const f = foundationPartial(
+  interproTheme,
+  ipro,
+  local,
+  blocks,
+  buttonCSS,
+  fonts,
+);
 
 export const MAX_NUMBER_OF_SEQUENCES = 100;
 
@@ -666,13 +677,20 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                   <div className={f('columns')}>
                     <div className={f('button-group', 'line-with-buttons')}>
                       <label
-                        className={f(
-                          'hollow',
-                          'button',
-                          'tertiary',
+                        className={`vf-button ${f(
+                          'vf-button',
+                          'vf-button--secondary',
+                          'vf-button--sm',
                           'user-select-none',
-                        )}
+                        )}`}
                       >
+                        <span
+                          className={f(
+                            'icon',
+                            'icon-common',
+                            'icon-folder-open',
+                          )}
+                        />
                         Choose file
                         <input
                           type="file"
@@ -680,28 +698,24 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                           hidden
                         />
                       </label>
-                      <button
-                        type="button"
-                        className={f(
-                          'hollow',
-                          'button',
-                          'secondary',
-                          'user-select-none',
-                        )}
+                      <Button
+                        type="secondary"
+                        className={f('user-select-none')}
                         onClick={this._loadExample}
                       >
                         Example protein sequence
-                      </button>
-                      <button
-                        type="button"
-                        className={f('button', 'alert', {
+                      </Button>
+                      <Button
+                        className={f({
                           hidden:
                             valid || !editorState.getCurrentContent().hasText(),
                         })}
                         onClick={this._cleanUp}
+                        borderColor="var(--colors-alert-main)"
+                        backgroundColor="var(--colors-alert-main)"
                       >
                         Automatic FASTA clean up
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -720,20 +734,20 @@ export class IPScanSearch extends PureComponent /*:: <Props, State> */ {
                       'stacked-for-small',
                       'button-group',
                       'margin-bottom-none',
+                      'line-with-buttons',
                     )}
                   >
-                    <input
-                      type="submit"
-                      className={f('button', { disabled: !valid })}
+                    <Button
+                      submit
+                      className={f({ disabled: !valid })}
                       disabled={tooShort || !valid}
                       value="Search"
-                    />
-                    <input
-                      type="button"
-                      className={f('secondary', 'hollow', 'button')}
-                      onClick={this._handleReset}
-                      value="Clear"
-                    />
+                    >
+                      Search
+                    </Button>
+                    <Button type="secondary" onClick={this._handleReset}>
+                      Clear
+                    </Button>
                   </div>
                   <div
                     className={f(

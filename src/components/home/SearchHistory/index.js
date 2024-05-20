@@ -5,6 +5,8 @@ import searchStorage from 'storage/searchStorage';
 import Link from 'components/generic/Link';
 // $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -67,12 +69,9 @@ export const SearchHistory = () => {
       {searchTerms.length > 0 ? (
         <div className={f('row')}>
           <div className={f('column')}>
-            <button
-              className={f('button', 'margin-bottom-none')}
-              onClick={clearHistory}
-            >
+            <Button type="tertiary" onClick={clearHistory}>
               Clear History
-            </button>
+            </Button>
           </div>
         </div>
       ) : (

@@ -104,14 +104,18 @@ exports[`<SearchByText /> should render 1`] = `
           <div
             className="large-9 columns stacked-for-small margin-bottom-none button-group"
           >
-            <button
-              className="button"
-              type="submit"
+            <ForwardRef
+              style={
+                {
+                  "marginRight": "0.2rem",
+                }
+              }
+              submit={true}
             >
               Search
-            </button>
+            </ForwardRef>
             <Memo(Connect(Link))
-              className="secondary hollow button"
+              buttonType="secondary"
               to={
                 {
                   "description": {

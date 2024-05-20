@@ -9,6 +9,7 @@ import getUrlFor from 'utils/url-patterns';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import Integration from './Integration';
 import ContributingSignatures from './ContributingSignatures';
@@ -154,25 +155,10 @@ const SidePanel = ({
                   required
                 />
                 <div className={css('flex-space-evenly')}>
-                  <button
-                    className={css(
-                      'vf-button',
-                      'vf-button--primary',
-                      'vf-button--sm',
-                    )}
-                  >
-                    Submit
-                  </button>
-                  <button
-                    className={css(
-                      'vf-button',
-                      'vf-button--secondary',
-                      'vf-button--sm',
-                    )}
-                    onClick={clearFields}
-                  >
+                  <Button submit>Submit</Button>
+                  <Button type="tertiary" onClick={clearFields}>
                     Clear
-                  </button>
+                  </Button>
                 </div>
               </form>
             </DropDownButton>

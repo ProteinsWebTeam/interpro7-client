@@ -4,7 +4,6 @@
   --height: calc(var(--paddle-side) + var(--gap) + var(--gap));
   height: var(--height);
   position: relative;
-  margin-bottom: 1rem;
   outline: 0;
   font-size: 0.875rem;
   font-weight: bold;

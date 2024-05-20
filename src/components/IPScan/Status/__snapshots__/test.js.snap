@@ -62,24 +62,25 @@ exports[`<IPScanStatus /> should render 1`] = `
   >
     <ExtraOptions>
       <DropDownButton
-        icon=""
+        icon="icon-trash"
         label="Clear All"
       >
         <ul>
           <li>
-            <button
+            <ForwardRef
               onClick={[Function]}
+              type="hollow"
             >
               Loaded from File
-            </button>
+            </ForwardRef>
           </li>
           <li>
-             
-            <button
+            <ForwardRef
               onClick={[Function]}
+              type="hollow"
             >
               Loaded from Servers
-            </button>
+            </ForwardRef>
           </li>
         </ul>
       </DropDownButton>

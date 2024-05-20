@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 
 import AnimatedEntry from 'components/AnimatedEntry';
 import Link from 'components/generic/Link';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import config from 'config';
 
@@ -105,9 +107,9 @@ class CookieBanner extends PureComponent /*:: <{}, { display: ?boolean }> */ {
               'white-color',
             )}
           >
-            <button style={{ color: '#fff' }} onClick={this.handleClick}>
+            <Button onClick={this.handleClick}>
               I agree, dismiss this banner
-            </button>
+            </Button>
           </div>
         </div>
       </AnimatedEntry>

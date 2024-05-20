@@ -22,11 +22,11 @@
   }
 }
 
-.line-with-buttons {
+div.line-with-buttons {
   align-items: baseline;
 
   & > * {
-    margin: auto 0.5ch;
+    margin: auto 0.2ch;
   }
 }
 

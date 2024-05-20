@@ -7,14 +7,9 @@ import loadData from 'higherOrder/loadData/ts';
 import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+import { Button } from 'components/SimpleCommonComponents/Button';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';
-
-import cssBinder from 'styles/cssBinder';
-import ipro from 'styles/interpro-vf.css';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-
-const css = cssBinder(ipro, fonts);
 
 type Props = {
   proteinAccession: string;
@@ -47,13 +42,13 @@ const SequenceCheck = ({
           note that the displayed prediction may not accurately represent the
           current structure of the protein due to the sequence mismatch.
         </p>
-        <button
-          className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
+        <Button
+          type="secondary"
           onClick={() => setShowDiff(!showDiff)}
           style={{ width: '10rem' }}
         >
           {showDiff ? 'Hide' : 'Show'} Diff
-        </button>
+        </Button>
         {showDiff && (
           <div style={{ overflow: 'scroll', maxWidth: 'min(65vw,60em)' }}>
             <ReactDiffViewer

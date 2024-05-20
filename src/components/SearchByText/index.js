@@ -4,12 +4,15 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+import loadable from 'higherOrder/loadable';
 import TextSearchBox, {
   DEBOUNCE_RATE,
   DEBOUNCE_RATE_SLOW,
 } from 'components/SearchByText/TextSearchBox';
 import Example from 'components/SearchByText/Example';
 import Link from 'components/generic/Link';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
@@ -19,7 +22,6 @@ import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css';
 import blocks from 'styles/blocks.css';
 import local from './style.css';
-import loadable from 'higherOrder/loadable';
 
 const f = foundationPartial(interproTheme, ipro, local, blocks);
 
@@ -125,11 +127,11 @@ export class SearchByText extends PureComponent /*:: <Props> */ {
                     'button-group',
                   )}
                 >
-                  <button className={f('button')} type="submit">
+                  <Button submit style={{ marginRight: '0.2rem' }}>
                     Search
-                  </button>
+                  </Button>
                   <Link
-                    className={f('secondary', 'hollow', 'button')}
+                    buttonType="secondary"
                     to={{
                       description: {
                         main: { key: 'search' },

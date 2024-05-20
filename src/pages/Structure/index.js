@@ -21,6 +21,8 @@ import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
 // $FlowFixMe
 import File from 'components/File';
+// $FlowFixMe
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
 
 import loadable from 'higherOrder/loadable';
 
@@ -241,18 +243,7 @@ const List = (
                 fileType="tsv"
               />
               <label htmlFor="api">API</label>
-              <Link
-                name="api"
-                target="_blank"
-                href={url}
-                className={f('button', 'hollow', 'imitate-progress-button')}
-              >
-                <span
-                  className={f('icon', 'icon-common', 'icon-export')}
-                  data-icon="&#xf233;"
-                />
-                <span className={f('file-label')}>Web View</span>
-              </Link>
+              <APIViewButton url={url} />
             </div>
           </Exporter>
           <PageSizeSelector />

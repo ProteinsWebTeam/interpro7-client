@@ -42,7 +42,7 @@ export default class Toast extends PureComponent /*:: <Props> */ {
     paused: T.bool.isRequired,
     className: T.string,
     title: T.string,
-    body: T.oneOfType([T.string, T.object]).isRequired,
+    body: T.oneOfType([T.string, T.object]),
     link: T.object,
     action: T.object,
     ttl: T.number,

@@ -1,0 +1,71 @@
+button.vf-button,
+a.vf-button,
+a.vf-button:visited,
+label.vf-button,
+div.vf-button {
+  box-shadow: none;
+  transform: none;
+  margin: 0;
+  align-self: baseline;
+  &.vf-button--primary {
+    --vf-button-background-color: #1779ba;
+    --vf-button-border-color: #1779ba;
+    --vf-button-text-color: white;
+  }
+  &.vf-button--secondary {
+    --vf-button-background-color: white;
+    --vf-button-border-color: #1779ba;
+    --vf-button-text-color: #1779ba;
+  }
+  &.vf-button--tertiary {
+    --vf-button-background-color: #6a6a6a;
+    --vf-button-border-color: #6a6a6a;
+    --vf-button-text-color: white;
+  }
+  &.vf-button--hollow {
+    --vf-button-background-color: transparent;
+    --vf-button-border-color: transparent;
+    --vf-button-text-color: #1779ba;
+  }
+  &.vf-button--inline {
+    --vf-button-background-color: transparent;
+    --vf-button-border-color: transparent;
+    --vf-button-text-color: var(--colors-light-txt, gray);
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  &.vf-button--lg {
+    font-size: 2rem;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    box-shadow: none;
+    transform: none;
+    opacity: 0.8;
+  }
+
+  &[disabled] {
+    --vf-button-background-color: #999;
+    --vf-button-border-color: #aaa;
+    --vf-color__text--primary: #ddd;
+    &:hover,
+    &:active,
+    &:focus {
+      opacity: 1;
+    }
+  }
+  & .icon {
+    &::before {
+      color: inherit;
+    }
+    &:not(:last-child)::before {
+      margin-right: 0.5rem;
+    }
+  }
+}
+.vf-button + .vf-button {
+  margin-left: 0.2rem;
+}

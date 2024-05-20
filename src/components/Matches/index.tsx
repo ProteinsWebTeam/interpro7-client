@@ -21,6 +21,7 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
 import LazyImage from 'components/LazyImage';
 import Lazy from 'wrappers/Lazy';
 import loadWebComponent from 'utils/load-web-component';
@@ -309,19 +310,11 @@ const Matches = ({
                 </>
               )}
               <label htmlFor="api">API</label>
-              <Link
-                target="_blank"
-                href={toPublicAPI(
+              <APIViewButton
+                url={toPublicAPI(
                   includeTaxonFocusedOnURL(getReversedUrl(state), focused),
                 )}
-                className={css('button', 'hollow', 'imitate-progress-button')}
-              >
-                <span
-                  className={css('icon', 'icon-common', 'icon-export')}
-                  data-icon="&#xf233;"
-                />
-                <span className={css('file-label')}>Web View</span>
-              </Link>
+              />
             </div>
           </Exporter>
         )}

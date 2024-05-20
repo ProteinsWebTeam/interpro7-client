@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import cn from 'classnames';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 
@@ -13,6 +12,11 @@ import { customLocationSelector } from 'reducers/custom-location';
 import generateHref from './utils/generate-href';
 import generateRel from './utils/generate-rel';
 import generateClassName from './utils/generate-classname';
+
+// $FlowFixMe
+import cssBinder from 'styles/cssBinder';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
+const css = cssBinder(buttonCSS);
 
 import { DEV } from 'config';
 
@@ -48,6 +52,7 @@ const getNextLocation = (customLocation, to) =>
   className?: string,
   activeClass?: function | string,
   withReferrer?: boolean,
+  buttonType?: string,
 }; */
 
 export class _Link extends PureComponent /*:: <Props> */ {
@@ -80,6 +85,7 @@ export class _Link extends PureComponent /*:: <Props> */ {
     activeClass: T.oneOfType([T.string, T.func]),
     withReferrer: T.bool,
     download: T.string,
+    buttonType: T.string,
   };
 
   handleClick = (event) => {
@@ -134,6 +140,7 @@ export class _Link extends PureComponent /*:: <Props> */ {
       rel,
       target,
       withReferrer,
+      buttonType,
       // passed down
       ...props
     } = this.props;
@@ -182,14 +189,26 @@ export class _Link extends PureComponent /*:: <Props> */ {
       };
     }
     const _rel = generateRel(rel, target, href, withReferrer);
+    let buttonClassName = buttonType
+      ? ['vf-button', `vf-button--${buttonType}`, 'vf-button--sm']
+      : [];
     return (
       <a
         {...props}
         href={_href}
         rel={_rel}
         target={target}
-        className={cn(className, activeClassName) || null}
+        className={css(className, activeClassName, ...buttonClassName) || null}
         onClick={this.handleClick}
+        style={{
+          // Corrections for interpro-new... to remove when that css is finally removed
+          color: buttonType
+            ? 'var(--vf-button-text-color, #ffffff)'
+            : undefined,
+          borderBottomColor: buttonType
+            ? 'var(--vf-button-border-color, #ffffff)'
+            : undefined,
+        }}
       >
         {_children}
       </a>

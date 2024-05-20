@@ -14,11 +14,11 @@ exports[`<Actions /> should render 1`] = `
       </div>
     }
   >
-    <button
+    <ForwardRef
       aria-label="Delete Results"
-      className="icon icon-common ico-neutral"
-      data-icon=""
+      icon="icon-trash"
       onClick={[Function]}
+      type="inline"
     />
   </Tooltip>
   <Tooltip
@@ -31,11 +31,11 @@ exports[`<Actions /> should render 1`] = `
       </div>
     }
   >
-    <button
+    <ForwardRef
       aria-label="Save results in Browser"
-      className="icon icon-common ico-neutral"
-      data-icon="S"
+      icon="icon-save"
       onClick={[Function]}
+      type="inline"
     />
   </Tooltip>
 </nav>

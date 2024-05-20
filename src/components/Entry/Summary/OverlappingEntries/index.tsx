@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'components/generic/Link';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import { Button } from 'components/SimpleCommonComponents/Button';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -29,7 +30,7 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
   if (!showAllOverlappingEntries)
     _overlaps = (metadata.overlaps_with || []).slice(
       0,
-      MAX_NUMBER_OF_OVERLAPPING_ENTRIES
+      MAX_NUMBER_OF_OVERLAPPING_ENTRIES,
     );
 
   return (
@@ -83,12 +84,8 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
         ))}
         {Object.keys(metadata.overlaps_with || {}).length >
           MAX_NUMBER_OF_OVERLAPPING_ENTRIES && (
-          <button
-            className={css(
-              'vf-button',
-              'vf-button--secondary',
-              'vf-button--sm'
-            )}
+          <Button
+            type="secondary"
             onClick={() =>
               setShowAllOverlappingEntries(!showAllOverlappingEntries)
             }
@@ -111,7 +108,7 @@ const OverlappingEntries = ({ metadata }: { metadata: EntryMetadata }) => {
                 />
               </span>
             )}
-          </button>
+          </Button>
         )}
       </td>
     </tr>

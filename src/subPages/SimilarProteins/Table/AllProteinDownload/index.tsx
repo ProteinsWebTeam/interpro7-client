@@ -2,11 +2,6 @@ import React from 'react';
 import File from 'components/File';
 import { SupportedExtensions } from 'components/File/FileButton';
 
-import cssBinder from 'styles/cssBinder';
-
-import exporterStyle from 'components/Table/Exporter/style.css';
-
-const css = cssBinder(exporterStyle);
 type Props = {
   description: InterProDescription;
   count: number;
@@ -34,7 +29,6 @@ const AllProteinDownload = ({
     }}
     search={{ ida }}
     endpoint="protein"
-    className={css('generate-button')}
   />
 );
 

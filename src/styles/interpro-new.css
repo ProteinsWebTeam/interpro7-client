@@ -337,8 +337,8 @@ table.light .subheader {
   margin: 10px 0 0 10px;
 }
 
-table.light.nolink tbody a,
-.table.light tbody a:visited {
+table.light.nolink tbody td a,
+.table.light tbody td a:visited {
   color: var(--colors-light-txt);
 }
 

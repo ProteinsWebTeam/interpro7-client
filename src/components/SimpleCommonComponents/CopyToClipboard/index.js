@@ -7,11 +7,9 @@ import ClipboardJS from 'clipboard';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { addToast } from 'actions/creators';
 
-import { foundationPartial } from 'styles/foundation';
-import fonts from 'EBI-Icon-fonts/fonts.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
-const f = foundationPartial(ebiGlobalStyles, fonts);
 const TTL = 1000;
 
 const CopyToClipboard = ({ textToCopy, tooltipText, addToast }) => {
@@ -32,16 +30,9 @@ const CopyToClipboard = ({ textToCopy, tooltipText, addToast }) => {
     );
   });
   return (
-    <button type="button" ref={button}>
-      <Tooltip title={tooltipText}>
-        {' '}
-        <span
-          className={f('icon', 'icon-common', 'ico-neutral')}
-          data-icon="&#xf0c5;"
-          aria-label={tooltipText}
-        />
-      </Tooltip>
-    </button>
+    <Tooltip title={tooltipText}>
+      <Button type="inline" ref={button} icon="icon-copy" />
+    </Tooltip>
   );
 };
 CopyToClipboard.propTypes = {

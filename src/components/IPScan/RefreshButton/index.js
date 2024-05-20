@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { updateJobStatus } from 'actions/creators';
 
@@ -49,11 +51,7 @@ export class RefreshButton extends PureComponent /*:: <Props> */ {
 
   render() {
     return (
-      <button
-        className={f('button')}
-        aria-label={TITLE}
-        onClick={this._handleClick}
-      >
+      <Button aria-label={TITLE} onClick={this._handleClick}>
         <Tooltip title={TITLE}>
           <span
             className={f('icon', 'icon-common')}
@@ -61,7 +59,7 @@ export class RefreshButton extends PureComponent /*:: <Props> */ {
             ref={this._ref}
           />
         </Tooltip>
-      </button>
+      </Button>
     );
   }
 }

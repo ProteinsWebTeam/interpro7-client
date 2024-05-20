@@ -185,7 +185,13 @@ exports[`<SummaryProtein /> should render 1`] = `
           sequence="%3EA0A000_STRVD%201-109%0AMDFFVRLARETGDRKREFLELGRKAGRFPAASTSNGEISIWCSNDYLGMGQHPDVLDAMKRSVDEYGGGSGGSRNTGGTN%0AHFHVALEREPAEPHGKEDAVLFTSGYSAN%0A"
           title="Search sequence with InterProScan"
         />
-        <label>
+        <label
+          style={
+            {
+              "marginBottom": "0.4rem",
+            }
+          }
+        >
           <FileExporter
             count={13}
             description={

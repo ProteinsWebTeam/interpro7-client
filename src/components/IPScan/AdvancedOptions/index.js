@@ -5,14 +5,17 @@ import { format } from 'url';
 
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import loadData from 'higherOrder/loadData';
 
 import { foundationPartial } from 'styles/foundation';
 
 import local from './style.css';
+import localParent from '../Search/style.css';
 
-const f = foundationPartial(local);
+const f = foundationPartial(local, localParent);
 
 /*:: type Props = {
   name: string,
@@ -242,19 +245,13 @@ export class AdvancedOptions extends PureComponent /*:: <AdvancedOptionsProps> *
           <fieldset className={f('fieldset')} ref={this._ref}>
             <legend>Applications</legend>
             <p>{payload.description}</p>
-            <div className={f('button-group')}>
-              <button
-                className={f('button', 'secondary')}
-                onClick={this._selectAll}
-              >
+            <div className={f('button-group', 'line-with-buttons')}>
+              <Button type="tertiary" onClick={this._selectAll}>
                 Select all
-              </button>
-              <button
-                className={f('button', 'secondary')}
-                onClick={this._unselectAll}
-              >
+              </Button>
+              <Button type="tertiary" onClick={this._unselectAll}>
                 Unselect all
-              </button>
+              </Button>
             </div>
             <fieldset className={f('fieldset')}>
               <legend>Member databases</legend>

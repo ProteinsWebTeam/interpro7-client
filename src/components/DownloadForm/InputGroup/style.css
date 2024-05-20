@@ -21,16 +21,7 @@
   }
 }
 .new-input-group-button button {
-  height: var(--group-height);
-  color: var(--colors-almost-white);
-  background-color: var(--colors-submain);
-  border: 1px solid var(--colors-slightgray);
   margin-left: 2px;
-  font-weight: bold;
-  padding: 0 1rem;
-  &:hover {
-    background-color: var(--colors-submain-darker);
-  }
 }
 .new-input-group-label {
   padding: 0 1rem;

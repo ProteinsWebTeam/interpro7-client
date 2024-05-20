@@ -29,6 +29,8 @@ import Table, {
 // $FlowFixMe
 import File from 'components/File';
 // $FlowFixMe
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
+// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
@@ -322,18 +324,7 @@ class List extends PureComponent /*:: <Props,State> */ {
                 />
 
                 <label htmlFor="api">API</label>
-                <Link
-                  target="_blank"
-                  name="api"
-                  href={urlToExport}
-                  className={f('button', 'hollow', 'imitate-progress-button')}
-                >
-                  <span
-                    className={f('icon', 'icon-common', 'icon-export')}
-                    data-icon="&#xf233;"
-                  />
-                  <span className={f('file-label')}>Web View</span>
-                </Link>
+                <APIViewButton url={urlToExport} />
               </div>
             </Exporter>
             <PageSizeSelector />
