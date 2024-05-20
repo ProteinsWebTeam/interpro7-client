@@ -24,6 +24,15 @@ declare module '*.tmpl' {
   export default content;
 }
 
+// TODO: remove after migration of storage/
+declare module 'storage/searchStorage' {
+  const content: {
+    getValue: () => unknown;
+    setValue: (v: unknown) => void;
+  };
+  export default content;
+}
+
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
   let InterproEntry: InterProEntryProps;

@@ -8,7 +8,9 @@ import loadable from 'higherOrder/loadable';
 import TextSearchBox, {
   DEBOUNCE_RATE,
   DEBOUNCE_RATE_SLOW,
+  // $FlowFixMe
 } from 'components/SearchByText/TextSearchBox';
+// $FlowFixMe
 import Example from 'components/SearchByText/Example';
 import Link from 'components/generic/Link';
 // $FlowFixMe

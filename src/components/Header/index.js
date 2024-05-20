@@ -18,6 +18,7 @@ import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 import TextSearchBox, {
   DEBOUNCE_RATE_SLOW,
+  // $FlowFixMe
 } from 'components/SearchByText/TextSearchBox';
 
 import { sticky as supportsSticky } from 'utils/support';
