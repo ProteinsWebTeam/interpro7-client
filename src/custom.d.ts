@@ -334,7 +334,7 @@ interface EntryMetadata extends Metadata {
     type: string;
   }> | null;
   cross_references: Record<string, CrossReference>;
-  wikipedia: WikipediaEntry;
+  wikipedia?: Array<WikipediaEntry>;
   set_info?: {
     accession: string;
     name: string;
