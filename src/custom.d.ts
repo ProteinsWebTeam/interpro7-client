@@ -23,6 +23,11 @@ declare module '*.tmpl' {
   const content: any;
   export default content;
 }
+declare module '*.fasta' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
 
 // TODO: remove after migration of storage/
 declare module 'storage/searchStorage' {

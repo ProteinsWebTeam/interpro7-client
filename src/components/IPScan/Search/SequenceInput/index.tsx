@@ -223,7 +223,7 @@ export const cleanUpBlocks = (blocks: RawDraftContentBlock[]) => {
     .join('\n');
 };
 
-type SequenceChecks = {
+export type SequenceChecks = {
   valid: boolean;
   hasText: boolean;
   tooShort: boolean;
@@ -231,10 +231,19 @@ type SequenceChecks = {
   headerIssues: boolean;
 };
 type Props = {
-  value?: string;
+  value?: string | null;
   onChecksChange?: (tests: SequenceChecks) => void;
 };
-const SequenceInput = React.forwardRef(
+
+export type SequenceInputHandle = {
+  reset: (text?: string) => void;
+  cleanUp: () => void;
+  focusEditor: () => void;
+  getContent: () => string;
+  sequenceTests: SequenceChecks;
+};
+
+const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
   ({ value, onChecksChange }: Props, ref) => {
     const editorRef = useRef<Editor>(null);
     const [editorState, setEditorState] = useState<EditorState>(

@@ -10,6 +10,7 @@ import { schemaProcessDataPageSection } from 'schema_org/processors';
 import DomainButton from './DomainButton';
 import PanelIDA from './PanelIDA';
 import ToggleSwitch from 'components/ToggleSwitch';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -17,7 +18,6 @@ import blocks from 'styles/blocks.css';
 import local from './style.css';
 import searchPageCss from 'pages/Search/style.css';
 import search from 'components/IPScan/Search/style.css';
-import Button from 'components/SimpleCommonComponents/Button';
 
 const css = cssBinder(local, blocks, search, searchPageCss);
 
