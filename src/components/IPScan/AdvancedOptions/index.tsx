@@ -1,4 +1,4 @@
-import React, { PureComponent, useRef } from 'react';
+import React, { useRef } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 

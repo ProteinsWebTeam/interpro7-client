@@ -5,6 +5,7 @@
   }
   & .help-col {
     display: block;
+    margin-left: 0.5rem;
   }
   & .help-col.removed {
     display: none;
