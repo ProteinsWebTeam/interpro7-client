@@ -17,6 +17,7 @@ import Table, {
   HighlightToggler,
 } from 'components/Table';
 
+// $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
 // $FlowFixMe

@@ -22,6 +22,7 @@ import Table, {
   Exporter,
   HighlightToggler,
 } from 'components/Table';
+// $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 // $FlowFixMe
 import File from 'components/File';

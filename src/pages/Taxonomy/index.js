@@ -32,6 +32,7 @@ import File from 'components/File';
 import APIViewButton from 'components/Table/Exporter/APIViewButton';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
 
