@@ -233,14 +233,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
           ref={this._formRef}
         >
           <div>
-            <div
-              className={css(
-                'simple-box',
-                'border',
-                'margin-bottom-none',
-                'ipscan-block',
-              )}
-            >
+            <div className={css('simple-box', 'ipscan-block')}>
               <header>Search your sequence, in FASTA format</header>
               <SchemaOrgData
                 data={{
@@ -302,52 +295,40 @@ export class IPScanSearch extends PureComponent<Props, State> {
                 />
               </div>
 
-              <div className={css('row')}>
-                <div className={css('columns')}>
-                  <div className={css('button-group', 'line-with-buttons')}>
-                    <label
-                      className={`vf-button ${css(
-                        'vf-button',
-                        'vf-button--secondary',
-                        'vf-button--sm',
-                        'user-select-none',
-                      )}`}
-                    >
-                      <span
-                        className={css(
-                          'icon',
-                          'icon-common',
-                          'icon-folder-open',
-                        )}
-                      />
-                      Choose file
-                      <input
-                        type="file"
-                        onChange={this._handleFileChange}
-                        hidden
-                      />
-                    </label>
-                    <Button
-                      type="secondary"
-                      className={css('user-select-none')}
-                      onClick={this._loadExample}
-                    >
-                      Example protein sequence
-                    </Button>
-                    <Button
-                      className={css({
-                        hidden:
-                          this.state.sequenceChecks?.valid ||
-                          !this.state.sequenceChecks?.hasText,
-                      })}
-                      onClick={this._cleanUp}
-                      borderColor="var(--colors-alert-main)"
-                      backgroundColor="var(--colors-alert-main)"
-                    >
-                      Automatic FASTA clean up
-                    </Button>
-                  </div>
-                </div>
+              <div>
+                <label
+                  className={css(
+                    'vf-button',
+                    'vf-button--secondary',
+                    'vf-button--sm',
+                    'user-select-none',
+                  )}
+                >
+                  <span
+                    className={css('icon', 'icon-common', 'icon-folder-open')}
+                  />
+                  Choose file
+                  <input type="file" onChange={this._handleFileChange} hidden />
+                </label>
+                <Button
+                  type="secondary"
+                  className={css('user-select-none')}
+                  onClick={this._loadExample}
+                >
+                  Example protein sequence
+                </Button>
+                <Button
+                  className={css({
+                    hidden:
+                      this.state.sequenceChecks?.valid ||
+                      !this.state.sequenceChecks?.hasText,
+                  })}
+                  onClick={this._cleanUp}
+                  borderColor="var(--colors-alert-main)"
+                  backgroundColor="var(--colors-alert-main)"
+                >
+                  Automatic FASTA clean up
+                </Button>
               </div>
 
               <AdvancedOptions
@@ -356,17 +337,8 @@ export class IPScanSearch extends PureComponent<Props, State> {
                 initialOptions={this.state.initialAdvancedOptions}
               />
 
-              <div className={css('row')}>
-                <div
-                  className={css(
-                    'large-8',
-                    'columns',
-                    'stacked-for-small',
-                    'button-group',
-                    'margin-bottom-none',
-                    'line-with-buttons',
-                  )}
-                >
+              <footer>
+                <div>
                   <Button
                     submit
                     className={css({
@@ -384,17 +356,10 @@ export class IPScanSearch extends PureComponent<Props, State> {
                     Clear
                   </Button>
                 </div>
-                <div
-                  className={css(
-                    'large-4',
-                    'columns',
-                    'show-for-medium',
-                    'search-adv',
-                  )}
-                >
+                <div className={css('search-adv')}>
                   <span>Powered by InterProScan</span>
                 </div>
-              </div>
+              </footer>
             </div>
           </div>
           <div className={css('dragging-overlay')}>Drop your file here</div>

@@ -1,136 +1,112 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<IPScanSearch /> should render 1`] = `
-<div
-  className="row margin-bottom-medium"
+<section
+  className="vf-stack vf-stack--400"
 >
-  <div
-    className="large-12 columns"
+  <form
+    className="search-form"
+    onDrag={[Function]}
+    onDragEnd={[Function]}
+    onDragEnter={[Function]}
+    onDragExit={[Function]}
+    onDragLeave={[Function]}
+    onDragOver={[Function]}
+    onDragStart={[Function]}
+    onDrop={[Function]}
+    onSubmit={[Function]}
   >
-    <form
-      className="search-form"
-      onDrag={[Function]}
-      onDragEnd={[Function]}
-      onDragEnter={[Function]}
-      onDragExit={[Function]}
-      onDragLeave={[Function]}
-      onDragOver={[Function]}
-      onDragStart={[Function]}
-      onDrop={[Function]}
-      onSubmit={[Function]}
-    >
-      <div>
-        <div
-          className="simple-box border margin-bottom-none ipscan-block"
-        >
-          <div
-            className="row"
-          >
-            <div
-              className="large-12 columns search-input"
-            >
-              <h3
-                className="light"
-              >
-                Sequence, in FASTA format
-              </h3>
-              <Memo(Loadable)
-                data={
-                  {
-                    "description": "Search for InterPro matches in your sequences",
-                    "name": "Search By Sequence",
-                  }
-                }
-                processData={[Function]}
-              />
-              <SequenceInput
-                onChecksChange={[Function]}
-                value=""
-              />
-            </div>
-          </div>
-          <div
-            className="row"
-          >
-            <div
-              className="columns"
-            >
-              <div
-                className="button-group line-with-buttons"
-              >
-                <label
-                  className="vf-button vf-button vf-button--secondary vf-button--sm user-select-none"
-                >
-                  <span
-                    className="icon icon-common icon-folder-open"
-                  />
-                  Choose file
-                  <input
-                    hidden={true}
-                    onChange={[Function]}
-                    type="file"
-                  />
-                </label>
-                <ForwardRef
-                  className="user-select-none"
-                  onClick={[Function]}
-                  type="secondary"
-                >
-                  Example protein sequence
-                </ForwardRef>
-                <ForwardRef
-                  backgroundColor="var(--colors-alert-main)"
-                  borderColor="var(--colors-alert-main)"
-                  className="hidden"
-                  onClick={[Function]}
-                >
-                  Automatic FASTA clean up
-                </ForwardRef>
-              </div>
-            </div>
-          </div>
-          <Memo(Connect(loadData(AdvancedOptions)))
-            changeTitle={[Function]}
-            initialOptions={null}
-            title={null}
-          />
-          <div
-            className="row"
-          >
-            <div
-              className="large-8 columns stacked-for-small button-group margin-bottom-none line-with-buttons"
-            >
-              <ForwardRef
-                className="disabled"
-                disabled={true}
-                submit={true}
-                value="Search"
-              >
-                Search
-              </ForwardRef>
-              <ForwardRef
-                onClick={[Function]}
-                type="secondary"
-              >
-                Clear
-              </ForwardRef>
-            </div>
-            <div
-              className="large-4 columns show-for-medium search-adv"
-            >
-              <span>
-                Powered by InterProScan
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div>
       <div
-        className="dragging-overlay"
+        className="simple-box ipscan-block"
       >
-        Drop your file here
+        <header>
+          Search your sequence, in FASTA format
+        </header>
+        <Memo(Loadable)
+          data={
+            {
+              "description": "Search for InterPro matches in your sequences",
+              "name": "Search By Sequence",
+            }
+          }
+          processData={[Function]}
+        />
+        <div
+          className="vf-stack vf-stack--200"
+        >
+          <SequenceInput
+            onChecksChange={[Function]}
+            value=""
+          />
+        </div>
+        <div>
+          <label
+            className="vf-button vf-button--secondary vf-button--sm user-select-none"
+          >
+            <span
+              className="icon icon-common icon-folder-open"
+            />
+            Choose file
+            <input
+              hidden={true}
+              onChange={[Function]}
+              type="file"
+            />
+          </label>
+          <ForwardRef
+            className="user-select-none"
+            onClick={[Function]}
+            type="secondary"
+          >
+            Example protein sequence
+          </ForwardRef>
+          <ForwardRef
+            backgroundColor="var(--colors-alert-main)"
+            borderColor="var(--colors-alert-main)"
+            className="hidden"
+            onClick={[Function]}
+          >
+            Automatic FASTA clean up
+          </ForwardRef>
+        </div>
+        <Memo(Connect(loadData(AdvancedOptions)))
+          changeTitle={[Function]}
+          initialOptions={null}
+          title={null}
+        />
+        <footer>
+          <div>
+            <ForwardRef
+              className="disabled"
+              disabled={true}
+              submit={true}
+              value="Search"
+            >
+              Search
+            </ForwardRef>
+            <ForwardRef
+              onClick={[Function]}
+              type="secondary"
+            >
+              Clear
+            </ForwardRef>
+          </div>
+          <div
+            className="search-adv"
+          >
+            <span>
+              Powered by InterProScan
+            </span>
+          </div>
+        </footer>
       </div>
-    </form>
-  </div>
-</div>
+    </div>
+    <div
+      className="dragging-overlay"
+    >
+      Drop your file here
+    </div>
+  </form>
+</section>
 `;
