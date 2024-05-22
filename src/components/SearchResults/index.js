@@ -12,6 +12,7 @@ import Table, {
   PageSizeSelector,
   HighlightToggler,
 } from 'components/Table';
+// $FlowFixMe
 import ExactMatch from 'components/SearchResults/ExactMatch';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 // $FlowFixMe

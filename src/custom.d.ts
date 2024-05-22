@@ -1083,3 +1083,14 @@ type IprscanParametersDetailsPayload = {
     values: Array<IprscanParameterValue>;
   };
 };
+
+type UtilsAccessionPayload = {
+  endpoint: string;
+  source_database: string;
+  accession?: string;
+  proteins?: Array<{
+    accession: string;
+    organism: string;
+    tax_id: string;
+  }>;
+};
