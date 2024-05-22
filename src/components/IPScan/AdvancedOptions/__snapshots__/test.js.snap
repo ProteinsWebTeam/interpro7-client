@@ -1,11 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<AdvancedOptions /> should render 1`] = `
-<div
-  className="row"
->
+<section>
   <details
-    className="columns margin-bottom-medium option-style"
+    className="option-style"
   >
     <summary>
       <span
@@ -13,58 +11,56 @@ exports[`<AdvancedOptions /> should render 1`] = `
       >
         ►
       </span>
-       Advanced options
+      <span>
+        Advanced options
+      </span>
     </summary>
     <fieldset
-      className="fieldset"
+      className="new-fieldset"
     >
       <legend>
         Job configuration
       </legend>
-      <Tooltip
-        title="Stay on this page after submitting a new job?"
+      <label
+        style={
+          {
+            "marginBottom": "1rem",
+          }
+        }
       >
-        <label
-          className="stay-checkbox"
+        <Tooltip
+          title="Stay on this page after submitting a new job?"
         >
-          <div
-            className="switch tiny"
-          >
-            <input
-              className="switch-input"
-              name="stay"
-              type="checkbox"
-            />
-            <span
-              className="switch-paddle"
-            >
-              <span />
-            </span>
-          </div>
-          Create another job after this one
-        </label>
-      </Tooltip>
-      <Tooltip
-        title="Give this job a local title (only visible on this browser)"
+          <ToggleSwitch
+            id="stay"
+            label="Create another job after this one"
+            name="stay"
+            size="tiny"
+            switchCond={false}
+          />
+        </Tooltip>
+      </label>
+      <label
+        className="new-input-group"
       >
-        <label
-          className="input-group"
+        <span
+          className="new-input-group-label"
         >
-          <span
-            className="input-group-label"
-          >
-            Job title
-          </span>
+          Job title
+        </span>
+        <Tooltip
+          title="Give this job a local title (only visible on this browser)"
+        >
           <input
             className="input-group-field"
             name="local-title"
             type="text"
           />
-        </label>
-      </Tooltip>
+        </Tooltip>
+      </label>
     </fieldset>
     <fieldset
-      className="fieldset"
+      className="new-fieldset"
     >
       <legend>
         Applications
@@ -89,20 +85,20 @@ exports[`<AdvancedOptions /> should render 1`] = `
         </ForwardRef>
       </div>
       <fieldset
-        className="fieldset"
+        className="new-fieldset"
       >
         <legend>
           Member databases
         </legend>
         <fieldset
-          className="fieldset"
+          className="new-fieldset"
         >
           <legend>
             Families, domains, sites & repeats
           </legend>
         </fieldset>
         <fieldset
-          className="fieldset"
+          className="new-fieldset"
         >
           <legend>
             Structural domains
@@ -110,7 +106,7 @@ exports[`<AdvancedOptions /> should render 1`] = `
         </fieldset>
       </fieldset>
       <fieldset
-        className="fieldset"
+        className="new-fieldset"
       >
         <legend>
           Other sequence features
@@ -118,5 +114,5 @@ exports[`<AdvancedOptions /> should render 1`] = `
       </fieldset>
     </fieldset>
   </details>
-</div>
+</section>
 `;

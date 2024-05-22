@@ -1,4 +1,4 @@
-.new-switch {
+div.new-switch {
   --paddle-side: 1.5rem;
   --gap: 0.25rem;
   --height: calc(var(--paddle-side) + var(--gap) + var(--gap));

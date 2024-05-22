@@ -173,7 +173,7 @@ type Props = {
   primary?: Endpoint;
   secondary?: Endpoint;
   matches: Array<GenericMatch>;
-  search?: Record<string, string | boolean>;
+  search?: InterProLocationSearch;
   description?: InterProDescription;
   hash?: string;
   state?: GlobalState;

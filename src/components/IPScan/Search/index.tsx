@@ -59,12 +59,12 @@ type Props = {
   ipScan?: ParsedURLServer;
   value?: string | null;
   main?: string;
-  search?: Record<string, string | boolean>;
+  search?: InterProLocationSearch;
 };
 
 type State = {
-  title: string | null;
-  initialAdvancedOptions: Record<string, string | boolean> | null;
+  title?: string;
+  initialAdvancedOptions?: InterProLocationSearch;
   submittedJob: string | null;
   sequenceChecks: SequenceChecks | null;
   dragging: boolean;
@@ -78,13 +78,13 @@ export class IPScanSearch extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    let initialAdvancedOptions = null;
+    let initialAdvancedOptions = undefined;
 
     if (props.search) {
       initialAdvancedOptions = props.search;
     }
     this.state = {
-      title: null,
+      title: undefined,
       initialAdvancedOptions,
       submittedJob: null,
       sequenceChecks: null,
@@ -129,7 +129,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
     this.setState(
       {
         dragging: false,
-        title: null,
+        title: undefined,
         submittedJob: null,
       },
       () => this._editorRef.current?.focusEditor(),

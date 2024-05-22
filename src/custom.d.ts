@@ -135,9 +135,11 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   };
   other?: string[];
 };
+
+type InterProLocationSearch = Record<string, string | boolean | Array<string>>;
 type InterProLocation = {
   description: InterProDescription;
-  search: Record<string, string | boolean>;
+  search: InterProLocationSearch;
   hash: string;
   state: Record<string, string>;
 };
@@ -1044,6 +1046,7 @@ type Iprscan5Result = {
     id: string;
   }>;
 };
+
 type Iprscan5Payload = {
   'interproscan-version': string;
   results: Array<Iprscan5Result>;
@@ -1059,4 +1062,24 @@ type IprscanMetaIDB = {
   status: string;
   type: string;
   times: Record<string, number>;
+};
+
+type IprscanParameterValue = {
+  label: string;
+  value: string;
+  defaultValue: boolean;
+  properties: {
+    properties: Array<{
+      key: string;
+      value: string;
+    }>;
+    empty: boolean;
+  };
+};
+type IprscanParametersDetailsPayload = {
+  name: string;
+  description: string;
+  values: {
+    values: Array<IprscanParameterValue>;
+  };
 };

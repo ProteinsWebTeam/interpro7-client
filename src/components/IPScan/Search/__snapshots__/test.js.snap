@@ -72,8 +72,6 @@ exports[`<IPScanSearch /> should render 1`] = `
         </div>
         <Memo(Connect(loadData(AdvancedOptions)))
           changeTitle={[Function]}
-          initialOptions={null}
-          title={null}
         />
         <footer>
           <div>
