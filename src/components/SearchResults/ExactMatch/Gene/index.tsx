@@ -1,15 +1,12 @@
-// @flow
 import React, { Fragment, useState } from 'react';
-import T from 'prop-types';
+
 import Link from 'components/generic/Link';
-// $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
-// $FlowFixMe
 import Button from 'components/SimpleCommonComponents/Button';
 
-const NUMBER_OF_PROTEINS_TO_SHOW = 2;
+const NUMBER_OF_PROTEINS_TO_SHOW = 5;
 
-const ListOfProteins = ({ accessions } /*: {accessions: string[]} */) => {
+const ListOfProteins = ({ accessions }: { accessions: string[] }) => {
   const [showMore, setShowMore] = useState(false);
   const accessions2show =
     accessions.length < NUMBER_OF_PROTEINS_TO_SHOW || showMore
@@ -41,18 +38,15 @@ const ListOfProteins = ({ accessions } /*: {accessions: string[]} */) => {
     </>
   );
 };
-ListOfProteins.propTypes = {
-  accessions: T.arrayOf(T.string),
-};
 
-/*:: type EMGWProps = {
-  matches: {
-    accessions: string[],
-    name: string,
-  },
-  gene: string,
-}; */
-const ExactGeneMatchWrapper = ({ matches, gene }) => (
+type Props = {
+  matches: Array<{
+    accessions: string[];
+    name: string;
+  }>;
+  gene: string;
+};
+const ExactGeneMatchWrapper = ({ matches, gene }: Props) => (
   <Callout type="warning" icon="icon-arrow-alt-circle-right">
     <span>
       Found an exact gene match for <b>{gene}</b> in the following key species:
@@ -66,14 +60,5 @@ const ExactGeneMatchWrapper = ({ matches, gene }) => (
     </ul>
   </Callout>
 );
-ExactGeneMatchWrapper.propTypes = {
-  matches: T.arrayOf(
-    T.shape({
-      accessions: T.arrayOf(T.string),
-      name: T.string,
-    }),
-  ),
-  gene: T.string,
-};
 
 export default ExactGeneMatchWrapper;
