@@ -1094,3 +1094,15 @@ type UtilsAccessionPayload = {
     tax_id: string;
   }>;
 };
+
+type EBISearchEntry = {
+  accession: string;
+  fields: {
+    name: Array<string>;
+    source_database: Array<string>;
+  };
+};
+type EBISearchPayload = {
+  entries: Array<EBISearchEntry>;
+  hitCount: number;
+};
