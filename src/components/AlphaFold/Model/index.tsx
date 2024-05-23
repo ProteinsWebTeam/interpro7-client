@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Link from 'components/generic/Link';
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
@@ -316,4 +315,4 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
 export default loadData({
   getUrl: getModelInfoUrl(true),
   mapStateToProps: getModelInfoUrl(false),
-} as Params)(AlphaFoldModel);
+} as LoadDataParameters)(AlphaFoldModel);

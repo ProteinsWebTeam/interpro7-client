@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -68,4 +67,4 @@ const getUrl = createSelector(
     }),
 );
 
-export default loadData(getUrl as Params)(TaxnameStructures);
+export default loadData(getUrl as LoadDataParameters)(TaxnameStructures);

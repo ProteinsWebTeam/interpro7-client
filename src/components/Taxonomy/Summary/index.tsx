@@ -4,7 +4,6 @@ import { format } from 'url';
 
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { goToCustomLocation } from 'actions/creators';
@@ -295,4 +294,4 @@ export default loadData<{ metadata: TaxonomyMetadata } & WithNames, 'Names'>({
   getUrl,
   propNamespace: 'Names',
   mapDispatchToProps: { goToCustomLocation },
-} as Params)(SummaryTaxonomy);
+} as LoadDataParameters)(SummaryTaxonomy);

@@ -4,7 +4,6 @@ import { format } from 'url';
 import ReactDiffViewer from 'react-diff-viewer-continued';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { Button } from 'components/SimpleCommonComponents/Button';
@@ -85,4 +84,4 @@ const getUrlForProtein = createSelector(
   },
 );
 
-export default loadData(getUrlForProtein as Params)(SequenceCheck);
+export default loadData(getUrlForProtein as LoadDataParameters)(SequenceCheck);

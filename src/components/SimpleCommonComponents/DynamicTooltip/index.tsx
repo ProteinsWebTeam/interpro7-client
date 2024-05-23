@@ -1,7 +1,6 @@
 import React, { useState, useEffect, PropsWithChildren } from 'react';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { createSelector } from 'reselect';
@@ -64,9 +63,9 @@ const getUrlFor = createSelector(
   },
 );
 
-const DataProvider = loadData<{ metadata: Metadata }>(getUrlFor as Params)(
-  _DataProvider,
-);
+const DataProvider = loadData<{ metadata: Metadata }>(
+  getUrlFor as LoadDataParameters,
+)(_DataProvider);
 
 type Props = PropsWithChildren<{
   accession: string;

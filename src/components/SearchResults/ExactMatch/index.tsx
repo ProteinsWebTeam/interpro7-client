@@ -2,7 +2,6 @@ import React, { PropsWithChildren } from 'react';
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Link from 'components/generic/Link';
 import Callout from 'components/SimpleCommonComponents/Callout';
@@ -178,4 +177,6 @@ const getSearchNumberUrl = createSelector(
 export default loadData({
   getUrl: getSearchNumberUrl,
   propNamespace: 'Number',
-} as Params)(loadData(getSearchStringUrl as Params)(ExactMatch));
+} as LoadDataParameters)(
+  loadData(getSearchStringUrl as LoadDataParameters)(ExactMatch),
+);

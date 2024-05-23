@@ -5,7 +5,6 @@ import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Link from 'components/generic/Link';
 import { Button } from 'components/SimpleCommonComponents/Button';
@@ -220,4 +219,4 @@ export const mapStateToPropsForModels = createSelector(
 export default loadData({
   getUrl: getUrl(true),
   mapStateToProps: mapStateToPropsForModels,
-} as Params)(ProteinTable);
+} as LoadDataParameters)(ProteinTable);

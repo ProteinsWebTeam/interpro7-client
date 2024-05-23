@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import GoTerms from 'components/GoTerms';
@@ -61,10 +60,12 @@ const getUrl = createSelector(
         subfamily: '',
       },
     });
-  }
+  },
 );
 
-const PantherSFGoTerms = loadData(getUrl as Params)(PantherSFGoTermsWithData);
+const PantherSFGoTerms = loadData(getUrl as LoadDataParameters)(
+  PantherSFGoTermsWithData,
+);
 
 type Props = {
   subfamilies?: string[];

@@ -11,7 +11,7 @@ import {
   addToast,
 } from 'actions/creators';
 
-import extractParams, { Params } from '../extract-params';
+import extractParams from '../extract-params';
 import getFetch from '../getFetch';
 
 import { UnconnectedErrorBoundary } from 'wrappers/ErrorBoundary';
@@ -33,7 +33,7 @@ type ConnectedProps = {
 };
 
 const loadData = <Payload = unknown, Namespace extends string = ''>(
-  params?: Params,
+  params?: LoadDataParameters,
 ) => {
   const {
     getUrl,

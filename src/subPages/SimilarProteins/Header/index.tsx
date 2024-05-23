@@ -5,7 +5,6 @@ import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { ida2json } from 'components/Entry/DomainArchitectures';
@@ -168,9 +167,9 @@ const mapStateToPropsAccessionDB = createSelector(
 export default loadData<DomainsPayload, 'Domain'>({
   getUrl: getUrlForDomains,
   propNamespace: 'Domain',
-} as Params)(
+} as LoadDataParameters)(
   loadData({
     getUrl: getUrlForIDA,
     mapStateToProps: mapStateToPropsAccessionDB,
-  } as Params)(React.memo(SimilarProteinsHeaderWithData)),
+  } as LoadDataParameters)(React.memo(SimilarProteinsHeaderWithData)),
 );

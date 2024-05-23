@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
 
@@ -281,20 +280,22 @@ export default loadExternalSources(
   loadData<AlphafoldPayload, 'Prediction'>({
     getUrl: getAlphaFoldPredictionURL,
     propNamespace: 'Prediction',
-  } as Params)(
+  } as LoadDataParameters)(
     loadData<AlphafoldConfidencePayload, 'Confidence'>({
       getUrl: getConfidenceURLFromPayload('Prediction'),
       propNamespace: 'Confidence',
-    } as Params)(
+    } as LoadDataParameters)(
       loadData<ExtraFeaturesPayload, 'Features'>({
         getUrl: getExtraURL('extra_features'),
         propNamespace: 'Features',
-      } as Params)(
+      } as LoadDataParameters)(
         loadData<ResiduesPayload, 'Residues'>({
           getUrl: getExtraURL('residues'),
           propNamespace: 'Residues',
-        } as Params)(
-          loadData(getRelatedEntriesURL as Params)(DomainOnProteinWithoutData),
+        } as LoadDataParameters)(
+          loadData(getRelatedEntriesURL as LoadDataParameters)(
+            DomainOnProteinWithoutData,
+          ),
         ),
       ),
     ),

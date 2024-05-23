@@ -14,7 +14,7 @@ import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Callout from 'components/SimpleCommonComponents/Callout';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
+
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
@@ -226,6 +226,7 @@ const getEbiSearchUrl = createSelector(
   },
 );
 
-export default loadData({ getUrl: getEbiSearchUrl, mapStateToProps } as Params)(
-  SearchResults,
-);
+export default loadData({
+  getUrl: getEbiSearchUrl,
+  mapStateToProps,
+} as LoadDataParameters)(SearchResults);

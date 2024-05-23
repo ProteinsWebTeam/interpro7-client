@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Button from 'components/SimpleCommonComponents/Button';
@@ -219,4 +218,4 @@ const getUrlFromState = createSelector(
     }),
 );
 
-export default loadData(getUrlFromState as Params)(AdvancedOptions);
+export default loadData(getUrlFromState as LoadDataParameters)(AdvancedOptions);

@@ -6,7 +6,7 @@ import { set } from 'lodash-es';
 
 import loadData from 'higherOrder/loadData/ts';
 import loadable from 'higherOrder/loadable';
-import { Params } from 'higherOrder/loadData/extract-params';
+
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 import { goToCustomLocation } from 'actions/creators';
@@ -494,4 +494,4 @@ export default loadData({
   getUrl: getUrlForMeta,
   mapStateToProps,
   mapDispatchToProps: { goToCustomLocation },
-} as Params)(DownloadForm);
+} as LoadDataParameters)(DownloadForm);

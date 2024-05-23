@@ -3,7 +3,6 @@ import React from 'react';
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -30,4 +29,6 @@ const getProteomeUrl = createSelector(
     return `${config.root.UniProt.href}/proteomes/${accession}`;
   },
 );
-export default loadData(getProteomeUrl as Params)(UniProtDescription);
+export default loadData(getProteomeUrl as LoadDataParameters)(
+  UniProtDescription,
+);

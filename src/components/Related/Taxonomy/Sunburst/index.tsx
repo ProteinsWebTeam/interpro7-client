@@ -333,4 +333,4 @@ const mapStateToProps = createSelector(
 export default loadData<TaxaPayload>({
   getUrl,
   mapStateToProps,
-})(Sunburst);
+} as LoadDataParameters)(Sunburst);

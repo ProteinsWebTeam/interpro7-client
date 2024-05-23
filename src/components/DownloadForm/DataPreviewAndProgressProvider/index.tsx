@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 type ChildrenFnProps = {
   data?: RequestedData<PayloadList<unknown>>;
@@ -51,4 +50,4 @@ const mapStateToProps = createSelector(
 export default loadData({
   getUrl: (_, { url }) => url,
   mapStateToProps,
-} as Params)(DataPreviewProviderWithoutData);
+} as LoadDataParameters)(DataPreviewProviderWithoutData);
