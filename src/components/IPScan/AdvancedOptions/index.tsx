@@ -5,7 +5,6 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
 import { Params } from 'higherOrder/loadData/extract-params';
 
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Button from 'components/SimpleCommonComponents/Button';
 import ToggleSwitch from 'components/ToggleSwitch';
 

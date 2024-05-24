@@ -18,7 +18,7 @@ const InfoMessages = ({ valid, tooShort, tooMany, headerIssues }: Props) => {
       {!valid && (
         <div>
           {tooShort
-            ? 'There is a header without content. '
+            ? 'The sequence is too short (min: three characters). '
             : 'The sequence has invalid characters. '}
           <span role="img" aria-label="warning">
             ⚠️
@@ -27,7 +27,7 @@ const InfoMessages = ({ valid, tooShort, tooMany, headerIssues }: Props) => {
       )}
       {valid && tooShort && (
         <div>
-          The sequence is too short.{' '}
+          The sequence is too short (min: three characters).{' '}
           <span role="img" aria-label="warning">
             ⚠️
           </span>
