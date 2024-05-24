@@ -16,7 +16,7 @@ import { getUrlForMeta, getReversedUrl } from 'higherOrder/loadData/defaults';
 
 const mapStateToPropsAdvancedQuery = createSelector(
   (state: GlobalState) => state.customLocation.description.main.key,
-  (mainType) => ({ mainType })
+  (mainType) => ({ mainType }),
 );
 
 interface TaxonomyProps extends LoadDataProps<RootAPIPayload, 'Base'> {
@@ -29,7 +29,11 @@ const RelatedTaxonomy = loadData<RootAPIPayload, 'Base'>({
   getUrl: getUrlForMeta,
   propNamespace: 'Base',
   mapStateToProps: mapStateToPropsAdvancedQuery,
-})(({ dataBase, actualSize, ...props }: TaxonomyProps) => {
+} as LoadDataParameters)(({
+  dataBase,
+  actualSize,
+  ...props
+}: TaxonomyProps) => {
   return dataBase ? (
     <RelatedAdvanced
       dataBase={dataBase}
@@ -104,7 +108,7 @@ const RelatedAdvancedQuery = loadData<RootAPIPayload, 'Base'>({
   loadData<PayloadList<EndpointWithMatchesPayload<Metadata, AnyMatch>>>({
     getUrl: getReversedUrl,
     mapStateToProps: mapStateToPropsAdvancedQuery,
-  })(_RelatedAdvancedQuery)
+  } as LoadDataParameters)(_RelatedAdvancedQuery),
 );
 
 type Props = {
@@ -132,7 +136,7 @@ const mapStateToPropsDefault = createSelector(
   (state: GlobalState) =>
     findIn(
       state.customLocation.description,
-      (value: EndpointPartialLocation) => !!value.isFilter && value.order === 1
+      (value: EndpointPartialLocation) => !!value.isFilter && value.order === 1,
     ),
   (state: GlobalState) => state.customLocation.hash,
   ([focusType, filter], hash) => ({
@@ -144,7 +148,7 @@ const mapStateToPropsDefault = createSelector(
           .integration)
     ),
     hash,
-  })
+  }),
 );
 
 export default connect(mapStateToPropsDefault)(Related);

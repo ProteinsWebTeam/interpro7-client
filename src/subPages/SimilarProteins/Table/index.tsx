@@ -6,7 +6,6 @@ import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -273,4 +272,4 @@ export default loadData<PayloadList<ProteinMetadata>, 'IDA'>({
   getUrl: mapStateToPropsForIDA,
   propNamespace: 'IDA',
   mapStateToProps,
-} as Params)(SimilarProteinTable);
+} as LoadDataParameters)(SimilarProteinTable);

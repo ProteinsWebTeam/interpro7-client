@@ -6,7 +6,7 @@ import config from 'config';
 import { MenuItemProps, entities, singleEntity } from 'menuConfig';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'src/higherOrder/loadData/extract-params';
+
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -247,6 +247,7 @@ const mapStateToUrl = createSelector(
   },
 );
 
-export default loadData({ getUrl: mapStateToUrl, mapStateToProps } as Params)(
-  EntryMenuWithoutData,
-);
+export default loadData({
+  getUrl: mapStateToUrl,
+  mapStateToProps,
+} as LoadDataParameters)(EntryMenuWithoutData);

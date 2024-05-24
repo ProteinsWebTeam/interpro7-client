@@ -3,7 +3,6 @@ import React from 'react';
 import { format } from 'url';
 import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
@@ -156,6 +155,7 @@ const getIsoformURL = createSelector(
     });
   },
 );
-export default loadData({ getUrl: getIsoformURL, mapStateToProps } as Params)(
-  Viewer,
-);
+export default loadData({
+  getUrl: getIsoformURL,
+  mapStateToProps,
+} as LoadDataParameters)(Viewer);

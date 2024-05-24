@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Button from 'components/SimpleCommonComponents/Button';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -123,4 +122,4 @@ export default loadData({
   getUrl: getUrlForIpscan,
   mapStateToProps,
   fetchOptions: { useCache: false, responseType: 'text' },
-} as Params)(DownloadAll);
+} as LoadDataParameters)(DownloadAll);

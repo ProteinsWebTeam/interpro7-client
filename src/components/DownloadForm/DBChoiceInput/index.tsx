@@ -8,7 +8,6 @@ import { toPlural } from 'utils/pages/toPlural';
 import sortFnFor from 'utils/sort-functions/basic';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
 
@@ -138,4 +137,6 @@ const mapStateToUrlFor = createSelector(
     ),
 );
 
-export default loadData(mapStateToUrlFor as Params)(DBChoiceInputWithoutData);
+export default loadData(mapStateToUrlFor as LoadDataParameters)(
+  DBChoiceInputWithoutData,
+);

@@ -3,7 +3,6 @@ import React from 'react';
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import config from 'config';
 
@@ -42,4 +41,4 @@ const getRfamUrl = createSelector(
   },
 );
 
-export default loadData(getRfamUrl as Params)(RFamLink);
+export default loadData(getRfamUrl as LoadDataParameters)(RFamLink);
