@@ -738,6 +738,7 @@ type SettingsProps = {
     disprot: Object,
     wikipedia: Object,
     alphafold: Object,
+    proteinsAPI: Object,
   },
   changeSettings: function,
   changeSettingsRaw: function,

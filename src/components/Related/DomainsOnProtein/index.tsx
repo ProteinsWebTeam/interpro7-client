@@ -25,6 +25,7 @@ import mergeExtraFeatures from './mergeExtraFeatures';
 import mergeResidues from './mergeResidues';
 import DomainsOnProteinLoaded, { makeTracks } from './DomainsOnProteinLoaded';
 import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
+import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
 
 export const orderByAccession = (
   a: { accession: string },
@@ -65,6 +66,7 @@ interface LoadedProps
     ExtenalSourcesProps,
     LoadDataProps<ExtraFeaturesPayload, 'Features'>,
     LoadDataProps<ResiduesPayload, 'Residues'>,
+    LoadDataProps<ProteinsAPIVariation, 'Variation'>,
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
     LoadDataProps<
@@ -77,6 +79,7 @@ const DomainOnProteinWithoutData = ({
   dataResidues,
   dataFeatures,
   dataConfidence,
+  dataVariation,
   onMatchesLoaded,
   onFamiliesFound,
   children,
@@ -214,6 +217,7 @@ const DomainOnProteinWithoutData = ({
         mainData={mainData}
         dataMerged={mergedData}
         dataConfidence={dataConfidence}
+        dataVariation={dataVariation}
         loading={
           data?.loading ||
           dataFeatures?.loading ||
@@ -276,6 +280,20 @@ const getExtraURL = (query: string) =>
       return url;
     },
   );
+const getVariationURL = createSelector(
+  (state: GlobalState) => state.settings.proteinsAPI,
+  (state: GlobalState) =>
+    state.customLocation.description.protein?.accession || '',
+  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+    const url = format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + 'variation/' + accession,
+    });
+    return url;
+  },
+);
 
 export default loadExternalSources(
   loadData<AlphafoldPayload, 'Prediction'>({
@@ -294,7 +312,14 @@ export default loadExternalSources(
           getUrl: getExtraURL('residues'),
           propNamespace: 'Residues',
         } as Params)(
-          loadData(getRelatedEntriesURL as Params)(DomainOnProteinWithoutData),
+          loadData<ProteinsAPIVariation, 'Variation'>({
+            getUrl: getVariationURL,
+            propNamespace: 'Variation',
+          } as Params)(
+            loadData(getRelatedEntriesURL as Params)(
+              DomainOnProteinWithoutData,
+            ),
+          ),
         ),
       ),
     ),
