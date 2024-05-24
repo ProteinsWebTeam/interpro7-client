@@ -28,17 +28,13 @@ exports[`<AdvancedOptions /> should render 1`] = `
           }
         }
       >
-        <Tooltip
-          title="Stay on this page after submitting a new job?"
-        >
-          <ToggleSwitch
-            id="stay"
-            label="Create another job after this one"
-            name="stay"
-            size="tiny"
-            switchCond={false}
-          />
-        </Tooltip>
+        <ToggleSwitch
+          id="stay"
+          label="Create another job after this one"
+          name="stay"
+          size="tiny"
+          switchCond={false}
+        />
       </label>
       <label
         className="new-input-group"
@@ -48,15 +44,12 @@ exports[`<AdvancedOptions /> should render 1`] = `
         >
           Job title
         </span>
-        <Tooltip
-          title="Give this job a local title (only visible on this browser)"
-        >
-          <input
-            className="input-group-field"
-            name="local-title"
-            type="text"
-          />
-        </Tooltip>
+        <input
+          className="input-group-field"
+          name="local-title"
+          placeholder="Give this job a local title (only visible on this browser)"
+          type="text"
+        />
       </label>
     </fieldset>
     <fieldset

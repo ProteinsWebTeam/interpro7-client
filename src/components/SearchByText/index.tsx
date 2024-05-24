@@ -33,7 +33,6 @@ export const SearchByText = ({ main }: Props) => {
   const input = useRef(null);
   useEffect(() => {
     if (main === 'search') {
-      // TODO: make it work by typing the Forwarded ref.
       (input.current as unknown as { focus: () => void })?.focus();
     }
   }, [main]);

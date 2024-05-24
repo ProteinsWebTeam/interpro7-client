@@ -85,8 +85,6 @@ const RedirectToDefault = ({
     search: { q: value },
   },
 }: GlobalState) => {
-  // TODO: after a decent amount of time, remove from here…
-  // This logic is only to handle old IP6 URL structure and redirect to new one
   if (typeof value === 'string') {
     return (
       <Redirect
@@ -99,7 +97,6 @@ const RedirectToDefault = ({
       />
     );
   }
-  // TODO: …to there
   return (
     <Redirect
       to={{

@@ -39,7 +39,7 @@ const otherValues = new Set([
   'SignalP',
   'TMHMM',
 ]);
-const ignoreList = new Set(['ProDom']);
+const ignoreList = new Set();
 
 const labels = new Map([
   ['PfamA', 'Pfam'],
@@ -155,15 +155,14 @@ export const AdvancedOptions = ({
           </label>
           <label className={css('new-input-group')}>
             <span className={css('new-input-group-label')}>Job title</span>
-            <Tooltip title="Give this job a local title (only visible on this browser)">
-              <input
-                type="text"
-                className={css('input-group-field')}
-                name="local-title"
-                defaultValue={title}
-                onChange={changeTitle}
-              />
-            </Tooltip>
+            <input
+              type="text"
+              className={css('input-group-field')}
+              name="local-title"
+              defaultValue={title}
+              onChange={changeTitle}
+              placeholder="Give this job a local title (only visible on this browser)"
+            />
           </label>
         </fieldset>
         <fieldset className={css('new-fieldset')} ref={fieldSetRef}>
@@ -191,13 +190,8 @@ export const AdvancedOptions = ({
           <fieldset className={css('new-fieldset')}>
             <legend>Other sequence features</legend>
             {other.map(applicationToCheckbox)}
+            {noCategory.map(applicationToCheckbox)}
           </fieldset>
-          {noCategory.length ? (
-            <fieldset className={css('new-fieldset')}>
-              <legend>Other category</legend>
-              {noCategory.map(applicationToCheckbox)}
-            </fieldset>
-          ) : null}
         </fieldset>
       </details>
     </section>

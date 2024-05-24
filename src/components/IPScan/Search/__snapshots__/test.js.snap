@@ -21,7 +21,7 @@ exports[`<IPScanSearch /> should render 1`] = `
         className="simple-box ipscan-block"
       >
         <header>
-          Search your sequence, in FASTA format
+          Scan your sequences
         </header>
         <Memo(Loadable)
           data={
@@ -67,7 +67,7 @@ exports[`<IPScanSearch /> should render 1`] = `
             className="hidden"
             onClick={[Function]}
           >
-            Automatic FASTA clean up
+            Automatic clean up
           </ForwardRef>
         </div>
         <Memo(Connect(loadData(AdvancedOptions)))
