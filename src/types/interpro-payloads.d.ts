@@ -54,6 +54,7 @@ type StructuredDescription = {
   text: string;
   llm: boolean;
   checked: boolean;
+  updated: boolean;
 };
 
 type MetadataCounter =
@@ -91,7 +92,7 @@ interface EntryMetadata extends Metadata {
     type: string;
   }> | null;
   cross_references: Record<string, CrossReference>;
-  wikipedia: WikipediaEntry;
+  wikipedia: Array<WikipediaEntry>;
   set_info?: {
     accession: string;
     name: string;
@@ -103,6 +104,7 @@ interface EntryMetadata extends Metadata {
   is_removed?: boolean;
   is_llm?: boolean;
   is_reviewed_llm?: boolean;
+  is_updated_llm?: boolean;
   in_alphafold?: boolean;
   entry_annotations?: Record<string, unknown>;
 }

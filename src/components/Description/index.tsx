@@ -54,6 +54,7 @@ class Description extends PureComponent<Props> {
           text,
           llm: typeof e === 'string' ? false : e.llm,
           checked: typeof e === 'string' ? false : e.checked,
+          updated: typeof e === 'string' ? false : e.updated,
         }),
       );
     });
@@ -63,7 +64,7 @@ class Description extends PureComponent<Props> {
         {sections
           .map((section, i) =>
             section
-              .map(({ text, llm, checked }, j) => (
+              .map(({ text, llm, checked, updated }, j) => (
                 <div
                   className={css('content', {
                     llm,
@@ -73,7 +74,11 @@ class Description extends PureComponent<Props> {
                   key={`${i}_${j}`}
                 >
                   {showBadges &&
-                    (llm ? <BadgeAI checked={checked} /> : <BadgeCurated />)}
+                    (llm ? (
+                      <BadgeAI checked={checked} updated={updated} />
+                    ) : (
+                      <BadgeCurated />
+                    ))}
                   <Paragraph
                     key={`${i}.${j}`}
                     p={text}

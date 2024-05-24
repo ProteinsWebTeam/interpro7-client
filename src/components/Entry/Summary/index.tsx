@@ -13,6 +13,7 @@ import Literature, {
 } from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Tabs from 'components/Tabs';
 
 import MemberDBSubtitle from './MemberDBSubtitle';
 import SidePanel from './SidePanel';
@@ -135,6 +136,8 @@ const SummaryEntry = ({
     return null;
   };
   const hasLLM = hasLLMParagraphs(metadata.description || []);
+  const hasWiki =
+    metadata.source_database === 'pfam' && !!metadata.wikipedia?.length;
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
       <section className={css('vf-grid', 'summary-grid')}>
@@ -170,15 +173,22 @@ const SummaryEntry = ({
         }
         hasIntegratedCitations={integratedCitations?.length > 0}
       />
-      <section>
-        {metadata.source_database === 'pfam' && metadata.wikipedia ? (
-          <Wikipedia
-            title={metadata.wikipedia.title}
-            extract={metadata.wikipedia.extract}
-            thumbnail={metadata.wikipedia.thumbnail}
-          />
-        ) : null}
-      </section>
+      {hasWiki && (
+        <section>
+          <h4>Wikipedia</h4>
+          <Tabs>
+            {(metadata.wikipedia || []).map((wiki, key) => (
+              <div key={key} title={wiki.title.replaceAll('_', ' ')}>
+                <Wikipedia
+                  title={wiki.title}
+                  extract={wiki.extract}
+                  thumbnail={wiki.thumbnail}
+                />
+              </div>
+            ))}
+          </Tabs>
+        </section>
+      )}
     </div>
   );
 };

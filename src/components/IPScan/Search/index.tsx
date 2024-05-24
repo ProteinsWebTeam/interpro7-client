@@ -234,7 +234,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
         >
           <div>
             <div className={css('simple-box', 'ipscan-block')}>
-              <header>Search your sequence, in FASTA format</header>
+              <header>Scan your sequences</header>
               <SchemaOrgData
                 data={{
                   name: 'Search By Sequence',
@@ -327,7 +327,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
                   borderColor="var(--colors-alert-main)"
                   backgroundColor="var(--colors-alert-main)"
                 >
-                  Automatic FASTA clean up
+                  Automatic clean up
                 </Button>
               </div>
 

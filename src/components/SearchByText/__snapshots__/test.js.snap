@@ -21,7 +21,7 @@ exports[`<SearchByText /> should render 1`] = `
       className="simple-box"
     >
       <header>
-        Search families, domains, proteins, keywords or GO terms
+        Search by protein families, domains, proteins, keywords, or GO terms
       </header>
       <div
         className="vf-stack vf-stack--200"
@@ -34,7 +34,7 @@ exports[`<SearchByText /> should render 1`] = `
         >
           <span>
              
-            e.g.
+            Examples:
             <Example>
               IPR020422
             </Example>

@@ -117,6 +117,7 @@ type SettingsState = {
   alphafold: ParsedURLServer;
   uniprot: ParsedURLServer;
   rfam: ParsedURLServer;
+  proteinsAPI: ParsedURLServer;
 };
 type ParsedURLServer = {
   protocol: string;

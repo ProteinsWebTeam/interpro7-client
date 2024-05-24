@@ -4,7 +4,6 @@ import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
 
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Button from 'components/SimpleCommonComponents/Button';
 import ToggleSwitch from 'components/ToggleSwitch';
 
@@ -26,7 +25,6 @@ const mdb1Values = new Set([
   'PRINTS',
   'PrositeProfiles',
   'SMART',
-  'TIGRFAM',
   'NCBIfam',
   'PrositePatterns',
   'SFLD',
@@ -39,14 +37,13 @@ const otherValues = new Set([
   'SignalP',
   'TMHMM',
 ]);
-const ignoreList = new Set(['ProDom']);
+const ignoreList = new Set();
 
 const labels = new Map([
   ['PfamA', 'Pfam'],
   ['Panther', 'PANTHER'],
   ['SuperFamily', 'SUPERFAMILY'],
   ['Gene3d', 'CATH-Gene3D'],
-  ['TIGRFAM', 'TIGRFAMs'],
   ['PrositeProfiles', 'PROSITE profiles'],
   ['PrositePatterns', 'PROSITE patterns'],
 ]);
@@ -146,27 +143,24 @@ export const AdvancedOptions = ({
         <fieldset className={css('new-fieldset')}>
           <legend>Job configuration</legend>
           <label style={{ marginBottom: '1rem' }}>
-            <Tooltip title="Stay on this page after submitting a new job?">
-              <ToggleSwitch
-                id="stay"
-                name="stay"
-                switchCond={false}
-                label="Create another job after this one"
-                size="tiny"
-              />
-            </Tooltip>
+            <ToggleSwitch
+              id="stay"
+              name="stay"
+              switchCond={false}
+              label="Create another job after this one"
+              size="tiny"
+            />
           </label>
           <label className={css('new-input-group')}>
             <span className={css('new-input-group-label')}>Job title</span>
-            <Tooltip title="Give this job a local title (only visible on this browser)">
-              <input
-                type="text"
-                className={css('input-group-field')}
-                name="local-title"
-                defaultValue={title}
-                onChange={changeTitle}
-              />
-            </Tooltip>
+            <input
+              type="text"
+              className={css('input-group-field')}
+              name="local-title"
+              defaultValue={title}
+              onChange={changeTitle}
+              placeholder="Give this job a local title (only visible on this browser)"
+            />
           </label>
         </fieldset>
         <fieldset className={css('new-fieldset')} ref={fieldSetRef}>
@@ -194,13 +188,8 @@ export const AdvancedOptions = ({
           <fieldset className={css('new-fieldset')}>
             <legend>Other sequence features</legend>
             {other.map(applicationToCheckbox)}
+            {noCategory.map(applicationToCheckbox)}
           </fieldset>
-          {noCategory.length ? (
-            <fieldset className={css('new-fieldset')}>
-              <legend>Other category</legend>
-              {noCategory.map(applicationToCheckbox)}
-            </fieldset>
-          ) : null}
         </fieldset>
       </details>
     </section>

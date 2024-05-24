@@ -25,6 +25,7 @@ const ProteinViewerHeader = forwardRef<NightingaleNavigationCE, Props>(
           <NightingaleNavigation
             length={length}
             margin-color="#fafafa"
+            margin-left={20}
             height={50}
             show-highlight
             highlight-color={highlightColor}
@@ -36,6 +37,7 @@ const ProteinViewerHeader = forwardRef<NightingaleNavigationCE, Props>(
             sequence={sequence}
             length={length}
             margin-color="#fafafa"
+            margin-left={20}
             highlight-event="onmouseover"
             highlight-color={highlightColor}
             height={30}
@@ -44,7 +46,7 @@ const ProteinViewerHeader = forwardRef<NightingaleNavigationCE, Props>(
         </div>
       </>
     );
-  }
+  },
 );
 
 export default ProteinViewerHeader;

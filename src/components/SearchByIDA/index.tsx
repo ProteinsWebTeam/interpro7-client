@@ -147,9 +147,7 @@ export class SearchByIDA extends PureComponent<Props, State> {
     return (
       <section className={css('vf-stack', 'vf-stack--400')}>
         <div className={css('simple-box')}>
-          <header>
-            Search for proteins with a specific domain architecture
-          </header>
+          <header>Search for proteins containing specific domains</header>
           <SchemaOrgData
             data={{
               name: 'Search By Domain Architecture IDA',

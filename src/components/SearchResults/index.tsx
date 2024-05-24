@@ -73,8 +73,7 @@ export const SearchResults = ({
       <>
         <ExactMatch searchValue={searchValue} />
         <Callout type="info">
-          Your search for <strong>{searchValue}</strong> did not match any
-          InterPro entries.
+          No results found for <strong>{searchValue}</strong>.
         </Callout>
       </>
     );

@@ -8,7 +8,7 @@ exports[`<SearchByIDA /> should render 1`] = `
     className="simple-box"
   >
     <header>
-      Search for proteins with a specific domain architecture
+      Search for proteins containing specific domains
     </header>
     <Memo(Loadable)
       data={

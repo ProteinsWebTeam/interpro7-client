@@ -79,16 +79,15 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
     <div className={css('wiki-article')}>
       <div className={css('vf-grid', 'wiki-content')}>
         <div className={css('vf-grid__col--span-3', 'columns')}>
-          <h4>
+          <h5>
             <Link
               className={css('ext-link')}
               target="_blank"
               href={`https://en.wikipedia.org/wiki/${title}`}
             >
               {title.replace(/_/g, ' ')}
-            </Link>{' '}
-            <div className={css('tag')}>Wikipedia</div>
-          </h4>
+            </Link>
+          </h5>
           {convertHtmlToReact(extract)}
         </div>
         <div className={css('columns')}>
