@@ -13,6 +13,7 @@ import Table, {
   Card,
   HighlightToggler,
 } from 'components/Table';
+// $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 // $FlowFixMe
 import SetCard from 'components/Set/Card';

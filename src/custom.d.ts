@@ -23,6 +23,20 @@ declare module '*.tmpl' {
   const content: any;
   export default content;
 }
+declare module '*.fasta' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const content: any;
+  export default content;
+}
+
+// TODO: remove after migration of storage/
+declare module 'storage/searchStorage' {
+  const content: {
+    getValue: () => unknown;
+    setValue: (v: unknown) => void;
+  };
+  export default content;
+}
 
 declare module 'interpro-components' {
   let InterproHierarchy: InterProHierarchyProps;
@@ -121,9 +135,11 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   };
   other?: string[];
 };
+
+type InterProLocationSearch = Record<string, string | boolean | Array<string>>;
 type InterProLocation = {
   description: InterProDescription;
-  search: Record<string, string | boolean>;
+  search: InterProLocationSearch;
   hash: string;
   state: Record<string, string>;
 };
@@ -1033,6 +1049,7 @@ type Iprscan5Result = {
     id: string;
   }>;
 };
+
 type Iprscan5Payload = {
   'interproscan-version': string;
   results: Array<Iprscan5Result>;
@@ -1048,4 +1065,47 @@ type IprscanMetaIDB = {
   status: string;
   type: string;
   times: Record<string, number>;
+};
+
+type IprscanParameterValue = {
+  label: string;
+  value: string;
+  defaultValue: boolean;
+  properties: {
+    properties: Array<{
+      key: string;
+      value: string;
+    }>;
+    empty: boolean;
+  };
+};
+type IprscanParametersDetailsPayload = {
+  name: string;
+  description: string;
+  values: {
+    values: Array<IprscanParameterValue>;
+  };
+};
+
+type UtilsAccessionPayload = {
+  endpoint: string;
+  source_database: string;
+  accession?: string;
+  proteins?: Array<{
+    accession: string;
+    organism: string;
+    tax_id: string;
+  }>;
+};
+
+type EBISearchEntry = {
+  accession: string;
+  fields: {
+    name: Array<string>;
+    source_database: Array<string>;
+  };
+};
+type EBISearchPayload = {
+  entries: Array<EBISearchEntry>;
+  hitCount: number;
 };

@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<SearchByText /> should render 1`] = `
-<div
-  className="row"
+<section
+  className="vf-stack vf-stack--400"
 >
   <Memo(Loadable)
     data={
@@ -13,128 +13,105 @@ exports[`<SearchByText /> should render 1`] = `
     }
     processData={[Function]}
   />
-  <div
-    className="large-12 columns margin-bottom-medium"
+  <form
+    data-category="navigation"
+    onSubmit={[Function]}
   >
-    <form
-      data-category="navigation"
-      onSubmit={[Function]}
+    <div
+      className="simple-box"
     >
+      <header>
+        Search by protein families, domains, proteins, keywords, or GO terms
+      </header>
       <div
-        className="simple-box border margin-bottom-none"
+        className="vf-stack vf-stack--200"
       >
+        <Connect(TextSearchBox)
+          delay={1000}
+        />
         <div
-          className="row"
+          className="examples"
         >
-          <div
-            className="large-12 columns search-input"
-          >
-            <h3
-              className="light"
-            >
-              Search families, domains, proteins, keywords or GO terms
-            </h3>
-            <Connect(TextSearchBox)
-              delay={1000}
-            />
-          </div>
+          <span>
+             
+            Examples:
+            <Example>
+              IPR020422
+            </Example>
+            ,
+            <Example>
+              kinase
+            </Example>
+            ,
+            <Example>
+              O00167
+            </Example>
+            ,
+            <Example>
+              PF02932
+            </Example>
+            ,
+            <Example>
+              GO:0007165
+            </Example>
+            ,
+            <Example>
+              1t2v
+            </Example>
+            ,
+            <Example>
+              UP000005640
+            </Example>
+          </span>
         </div>
-        <div
-          className="row"
-        >
-          <div
-            className="medium-8 columns neutral"
+      </div>
+      <footer>
+        <div>
+          <ForwardRef
             style={
               {
-                "float": "none",
+                "marginRight": "0.2rem",
+              }
+            }
+            submit={true}
+          >
+            Search
+          </ForwardRef>
+          <Memo(Connect(Link))
+            buttonType="secondary"
+            to={
+              {
+                "description": {
+                  "main": {
+                    "key": "search",
+                  },
+                  "search": {
+                    "type": "text",
+                  },
+                },
               }
             }
           >
-            <span>
-               
-              e.g.
-              <Example>
-                IPR020422
-              </Example>
-              ,
-              <Example>
-                kinase
-              </Example>
-              ,
-              <Example>
-                O00167
-              </Example>
-              ,
-              <Example>
-                PF02932
-              </Example>
-              ,
-              <Example>
-                GO:0007165
-              </Example>
-              ,
-              <Example>
-                1t2v
-              </Example>
-              ,
-              <Example>
-                UP000005640
-              </Example>
-            </span>
-          </div>
-          <div
-            className="medium-4 columns show-for-medium search-adv"
-          >
-            <span>
-              Powered by
-               
-              <Memo(Connect(Link))
-                className="neutral ext"
-                href="https://www.ebi.ac.uk/ebisearch/"
-                target="_blank"
-              >
-                EBI search
-              </Memo(Connect(Link))>
-            </span>
-          </div>
+            Clear
+          </Memo(Connect(Link))>
         </div>
         <div
-          className="row action-row"
+          className="search-adv"
         >
-          <div
-            className="large-9 columns stacked-for-small margin-bottom-none button-group"
-          >
-            <ForwardRef
-              style={
-                {
-                  "marginRight": "0.2rem",
-                }
-              }
-              submit={true}
-            >
-              Search
-            </ForwardRef>
+          <span>
+            Powered by
+             
             <Memo(Connect(Link))
-              buttonType="secondary"
-              to={
-                {
-                  "description": {
-                    "main": {
-                      "key": "search",
-                    },
-                    "search": {
-                      "type": "text",
-                    },
-                  },
-                }
-              }
+              className="neutral ext"
+              href="https://www.ebi.ac.uk/ebisearch/"
+              target="_blank"
             >
-              Clear
+              EBI search
             </Memo(Connect(Link))>
-          </div>
+          </span>
         </div>
-      </div>
-    </form>
-  </div>
-</div>
+      </footer>
+    </div>
+  </form>
+</section>
 `;

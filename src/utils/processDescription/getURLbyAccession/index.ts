@@ -8,7 +8,7 @@ const otherEndpoints = {
   taxonomy: 'uniprot',
   set: 'all',
 };
-const isDescriptionValid = (description) => {
+const isDescriptionValid = (description: InterProPartialDescription) => {
   try {
     descriptionToDescription(description);
     return true;
@@ -17,20 +17,23 @@ const isDescriptionValid = (description) => {
   }
 };
 
-const getURLByAccession = (accession) => {
+const getURLByAccession = (accession?: string | null) => {
   const directLinkDescription = {
     main: { key: 'entry' },
     entry: {
       accession: accession,
       db: 'InterPro',
     },
-  };
+  } as InterProPartialDescription;
   // First check for exact match in InterPro
   if (isDescriptionValid(directLinkDescription)) {
     return directLinkDescription;
   }
   // Then for exact match in other member DBs
   for (const db of ENTRY_DBS) {
+    if (!directLinkDescription.entry) {
+      directLinkDescription.entry = {};
+    }
     directLinkDescription.entry.db = db;
     if (isDescriptionValid(directLinkDescription)) {
       return directLinkDescription;
@@ -44,7 +47,7 @@ const getURLByAccession = (accession) => {
         accession: accession,
         db,
       },
-    };
+    } as InterProPartialDescription;
     if (isDescriptionValid(directEndpointLinkDescription)) {
       return directEndpointLinkDescription;
     }

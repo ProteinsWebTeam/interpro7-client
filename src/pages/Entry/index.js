@@ -25,6 +25,7 @@ import Table, {
   Exporter,
   HighlightToggler,
 } from 'components/Table';
+// $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import getExtUrlFor from 'utils/url-patterns';

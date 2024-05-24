@@ -173,7 +173,7 @@ type Props = {
   primary?: Endpoint;
   secondary?: Endpoint;
   matches: Array<GenericMatch>;
-  search?: Record<string, string | boolean>;
+  search?: InterProLocationSearch;
   description?: InterProDescription;
   hash?: string;
   state?: GlobalState;
@@ -333,7 +333,10 @@ const Matches = ({
                   dimension=".8em"
                 />
               ) : null}
-              <HighlightedText text={acc} textToHighlight={search?.search} />
+              <HighlightedText
+                text={acc}
+                textToHighlight={search?.search as string}
+              />
             </span>
           );
           return (
@@ -396,7 +399,10 @@ const Matches = ({
               }
             }
           >
-            <HighlightedText text={name} textToHighlight={search?.search} />
+            <HighlightedText
+              text={name}
+              textToHighlight={search?.search as string}
+            />
           </Link>
         )}
       >
@@ -413,7 +419,10 @@ const Matches = ({
         ) => (
           <>
             {focusType === 'taxonomy' || focusType === 'proteome' ? (
-              <HighlightedText text={name} textToHighlight={search?.search} />
+              <HighlightedText
+                text={name}
+                textToHighlight={search?.search as string}
+              />
             ) : (
               <Link
                 to={
@@ -425,7 +434,10 @@ const Matches = ({
                   }
                 }
               >
-                <HighlightedText text={name} textToHighlight={search?.search} />
+                <HighlightedText
+                  text={name}
+                  textToHighlight={search?.search as string}
+                />
               </Link>
             )}
           </>

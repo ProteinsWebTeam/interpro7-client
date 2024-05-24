@@ -1,51 +1,53 @@
-import React, { useState } from 'react';
-import T from 'prop-types';
+import React, { PropsWithChildren, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
+
 import HelpBanner from 'components/Help/HelpBanner';
-// $FlowFixMe
+import InfoBanner from 'components/Help/InfoBanner';
 import Button from 'components/SimpleCommonComponents/Button';
 
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataWebPage } from 'schema_org/processors';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import ipro from 'styles/interpro-new.css';
 import style from './style.css';
 // TODO: consider changing to completely use the Tabs component
 import tabs from 'components/Tabs/style.css';
-import InfoBanner from 'components/Help/InfoBanner';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const f = foundationPartial(ebiGlobalStyles, ipro, tabs, style, fonts);
+const css = cssBinder(tabs, style, fonts);
 
 const SearchByText = loadable({
   loader: () =>
     import(/* webpackChunkName: "search-by-text" */ 'components/SearchByText'),
+  loading: null,
 });
 const SearchResults = loadable({
   loader: () =>
     import(/* webpackChunkName: "search-results" */ 'components/SearchResults'),
+  loading: null,
 });
 const IPScanSearch = loadable({
   loader: () =>
     import(/* webpackChunkName: "ipscan-search" */ 'components/IPScan/Search'),
+  loading: null,
 });
 const IDASearch = loadable({
   loader: () =>
     import(/* webpackChunkName: "ida-search" */ 'components/SearchByIDA'),
+  loading: null,
 });
 const IDAResults = loadable({
   loader: () =>
     import(
       /* webpackChunkName: "ida-results" */ 'components/Entry/DomainArchitectures/IDAResults'
     ),
+  loading: null,
 });
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -78,15 +80,11 @@ const routes = new Map([
   ['ida', WrappedIDASearch],
 ]);
 
-const RedirectToDefault = (
-  {
-    customLocation: {
-      search: { q: value },
-    },
-  } /*: {customLocation: {search: {q: string}}} */,
-) => {
-  // TODO: after a decent amount of time, remove from here…
-  // This logic is only to handle old IP6 URL structure and redirect to new one
+const RedirectToDefault = ({
+  customLocation: {
+    search: { q: value },
+  },
+}: GlobalState) => {
   if (typeof value === 'string') {
     return (
       <Redirect
@@ -99,7 +97,6 @@ const RedirectToDefault = (
       />
     );
   }
-  // TODO: …to there
   return (
     <Redirect
       to={{
@@ -108,21 +105,16 @@ const RedirectToDefault = (
     />
   );
 };
-RedirectToDefault.propTypes = {
-  customLocation: T.shape({
-    search: T.shape({
-      q: T.string,
-    }).isRequired,
-  }).isRequired,
-};
 
-const Wrapper = (
-  { topic, children } /*: {topic: string, children: Node} */,
-) => {
+type Props = PropsWithChildren<{
+  topic: 'TextSearch' | 'InterProScan' | 'IDA';
+}>;
+
+const Wrapper = ({ topic, children }: Props) => {
   const [showHelp, setShowHelp] = useState(false);
   const toggleShowHelp = () => setShowHelp(!showHelp);
   return (
-    <div className={f('row')}>
+    <section>
       <Helmet>
         <title>Search</title>
       </Helmet>
@@ -134,10 +126,10 @@ const Wrapper = (
         }}
         processData={schemaProcessDataWebPage}
       />
-      <div className={f('columns', 'margin-bottom-large')}>
+      <div>
         <h3>Search InterPro</h3>
-        <ul className={f('new-tabs', 'main-style', 'margin-top-large')}>
-          <li className={f('tabs-title')}>
+        <ul className={css('new-tabs', 'main-style')}>
+          <li className={css('tabs-title')}>
             <Link
               to={{
                 description: {
@@ -145,12 +137,12 @@ const Wrapper = (
                   search: { type: 'sequence' },
                 },
               }}
-              activeClass={f('is-active', 'is-active-tab')}
+              activeClass={css('is-active', 'is-active-tab')}
             >
               by sequence
             </Link>
           </li>
-          <li className={f('tabs-title')}>
+          <li className={css('tabs-title')}>
             <Link
               to={{
                 description: {
@@ -162,12 +154,12 @@ const Wrapper = (
                 description: {
                   search: { type },
                 },
-              }) => type === 'text' && f('is-active', 'is-active-tab')}
+              }) => type === 'text' && css('is-active', 'is-active-tab')}
             >
               by text
             </Link>
           </li>
-          <li className={f('tabs-title')}>
+          <li className={css('tabs-title')}>
             <Link
               to={{
                 description: {
@@ -175,17 +167,17 @@ const Wrapper = (
                   search: { type: 'ida' },
                 },
               }}
-              activeClass={f('is-active', 'is-active-tab')}
+              activeClass={css('is-active', 'is-active-tab')}
             >
               by domain architecture
             </Link>
           </li>
         </ul>
-        <div className={f('tab-content')}>
-          <div className={f('tabs-panel', 'is-active')}>
+        <div className={css('tab-content')}>
+          <div className={css('tabs-panel', 'is-active')}>
             <ErrorBoundary>
-              <div className={f('tabs-panel-content')}>
-                <div className={f('search-form')}>
+              <div className={css('tabs-panel-content')}>
+                <div className={css('search-form')}>
                   {Array.isArray(children) ? children[0] : children}
                 </div>
                 <div>
@@ -198,7 +190,7 @@ const Wrapper = (
                     }}
                   />
                 </div>
-                <div className={f('help-col', { removed: !showHelp })}>
+                <div className={css('help-col', { removed: !showHelp })}>
                   {
                     <>
                       <InfoBanner topic={topic} />
@@ -213,15 +205,11 @@ const Wrapper = (
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
-Wrapper.propTypes = {
-  topic: T.string,
-  children: T.node.isRequired,
-};
 
-const locationSelector = (customLocation) =>
+const locationSelector = (customLocation: InterProLocation) =>
   customLocation.description.search.type;
 
 const Search = () => (

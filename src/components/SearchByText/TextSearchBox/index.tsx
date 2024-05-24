@@ -1,74 +1,61 @@
-// @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { debounce } from 'lodash-es';
 
 import { goToCustomLocation } from 'actions/creators';
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
+
 import searchStorage from 'storage/searchStorage';
 
-import Select from 'react-select';
+import Select, { InputActionMeta, SelectInstance } from 'react-select';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import interproTheme from 'styles/theme-interpro.css';
-import local from './style.css';
+import local from '../style.css';
 
-const f = foundationPartial(interproTheme, fonts, local);
+const css = cssBinder(fonts, local);
 
 export const DEBOUNCE_RATE = 1000; // 1s
 export const DEBOUNCE_RATE_SLOW = 2000; // 2s
 
-/*:: type Props = {
-  pageSize?: number,
-  main: ?string,
-  value: ?string,
-  className?: string,
-  goToCustomLocation: typeof goToCustomLocation,
-  delay?: ?number,
-  shouldRedirect?: ?boolean,
-  forHeader?: ?boolean,
-}; */
-/*:: type State = {|
-  localValue: ?string,
-  loading: ?boolean,
-  searchHistory: Array<string>
-|} */
+type Props = {
+  pageSize?: string;
+  main?: string;
+  value?: string | null;
+  className?: string;
+  goToCustomLocation: typeof goToCustomLocation;
+  delay?: number;
+  shouldRedirect?: boolean;
+  forHeader?: boolean;
+};
+type State = {
+  localValue?: string | null;
+  loading?: boolean;
+  searchHistory: Array<string>;
+};
 
-class TextSearchBox extends PureComponent /*:: <Props, State> */ {
-  /*:: _debouncedPush: ?boolean => void; */
-  /*:: _select: { current: null | React$ElementRef<'div'> }; */
+class TextSearchBox extends PureComponent<Props, State> {
+  private select: React.RefObject<
+    SelectInstance<{ value: string; label: string }>
+  >;
 
-  static propTypes = {
-    pageSize: T.number,
-    main: T.string,
-    value: T.string,
-    className: T.string,
-    goToCustomLocation: T.func,
-    delay: T.number,
-    shouldRedirect: T.bool,
-    forHeader: T.bool,
-  };
-
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = { localValue: null, loading: false, searchHistory: [] };
 
-    this._debouncedPush = debounce(
-      this.routerPush,
-      +props.delay || DEBOUNCE_RATE,
-    );
-    this._select = React.createRef();
+    this.select = React.createRef();
   }
 
   componentDidMount() {
     this._updateStateFromProps();
     if (searchStorage)
-      this.setState({ searchHistory: searchStorage.getValue() || [] });
+      this.setState({
+        searchHistory: (searchStorage.getValue() as string[]) || [],
+      });
   }
 
   componentDidUpdate() {
@@ -83,10 +70,10 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
       this.setState({ loading: false });
     }
   }
-  routerPush = (replace) => {
+  routerPush = (replace?: boolean) => {
     const { pageSize, shouldRedirect } = this.props;
-    const query /*: { page: number, page_size?: number } */ = { page: 1 };
-    if (pageSize) query.page_size = pageSize;
+    const query: { page: number; page_size?: number } = { page: 1 };
+    if (pageSize) query.page_size = Number(pageSize);
     const value = this.state.localValue
       ? this.state.localValue.trim()
       : this.state.localValue;
@@ -122,45 +109,46 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
       replace,
     );
   };
+  private debouncedPush = debounce(
+    this.routerPush,
+    this.props.delay || DEBOUNCE_RATE,
+  );
 
-  handleKeyPress = (target) => {
-    const enterKey = 13;
-    if (target.charCode === enterKey) {
+  handleKeyPress: React.KeyboardEventHandler<HTMLDivElement> = (target) => {
+    if (target.code === 'Enter') {
       this.routerPush();
     }
   };
 
-  handleChange = (term, { action }) => {
+  handleChange = (term: string, { action }: InputActionMeta) => {
     if (action === 'input-change') {
-      this.setState(
-        { localValue: term, loading: true },
-        this._debouncedPush(true),
+      this.setState({ localValue: term, loading: true }, () =>
+        this.debouncedPush(true),
       );
     }
   };
 
-  setSelection = (selection) => {
-    this.setState(
-      { localValue: selection?.value, loading: true },
-      this._debouncedPush(true),
+  setSelection = (selection: { value?: string } | null) => {
+    this.setState({ localValue: selection?.value, loading: true }, () =>
+      this.debouncedPush(true),
     );
   };
 
   focus() {
-    if (this._select) this._select?.current?.focus();
+    if (this.select) this.select?.current?.focus();
   }
 
   render() {
     return (
-      <div className={f('input-group', 'margin-bottom-small')}>
-        <div className={f('search-input-box')}>
+      <div className={css('input-group', 'margin-bottom-small')}>
+        <div className={css('search-input-box')}>
           <Select
             options={(this.state.searchHistory || []).map((term) => ({
               value: term,
               label: term,
             }))}
-            ref={this._select}
-            className={f(this.props.className, 'select-search', {
+            ref={this.select}
+            className={css(this.props.className, 'select-search', {
               header: this.props.forHeader,
             })}
             placeholder="Enter your search"
@@ -208,9 +196,9 @@ class TextSearchBox extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  (state) => state.customLocation.description.main.key,
-  (state) => state.customLocation.description.search.value,
-  (state) => state.customLocation.search.page_size,
+  (state: GlobalState) => state.customLocation.description.main.key,
+  (state: GlobalState) => state.customLocation.description.search.value,
+  (state: GlobalState) => state.customLocation.search.page_size as string,
   (main, value, pageSize) => ({ main, value, pageSize }),
 );
 

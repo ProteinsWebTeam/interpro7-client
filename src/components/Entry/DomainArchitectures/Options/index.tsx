@@ -26,7 +26,7 @@ type PropsIDAOptions = {
   showExporter?: boolean;
   api?: ParsedURLServer;
   entryLocation?: EndpointLocation;
-  search?: Record<string, string | boolean>;
+  search?: InterProLocationSearch;
   count?: number;
 };
 const IDAOptions = ({
@@ -89,7 +89,7 @@ const IDAOptions = ({
 const getAPIURL = (
   { protocol, hostname, port, root }: ParsedURLServer,
   entryLocation?: EndpointLocation,
-  search?: Record<string, string | boolean>,
+  search?: InterProLocationSearch,
 ) => {
   const description = {
     main: { key: 'entry' },
