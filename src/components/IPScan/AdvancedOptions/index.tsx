@@ -27,7 +27,6 @@ const mdb1Values = new Set([
   'PRINTS',
   'PrositeProfiles',
   'SMART',
-  'TIGRFAM',
   'NCBIfam',
   'PrositePatterns',
   'SFLD',
@@ -47,7 +46,6 @@ const labels = new Map([
   ['Panther', 'PANTHER'],
   ['SuperFamily', 'SUPERFAMILY'],
   ['Gene3d', 'CATH-Gene3D'],
-  ['TIGRFAM', 'TIGRFAMs'],
   ['PrositeProfiles', 'PROSITE profiles'],
   ['PrositePatterns', 'PROSITE patterns'],
 ]);
@@ -147,15 +145,13 @@ export const AdvancedOptions = ({
         <fieldset className={css('new-fieldset')}>
           <legend>Job configuration</legend>
           <label style={{ marginBottom: '1rem' }}>
-            <Tooltip title="Stay on this page after submitting a new job?">
-              <ToggleSwitch
-                id="stay"
-                name="stay"
-                switchCond={false}
-                label="Create another job after this one"
-                size="tiny"
-              />
-            </Tooltip>
+            <ToggleSwitch
+              id="stay"
+              name="stay"
+              switchCond={false}
+              label="Create another job after this one"
+              size="tiny"
+            />
           </label>
           <label className={css('new-input-group')}>
             <span className={css('new-input-group-label')}>Job title</span>

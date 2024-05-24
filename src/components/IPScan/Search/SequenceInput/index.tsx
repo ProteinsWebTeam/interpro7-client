@@ -182,8 +182,8 @@ const addFastAHeaderIfNeeded = (
     const firstLine = (lines?.[0] || '').trim();
     const hasHeader = firstLine.startsWith('>');
     if (!hasHeader && firstLine.length > minLengthForHeader) {
-      const newHeader = `Sequence title ${getId()}`;
-      const header = `> ${newHeader}`;
+      const newHeader = `Sequence${getId()}`;
+      const header = `>${newHeader}`;
       // this.setState({ title: newHeader });
       lines.splice(0, 0, header);
       const newState = EditorState.createWithContent(

@@ -50,7 +50,7 @@ export const SearchByText = ({ main }: Props) => {
       <form onSubmit={(e) => e.preventDefault()} data-category="navigation">
         <div className={css('simple-box')}>
           <header>
-            Search families, domains, proteins, keywords or GO terms
+            Search by protein families, domains, proteins, keywords, or GO terms
           </header>
           <div className={css('vf-stack', 'vf-stack--200')}>
             <TextSearchBox
@@ -60,7 +60,7 @@ export const SearchByText = ({ main }: Props) => {
             <div className={css('examples')}>
               <span>
                 {' '}
-                e.g.
+                Examples:
                 <Example>IPR020422</Example>,<Example>kinase</Example>,
                 <Example>O00167</Example>,<Example>PF02932</Example>,
                 <Example>GO:0007165</Example>,<Example>1t2v</Example>,
