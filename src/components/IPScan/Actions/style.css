@@ -20,8 +20,8 @@ body nav.buttons {
     text-decoration: none;
     font-style: normal;
     background-size: contain;
-    font-weight: 400;
-    color: var(--colors-ebidark);
+    /* font-weight: 400; */
+    /* color: var(--colors-ebidark); */
   }
   & span.icon {
     color: var(--colors-progress);

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import Description from '..';
+import { Button } from 'components/SimpleCommonComponents/Button';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -54,12 +55,8 @@ class DescriptionReadMore extends PureComponent<
       <>
         <Description textBlocks={[textToShow]} {...this.props} />
         {minNumberOfCharToShow < text.length && (
-          <button
-            className={css(
-              'vf-button',
-              'vf-button--secondary',
-              'vf-button--sm',
-            )}
+          <Button
+            type="tertiary"
             onClick={() => this.setState({ showMore: !showMore })}
           >
             Show{' '}
@@ -80,7 +77,7 @@ class DescriptionReadMore extends PureComponent<
                 />
               </span>
             )}
-          </button>
+          </Button>
         )}
       </>
     );

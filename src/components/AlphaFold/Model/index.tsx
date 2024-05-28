@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Link from 'components/generic/Link';
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
@@ -12,6 +11,7 @@ import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPi
 import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 import { Selection } from 'components/Structure/ViewerAndEntries';
@@ -241,10 +241,11 @@ const AlphaFoldModel = ({
                   />
                   &nbsp;mmCIF file
                 </Link>
-                <button
-                  className={css('icon', 'icon-common', 'control')}
+                <Button
+                  type="inline"
+                  icon="icon-redo"
+                  className={css('control')}
                   onClick={() => setShouldResetViewer(true)}
-                  data-icon="}"
                   title="Reset image"
                 />
                 <FullScreenButton
@@ -314,4 +315,4 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
 export default loadData({
   getUrl: getModelInfoUrl(true),
   mapStateToProps: getModelInfoUrl(false),
-} as Params)(AlphaFoldModel);
+} as LoadDataParameters)(AlphaFoldModel);

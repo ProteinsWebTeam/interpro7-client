@@ -20,7 +20,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
               <div
                 className="aligned-to-track-component"
               >
-                <Yi
+                <Fr
                   display-end={0}
                   display-start={1}
                   height={30}
@@ -44,7 +44,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
                 }
                 onMouseOverFeature={[Function]}
               >
-                <Memo(Kr)
+                <Memo(mi)
                   data={[]}
                   display-end={0}
                   display-start={1}

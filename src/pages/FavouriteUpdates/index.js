@@ -3,6 +3,8 @@ import { getMismatchedFavourites } from 'utils/compare-favourites';
 import getTableAccess, { FavEntries } from 'storage/idb';
 
 import ReactDiffViewer from 'react-diff-viewer-continued';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
@@ -48,9 +50,8 @@ const FavouriteUpdates = () => {
                       <h3>Entry: {fav.accession}</h3>
                     </div>
                     <div className={f('medium-2', 'column')}>
-                      <button
-                        className={f('button', 'icon', 'icon-common')}
-                        data-icon="&#x7d;"
+                      <Button
+                        icon="icon-redo"
                         onClick={() =>
                           updateIDB(
                             fav.accession,
@@ -60,9 +61,8 @@ const FavouriteUpdates = () => {
                           )
                         }
                       >
-                        {' '}
                         Update
-                      </button>
+                      </Button>
                     </div>
                   </div>
                   <ReactDiffViewer

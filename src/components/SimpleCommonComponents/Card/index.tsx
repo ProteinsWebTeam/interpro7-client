@@ -57,18 +57,12 @@ export const Card = ({
             {footer}
             {linkForMore && (
               <div className={css('card-more')}>
-                <Link href={linkForMore} target="_blank">
-                  <div
-                    className={css(
-                      'button-more',
-                      'icon',
-                      'icon-common',
-                      'icon-right',
-                    )}
+                <Link href={linkForMore} target="_blank" buttonType="tertiary">
+                  <span
+                    className={css('icon', 'icon-common', 'icon-right')}
                     data-icon="&#xf061;"
-                  >
-                    {labelForMore || 'See more'}
-                  </div>
+                  ></span>{' '}
+                  {labelForMore || 'See more'}
                 </Link>
               </div>
             )}{' '}

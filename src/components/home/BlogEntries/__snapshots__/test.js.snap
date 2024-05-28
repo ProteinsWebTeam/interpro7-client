@@ -16,14 +16,11 @@ exports[`<BlogEntries /> Blog entries 1`] = `
     className="blogs-container vf-grid read-all"
   >
     <Memo(Connect(Link))
+      buttonType="primary"
       href="https://proteinswebteam.github.io/interpro-blog"
       target="_blank"
     >
-      <div
-        className="vf-button vf-button--secondary vf-button--sm margin-bottom-none"
-      >
-        Read all articles
-      </div>
+      Read all articles
     </Memo(Connect(Link))>
   </div>
 </section>

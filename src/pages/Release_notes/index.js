@@ -20,6 +20,8 @@ import NumberComponent from 'components/NumberComponent';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 // $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { foundationPartial } from 'styles/foundation';
 
@@ -54,12 +56,13 @@ const ReleaseNotesSelectorWithData = (
   return (
     <>
       {!showFullList && (
-        <button
-          className={f('show-more-releases', 'link')}
+        <Button
+          type="hollow"
+          // className={f('show-more-releases', 'link')}
           onClick={() => setShowFullList(true)}
         >
           Show Previous Releases
-        </button>
+        </Button>
       )}
       <ul className={f('release-selector')}>
         {releasesToShow.map(([version, date]) => (

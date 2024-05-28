@@ -7,6 +7,9 @@ import { capitalize } from 'lodash-es';
 import GoLink from 'components/ExtLink/GoLink';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
+
 import { foundationPartial } from 'styles/foundation';
 
 import local from '../style.css';
@@ -27,7 +30,7 @@ type Props = {
 }
  */
 
-const DEFAULT_MAX_NUMBER_OF_TERMS = 10;
+const DEFAULT_MAX_NUMBER_OF_TERMS = 2;
 const colors = {
   P: 'var(--colors-go-bp)',
   F: 'var(--colors-go-mf)',
@@ -64,9 +67,9 @@ const ListOfGOTerms = (
         ),
       )}
       {terms.length !== termsToShow.length && (
-        <button onClick={() => setShowMore(true)} className={f('link')}>
+        <Button type="hollow" onClick={() => setShowMore(true)}>
           Show {terms.length - maxNumberOfTerms} more
-        </button>
+        </Button>
       )}
     </>
   );

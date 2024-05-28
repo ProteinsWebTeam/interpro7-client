@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import AlphaFoldModel from 'components/AlphaFold/Model';
 import ProteinTable, {
   getUrl,
@@ -96,4 +95,4 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
 export default loadData({
   getUrl: getUrl(false),
   mapStateToProps: mapStateToPropsForModels,
-} as Params)(AlphaFoldModelSubPage);
+} as LoadDataParameters)(AlphaFoldModelSubPage);

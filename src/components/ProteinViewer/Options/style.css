@@ -60,9 +60,8 @@
 }
 
 .protvista-menu {
-  margin: 0.5rem 0 0.5rem 0;
   & button {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
   & ul.menu-options {
     list-style-type: none;
@@ -70,14 +69,15 @@
     padding: 0;
     & li {
       display: block;
-      padding: 0.3rem 1rem;
+      padding: 0rem 1rem;
       white-space: nowrap;
+      margin-bottom: 0.1rem;
     }
 
-    & li input {
-      padding: 0 0.5rem;
-      margin: 0;
-      white-space: nowrap;
+    & li label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-left: 0;
     }
 
     & hr {
@@ -86,6 +86,11 @@
   }
 
   & .nested-list {
+    & > header {
+      font-size: 1.1rem;
+      background-color: transparent;
+    }
+
     font-size: 0.8rem;
     & label {
       text-wrap: nowrap;

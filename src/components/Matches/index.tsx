@@ -21,6 +21,7 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
 import LazyImage from 'components/LazyImage';
 import Lazy from 'wrappers/Lazy';
 import loadWebComponent from 'utils/load-web-component';
@@ -172,7 +173,7 @@ type Props = {
   primary?: Endpoint;
   secondary?: Endpoint;
   matches: Array<GenericMatch>;
-  search?: Record<string, string | boolean>;
+  search?: InterProLocationSearch;
   description?: InterProDescription;
   hash?: string;
   state?: GlobalState;
@@ -309,19 +310,11 @@ const Matches = ({
                 </>
               )}
               <label htmlFor="api">API</label>
-              <Link
-                target="_blank"
-                href={toPublicAPI(
+              <APIViewButton
+                url={toPublicAPI(
                   includeTaxonFocusedOnURL(getReversedUrl(state), focused),
                 )}
-                className={css('button', 'hollow', 'imitate-progress-button')}
-              >
-                <span
-                  className={css('icon', 'icon-common', 'icon-export')}
-                  data-icon="&#xf233;"
-                />
-                <span className={css('file-label')}>Web View</span>
-              </Link>
+              />
             </div>
           </Exporter>
         )}
@@ -340,7 +333,10 @@ const Matches = ({
                   dimension=".8em"
                 />
               ) : null}
-              <HighlightedText text={acc} textToHighlight={search?.search} />
+              <HighlightedText
+                text={acc}
+                textToHighlight={search?.search as string}
+              />
             </span>
           );
           return (
@@ -403,7 +399,10 @@ const Matches = ({
               }
             }
           >
-            <HighlightedText text={name} textToHighlight={search?.search} />
+            <HighlightedText
+              text={name}
+              textToHighlight={search?.search as string}
+            />
           </Link>
         )}
       >
@@ -420,7 +419,10 @@ const Matches = ({
         ) => (
           <>
             {focusType === 'taxonomy' || focusType === 'proteome' ? (
-              <HighlightedText text={name} textToHighlight={search?.search} />
+              <HighlightedText
+                text={name}
+                textToHighlight={search?.search as string}
+              />
             ) : (
               <Link
                 to={
@@ -432,7 +434,10 @@ const Matches = ({
                   }
                 }
               >
-                <HighlightedText text={name} textToHighlight={search?.search} />
+                <HighlightedText
+                  text={name}
+                  textToHighlight={search?.search as string}
+                />
               </Link>
             )}
           </>

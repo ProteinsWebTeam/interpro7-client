@@ -49,12 +49,8 @@ const TooltipContent = ({
               },
               hash: `${subpath || ''}${getSearchString(search)}|${fileType}`,
             }}
-            className={css(
-              'vf-button',
-              'vf-button--tertiary',
-              'vf-button--sm',
-              'in-popup',
-            )}
+            buttonType="tertiary"
+            className={css('in-popup')}
           >
             See more download options
           </Link>

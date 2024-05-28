@@ -361,6 +361,7 @@ const SummaryIPScanJob = ({
                           ? dataURL
                           : `${dataURL}/${rootAccession}/${type}`
                       }
+                      buttonType="secondary"
                       download={`InterProScan.${type}`}
                       disabled={expired && type !== 'json'}
                     >

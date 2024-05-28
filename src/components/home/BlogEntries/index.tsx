@@ -14,8 +14,9 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './styles.css';
 import cards from 'components/SimpleCommonComponents/Card/styles.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const css = cssBinder(fonts, local, cards);
+const css = cssBinder(fonts, local, cards, buttonCSS);
 
 const BLOG_ROOT = 'https://proteinswebteam.github.io/interpro-blog';
 
@@ -136,17 +137,8 @@ export const BlogEntries = ({ data }: LoadedProps) => {
         )}
       </ResizeObserverComponent>
       <div className={css('blogs-container', 'vf-grid', 'read-all')}>
-        <Link href={`${BLOG_ROOT}`} target="_blank">
-          <div
-            className={css(
-              'vf-button',
-              'vf-button--secondary',
-              'vf-button--sm',
-              'margin-bottom-none',
-            )}
-          >
-            Read all articles
-          </div>
+        <Link href={`${BLOG_ROOT}`} target="_blank" buttonType="primary">
+          Read all articles
         </Link>
       </div>
     </section>

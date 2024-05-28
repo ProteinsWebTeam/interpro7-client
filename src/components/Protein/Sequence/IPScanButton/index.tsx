@@ -8,8 +8,9 @@ import cssBinder from 'styles/cssBinder';
 
 import sequenceStyles from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const css = cssBinder(sequenceStyles, fonts);
+const css = cssBinder(sequenceStyles, fonts, buttonCSS);
 
 type Props = {
   goToCustomLocation: typeof goToCustomLocation;
@@ -50,7 +51,7 @@ const IPScanButton = ({
           'sequence-link',
           'vf-button',
           'vf-button--secondary',
-          'vf-button--sm'
+          'vf-button--sm',
         )}
         data-icon="&#xf061;"
         style={{ minWidth: minWidth, marginRight: '1rem' }}

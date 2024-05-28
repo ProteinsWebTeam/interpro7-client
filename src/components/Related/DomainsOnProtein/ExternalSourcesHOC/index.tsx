@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
 import formatRepeatsDB from './RepeatsDB';
 import formatDisProt from './DisProt';
@@ -64,15 +63,15 @@ export function loadExternalSources<
   return loadData<RepeatsDBPayload, 'RepeatsDB'>({
     getUrl: getRepeatsDBURL,
     propNamespace: 'RepeatsDB',
-  } as Params)(
+  } as LoadDataParameters)(
     loadData<DisProtPayload, 'DisProt'>({
       getUrl: getDisProtURL,
       propNamespace: 'DisProt',
-    } as Params)(
+    } as LoadDataParameters)(
       loadData<Genome3DProteinPayload, 'Genome3D'>({
         getUrl: getGenome3dURL,
         propNamespace: 'Genome3D',
-      } as Params)(ComponentWithExternalData),
+      } as LoadDataParameters)(ComponentWithExternalData),
     ),
   );
 }

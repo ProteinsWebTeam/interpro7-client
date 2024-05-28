@@ -70,16 +70,11 @@ exports[`<CookieBanner /> should render 1`] = `
     <div
       className="columns medium-4 large-3 text-right white-color"
     >
-      <button
+      <ForwardRef
         onClick={[Function]}
-        style={
-          {
-            "color": "#fff",
-          }
-        }
       >
         I agree, dismiss this banner
-      </button>
+      </ForwardRef>
     </div>
   </div>
 </Memo(Connect(AnimatedEntry))>

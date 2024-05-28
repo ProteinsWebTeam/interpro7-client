@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, FormEvent } from 'react';
 import { noop } from 'lodash-es';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import { Button } from 'components/SimpleCommonComponents/Button';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -116,9 +117,9 @@ const SelectedParameter = ({
         </>
       }
       button={
-        <button onClick={onRemove} className={css('button')} ref={buttonEl}>
+        <Button onClick={onRemove} ref={buttonEl}>
           Remove
-        </button>
+        </Button>
       }
     />
   );

@@ -13,7 +13,6 @@
   font-style: italic;
   font-size: 80%;
   color: var(--colors-gray);
-  margin-right: 0.2rem; /*to align with border form*/
 }
 
 .neutral span {
@@ -123,4 +122,10 @@ label:hover .select-search {
     opacity: 1;
     -webkit-filter: blur(0); /*remove blur effect on chrome*/
   }
+}
+
+.examples {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.8;
 }

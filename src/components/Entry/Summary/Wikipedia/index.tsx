@@ -6,7 +6,6 @@ import { XMLParser } from 'fast-xml-parser';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'src/higherOrder/loadData/extract-params';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -80,16 +79,15 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
     <div className={css('wiki-article')}>
       <div className={css('vf-grid', 'wiki-content')}>
         <div className={css('vf-grid__col--span-3', 'columns')}>
-          <h4>
+          <h5>
             <Link
               className={css('ext-link')}
               target="_blank"
               href={`https://en.wikipedia.org/wiki/${title}`}
             >
               {title.replace(/_/g, ' ')}
-            </Link>{' '}
-            <div className={css('tag')}>Wikipedia</div>
-          </h4>
+            </Link>
+          </h5>
           {convertHtmlToReact(extract)}
         </div>
         <div className={css('columns')}>
@@ -179,4 +177,4 @@ const getWikiUrl = createSelector(
     });
   },
 );
-export default loadData(getWikiUrl as Params)(Wikipedia);
+export default loadData(getWikiUrl as LoadDataParameters)(Wikipedia);

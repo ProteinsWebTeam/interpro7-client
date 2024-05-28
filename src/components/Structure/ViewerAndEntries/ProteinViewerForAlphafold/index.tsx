@@ -14,7 +14,7 @@ import {
 import { Selection } from 'components/Structure/ViewerAndEntries';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { Params } from 'src/higherOrder/loadData/extract-params';
+
 import {
   flattenTracksObject,
   makeTracks,
@@ -190,16 +190,16 @@ const getInterproRelatedEntriesURL = createSelector(
 export default loadData<AlphafoldPayload, 'Prediction'>({
   getUrl: getAlphaFoldPredictionURL,
   propNamespace: 'Prediction',
-} as Params)(
+} as LoadDataParameters)(
   loadData<AlphafoldConfidencePayload, 'Confidence'>({
     getUrl: getConfidenceURLFromPayload('Prediction'),
     propNamespace: 'Confidence',
-  } as Params)(
+  } as LoadDataParameters)(
     loadData<{ metadata: ProteinMetadata }, 'Protein'>({
       getUrl: getProteinURL,
       propNamespace: 'Protein',
-    } as Params)(
-      loadData(getInterproRelatedEntriesURL as Params)(
+    } as LoadDataParameters)(
+      loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
         ProteinViewerForAlphafold,
       ),
     ),

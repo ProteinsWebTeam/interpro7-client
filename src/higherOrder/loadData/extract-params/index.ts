@@ -4,27 +4,13 @@ import * as defaults from '../defaults';
 
 // getUrl
 const extractGetUrl = <Props = unknown>(
-  getUrl: string | GetUrl<Props> = defaults.getUrlForApi
+  getUrl: string | GetUrl<Props> = defaults.getUrlForApi,
 ) => {
   if (typeof getUrl === 'string') {
     return defaults.getUrl(getUrl);
   }
   return getUrl;
 };
-
-export type Params<Props = unknown> =
-  | {
-      getUrl?: GetUrl<Props>;
-      fetchOptions?: FetchOptions;
-      propNamespace?: string;
-      weight?: number;
-      mapStateToProps?:
-        | ((state: unknown, props: unknown) => Props)
-        | typeof noop;
-      mapDispatchToProps?: Record<string, unknown>;
-    }
-  | string
-  | GetUrl<Props>;
 
 export type ExtractedParams<Props = unknown> = {
   getUrl: GetUrl<Props>;
@@ -37,7 +23,7 @@ export type ExtractedParams<Props = unknown> = {
   mapDispatchToProps: Record<string, unknown>;
 };
 
-export default <Props = unknown>(params?: Params<Props>) => {
+export default <Props = unknown>(params?: LoadDataParameters<Props>) => {
   const extracted: ExtractedParams<Props> = {
     getUrl: defaults.getUrlForApi as GetUrl<Props>,
     fetchOptions: {},

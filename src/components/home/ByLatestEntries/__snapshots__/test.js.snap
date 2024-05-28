@@ -43,7 +43,7 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
         />
       </Memo(Connect(AnimatedEntry))>
       <Memo(Connect(Link))
-        className="button margin-bottom-none"
+        buttonType="primary"
         to={
           {
             "description": {

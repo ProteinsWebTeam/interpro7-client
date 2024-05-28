@@ -156,7 +156,7 @@ exports[`<BySpecies /> By Species 1`] = `
     />
   </Memo(Connect(AnimatedEntry))>
   <Memo(Connect(Link))
-    className="button margin-bottom-none margin-top-large"
+    buttonType="primary"
     to={
       {
         "description": {

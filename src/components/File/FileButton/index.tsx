@@ -10,8 +10,9 @@ import TooltipContent from '../TooltipContent';
 import cssBinder from 'styles/cssBinder';
 import local from './style.css';
 import ipro from 'styles/interpro-vf.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const css = cssBinder(local, ipro);
+const css = cssBinder(local, ipro, buttonCSS);
 
 const SMALL = 0.01;
 

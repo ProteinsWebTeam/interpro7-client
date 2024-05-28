@@ -9,6 +9,10 @@
   font-size: 0.8rem;
   overflow: auto;
   margin-bottom: 0.5rem;
+  background-color: white;
+  border: 2px solid var(--colors-gray);
+  padding: 0.5rem;
+  cursor: text;
 
   & :global(.public-DraftEditorPlaceholder-root) {
     color: #cacaca;
@@ -22,11 +26,11 @@
   }
 }
 
-.line-with-buttons {
+div.line-with-buttons {
   align-items: baseline;
 
   & > * {
-    margin: auto 0.5ch;
+    margin: auto 0.2ch;
   }
 }
 
@@ -90,6 +94,10 @@
 
 .comment {
   color: gray;
+}
+.fasta-header {
+  color: rgb(11, 11, 54);
+  font-weight: bold;
 }
 
 .invalid-letter,

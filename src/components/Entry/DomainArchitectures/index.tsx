@@ -14,7 +14,6 @@ import IDAOptions from './Options';
 import IDAProtVista from './IDAProtVista';
 import TextIDA from './TextIDA';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import loadable from 'higherOrder/loadable';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
@@ -302,5 +301,5 @@ export default loadData<RootAPIPayload, 'DB'>({
   loadData({
     getUrl: getUrlFor,
     mapStateToProps,
-  } as Params)(DomainArchitecturesWithData),
+  } as LoadDataParameters)(DomainArchitecturesWithData),
 );

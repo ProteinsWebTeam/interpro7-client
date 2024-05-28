@@ -1,43 +1,36 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { downloadSelector } from 'reducers/download';
 import { downloadURL } from 'actions/creators';
 
 import { getQueryTerm } from 'components/SearchResults';
-// $FlowFixMe
-import FileButton from 'components/File/FileButton';
+import FileButton, { SupportedExtensions } from 'components/File/FileButton';
 import blockEvent from 'utils/block-event';
 
-/*::
-  type FileExplorerProps = {
-    count?: number,
-    fileType: string,
-    name: string,
-    className?: string,
-    url: string,
-    downloadURL: function,
-    download: {
-      progress: number,
-      successful?: boolean,
-      blobURL?: string,
-    },
-  }
-  */
-const FileExporter = (
-  {
-    count = Infinity,
-    fileType,
-    name,
-    className,
-    url,
-    downloadURL,
-    download,
-  } /*: FileExplorerProps */,
-) => {
+type Props = {
+  count?: number;
+  fileType: SupportedExtensions;
+  name: string;
+  className?: string;
+  url: string;
+  downloadURL: typeof downloadURL;
+  download: {
+    progress: number;
+    successful?: boolean;
+    blobURL?: string;
+  };
+};
+
+const FileExporter = ({
+  count = Infinity,
+  fileType,
+  name,
+  className,
+  url,
+  downloadURL,
+  download,
+}: Props) => {
   const _handleClick = blockEvent(() => {
     downloadURL(url, fileType, null, 'ebisearch');
   });
@@ -57,23 +50,10 @@ const FileExporter = (
     />
   );
 };
-FileExporter.propTypes = {
-  count: T.number,
-  fileType: T.string.isRequired,
-  name: T.string,
-  className: T.string,
-  url: T.string,
-  downloadURL: T.func,
-  download: T.shape({
-    progress: T.number,
-    successful: T.bool,
-    blobURL: T.string,
-  }),
-};
 
 const getEbiSearchUrl = createSelector(
-  (state) => state.settings.ebi,
-  (state) => state.customLocation.description.search.value,
+  (state: GlobalState) => state.settings.ebi,
+  (state: GlobalState) => state.customLocation.description.search.value,
   ({ protocol, hostname, port, root }, searchValue) => {
     if (!searchValue) return null;
     const fields = 'description,name,source_database';
@@ -84,7 +64,7 @@ const getEbiSearchUrl = createSelector(
 );
 const mapStateToProps = createSelector(
   getEbiSearchUrl,
-  downloadSelector,
+  (state: GlobalState) => state.download,
   (_, { fileType }) => fileType,
   (url, downloads, fileType) => ({
     url,

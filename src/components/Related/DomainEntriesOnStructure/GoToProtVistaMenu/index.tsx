@@ -16,6 +16,7 @@ const GoToProtVistaMenu = ({ entries }: { entries: DataForProteinChain[] }) => (
         return (
           <li key={i}>
             <Link
+              buttonType="hollow"
               to={(customLocation) => ({
                 ...customLocation,
                 hash: elementID,

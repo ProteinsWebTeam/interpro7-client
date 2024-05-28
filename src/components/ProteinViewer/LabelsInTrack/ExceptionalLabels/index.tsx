@@ -29,6 +29,7 @@ const EXCEPTIONAL_TYPES = [
   'sequence_conservation',
   'chain',
   'secondary_structure',
+  'variation',
 ];
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
 
@@ -89,6 +90,18 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
       <span>{label}</span>
     ) : (
       <Link href={`http://elm.eu.org/${entry.accession}`}>{label}</Link>
+    );
+  if (entry.source_database === 'proteinsAPI')
+    return isPrinting ? (
+      <span>{label}</span>
+    ) : (
+      <Link
+        className={css('ext')}
+        href={`https://www.uniprot.org/uniprotkb/${entry.protein}/variant-viewer`}
+        target="_blank"
+      >
+        Go to UniProt
+      </Link>
     );
   if (entry.type === 'residue')
     return <span>{entry.locations?.[0]?.description || ''}</span>;

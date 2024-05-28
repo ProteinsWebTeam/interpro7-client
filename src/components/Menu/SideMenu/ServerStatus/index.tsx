@@ -37,11 +37,9 @@ const BrowserStatus = ({ status }: BrowserProps) => {
   );
 };
 
-type ServerProps = {
+type ServerProps = ServerStatus & {
   browser: boolean;
   endpoint: string;
-  status: boolean;
-  lastCheck: number;
 };
 
 const ServerStatus = ({
@@ -73,7 +71,7 @@ const ServerStatus = ({
 };
 
 type StatusesProps = {
-  statuses: Object;
+  statuses: Record<string, ServerStatus>;
   browser: boolean;
 };
 

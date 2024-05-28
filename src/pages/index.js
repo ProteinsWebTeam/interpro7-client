@@ -51,6 +51,7 @@ const EntrySet = loadable({
 
 // Other
 const Search = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "search-page" */ './Search'),
 });
 const Jobs = loadable({

@@ -5,6 +5,7 @@ import {
   groupByEntryType,
   orderByAccession,
 } from 'components/Related/DomainsOnProtein';
+import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -84,6 +85,27 @@ export const flattenTracksObject = (
       ])
   );
 };
+export const addVariationTrack = (
+  variationPayload: ProteinsAPIVariation,
+  protein: string,
+  tracks: ProteinViewerData,
+) => {
+  if (variationPayload?.features?.length) {
+    const variationTrack: [string, Array<unknown>] = [
+      'Pathogenic and likely pathogenic variants',
+      [
+        {
+          accession: `variation_${protein}`,
+          data: variationPayload,
+          type: 'variation',
+          protein,
+          source_database: 'proteinsAPI',
+        },
+      ],
+    ];
+    tracks.push(variationTrack);
+  }
+};
 
 type Props = PropsWithChildren<{
   mainData:
@@ -97,6 +119,7 @@ type Props = PropsWithChildren<{
       };
   dataMerged: ProteinViewerDataObject;
   dataConfidence?: RequestedData<AlphafoldConfidencePayload>;
+  dataVariation?: RequestedData<ProteinsAPIVariation>;
   conservationError?: string | null;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
@@ -108,6 +131,7 @@ const DomainsOnProteinLoaded = ({
   mainData,
   dataMerged,
   dataConfidence,
+  dataVariation,
   conservationError,
   showConservationButton,
   handleConservationLoad,
@@ -122,6 +146,16 @@ const DomainsOnProteinLoaded = ({
 
   if (dataConfidence)
     addConfidenceTrack(dataConfidence, protein.accession, sortedData);
+
+  if (dataVariation?.ok && dataVariation.payload) {
+    const filteredVariationPayload = filterVariation(dataVariation.payload);
+    if (filteredVariationPayload.features.length > 0)
+      addVariationTrack(
+        filteredVariationPayload,
+        protein.accession,
+        sortedData,
+      );
+  }
 
   return (
     <ProteinViewer
@@ -139,3 +173,16 @@ const DomainsOnProteinLoaded = ({
 };
 
 export default DomainsOnProteinLoaded;
+function filterVariation(payload: ProteinsAPIVariation): ProteinsAPIVariation {
+  const types = ['pathogenic', 'likely pathogenic'];
+  const features = payload.features.filter(
+    (f) =>
+      (f?.clinicalSignificances || []).filter((cs) =>
+        types.includes((cs?.type || '').toLowerCase()),
+      ).length > 0,
+  );
+  return {
+    ...payload,
+    features,
+  };
+}

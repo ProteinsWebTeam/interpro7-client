@@ -11,6 +11,8 @@ import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import '@nightingale-elements/nightingale-manager';
 import '@nightingale-elements/nightingale-navigation';
@@ -135,9 +137,10 @@ const AlignmentViewer = ({
           >
             <span>{align.rows().toLocaleString()} sequences</span>
             <div>
-              <button
-                className={f('icon', 'icon-common', 'zoom-button')}
-                data-icon="&#xf146;"
+              <Button
+                type="inline"
+                icon="icon-minus-square"
+                className={f('zoom-button')}
                 title={'Click or use CTRL + mouse wheel down to zoom out'}
                 onClick={() => {
                   navigationTrack.current /*: any */
@@ -145,9 +148,10 @@ const AlignmentViewer = ({
                 }}
               />
 
-              <button
-                className={f('icon', 'icon-common', 'zoom-button')}
-                data-icon="&#xf0fe;"
+              <Button
+                type="inline"
+                icon="icon-plus-square"
+                className={f('zoom-button')}
                 title={'Click or use CTRL + mouse wheel up to to zoom in'}
                 onClick={() => {
                   navigationTrack.current /*: any */

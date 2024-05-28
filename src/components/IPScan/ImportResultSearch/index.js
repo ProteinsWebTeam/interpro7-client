@@ -3,18 +3,22 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
+import { goToCustomLocation } from 'actions/creators';
+
 import LoadedFileDialog from './LoadedFileDialog';
+import blockEvent from 'utils/block-event';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { foundationPartial } from 'styles/foundation';
-import blockEvent from 'utils/block-event';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 import ipro from 'styles/interpro-new.css';
 import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
-import { goToCustomLocation } from 'actions/creators';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const f = foundationPartial(interproTheme, fonts, local, ipro);
+const f = foundationPartial(interproTheme, fonts, local, ipro, buttonCSS);
 
 const TITLE = 'Import Result';
 const ImportResultSearch = ({ goToCustomLocation }) => {
@@ -117,17 +121,23 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
         onChange={handleChange}
         onKeyPress={handleKeyPress}
       />
-      <button
+      <Button
         disabled={!isValid}
-        className={f('button')}
+        // className={f('button')}
         aria-label={`${TITLE} from server with ID`}
         onClick={handleImport}
-      >
-        <span className={f('icon', 'icon-common')} data-icon="&#xf381;" />
-      </button>
+        icon="icon-cloud-download-alt"
+      />
+
       <label
         aria-label={`${TITLE} from file`}
-        className={f('button', 'icon', 'icon-common')}
+        className={`vf-button ${f(
+          'icon',
+          'icon-common',
+          'vf-button',
+          'vf-button--primary',
+          'vf-button--sm',
+        )}`}
         data-icon="&#xf093;"
       >
         {' '}

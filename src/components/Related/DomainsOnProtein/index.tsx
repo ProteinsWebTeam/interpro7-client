@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
 
@@ -25,6 +24,7 @@ import mergeExtraFeatures from './mergeExtraFeatures';
 import mergeResidues from './mergeResidues';
 import DomainsOnProteinLoaded, { makeTracks } from './DomainsOnProteinLoaded';
 import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
+import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
 
 export const orderByAccession = (
   a: { accession: string },
@@ -65,6 +65,7 @@ interface LoadedProps
     ExtenalSourcesProps,
     LoadDataProps<ExtraFeaturesPayload, 'Features'>,
     LoadDataProps<ResiduesPayload, 'Residues'>,
+    LoadDataProps<ProteinsAPIVariation, 'Variation'>,
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
     LoadDataProps<
@@ -77,6 +78,7 @@ const DomainOnProteinWithoutData = ({
   dataResidues,
   dataFeatures,
   dataConfidence,
+  dataVariation,
   onMatchesLoaded,
   onFamiliesFound,
   children,
@@ -214,6 +216,7 @@ const DomainOnProteinWithoutData = ({
         mainData={mainData}
         dataMerged={mergedData}
         dataConfidence={dataConfidence}
+        dataVariation={dataVariation}
         loading={
           data?.loading ||
           dataFeatures?.loading ||
@@ -276,25 +279,46 @@ const getExtraURL = (query: string) =>
       return url;
     },
   );
+const getVariationURL = createSelector(
+  (state: GlobalState) => state.settings.proteinsAPI,
+  (state: GlobalState) =>
+    state.customLocation.description.protein?.accession || '',
+  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+    const url = format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + 'variation/' + accession,
+    });
+    return url;
+  },
+);
 
 export default loadExternalSources(
   loadData<AlphafoldPayload, 'Prediction'>({
     getUrl: getAlphaFoldPredictionURL,
     propNamespace: 'Prediction',
-  } as Params)(
+  } as LoadDataParameters)(
     loadData<AlphafoldConfidencePayload, 'Confidence'>({
       getUrl: getConfidenceURLFromPayload('Prediction'),
       propNamespace: 'Confidence',
-    } as Params)(
+    } as LoadDataParameters)(
       loadData<ExtraFeaturesPayload, 'Features'>({
         getUrl: getExtraURL('extra_features'),
         propNamespace: 'Features',
-      } as Params)(
+      } as LoadDataParameters)(
         loadData<ResiduesPayload, 'Residues'>({
           getUrl: getExtraURL('residues'),
           propNamespace: 'Residues',
-        } as Params)(
-          loadData(getRelatedEntriesURL as Params)(DomainOnProteinWithoutData),
+        } as LoadDataParameters)(
+          loadData<ProteinsAPIVariation, 'Variation'>({
+            getUrl: getVariationURL,
+            propNamespace: 'Variation',
+          } as LoadDataParameters)(
+            loadData(getRelatedEntriesURL as LoadDataParameters)(
+              DomainOnProteinWithoutData,
+            ),
+          ),
         ),
       ),
     ),

@@ -122,7 +122,7 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
     </div>
   </Memo(Connect(AnimatedEntry))>
   <Memo(Connect(Link))
-    className="button margin-bottom-none margin-top-large"
+    buttonType="primary"
     to={
       {
         "description": {

@@ -337,8 +337,8 @@ table.light .subheader {
   margin: 10px 0 0 10px;
 }
 
-table.light.nolink tbody a,
-.table.light tbody a:visited {
+table.light.nolink tbody td a,
+.table.light tbody td a:visited {
   color: var(--colors-light-txt);
 }
 
@@ -775,31 +775,6 @@ details.accordion-style[open] summary {
     transform: translateY(-50%) rotate(45deg);
   }
 }
-/* using icon
-details.accordion-style[open] summary:after {
-content: '';
-} */
-/* ** END ACCORDION MENU *** */
-/*ALT ACCORDION*/
-details.option-style > summary {
-  color: var(--colors-graydark);
-  border: 0px solid var(--colors-very-white);
-  border-bottom-width: 0;
-  padding: 1rem;
-  cursor: pointer;
-  outline: 0;
-  z-index: var(--z-index-deepest);
-  position: relative; /*for animation*/
-  list-style: none; /*to keep for Firefox*/
-  transition: all var(--timing-medclose) ease-out;
-  /*remove default icon (Edge + Chrome + Opera_*/
-  &:hover {
-    background-color: var(--colors-unknown-sub);
-    color: var(--colors-dark);
-    transition: all var(--timing-medclose) ease-out;
-  }
-}
-
 /*END ALT*/
 /* footer */
 .local_footer {

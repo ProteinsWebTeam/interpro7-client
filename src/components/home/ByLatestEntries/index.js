@@ -56,7 +56,7 @@ export class ByLatestEntries extends PureComponent /*:: <EntriesProps> */ {
                   },
                   search: { latest_entries: '' },
                 }}
-                className={f('button', 'margin-bottom-none')}
+                buttonType="primary"
               >
                 View all latest entries
               </Link>
