@@ -92,7 +92,7 @@ export const addVariationTrack = (
 ) => {
   if (variationPayload?.features?.length) {
     const variationTrack: [string, Array<unknown>] = [
-      'Pathogenic and likely pathogenic variants',
+      'Clinical significance: pathogenic and likely pathogenic variants',
       [
         {
           accession: `variation_${protein}`,
@@ -180,6 +180,8 @@ function filterVariation(payload: ProteinsAPIVariation): ProteinsAPIVariation {
       (f?.clinicalSignificances || []).filter((cs) =>
         types.includes((cs?.type || '').toLowerCase()),
       ).length > 0,
+    // Next line is the filter I think UniProt uses, which yields different results than the one above
+    // (f) => (f?.association || []).filter((a) => a.disease).length > 0,
   );
   return {
     ...payload,
