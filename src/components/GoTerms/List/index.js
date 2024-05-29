@@ -56,7 +56,7 @@ const ListOfGOTerms = (
           >
             <GoLink
               id={identifier}
-              className={f('go-terms', 'ext', 'tag')}
+              className={f('go-terms', 'ext')}
               style={{
                 background: colors[code] || 'transparent',
               }}
