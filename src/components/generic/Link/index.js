@@ -192,6 +192,7 @@ export class _Link extends PureComponent /*:: <Props> */ {
     const buttonClassName = buttonType
       ? ['vf-button', `vf-button--${buttonType}`, 'vf-button--sm']
       : [];
+    const style = props.style || {};
     return (
       <a
         {...props}
@@ -208,6 +209,7 @@ export class _Link extends PureComponent /*:: <Props> */ {
           borderBottomColor: buttonType
             ? 'var(--vf-button-border-color, #ffffff)'
             : undefined,
+          ...style,
         }}
       >
         {_children}
