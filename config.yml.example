@@ -51,6 +51,7 @@ pages:
       - pathways
       - curation
       - subfamilies
+      - feedback
   protein:
     subPages:
       - entry

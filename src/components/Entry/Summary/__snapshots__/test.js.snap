@@ -73,7 +73,7 @@ exports[`<SummaryEntry /> should render 1`] = `
     <div
       className="vf-stack"
     >
-      <Memo(Connect(SidePanel))
+      <SidePanel
         dbInfo={{}}
         metadata={
           {
