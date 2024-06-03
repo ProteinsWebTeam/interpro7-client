@@ -217,6 +217,12 @@ export class IPScanSearch extends PureComponent<Props, State> {
         />
       );
     const { dragging } = this.state;
+    const allOk =
+      this.state.sequenceChecks?.validCharacters.result &&
+      !this.state.sequenceChecks.tooShort.result &&
+      !this.state.sequenceChecks.duplicateHeaders.result &&
+      !this.state.sequenceChecks.tooMany.result;
+
     return (
       <section className={css('vf-stack', 'vf-stack--400')}>
         <form
@@ -319,9 +325,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
                 </Button>
                 <Button
                   className={css({
-                    hidden:
-                      this.state.sequenceChecks?.valid ||
-                      !this.state.sequenceChecks?.hasText,
+                    hidden: allOk || !this.state.sequenceChecks?.hasText.result,
                   })}
                   onClick={this._cleanUp}
                   borderColor="var(--colors-alert-main)"
@@ -342,12 +346,9 @@ export class IPScanSearch extends PureComponent<Props, State> {
                   <Button
                     submit
                     className={css({
-                      disabled: !this.state.sequenceChecks?.valid,
+                      disabled: !allOk,
                     })}
-                    disabled={
-                      this.state.sequenceChecks?.tooShort ||
-                      !this.state.sequenceChecks?.valid
-                    }
+                    disabled={!allOk}
                     value="Search"
                   >
                     Search

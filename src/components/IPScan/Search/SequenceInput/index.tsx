@@ -113,63 +113,65 @@ const trimSequenceLines = (lines: Array<string>) =>
     .map((l) => (l.startsWith(';') ? false : l)) // removing comments
     .filter(Boolean) as Array<string>;
 
-export const checkValidity = (lines: Array<string>) => {
-  let numberOfSequences = 0;
-  let gotContentYet = false;
+export const areAllCharacterValid = (lines: Array<string>): CheckResult => {
+  let currentHeader = '';
   const trimmedLines = trimSequenceLines(lines);
   if (!headerRE.test(trimmedLines[0]) && !IUPACProtRE.test(trimmedLines[0]))
-    return false;
+    return { result: false, detail: 'Invalid first line' };
   for (const line of trimmedLines) {
     if (headerRE.test(line)) {
-      if (numberOfSequences > 0 && !gotContentYet) return false;
-      gotContentYet = false;
-      numberOfSequences++;
-    } else if (IUPACProtRE.test(line)) {
-      gotContentYet = true;
-    } else {
-      return false;
+      currentHeader = line;
+    } else if (!IUPACProtRE.test(line)) {
+      return {
+        result: false,
+        detail: 'Invalid characters',
+        header: currentHeader,
+      };
     }
   }
-  return numberOfSequences <= MAX_NUMBER_OF_SEQUENCES && gotContentYet;
+  return { result: true };
 };
 
 const MIN_LENGTH = 3;
 
-export const isTooShort = (lines: Array<string>) => {
+export const isTooShort = (lines: Array<string>): CheckResult => {
   let count = 0;
   let firstLine = true;
+  let currentHeader = '';
   const trimmedLines = trimSequenceLines(lines);
   for (const line of trimmedLines) {
     if (headerRE.test(line)) {
-      if (!firstLine && count < MIN_LENGTH) return true;
+      if (!firstLine && count < MIN_LENGTH)
+        return { result: true, header: currentHeader };
+      currentHeader = line;
       count = 0;
     } else {
       count += line.trim().length;
     }
     firstLine = false;
   }
-  return count < MIN_LENGTH;
+  return { result: count < MIN_LENGTH, header: currentHeader };
 };
 
-const hasHeaderIssues = (lines: Array<string>) => {
+const hasDuplicateHeaders = (lines: Array<string>): CheckResult => {
   const trimmedLines = trimSequenceLines(lines);
-  const isFirstLineAComment =
-    trimmedLines.length && trimmedLines[0].startsWith('>');
-  const numberOfHeaders = trimmedLines.filter((l) => l.startsWith('>')).length;
-  if (numberOfHeaders === 0) return false;
-  if (numberOfHeaders === 1 && isFirstLineAComment) return false;
-  for (let x = 1; x < lines.length; x++) {
-    if (lines[x - 1].startsWith('>') && lines[x].startsWith('>')) return true; // it has 2 consecutive headers
+  const headers = trimmedLines
+    .filter((line) => line.startsWith('>'))
+    .map((h) => h.slice(1).trim());
+  const headersCount: Record<string, number> = {};
+  for (const header of headers) {
+    if (!headersCount[header]) headersCount[header] = 1;
+    else return { result: true, header: `> ${header}` };
   }
-  return false;
+  return { result: false };
 };
 
-const hasTooManySequences = (lines: Array<string>) => {
+const hasTooManySequences = (lines: Array<string>): CheckResult => {
   const trimmedLines = trimSequenceLines(lines);
-  return (
-    trimmedLines.filter((line) => line.startsWith('>')).length >
+  return trimmedLines.filter((line) => line.startsWith('>')).length >
     MAX_NUMBER_OF_SEQUENCES
-  );
+    ? { result: true, detail: 'Too many sequences' }
+    : { result: false };
 };
 
 const addFastAHeaderIfNeeded = (
@@ -209,26 +211,40 @@ const hasContentInNextLine = (
 };
 
 export const cleanUpBlocks = (blocks: RawDraftContentBlock[]) => {
+  const headers: Record<string, number> = {};
   return blocks
     .map(({ text }, i, lines) => {
       const line = text.trim();
       if (!line) return null;
       if (line.startsWith(';')) return line;
-      if (line.startsWith('>'))
-        return hasContentInNextLine(lines, i) ? line : null;
-
+      if (line.startsWith('>')) {
+        let newLine = line;
+        const header = line.slice(1).trim();
+        if (header in headers) {
+          headers[header]++;
+          newLine += ` - ${headers[header]}`;
+        } else {
+          headers[header] = 1;
+        }
+        return hasContentInNextLine(lines, i) ? newLine : null;
+      }
       return line.replace(/[^a-z\s]/gi, '').trim();
     })
     .filter(Boolean)
     .join('\n');
 };
 
+export type CheckResult = {
+  result: boolean;
+  header?: string;
+  detail?: string;
+};
 export type SequenceChecks = {
-  valid: boolean;
-  hasText: boolean;
-  tooShort: boolean;
-  tooMany: boolean;
-  headerIssues: boolean;
+  validCharacters: CheckResult;
+  hasText: CheckResult;
+  tooShort: CheckResult;
+  tooMany: CheckResult;
+  duplicateHeaders: CheckResult;
 };
 type Props = {
   value?: string | null;
@@ -250,20 +266,20 @@ const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
       EditorState.createEmpty(compositeDecorator),
     );
     const [tests, setTests] = useState<SequenceChecks>({
-      valid: true,
-      hasText: false,
-      tooShort: true,
-      tooMany: false,
-      headerIssues: false,
+      validCharacters: { result: true },
+      hasText: { result: false },
+      tooShort: { result: true },
+      tooMany: { result: false },
+      duplicateHeaders: { result: false },
     });
 
     const runChecks = (lines: Array<string>) => {
-      const result = {
-        valid: checkValidity(lines),
-        hasText: editorState.getCurrentContent().hasText(),
+      const result: SequenceChecks = {
+        validCharacters: areAllCharacterValid(lines),
+        hasText: { result: editorState.getCurrentContent().hasText() },
         tooShort: isTooShort(lines),
         tooMany: hasTooManySequences(lines),
-        headerIssues: hasHeaderIssues(lines),
+        duplicateHeaders: hasDuplicateHeaders(lines),
       };
       if (result !== tests) {
         setTests(result);
@@ -342,6 +358,11 @@ const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
       handleChange(newEditorState);
       return 'handled';
     };
+    const allOk =
+      tests.validCharacters.result &&
+      !tests.tooShort.result &&
+      !tests.duplicateHeaders.result &&
+      !tests.tooMany.result;
 
     return (
       <section>
@@ -349,12 +370,8 @@ const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
           <div
             className={css('editor', {
               'invalid-block':
-                !tests.valid && editorState.getCurrentContent().hasText(),
-              'valid-block':
-                tests.valid &&
-                editorState.getCurrentContent().hasText() &&
-                !tests.tooShort &&
-                !tests.headerIssues,
+                !allOk && editorState.getCurrentContent().hasText(),
+              'valid-block': allOk && editorState.getCurrentContent().hasText(),
             })}
           >
             <Editor
@@ -369,9 +386,9 @@ const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
         </div>
         {editorState.getCurrentContent().hasText() && (
           <InfoMessages
-            valid={tests.valid}
+            validCharacters={tests.validCharacters}
             tooShort={tests.tooShort}
-            headerIssues={tests.headerIssues}
+            duplicateHeaders={tests.duplicateHeaders}
             tooMany={tests.tooMany}
           />
         )}

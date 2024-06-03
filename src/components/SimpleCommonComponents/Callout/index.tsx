@@ -11,6 +11,8 @@ type Props = PropsWithChildren<{
   icon?: string;
   alt?: boolean;
   type: 'info' | 'alert' | 'warning' | 'announcement';
+  style?: React.CSSProperties;
+  className?: string;
 }>;
 
 const defaultIcons = {
@@ -19,10 +21,20 @@ const defaultIcons = {
   alert: 'icon-exclamation-circle',
   announcement: 'icon-announcement',
 };
-const Callout = ({ type, icon, alt = false, children }: Props) => {
+const Callout = ({
+  type,
+  icon,
+  alt = false,
+  style = {},
+  className = '',
+  children,
+}: Props) => {
   const iconClass = icon ? icon : defaultIcons[type];
   return (
-    <div className={css('new-callout', type, { alt })}>
+    <div
+      className={css('new-callout', type, className, { alt })}
+      style={{ ...style }}
+    >
       {icon && (
         <>
           <span className={css('icon', 'icon-common', iconClass)} />
