@@ -153,7 +153,7 @@ export const isTooShort = (lines: Array<string>): CheckResult => {
   return { result: count < MIN_LENGTH, header: currentHeader };
 };
 
-const hasDuplicateHeaders = (lines: Array<string>): CheckResult => {
+export const hasDuplicateHeaders = (lines: Array<string>): CheckResult => {
   const trimmedLines = trimSequenceLines(lines);
   const headers = trimmedLines
     .filter((line) => line.startsWith('>'))
@@ -166,7 +166,7 @@ const hasDuplicateHeaders = (lines: Array<string>): CheckResult => {
   return { result: false };
 };
 
-const hasTooManySequences = (lines: Array<string>): CheckResult => {
+export const hasTooManySequences = (lines: Array<string>): CheckResult => {
   const trimmedLines = trimSequenceLines(lines);
   return trimmedLines.filter((line) => line.startsWith('>')).length >
     MAX_NUMBER_OF_SEQUENCES
