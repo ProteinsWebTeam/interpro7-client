@@ -338,10 +338,14 @@ interface EntryStructureMatch extends MatchI {
   entry_type: string;
   entry_integrated: string | null;
 }
+interface EntrySetMatch extends MatchI {
+  matching_entry?: string;
+}
 
 type AnyMatch = Partial<EntryProteinMatch> &
   Partial<EntryStructureMatch> &
-  Partial<StructureProteinMatch>;
+  Partial<StructureProteinMatch> &
+  Partial<EntrySetMatch>;
 
 type EntryStructurePayload = {
   metadata: EntryMetadata;
