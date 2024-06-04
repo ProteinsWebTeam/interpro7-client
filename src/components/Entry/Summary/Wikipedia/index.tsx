@@ -125,6 +125,7 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
                               /[[\]]/g,
                               '',
                             )}`}
+                            key={i}
                           >
                             {text.replaceAll(/[[\]]/g, '')}
                           </Link>
