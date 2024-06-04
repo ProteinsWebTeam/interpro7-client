@@ -18,7 +18,7 @@ import { askNotificationPermission } from 'utils/browser-notifications';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import SequenceInput, {
-  SequenceChecks,
+  SequenceIssue,
   SequenceInputHandle,
 } from './SequenceInput';
 import example from './example.fasta';
@@ -33,7 +33,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const css = cssBinder(searchPageCss, local, blocks, buttonCSS, fonts);
 
-export const MAX_NUMBER_OF_SEQUENCES = 100;
+export const MAX_NUMBER_OF_SEQUENCES = 2;
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -66,7 +66,7 @@ type State = {
   title?: string;
   initialAdvancedOptions?: InterProLocationSearch;
   submittedJob: string | null;
-  sequenceChecks: SequenceChecks | null;
+  sequenceIssues: Array<SequenceIssue>;
   dragging: boolean;
 };
 
@@ -87,7 +87,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
       title: undefined,
       initialAdvancedOptions,
       submittedJob: null,
-      sequenceChecks: null,
+      sequenceIssues: [],
       dragging: false,
     };
 
@@ -217,11 +217,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
         />
       );
     const { dragging } = this.state;
-    const allOk =
-      this.state.sequenceChecks?.validCharacters.result &&
-      !this.state.sequenceChecks.tooShort.result &&
-      !this.state.sequenceChecks.duplicateHeaders.result &&
-      !this.state.sequenceChecks.tooMany.result;
+    const allOk = this.state.sequenceIssues.length === 0;
 
     return (
       <section className={css('vf-stack', 'vf-stack--400')}>
@@ -295,8 +291,8 @@ export class IPScanSearch extends PureComponent<Props, State> {
                 <SequenceInput
                   value={this.props.value}
                   ref={this._editorRef}
-                  onChecksChange={(tests) => {
-                    this.setState({ sequenceChecks: tests });
+                  onChecksChange={(issues) => {
+                    this.setState({ sequenceIssues: issues });
                   }}
                 />
               </div>
@@ -325,7 +321,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
                 </Button>
                 <Button
                   className={css({
-                    hidden: allOk || !this.state.sequenceChecks?.hasText.result,
+                    hidden: allOk || !this._editorRef.current?.hasText(),
                   })}
                   onClick={this._cleanUp}
                   borderColor="var(--colors-alert-main)"
