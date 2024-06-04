@@ -49,7 +49,7 @@ const InfoMessages = ({
         <ul className={css('warnings')}>
           {!validCharacters.result && (
             <li>
-              The sequence with the header below has invalid characters. '
+              The sequence with the header below has invalid characters.{' '}
               <div className={css('header')}>{validCharacters.header}</div>
             </li>
           )}
@@ -70,7 +70,7 @@ const InfoMessages = ({
           )}
           {duplicateHeaders.result && (
             <li>
-              There are multiple sequences with the same header.{' '}
+              There are multiple sequences with the same header:{' '}
               <div className={css('header')}>{duplicateHeaders.header}</div>
             </li>
           )}
