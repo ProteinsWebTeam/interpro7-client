@@ -48,7 +48,8 @@ const SidePanel = ({
                 width: '100%',
               }}
             >
-              Add your annotation
+              <span className={css('icon', 'icon-common', 'icon-pencil-alt')} />{' '}
+              Provide feedback
             </Link>
           </div>
         )}

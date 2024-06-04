@@ -17,6 +17,7 @@ const css = cssBinder(local);
 
 type Props = {
   api: ParsedURLServer;
+  llm?: boolean;
   addToast: typeof addToast;
 };
 
@@ -24,7 +25,7 @@ interface LoadedProps
   extends Props,
     LoadDataProps<{ metadata: EntryMetadata }> {}
 
-const Feedback = ({ api, data, addToast }: LoadedProps) => {
+const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
   if (!data) return null;
   if (data.loading) return <Loading />;
   const metadata = data.payload?.metadata;
@@ -43,13 +44,17 @@ const Feedback = ({ api, data, addToast }: LoadedProps) => {
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
   const entry = `${metadata.name.name} (${metadata.accession})`;
-  const queue = metadata.source_database.toLowerCase();
+  const queue =
+    metadata.source_database.toLowerCase() === 'pfam' ? 'pfam' : 'interpro';
 
   const handleSubmit = (event: FormEvent) => {
     if (!event.target) return;
     event.preventDefault();
     const data = new FormData(event.target as HTMLFormElement);
-    data.append('subject', `Add annotation, ${entry}`);
+    data.append(
+      'subject',
+      llm ? `LLM Feedback, ${entry}` : `Add annotation, ${entry}`,
+    );
     data.append('queue', queue);
     fetch(apiUrl, {
       method: 'POST',
@@ -89,22 +94,29 @@ const Feedback = ({ api, data, addToast }: LoadedProps) => {
 
   return (
     <form onSubmit={handleSubmit} className={css('vf-stack', 'vf-stack--200')}>
-      <h4>Add your annotation</h4>
-      <p>
-        You can suggest annotation updates for this entry using the provided
-        form. Our curators will review and, if suitable, include them in the
-        next{' '}
-        {metadata.source_database.toLowerCase() === 'interpro'
-          ? 'InterPro'
-          : 'Pfam'}{' '}
-        release. Please include supporting literature references for better
-        accuracy.
-      </p>
+      <h4>Feedback</h4>
+      {llm ? (
+        <p>
+          Please let us know if there is anything incorrect in the LLM generated
+          data.
+        </p>
+      ) : (
+        <p>
+          You can suggest annotation updates for this entry using the provided
+          form. Our curators will review and, if suitable, include them in the
+          next{' '}
+          {metadata.source_database.toLowerCase() === 'interpro'
+            ? 'InterPro'
+            : 'Pfam'}{' '}
+          release. Please include supporting literature references for better
+          accuracy.
+        </p>
+      )}
       <label
         className={css('vf-form__label', 'vf-form__label--required')}
         htmlFor="message"
       >
-        Your annotation
+        Details
       </label>
       <textarea
         id="message"
@@ -142,7 +154,8 @@ const Feedback = ({ api, data, addToast }: LoadedProps) => {
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.api,
-  (api) => ({ api }),
+  (state: GlobalState) => state.customLocation.search,
+  (api, search) => ({ api, llm: 'llm' in search }),
 );
 
 export default connect(mapStateToProps, { addToast })(Feedback);
