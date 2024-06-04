@@ -17,8 +17,6 @@ import {
   RawDraftContentBlock,
 } from 'draft-js';
 
-import getId from 'utils/cheap-unique-id';
-
 import { MAX_NUMBER_OF_SEQUENCES } from '..';
 
 import cssBinder from 'styles/cssBinder';
@@ -178,13 +176,14 @@ const addFastAHeaderIfNeeded = (
   editorState: EditorState,
   lines: Array<string>,
 ) => {
+  let incrementalId = 1;
   const minLengthForHeader = 3;
   const currentContent = editorState.getCurrentContent();
   if (currentContent.hasText()) {
     const firstLine = (lines?.[0] || '').trim();
     const hasHeader = firstLine.startsWith('>');
     if (!hasHeader && firstLine.length > minLengthForHeader) {
-      const newHeader = `Sequence${getId()}`;
+      const newHeader = `Sequence${incrementalId++}`;
       const header = `>${newHeader}`;
       // this.setState({ title: newHeader });
       lines.splice(0, 0, header);

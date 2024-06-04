@@ -55,11 +55,9 @@ const InfoMessages = ({
           )}
           {tooShort.result && (
             <li>
-              The sequence {tooShort.header ? 'with the header below' : ''} is
-              too short (min: three characters).{' '}
-              {tooShort.header && (
-                <div className={css('header')}>{tooShort.header}</div>
-              )}
+              The sequence with the header below is too short (min: three
+              characters).{' '}
+              <div className={css('header')}>{tooShort.header}</div>
             </li>
           )}
           {tooMany.result && (
