@@ -59,7 +59,7 @@ const InfoMessages = ({ sequenceIssues }: Props) => {
                     {MAX_NUMBER_OF_SEQUENCES}.{' '}
                   </li>
                 );
-              case 'duplicateHeaders':
+              case 'duplicatedHeaders':
                 return (
                   <li>
                     There are multiple sequences with the same header:{' '}

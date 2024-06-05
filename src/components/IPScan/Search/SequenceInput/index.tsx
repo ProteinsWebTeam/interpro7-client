@@ -113,65 +113,6 @@ const trimSequenceLines = (lines: Array<string>) =>
     .map((l) => (l.startsWith(';') ? false : l)) // removing comments
     .filter(Boolean) as Array<string>;
 
-// export const areAllCharacterValid = (lines: Array<string>): CheckResult => {
-//   let currentHeader = '';
-//   const trimmedLines = trimSequenceLines(lines);
-//   if (!headerRE.test(trimmedLines[0]) && !IUPACProtRE.test(trimmedLines[0]))
-//     return { result: false, detail: 'Invalid first line' };
-//   for (const line of trimmedLines) {
-//     if (headerRE.test(line)) {
-//       currentHeader = line;
-//     } else if (!IUPACProtRE.test(line)) {
-//       return {
-//         result: false,
-//         detail: 'Invalid characters',
-//         header: currentHeader,
-//       };
-//     }
-//   }
-//   return { result: true };
-// };
-
-// export const isTooShort = (lines: Array<string>): CheckResult => {
-//   let count = 0;
-//   let firstLine = true;
-//   let currentHeader = '';
-//   const trimmedLines = trimSequenceLines(lines);
-//   for (const line of trimmedLines) {
-//     if (headerRE.test(line)) {
-//       if (!firstLine && count < MIN_LENGTH)
-//         return { result: true, header: currentHeader };
-//       currentHeader = line;
-//       count = 0;
-//     } else {
-//       count += line.trim().length;
-//     }
-//     firstLine = false;
-//   }
-//   return { result: count < MIN_LENGTH, header: currentHeader };
-// };
-
-// export const hasDuplicateHeaders = (lines: Array<string>): CheckResult => {
-//   const trimmedLines = trimSequenceLines(lines);
-//   const headers = trimmedLines
-//     .filter((line) => line.startsWith('>'))
-//     .map((h) => h.slice(1).trim());
-//   const headersCount: Record<string, number> = {};
-//   for (const header of headers) {
-//     if (!headersCount[header]) headersCount[header] = 1;
-//     else return { result: true, header: `> ${header}` };
-//   }
-//   return { result: false };
-// };
-
-// export const hasTooManySequences = (lines: Array<string>): CheckResult => {
-//   const trimmedLines = trimSequenceLines(lines);
-//   return trimmedLines.filter((line) => line.startsWith('>')).length >
-//     MAX_NUMBER_OF_SEQUENCES
-//     ? { result: true, detail: 'Too many sequences' }
-//     : { result: false };
-// };
-
 const addFastAHeaderIfNeeded = (
   editorState: EditorState,
   lines: Array<string>,
@@ -234,12 +175,12 @@ export const cleanUpBlocks = (blocks: RawDraftContentBlock[]) => {
 };
 
 export type SequenceIssue = {
-  type: 'invalidCharacters' | 'tooShort' | 'tooMany' | 'duplicateHeaders';
+  type: 'invalidCharacters' | 'tooShort' | 'tooMany' | 'duplicatedHeaders';
   header?: string;
   detail?: string;
 };
 
-const checkLines = (lines: Array<string>): Array<SequenceIssue> => {
+export const checkLines = (lines: Array<string>): Array<SequenceIssue> => {
   const issues: Array<SequenceIssue> = [];
   let count = 0;
   let firstLine = true;
@@ -259,7 +200,7 @@ const checkLines = (lines: Array<string>): Array<SequenceIssue> => {
       else {
         headersCount[header]++;
         issues.push({
-          type: 'duplicateHeaders',
+          type: 'duplicatedHeaders',
           header: `> ${header}`,
         });
       }

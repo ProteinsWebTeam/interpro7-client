@@ -33,7 +33,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const css = cssBinder(searchPageCss, local, blocks, buttonCSS, fonts);
 
-export const MAX_NUMBER_OF_SEQUENCES = 2;
+export const MAX_NUMBER_OF_SEQUENCES = 100;
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -218,7 +218,8 @@ export class IPScanSearch extends PureComponent<Props, State> {
       );
     const { dragging } = this.state;
     const allOk = this.state.sequenceIssues.length === 0;
-
+    const hasText =
+      !!this._editorRef.current && this._editorRef.current?.hasText();
     return (
       <section className={css('vf-stack', 'vf-stack--400')}>
         <form
@@ -321,7 +322,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
                 </Button>
                 <Button
                   className={css({
-                    hidden: allOk || !this._editorRef.current?.hasText(),
+                    hidden: allOk || !hasText,
                   })}
                   onClick={this._cleanUp}
                   borderColor="var(--colors-alert-main)"
@@ -342,9 +343,9 @@ export class IPScanSearch extends PureComponent<Props, State> {
                   <Button
                     submit
                     className={css({
-                      disabled: !allOk,
+                      disabled: !allOk || !hasText,
                     })}
-                    disabled={!allOk}
+                    disabled={!allOk || !hasText}
                     value="Search"
                   >
                     Search
