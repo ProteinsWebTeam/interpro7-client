@@ -407,6 +407,8 @@ type Taxon = {
   children: Array<Taxon>;
 };
 
+type GroupByPayload = Record<string, number>;
+
 type IDAResult = {
   ida: string;
   ida_id: string;

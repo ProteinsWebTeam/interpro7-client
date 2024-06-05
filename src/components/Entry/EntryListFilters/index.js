@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import FiltersPanel from 'components/FiltersPanel';
+// $FlowFixMe
 import EntryTypeFilter from './EntryTypeFilter';
 import IntegratedFilter from './IntegratedFilter';
 // import SignaturesFilter from './SignaturesFilter';
