@@ -1,5 +1,5 @@
-@import '../../styles/timing.css';
-@import '../../styles/colors.css';
+@import "../../styles/timing.css";
+@import "../../styles/colors.css";
 
 .filters-panel {
   --left-gap: 0.7rem;
@@ -21,6 +21,9 @@
   & label {
     line-height: normal;
     margin-top: 0.1em;
+  }
+  & .filter {
+    padding: 0 1rem;
   }
 }
 .filters-panel,
@@ -166,7 +169,7 @@ hr {
 }
 .radio-btn-label::before {
   display: inline-block;
-  content: '';
+  content: "";
   height: 0.8rem;
   min-width: 0.8rem;
   width: 0.8rem;

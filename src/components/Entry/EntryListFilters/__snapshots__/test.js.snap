@@ -8,5 +8,8 @@ exports[`<EntryListFilter /> should render 1`] = `
   <Memo(Connect(loadData(GOTermsFilter)))
     label="GO Terms"
   />
+  <Memo(Connect(loadData(LatestFilter)))
+    label="Latest entries"
+  />
 </Memo(Connect(FiltersPanel))>
 `;
