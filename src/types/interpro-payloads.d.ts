@@ -73,6 +73,10 @@ interface Metadata {
   go_terms?: Array<GOTerm>;
 }
 
+type MetadataPayload<T = unknown> = {
+  metadata: T;
+};
+
 type NameObject = {
   name: string;
   short?: string;
@@ -407,7 +411,7 @@ type Taxon = {
   children: Array<Taxon>;
 };
 
-type GroupByPayload = Record<string, number>;
+type GroupByPayload<T = number> = Record<string, T>;
 
 type IDAResult = {
   ida: string;

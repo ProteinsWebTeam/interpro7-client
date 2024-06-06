@@ -16,12 +16,12 @@ import style from './style.css';
 
 const css = cssBinder(style);
 
-export const getPayloadOrEmpty = <T = unknown,>(
-  payload: T | null,
+export const getPayloadOrEmpty = <Payload = unknown, Value = number>(
+  payload: Payload | null,
   loading: boolean,
   isStale?: boolean,
 ) => {
-  let _payload: T | Record<string, number> = payload || {};
+  let _payload: Payload | Record<string, Value> = payload || {};
   if (payload && loading && !isStale) _payload = {};
   if (!payload) _payload = {};
   return _payload;

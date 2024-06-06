@@ -18,7 +18,6 @@ export const ProteinListFilters = ({
     {!hasEntryFilter && <MatchPresenceFilter label="Matching Entries" />}
     <CurationFilter label="UniProt Curation" />
     <TaxonomyFilter label="Taxonomy" />
-    {/* <SizeFilter label="Protein Size" />*/}
     <FragmentFilter label="Sequence Status" />
   </FiltersPanel>
 );
