@@ -13,6 +13,7 @@ import ProteinCard from 'components/Protein/Card';
 // $FlowFixMe
 import APIViewButton from 'components/Table/Exporter/APIViewButton';
 
+// $FlowFixMe
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
   Column,
