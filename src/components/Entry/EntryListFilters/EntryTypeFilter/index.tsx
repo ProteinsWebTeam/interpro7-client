@@ -23,8 +23,9 @@ const allRE = /^all$/i;
 const isAll = (string: string) => allRE.test(string);
 
 type Props = {
-  goToCustomLocation: typeof goToCustomLocation;
-  customLocation: InterProLocation;
+  label?: string;
+  goToCustomLocation?: typeof goToCustomLocation;
+  customLocation?: InterProLocation;
 };
 
 interface LoadedProps extends Props, LoadDataProps<GroupByPayload> {}
@@ -39,11 +40,12 @@ class EntryTypeFilter extends PureComponent<LoadedProps> {
   }
 
   _handleSelection = ({ target }: FormEvent) => {
+    if (!this.props.customLocation) return null;
     const value = (target as HTMLInputElement).value;
     const { page, type, ...search } = this.props.customLocation.search;
     if (!isAll(value)) search.type = value;
     delete search.cursor;
-    this.props.goToCustomLocation({ ...this.props.customLocation, search });
+    this.props.goToCustomLocation?.({ ...this.props.customLocation, search });
   };
 
   _formatType = (type: string) => {
@@ -53,7 +55,7 @@ class EntryTypeFilter extends PureComponent<LoadedProps> {
   };
 
   render() {
-    if (!this.props.data) return null;
+    if (!this.props.data || !this.props.customLocation) return null;
     const {
       data: { loading, payload },
       isStale,

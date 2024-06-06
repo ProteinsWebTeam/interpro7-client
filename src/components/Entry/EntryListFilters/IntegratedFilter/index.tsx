@@ -17,8 +17,9 @@ import style from 'components/FiltersPanel/style.css';
 const css = cssBinder(style);
 
 type Props = {
-  goToCustomLocation: typeof goToCustomLocation;
-  customLocation: InterProLocation;
+  label?: string;
+  goToCustomLocation?: typeof goToCustomLocation;
+  customLocation?: InterProLocation;
 };
 interface LoadedProps extends Props, LoadDataProps<GroupByPayload> {}
 
@@ -28,7 +29,7 @@ const IntegratedFilter = ({
   goToCustomLocation,
   customLocation,
 }: LoadedProps) => {
-  if (!data) return null;
+  if (!data || !customLocation) return null;
   const { loading, payload } = data;
   let value = customLocation.description.entry.integration || '';
   if (!['unintegrated', 'integrated'].includes(value)) {
@@ -43,7 +44,7 @@ const IntegratedFilter = ({
     const value = (target as HTMLInputElement).value;
     const { description, search: s, ...rest } = customLocation;
     const { cursor: _, ...search } = s;
-    goToCustomLocation({
+    goToCustomLocation?.({
       ...rest,
       search,
       description: {

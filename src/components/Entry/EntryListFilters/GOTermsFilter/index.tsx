@@ -33,9 +33,11 @@ const short = {
 };
 
 type Props = {
-  goToCustomLocation: typeof goToCustomLocation;
-  customLocation: InterProLocation;
+  label?: string;
+  goToCustomLocation?: typeof goToCustomLocation;
+  customLocation?: InterProLocation;
 };
+
 interface LoadedProps extends Props, LoadDataProps<GroupByPayload> {}
 
 const GOTermsFilter = ({
@@ -44,7 +46,7 @@ const GOTermsFilter = ({
   customLocation,
   goToCustomLocation,
 }: LoadedProps) => {
-  if (!data) return null;
+  if (!data || !customLocation) return null;
   const { loading, payload } = data;
   const { search } = customLocation;
 
@@ -52,7 +54,7 @@ const GOTermsFilter = ({
     const value = (target as HTMLInputElement).value;
     const { page, go_category: _, cursor: __, ...restOfsearch } = search;
     if (value !== 'All') restOfsearch.go_category = value;
-    goToCustomLocation({ ...customLocation, search: restOfsearch });
+    goToCustomLocation?.({ ...customLocation, search: restOfsearch });
   };
 
   const terms = Object.entries<number>(

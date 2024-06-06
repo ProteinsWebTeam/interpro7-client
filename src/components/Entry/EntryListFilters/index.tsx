@@ -1,20 +1,15 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 import { connect } from 'react-redux';
 
 import { createSelector } from 'reselect';
 
 import FiltersPanel from 'components/FiltersPanel';
-// $FlowFixMe
 import EntryTypeFilter from './EntryTypeFilter';
-// $FlowFixMe
 import IntegratedFilter from './IntegratedFilter';
-// import SignaturesFilter from './SignaturesFilter';
-// $FlowFixMe
 import GOTermsFilter from './GOTermsFilter';
 
-export const EntryListFilter = ({ mainDB } /*: {mainDB: string} */) => (
+type Props = { mainDB?: string };
+export const EntryListFilter = ({ mainDB }: Props) => (
   <FiltersPanel>
     <EntryTypeFilter
       label={`${
@@ -25,16 +20,14 @@ export const EntryListFilter = ({ mainDB } /*: {mainDB: string} */) => (
     {mainDB === 'InterPro' && <GOTermsFilter label="GO Terms" />}
   </FiltersPanel>
 );
-EntryListFilter.propTypes = {
-  mainDB: T.string,
-};
 
 const mapStateToProps = createSelector(
-  (state) =>
+  (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    state.customLocation.description[state.customLocation.description.main.key]
-      .db,
-  (mainDB) => ({ mainDB }),
+    (state.customLocation.description[
+      state.customLocation.description.main.key
+    ] as EndpointLocation),
+  (mainEndpoint) => ({ mainDB: mainEndpoint.db || '' }),
 );
 
 export default connect(mapStateToProps)(EntryListFilter);
