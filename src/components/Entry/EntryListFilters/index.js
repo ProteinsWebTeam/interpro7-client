@@ -8,6 +8,7 @@ import { createSelector } from 'reselect';
 import FiltersPanel from 'components/FiltersPanel';
 // $FlowFixMe
 import EntryTypeFilter from './EntryTypeFilter';
+// $FlowFixMe
 import IntegratedFilter from './IntegratedFilter';
 // import SignaturesFilter from './SignaturesFilter';
 // $FlowFixMe
