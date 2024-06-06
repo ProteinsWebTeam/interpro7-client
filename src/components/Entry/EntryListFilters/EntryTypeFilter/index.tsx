@@ -88,49 +88,46 @@ class EntryTypeFilter extends PureComponent<LoadedProps> {
       types.unshift(['All', types.reduce((acc, [, count]) => acc + count, 0)]);
     }
     return (
-      <div className={css('list-entries', { stale: isStale })}>
-        <div className={css('column')}>
-          {types.map(([type, count]) => {
-            const checked =
-              (!search.type && isAll(type)) ||
-              search.type === type.toLowerCase();
-            return (
-              <label key={type} className={css('radio-btn-label', { checked })}>
-                <input
-                  type="radio"
-                  name="entry_type"
-                  className={css('radio-btn')}
-                  value={type.toLowerCase()}
-                  onChange={this._handleSelection}
-                  disabled={isStale}
-                  checked={checked}
-                  style={{ margin: '0.25em' }}
-                />
-                <span>
-                  {isAll(type) || db !== 'InterPro' ? (
-                    this._formatType(type)
-                  ) : (
-                    <interpro-type
-                      type={type.replace('_', ' ')}
-                      expanded
-                      dimension="17px"
-                    >
-                      {type}
-                    </interpro-type>
-                  )}
-                </span>
-                <NumberComponent
-                  label
-                  loading={loading}
-                  className={css('filter-label')}
-                  abbr
-                >
-                  {count}
-                </NumberComponent>
-              </label>
-            );
-          })}
-        </div>
+      <div className={css('list-entries', 'filter', { stale: isStale })}>
+        {types.map(([type, count]) => {
+          const checked =
+            (!search.type && isAll(type)) || search.type === type.toLowerCase();
+          return (
+            <label key={type} className={css('radio-btn-label', { checked })}>
+              <input
+                type="radio"
+                name="entry_type"
+                className={css('radio-btn')}
+                value={type.toLowerCase()}
+                onChange={this._handleSelection}
+                disabled={isStale}
+                checked={checked}
+                style={{ margin: '0.25em' }}
+              />
+              <span>
+                {isAll(type) || db !== 'InterPro' ? (
+                  this._formatType(type)
+                ) : (
+                  <interpro-type
+                    type={type.replace('_', ' ')}
+                    expanded
+                    dimension="17px"
+                  >
+                    {type}
+                  </interpro-type>
+                )}
+              </span>
+              <NumberComponent
+                label
+                loading={loading}
+                className={css('filter-label')}
+                abbr
+              >
+                {count}
+              </NumberComponent>
+            </label>
+          );
+        })}
       </div>
     );
   }

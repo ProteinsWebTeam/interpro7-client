@@ -10,6 +10,7 @@ import FiltersPanel from 'components/FiltersPanel';
 import EntryTypeFilter from './EntryTypeFilter';
 import IntegratedFilter from './IntegratedFilter';
 // import SignaturesFilter from './SignaturesFilter';
+// $FlowFixMe
 import GOTermsFilter from './GOTermsFilter';
 
 export const EntryListFilter = ({ mainDB } /*: {mainDB: string} */) => (
