@@ -10,6 +10,7 @@ import CurationFilter from './CurationFilter';
 // import SizeFilter from './SizeFilter';
 import TaxonomyFilter from './TaxonomyFilter';
 import FragmentFilter from './FragmentFilter';
+// $FlowFixMe
 import MatchPresenceFilter from './MatchPresenceFilter';
 
 export const ProteinListFilters = (
