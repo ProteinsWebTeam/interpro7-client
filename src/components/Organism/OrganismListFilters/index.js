@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 
+// $FlowFixMe
 import FiltersPanel from 'components/FiltersPanel';
 import OrganismDBFilter from './OrganismDBFilter';
 // import LengthFilter from './LengthFilter';

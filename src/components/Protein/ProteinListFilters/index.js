@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
+// $FlowFixMe
 import FiltersPanel from 'components/FiltersPanel';
 import CurationFilter from './CurationFilter';
 // import SizeFilter from './SizeFilter';
@@ -27,8 +28,8 @@ ProteinListFilters.propTypes = {
 };
 
 const mapStateToProps = createSelector(
-  state => state.customLocation.description.entry.isFilter,
-  hasEntryFilter => ({ hasEntryFilter }),
+  (state) => state.customLocation.description.entry.isFilter,
+  (hasEntryFilter) => ({ hasEntryFilter }),
 );
 
 export default connect(mapStateToProps)(ProteinListFilters);

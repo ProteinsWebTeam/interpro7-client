@@ -36,7 +36,7 @@ const IntegratedFilter = ({
     value = 'both';
   }
 
-  const types = getPayloadOrEmpty(payload, loading, isStale);
+  const types = getPayloadOrEmpty<GroupByPayload>(payload, loading, isStale);
   if (!loading)
     types.both = (types.integrated || 0) + (types.unintegrated || 0);
 

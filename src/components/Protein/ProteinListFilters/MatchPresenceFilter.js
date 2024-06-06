@@ -7,6 +7,7 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import { goToCustomLocation } from 'actions/creators';

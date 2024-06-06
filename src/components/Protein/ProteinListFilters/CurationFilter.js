@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import { getPayloadOrEmpty } from 'components/FiltersPanel';
 
 import loadData from 'higherOrder/loadData';

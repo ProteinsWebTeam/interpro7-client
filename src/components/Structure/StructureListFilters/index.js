@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 
+// $FlowFixMe
 import FiltersPanel from 'components/FiltersPanel';
 import ExperimentTypeFilter from './ExperimentTypeFilter';
 import ResolutionFilter from './ResolutionFilter';

@@ -1,82 +1,70 @@
-import React, { PureComponent, Children } from 'react';
-import T from 'prop-types';
+import React, {
+  PureComponent,
+  Children,
+  PropsWithChildren,
+  ReactElement,
+} from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { goToCustomLocation } from 'actions/creators';
-import { customLocationSelector } from 'reducers/custom-location';
-
-import { foundationPartial } from 'styles/foundation';
-
 import { UnconnectedErrorBoundary } from 'wrappers/ErrorBoundary';
+import { goToCustomLocation } from 'actions/creators';
+
+import cssBinder from 'styles/cssBinder';
 
 import style from './style.css';
 
-const f = foundationPartial(style);
+const css = cssBinder(style);
 
-export const getPayloadOrEmpty = (payload, loading, isStale) => {
-  let _payload = payload;
+export const getPayloadOrEmpty = <T = unknown,>(
+  payload: T | null,
+  loading: boolean,
+  isStale?: boolean,
+) => {
+  let _payload: T | Record<string, number> = payload || {};
   if (payload && loading && !isStale) _payload = {};
   if (!payload) _payload = {};
   return _payload;
 };
 
-export const FilterPanel = (
-  {
-    label,
-    collapsed,
-    toggle,
-    children,
-  } /*: {label: string, collapsed?: boolean, toggle?: function, children?: any} */,
-) => (
+type FilterPanelProps = PropsWithChildren<{
+  label: string;
+  collapsed?: boolean;
+  toggle?: () => void;
+}>;
+export const FilterPanel = ({
+  label,
+  collapsed,
+  toggle,
+  children,
+}: FilterPanelProps) => (
   <div
-    className={f('filter-container')}
+    className={css('filter-container')}
     data-testid={`filterby-${label.toLowerCase().replace(/\s+/g, '_')}`}
   >
     {label && (
-      <button className={f('toggle')} onClick={toggle}>
-        <span className={f('arrow', { collapsed })}>▸</span>
-        <span className={f('button-label')}>{label}</span>
+      <button className={css('toggle')} onClick={toggle}>
+        <span className={css('arrow', { collapsed })}>▸</span>
+        <span className={css('button-label')}>{label}</span>
       </button>
     )}
-    <div className={f('filter-panel', { collapsed })}>{children}</div>
+    <div className={css('filter-panel', { collapsed })}>{children}</div>
   </div>
 );
-FilterPanel.propTypes = {
-  label: T.string,
-  collapsed: T.bool,
-  toggle: T.func,
-  children: T.any,
+
+type Props = PropsWithChildren<{
+  goToCustomLocation?: typeof goToCustomLocation;
+  customLocation?: InterProLocation;
+}>;
+
+type State = {
+  filters: Array<boolean>;
 };
-
-/*:: type Props = {
-  children: any,
-  goToCustomLocation: function,
-  customLocation: {
-    search: Object,
-    description: Object,
-    hash: string
-    }
-}; */
-
-/*:: type State = {
-  filters: any
-}; */
-export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
-  static propTypes = {
-    children: T.any,
-    goToCustomLocation: T.func.isRequired,
-    customLocation: T.shape({
-      search: T.object.isRequired,
-      description: T.object.isRequired,
-      hash: T.string.isRequired,
-    }).isRequired,
-  };
-
-  constructor(props /*: Props*/) {
+export class FiltersPanel extends PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
-    this.state = { filters: Children.map(props.children, () => false) };
+    this.state = { filters: Children.map(props.children, () => false) || [] };
   }
 
   toggleAll = () => {
@@ -91,9 +79,11 @@ export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
   };
 
   clearAll = () => {
+    if (!this.props.customLocation) return;
     const { description, hash, search } = this.props.customLocation;
     const { key } = description.main;
-    let db = key === 'protein' ? 'UniProt' : description[key].db;
+    let db =
+      key === 'protein' ? 'UniProt' : (description[key] as EndpointLocation).db;
     if (key === 'taxonomy') db = 'uniprot';
     const newDescription = {
       ...description,
@@ -106,40 +96,37 @@ export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
     newDescription.entry.integration = null;
     if (newDescription.protein.isFilter) newDescription.protein.db = 'uniprot';
     const newSearch = search.page_size ? { page_size: search.page_size } : {};
-    this.props.goToCustomLocation({
+    this.props.goToCustomLocation?.({
       description: newDescription,
       search: newSearch,
       hash,
     });
   };
 
-  toggleFilter = (i) => () => {
+  toggleFilter = (i: number) => () => {
     const [...filters] = this.state.filters;
     filters[i] = !filters[i];
     this.setState({ filters });
   };
 
   render() {
-    const children = this.props.children.length
-      ? this.props.children
-      : [this.props.children];
     const toCollapse = Object.values(this.state.filters).reduce(
       (acc, v) => v && acc,
       true,
     );
     return (
-      <div className={f('filters-panel')}>
+      <div className={css('filters-panel')}>
         <header>Filter By</header>
-        {children.length > 1 && (
+        {Children.count(this.props.children) > 1 && (
           <nav data-testid="filters-panel">
-            <span className={f('filter-buttons')}>
-              <button className={f('but-collapse')} onClick={this.clearAll}>
+            <span className={css('filter-buttons')}>
+              <button className={css('but-collapse')} onClick={this.clearAll}>
                 Clear
               </button>
               &nbsp;|&nbsp;
-              <button className={f('but-collapse')} onClick={this.toggleAll}>
+              <button className={css('but-collapse')} onClick={this.toggleAll}>
                 {toCollapse ? 'Show All' : 'Collapse All'}
-                <span className={f('filter-title-arrow')}>
+                <span className={css('filter-title-arrow')}>
                   {toCollapse ? ' ▸' : ' ▾'}
                 </span>
               </button>
@@ -147,12 +134,13 @@ export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
           </nav>
         )}
         <UnconnectedErrorBoundary customLocation={this.props.customLocation}>
-          {children.map(
+          {Children.map(
+            this.props.children,
             (child, i) =>
               child && (
                 <FilterPanel
                   key={i}
-                  label={child.props.label}
+                  label={(child as ReactElement).props.label}
                   toggle={this.toggleFilter(i)}
                   collapsed={this.state.filters[i]}
                 >
@@ -166,7 +154,7 @@ export class FiltersPanel extends PureComponent /*:: <Props, State> */ {
   }
 }
 const mapStateToProps = createSelector(
-  customLocationSelector,
+  (state: GlobalState) => state.customLocation,
   (customLocation) => ({ customLocation }),
 );
 
