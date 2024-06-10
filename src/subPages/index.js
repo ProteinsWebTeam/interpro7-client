@@ -30,6 +30,9 @@ const InteractionsSubPage = loadable({
 const PathwaysSubPage = loadable({
   loader: () => import(/* webpackChunkName: "pathways-subpage" */ './Pathways'),
 });
+const FeedbackSubPage = loadable({
+  loader: () => import(/* webpackChunkName: "feedback-subpage" */ './Feedback'),
+});
 const SubfamiliesSubPage = loadable({
   loader: () =>
     import(/* webpackChunkName: "subfamilies-subpage" */ './Subfamilies'),
@@ -169,6 +172,7 @@ const subPages = new Map([
   ['proteome', loadData()(Proteome)],
   ['similar_proteins', SimilarProteins],
   ['curation', Curation],
+  ['feedback', FeedbackSubPage],
 ]);
 
 export default subPages;
