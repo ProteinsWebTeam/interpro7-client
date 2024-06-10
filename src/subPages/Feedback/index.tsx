@@ -103,43 +103,28 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
             protein families.
           </p>
           <p>
-            Our preliminary assessments have indicated that the quality
-            of these descriptions is sufficiently high to warrant publication
-            on the InterPro website. However, we are keenly interested
-            in gathering feedback from researchers who use our resource.
+            Our preliminary assessments have indicated that the quality of these
+            descriptions is sufficiently high to warrant publication on the
+            InterPro website. However, we are keenly interested in gathering
+            feedback from researchers who use our resource.
           </p>
           <p>
-            Your input is invaluable to us, and we appreciate your time
-            in providing us with your insights.
+            Your input is invaluable to us, and we appreciate your time in
+            providing us with your insights.
           </p>
         </>
       ) : (
         <p>
-          We welcome your suggestions for updating this entry's annotations.
-          Our curators will review all feedback and may incorporate suitable
-          updates in the next{' '}
+          We welcome your suggestions for updating this entry's annotations. Our
+          curators will review all feedback and may incorporate suitable updates
+          in the next{' '}
           {metadata.source_database.toLowerCase() === 'interpro'
             ? 'InterPro'
             : 'Pfam'}{' '}
-          release. For more accurate updates, please include
-          supporting literature references.
+          release. For more accurate updates, please include supporting
+          literature references.
         </p>
       )}
-      <label
-        className={css('vf-form__label', 'vf-form__label--required')}
-        htmlFor="message"
-      >
-        Details
-      </label>
-      <textarea
-        id="message"
-        name="message"
-        value={message}
-        onChange={handleFields}
-        className={css('vf-form__textarea')}
-        rows={5}
-        required
-      />
       <label
         className={css('vf-form__label', 'vf-form__label--required')}
         htmlFor="from_email"
@@ -153,6 +138,21 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
         value={email}
         onChange={handleFields}
         className={css('vf-form__input')}
+        required
+      />
+      <label
+        className={css('vf-form__label', 'vf-form__label--required')}
+        htmlFor="message"
+      >
+        Details
+      </label>
+      <textarea
+        id="message"
+        name="message"
+        value={message}
+        onChange={handleFields}
+        className={css('vf-form__textarea')}
+        rows={5}
         required
       />
       <div className={css('flex-space-evenly')}>
