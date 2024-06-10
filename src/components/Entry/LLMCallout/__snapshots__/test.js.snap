@@ -46,7 +46,7 @@ exports[`<LLMCallout /> should render 1`] = `
       }
     >
       <span
-        className="small icon icon-common icon-pencil-alt"
+        className="small icon icon-common icon-comment"
       />
        
       Provide feedback
