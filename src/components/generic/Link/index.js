@@ -86,6 +86,7 @@ export class _Link extends PureComponent /*:: <Props> */ {
     withReferrer: T.bool,
     download: T.string,
     buttonType: T.string,
+    style: T.object,
   };
 
   handleClick = (event) => {

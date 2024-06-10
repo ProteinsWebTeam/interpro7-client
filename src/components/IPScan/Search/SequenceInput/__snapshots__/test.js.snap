@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`clenUp() double headers 1`] = `
+">testing
+tgcatgcatgtca
+gcatgcat
+>testing - 2
+tgcatgcatgtca
+gcatgcat
+>testing - 3
+tgcatgcatgtca
+gcatgcat"
+`;
+
+exports[`clenUp() double headers 2`] = `
+">testing
+tgcatgcatgtca
+gcatgcat
+;comment
+;comment
+>testing - 2
+tgcatgcatgtca
+gcatgcat
+>testing - 3
+tgcatgcatgtca
+gcatgcat"
+`;
