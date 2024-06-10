@@ -18,7 +18,7 @@ import { askNotificationPermission } from 'utils/browser-notifications';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import SequenceInput, {
-  SequenceChecks,
+  SequenceIssue,
   SequenceInputHandle,
 } from './SequenceInput';
 import example from './example.fasta';
@@ -66,7 +66,7 @@ type State = {
   title?: string;
   initialAdvancedOptions?: InterProLocationSearch;
   submittedJob: string | null;
-  sequenceChecks: SequenceChecks | null;
+  sequenceIssues: Array<SequenceIssue>;
   dragging: boolean;
 };
 
@@ -87,7 +87,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
       title: undefined,
       initialAdvancedOptions,
       submittedJob: null,
-      sequenceChecks: null,
+      sequenceIssues: [],
       dragging: false,
     };
 
@@ -217,6 +217,9 @@ export class IPScanSearch extends PureComponent<Props, State> {
         />
       );
     const { dragging } = this.state;
+    const allOk = this.state.sequenceIssues.length === 0;
+    const hasText =
+      !!this._editorRef.current && this._editorRef.current?.hasText();
     return (
       <section className={css('vf-stack', 'vf-stack--400')}>
         <form
@@ -289,8 +292,8 @@ export class IPScanSearch extends PureComponent<Props, State> {
                 <SequenceInput
                   value={this.props.value}
                   ref={this._editorRef}
-                  onChecksChange={(tests) => {
-                    this.setState({ sequenceChecks: tests });
+                  onChecksChange={(issues) => {
+                    this.setState({ sequenceIssues: issues });
                   }}
                 />
               </div>
@@ -319,9 +322,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
                 </Button>
                 <Button
                   className={css({
-                    hidden:
-                      this.state.sequenceChecks?.valid ||
-                      !this.state.sequenceChecks?.hasText,
+                    hidden: allOk || !hasText,
                   })}
                   onClick={this._cleanUp}
                   borderColor="var(--colors-alert-main)"
@@ -342,12 +343,9 @@ export class IPScanSearch extends PureComponent<Props, State> {
                   <Button
                     submit
                     className={css({
-                      disabled: !this.state.sequenceChecks?.valid,
+                      disabled: !allOk || !hasText,
                     })}
-                    disabled={
-                      this.state.sequenceChecks?.tooShort ||
-                      !this.state.sequenceChecks?.valid
-                    }
+                    disabled={!allOk || !hasText}
                     value="Search"
                   >
                     Search

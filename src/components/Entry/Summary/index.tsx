@@ -143,7 +143,10 @@ const SummaryEntry = ({
       <section className={css('vf-grid', 'summary-grid')}>
         <div className={css('vf-stack')}>
           {hasLLM || hasIntegratedLLM || metadata?.is_llm ? (
-            <LLMCallout accession={metadata.accession} />
+            <LLMCallout
+              accession={metadata.accession}
+              db={metadata.source_database}
+            />
           ) : null}
           {metadata?.source_database?.toLowerCase() === 'interpro' ? (
             <InterProSubtitle metadata={metadata} hasLLM={metadata?.is_llm} />
