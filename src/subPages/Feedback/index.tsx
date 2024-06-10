@@ -12,8 +12,9 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import cssBinder from 'styles/cssBinder';
 
 import local from './style.css';
+import forms from 'styles/forms.css';
 
-const css = cssBinder(local);
+const css = cssBinder(local, forms);
 
 type Props = {
   api: ParsedURLServer;
@@ -126,7 +127,11 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
         </p>
       )}
       <label
-        className={css('vf-form__label', 'vf-form__label--required')}
+        className={css(
+          'vf-form__label',
+          'vf-form__label--required',
+          'required',
+        )}
         htmlFor="from_email"
       >
         Email address
@@ -141,7 +146,11 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
         required
       />
       <label
-        className={css('vf-form__label', 'vf-form__label--required')}
+        className={css(
+          'vf-form__label',
+          'vf-form__label--required',
+          'required',
+        )}
         htmlFor="message"
       >
         Details
