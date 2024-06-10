@@ -17,8 +17,6 @@ import {
   RawDraftContentBlock,
 } from 'draft-js';
 
-import getId from 'utils/cheap-unique-id';
-
 import { MAX_NUMBER_OF_SEQUENCES } from '..';
 
 import cssBinder from 'styles/cssBinder';
@@ -30,6 +28,8 @@ import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 import InfoMessages from './InfoMessages';
 
 const css = cssBinder(local, blocks, searchPageCss, buttonCSS);
+
+const MIN_LENGTH = 3;
 
 const classedSpan = (className: string) => {
   const Span = ({
@@ -113,76 +113,18 @@ const trimSequenceLines = (lines: Array<string>) =>
     .map((l) => (l.startsWith(';') ? false : l)) // removing comments
     .filter(Boolean) as Array<string>;
 
-export const checkValidity = (lines: Array<string>) => {
-  let numberOfSequences = 0;
-  let gotContentYet = false;
-  const trimmedLines = trimSequenceLines(lines);
-  if (!headerRE.test(trimmedLines[0]) && !IUPACProtRE.test(trimmedLines[0]))
-    return false;
-  for (const line of trimmedLines) {
-    if (headerRE.test(line)) {
-      if (numberOfSequences > 0 && !gotContentYet) return false;
-      gotContentYet = false;
-      numberOfSequences++;
-    } else if (IUPACProtRE.test(line)) {
-      gotContentYet = true;
-    } else {
-      return false;
-    }
-  }
-  return numberOfSequences <= MAX_NUMBER_OF_SEQUENCES && gotContentYet;
-};
-
-const MIN_LENGTH = 3;
-
-export const isTooShort = (lines: Array<string>) => {
-  let count = 0;
-  let firstLine = true;
-  const trimmedLines = trimSequenceLines(lines);
-  for (const line of trimmedLines) {
-    if (headerRE.test(line)) {
-      if (!firstLine && count < MIN_LENGTH) return true;
-      count = 0;
-    } else {
-      count += line.trim().length;
-    }
-    firstLine = false;
-  }
-  return count < MIN_LENGTH;
-};
-
-const hasHeaderIssues = (lines: Array<string>) => {
-  const trimmedLines = trimSequenceLines(lines);
-  const isFirstLineAComment =
-    trimmedLines.length && trimmedLines[0].startsWith('>');
-  const numberOfHeaders = trimmedLines.filter((l) => l.startsWith('>')).length;
-  if (numberOfHeaders === 0) return false;
-  if (numberOfHeaders === 1 && isFirstLineAComment) return false;
-  for (let x = 1; x < lines.length; x++) {
-    if (lines[x - 1].startsWith('>') && lines[x].startsWith('>')) return true; // it has 2 consecutive headers
-  }
-  return false;
-};
-
-const hasTooManySequences = (lines: Array<string>) => {
-  const trimmedLines = trimSequenceLines(lines);
-  return (
-    trimmedLines.filter((line) => line.startsWith('>')).length >
-    MAX_NUMBER_OF_SEQUENCES
-  );
-};
-
 const addFastAHeaderIfNeeded = (
   editorState: EditorState,
   lines: Array<string>,
 ) => {
+  let incrementalId = 1;
   const minLengthForHeader = 3;
   const currentContent = editorState.getCurrentContent();
   if (currentContent.hasText()) {
     const firstLine = (lines?.[0] || '').trim();
     const hasHeader = firstLine.startsWith('>');
     if (!hasHeader && firstLine.length > minLengthForHeader) {
-      const newHeader = `Sequence${getId()}`;
+      const newHeader = `Sequence${incrementalId++}`;
       const header = `>${newHeader}`;
       // this.setState({ title: newHeader });
       lines.splice(0, 0, header);
@@ -209,30 +151,82 @@ const hasContentInNextLine = (
 };
 
 export const cleanUpBlocks = (blocks: RawDraftContentBlock[]) => {
+  const headers: Record<string, number> = {};
   return blocks
     .map(({ text }, i, lines) => {
       const line = text.trim();
       if (!line) return null;
       if (line.startsWith(';')) return line;
-      if (line.startsWith('>'))
-        return hasContentInNextLine(lines, i) ? line : null;
-
+      if (line.startsWith('>')) {
+        let newLine = line;
+        const header = line.slice(1).trim();
+        if (header in headers) {
+          headers[header]++;
+          newLine += ` - ${headers[header]}`;
+        } else {
+          headers[header] = 1;
+        }
+        return hasContentInNextLine(lines, i) ? newLine : null;
+      }
       return line.replace(/[^a-z\s]/gi, '').trim();
     })
     .filter(Boolean)
     .join('\n');
 };
 
-export type SequenceChecks = {
-  valid: boolean;
-  hasText: boolean;
-  tooShort: boolean;
-  tooMany: boolean;
-  headerIssues: boolean;
+export type SequenceIssue = {
+  type: 'invalidCharacters' | 'tooShort' | 'tooMany' | 'duplicatedHeaders';
+  header?: string;
+  detail?: string;
+};
+
+export const checkLines = (lines: Array<string>): Array<SequenceIssue> => {
+  const issues: Array<SequenceIssue> = [];
+  let count = 0;
+  let firstLine = true;
+  let currentHeader = '';
+  const headersCount: Record<string, number> = {};
+  let numberOfSequences = 0;
+  const trimmedLines = trimSequenceLines(lines);
+  for (const line of trimmedLines) {
+    if (headerRE.test(line)) {
+      if (!firstLine && count < MIN_LENGTH)
+        issues.push({ type: 'tooShort', header: currentHeader });
+      currentHeader = line;
+      count = 0;
+      numberOfSequences++;
+      const header = line.slice(1).trim();
+      if (!headersCount[header]) headersCount[header] = 1;
+      else {
+        headersCount[header]++;
+        issues.push({
+          type: 'duplicatedHeaders',
+          header: `> ${header}`,
+        });
+      }
+    } else {
+      if (!IUPACProtRE.test(line)) {
+        issues.push({
+          type: 'invalidCharacters',
+          detail: 'Invalid characters',
+          header: currentHeader,
+        });
+      }
+      count += line.trim().length;
+    }
+    firstLine = false;
+  }
+  // last sequence
+  if (count < MIN_LENGTH)
+    issues.push({ type: 'tooShort', header: currentHeader });
+  if (numberOfSequences > MAX_NUMBER_OF_SEQUENCES) {
+    issues.push({ type: 'tooMany' });
+  }
+  return issues;
 };
 type Props = {
   value?: string | null;
-  onChecksChange?: (tests: SequenceChecks) => void;
+  onChecksChange?: (issues: Array<SequenceIssue>) => void;
 };
 
 export type SequenceInputHandle = {
@@ -240,7 +234,8 @@ export type SequenceInputHandle = {
   cleanUp: () => void;
   focusEditor: () => void;
   getContent: () => string;
-  sequenceTests: SequenceChecks;
+  sequenceIssues: Array<SequenceIssue>;
+  hasText: () => boolean;
 };
 
 const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
@@ -249,26 +244,15 @@ const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
     const [editorState, setEditorState] = useState<EditorState>(
       EditorState.createEmpty(compositeDecorator),
     );
-    const [tests, setTests] = useState<SequenceChecks>({
-      valid: true,
-      hasText: false,
-      tooShort: true,
-      tooMany: false,
-      headerIssues: false,
-    });
+    const [issues, setIssues] = useState<Array<SequenceIssue>>([]);
 
     const runChecks = (lines: Array<string>) => {
-      const result = {
-        valid: checkValidity(lines),
-        hasText: editorState.getCurrentContent().hasText(),
-        tooShort: isTooShort(lines),
-        tooMany: hasTooManySequences(lines),
-        headerIssues: hasHeaderIssues(lines),
-      };
-      if (result !== tests) {
-        setTests(result);
+      const newIssues: Array<SequenceIssue> = checkLines(lines);
+
+      if (newIssues !== issues) {
+        setIssues(newIssues);
         if (onChecksChange) {
-          onChecksChange(result);
+          onChecksChange(newIssues);
         }
       }
     };
@@ -306,13 +290,15 @@ const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
         .blocks.map((block) => block.text)
         .join('\n');
     };
+    const hasText = () => editorState.getCurrentContent().hasText();
 
     useImperativeHandle(ref, () => ({
       reset,
       cleanUp,
       focusEditor,
       getContent,
-      sequenceTests: tests,
+      sequenceIssues: issues,
+      hasText,
     }));
 
     const handleChange = (newEditorState: EditorState): void => {
@@ -342,19 +328,15 @@ const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
       handleChange(newEditorState);
       return 'handled';
     };
+    const allOk = issues.length === 0;
 
     return (
       <section>
         <div onClick={focusEditor} role="presentation">
           <div
             className={css('editor', {
-              'invalid-block':
-                !tests.valid && editorState.getCurrentContent().hasText(),
-              'valid-block':
-                tests.valid &&
-                editorState.getCurrentContent().hasText() &&
-                !tests.tooShort &&
-                !tests.headerIssues,
+              'invalid-block': !allOk && hasText(),
+              'valid-block': allOk && hasText(),
             })}
           >
             <Editor
@@ -367,14 +349,7 @@ const SequenceInput = React.forwardRef<SequenceInputHandle, Props>(
             />
           </div>
         </div>
-        {editorState.getCurrentContent().hasText() && (
-          <InfoMessages
-            valid={tests.valid}
-            tooShort={tests.tooShort}
-            headerIssues={tests.headerIssues}
-            tooMany={tests.tooMany}
-          />
-        )}
+        {hasText() && <InfoMessages sequenceIssues={issues} />}
       </section>
     );
   },

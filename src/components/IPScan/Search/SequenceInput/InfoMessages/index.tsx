@@ -1,64 +1,78 @@
 import React from 'react';
+
+import Callout from 'components/SimpleCommonComponents/Callout';
+
 import { MAX_NUMBER_OF_SEQUENCES } from '../..';
+import { SequenceIssue } from '..';
+
+import cssBinder from 'styles/cssBinder';
+
+import local from './style.css';
+
+const css = cssBinder(local);
 
 type Props = {
-  valid: boolean;
-  tooShort: boolean;
-  tooMany: boolean;
-  headerIssues: boolean;
+  sequenceIssues: Array<SequenceIssue>;
 };
 
-const InfoMessages = ({ valid, tooShort, tooMany, headerIssues }: Props) => {
+const InfoMessages = ({ sequenceIssues }: Props) => {
+  const allOk = sequenceIssues.length === 0;
   return (
-    <div
+    <Callout
+      type={allOk ? 'announcement' : 'warning'}
       style={{
-        textAlign: 'right',
+        backgroundColor: 'var(--colors-secondary-header)',
       }}
+      alt
+      className={css('info-message')}
     >
-      {!valid && (
+      {allOk ? (
         <div>
-          {tooShort
-            ? 'The sequence is too short (min: three characters). '
-            : 'The sequence has invalid characters. '}
-          <span role="img" aria-label="warning">
-            ⚠️
-          </span>
-        </div>
-      )}
-      {valid && tooShort && (
-        <div>
-          The sequence is too short (min: three characters).{' '}
-          <span role="img" aria-label="warning">
-            ⚠️
-          </span>
-        </div>
-      )}
-      {tooMany && (
-        <div>
-          There are too many sequences. The maximum allowed is{' '}
-          {MAX_NUMBER_OF_SEQUENCES}.{' '}
-          <span role="img" aria-label="warning">
-            ⚠️
-          </span>
-        </div>
-      )}
-      {headerIssues && (
-        <div>
-          There are issues with the headers.{' '}
-          <span role="img" aria-label="warning">
-            ⚠️
-          </span>
-        </div>
-      )}
-      {valid && !tooShort && !headerIssues && (
-        <div>
-          Valid Sequence.{' '}
           <span role="img" aria-label="warning">
             ✅
-          </span>
+          </span>{' '}
+          Valid Sequence.
         </div>
+      ) : (
+        <ul className={css('warnings')}>
+          {sequenceIssues.map((issue) => {
+            switch (issue.type) {
+              case 'invalidCharacters':
+                return (
+                  <li>
+                    The sequence with the header below has invalid characters.{' '}
+                    <div className={css('header')}>{issue.header}</div>
+                  </li>
+                );
+              case 'tooShort':
+                return (
+                  <li>
+                    The sequence with the header below is too short (min: three
+                    characters).{' '}
+                    <div className={css('header')}>{issue.header}</div>
+                  </li>
+                );
+              case 'tooMany':
+                return (
+                  <li>
+                    There are too many sequences. The maximum allowed is{' '}
+                    {MAX_NUMBER_OF_SEQUENCES}.{' '}
+                  </li>
+                );
+              case 'duplicatedHeaders':
+                return (
+                  <li>
+                    There are multiple sequences with the same header:{' '}
+                    <div className={css('header')}>{issue.header}</div>
+                  </li>
+                );
+              default:
+                return null;
+            }
+          })}
+        </ul>
       )}
-    </div>
+    </Callout>
   );
 };
 

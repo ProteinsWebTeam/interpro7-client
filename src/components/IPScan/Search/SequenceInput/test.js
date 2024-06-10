@@ -1,4 +1,4 @@
-import { checkValidity, isTooShort, cleanUpBlocks } from '.';
+import { checkLines, cleanUpBlocks } from '.';
 import { MAX_NUMBER_OF_SEQUENCES } from '..';
 
 const seq = `
@@ -6,38 +6,74 @@ const seq = `
 tgcatgcatgtca
 gcatgcat`;
 
-describe('checkValidity()', () => {
+const invalidCharactersIssue = {
+  type: 'invalidCharacters',
+  detail: 'Invalid characters',
+  header: '>testing',
+};
+const tooShortIssue = {
+  type: 'tooShort',
+  header: '',
+};
+const tooManyIssue = {
+  type: 'tooMany',
+};
+const duplicateHeaderIssue = {
+  type: 'duplicatedHeaders',
+  header: '> testing',
+};
+describe('areAllCharacterValid()', () => {
   test('valid text', () => {
-    expect(checkValidity(seq.split('\n'))).toEqual(true);
-    expect(isTooShort(seq.split('\n'))).toEqual(false);
+    expect(checkLines(seq.split('\n'))).toEqual([]);
   });
+
   test('other char', () => {
-    expect(checkValidity(`${seq}4`.split('\n'))).toEqual(false);
-    expect(checkValidity(`${seq}-`.split('\n'))).toEqual(false);
-    expect(checkValidity(`${seq}.`.split('\n'))).toEqual(false);
-    expect(isTooShort(`${seq}4`.split('\n'))).toEqual(false);
+    expect(checkLines(`${seq}4`.split('\n'))).toMatchObject([
+      invalidCharactersIssue,
+    ]);
+    expect(checkLines(`${seq}-`.split('\n'))).toMatchObject([
+      invalidCharactersIssue,
+    ]);
+    expect(checkLines(`${seq}.`.split('\n'))).toMatchObject([
+      invalidCharactersIssue,
+    ]);
   });
+
   test('too short', () => {
-    expect(checkValidity(['A'])).toEqual(true);
-    expect(isTooShort(['A'])).toEqual(true);
-    expect(isTooShort([...seq.split('\n'), '> another seq', 'A'])).toEqual(
-      true,
-    );
+    expect(checkLines(['A'])).toMatchObject([tooShortIssue]);
+    tooShortIssue.header = '> another seq';
     expect(
-      isTooShort([
+      checkLines([...seq.split('\n'), '> another seq', 'A']),
+    ).toMatchObject([tooShortIssue]);
+    expect(
+      checkLines([
         ...seq.split('\n'),
-        ...seq.split('\n'),
+        ...seq.replace('>', '> 2').split('\n'),
         '> another seq',
         'A',
-        ...seq.split('\n'),
+        ...seq.replace('>', '> 4').split('\n'),
       ]),
-    ).toEqual(true);
+    ).toMatchObject([tooShortIssue]);
   });
-  test('Max number of sequenceas', () => {
+
+  test('Max number of sequences', () => {
     let seqs = '';
-    for (let i = 0; i < MAX_NUMBER_OF_SEQUENCES; i++) seqs += `${seq}\n`;
-    expect(checkValidity(seqs.split('\n'))).toEqual(true);
-    expect(checkValidity(`${seqs}${seq}`.split('\n'))).toEqual(false);
+    for (let i = 0; i < MAX_NUMBER_OF_SEQUENCES; i++)
+      seqs += `${seq.replace('>', `> ${i}`)}\n`;
+    expect(checkLines(seqs.split('\n'))).toEqual([]);
+    expect(checkLines(`${seqs}${seq}`.split('\n'))).toMatchObject([
+      tooManyIssue,
+    ]);
+  });
+  test('hasDuplicateHeaders', () => {
+    expect(checkLines(`${seq}`.split('\n'))).toEqual([]);
+    expect(checkLines(`${seq}${seq}`.split('\n'))).toMatchObject([
+      duplicateHeaderIssue,
+    ]);
+    expect(checkLines(`${seq}${seq}${seq}`.split('\n'))).toMatchObject([
+      duplicateHeaderIssue,
+      duplicateHeaderIssue,
+    ]);
   });
 });
 
@@ -59,15 +95,13 @@ describe('clenUp()', () => {
           .split('\n')
           .map((l) => ({ text: l })),
       ),
-    ).toEqual(`${seq.trim()}\n${seq.trim()}\n${seq.trim()}`);
+    ).toMatchSnapshot();
     expect(
       cleanUpBlocks(
         `${seq}\n;comment\n> double header\n;comment${seq}${seq}`
           .split('\n')
           .map((l) => ({ text: l })),
       ),
-    ).toEqual(
-      `${seq.trim()}\n;comment\n;comment\n${seq.trim()}\n${seq.trim()}`,
-    );
+    ).toMatchSnapshot();
   });
 });
