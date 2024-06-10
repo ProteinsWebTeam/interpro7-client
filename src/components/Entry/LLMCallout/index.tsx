@@ -57,7 +57,7 @@ const LLMCallout = ({ accession, db }: Props) => {
           }}
         >
           <span
-            className={css('small', 'icon', 'icon-common', 'icon-pencil-alt')}
+            className={css('small', 'icon', 'icon-common', 'icon-comment')}
           />{' '}
           Provide feedback
         </Link>

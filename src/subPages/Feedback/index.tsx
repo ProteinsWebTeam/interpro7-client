@@ -96,20 +96,33 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
     <form onSubmit={handleSubmit} className={css('vf-stack', 'vf-stack--200')}>
       <h4>Feedback</h4>
       {llm ? (
-        <p>
-          Please let us know if there is anything incorrect in the LLM generated
-          data.
-        </p>
+        <>
+          <p>
+            InterPro has started exploring the utilization of Large Language
+            Models (LLM) for the automated generation of descriptions for
+            protein families.
+          </p>
+          <p>
+            Our preliminary assessments have indicated that the quality
+            of these descriptions is sufficiently high to warrant publication
+            on the InterPro website. However, we are keenly interested
+            in gathering feedback from researchers who use our resource.
+          </p>
+          <p>
+            Your input is invaluable to us, and we appreciate your time
+            in providing us with your insights.
+          </p>
+        </>
       ) : (
         <p>
-          You can suggest annotation updates for this entry using the provided
-          form. Our curators will review and, if suitable, include them in the
-          next{' '}
+          We welcome your suggestions for updating this entry's annotations.
+          Our curators will review all feedback and may incorporate suitable
+          updates in the next{' '}
           {metadata.source_database.toLowerCase() === 'interpro'
             ? 'InterPro'
             : 'Pfam'}{' '}
-          release. Please include supporting literature references for better
-          accuracy.
+          release. For more accurate updates, please include
+          supporting literature references.
         </p>
       )}
       <label

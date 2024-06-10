@@ -48,7 +48,7 @@ const SidePanel = ({
                 width: '100%',
               }}
             >
-              <span className={css('icon', 'icon-common', 'icon-pencil-alt')} />{' '}
+              <span className={css('icon', 'icon-common', 'icon-comment')} />{' '}
               Provide feedback
             </Link>
           </div>
