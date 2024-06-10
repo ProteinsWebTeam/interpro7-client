@@ -1,0 +1,27 @@
+div.info-message {
+  & > div {
+    width: 100%;
+  }
+  & .header {
+    font-family: var(--fonts-mono);
+    font-size: 0.8rem;
+    /* border: 1px solid gray; */
+    background-color: var(--colors-almost-white);
+    /* color: darkblue; */
+    font-weight: bold;
+    padding: 0.2rem;
+    margin-left: 2rem;
+  }
+  & ul.warnings {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    & li {
+      padding-left: 1rem;
+      /* text-indent: -0.75rem; */
+      &::before {
+        content: "⚠️ ";
+      }
+    }
+  }
+}
