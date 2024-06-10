@@ -154,7 +154,7 @@ export class ResolutionFilter extends PureComponent<Props, State> {
     }
     const step = 0.05;
     return (
-      <div className={css('column')}>
+      <div className={css('filter')}>
         <label
           className={css('radio-btn-label', { checked: selectedRange === ALL })}
         >
