@@ -50,6 +50,7 @@ const RESOLUTION_RANGE_REGEXP = /^(\d*(\.\d+)?)-(\d*(\.\d+)?)$/;
 
 export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
   static propTypes = {
+    label: T.string,
     customLocation: T.shape({
       description: T.object.isRequired,
       search: T.object.isRequired,
@@ -98,7 +99,12 @@ export class ResolutionFilter extends PureComponent /*:: <Props, State> */ {
   _updateLocation = debounce((fromMount) => {
     const { min, max } = this.state;
     const { goToCustomLocation, customLocation } = this.props;
-    const { page, cursor, resolution: _, ...search } = {
+    const {
+      page,
+      cursor,
+      resolution: _,
+      ...search
+    } = {
       ...customLocation.search,
     };
     if (fromMount && page) search.page = page;

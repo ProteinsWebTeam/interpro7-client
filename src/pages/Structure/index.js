@@ -5,6 +5,7 @@ import T from 'prop-types';
 import Link from 'components/generic/Link';
 import MemberDBSelector from 'components/MemberDBSelector';
 import LazyImage from 'components/LazyImage';
+// $FlowFixMe
 import StructureListFilters from 'components/Structure/StructureListFilters';
 // $FlowFixMe
 import StructureCard from 'components/Structure/Card';
