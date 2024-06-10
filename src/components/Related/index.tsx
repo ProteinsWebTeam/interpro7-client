@@ -80,7 +80,7 @@ const _RelatedAdvancedQuery = ({
             entry_structure_locations: match.entry_structure_locations,
             structure_protein_locations: match.structure_protein_locations,
             chain: match.chain,
-            matching_entry: match.matching_entry,
+            entry_accession: match.entry_accession,
           }));
           return obj as unknown as MetadataWithLocations;
         })

@@ -672,7 +672,7 @@ const Matches = ({
         renderer={(matches: Array<AnyMatch>) => {
           const accessions = new Set(
             (matches || [])
-              .map((match) => match.matching_entry)
+              .map((match) => match.entry_accession)
               .filter(Boolean),
           ) as Set<string>;
           return Array.from(accessions).map((accession) => (
@@ -693,7 +693,7 @@ const Matches = ({
           ));
         }}
       >
-        Entry Matching
+        Matching Entry
       </Column>
     </Table>
   );

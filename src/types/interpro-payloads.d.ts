@@ -339,7 +339,7 @@ interface EntryStructureMatch extends MatchI {
   entry_integrated: string | null;
 }
 interface EntrySetMatch extends MatchI {
-  matching_entry?: string;
+  entry_accession?: string;
 }
 
 type AnyMatch = Partial<EntryProteinMatch> &
