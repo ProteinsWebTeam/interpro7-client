@@ -67,7 +67,7 @@ const LatestFilter = ({
           checked={latest}
           style={{ margin: '0.25em' }}
         />
-        <span>Latest Entries</span>
+        <span>New Entries</span>
         <NumberComponent
           label
           loading={data.loading}

@@ -22,7 +22,7 @@ export const EntryListFilter = ({ mainDB } /*: {mainDB: string} */) => (
     />
     {mainDB !== 'InterPro' && <IntegratedFilter label="InterPro State" />}
     {mainDB === 'InterPro' && <GOTermsFilter label="GO Terms" />}
-    {mainDB === 'InterPro' && <LatestFilter label="Latest entries" />}
+    {mainDB === 'InterPro' && <LatestFilter label="New entries" />}
   </FiltersPanel>
 );
 EntryListFilter.propTypes = {
