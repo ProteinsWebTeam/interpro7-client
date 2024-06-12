@@ -7,6 +7,7 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
 import ProteinCard from 'components/Protein/Card';

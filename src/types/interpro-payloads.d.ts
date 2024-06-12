@@ -535,3 +535,14 @@ type UtilsAccessionPayload = {
 type ErrorPayload = {
   detail: string;
 };
+
+type CounterPayload = {
+  [endpoint in EndpointPlural]: Record<string, number> & {
+    member_databases?: Record<string, number>;
+  };
+};
+type ComposedCounterPayload = {
+  [endpoint in EndpointPlural]: Record<string, Record<string, number>> & {
+    member_databases?: Record<string, Record<string, number>>;
+  };
+};
