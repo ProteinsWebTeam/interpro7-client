@@ -31,9 +31,8 @@ const ExperimentTypeFilter = ({
   customLocation,
   goToCustomLocation,
 }: LoadedProps) => {
-  if (!data) return null;
+  if (!data || !customLocation) return null;
   const { loading, payload } = data;
-  if (!customLocation) return;
   const search = customLocation.search;
   const defaultObject = { 'x-ray': NaN, nmr: NaN, em: NaN };
   const _payload = getPayloadOrEmpty(

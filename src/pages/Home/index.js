@@ -335,7 +335,7 @@ class Home extends PureComponent {
             }
             <div>
               <Tabs>
-                <div title="Latest entries">
+                <div title="New entries">
                   <ByLatestEntries />
                 </div>
                 <div title="Favourite entries">

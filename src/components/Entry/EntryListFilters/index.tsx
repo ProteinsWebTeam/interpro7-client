@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import FiltersPanel from 'components/FiltersPanel';
 import EntryTypeFilter from './EntryTypeFilter';
 import IntegratedFilter from './IntegratedFilter';
+import LatestFilter from './LatestFilter';
 import GOTermsFilter from './GOTermsFilter';
 
 type Props = { mainDB?: string };
@@ -18,6 +19,7 @@ export const EntryListFilter = ({ mainDB }: Props) => (
     />
     {mainDB !== 'InterPro' && <IntegratedFilter label="InterPro State" />}
     {mainDB === 'InterPro' && <GOTermsFilter label="GO Terms" />}
+    {mainDB === 'InterPro' && <LatestFilter label="New entries" />}
   </FiltersPanel>
 );
 
