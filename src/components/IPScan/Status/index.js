@@ -203,6 +203,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           <Column
             dataKey="localTitle"
             isSearchable={true}
+            isSortable={true}
             renderer={(localTitle /*: string */, row /*: Object */) => (
               <>
                 <span style={{ marginRight: '1em' }}>
@@ -236,6 +237,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           <Column
             dataKey="times"
             isSearchable={true}
+            isSortable={true}
             renderer={(
               {
                 created,

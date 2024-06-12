@@ -1,6 +1,4 @@
-// @flow
-import React, { useState } from 'react';
-import T from 'prop-types';
+import React, { PropsWithChildren, useState } from 'react';
 
 import {
   ConnectedSortButton,
@@ -8,9 +6,26 @@ import {
   ColumnSearchBox,
 } from 'components/SimpleCommonComponents/ColumnIcons';
 
-const Header = (
-  { columns, notFound } /*: {columns: Array<Object>, notFound?: boolean} */,
-) => {
+// TODO: move to the columns when that is migrated
+type ColumnProps = PropsWithChildren<{
+  dataKey: string;
+  displayIf?: boolean;
+  defaultKey?: string;
+  name: string;
+  headerStyle?: React.CSSProperties;
+  headerClassName?: string;
+  isSearchable: boolean;
+  isSortable: boolean;
+  showOptions: boolean;
+  options: unknown;
+  customiseSearch: unknown;
+}>;
+
+type Props = {
+  columns: Array<ColumnProps>;
+  notFound?: boolean;
+};
+const Header = ({ columns, notFound }: Props) => {
   const [showFilter, setShowFilter] = useState(
     Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),
   );
@@ -31,6 +46,7 @@ const Header = (
               children,
               headerClassName,
               isSearchable = false,
+              isSortable = false,
               showOptions = false,
               options,
               customiseSearch,
@@ -40,19 +56,17 @@ const Header = (
                 style={headerStyle}
                 className={headerClassName}
               >
+                {isSortable && <ConnectedSortButton field={dataKey} />}
                 {isSearchable && (
-                  <>
-                    <ConnectedSortButton field={dataKey} />{' '}
-                    <FilterButton
-                      isOpen={showFilter[dataKey]}
-                      onClick={() =>
-                        setShowFilter({
-                          ...showFilter,
-                          [dataKey]: !showFilter[dataKey],
-                        })
-                      }
-                    />{' '}
-                  </>
+                  <FilterButton
+                    isOpen={showFilter[dataKey]}
+                    onClick={() =>
+                      setShowFilter({
+                        ...showFilter,
+                        [dataKey]: !showFilter[dataKey],
+                      })
+                    }
+                  />
                 )}
                 {children || name || dataKey}
                 {isSearchable && (
@@ -70,10 +84,6 @@ const Header = (
       </tr>
     </thead>
   );
-};
-Header.propTypes = {
-  columns: T.arrayOf(T.object).isRequired,
-  notFound: T.bool,
 };
 
 export default Header;
