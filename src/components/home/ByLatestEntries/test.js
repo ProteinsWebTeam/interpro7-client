@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -11,6 +10,7 @@ describe('<ByEntriesFeatured />', () => {
     renderer.render(
       <ByLatestEntries
         data={{
+          ok: true,
           payload: {
             results: [
               {
