@@ -284,7 +284,9 @@ class List extends PureComponent /*:: <ListProps> */ {
                 extra,
               ) => {
                 const count =
-                  (extra && extra.counters && extra.counters.entries) || '-';
+                  extra?.counters?.entries?.total ||
+                  extra?.counters?.entries ||
+                  '-';
                 return (
                   <Link
                     to={(customLocation) => ({
