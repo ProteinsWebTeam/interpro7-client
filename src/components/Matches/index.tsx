@@ -38,9 +38,10 @@ import cssBinder from 'styles/cssBinder';
 
 import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import tableStyles from 'components/Table/style.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 
-const css = cssBinder(fonts, localStyle, exporterStyle);
+const css = cssBinder(fonts, localStyle, exporterStyle, tableStyles);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -470,7 +471,7 @@ const Matches = ({
       </Column>
       <Column
         dataKey="source_database"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={
           primary !== 'taxonomy' &&
@@ -495,7 +496,7 @@ const Matches = ({
       </Column>
       <Column
         dataKey="accession"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         defaultKey="structureAccession"
         displayIf={primary === 'structure'}
@@ -582,7 +583,7 @@ const Matches = ({
       <Column
         dataKey="counters.extra_fields.counters.proteins"
         defaultKey="protein-count"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
         renderer={(count: number) => (
@@ -594,7 +595,7 @@ const Matches = ({
       <Column
         dataKey="accession"
         defaultKey="proteinFastas"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
         renderer={ProteinDownloadRenderer(description)}
@@ -604,7 +605,7 @@ const Matches = ({
       <Column
         dataKey="accession"
         defaultKey="seedAlignment"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={
           primary === 'entry' &&
@@ -634,7 +635,7 @@ const Matches = ({
       <Column
         dataKey="accession"
         defaultKey="ida"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={
           primary === 'entry' &&

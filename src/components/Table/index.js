@@ -9,6 +9,7 @@ import Switch from 'components/generic/Switch';
 import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 
+// $FlowFixMe
 import _Header from './Header';
 import _Exporter from './Exporter';
 import _PageSizeSelector from './PageSizeSelector';

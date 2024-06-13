@@ -209,6 +209,7 @@ class List extends PureComponent /*:: <ListProps> */ {
             <HighlightToggler />
             <Column
               dataKey="accession"
+              isSortable={true}
               // eslint-disable-next-line camelcase
               renderer={(accession /*: string */, row) => (
                 <Link

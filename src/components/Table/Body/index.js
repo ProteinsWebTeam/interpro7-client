@@ -13,9 +13,10 @@ import ColorHash from 'color-hash';
 
 import { foundationPartial } from 'styles/foundation';
 
+import tableStyles from '../style.css';
 import styles from './style.css';
 
-const f = foundationPartial(styles);
+const f = foundationPartial(styles, tableStyles);
 // default values for version 1.X of colorhash
 /* eslint-disable no-magic-numbers */
 const colorHash = new ColorHash({
@@ -161,7 +162,10 @@ class Body extends PureComponent /*:: <BodyProps> */ {
                       {columns.slice(2).map((_, i) => (
                         <th key={i} style={{ position: 'unset' }} />
                       ))}
-                      <th style={{ position: 'unset' }}>
+                      <th
+                        style={{ position: 'unset' }}
+                        className={f('table-header-right')}
+                      >
                         <GroupActions group={row.group} />
                       </th>
                     </>

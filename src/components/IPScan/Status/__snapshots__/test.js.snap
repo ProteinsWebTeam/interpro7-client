@@ -88,6 +88,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     <Column
       dataKey="localTitle"
       isSearchable={true}
+      isSortable={true}
       renderer={[Function]}
     >
       Results
@@ -95,6 +96,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     <Column
       dataKey="times"
       isSearchable={true}
+      isSortable={true}
       renderer={[Function]}
     >
       Created
@@ -102,7 +104,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     <Column
       cellClassName="table-center"
       dataKey="status"
-      headerClassName="table-center"
+      headerClassName="table-header-center"
       renderer={[Function]}
     >
       Status
@@ -111,7 +113,7 @@ exports[`<IPScanStatus /> should render 1`] = `
       cellClassName="table-center font-ml"
       dataKey="localID"
       defaultKey="actions"
-      headerClassName="table-center"
+      headerClassName="table-header-center"
       renderer={[Function]}
     >
       Action

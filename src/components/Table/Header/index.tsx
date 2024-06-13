@@ -6,6 +6,12 @@ import {
   ColumnSearchBox,
 } from 'components/SimpleCommonComponents/ColumnIcons';
 
+import cssBinder from 'styles/cssBinder';
+
+import s from '../style.css';
+
+const css = cssBinder(s);
+
 // TODO: move to the columns when that is migrated
 type ColumnProps = PropsWithChildren<{
   dataKey: string;
@@ -56,19 +62,21 @@ const Header = ({ columns, notFound }: Props) => {
                 style={headerStyle}
                 className={headerClassName}
               >
-                {isSortable && <ConnectedSortButton field={dataKey} />}
-                {isSearchable && (
-                  <FilterButton
-                    isOpen={showFilter[dataKey]}
-                    onClick={() =>
-                      setShowFilter({
-                        ...showFilter,
-                        [dataKey]: !showFilter[dataKey],
-                      })
-                    }
-                  />
-                )}
-                {children || name || dataKey}
+                <div className={css('table-header')}>
+                  {isSortable && <ConnectedSortButton field={dataKey} />}
+                  {isSearchable && (
+                    <FilterButton
+                      isOpen={showFilter[dataKey]}
+                      onClick={() =>
+                        setShowFilter({
+                          ...showFilter,
+                          [dataKey]: !showFilter[dataKey],
+                        })
+                      }
+                    />
+                  )}
+                  {children || name || dataKey}
+                </div>
                 {isSearchable && (
                   <ColumnSearchBox
                     field={dataKey}
