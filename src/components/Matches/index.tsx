@@ -463,7 +463,7 @@ const Matches = ({
               {sourceOrganism.fullName}
             </Link>
           ) : (
-            sourceOrganism
+            String(sourceOrganism)
           )
         }
       >

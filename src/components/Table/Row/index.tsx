@@ -1,48 +1,33 @@
-// @flow
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, { PureComponent, ReactNode, RefObject } from 'react';
 
 import { get as lodashGet } from 'lodash-es';
+import { ColumnProps, Renderer } from '../Column';
 
-/*::
-  type Renderer = (string | number, ...rest:Array<any>)=> any
- */
-const defaultRenderer /*: Renderer */ = (value) => <div>{value}</div>;
+const defaultRenderer: Renderer = (value) => <div>{String(value)}</div>;
 
 const DURATION = 250;
 
-/*:: type Props = {
-  row: Object,
-  columns: Array<Object>,
-  extra: Object,
-  rowClassName: string | function,
-  group?: string,
-  backgroundColor?: ?string,
-}; */
-class Row extends PureComponent /*:: <Props> */ {
-  /*:: _ref: {current: null | React$ElementRef<string>} */
-  static propTypes = {
-    row: T.object.isRequired,
-    columns: T.array.isRequired,
-    extra: T.object,
-    rowClassName: T.oneOfType([T.string, T.func]),
-    group: T.string,
-    backgroundColor: T.string,
-  };
+type Props = {
+  row: Record<string, unknown>;
+  columns: Array<ColumnProps>;
+  extra: Record<string, unknown>;
+  rowClassName: string | ((rowData: unknown) => string);
+  group?: string;
+  backgroundColor?: string;
+};
+class Row extends PureComponent<Props> {
+  _ref: RefObject<HTMLTableRowElement>;
 
-  constructor(props /*: Props */) {
+  constructor(props: Props) {
     super(props);
 
     this._ref = React.createRef();
   }
 
-  // TODO review / fix
   componentDidMount() {
-    // $FlowFixMe method-unbinding
     if (!(this._ref.current && this._ref.current.animate)) return;
     this._ref.current.animate(
-      // prettier-ignore
-      { opacity: ([0, 1]/*: Array<number | null> */) },
+      { opacity: [0, 1] },
       { duration: DURATION, easing: 'ease-in-out' },
     );
   }

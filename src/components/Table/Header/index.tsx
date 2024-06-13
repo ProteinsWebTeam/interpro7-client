@@ -9,23 +9,9 @@ import {
 import cssBinder from 'styles/cssBinder';
 
 import s from '../style.css';
+import { ColumnProps } from '../Column';
 
 const css = cssBinder(s);
-
-// TODO: move to the columns when that is migrated
-type ColumnProps = PropsWithChildren<{
-  dataKey: string;
-  displayIf?: boolean;
-  defaultKey?: string;
-  name: string;
-  headerStyle?: React.CSSProperties;
-  headerClassName?: string;
-  isSearchable: boolean;
-  isSortable: boolean;
-  showOptions: boolean;
-  options: unknown;
-  customiseSearch: unknown;
-}>;
 
 type Props = {
   columns: Array<ColumnProps>;
