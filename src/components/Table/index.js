@@ -62,9 +62,10 @@ ExtraOptions.propTypes = { children: T.any };
   onFocusChanged?: ?function,
   shouldGroup?: boolean,
   groupActions?: (string)=>any
-} */
+  } */
 
 const TableView = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "table-view" */ './views/Table'),
 });
 

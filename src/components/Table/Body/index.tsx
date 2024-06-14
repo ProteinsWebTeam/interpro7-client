@@ -35,7 +35,6 @@ class NoRows extends PureComponent<Props> {
   }
 
   componentDidMount() {
-    // $FlowFixMe method-unbinding
     if (!(this._ref.current && this._ref.current.animate)) return;
     this._ref.current.animate(
       { opacity: [0, 1] },
@@ -65,7 +64,7 @@ type BodyProps<
   ExtraData = Record<string, unknown>,
 > = {
   loading: boolean;
-  ok: boolean;
+  ok?: boolean;
   status: number;
   rows: Array<
     (RowData | { metadata: RowData }) & {
@@ -114,8 +113,6 @@ class Body<
         </NoRows>
       );
 
-    // const message = getStatusMessage(status);
-    // if (message) return <NoRows>{message}</NoRows>;
     // don't change next line to “!ok”, might be undefined
     if (ok === false) return <NoRows>The API request failed</NoRows>;
     if (notFound || !rows.length) {

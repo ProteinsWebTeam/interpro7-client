@@ -22,6 +22,7 @@ import styles from './style.css';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, styles);
 
+// $FlowFixMe
 import TableView from './views/Table';
 
 /*:: type Props = {
