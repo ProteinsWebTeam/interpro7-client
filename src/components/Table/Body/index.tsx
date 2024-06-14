@@ -57,31 +57,31 @@ class NoRows extends PureComponent<Props> {
   }
 }
 type BodyProps<
-  RowDataB = Record<string, unknown>,
-  ExtraDataB = Record<string, unknown>,
+  RowData = Record<string, unknown>,
+  ExtraData = Record<string, unknown>,
 > = {
   loading: boolean;
   ok?: boolean;
   status: number;
   rows: Array<
-    RowDataB & {
-      metadata?: RowDataB;
-      extra_fields?: ExtraDataB;
+    RowData & {
+      metadata?: RowData;
+      extra_fields?: ExtraData;
       group?: string;
     }
   >;
   rowKey: string;
-  columns: Array<ColumnProps<unknown, RowDataB, ExtraDataB>>;
-  rowClassName?: string | ((rowData: RowDataB) => string);
+  columns: Array<ColumnProps<unknown, RowData, ExtraData>>;
+  rowClassName?: string | ((rowData: RowData) => string);
   groups?: Array<string>;
   groupActions?: React.FC<{ group: string }>;
   notFound: boolean;
 };
 
 class Body<
-  RowDataBB = Record<string, unknown>,
-  ExtraDataBB = Record<string, unknown>,
-> extends PureComponent<BodyProps<RowDataBB, ExtraDataBB>> {
+  RowData = Record<string, unknown>,
+  ExtraData = Record<string, unknown>,
+> extends PureComponent<BodyProps<RowData, ExtraData>> {
   static defaultProps = {
     rowKey: 'accession',
   };
@@ -120,7 +120,7 @@ class Body<
     return (
       <tbody>
         {rows.map((row, index) => {
-          const rowData = 'metadata' in row ? (row.metadata as RowDataBB) : row;
+          const rowData = 'metadata' in row ? (row.metadata as RowData) : row;
           const extraData =
             'extra_fields' in row ? row.extra_fields : undefined;
           const rcn =
@@ -171,7 +171,7 @@ class Body<
                   )}
                 </tr>
               )}
-              <Row<RowDataBB, ExtraDataBB>
+              <Row<RowData, ExtraData>
                 row={rowData}
                 columns={columns}
                 extra={extraData}

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import T from 'prop-types';
-
+// $FlowFixMe
 import FullyLoadedTable from 'components/Table/FullyLoadedTable';
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';

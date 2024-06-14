@@ -1,77 +1,83 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Table, { Column, PageSizeSelector } from 'components/Table';
-/*:: type Props = {
-  data: Array<Object>,
-  search: {
-    sort_by: string,
-    page_size: number,
-    page: number,
-  },
-  pageSize: number,
-  renderers: {},
-  columnToString: {},
-  headerStyle: {
-    [string]: {}
-  },
-  cellStyle: {
-    [string]: {}
-  },
-  headerClassName: {
-    [string]: string
-  },
-  cellClassName: {
-    [string]: string
-  },
-} */
+import { Renderer } from '../Column';
 
-export const sortSubsetBy = (subset, search, keys, columnToString = {}) => {
+export const sortSubsetBy = <RowData extends Record<string, unknown>>(
+  subset: Array<RowData>,
+  search: InterProLocationSearch | undefined,
+  keys: Array<string>,
+  columnToString: Record<string, Column2StringFn<RowData>> = {},
+) => {
   for (const key of keys) {
     const str = columnToString[key] || ((x) => `${x}`);
-    if (search.sort_by === key) {
+    if (search?.sort_by === key) {
       subset.sort((a, b) => (str(a[key]) > str(b[key]) ? 1 : -1));
     }
-    if (search.sort_by === `-${key}`) {
+    if (search?.sort_by === `-${key}`) {
       subset.sort((a, b) => (str(a[key]) > str(b[key]) ? -1 : 1));
     }
   }
 };
-export const filterSubset = (subset, search, keys, columnToString = {}) => {
+
+export const filterSubset = <RowData extends Record<string, unknown>>(
+  subset: Array<RowData>,
+  search: InterProLocationSearch | undefined,
+  keys: Array<string>,
+  columnToString: Record<string, Column2StringFn<RowData>> = {},
+) => {
   let filteredSubset = [...subset];
   for (const key of keys) {
-    if (search[key]) {
+    if (search?.[key]) {
       const str =
         columnToString[key] || ((x) => JSON.stringify(x).toLowerCase());
       filteredSubset = filteredSubset.filter(
-        (row) => str(row[key], row).indexOf(search[key].toLowerCase()) !== -1,
+        (row) =>
+          str(row[key], row).indexOf((search[key] as string).toLowerCase()) !==
+          -1,
       );
     }
   }
   return filteredSubset;
 };
-const FullyLoadedTable = (
-  {
-    data,
-    renderers = {},
-    columnToString = {},
-    headerStyle = {},
-    cellStyle = {},
-    headerClassName = {},
-    cellClassName = {},
-    search,
-    pageSize,
-  } /*: Props */,
-) => {
+
+type Column2StringFn<RowData = unknown> = (
+  cellValue: unknown,
+  row?: RowData,
+) => string;
+
+type Props<RowData extends Record<string, unknown>> = {
+  data: Array<RowData>;
+  search?: InterProLocationSearch;
+  pageSize?: number;
+  renderers?: Record<string, Renderer<unknown, RowData>>;
+  columnToString?: Record<string, Column2StringFn<RowData>>;
+  headerStyle?: Record<string, React.CSSProperties>;
+  cellStyle?: Record<string, React.CSSProperties>;
+  headerClassName?: Record<string, string>;
+  cellClassName?: Record<string, string>;
+};
+
+const FullyLoadedTable = <RowData extends Record<string, unknown>>({
+  data,
+  renderers = {},
+  columnToString = {},
+  headerStyle = {},
+  cellStyle = {},
+  headerClassName = {},
+  cellClassName = {},
+  search,
+  pageSize,
+}: Props<RowData>) => {
   const keys = Object.keys(data?.[0] || {});
   let subset = data;
   subset = filterSubset(subset, search, keys);
   sortSubsetBy(subset, search, keys, columnToString);
-  const size = search.page_size || pageSize;
-  const page = search?.page || 1;
+  const size = Number(search?.page_size) || pageSize || 20;
+  const page = Number(search?.page) || 1;
   subset = subset.slice((page - 1) * size, page * size);
 
   return (
@@ -103,22 +109,10 @@ const FullyLoadedTable = (
     </Table>
   );
 };
-FullyLoadedTable.propTypes = {
-  data: T.array.isRequired,
-  search: T.object,
-  pageSize: T.number,
-  renderers: T.object,
-  columnToString: T.object,
-
-  headerStyle: T.object,
-  cellStyle: T.object,
-  headerClassName: T.object,
-  cellClassName: T.object,
-};
 
 const mapStateToProps = createSelector(
-  (state) => state.customLocation.search,
-  (state) => state.settings.navigation.pageSize,
+  (state: GlobalState) => state.customLocation.search,
+  (state: GlobalState) => state.settings.navigation.pageSize,
   (search, pageSize) => ({ search, pageSize }),
 );
 
