@@ -4,7 +4,7 @@
   /*GAL*/
   --menuitem-padding: 0.4rem;
 }
-body {
+body:global(.interpro) {
   & a.browse-tabs-link {
     white-space: nowrap;
 

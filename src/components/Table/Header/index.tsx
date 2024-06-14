@@ -5,19 +5,28 @@ import {
   FilterButton,
   ColumnSearchBox,
 } from 'components/SimpleCommonComponents/ColumnIcons';
+import { ColumnProps } from '../Column';
 
 import cssBinder from 'styles/cssBinder';
 
 import s from '../style.css';
-import { ColumnProps } from '../Column';
 
 const css = cssBinder(s);
 
-type Props = {
-  columns: Array<ColumnProps>;
+type Props<
+  RowData = Record<string, unknown>,
+  ExtraData = Record<string, unknown>,
+> = {
+  columns: Array<ColumnProps<unknown, RowData, ExtraData>>;
   notFound?: boolean;
 };
-const Header = ({ columns, notFound }: Props) => {
+const Header = <
+  RowData = Record<string, unknown>,
+  ExtraData = Record<string, unknown>,
+>({
+  columns,
+  notFound,
+}: Props<RowData, ExtraData>) => {
   const [showFilter, setShowFilter] = useState(
     Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),
   );

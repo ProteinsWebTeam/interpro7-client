@@ -14,7 +14,7 @@ type Props<
   row: RowData;
   columns: Array<ColumnProps<unknown, RowData, ExtraData>>;
   extra?: ExtraData;
-  rowClassName: string | ((rowData: RowData) => string);
+  rowClassName?: string | ((rowData: RowData) => string);
   group?: string;
   backgroundColor?: string;
 };

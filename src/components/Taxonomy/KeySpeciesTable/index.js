@@ -13,6 +13,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 // $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
 import { Column } from 'components/Table';
+// $FlowFixMe
 import Table from 'components/Table/SimpleTable';
 // $FlowFixMe
 import ProteinDownloadRenderer from 'components/Matches/ProteinDownloadRenderer';

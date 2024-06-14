@@ -1,6 +1,181 @@
 @import "../../styles/timing.css";
 @import "../../styles/colors.css";
 
+/****************************** TABLE *********************************/
+/*gal*/
+.table-center {
+  text-align: center;
+}
+
+.min-width-sm {
+  width: 18%;
+}
+/* Small screen only */
+@media screen and (max-width: 39.9375em) {
+  .xs-hide {
+    display: none;
+  }
+}
+
+/*Style default table*/
+table.classic {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  & thead th {
+    border: 1px solid var(--colors-vlightgray);
+    background: var(--colors-very-white);
+  }
+  & tr td {
+    border: 1px solid var(--colors-very-white);
+  }
+  & tr:hover {
+    background-color: #fafafa;
+  }
+}
+
+table.classic tbody tr:nth-child(even) {
+  background-color: var(--colors-nearly-white);
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+/*/Style default table*/
+
+/*Style light table */
+table.light {
+  color: var(--colors-light-txt);
+  font-size: 0.93em;
+  border-collapse: collapse;
+}
+table.light thead {
+  color: #9baaaf;
+  font-size: 0.9em;
+  margin: 10px 0;
+  border: 0;
+  background: transparent; /*Overwrite EBI global*/
+}
+table.light thead th {
+  vertical-align: top;
+  background: rgba(255, 255, 255, 0.8);
+  outline: none;
+  border-bottom: 1px solid #d4dddf;
+  text-transform: uppercase;
+  font-size: 0.93em;
+  font-weight: 400;
+  color: #73828c;
+}
+table.light.sorting thead th {
+  color: #a7b2b6;
+}
+
+table.light thead tr:nth-child(even):hover {
+  background: transparent;
+}
+table.light thead td {
+  font-weight: normal;
+  font-style: italic;
+  color: #73828c; /*Overwrite EBI global*/
+}
+
+table.light thead th:hover {
+  color: #73828c;
+}
+table.light tr:nth-child(even):hover,
+table.light tr:nth-child(odd):hover {
+  background-color: #f9fafb;
+}
+table.light tbody {
+  border: none;
+}
+table.light tbody tr:nth-child(even) {
+  background-color: #fff;
+}
+table.light tbody tr td {
+  border-top: 1px solid #d4dddf;
+  border-bottom: 1px solid #d4dddf;
+}
+table.light .order-row {
+  background: #f2f6f7;
+  border: 1px solid #fff;
+}
+table.light .tfooter label {
+  color: #a7b2b6;
+  font-size: 0.93em;
+}
+table.light .subheader {
+  color: #505f74;
+  margin: 10px 0 0 10px;
+}
+
+table.light.nolink tbody td a,
+.table.light tbody td a:visited {
+  color: var(--colors-light-txt);
+}
+
+table.light.sorting thead th {
+  color: #a7b2b6;
+}
+table.light.sorting thead th:hover {
+  color: #73828c;
+}
+/*/Style light table */
+
+table.light.small {
+  width: 30%;
+  min-width: 300px;
+
+  & td {
+    border: none;
+    padding: 0.3rem; /* no extra space */
+  }
+}
+
+table.light.table-sum {
+  font-family: var(--fonts-system);
+  color: var(--colors-dark);
+  width: 100%;
+  border-right-width: 0;
+  border-collapse: collapse;
+
+  & tr:hover {
+    background-color: transparent;
+  }
+
+  & td {
+    border: none;
+    padding: 0.5rem 1rem 0.5rem 0; /* extra space between two rows - easier than defining with */
+
+    &:first-of-type {
+      width: 20%;
+      vertical-align: top;
+      font-size: 110%;
+      font-weight: 600;
+    }
+  }
+}
+
+/*responsive table*/
+@media screen and (max-width: 39.9375em) {
+  table.responsive th,
+  table.responsive tr {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  table.responsive tbody tr {
+    border: 2px #d4dddf solid;
+  }
+
+  table.responsive tbody tr td {
+    border: 0;
+  }
+  /*class used to show info on the same line   */
+  table.responsive td.sm-inline {
+    display: inline-block;
+  }
+}
+/*/responsive table*/
+
 table th {
   top: 98px;
   position: sticky;

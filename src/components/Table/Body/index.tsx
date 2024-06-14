@@ -46,10 +46,7 @@ class NoRows extends PureComponent<Props> {
     return (
       <tbody ref={this._ref}>
         <tr>
-          <td
-            className={css('padding-top-large', 'padding-bottom-large')}
-            colSpan={999}
-          >
+          <td colSpan={999}>
             <span className={css('warning-msg-table')}>
               {this.props.children}
             </span>
@@ -60,30 +57,31 @@ class NoRows extends PureComponent<Props> {
   }
 }
 type BodyProps<
-  RowData = Record<string, unknown>,
-  ExtraData = Record<string, unknown>,
+  RowDataB = Record<string, unknown>,
+  ExtraDataB = Record<string, unknown>,
 > = {
   loading: boolean;
   ok?: boolean;
   status: number;
   rows: Array<
-    (RowData | { metadata: RowData }) & {
-      extra_fields?: ExtraData;
+    RowDataB & {
+      metadata?: RowDataB;
+      extra_fields?: ExtraDataB;
       group?: string;
     }
   >;
   rowKey: string;
-  columns: Array<ColumnProps<unknown, RowData, ExtraData>>;
-  rowClassName: string | ((rowData: RowData) => string);
+  columns: Array<ColumnProps<unknown, RowDataB, ExtraDataB>>;
+  rowClassName?: string | ((rowData: RowDataB) => string);
   groups?: Array<string>;
   groupActions?: React.FC<{ group: string }>;
   notFound: boolean;
 };
 
 class Body<
-  RowData = Record<string, unknown>,
-  ExtraData = Record<string, unknown>,
-> extends PureComponent<BodyProps<RowData, ExtraData>> {
+  RowDataBB = Record<string, unknown>,
+  ExtraDataBB = Record<string, unknown>,
+> extends PureComponent<BodyProps<RowDataBB, ExtraDataBB>> {
   static defaultProps = {
     rowKey: 'accession',
   };
@@ -122,7 +120,7 @@ class Body<
     return (
       <tbody>
         {rows.map((row, index) => {
-          const rowData = 'metadata' in row ? row.metadata : row;
+          const rowData = 'metadata' in row ? (row.metadata as RowDataBB) : row;
           const extraData =
             'extra_fields' in row ? row.extra_fields : undefined;
           const rcn =
@@ -173,7 +171,7 @@ class Body<
                   )}
                 </tr>
               )}
-              <Row
+              <Row<RowDataBB, ExtraDataBB>
                 row={rowData}
                 columns={columns}
                 extra={extraData}

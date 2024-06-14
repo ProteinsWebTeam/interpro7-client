@@ -15,7 +15,7 @@ type Props<
   RowData = Record<string, unknown>,
   ExtraData = Record<string, unknown>,
 > = {
-  dataTable: Array<RowData>;
+  dataTable: Array<RowData & {}>;
   rowKey?: string;
   isStale?: boolean;
   loading?: boolean;
@@ -23,12 +23,15 @@ type Props<
   status?: number;
   notFound?: boolean;
   columns: Array<ColumnProps<unknown, RowData, ExtraData>>;
-  rowClassName: string | ((rowData: RowData) => string);
+  rowClassName?: string | ((rowData: RowData) => string);
   groups?: Array<string>;
   groupActions?: React.FC<{ group: string }>;
 };
 
-class TableView extends PureComponent<Props> {
+class TableView<
+  RowData = Record<string, unknown>,
+  ExtraData = Record<string, unknown>,
+> extends PureComponent<Props<RowData, ExtraData>> {
   render() {
     const {
       loading,
@@ -49,7 +52,7 @@ class TableView extends PureComponent<Props> {
         data-testid="data-table"
       >
         <Header columns={columns} notFound={notFound} />
-        <Body
+        <Body<RowData, ExtraData>
           rows={dataTable || []}
           rowKey={rowKey}
           columns={columns}
