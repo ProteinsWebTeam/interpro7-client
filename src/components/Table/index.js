@@ -69,10 +69,6 @@ const TableView = loadable({
   loader: () => import(/* webpackChunkName: "table-view" */ './views/Table'),
 });
 
-// const ListView = loadable({
-//   loader: () => import(/* webpackChunkName: "list-view" */ './views/List'),
-// });
-
 const GridView = loadable({
   loader: () => import(/* webpackChunkName: "grid-view" */ './views/Grid'),
 });
@@ -83,6 +79,7 @@ const TreeView = loadable({
 const KeySpecies = loadable({
   loader: () =>
     import(
+      // $FlowFixMe
       /* webpackChunkName: "keyspecies-view" */ 'components/Taxonomy/KeySpeciesTable'
     ),
 });
