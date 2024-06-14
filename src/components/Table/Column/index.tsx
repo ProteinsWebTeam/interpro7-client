@@ -4,7 +4,7 @@ export type Renderer<
   CellData = unknown,
   RowData = Record<string, unknown>,
   ExtraData = Record<string, unknown>,
-> = (cellData: CellData, rowData: RowData, extraData: ExtraData) => ReactNode;
+> = (cellData: CellData, rowData: RowData, extraData?: ExtraData) => ReactNode;
 
 export type ColumnProps<
   CellData = unknown,
@@ -31,6 +31,7 @@ const Column = <
   CellData = unknown,
   RowData = Record<string, unknown>,
   ExtraData = Record<string, unknown>,
+  // eslint-disable-next-line no-empty-pattern
 >({}: ColumnProps<CellData, RowData, ExtraData>) => null;
 
 export default Column;

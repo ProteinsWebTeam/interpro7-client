@@ -4,6 +4,7 @@ import T from 'prop-types';
 
 // $FlowFixMe
 import Header from 'components/Table/Header';
+// $FlowFixMe
 import Body from 'components/Table/Body';
 
 import { foundationPartial } from 'styles/foundation';

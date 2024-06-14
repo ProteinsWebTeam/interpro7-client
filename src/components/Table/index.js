@@ -15,9 +15,12 @@ import _Exporter from './Exporter';
 import _PageSizeSelector from './PageSizeSelector';
 import _SearchBox from './SearchBox';
 import _HighlightToggler from './HighlightToggler';
+// $FlowFixMe
 import _Body from './Body';
+// $FlowFixMe
 import _Column from './Column';
 import _Card from './Card';
+// $FlowFixMe
 import _Row from './Row';
 // $FlowFixMe
 import _Footer from './Footer';

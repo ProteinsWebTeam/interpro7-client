@@ -1,4 +1,4 @@
-import React, { PureComponent, ReactNode, RefObject } from 'react';
+import React, { PureComponent, RefObject } from 'react';
 
 import { get as lodashGet } from 'lodash-es';
 import { ColumnProps, Renderer } from '../Column';
@@ -7,18 +7,24 @@ const defaultRenderer: Renderer = (value) => <div>{String(value)}</div>;
 
 const DURATION = 250;
 
-type Props = {
-  row: Record<string, unknown>;
-  columns: Array<ColumnProps>;
-  extra: Record<string, unknown>;
-  rowClassName: string | ((rowData: unknown) => string);
+type Props<
+  RowData = Record<string, unknown>,
+  ExtraData = Record<string, unknown>,
+> = {
+  row: RowData;
+  columns: Array<ColumnProps<unknown, RowData, ExtraData>>;
+  extra?: ExtraData;
+  rowClassName: string | ((rowData: RowData) => string);
   group?: string;
   backgroundColor?: string;
 };
-class Row extends PureComponent<Props> {
+class Row<
+  RowData = Record<string, unknown>,
+  ExtraData = Record<string, unknown>,
+> extends PureComponent<Props<RowData, ExtraData>> {
   _ref: RefObject<HTMLTableRowElement>;
 
-  constructor(props: Props) {
+  constructor(props: Props<RowData, ExtraData>) {
     super(props);
 
     this._ref = React.createRef();
@@ -48,7 +54,11 @@ class Row extends PureComponent<Props> {
                 defaultKey,
                 cellStyle,
                 cellClassName,
-                renderer = defaultRenderer,
+                renderer = defaultRenderer as Renderer<
+                  unknown,
+                  RowData,
+                  ExtraData
+                >,
               },
               i,
             ) => (

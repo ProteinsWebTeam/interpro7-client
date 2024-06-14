@@ -5,8 +5,11 @@ import T from 'prop-types';
 
 // $FlowFixMe
 import _Header from './Header';
+// $FlowFixMe
 import _Body from './Body';
+// $FlowFixMe
 import _Column from './Column';
+// $FlowFixMe
 import _Row from './Row';
 // $FlowFixMe
 import _Footer from './Footer';
