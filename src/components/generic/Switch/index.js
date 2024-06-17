@@ -1,6 +1,5 @@
 // @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
@@ -33,14 +32,6 @@ const match = (childRoutes, indexRoute, valueFromLocation) => {
 }; */
 
 class _Switch extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    indexRoute: T.oneOfType([T.func, T.object]),
-    locationSelector: T.func.isRequired,
-    childRoutes: T.instanceOf(Map),
-    catchAll: T.oneOfType([T.func, T.object]),
-    customLocation: T.object.isRequired,
-  };
-
   render() {
     const {
       indexRoute,
@@ -61,7 +52,7 @@ class _Switch extends PureComponent /*:: <Props> */ {
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default connect(mapStateToProps)(_Switch);

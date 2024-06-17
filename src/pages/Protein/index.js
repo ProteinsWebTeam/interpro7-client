@@ -21,6 +21,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
   HighlightToggler,
+  // $FlowFixMe
 } from 'components/Table';
 // $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';

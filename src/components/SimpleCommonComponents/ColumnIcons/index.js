@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
+// $FlowFixMe
 import { SearchBox } from 'components/Table';
 // $FlowFixMe
 import Button from 'components/SimpleCommonComponents/Button';
