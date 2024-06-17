@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Table, { Column, PageSizeSelector } from 'components/Table';
@@ -44,6 +44,16 @@ export const filterSubset = <RowData extends Record<string, unknown>>(
   return filteredSubset;
 };
 
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.customLocation.search,
+  (state: GlobalState) => state.settings.navigation.pageSize,
+  (search, pageSize) => ({ search, pageSize }),
+);
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 type Column2StringFn<RowData = unknown> = (
   cellValue: unknown,
   row?: RowData,
@@ -51,8 +61,6 @@ type Column2StringFn<RowData = unknown> = (
 
 type Props<RowData extends Record<string, unknown>> = {
   data: Array<RowData>;
-  search?: InterProLocationSearch;
-  pageSize?: number;
   renderers?: Record<string, Renderer<unknown, RowData>>;
   columnToString?: Record<string, Column2StringFn<RowData>>;
   headerStyle?: Record<string, React.CSSProperties>;
@@ -60,8 +68,10 @@ type Props<RowData extends Record<string, unknown>> = {
   headerClassName?: Record<string, string>;
   cellClassName?: Record<string, string>;
 };
+type AllProps<RowData extends Record<string, unknown>> = Props<RowData> &
+  PropsFromRedux;
 
-const FullyLoadedTable = <RowData extends Record<string, unknown>>({
+export const FullyLoadedTable = <RowData extends Record<string, unknown>>({
   data,
   renderers = {},
   columnToString = {},
@@ -71,7 +81,7 @@ const FullyLoadedTable = <RowData extends Record<string, unknown>>({
   cellClassName = {},
   search,
   pageSize,
-}: Props<RowData>) => {
+}: AllProps<RowData>) => {
   const keys = Object.keys(data?.[0] || {});
   let subset = data;
   subset = filterSubset(subset, search, keys);
@@ -110,10 +120,14 @@ const FullyLoadedTable = <RowData extends Record<string, unknown>>({
   );
 };
 
-const mapStateToProps = createSelector(
-  (state: GlobalState) => state.customLocation.search,
-  (state: GlobalState) => state.settings.navigation.pageSize,
-  (search, pageSize) => ({ search, pageSize }),
-);
+// Define a generic connected component
+const ConnectedFullyLoadedTable = <RowData extends Record<string, unknown>>(
+  props: Props<RowData>,
+) => {
+  const ConnectedTable = connector(
+    FullyLoadedTable as React.ComponentType<AllProps<RowData>>,
+  );
+  return <ConnectedTable {...props} />;
+};
 
-export default connect(mapStateToProps)(FullyLoadedTable);
+export default ConnectedFullyLoadedTable;
