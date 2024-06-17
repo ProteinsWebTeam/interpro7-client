@@ -1,6 +1,6 @@
-@import '../../styles/timing.css';
-@import '../../styles/colors.css';
-@import '../../styles/z-index.css';
+@import "../../styles/timing.css";
+@import "../../styles/colors.css";
+@import "../../styles/z-index.css";
 
 .potential-popup {
   width: 100%;
@@ -93,7 +93,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     pointer-events: none;
     position: absolute;
     top: 0;
@@ -157,8 +157,9 @@
   }
 
   & > .label {
-    color: #636363;
-    background: var(--colors-nearly-white);
+    color: var(--colors-graydark);
+    background-color: rgba(0, 0, 0, 0.07);
+    margin-right: 0.3rem;
   }
 }
 

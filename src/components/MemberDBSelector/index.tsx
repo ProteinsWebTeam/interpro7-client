@@ -353,6 +353,7 @@ export class _MemberDBSelector extends PureComponent<LoadedProps, State> {
                     </span>
                     {!this.props.hideCounters && (
                       <NumberComponent
+                        label
                         loading={loading}
                         className={css('label')}
                         titleType={toPlural(
