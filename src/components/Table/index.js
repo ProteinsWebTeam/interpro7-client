@@ -3,10 +3,7 @@
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
 
-// $FlowFixMe
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Switch from 'components/generic/Switch';
-import Link from 'components/generic/Link';
 import Redirect from 'components/generic/Redirect';
 
 // $FlowFixMe
@@ -25,6 +22,8 @@ import _Row from './Row';
 // $FlowFixMe
 import _Footer from './Footer';
 import _TotalNb from './TotalNb';
+// $FlowFixMe
+import TableViewButtons from './ViewButtons';
 
 import loadable from 'higherOrder/loadable';
 
@@ -135,94 +134,6 @@ const footerChildRoutes = new Map([
 ]);
 const hashSelector = (customLocation) => customLocation.hash;
 
-const TableViewButtons = (
-  { tableIcon, card, withTree, withSunburst, withKeySpecies } /*: {
-    tableIcon: boolean,
-    card: boolean,
-    withTree: boolean,
-    withSunburst: boolean,
-    withKeySpecies: boolean,
-  } */,
-) => (
-  <div className={f('type-selector', 'pp-table-options')}>
-    {tableIcon && (
-      <Tooltip title="View your results as a table">
-        <Link
-          to={(l) => ({ ...l, hash: 'table' })}
-          className={f('icon-view', 'table-view')}
-          activeClass={f('active')}
-          aria-label="view your results as a table"
-          data-testid="view-table-button"
-        />
-      </Tooltip>
-    )}
-    {card && (
-      <div className={f('test-support-grid')}>
-        <Tooltip title="View your results in a grid">
-          <Link
-            to={(l) => ({ ...l, hash: 'grid' })}
-            className={f('icon-view', 'grid-view', {
-              disabled: !card,
-            })}
-            activeClass={f('active')}
-            aria-disabled={card ? 'false' : 'true'}
-            aria-label="view your results in a grid"
-            data-testid="view-grid-button"
-          />
-        </Tooltip>
-      </div>
-    )}
-    {withTree && (
-      <Tooltip title="View your results as a tree">
-        <Link
-          to={(l) => ({ ...l, hash: 'tree' })}
-          className={f('icon-view', 'tree-view', {
-            disabled: !withTree,
-          })}
-          activeClass={f('active')}
-          aria-disabled={withTree ? 'false' : 'true'}
-          aria-label="view your results as a tree"
-          data-testid="view-tree-button"
-        />
-      </Tooltip>
-    )}
-    {withSunburst && (
-      <Tooltip title="Display a sunburst view">
-        <Link
-          to={(l) => ({ ...l, hash: 'sunburst' })}
-          className={f('icon-view', 'sunburst-view', {
-            disabled: !withSunburst,
-          })}
-          activeClass={f('active')}
-          aria-disabled={withSunburst ? 'false' : 'true'}
-          aria-label="view your results as a sunburst"
-          data-testid="view-sunburst-button"
-        />
-      </Tooltip>
-    )}
-    {withKeySpecies && (
-      <Tooltip title="View only key species">
-        <Link
-          to={(l) => ({ ...l, hash: 'keyspecies' })}
-          className={f('icon-view', 'keyspecies-view', {
-            disabled: !withKeySpecies,
-          })}
-          activeClass={f('active')}
-          aria-disabled={withKeySpecies ? 'false' : 'true'}
-          aria-label="view only key species"
-          data-testid="view-keyspecies-button"
-        />
-      </Tooltip>
-    )}
-  </div>
-);
-TableViewButtons.propTypes = {
-  tableIcon: T.bool,
-  card: T.bool,
-  withTree: T.bool,
-  withSunburst: T.bool,
-  withKeySpecies: T.bool,
-};
 class Table extends PureComponent /*:: <Props> */ {
   static propTypes = {
     dataTable: T.array,
