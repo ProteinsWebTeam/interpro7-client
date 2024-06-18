@@ -60,6 +60,7 @@ exports[`<MemberDBSelector /> should render 1`] = `
         <Memo(Connect(NumberComponent))
           abbr={true}
           className="label"
+          label={true}
           loading={false}
           style={
             {
