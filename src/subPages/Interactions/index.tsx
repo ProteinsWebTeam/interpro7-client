@@ -1,19 +1,22 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
-// $FlowFixMe
-import FullyLoadedTable from 'components/Table/FullyLoadedTable';
+
+import FullyLoadedTable, {
+  Column2StringFn,
+} from 'components/Table/FullyLoadedTable';
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import f from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
+import { Renderer } from 'src/components/Table/Column';
+
+const css = cssBinder();
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
-const schemaProcessData = (data) => {
+const schemaProcessData = (data: Interaction[]) => {
   return {
     '@id': '@additionalProperty',
     '@type': 'PropertyValue',
@@ -34,13 +37,16 @@ const schemaProcessData = (data) => {
   };
 };
 
-const Molecule = ({ accession, identifier, type }) =>
-  type === 'protein' ? (
+const Molecule: Renderer<unknown, Interaction> = (molecule: unknown) => {
+  const { accession, identifier, type } = molecule as InteractionMolecule;
+  return type === 'protein' ? (
     <Link
       to={{
         description: {
           main: { key: 'protein' },
-          protein: { db: 'uniprot', accession },
+          // The split below is in cases the accession points to an isoform e.g. O00305-2
+          // TODO: Update link to directly point to isoforms
+          protein: { db: 'uniprot', accession: accession.split('-')[0] },
         },
       }}
     >
@@ -51,19 +57,21 @@ const Molecule = ({ accession, identifier, type }) =>
       {identifier} ({accession})
     </span>
   );
-Molecule.propTypes = {
-  accession: T.string.isRequired,
-  identifier: T.string,
-  type: T.string,
 };
-const moleculeToString = ({ accession, identifier }) =>
-  `${identifier}${accession}`;
+const moleculeToString: Column2StringFn<Interaction> = (molecule: unknown) => {
+  const { accession, identifier } = molecule as InteractionMolecule;
+  return `${identifier}${accession}`;
+};
 
-const InteractionsSubPage = ({ data } /*: {data: Object}*/) => {
+type Props = {
+  data: RequestedData<InteractionsPayload>;
+};
+
+const InteractionsSubPage = ({ data }: Props) => {
   if (data.loading) return <Loading />;
   const _data = data?.payload?.interactions;
   return (
-    <div className={f('row', 'column')}>
+    <div className={css('vf-stack', 'vf-stack--400')}>
       {_data ? (
         <>
           <p>
@@ -89,9 +97,6 @@ const InteractionsSubPage = ({ data } /*: {data: Object}*/) => {
       )}
     </div>
   );
-};
-InteractionsSubPage.propTypes = {
-  data: T.object.isRequired,
 };
 
 export default InteractionsSubPage;

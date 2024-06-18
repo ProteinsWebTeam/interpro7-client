@@ -54,7 +54,7 @@ const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type Column2StringFn<RowData = unknown> = (
+export type Column2StringFn<RowData = unknown> = (
   cellValue: unknown,
   row?: RowData,
 ) => string;
