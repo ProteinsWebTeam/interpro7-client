@@ -71,7 +71,7 @@ const InteractionsSubPage = ({ data }: Props) => {
   if (data.loading) return <Loading />;
   const _data = data?.payload?.interactions;
   return (
-    <div className={css('row', 'column')}>
+    <div className={css('vf-stack', 'vf-stack--400')}>
       {_data ? (
         <>
           <p>

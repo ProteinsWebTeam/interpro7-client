@@ -62,7 +62,7 @@ const InteractionsAndPathwaysSubPage = ({ data }: Props) => {
   }
 
   return (
-    <div className={css('row', 'column')}>
+    <div className={css('vf-stack', 'vf-stack--400')}>
       {_data ? (
         <>
           <p>
