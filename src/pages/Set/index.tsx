@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 
 import loadable from 'higherOrder/loadable';
@@ -11,14 +10,14 @@ import { setDBs } from 'utils/processDescription/handlers';
 
 const SummaryAsync = loadable({
   loader: () =>
-    // $FlowFixMe
     import(/* webpackChunkName: "set-summary" */ 'components/Set/Summary'),
+  loading: undefined,
 });
 
 const ListAsync = loadable({
   loader: () =>
-    // $FlowFixMe
     import(/* webpackChunkName: "set-list" */ 'components/Set/List'),
+  loading: undefined,
 });
 
 const subPagesForSet = new Map();

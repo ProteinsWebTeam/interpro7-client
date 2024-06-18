@@ -46,6 +46,7 @@ const Proteome = loadable({
   loader: () => import(/* webpackChunkName: "proteome-page" */ './Proteome'),
 });
 const EntrySet = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "set-page" */ './Set'),
 });
 
