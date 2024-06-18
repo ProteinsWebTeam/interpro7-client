@@ -43,7 +43,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     </div>
     <Memo(Connect(ImportResultSearch)) />
   </div>
-  <Memo(Table)
+  <Table
     actualSize={0}
     contentType="result"
     dataTable={[]}
@@ -118,7 +118,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     >
       Action
     </Column>
-  </Memo(Table)>
+  </Table>
   <Memo(Connect(ClearAllDialog))
     closeModal={[Function]}
     from={null}

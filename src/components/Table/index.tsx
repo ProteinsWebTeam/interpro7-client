@@ -294,7 +294,7 @@ class Table<RowData extends object> extends PureComponent<Props<RowData>> {
     );
   }
 }
-export default React.memo(Table);
+export default Table;
 
 export const Header = _Header;
 export const PageSizeSelector = _PageSizeSelector;
