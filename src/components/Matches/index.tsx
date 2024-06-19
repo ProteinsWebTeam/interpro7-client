@@ -660,6 +660,41 @@ const Matches = ({
       >
         Domain architectures
       </Column>
+      <Column
+        dataKey="matches"
+        defaultKey="entryInMatch"
+        headerClassName={css('table-center')}
+        cellClassName={css('table-center')}
+        displayIf={
+          ['protein', 'structure'].includes(primary || '') &&
+          secondary === 'set'
+        }
+        renderer={(matches: Array<AnyMatch>) => {
+          const accessions = new Set(
+            (matches || [])
+              .map((match) => match.entry_accession)
+              .filter(Boolean),
+          ) as Set<string>;
+          return Array.from(accessions).map((accession) => (
+            <Link
+              key={accession}
+              to={(customLocation) => ({
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: customLocation.description.set.db,
+                    accession,
+                  },
+                },
+              })}
+            >
+              {accession.toUpperCase()}{' '}
+            </Link>
+          ));
+        }}
+      >
+        Matching Entry
+      </Column>
     </Table>
   );
 };
