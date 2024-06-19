@@ -38,7 +38,7 @@ const TaxonomyOption = ({
       checked={checked}
       style={{ margin: '0.25em' }}
     />
-    {taxId === 'ALL' ? <div>All</div> : title}
+    <span>{taxId === 'ALL' ? 'All' : title}</span>
     {typeof count === 'undefined' || isNaN(count) ? null : (
       <NumberComponent
         label

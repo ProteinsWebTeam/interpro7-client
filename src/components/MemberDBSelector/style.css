@@ -160,6 +160,8 @@
     color: var(--colors-graydark);
     background-color: rgba(0, 0, 0, 0.07);
     margin-right: 0.3rem;
+    white-space: nowrap;
+    padding-right: 0.2rem;
   }
 }
 
