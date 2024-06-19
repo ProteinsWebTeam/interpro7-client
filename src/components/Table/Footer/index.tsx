@@ -39,7 +39,7 @@ const Footer = ({
   return (
     <div className={css('table-footer')}>
       <div className={css('table-footer-content')}>
-        {withPageSizeSelector && <PageSizeSelector search={pagination} />}
+        {withPageSizeSelector && <PageSizeSelector />}
         <div className={css('pagination-box')}>
           <ul
             className={css('pagination', 'text-right')}
