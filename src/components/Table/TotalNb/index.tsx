@@ -1,28 +1,25 @@
-// @flow
 /* eslint no-magic-numbers: ["error", { "ignore": [0, 1, 2, 3, 4] }]*/
-import React from 'react';
-import T from 'prop-types';
+import React, { ReactNode } from 'react';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import MemberDBSelector from 'components/MemberDBSelector';
-// $FlowFixMe
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import NumberComponent from 'components/NumberComponent';
-// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
-import cn from 'classnames/bind';
-
+import { toPlural } from 'utils/pages/toPlural';
 import config from 'config';
-import { toPlural } from 'utils/pages';
+
+import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
-import { toCanonicalURL } from 'utils/url';
+import { toCanonicalURL } from 'utils/url/toCanonicalURL';
 
-const s = cn.bind(styles);
+const css = cssBinder(styles);
 
-const entityText = (entity, count) => {
+const entityText = (entity: string, count: number) => {
   if (entity === 'search') {
     return `result${count > 1 ? 's' : ''}`;
   }
@@ -30,17 +27,17 @@ const entityText = (entity, count) => {
 };
 
 const dbText = (
-  entryDB,
-  setDB,
-  db,
-  isSubPageButMainIsEntry,
-  databases = {},
+  entryDB?: MemberDB | 'interpro',
+  setDB?: string | null,
+  db?: string | null,
+  isSubPageButMainIsEntry?: boolean,
+  databases: DBsInfo = {},
 ) => {
   if (isSubPageButMainIsEntry || !entryDB) return null;
   return (
     <span>
       {entryDB === db || setDB === db ? ' in ' : ' matching '}
-      <span className={s('total-text-bold')}>
+      <span className={css('total-text-bold')}>
         {(databases && databases[entryDB] && databases[entryDB].name) ||
           entryDB}
       </span>{' '}
@@ -54,51 +51,52 @@ const dbText = (
                            entryDB
                          }`}
       />
-      <MemberSymbol type={entryDB} className={s('db-symbol')} />
+      <MemberSymbol type={entryDB} className={css('db-symbol')} />
     </span>
   );
 };
 
-const SelectorSpoof = ({ children } /*: { children: function } */) =>
-  children();
-SelectorSpoof.propTypes = {
-  children: T.func.isRequired,
-};
+const SelectorSpoof = ({
+  children,
+}: {
+  contentType: unknown;
+  children: (x: boolean) => ReactNode;
+}) => children(true);
 
 const url2page = new Map();
 
-// eslint-disable-next-line complexity
-export const TotalNb = (
-  {
-    className,
-    data,
-    actualSize,
-    pagination,
-    description,
-    contentType,
-    databases,
-    dbCounters,
-    currentAPICall,
-    nextAPICall,
-    previousAPICall,
-  } /*: {
-    className?: string,
-    data: Array<Object>,
-    actualSize?: number,
-    pagination: Object,
-    notFound?: boolean,
-    description: Object,
-    contentType?: string,
-    databases?: Object,
-    dbCounters?: Object,
-    currentAPICall?: ?string,
-    nextAPICall?: ?string,
-    previousAPICall?: ?string,
-  } */,
-) => {
+type Props<RowData extends object> = {
+  className?: string;
+  data: Array<RowData>;
+  actualSize?: number;
+  pagination: Record<string, unknown>;
+  notFound?: boolean;
+  description?: InterProDescription;
+  contentType?: string;
+  databases?: DBsInfo;
+  dbCounters?: MetadataCounters;
+  currentAPICall?: string | null;
+  nextAPICall?: string | null;
+  previousAPICall?: string | null;
+};
+
+export const TotalNb = <RowData extends object>({
+  className,
+  data,
+  actualSize,
+  pagination,
+  description,
+  contentType,
+  databases,
+  dbCounters,
+  currentAPICall,
+  nextAPICall,
+  previousAPICall,
+}: Props<RowData>) => {
+  if (!description) return null;
   const page =
-    (currentAPICall && url2page.get(toCanonicalURL(currentAPICall, true))) ||
-    parseInt(pagination.page || 1, 10);
+    (currentAPICall && url2page.get(toCanonicalURL(currentAPICall))) ||
+    Number(pagination.page || 1);
   const pageSize = parseInt(
     pagination.page_size || config.pagination.pageSize,
     10,
@@ -112,9 +110,9 @@ export const TotalNb = (
 
   const index = (page - 1) * pageSize + 1;
 
-  let textLabel = '';
+  let textLabel: ReactNode = '';
   if (actualSize) {
-    const db = description[description.main.key].db;
+    const db = description[description.main.key as Endpoint].db;
 
     const isSubPageButMainIsEntry =
       contentType !== description.main.key && description.main.key === 'entry';
@@ -137,9 +135,9 @@ export const TotalNb = (
         contentType={contentType}
         dbCounters={dbCounters}
       >
-        {(open) => (
+        {(open: boolean) => (
           <span
-            className={s('header-total-results', {
+            className={css('header-total-results', {
               selector: typeof open === 'boolean',
               open,
               bordered: needSelector,
@@ -154,7 +152,7 @@ export const TotalNb = (
             </strong>{' '}
             {entityText(contentType || description.main.key, actualSize)}
             {dbText(
-              description.entry.db,
+              description.entry.db as MemberDB | 'interpro',
               description.set.db,
               db,
               isSubPageButMainIsEntry,
@@ -165,26 +163,11 @@ export const TotalNb = (
       </SelectorMaybe>
     );
   }
-  return <span className={s(className, 'component')}>{textLabel}</span>;
-};
-
-TotalNb.propTypes = {
-  data: T.array,
-  actualSize: T.number,
-  pagination: T.object.isRequired,
-  notFound: T.bool,
-  className: T.string,
-  description: T.object,
-  contentType: T.string,
-  databases: T.object,
-  dbCounters: T.object,
-  currentAPICall: T.string,
-  nextAPICall: T.string,
-  previousAPICall: T.string,
+  return <span className={css(className, 'component')}>{textLabel}</span>;
 };
 
 const mapStateToProps = createSelector(
-  (state) => state.customLocation.description,
+  (state: GlobalState) => state.customLocation.description,
   (description) => ({ description }),
 );
 
