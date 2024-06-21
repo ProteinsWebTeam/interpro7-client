@@ -174,21 +174,53 @@ interface TaxonomyMetadata extends Metadata {
   children: Array<string>;
   parent: string;
   name: Required<NameObject>;
+  counters: TaxonomyCounters;
+  exact_match?: boolean;
 }
 type WithNames = {
   names: Record<string, Required<NameObject>>;
 };
-type WithTaxonomyFilters = {
-  children?: Record<
-    string,
-    {
-      entries: number;
-      proteomes: number;
-      proteins: number;
-      structures: number;
-    }
-  >;
+type TaxonomyCounters = {
+  entries: number;
+  proteomes: number;
+  proteins: number;
+  structures: number;
 };
+type WithTaxonomyFilters = {
+  children?: Record<string, TaxonomyCounters>;
+};
+type TaxNode = {
+  id: string;
+  children?: Array<TaxNode>;
+  lineage?: string;
+  counters?: TaxonomyCounters;
+  rank?: string;
+  hitcount?: number | 'N/A' | undefined;
+  name: string;
+};
+
+type TaxonommyTreePayload = {
+  metadata: TaxonomyMetadata;
+} & WithNames &
+  WithTaxonomyFilters;
+
+// Use for Sunburst
+type TaxaPayload = {
+  taxa: Taxon;
+};
+type Taxon = {
+  id: string;
+  rank: string;
+  name: string;
+  lineage?: Array<{
+    name: string;
+    id: string;
+  }>;
+  proteins: number;
+  species: number;
+  children: Array<Taxon>;
+};
+
 interface ProteomeMetadata extends Metadata {
   is_reference: boolean;
   strain: string;
@@ -390,22 +422,6 @@ type ResidueMetadata = {
   locations: Array<ProtVistaLocation>;
 };
 type ResiduesPayload = Record<string, ResidueMetadata>;
-
-type TaxaPayload = {
-  taxa: Taxon;
-};
-type Taxon = {
-  id: string;
-  rank: string;
-  name: string;
-  lineage?: Array<{
-    name: string;
-    id: string;
-  }>;
-  proteins: number;
-  species: number;
-  children: Array<Taxon>;
-};
 
 type IDAResult = {
   ida: string;

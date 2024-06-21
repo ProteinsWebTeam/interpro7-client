@@ -13,7 +13,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Accession from 'components/Accession';
 import Lineage from 'components/Taxonomy/Lineage';
 import Children from 'components/Taxonomy/Children';
-import Tree, { TaxNode } from 'components/Tree';
+import Tree from 'components/Tree';
 import BaseLink from 'components/ExtLink/BaseLink';
 
 import cssBinder from 'styles/cssBinder';
