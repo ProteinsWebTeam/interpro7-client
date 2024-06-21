@@ -73,6 +73,10 @@ interface Metadata {
   go_terms?: Array<GOTerm>;
 }
 
+type MetadataPayload<T = unknown> = {
+  metadata: T;
+};
+
 type NameObject = {
   name: string;
   short?: string;
@@ -411,6 +415,8 @@ type Taxon = {
   children: Array<Taxon>;
 };
 
+type GroupByPayload<T = number> = Record<string, T>;
+
 type IDAResult = {
   ida: string;
   ida_id: string;
@@ -532,4 +538,15 @@ type UtilsAccessionPayload = {
 
 type ErrorPayload = {
   detail: string;
+};
+
+type CounterPayload = {
+  [endpoint in EndpointPlural]: Record<string, number> & {
+    member_databases?: Record<string, number>;
+  };
+};
+type ComposedCounterPayload = {
+  [endpoint in EndpointPlural]: Record<string, Record<string, number>> & {
+    member_databases?: Record<string, Record<string, number>>;
+  };
 };
