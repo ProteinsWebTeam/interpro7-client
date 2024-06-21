@@ -108,7 +108,10 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
       currentNode = newNode;
     }
     if (currentNode) {
-      currentNode.name = data.name.short || data.name.name || data.accession;
+      currentNode.name =
+        (data.name as NameObject)?.short ||
+        (data.name as NameObject)?.name ||
+        data.accession;
       currentNode.hitcount = data?.counters?.proteins as number;
 
       if (data.children) {

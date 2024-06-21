@@ -173,7 +173,7 @@ interface TaxonomyMetadata extends Metadata {
   rank: string;
   children: Array<string>;
   parent: string;
-  name: Required<NameObject>;
+  name: Required<NameObject> | string;
   counters: TaxonomyCounters;
   exact_match?: boolean;
 }
