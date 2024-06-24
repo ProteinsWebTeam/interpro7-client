@@ -1,8 +1,5 @@
-import React, { PropsWithChildren, useState, useRef } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 
-import SortButton, {
-  ExposedButtonProps,
-} from 'components/SimpleCommonComponents/ColumnIcons/SortButton';
 import FilterButton from 'components/SimpleCommonComponents/ColumnIcons/FilterButton';
 import ColumnSearchBox, {
   CustomiseSearchBoxOptions,
@@ -11,6 +8,7 @@ import ColumnSearchBox, {
 import cssBinder from 'styles/cssBinder';
 
 import s from '../style.css';
+import SortButtonWithLabel from './SortButtonWithLabel';
 
 const css = cssBinder(s);
 
@@ -37,7 +35,6 @@ const Header = ({ columns, notFound }: Props) => {
   const [showFilter, setShowFilter] = useState(
     Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),
   );
-  const sortButton = useRef<ExposedButtonProps>(null);
 
   if (notFound) {
     return null;
@@ -68,19 +65,10 @@ const Header = ({ columns, notFound }: Props) => {
               >
                 <div className={css('table-header')}>
                   {isSortable ? (
-                    <>
-                      <a
-                        onClick={() => {
-                          sortButton.current?.toggleSort();
-                        }}
-                        style={{
-                          color: 'inherit',
-                        }}
-                      >
-                        {children || name || dataKey}
-                      </a>
-                      <SortButton field={dataKey} ref={sortButton} />
-                    </>
+                    <SortButtonWithLabel
+                      text={(children as string) || name || dataKey}
+                      dataKey={dataKey}
+                    />
                   ) : (
                     <span>{children || name || dataKey}</span>
                   )}
