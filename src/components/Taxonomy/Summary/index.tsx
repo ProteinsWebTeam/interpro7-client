@@ -234,7 +234,6 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
         </section>
         <div>
           {
-            // @ts-expect-error until MemberDB is migrated to TS
             <MemberDBSelector
               contentType="taxonomy"
               filterType="entry"
@@ -242,7 +241,7 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
               isSelected={this._isSelected}
               hideCounters={true}
             >
-              {(open: string) => (
+              {(open: boolean) => (
                 <span
                   className={css(
                     'header-total-results',

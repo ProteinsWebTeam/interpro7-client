@@ -96,6 +96,7 @@ interface InterProTypeProps
   > {
   type: string;
   dimension: string;
+  expanded?: boolean;
 }
 
 interface InterProHierarchyProps

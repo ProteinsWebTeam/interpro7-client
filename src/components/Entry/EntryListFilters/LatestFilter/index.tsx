@@ -17,9 +17,10 @@ import style from 'components/FiltersPanel/style.css';
 const css = cssBinder(style);
 
 type Props = {
-  latest: boolean;
-  customLocation: InterProLocation;
-  goToCustomLocation: typeof goToCustomLocation;
+  label?: string;
+  latest?: boolean;
+  customLocation?: InterProLocation;
+  goToCustomLocation?: typeof goToCustomLocation;
 };
 interface LoadedProps extends Props, LoadDataProps<PayloadList<unknown>> {}
 
@@ -31,12 +32,12 @@ const LatestFilter = ({
   goToCustomLocation,
 }: LoadedProps) => {
   if (!data) return null;
-  if (!data.payload) return null;
+  if (!data.payload || !customLocation) return null;
   const handleChange = () => {
     const { page, ...search } = customLocation.search;
     const { latest_entries, ...rest } = search;
     if (!latest) rest.latest_entries = '';
-    goToCustomLocation({
+    goToCustomLocation?.({
       ...customLocation,
       search: rest,
     });
