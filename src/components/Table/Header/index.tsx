@@ -1,10 +1,12 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren, useState, useRef } from 'react';
 
-import {
-  ConnectedSortButton,
-  FilterButton,
-  ColumnSearchBox,
-} from 'components/SimpleCommonComponents/ColumnIcons';
+import SortButton, {
+  ExposedButtonProps,
+} from 'components/SimpleCommonComponents/ColumnIcons/SortButton';
+import FilterButton from 'components/SimpleCommonComponents/ColumnIcons/FilterButton';
+import ColumnSearchBox, {
+  CustomiseSearchBoxOptions,
+} from 'components/SimpleCommonComponents/ColumnIcons/ColumnSearchBox';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -23,8 +25,8 @@ type ColumnProps = PropsWithChildren<{
   isSearchable: boolean;
   isSortable: boolean;
   showOptions: boolean;
-  options: unknown;
-  customiseSearch: unknown;
+  options: Array<string>;
+  customiseSearch: CustomiseSearchBoxOptions;
 }>;
 
 type Props = {
@@ -35,6 +37,8 @@ const Header = ({ columns, notFound }: Props) => {
   const [showFilter, setShowFilter] = useState(
     Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),
   );
+  const sortButton = useRef<ExposedButtonProps>(null);
+
   if (notFound) {
     return null;
   }
@@ -63,7 +67,23 @@ const Header = ({ columns, notFound }: Props) => {
                 className={headerClassName}
               >
                 <div className={css('table-header')}>
-                  {isSortable && <ConnectedSortButton field={dataKey} />}
+                  {isSortable ? (
+                    <>
+                      <a
+                        onClick={() => {
+                          sortButton.current?.toggleSort();
+                        }}
+                        style={{
+                          color: 'inherit',
+                        }}
+                      >
+                        {children || name || dataKey}
+                      </a>
+                      <SortButton field={dataKey} ref={sortButton} />
+                    </>
+                  ) : (
+                    <span>{children || name || dataKey}</span>
+                  )}
                   {isSearchable && (
                     <FilterButton
                       isOpen={showFilter[dataKey]}
@@ -75,7 +95,6 @@ const Header = ({ columns, notFound }: Props) => {
                       }
                     />
                   )}
-                  {children || name || dataKey}
                 </div>
                 {isSearchable && (
                   <ColumnSearchBox
