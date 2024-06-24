@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
-import {
-  ConnectedSortButton,
-  FilterButton,
-  ColumnSearchBox,
-} from 'components/SimpleCommonComponents/ColumnIcons';
+import SortButton, {
+  ExposedButtonProps,
+} from 'components/SimpleCommonComponents/ColumnIcons/SortButton';
+import FilterButton from 'components/SimpleCommonComponents/ColumnIcons/FilterButton';
+import ColumnSearchBox from 'components/SimpleCommonComponents/ColumnIcons/ColumnSearchBox';
+
 import { ColumnProps } from '../Column';
 
 import cssBinder from 'styles/cssBinder';
@@ -30,6 +31,8 @@ const Header = <
   const [showFilter, setShowFilter] = useState(
     Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),
   );
+  const sortButton = useRef<ExposedButtonProps>(null);
+
   if (notFound) {
     return null;
   }
@@ -58,7 +61,23 @@ const Header = <
                 className={headerClassName}
               >
                 <div className={css('table-header')}>
-                  {isSortable && <ConnectedSortButton field={dataKey} />}
+                  {isSortable ? (
+                    <>
+                      <a
+                        onClick={() => {
+                          sortButton.current?.toggleSort();
+                        }}
+                        style={{
+                          color: 'inherit',
+                        }}
+                      >
+                        {children || name || dataKey}
+                      </a>
+                      <SortButton field={dataKey} ref={sortButton} />
+                    </>
+                  ) : (
+                    <span>{children || name || dataKey}</span>
+                  )}
                   {isSearchable && (
                     <FilterButton
                       isOpen={showFilter[dataKey]}
@@ -70,7 +89,6 @@ const Header = <
                       }
                     />
                   )}
-                  {children || name || dataKey}
                 </div>
                 {isSearchable && (
                   <ColumnSearchBox
