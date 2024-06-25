@@ -4,6 +4,28 @@
 table th {
   top: 98px;
   position: sticky;
+  & > div.table-header {
+    width: 100%;
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: nowrap;
+  }
+  &.table-header-right {
+    text-align: right;
+    padding-right: 0;
+    & > div {
+      justify-content: right;
+    }
+  }
+  &.table-header-center {
+    text-align: center;
+    & > div {
+      justify-content: center;
+    }
+  }
+}
+.table-center {
+  text-align: center;
 }
 
 .result-page .table-results-filtering {

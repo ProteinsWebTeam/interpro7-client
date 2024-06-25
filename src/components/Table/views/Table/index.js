@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
+// $FlowFixMe
 import Header from 'components/Table/Header';
 import Body from 'components/Table/Body';
 

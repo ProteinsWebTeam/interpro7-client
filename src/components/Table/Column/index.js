@@ -13,6 +13,7 @@ Column.propTypes = {
   headerClassName: T.string,
   cellClassName: T.string,
   isSearchable: T.bool,
+  isSortable: T.bool,
   children: T.any,
   showOptions: T.bool,
   options: T.array,

@@ -1,19 +1,41 @@
-// @flow
-import React, { useState } from 'react';
-import T from 'prop-types';
+import React, { PropsWithChildren, useState } from 'react';
 
-import {
-  ConnectedSortButton,
-  FilterButton,
-  ColumnSearchBox,
-} from 'components/SimpleCommonComponents/ColumnIcons';
+import FilterButton from 'components/SimpleCommonComponents/ColumnIcons/FilterButton';
+import ColumnSearchBox, {
+  CustomiseSearchBoxOptions,
+} from 'components/SimpleCommonComponents/ColumnIcons/ColumnSearchBox';
 
-const Header = (
-  { columns, notFound } /*: {columns: Array<Object>, notFound?: boolean} */,
-) => {
+import cssBinder from 'styles/cssBinder';
+
+import s from '../style.css';
+import SortButtonWithLabel from './SortButtonWithLabel';
+
+const css = cssBinder(s);
+
+// TODO: move to the columns when that is migrated
+type ColumnProps = PropsWithChildren<{
+  dataKey: string;
+  displayIf?: boolean;
+  defaultKey?: string;
+  name: string;
+  headerStyle?: React.CSSProperties;
+  headerClassName?: string;
+  isSearchable: boolean;
+  isSortable: boolean;
+  showOptions: boolean;
+  options: Array<string>;
+  customiseSearch: CustomiseSearchBoxOptions;
+}>;
+
+type Props = {
+  columns: Array<ColumnProps>;
+  notFound?: boolean;
+};
+const Header = ({ columns, notFound }: Props) => {
   const [showFilter, setShowFilter] = useState(
     Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),
   );
+
   if (notFound) {
     return null;
   }
@@ -31,6 +53,7 @@ const Header = (
               children,
               headerClassName,
               isSearchable = false,
+              isSortable = false,
               showOptions = false,
               options,
               customiseSearch,
@@ -40,9 +63,16 @@ const Header = (
                 style={headerStyle}
                 className={headerClassName}
               >
-                {isSearchable && (
-                  <>
-                    <ConnectedSortButton field={dataKey} />{' '}
+                <div className={css('table-header')}>
+                  {isSortable ? (
+                    <SortButtonWithLabel
+                      text={(children as string) || name || dataKey}
+                      dataKey={dataKey}
+                    />
+                  ) : (
+                    <span>{children || name || dataKey}</span>
+                  )}
+                  {isSearchable && (
                     <FilterButton
                       isOpen={showFilter[dataKey]}
                       onClick={() =>
@@ -51,10 +81,9 @@ const Header = (
                           [dataKey]: !showFilter[dataKey],
                         })
                       }
-                    />{' '}
-                  </>
-                )}
-                {children || name || dataKey}
+                    />
+                  )}
+                </div>
                 {isSearchable && (
                   <ColumnSearchBox
                     field={dataKey}
@@ -70,10 +99,6 @@ const Header = (
       </tr>
     </thead>
   );
-};
-Header.propTypes = {
-  columns: T.arrayOf(T.object).isRequired,
-  notFound: T.bool,
 };
 
 export default Header;

@@ -236,4 +236,6 @@ export const getUrlForApi = (...parameters) =>
     .replace('/feedback', '/')
     .replace('/sequence', '/')
     .replace('/similar_proteins', '/')
-    .replace('/curation', '/');
+    .replace('/curation', '/')
+    // To simplify set calls to use a single endpoint
+    .replace(/\/set\/[a-zA-Z0-9]+\/entry\/([a-zA-Z0-9]+)\//, '/set/$1/');
