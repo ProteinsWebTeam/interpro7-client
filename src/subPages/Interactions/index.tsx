@@ -9,6 +9,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import cssBinder from 'styles/cssBinder';
 import { Renderer } from 'src/components/Table/Column';
+import PMCLink from 'components/ExtLink/PMCLink';
 
 const css = cssBinder();
 
@@ -35,6 +36,25 @@ const schemaProcessData = (data: Interaction[]) => {
       },
     })),
   };
+};
+
+const IntactLink: Renderer<unknown, Interaction> = (accession: unknown) => {
+  const url = `//www.ebi.ac.uk/intact/details/interaction/${
+    accession as string
+  }`;
+  return (
+    <Link className={css('ext')} href={url} target="_blank">
+      {accession}
+    </Link>
+  );
+};
+
+const EPMCLink: Renderer<unknown, Interaction> = (pubmedID: unknown) => {
+  return (
+    <PMCLink id={pubmedID as number} className={css('ext')}>
+      {pubmedID as number}
+    </PMCLink>
+  );
 };
 
 const Molecule: Renderer<unknown, Interaction> = (molecule: unknown) => {
@@ -83,12 +103,20 @@ const InteractionsSubPage = ({ data }: Props) => {
           <FullyLoadedTable
             data={_data}
             renderers={{
+              intact_id: IntactLink,
+              pubmed_id: EPMCLink,
               molecule_1: Molecule,
               molecule_2: Molecule,
             }}
             columnToString={{
               molecule_1: moleculeToString,
               molecule_2: moleculeToString,
+            }}
+            headerColumns={{
+              intact_id: 'Accession',
+              pubmed_id: 'PubMed ID',
+              molecule_1: 'Molecule A',
+              molecule_2: 'Molecule B',
             }}
           />
         </>
