@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 
-import {
-  ConnectedSortButton,
-  FilterButton,
-  ColumnSearchBox,
-} from 'components/SimpleCommonComponents/ColumnIcons';
+import FilterButton from 'components/SimpleCommonComponents/ColumnIcons/FilterButton';
+import ColumnSearchBox from 'components/SimpleCommonComponents/ColumnIcons/ColumnSearchBox';
+
 import { ColumnProps } from '../Column';
 
 import cssBinder from 'styles/cssBinder';
 
 import s from '../style.css';
+import SortButtonWithLabel from './SortButtonWithLabel';
 
 const css = cssBinder(s);
 
@@ -30,6 +29,7 @@ const Header = <
   const [showFilter, setShowFilter] = useState(
     Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),
   );
+
   if (notFound) {
     return null;
   }
@@ -58,7 +58,14 @@ const Header = <
                 className={headerClassName}
               >
                 <div className={css('table-header')}>
-                  {isSortable && <ConnectedSortButton field={dataKey} />}
+                  {isSortable ? (
+                    <SortButtonWithLabel
+                      text={(children as string) || name || dataKey}
+                      dataKey={dataKey}
+                    />
+                  ) : (
+                    <span>{children || name || dataKey}</span>
+                  )}
                   {isSearchable && (
                     <FilterButton
                       isOpen={showFilter[dataKey]}
@@ -70,7 +77,6 @@ const Header = <
                       }
                     />
                   )}
-                  {children || name || dataKey}
                 </div>
                 {isSearchable && (
                   <ColumnSearchBox
