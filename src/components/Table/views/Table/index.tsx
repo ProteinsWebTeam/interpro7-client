@@ -17,7 +17,6 @@ type Props<
 > = {
   dataTable: Array<RowData & {}>;
   rowKey?: string;
-  isStale?: boolean;
   loading?: boolean;
   ok?: boolean;
   status?: number;
@@ -35,7 +34,6 @@ class TableView<
   render() {
     const {
       loading,
-      // isStale,
       ok,
       status,
       columns,
@@ -58,7 +56,6 @@ class TableView<
           columns={columns}
           notFound={!!notFound}
           loading={!!loading}
-          // isStale={!!isStale}
           ok={ok}
           status={status || 0}
           rowClassName={rowClassName}

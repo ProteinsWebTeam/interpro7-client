@@ -49,7 +49,6 @@ table.light {
 }
 table.light thead {
   color: #9baaaf;
-  font-size: 0.9em;
   margin: 10px 0;
   border: 0;
   background: transparent; /*Overwrite EBI global*/
@@ -59,8 +58,6 @@ table.light thead th {
   background: rgba(255, 255, 255, 0.8);
   outline: none;
   border-bottom: 1px solid #d4dddf;
-  text-transform: uppercase;
-  font-size: 0.93em;
   font-weight: 400;
   color: #73828c;
 }
