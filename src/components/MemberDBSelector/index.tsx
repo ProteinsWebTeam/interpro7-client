@@ -1,33 +1,30 @@
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, { FormEvent, PureComponent } from 'react';
+
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import { sleep } from 'timing-functions';
 import { noop, get as _get } from 'lodash-es';
 
 import config from 'config';
+import { NOT_MEMBER_DBS } from 'menuConfig';
 
 import NumberComponent from 'components/NumberComponent';
-// $FlowFixMe
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
-import loadData from 'higherOrder/loadData';
-import { getUrlForMeta } from '../../higherOrder/loadData/defaults';
+import loadData from 'higherOrder/loadData/ts';
+import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import cancelable from 'utils/cancelable';
-import { toPlural } from 'utils/pages';
+import { toPlural } from 'utils/pages/toPlural';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { goToCustomLocation } from 'actions/creators';
-import { customLocationSelector } from 'reducers/custom-location';
 
-import { foundationPartial } from 'styles/foundation';
-
-import { NOT_MEMBER_DBS } from 'menuConfig';
+import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
 
-const f = foundationPartial(styles);
+const css = cssBinder(styles);
 
 const defaultDBFor = new Map([
   ['protein', 'uniprot'],
@@ -40,55 +37,65 @@ const defaultDBFor = new Map([
 const MIN_DELAY = 400;
 // const DELAY = 1500;
 
-const getStaticCountFor = (db, counts) => {
+const getStaticCountFor = (db: string, counts: MetadataCounters) => {
   return counts[db] || 0;
 };
 
 // eslint-disable-next-line
 const getCountFor = (
-  db,
-  { dataDBCount, dataAllCount, dataSubPageCount },
-  main,
-  sub,
-  hasMoreThanOneFilter,
+  db: string,
+  {
+    dataDBCount,
+    dataAllCount,
+    dataSubPageCount,
+  }: {
+    dataDBCount?: RequestedData<ComposedCounterPayload>;
+    dataAllCount?: RequestedData<CounterPayload>;
+    dataSubPageCount?: RequestedData<MetadataPayload & CounterPayload>;
+  },
+  main: Endpoint,
+  sub?: string | null,
+  hasMoreThanOneFilter?: boolean,
 ) => {
   if (sub) {
+    if (!dataSubPageCount) return;
     if (dataSubPageCount.loading) return 'loading';
     if (!dataSubPageCount.ok) return;
     switch (db) {
       case 'interpro':
         return _get(
-          dataSubPageCount.payload.entries,
+          dataSubPageCount.payload!.entries,
           [
             'interpro',
-            sub === 'entry' && !hasMoreThanOneFilter ? null : toPlural(sub),
+            sub === 'entry' && !hasMoreThanOneFilter ? '' : toPlural(sub),
           ].filter(Boolean),
         );
       case 'all':
         return _get(
-          dataSubPageCount.payload.entries,
-          ['all', sub === 'entry' ? null : toPlural(sub)].filter(Boolean),
+          dataSubPageCount.payload!.entries,
+          ['all', sub === 'entry' ? '' : toPlural(sub)].filter(Boolean),
         );
       default:
         return _get(
-          dataSubPageCount.payload.entries.member_databases,
+          dataSubPageCount.payload!.entries.member_databases,
           [
             db.toLowerCase(),
-            sub === 'entry' && !hasMoreThanOneFilter ? null : toPlural(sub),
+            sub === 'entry' && !hasMoreThanOneFilter ? '' : toPlural(sub),
           ].filter(Boolean),
           0,
         );
     }
   } else {
+    if (!dataDBCount || !dataAllCount) return;
     switch (db) {
       case 'interpro':
         if (dataDBCount.loading) return 'loading';
         if (!dataDBCount.ok) return;
         return _get(
-          dataDBCount.payload.entries,
+          dataDBCount.payload!.entries,
           [
             'interpro',
-            main === 'entry' && !hasMoreThanOneFilter ? null : toPlural(main),
+            main === 'entry' && !hasMoreThanOneFilter ? '' : toPlural(main),
           ].filter(Boolean),
         );
       case 'all':
@@ -96,16 +103,16 @@ const getCountFor = (
         if (!dataAllCount.ok) return;
         return _get(dataAllCount.payload, [
           toPlural(main),
-          defaultDBFor.get(main),
+          defaultDBFor.get(main) || '',
         ]);
       default:
         if (dataDBCount.loading) return 'loading';
         if (!dataDBCount.ok) return;
         return _get(
-          dataDBCount.payload.entries.member_databases,
+          dataDBCount.payload!.entries.member_databases,
           [
             db.toLowerCase(),
-            main === 'entry' && !hasMoreThanOneFilter ? null : toPlural(main),
+            main === 'entry' && !hasMoreThanOneFilter ? '' : toPlural(main),
           ].filter(Boolean),
           0,
         );
@@ -113,96 +120,66 @@ const getCountFor = (
   }
 };
 
-const comparisonFunction = (a, b) => {
+const comparisonFunction = (a: DBInfo, b: DBInfo) => {
   if (a.canonical < b.canonical) return -1;
   if (b.canonical < a.canonical) return 1;
   return 0;
 };
 
-const dataType = T.shape({
-  loading: T.bool.isRequired,
-  payload: T.object,
-});
+type Props = {
+  contentType?: string;
+  filterType?: string;
+  customLocation?: InterProLocation;
+  lowGraphics?: boolean;
+  goToCustomLocation?: typeof goToCustomLocation;
+  className?: string;
+  isSelected?: (db: DBInfo) => boolean;
+  onChange?: (event: FormEvent) => void;
+  hideCounters?: boolean;
+  dbCounters?: MetadataCounters;
+  children?: (visible: boolean) => React.ReactNode;
+};
+interface LoadedProps
+  extends Props,
+    LoadDataProps<CounterPayload, 'AllCount'>,
+    LoadDataProps<ComposedCounterPayload, 'DBCount'>,
+    LoadDataProps<MetadataPayload & CounterPayload, 'SubPageCount'>,
+    LoadDataProps<RootAPIPayload, 'DB'> {}
 
-/*:: type Props = {
-  children?: function,
-  dataDB: {
-    loading: boolean,
-    payload: Object
-   },
-   dataAllCount?: {
-    loading: boolean,
-    payload: Object
-   },
-   dataDBCount: {
-    loading: boolean,
-    payload: Object
-   },
-   dataSubPageCount?: {
-    loading: boolean,
-    payload: Object
-   },
-   contentType: string,
-   filterType?: string,
-   customLocation: {
-     description: Object,
-     search: Object
-   },
-   lowGraphics: boolean,
-   goToCustomLocation: function,
-   className?: string,
-   isSelected?: function,
-   onChange?: function,
-   hideCounters?: boolean,
-   dbCounters?: Object
-}; */
-
-/*:: type State = {
-  visible: boolean
-}; */
-export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
-  static propTypes = {
-    children: T.func,
-    dataDB: dataType,
-    dataAllCount: dataType,
-    dataDBCount: dataType,
-    dataSubPageCount: dataType,
-    contentType: T.string.isRequired,
-    filterType: T.string,
-    customLocation: T.shape({
-      description: T.object.isRequired,
-      search: T.object.isRequired,
-    }).isRequired,
-    lowGraphics: T.bool.isRequired,
-    goToCustomLocation: T.func.isRequired,
-    className: T.string,
-    isSelected: T.func,
-    onChange: T.func,
-    hideCounters: T.bool,
-    dbCounters: T.object,
+type State = {
+  visible: boolean;
+};
+export class _MemberDBSelector extends PureComponent<LoadedProps, State> {
+  _dbs: Map<string, DBInfo>;
+  _exit?: {
+    promise: Promise<unknown>;
+    canceled: boolean;
+    cancel(): void;
   };
 
-  constructor(props /*: Props */) {
-    /* _dbs : Map<string, Object> */
+  constructor(props: LoadedProps) {
     super(props);
 
     this.state = { visible: false };
 
     this._dbs = new Map();
     if (
-      props.customLocation.description.main.key !== 'entry' &&
+      props.customLocation?.description.main.key !== 'entry' &&
       props.contentType !== 'entry'
     ) {
-      this._dbs.set('all', { canonical: 'all', name: 'All' });
+      this._dbs.set('all', {
+        canonical: 'all',
+        name: 'All',
+        description: 'All',
+        version: '',
+        releaseDate: '',
+        type: '',
+      });
     }
   }
 
-  componentWillUnmount() {
-    if (this._hide) this._hide.cancel();
-  }
-
-  _populateDBs = (databases) => {
-    if (databases.payload && this._dbs.size <= 1) {
+  _populateDBs = (databases?: RequestedData<RootAPIPayload>) => {
+    if (databases?.payload && this._dbs.size <= 1) {
       this._dbs.set('interpro', databases.payload.databases.interpro);
       const dbs = Object.values(databases.payload.databases).sort(
         comparisonFunction,
@@ -220,50 +197,48 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
     return this._dbs;
   };
 
-  _defaultHandleChange = ({ target: { value } }) => {
-    const description = { ...this.props.customLocation.description };
+  _defaultHandleChange = ({ target }: FormEvent) => {
+    const value = (target as HTMLInputElement).value;
+    if (!this.props.customLocation) return;
+    const description: InterProPartialDescription = {
+      ...this.props.customLocation.description,
+    };
     if (value === 'all') {
       description.entry = {};
     } else {
       description.entry = {
-        isFilter: description.main.key !== 'entry',
+        isFilter: description.main?.key !== 'entry',
         db: value,
       };
     }
-    if (description.main.key === 'protein') {
-      description.protein.db = 'uniprot';
+    if (description.main?.key === 'protein') {
+      description.protein!.db = 'uniprot';
     }
-    if (description.taxonomy.isFilter) description.taxonomy.isFilter = false;
+    if (description.taxonomy!.isFilter) description.taxonomy!.isFilter = false;
     // const { page, ...search } = this.props.customLocation.search;
     const { search } = this.props.customLocation.search;
-    this.props.goToCustomLocation({
+    this.props.goToCustomLocation?.({
       ...this.props.customLocation,
       description,
       search: { search },
     });
-    // this._handleExit(DELAY);
-    /* TODO: if we decide to not close after click on database, remove this, and
-       logic to handle delay in this._handleExit */
   };
 
   _handleOpen = () => {
-    if (this._hide) this._hide.cancel();
     this.setState({ visible: true });
   };
 
-  _handleExit =
-    (withDelay /*: boolean*/) => (maybeEvent /*: Event | number */) => {
-      if (!this.state.visible) return;
-      const delay = Number.isFinite(maybeEvent) ? maybeEvent : MIN_DELAY;
-      this._exit = cancelable(
-        sleep(withDelay ? delay : 0).then(() => {
-          if (this._exit && !this._exit.canceled) {
-            this.setState({ visible: false });
-          }
-        }),
-      );
-      this._exit.promise.catch(noop);
-    };
+  _handleExit = (withDelay: boolean) => () => {
+    if (!this.state.visible) return;
+    this._exit = cancelable(
+      sleep(withDelay ? MIN_DELAY : 0).then(() => {
+        if (this._exit && !this._exit.canceled) {
+          this.setState({ visible: false });
+        }
+      }),
+    );
+    this._exit.promise.catch(noop);
+  };
 
   render() {
     const {
@@ -277,14 +252,17 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
       className = '',
       dbCounters,
     } = this.props;
+    if (!customLocation) return null;
     const { visible } = this.state;
     const dbs = this._populateDBs(dataDB);
     if (dbs.size <= 1) return null;
-    const main = customLocation.description.main.key;
+    const main = customLocation.description.main.key as Endpoint;
     const subL =
       customLocation.description[main].accession &&
       Object.entries(customLocation.description).find(
-        ([_, { isFilter }]) => isFilter,
+        ([_, maybeEndpointLocation]) =>
+          !Array.isArray(maybeEndpointLocation) &&
+          (maybeEndpointLocation as EndpointPartialLocation).isFilter,
       );
     const sub = this.props.filterType || (subL && subL[0]);
     const isSelected =
@@ -296,13 +274,15 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
     const handleChange = this.props.onChange || this._defaultHandleChange;
     const hasMoreThanOneFilter =
       Object.entries(customLocation.description).filter(
-        ([_, { isFilter }]) => isFilter,
+        ([_, maybeEndpointLocation]) =>
+          !Array.isArray(maybeEndpointLocation) &&
+          (maybeEndpointLocation as EndpointPartialLocation).isFilter,
       ).length > 1;
 
     const shouldShowInterPro = customLocation.description.main.key !== 'entry';
     return (
       <div
-        tabIndex="0"
+        tabIndex={0}
         role="button"
         onMouseOver={() =>
           this._exit && !this._exit.canceled && this._exit.cancel()
@@ -312,26 +292,26 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
         onFocus={this._handleOpen}
         onMouseLeave={this._handleExit(true)}
         onBlur={this._handleExit(true)}
-        className={f('container', className, {
+        className={css('container', className, {
           lowGraphics,
         })}
       >
         <span
-          className={f('child-container')}
+          className={css('child-container')}
           onClick={this._handleExit(false)}
           onKeyPress={this._handleExit(false)}
           role="button"
-          tabIndex="0"
+          tabIndex={0}
         >
           {children ? children(visible) : null}
         </span>
-        <div className={f('potential-popup', { popup: children, visible })}>
-          <div className={f('filter-label')}>
+        <div className={css('potential-popup', { popup: children, visible })}>
+          <div className={css('filter-label')}>
             <TooltipAndRTDLink rtdPage="searchways.html#using-browse-feature-to-search-and-filter-interpro" />{' '}
             Select your database:
           </div>
           <form
-            className={f('db-selector', { 'one-column': !children })}
+            className={css('db-selector', { 'one-column': !children })}
             onChange={handleChange}
           >
             {Array.from(this._dbs.values())
@@ -354,7 +334,7 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
                 return (
                   <label
                     key={db.canonical}
-                    className={f('db-choice', { disabled, checked })}
+                    className={css('db-choice', { disabled, checked })}
                     style={{ color: config.colors.get(db.canonical) }}
                     data-testid={`memberdb-filter-${db.canonical
                       .toLowerCase()
@@ -368,14 +348,18 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
                       checked={checked}
                       onChange={noop}
                     />
-                    <span className={f('text')}>
+                    <span className={css('text')}>
                       {db.name === 'All' ? `All ${toPlural(main)}` : db.name}
                     </span>
                     {!this.props.hideCounters && (
                       <NumberComponent
+                        label
                         loading={loading}
-                        className={f('label')}
-                        titleType={toPlural(main, (!loading && count) || 0)}
+                        className={css('label')}
+                        titleType={toPlural(
+                          main,
+                          (!loading && (count as number)) || 0,
+                        )}
                         style={{
                           background:
                             checked && config.colors.get(db.canonical),
@@ -396,8 +380,8 @@ export class _MemberDBSelector extends PureComponent /*:: <Props, State> */ {
 }
 
 const getUrlForAllCount = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.description.main.key,
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.customLocation.description.main.key,
   ({ protocol, hostname, port, root }, mainType) =>
     format({
       protocol,
@@ -408,8 +392,8 @@ const getUrlForAllCount = createSelector(
 );
 
 const getUrlForMemberDBCount = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.description,
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.customLocation.description,
   ({ protocol, hostname, port, root }, description) => {
     let output = format({
       protocol,
@@ -419,8 +403,7 @@ const getUrlForMemberDBCount = createSelector(
     });
     if (description.main.key && description.main.key !== 'entry') {
       output += `/${description.main.key}/${
-        description[description.main.key].proteomeDB ||
-        description[description.main.key].db
+        description[description.main.key as Endpoint].db
       }`;
       if (description.main.key === 'protein') {
         output = output.replace(/(un)?reviewed/i, 'UniProt');
@@ -431,10 +414,10 @@ const getUrlForMemberDBCount = createSelector(
 );
 
 const getUrlForSubPageCount = createSelector(
-  (state) => state.settings.api,
-  (state) => state.customLocation.description,
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.customLocation.description,
   ({ protocol, hostname, port, root }, description) => {
-    const { ..._description } = description;
+    const _description: InterProPartialDescription = { ...description };
     if (description.main.key !== 'entry') {
       _description.entry = { isFilter: true };
     }
@@ -448,42 +431,45 @@ const getUrlForSubPageCount = createSelector(
 );
 
 const mapStateToProps = createSelector(
-  customLocationSelector,
-  (state) => state.settings.ui.lowGraphics,
+  (state: GlobalState) => state.customLocation,
+  (state: GlobalState) => state.settings.ui.lowGraphics,
   (customLocation, lowGraphics) => ({ customLocation, lowGraphics }),
 );
 
-const FullyLoadedMemberDBSelector = loadData({
+const FullyLoadedMemberDBSelector = loadData<RootAPIPayload, 'DB'>({
   getUrl: getUrlForMeta,
   propNamespace: 'DB',
 })(
-  loadData({ getUrl: getUrlForAllCount, propNamespace: 'AllCount' })(
-    loadData({ getUrl: getUrlForMemberDBCount, propNamespace: 'DBCount' })(
-      loadData({
+  loadData<CounterPayload, 'AllCount'>({
+    getUrl: getUrlForAllCount,
+    propNamespace: 'AllCount',
+  } as LoadDataParameters)(
+    loadData<ComposedCounterPayload, 'DBCount'>({
+      getUrl: getUrlForMemberDBCount,
+      propNamespace: 'DBCount',
+    } as LoadDataParameters)(
+      loadData<MetadataPayload & CounterPayload, 'SubPageCount'>({
         getUrl: getUrlForSubPageCount,
         propNamespace: 'SubPageCount',
         mapStateToProps,
         mapDispatchToProps: { goToCustomLocation },
-      })(_MemberDBSelector),
+      } as LoadDataParameters)(_MemberDBSelector),
     ),
   ),
 );
 
-const SimplyLoadedMemberDBSelector = loadData({
+const SimplyLoadedMemberDBSelector = loadData<RootAPIPayload, 'DB'>({
   getUrl: getUrlForMeta,
   propNamespace: 'DB',
   mapStateToProps,
   mapDispatchToProps: { goToCustomLocation },
-})(_MemberDBSelector);
+} as LoadDataParameters)(_MemberDBSelector);
 
-const OptMemberDBSelector = (props) =>
+const OptMemberDBSelector = (props: Props) =>
   props.dbCounters ? (
     <SimplyLoadedMemberDBSelector {...props} />
   ) : (
     <FullyLoadedMemberDBSelector {...props} />
   );
-OptMemberDBSelector.propTypes = {
-  dbCounters: T.object,
-};
 
 export default OptMemberDBSelector;

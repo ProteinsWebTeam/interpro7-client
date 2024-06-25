@@ -1,4 +1,5 @@
 import { PropsWithChildren, ReactNode } from 'react';
+import { CustomiseSearchBoxOptions } from 'components/Table/SearchBox';
 
 export type Renderer<
   CellData = unknown,
@@ -23,8 +24,8 @@ export type ColumnProps<
   isSearchable?: boolean;
   isSortable?: boolean;
   showOptions?: boolean;
-  options?: unknown;
-  customiseSearch?: unknown;
+  options?: Array<string>;
+  customiseSearch?: CustomiseSearchBoxOptions;
 }>;
 
 const Column = <

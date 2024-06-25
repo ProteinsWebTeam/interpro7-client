@@ -168,7 +168,6 @@ const List = ({
         <div className={css('browse-side-panel')}>
           <div className={css('selector-container')}>
             <MemberDBSelector
-              // @ts-expect-error until MemberDBselector is migrated
               contentType="taxonomy"
               className="pp-left-side-db-selector"
             />

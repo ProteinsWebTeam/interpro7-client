@@ -83,7 +83,6 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
         <div className={f('browse-side-panel')}>
           <div className={f('selector-container')}>
             <MemberDBSelector
-              // @ts-expect-error until MemberDB selector is migrated
               contentType="set"
               className="pp-left-side-db-selector"
             />
