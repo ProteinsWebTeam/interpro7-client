@@ -16,9 +16,11 @@ import NumberComponent from 'components/NumberComponent';
 import { speciesFeat } from 'staticData/home';
 
 import cssBinder from 'styles/cssBinder';
-import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const css = cssBinder(fonts);
+import fonts from 'EBI-Icon-fonts/fonts.css';
+import tableStyles from 'components/Table/style.css';
+
+const css = cssBinder(fonts, tableStyles);
 
 type Props = {
   description?: InterProDescription;
@@ -84,7 +86,7 @@ const _KeySpeciesTableWithData = ({ data, description }: LoadedProps) => {
       <Column
         dataKey="proteins"
         cellClassName={css('table-center')}
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         renderer={(count) => <NumberComponent abbr>{count}</NumberComponent>}
       >
         protein count
@@ -92,7 +94,7 @@ const _KeySpeciesTableWithData = ({ data, description }: LoadedProps) => {
       <Column
         dataKey="accession"
         defaultKey="proteinFastas"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         renderer={ProteinDownloadRenderer(description)}
       >
