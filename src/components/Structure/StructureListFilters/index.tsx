@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 
 import FiltersPanel from 'components/FiltersPanel';

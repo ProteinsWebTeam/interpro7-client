@@ -15,6 +15,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { includeTaxonFocusedOnURL } from 'higherOrder/loadData/defaults';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
 import TaxonomyCard from 'components/Taxonomy/Card';

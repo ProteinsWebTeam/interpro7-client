@@ -4,6 +4,7 @@ import React from 'react';
 // import { createSelector } from 'reselect';
 // import { connect } from 'react-redux';
 
+// $FlowFixMe
 import FiltersPanel from 'components/FiltersPanel';
 import IsReferenceFilter from 'components/Proteome/ProteomeListFilters/IsReferenceFilter';
 
