@@ -57,6 +57,15 @@ const schemaProcessData = (data) => {
 const HmmModelSection = ({ logo } /*: {logo: {}} */) => {
   useEffect(() => {
     loadWebComponent(() => Skylign).as('skylign-component');
+
+    // TODO: Change style in `skylign-component` itself.
+    // This is a temporaly walkaround to change a shadow DOM style from this code base.
+    customElements.whenDefined('skylign-component').then(() => {
+      const controlsDiv = document
+        .querySelector('skylign-component')
+        .shadowRoot.querySelector('div');
+      controlsDiv.style.position = 'relative';
+    });
   });
 
   return (
