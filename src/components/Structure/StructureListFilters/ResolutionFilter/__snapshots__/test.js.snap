@@ -2,7 +2,7 @@
 
 exports[`<ResolutionFilter /> should render 1`] = `
 <div
-  className="column"
+  className="filter"
 >
   <label
     className="radio-btn-label checked"

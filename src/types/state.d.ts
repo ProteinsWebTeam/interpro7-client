@@ -17,6 +17,14 @@ type Endpoint =
   | 'proteome'
   | 'set';
 
+type EndpointPlural =
+  | 'entries'
+  | 'proteins'
+  | 'structures'
+  | 'taxa'
+  | 'proteomes'
+  | 'sets';
+
 type MemberDB =
   | 'cathgene3d'
   | 'cdd'

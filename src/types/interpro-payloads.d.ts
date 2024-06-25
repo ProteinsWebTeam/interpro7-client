@@ -73,6 +73,10 @@ interface Metadata {
   go_terms?: Array<GOTerm>;
 }
 
+type MetadataPayload<T = unknown> = {
+  metadata: T;
+};
+
 type NameObject = {
   name: string;
   short?: string;
@@ -338,10 +342,14 @@ interface EntryStructureMatch extends MatchI {
   entry_type: string;
   entry_integrated: string | null;
 }
+interface EntrySetMatch extends MatchI {
+  entry_accession?: string;
+}
 
 type AnyMatch = Partial<EntryProteinMatch> &
   Partial<EntryStructureMatch> &
-  Partial<StructureProteinMatch>;
+  Partial<StructureProteinMatch> &
+  Partial<EntrySetMatch>;
 
 type EntryStructurePayload = {
   metadata: EntryMetadata;
@@ -406,6 +414,8 @@ type Taxon = {
   species: number;
   children: Array<Taxon>;
 };
+
+type GroupByPayload<T = number> = Record<string, T>;
 
 type IDAResult = {
   ida: string;
@@ -544,4 +554,14 @@ type Interaction = {
 
 type InteractionsPayload = {
   interactions: Array<Interaction>;
+};
+type CounterPayload = {
+  [endpoint in EndpointPlural]: Record<string, number> & {
+    member_databases?: Record<string, number>;
+  };
+};
+type ComposedCounterPayload = {
+  [endpoint in EndpointPlural]: Record<string, Record<string, number>> & {
+    member_databases?: Record<string, Record<string, number>>;
+  };
 };
