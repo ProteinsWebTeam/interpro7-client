@@ -78,7 +78,6 @@ export default class Table<
                 className={css('table-main', { loading: loading || isStale })}
               >
                 <TableView<RowData>
-                  isStale={isStale}
                   loading={loading}
                   ok={ok}
                   status={status}
