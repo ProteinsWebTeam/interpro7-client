@@ -3,6 +3,7 @@
 import React, { PureComponent, Children } from 'react';
 import T from 'prop-types';
 
+// $FlowFixMe
 import _Header from './Header';
 import _Body from './Body';
 import _Column from './Column';

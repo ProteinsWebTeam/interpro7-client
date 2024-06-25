@@ -83,6 +83,7 @@ const FullyLoadedTable = (
           dataKey={key}
           renderer={renderers[key] || ((d) => d)}
           isSearchable={true}
+          isSortable={true}
           headerStyle={{
             ...(headerStyle['*'] || {}),
             ...(headerStyle[key] || {}),

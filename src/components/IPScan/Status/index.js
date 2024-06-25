@@ -39,8 +39,9 @@ import interproTheme from 'styles/theme-interpro.css'; /* needed for custom butt
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import tableStyles from 'components/Table/style.css';
 
-const f = foundationPartial(interproTheme, fonts, ipro, local);
+const f = foundationPartial(interproTheme, fonts, ipro, local, tableStyles);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -203,6 +204,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           <Column
             dataKey="localTitle"
             isSearchable={true}
+            isSortable={true}
             renderer={(localTitle /*: string */, row /*: Object */) => (
               <>
                 <span style={{ marginRight: '1em' }}>
@@ -236,6 +238,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           <Column
             dataKey="times"
             isSearchable={true}
+            isSortable={true}
             renderer={(
               {
                 created,
@@ -259,7 +262,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           </Column>
           <Column
             dataKey="status"
-            headerClassName={f('table-center')}
+            headerClassName={f('table-header-center')}
             cellClassName={f('table-center')}
             renderer={(status /*: string */, row /*: Object */) => (
               <Tooltip title={`Job ${status}`}>
@@ -320,7 +323,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           <Column
             dataKey="localID"
             defaultKey="actions"
-            headerClassName={f('table-center')}
+            headerClassName={f('table-header-center')}
             cellClassName={f('table-center', 'font-ml')}
             renderer={(localID /*: string */) => (
               <Actions localID={localID} forStatus={true} />

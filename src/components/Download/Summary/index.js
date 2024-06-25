@@ -25,8 +25,9 @@ import interproTheme from 'styles/theme-interpro.css'; /* needed for custom butt
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import VersionCheck from './VersionCheck';
+import tableStyles from 'components/Table/style.css';
 
-const f = foundationPartial(interproTheme, fonts, ipro);
+const f = foundationPartial(interproTheme, fonts, ipro, tableStyles);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -116,7 +117,7 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
             </Column>
             <Column
               dataKey="progress"
-              headerClassName={f('table-center')}
+              headerClassName={f('table-header-center')}
               cellClassName={f('table-center')}
               renderer={(
                 progress /*: number */,
@@ -167,7 +168,7 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
             <Column
               dataKey="localID"
               defaultKey="actions"
-              headerClassName={f('table-center')}
+              headerClassName={f('table-header-center')}
               cellClassName={f('table-center')}
               renderer={(
                 localID /*: string */,

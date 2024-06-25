@@ -210,6 +210,7 @@ class List extends PureComponent /*:: <ListProps> */ {
             <HighlightToggler />
             <Column
               dataKey="accession"
+              isSortable={true}
               // eslint-disable-next-line camelcase
               renderer={(accession /*: string */, row) => (
                 <Link
@@ -284,7 +285,9 @@ class List extends PureComponent /*:: <ListProps> */ {
                 extra,
               ) => {
                 const count =
-                  (extra && extra.counters && extra.counters.entries) || '-';
+                  extra?.counters?.entries?.total ||
+                  extra?.counters?.entries ||
+                  '-';
                 return (
                   <Link
                     to={(customLocation) => ({
