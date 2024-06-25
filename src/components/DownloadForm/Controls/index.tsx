@@ -118,9 +118,10 @@ export class Controls extends PureComponent<Props> {
             Generate
           </Button>
           <Link
-            className={css('button', 'hollow', {
+            className={css({
               warning: count >= SOFT_LIMIT,
             })}
+            buttonType="primary"
             disabled={!successful || count > HARD_LIMIT}
             href={blobURL}
             download={`export.${fileType === 'accession' ? 'txt' : fileType}`}

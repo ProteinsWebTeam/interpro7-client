@@ -38,7 +38,8 @@ exports[`<Controls /> should render 1`] = `
       Generate
     </ForwardRef>
     <Memo(Connect(Link))
-      className="button hollow warning"
+      buttonType="primary"
+      className="warning"
       disabled={true}
       download="export.undefined"
     >

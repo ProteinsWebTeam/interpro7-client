@@ -43,7 +43,7 @@ const GoToNewDownload = () => (
       },
       hash: '/entry/InterPro/|accession',
     }}
-    className={f('button')}
+    buttonType="primary"
   >
     Select and Download InterPro data
   </Link>
