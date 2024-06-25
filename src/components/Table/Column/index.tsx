@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactNode } from 'react';
-import { CustomiseSearchBoxOptions } from 'components/SimpleCommonComponents/ColumnIcons/ColumnSearchBox';
+import { CustomiseSearchBoxOptions } from 'components/Table/SearchBox';
 
 export type Renderer<
   CellData = unknown,

@@ -16,6 +16,12 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 const css = cssBinder(fonts, s);
 
 const DEBOUNCE_RATE = 500; // In ms
+export type CustomiseSearchBoxOptions = {
+  type?: string;
+  validation?: RegExp;
+  message?: string;
+  placeholder?: string;
+};
 
 type Props = {
   customLocation?: InterProLocation;
@@ -23,11 +29,7 @@ type Props = {
   loading?: boolean;
   children?: string;
   field?: string;
-  customiseSearch?: {
-    type: string;
-    validation: RegExp;
-    message: string;
-  };
+  customiseSearch?: CustomiseSearchBoxOptions;
 };
 type State = {
   localSearch: string | null;
