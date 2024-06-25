@@ -65,6 +65,7 @@ type Props<RowData extends Record<string, unknown>> = {
   columnToString?: Record<string, Column2StringFn<RowData>>;
   headerStyle?: Record<string, React.CSSProperties>;
   cellStyle?: Record<string, React.CSSProperties>;
+  headerColumns?: Record<string, string>;
   headerClassName?: Record<string, string>;
   cellClassName?: Record<string, string>;
 };
@@ -77,6 +78,7 @@ export const FullyLoadedTable = <RowData extends Record<string, unknown>>({
   columnToString = {},
   headerStyle = {},
   cellStyle = {},
+  headerColumns = {},
   headerClassName = {},
   cellClassName = {},
   search,
@@ -89,7 +91,6 @@ export const FullyLoadedTable = <RowData extends Record<string, unknown>>({
   const size = Number(search?.page_size) || pageSize || 20;
   const page = Number(search?.page) || 1;
   subset = subset.slice((page - 1) * size, page * size);
-
   return (
     <Table actualSize={data.length} dataTable={subset} query={search}>
       <PageSizeSelector />
@@ -114,7 +115,9 @@ export const FullyLoadedTable = <RowData extends Record<string, unknown>>({
           cellClassName={`${cellClassName['*'] || ''} ${
             cellClassName[key] || ''
           }`}
-        />
+        >
+          {headerColumns[key] || key}
+        </Column>
       ))}
     </Table>
   );
