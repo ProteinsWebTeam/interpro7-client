@@ -132,7 +132,7 @@ exports[`<Documentation /> should render 1`] = `
                         "type": "download",
                       },
                     },
-                    "hash": "/entry/interpro",
+                    "hash": "/entry/interpro/|json",
                   }
                 }
               >
