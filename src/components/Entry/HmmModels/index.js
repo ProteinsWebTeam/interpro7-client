@@ -63,8 +63,9 @@ const HmmModelSection = ({ logo } /*: {logo: {}} */) => {
     customElements.whenDefined('skylign-component').then(() => {
       const controlsDiv = document
         .querySelector('skylign-component')
-        .shadowRoot.querySelector('div');
-      controlsDiv.style.position = 'relative';
+        ?.shadowRoot?.querySelector('div');
+
+      if (controlsDiv) controlsDiv.style.position = 'relative';
     });
   });
 
