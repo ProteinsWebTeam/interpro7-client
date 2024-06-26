@@ -23,9 +23,7 @@ const DomainArchitecture = loadable({
 });
 const InteractionsSubPage = loadable({
   loader: () =>
-    import(
-      /* webpackChunkName: "interactions-subpage" */ './InteractionsSubPage'
-    ),
+    import(/* webpackChunkName: "interactions-subpage" */ './Interactions'),
 });
 const PathwaysSubPage = loadable({
   loader: () => import(/* webpackChunkName: "pathways-subpage" */ './Pathways'),

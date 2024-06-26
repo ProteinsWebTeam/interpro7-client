@@ -540,6 +540,21 @@ type ErrorPayload = {
   detail: string;
 };
 
+type InteractionMolecule = {
+  accession: string;
+  identifier: string;
+  type: string;
+};
+type Interaction = {
+  intact_id: string;
+  pubmed_id: number;
+  molecule_1: InteractionMolecule;
+  molecule_2: InteractionMolecule;
+};
+
+type InteractionsPayload = {
+  interactions: Array<Interaction>;
+};
 type CounterPayload = {
   [endpoint in EndpointPlural]: Record<string, number> & {
     member_databases?: Record<string, number>;

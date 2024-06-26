@@ -1,27 +1,26 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 
 import FullyLoadedTable from 'components/Table/FullyLoadedTable';
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { Renderer } from 'src/components/Table/Column';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-const f = foundationPartial();
+const css = cssBinder();
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
-const links = {
+const links: Record<string, string> = {
   reactome: 'https://reactome.org/content/schema/instance/browser/<id>',
   kegg: 'https://www.genome.jp/dbget-bin/www_bget?map<id>',
   metacyc: 'https://metacyc.org/META/NEW-IMAGE?type=NIL&object=<id>&redirect=T',
 };
 
-const schemaProcessData = (data) => {
+const schemaProcessData = (data: Array<Pathway>) => {
   return {
     '@id': '@additionalProperty',
     '@type': 'PropertyValue',
@@ -30,40 +29,40 @@ const schemaProcessData = (data) => {
   };
 };
 
-const PathwayLink = (id, { database }) => {
+const PathwayLink: Renderer<unknown, Pathway> = (
+  id: unknown,
+  { database }: Pathway,
+) => {
   if (links[database]) {
     return (
       <Link
         target="_blank"
-        className={f('ext')}
-        href={links[database].replace('<id>', id)}
+        className={css('ext')}
+        href={links[database].replace('<id>', String(id))}
       >
         {id}
       </Link>
     );
   }
-  return <span>{id}</span>;
+  return <span>{String(id)}</span>;
 };
-PathwayLink.propTypes = {
-  accession: T.string.isRequired,
-  identifier: T.string,
-  type: T.string,
+type Props = {
+  data: RequestedData<{
+    pathways: Record<string, Array<{ id: string; name: string }>>;
+  }>;
 };
+type Pathway = { id: string; name: string; database: string };
 
-const InteractionsAndPathwaysSubPage = (
-  {
-    data,
-  } /*: {data: {loading: boolean, payload: {pathways: {[string]: Array<Object>}} }}*/,
-) => {
+const InteractionsAndPathwaysSubPage = ({ data }: Props) => {
   if (data.loading) return <Loading />;
-  const _data = [];
+  if (!data.payload) return null;
+  const _data: Array<Pathway> = [];
   for (const [database, pathways] of Object.entries(data.payload.pathways)) {
-    // $FlowFixMe
     _data.push(...pathways.map(({ id, name }) => ({ id, name, database })));
   }
 
   return (
-    <div className={f('row', 'column')}>
+    <div className={css('vf-stack', 'vf-stack--400')}>
       {_data ? (
         <>
           <p>
@@ -82,9 +81,6 @@ const InteractionsAndPathwaysSubPage = (
       )}
     </div>
   );
-};
-InteractionsAndPathwaysSubPage.propTypes = {
-  data: T.object.isRequired,
 };
 
 export default InteractionsAndPathwaysSubPage;
