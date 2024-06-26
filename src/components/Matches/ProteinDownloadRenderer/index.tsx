@@ -19,7 +19,7 @@ const ProteinDownloadRenderer =
       source_database: string;
       proteins?: number;
       counters?: { extra_fields: { counters: { proteins: number } } };
-    }
+    },
   ) => {
     if (!description) return null;
     const endpointToFilterBy /*: string */ = description.taxonomy.isFilter

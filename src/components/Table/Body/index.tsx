@@ -1,47 +1,40 @@
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, { PropsWithChildren, PureComponent, RefObject } from 'react';
+import ColorHash from 'color-hash';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import Row from '../Row';
 
 import { edgeCases } from 'utils/server-message';
-// $FlowFixMe
 import EdgeCase from 'components/EdgeCase';
 
-import ColorHash from 'color-hash';
-
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import tableStyles from '../style.css';
 import styles from './style.css';
+import { ColumnProps } from '../Column';
 
-const f = foundationPartial(styles, tableStyles);
+const css = cssBinder(styles, tableStyles);
 // default values for version 1.X of colorhash
 /* eslint-disable no-magic-numbers */
 const colorHash = new ColorHash({
-  hash: 'bkdr',
   saturation: [0.65, 0.35, 0.5],
   lightness: 0.95,
 });
 /* eslint-enable no-magic-numbers */
 
-/*:: type Props = { children: any} */
+type Props = PropsWithChildren<{}>;
 
-class NoRows extends PureComponent /*:: <Props> */ {
-  /*:: _ref: { current: null | React$ElementRef<'tbody'> }; */
-  static propTypes = {
-    children: T.any.isRequired,
-  };
+class NoRows extends PureComponent<Props> {
+  _ref: RefObject<HTMLTableSectionElement>;
 
-  constructor(props /*: Props */) {
+  constructor(props: Props) {
     super(props);
 
     this._ref = React.createRef();
   }
 
   componentDidMount() {
-    // $FlowFixMe method-unbinding
     if (!(this._ref.current && this._ref.current.animate)) return;
     this._ref.current.animate(
       { opacity: [0, 1] },
@@ -53,11 +46,8 @@ class NoRows extends PureComponent /*:: <Props> */ {
     return (
       <tbody ref={this._ref}>
         <tr>
-          <td
-            className={f('padding-top-large', 'padding-bottom-large')}
-            colSpan="999"
-          >
-            <span className={f('warning-msg-table')}>
+          <td colSpan={999}>
+            <span className={css('warning-msg-table')}>
               {this.props.children}
             </span>
           </td>
@@ -66,33 +56,32 @@ class NoRows extends PureComponent /*:: <Props> */ {
     );
   }
 }
-/*:: type BodyProps = {
-  loading: boolean,
-  ok: boolean,
-  status: number,
-  rows: Array<Object>,
-  rowKey: string,
-  columns: Array<string>,
-  rowClassName:string | function,
-  groups?: Array<string>,
-  groupActions?: React$Element<any>,
-  notFound: boolean
-} */
+type BodyProps<
+  RowDataB = Record<string, unknown>,
+  ExtraDataB = Record<string, unknown>,
+> = {
+  loading: boolean;
+  ok?: boolean;
+  status: number;
+  rows: Array<
+    RowDataB & {
+      metadata?: RowDataB;
+      extra_fields?: ExtraDataB;
+      group?: string;
+    }
+  >;
+  rowKey: string;
+  columns: Array<ColumnProps<unknown, RowDataB, ExtraDataB>>;
+  rowClassName?: string | ((rowData: RowDataB) => string);
+  groups?: Array<string>;
+  groupActions?: React.FC<{ group: string }>;
+  notFound: boolean;
+};
 
-class Body extends PureComponent /*:: <BodyProps> */ {
-  static propTypes = {
-    loading: T.bool,
-    ok: T.bool,
-    status: T.number,
-    rows: T.array.isRequired,
-    rowKey: T.string,
-    columns: T.array.isRequired,
-    notFound: T.bool,
-    rowClassName: T.oneOfType([T.string, T.func]),
-    groups: T.arrayOf(T.string),
-    groupActions: T.elementType,
-  };
-
+class Body<
+  RowDataBB = Record<string, unknown>,
+  ExtraDataBB = Record<string, unknown>,
+> extends PureComponent<BodyProps<RowDataBB, ExtraDataBB>> {
   static defaultProps = {
     rowKey: 'accession',
   };
@@ -122,40 +111,50 @@ class Body extends PureComponent /*:: <BodyProps> */ {
         </NoRows>
       );
 
-    // const message = getStatusMessage(status);
-    // if (message) return <NoRows>{message}</NoRows>;
     // don't change next line to “!ok”, might be undefined
     if (ok === false) return <NoRows>The API request failed</NoRows>;
     if (notFound || !rows.length) {
       return <NoRows>{loading ? <Loading /> : 'No data available'}</NoRows>;
     }
-    let curentGroup = null;
+    let curentGroup: string | null = null;
     return (
       <tbody>
         {rows.map((row, index) => {
-          const rowData = row.metadata || row;
-          const extraData = row.extra_fields;
-          const rcn = row.className ? row.className : rowClassName;
-          let GroupActions = null;
-          const shouldRenderGroupHeader =
-            groups?.length && row.group && curentGroup !== row.group;
-          if (shouldRenderGroupHeader) {
-            curentGroup = row.group;
+          const rowData = 'metadata' in row ? (row.metadata as RowDataBB) : row;
+          const extraData =
+            'extra_fields' in row ? row.extra_fields : undefined;
+          const rcn =
+            'className' in row ? (row.className as string) : rowClassName;
+          let GroupActions: React.FC<{ group: string }> | null = null;
+          const rowGroup = 'group' in row ? (row.group as string) : undefined;
+          const shouldRenderGroupHeader = !!(
+            groups?.length &&
+            rowGroup &&
+            curentGroup !== rowGroup
+          );
+          if (shouldRenderGroupHeader && groupActions) {
+            curentGroup = rowGroup as string;
             GroupActions = groupActions;
           }
           return (
-            <React.Fragment key={rowData[rowKey] || index}>
+            <React.Fragment
+              key={
+                rowKey in (rowData as object)
+                  ? (rowData as Record<string, string>)[rowKey]
+                  : index
+              }
+            >
               {shouldRenderGroupHeader && (
                 <tr>
                   <th
                     style={{
                       color: 'var(--colors-progress, #1f6ca2)',
                       textAlign: 'start',
-                      backgroundColor: colorHash.hex(row.group),
+                      backgroundColor: colorHash.hex(rowGroup),
                       position: 'unset',
                     }}
                   >
-                    {row.group}
+                    {rowGroup}
                   </th>
                   {!!GroupActions && (
                     <>
@@ -164,22 +163,24 @@ class Body extends PureComponent /*:: <BodyProps> */ {
                       ))}
                       <th
                         style={{ position: 'unset' }}
-                        className={f('table-header-right')}
+                        className={css('table-header-right')}
                       >
-                        <GroupActions group={row.group} />
+                        <GroupActions group={rowGroup} />
                       </th>
                     </>
                   )}
                 </tr>
               )}
-              <Row
+              <Row<RowDataBB, ExtraDataBB>
                 row={rowData}
                 columns={columns}
                 extra={extraData}
                 rowClassName={rcn}
-                group={groups && row.group}
+                group={groups && (row.group as string)}
                 backgroundColor={
-                  groups && row.group ? colorHash.hex(row.group) : null
+                  groups && row.group
+                    ? colorHash.hex(row.group as string)
+                    : undefined
                 }
               />
             </React.Fragment>

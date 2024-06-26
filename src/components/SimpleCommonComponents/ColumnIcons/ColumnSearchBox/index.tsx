@@ -16,7 +16,7 @@ type Props = {
   forceToShow?: boolean;
   search: InterProLocationSearch;
   showOptions?: boolean;
-  options: Array<string>;
+  options?: Array<string>;
   customiseSearch?: CustomiseSearchBoxOptions;
 };
 const ColumnSearchBox = ({
@@ -28,7 +28,8 @@ const ColumnSearchBox = ({
   customiseSearch,
 }: Props) => {
   if (!forceToShow && !(field in search)) return null;
-  if (showOptions) return <ColumnSelectMenu field={field} options={options} />;
+  if (showOptions && options)
+    return <ColumnSelectMenu field={field} options={options} />;
   return (
     <SearchBox field={field} customiseSearch={customiseSearch}>
       {customiseSearch?.placeholder}

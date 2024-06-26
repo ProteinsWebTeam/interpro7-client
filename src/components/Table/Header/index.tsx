@@ -1,9 +1,9 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { useState } from 'react';
 
 import FilterButton from 'components/SimpleCommonComponents/ColumnIcons/FilterButton';
-import ColumnSearchBox, {
-  CustomiseSearchBoxOptions,
-} from 'components/SimpleCommonComponents/ColumnIcons/ColumnSearchBox';
+import ColumnSearchBox from 'components/SimpleCommonComponents/ColumnIcons/ColumnSearchBox';
+
+import { ColumnProps } from '../Column';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -12,26 +12,20 @@ import SortButtonWithLabel from './SortButtonWithLabel';
 
 const css = cssBinder(s);
 
-// TODO: move to the columns when that is migrated
-type ColumnProps = PropsWithChildren<{
-  dataKey: string;
-  displayIf?: boolean;
-  defaultKey?: string;
-  name: string;
-  headerStyle?: React.CSSProperties;
-  headerClassName?: string;
-  isSearchable: boolean;
-  isSortable: boolean;
-  showOptions: boolean;
-  options: Array<string>;
-  customiseSearch: CustomiseSearchBoxOptions;
-}>;
-
-type Props = {
-  columns: Array<ColumnProps>;
+type Props<
+  RowData = Record<string, unknown>,
+  ExtraData = Record<string, unknown>,
+> = {
+  columns: Array<ColumnProps<unknown, RowData, ExtraData>>;
   notFound?: boolean;
 };
-const Header = ({ columns, notFound }: Props) => {
+const Header = <
+  RowData = Record<string, unknown>,
+  ExtraData = Record<string, unknown>,
+>({
+  columns,
+  notFound,
+}: Props<RowData, ExtraData>) => {
   const [showFilter, setShowFilter] = useState(
     Object.fromEntries(columns.map(({ dataKey }) => [dataKey, false])),
   );

@@ -15,9 +15,12 @@ import _Exporter from './Exporter';
 import _PageSizeSelector from './PageSizeSelector';
 import _SearchBox from './SearchBox';
 import _HighlightToggler from './HighlightToggler';
+// $FlowFixMe
 import _Body from './Body';
+// $FlowFixMe
 import _Column from './Column';
 import _Card from './Card';
+// $FlowFixMe
 import _Row from './Row';
 // $FlowFixMe
 import _Footer from './Footer';
@@ -59,15 +62,12 @@ ExtraOptions.propTypes = { children: T.any };
   onFocusChanged?: ?function,
   shouldGroup?: boolean,
   groupActions?: (string)=>any
-} */
+  } */
 
 const TableView = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "table-view" */ './views/Table'),
 });
-
-// const ListView = loadable({
-//   loader: () => import(/* webpackChunkName: "list-view" */ './views/List'),
-// });
 
 const GridView = loadable({
   loader: () => import(/* webpackChunkName: "grid-view" */ './views/Grid'),
@@ -79,6 +79,7 @@ const TreeView = loadable({
 const KeySpecies = loadable({
   loader: () =>
     import(
+      // $FlowFixMe
       /* webpackChunkName: "keyspecies-view" */ 'components/Taxonomy/KeySpeciesTable'
     ),
 });
