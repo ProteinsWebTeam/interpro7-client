@@ -48,33 +48,5 @@ export const getCursor = (url /*: string */) => {
   return null;
 };
 
-export const toCanonicalURL = (
-  url /*: string */,
-  encodeArguments /*: boolean */ = false,
-) => {
-  const ulrObj = parse(url);
-  if (!ulrObj.search) return ulrObj.pathname;
-  const path = trimSlashes(
-    ulrObj.pathname.split('api/')?.[1] || ulrObj.pathname,
-  );
-  return `${path}?${ulrObj.search
-    .slice(1)
-    .split('&')
-    .filter((arg) => arg.toLowerCase() !== 'page_size=20')
-    .map((arg) => {
-      if (!encodeArguments) return arg;
-      const regex = /(.+)=(.+)/;
-      const matches = regex.exec(arg);
-      if (matches) {
-        return `${matches[1]}=${
-          matches[1] === 'cursor' ? matches[2] : encodeURIComponent(matches[2])
-        }`;
-      }
-      return arg;
-    })
-    .sort()
-    .join('&')}`;
-};
-
 // Function to use when an API URL needs to be exposed
 export const toPublicAPI = (url /*: string */) => url.replace('wwwapi', 'api');

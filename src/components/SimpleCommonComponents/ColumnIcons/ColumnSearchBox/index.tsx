@@ -3,14 +3,9 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 import { SearchBox } from 'components/Table';
+import { CustomiseSearchBoxOptions } from 'components/Table/SearchBox';
 import ColumnSelectMenu from './ColumnSelectMenu';
 
-export type CustomiseSearchBoxOptions = {
-  type?: string;
-  validation?: RegExp;
-  message?: string;
-  placeholder?: string;
-};
 type Props = {
   field: string;
   forceToShow?: boolean;
@@ -19,6 +14,7 @@ type Props = {
   options?: Array<string>;
   customiseSearch?: CustomiseSearchBoxOptions;
 };
+
 const ColumnSearchBox = ({
   field,
   forceToShow,
