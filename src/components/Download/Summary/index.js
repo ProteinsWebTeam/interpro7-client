@@ -9,6 +9,7 @@ import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Table, { Column } from 'components/Table';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';

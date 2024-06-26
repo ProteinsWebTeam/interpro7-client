@@ -36,6 +36,7 @@ import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideSummary from 'components/IPScan/NucleotideSummary';
 import IPScanTitle from './IPScanTitle';
 import SubJobsBrowser from '../SubJobsBrowser';
+// $FlowFixMe
 import { Exporter } from 'components/Table';
 import { updateJobTitle } from 'actions/creators';
 

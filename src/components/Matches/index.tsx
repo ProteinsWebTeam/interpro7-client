@@ -178,8 +178,8 @@ type Props = {
   description?: InterProDescription;
   hash?: string;
   state?: GlobalState;
-  databases: Record<string, { name: string }>;
-  dbCounters?: Object;
+  databases: DBsInfo;
+  dbCounters?: MetadataCounters;
   mainData: MetadataWithLocations;
   accessionSearch?: AccSearchData;
   focusType?: string;
@@ -213,7 +213,7 @@ const Matches = ({
   status,
   ...props
 }: Props) => {
-  const [focused, setFocused] = useState(null);
+  const [focused, setFocused] = useState<string | null>(null);
   useEffect(() => {
     loadWebComponent(() =>
       import(
@@ -254,7 +254,9 @@ const Matches = ({
       withSunburst={isTaxonomySubpage}
       withKeySpecies={isTaxonomySubpage}
       dbCounters={dbCounters}
-      rowClassName={(row: Record<string, unknown>) => css({ exact: row.exact })}
+      rowClassName={(row) =>
+        css({ exact: (row as Record<string, unknown>).exact })
+      }
       nextAPICall={nextAPICall}
       previousAPICall={previousAPICall}
       currentAPICall={currentAPICall}

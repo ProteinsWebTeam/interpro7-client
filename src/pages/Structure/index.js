@@ -17,6 +17,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
   HighlightToggler,
+  // $FlowFixMe
 } from 'components/Table';
 
 // $FlowFixMe
