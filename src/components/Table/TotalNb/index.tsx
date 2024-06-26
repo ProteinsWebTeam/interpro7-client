@@ -139,8 +139,8 @@ export const TotalNb = <RowData extends object>({
         {(open: boolean) => (
           <span
             className={css('header-total-results', {
-              selector: typeof open === 'boolean',
-              open,
+              selector: needSelector,
+              open: needSelector && open,
               bordered: needSelector,
             })}
           >
