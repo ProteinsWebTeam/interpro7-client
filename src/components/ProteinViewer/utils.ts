@@ -16,8 +16,8 @@ export const selectRepresentativeDomains = (
     }
     for (const location of domain[locationKey] as Array<ProtVistaLocation>) {
       for (const fragment of location.fragments) {
-        const { start, end, representative } = fragment;
-        if (representative) {
+        const { start, end } = fragment;
+        if (location.representative) {
           flatDomains.push({
             accession,
             chain,
