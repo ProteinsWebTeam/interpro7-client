@@ -232,7 +232,6 @@ type ProtVistaFragment = {
   residues?: string;
   seq_feature?: string;
   fill?: string;
-  representative?: boolean;
   protein_start?: number;
   protein_end?: number;
 };
@@ -245,6 +244,7 @@ type ProtVistaLocation = {
     name: string;
     accession: string;
   };
+  representative?: boolean;
   description?: string;
   accession?: string;
   [other: string]: unknown;
