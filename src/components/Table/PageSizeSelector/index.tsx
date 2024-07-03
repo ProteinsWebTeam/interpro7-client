@@ -47,7 +47,7 @@ const PageSizeSelector = (props: Props) => {
   }
   return (
     <div className={f('table-length')}>
-      Show{' '}
+      Rows per page:{' '}
       <select
         className={f('small')}
         style={{ width: 'auto' }}
@@ -60,8 +60,7 @@ const PageSizeSelector = (props: Props) => {
             {opt}
           </option>
         ))}
-      </select>{' '}
-      results
+      </select>
     </div>
   );
 };

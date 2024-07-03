@@ -15,8 +15,8 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import optionsCSS from 'components/ProteinViewer/Options/style.css';
 import s from './style.css';
-
-const css = cssBinder(s, fonts, optionsCSS);
+import ipro from 'styles/interpro-vf.css';
+const css = cssBinder(s, ipro, fonts, optionsCSS);
 
 type Props = PropsWithChildren<{
   entryDB: string | null;
@@ -47,7 +47,7 @@ const Exporter = ({
         {children}
       </DropDownButton>
       {includeSettings && (
-        <Tooltip title="Settings (customise results by page, …)">
+        <Tooltip title="Settings">
           <div style={{ display: 'flex' }}>
             <Link
               to={{ description: { other: ['settings'] } }}
@@ -56,6 +56,7 @@ const Exporter = ({
                 'icon-common',
                 'icon-settings',
                 'show-for-large',
+                'no-decoration',
               )}
               data-icon="&#xf013;"
               aria-label="settings"

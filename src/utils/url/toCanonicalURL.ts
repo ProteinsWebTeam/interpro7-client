@@ -1,13 +1,12 @@
-import { parse } from 'url';
 import { trimSlashes } from '.';
 
 export const toCanonicalURL = (url: string) => {
-  const ulrObj = parse(decodeURIComponent(url));
-  if (!ulrObj.search) return ulrObj.pathname;
+  const urlObj = new URL(decodeURIComponent(url));
+  if (!urlObj.search) return urlObj.pathname;
   const path = trimSlashes(
-    (ulrObj.pathname || '').split('api/')?.[1] || ulrObj.pathname,
+    urlObj.pathname.split('api/')?.[1] || urlObj.pathname,
   );
-  return `${path}?${ulrObj.search
+  return `${path}?${urlObj.search
     .slice(1)
     .split('&')
     .filter((arg) => arg.toLowerCase() !== 'page_size=20')
