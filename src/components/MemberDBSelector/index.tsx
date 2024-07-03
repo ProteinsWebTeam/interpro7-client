@@ -37,7 +37,7 @@ const defaultDBFor = new Map([
 const MIN_DELAY = 400;
 // const DELAY = 1500;
 
-const getStaticCountFor = (db: string, counts: Record<string, number>) => {
+const getStaticCountFor = (db: string, counts: MetadataCounters) => {
   return counts[db] || 0;
 };
 
@@ -127,7 +127,7 @@ const comparisonFunction = (a: DBInfo, b: DBInfo) => {
 };
 
 type Props = {
-  contentType: string;
+  contentType?: string;
   filterType?: string;
   customLocation?: InterProLocation;
   lowGraphics?: boolean;
@@ -136,7 +136,7 @@ type Props = {
   isSelected?: (db: DBInfo) => boolean;
   onChange?: (event: FormEvent) => void;
   hideCounters?: boolean;
-  dbCounters?: Record<string, number>;
+  dbCounters?: MetadataCounters;
   children?: (visible: boolean) => React.ReactNode;
 };
 interface LoadedProps
