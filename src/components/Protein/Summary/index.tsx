@@ -259,7 +259,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                           { disabled: !isoform },
                         )}
                         disabled={!isoform}
-                        dataIcon={'\uF0DB'}
+                        dataIcon="icon-columns"
                         tooltip="Compare side-by-side with canonical sequence"
                         onFullScreenHook={() => setComparisonMode(true)}
                         onExitFullScreenHook={() => setComparisonMode(false)}
