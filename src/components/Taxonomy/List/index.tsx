@@ -267,7 +267,7 @@ const List = ({
               </Link>
             )}
           >
-            Tax ID
+            Taxon ID
           </Column>
           <Column
             dataKey="name"
