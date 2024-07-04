@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
-// @flow
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import { cloneDeep } from 'lodash-es';
 
 import { goToCustomLocation } from 'actions/creators';
 import { connect } from 'react-redux';
@@ -10,65 +9,43 @@ import { connect } from 'react-redux';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-// $FlowFixMe
 import Tree from 'components/Tree';
 import NumberComponent from 'components/NumberComponent';
 import abbreviateNumber from 'components/NumberComponent/utils/number-to-display-text';
-
-// $FlowFixMe
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import Tip from 'components/Tip';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 
-import { foundationPartial } from 'styles/foundation';
-// $FlowFixMe
-import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
-import Tip from 'components/Tip';
+import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-import { cloneDeep } from 'lodash-es';
+import DataProvider, { DataProviderLoadedProps } from './DataProvider';
 
-const f = foundationPartial(ebiGlobalStyles, styles, fonts);
+const css = cssBinder(styles, fonts);
+
 const ANIMATION_DURATION = 0.3;
 
-const mapStateToUrlFor = createSelector(
-  (taxID) => taxID,
-  (taxID) =>
-    createSelector(
-      (state) => state.settings.api,
-      (state) => state.customLocation.description,
-      ({ protocol, hostname, port, root }, description) => {
-        if (
-          (description.main.key === 'entry' && description.entry.accession) ||
-          (description.main.key === 'taxonomy' && description.entry.db)
-        ) {
-          const query = description.entry.accession
-            ? {
-                filter_by_entry: description.entry.accession,
-              }
-            : {
-                filter_by_entry_db: description.entry.db,
-              };
-          return format({
-            protocol,
-            hostname,
-            port,
-            pathname:
-              root +
-              descriptionToPath({
-                main: { key: 'taxonomy' },
-                taxonomy: {
-                  db: 'uniprot',
-                  accession: taxID,
-                },
-              }),
-            query,
-          });
-        }
+const mapStateToUrlFor = (taxID: string) =>
+  createSelector(
+    (state: GlobalState) => state.settings.api,
+    (state: GlobalState) => state.customLocation.description,
+    ({ protocol, hostname, port, root }, description) => {
+      if (
+        (description.main.key === 'entry' && description.entry.accession) ||
+        (description.main.key === 'taxonomy' && description.entry.db)
+      ) {
+        const query = description.entry.accession
+          ? {
+              filter_by_entry: description.entry.accession,
+            }
+          : {
+              filter_by_entry_db: description.entry.db,
+            };
         return format({
           protocol,
           hostname,
@@ -76,116 +53,51 @@ const mapStateToUrlFor = createSelector(
           pathname:
             root +
             descriptionToPath({
-              ...description,
-              [description.main.key]: {
-                ...description[description.main.key],
-                isFilter: description.main.key !== 'taxonomy',
-              },
               main: { key: 'taxonomy' },
               taxonomy: {
                 db: 'uniprot',
                 accession: taxID,
               },
             }),
-          search: 'with_names',
+          query,
         });
-      },
-    ),
-);
-/*::
-  type Names = {
-    [string]: {
-      short: string,
-      name: string,
-    }
-  }
-type Payload = {
-  metadata: Object,
-  children: CountersMap,
-  names: Names,
-};
-type Props = {
-  taxID: string,
-  data: {
-    loading: boolean,
-    payload: Object
-  },
-  sendData: function
-};
-*/
-class DataProvider extends PureComponent /*:: <Props> */ {
-  /*::
-   _sent: boolean;
-   */
+      }
+      return format({
+        protocol,
+        hostname,
+        port,
+        pathname:
+          root +
+          descriptionToPath({
+            ...description,
+            [description.main.key]: {
+              ...description[description.main.key],
+              isFilter: description.main.key !== 'taxonomy',
+            },
+            main: { key: 'taxonomy' },
+            taxonomy: {
+              db: 'uniprot',
+              accession: taxID,
+            },
+          }),
+        search: 'with_names',
+      });
+    },
+  );
 
-  componentDidMount() {
-    this._sendDataUpIfAny();
-  }
+type Names = Record<string, NameObject>;
+type CountersMap = Record<string, TaxonomyCounters>;
 
-  componentDidUpdate({ data: { payload } }) {
-    if (this.props.data.payload !== payload) this._sendDataUpIfAny();
-  }
-
-  _sendDataUpIfAny = () => {
-    if (this._sent) return;
-    const {
-      taxID,
-      data: { loading, payload },
-      sendData,
-    } = this.props;
-    if (!loading && payload) {
-      this._sent = true;
-      sendData(taxID, payload);
-    }
-  };
-
-  render() {
-    return null;
-  }
-}
-
-/*::
-  type Node =  {
-    id: string,
-    children?: Array<any>,
-    lineage?: string,
-    counters?: Counters;
-    rank?: string;
-    hitcount?: number;
-    name: string
-  };
-  type Counters = {
-    proteins: number,
-    proteoms: number,
-    structures: number,
-  };
-  type CountersMap = {
-    [string]: Counters,
-  }
-  type Metadata = {
-    accession: string,
-    lineage?: string,
-    counters?: Counters;
-    rank?: string;
-    children: Array<string>,
-  }
- */
-const findNodeWithId = (
-  id /*: string */,
-  node /*: Node */,
-) /*: void | Node */ => {
+const findNodeWithId = (id: string, node: TaxNode): TaxNode | undefined => {
   if (node.id === id) return node;
   for (const child of node.children || []) {
     const found = findNodeWithId(id, child);
     if (found) return found;
   }
+  return undefined;
 };
 
-const addNodesFromLineage = (
-  update /*: Node */,
-  root /*: Node */,
-  names /*: Names */,
-) => {
+const addNodesFromLineage = (update: TaxNode, root: TaxNode, names: Names) => {
   const lineage = (update.lineage || '').trim().split(' ');
   lineage.splice(-1);
   const parentId = lineage.splice(-1)?.[0];
@@ -208,27 +120,27 @@ const addNodesFromLineage = (
 };
 
 const mergeData = (
-  root /*: Node */,
-  update /*: Metadata */,
-  names /*: Names */,
-  childrenCounters /*: CountersMap */,
+  root: TaxNode,
+  update: TaxonomyMetadata,
+  names: Names,
+  childrenCounters?: CountersMap,
 ) => {
   let toUpdate = findNodeWithId(update.accession, root);
   if (!toUpdate) {
     toUpdate = addNodesFromLineage(
       {
         id: update.accession,
-        name: names[update.accession].short,
+        name: names[update.accession].short || '',
         lineage: update.lineage,
       },
       root,
       names,
     );
   }
-  toUpdate.lineage = update.lineage;
-  toUpdate.counters = update.counters;
-  toUpdate.rank = update.rank;
-  toUpdate.hitcount = abbreviateNumber(update?.counters?.proteins, true);
+  toUpdate!.lineage = update.lineage;
+  toUpdate!.counters = update.counters;
+  toUpdate!.rank = update.rank;
+  toUpdate!.hitcount = abbreviateNumber(update?.counters?.proteins, true);
   if (!toUpdate.children || (update.children && update.children.length)) {
     toUpdate.children = update.children.map((id) => ({
       name: names[id].short || names[id].name,
@@ -238,32 +150,31 @@ const mergeData = (
   }
   return root;
 };
-/*:: type TreeViewProps = {
-  customLocation: {
-    description: Object,
-  },
-  dataTable: Array<Object>,
-  goToCustomLocation: function,
-  showTreeToast: boolean,
-  addToast: function,
-  changeSettingsRaw: function,
-  onFocusChanged: function,
-};*/
+type Props = {
+  customLocation: InterProLocation;
+  dataTable: Array<TaxonommyTreePayload>;
+  goToCustomLocation: typeof goToCustomLocation;
+  showTreeToast?: boolean;
+  onFocusChanged: (taxID: string) => void;
+};
 
-/*:: type State = {
-  data: Node,
-  focused: string,
-  entryDB: Object,
-  exactMatch: Object,
-}; */
-class TreeView extends Component /*:: <TreeViewProps, State> */ {
-  /*::
-  _CDPMap: Map<string, Object>;
-  _lineageNames: Map<string,*>;
+type State = {
+  data: TaxNode;
+  focused: string;
+  entryDB: string | null;
+  exactMatch?: TaxonommyTreePayload;
+};
+
+type Provider = React.ComponentType<
+  DataProviderLoadedProps<TaxonommyTreePayload>
+>;
+
+class TreeView extends Component<Props, State> {
+  _CDPMap: Map<string, Provider>;
+  _lineageNames: Map<string, string>;
   _initialLoad: boolean;
-  */
 
-  constructor(props /*: TreeViewProps */) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       data: { name: 'root', id: '1' },
@@ -284,8 +195,8 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
         },
       },
       dataTable,
-    },
-    { entryDB: oldDB, exactMatch },
+    }: Props,
+    { entryDB: oldDB, exactMatch }: State,
   ) {
     if (newDB !== oldDB) {
       return {
@@ -303,10 +214,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     return null;
   }
 
-  shouldComponentUpdate(
-    nextProps /*: TreeViewProps */,
-    nextState /*: State */,
-  ) {
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
     const {
       customLocation: {
         description: {
@@ -328,11 +236,11 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
   componentWillUnmount() {
     this._CDPMap.clear();
   }
-  _handleNewSearchData = (taxID /*: string */, payload /*: Payload */) => {
+  _handleNewSearchData = (taxID: string, payload: TaxonommyTreePayload) => {
     this._handleNewData(taxID, payload);
     this._handleNewFocus(taxID);
   };
-  _handleNewData = (taxID /*: string */, payload /*: Payload */) => {
+  _handleNewData = (taxID: string, payload: TaxonommyTreePayload) => {
     if (payload?.metadata?.children) {
       const c = payload.metadata.children.length;
       if (c === 1 && this._initialLoad) {
@@ -350,7 +258,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     }
   };
 
-  _handleNewFocus = (taxID /*: string */) => {
+  _handleNewFocus = (taxID: string) => {
     if (taxID) {
       this.setState({ focused: taxID });
       if (this.props.onFocusChanged) {
@@ -358,7 +266,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
       }
     }
   };
-  _handleLabelClick = (taxID /*: string */) => {
+  _handleLabelClick = (taxID: string) => {
     this.props.goToCustomLocation({
       description: {
         main: { key: 'taxonomy' },
@@ -370,7 +278,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     });
   };
 
-  _storeLineageNames = (focused /*: string */, data /*: Node */) => {
+  _storeLineageNames = (focused: string, data: TaxNode) => {
     if (focused === data.id) {
       this._lineageNames.set(focused, data.name);
     } else {
@@ -384,19 +292,21 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
     const { focused, data, exactMatch } = this.state;
     let ConnectedDataProvider = this._CDPMap.get(focused);
     if (!ConnectedDataProvider) {
-      ConnectedDataProvider = loadData(mapStateToUrlFor(focused))(DataProvider);
+      ConnectedDataProvider = loadData<TaxonommyTreePayload>(
+        mapStateToUrlFor(focused) as LoadDataParameters,
+      )(DataProvider<TaxonommyTreePayload>);
       this._CDPMap.set(focused, ConnectedDataProvider);
       this._storeLineageNames(focused, data);
     }
-    let ConnectedDataProviderSearch = null;
+    let ConnectedDataProviderSearch: Provider | null | undefined = null;
     if (exactMatch) {
       ConnectedDataProviderSearch = this._CDPMap.get(
         exactMatch.metadata.accession,
       );
       if (!ConnectedDataProviderSearch) {
-        ConnectedDataProviderSearch = loadData(
-          mapStateToUrlFor(exactMatch.metadata.accession),
-        )(DataProvider);
+        ConnectedDataProviderSearch = loadData<TaxonommyTreePayload>(
+          mapStateToUrlFor(exactMatch.metadata.accession) as LoadDataParameters,
+        )(DataProvider<TaxonommyTreePayload>);
         this._CDPMap.set(
           exactMatch.metadata.accession,
           ConnectedDataProviderSearch,
@@ -423,12 +333,12 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
             settingsName="showTreeToast"
           />
         ) : null}
-        <div className={f('node-details')}>
-          <div className={f('node-info')}>
+        <div className={css('node-details')}>
+          <div className={css('node-info')}>
             <header>
               <Tooltip title="[Tax ID]: [Tax Name]">
                 <span
-                  className={f('small', 'icon', 'icon-common')}
+                  className={css('small', 'icon', 'icon-common')}
                   data-icon="&#xf129;"
                   aria-label="Tax ID: Tax Name"
                 />
@@ -448,7 +358,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
               <div>
                 <Tooltip title="Rank.">
                   <span
-                    className={f('small', 'icon', 'icon-common')}
+                    className={css('small', 'icon', 'icon-common')}
                     data-icon="&#xf129;"
                     aria-label="Rank."
                   />
@@ -482,60 +392,63 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
               </DropDownButton>
             )}
           </div>
-          <div className={f('node-links')}>
+          <div className={css('node-links')}>
             {currentNode?.counters ? (
               <ul>
-                {
-                  // prettier-ignore
-                  (Object.entries(countersToShow)/*: any */)
-                    .map(([endpoint, [plural, db]]/*: [string, [string, number]] */) => {
-                      if (
-                        endpoint === mainEndpoint ||
-                        typeof currentNode?.counters?.[plural] === 'undefined'
-                      )
-                        return null;
-                      const to = {
-                        ...cloneDeep(description),
-                        [endpoint]: {
-                          isFilter: true,
-                          db,
-                          order: 1,
-                        },
-                      };
+                {Object.entries(countersToShow)
+                  .map(([endpoint, [plural, db]]) => {
+                    if (
+                      endpoint === mainEndpoint ||
+                      !(plural in currentNode.counters!)
+                    )
+                      return null;
+                    const to: InterProPartialDescription = {
+                      ...cloneDeep(description),
+                      [endpoint]: {
+                        isFilter: true,
+                        db,
+                        order: 1,
+                      },
+                    };
 
-                      if (description.main.key === 'taxonomy') {
-                        to.taxonomy.accession = this.state.focused;
-                        if (endpoint !== 'entry')
-                          to.entry.order = 2;
-                      } else {
-                        to.taxonomy = {
-                          db: 'uniprot',
-                          isFilter: true,
-                          order: 2,
-                          accession: this.state.focused,
-                        };
-                      }
-                      return (
-                        <li key={endpoint}>
-                          <Link
-                            className={f('no-decoration', {
-                              disable: !currentNode?.counters?.[plural],
-                            })}
-                            to={{
-                              description: to,
-                            }}
-                          >
-                            <NumberComponent duration={ANIMATION_DURATION}>
-                              {currentNode?.counters?.[plural]}
-                            </NumberComponent>{' '}
-                            {plural}
-                          </Link>{' '}
-                          -
-                        </li>
-                      );
-                    })
-                    .filter(Boolean)
-                }
+                    if (description.main.key === 'taxonomy') {
+                      to!.taxonomy!.accession = this.state.focused;
+                      if (endpoint !== 'entry') to!.entry!.order = 2;
+                    } else {
+                      to.taxonomy = {
+                        db: 'uniprot',
+                        isFilter: true,
+                        order: 2,
+                        accession: this.state.focused,
+                      };
+                    }
+                    return (
+                      <li key={endpoint}>
+                        <Link
+                          className={css('no-decoration', {
+                            disable:
+                              !currentNode?.counters?.[
+                                plural as keyof TaxonomyCounters
+                              ],
+                          })}
+                          to={{
+                            description: to,
+                          }}
+                        >
+                          <NumberComponent duration={ANIMATION_DURATION}>
+                            {
+                              currentNode?.counters?.[
+                                plural as keyof TaxonomyCounters
+                              ]
+                            }
+                          </NumberComponent>{' '}
+                          {plural}
+                        </Link>{' '}
+                        -
+                      </li>
+                    );
+                  })
+                  .filter(Boolean)}
               </ul>
             ) : (
               <Loading inline={true} />
@@ -546,7 +459,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
         {ConnectedDataProviderSearch && (
           <ConnectedDataProviderSearch
             sendData={this._handleNewSearchData}
-            taxID={exactMatch.metadata.accession}
+            taxID={exactMatch?.metadata.accession}
           />
         )}
         <Tree
@@ -561,7 +474,7 @@ class TreeView extends Component /*:: <TreeViewProps, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  (state) => state.settings.notifications.showTreeToast,
+  (state: GlobalState) => state.settings.notifications.showTreeToast,
   (showTreeToast) => ({ showTreeToast }),
 );
 

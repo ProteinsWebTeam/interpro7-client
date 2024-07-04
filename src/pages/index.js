@@ -40,6 +40,7 @@ const Structure = loadable({
   loader: () => import(/* webpackChunkName: "structure-page" */ './Structure'),
 });
 const Taxonomy = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "taxonomy-page" */ './Taxonomy'),
 });
 const Proteome = loadable({

@@ -27,7 +27,11 @@ const ExtraTaxonomyOption = ({
   <TaxonomyOption
     taxId={taxId}
     checked={!!checked}
-    title={data?.payload?.metadata?.name?.name || taxId}
+    title={
+      (typeof data?.payload?.metadata?.name === 'string'
+        ? data?.payload?.metadata?.name
+        : data?.payload?.metadata?.name?.name) || taxId
+    }
     onChange={onChange}
     isStale={!!isStale}
     loading={data!.loading}
