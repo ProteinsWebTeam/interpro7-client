@@ -10,6 +10,7 @@ import { format } from 'url';
 // $FlowFixMe
 import getFetch from 'higherOrder/loadData/getFetch';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+// $FlowFixMe
 import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
 
 import Redirect from 'components/generic/Redirect';

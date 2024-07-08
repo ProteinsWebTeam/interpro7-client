@@ -25,3 +25,11 @@ type JobStatus =
   | 'running'
   | 'finished'
   | 'queued';
+
+type IprscanDataIDB = {
+  applications: Array<string>;
+  'interproscan-version': string;
+  input: string;
+  originalInput: string;
+  results: Array<Iprscan5Result>;
+};
