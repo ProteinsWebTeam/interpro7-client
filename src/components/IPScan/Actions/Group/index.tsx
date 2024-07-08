@@ -69,7 +69,7 @@ const getRemoteID = (jobs: Jobs, group: string) => {
     (job) => job.metadata.group === group && job.metadata.remoteID,
   );
   if (jobWithRemoteID) {
-    return jobWithRemoteID.metadata.remoteID.replace(/-\d+$/, '');
+    return jobWithRemoteID.metadata.remoteID!.replace(/-\d+$/, '');
   }
   return;
 };

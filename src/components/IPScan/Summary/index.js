@@ -31,6 +31,7 @@ import Length from 'components/Protein/Length';
 // $FlowFixMe
 import DomainsOnProteinLoaded from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 import Actions from 'components/IPScan/Actions';
+// $FlowFixMe
 import { getIProScanURL } from 'components/IPScan/Status';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideSummary from 'components/IPScan/NucleotideSummary';

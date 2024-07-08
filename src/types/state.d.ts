@@ -6,6 +6,7 @@ type GlobalState = {
     servers: Record<string, ServerStatus>;
     browser: boolean;
   };
+  jobs: Record<string, { metadata: IprscanMetaIDB }>;
   [other: string]: unknown;
 }; // TODO: replace for redux state type
 
