@@ -1,10 +1,9 @@
-// @flow
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
+
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 
-// $FlowFixMe
+import { updateJobStatus } from 'actions/creators';
 import Title from 'components/Title';
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
@@ -15,22 +14,21 @@ import loadable from 'higherOrder/loadable';
 
 import getTableAccess, { IPScanJobsData, IPScanJobsMeta } from 'storage/idb';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import ipro from 'styles/interpro-new.css';
 import ResultImporter from 'components/IPScan/ResultImporter';
-import { updateJobStatus } from 'actions/creators';
 
-const f = foundationPartial(fonts, pageStyle, ipro, styles);
+const css = cssBinder(fonts, pageStyle, styles);
 
 const SummaryAsync = loadable({
   loader: () =>
     import(
       /* webpackChunkName: "ipscan-summary" */ 'components/IPScan/Summary'
     ),
+  loading: false,
 });
 
 const EntrySubPage = loadable({
@@ -38,11 +36,13 @@ const EntrySubPage = loadable({
     import(
       /* webpackChunkName: "ips-entry-subpage" */ 'components/IPScan/EntrySubPage'
     ),
+  loading: false,
 });
 
 const SequenceSubPage = loadable({
   loader: () =>
     import(/* webpackChunkName: "sequence-subpage" */ 'subPages/Sequence'),
+  loading: false,
 });
 
 const subPagesForSequence = new Map([
@@ -50,57 +50,48 @@ const subPagesForSequence = new Map([
   ['sequence', SequenceSubPage],
 ]);
 
-const locationSelector = (customLocation) => {
+const locationSelector = (customLocation: InterProLocation) => {
   const { key } = customLocation.description.main;
   return (
-    // prettier-ignore
-    customLocation.description[key].detail ||
-      ((Object.entries(customLocation.description)/*: any */).find(
-        ([_key, value]/*: [string, {isFilter: boolean}] */) => value.isFilter,
-      ) || [])[0]
+    customLocation.description[key as Endpoint].detail ||
+    (Object.entries(customLocation.description).find(
+      ([_key, value]) => (value as EndpointLocation).isFilter,
+    ) || [])[0]
   );
 };
-export const countInterProFromMatches = (matches) =>
+export const countInterProFromMatches = (matches: Array<Iprscan5Match>) =>
   Array.from(
     new Set(matches.map((m) => (m.signature.entry || {}).accession)).values(),
   ).filter(Boolean).length;
 
 const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
-/*:: type Props = {
-  data: {
-   payload: Object,
-   loading: boolean,
-  },
-  matched: string,
-  entryDB: string,
-  entries: number,
-  accession: string,
-  localID: string,
-  remoteID: string,
-  localTitle: string,
-  updateJobStatus: ()=>void,
-};*/
 
-/*:: type State = {
-  localIDForLocalPayload: ?string,
-  remoteIDForLocalPayload: ?string,
-  localPayload: ?Object,
-  isImporting: boolean,
-  shouldImportResults: boolean,
-};*/
-class IPScanResult extends PureComponent /*:: <Props, State> */ {
-  static propTypes = {
-    matched: T.string.isRequired,
-    accession: T.string,
-    entryDB: T.string,
-    localID: T.string,
-    remoteID: T.string,
-    localTitle: T.string,
-    entries: T.number,
-    updateJobStatus: T.func.isRequired,
-  };
+type LocalPayload = Iprscan5Result & {
+  group?: string;
+  orf?: string;
+  applications?: Array<string>;
+};
 
-  constructor(props /*: Props */) {
+type Props = {
+  matched: string;
+  accession: string;
+  localID?: string;
+  remoteID?: string;
+  entryDB?: string;
+  localTitle?: string;
+  entries?: number;
+  updateJobStatus: typeof updateJobStatus;
+};
+
+type State = {
+  localIDForLocalPayload: string | null;
+  remoteIDForLocalPayload: string | null | undefined;
+  localPayload: LocalPayload | null;
+  isImporting: boolean;
+  shouldImportResults: boolean;
+};
+class IPScanResult extends PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -157,12 +148,14 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
                   meta?.status === 'error'
                     ? 'There was an error recovering this job from the server.'
                     : 'Results are being processed on the InterProScan server',
+                id: '',
               },
             ],
             group: meta?.group,
             orf: data?.results?.[0]?.orf,
             applications: data?.applications,
-          },
+            md5: '',
+          } as LocalPayload,
         });
       },
     );
@@ -197,12 +190,14 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
         />
       );
     }
-    const metadata = {
+    const metadata: Metadata & { name: NameObject } = {
       accession,
       counters: { entries },
       name: {
         name: 'InterProScan Search Result',
       },
+      source_database: 'InterProScan',
+      description: ['Placeholder for InterProScan results'],
     };
     return (
       <>
@@ -211,8 +206,8 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
           handleImported={() => this.setState({ shouldImportResults: false })}
         />
         <ErrorBoundary>
-          <div className={f('row')}>
-            <div className={f('large-12', 'columns')}>
+          <div className={css('row')}>
+            <div className={css('large-12', 'columns')}>
               {
                 // Menu Just for InterProScan search
               }
@@ -250,13 +245,12 @@ class IPScanResult extends PureComponent /*:: <Props, State> */ {
 }
 
 const mapStateToProps = createSelector(
-  (state) => state.jobs || {},
-  (state) => state.customLocation.description.result.accession,
-  (state) => state.customLocation.description.entry,
+  (state: GlobalState) => state.jobs || {},
+  (state: GlobalState) =>
+    state.customLocation.description.result.accession as string,
+  (state: GlobalState) => state.customLocation.description.entry,
   (jobs, accession, { isFilter, db }) => {
-    const job /*: {metadata: {localID: string, remoteID: string, localTitle: string, entries: number}} */ =
-      // prettier-ignore
-      (Object.values(jobs)/*: any */).find(
+    const job = Object.values(jobs).find(
       (job) =>
         job.metadata.localID === accession ||
         job.metadata.remoteID === accession ||
@@ -268,7 +262,7 @@ const mapStateToProps = createSelector(
       ? {
           localID: job.metadata.localID,
           remoteID: job.metadata.remoteID,
-          entryDB: isFilter && db,
+          entryDB: (isFilter && db) || undefined,
           localTitle: job.metadata.localTitle,
           entries: job.metadata.entries,
           accession,

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { importJobFromData } from 'actions/creators';
 import id from 'utils/cheap-unique-id';
 
+// $FlowFixMe
 import { countInterProFromMatches } from 'pages/Sequence';
 import Modal from 'components/SimpleCommonComponents/Modal';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';

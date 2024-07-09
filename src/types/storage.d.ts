@@ -8,6 +8,7 @@ type IprscanMetaIDB = {
   status: JobStatus;
   type: string;
   times: JobTimes;
+  entries?: number;
 };
 type JobTimes = {
   created?: number;
