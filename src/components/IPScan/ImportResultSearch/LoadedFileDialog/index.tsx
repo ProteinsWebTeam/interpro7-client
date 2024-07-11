@@ -1,5 +1,4 @@
 import React from 'react';
-import T from 'prop-types';
 
 import { connect } from 'react-redux';
 import { importJobFromData } from 'actions/creators';
@@ -10,16 +9,17 @@ import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideCheck, {
   isNucleotideFile,
 } from 'components/IPScan/NucleotideCheck';
-// $FlowFixMe
 import Button from 'components/SimpleCommonComponents/Button';
 
-const isValid = (fileObj) => {
+const isValid = (fileObj: Record<string, unknown>) => {
   return (
     typeof fileObj === 'object' &&
     'results' in fileObj &&
     'interproscan-version' in fileObj
   );
 };
+
+// TODO: remove this types once the nucleotide file logic is restored
 /*::
 type ProteinResult = {
   xref: Array<{id: string}>,
@@ -64,25 +64,18 @@ type JobMetadata = {
   entries: Array<Object>,
   group?: string,
 }
-type Props = {
-  show: Boolean,
-  closeModal: function,
-  fileContent: ProteinFile | NucleotideFile,
-  fileName: string,
-  importJobFromData: function,
-}
 */
 
 const saveJobInIDB = (
-  results /*: Array<ProteinResult> */,
-  remoteID /*: string */,
-  localTitle /*: string|null */,
-  ipScanVersion /*: string */,
-  applications /*: ?string[]|string */,
-  importJobFromData /*: function */,
+  results: Array<Iprscan5Result>,
+  remoteID: string,
+  localTitle: string | null,
+  ipScanVersion: string,
+  applications: Array<string> | string,
+  importJobFromDataD: typeof importJobFromData,
 ) => {
   const localID = id(`internal-${Date.now()}`);
-  const metadata /*: JobMetadata */ = {
+  const metadata = {
     localID,
     localTitle,
     type: 'InterProScan',
@@ -93,53 +86,58 @@ const saveJobInIDB = (
   const data = {
     localID,
     'interproscan-version': ipScanVersion,
-    // input: result.sequence,
     results,
     applications,
   };
-  // if (result.group) {
-  //   metadata.group = result.group;
-  // }
-  importJobFromData({
+  importJobFromDataD({
     metadata,
     data,
   });
 };
 
-const LoadedFileDialog = (
-  { show, closeModal, fileContent, fileName, importJobFromData } /*: Props */,
-) => {
+type Props = {
+  show: boolean;
+  closeModal: () => void;
+  fileContent: IprscanDataIDB; // ProteinFile | NucleotideFile,
+  fileName: string;
+  importJobFromData: typeof importJobFromData;
+};
+
+const LoadedFileDialog = ({
+  show,
+  closeModal,
+  fileContent,
+  fileName,
+  importJobFromData,
+}: Props) => {
   const saveFileInIndexDB = () => {
-    // TODO: nucleotides staff hasn't been migrated!
+    // TODO: 🔰 nucleotides staff hasn't been migrated!
     if (isNucleotideFile(fileContent)) {
-      for (let i = fileContent.results.length - 1; i >= 0; i--) {
-        // prettier-ignore
-        const result/*: NucleotideResult */ = (fileContent.results[i]/*: any */);
-        const id = result.crossReferences?.[0]?.id;
-        for (const orf of result.openReadingFrames) {
-          const { protein, ...rest } = orf;
-          protein.group = id;
-          protein.orf = { ...rest, dnaSequence: result.sequence };
-          if (protein.matches?.length) {
-            saveJobInIDB(
-              protein,
-              `imported_file-${fileName}-${i + 1}-orf-${rest.id}`,
-              `${id} - ORF:${rest.id}`,
-              fileContent['interproscan-version'],
-              fileContent.applications,
-              importJobFromData,
-            );
-          }
-        }
-      }
+      // for (let i = fileContent.results.length - 1; i >= 0; i--) {
+      //   // prettier-ignore
+      //   const result/*: NucleotideResult */ = (fileContent.results[i]/*: any */);
+      //   const id = result.crossReferences?.[0]?.id;
+      //   for (const orf of result.openReadingFrames) {
+      //     const { protein, ...rest } = orf;
+      //     protein.group = id;
+      //     protein.orf = { ...rest, dnaSequence: result.sequence };
+      //     if (protein.matches?.length) {
+      //       saveJobInIDB(
+      //         protein,
+      //         `imported_file-${fileName}-${i + 1}-orf-${rest.id}`,
+      //         `${id} - ORF:${rest.id}`,
+      //         fileContent['interproscan-version'],
+      //         fileContent.applications,
+      //         importJobFromData,
+      //       );
+      //     }
+      //   }
+      // }
     } else {
-      // prettier-ignore
-      // const result/*: ProteinResult */ = (fileContent.results[i]/*: any */);
-      // result.group = fileName;
       saveJobInIDB(
         fileContent.results,
         `imported_file-${fileName}`,
-        null, // result?.xref?.[0]?.id || `Seq ${i + 1} from ${fileName}`,
+        null,
         fileContent['interproscan-version'],
         fileContent.applications,
         importJobFromData,
@@ -174,13 +172,6 @@ const LoadedFileDialog = (
       )}
     </Modal>
   );
-};
-LoadedFileDialog.propTypes = {
-  show: T.bool,
-  closeModal: T.func,
-  fileContent: T.object,
-  fileName: T.string,
-  importJobFromData: T.func,
 };
 
 export default connect(undefined, { importJobFromData })(LoadedFileDialog);
