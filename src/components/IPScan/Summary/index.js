@@ -13,14 +13,11 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 // $FlowFixMe
 import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
 
-import Redirect from 'components/generic/Redirect';
 import Link from 'components/generic/Link';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
-// $FlowFixMe
-import Callout from 'components/SimpleCommonComponents/Callout';
 // $FlowFixMe
 import GoTerms from 'components/GoTerms';
 // $FlowFixMe
@@ -145,9 +142,10 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
 
 // eslint-disable-next-line complexity
 const SummaryIPScanJob = ({
-  accession,
+  jobAccession,
+  // seqAccession,
   localID,
-  remoteID,
+  // remoteID,
   localTitle,
   status,
   data,
@@ -180,23 +178,6 @@ const SummaryIPScanJob = ({
     }
   }, [data.payload, localPayload]);
 
-  if (remoteID && remoteID !== accession) {
-    return (
-      <Redirect
-        to={(customLocation) => ({
-          ...customLocation,
-          description: {
-            ...customLocation.description,
-            result: {
-              ...customLocation.description.result,
-              accession: remoteID,
-            },
-          },
-        })}
-      />
-    );
-  }
-
   const payload = data.payload
     ? {
         ...data.payload.results[0],
@@ -206,10 +187,10 @@ const SummaryIPScanJob = ({
 
   if (!payload) return <Loading />;
 
-  const created = getCreated(payload, accession);
+  const created = getCreated(payload, jobAccession);
 
   const metadata = {
-    accession,
+    accession: jobAccession,
     length: payload.sequence.length,
     sequence: payload.sequence,
     name: {
@@ -235,14 +216,11 @@ const SummaryIPScanJob = ({
   }
   // TODO: Check if thejob is still in the server to display or not the Exporter
   const reg = /(.+)(-\d+)$/;
-  const match = reg.exec(accession);
-  const rootAccession = match?.[1] ?? accession;
+  const match = reg.exec(jobAccession);
+  const rootAccession = match?.[1] ?? jobAccession;
   return (
     <div className={f('sections')}>
       <section>
-        {!data.payload && payload?.['interproscan-version'] ? (
-          <Callout type="info">Using data stored in your browser</Callout>
-        ) : null}
         <IPScanVersionCheck
           ipScanVersion={payload['interproscan-version']}
           callback={setVersionMismatch}
@@ -269,9 +247,21 @@ const SummaryIPScanJob = ({
             </Tooltip>
           </header>
           <section style={{ display: 'flex' }}>
-            <Accession accession={accession} title="Job ID" />{' '}
+            <Link
+              to={{
+                description: {
+                  main: { key: 'result' },
+                  result: {
+                    job: jobAccession,
+                    type: 'InterProScan',
+                  },
+                },
+              }}
+            >
+              <Accession accession={jobAccession} title="Job ID" />{' '}
+            </Link>
             <CopyToClipboard
-              textToCopy={getIProScanURL(accession)}
+              textToCopy={getIProScanURL(jobAccession)}
               tooltipText="Copy URL"
             />
           </section>
@@ -306,27 +296,6 @@ const SummaryIPScanJob = ({
             <StatusTooltip status={status} />
           </section>
         </section>
-        {status === 'finished' && (
-          <section className={f('summary-row')}>
-            <header>
-              Expires{' '}
-              <Tooltip
-                title={
-                  'InterProScan Jobs are only kept in our servers for 1 week.'
-                }
-              >
-                <span
-                  className={f('small', 'icon', 'icon-common')}
-                  data-icon="&#xf129;"
-                  aria-label={'Case sensitive'}
-                />
-              </Tooltip>
-            </header>
-            <section>
-              {new Date(created + MAX_TIME_ON_SERVER).toDateString()}
-            </section>
-          </section>
-        )}
 
         <div className={'row'}>
           <div
@@ -384,7 +353,7 @@ const SummaryIPScanJob = ({
 };
 
 SummaryIPScanJob.propTypes = {
-  accession: T.string.isRequired,
+  jobAccession: T.string.isRequired,
   localID: T.string,
   remoteID: T.string,
   localTitle: T.string,
@@ -396,33 +365,31 @@ SummaryIPScanJob.propTypes = {
   updateJobTitle: T.func,
 };
 
-const jobMapSelector = (state) => state.jobs;
-const accessionSelector = (state) =>
-  state.customLocation.description.result.accession;
-
 const jobSelector = createSelector(
-  accessionSelector,
-  jobMapSelector,
-  (accession, jobMap) => {
+  (state) => state.customLocation.description.result.job,
+  (state) => state.jobs,
+  (jobAccession, jobMap) => {
     // prettier-ignore
     return (Object.values(jobMap || {}) /*: any */)
       .find(
         (
           job /*: {metadata:{remoteID: string, localID: string, status: string}} */,
         ) =>
-          job.metadata.remoteID === accession ||
-          job.metadata.localID === accession,
+          job.metadata.remoteID === jobAccession ||
+          job.metadata.localID === jobAccession,
       );
   },
 );
 
 const mapStateToProps = createSelector(
-  accessionSelector,
+  (state) => state.customLocation.description.result.job,
+  (state) => state.customLocation.description.result.accession,
   jobSelector,
   (state) => state.settings.api,
   (state) => state.settings.ipScan,
-  (accession, job, api, ipScan) => ({
-    accession,
+  (jobAccession, seqAccession, job, api, ipScan) => ({
+    jobAccession,
+    seqAccession,
     localID: job?.metadata?.localID,
     remoteID: job?.metadata?.remoteID,
     status: job?.metadata?.status,

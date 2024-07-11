@@ -25,6 +25,13 @@ const IPScanStatus = loadable({
     import(/* webpackChunkName: "ipscan-status" */ 'components/IPScan/Status'),
 });
 
+const IPScanJobStatus = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "ipscan-status" */ 'components/IPScan/Status/SequenceList'
+    ),
+});
+
 const IPScanResult = loadable({
   loader: () =>
     import(/* webpackChunkName: "sequence-page" */ 'pages/Sequence'),
@@ -59,13 +66,24 @@ const RedirectToIPScan = () => (
 );
 
 const jobAccessionSelector = (customLocation) =>
+  customLocation.description.result.job;
+const sequenceAccessionSelector = (customLocation) =>
   customLocation.description.result.accession;
 
 const _IPScanResultSafeGuardIfNotRehydratedYet = (
   { jobs, ...props } /*: {jobs: Object} */,
 ) => {
   if (!jobs) return <Loading />;
-  return <IPScanResult {...props} />;
+  return (
+    <Switch
+      {...props}
+      locationSelector={sequenceAccessionSelector}
+      indexRoute={IPScanJobStatus}
+      catchAll={IPScanResult}
+    />
+  );
+
+  // return <IPScanJobStatus {...props} />;
 };
 _IPScanResultSafeGuardIfNotRehydratedYet.propTypes = {
   jobs: T.object,

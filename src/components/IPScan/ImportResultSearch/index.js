@@ -34,7 +34,7 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
         main: { key: 'result' },
         result: {
           type: 'InterProScan',
-          accession: id,
+          job: id,
         },
       },
     });
@@ -45,7 +45,7 @@ const ImportResultSearch = ({ goToCustomLocation }) => {
         main: { key: 'result' },
         result: {
           type: 'InterProScan',
-          accession: event.target.value,
+          job: event.target.value,
         },
       });
       setValid(true);

@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import T from 'prop-types';
 
@@ -6,8 +5,6 @@ import { connect } from 'react-redux';
 import { importJobFromData } from 'actions/creators';
 import id from 'utils/cheap-unique-id';
 
-// $FlowFixMe
-import { countInterProFromMatches } from 'pages/Sequence';
 import Modal from 'components/SimpleCommonComponents/Modal';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideCheck, {
@@ -77,9 +74,9 @@ type Props = {
 */
 
 const saveJobInIDB = (
-  result /*: ProteinResult */,
+  results /*: Array<ProteinResult> */,
   remoteID /*: string */,
-  localTitle /*: string */,
+  localTitle /*: string|null */,
   ipScanVersion /*: string */,
   applications /*: ?string[]|string */,
   importJobFromData /*: function */,
@@ -90,18 +87,19 @@ const saveJobInIDB = (
     localTitle,
     type: 'InterProScan',
     remoteID,
-    hasResults: result.matches.length > 0,
-    entries: countInterProFromMatches(result.matches),
+    hasResults: results.some((result) => result?.matches?.length > 0),
+    entries: results.length, // countInterProFromMatches(result.matches),
   };
   const data = {
+    localID,
     'interproscan-version': ipScanVersion,
-    input: result.sequence,
-    results: [result],
+    // input: result.sequence,
+    results,
     applications,
   };
-  if (result.group) {
-    metadata.group = result.group;
-  }
+  // if (result.group) {
+  //   metadata.group = result.group;
+  // }
   importJobFromData({
     metadata,
     data,
@@ -112,8 +110,9 @@ const LoadedFileDialog = (
   { show, closeModal, fileContent, fileName, importJobFromData } /*: Props */,
 ) => {
   const saveFileInIndexDB = () => {
-    for (let i = fileContent.results.length - 1; i >= 0; i--) {
-      if (isNucleotideFile(fileContent)) {
+    // TODO: nucleotides staff hasn't been migrated!
+    if (isNucleotideFile(fileContent)) {
+      for (let i = fileContent.results.length - 1; i >= 0; i--) {
         // prettier-ignore
         const result/*: NucleotideResult */ = (fileContent.results[i]/*: any */);
         const id = result.crossReferences?.[0]?.id;
@@ -132,20 +131,21 @@ const LoadedFileDialog = (
             );
           }
         }
-      } else {
-        // prettier-ignore
-        const result/*: ProteinResult */ = (fileContent.results[i]/*: any */);
-        result.group = fileName;
-        saveJobInIDB(
-          result,
-          `imported_file-${fileName}-${i + 1}`,
-          result?.xref?.[0]?.id || `Seq ${i + 1} from ${fileName}`,
-          fileContent['interproscan-version'],
-          fileContent.applications,
-          importJobFromData,
-        );
       }
+    } else {
+      // prettier-ignore
+      // const result/*: ProteinResult */ = (fileContent.results[i]/*: any */);
+      // result.group = fileName;
+      saveJobInIDB(
+        fileContent.results,
+        `imported_file-${fileName}`,
+        null, // result?.xref?.[0]?.id || `Seq ${i + 1} from ${fileName}`,
+        fileContent['interproscan-version'],
+        fileContent.applications,
+        importJobFromData,
+      );
     }
+
     closeModal();
   };
   return (

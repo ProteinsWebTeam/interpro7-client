@@ -8,7 +8,6 @@ import Title from 'components/Title';
 import { BrowseTabsWithoutData } from 'components/BrowseTabs';
 import ErrorBoundary from 'wrappers/ErrorBoundary';
 import Switch from 'components/generic/Switch';
-import Redirect from 'components/generic/Redirect';
 
 import loadable from 'higherOrder/loadable';
 
@@ -19,7 +18,6 @@ import cssBinder from 'styles/cssBinder';
 import styles from 'styles/blocks.css';
 import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import ResultImporter from 'components/IPScan/ResultImporter';
 
 const css = cssBinder(fonts, pageStyle, styles);
 
@@ -74,7 +72,8 @@ type LocalPayload = Iprscan5Result & {
 
 type Props = {
   matched: string;
-  accession: string;
+  jobAccession: string;
+  sequenceAccession: string;
   localID?: string;
   remoteID?: string;
   entryDB?: string;
@@ -87,8 +86,6 @@ type State = {
   localIDForLocalPayload: string | null;
   remoteIDForLocalPayload: string | null | undefined;
   localPayload: LocalPayload | null;
-  isImporting: boolean;
-  shouldImportResults: boolean;
 };
 class IPScanResult extends PureComponent<Props, State> {
   constructor(props: Props) {
@@ -98,8 +95,6 @@ class IPScanResult extends PureComponent<Props, State> {
       localIDForLocalPayload: null,
       remoteIDForLocalPayload: null,
       localPayload: null,
-      shouldImportResults: false,
-      isImporting: false,
     };
   }
 
@@ -115,10 +110,6 @@ class IPScanResult extends PureComponent<Props, State> {
 
   #getLocalDataIfNeeded = () => {
     const { localID, remoteID } = this.props;
-    if (!localID && !this.state.isImporting) {
-      this.setState({ shouldImportResults: true, isImporting: true });
-      return;
-    }
     if (
       !localID ||
       (this.state.localIDForLocalPayload === localID &&
@@ -130,7 +121,7 @@ class IPScanResult extends PureComponent<Props, State> {
       { localIDForLocalPayload: localID, remoteIDForLocalPayload: remoteID },
       async () => {
         const dataT = await getTableAccess(IPScanJobsData);
-        const data = await dataT.get(localID);
+        const data = await dataT.get(this.props.sequenceAccession);
         const metaTA = await getTableAccess(IPScanJobsMeta);
         const meta = await metaTA.get(localID);
 
@@ -142,7 +133,7 @@ class IPScanResult extends PureComponent<Props, State> {
               .toUpperCase(),
             matches: data?.results?.[0]?.matches || [],
             'interproscan-version': data?.['interproscan-version'],
-            xref: [
+            xref: data?.results?.[0]?.xref || [
               {
                 name:
                   meta?.status === 'error'
@@ -166,8 +157,9 @@ class IPScanResult extends PureComponent<Props, State> {
       matched,
       localTitle,
       entries: entriesProps,
-      remoteID,
-      accession,
+      // remoteID,
+      jobAccession,
+      // sequenceAccession,
     } = this.props;
 
     let entries = entriesProps || NaN;
@@ -175,23 +167,8 @@ class IPScanResult extends PureComponent<Props, State> {
       entries = countInterProFromMatches(this.state.localPayload.matches);
     }
 
-    if (remoteID && remoteID !== accession) {
-      return (
-        <Redirect
-          to={{
-            description: {
-              main: { key: 'result' },
-              result: {
-                type: 'InterProScan',
-                accession: remoteID,
-              },
-            },
-          }}
-        />
-      );
-    }
     const metadata: Metadata & { name: NameObject } = {
-      accession,
+      accession: jobAccession,
       counters: { entries },
       name: {
         name: 'InterProScan Search Result',
@@ -201,10 +178,6 @@ class IPScanResult extends PureComponent<Props, State> {
     };
     return (
       <>
-        <ResultImporter
-          shouldImport={this.state.shouldImportResults}
-          handleImported={() => this.setState({ shouldImportResults: false })}
-        />
         <ErrorBoundary>
           <div className={css('row')}>
             <div className={css('large-12', 'columns')}>
@@ -226,19 +199,17 @@ class IPScanResult extends PureComponent<Props, State> {
             </div>
           </div>
         </ErrorBoundary>
-        {!this.state.shouldImportResults && (
-          <ErrorBoundary>
-            <Switch
-              data={{ payload: null }}
-              {...this.props}
-              localPayload={this.state.localPayload}
-              localTitle={localTitle}
-              locationSelector={locationSelector}
-              indexRoute={SummaryAsync}
-              childRoutes={subPagesForSequence}
-            />
-          </ErrorBoundary>
-        )}
+        <ErrorBoundary>
+          <Switch
+            data={{ payload: null }}
+            {...this.props}
+            localPayload={this.state.localPayload}
+            localTitle={localTitle}
+            locationSelector={locationSelector}
+            indexRoute={SummaryAsync}
+            childRoutes={subPagesForSequence}
+          />
+        </ErrorBoundary>
       </>
     );
   }
@@ -246,16 +217,15 @@ class IPScanResult extends PureComponent<Props, State> {
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.jobs || {},
+  (state: GlobalState) => state.customLocation.description.result.job as string,
   (state: GlobalState) =>
     state.customLocation.description.result.accession as string,
   (state: GlobalState) => state.customLocation.description.entry,
-  (jobs, accession, { isFilter, db }) => {
+  (jobs, JobAccession, sequenceAccession, { isFilter, db }) => {
     const job = Object.values(jobs).find(
       (job) =>
-        job.metadata.localID === accession ||
-        job.metadata.remoteID === accession ||
-        job.metadata.localID === `${accession}-1` ||
-        job.metadata.remoteID === `${accession}-1`,
+        job.metadata.localID === JobAccession ||
+        job.metadata.remoteID === JobAccession,
     );
 
     return job
@@ -265,9 +235,10 @@ const mapStateToProps = createSelector(
           entryDB: (isFilter && db) || undefined,
           localTitle: job.metadata.localTitle,
           entries: job.metadata.entries,
-          accession,
+          JobAccession,
+          sequenceAccession,
         }
-      : { accession };
+      : { JobAccession, sequenceAccession };
   },
 );
 

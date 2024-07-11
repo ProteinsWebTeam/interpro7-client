@@ -8,7 +8,7 @@ exports[`<Actions /> should render 1`] = `
     title={
       <div>
         <b>
-          Delete sequence
+          Delete job
         </b>
         : This will remove the stored data from your browser. Remember that search results are only retained on our servers for 7 days
       </div>

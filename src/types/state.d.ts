@@ -81,6 +81,7 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   result?: {
     type: string | null;
     accession?: string | null;
+    job?: string | null;
     detail?: string | null;
   };
   other?: string[];

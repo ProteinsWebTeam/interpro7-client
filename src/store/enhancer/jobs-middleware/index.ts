@@ -46,8 +46,14 @@ const dataTA = getTableAccess(IPScanJobsData);
 
 const deleteJobInDB = async (localID: string) => {
   const [dataT, metaT] = await Promise.all([dataTA, metaTA]);
-  dataT.delete(localID);
   metaT.delete(localID);
+  for (const [key] of Object.entries(
+    (await dataT.getAll()) as Record<string, IprscanMetaIDB>,
+  )) {
+    if (key.startsWith(localID)) {
+      dataT.delete(key);
+    }
+  }
 };
 
 const rehydrateStoredJobs = async (dispatch: Dispatch) => {
@@ -115,19 +121,20 @@ const updateJobInDB = async (
   dispatch?: Dispatch,
 ) => {
   const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
-  const { remoteID, localID } = metadata;
+  const { remoteID, localID, group } = metadata;
   if (data) {
-    const prev = await dataT.get(metadata.localID);
-    const newData = {
-      ...prev,
-      ...data,
-      results: [data?.results?.[0]],
-    };
-    newData.originalInput = newData.input;
-    delete newData.input;
+    // const prev = await dataT.get(metadata.localID);
+    // const newData = {
+    //   ...prev,
+    //   ...data,
+    //   results: [data?.results?.[0]],
+    // };
+    // newData.originalInput = newData.input;
+    // delete newData.input;
 
-    metadata.localTitle = data?.results?.[0]?.xref?.[0]?.name;
-    if (data?.results?.length > 1 && !(remoteID || '').endsWith('-1')) {
+    // metadata.localTitle = data?.results?.[0]?.xref?.[0]?.name;
+    metadata.entries = data?.results?.length;
+    if (data?.results?.length > 1 && !group) {
       const now = new Date();
       metadata.group =
         metadata.group ||
@@ -139,33 +146,29 @@ const updateJobInDB = async (
           .padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now
           .getSeconds()
           .toString()
-          .padStart(2, '0')}-${data.results.length}`;
-      metadata.remoteID = `${remoteID}-1`;
-      metadata.localID = `${localID}-1`;
-      metaT.delete(localID);
-      dataT.delete(localID);
+          .padStart(2, '0')}`;
     }
-    dataT.set(newData, metadata.localID);
+    // dataT.set(newData, metadata.localID);
   }
   metaT.set(metadata, metadata.localID);
 
   (Array.isArray(data?.results) ? data?.results : [])
-    .slice(1)
+    // .slice(1)
     .forEach((result, i) => {
-      const newLocalID = `${localID}-${i + 2}`;
+      const newLocalID = `${localID}-${i + 1}`;
       dataT.set(
         { ...data, results: [result], localID: newLocalID },
         newLocalID,
       );
-      metaT.set(
-        {
-          ...metadata,
-          localID: newLocalID,
-          remoteID: `${remoteID}-${i + 2}`,
-          localTitle: result.xref?.[0]?.name,
-        },
-        newLocalID,
-      );
+      // metaT.set(
+      //   {
+      //     ...metadata,
+      //     localID: newLocalID,
+      //     remoteID: `${remoteID}-${i + 2}`,
+      //     localTitle: result.xref?.[0]?.name,
+      //   },
+      //   newLocalID,
+      // );
     });
   if (dispatch) {
     rehydrateStoredJobs(dispatch);
@@ -233,8 +236,7 @@ const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
           body: url
             .format({
               query: {
-                // prettier-ignore
-                email: (config /*: any */).IPScan.contactEmail,
+                email: config.IPScan.contactEmail,
                 title: localID,
                 sequence: input,
                 appl: applications,
@@ -382,9 +384,8 @@ const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
     try {
       const metaT = await metaTA;
       for (const [localID, meta] of Object.entries(
-        await metaT.getAll() as Record<string, IprscanMetaIDB>,
-        // prettier-ignore
-      ) /*: any */) {
+        (await metaT.getAll()) as Record<string, IprscanMetaIDB>,
+      )) {
         await processJob(localID, meta);
       }
     } catch (error) {
@@ -403,17 +404,25 @@ const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
     const unknownAction = tmpAction as UnknownAction;
     const previousState = getState();
     const output = next(unknownAction) as GlobalState;
-
     if (
       unknownAction.type === CREATE_JOB ||
-      unknownAction.type === IMPORT_JOB ||
-      unknownAction.type === IMPORT_JOB_FROM_DATA
+      unknownAction.type === IMPORT_JOB
     ) {
       const action = unknownAction as JobAction;
       const job = getState().jobs[action.job.metadata.localID!];
       createJobInDB(job.metadata, action.job.data);
       if (unknownAction.type === IMPORT_JOB)
         processJob(action.job.metadata.localID!, job.metadata);
+    }
+    if (unknownAction.type === IMPORT_JOB_FROM_DATA) {
+      const action = unknownAction as JobAction;
+      const job = getState().jobs[action.job.metadata.localID!];
+      const { results, ...jobDataWithoutResults } = action.job.data;
+      createJobInDB(
+        job.metadata,
+        jobDataWithoutResults as unknown as IprscanDataIDB,
+      );
+      updateJobInDB(job.metadata, action.job.data, dispatch);
     }
 
     if (unknownAction.type === UPDATE_JOB) {

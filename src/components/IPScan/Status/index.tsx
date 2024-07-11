@@ -28,7 +28,7 @@ import RefreshButton from 'components/IPScan/RefreshButton';
 import ClearAllDialog from 'components/IPScan/ClearAllDialog';
 import ImportResultSearch from 'components/IPScan/ImportResultSearch';
 import Actions from 'components/IPScan/Actions';
-import GroupActions from 'components/IPScan/Actions/Group';
+// import GroupActions from 'components/IPScan/Actions/Group';
 
 import config from 'config';
 
@@ -101,7 +101,7 @@ export class IPScanStatus extends PureComponent<Props> {
 
   render() {
     const { jobs, search, defaultPageSize } = this.props;
-    const keys = ['localID', 'localTitle', 'times'];
+    const keys = ['localID', 'localTitle', 'times', 'entries'];
     let paginatedJobs = [...jobs];
     sortSubsetBy<IprscanMetaIDB>(paginatedJobs, search, keys, {
       localID: (localID, row) => row!.remoteID || (localID as string),
@@ -118,12 +118,6 @@ export class IPScanStatus extends PureComponent<Props> {
         const { created, importing, lastUpdate } = times as JobTimes;
         return formatTime(new Date(created || importing || lastUpdate));
       },
-    });
-    paginatedJobs.sort((a, b) => {
-      if (!a.group) return -1;
-      if (!b.group) return 1;
-      if (a.group === b.group) return 0;
-      return a.group > b.group ? 1 : -1;
     });
     const pageSize = search.page_size || defaultPageSize;
     paginatedJobs = paginatedJobs.splice(
@@ -169,9 +163,7 @@ export class IPScanStatus extends PureComponent<Props> {
           actualSize={jobs.length}
           query={search}
           showTableIcon={false}
-          shouldGroup={true}
-          // eslint-disable-next-line react/display-name
-          groupActions={GroupActions}
+          // groupActions={GroupActions}
         >
           <ExtraOptions>
             <DropDownButton label="Clear All" icon="icon-trash">
@@ -205,7 +197,7 @@ export class IPScanStatus extends PureComponent<Props> {
                         main: { key: 'result' },
                         result: {
                           type: 'InterProScan',
-                          accession: row.remoteID || row.localID,
+                          job: row.remoteID || row.localID,
                         },
                       },
                     }}
@@ -225,6 +217,9 @@ export class IPScanStatus extends PureComponent<Props> {
             )}
           >
             Results
+          </Column>
+          <Column dataKey="entries" isSearchable={true} isSortable={true}>
+            Sequences
           </Column>
           <Column
             dataKey="times"

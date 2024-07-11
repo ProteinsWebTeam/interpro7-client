@@ -47,17 +47,8 @@ exports[`<IPScanStatus /> should render 1`] = `
     actualSize={0}
     contentType="result"
     dataTable={[]}
-    groupActions={
-      {
-        "$$typeof": Symbol(react.memo),
-        "WrappedComponent": [Function],
-        "compare": null,
-        "type": [Function],
-      }
-    }
     query={{}}
     rowKey="localID"
-    shouldGroup={true}
     showTableIcon={false}
   >
     <ExtraOptions>
@@ -92,6 +83,13 @@ exports[`<IPScanStatus /> should render 1`] = `
       renderer={[Function]}
     >
       Results
+    </Column>
+    <Column
+      dataKey="entries"
+      isSearchable={true}
+      isSortable={true}
+    >
+      Sequences
     </Column>
     <Column
       dataKey="times"

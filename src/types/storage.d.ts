@@ -28,6 +28,7 @@ type JobStatus =
   | 'queued';
 
 type IprscanDataIDB = {
+  localID: string;
   applications: Array<string>;
   'interproscan-version': string;
   input: string;
