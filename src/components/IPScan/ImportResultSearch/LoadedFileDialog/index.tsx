@@ -98,7 +98,7 @@ const saveJobInIDB = (
 type Props = {
   show: boolean;
   closeModal: () => void;
-  fileContent: IprscanDataIDB; // ProteinFile | NucleotideFile,
+  fileContent: Record<string, unknown>; // ProteinFile | NucleotideFile,
   fileName: string;
   importJobFromData: typeof importJobFromData;
 };
@@ -110,7 +110,12 @@ const LoadedFileDialog = ({
   fileName,
   importJobFromData,
 }: Props) => {
+  let validFileContent: IprscanDataIDB | null = null;
+  if (fileContent && isValid(fileContent))
+    validFileContent = fileContent as IprscanDataIDB;
+
   const saveFileInIndexDB = () => {
+    if (!validFileContent) return;
     // TODO: 🔰 nucleotides staff hasn't been migrated!
     if (isNucleotideFile(fileContent)) {
       // for (let i = fileContent.results.length - 1; i >= 0; i--) {
@@ -135,11 +140,11 @@ const LoadedFileDialog = ({
       // }
     } else {
       saveJobInIDB(
-        fileContent.results,
+        validFileContent.results,
         `imported_file-${fileName}`,
         null,
-        fileContent['interproscan-version'],
-        fileContent.applications,
+        validFileContent['interproscan-version'],
+        validFileContent.applications,
         importJobFromData,
       );
     }
@@ -149,20 +154,20 @@ const LoadedFileDialog = ({
   return (
     <Modal show={show} closeModal={closeModal}>
       <h2 id="modalTitle">InterProScan File</h2>
-      {fileContent && isValid(fileContent) ? (
+      {validFileContent ? (
         <>
           <p>
             Loading file: <code>{fileName}</code>
           </p>
           <p>
             You are about to load the analysis of{' '}
-            <b>{fileContent.results.length} sequences</b> with InterProScan
-            version {fileContent['interproscan-version']}
+            <b>{validFileContent.results.length} sequences</b> with InterProScan
+            version {validFileContent['interproscan-version']}
           </p>
           <IPScanVersionCheck
             ipScanVersion={fileContent['interproscan-version']}
           />
-          <NucleotideCheck fileContent={fileContent} />
+          <NucleotideCheck fileContent={validFileContent} />
           <div style={{ textAlign: 'right' }}>
             <Button onClick={saveFileInIndexDB}>OK</Button>
           </div>
