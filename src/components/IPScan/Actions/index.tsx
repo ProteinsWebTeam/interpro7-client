@@ -30,6 +30,7 @@ type Props = {
   attributes?: {
     applications: string[] | null;
   };
+  MoreActions?: React.ReactNode;
 };
 
 export const Actions = ({
@@ -43,6 +44,7 @@ export const Actions = ({
   versionMismatch,
   attributes,
   sequence,
+  MoreActions,
 }: Props) => {
   const _handleReRun = () => {
     const search: Record<string, unknown> = {};
@@ -87,11 +89,13 @@ export const Actions = ({
         }
       >
         <Button
-          type="inline"
+          type={forStatus ? 'inline' : 'secondary'}
           icon="icon-trash"
           onClick={_handleDelete}
           aria-label="Delete Results"
-        />
+        >
+          {!forStatus && <span>Delete Results</span>}
+        </Button>
       </Tooltip>
       {status === 'finished' && (
         <Tooltip
@@ -104,11 +108,13 @@ export const Actions = ({
           }
         >
           <Button
-            type="inline"
+            type={forStatus ? 'inline' : 'secondary'}
             icon="icon-save"
             onClick={() => keepJobAsLocal?.(localID)}
             aria-label="Save results in Browser"
-          />
+          >
+            {!forStatus && <span>Save results in Browser</span>}
+          </Button>
         </Tooltip>
       )}
       {versionMismatch && (
@@ -130,6 +136,7 @@ export const Actions = ({
           />
         </Tooltip>
       )}
+      {MoreActions ? MoreActions : null}
     </nav>
   );
 };

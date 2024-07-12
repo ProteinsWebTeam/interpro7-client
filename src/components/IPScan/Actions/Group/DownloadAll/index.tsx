@@ -8,14 +8,25 @@ import Button from 'components/SimpleCommonComponents/Button';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Link from 'components/generic/Link';
 
-import { getAllResults, Jobs } from '..';
-
 import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../../style.css';
 
 const css = cssBinder(fonts, local);
+
+function generateSingleIPScanObject(
+  job: IprscanMetaIDB,
+  jobsData: IprscanDataIDB[],
+): Record<string, unknown> {
+  const { results: _, ...moreMeta } = jobsData?.[0] || {};
+
+  return {
+    ...job,
+    ...moreMeta,
+    results: jobsData.map((jd) => jd.results?.[0]).filter(Boolean),
+  };
+}
 
 const downloadFile = (jsonContent: Record<string, unknown>, name: string) => {
   const downloadContent = JSON.stringify(jsonContent);
@@ -36,19 +47,23 @@ const downloadFile = (jsonContent: Record<string, unknown>, name: string) => {
 };
 
 type Props = {
-  jobs: Jobs;
-  remoteID?: string;
-  group: string;
+  job: IprscanMetaIDB;
+  jobsData?: Array<IprscanDataIDB>;
   dataURL?: string;
 };
 interface LoadedProps extends Props, LoadDataProps<string> {}
 
-const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
+const DownloadAll = ({ job, jobsData, data, dataURL }: LoadedProps) => {
   const handleDownload = async () => {
-    downloadFile(await getAllResults(jobs, group), `${group}.json`);
+    if (!jobsData?.length) return;
+    downloadFile(
+      generateSingleIPScanObject(job, jobsData),
+      `${job.remoteID}.json`,
+    );
   };
-  const thereDataInServers = remoteID && data?.payload === 'FINISHED';
-  return thereDataInServers ? (
+  const remoteID = job.remoteID;
+  const thereIsDataInServers = remoteID && data?.payload === 'FINISHED';
+  return thereIsDataInServers ? (
     ['sequence', 'tsv', 'json', 'xml', 'gff'].map((type) => (
       <li key={type}>
         <Tooltip
@@ -64,6 +79,7 @@ const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
             href={`${dataURL}/${remoteID}/${type}`}
             download={`InterProScan-${remoteID}.${type}`}
             buttonType="hollow"
+            className={css('download-option')}
           >
             <span className={css('icon', 'icon-common')} data-icon="&#xf019;" />{' '}
             {type === 'sequence'
@@ -84,7 +100,7 @@ const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
         }
       >
         <Button
-          className={css('group')}
+          className={css('group, download-option')}
           type="hollow"
           onClick={handleDownload}
           icon="icon-download"
@@ -99,7 +115,7 @@ const DownloadAll = ({ jobs, group, remoteID, data, dataURL }: LoadedProps) => {
 
 const getUrlForIpscan = createSelector(
   (state: GlobalState) => state.settings.ipScan,
-  (_state: GlobalState, props?: Props) => props?.remoteID || '',
+  (_state: GlobalState, props?: Props) => props?.job?.remoteID || '',
   (server: ParsedURLServer, remoteID: string) => {
     if (!remoteID) return null;
     const { protocol, hostname, port, root } = server;

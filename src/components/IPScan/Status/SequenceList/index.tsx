@@ -12,6 +12,7 @@ import Link from 'components/generic/Link';
 import { filterSubset, sortSubsetBy } from 'components/Table/FullyLoadedTable';
 import Table, { Column } from 'components/Table';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 
@@ -20,15 +21,20 @@ import Accession from 'components/Accession';
 
 import config from 'config';
 
+import StatusTooltip from '../../Summary/StatusTooltip';
+import ResultImporter from '../../ResultImporter';
+import Actions from '../../Actions';
+import DownloadAll from '../../Actions/Group/DownloadAll';
+import ReRun from '../../Actions/Group/ReRun';
+
+import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
+
 import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../style.css';
 import tableStyles from 'components/Table/style.css';
 import summary from 'styles/summary.css';
-import StatusTooltip from '../../Summary/StatusTooltip';
-import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
-import ResultImporter from '../../ResultImporter';
 
 const css = cssBinder(fonts, local, tableStyles, summary);
 
@@ -154,13 +160,23 @@ export const IPScanStatus = ({
         <header>Number of Sequences</header>
         <section>{job?.entries || 1}</section>
       </section>
-      {
-        // TODO: Add the actions that concern the whole job
-        /* <section className={css('summary-row')}>
+      <section className={css('summary-row')}>
         <header>Actions</header>
-        <section>TODO</section>
-      </section> */
-      }
+        <section>
+          <Actions
+            localID={job?.localID || ''}
+            status={job?.status || ''}
+            MoreActions={
+              <>
+                <ReRun job={job} jobsData={jobsData} />
+                <DropDownButton label="Download" icon="icon-list">
+                  <DownloadAll job={job} jobsData={jobsData} />
+                </DropDownButton>
+              </>
+            }
+          />
+        </section>
+      </section>
       <section className={css('summary-row')}>
         <header>Status</header>
         <section>

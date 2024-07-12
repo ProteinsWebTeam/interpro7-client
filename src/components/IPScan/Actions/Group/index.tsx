@@ -19,17 +19,6 @@ import local from '../style.css';
 
 const css = cssBinder(fonts, local);
 
-const mergeSequences = (results: Array<Iprscan5Result>) => {
-  let seqs = '';
-  let i = 1;
-  for (const result of results) {
-    seqs += `> ${result.xref?.[0]?.id || `Sequence ${i++}`}\n${(
-      (result.sequence || '').match(/(.{1,60})/g) || []
-    ).join('\n')}\n`;
-  }
-  return seqs;
-};
-
 export type Jobs = Record<
   string,
   {
@@ -83,27 +72,6 @@ const GroupActions = ({
     getJobsOfGroup(jobs, group).forEach((job) => deleteJob(job));
   };
 
-  const handleReRun = async () => {
-    const results = await getAllResults(jobs, group);
-    const search: Record<string, unknown> = {};
-    if (results?.applications) {
-      search.applications =
-        typeof results.applications === 'string'
-          ? [results.applications]
-          : results.applications;
-    }
-    goToCustomLocation({
-      description: {
-        main: { key: 'search' },
-        search: {
-          type: 'sequence',
-          value: mergeSequences(results.results as Iprscan5Result[]),
-        },
-      },
-      search,
-    });
-  };
-
   return (
     <nav className={css('buttons')}>
       <DropDownButton label="Group Actions" icon="icon-list">
@@ -129,30 +97,12 @@ const GroupActions = ({
               </Button>
             </Tooltip>
           </li>
-          <DownloadAll
+          {/* <DownloadAll
             jobs={jobs}
             group={group}
             remoteID={getRemoteID(jobs, group)}
-          />
-          <li>
-            <Tooltip
-              title={
-                <div>
-                  Start a new sequence search using the same sequences as this
-                  job.
-                </div>
-              }
-            >
-              <Button
-                type="hollow"
-                onClick={handleReRun}
-                icon="icon-undo"
-                aria-label="Resubmit all sequences"
-              >
-                Resubmit All
-              </Button>
-            </Tooltip>
-          </li>
+          /> */}
+          <li></li>
         </ul>
       </DropDownButton>
     </nav>
