@@ -64,12 +64,6 @@ export const countInterProFromMatches = (matches: Array<Iprscan5Match>) =>
 
 const FASTA_CLEANER = /(^[>;].*$)|\W/gm;
 
-type LocalPayload = Iprscan5Result & {
-  group?: string;
-  orf?: string;
-  applications?: Array<string>;
-};
-
 type Props = {
   matched: string;
   jobAccession: string;
@@ -155,7 +149,7 @@ class IPScanResult extends PureComponent<Props, State> {
   render() {
     const {
       matched,
-      localTitle,
+      // localTitle,
       entries: entriesProps,
       // remoteID,
       jobAccession,

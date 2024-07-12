@@ -35,3 +35,12 @@ type IprscanDataIDB = {
   originalInput: string;
   results: Array<Iprscan5Result>;
 };
+
+type LocalPayload = Iprscan5Result & {
+  group?: string;
+  orf?: string;
+  applications?: Array<string>;
+  goterms?: Array<string>;
+  pathways?: Array<string>;
+  'interproscan-version'?: string;
+};

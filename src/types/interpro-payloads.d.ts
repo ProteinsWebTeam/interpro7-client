@@ -132,6 +132,11 @@ interface ProteinMetadata extends Metadata {
   ida_accession: string;
   source_organism: SourceOrganism;
 }
+type MinimalProteinMetadata = {
+  accession: string;
+  length: number;
+  sequence: string;
+};
 interface StructureMetadata extends Metadata {
   name: NameObject | string;
   experiment_type: string;

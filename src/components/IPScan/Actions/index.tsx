@@ -28,7 +28,9 @@ type Props = {
   keepJobAsLocal?: typeof keepJobAsLocal;
   sequence?: string;
   attributes?: {
-    applications: string[] | null;
+    applications?: string[] | null;
+    goterms?: string[] | null;
+    pathways?: string[] | null;
   };
   MoreActions?: React.ReactNode;
 };

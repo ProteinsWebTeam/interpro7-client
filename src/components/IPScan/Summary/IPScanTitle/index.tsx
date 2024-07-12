@@ -15,7 +15,7 @@ const css = cssBinder(summary, fonts, style);
 
 type Props = {
   seqAccession: string;
-  localTitle: string;
+  localTitle?: string;
   payload: Iprscan5Result;
   updateSequenceJobTitle?: typeof updateSequenceJobTitle;
   status: string;

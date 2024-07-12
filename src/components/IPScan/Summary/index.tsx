@@ -1,78 +1,43 @@
-// @flow
 import React, { useEffect, useState } from 'react';
-import T from 'prop-types';
-import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
-// $FlowFixMe
 import getFetch from 'higherOrder/loadData/getFetch';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-// $FlowFixMe
 import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
 
 import Link from 'components/generic/Link';
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
-// $FlowFixMe
 import GoTerms from 'components/GoTerms';
-// $FlowFixMe
 import Accession from 'components/Accession';
-// $FlowFixMe
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
-// $FlowFixMe
 import Length from 'components/Protein/Length';
-// $FlowFixMe
 import DomainsOnProteinLoaded from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
-// $FlowFixMe
-import Actions from 'components/IPScan/Actions';
-// $FlowFixMe
-import { getIProScanURL } from 'components/IPScan/Status';
-import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
-import NucleotideSummary from 'components/IPScan/NucleotideSummary';
-// $FlowFixMe
-import IPScanTitle from './IPScanTitle';
-import SubJobsBrowser from '../SubJobsBrowser';
-// $FlowFixMe
 import { Exporter } from 'components/Table';
-import { updateJobTitle } from 'actions/creators';
 
-// $FlowFixMe
+import Actions from '../Actions';
+import { getIProScanURL } from '../Status';
+import IPScanVersionCheck from '../IPScanVersionCheck';
+import NucleotideSummary from '../NucleotideSummary';
+import SubJobsBrowser from '../SubJobsBrowser';
+import IPScanTitle from './IPScanTitle';
 import StatusTooltip from './StatusTooltip';
-// $FlowFixMe
 import { mergeData } from './serializers';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import style from './style.css';
 import summary from 'styles/summary.css';
-import theme from 'styles/theme-interpro.css';
 
-const f = foundationPartial(summary, theme, ebiGlobalStyles, fonts, style);
+const css = cssBinder(summary, fonts, style);
 
 const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
 
-/*:: type Props = {
-  accession: string,
-  localID: string,
-  remoteID?: string,
-  status: string,
-  data: {
-    loading: boolean,
-    payload: {
-      results: Array<Object>,
-    },
-  },
-  localPayload: ?Object,
-};
-*/
-
-const getInterProGoTerms = (matches) => {
+const getInterProGoTerms = (matches: Array<Iprscan5Match>) => {
   const goTerms = new Map();
   for (const match of matches) {
     for (const { id, category, name } of (match.signature.entry || {})
@@ -90,7 +55,7 @@ const getInterProGoTerms = (matches) => {
   return Array.from(goTerms.values());
 };
 
-const getPantherGoTerms = (matches) => {
+const getPantherGoTerms = (matches: Array<Iprscan5Match>) => {
   const goTerms = new Map();
 
   for (const match of matches) {
@@ -116,8 +81,11 @@ const getPantherGoTerms = (matches) => {
   return Array.from(goTerms.values());
 };
 
-const getCreated = (payload, accession) => {
-  let created = payload?.times?.created;
+const getCreated = (
+  payload: IprscanMetaIDB | LocalPayload,
+  accession: string,
+) => {
+  let created = (payload as IprscanMetaIDB)?.times?.created;
   if (!created) {
     const regex =
       /iprscan5-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
@@ -129,7 +97,10 @@ const getCreated = (payload, accession) => {
   }
   return created;
 };
-const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
+const getEntryURL = (
+  { protocol, hostname, port, root }: ParsedURLServer,
+  accession: string,
+) => {
   const description = {
     main: { key: 'entry' },
     entry: { db: 'interpro', accession },
@@ -142,7 +113,21 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
   });
 };
 
-// eslint-disable-next-line complexity
+type Props = {
+  jobAccession: string;
+  seqAccession: string;
+  localID: string;
+  // remoteID?: string,
+  status?: JobStatus;
+  data: {
+    loading: boolean;
+    payload: Iprscan5Payload;
+  };
+  api: ParsedURLServer;
+  ipScan: ParsedURLServer;
+  localPayload: LocalPayload;
+};
+
 const SummaryIPScanJob = ({
   jobAccession,
   seqAccession,
@@ -153,11 +138,12 @@ const SummaryIPScanJob = ({
   localPayload,
   api,
   ipScan,
-  updateJobTitle,
-}) => {
+}: Props) => {
   const [mergedData, setMergedData] = useState({});
   const [versionMismatch, setVersionMismatch] = useState(false);
-  const [familyHierarchyData, setFamilyHierarchyData] = useState([]);
+  const [familyHierarchyData, setFamilyHierarchyData] = useState<
+    Array<EntryMetadata>
+  >([]);
 
   useEffect(() => {
     if (data.payload || localPayload) {
@@ -166,11 +152,17 @@ const SummaryIPScanJob = ({
       const organisedData = mergeData(payload.matches, payload.sequenceLength);
       setMergedData(organisedData);
       if (organisedData.family) {
-        const families = [];
+        const families: Array<EntryMetadata> = [];
         organisedData.family.forEach((entry) => {
-          fetchFun(getEntryURL(api, entry.accession)).then((data) => {
-            if (data?.payload?.metadata) {
-              families.push(data.payload.metadata);
+          fetchFun(
+            getEntryURL(api, (entry as unknown as EntryMetadata).accession),
+          ).then((data) => {
+            const entryData = data as RequestedData<
+              MetadataPayload<EntryMetadata>
+            >;
+            const entryPayload = entryData?.payload;
+            if (entryPayload?.metadata) {
+              families.push(entryPayload.metadata);
               setFamilyHierarchyData([...families]);
             }
           });
@@ -186,11 +178,11 @@ const SummaryIPScanJob = ({
       }
     : localPayload;
 
-  if (!payload) return <Loading />;
+  if (!payload || !status) return <Loading />;
 
   const created = getCreated(payload, jobAccession);
 
-  const metadata = {
+  const metadata: MinimalProteinMetadata & { name: NameObject } = {
     accession: jobAccession,
     length: payload.sequence.length,
     sequence: payload.sequence,
@@ -220,26 +212,27 @@ const SummaryIPScanJob = ({
   const match = reg.exec(jobAccession);
   const rootAccession = match?.[1] ?? jobAccession;
   return (
-    <div className={f('sections')}>
+    <div className={css('sections')}>
       <section>
         <IPScanVersionCheck
           ipScanVersion={payload['interproscan-version']}
           callback={setVersionMismatch}
         />
         <SubJobsBrowser />
-        <NucleotideSummary payload={payload} />
+        {/* TODO: re-enable nucleotides
+        <NucleotideSummary payload={payload} /> */}
         <IPScanTitle
           seqAccession={seqAccession}
           payload={payload}
           status={status}
         />
 
-        <section className={f('summary-row')}>
+        <section className={css('summary-row')}>
           <header>
             Job ID{' '}
             <Tooltip title={'Case sensitive'}>
               <span
-                className={f('small', 'icon', 'icon-common')}
+                className={css('small', 'icon', 'icon-common')}
                 data-icon="&#xf129;"
                 aria-label={'Case sensitive'}
               />
@@ -265,14 +258,14 @@ const SummaryIPScanJob = ({
             />
           </section>
         </section>
-        <section className={f('summary-row')}>
+        <section className={css('summary-row')}>
           <header>Length</header>
           <section>
             <Length metadata={metadata} />
           </section>
         </section>
         {localID && (
-          <section className={f('summary-row')}>
+          <section className={css('summary-row')}>
             <header>Actions</header>
             <section>
               <Actions
@@ -289,7 +282,7 @@ const SummaryIPScanJob = ({
             </section>
           </section>
         )}
-        <section className={f('summary-row')}>
+        <section className={css('summary-row')}>
           <header>Status</header>
           <section>
             <StatusTooltip status={status} />
@@ -298,7 +291,7 @@ const SummaryIPScanJob = ({
 
         <div className={'row'}>
           <div
-            className={f(
+            className={css(
               'medium-9',
               'columns',
               'margin-bottom-large',
@@ -309,7 +302,7 @@ const SummaryIPScanJob = ({
             {familyHierarchyData.length ? (
               <ProteinEntryHierarchy entries={familyHierarchyData} />
             ) : (
-              <p className={f('margin-bottom-medium')}>None predicted</p>
+              <p className={css('margin-bottom-medium')}>None predicted</p>
             )}
           </div>
         </div>
@@ -320,6 +313,7 @@ const SummaryIPScanJob = ({
           <DomainsOnProteinLoaded
             mainData={{ metadata }}
             dataMerged={mergedData}
+            loading={false}
           >
             <Exporter includeSettings={false}>
               <ul>
@@ -351,49 +345,34 @@ const SummaryIPScanJob = ({
   );
 };
 
-SummaryIPScanJob.propTypes = {
-  jobAccession: T.string.isRequired,
-  localID: T.string,
-  remoteID: T.string,
-  status: T.string,
-  data: dataPropType,
-  localPayload: T.object,
-  api: T.object,
-  ipScan: T.object,
-  updateJobTitle: T.func,
-};
-
 const jobSelector = createSelector(
-  (state) => state.customLocation.description.result.job,
-  (state) => state.jobs,
+  (state: GlobalState) => state.customLocation.description.result.job,
+  (state: GlobalState) => state.jobs,
   (jobAccession, jobMap) => {
-    // prettier-ignore
-    return (Object.values(jobMap || {}) /*: any */)
-      .find(
-        (
-          job /*: {metadata:{remoteID: string, localID: string, status: string}} */,
-        ) =>
-          job.metadata.remoteID === jobAccession ||
-          job.metadata.localID === jobAccession,
-      );
+    return Object.values(jobMap || {}).find(
+      (job) =>
+        job.metadata.remoteID === jobAccession ||
+        job.metadata.localID === jobAccession,
+    );
   },
 );
 
 const mapStateToProps = createSelector(
-  (state) => state.customLocation.description.result.job,
-  (state) => state.customLocation.description.result.accession,
+  (state: GlobalState) => state.customLocation.description.result.job || '',
+  (state: GlobalState) =>
+    state.customLocation.description.result.accession || '',
   jobSelector,
-  (state) => state.settings.api,
-  (state) => state.settings.ipScan,
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.settings.ipScan,
   (jobAccession, seqAccession, job, api, ipScan) => ({
     jobAccession,
     seqAccession,
-    localID: job?.metadata?.localID,
-    remoteID: job?.metadata?.remoteID,
+    localID: job?.metadata?.localID || '',
+    remoteID: job?.metadata?.remoteID || '',
     status: job?.metadata?.status,
     api,
     ipScan,
   }),
 );
 
-export default connect(mapStateToProps, { updateJobTitle })(SummaryIPScanJob);
+export default connect(mapStateToProps)(SummaryIPScanJob);
