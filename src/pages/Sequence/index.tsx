@@ -204,7 +204,6 @@ class IPScanResult extends PureComponent<Props, State> {
             data={{ payload: null }}
             {...this.props}
             localPayload={this.state.localPayload}
-            localTitle={localTitle}
             locationSelector={locationSelector}
             indexRoute={SummaryAsync}
             childRoutes={subPagesForSequence}

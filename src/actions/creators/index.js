@@ -160,6 +160,14 @@ export const updateJobTitle = (
   job,
   value,
 });
+export const updateSequenceJobTitle = (
+  jobID /*: string */,
+  value /*: string */,
+) => ({
+  type: types.UPDATE_SEQUENCE_JOB_TITLE,
+  jobID,
+  value,
+});
 
 export const rehydrateJobs = (jobs /*: { [key: string]: Object } */) => ({
   type: types.REHYDRATE_JOBS,

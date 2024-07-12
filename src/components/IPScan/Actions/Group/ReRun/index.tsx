@@ -18,12 +18,11 @@ const mergeSequences = (results: Array<Iprscan5Result>) => {
 };
 
 type Props = {
-  job: IprscanMetaIDB;
   jobsData?: Array<IprscanDataIDB>;
   goToCustomLocation: typeof goToCustomLocation;
 };
 
-const ReRun = ({ job, jobsData, goToCustomLocation }: Props) => {
+const ReRun = ({ jobsData, goToCustomLocation }: Props) => {
   const handleReRun = async () => {
     const search: Record<string, unknown> = {};
     // All jobs should have the same applications so we can t=ake this from the first one.

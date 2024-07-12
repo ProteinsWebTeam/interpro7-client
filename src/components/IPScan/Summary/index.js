@@ -34,12 +34,14 @@ import Actions from 'components/IPScan/Actions';
 import { getIProScanURL } from 'components/IPScan/Status';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
 import NucleotideSummary from 'components/IPScan/NucleotideSummary';
+// $FlowFixMe
 import IPScanTitle from './IPScanTitle';
 import SubJobsBrowser from '../SubJobsBrowser';
 // $FlowFixMe
 import { Exporter } from 'components/Table';
 import { updateJobTitle } from 'actions/creators';
 
+// $FlowFixMe
 import StatusTooltip from './StatusTooltip';
 // $FlowFixMe
 import { mergeData } from './serializers';
@@ -60,7 +62,6 @@ const fetchFun = getFetch({ method: 'GET', responseType: 'JSON' });
   localID: string,
   remoteID?: string,
   status: string,
-  localTitle: string,
   data: {
     loading: boolean,
     payload: {
@@ -144,10 +145,9 @@ const getEntryURL = ({ protocol, hostname, port, root }, accession) => {
 // eslint-disable-next-line complexity
 const SummaryIPScanJob = ({
   jobAccession,
-  // seqAccession,
+  seqAccession,
   localID,
   // remoteID,
-  localTitle,
   status,
   data,
   localPayload,
@@ -229,10 +229,8 @@ const SummaryIPScanJob = ({
         <SubJobsBrowser />
         <NucleotideSummary payload={payload} />
         <IPScanTitle
-          localTitle={localTitle}
-          localID={localID}
+          seqAccession={seqAccession}
           payload={payload}
-          updateJobTitle={updateJobTitle}
           status={status}
         />
 
@@ -357,7 +355,6 @@ SummaryIPScanJob.propTypes = {
   jobAccession: T.string.isRequired,
   localID: T.string,
   remoteID: T.string,
-  localTitle: T.string,
   status: T.string,
   data: dataPropType,
   localPayload: T.object,

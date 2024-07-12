@@ -10,7 +10,7 @@ import Button from 'components/SimpleCommonComponents/Button';
 import { deleteJob, goToCustomLocation } from 'actions/creators';
 import getTableAccess, { IPScanJobsData } from 'storage/idb';
 
-import DownloadAll from './DownloadAll';
+// import DownloadAll from './DownloadAll';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -53,20 +53,20 @@ export const getAllResults = async (jobs: Jobs, group: string) => {
   return output;
 };
 
-const getRemoteID = (jobs: Jobs, group: string) => {
-  const jobWithRemoteID = Object.values(jobs).find(
-    (job) => job.metadata.group === group && job.metadata.remoteID,
-  );
-  if (jobWithRemoteID) {
-    return jobWithRemoteID.metadata.remoteID!.replace(/-\d+$/, '');
-  }
-  return;
-};
+// const getRemoteID = (jobs: Jobs, group: string) => {
+//   const jobWithRemoteID = Object.values(jobs).find(
+//     (job) => job.metadata.group === group && job.metadata.remoteID,
+//   );
+//   if (jobWithRemoteID) {
+//     return jobWithRemoteID.metadata.remoteID!.replace(/-\d+$/, '');
+//   }
+//   return;
+// };
 const GroupActions = ({
   group,
   jobs,
   deleteJob,
-  goToCustomLocation,
+  // goToCustomLocation,
 }: Props) => {
   const handleDelete = () => {
     getJobsOfGroup(jobs, group).forEach((job) => deleteJob(job));

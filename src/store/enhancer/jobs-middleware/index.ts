@@ -20,6 +20,7 @@ import {
   NEW_PROCESSED_CUSTOM_LOCATION,
   IMPORT_JOB,
   IMPORT_JOB_FROM_DATA,
+  UPDATE_SEQUENCE_JOB_TITLE,
 } from 'actions/types';
 import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
 
@@ -93,18 +94,10 @@ const createJobInDB = async (
   }
 };
 
-const updateSequenceTitleDB = async (
-  metadata: IprscanMetaIDB,
-  title: string,
-) => {
-  const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
-  const { localID } = metadata;
+const updateSequenceTitleDB = async (jobSequenceID: string, title: string) => {
+  const dataT = await dataTA;
 
-  metaT.update(localID, (prev: IprscanMetaIDB) => ({
-    ...prev,
-    localTitle: title,
-  }));
-  dataT.update(localID, (prev: IprscanDataIDB) => ({
+  dataT.update(jobSequenceID, (prev: IprscanDataIDB) => ({
     ...prev,
     results: [
       {
@@ -442,12 +435,20 @@ const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
       loop();
     }
 
-    if (unknownAction.type === UPDATE_JOB_TITLE) {
-      const action = unknownAction as JobAction;
-      updateSequenceTitleDB(
-        getState().jobs[action.job.metadata.localID!].metadata,
-        action.value || '',
-      );
+    // if (unknownAction.type === UPDATE_JOB_TITLE) {
+    //   const action = unknownAction as JobAction;
+    //   updateSequenceTitleDB(
+    //     getState().jobs[action.job.metadata.localID!].metadata,
+    //     action.value || '',
+    //   );
+    //   rehydrateStoredJobs(dispatch);
+    // }
+    if (unknownAction.type === UPDATE_SEQUENCE_JOB_TITLE) {
+      const action = unknownAction as unknown as {
+        jobID: string;
+        value: string;
+      };
+      updateSequenceTitleDB(action.jobID, action.value || '');
       rehydrateStoredJobs(dispatch);
     }
 

@@ -168,7 +168,7 @@ export const IPScanStatus = ({
             status={job?.status || ''}
             MoreActions={
               <>
-                <ReRun job={job} jobsData={jobsData} />
+                <ReRun jobsData={jobsData} />
                 <DropDownButton label="Download" icon="icon-list">
                   <DownloadAll job={job} jobsData={jobsData} />
                 </DropDownButton>
