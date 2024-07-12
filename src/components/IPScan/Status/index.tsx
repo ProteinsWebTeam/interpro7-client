@@ -305,8 +305,8 @@ export class IPScanStatus extends PureComponent<Props> {
             defaultKey="actions"
             headerClassName={css('table-header-center')}
             cellClassName={css('table-center', 'font-ml')}
-            renderer={(localID: string) => (
-              <Actions localID={localID} forStatus={true} />
+            renderer={(localID: string, row: IprscanMetaIDB) => (
+              <Actions localID={localID} forStatus={true} status={row.status} />
             )}
           >
             Action

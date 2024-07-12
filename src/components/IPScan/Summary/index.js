@@ -28,6 +28,7 @@ import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 import Length from 'components/Protein/Length';
 // $FlowFixMe
 import DomainsOnProteinLoaded from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+// $FlowFixMe
 import Actions from 'components/IPScan/Actions';
 // $FlowFixMe
 import { getIProScanURL } from 'components/IPScan/Status';
