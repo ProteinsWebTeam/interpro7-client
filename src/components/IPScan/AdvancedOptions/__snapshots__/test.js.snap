@@ -29,10 +29,29 @@ exports[`<AdvancedOptions /> should render 1`] = `
         }
       >
         <ToggleSwitch
+          id="seqtype"
+          label="Sequence type:"
+          name="seqtype"
+          offValue="Amino acids"
+          onValue="Nucleotides"
+          size="small"
+          switchCond={false}
+          width="8rem"
+        />
+      </label>
+      <br />
+      <label
+        style={
+          {
+            "marginBottom": "1rem",
+          }
+        }
+      >
+        <ToggleSwitch
           id="stay"
-          label="Create another job after this one"
+          label="Create another job after this one:"
           name="stay"
-          size="tiny"
+          size="small"
           switchCond={false}
         />
       </label>

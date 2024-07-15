@@ -246,6 +246,7 @@ const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
                 title: localID,
                 sequence: input,
                 appl: applications,
+                stype: meta.seqtype || 'p',
               },
             })
             .replace(/^\?/, ''),

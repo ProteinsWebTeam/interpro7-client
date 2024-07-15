@@ -144,11 +144,24 @@ export const AdvancedOptions = ({
           <legend>Job configuration</legend>
           <label style={{ marginBottom: '1rem' }}>
             <ToggleSwitch
+              id="seqtype"
+              name="seqtype"
+              switchCond={false}
+              label="Sequence type:"
+              size="small"
+              offValue="Amino acids"
+              onValue="Nucleotides"
+              width="8rem"
+            />
+          </label>
+          <br />
+          <label style={{ marginBottom: '1rem' }}>
+            <ToggleSwitch
               id="stay"
               name="stay"
               switchCond={false}
-              label="Create another job after this one"
-              size="tiny"
+              label="Create another job after this one:"
+              size="small"
             />
           </label>
           <label className={css('new-input-group')}>

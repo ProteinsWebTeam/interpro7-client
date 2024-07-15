@@ -148,6 +148,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
         localID,
         group: this.state.title,
         type: 'InterProScan',
+        seqtype: isXChecked('seqtype') ? 'n' : 'p',
       },
       data: {
         input: editorContent,
