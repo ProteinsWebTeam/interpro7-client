@@ -259,15 +259,9 @@ const SummaryIPScanJob = ({
             />
           </section>
         </section>
-        <section className={css('summary-row')}>
-          <header>Length</header>
-          <section>
-            <Length metadata={metadata} />
-          </section>
-        </section>
         {localID && (
           <section className={css('summary-row')}>
-            <header>Actions</header>
+            <header>Job Actions</header>
             <section>
               <Actions
                 localID={localID}
@@ -283,6 +277,12 @@ const SummaryIPScanJob = ({
             </section>
           </section>
         )}
+        <section className={css('summary-row')}>
+          <header>Sequence Length</header>
+          <section>
+            <Length metadata={metadata} />
+          </section>
+        </section>
         <section className={css('summary-row')}>
           <header>Status</header>
           <section>

@@ -156,14 +156,13 @@ class IPScanResult extends PureComponent<Props, State> {
       // sequenceAccession,
     } = this.props;
 
-    let entries = entriesProps || NaN;
-    if (this.state.localPayload && isNaN(entries)) {
-      entries = countInterProFromMatches(this.state.localPayload.matches);
-    }
-
     const metadata: Metadata & { name: NameObject } = {
       accession: jobAccession,
-      counters: { entries },
+      counters: {
+        entries: this.state.localPayload
+          ? countInterProFromMatches(this.state.localPayload.matches)
+          : NaN,
+      },
       name: {
         name: 'InterProScan Search Result',
       },

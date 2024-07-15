@@ -36,6 +36,7 @@ import local from '../style.css';
 import tableStyles from 'components/Table/style.css';
 import summary from 'styles/summary.css';
 import IPScanTitle from '../../Summary/IPScanTitle';
+import IPScanVersionCheck from '../../IPScanVersionCheck';
 
 const css = cssBinder(fonts, local, tableStyles, summary);
 
@@ -74,6 +75,7 @@ export const IPScanStatus = ({
   const [jobsData, setJobsData] = useState<Array<IprscanDataIDB>>([]);
   const [shouldImportResults, setShouldImportResults] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  // const [versionMismatch, setVersionMismatch] = useState(false);
   const getSequencesData = async (job: IprscanMetaIDB) => {
     const dataT = await getTableAccess(IPScanJobsData);
     const jobsData: Array<IprscanDataIDB> = [];
@@ -123,6 +125,10 @@ export const IPScanStatus = ({
   );
   return (
     <section>
+      <IPScanVersionCheck
+        ipScanVersion={jobsData?.[0]?.['interproscan-version']}
+      />
+
       <h3 className={css('light')}>
         Your InterProScan Search Results (Sequences){' '}
         <TooltipAndRTDLink rtdPage="searchways.html#sequence-search-results" />
