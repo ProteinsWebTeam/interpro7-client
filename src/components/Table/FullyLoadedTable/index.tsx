@@ -36,9 +36,9 @@ export const filterSubset = <RowData extends Record<string, unknown>>(
         columnToString[key] || ((x) => JSON.stringify(x).toLowerCase());
       filteredSubset = filteredSubset.filter(
         (row) =>
-          String(str(row[key], row)).indexOf(
-            (search[key] as string).toLowerCase(),
-          ) !== -1,
+          String(str(row[key], row))
+            .toLowerCase()
+            .indexOf((search[key] as string).toLowerCase()) !== -1,
       );
     }
   }

@@ -105,6 +105,8 @@ export class IPScanStatus extends PureComponent<Props> {
     let paginatedJobs = [...jobs];
     sortSubsetBy<IprscanMetaIDB>(paginatedJobs, search, keys, {
       localID: (localID, row) => row!.remoteID || (localID as string),
+      localTitle: (localTitle, row) =>
+        (localTitle as string) || row?.remoteID || row?.localID || '',
       times: (times) => {
         const { created, importing, lastUpdate } = times as JobTimes;
         return new Date(
@@ -114,6 +116,8 @@ export class IPScanStatus extends PureComponent<Props> {
     });
     paginatedJobs = filterSubset(paginatedJobs, search, keys, {
       localID: (localID, row) => row!.remoteID || (localID as string),
+      localTitle: (localTitle, row) =>
+        (localTitle as string) || row?.remoteID || row?.localID || '',
       times: (times) => {
         const { created, importing, lastUpdate } = times as JobTimes;
         return formatTime(new Date(created || importing || lastUpdate));

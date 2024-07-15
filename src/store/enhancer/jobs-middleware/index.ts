@@ -41,6 +41,11 @@ type JobAction = {
   value?: string;
   localID?: string;
 };
+type nameAction = {
+  type: string;
+  jobID: string;
+  value: string;
+};
 
 const metaTA = getTableAccess(IPScanJobsMeta);
 const dataTA = getTableAccess(IPScanJobsData);
@@ -94,6 +99,14 @@ const createJobInDB = async (
   }
 };
 
+const updateJobTitleDB = async (jobID: string, title: string) => {
+  const metaT = await metaTA;
+
+  metaT.update(jobID, (prev: IprscanMetaIDB) => ({
+    ...prev,
+    localTitle: title,
+  }));
+};
 const updateSequenceTitleDB = async (jobSequenceID: string, title: string) => {
   const dataT = await dataTA;
 
@@ -435,19 +448,13 @@ const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
       loop();
     }
 
-    // if (unknownAction.type === UPDATE_JOB_TITLE) {
-    //   const action = unknownAction as JobAction;
-    //   updateSequenceTitleDB(
-    //     getState().jobs[action.job.metadata.localID!].metadata,
-    //     action.value || '',
-    //   );
-    //   rehydrateStoredJobs(dispatch);
-    // }
+    if (unknownAction.type === UPDATE_JOB_TITLE) {
+      const action = unknownAction as nameAction;
+      updateJobTitleDB(action.jobID, action.value || '');
+      rehydrateStoredJobs(dispatch);
+    }
     if (unknownAction.type === UPDATE_SEQUENCE_JOB_TITLE) {
-      const action = unknownAction as unknown as {
-        jobID: string;
-        value: string;
-      };
+      const action = unknownAction as nameAction;
       updateSequenceTitleDB(action.jobID, action.value || '');
       rehydrateStoredJobs(dispatch);
     }

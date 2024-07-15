@@ -22,7 +22,7 @@ import { Exporter } from 'components/Table';
 import Actions from '../Actions';
 import { getIProScanURL } from '../Status';
 import IPScanVersionCheck from '../IPScanVersionCheck';
-import NucleotideSummary from '../NucleotideSummary';
+// import NucleotideSummary from '../NucleotideSummary';
 import SubJobsBrowser from '../SubJobsBrowser';
 import IPScanTitle from './IPScanTitle';
 import StatusTooltip from './StatusTooltip';
@@ -222,7 +222,8 @@ const SummaryIPScanJob = ({
         {/* TODO: re-enable nucleotides
         <NucleotideSummary payload={payload} /> */}
         <IPScanTitle
-          seqAccession={seqAccession}
+          type="sequence"
+          accession={seqAccession}
           payload={payload}
           status={status}
         />

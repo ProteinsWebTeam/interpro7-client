@@ -35,6 +35,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../style.css';
 import tableStyles from 'components/Table/style.css';
 import summary from 'styles/summary.css';
+import IPScanTitle from '../../Summary/IPScanTitle';
 
 const css = cssBinder(fonts, local, tableStyles, summary);
 
@@ -126,13 +127,14 @@ export const IPScanStatus = ({
         Your InterProScan Search Results (Sequences){' '}
         <TooltipAndRTDLink rtdPage="searchways.html#sequence-search-results" />
       </h3>
-      {/* <IPScanTitle
-        localTitle={job?.localTitle || ' '}
-        localID={job?.localID}
-        // payload={{ job }}
-        // updateJobTitle={updateJobTitle}
+
+      <IPScanTitle
+        type="job"
+        accession={job?.localID || ''}
+        localTitle={job?.localTitle || ''}
         status={job?.status}
-      /> */}
+        payload={job}
+      />
 
       <section className={css('summary-row')}>
         <header>

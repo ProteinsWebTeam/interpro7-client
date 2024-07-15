@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, KeyboardEvent } from 'react';
 
 import { connect } from 'react-redux';
-import { updateSequenceJobTitle } from 'actions/creators';
+import { updateSequenceJobTitle, updateJobTitle } from 'actions/creators';
 
 import Button from 'components/SimpleCommonComponents/Button';
 
@@ -14,44 +14,57 @@ import summary from 'styles/summary.css';
 const css = cssBinder(summary, fonts, style);
 
 type Props = {
-  seqAccession: string;
+  type: 'sequence' | 'job';
+  accession: string;
   localTitle?: string;
-  payload: Iprscan5Result;
+  payload: Iprscan5Result | IprscanMetaIDB;
   updateSequenceJobTitle?: typeof updateSequenceJobTitle;
+  updateJobTitle?: typeof updateJobTitle;
   status: string;
 };
 
 const IPScanTitle = ({
-  seqAccession,
+  type,
+  accession,
   localTitle,
   payload,
   updateSequenceJobTitle,
+  updateJobTitle,
   status,
 }: Props) => {
-  const [title, setTitle] = useState(localTitle);
+  const [title, setTitle] = useState(localTitle || '');
   const [readable, setReadable] = useState(true);
   const titleInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    setTitle(localTitle || payload.xref[0].name);
+    setTitle(localTitle || (payload as Iprscan5Result).xref?.[0].name);
   }, [payload, localTitle]);
 
   const changeTitle = () => {
-    if (titleInputRef.current === null) return;
-    if (titleInputRef.current === undefined) return;
+    if (!titleInputRef.current) return;
     if (titleInputRef.current.readOnly) {
       titleInputRef.current.focus();
     } else {
       if (titleInputRef.current.value !== '') {
         const value = titleInputRef.current.value;
-        payload.xref[0].name = value;
-        updateSequenceJobTitle?.(seqAccession, value);
+        if (type === 'sequence') {
+          (payload as Iprscan5Result).xref[0].name = value;
+          updateSequenceJobTitle?.(accession, value);
+        }
+        if (type === 'job') {
+          (payload as IprscanMetaIDB).localTitle = value;
+          updateJobTitle?.(accession, value);
+        }
         setTitle(value);
       }
     }
     setReadable(!titleInputRef.current.readOnly);
   };
+  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      changeTitle();
+    }
+  };
 
-  if (!title) return null;
   return (
     <section className={css('summary-row')}>
       <header>Title</header>
@@ -61,8 +74,10 @@ const IPScanTitle = ({
           className={css('title')}
           value={title}
           readOnly={readable}
-          style={{ width: `${title.length}ch` }}
+          style={{ width: `${Math.max(title?.length, 10)}ch` }}
           onChange={(event) => setTitle(event.target.value)}
+          onDoubleClick={() => setReadable(false)}
+          onKeyUp={handleKeyPress}
         />
         {['finished', 'imported file', 'saved in browser'].includes(status) ? (
           <Button
@@ -77,4 +92,6 @@ const IPScanTitle = ({
   );
 };
 
-export default connect(undefined, { updateSequenceJobTitle })(IPScanTitle);
+export default connect(undefined, { updateSequenceJobTitle, updateJobTitle })(
+  IPScanTitle,
+);
