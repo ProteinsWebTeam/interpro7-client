@@ -20,7 +20,7 @@ import Length from 'components/Protein/Length';
 import DomainsOnProteinLoaded from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 import { Exporter } from 'components/Table';
 
-import Actions from '../Actions';
+// import Actions from '../Actions';
 import { getIProScanURL } from '../Status';
 import IPScanVersionCheck from '../IPScanVersionCheck';
 import NucleotideSummary from '../NucleotideSummary';
@@ -137,7 +137,7 @@ const SummaryIPScanJob = ({
   jobAccession,
   seqAccession,
   jobType,
-  localID,
+  // localID,
   // remoteID,
   status,
   data,
@@ -149,7 +149,6 @@ const SummaryIPScanJob = ({
   goToCustomLocation,
 }: Props) => {
   const [mergedData, setMergedData] = useState({});
-  const [versionMismatch, setVersionMismatch] = useState(false);
   const [familyHierarchyData, setFamilyHierarchyData] = useState<
     Array<EntryMetadata>
   >([]);
@@ -251,10 +250,7 @@ const SummaryIPScanJob = ({
   return (
     <div className={css('sections')}>
       <section>
-        <IPScanVersionCheck
-          ipScanVersion={bPayload['interproscan-version']}
-          callback={setVersionMismatch}
-        />
+        <IPScanVersionCheck ipScanVersion={bPayload['interproscan-version']} />
         <SubJobsBrowser />
 
         <IPScanTitle
@@ -295,7 +291,13 @@ const SummaryIPScanJob = ({
             />
           </section>
         </section>
-        {localID && (
+        <section className={css('summary-row')}>
+          <header>Status</header>
+          <section>
+            <StatusTooltip status={status} />
+          </section>
+        </section>
+        {/* {localID && (
           <section className={css('summary-row')}>
             <header>Job Actions</header>
             <section>
@@ -312,18 +314,12 @@ const SummaryIPScanJob = ({
               />
             </section>
           </section>
-        )}
+        )} */}
         <NucleotideSummary payload={basePayload} orf={orf} />
         <section className={css('summary-row')}>
           <header>Sequence Length</header>
           <section>
             <Length metadata={metadata} />
-          </section>
-        </section>
-        <section className={css('summary-row')}>
-          <header>Status</header>
-          <section>
-            <StatusTooltip status={status} />
           </section>
         </section>
 

@@ -59,9 +59,9 @@ const NucleotideSummary = ({
         <section className={f('summary-row')}>
           <header>Current ORF</header>
           <section>
-            <select onChange={handleORFChange}>
+            <select onChange={handleORFChange} value={orf}>
               {nPayload.openReadingFrames.map((frame, i) => (
-                <option key={i} value={i} selected={i == orf}>
+                <option key={i} value={i}>
                   {i}: {frame.start}-{frame.end} ({frame.strand})
                 </option>
               ))}

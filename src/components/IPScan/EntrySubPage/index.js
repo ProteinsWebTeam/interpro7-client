@@ -20,6 +20,7 @@ import { iproscan2urlDB } from 'utils/url-patterns';
   localPayload: Object,
   dataBase: Object,
   entryDB: string,
+  orf?: boolean,
 }*/
 
 const flatMatchesFromIPScanPayload = function* (ipScanMatches, proteinLength) {
@@ -96,6 +97,7 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
     dataBase: T.object.isRequired,
     entryDB: T.string.isRequired,
     localPayload: T.object,
+    orf: T.bool,
   };
 
   render() {
@@ -104,6 +106,7 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
       data: { payload },
       dataBase,
       localPayload,
+      orf,
     } = this.props;
     if (!entryDB)
       return (
@@ -118,7 +121,14 @@ class EntrySubPage extends PureComponent /*:: <Props> */ {
         />
       );
     if (!payload && !localPayload) return <Loading />;
-    const mainData = payload ? { ...payload.results[0] } : localPayload;
+    let mainData = payload ? { ...payload.results[0] } : localPayload;
+    if (mainData.openReadingFrames?.length && typeof orf === 'number') {
+      mainData = {
+        ...mainData,
+        ...mainData /* as Iprscan5NucleotideResult*/.openReadingFrames[orf]
+          .protein,
+      };
+    }
     mainData.length = mainData.sequence.length;
     const flatArray = Array.from(
       flatMatchesFromIPScanPayload(mainData.matches, mainData.length),

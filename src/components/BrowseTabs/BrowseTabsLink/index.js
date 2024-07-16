@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 
@@ -89,7 +88,7 @@ class BrowseTabsLink extends PureComponent /*:: <Props> */ {
 
     const value = getValue(loading, payload, counter, name);
 
-    if (!isFirstLevel && !isNaN(value) && !value) return null;
+    if (!isFirstLevel && !isNaN(value) && value < 0) return null;
 
     return (
       <Link

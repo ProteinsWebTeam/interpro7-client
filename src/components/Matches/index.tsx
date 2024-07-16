@@ -262,6 +262,7 @@ const Matches = ({
       currentAPICall={currentAPICall}
       status={status}
       onFocusChanged={setFocused}
+      alwaysShowTotalNB={true}
     >
       <PageSizeSelector />
       {!(

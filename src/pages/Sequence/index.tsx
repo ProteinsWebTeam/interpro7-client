@@ -69,6 +69,7 @@ type Props = {
   jobAccession: string;
   sequenceAccession: string;
   localID?: string;
+  orf?: number;
   remoteID?: string;
   entryDB?: string;
   localTitle?: string;
@@ -153,24 +154,26 @@ class IPScanResult extends PureComponent<Props, State> {
   };
 
   render() {
-    const {
-      matched,
-      // localTitle,
-      // entries: entriesProps,
-      // remoteID,
-      jobAccession,
-      // sequenceAccession,
-    } = this.props;
+    const { matched, jobAccession, orf } = this.props;
 
+    let entries = (this.state.localPayload as Iprscan5Result)?.matches
+      ? countInterProFromMatches(
+          (this.state.localPayload as Iprscan5Result).matches,
+        )
+      : NaN;
+    if (
+      typeof orf === 'number' &&
+      (this.state.localPayload as Iprscan5NucleotideResult)?.openReadingFrames
+    ) {
+      entries = countInterProFromMatches(
+        (this.state.localPayload as Iprscan5NucleotideResult)
+          ?.openReadingFrames[orf].protein.matches,
+      );
+    }
     const metadata: Metadata & { name: NameObject } = {
       accession: jobAccession,
       counters: {
-        // TODO: Needs to be done for nucleotides
-        entries: (this.state.localPayload as Iprscan5Result)?.matches
-          ? countInterProFromMatches(
-              (this.state.localPayload as Iprscan5Result).matches,
-            )
-          : NaN,
+        entries,
       },
       name: {
         name: 'InterProScan Search Result',
@@ -222,7 +225,8 @@ const mapStateToProps = createSelector(
   (state: GlobalState) =>
     state.customLocation.description.result.accession as string,
   (state: GlobalState) => state.customLocation.description.entry,
-  (jobs, JobAccession, sequenceAccession, { isFilter, db }) => {
+  (state: GlobalState) => state.customLocation.search.orf,
+  (jobs, JobAccession, sequenceAccession, { isFilter, db }, orf) => {
     const job = Object.values(jobs).find(
       (job) =>
         job.metadata.localID === JobAccession ||
@@ -238,6 +242,7 @@ const mapStateToProps = createSelector(
           entries: job.metadata.entries,
           JobAccession,
           sequenceAccession,
+          orf: typeof orf !== 'undefined' ? Number(orf) : undefined,
         }
       : { JobAccession, sequenceAccession };
   },
