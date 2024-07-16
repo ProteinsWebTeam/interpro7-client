@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
@@ -49,6 +48,7 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
     data: dataPropType.isRequired,
     localPayload: T.object,
     localTitle: T.string,
+    orf: T.number,
   };
 
   render() {
@@ -58,6 +58,11 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
     const local = this.props.localPayload;
     let payload = null;
     const { loading, ok } = this.props.data;
+    const hasORF =
+      local?.openReadingFrames?.length && typeof this.props.orf !== 'undefined';
+    const currentORF = local?.openReadingFrames?.[this.props.orf];
+    const protein = currentORF?.protein;
+
     if (ok && !loading && !payload && this.props.data?.payload) {
       payload = this.props.data?.payload;
     }
@@ -70,6 +75,10 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
       accession = payload.results?.[0]?.xref?.accession;
       sequence = payload.results?.[0]?.xref?.sequence;
       name = payload.results?.[0]?.xref?.name?.name;
+    } else if (hasORF) {
+      accession = protein.xref[0].identifier || '';
+      name = protein.xref[0].name || '';
+      sequence = protein.sequence;
     } else {
       accession = local.xref[0].identifier || '';
       name = this.props.localTitle || local.xref[0].name || '';
@@ -78,16 +87,16 @@ class SequenceSubPage extends PureComponent /*:: <Props> */ {
     return (
       <>
         <Sequence accession={accession} sequence={sequence} name={name} />
-        {local?.orf?.dnaSequence && (
+        {hasORF && protein && (
           <section id="nucleotides">
             <header>
-              Nucleotide Sequence - {local.group} [{local?.orf?.start}-
-              {local?.orf?.end}]
+              Nucleotide Sequence - [{currentORF.start}-{currentORF.end}]
             </header>
             <InnerSequence
-              sequence={local?.orf?.dnaSequence}
-              start={local?.orf?.start}
-              end={local?.orf?.end}
+              sequence={local?.sequence}
+              start={currentORF.start}
+              end={currentORF.end}
+              name={protein.xref[0].name}
             />
           </section>
         )}

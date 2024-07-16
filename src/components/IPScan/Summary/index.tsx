@@ -319,7 +319,7 @@ const SummaryIPScanJob = ({
         <section className={css('summary-row')}>
           <header>Sequence Length</header>
           <section>
-            <Length metadata={metadata} />
+            <Length metadata={metadata} orf={orf} />
           </section>
         </section>
 

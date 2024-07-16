@@ -84,6 +84,7 @@ const NucleotideSummary = ({
                         detail: 'sequence',
                       },
                     },
+                    search: { orf },
                     hash: 'nucleotides',
                   })}
                 >
