@@ -6,9 +6,7 @@ import id from 'utils/cheap-unique-id';
 
 import Modal from 'components/SimpleCommonComponents/Modal';
 import IPScanVersionCheck from 'components/IPScan/IPScanVersionCheck';
-import NucleotideCheck, {
-  isNucleotideFile,
-} from 'components/IPScan/NucleotideCheck';
+import NucleotideCheck from 'components/IPScan/NucleotideCheck';
 import Button from 'components/SimpleCommonComponents/Button';
 
 const isValid = (fileObj: Record<string, unknown>) => {
@@ -116,39 +114,15 @@ const LoadedFileDialog = ({
 
   const saveFileInIndexDB = () => {
     if (!validFileContent) return;
-    // TODO: 🔰 nucleotides staff hasn't been migrated!
-    if (isNucleotideFile(fileContent)) {
-      // for (let i = fileContent.results.length - 1; i >= 0; i--) {
-      //   // prettier-ignore
-      //   const result/*: NucleotideResult */ = (fileContent.results[i]/*: any */);
-      //   const id = result.crossReferences?.[0]?.id;
-      //   for (const orf of result.openReadingFrames) {
-      //     const { protein, ...rest } = orf;
-      //     protein.group = id;
-      //     protein.orf = { ...rest, dnaSequence: result.sequence };
-      //     if (protein.matches?.length) {
-      //       saveJobInIDB(
-      //         protein,
-      //         `imported_file-${fileName}-${i + 1}-orf-${rest.id}`,
-      //         `${id} - ORF:${rest.id}`,
-      //         fileContent['interproscan-version'],
-      //         fileContent.applications,
-      //         importJobFromData,
-      //       );
-      //     }
-      //   }
-      // }
-    } else {
-      saveJobInIDB(
-        validFileContent.results,
-        `imported_file-${fileName}`,
-        null,
-        validFileContent['interproscan-version'],
-        validFileContent.applications,
-        importJobFromData,
-      );
-    }
 
+    saveJobInIDB(
+      validFileContent.results,
+      `imported_file-${fileName}`,
+      null,
+      validFileContent['interproscan-version'],
+      validFileContent.applications,
+      importJobFromData,
+    );
     closeModal();
   };
   return (

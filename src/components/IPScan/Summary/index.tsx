@@ -258,6 +258,7 @@ const SummaryIPScanJob = ({
           accession={seqAccession}
           payload={payload as Iprscan5Result}
           status={status}
+          editable={jobType !== 'n'}
         />
 
         <section className={css('summary-row')}>

@@ -21,6 +21,7 @@ type Props = {
   updateSequenceJobTitle?: typeof updateSequenceJobTitle;
   updateJobTitle?: typeof updateJobTitle;
   status: string;
+  editable?: boolean;
 };
 
 const IPScanTitle = ({
@@ -31,12 +32,13 @@ const IPScanTitle = ({
   updateSequenceJobTitle,
   updateJobTitle,
   status,
+  editable = true,
 }: Props) => {
   const [title, setTitle] = useState(localTitle || '');
   const [readable, setReadable] = useState(true);
   const titleInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    setTitle(localTitle || (payload as Iprscan5Result).xref?.[0].name);
+    setTitle(localTitle || (payload as Iprscan5Result).xref?.[0].name || '');
   }, [payload, localTitle]);
 
   const changeTitle = () => {
@@ -73,13 +75,14 @@ const IPScanTitle = ({
           ref={titleInputRef}
           className={css('title')}
           value={title}
-          readOnly={readable}
+          readOnly={readable || !editable}
           style={{ width: `${Math.max(title?.length, 10)}ch` }}
           onChange={(event) => setTitle(event.target.value)}
-          onDoubleClick={() => setReadable(false)}
+          onDoubleClick={() => setReadable(false || !editable)}
           onKeyUp={handleKeyPress}
         />
-        {['finished', 'imported file', 'saved in browser'].includes(status) ? (
+        {editable &&
+        ['finished', 'imported file', 'saved in browser'].includes(status) ? (
           <Button
             type="inline"
             onClick={changeTitle}

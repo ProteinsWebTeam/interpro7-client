@@ -1,41 +1,28 @@
 import React from 'react';
-import T from 'prop-types';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
-// $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
 
-/*::
-  import type {ProteinFile, NucleotideFile} from 'components/IPScan/ImportResultSearch/LoadedFileDialog'
-  type Props = {
-    fileContent?: ProteinFile | NucleotideFile,
-  }
-*/
-export const isNucleotideFile = (fileContent) =>
+export const isNucleotideFile = (fileContent: IprscanDataIDB | null) =>
   'crossReferences' in (fileContent?.results?.[0] || {}) &&
   'openReadingFrames' in (fileContent?.results?.[0] || {});
 
-const NucleotideCheck = ({ fileContent } /*: Props */) => {
+type Props = { fileContent: IprscanDataIDB };
+
+const NucleotideCheck = ({ fileContent }: Props) => {
   if (!fileContent) return <Loading inline={true} />;
   if (isNucleotideFile(fileContent)) {
     return (
-      <Callout type="info">
+      <Callout type="info" showIcon icon="icon-dna">
         <b>Nucleotide Sequence</b>
         <p>
           We have detected this file as an InterProScan search result using a
           sequence of <b>nucleotides</b>.
-        </p>
-        <p>
-          We will display it in the results as one result per open reading frame
         </p>
       </Callout>
     );
   }
   return null;
 };
-NucleotideCheck.propTypes = {
-  fileContent: T.shape({
-    results: T.arrayOf(T.object),
-  }),
-};
+
 export default NucleotideCheck;
