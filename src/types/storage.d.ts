@@ -37,9 +37,13 @@ type IprscanDataIDB = {
   results: Array<Iprscan5Result>;
 };
 
-type LocalPayload = Iprscan5Result & {
-  group?: string;
-  orf?: string;
+type IprscanNucleotideDataIDB = IprscanDataIDB & {
+  results: Array<Iprscan5NucleotideResult>;
+};
+
+type LocalPayload = (Iprscan5Result | Iprscan5NucleotideResult) & {
+  // group?: string;
+  // orf?: string;
   applications?: Array<string>;
   goterms?: Array<string>;
   pathways?: Array<string>;

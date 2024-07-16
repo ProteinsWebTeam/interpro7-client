@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+import { goToCustomLocation } from 'actions/creators';
 import getFetch from 'higherOrder/loadData/getFetch';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
@@ -22,7 +23,7 @@ import { Exporter } from 'components/Table';
 import Actions from '../Actions';
 import { getIProScanURL } from '../Status';
 import IPScanVersionCheck from '../IPScanVersionCheck';
-// import NucleotideSummary from '../NucleotideSummary';
+import NucleotideSummary from '../NucleotideSummary';
 import SubJobsBrowser from '../SubJobsBrowser';
 import IPScanTitle from './IPScanTitle';
 import StatusTooltip from './StatusTooltip';
@@ -114,8 +115,10 @@ const getEntryURL = (
 };
 
 type Props = {
+  customLocation: InterProLocation;
   jobAccession: string;
   seqAccession: string;
+  jobType: 'n' | 'p';
   localID: string;
   // remoteID?: string,
   status?: JobStatus;
@@ -126,11 +129,14 @@ type Props = {
   api: ParsedURLServer;
   ipScan: ParsedURLServer;
   localPayload: LocalPayload;
+  orf?: number;
+  goToCustomLocation?: typeof goToCustomLocation;
 };
 
 const SummaryIPScanJob = ({
   jobAccession,
   seqAccession,
+  jobType,
   localID,
   // remoteID,
   status,
@@ -138,17 +144,41 @@ const SummaryIPScanJob = ({
   localPayload,
   api,
   ipScan,
+  orf,
+  customLocation,
+  goToCustomLocation,
 }: Props) => {
   const [mergedData, setMergedData] = useState({});
   const [versionMismatch, setVersionMismatch] = useState(false);
   const [familyHierarchyData, setFamilyHierarchyData] = useState<
     Array<EntryMetadata>
   >([]);
-
+  useEffect(() => {
+    if (jobType === 'n') {
+      if (orf === undefined) {
+        goToCustomLocation?.(
+          {
+            ...customLocation,
+            search: {
+              ...customLocation.search,
+              orf: 0,
+            },
+          },
+          true,
+        );
+      }
+    }
+  }, [orf]);
   useEffect(() => {
     if (data.payload || localPayload) {
-      const payload = data.payload ? data.payload.results[0] : localPayload;
-
+      let bPayload = data.payload ? data.payload.results[0] : localPayload;
+      if (jobType === 'n') {
+        if (orf === undefined) return;
+        if ((bPayload as unknown as Iprscan5NucleotideResult).openReadingFrames)
+          bPayload = (bPayload as unknown as Iprscan5NucleotideResult)
+            .openReadingFrames[orf].protein;
+      }
+      const payload = bPayload as Iprscan5Result;
       const organisedData = mergeData(payload.matches, payload.sequenceLength);
       setMergedData(organisedData);
       if (organisedData.family) {
@@ -169,17 +199,24 @@ const SummaryIPScanJob = ({
         });
       }
     }
-  }, [data.payload, localPayload]);
+  }, [data.payload, localPayload, orf]);
 
-  const payload = data.payload
-    ? {
-        ...data.payload.results[0],
-        'interproscan-version': data.payload?.['interproscan-version'],
-      }
+  if (jobType === 'n' && orf === undefined) return null;
+
+  const basePayload: LocalPayload = data.payload
+    ? data.payload.results[0]
     : localPayload;
-
-  if (!payload || !status) return <Loading />;
-
+  if (!basePayload || !status) return <Loading />;
+  let bPayload = { ...basePayload } as LocalPayload;
+  if (data.payload)
+    bPayload['interproscan-version'] = data.payload?.['interproscan-version'];
+  if (jobType === 'n') {
+    bPayload = {
+      ...bPayload,
+      ...(bPayload as Iprscan5NucleotideResult).openReadingFrames[orf!].protein,
+    };
+  }
+  const payload = bPayload as Iprscan5Result;
   const created = getCreated(payload, jobAccession);
 
   const metadata: MinimalProteinMetadata & { name: NameObject } = {
@@ -215,16 +252,15 @@ const SummaryIPScanJob = ({
     <div className={css('sections')}>
       <section>
         <IPScanVersionCheck
-          ipScanVersion={payload['interproscan-version']}
+          ipScanVersion={bPayload['interproscan-version']}
           callback={setVersionMismatch}
         />
         <SubJobsBrowser />
-        {/* TODO: re-enable nucleotides
-        <NucleotideSummary payload={payload} /> */}
+
         <IPScanTitle
           type="sequence"
           accession={seqAccession}
-          payload={payload}
+          payload={payload as Iprscan5Result}
           status={status}
         />
 
@@ -277,6 +313,7 @@ const SummaryIPScanJob = ({
             </section>
           </section>
         )}
+        <NucleotideSummary payload={basePayload} orf={orf} />
         <section className={css('summary-row')}>
           <header>Sequence Length</header>
           <section>
@@ -359,15 +396,20 @@ const jobSelector = createSelector(
 );
 
 const mapStateToProps = createSelector(
+  (state: GlobalState) => state.customLocation,
   (state: GlobalState) => state.customLocation.description.result.job || '',
   (state: GlobalState) =>
     state.customLocation.description.result.accession || '',
   jobSelector,
+  (state: GlobalState) => state.customLocation.search.orf,
   (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.settings.ipScan,
-  (jobAccession, seqAccession, job, api, ipScan) => ({
+  (customLocation, jobAccession, seqAccession, job, orf, api, ipScan) => ({
+    customLocation,
     jobAccession,
     seqAccession,
+    jobType: (job?.metadata.seqtype === 'n' ? 'n' : 'p') as 'n' | 'p',
+    orf: typeof orf !== 'undefined' ? Number(orf) : undefined,
     localID: job?.metadata?.localID || '',
     remoteID: job?.metadata?.remoteID || '',
     status: job?.metadata?.status,
@@ -376,4 +418,6 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(mapStateToProps)(SummaryIPScanJob);
+export default connect(mapStateToProps, { goToCustomLocation })(
+  SummaryIPScanJob,
+);

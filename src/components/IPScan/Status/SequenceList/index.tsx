@@ -165,6 +165,12 @@ export const IPScanStatus = ({
         </section>
       </section>
       <section className={css('summary-row')}>
+        <header>Sequence type</header>
+        <section>
+          {job?.seqtype === 'n' ? 'Nucleotides' : 'Amino acids'}
+        </section>
+      </section>
+      <section className={css('summary-row')}>
         <header>Number of Sequences</header>
         <section>{job?.entries || 1}</section>
       </section>
@@ -263,6 +269,7 @@ export const IPScanStatus = ({
           dataKey="results"
           // isSearchable={true}
           // isSortable={true}
+          displayIf={job.seqtype !== 'n'}
           renderer={(results: Array<Iprscan5Result>) =>
             results[0].matches.length
           }

@@ -140,6 +140,8 @@ const updateJobInDB = async (
 
     // metadata.localTitle = data?.results?.[0]?.xref?.[0]?.name;
     metadata.entries = data?.results?.length;
+    metadata.seqtype =
+      'openReadingFrames' in (data?.results?.[0] || {}) ? 'n' : 'p';
     if (data?.results?.length > 1 && !group) {
       const now = new Date();
       metadata.group =

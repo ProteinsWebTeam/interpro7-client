@@ -57,6 +57,24 @@ type Iprscan5Result = {
     id: string;
   }>;
 };
+type Iprscan5NucleotideResult = {
+  id: number;
+  crossReferences: Array<{
+    id: string;
+    name: string;
+    nucleotideSequence: number;
+  }>;
+  md5: string;
+  openReadingFrames: Array<Iprscan5ORFResult>;
+};
+type Iprscan5ORFResult = {
+  id: number;
+  start: number;
+  end: number;
+  nucleotideSequence: number;
+  strand: string;
+  protein: Iprscan5Result;
+};
 
 type Iprscan5Payload = {
   'interproscan-version': string;

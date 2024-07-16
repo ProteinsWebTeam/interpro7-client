@@ -9,6 +9,7 @@ const css = cssBinder(local, fonts);
 
 type Props = PropsWithChildren<{
   icon?: string;
+  showIcon?: boolean;
   alt?: boolean;
   type: 'info' | 'alert' | 'warning' | 'announcement';
   style?: React.CSSProperties;
@@ -27,6 +28,7 @@ const Callout = ({
   alt = false,
   style = {},
   className = '',
+  showIcon,
   children,
 }: Props) => {
   const iconClass = icon ? icon : defaultIcons[type];
@@ -35,9 +37,11 @@ const Callout = ({
       className={css('new-callout', type, className, { alt })}
       style={{ ...style }}
     >
-      {icon && (
+      {showIcon && (
         <>
-          <span className={css('icon', 'icon-common', iconClass)} />
+          <span
+            className={css('icon', 'icon-common', 'icon-conceptual', iconClass)}
+          />
         </>
       )}
       <div>{children}</div>

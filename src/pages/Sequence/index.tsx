@@ -115,7 +115,9 @@ class IPScanResult extends PureComponent<Props, State> {
       { localIDForLocalPayload: localID, remoteIDForLocalPayload: remoteID },
       async () => {
         const dataT = await getTableAccess(IPScanJobsData);
-        const data = await dataT.get(this.props.sequenceAccession);
+        const data = (await dataT.get(this.props.sequenceAccession)) as
+          | IprscanDataIDB
+          | IprscanNucleotideDataIDB;
         const metaTA = await getTableAccess(IPScanJobsMeta);
         const meta = await metaTA.get(localID);
 
@@ -136,10 +138,14 @@ class IPScanResult extends PureComponent<Props, State> {
                 id: '',
               },
             ],
-            group: meta?.group,
-            orf: data?.results?.[0]?.orf,
             applications: data?.applications,
             md5: '',
+            openReadingFrames:
+              (data as IprscanNucleotideDataIDB).results?.[0]
+                ?.openReadingFrames || [],
+            crossReferences:
+              (data as IprscanNucleotideDataIDB).results?.[0]
+                ?.crossReferences || [],
           } as LocalPayload,
         });
       },
@@ -150,7 +156,7 @@ class IPScanResult extends PureComponent<Props, State> {
     const {
       matched,
       // localTitle,
-      entries: entriesProps,
+      // entries: entriesProps,
       // remoteID,
       jobAccession,
       // sequenceAccession,
@@ -159,8 +165,11 @@ class IPScanResult extends PureComponent<Props, State> {
     const metadata: Metadata & { name: NameObject } = {
       accession: jobAccession,
       counters: {
-        entries: this.state.localPayload
-          ? countInterProFromMatches(this.state.localPayload.matches)
+        // TODO: Needs to be done for nucleotides
+        entries: (this.state.localPayload as Iprscan5Result)?.matches
+          ? countInterProFromMatches(
+              (this.state.localPayload as Iprscan5Result).matches,
+            )
           : NaN,
       },
       name: {
