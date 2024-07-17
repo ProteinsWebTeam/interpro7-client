@@ -15,7 +15,7 @@ import { findIn, filterIn } from 'utils/processDescription/filterFuncions';
 import classNames from 'classnames';
 
 type Props = {
-  mainData: Metadata;
+  mainData: Metadata | LocalPayload;
   secondaryData: Array<MetadataWithLocations>;
   isStale: boolean;
   mainType: Endpoint;
@@ -29,9 +29,10 @@ type Props = {
   previousAPICall?: string | null;
   currentAPICall?: string | null;
   status?: number | null;
+  dbCounters?: MetadataCounters;
 };
 
-const RelatedAdvanced = ({
+export const RelatedAdvanced = ({
   mainData,
   secondaryData,
   isStale,
@@ -60,7 +61,7 @@ const RelatedAdvanced = ({
           ) : null} */}
           <RelatedTable
             mainType={mainType}
-            mainData={mainData}
+            mainData={mainData as Metadata}
             secondaryData={secondaryData}
             focusType={focusType}
             otherFilters={otherFilters}
@@ -80,19 +81,22 @@ const mapStateToPropsAdvanced = createSelector(
   (state: GlobalState) =>
     findIn(
       state.customLocation.description,
-      (value: EndpointPartialLocation) => !!value.isFilter && value.order === 1
+      (value: EndpointPartialLocation) => !!value.isFilter && value.order === 1,
     ),
   (state: GlobalState) =>
     filterIn(
       state.customLocation.description,
-      (value: EndpointPartialLocation) => !!value.isFilter && value.order !== 1
+      (value: EndpointPartialLocation) => !!value.isFilter && value.order !== 1,
     ),
   (mainType, [focusType, focusObj], otherFilters) => ({
     mainType:
       (mainType as string) === 'result' ? ('protein' as Endpoint) : mainType,
-    focusType: focusType as Endpoint,
+    focusType:
+      (mainType as string) === 'result'
+        ? ('entry' as Endpoint)
+        : (focusType as Endpoint),
     focusDB: (focusObj as EndpointLocation)?.db,
     otherFilters: otherFilters as Array<EndpointFilter>,
-  })
+  }),
 );
 export default connect(mapStateToPropsAdvanced)(RelatedAdvanced);

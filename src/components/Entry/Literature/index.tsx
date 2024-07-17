@@ -20,7 +20,7 @@ import { getDescriptionText } from 'components/Description';
 const css = cssBinder(refStyles, ipro);
 
 export const getLiteratureIdsFromDescription = (
-  description: Array<string | StructuredDescription>,
+  description?: Array<string | StructuredDescription>,
 ): Array<string> =>
   (description || []).reduce(
     (acc, part) => [

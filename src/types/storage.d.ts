@@ -42,10 +42,10 @@ type IprscanNucleotideDataIDB = IprscanDataIDB & {
 };
 
 type LocalPayload = (Iprscan5Result | Iprscan5NucleotideResult) & {
-  // group?: string;
-  // orf?: string;
   applications?: Array<string>;
   goterms?: Array<string>;
   pathways?: Array<string>;
   'interproscan-version'?: string;
+  sequence?: string;
+  length?: number;
 };

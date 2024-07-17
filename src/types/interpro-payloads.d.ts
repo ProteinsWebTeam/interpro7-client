@@ -68,8 +68,8 @@ type MetadataCounters = {
 interface Metadata {
   accession: string;
   source_database: string;
-  description: Array<string | StructuredDescription>;
-  counters: MetadataCounters;
+  description?: Array<string | StructuredDescription>;
+  counters?: MetadataCounters;
   go_terms?: Array<GOTerm>;
 }
 
@@ -291,6 +291,7 @@ type MetadataWithLocations = Metadata & {
   protein_structure_locations?: Array<ProtVistaLocation>;
   entry_structure_locations?: Array<ProtVistaLocation>;
   coordinates?: Array<ProtVistaLocation>;
+  matches?: EntryProteinMatch[];
   sequence_length?: number;
   sequence?: string;
 };
