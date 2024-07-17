@@ -4,6 +4,8 @@ import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+// $FlowFixMe
+// $FlowFixMe
 import BrowseTabsLink from './BrowseTabsLink';
 
 import config from 'config';
