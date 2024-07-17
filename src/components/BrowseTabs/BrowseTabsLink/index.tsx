@@ -17,33 +17,25 @@ const singleEntityNames = new Map(
 
 const whitelist = new Set(['Overview', 'Domain Architectures', 'Sequence']);
 
-const getValue = (
-  loading: boolean,
-  payload: MetadataPayload<Metadata> | null,
-  counter: string,
-  name: string,
-) => {
-  if (loading || !payload || !payload.metadata) return NaN;
+const getValue = (metadata: Metadata, counter: string, name: string) => {
+  if (!metadata) return NaN;
   if (name === 'Domain Architectures') {
-    if (payload.metadata.source_database.toLowerCase() !== 'interpro') return 0;
+    if (metadata.source_database.toLowerCase() !== 'interpro') return 0;
     // TODO: find a generic way to deal with this:
-    if (payload.metadata.counters && !payload.metadata.counters.proteins) {
+    if (metadata.counters && !metadata.counters.proteins) {
       return NaN;
     }
   }
   // TODO: find a generic way to deal with this:
   if (whitelist.has(name)) return NaN;
-  if (
-    payload.metadata.counters &&
-    Number.isFinite(payload.metadata.counters[counter])
-  ) {
-    return payload.metadata.counters[counter] as number;
+  if (metadata.counters && Number.isFinite(metadata.counters[counter])) {
+    return metadata.counters[counter] as number;
   } // Enabling the menuitems that appear in the entry_annotations object.
   // i.e. only enable the menu item if there is info for it
   if (
-    (payload.metadata as EntryMetadata).entry_annotations &&
+    (metadata as EntryMetadata).entry_annotations &&
     Object.prototype.hasOwnProperty.call(
-      payload.metadata as EntryMetadata,
+      metadata as EntryMetadata,
       singleEntityNames.get(name) || '',
     )
   ) {
@@ -53,11 +45,13 @@ const getValue = (
 };
 
 type Props = {
-  to: InterProLocation | ((loc: InterProLocation) => InterProLocation);
+  to:
+    | InterProPartialLocation
+    | ((loc: InterProLocation) => InterProPartialLocation);
   name: string;
   exact?: boolean;
   counter?: string;
-  data: RequestedData<MetadataPayload<Metadata>>;
+  metadata: Metadata;
   isFirstLevel?: boolean;
   isSignature?: boolean;
 };
@@ -67,11 +61,11 @@ const BrowseTabsLink = ({
   name,
   exact,
   counter,
-  data: { loading, payload },
+  metadata,
   isFirstLevel,
   isSignature,
 }: Props) => {
-  const value = getValue(loading, payload, counter || '', name);
+  const value = getValue(metadata, counter || '', name);
 
   if (!isFirstLevel && !isNaN(value) && value < 0) return null;
 
@@ -86,7 +80,7 @@ const BrowseTabsLink = ({
       {name}
       {value !== null && ' '}
       {value !== null && !isNaN(value) && value > 0 && (
-        <NumberComponent label loading={loading} abbr>
+        <NumberComponent label abbr>
           {value}
         </NumberComponent>
       )}

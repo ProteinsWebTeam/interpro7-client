@@ -196,10 +196,7 @@ class IPScanResult extends PureComponent<Props, State> {
                 mainType="sequence"
                 mainDB=""
                 mainAccession={matched}
-                data={{
-                  loading: false,
-                  payload: { metadata },
-                }}
+                metadata={metadata}
               />
             </div>
           </div>
