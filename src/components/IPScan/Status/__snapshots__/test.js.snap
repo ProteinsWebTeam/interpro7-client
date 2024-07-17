@@ -120,7 +120,7 @@ exports[`<IPScanStatus /> should render 1`] = `
   <Memo(Connect(ClearAllDialog))
     closeModal={[Function]}
     from={null}
-    jobs={null}
+    jobs={[]}
     show={false}
   />
 </div>
