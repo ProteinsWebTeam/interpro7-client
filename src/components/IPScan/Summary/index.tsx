@@ -24,7 +24,6 @@ import { Exporter } from 'components/Table';
 import { getIProScanURL } from '../Status';
 import IPScanVersionCheck from '../IPScanVersionCheck';
 import NucleotideSummary from '../NucleotideSummary';
-import SubJobsBrowser from '../SubJobsBrowser';
 import IPScanTitle from './IPScanTitle';
 import StatusTooltip from './StatusTooltip';
 import { mergeData } from './serializers';
@@ -251,7 +250,6 @@ const SummaryIPScanJob = ({
     <div className={css('sections')}>
       <section>
         <IPScanVersionCheck ipScanVersion={bPayload['interproscan-version']} />
-        <SubJobsBrowser />
 
         <IPScanTitle
           type="sequence"
