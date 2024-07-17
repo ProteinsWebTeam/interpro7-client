@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import React, { PropsWithChildren } from 'react';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Helmet } from 'react-helmet-async';
@@ -13,16 +13,14 @@ import ErrorBoundary from 'wrappers/ErrorBoundary';
 import loadable from 'higherOrder/loadable';
 import { schemaProcessDataWebPage } from 'schema_org/processors';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 
-import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
-
-const f = foundationPartial(ebiGlobalStyles, ipro);
+const css = cssBinder();
 
 const IPScanStatus = loadable({
   loader: () =>
     import(/* webpackChunkName: "ipscan-status" */ 'components/IPScan/Status'),
+  loading: false,
 });
 
 const IPScanJobStatus = loadable({
@@ -30,11 +28,13 @@ const IPScanJobStatus = loadable({
     import(
       /* webpackChunkName: "ipscan-status" */ 'components/IPScan/Status/SequenceList'
     ),
+  loading: false,
 });
 
 const IPScanResult = loadable({
   loader: () =>
     import(/* webpackChunkName: "sequence-page" */ 'pages/Sequence'),
+  loading: false,
 });
 
 const DownloadSummary = loadable({
@@ -42,11 +42,13 @@ const DownloadSummary = loadable({
     import(
       /* webpackChunkName: "download-summary" */ 'components/Download/Summary'
     ),
+  loading: false,
 });
 
 const DownloadForm = loadable({
   loader: () =>
     import(/* webpackChunkName: "download-form" */ 'components/DownloadForm'),
+  loading: false,
 });
 
 const SchemaOrgData = loadable({
@@ -65,14 +67,18 @@ const RedirectToIPScan = () => (
   />
 );
 
-const jobAccessionSelector = (customLocation) =>
+const jobAccessionSelector = (customLocation: InterProLocation) =>
   customLocation.description.result.job;
-const sequenceAccessionSelector = (customLocation) =>
+const sequenceAccessionSelector = (customLocation: InterProLocation) =>
   customLocation.description.result.accession;
 
-const _IPScanResultSafeGuardIfNotRehydratedYet = (
-  { jobs, ...props } /*: {jobs: Object} */,
-) => {
+const _IPScanResultSafeGuardIfNotRehydratedYet = ({
+  jobs,
+  ...props
+}: {
+  jobs: Record<string, { metadata: IprscanMetaIDB }>;
+  [p: string]: unknown;
+}) => {
   if (!jobs) return <Loading />;
   return (
     <Switch
@@ -82,21 +88,17 @@ const _IPScanResultSafeGuardIfNotRehydratedYet = (
       catchAll={IPScanResult}
     />
   );
+};
 
-  // return <IPScanJobStatus {...props} />;
-};
-_IPScanResultSafeGuardIfNotRehydratedYet.propTypes = {
-  jobs: T.object,
-};
 const jobSelector = createSelector(
-  (state) => state.jobs,
+  (state: GlobalState) => state.jobs,
   (jobs) => ({ jobs }),
 );
 const IPScanResultSafeGuardIfNotRehydratedYet = connect(jobSelector)(
   _IPScanResultSafeGuardIfNotRehydratedYet,
 );
 
-const InterProScanInnerSwitch = (props) => (
+const InterProScanInnerSwitch = (props: Record<string, unknown>) => (
   <Wrapper>
     <ErrorBoundary>
       <Switch
@@ -109,11 +111,12 @@ const InterProScanInnerSwitch = (props) => (
   </Wrapper>
 );
 
-const downloadSelector = (customLocation) => customLocation.hash;
+const downloadSelector = (customLocation: InterProLocation) =>
+  customLocation.hash;
 
 const downloadRoutes = new Map([[/^\//, DownloadForm]]);
 
-const Download = (props) => (
+const Download = (props: Record<string, unknown>) => (
   <Wrapper>
     <ErrorBoundary>
       <Switch
@@ -131,39 +134,31 @@ const routes = new Map([
   ['InterProScan', InterProScanInnerSwitch],
   ['download', Download],
 ]);
-/*:: type Props = {
-  children: Node
-};*/
-class Wrapper extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    children: T.node.isRequired,
-  };
 
-  render() {
-    return (
-      <div className={f('row')}>
-        <div className={f('columns', 'margin-bottom-large')}>
-          <SchemaOrgData
-            data={{
-              name: 'InterPro Jobs Page',
-              description:
-                'The webpage were the result of job requests can be found',
-              location: window.location,
-            }}
-            processData={schemaProcessDataWebPage}
-          />
-          <div className={f('tabs', 'tabs-content')}>
-            <div className={f('tabs-panel', 'is-active')}>
-              <ErrorBoundary>{this.props.children}</ErrorBoundary>
-            </div>
+const Wrapper = ({ children }: PropsWithChildren) => {
+  return (
+    <div className={css('row')}>
+      <div className={css('columns', 'margin-bottom-large')}>
+        <SchemaOrgData
+          data={{
+            name: 'InterPro Jobs Page',
+            description:
+              'The webpage were the result of job requests can be found',
+            location: window.location,
+          }}
+          processData={schemaProcessDataWebPage}
+        />
+        <div className={css('tabs', 'tabs-content')}>
+          <div className={css('tabs-panel', 'is-active')}>
+            <ErrorBoundary>{children || ''}</ErrorBoundary>
           </div>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-const jobTypeSelector = (customLocation) =>
+const jobTypeSelector = (customLocation: InterProLocation) =>
   customLocation.description.result.type;
 
 const Jobs = () => (
