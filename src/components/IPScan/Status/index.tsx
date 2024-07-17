@@ -25,10 +25,11 @@ import Button from 'components/SimpleCommonComponents/Button';
 import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 
 import RefreshButton from 'components/IPScan/RefreshButton';
-import ClearAllDialog from 'components/IPScan/ClearAllDialog';
+import ClearAllDialog, {
+  SourceToRemove,
+} from 'components/IPScan/ClearAllDialog';
 import ImportResultSearch from 'components/IPScan/ImportResultSearch';
 import Actions from 'components/IPScan/Actions';
-// import GroupActions from 'components/IPScan/Actions/Group';
 
 import config from 'config';
 
@@ -83,10 +84,16 @@ type Props = {
   updateJobStatus: typeof updateJobStatus;
 };
 
-export class IPScanStatus extends PureComponent<Props> {
-  state = { show: false, jobsToRemove: null, from: null };
+type State = {
+  show: boolean;
+  jobsToRemove: Array<IprscanMetaIDB>;
+  from: SourceToRemove;
+};
 
-  deleteAll = (from = 'file') => {
+export class IPScanStatus extends PureComponent<Props, State> {
+  state: State = { show: false, jobsToRemove: [], from: null };
+
+  deleteAll = (from: SourceToRemove = 'file') => {
     const { jobs } = this.props;
     this.setState({
       show: true,
