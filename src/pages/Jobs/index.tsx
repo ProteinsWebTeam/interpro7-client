@@ -137,21 +137,19 @@ const routes = new Map([
 
 const Wrapper = ({ children }: PropsWithChildren) => {
   return (
-    <div className={css('row')}>
-      <div className={css('columns', 'margin-bottom-large')}>
-        <SchemaOrgData
-          data={{
-            name: 'InterPro Jobs Page',
-            description:
-              'The webpage were the result of job requests can be found',
-            location: window.location,
-          }}
-          processData={schemaProcessDataWebPage}
-        />
-        <div className={css('tabs', 'tabs-content')}>
-          <div className={css('tabs-panel', 'is-active')}>
-            <ErrorBoundary>{children || ''}</ErrorBoundary>
-          </div>
+    <div className={css('vf-stack', 'vf-stack--400')}>
+      <SchemaOrgData
+        data={{
+          name: 'InterPro Jobs Page',
+          description:
+            'The webpage were the result of job requests can be found',
+          location: window.location,
+        }}
+        processData={schemaProcessDataWebPage}
+      />
+      <div className={css('tabs', 'tabs-content')}>
+        <div className={css('tabs-panel', 'is-active')}>
+          <ErrorBoundary>{children || ''}</ErrorBoundary>
         </div>
       </div>
     </div>

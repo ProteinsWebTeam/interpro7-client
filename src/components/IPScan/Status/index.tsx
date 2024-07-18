@@ -136,7 +136,7 @@ export class IPScanStatus extends PureComponent<Props, State> {
       Number(pageSize),
     );
     return (
-      <div className={css('row', 'columns')}>
+      <div className={css('vf-stack')}>
         <h3 className={css('light')}>
           Your InterProScan Search Results{' '}
           <TooltipAndRTDLink rtdPage="searchways.html#sequence-search-results" />

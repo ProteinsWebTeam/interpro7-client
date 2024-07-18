@@ -172,9 +172,13 @@ const SummaryIPScanJob = ({
       let bPayload = data.payload ? data.payload.results[0] : localPayload;
       if (jobType === 'n') {
         if (orf === undefined) return;
-        if ((bPayload as unknown as Iprscan5NucleotideResult).openReadingFrames)
+        if (
+          (bPayload as unknown as Iprscan5NucleotideResult).openReadingFrames
+        ) {
           bPayload = (bPayload as unknown as Iprscan5NucleotideResult)
             .openReadingFrames[orf].protein;
+          setFamilyHierarchyData([]);
+        }
       }
       const payload = bPayload as Iprscan5Result;
       const organisedData = mergeData(payload.matches, payload.sequenceLength);
@@ -322,23 +326,16 @@ const SummaryIPScanJob = ({
           </section>
         </section>
 
-        <div className={'row'}>
-          <div
-            className={css(
-              'medium-9',
-              'columns',
-              'margin-bottom-large',
-              'margin-top-large',
-            )}
-          >
-            <h4>Protein family membership</h4>
+        <section className={css('summary-row')}>
+          <header>Protein family membership</header>
+          <section>
             {familyHierarchyData.length ? (
               <ProteinEntryHierarchy entries={familyHierarchyData} />
             ) : (
               <p className={css('margin-bottom-medium')}>None predicted</p>
             )}
-          </div>
-        </div>
+          </section>
+        </section>
       </section>
 
       {['finished', 'imported file', 'saved in browser'].includes(status) && (

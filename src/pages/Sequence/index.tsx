@@ -184,21 +184,19 @@ class IPScanResult extends PureComponent<Props, State> {
     return (
       <>
         <ErrorBoundary>
-          <div className={css('row')}>
-            <div className={css('large-12', 'columns')}>
-              {
-                // Menu Just for InterProScan search
-              }
-              <Title metadata={metadata} mainType="protein" />
+          <div className={css('vf-stack', 'vf-stack-400')}>
+            {
+              // Menu Just for InterProScan search
+            }
+            <Title metadata={metadata} mainType="protein" />
 
-              <BrowseTabsWithoutData
-                key="browse"
-                mainType="sequence"
-                mainDB=""
-                mainAccession={matched}
-                metadata={metadata}
-              />
-            </div>
+            <BrowseTabsWithoutData
+              key="browse"
+              mainType="sequence"
+              mainDB=""
+              mainAccession={matched}
+              metadata={metadata}
+            />
           </div>
         </ErrorBoundary>
         <ErrorBoundary>
