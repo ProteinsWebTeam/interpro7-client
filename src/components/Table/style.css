@@ -181,6 +181,7 @@ table th {
     display: flex;
     gap: 0.3rem;
     flex-wrap: nowrap;
+    text-transform: capitalize;
   }
   &.table-header-right {
     text-align: right;

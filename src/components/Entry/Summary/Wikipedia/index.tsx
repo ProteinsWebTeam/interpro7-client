@@ -76,7 +76,9 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
   const imageLink = (
     <img src={`data:image/png;base64, ${thumbnail}`} alt="Structure" />
   );
-  const captionWithLinksSplit = article.caption.split(/(\[\[[^\]]+\]\])/);
+  const captionWithLinksSplit = (article.caption || '').split(
+    /(\[\[[^\]]+\]\])/,
+  );
   return (
     <div className={css('wiki-article')}>
       <div className={css('vf-grid', 'wiki-content')}>
