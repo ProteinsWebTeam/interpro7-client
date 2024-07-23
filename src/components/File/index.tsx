@@ -18,7 +18,7 @@ const mapStateToPropsFor = (url: string, fileType: string, subset: boolean) =>
     (downloads) =>
       downloads[
         [url, fileType, subset && 'subset'].filter(Boolean).join('|')
-      ] || {}
+      ] || {},
   );
 
 type Props = {
@@ -80,7 +80,7 @@ export class File extends PureComponent<Props, State> {
       fileType: nextProps.fileType,
       subset: nextProps.subset,
       ConnectedButton: connect(
-        mapStateToPropsFor(url, nextProps.fileType, !!nextProps.subset)
+        mapStateToPropsFor(url, nextProps.fileType, !!nextProps.subset),
       )(FileButton),
     };
   }
@@ -93,7 +93,7 @@ export class File extends PureComponent<Props, State> {
       this.state.url,
       this.props.fileType,
       this.props.subset,
-      this.props.endpoint
+      this.props.endpoint,
     );
   });
 
@@ -117,7 +117,7 @@ export class File extends PureComponent<Props, State> {
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.customLocation.description.entry,
-  (api: ParsedURLServer, entryDescription) => ({ api, entryDescription })
+  (api: ParsedURLServer, entryDescription) => ({ api, entryDescription }),
 );
 
 export default connect(mapStateToProps, { downloadURL })(File);

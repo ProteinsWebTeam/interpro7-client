@@ -3,8 +3,10 @@ import React from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import MemberDBSelector from 'components/MemberDBSelector';
 import LazyImage from 'components/LazyImage';
+// $FlowFixMe
 import StructureListFilters from 'components/Structure/StructureListFilters';
 // $FlowFixMe
 import StructureCard from 'components/Structure/Card';
@@ -15,6 +17,7 @@ import Table, {
   PageSizeSelector,
   Exporter,
   HighlightToggler,
+  // $FlowFixMe
 } from 'components/Table';
 
 // $FlowFixMe

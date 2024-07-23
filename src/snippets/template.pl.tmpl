@@ -142,9 +142,6 @@ sub main {
       if (defined $item->{"entries"}){
         $entries=$item->{"entries"};
       }
-      if (defined $item->{"entry_subset"}){
-        $entries=$item->{"entry_subset"};
-      }
       if ($entries){
         print ">$item->{metadata}->{accession}$HEADER_SEPARATOR";
         my $DASH="";

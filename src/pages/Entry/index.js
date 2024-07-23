@@ -274,6 +274,7 @@ class List extends PureComponent /*:: <Props> */ {
             )}
             <Column
               dataKey="accession"
+              isSortable={true}
               renderer={(accession /*: string */, row) => (
                 <Link
                   to={(customLocation) => ({

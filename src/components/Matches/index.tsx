@@ -38,9 +38,10 @@ import cssBinder from 'styles/cssBinder';
 
 import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import tableStyles from 'components/Table/style.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 
-const css = cssBinder(fonts, localStyle, exporterStyle);
+const css = cssBinder(fonts, localStyle, exporterStyle, tableStyles);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -177,8 +178,8 @@ type Props = {
   description?: InterProDescription;
   hash?: string;
   state?: GlobalState;
-  databases: Record<string, { name: string }>;
-  dbCounters?: Object;
+  databases: DBsInfo;
+  dbCounters?: MetadataCounters;
   mainData: MetadataWithLocations;
   accessionSearch?: AccSearchData;
   focusType?: string;
@@ -212,7 +213,7 @@ const Matches = ({
   status,
   ...props
 }: Props) => {
-  const [focused, setFocused] = useState(null);
+  const [focused, setFocused] = useState<string | null>(null);
   useEffect(() => {
     loadWebComponent(() =>
       import(
@@ -253,7 +254,9 @@ const Matches = ({
       withSunburst={isTaxonomySubpage}
       withKeySpecies={isTaxonomySubpage}
       dbCounters={dbCounters}
-      rowClassName={(row: Record<string, unknown>) => css({ exact: row.exact })}
+      rowClassName={(row) =>
+        css({ exact: (row as Record<string, unknown>).exact })
+      }
       nextAPICall={nextAPICall}
       previousAPICall={previousAPICall}
       currentAPICall={currentAPICall}
@@ -462,7 +465,7 @@ const Matches = ({
               {sourceOrganism.fullName}
             </Link>
           ) : (
-            sourceOrganism
+            String(sourceOrganism)
           )
         }
       >
@@ -470,7 +473,7 @@ const Matches = ({
       </Column>
       <Column
         dataKey="source_database"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={
           primary !== 'taxonomy' &&
@@ -495,7 +498,7 @@ const Matches = ({
       </Column>
       <Column
         dataKey="accession"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         defaultKey="structureAccession"
         displayIf={primary === 'structure'}
@@ -582,7 +585,7 @@ const Matches = ({
       <Column
         dataKey="counters.extra_fields.counters.proteins"
         defaultKey="protein-count"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
         renderer={(count: number) => (
@@ -594,7 +597,7 @@ const Matches = ({
       <Column
         dataKey="accession"
         defaultKey="proteinFastas"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
         renderer={ProteinDownloadRenderer(description)}
@@ -604,7 +607,7 @@ const Matches = ({
       <Column
         dataKey="accession"
         defaultKey="seedAlignment"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={
           primary === 'entry' &&
@@ -634,7 +637,7 @@ const Matches = ({
       <Column
         dataKey="accession"
         defaultKey="ida"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={
           primary === 'entry' &&
@@ -659,6 +662,41 @@ const Matches = ({
         )}
       >
         Domain architectures
+      </Column>
+      <Column
+        dataKey="matches"
+        defaultKey="entryInMatch"
+        headerClassName={css('table-center')}
+        cellClassName={css('table-center')}
+        displayIf={
+          ['protein', 'structure'].includes(primary || '') &&
+          secondary === 'set'
+        }
+        renderer={(matches: Array<AnyMatch>) => {
+          const accessions = new Set(
+            (matches || [])
+              .map((match) => match.entry_accession)
+              .filter(Boolean),
+          ) as Set<string>;
+          return Array.from(accessions).map((accession) => (
+            <Link
+              key={accession}
+              to={(customLocation) => ({
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: customLocation.description.set.db,
+                    accession,
+                  },
+                },
+              })}
+            >
+              {accession.toUpperCase()}{' '}
+            </Link>
+          ));
+        }}
+      >
+        Matching Entry
       </Column>
     </Table>
   );

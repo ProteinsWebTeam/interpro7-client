@@ -1,6 +1,5 @@
-// @flow
-import { removeLastSlash, buildLink, buildAnchorLink, toCanonicalURL } from '.';
-
+import { removeLastSlash, buildLink, buildAnchorLink } from '.';
+import toCanonicalURL from './toCanonicalURL';
 describe('url utils', () => {
   describe('removeLastSlash', () => {
     test('should remove last slash of a string', () => {
@@ -16,7 +15,10 @@ describe('url utils', () => {
     test('should build a valid link href', () => {
       for (const path of ['/some/path', '/some/path/', '/some/path//']) {
         expect(buildLink(path)).toBe('/some/path/');
-        for (const [from, o] of [['path', '/some/path/'], ['some', '/some/']]) {
+        for (const [from, o] of [
+          ['path', '/some/path/'],
+          ['some', '/some/'],
+        ]) {
           expect(buildLink(path, from)).toBe(o);
           expect(buildLink(path, from, 'a')).toBe(`${o}a/`);
           expect(buildLink(path, from, 'a', 'b', 'c')).toBe(`${o}a/b/c/`);

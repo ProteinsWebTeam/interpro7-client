@@ -251,7 +251,7 @@ const AlphaFoldModel = ({
                 <FullScreenButton
                   className={css('icon', 'icon-common', 'control')}
                   tooltip="Split full screen"
-                  dataIcon={'\uF0DB'}
+                  dataIcon="icon-columns"
                   element={parentElement}
                   onFullScreenHook={() => onSplitScreenChange?.(true)}
                   onExitFullScreenHook={() => onSplitScreenChange?.(false)}

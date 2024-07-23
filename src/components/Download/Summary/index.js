@@ -9,6 +9,7 @@ import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import Table, { Column } from 'components/Table';
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -25,8 +26,9 @@ import interproTheme from 'styles/theme-interpro.css'; /* needed for custom butt
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import VersionCheck from './VersionCheck';
+import tableStyles from 'components/Table/style.css';
 
-const f = foundationPartial(interproTheme, fonts, ipro);
+const f = foundationPartial(interproTheme, fonts, ipro, tableStyles);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -42,7 +44,7 @@ const GoToNewDownload = () => (
       },
       hash: '/entry/InterPro/|accession',
     }}
-    className={f('button')}
+    buttonType="primary"
   >
     Select and Download InterPro data
   </Link>
@@ -116,7 +118,7 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
             </Column>
             <Column
               dataKey="progress"
-              headerClassName={f('table-center')}
+              headerClassName={f('table-header-center')}
               cellClassName={f('table-center')}
               renderer={(
                 progress /*: number */,
@@ -167,7 +169,7 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
             <Column
               dataKey="localID"
               defaultKey="actions"
-              headerClassName={f('table-center')}
+              headerClassName={f('table-header-center')}
               cellClassName={f('table-center')}
               renderer={(
                 localID /*: string */,

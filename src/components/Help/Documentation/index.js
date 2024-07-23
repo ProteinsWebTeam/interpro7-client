@@ -126,7 +126,7 @@ export default class Documentation extends PureComponent /*:: <{}> */ {
                           main: { key: 'result' },
                           result: { type: 'download' },
                         },
-                        hash: '/entry/interpro',
+                        hash: '/entry/interpro/|json',
                       }}
                     >
                       Code snippet generator

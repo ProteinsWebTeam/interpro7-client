@@ -3,6 +3,18 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import TimeAgo from '.';
 
+jest.mock('timeago.js', () => {
+  const originalModule = jest.requireActual('timeago.js');
+
+  // Mock the default export and named export 'foo'
+  return {
+    __esModule: true,
+    ...originalModule,
+    default: jest.fn(() => 'mocked format'),
+    format: jest.fn(() => 'A while ago'),
+  };
+});
+
 const renderer = new ShallowRenderer();
 
 describe('<TimeAgo />', () => {

@@ -50,9 +50,10 @@ const ReleaseNotesSelectorWithData = (
 ) => {
   const [showFullList, setShowFullList] = useState(false);
   if (loading || !payload) return <Loading />;
-  const releasesToShow = showFullList
-    ? Object.entries(payload)
-    : Object.entries(payload).slice(-1);
+  const allRelease = Object.entries(payload).sort(
+    ([a], [b]) => Number(a) - Number(b),
+  );
+  const releasesToShow = showFullList ? allRelease : allRelease.slice(-2, -1);
   return (
     <>
       {!showFullList && (

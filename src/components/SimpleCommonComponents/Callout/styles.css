@@ -56,5 +56,5 @@
   background-color: #c4ffaa;
 }
 .new-callout.announcement.alt {
-  border-left: #57ff10 4px solid;
+  border-left: var(--colors-check) 4px solid;
 }

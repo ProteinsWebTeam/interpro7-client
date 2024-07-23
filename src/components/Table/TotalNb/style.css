@@ -1,5 +1,5 @@
-@import '../../../styles/colors.css';
-@import '../../../styles/timing.css';
+@import "../../../styles/colors.css";
+@import "../../../styles/timing.css";
 
 .component {
   color: #505f74;
@@ -26,17 +26,16 @@
       border: solid 1px var(--colors-lightgray);
     }
     &::after {
-      content: '▼';
-      /*opacity: 1;*/
-      /*transition: opacity var(--timing-medium) ease-in-out;*/
+      content: "▼";
+      display: inline-block;
+      transition: transform var(--timing-fast) ease-in-out;
     }
     &:active {
       border: solid 1px var(--colors-active-form);
     }
 
     &.open::after {
-      /*opacity: 0;*/
-      content: '▲';
+      transform: rotate(-90deg);
     }
   }
 }

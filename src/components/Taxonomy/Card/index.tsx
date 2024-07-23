@@ -25,7 +25,7 @@ type Props = {
     metadata: TaxonomyMetadata;
     extra_fields?: {
       counters: MetadataCounters;
-      lineage: string;
+      lineage?: string;
     };
   };
   search: string;

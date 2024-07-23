@@ -13,6 +13,7 @@ import Table, {
   Exporter,
   Card,
   HighlightToggler,
+  // $FlowFixMe
 } from 'components/Table';
 // $FlowFixMe
 import File from 'components/File';
@@ -21,6 +22,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 // $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+// $FlowFixMe
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
 import APIViewButton from 'components/Table/Exporter/APIViewButton';

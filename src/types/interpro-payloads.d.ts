@@ -73,6 +73,10 @@ interface Metadata {
   go_terms?: Array<GOTerm>;
 }
 
+type MetadataPayload<T = unknown> = {
+  metadata: T;
+};
+
 type NameObject = {
   name: string;
   short?: string;
@@ -173,22 +177,54 @@ interface TaxonomyMetadata extends Metadata {
   rank: string;
   children: Array<string>;
   parent: string;
-  name: Required<NameObject>;
+  name: Required<NameObject> | string;
+  counters: TaxonomyCounters;
+  exact_match?: boolean;
 }
 type WithNames = {
   names: Record<string, Required<NameObject>>;
 };
-type WithTaxonomyFilters = {
-  children?: Record<
-    string,
-    {
-      entries: number;
-      proteomes: number;
-      proteins: number;
-      structures: number;
-    }
-  >;
+type TaxonomyCounters = {
+  entries: number;
+  proteomes: number;
+  proteins: number;
+  structures: number;
 };
+type WithTaxonomyFilters = {
+  children?: Record<string, TaxonomyCounters>;
+};
+type TaxNode = {
+  id: string;
+  children?: Array<TaxNode>;
+  lineage?: string;
+  counters?: TaxonomyCounters;
+  rank?: string;
+  hitcount?: number | 'N/A' | undefined;
+  name: string;
+};
+
+type TaxonommyTreePayload = {
+  metadata: TaxonomyMetadata;
+} & WithNames &
+  WithTaxonomyFilters;
+
+// Use for Sunburst
+type TaxaPayload = {
+  taxa: Taxon;
+};
+type Taxon = {
+  id: string;
+  rank: string;
+  name: string;
+  lineage?: Array<{
+    name: string;
+    id: string;
+  }>;
+  proteins: number;
+  species: number;
+  children: Array<Taxon>;
+};
+
 interface ProteomeMetadata extends Metadata {
   is_reference: boolean;
   strain: string;
@@ -228,7 +264,6 @@ type ProtVistaFragment = {
   residues?: string;
   seq_feature?: string;
   fill?: string;
-  representative?: boolean;
   protein_start?: number;
   protein_end?: number;
 };
@@ -241,6 +276,7 @@ type ProtVistaLocation = {
     name: string;
     accession: string;
   };
+  representative?: boolean;
   description?: string;
   accession?: string;
   [other: string]: unknown;
@@ -338,10 +374,14 @@ interface EntryStructureMatch extends MatchI {
   entry_type: string;
   entry_integrated: string | null;
 }
+interface EntrySetMatch extends MatchI {
+  entry_accession?: string;
+}
 
 type AnyMatch = Partial<EntryProteinMatch> &
   Partial<EntryStructureMatch> &
-  Partial<StructureProteinMatch>;
+  Partial<StructureProteinMatch> &
+  Partial<EntrySetMatch>;
 
 type EntryStructurePayload = {
   metadata: EntryMetadata;
@@ -391,21 +431,7 @@ type ResidueMetadata = {
 };
 type ResiduesPayload = Record<string, ResidueMetadata>;
 
-type TaxaPayload = {
-  taxa: Taxon;
-};
-type Taxon = {
-  id: string;
-  rank: string;
-  name: string;
-  lineage?: Array<{
-    name: string;
-    id: string;
-  }>;
-  proteins: number;
-  species: number;
-  children: Array<Taxon>;
-};
+type GroupByPayload<T = number> = Record<string, T>;
 
 type IDAResult = {
   ida: string;
@@ -528,4 +554,30 @@ type UtilsAccessionPayload = {
 
 type ErrorPayload = {
   detail: string;
+};
+
+type InteractionMolecule = {
+  accession: string;
+  identifier: string;
+  type: string;
+};
+type Interaction = {
+  intact_id: string;
+  pubmed_id: number;
+  molecule_1: InteractionMolecule;
+  molecule_2: InteractionMolecule;
+};
+
+type InteractionsPayload = {
+  interactions: Array<Interaction>;
+};
+type CounterPayload = {
+  [endpoint in EndpointPlural]: Record<string, number> & {
+    member_databases?: Record<string, number>;
+  };
+};
+type ComposedCounterPayload = {
+  [endpoint in EndpointPlural]: Record<string, Record<string, number>> & {
+    member_databases?: Record<string, Record<string, number>>;
+  };
 };

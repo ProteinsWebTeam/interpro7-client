@@ -54,7 +54,7 @@ export const decodeDescription = (description: Array<string>) =>
 
 type Props = {
   searchValue: string;
-  query: Object;
+  query: InterProLocationSearch;
 };
 interface LoadedProps extends Props, LoadDataProps<EBISearchPayload> {}
 
@@ -190,8 +190,8 @@ export const SearchResults = ({
 };
 
 const mapStateToProps = createSelector(
-  (state) => state.customLocation.description.search.value,
-  (state) => state.customLocation.search,
+  (state: GlobalState) => state.customLocation.description.search.value,
+  (state: GlobalState) => state.customLocation.search,
   (searchValue, query) => ({ searchValue, query }),
 );
 

@@ -202,7 +202,7 @@ const SimilarProteinTable = ({
                 {sourceOrganism.fullName}
               </Link>
             ) : (
-              sourceOrganism
+              String(sourceOrganism)
             )
           }
         >

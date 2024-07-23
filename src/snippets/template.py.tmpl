@@ -122,8 +122,6 @@ def output_list():
            }%>sys.stdout.write("\n")
       <% } else if (fileType === "fasta") { %>
       entries = None
-      if ("entry_subset" in item):
-        entries = item["entry_subset"]
       elif ("entries" in item):
         entries = item["entries"]
       

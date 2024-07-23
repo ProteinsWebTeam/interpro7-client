@@ -23,12 +23,13 @@ const DomainArchitecture = loadable({
 });
 const InteractionsSubPage = loadable({
   loader: () =>
-    import(
-      /* webpackChunkName: "interactions-subpage" */ './InteractionsSubPage'
-    ),
+    import(/* webpackChunkName: "interactions-subpage" */ './Interactions'),
 });
 const PathwaysSubPage = loadable({
   loader: () => import(/* webpackChunkName: "pathways-subpage" */ './Pathways'),
+});
+const FeedbackSubPage = loadable({
+  loader: () => import(/* webpackChunkName: "feedback-subpage" */ './Feedback'),
 });
 const SubfamiliesSubPage = loadable({
   loader: () =>
@@ -169,6 +170,7 @@ const subPages = new Map([
   ['proteome', loadData()(Proteome)],
   ['similar_proteins', SimilarProteins],
   ['curation', Curation],
+  ['feedback', FeedbackSubPage],
 ]);
 
 export default subPages;
