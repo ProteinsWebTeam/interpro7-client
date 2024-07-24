@@ -143,7 +143,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('row', 'columns')}>
         <Callout type="warning" icon={f('icon-bullhorn')}>
-          <h4>This page will be updated with Release 102.0</h4>
+          <h4>This page will be updated with release 102.0</h4>
           <p>
             We are working on a new version of this page: reorganising jobs with
             multiple sequences and supporting search with nucleotide sequences
@@ -152,7 +152,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           <p>
             Unfortunately the new version is incompatible with previously saved
             jobs in the browser. If you have any jobs you want to keep, please
-            expport them as JSON, and import them back once the new version is
+            export them as JSON, and import them back once the new version is
             released.
           </p>
         </Callout>
