@@ -49,6 +49,7 @@ const LoadingBarAsync = loadable({
   loader: () =>
     schedule(DEFAULT_SCHEDULE_DELAY).then(
       () =>
+        // $FlowFixMe
         import(/* webpackChunkName: "loading-bar" */ 'components/LoadingBar'),
     ),
   loading: NullComponent,
