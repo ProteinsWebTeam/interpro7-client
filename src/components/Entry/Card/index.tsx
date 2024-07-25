@@ -5,7 +5,6 @@ import Card from 'components/SimpleCommonComponents/Card';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import Description from 'components/Description';
 import MemberSymbol from '../MemberSymbol';
 import SummaryCounterEntries from '../SummaryCounterEntries';
 
@@ -14,53 +13,22 @@ import cssBinder from 'styles/cssBinder';
 import styles from './styles.css';
 
 const css = cssBinder(styles);
-
-const description2IDs = (description: string) =>
-  (description.match(/"(PUB\d+)"/gi) || []).map((t) =>
-    t.replace(/(^")|("$)/g, ''),
-  );
-
 type Props = {
   data: {
     metadata: EntryMetadata;
     extra_fields?: {
       counters: MetadataCounters;
-      description: Array<StructuredDescription>;
       literature?: Record<string, Reference>;
     };
   };
   search: string;
   entryDB: MemberDB | 'interpro';
-  showDescription?: boolean;
 };
-const EntryCard = ({
-  data,
-  search,
-  entryDB,
-  showDescription = true,
-}: Props) => {
+const EntryCard = ({ data, search, entryDB }: Props) => {
   const name =
     typeof data.metadata.name === 'string'
       ? data.metadata.name
       : data.metadata.name.name;
-
-  let desc: StructuredDescription | undefined = undefined;
-  let included: [string, Reference][] | undefined = undefined;
-  if (showDescription) {
-    const description = data.extra_fields?.description;
-    const literature = data.extra_fields?.literature;
-    if (description?.length) {
-      desc = description[0];
-      const citations = description2IDs(desc.text);
-      included = Object.entries(literature || {})
-        .filter(([id]) => citations.includes(id))
-        .sort(
-          (a, b) =>
-            (desc as StructuredDescription).text.indexOf(a[0]) -
-            (desc as StructuredDescription).text.indexOf(b[0]),
-        );
-    }
-  }
   return (
     <Card
       imageComponent={
@@ -146,21 +114,8 @@ const EntryCard = ({
         ) : (
           <Loading />
         )}
-        {showDescription &&
-          (desc && included ? (
-            <div className={css('new-card-description')}>
-              <Description
-                textBlocks={[desc]}
-                literature={included}
-                withoutIDs
-              />
-            </div>
-          ) : (
-            <Loading />
-          ))}
       </div>
     </Card>
   );
 };
-
 export default EntryCard;
