@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 
 import Link from 'components/generic/Link';
@@ -18,10 +17,11 @@ type gitInfo = {
   tag: string;
 };
 type devInfo = {
-  buildTime: string;
+  buildTime: Date;
   mode: string;
   git: gitInfo;
 };
+
 export const Advanced = () => {
   const devInfo: devInfo = {
     buildTime: info.build.time,
@@ -32,6 +32,7 @@ export const Advanced = () => {
       tag: info.git.tag,
     },
   };
+
   return (
     <section>
       <DiskUsage />
