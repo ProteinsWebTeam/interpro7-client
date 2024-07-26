@@ -16,13 +16,14 @@ type gitInfo = {
   commit: string;
   tag: string;
 };
+
 type devInfo = {
   buildTime: Date;
   mode: string;
   git: gitInfo;
 };
 
-export const Advanced = () => {
+const Advanced = () => {
   const devInfo: devInfo = {
     buildTime: info.build.time,
     mode: info.mode,
