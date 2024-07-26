@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React from 'react';
 
 import Link from 'components/generic/Link';
 
@@ -12,50 +12,69 @@ import { pkg } from 'config';
 // remove last “.git”
 const url = pkg.repository.url.replace('.git', '');
 
-export default class Advanced extends PureComponent /*:: <{}> */ {
-  render() {
-    return (
-      <section>
-        <DiskUsage />
-        <div>
-          {'This website has been built on '}
-          <code>{new Date(info.build.time).toString()}</code>
-        </div>
-        <div>
-          {'Build mode: '}
-          <code>{info.mode}</code>
-        </div>
-        <div>
-          It has been built from the repository at:
-          <ul>
+type gitInfo = {
+  branch: string;
+  commit: string;
+  tag: string;
+};
+type devInfo = {
+  buildTime: string;
+  mode: string;
+  git: gitInfo;
+};
+export const Advanced = () => {
+  const devInfo: devInfo = {
+    buildTime: info.build.time,
+    mode: info.mode,
+    git: {
+      branch: info.git.branch,
+      commit: info.git.commit,
+      tag: info.git.tag,
+    },
+  };
+  return (
+    <section>
+      <DiskUsage />
+      <div>
+        {'This website has been built on '}
+        <code>{new Date(devInfo.buildTime).toString()}</code>
+      </div>
+      <div>
+        {'Build mode: '}
+        <code>{devInfo.mode}</code>
+      </div>
+      <div>
+        It has been built from the repository at:
+        <ul>
+          <li>
+            <Link target="_blank" href={url}>
+              <code>{url}</code>
+            </Link>
+          </li>
+          <li>
+            {'branch: '}
+            <Link target="_blank" href={`${url}/tree/${devInfo.git.branch}`}>
+              <code>{devInfo.git.branch}</code>
+            </Link>
+          </li>
+          {devInfo.git.tag !== devInfo.git.commit && devInfo.git.tag && (
             <li>
-              <Link target="_blank" href={url}>
-                <code>{url}</code>
+              {'tag: '}
+              <Link target="_blank" href={`${url}/tree/${devInfo.git.tag}`}>
+                <code>{devInfo.git.tag}</code>
               </Link>
             </li>
-            <li>
-              {'branch: '}
-              <Link target="_blank" href={`${url}/tree/${info.git.branch}`}>
-                <code>{info.git.branch}</code>
-              </Link>
-            </li>
-            {info.git.tag !== info.git.commit && info.git.tag && (
-              <li>
-                {'tag: '}
-                <Link target="_blank" href={`${url}/tree/${info.git.tag}`}>
-                  <code>{info.git.tag}</code>
-                </Link>
-              </li>
-            )}
-            <li>
-              {'commit: '}
-              <Link target="_blank" href={`${url}/tree/${info.git.commit}`}>
-                <code>{info.git.commit}</code>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </section>
-    );
-  }
-}
+          )}
+          <li>
+            {'commit: '}
+            <Link target="_blank" href={`${url}/tree/${devInfo.git.commit}`}>
+              <code>{devInfo.git.commit}</code>
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </section>
+  );
+};
+
+export default Advanced;
