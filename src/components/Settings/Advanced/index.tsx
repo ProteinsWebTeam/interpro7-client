@@ -11,26 +11,14 @@ import { pkg } from 'config';
 // remove last “.git”
 const url = pkg.repository.url.replace('.git', '');
 
-type gitInfo = {
-  branch: string;
-  commit: string;
-  tag: string;
-};
-
-type devInfo = {
-  buildTime: Date;
-  mode: string;
-  git: gitInfo;
-};
-
 const Advanced = () => {
-  const devInfo: devInfo = {
-    buildTime: info.build.time,
+  const devInfo = {
+    buildTime: info.build?.time || 0,
     mode: info.mode,
     git: {
-      branch: info.git.branch,
-      commit: info.git.commit,
-      tag: info.git.tag,
+      branch: info.git?.branch,
+      commit: info.git?.commit,
+      tag: info.git?.tag || '',
     },
   };
 
