@@ -56,7 +56,7 @@ const FragmentFilter = ({
     if (!customLocation) return;
     const value = (target as HTMLInputElement).value;
     const { page, cursor, ...search } = customLocation.search || {};
-    const _search: Record<string, unknown> = { ...search, is_fragment: value };
+    const _search: InterProLocationSearch = { ...search, is_fragment: value };
     if (value === 'both') {
       delete _search.is_fragment;
     }

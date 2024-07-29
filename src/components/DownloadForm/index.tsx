@@ -196,7 +196,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
       .join('|');
     if (nextHash !== this.props.customLocation?.hash) {
       this.props.goToCustomLocation?.({
-        ...this.props.customLocation,
+        ...this.props.customLocation!,
         hash: nextHash,
       });
     }

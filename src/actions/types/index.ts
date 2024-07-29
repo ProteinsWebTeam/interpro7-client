@@ -1,4 +1,3 @@
-// @flow
 // custom location
 export const NEW_CUSTOM_LOCATION = 'NEW_CUSTOM_LOCATION';
 export const NEW_PROCESSED_CUSTOM_LOCATION = 'NEW_PROCESSED_CUSTOM_LOCATION';

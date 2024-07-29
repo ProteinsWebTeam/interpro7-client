@@ -86,13 +86,14 @@ export class File extends PureComponent<Props, State> {
   }
 
   _handleClick = blockEvent(() => {
+    if (!this.state.url || !this.props.endpoint) return;
     // Request browser notification
     askNotificationPermission();
 
     this.props.downloadURL(
       this.state.url,
       this.props.fileType,
-      this.props.subset,
+      !!this.props.subset,
       this.props.endpoint,
     );
   });

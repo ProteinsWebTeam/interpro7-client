@@ -85,12 +85,12 @@ const GroupActions = ({
 
   const handleReRun = async () => {
     const results = await getAllResults(jobs, group);
-    const search: Record<string, unknown> = {};
+    const search: InterProLocationSearch = {};
     if (results?.applications) {
       search.applications =
         typeof results.applications === 'string'
           ? [results.applications]
-          : results.applications;
+          : (results.applications as Array<string>);
     }
     goToCustomLocation({
       description: {

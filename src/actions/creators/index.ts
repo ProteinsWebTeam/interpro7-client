@@ -1,21 +1,13 @@
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
-
-/*:: import type { Description } from 'utils/processDescription/handlers'; */
-
-/*:: type Location = {pathname: string, search: Object, hash: string}; */
-/*:: export type CustomLocation = {|
-  description: Description,
-  search?: {[key: string]: string},
-  hash?: string,
-|}; */
+import { PropsWithChildren } from 'react';
 
 // Action creators
 // custom location
 export const goToCustomLocation = (
-  customLocation /*: CustomLocation */,
-  replace /*:: ?: boolean */,
-  state /*:: ?: any */,
+  customLocation: InterProPartialLocation,
+  replace?: boolean,
+  state?: unknown,
 ) => ({
   type: types.NEW_CUSTOM_LOCATION,
   customLocation,
@@ -24,8 +16,8 @@ export const goToCustomLocation = (
 });
 
 export const customLocationChangeFromHistory = (
-  customLocation /*: CustomLocation */,
-  state /*:: ?: any */,
+  customLocation: InterProPartialLocation,
+  state?: unknown,
 ) => ({
   type: types.NEW_PROCESSED_CUSTOM_LOCATION,
   customLocation,
@@ -74,7 +66,7 @@ export const unstick = () => ({
 });
 
 // settings
-export const changePageSize = (pageSize /* :number */) => ({
+export const changePageSize = (pageSize: number) => ({
   type: types.CHANGE_SETTINGS,
   category: 'pagination',
   key: 'pageSize',
@@ -82,9 +74,9 @@ export const changePageSize = (pageSize /* :number */) => ({
 });
 
 export const changeSettingsRaw = (
-  category /*: string */,
-  key /*: string */,
-  value /*: string */,
+  category: string,
+  key: string,
+  value: string | number | boolean | LabelUISettings,
 ) => ({
   type: types.CHANGE_SETTINGS,
   category,
@@ -92,7 +84,7 @@ export const changeSettingsRaw = (
   value,
 });
 
-export const changeSettings = (event /* :Event */) => {
+export const changeSettings = (event: Event) => {
   if (
     event.target instanceof HTMLInputElement ||
     event.target instanceof HTMLSelectElement
@@ -105,16 +97,16 @@ export const changeSettings = (event /* :Event */) => {
   }
 };
 
-export const resetSettings = (value /*: ?Object */) => ({
+export const resetSettings = (value: unknown) => ({
   type: types.RESET_SETTINGS,
   value,
 });
 
 // dataProgress
 export const dataProgressInfo = (
-  key /*: string */,
-  progress /*: number */,
-  weight /*: number */,
+  key: string,
+  progress: number,
+  weight: number,
 ) => ({
   type: types.PROGRESS_DATA,
   key,
@@ -122,23 +114,24 @@ export const dataProgressInfo = (
   weight,
 });
 
-export const dataProgressUnload = (key /*: string */) => ({
+export const dataProgressUnload = (key: string) => ({
   type: types.UNLOAD_DATA,
   key,
 });
 
 // jobs
-export const createJob = (job /*: { metadata: Object, data: Object } */) => ({
+// TODO: Update for correct types once the ipscan-results branch gets merged
+export const createJob = (job: { metadata: unknown; data: unknown }) => ({
   type: types.CREATE_JOB,
   job,
 });
 
-export const updateJob = (job /*: { metadata: Object, data: Object } */) => ({
+export const updateJob = (job: { metadata: unknown; data: unknown }) => ({
   type: types.UPDATE_JOB,
   job,
 });
 
-export const deleteJob = (job /*: { metadata: Object, data: Object } */) => ({
+export const deleteJob = (job: { metadata: unknown; data?: unknown }) => ({
   type: types.DELETE_JOB,
   job,
 });
@@ -147,52 +140,54 @@ export const updateJobStatus = () => ({
   type: types.UPDATE_JOB_STATUS,
 });
 
-export const keepJobAsLocal = (localID /*: string */) => ({
+export const keepJobAsLocal = (localID: string) => ({
   type: types.KEEP_JOB_AS_LOCAL,
   localID,
 });
 
 export const updateJobTitle = (
-  job /*: { metadata: Object, data: Object } */,
-  value /*: string */,
+  job: { metadata: unknown; data: unknown },
+  value: string,
 ) => ({
   type: types.UPDATE_JOB_TITLE,
   job,
   value,
 });
 
-export const rehydrateJobs = (jobs /*: { [key: string]: Object } */) => ({
+// TODO: Update for correct types once the ipscan-results branch gets merged
+export const rehydrateJobs = (jobs: Record<string, unknown>) => ({
   type: types.REHYDRATE_JOBS,
   jobs,
 });
 
-export const loadDataJob = (job /*: { metadata: Object, data: Object } */) => ({
+export const loadDataJob = (job: { metadata: unknown; data: unknown }) => ({
   type: types.LOAD_DATA_JOB,
   job,
 });
 
-export const importJob = (job /*:  Object */) => ({
+export const importJob = (job: { metadata: unknown; data: unknown }) => ({
   type: types.IMPORT_JOB,
   job,
 });
-export const importJobFromData = (job /*:  Object */) => ({
+export const importJobFromData = (job: {
+  metadata: unknown;
+  data: unknown;
+}) => ({
   type: types.IMPORT_JOB_FROM_DATA,
   job,
 });
 
-export const unloadDataJob = (
-  job /*: { metadata: Object, data: Object } */,
-) => ({
+export const unloadDataJob = (job: { metadata: unknown; data: unknown }) => ({
   type: types.UNLOAD_DATA_JOB,
   job,
 });
 
 // download
 export const downloadURL = (
-  url /*: string */,
-  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
-  subset /*: boolean */,
-  endpoint /*: string */,
+  url: string,
+  fileType: DownloadFileTypes,
+  subset: boolean,
+  endpoint: string,
 ) => ({
   type: types.DOWNLOAD_URL,
   url,
@@ -202,10 +197,10 @@ export const downloadURL = (
 });
 
 export const downloadError = (
-  url /*: string */,
-  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
-  subset /*: boolean */,
-  errorMessage /*: string */,
+  url: string,
+  fileType: DownloadFileTypes,
+  subset: boolean,
+  errorMessage: string,
 ) => ({
   type: types.DOWNLOAD_ERROR,
   url,
@@ -215,11 +210,16 @@ export const downloadError = (
 });
 
 export const downloadSuccess = (
-  url /*: string */,
-  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
-  subset /*: boolean */,
-  endpoint /*: string */,
-  { blob, length, date, version } /*: { blobURL:string, size: string } */,
+  url: string,
+  fileType: DownloadFileTypes,
+  subset: boolean,
+  endpoint: string,
+  {
+    blob,
+    length,
+    date,
+    version,
+  }: { blob: unknown; length: number; date: string; version: string },
 ) => ({
   type: types.DOWNLOAD_SUCCESS,
   url,
@@ -233,11 +233,11 @@ export const downloadSuccess = (
 });
 
 export const downloadProgress = (
-  url /*: string */,
-  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
-  subset /*: boolean */,
-  endpoint /*: string */,
-  progress /*: number */,
+  url: string,
+  fileType: DownloadFileTypes,
+  subset: boolean,
+  endpoint: string,
+  progress: number,
 ) => ({
   type: types.DOWNLOAD_PROGRESS,
   url,
@@ -248,9 +248,9 @@ export const downloadProgress = (
 });
 
 export const downloadDelete = (
-  url /*: string */,
-  fileType /*: 'accession' | 'fasta' | 'json' | 'ndjson' | 'tsv' | 'xml' */,
-  subset /*: boolean */,
+  url: string,
+  fileType: DownloadFileTypes,
+  subset: boolean,
 ) => ({
   type: types.DOWNLOAD_DELETE,
   url,
@@ -258,48 +258,71 @@ export const downloadDelete = (
   subset,
 });
 
-export const setInitialDownloads = (downloads /*: Array<{}> */) => ({
+// TODO: Update for correct types once the download-jobs middleware is migrated
+export const setInitialDownloads = (downloads: Array<unknown>) => ({
   type: types.SET_INITIAL_DOWNLOADS,
   downloads,
 });
 
 // status
-export const serverStatus = (server /*: string */, status /*: boolean*/) => ({
+export const serverStatus = (server: string, status: boolean) => ({
   type: types.SERVER_STATUS,
   server,
   status,
 });
 
-export const browserStatus = (status /*: boolean*/) => ({
+export const browserStatus = (status: boolean) => ({
   type: types.BROWSER_STATUS,
   onLine: status,
 });
 
 // toast messages
-export const addToast = (toast /*: Object */, id /*: string */) => ({
+// TODO: move this to the Toas component when it gets migrated
+type ToastProps = {
+  paused?: boolean;
+  className?: string;
+  title: string;
+  body?: string;
+  link?: PropsWithChildren<{ to: InterProPartialLocation }>;
+  action?: {
+    text: string;
+    fn: () => void;
+  };
+  ttl?: number;
+  checkBox?: {
+    label: string;
+    fn: () => void;
+  };
+  handleClose?: () => void;
+};
+
+export const addToast = (toast: ToastProps, id: string) => ({
   type: types.ADD_TOAST,
   id,
   toast,
 });
 
-export const removeToast = (id /*: string */) => ({
+export const removeToast = (id: string) => ({
   type: types.REMOVE_TOAST,
   id,
 });
 
 // favourites
-export const setInitialFavourites = (favourites /*: Array<string> */) => ({
+export const setInitialFavourites = (favourites: Array<string>) => ({
   type: types.SET_INITIAL_FAVOURITES,
   favourites,
 });
 
-export const markFavourite = (id /*: string */, content /*: Object */) => ({
+export const markFavourite = (
+  id: string,
+  content: MetadataPayload<Metadata>,
+) => ({
   type: types.MARK_FAVOURITE,
   id,
   content,
 });
 
-export const unmarkFavourite = (id /*: string */) => ({
+export const unmarkFavourite = (id: string) => ({
   type: types.UNMARK_FAVOURITE,
   id,
 });

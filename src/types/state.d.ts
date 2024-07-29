@@ -85,7 +85,10 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   other?: string[];
 };
 
-type InterProLocationSearch = Record<string, string | boolean | Array<string>>;
+type InterProLocationSearch = Record<
+  string,
+  string | boolean | number | Array<string>
+>;
 type InterProLocation = {
   description: InterProDescription;
   search: InterProLocationSearch;
@@ -94,7 +97,7 @@ type InterProLocation = {
 };
 type InterProPartialLocation = {
   description: InterProPartialDescription;
-  search?: Record<string, string | boolean>;
+  search?: InterProLocationSearch;
   hash?: string;
   state?: Record<string, string>;
 };
@@ -163,3 +166,11 @@ type ServerStatus = {
   status: boolean;
   lastCheck: number;
 };
+
+type DownloadFileTypes =
+  | 'accession'
+  | 'fasta'
+  | 'json'
+  | 'ndjson'
+  | 'tsv'
+  | 'xml';

@@ -95,7 +95,9 @@ export class FiltersPanel extends PureComponent<Props, State> {
     newDescription.taxonomy.isFilter = false;
     newDescription.entry.integration = null;
     if (newDescription.protein.isFilter) newDescription.protein.db = 'uniprot';
-    const newSearch = search.page_size ? { page_size: search.page_size } : {};
+    const newSearch: InterProLocationSearch = search.page_size
+      ? { page_size: search.page_size }
+      : {};
     this.props.goToCustomLocation?.({
       description: newDescription,
       search: newSearch,
