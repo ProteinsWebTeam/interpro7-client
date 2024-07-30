@@ -85,10 +85,20 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   other?: string[];
 };
 
-type InterProLocationSearch = Record<
-  string,
-  string | boolean | number | Array<string>
->;
+type InterProLocationSearch = {
+  // Pagination
+  page?: number;
+  page_size?: number;
+  // API
+  extra_fields?: string;
+  // IDA search
+  ida_search?: string;
+  ida_ignore?: string;
+  ordered?: boolean;
+  exact?: boolean;
+  [key: string]: string | boolean | number | Array<string> | undefined;
+};
+
 type InterProLocation = {
   description: InterProDescription;
   search: InterProLocationSearch;

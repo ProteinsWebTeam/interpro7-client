@@ -22,7 +22,7 @@ export const DEBOUNCE_RATE = 1000; // 1s
 export const DEBOUNCE_RATE_SLOW = 2000; // 2s
 
 type Props = {
-  pageSize?: string;
+  pageSize?: number;
   main?: string;
   value?: string | null;
   className?: string;
@@ -198,7 +198,7 @@ class TextSearchBox extends PureComponent<Props, State> {
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.description.main.key!,
   (state: GlobalState) => state.customLocation.description.search.value,
-  (state: GlobalState) => state.customLocation.search.page_size as string,
+  (state: GlobalState) => state.customLocation.search.page_size,
   (main, value, pageSize) => ({ main, value, pageSize }),
 );
 

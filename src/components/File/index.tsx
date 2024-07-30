@@ -30,7 +30,7 @@ type Props = {
   count: number;
   subset?: boolean;
   name: string;
-  search?: Record<string, string>;
+  search?: InterProLocationSearch;
   endpoint?: string;
   className?: string;
   minWidth?: number | string;

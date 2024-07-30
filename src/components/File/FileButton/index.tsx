@@ -40,7 +40,7 @@ export type FileButtonProps = {
   handleClick: (event: Event) => void;
   shouldLinkToResults?: boolean;
   showIcon?: boolean;
-  search?: Record<string, string>;
+  search?: InterProLocationSearch;
 };
 
 const FileButton = ({

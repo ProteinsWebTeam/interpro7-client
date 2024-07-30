@@ -22,9 +22,7 @@ const endpoint: Partial<
 
 type Props = {
   description?: InterProPartialDescription;
-  search?: {
-    extra_fields?: string;
-  };
+  search?: InterProLocationSearch;
   count: number;
   minWidth?: number | string;
   fileType: SupportedExtensions;
