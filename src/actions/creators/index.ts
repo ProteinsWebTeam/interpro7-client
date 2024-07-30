@@ -2,28 +2,36 @@
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
 import { PropsWithChildren } from 'react';
+import { Action } from 'redux';
 
 // Action creators
 // custom location
+export interface LocationAction extends Action {
+  customLocation: InterProPartialLocation;
+  replace?: boolean;
+}
+
 export const goToCustomLocation = (
   customLocation: InterProPartialLocation,
   replace?: boolean,
   state?: unknown,
-) => ({
-  type: types.NEW_CUSTOM_LOCATION,
-  customLocation,
-  replace: !!replace,
-  state,
-});
+) =>
+  ({
+    type: types.NEW_CUSTOM_LOCATION,
+    customLocation,
+    replace: !!replace,
+    state,
+  }) as LocationAction;
 
 export const customLocationChangeFromHistory = (
   customLocation: InterProPartialLocation,
   state?: unknown,
-) => ({
-  type: types.NEW_PROCESSED_CUSTOM_LOCATION,
-  customLocation,
-  state,
-});
+) =>
+  ({
+    type: types.NEW_PROCESSED_CUSTOM_LOCATION,
+    customLocation,
+    state,
+  }) as LocationAction;
 
 // UI
 export const toggleEMBLMapNav = () => ({

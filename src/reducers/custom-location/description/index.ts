@@ -3,11 +3,8 @@ import { createSelector } from 'reselect';
 import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
-import { Action } from 'redux';
+import { LocationAction } from 'actions/creators';
 
-interface LocationAction extends Action {
-  customLocation: InterProPartialLocation;
-}
 export default (
   state: InterProDescription = getEmptyDescription(),
   action: LocationAction,
