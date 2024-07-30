@@ -38,6 +38,7 @@ import IPScanTitle from './IPScanTitle';
 import SubJobsBrowser from '../SubJobsBrowser';
 // $FlowFixMe
 import { Exporter } from 'components/Table';
+// $FlowFixMe
 import { updateJobTitle } from 'actions/creators';
 
 import StatusTooltip from './StatusTooltip';

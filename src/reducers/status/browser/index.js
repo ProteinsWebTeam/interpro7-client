@@ -1,4 +1,4 @@
-// @flow
+// $FlowFixMe
 import { BROWSER_STATUS } from 'actions/types';
 
 /*:: export type BrowserStatus = boolean; */

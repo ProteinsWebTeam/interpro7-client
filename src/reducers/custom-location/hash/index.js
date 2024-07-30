@@ -1,4 +1,5 @@
 // @flow
+// $FlowFixMe
 import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
 
 export default (state /*: Hash */ = '', action /*: Object */) => {

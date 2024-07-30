@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 
+// $FlowFixMe
 import { goToCustomLocation, closeEverything } from 'actions/creators';
 import { customLocationSelector } from 'reducers/custom-location';
 

@@ -2,6 +2,7 @@
 /*:: declare var gtag: (str: string, str: string, obj: {}) => void; */
 import { format } from 'url';
 
+// $FlowFixMe
 import { NEW_CUSTOM_LOCATION } from 'actions/types';
 import { customLocationChangeFromHistory } from 'actions/creators';
 

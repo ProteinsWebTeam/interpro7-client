@@ -1,6 +1,6 @@
-// @flow
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import { PROGRESS_DATA, UNLOAD_DATA } from 'actions/types';
 
 /*:: export type DatumProgress = {
@@ -32,7 +32,7 @@ export default (state /*: DataProgress */ = {}, action /*: Object */) => {
 };
 
 export const dataProgressSelector = (state /*: State */) => state.dataProgress;
-export const overallDataProgressSelector = (createSelector(
+export const overallDataProgressSelector = createSelector(
   dataProgressSelector,
   (dataProgress /*: DataProgress */) => {
     const keys = Object.keys(dataProgress);
@@ -47,8 +47,8 @@ export const overallDataProgressSelector = (createSelector(
     overallProgress /= overallWeight;
     return overallProgress;
   },
-) /*: (State) => number | void */);
-export const overallDataLoadingSelector = (createSelector(
+); /*: (State) => number | void */
+export const overallDataLoadingSelector = createSelector(
   overallDataProgressSelector,
-  progress => progress !== 1,
-) /*: (State) => boolean */);
+  (progress) => progress !== 1,
+); /*: (State) => boolean */

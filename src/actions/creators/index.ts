@@ -1,3 +1,4 @@
+// $FlowFixMe
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
 import { PropsWithChildren } from 'react';

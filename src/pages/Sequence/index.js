@@ -22,6 +22,7 @@ import pageStyle from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import ResultImporter from 'components/IPScan/ResultImporter';
+// $FlowFixMe
 import { updateJobStatus } from 'actions/creators';
 
 const f = foundationPartial(fonts, pageStyle, ipro, styles);

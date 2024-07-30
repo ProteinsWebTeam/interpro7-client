@@ -1,4 +1,4 @@
-// @flow
+// $FlowFixMe
 import { STUCK, UNSTUCK } from 'actions/types';
 
 /*:: export type Stuck = boolean; */

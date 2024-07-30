@@ -1,5 +1,6 @@
 // @flow
 import reducer from '.';
+// $FlowFixMe
 import { LOAD_DATA_JOB, UNLOAD_DATA_JOB } from 'actions/types';
 
 const testData1 = { sequence: 'MITIDGNGAV' };

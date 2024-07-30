@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import classnames from 'classnames/bind';
 
+// $FlowFixMe
 import { closeEverything } from 'actions/creators';
 import { emblMapNavSelector } from 'reducers/ui/emblMapNav';
 import { sideNavSelector } from 'reducers/ui/sideNav';

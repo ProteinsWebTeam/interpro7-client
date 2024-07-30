@@ -13,6 +13,7 @@ import {
   deleteJob,
   goToCustomLocation,
   keepJobAsLocal,
+  // $FlowFixMe
 } from 'actions/creators';
 import { foundationPartial } from 'styles/foundation';
 

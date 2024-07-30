@@ -1,7 +1,8 @@
 // @flow
+// $FlowFixMe
 import { ADD_TOAST, REMOVE_TOAST } from 'actions/types';
 
-const extractAllBut = key => ({
+const extractAllBut = (key) => ({
   from(source) {
     const { [key]: _, ...subset } = source;
     return subset;

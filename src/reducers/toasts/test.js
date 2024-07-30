@@ -1,5 +1,6 @@
 // @flow
 import reducer from '.';
+// $FlowFixMe
 import { ADD_TOAST, REMOVE_TOAST } from 'actions/types';
 
 describe('reducer for toast messages', () => {

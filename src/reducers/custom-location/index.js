@@ -1,4 +1,3 @@
-// @flow
 import { combineReducers } from 'redux';
 
 import description from './description';
@@ -18,12 +17,12 @@ import state from './state';
 |}; */
 /*:: import type { State } from 'reducers'; */
 
-export default (combineReducers({
+export default combineReducers({
   description,
   search,
   hash,
   state,
-}) /*: (CustomLocation | void, any) => CustomLocation */);
+});
 
 export const customLocationSelector = (state /*: State */) =>
   state.customLocation;

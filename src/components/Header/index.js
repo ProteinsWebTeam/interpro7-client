@@ -8,6 +8,7 @@ import classnames from 'classnames/bind';
 
 import { stuckSelector } from 'reducers/ui/stuck';
 import { sideNavSelector } from 'reducers/ui/sideNav';
+// $FlowFixMe
 import { toggleSideNav } from 'actions/creators';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';

@@ -1,3 +1,4 @@
+// $FlowFixMe
 import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 import config from 'config';
 

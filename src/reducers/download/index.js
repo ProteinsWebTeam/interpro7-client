@@ -1,4 +1,3 @@
-// @flow
 import {
   DOWNLOAD_URL,
   DOWNLOAD_PROGRESS,
@@ -6,6 +5,7 @@ import {
   DOWNLOAD_DELETE,
   DOWNLOAD_ERROR,
   SET_INITIAL_DOWNLOADS,
+  // $FlowFixMe
 } from 'actions/types';
 import { createNotification } from 'utils/browser-notifications';
 import getTableAccess, { DownloadJobs } from 'storage/idb';

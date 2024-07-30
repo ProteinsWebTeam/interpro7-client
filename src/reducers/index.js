@@ -1,4 +1,3 @@
-// @flow
 import { combineReducers } from 'redux';
 
 import customLocation from './custom-location';
@@ -30,7 +29,7 @@ import 'utils/global-message';
   ui: UI,
 |}; */
 
-export default (combineReducers({
+export default combineReducers({
   customLocation,
   dataProgress,
   download,
@@ -40,4 +39,4 @@ export default (combineReducers({
   status,
   toasts,
   ui,
-}) /*: (State | void, any) => State */);
+});

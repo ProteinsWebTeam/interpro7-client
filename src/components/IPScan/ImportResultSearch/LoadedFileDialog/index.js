@@ -3,6 +3,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import { connect } from 'react-redux';
+// $FlowFixMe
 import { importJobFromData } from 'actions/creators';
 import id from 'utils/cheap-unique-id';
 

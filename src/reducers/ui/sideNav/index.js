@@ -1,4 +1,3 @@
-// @flow
 import { TOGGLE_SIDE_NAV, CLOSE_EVERYTHING } from 'actions/types';
 
 /*:: export type SideNav = boolean; */

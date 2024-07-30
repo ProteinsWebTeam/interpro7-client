@@ -4,6 +4,7 @@ import React from 'react';
 import T from 'prop-types';
 
 import { connect } from 'react-redux';
+// $FlowFixMe
 import { deleteJob } from 'actions/creators';
 
 import Modal from 'components/SimpleCommonComponents/Modal';

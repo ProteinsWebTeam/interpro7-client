@@ -1,5 +1,6 @@
 // @flow
 import reducer from '.';
+// $FlowFixMe
 import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
 
 describe('reducer for location search', () => {

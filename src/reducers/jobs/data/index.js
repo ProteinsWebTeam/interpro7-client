@@ -1,4 +1,5 @@
 // @flow
+// $FlowFixMe
 import { LOAD_DATA_JOB, UNLOAD_DATA_JOB } from 'actions/types';
 
 /*:: type JobData = Object */

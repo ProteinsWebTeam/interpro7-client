@@ -4,6 +4,7 @@ import {
   UPDATE_JOB,
   IMPORT_JOB,
   IMPORT_JOB_FROM_DATA,
+  // $FlowFixMe
 } from 'actions/types';
 
 /*:: type JobStatus = 'created' | 'submitted' | 'failed' | 'importing' | 'imported file' | 'saved in browser' | 'running' | 'finished' | 'queued'; */

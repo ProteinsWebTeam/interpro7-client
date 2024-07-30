@@ -1,5 +1,3 @@
-// @flow
-
 /*:: import * as ActionTypes from './types'; */
 
 /*:: export type Action = {
