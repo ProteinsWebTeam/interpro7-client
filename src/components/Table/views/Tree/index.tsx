@@ -336,13 +336,6 @@ class TreeView extends Component<Props, State> {
         <div className={css('node-details')}>
           <div className={css('node-info')}>
             <header>
-              <Tooltip title="[Tax ID]: [Tax Name]">
-                <span
-                  className={css('small', 'icon', 'icon-common')}
-                  data-icon="&#xf129;"
-                  aria-label="Tax ID: Tax Name"
-                />
-              </Tooltip>{' '}
               <Link
                 to={{
                   description: {
@@ -351,45 +344,36 @@ class TreeView extends Component<Props, State> {
                   },
                 }}
               >
-                {currentNode?.id}: {currentNode?.name}
+                {currentNode?.name}
               </Link>
             </header>
             {currentNode?.rank?.toLowerCase() !== 'no rank' && (
               <div>
-                <Tooltip title="Rank.">
-                  <span
-                    className={css('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                    aria-label="Rank."
-                  />
-                </Tooltip>{' '}
-                <i>{currentNode?.rank}</i>
+                <p>{currentNode?.rank}</p>
               </div>
             )}
             {currentNode?.lineage && (
-              <DropDownButton label="Lineage" fontSize="12px">
-                <ul>
-                  {Array.from(this._lineageNames.keys()).map((key) => (
-                    <li key={key}>
-                      <Link
-                        to={{
-                          description: {
-                            main: { key: 'taxonomy' },
-                            taxonomy: { db: 'uniprot', accession: key },
-                          },
-                        }}
-                      >
-                        {`${
-                          this._lineageNames
-                            ?.get(key)
-                            ?.charAt(0)
-                            ?.toUpperCase() || ''
-                        }${this._lineageNames.get(key)?.slice(1) || ''}`}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </DropDownButton>
+              <nav className={'breadcrumbs'}>
+                {Array.from(this._lineageNames.keys()).map((key) => (
+                  <li key={key}>
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'taxonomy' },
+                          taxonomy: { db: 'uniprot', accession: key },
+                        },
+                      }}
+                    >
+                      {`${
+                        this._lineageNames
+                          ?.get(key)
+                          ?.charAt(0)
+                          ?.toUpperCase() || ''
+                      }${this._lineageNames.get(key)?.slice(1) || ''}`}
+                    </Link>
+                  </li>
+                ))}
+              </nav>
             )}
           </div>
           <div className={css('node-links')}>
