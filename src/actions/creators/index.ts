@@ -9,6 +9,7 @@ import { Action } from 'redux';
 export interface LocationAction extends Action {
   customLocation: InterProPartialLocation;
   replace?: boolean;
+  state?: unknown;
 }
 
 export const goToCustomLocation = (
