@@ -151,7 +151,7 @@ export const TotalNb = <RowData extends object>({
             <strong>
               <NumberComponent abbr>{actualSize}</NumberComponent>
             </strong>{' '}
-            {entityText(contentType || description.main.key, actualSize)}
+            {entityText(contentType || description.main.key!, actualSize)}
             {dbText(
               description.entry.db as MemberDB | 'interpro',
               description.set.db,

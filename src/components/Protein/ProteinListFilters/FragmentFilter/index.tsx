@@ -124,7 +124,7 @@ const getUrl = createSelector(
     if (description.main.key !== 'protein') {
       _description.main = { key: 'protein' };
       _description[description.main.key as Endpoint] = {
-        ...description[description.main.key],
+        ...description[description.main.key as Endpoint],
         isFilter: true,
       };
     }

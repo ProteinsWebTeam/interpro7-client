@@ -1,17 +1,16 @@
 import { createSelector } from 'reselect';
 
-// $FlowFixMe
 import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
+import { Action } from 'redux';
 
-/*:: import type { Description, DescriptionMain } from 'utils/processDescription/handlers'; */
-/*:: import type { CustomLocation } from '..'; */
-/*:: import type { State } from 'reducers'; */
-
+interface LocationAction extends Action {
+  customLocation: InterProPartialLocation;
+}
 export default (
-  state /*: Description */ = getEmptyDescription(),
-  action /*: Object */,
+  state: InterProDescription = getEmptyDescription(),
+  action: LocationAction,
 ) => {
   switch (action.type) {
     case NEW_PROCESSED_CUSTOM_LOCATION:
@@ -21,10 +20,10 @@ export default (
   }
 };
 
-export const descriptionSelector = (state /*: State */) =>
+export const descriptionSelector = (state: GlobalState) =>
   state.customLocation.description;
 
-const descriptionLocationSelector = (customLocation /*: CustomLocation */) =>
+const descriptionLocationSelector = (customLocation: InterProLocation) =>
   customLocation.description;
 
 const mainKeyLocationSelector = createSelector(
@@ -37,8 +36,8 @@ export const mainDBLocationSelector = createSelector(
   mainKeyLocationSelector,
   (description, mainKey) => {
     if (!mainKey) return null;
-    const mainType = description[mainKey];
+    const mainType = description[mainKey as Endpoint];
     if (!mainType) return null;
-    return mainType.db || mainType.memberDB || null;
+    return mainType.db || (mainType as EntryLocation).memberDB || null;
   },
-); /*: (CustomLocation) => DescriptionMain | string | null */
+);

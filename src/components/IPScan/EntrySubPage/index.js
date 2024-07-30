@@ -10,6 +10,7 @@ import Related from 'components/Related/RelatedAdvanced';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Redirect from 'components/generic/Redirect';
 
+// $FlowFixMe
 import { descriptionSelector } from 'reducers/custom-location/description';
 import loadData from 'higherOrder/loadData';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';

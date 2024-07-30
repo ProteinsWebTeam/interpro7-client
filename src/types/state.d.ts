@@ -49,7 +49,11 @@ type EndpointPartialLocation = {
   accession?: string | null;
   detail?: string | null;
   order?: number | null;
+};
+type EntryLocation = EndpointPartialLocation & {
   integration?: string | null;
+  memberDB?: string | null;
+  memberDBAccession?: string | null;
 };
 type InterProDescription = Required<
   InterProPartialDescription<EndpointLocation>
@@ -58,14 +62,10 @@ type EndpointFilter = [endpoint: Endpoint, location: EndpointPartialLocation];
 
 type InterProPartialDescription<Location = EndpointPartialLocation> = {
   main?: {
-    key: Endpoint | 'search' | 'result' | 'other';
+    key: Endpoint | 'search' | 'result' | 'other' | null;
     numberOfFilters?: 0;
   };
-  entry?: Location & {
-    integration?: string | null;
-    memberDB?: string | null;
-    memberDBAccession?: string | null;
-  };
+  entry?: Location & EntryLocation;
   protein?: Location;
   structure?: EndpointPartialLocation & {
     chain?: string | null;

@@ -22,7 +22,7 @@ const ProteinDownloadRenderer =
     },
   ) => {
     if (!description) return null;
-    const endpointToFilterBy /*: string */ = description.taxonomy.isFilter
+    const endpointToFilterBy = description.taxonomy.isFilter
       ? 'taxonomy'
       : 'proteome';
     return (
@@ -34,8 +34,8 @@ const ProteinDownloadRenderer =
               to={{
                 description: {
                   main: { key: description.main.key },
-                  [description.main.key]: {
-                    ...description[description.main.key],
+                  [description.main.key!]: {
+                    ...description[description.main.key as Endpoint],
                   },
                   protein: {
                     db: 'uniprot',
@@ -58,8 +58,7 @@ const ProteinDownloadRenderer =
         <File
           fileType="fasta"
           name={`protein-sequences-matching-${
-            (description[description.main.key] as EndpointPartialLocation)
-              .accession
+            description[description.main.key as Endpoint].accession
           }-for-${accession}.fasta`}
           count={
             row.proteins || row.counters?.extra_fields.counters.proteins || 0
@@ -72,8 +71,8 @@ const ProteinDownloadRenderer =
               db: 'UniProt',
               accession: `${accession}`,
             },
-            [description.main.key]: {
-              ...description[description.main.key],
+            [description.main.key!]: {
+              ...description[description.main.key as Endpoint],
               isFilter: true,
             },
           }}

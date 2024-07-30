@@ -1,7 +1,5 @@
-/*:: import type { Description } from 'utils/processDescription/handlers'; */
-
 // prettier-ignore
-export default () /*: Description */ => Object.freeze({
+export default () => Object.freeze({
   main: Object.seal({
     key: null,
     numberOfFilters: 0,
@@ -62,4 +60,4 @@ export default () /*: Description */ => Object.freeze({
     detail: null,
   }),
   other: [],
-});
+} as InterProDescription);

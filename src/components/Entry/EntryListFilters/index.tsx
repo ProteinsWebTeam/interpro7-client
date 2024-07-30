@@ -26,10 +26,10 @@ export const EntryListFilter = ({ mainDB }: Props) => (
 const mapStateToProps = createSelector(
   (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    (state.customLocation.description[
-      state.customLocation.description.main.key
-    ] as EndpointLocation),
-  (mainEndpoint) => ({ mainDB: mainEndpoint.db || '' }),
+    state.customLocation.description[
+      state.customLocation.description.main.key as Endpoint
+    ],
+  (mainEndpoint) => ({ mainDB: mainEndpoint!.db || '' }),
 );
 
 export default connect(mapStateToProps)(EntryListFilter);

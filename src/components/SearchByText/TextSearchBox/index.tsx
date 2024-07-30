@@ -196,7 +196,7 @@ class TextSearchBox extends PureComponent<Props, State> {
 }
 
 const mapStateToProps = createSelector(
-  (state: GlobalState) => state.customLocation.description.main.key,
+  (state: GlobalState) => state.customLocation.description.main.key!,
   (state: GlobalState) => state.customLocation.description.search.value,
   (state: GlobalState) => state.customLocation.search.page_size as string,
   (main, value, pageSize) => ({ main, value, pageSize }),

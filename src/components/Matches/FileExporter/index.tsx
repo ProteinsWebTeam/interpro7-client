@@ -51,8 +51,8 @@ const FileExporter = ({
     ...description,
     main: { key: primary },
     [primary]: { ...description[primary], isFilter: false },
-    [description.main.key]: {
-      ...description[description.main.key],
+    [description.main.key!]: {
+      ...description[description.main.key as Endpoint],
       isFilter: true,
     },
   };
@@ -75,7 +75,7 @@ const FileExporter = ({
       className={className}
       fileType={fileType}
       name={`${primary}-matching-${
-        (description[description.main.key] as EndpointLocation).accession
+        description?.[description.main.key as Endpoint]?.accession || ''
       }.${fileType}`}
       count={count}
       customLocationDescription={customLocationDescription}

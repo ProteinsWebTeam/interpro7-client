@@ -82,13 +82,12 @@ export class FiltersPanel extends PureComponent<Props, State> {
     if (!this.props.customLocation) return;
     const { description, hash, search } = this.props.customLocation;
     const { key } = description.main;
-    let db =
-      key === 'protein' ? 'UniProt' : (description[key] as EndpointLocation).db;
+    let db = key === 'protein' ? 'UniProt' : description[key as Endpoint].db;
     if (key === 'taxonomy') db = 'uniprot';
     const newDescription = {
       ...description,
-      [key]: {
-        ...description[key],
+      [key!]: {
+        ...description[key as Endpoint],
         db,
       },
     };
