@@ -12,8 +12,6 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Tree from 'components/Tree';
 import NumberComponent from 'components/NumberComponent';
 import abbreviateNumber from 'components/NumberComponent/utils/number-to-display-text';
-import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Tip from 'components/Tip';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -330,8 +328,9 @@ class TreeView extends Component<Props, State> {
     };
 
     /* Compute breadcrumb */
+
     let lineageIDs: string[] | undefined = [];
-    let lineageString: string | undefined = currentNode?.lineage?.slice(
+    const lineageString: string | undefined = currentNode?.lineage?.slice(
       1,
       currentNode?.lineage?.length - 1,
     );
