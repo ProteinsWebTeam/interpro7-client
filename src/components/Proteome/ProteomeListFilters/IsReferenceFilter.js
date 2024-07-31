@@ -12,6 +12,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 // $FlowFixMe
 import { goToCustomLocation } from 'actions/creators';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';

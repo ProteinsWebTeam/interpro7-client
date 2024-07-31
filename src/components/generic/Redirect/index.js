@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 
 // $FlowFixMe
 import { goToCustomLocation } from 'actions/creators';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 
 /*:: type Props = {

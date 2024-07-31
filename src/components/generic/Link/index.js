@@ -8,6 +8,7 @@ import descriptionToDescription from 'utils/processDescription/descriptionToDesc
 
 // $FlowFixMe
 import { goToCustomLocation, closeEverything } from 'actions/creators';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 
 import generateHref from './utils/generate-href';
