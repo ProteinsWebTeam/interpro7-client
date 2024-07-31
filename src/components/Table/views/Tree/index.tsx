@@ -173,6 +173,7 @@ class TreeView extends Component<Props, State> {
   _CDPMap: Map<string, Provider>;
   _lineageNames: Map<string, string>;
   _initialLoad: boolean;
+  _breadcrumbs: TaxNode[];
 
   constructor(props: Props) {
     super(props);
@@ -184,7 +185,8 @@ class TreeView extends Component<Props, State> {
     };
     this._CDPMap = new Map();
     this._lineageNames = new Map();
-    this._initialLoad = true; // Automatically opens the tree until it finds a branch of children when it loads the first time
+    this._initialLoad = true;
+    this._breadcrumbs = []; // Automatically opens the tree until it finds a branch of children when it loads the first time
   }
 
   static getDerivedStateFromProps(
@@ -259,6 +261,17 @@ class TreeView extends Component<Props, State> {
   };
 
   _handleNewFocus = (taxID: string) => {
+    /* Recomputing the lineage.
+       This handles the case of going back to one of the already open taxons.
+       E.g Tree is at Root -> Virus -> AnelloViridae and the desired action is Root -> Virus
+    
+    for (let i = 0; i < this._breadcrumbs.length; i++){
+      if (this._breadcrumbs[i].id == taxID){
+        this._storeLineageNames(this._breadcrumbs[i].id, this._breadcrumbs[i])
+        break
+      }
+    }*/
+
     if (taxID) {
       this.setState({ focused: taxID });
       if (this.props.onFocusChanged) {
@@ -266,6 +279,7 @@ class TreeView extends Component<Props, State> {
       }
     }
   };
+
   _handleLabelClick = (taxID: string) => {
     this.props.goToCustomLocation({
       description: {
@@ -278,8 +292,39 @@ class TreeView extends Component<Props, State> {
     });
   };
 
+  // Find the parent of a node among the ones already added to the breadcrumb
+  _parent = (node: TaxNode, breadcrumbs: TaxNode[]) => {
+    for (let i = breadcrumbs.length - 1; i >= 0; i--) {
+      let taxObj = breadcrumbs[i];
+      if (taxObj.children !== undefined) {
+        for (let j = 0; j < taxObj.children?.length; j++) {
+          if (taxObj.children[j].id == node.id) {
+            return taxObj;
+          }
+        }
+      }
+    }
+  };
+
   _storeLineageNames = (focused: string, data: TaxNode) => {
     if (focused === data.id) {
+      // Updating breadcrumb object and recreating lineage
+      /*
+      this._breadcrumbs.push(data)
+      let parentNode: TaxNode = data
+      let localBreadcrumbs: TaxNode[] = [data]
+      
+      while (parentNode.name != "root"){
+        parentNode = this._parent(parentNode as TaxNode, this._breadcrumbs) as TaxNode
+        console.log(parentNode)
+        localBreadcrumbs.push(parentNode)
+      }
+
+      localBreadcrumbs.reverse()
+
+      this._lineageNames.clear()
+      localBreadcrumbs.map((taxon) => {*/
+      // Adding the right tuple (id, name) to lineageNames */
       this._lineageNames.set(focused, data.name);
     } else {
       data?.children?.forEach((child) => {
