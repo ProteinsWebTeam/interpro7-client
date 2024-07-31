@@ -19,16 +19,24 @@ type Props = {
     extra_fields?: {
       counters: MetadataCounters;
       literature?: Record<string, Reference>;
+      short_name: string;
     };
   };
   search: string;
   entryDB: MemberDB | 'interpro';
 };
 const EntryCard = ({ data, search, entryDB }: Props) => {
+  console.log(data.extra_fields);
   const name =
+    typeof data.extra_fields?.short_name === 'string'
+      ? data.extra_fields?.short_name
+      : data.metadata.accession;
+
+  const subtitleFullName =
     typeof data.metadata.name === 'string'
       ? data.metadata.name
       : data.metadata.name.name;
+
   return (
     <Card
       imageComponent={
@@ -43,7 +51,6 @@ const EntryCard = ({ data, search, entryDB }: Props) => {
         ) : (
           <Tooltip title={`${entryDB} database`}>
             <MemberSymbol
-              // size="2em"
               type={entryDB}
               aria-label="Database type"
               className={css('md-small')}
@@ -66,6 +73,7 @@ const EntryCard = ({ data, search, entryDB }: Props) => {
           <HighlightedText text={name || ''} textToHighlight={search} />
         </Link>
       }
+      subHeader={<>{subtitleFullName}</>}
       footer={
         <>
           {entryDB.toLowerCase() === 'interpro' ? (

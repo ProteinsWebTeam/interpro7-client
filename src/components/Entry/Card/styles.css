@@ -1,4 +1,4 @@
 .md-small {
-  display: flex;
-  width: 46px;
+  align-items: center;
+  width: 2.5em !important;
 }
