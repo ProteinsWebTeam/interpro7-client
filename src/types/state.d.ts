@@ -164,21 +164,34 @@ type LabelUISettings = {
   short: boolean;
 };
 
-type DownloadState = Record<string, DownloadProgress>;
+type DownloadState = Record<string, DownloadProgress | CompletedDownload>;
 
 type DownloadProgress = {
   progress: number;
-  successful: null | boolean;
+  successful?: null | boolean;
   blobURL: string;
   size: null | number;
   version: number;
+  fileType: DownloadFileTypes;
+  date?: Date;
+  length?: number;
+  subset?: boolean;
 };
+
+type CompletedDownload = DownloadProgress & {
+  blob: Blob;
+  date: Date;
+  length: number;
+  subset: boolean;
+};
+
 type ServerStatus = {
   status: boolean;
   lastCheck: number;
 };
 
 type DownloadFileTypes =
+  | 'txt'
   | 'accession'
   | 'fasta'
   | 'json'

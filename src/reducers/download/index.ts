@@ -5,44 +5,30 @@ import {
   DOWNLOAD_DELETE,
   DOWNLOAD_ERROR,
   SET_INITIAL_DOWNLOADS,
-  // $FlowFixMe
+  DownloadAction,
+  InitialDownloadsAction,
 } from 'actions/types';
+
 import { createNotification } from 'utils/browser-notifications';
 import getTableAccess, { DownloadJobs } from 'storage/idb';
 
 const downloadsTable = getTableAccess(DownloadJobs);
 
-const deleteDownloadInDB = async (key) => {
+const deleteDownloadInDB = async (key: string) => {
   const downloadsT = await downloadsTable;
   downloadsT.delete(key);
 };
 
-/*::
-export type DatumProgress = {
-  progress: number,
-  successful: ?boolean,
-  blobURL: ?string,
-};
-export type CompletedDownload ={
-  blob: Blob,
-  date: Date,
-  fileType: string,
-  version: string,
-  length: number,
-  subset: boolean,
-}
-
-*/
-/*:: export type Download = { [string]: DatumProgress }; */
-/*:: import type { State } from 'reducers'; */
-
-const keyFromAction = (action) =>
+const keyFromAction = (action: DownloadAction) =>
   action.key ||
   [action.url, action.fileType, action.subset && 'subset']
     .filter(Boolean)
     .join('|');
 
-export default (state /*: Download */ = {}, action /*: Object */) => {
+export default (
+  state: DownloadState = {},
+  action: DownloadAction | InitialDownloadsAction,
+) => {
   switch (action.type) {
     case DOWNLOAD_URL:
     case DOWNLOAD_PROGRESS:
@@ -92,27 +78,22 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
       deleteDownloadInDB(key);
       return newState;
     case SET_INITIAL_DOWNLOADS:
-      const savedDownloads = {};
-      // prettier-ignore
-      (Object.entries(action.downloads) /*: any */)
-        .forEach(
-          ([
-            key,
-            { blob, date, fileType, length, subset, version },
-          ]/*: [string, CompletedDownload] */) => {
-            savedDownloads[key] = {
-              progress: 1,
-              successful: true,
-              blobURL: URL.createObjectURL(blob),
-              size: blob.size,
-              length,
-              subset,
-              fileType,
-              date,
-              version,
-            };
-          },
-        );
+      const savedDownloads: Record<string, DownloadProgress> = {};
+      Object.entries(action.downloads).forEach(
+        ([key, { blob, date, fileType, length, subset, version }]) => {
+          savedDownloads[key] = {
+            progress: 1,
+            successful: true,
+            blobURL: URL.createObjectURL(blob),
+            size: blob.size,
+            length,
+            subset,
+            fileType,
+            date,
+            version,
+          };
+        },
+      );
       return {
         ...state,
         ...savedDownloads,
@@ -122,4 +103,4 @@ export default (state /*: Download */ = {}, action /*: Object */) => {
   }
 };
 
-export const downloadSelector = (state /*: State */) => state.download;
+export const downloadSelector = (state: GlobalState) => state.download;

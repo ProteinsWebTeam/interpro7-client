@@ -12,7 +12,11 @@ import blockEvent from 'utils/block-event';
 
 import FileButton, { SupportedExtensions } from './FileButton';
 
-const mapStateToPropsFor = (url: string, fileType: string, subset: boolean) =>
+const mapStateToPropsFor = (
+  url: string,
+  fileType: DownloadFileTypes,
+  subset: boolean,
+) =>
   createSelector(
     downloadSelector,
     (downloads) =>
@@ -26,7 +30,7 @@ type Props = {
   entryDescription: Object;
   customLocationDescription?: Object;
   downloadURL: typeof downloadURL;
-  fileType: SupportedExtensions;
+  fileType: DownloadFileTypes;
   count: number;
   subset?: boolean;
   name: string;
@@ -104,7 +108,7 @@ export class File extends PureComponent<Props, State> {
     return ConnectedButton ? (
       <ConnectedButton
         {...this.props}
-        fileType={fileType}
+        fileType={fileType as SupportedExtensions}
         url={url || ''}
         subpath={subpath || ''}
         name={name}

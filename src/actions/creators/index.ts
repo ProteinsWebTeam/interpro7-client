@@ -1,7 +1,11 @@
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
 import { PropsWithChildren } from 'react';
-import { DataProgressAction, LocationAction } from 'actions/types';
+import {
+  DataProgressAction,
+  DownloadAction,
+  LocationAction,
+} from 'actions/types';
 
 // Action creators
 // custom location
@@ -194,26 +198,28 @@ export const downloadURL = (
   fileType: DownloadFileTypes,
   subset: boolean,
   endpoint: string,
-) => ({
-  type: types.DOWNLOAD_URL,
-  url,
-  fileType,
-  subset,
-  endpoint,
-});
+) =>
+  ({
+    type: types.DOWNLOAD_URL,
+    url,
+    fileType,
+    subset,
+    endpoint,
+  }) as DownloadAction;
 
 export const downloadError = (
   url: string,
   fileType: DownloadFileTypes,
   subset: boolean,
   errorMessage: string,
-) => ({
-  type: types.DOWNLOAD_ERROR,
-  url,
-  fileType,
-  subset,
-  errorMessage,
-});
+) =>
+  ({
+    type: types.DOWNLOAD_ERROR,
+    url,
+    fileType,
+    subset,
+    errorMessage,
+  }) as DownloadAction;
 
 export const downloadSuccess = (
   url: string,
@@ -225,18 +231,19 @@ export const downloadSuccess = (
     length,
     date,
     version,
-  }: { blob: unknown; length: number; date: string; version: string },
-) => ({
-  type: types.DOWNLOAD_SUCCESS,
-  url,
-  fileType,
-  subset,
-  endpoint,
-  blob,
-  length,
-  date,
-  version,
-});
+  }: { blob: Blob; length: number; date: string; version: string },
+) =>
+  ({
+    type: types.DOWNLOAD_SUCCESS,
+    url,
+    fileType,
+    subset,
+    endpoint,
+    blob,
+    length,
+    date,
+    version,
+  }) as DownloadAction;
 
 export const downloadProgress = (
   url: string,
@@ -244,25 +251,27 @@ export const downloadProgress = (
   subset: boolean,
   endpoint: string,
   progress: number,
-) => ({
-  type: types.DOWNLOAD_PROGRESS,
-  url,
-  fileType,
-  subset,
-  endpoint,
-  progress,
-});
+) =>
+  ({
+    type: types.DOWNLOAD_PROGRESS,
+    url,
+    fileType,
+    subset,
+    endpoint,
+    progress,
+  }) as DownloadAction;
 
 export const downloadDelete = (
   url: string,
   fileType: DownloadFileTypes,
   subset: boolean,
-) => ({
-  type: types.DOWNLOAD_DELETE,
-  url,
-  fileType,
-  subset,
-});
+) =>
+  ({
+    type: types.DOWNLOAD_DELETE,
+    url,
+    fileType,
+    subset,
+  }) as DownloadAction;
 
 // TODO: Update for correct types once the download-jobs middleware is migrated
 export const setInitialDownloads = (downloads: Array<unknown>) => ({

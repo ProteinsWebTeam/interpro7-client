@@ -45,6 +45,31 @@ export const DOWNLOAD_SUCCESS = 'DOWNLOAD_SUCCESS';
 export const DOWNLOAD_DELETE = 'DOWNLOAD_DELETE';
 export const SET_INITIAL_DOWNLOADS = 'SET_INITIAL_DOWNLOADS';
 
+export interface DownloadAction
+  extends Action<
+    | typeof DOWNLOAD_URL
+    | typeof DOWNLOAD_PROGRESS
+    | typeof DOWNLOAD_ERROR
+    | typeof DOWNLOAD_SUCCESS
+    | typeof DOWNLOAD_DELETE
+  > {
+  url: string;
+  key?: string;
+  fileType: DownloadFileTypes;
+  subset: boolean;
+  endpoint?: Endpoint;
+  errorMessage?: string;
+  progress?: number;
+  blob?: Blob;
+  length?: number;
+  date?: string;
+  version?: string;
+}
+
+export interface InitialDownloadsAction
+  extends Action<typeof SET_INITIAL_DOWNLOADS> {
+  downloads: Array<CompletedDownload>;
+}
 // settings
 export const CHANGE_SETTINGS = 'CHANGE_SETTINGS';
 export const RESET_SETTINGS = 'RESET_SETTINGS';
