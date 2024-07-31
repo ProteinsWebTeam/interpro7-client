@@ -1,7 +1,6 @@
 // TODO: I'm not sure if location.state: is used any more (see location middleware), investgate if can be removed
 
-import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
-import { LocationAction } from 'actions/creators';
+import { LocationAction, NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
 
 export default (state: InterProLocationSearch = {}, action: LocationAction) => {
   switch (action.type) {

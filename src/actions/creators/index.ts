@@ -1,16 +1,10 @@
-// $FlowFixMe
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
 import { PropsWithChildren } from 'react';
-import { Action } from 'redux';
+import { DataProgressAction, LocationAction } from 'actions/types';
 
 // Action creators
 // custom location
-export interface LocationAction extends Action {
-  customLocation: InterProPartialLocation;
-  replace?: boolean;
-  state?: unknown;
-}
 
 export const goToCustomLocation = (
   customLocation: InterProPartialLocation,
@@ -117,17 +111,19 @@ export const dataProgressInfo = (
   key: string,
   progress: number,
   weight: number,
-) => ({
-  type: types.PROGRESS_DATA,
-  key,
-  progress,
-  weight,
-});
+) =>
+  ({
+    type: types.PROGRESS_DATA,
+    key,
+    progress,
+    weight,
+  }) as DataProgressAction;
 
-export const dataProgressUnload = (key: string) => ({
-  type: types.UNLOAD_DATA,
-  key,
-});
+export const dataProgressUnload = (key: string) =>
+  ({
+    type: types.UNLOAD_DATA,
+    key,
+  }) as DataProgressAction;
 
 // jobs
 // TODO: Update for correct types once the ipscan-results branch gets merged

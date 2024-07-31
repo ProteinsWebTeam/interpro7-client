@@ -1,10 +1,28 @@
+import { Action } from 'redux';
+
 // custom location
 export const NEW_CUSTOM_LOCATION = 'NEW_CUSTOM_LOCATION';
 export const NEW_PROCESSED_CUSTOM_LOCATION = 'NEW_PROCESSED_CUSTOM_LOCATION';
 
+export interface LocationAction
+  extends Action<
+    typeof NEW_CUSTOM_LOCATION | typeof NEW_PROCESSED_CUSTOM_LOCATION
+  > {
+  customLocation: InterProPartialLocation;
+  replace?: boolean;
+  state?: unknown;
+}
+
 // data
 export const PROGRESS_DATA = 'PROGRESS_DATA';
 export const UNLOAD_DATA = 'UNLOAD_DATA';
+
+export interface DataProgressAction
+  extends Action<typeof PROGRESS_DATA | typeof UNLOAD_DATA> {
+  key: string;
+  progress?: number;
+  weight?: number;
+}
 
 // jobs
 export const CREATE_JOB = 'CREATE_JOB';

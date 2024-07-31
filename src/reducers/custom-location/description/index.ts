@@ -1,9 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
+import { LocationAction, NEW_PROCESSED_CUSTOM_LOCATION } from 'actions/types';
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
-import { LocationAction } from 'actions/creators';
 
 export default (
   state: InterProDescription = getEmptyDescription(),

@@ -6,6 +6,7 @@ type GlobalState = {
     servers: Record<string, ServerStatus>;
     browser: boolean;
   };
+  dataProgress: DataProgress;
   [other: string]: unknown;
 }; // TODO: replace for redux state type
 
@@ -184,3 +185,9 @@ type DownloadFileTypes =
   | 'ndjson'
   | 'tsv'
   | 'xml';
+
+type DataProgress = Record<string, DatumProgress>;
+type DatumProgress = {
+  progress: number;
+  weight: number;
+};
