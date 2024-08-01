@@ -115,21 +115,10 @@ type InterProPartialLocation = {
 };
 
 type SettingsState = {
-  navigation: {
-    pageSize: number;
-    secondsToRetry: number;
-  };
-  notifications: {
-    showTreeToast: boolean;
-    showConnectionStatusToast: boolean;
-    showSettingsToast: boolean;
-    showHelpToast: boolean;
-    showCtrlToZoomToast: boolean;
-  };
+  navigation: NavigationSettings;
+  notifications: NotificationsSettings;
   ui: UISettings;
-  cache: {
-    enabled: boolean;
-  };
+  cache: CacheSettings;
   ebi: ParsedURLServer;
   api: ParsedURLServer;
   ipScan: ParsedURLServer;
@@ -150,6 +139,17 @@ type ParsedURLServer = {
   query: string;
 };
 
+type NavigationSettings = {
+  pageSize: number;
+  secondsToRetry: number;
+};
+type NotificationsSettings = {
+  showTreeToast: boolean;
+  showConnectionStatusToast: boolean;
+  showSettingsToast: boolean;
+  showHelpToast: boolean;
+  showCtrlToZoomToast: boolean;
+};
 type UISettings = {
   lowGraphics: boolean;
   colorDomainsBy: 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP';
@@ -164,7 +164,9 @@ type LabelUISettings = {
   name: boolean;
   short: boolean;
 };
-
+type CacheSettings = {
+  enabled: boolean;
+};
 type DownloadState = Record<string, DownloadProgress | CompletedDownload>;
 
 type DownloadProgress = {

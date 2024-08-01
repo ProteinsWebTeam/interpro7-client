@@ -73,6 +73,12 @@ export interface InitialDownloadsAction
 // settings
 export const CHANGE_SETTINGS = 'CHANGE_SETTINGS';
 export const RESET_SETTINGS = 'RESET_SETTINGS';
+export interface SettingsAction
+  extends Action<typeof CHANGE_SETTINGS | typeof RESET_SETTINGS> {
+  category?: string;
+  key?: string;
+  value?: string | number | boolean | LabelUISettings;
+}
 
 // status
 export const BROWSER_STATUS = 'BROWSER_STATUS';

@@ -6,6 +6,7 @@ import {
   DownloadAction,
   FavouritesAction,
   LocationAction,
+  SettingsAction,
 } from 'actions/types';
 
 // Action creators
@@ -75,23 +76,25 @@ export const unstick = () => ({
 });
 
 // settings
-export const changePageSize = (pageSize: number) => ({
-  type: types.CHANGE_SETTINGS,
-  category: 'pagination',
-  key: 'pageSize',
-  value: +pageSize,
-});
+export const changePageSize = (pageSize: number) =>
+  ({
+    type: types.CHANGE_SETTINGS,
+    category: 'pagination',
+    key: 'pageSize',
+    value: +pageSize,
+  }) as SettingsAction;
 
 export const changeSettingsRaw = (
   category: string,
   key: string,
   value: string | number | boolean | LabelUISettings,
-) => ({
-  type: types.CHANGE_SETTINGS,
-  category,
-  key,
-  value,
-});
+) =>
+  ({
+    type: types.CHANGE_SETTINGS,
+    category,
+    key,
+    value,
+  }) as SettingsAction;
 
 export const changeSettings = (event: Event) => {
   if (
@@ -106,10 +109,11 @@ export const changeSettings = (event: Event) => {
   }
 };
 
-export const resetSettings = (value: unknown) => ({
-  type: types.RESET_SETTINGS,
-  value,
-});
+export const resetSettings = (value: unknown) =>
+  ({
+    type: types.RESET_SETTINGS,
+    value,
+  }) as SettingsAction;
 
 // dataProgress
 export const dataProgressInfo = (
