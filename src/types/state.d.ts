@@ -1,12 +1,13 @@
 type GlobalState = {
   customLocation: InterProLocation;
-  settings: SettingsState;
+  dataProgress: DataProgress;
   download: DownloadState;
+  favourites: FavouritesState;
+  settings: SettingsState;
   status: {
     servers: Record<string, ServerStatus>;
     browser: boolean;
   };
-  dataProgress: DataProgress;
   [other: string]: unknown;
 }; // TODO: replace for redux state type
 
@@ -203,4 +204,8 @@ type DataProgress = Record<string, DatumProgress>;
 type DatumProgress = {
   progress: number;
   weight: number;
+};
+
+type FavouritesState = {
+  entries: Array<string>;
 };

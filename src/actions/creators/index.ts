@@ -4,6 +4,7 @@ import { PropsWithChildren } from 'react';
 import {
   DataProgressAction,
   DownloadAction,
+  FavouritesAction,
   LocationAction,
 } from 'actions/types';
 
@@ -323,21 +324,21 @@ export const removeToast = (id: string) => ({
 });
 
 // favourites
-export const setInitialFavourites = (favourites: Array<string>) => ({
-  type: types.SET_INITIAL_FAVOURITES,
-  favourites,
-});
+export const setInitialFavourites = (favourites: Array<string>) =>
+  ({
+    type: types.SET_INITIAL_FAVOURITES,
+    favourites,
+  }) as FavouritesAction;
 
-export const markFavourite = (
-  id: string,
-  content: MetadataPayload<Metadata>,
-) => ({
-  type: types.MARK_FAVOURITE,
-  id,
-  content,
-});
+export const markFavourite = (id: string, content: MetadataPayload<Metadata>) =>
+  ({
+    type: types.MARK_FAVOURITE,
+    id,
+    content,
+  }) as FavouritesAction;
 
-export const unmarkFavourite = (id: string) => ({
-  type: types.UNMARK_FAVOURITE,
-  id,
-});
+export const unmarkFavourite = (id: string) =>
+  ({
+    type: types.UNMARK_FAVOURITE,
+    id,
+  }) as FavouritesAction;
