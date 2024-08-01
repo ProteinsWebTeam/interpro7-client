@@ -83,7 +83,12 @@ export interface SettingsAction
 // status
 export const BROWSER_STATUS = 'BROWSER_STATUS';
 export const SERVER_STATUS = 'SERVER_STATUS';
-
+export interface StatusAction
+  extends Action<typeof BROWSER_STATUS | typeof SERVER_STATUS> {
+  server?: string;
+  status?: boolean;
+  onLine?: boolean;
+}
 // UI
 export const TOGGLE_SIDE_NAV = 'TOGGLE_SIDE_NAV';
 export const TOGGLE_EMBL_MAP_NAV = 'TOGGLE_EMBL_MAP_NAV';

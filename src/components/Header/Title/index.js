@@ -7,6 +7,7 @@ import { createSelector } from 'reselect';
 // $FlowFixMe
 import { overallDataLoadingSelector } from 'reducers/data-progress';
 import { stuckSelector } from 'reducers/ui/stuck';
+// $FlowFixMe
 import { browserStatusSelector } from 'reducers/status/browser';
 
 import Link from 'components/generic/Link';
