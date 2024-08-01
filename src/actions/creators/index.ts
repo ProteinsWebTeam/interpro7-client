@@ -7,6 +7,7 @@ import {
   FavouritesAction,
   LocationAction,
   SettingsAction,
+  StatusAction,
 } from 'actions/types';
 
 // Action creators
@@ -285,16 +286,18 @@ export const setInitialDownloads = (downloads: Array<unknown>) => ({
 });
 
 // status
-export const serverStatus = (server: string, status: boolean) => ({
-  type: types.SERVER_STATUS,
-  server,
-  status,
-});
+export const serverStatus = (server: string, status: boolean) =>
+  ({
+    type: types.SERVER_STATUS,
+    server,
+    status,
+  }) as StatusAction;
 
-export const browserStatus = (status: boolean) => ({
-  type: types.BROWSER_STATUS,
-  onLine: status,
-});
+export const browserStatus = (status: boolean) =>
+  ({
+    type: types.BROWSER_STATUS,
+    onLine: status,
+  }) as StatusAction;
 
 // toast messages
 // TODO: move this to the Toas component when it gets migrated

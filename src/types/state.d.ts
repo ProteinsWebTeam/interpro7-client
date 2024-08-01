@@ -5,7 +5,7 @@ type GlobalState = {
   favourites: FavouritesState;
   settings: SettingsState;
   status: {
-    servers: Record<string, ServerStatus>;
+    servers: Record<Server, ServerStatus>;
     browser: boolean;
   };
   [other: string]: unknown;
@@ -188,9 +188,19 @@ type CompletedDownload = DownloadProgress & {
   subset: boolean;
 };
 
+type Server =
+  | 'api'
+  | 'ebi'
+  | 'ipScan'
+  | 'genome3d'
+  | 'wikipedia'
+  | 'alphafold'
+  | 'repeatsDB'
+  | 'disprot'
+  | 'proteinsAPI';
 type ServerStatus = {
-  status: boolean;
-  lastCheck: number;
+  status: boolean | null;
+  lastCheck: number | null;
 };
 
 type DownloadFileTypes =

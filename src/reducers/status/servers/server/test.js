@@ -1,6 +1,4 @@
-// @flow
 import getReducerFor from '.';
-// $FlowFixMe
 import { SERVER_STATUS, TEST } from 'actions/types';
 
 const FAKE_DATE = 1234567890000;
