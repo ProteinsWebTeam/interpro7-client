@@ -35,9 +35,10 @@ const Game = () => (
 // FlowFix me comment needed for async components
 const Documentation = loadable({
   loader: () =>
-    // $FlowFixMe
     import(
-      /* webpackChunkName: "help-documentation" */ 'components/Help/Documentation'
+      /* webpackChunkName: "help-documentation" */
+      // $FlowFixMe
+      'components/Help/Documentation'
     ),
   loading: () => null,
 });
