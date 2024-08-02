@@ -36,7 +36,7 @@ const Documentation = loadable({
   loader: () =>
     // $FlowFixMe
     import(
-      /* webpackChunkName: "side-menu" */ 'components/Settings/Documentation'
+      /* webpackChunkName: "help-documentation" */ 'components/Help/Documentation'
     ),
 });
 
@@ -63,16 +63,14 @@ export default class Help extends PureComponent /*:: <{}> */ {
           <title>Help</title>
         </Helmet>
 
-        {
-          <SchemaOrgData
-            data={{
-              name: 'InterPro Help Page',
-              description: 'Documentation relating to the use of InterPro',
-              location: window.location,
-            }}
-            processData={schemaProcessDataWebPage}
-          />
-        }
+        <SchemaOrgData
+          data={{
+            name: 'InterPro Help Page',
+            description: 'Documentation relating to the use of InterPro',
+            location: window.location,
+          }}
+          processData={schemaProcessDataWebPage}
+        />
         <div className={f('columns', 'margin-bottom-large')}>
           <div className={f('tabs', 'tabs-content')}>
             <div className={f('tabs-panel', 'is-active')}>
