@@ -39,6 +39,7 @@
       font-weight: 600;
       display: flex;
       align-items: center;
+      word-break: break-all;
       gap: 0.5rem;
       & * {
         flex-grow: 1;

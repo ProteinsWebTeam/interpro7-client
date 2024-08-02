@@ -26,7 +26,6 @@ type Props = {
   entryDB: MemberDB | 'interpro';
 };
 const EntryCard = ({ data, search, entryDB }: Props) => {
-  console.log(data.extra_fields);
   const name =
     typeof data.extra_fields?.short_name === 'string'
       ? data.extra_fields?.short_name
@@ -40,23 +39,13 @@ const EntryCard = ({ data, search, entryDB }: Props) => {
   return (
     <Card
       imageComponent={
-        entryDB.toLowerCase() === 'interpro' ? (
-          <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
-            <interpro-type
-              dimension="2em"
-              type={data.metadata.type.replace('_', ' ')}
-              aria-label="Entry type"
-            />
-          </Tooltip>
-        ) : (
-          <Tooltip title={`${entryDB} database`}>
-            <MemberSymbol
-              type={entryDB}
-              aria-label="Database type"
-              className={css('md-small')}
-            />
-          </Tooltip>
-        )
+        <Tooltip title={`${data.metadata.type.replace('_', ' ')} type`}>
+          <interpro-type
+            dimension="2em"
+            type={data.metadata.type.replace('_', ' ')}
+            aria-label="Entry type"
+          />
+        </Tooltip>
       }
       title={
         <Link
@@ -76,38 +65,40 @@ const EntryCard = ({ data, search, entryDB }: Props) => {
       subHeader={<>{subtitleFullName}</>}
       footer={
         <>
-          {entryDB.toLowerCase() === 'interpro' ? (
-            <div>{data.metadata.type.replace('_', ' ')}</div>
-          ) : (
-            <div>
-              {data.metadata.integrated ? (
-                <div>
-                  Integrated into{' '}
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'entry' },
-                        entry: {
-                          db: 'InterPro',
-                          accession: data.metadata.integrated,
-                        },
-                      },
-                    }}
-                  >
-                    {data.metadata.integrated}
-                  </Link>
-                </div>
-              ) : (
-                'Not integrated'
-              )}
-            </div>
-          )}
           <div>
             <HighlightedText
               text={data.metadata.accession || ''}
               textToHighlight={search}
             />
           </div>
+          {entryDB.toLowerCase() === 'interpro' ? (
+            <div></div>
+          ) : (
+            <div>
+              {data.metadata.integrated ? (
+                <div>
+                  Integrated into{' '}
+                  <div>
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'entry' },
+                          entry: {
+                            db: 'InterPro',
+                            accession: data.metadata.integrated,
+                          },
+                        },
+                      }}
+                    >
+                      {data.metadata.integrated}
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                'Not integrated'
+              )}
+            </div>
+          )}
         </>
       }
     >
