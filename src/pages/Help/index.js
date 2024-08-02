@@ -58,7 +58,7 @@ const RedirectToDefault = () => (
 export default class Help extends PureComponent /*:: <{}> */ {
   render() {
     return (
-      <div className={f('row')}>
+      <div className={f('test')}>
         <Helmet>
           <title>Help</title>
         </Helmet>
