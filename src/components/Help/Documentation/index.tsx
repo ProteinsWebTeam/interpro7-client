@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 
 import config from 'config';
@@ -21,7 +20,7 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const Documentation = () => {
+export const Documentation = () => {
   return (
     <section>
       <SchemaOrgData
@@ -217,5 +216,3 @@ const Documentation = () => {
     </section>
   );
 };
-
-export default Documentation;

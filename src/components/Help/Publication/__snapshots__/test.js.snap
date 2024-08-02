@@ -2,7 +2,7 @@
 
 exports[`<Publication /> should render 1`] = `
 <blockquote
-  className="quote"
+  className="vf-quote"
 >
    
   <Memo(Connect(Link))
