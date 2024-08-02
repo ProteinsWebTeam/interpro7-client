@@ -1,7 +1,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { Documentation } from '.';
+import Documentation from '.';
 
 const renderer = new ShallowRenderer();
 

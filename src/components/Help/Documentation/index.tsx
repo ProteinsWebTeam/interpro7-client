@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 
 import config from 'config';
@@ -14,13 +15,11 @@ import cssBinder from 'styles/cssBinder';
 const f = cssBinder(ebiGlobalStyles, fonts, ipro, local);
 
 const SchemaOrgData = loadable({
-  loader: () => {
-    import(/* webpackChunkName: "schemaOrg" */ 'schema_org');
-  },
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 
-export const Documentation = () => {
+const Documentation = () => {
   return (
     <section>
       <SchemaOrgData
@@ -216,3 +215,5 @@ export const Documentation = () => {
     </section>
   );
 };
+
+export default Documentation;

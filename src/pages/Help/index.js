@@ -38,6 +38,7 @@ const Documentation = loadable({
     import(
       /* webpackChunkName: "help-documentation" */ 'components/Help/Documentation'
     ),
+  loading: () => null,
 });
 
 const routes = new Map([
@@ -62,7 +63,6 @@ export default class Help extends PureComponent /*:: <{}> */ {
         <Helmet>
           <title>Help</title>
         </Helmet>
-
         <SchemaOrgData
           data={{
             name: 'InterPro Help Page',
