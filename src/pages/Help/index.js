@@ -32,12 +32,14 @@ const Game = () => (
   <ContentFromRTD page="protein_families_game.rst" format="faq" />
 );
 
+// FlowFix me comment needed for async components
 const Documentation = loadable({
   loader: () =>
     // $FlowFixMe
     import(
       /* webpackChunkName: "help-documentation" */ 'components/Help/Documentation'
     ),
+  loading: () => null,
 });
 
 const routes = new Map([
@@ -62,7 +64,6 @@ export default class Help extends PureComponent /*:: <{}> */ {
         <Helmet>
           <title>Help</title>
         </Helmet>
-
         <SchemaOrgData
           data={{
             name: 'InterPro Help Page',
