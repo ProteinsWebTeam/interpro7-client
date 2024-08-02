@@ -1,22 +1,27 @@
 import React from 'react';
-import T from 'prop-types';
 
 import config from 'config';
 import Link from 'components/generic/Link';
+
 // $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
-import { foundationPartial } from 'styles/foundation';
 import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 
-const f = foundationPartial(interproTheme, ipro, fonts);
+import cssBinder from 'styles/cssBinder';
+const f = cssBinder(interproTheme, ipro, fonts);
+
+type TooltipAndRTDLinkProps = {
+  rtdPage: string;
+  label?: string;
+};
 
 const TooltipAndRTDLink = ({
   rtdPage,
   label = 'Visit our documentation for more information.',
-}) => {
+}: TooltipAndRTDLinkProps) => {
   return (
     <sup>
       <Tooltip
@@ -39,10 +44,6 @@ const TooltipAndRTDLink = ({
       </Tooltip>
     </sup>
   );
-};
-TooltipAndRTDLink.propTypes = {
-  rtdPage: T.string.isRequired,
-  label: T.string,
 };
 
 export default TooltipAndRTDLink;

@@ -32,6 +32,7 @@ const Game = () => (
 
 const Documentation = loadable({
   loader: () =>
+    // $FlowFixMe
     import(
       /* webpackChunkName: "help-documentation" */ 'components/Help/Documentation'
     ),
