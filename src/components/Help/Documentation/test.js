@@ -11,4 +11,3 @@ describe('<Documentation />', () => {
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 });
-``;
