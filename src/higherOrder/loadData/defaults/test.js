@@ -182,7 +182,7 @@ describe('getUrlForApi', () => {
       );
       expect(url).toEqual(
         expect.stringMatching(
-          /[?&]extra_fields=description,literature,counters(:([a-z]+-?)+)?(&|$)/,
+          /[?&]extra_fields=short_name,description,literature,counters(:([a-z]+-?)+)?(&|$)/,
         ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page_size=10(&|$)/));
@@ -208,7 +208,7 @@ describe('getUrlForApi', () => {
       );
       expect(url).toEqual(
         expect.stringMatching(
-          /[?&]extra_fields=description,literature,counters(:([a-z]+-?)+)?(&|$)/,
+          /[?&]extra_fields=short_name,description,literature,counters(:([a-z]+-?)+)?(&|$)/,
         ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page=2(&|$)/));
