@@ -70,6 +70,7 @@ export interface InitialDownloadsAction
   extends Action<typeof SET_INITIAL_DOWNLOADS> {
   downloads: Array<CompletedDownload>;
 }
+
 // settings
 export const CHANGE_SETTINGS = 'CHANGE_SETTINGS';
 export const RESET_SETTINGS = 'RESET_SETTINGS';
@@ -99,7 +100,11 @@ export const UNSTUCK = 'UNSTUCK';
 // toast messages
 export const ADD_TOAST = 'ADD_TOAST';
 export const REMOVE_TOAST = 'REMOVE_TOAST';
-
+export interface ToastAction
+  extends Action<typeof ADD_TOAST | typeof REMOVE_TOAST> {
+  id: string;
+  toast?: ToastData;
+}
 // favourites
 export const SET_INITIAL_FAVOURITES = 'SET_INITIAL_FAVOURITES';
 export const MARK_FAVOURITE = 'MARK_FAVOURITE';

@@ -8,6 +8,7 @@ type GlobalState = {
     servers: Record<Server, ServerStatus>;
     browser: boolean;
   };
+  toasts: ToastsState;
   [other: string]: unknown;
 }; // TODO: replace for redux state type
 
@@ -220,4 +221,24 @@ type DatumProgress = {
 
 type FavouritesState = {
   entries: Array<string>;
+};
+
+type ToastsState = Record<string, ToastData>;
+
+type ToastData = {
+  paused?: boolean;
+  className?: string;
+  title: string;
+  body?: string;
+  link?: { to: InterProPartialLocation; children: string };
+  action?: {
+    text: string;
+    fn: () => void;
+  };
+  ttl?: number;
+  checkBox?: {
+    label: string;
+    fn: () => void;
+  };
+  // handleClose?: () => void;
 };

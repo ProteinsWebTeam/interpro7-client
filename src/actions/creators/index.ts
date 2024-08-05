@@ -300,26 +300,8 @@ export const browserStatus = (status: boolean) =>
   }) as StatusAction;
 
 // toast messages
-// TODO: move this to the Toas component when it gets migrated
-type ToastProps = {
-  paused?: boolean;
-  className?: string;
-  title: string;
-  body?: string;
-  link?: PropsWithChildren<{ to: InterProPartialLocation }>;
-  action?: {
-    text: string;
-    fn: () => void;
-  };
-  ttl?: number;
-  checkBox?: {
-    label: string;
-    fn: () => void;
-  };
-  handleClose?: () => void;
-};
 
-export const addToast = (toast: ToastProps, id: string) => ({
+export const addToast = (toast: ToastData, id: string) => ({
   type: types.ADD_TOAST,
   id,
   toast,
