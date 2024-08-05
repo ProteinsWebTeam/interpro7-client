@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 
 // $FlowFixMe
 import { overallDataLoadingSelector } from 'reducers/data-progress';
+// $FlowFixMe
 import { stuckSelector } from 'reducers/ui/stuck';
 // $FlowFixMe
 import { browserStatusSelector } from 'reducers/status/browser';
