@@ -1,6 +1,5 @@
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
-import { PropsWithChildren } from 'react';
 import {
   DataProgressAction,
   DownloadAction,
@@ -13,8 +12,8 @@ import {
 } from 'actions/types';
 
 // Action creators
-// custom location
 
+// custom location
 export const goToCustomLocation = (
   customLocation: InterProPartialLocation,
   replace?: boolean,
