@@ -9,6 +9,7 @@ type GlobalState = {
     browser: boolean;
   };
   toasts: ToastsState;
+  ui: UIState;
   [other: string]: unknown;
 }; // TODO: replace for redux state type
 
@@ -241,4 +242,10 @@ type ToastData = {
     fn: () => void;
   };
   // handleClose?: () => void;
+};
+
+type UIState = {
+  emblMapNav: boolean;
+  sideNav: boolean;
+  stuck: boolean;
 };

@@ -8,6 +8,8 @@ import {
   LocationAction,
   SettingsAction,
   StatusAction,
+  ToastAction,
+  UIAction,
 } from 'actions/types';
 
 // Action creators
@@ -36,45 +38,54 @@ export const customLocationChangeFromHistory = (
   }) as LocationAction;
 
 // UI
-export const toggleEMBLMapNav = () => ({
-  type: types.TOGGLE_EMBL_MAP_NAV,
-});
+export const toggleEMBLMapNav = () =>
+  ({
+    type: types.TOGGLE_EMBL_MAP_NAV,
+  }) as UIAction;
 
-export const openEMBLMapNav = () => ({
-  type: types.TOGGLE_EMBL_MAP_NAV,
-  status: 'open',
-});
+export const openEMBLMapNav = () =>
+  ({
+    type: types.TOGGLE_EMBL_MAP_NAV,
+    status: 'open',
+  }) as UIAction;
 
-export const closeEMBLMapNav = () => ({
-  type: types.TOGGLE_EMBL_MAP_NAV,
-  status: 'close',
-});
+export const closeEMBLMapNav = () =>
+  ({
+    type: types.TOGGLE_EMBL_MAP_NAV,
+    status: 'close',
+  }) as UIAction;
 
-export const toggleSideNav = () => ({
-  type: types.TOGGLE_SIDE_NAV,
-});
+export const toggleSideNav = () =>
+  ({
+    type: types.TOGGLE_SIDE_NAV,
+  }) as UIAction;
 
-export const openSideNav = () => ({
-  type: types.TOGGLE_SIDE_NAV,
-  status: 'open',
-});
+export const openSideNav = () =>
+  ({
+    type: types.TOGGLE_SIDE_NAV,
+    status: 'open',
+  }) as UIAction;
 
-export const closeSideNav = () => ({
-  type: types.TOGGLE_SIDE_NAV,
-  status: 'close',
-});
+export const closeSideNav = () =>
+  ({
+    type: types.TOGGLE_SIDE_NAV,
+    status: 'close',
+  }) as UIAction;
 
-export const closeEverything = () => ({
-  type: types.CLOSE_EVERYTHING,
-});
+export const closeEverything = () =>
+  ({
+    type: types.CLOSE_EVERYTHING,
+  }) as UIAction;
 
-export const stick = () => ({
-  type: types.STUCK,
-});
+export const stick = () =>
+  ({
+    type: types.STUCK,
+  }) as UIAction;
 
-export const unstick = () => ({
-  type: types.UNSTUCK,
-});
+export const unstick = () =>
+  ({
+    type: types.UNSTUCK,
+  }) as UIAction;
 
 // settings
 export const changePageSize = (pageSize: number) =>
@@ -300,17 +311,18 @@ export const browserStatus = (status: boolean) =>
   }) as StatusAction;
 
 // toast messages
+export const addToast = (toast: ToastData, id: string) =>
+  ({
+    type: types.ADD_TOAST,
+    id,
+    toast,
+  }) as ToastAction;
 
-export const addToast = (toast: ToastData, id: string) => ({
-  type: types.ADD_TOAST,
-  id,
-  toast,
-});
-
-export const removeToast = (id: string) => ({
-  type: types.REMOVE_TOAST,
-  id,
-});
+export const removeToast = (id: string) =>
+  ({
+    type: types.REMOVE_TOAST,
+    id,
+  }) as ToastAction;
 
 // favourites
 export const setInitialFavourites = (favourites: Array<string>) =>

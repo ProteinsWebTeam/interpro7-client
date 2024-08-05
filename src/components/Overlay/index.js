@@ -7,6 +7,7 @@ import classnames from 'classnames/bind';
 
 // $FlowFixMe
 import { closeEverything } from 'actions/creators';
+// $FlowFixMe
 import { emblMapNavSelector } from 'reducers/ui/emblMapNav';
 import { sideNavSelector } from 'reducers/ui/sideNav';
 
