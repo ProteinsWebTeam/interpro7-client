@@ -338,10 +338,8 @@ class TreeView extends Component<Props, State> {
     // Splitting string
     if (lineageString) {
       lineageIDs = lineageString.split(' ');
-      if (lineageIDs !== undefined) {
-        for (let i = 0; i < lineageIDs?.length; i++) {
-          lineageIDs[i] = lineageIDs[i].trim();
-        }
+      for (let i = 0; i < lineageIDs?.length; i++) {
+        lineageIDs[i] = lineageIDs[i].trim();
       }
     }
     return (
@@ -372,8 +370,8 @@ class TreeView extends Component<Props, State> {
                 <p>{currentNode?.rank}</p>
               </div>
             )}
-            {currentNode?.lineage && (
-              <nav className={'breadcrumbs'}>
+            {currentNode?.lineage && lineageIDs.length > 1 && (
+              <nav className={css('breadcrumbs')}>
                 {lineageIDs.map((key) => (
                   <li key={key}>
                     <Link
