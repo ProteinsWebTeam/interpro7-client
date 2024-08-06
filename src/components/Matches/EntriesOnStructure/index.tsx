@@ -98,6 +98,7 @@ const EntriesOnStructure = ({ matches, match }: Props) => {
                           id={`track_${structure.accession}`}
                           shape="roundRectangle"
                           data={data?.[m.chain || ''] || []}
+                          width={300}
                           expanded
                           use-ctrl-to-zoom
                         />
