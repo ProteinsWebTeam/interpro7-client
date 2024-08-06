@@ -54,6 +54,7 @@ exports[`<StructureOnProtein /> should render 1`] = `
                   margin-color="#fafafa"
                   shape="rectangle"
                   use-ctrl-to-zoom={true}
+                  width={300}
                 />
               </TooltipForTrack>
             </div>

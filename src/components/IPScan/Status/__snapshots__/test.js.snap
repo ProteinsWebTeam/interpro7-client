@@ -4,6 +4,20 @@ exports[`<IPScanStatus /> should render 1`] = `
 <div
   className="vf-stack"
 >
+  <Callout
+    icon="icon-bullhorn"
+    type="warning"
+  >
+    <h4>
+      This page will be updated with release 102.0
+    </h4>
+    <p>
+      We are working on a new version of this page: reorganising jobs with multiple sequences and supporting search with nucleotide sequences from the website.
+    </p>
+    <p>
+      Unfortunately the new version is incompatible with previously saved jobs in the browser. If you have any jobs you want to keep, please export them as JSON, and import them back once the new version is released.
+    </p>
+  </Callout>
   <h3
     className="light"
   >

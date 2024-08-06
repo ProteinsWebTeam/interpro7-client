@@ -542,12 +542,12 @@ const Matches = ({
                 },
               }}
             >
-              View predicted structure
+              AlphaFold
             </Link>
           ) : null
         }
       >
-        Alphafold
+        Predicted structure
       </Column>
       <Column
         dataKey="match"

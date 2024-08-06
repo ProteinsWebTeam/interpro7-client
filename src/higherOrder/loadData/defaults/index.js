@@ -74,7 +74,7 @@ export const getUrl = createSelector(
           switch (description.main.key) {
             case 'entry':
               _search.extra_fields =
-                'description,literature,counters:protein-ida-taxonomy-structure';
+                'short_name,description,literature,counters:protein-ida-taxonomy-structure';
               if (DBS_WITH_SETS.includes(description.entry.db))
                 _search.extra_fields += '-set';
               break;

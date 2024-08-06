@@ -43,12 +43,10 @@ const f = foundationPartial(local);
 const DEFAULT_SEC = 20;
 const offsetForStickyHeader = 95;
 
-// Generate async components
 const Advanced = loadable({
   loader: () =>
-    import(
-      /* webpackChunkName: "about-advanced" */ 'components/Settings/Advanced'
-    ),
+    // $FlowFixMe
+    import(/* webpackChunkName: "side-menu" */ 'components/Settings/Advanced'),
 });
 
 const NavigationSettings = (
