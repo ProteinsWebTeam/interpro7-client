@@ -24,8 +24,6 @@ type Props = {
   editable?: boolean;
 };
 
-const EMPTY = 'ø';
-
 const IPScanTitle = ({
   type,
   accession,
