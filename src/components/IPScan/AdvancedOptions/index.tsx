@@ -149,8 +149,8 @@ export const AdvancedOptions = ({
               switchCond={false}
               label="Sequence type:"
               size="small"
-              offValue="Amino acids"
-              onValue="Nucleotides"
+              offValue="protein (amino acids)"
+              onValue="DNA/RNA (nucleotides)"
               width="8rem"
             />
           </label>
