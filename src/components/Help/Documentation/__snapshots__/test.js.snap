@@ -12,10 +12,10 @@ exports[`<Documentation /> should render 1`] = `
     processData={[Function]}
   />
   <div
-    className="row"
+    className="vf-grid vf-grid__col-3"
   >
     <div
-      className="columns large-8"
+      className="vf-grid__col--span-2"
     >
       <div
         className="flex-container"
@@ -194,7 +194,7 @@ exports[`<Documentation /> should render 1`] = `
       </div>
     </div>
     <div
-      className="columns large-4"
+      className="vf-grid__col--span-1"
     >
       <div
         className="box-add margin-top-xxlarge"

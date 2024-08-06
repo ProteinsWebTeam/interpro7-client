@@ -32,14 +32,11 @@ const Game = () => (
   <ContentFromRTD page="protein_families_game.rst" format="faq" />
 );
 
-// FlowFix me comment needed for async components
 const Documentation = loadable({
+  // prettier-ignore
   loader: () =>
-    import(
-      /* webpackChunkName: "help-documentation" */
-      // $FlowFixMe
-      'components/Help/Documentation'
-    ),
+    // $FlowFixMe
+    import(/* webpackChunkName: "help-documentation" */'components/Help/Documentation'),
   loading: () => null,
 });
 

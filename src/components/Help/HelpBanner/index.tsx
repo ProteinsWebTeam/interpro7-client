@@ -62,7 +62,7 @@ export const HelpBanner = ({ topic }: Props) => {
   return (
     <Card
       title={
-        <span className={css('vf-card')}>
+        <span>
           <span
             className={css('icon', 'icon-common', 'font-l')}
             data-icon="&#xf059;"

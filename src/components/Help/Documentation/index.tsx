@@ -7,12 +7,10 @@ import loadable from 'higherOrder/loadable';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import ipro from 'styles/interpro-new.css';
-import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import local from './style.css';
 
 import cssBinder from 'styles/cssBinder';
-const f = cssBinder(ebiGlobalStyles, fonts, ipro, local);
+const f = cssBinder(fonts, local);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -30,8 +28,8 @@ const Documentation = () => {
         }}
         processData={schemaProcessDataPageSection}
       />
-      <div className={f('row')}>
-        <div className={f('columns', 'large-8')}>
+      <div className={f('vf-grid', 'vf-grid__col-3')}>
+        <div className={f('vf-grid__col--span-2')}>
           <div className={f('flex-container')}>
             <div className={f('flex-box')}>
               <span
@@ -180,7 +178,7 @@ const Documentation = () => {
             </div>
           </div>
         </div>
-        <div className={f('columns', 'large-4')}>
+        <div className={f('vf-grid__col--span-1')}>
           <div className={f('box-add', 'margin-top-xxlarge')}>
             <h3 className={f('light')}>Contact us/Additional help</h3>
             <ul>
