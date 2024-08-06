@@ -24,6 +24,8 @@ type Props = {
   editable?: boolean;
 };
 
+const EMPTY = 'ø';
+
 const IPScanTitle = ({
   type,
   accession,
@@ -80,6 +82,7 @@ const IPScanTitle = ({
           onChange={(event) => setTitle(event.target.value)}
           onDoubleClick={() => setReadable(false || !editable)}
           onKeyUp={handleKeyPress}
+          placeholder="ø"
         />
         {editable &&
         ['finished', 'imported file', 'saved in browser'].includes(status) ? (

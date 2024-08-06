@@ -17,53 +17,6 @@ const isValid = (fileObj: Record<string, unknown>) => {
   );
 };
 
-// TODO: remove this types once the nucleotide file logic is restored
-/*::
-type ProteinResult = {
-  xref: Array<{id: string}>,
-  matches: Array<{signature:{entry: {}}}>,
-  sequence: string,
-  md5: string,
-  group?: string,
-  orf?: {},
-}
-type NucleotideResult = {
-  id: string,
-  sequence: string,
-  md5: string,
-  crossReferences: Array<{
-    name: string,
-    id: string,
-  }>,
-  openReadingFrames: Array<{
-    id: number,
-    start: number,
-    end: number,
-    strand: string,
-    protein: ProteinResult,
-  }>,
-}
-export type ProteinFile = {
-  results: Array<ProteinResult>,
-  'interproscan-version': string,
-  applications: string[]|string,
-}
-export type NucleotideFile = {
-  results: Array<NucleotideResult>,
-  'interproscan-version': string,
-  applications: string[]|string,
-  }
-type JobMetadata = {
-  localID: string,
-  localTitle: string,
-  type: string,
-  remoteID: string,
-  hasResults: boolean,
-  entries: Array<Object>,
-  group?: string,
-}
-*/
-
 const saveJobInIDB = (
   results: Array<Iprscan5Result>,
   remoteID: string,

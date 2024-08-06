@@ -129,16 +129,6 @@ const updateJobInDB = async (
   const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
   const { remoteID, localID, group } = metadata;
   if (data) {
-    // const prev = await dataT.get(metadata.localID);
-    // const newData = {
-    //   ...prev,
-    //   ...data,
-    //   results: [data?.results?.[0]],
-    // };
-    // newData.originalInput = newData.input;
-    // delete newData.input;
-
-    // metadata.localTitle = data?.results?.[0]?.xref?.[0]?.name;
     metadata.entries = data?.results?.length;
     metadata.seqtype =
       'openReadingFrames' in (data?.results?.[0] || {}) ? 'n' : 'p';
@@ -156,28 +146,13 @@ const updateJobInDB = async (
           .toString()
           .padStart(2, '0')}`;
     }
-    // dataT.set(newData, metadata.localID);
   }
   metaT.set(metadata, metadata.localID);
 
-  (Array.isArray(data?.results) ? data?.results : [])
-    // .slice(1)
-    .forEach((result, i) => {
-      const newLocalID = `${localID}-${i + 1}`;
-      dataT.set(
-        { ...data, results: [result], localID: newLocalID },
-        newLocalID,
-      );
-      // metaT.set(
-      //   {
-      //     ...metadata,
-      //     localID: newLocalID,
-      //     remoteID: `${remoteID}-${i + 2}`,
-      //     localTitle: result.xref?.[0]?.name,
-      //   },
-      //   newLocalID,
-      // );
-    });
+  (Array.isArray(data?.results) ? data?.results : []).forEach((result, i) => {
+    const newLocalID = `${localID}-${i + 1}`;
+    dataT.set({ ...data, results: [result], localID: newLocalID }, newLocalID);
+  });
   if (dispatch) {
     rehydrateStoredJobs(dispatch);
   }
@@ -308,7 +283,6 @@ const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
                 '_blank',
               );
             };
-            // TODO to be removed
             dispatch(
               addToast(
                 {
