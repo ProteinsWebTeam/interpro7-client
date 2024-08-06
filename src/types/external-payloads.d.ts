@@ -56,6 +56,10 @@ type Iprscan5Result = {
     name: string;
     id: string;
   }>;
+  crossReferences?: Array<{
+    name: string;
+    id: string;
+  }>;  
 };
 type Iprscan5NucleotideResult = {
   id: number;

@@ -46,15 +46,15 @@ const NucleotideSummary = ({
       <>
         <Callout type="info" showIcon icon="icon-dna">
           <b>Nucleotide Sequence</b>
-          <p>
+          <div>
             This analysis was the result of an InterProScan execution over a
             nucleotide sequence. The data below correspond to a single ORF from
             such sequence.
-          </p>
+          </div>
         </Callout>
         <section className={f('summary-row')}>
           <header>DNA Sequence ID</header>
-          <section>{nPayload.crossReferences[0].name}</section>
+          <section>{nPayload.crossReferences[0].id}</section>
         </section>
         <section className={f('summary-row')}>
           <header>Current ORF</header>
@@ -62,7 +62,7 @@ const NucleotideSummary = ({
             <select onChange={handleORFChange} value={orf}>
               {nPayload.openReadingFrames.map((frame, i) => (
                 <option key={i} value={i}>
-                  {i}: {frame.start}-{frame.end} ({frame.strand})
+                  {frame.strand}: {frame.start} - {frame.end}
                 </option>
               ))}
             </select>

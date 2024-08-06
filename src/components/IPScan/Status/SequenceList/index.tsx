@@ -183,7 +183,7 @@ export const IPScanStatus = ({
             MoreActions={
               <>
                 <ReRun jobsData={jobsData} />
-                <DropDownButton label="Download" icon="icon-list">
+                <DropDownButton label="Download" icon="icon-download">
                   <DownloadAll job={job} jobsData={jobsData} />
                 </DropDownButton>
               </>
@@ -248,7 +248,7 @@ export const IPScanStatus = ({
                     },
                   }}
                 >
-                  {row.results[0]?.xref?.[0]?.name ||
+                  {(row.results[0]?.crossReferences || row.results[0]?.xref)?.[0]?.id ||
                     (localTitle === '∅' ? null : localTitle) ||
                     row.localID}
                 </Link>
@@ -262,7 +262,7 @@ export const IPScanStatus = ({
             </>
           )}
         >
-          Results
+          Sequence
         </Column>
         <Column
           defaultKey="matches"
