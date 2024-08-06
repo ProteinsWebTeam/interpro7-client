@@ -367,12 +367,12 @@ class List extends PureComponent /*:: <ListProps> */ {
                       },
                     }}
                   >
-                    View predicted structure
+                    AlphaFold
                   </Link>
                 ) : null
               }
             >
-              AlphaFold
+              Predicted structure
             </Column>{' '}
           </Table>
         </section>
