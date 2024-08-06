@@ -58,7 +58,3 @@
   justify-content: center;
   border: 2px solid var(--colors-secondary-header);
 }
-
-.breadcrumbs > li {
-  text-transform: none !important;
-}
