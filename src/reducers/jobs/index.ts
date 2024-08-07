@@ -5,26 +5,22 @@ import {
   DELETE_JOB,
   REHYDRATE_JOBS,
   KEEP_JOB_AS_LOCAL,
+  IPScanAction,
+  IPScanMetadataAction,
 } from 'actions/types';
 import { IMPORT_JOB, IMPORT_JOB_FROM_DATA } from '../../actions/types';
 
-/*:: type Job = {
-  metadata: Object,
-  data?: Object,
-} */
-
-export default (
-  state /*: ?{[key: string]: Job } */ = null,
-  action /*: Object */,
-) => {
+export default (state: JobsState = {}, action: IPScanAction) => {
   switch (action.type) {
     case CREATE_JOB:
     case UPDATE_JOB:
     case IMPORT_JOB:
     case IMPORT_JOB_FROM_DATA:
       let id = action.job.metadata.localID;
-      let job = state[id];
-      if (!id) {
+      let job: { metadata: MinimalJobMetadata } | undefined = undefined;
+      if (id) {
+        job = state?.[id];
+      } else {
         job = Object.values(state).find(
           ({ metadata: { remoteID } }) =>
             remoteID === action.job.metadata.remoteID,
@@ -33,23 +29,25 @@ export default (
           id = job.metadata.localID;
         }
       }
-      job = job || {};
-      return {
-        ...state,
-        [id]: {
-          metadata: metadata(job.metadata, action),
-        },
-      };
+      return id && job
+        ? {
+            ...state,
+            [id]: {
+              metadata: metadata(job.metadata, action as IPScanMetadataAction),
+            },
+          }
+        : state;
     case DELETE_JOB:
-      const { [action.job.metadata.localID]: _, ...newState } = state;
+      const { [action.job.metadata.localID!]: _, ...newState } = state;
       return newState;
     case KEEP_JOB_AS_LOCAL:
+      const localID = action.localID!;
       return {
         ...state,
-        [action.localID]: {
-          ...state[action.localID],
+        [localID]: {
+          ...state[localID],
           metadata: {
-            ...state[action.localID].metadata,
+            ...state[localID].metadata,
             status: 'saved in browser',
           },
         },

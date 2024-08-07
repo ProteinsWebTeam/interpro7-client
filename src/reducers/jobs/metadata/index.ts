@@ -25,7 +25,7 @@ export const updateJob = (update: IprscanMetaIDB) => {
   return { ...base, ...update, times };
 };
 
-export default (state: IprscanMetaIDB, action: IPScanMetadataAction) => {
+export default (state: MinimalJobMetadata, action: IPScanMetadataAction) => {
   switch (action.type) {
     case CREATE_JOB:
       return updateJob({ ...action.job.metadata, status: 'created' });

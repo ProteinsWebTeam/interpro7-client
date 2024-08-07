@@ -65,16 +65,16 @@ const deleteJobInDB = async (localID: string) => {
 const rehydrateStoredJobs = async (dispatch: Dispatch) => {
   await schedule(DEFAULT_SCHEDULE_DELAY);
   const metaT = await metaTA;
-  const meta = (await metaT.getAll()) as Record<string, IprscanMetaIDB>;
+  const meta = (await metaT.getAll()) as Record<string, MinimalJobMetadata>;
   const entries = Object.entries(meta);
   if (!entries.length) return dispatch(rehydrateJobs({}));
-  const jobs: Record<string, { metadata: IprscanMetaIDB }> = {};
+  const jobs: JobsState = {};
   const now = Date.now();
   for (const [localID, metadata] of entries) {
     // if job expired on server, delete it
     if (
-      now - (metadata.times.created || now) > MAX_TIME_ON_SERVER &&
-      !['saved in browser', 'imported file'].includes(metadata.status)
+      now - (metadata.times?.created || now) > MAX_TIME_ON_SERVER &&
+      !['saved in browser', 'imported file'].includes(metadata.status || '')
     ) {
       deleteJobInDB(localID);
     } else {

@@ -57,7 +57,9 @@ export interface IPScanAction
     | typeof IMPORT_JOB
     | typeof IMPORT_JOB_FROM_DATA
   > {
-  job: { metadata: IprscanMetaIDB };
+  job: { metadata: IprscanMetaIDB; data?: IprscanDataIDB };
+  localID?: string;
+  jobs?: JobsState;
 }
 
 // download
