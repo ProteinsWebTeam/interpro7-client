@@ -58,7 +58,7 @@ export const getIProScanURL = (accession: string) => {
 };
 
 type Props = {
-  job?: IprscanMetaIDB;
+  job?: MinimalJobMetadata;
   search: InterProLocationSearch;
   defaultPageSize: number;
   updateJobStatus: typeof updateJobStatus;
@@ -76,7 +76,7 @@ export const IPScanStatus = ({
   const [shouldImportResults, setShouldImportResults] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   // const [versionMismatch, setVersionMismatch] = useState(false);
-  const getSequencesData = async (job: IprscanMetaIDB) => {
+  const getSequencesData = async (job: MinimalJobMetadata) => {
     const dataT = await getTableAccess(IPScanJobsData);
     const jobsData: Array<IprscanDataIDB> = [];
     const data = (await dataT.get(job?.localID)) as IprscanDataIDB;
@@ -215,7 +215,7 @@ export const IPScanStatus = ({
           </header>
           <section>
             {new Date(
-              (job?.times.created || 0) + MAX_TIME_ON_SERVER,
+              (job?.times?.created || 0) + MAX_TIME_ON_SERVER,
             ).toDateString()}
           </section>
         </section>

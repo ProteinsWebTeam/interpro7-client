@@ -4,6 +4,7 @@ import {
   DataProgressAction,
   DownloadAction,
   FavouritesAction,
+  IPScanMetadataAction,
   LocationAction,
   SettingsAction,
   StatusAction,
@@ -146,13 +147,33 @@ export const dataProgressUnload = (key: string) =>
   }) as DataProgressAction;
 
 // jobs
-// TODO: Update for correct types once the ipscan-results branch gets merged
-export const createJob = (job: { metadata: unknown; data: unknown }) => ({
-  type: types.CREATE_JOB,
+export const createJob = (job: {
+  metadata: MinimalJobMetadata;
+  data: InitialJobData | IprscanDataIDB;
+}) =>
+  ({
+    type: types.CREATE_JOB,
+    job,
+  }) as IPScanMetadataAction;
+
+export const importJob = (job: {
+  metadata: MinimalJobMetadata;
+  data: InitialJobData;
+}) => ({
+  type: types.IMPORT_JOB,
   job,
 });
-
-export const updateJob = (job: { metadata: unknown; data?: unknown }) => ({
+export const importJobFromData = (job: {
+  metadata: MinimalJobMetadata;
+  data: IprscanDataIDB;
+}) => ({
+  type: types.IMPORT_JOB_FROM_DATA,
+  job,
+});
+export const updateJob = (job: {
+  metadata: MinimalJobMetadata;
+  data?: IprscanDataIDB;
+}) => ({
   type: types.UPDATE_JOB,
   job,
 });
@@ -186,18 +207,6 @@ export const updateSequenceJobTitle = (jobID: string, value: string) => ({
 export const rehydrateJobs = (jobs: Record<string, unknown>) => ({
   type: types.REHYDRATE_JOBS,
   jobs,
-});
-
-export const importJob = (job: { metadata: unknown; data: unknown }) => ({
-  type: types.IMPORT_JOB,
-  job,
-});
-export const importJobFromData = (job: {
-  metadata: unknown;
-  data: unknown;
-}) => ({
-  type: types.IMPORT_JOB_FROM_DATA,
-  job,
 });
 
 // download

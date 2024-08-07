@@ -17,23 +17,17 @@ import local from '../style.css';
 
 const css = cssBinder(fonts, local);
 
-export type Jobs = Record<
-  string,
-  {
-    metadata: IprscanMetaIDB;
-  }
->;
 type Props = {
   group: string;
   deleteJob: typeof deleteJob;
   goToCustomLocation: typeof goToCustomLocation;
-  jobs: Jobs;
+  jobs: JobsState;
 };
 
-const getJobsOfGroup = (jobs: Jobs, group: string) =>
+const getJobsOfGroup = (jobs: JobsState, group: string) =>
   Object.values(jobs).filter(({ metadata }) => metadata.group === group);
 
-export const getAllResults = async (jobs: Jobs, group: string) => {
+export const getAllResults = async (jobs: JobsState, group: string) => {
   const dataT = await getTableAccess(IPScanJobsData);
   const results = [];
   let output: Record<string, unknown> = {};

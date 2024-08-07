@@ -12,7 +12,7 @@ export type SourceToRemove = null | 'file' | 'server';
 type Props = {
   show: boolean;
   closeModal: () => void;
-  jobs: Array<IprscanMetaIDB>;
+  jobs: Array<MinimalJobMetadata>;
   from: SourceToRemove;
   deleteJob: typeof deleteJob;
 };

@@ -3,6 +3,7 @@ type GlobalState = {
   dataProgress: DataProgress;
   download: DownloadState;
   favourites: FavouritesState;
+  jobs: JobsState;
   settings: SettingsState;
   status: {
     servers: Record<Server, ServerStatus>;
@@ -10,12 +11,6 @@ type GlobalState = {
   };
   toasts: ToastsState;
   ui: UIState;
-  jobs: Record<
-    string,
-    {
-      metadata: IprscanMetaIDB;
-    }
-  >;
   [other: string]: unknown;
 }; // TODO: replace for redux state type
 
@@ -123,6 +118,15 @@ type InterProPartialLocation = {
   state?: Record<string, string>;
 };
 
+type JobsState = Record<string, { metadata: MinimalJobMetadata }>;
+type MinimalJobMetadata = {
+  localID: string;
+  type: string;
+} & Partial<IprscanMetaIDB>;
+type InitialJobData = {
+  input: string;
+  applications?: Array<string>;
+};
 type SettingsState = {
   navigation: NavigationSettings;
   notifications: NotificationsSettings;

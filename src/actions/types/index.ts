@@ -35,6 +35,15 @@ export const KEEP_JOB_AS_LOCAL = 'KEEP_JOB_AS_LOCAL';
 export const REHYDRATE_JOBS = 'REHYDRATE_JOBS';
 export const IMPORT_JOB = 'IMPORT_JOB';
 export const IMPORT_JOB_FROM_DATA = 'IMPORT_JOB_FROM_DATA';
+export interface IPScanMetadataAction
+  extends Action<
+    | typeof CREATE_JOB
+    | typeof IMPORT_JOB
+    | typeof IMPORT_JOB_FROM_DATA
+    | typeof UPDATE_JOB
+  > {
+  job: { metadata: IprscanMetaIDB; data?: IprscanDataIDB };
+}
 export interface IPScanAction
   extends Action<
     | typeof CREATE_JOB
@@ -48,7 +57,7 @@ export interface IPScanAction
     | typeof IMPORT_JOB
     | typeof IMPORT_JOB_FROM_DATA
   > {
-  url: string;
+  job: { metadata: IprscanMetaIDB };
 }
 
 // download

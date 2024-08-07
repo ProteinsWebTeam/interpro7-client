@@ -85,7 +85,7 @@ const rehydrateStoredJobs = async (dispatch: Dispatch) => {
 };
 
 const createJobInDB = async (
-  metadata: IprscanMetaIDB,
+  metadata: MinimalJobMetadata,
   data: IprscanDataIDB,
 ) => {
   const { localID } = metadata;
@@ -122,7 +122,7 @@ const updateSequenceTitleDB = async (jobSequenceID: string, title: string) => {
 };
 
 const updateJobInDB = async (
-  metadata: IprscanMetaIDB,
+  metadata: MinimalJobMetadata,
   data?: IprscanDataIDB,
   dispatch?: Dispatch,
 ) => {
@@ -191,7 +191,7 @@ const processImportedAttributes = (
 const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
   // function definitions
 
-  const processJob = async (localID: string, meta: IprscanMetaIDB) => {
+  const processJob = async (localID: string, meta: MinimalJobMetadata) => {
     // Wait to have some time to do all the maintenance
     await schedule(DEFAULT_SCHEDULE_DELAY);
     if (meta.status === 'failed') return;
@@ -258,7 +258,7 @@ const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
         // @ts-expect-error until cached-fetch is migrated
         { useCache: false },
       )) as unknown as { payload: string; ok: boolean };
-      const status = payload.toLowerCase().replace('_', ' ');
+      const status = payload.toLowerCase().replace('_', ' ') as JobStatus;
       if (ok) {
         // dispatch action to report status in the redux state
         dispatch(updateJob({ metadata: { ...meta, status } }));
@@ -367,7 +367,7 @@ const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
     try {
       const metaT = await metaTA;
       for (const [localID, meta] of Object.entries(
-        (await metaT.getAll()) as Record<string, IprscanMetaIDB>,
+        (await metaT.getAll()) as Record<string, MinimalJobMetadata>,
       )) {
         await processJob(localID, meta);
       }

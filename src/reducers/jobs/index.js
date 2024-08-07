@@ -38,7 +38,6 @@ export default (
         ...state,
         [id]: {
           metadata: metadata(job.metadata, action),
-          // data: data(job.data, action),
         },
       };
     case DELETE_JOB:

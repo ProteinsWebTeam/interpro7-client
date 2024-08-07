@@ -34,7 +34,7 @@ const saveJobInIDB = (
     hasResults: results.some((result) => result?.matches?.length > 0),
     entries: results.length, // countInterProFromMatches(result.matches),
   };
-  const data = {
+  const data: IprscanDataIDB = {
     localID,
     'interproscan-version': ipScanVersion,
     results,
