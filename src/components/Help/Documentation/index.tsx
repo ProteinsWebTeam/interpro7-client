@@ -180,7 +180,7 @@ const Documentation = () => {
         </div>
         <div className={f('vf-grid__col--span-1')}>
           <div className={f('box-add', 'margin-top-xxlarge')}>
-            <h3 className={f('light')}>Contact us/Additional help</h3>
+            <h3 className={f('light')}>Contact us</h3>
             <ul>
               {
                 // <li>
