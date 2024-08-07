@@ -5,14 +5,8 @@ import Card from 'components/SimpleCommonComponents/Card';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import MemberSymbol from '../MemberSymbol';
 import SummaryCounterEntries from '../SummaryCounterEntries';
 
-import cssBinder from 'styles/cssBinder';
-
-import styles from './styles.css';
-
-const css = cssBinder(styles);
 type Props = {
   data: {
     metadata: EntryMetadata;
