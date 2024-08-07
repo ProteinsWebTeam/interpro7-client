@@ -188,11 +188,6 @@ export const rehydrateJobs = (jobs: Record<string, unknown>) => ({
   jobs,
 });
 
-export const loadDataJob = (job: { metadata: unknown; data: unknown }) => ({
-  type: types.LOAD_DATA_JOB,
-  job,
-});
-
 export const importJob = (job: { metadata: unknown; data: unknown }) => ({
   type: types.IMPORT_JOB,
   job,
@@ -202,11 +197,6 @@ export const importJobFromData = (job: {
   data: unknown;
 }) => ({
   type: types.IMPORT_JOB_FROM_DATA,
-  job,
-});
-
-export const unloadDataJob = (job: { metadata: unknown; data: unknown }) => ({
-  type: types.UNLOAD_DATA_JOB,
   job,
 });
 

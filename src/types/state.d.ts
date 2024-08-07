@@ -10,7 +10,12 @@ type GlobalState = {
   };
   toasts: ToastsState;
   ui: UIState;
-  jobs: Record<string, { metadata: IprscanMetaIDB }>;
+  jobs: Record<
+    string,
+    {
+      metadata: IprscanMetaIDB;
+    }
+  >;
   [other: string]: unknown;
 }; // TODO: replace for redux state type
 

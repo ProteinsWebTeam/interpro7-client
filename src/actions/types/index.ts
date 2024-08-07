@@ -33,10 +33,23 @@ export const UPDATE_JOB_TITLE = 'UPDATE_JOB_TITLE';
 export const UPDATE_SEQUENCE_JOB_TITLE = 'UPDATE_SEQUENCE_JOB_TITLE';
 export const KEEP_JOB_AS_LOCAL = 'KEEP_JOB_AS_LOCAL';
 export const REHYDRATE_JOBS = 'REHYDRATE_JOBS';
-export const LOAD_DATA_JOB = 'LOAD_DATA_JOB';
-export const UNLOAD_DATA_JOB = 'UNLOAD_DATA_JOB';
 export const IMPORT_JOB = 'IMPORT_JOB';
 export const IMPORT_JOB_FROM_DATA = 'IMPORT_JOB_FROM_DATA';
+export interface IPScanAction
+  extends Action<
+    | typeof CREATE_JOB
+    | typeof UPDATE_JOB
+    | typeof DELETE_JOB
+    | typeof UPDATE_JOB_STATUS
+    | typeof UPDATE_JOB_TITLE
+    | typeof UPDATE_SEQUENCE_JOB_TITLE
+    | typeof KEEP_JOB_AS_LOCAL
+    | typeof REHYDRATE_JOBS
+    | typeof IMPORT_JOB
+    | typeof IMPORT_JOB_FROM_DATA
+  > {
+  url: string;
+}
 
 // download
 export const DOWNLOAD_URL = 'DOWNLOAD_URL';

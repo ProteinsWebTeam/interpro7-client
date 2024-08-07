@@ -1,12 +1,9 @@
 import metadata from './metadata';
-import data from './data';
 import {
   CREATE_JOB,
   UPDATE_JOB,
   DELETE_JOB,
   REHYDRATE_JOBS,
-  LOAD_DATA_JOB,
-  UNLOAD_DATA_JOB,
   KEEP_JOB_AS_LOCAL,
 } from 'actions/types';
 import { IMPORT_JOB, IMPORT_JOB_FROM_DATA } from '../../actions/types';
@@ -23,8 +20,6 @@ export default (
   switch (action.type) {
     case CREATE_JOB:
     case UPDATE_JOB:
-    case LOAD_DATA_JOB:
-    case UNLOAD_DATA_JOB:
     case IMPORT_JOB:
     case IMPORT_JOB_FROM_DATA:
       let id = action.job.metadata.localID;
@@ -43,7 +38,7 @@ export default (
         ...state,
         [id]: {
           metadata: metadata(job.metadata, action),
-          data: data(job.data, action),
+          // data: data(job.data, action),
         },
       };
     case DELETE_JOB:
