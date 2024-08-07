@@ -182,17 +182,6 @@ const Documentation = () => {
           <div className={css('box-add', 'margin-top-xxlarge')}>
             <h3 className={css('light')}>Contact us</h3>
             <ul>
-              {
-                // <li>
-                //   <Link href="//www.ebi.ac.uk/support/interpro-general-query">
-                //     <span
-                //       className={css('icon', 'icon-common')}
-                //       data-icon="&#x27a;"
-                //     />{' '}
-                //     Chat with an assistant{' '}
-                //   </Link>
-                // </li>
-              }
               <li>
                 <Link
                   href="//www.ebi.ac.uk/support/interpro"
