@@ -13,9 +13,10 @@ type Iprscan5Entry = {
   name: string;
   description: string;
   type: string;
-  goXRefs: unknown[];
+  goXRefs: Array<IPrscan5GO>;
   pathwayXRefs: unknown[];
 };
+type IPrscan5GO = { id: string; category: string; name: string };
 type Iprscan5Location = {
   start: number;
   end: number;
@@ -44,15 +45,39 @@ type Iprscan5Match = {
   'model-ac'?: string;
   accession?: string;
   source_database?: string;
+  goXRefs?: Array<IPrscan5GO>;
 };
 type Iprscan5Result = {
   sequence: string;
+  sequenceLength?: number;
   md5: string;
   matches: Array<Iprscan5Match>;
   xref: Array<{
     name: string;
     id: string;
   }>;
+  crossReferences?: Array<{
+    name: string;
+    id: string;
+  }>;
+};
+type Iprscan5NucleotideResult = {
+  id: number;
+  crossReferences: Array<{
+    id: string;
+    name: string;
+    nucleotideSequence: number;
+  }>;
+  md5: string;
+  openReadingFrames: Array<Iprscan5ORFResult>;
+};
+type Iprscan5ORFResult = {
+  id: number;
+  start: number;
+  end: number;
+  nucleotideSequence: number;
+  strand: string;
+  protein: Iprscan5Result;
 };
 
 type Iprscan5Payload = {

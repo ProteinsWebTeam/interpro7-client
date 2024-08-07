@@ -10,6 +10,7 @@ type GlobalState = {
   };
   toasts: ToastsState;
   ui: UIState;
+  jobs: Record<string, { metadata: IprscanMetaIDB }>;
   [other: string]: unknown;
 }; // TODO: replace for redux state type
 
@@ -84,6 +85,7 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   result?: {
     type: string | null;
     accession?: string | null;
+    job?: string | null;
     detail?: string | null;
   };
   other?: string[];

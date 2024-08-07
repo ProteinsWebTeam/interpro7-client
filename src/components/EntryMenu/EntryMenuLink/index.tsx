@@ -57,7 +57,7 @@ export const EntryMenuLink = ({
         // Some tabs do not have counter
         let counterValue: MetadataCounter = Infinity;
         counter.split('.').forEach((key, index) => {
-          if (index === 0) counterValue = payload.metadata.counters[key];
+          if (index === 0) counterValue = payload.metadata.counters![key];
           else if (typeof counterValue === 'object')
             counterValue = counterValue[key];
         });

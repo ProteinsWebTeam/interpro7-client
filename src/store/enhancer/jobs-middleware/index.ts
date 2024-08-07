@@ -1,20 +1,6 @@
-/*::
-  type ImportedParametersPayload = {
-    execution: {
-      userParameters: {
-        entry: Array<{
-          string: string,
-          boolean?: boolean,
-          'string-array'?: {
-            string: string[]
-          },
-        }>
-      }
-    }
-  }
-*/
 import url from 'url';
 import { schedule } from 'timing-functions';
+import { Dispatch, Middleware, UnknownAction } from 'redux';
 
 import { createNotification } from 'utils/browser-notifications';
 import {
@@ -34,6 +20,7 @@ import {
   NEW_PROCESSED_CUSTOM_LOCATION,
   IMPORT_JOB,
   IMPORT_JOB_FROM_DATA,
+  UPDATE_SEQUENCE_JOB_TITLE,
 } from 'actions/types';
 import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
 
@@ -41,32 +28,49 @@ import config from 'config';
 
 import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
 
-// eslint-disable-next-line no-magic-numbers
 const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
-// eslint-disable-next-line no-magic-numbers
 const DEFAULT_LOOP_TIMEOUT = 1000 * 10; // ten seconds
-// eslint-disable-next-line no-magic-numbers
 export const MAX_TIME_ON_SERVER = 1000 * 60 * 60 * 24 * 7; // one week
+
+type JobAction = {
+  type: string;
+  job: {
+    data: IprscanDataIDB;
+    metadata: IprscanMetaIDB;
+  };
+  value?: string;
+  localID?: string;
+};
+type nameAction = {
+  type: string;
+  jobID: string;
+  value: string;
+};
 
 const metaTA = getTableAccess(IPScanJobsMeta);
 const dataTA = getTableAccess(IPScanJobsData);
 
-const deleteJobInDB = async (localID) => {
+const deleteJobInDB = async (localID: string) => {
   const [dataT, metaT] = await Promise.all([dataTA, metaTA]);
-  dataT.delete(localID);
   metaT.delete(localID);
+  for (const [key] of Object.entries(
+    (await dataT.getAll()) as Record<string, IprscanMetaIDB>,
+  )) {
+    if (key.startsWith(localID)) {
+      dataT.delete(key);
+    }
+  }
 };
 
-const rehydrateStoredJobs = async (dispatch) => {
+const rehydrateStoredJobs = async (dispatch: Dispatch) => {
   await schedule(DEFAULT_SCHEDULE_DELAY);
   const metaT = await metaTA;
-  const meta = await metaT.getAll();
-  // prettier-ignore
-  const entries = (Object.entries(meta) /*: any */);
+  const meta = (await metaT.getAll()) as Record<string, IprscanMetaIDB>;
+  const entries = Object.entries(meta);
   if (!entries.length) return dispatch(rehydrateJobs({}));
-  const jobs = {};
+  const jobs: Record<string, { metadata: IprscanMetaIDB }> = {};
   const now = Date.now();
-  for (const [localID, metadata] /*: [string, JobMetadata] */ of entries) {
+  for (const [localID, metadata] of entries) {
     // if job expired on server, delete it
     if (
       now - (metadata.times.created || now) > MAX_TIME_ON_SERVER &&
@@ -80,7 +84,10 @@ const rehydrateStoredJobs = async (dispatch) => {
   dispatch(rehydrateJobs(jobs));
 };
 
-const createJobInDB = async (metadata /*: JobMetadata */, data) => {
+const createJobInDB = async (
+  metadata: IprscanMetaIDB,
+  data: IprscanDataIDB,
+) => {
   const { localID } = metadata;
   try {
     // add data and metadata to idb
@@ -88,16 +95,22 @@ const createJobInDB = async (metadata /*: JobMetadata */, data) => {
     await Promise.all([dataT.set(data, localID), metaT.set(metadata, localID)]);
   } catch {
     // cleanup if anything bad happens
-    deleteJobInDB(localID);
+    deleteJobInDB(localID!);
   }
 };
 
-const updateSequenceTitleDB = async (metadata, title) => {
-  const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
-  const { localID } = metadata;
+const updateJobTitleDB = async (jobID: string, title: string) => {
+  const metaT = await metaTA;
 
-  metaT.update(localID, (prev) => ({ ...prev, localTitle: title }));
-  dataT.update(localID, (prev) => ({
+  metaT.update(jobID, (prev: IprscanMetaIDB) => ({
+    ...prev,
+    localTitle: title,
+  }));
+};
+const updateSequenceTitleDB = async (jobSequenceID: string, title: string) => {
+  const dataT = await dataTA;
+
+  dataT.update(jobSequenceID, (prev: IprscanDataIDB) => ({
     ...prev,
     results: [
       {
@@ -107,21 +120,19 @@ const updateSequenceTitleDB = async (metadata, title) => {
     ],
   }));
 };
-const updateJobInDB = async (metadata, data, dispatch /*: function */) => {
-  const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
-  const { remoteID, localID } = metadata;
-  if (data) {
-    const prev = await dataT.get(metadata.localID);
-    const newData = {
-      ...prev,
-      ...data,
-      results: [data?.results?.[0]],
-    };
-    newData.originalInput = newData.input;
-    delete newData.input;
 
-    metadata.localTitle = data?.results?.[0]?.xref?.[0]?.name;
-    if (data?.results?.length > 1 && !remoteID.endsWith('-1')) {
+const updateJobInDB = async (
+  metadata: IprscanMetaIDB,
+  data?: IprscanDataIDB,
+  dispatch?: Dispatch,
+) => {
+  const [metaT, dataT] = await Promise.all([metaTA, dataTA]);
+  const { remoteID, localID, group } = metadata;
+  if (data) {
+    metadata.entries = data?.results?.length;
+    metadata.seqtype =
+      'openReadingFrames' in (data?.results?.[0] || {}) ? 'n' : 'p';
+    if (data?.results?.length > 1 && !group) {
       const now = new Date();
       metadata.group =
         metadata.group ||
@@ -133,42 +144,36 @@ const updateJobInDB = async (metadata, data, dispatch /*: function */) => {
           .padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now
           .getSeconds()
           .toString()
-          .padStart(2, '0')}-${data.results.length}`;
-      metadata.remoteID = `${remoteID}-1`;
-      metadata.localID = `${localID}-1`;
-      metaT.delete(localID);
-      dataT.delete(localID);
+          .padStart(2, '0')}`;
     }
-    dataT.set(newData, metadata.localID);
   }
   metaT.set(metadata, metadata.localID);
 
-  (Array.isArray(data?.results) ? data?.results : [])
-    .slice(1)
-    .forEach((result, i) => {
-      const newLocalID = `${localID}-${i + 2}`;
-      dataT.set(
-        { ...data, results: [result], localID: newLocalID },
-        newLocalID,
-      );
-      metaT.set(
-        {
-          ...metadata,
-          localID: newLocalID,
-          remoteID: `${remoteID}-${i + 2}`,
-          localTitle: result.xref?.[0]?.name,
-        },
-        newLocalID,
-      );
-    });
+  (Array.isArray(data?.results) ? data?.results : []).forEach((result, i) => {
+    const newLocalID = `${localID}-${i + 1}`;
+    dataT.set({ ...data, results: [result], localID: newLocalID }, newLocalID);
+  });
   if (dispatch) {
     rehydrateStoredJobs(dispatch);
   }
 };
 
+type ImportedParametersPayload = {
+  execution: {
+    userParameters: {
+      entry: Array<{
+        string: string;
+        boolean?: boolean;
+        'string-array'?: {
+          string: string[];
+        };
+      }>;
+    };
+  };
+};
 const processImportedAttributes = (
-  payload /*: ImportedParametersPayload */,
-) /*:  { applications: string[]|null } */ => {
+  payload: ImportedParametersPayload,
+): { applications: string[] | null } => {
   let applications = null;
   const parameters = payload?.execution?.userParameters?.entry || [];
   parameters.forEach((parameter) => {
@@ -183,42 +188,48 @@ const processImportedAttributes = (
   return { applications };
 };
 
-const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
+const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
   // function definitions
-  // eslint-disable-next-line
-  const processJob = async (localID /*: string */, meta /*: JobMetadata */) => {
+
+  const processJob = async (localID: string, meta: IprscanMetaIDB) => {
     // Wait to have some time to do all the maintenance
     await schedule(DEFAULT_SCHEDULE_DELAY);
     if (meta.status === 'failed') return;
     if (meta.status === 'created') {
       const dataT = await dataTA;
-      const { input, applications } = await dataT.get(localID);
+      const { input, applications } = (await dataT.get(
+        localID,
+      )) as IprscanDataIDB;
 
       const ipScanInfo = getState().settings.ipScan;
 
       // Here is where we actually submit the sequence to InterProScan servers
-      const { payload: remoteID, ok } = await cachedFetchText(
+      const { payload: remoteID, ok } = (await cachedFetchText(
         url.resolve(
           url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
           'run',
         ),
         {
+          // @ts-expect-error until cached-fetch is migrated
           useCache: false,
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: new Headers({
+            'Content-Type': 'application/x-www-form-urlencoded',
+          }),
           body: url
             .format({
               query: {
-                // prettier-ignore
-                email: (config /*: any */).IPScan.contactEmail,
+                email: config.IPScan.contactEmail,
                 title: localID,
                 sequence: input,
                 appl: applications,
+                stype: meta.seqtype || 'p',
               },
             })
             .replace(/^\?/, ''),
         },
-      );
+        // TODO: Update when cache-cetch is migrated
+      )) as unknown as { payload: string; ok: boolean };
       if (ok) {
         dispatch(
           updateJob({ metadata: { ...meta, remoteID, status: 'submitted' } }),
@@ -237,15 +248,16 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
       const ipScanInfo = getState().settings.ipScan;
       // Here we check the status of a job in the interProScan servers
 
-      const { payload, ok } = await cachedFetchText(
+      const { payload, ok } = (await cachedFetchText(
         meta.remoteID
           ? url.resolve(
               url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
               `status/${meta.remoteID || ''}`,
             )
           : null,
+        // @ts-expect-error until cached-fetch is migrated
         { useCache: false },
-      );
+      )) as unknown as { payload: string; ok: boolean };
       const status = payload.toLowerCase().replace('_', ' ');
       if (ok) {
         // dispatch action to report status in the redux state
@@ -271,7 +283,6 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
                 '_blank',
               );
             };
-            // TODO to be removed
             dispatch(
               addToast(
                 {
@@ -294,7 +305,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
                   },
                 },
                 id(),
-              ),
+              ) as unknown as UnknownAction,
             );
           }
         }
@@ -304,22 +315,22 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     if (meta.status === 'finished' && !meta.hasResults) {
       const ipScanInfo = getState().settings.ipScan;
       // Getting the results from the interporScan Server
-      const { payload: data1, ok } = await cachedFetchJSON(
+      const { payload: data1, ok } = (await cachedFetchJSON(
         meta.remoteID
           ? url.resolve(
               url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
               `result/${meta.remoteID || ''}/json`,
             )
           : null,
-      );
-      const { payload: data2, ok: ok2 } = await cachedFetchXML(
+      )) as unknown as { payload: IprscanDataIDB; ok: boolean };
+      const { payload: data2, ok: ok2 } = (await cachedFetchXML(
         meta.remoteID
           ? url.resolve(
               url.format({ ...ipScanInfo, pathname: ipScanInfo.root }),
               `result/${meta.remoteID || ''}/submission`,
             )
           : null,
-      );
+      )) as unknown as { payload: ImportedParametersPayload; ok: boolean };
       if (ok && ok2) {
         const data = {
           ...processImportedAttributes(data2),
@@ -341,7 +352,7 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
     }
   };
 
-  let loopID;
+  let loopID: number;
   let running = false;
   const loop = async () => {
     if (running) return;
@@ -355,70 +366,84 @@ const middleware /*: Middleware<*, *, *> */ = ({ dispatch, getState }) => {
 
     try {
       const metaT = await metaTA;
-      for (const [localID, meta] /*: [string, JobMetadata] */ of Object.entries(
-        await metaT.getAll(),
-        // prettier-ignore
-      ) /*: any */) {
+      for (const [localID, meta] of Object.entries(
+        (await metaT.getAll()) as Record<string, IprscanMetaIDB>,
+      )) {
         await processJob(localID, meta);
       }
     } catch (error) {
       console.error(error);
     } finally {
-      loopID = setTimeout(loop, DEFAULT_LOOP_TIMEOUT);
+      loopID = window.setTimeout(loop, DEFAULT_LOOP_TIMEOUT);
       running = false;
     }
   };
 
   // start the logic
   rehydrateStoredJobs(dispatch);
-  running = loop();
+  loop();
 
-  return (next) => (action) => {
+  return (next) => (tmpAction) => {
+    const unknownAction = tmpAction as UnknownAction;
     const previousState = getState();
-    const output = next(action);
-
+    const output = next(unknownAction) as GlobalState;
     if (
-      action.type === CREATE_JOB ||
-      action.type === IMPORT_JOB ||
-      action.type === IMPORT_JOB_FROM_DATA
+      unknownAction.type === CREATE_JOB ||
+      unknownAction.type === IMPORT_JOB
     ) {
-      const job = getState().jobs[action.job.metadata.localID];
+      const action = unknownAction as JobAction;
+      const job = getState().jobs[action.job.metadata.localID!];
       createJobInDB(job.metadata, action.job.data);
-      if (action.type === IMPORT_JOB)
-        processJob(action.job.metadata.localID, job.metadata);
+      if (unknownAction.type === IMPORT_JOB)
+        processJob(action.job.metadata.localID!, job.metadata);
+    }
+    if (unknownAction.type === IMPORT_JOB_FROM_DATA) {
+      const action = unknownAction as JobAction;
+      const job = getState().jobs[action.job.metadata.localID!];
+      const { results, ...jobDataWithoutResults } = action.job.data;
+      createJobInDB(
+        job.metadata,
+        jobDataWithoutResults as unknown as IprscanDataIDB,
+      );
+      updateJobInDB(job.metadata, action.job.data, dispatch);
     }
 
-    if (action.type === UPDATE_JOB) {
+    if (unknownAction.type === UPDATE_JOB) {
+      const action = unknownAction as JobAction;
       updateJobInDB(
-        getState().jobs[action.job.metadata.localID].metadata,
+        getState().jobs[action.job.metadata.localID!].metadata,
         action.job.data,
         dispatch,
       );
     }
 
-    if (action.type === DELETE_JOB) {
-      deleteJobInDB(action.job.metadata.localID);
+    if (unknownAction.type === DELETE_JOB) {
+      deleteJobInDB((unknownAction as JobAction).job.metadata.localID!);
     }
 
-    if (action.type === UPDATE_JOB_STATUS) {
+    if (unknownAction.type === UPDATE_JOB_STATUS) {
       loop();
     }
 
-    if (action.type === UPDATE_JOB_TITLE) {
-      updateSequenceTitleDB(
-        getState().jobs[action.job.metadata.localID].metadata,
-        action.value,
-      );
+    if (unknownAction.type === UPDATE_JOB_TITLE) {
+      const action = unknownAction as nameAction;
+      updateJobTitleDB(action.jobID, action.value || '');
       rehydrateStoredJobs(dispatch);
     }
-    if (action.type === KEEP_JOB_AS_LOCAL) {
+    if (unknownAction.type === UPDATE_SEQUENCE_JOB_TITLE) {
+      const action = unknownAction as nameAction;
+      updateSequenceTitleDB(action.jobID, action.value || '');
+      rehydrateStoredJobs(dispatch);
+    }
+
+    if (unknownAction.type === KEEP_JOB_AS_LOCAL) {
       updateJobInDB({
-        ...getState().jobs[action.localID].metadata,
+        ...getState().jobs[(unknownAction as JobAction).localID!].metadata,
         status: 'saved in browser',
       });
     }
 
-    if (action.type === NEW_PROCESSED_CUSTOM_LOCATION) {
+    if (unknownAction.type === NEW_PROCESSED_CUSTOM_LOCATION) {
       if (
         !previousState.customLocation.description.result.accession &&
         getState().customLocation.description.result.accession

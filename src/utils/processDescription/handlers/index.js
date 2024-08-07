@@ -596,7 +596,21 @@ export const resultTypeHandler /*: Handler */ = handlerConstructor({
   },
 });
 export const IPscanRegex =
-  /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}(-\d+)?|internal-[1-9]\d*-[1-9]\d*)|imported_file-.+(-\d+)$/;
+  /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}(-\d+)?|internal-[1-9]\d*-[1-9]\d*)|imported_file-.+(-\d+)?$/;
+export const resultIPScanJobHandler /*: Handler */ = handlerConstructor({
+  name: {
+    value: 'resultIPScanJobHandler',
+  },
+  key: {
+    value: ['result', 'job'],
+  },
+  cleanUp: {
+    value: (value) => value,
+  },
+  regexp: {
+    value: IPscanRegex,
+  },
+});
 export const resultIPScanAccessionHandler /*: Handler */ = handlerConstructor({
   name: {
     value: 'resultIPScanAccessionHandler',
@@ -883,10 +897,9 @@ searchTypeHandler.children = new Set([searchValueHandler]);
 // result
 resultHandler.children = new Set([resultTypeHandler]);
 
-resultTypeHandler.children = new Set([
-  resultIPScanAccessionHandler,
-  resultIPScanAccessionHandler,
-]);
+resultTypeHandler.children = new Set([resultIPScanJobHandler]);
+
+resultIPScanJobHandler.children = new Set([resultIPScanAccessionHandler]);
 
 resultIPScanAccessionHandler.children = new Set([entryHandler, detailHandler]);
 

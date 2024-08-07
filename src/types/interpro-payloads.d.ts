@@ -68,8 +68,8 @@ type MetadataCounters = {
 interface Metadata {
   accession: string;
   source_database: string;
-  description: Array<string | StructuredDescription>;
-  counters: MetadataCounters;
+  description?: Array<string | StructuredDescription>;
+  counters?: MetadataCounters;
   go_terms?: Array<GOTerm>;
 }
 
@@ -132,6 +132,11 @@ interface ProteinMetadata extends Metadata {
   ida_accession: string;
   source_organism: SourceOrganism;
 }
+type MinimalProteinMetadata = {
+  accession: string;
+  length: number;
+  sequence: string;
+};
 interface StructureMetadata extends Metadata {
   name: NameObject | string;
   experiment_type: string;
@@ -286,6 +291,7 @@ type MetadataWithLocations = Metadata & {
   protein_structure_locations?: Array<ProtVistaLocation>;
   entry_structure_locations?: Array<ProtVistaLocation>;
   coordinates?: Array<ProtVistaLocation>;
+  matches?: EntryProteinMatch[];
   sequence_length?: number;
   sequence?: string;
 };

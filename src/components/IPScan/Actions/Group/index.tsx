@@ -10,25 +10,12 @@ import Button from 'components/SimpleCommonComponents/Button';
 import { deleteJob, goToCustomLocation } from 'actions/creators';
 import getTableAccess, { IPScanJobsData } from 'storage/idb';
 
-import DownloadAll from './DownloadAll';
-
 import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../style.css';
 
 const css = cssBinder(fonts, local);
-
-const mergeSequences = (results: Array<Iprscan5Result>) => {
-  let seqs = '';
-  let i = 1;
-  for (const result of results) {
-    seqs += `> ${result.xref?.[0]?.id || `Sequence ${i++}`}\n${(
-      (result.sequence || '').match(/(.{1,60})/g) || []
-    ).join('\n')}\n`;
-  }
-  return seqs;
-};
 
 export type Jobs = Record<
   string,
@@ -64,44 +51,9 @@ export const getAllResults = async (jobs: Jobs, group: string) => {
   return output;
 };
 
-const getRemoteID = (jobs: Jobs, group: string) => {
-  const jobWithRemoteID = Object.values(jobs).find(
-    (job) => job.metadata.group === group && job.metadata.remoteID,
-  );
-  if (jobWithRemoteID) {
-    return jobWithRemoteID.metadata.remoteID.replace(/-\d+$/, '');
-  }
-  return;
-};
-const GroupActions = ({
-  group,
-  jobs,
-  deleteJob,
-  goToCustomLocation,
-}: Props) => {
+const GroupActions = ({ group, jobs, deleteJob }: Props) => {
   const handleDelete = () => {
     getJobsOfGroup(jobs, group).forEach((job) => deleteJob(job));
-  };
-
-  const handleReRun = async () => {
-    const results = await getAllResults(jobs, group);
-    const search: InterProLocationSearch = {};
-    if (results?.applications) {
-      search.applications =
-        typeof results.applications === 'string'
-          ? [results.applications]
-          : (results.applications as Array<string>);
-    }
-    goToCustomLocation({
-      description: {
-        main: { key: 'search' },
-        search: {
-          type: 'sequence',
-          value: mergeSequences(results.results as Iprscan5Result[]),
-        },
-      },
-      search,
-    });
   };
 
   return (
@@ -126,30 +78,6 @@ const GroupActions = ({
                 aria-label="Delete Results"
               >
                 Delete All
-              </Button>
-            </Tooltip>
-          </li>
-          <DownloadAll
-            jobs={jobs}
-            group={group}
-            remoteID={getRemoteID(jobs, group)}
-          />
-          <li>
-            <Tooltip
-              title={
-                <div>
-                  Start a new sequence search using the same sequences as this
-                  job.
-                </div>
-              }
-            >
-              <Button
-                type="hollow"
-                onClick={handleReRun}
-                icon="icon-undo"
-                aria-label="Resubmit all sequences"
-              >
-                Resubmit All
               </Button>
             </Tooltip>
           </li>

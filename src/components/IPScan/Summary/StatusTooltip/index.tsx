@@ -1,18 +1,16 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
 
-import { foundationPartial } from 'styles/foundation';
+import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from '../style.css';
 
-const f = foundationPartial(fonts, style);
+const css = cssBinder(fonts, style);
 
-const _StatusTooltip = ({ status /*: string */ }) => (
+type Props = { status: string };
+const _StatusTooltip = ({ status }: Props) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
       status === 'queued' ||
@@ -21,14 +19,14 @@ const _StatusTooltip = ({ status /*: string */ }) => (
       status === 'submitted') && (
       <>
         <SpinningCircle />
-        <div className={f('status')}>Searching</div>
+        <div className={css('status')}>Searching</div>
       </>
     )}
 
     {status === 'not found' || status === 'failure' || status === 'error' ? (
       <>
         <span
-          className={f('icon', 'icon-common', 'ico-notfound')}
+          className={css('icon', 'icon-common', 'ico-notfound')}
           data-icon="&#x78;"
           aria-label="Job failed or not found"
         />{' '}
@@ -38,7 +36,7 @@ const _StatusTooltip = ({ status /*: string */ }) => (
     {['finished', 'imported file', 'saved in browser'].includes(status) && (
       <>
         <span
-          className={f('icon', 'icon-common', 'ico-confirmed')}
+          className={css('icon', 'icon-common', 'ico-confirmed')}
           data-icon="&#xf00c;"
           aria-label="Job finished"
         />{' '}
@@ -47,20 +45,7 @@ const _StatusTooltip = ({ status /*: string */ }) => (
     )}
   </Tooltip>
 );
-_StatusTooltip.propTypes = {
-  status: T.oneOf([
-    'running',
-    'created',
-    'importing',
-    'imported file',
-    'saved in browser',
-    'submitted',
-    'not found',
-    'failure',
-    'error',
-    'finished',
-  ]),
-};
+
 const StatusTooltip = React.memo(_StatusTooltip);
 StatusTooltip.displayName = 'StatusTooltip';
 

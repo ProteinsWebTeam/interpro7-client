@@ -110,11 +110,11 @@ export const addVariationTrack = (
 type Props = PropsWithChildren<{
   mainData:
     | {
-        metadata: ProteinMetadata;
+        metadata: MinimalProteinMetadata;
       }
     | {
         payload: {
-          metadata: ProteinMetadata;
+          metadata: MinimalProteinMetadata;
         };
       };
   dataMerged: ProteinViewerDataObject;

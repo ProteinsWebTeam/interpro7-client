@@ -44,6 +44,7 @@ exports[`<EntriesOnProtein /> should render 1`] = `
         margin-color="#fafafa"
         shape="roundRectangle"
         use-ctrl-to-zoom={true}
+        width={300}
       />
     </TooltipForTrack>
   </div>

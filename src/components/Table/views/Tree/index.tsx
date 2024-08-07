@@ -12,8 +12,6 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Tree from 'components/Tree';
 import NumberComponent from 'components/NumberComponent';
 import abbreviateNumber from 'components/NumberComponent/utils/number-to-display-text';
-import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import Tip from 'components/Tip';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -102,6 +100,7 @@ const addNodesFromLineage = (update: TaxNode, root: TaxNode, names: Names) => {
   lineage.splice(-1);
   const parentId = lineage.splice(-1)?.[0];
   let parent = findNodeWithId(parentId, root);
+
   if (!parent) {
     parent = addNodesFromLineage(
       {
@@ -116,6 +115,7 @@ const addNodesFromLineage = (update: TaxNode, root: TaxNode, names: Names) => {
 
   if (!parent.children) parent.children = [];
   parent.children.push(update);
+
   return update;
 };
 
@@ -184,7 +184,7 @@ class TreeView extends Component<Props, State> {
     };
     this._CDPMap = new Map();
     this._lineageNames = new Map();
-    this._initialLoad = true; // Automatically opens the tree until it finds a branch of children when it loads the first time
+    this._initialLoad = true;
   }
 
   static getDerivedStateFromProps(
@@ -240,6 +240,7 @@ class TreeView extends Component<Props, State> {
     this._handleNewData(taxID, payload);
     this._handleNewFocus(taxID);
   };
+
   _handleNewData = (taxID: string, payload: TaxonommyTreePayload) => {
     if (payload?.metadata?.children) {
       const c = payload.metadata.children.length;
@@ -266,6 +267,7 @@ class TreeView extends Component<Props, State> {
       }
     }
   };
+
   _handleLabelClick = (taxID: string) => {
     this.props.goToCustomLocation({
       description: {
@@ -324,6 +326,22 @@ class TreeView extends Component<Props, State> {
       structure: ['structures', 'pdb'],
       proteome: ['proteomes', 'uniprot'],
     };
+
+    /* Compute breadcrumb */
+
+    let lineageIDs: string[] | undefined = [];
+    const lineageString: string | undefined = currentNode?.lineage?.slice(
+      1,
+      currentNode?.lineage?.length - 1,
+    );
+
+    // Splitting string
+    if (lineageString) {
+      lineageIDs = lineageString.split(' ');
+      for (let i = 0; i < lineageIDs?.length; i++) {
+        lineageIDs[i] = lineageIDs[i].trim();
+      }
+    }
     return (
       <>
         {this.props.showTreeToast ? (
@@ -336,13 +354,6 @@ class TreeView extends Component<Props, State> {
         <div className={css('node-details')}>
           <div className={css('node-info')}>
             <header>
-              <Tooltip title="[Tax ID]: [Tax Name]">
-                <span
-                  className={css('small', 'icon', 'icon-common')}
-                  data-icon="&#xf129;"
-                  aria-label="Tax ID: Tax Name"
-                />
-              </Tooltip>{' '}
               <Link
                 to={{
                   description: {
@@ -351,45 +362,36 @@ class TreeView extends Component<Props, State> {
                   },
                 }}
               >
-                {currentNode?.id}: {currentNode?.name}
+                {currentNode?.name}
               </Link>
             </header>
             {currentNode?.rank?.toLowerCase() !== 'no rank' && (
               <div>
-                <Tooltip title="Rank.">
-                  <span
-                    className={css('small', 'icon', 'icon-common')}
-                    data-icon="&#xf129;"
-                    aria-label="Rank."
-                  />
-                </Tooltip>{' '}
-                <i>{currentNode?.rank}</i>
+                <p>{currentNode?.rank}</p>
               </div>
             )}
-            {currentNode?.lineage && (
-              <DropDownButton label="Lineage" fontSize="12px">
-                <ul>
-                  {Array.from(this._lineageNames.keys()).map((key) => (
-                    <li key={key}>
-                      <Link
-                        to={{
-                          description: {
-                            main: { key: 'taxonomy' },
-                            taxonomy: { db: 'uniprot', accession: key },
-                          },
-                        }}
-                      >
-                        {`${
-                          this._lineageNames
-                            ?.get(key)
-                            ?.charAt(0)
-                            ?.toUpperCase() || ''
-                        }${this._lineageNames.get(key)?.slice(1) || ''}`}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </DropDownButton>
+            {currentNode?.lineage && lineageIDs.length > 1 && (
+              <nav className={css('breadcrumbs')}>
+                {lineageIDs.map((key) => (
+                  <li key={key}>
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'taxonomy' },
+                          taxonomy: { db: 'uniprot', accession: key },
+                        },
+                      }}
+                    >
+                      {`${
+                        this._lineageNames
+                          ?.get(key)
+                          ?.charAt(0)
+                          ?.toUpperCase() || ''
+                      }${this._lineageNames.get(key)?.slice(1) || ''}`}
+                    </Link>
+                  </li>
+                ))}
+              </nav>
             )}
           </div>
           <div className={css('node-links')}>

@@ -145,7 +145,7 @@ body table.matches-in-table tr:first-of-type td {
   border-top: 0;
 }
 .track-in-table {
-  max-width: 400px;
+  max-width: 300px;
 }
 .track-in-table text {
   fill: var(--colors-graydark);

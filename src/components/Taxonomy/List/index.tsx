@@ -163,7 +163,7 @@ const List = ({
   const urlToExport = includeTaxonFocusedOnURL(url);
 
   return (
-    <div className={css('row', 'filters-and-table')}>
+    <div className={css('filters-and-table')}>
       <nav>
         <div className={css('browse-side-panel')}>
           <div className={css('selector-container')}>

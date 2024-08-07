@@ -222,7 +222,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 <td>Family membership</td>
                 <td>
                   <FamilyHierarchy
-                    entriesCounter={metadata.counters.entries as number}
+                    entriesCounter={metadata.counters!.entries as number}
                     families={families}
                     matchesLoaded={matchesLoaded}
                   />
@@ -334,7 +334,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                   },
                   entry: { integration: 'all' },
                 }}
-                count={metadata.counters.entries as number}
+                count={metadata.counters!.entries as number}
                 fileType="tsv"
                 primary="entry"
                 secondary="protein"

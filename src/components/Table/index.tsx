@@ -61,6 +61,7 @@ type Props<RowData extends object> = PropsWithChildren<{
   groupActions?: React.FC<{ group: string }>;
   databases?: DBsInfo;
   dbCounters?: MetadataCounters;
+  alwaysShowTotalNB?: boolean;
 }>;
 
 const TableView = loadable({

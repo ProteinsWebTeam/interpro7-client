@@ -152,7 +152,7 @@ export const createJob = (job: { metadata: unknown; data: unknown }) => ({
   job,
 });
 
-export const updateJob = (job: { metadata: unknown; data: unknown }) => ({
+export const updateJob = (job: { metadata: unknown; data?: unknown }) => ({
   type: types.UPDATE_JOB,
   job,
 });
@@ -171,12 +171,14 @@ export const keepJobAsLocal = (localID: string) => ({
   localID,
 });
 
-export const updateJobTitle = (
-  job: { metadata: unknown; data: unknown },
-  value: string,
-) => ({
+export const updateJobTitle = (jobID: string, value: string) => ({
   type: types.UPDATE_JOB_TITLE,
-  job,
+  jobID,
+  value,
+});
+export const updateSequenceJobTitle = (jobID: string, value: string) => ({
+  type: types.UPDATE_SEQUENCE_JOB_TITLE,
+  jobID,
   value,
 });
 

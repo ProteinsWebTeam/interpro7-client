@@ -1,29 +1,23 @@
-// @flow
-
 import React from 'react';
-import T from 'prop-types';
 
 import { connect } from 'react-redux';
 // $FlowFixMe
 import { deleteJob } from 'actions/creators';
 
 import Modal from 'components/SimpleCommonComponents/Modal';
-// $FlowFixMe
 import Button from 'components/SimpleCommonComponents/Button';
 
-/*::
-  type Props = {
-    show: Boolean,
-    closeModal: function,
-    jobs: Array<{ localID: string }>,
-    from: string,
-    deleteJob: function,
-  }
-*/
+export type SourceToRemove = null | 'file' | 'server';
 
-const ClearAllDialog = (
-  { show, closeModal, jobs, from, deleteJob } /*: Props */,
-) => {
+type Props = {
+  show: boolean;
+  closeModal: () => void;
+  jobs: Array<IprscanMetaIDB>;
+  from: SourceToRemove;
+  deleteJob: typeof deleteJob;
+};
+
+const ClearAllDialog = ({ show, closeModal, jobs, from, deleteJob }: Props) => {
   const deleteJobs = () => {
     for (const job of jobs) {
       deleteJob({ metadata: { localID: job.localID } });
@@ -48,17 +42,6 @@ const ClearAllDialog = (
       )}
     </Modal>
   );
-};
-ClearAllDialog.propTypes = {
-  show: T.bool,
-  closeModal: T.func,
-  deleteJob: T.func,
-  jobs: T.arrayOf(
-    T.shape({
-      localID: T.string,
-    }),
-  ),
-  from: T.string,
 };
 
 export default connect(undefined, { deleteJob })(ClearAllDialog);

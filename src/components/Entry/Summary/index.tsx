@@ -43,14 +43,6 @@ const OtherSections = ({
   hasIntegratedCitations,
 }: OtherSectionsProps) => (
   <>
-    {!Object.keys(metadata.go_terms || []).length ||
-    metadata.source_database.toLowerCase() !== 'interpro' ? null : (
-      <GoTerms
-        terms={metadata.go_terms || []}
-        type="entry"
-        db={metadata.source_database}
-      />
-    )}
     {Object.keys(metadata.literature || []).length ? (
       <section id="references">
         <div className={css('vf-grid')}>
@@ -61,6 +53,15 @@ const OtherSections = ({
         <Literature included={included} extra={extra} />
       </section>
     ) : null}
+
+    {!Object.keys(metadata.go_terms || []).length ||
+    metadata.source_database.toLowerCase() !== 'interpro' ? null : (
+      <GoTerms
+        terms={metadata.go_terms || []}
+        type="entry"
+        db={metadata.source_database}
+      />
+    )}
 
     {Object.keys(metadata.cross_references || {}).length ? (
       <section id="cross_references" data-testid="entry-crossreferences">
@@ -117,7 +118,7 @@ const SummaryEntry = ({
         <>
           <h4>{headerText || 'Description'}</h4>
           <Description
-            textBlocks={metadata.description}
+            textBlocks={metadata.description || []}
             literature={included as Array<[string, Reference]>}
             showBadges={hasLLM}
           />
@@ -160,22 +161,22 @@ const SummaryEntry = ({
 
           <section className={css('vf-stack')}>
             {selectDescriptionComponent(hasLLM)}
+            <OtherSections
+              metadata={metadata}
+              citations={
+                { included, extra } as {
+                  included: Array<[string, Reference]>;
+                  extra: Array<[string, Reference]>;
+                }
+              }
+              hasIntegratedCitations={integratedCitations?.length > 0}
+            />
           </section>
         </div>
         <div className={css('vf-stack')}>
           <SidePanel metadata={metadata} dbInfo={dbInfo} />
         </div>
       </section>
-      <OtherSections
-        metadata={metadata}
-        citations={
-          { included, extra } as {
-            included: Array<[string, Reference]>;
-            extra: Array<[string, Reference]>;
-          }
-        }
-        hasIntegratedCitations={integratedCitations?.length > 0}
-      />
       {hasWiki && (
         <section>
           <h4>Wikipedia</h4>

@@ -58,6 +58,7 @@ const Search = loadable({
   loader: () => import(/* webpackChunkName: "search-page" */ './Search'),
 });
 const Jobs = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "jobs-page" */ './Jobs'),
 });
 
