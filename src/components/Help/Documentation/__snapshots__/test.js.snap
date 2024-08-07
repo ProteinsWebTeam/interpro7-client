@@ -202,7 +202,7 @@ exports[`<Documentation /> should render 1`] = `
         <h3
           className="light"
         >
-          Contact us/Additional help
+          Contact us
         </h3>
         <ul>
           <li>

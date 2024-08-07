@@ -10,7 +10,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 
 import cssBinder from 'styles/cssBinder';
-const f = cssBinder(local, fonts);
+const css = cssBinder(local, fonts);
 
 type TooltipAndRTDLinkProps = {
   rtdPage: string;
@@ -29,15 +29,15 @@ const TooltipAndRTDLink = ({
           <Link
             href={`${config.root.readthedocs.href}${rtdPage}`}
             target="_blank"
-            className={f('rtd-link')}
+            className={css('rtd-link')}
           >
-            <span className={f('icon', 'icon-common')} data-icon="&#xf02d;" />{' '}
+            <span className={css('icon', 'icon-common')} data-icon="&#xf02d;" />{' '}
             {label}
           </Link>
         }
       >
         <span
-          className={f('small', 'icon', 'icon-common')}
+          className={css('small', 'icon', 'icon-common')}
           data-icon="&#xf129;"
         />
       </Tooltip>
