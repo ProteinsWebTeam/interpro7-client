@@ -71,6 +71,7 @@ export default new Map([
       handlers.resultDownloadAccessionHandler,
     ]),
   ],
+  ['result.job', new Set([handlers.resultIPScanJobHandler])],
   ['result.detail', new Set([handlers.detailHandler])],
   // No need to add for 'other', handling that in descriptionToDescription
 ]);

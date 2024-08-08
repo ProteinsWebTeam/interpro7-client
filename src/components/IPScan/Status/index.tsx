@@ -1,5 +1,12 @@
 import React, { PureComponent } from 'react';
-import T from 'prop-types';
+import { format } from 'url';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
+import loadable from 'higherOrder/loadable';
+import { schemaProcessDataPageSection } from 'schema_org/processors';
+
+import { updateJobStatus } from 'actions/creators';
+
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format as formatTime } from 'timeago.js';
@@ -8,48 +15,38 @@ import Link from 'components/generic/Link';
 
 import { filterSubset, sortSubsetBy } from 'components/Table/FullyLoadedTable';
 import Table, { Column, ExtraOptions } from 'components/Table';
-// $FlowFixMe
 import TimeAgo from 'components/TimeAgo';
-// $FlowFixMe
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-import RefreshButton from 'components/IPScan/RefreshButton';
-import ClearAllDialog from 'components/IPScan/ClearAllDialog';
-import ImportResultSearch from 'components/IPScan/ImportResultSearch';
-import Actions from 'components/IPScan/Actions';
-import GroupActions from 'components/IPScan/Actions/Group';
-// $FlowFixMe
+
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
 import CopyToClipboard from 'components/SimpleCommonComponents/CopyToClipboard';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Button from 'components/SimpleCommonComponents/Button';
 import SpinningCircle from 'components/SimpleCommonComponents/Loading/spinningCircle';
-import Callout from 'components/SimpleCommonComponents/Callout';
 
-import { format } from 'url';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import RefreshButton from 'components/IPScan/RefreshButton';
+import ClearAllDialog, {
+  SourceToRemove,
+} from 'components/IPScan/ClearAllDialog';
+import ImportResultSearch from 'components/IPScan/ImportResultSearch';
+import Actions from 'components/IPScan/Actions';
+
 import config from 'config';
 
-import loadable from 'higherOrder/loadable';
-import { schemaProcessDataPageSection } from 'schema_org/processors';
+import cssBinder from 'styles/cssBinder';
 
-import { updateJobStatus } from 'actions/creators';
-
-import { foundationPartial } from 'styles/foundation';
-
-import interproTheme from 'styles/theme-interpro.css'; /* needed for custom button color*/
-import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 import tableStyles from 'components/Table/style.css';
 
-const f = foundationPartial(interproTheme, fonts, ipro, local, tableStyles);
+const css = cssBinder(fonts, local, tableStyles);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 
-export const getIProScanURL = (accession /*: string*/) => {
+export const getIProScanURL = (accession: string) => {
   const { protocol, hostname, port, pathname } = config.root.website;
   const url = format({
     protocol,
@@ -80,29 +77,23 @@ const GoToNewSearch = () => (
   </Link>
 );
 
-/*:: type Props = {
-  jobs: Array<Object>,
-  search: {
-    page: number,
-    page_size: number
-   },
-  defaultPageSize: number,
-  updateJobStatus: function,
-}*/
+type Props = {
+  jobs: Array<IprscanMetaIDB>;
+  search: InterProLocationSearch;
+  defaultPageSize: number;
+  updateJobStatus: typeof updateJobStatus;
+};
 
-export class IPScanStatus extends PureComponent /*:: <Props> */ {
-  static propTypes = {
-    jobs: T.arrayOf(T.object).isRequired,
-    search: T.shape({
-      page: T.number,
-      page_size: T.number,
-    }).isRequired,
-    defaultPageSize: T.number.isRequired,
-    updateJobStatus: T.func.isRequired,
-  };
-  state = { show: false, jobsToRemove: null, from: null };
+type State = {
+  show: boolean;
+  jobsToRemove: Array<IprscanMetaIDB>;
+  from: SourceToRemove;
+};
 
-  deleteAll = (from = 'file') => {
+export class IPScanStatus extends PureComponent<Props, State> {
+  state: State = { show: false, jobsToRemove: [], from: null };
+
+  deleteAll = (from: SourceToRemove = 'file') => {
     const { jobs } = this.props;
     this.setState({
       show: true,
@@ -110,63 +101,53 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
       jobsToRemove: jobs.filter(
         (job) =>
           (from === 'file' && job.status === 'imported file') ||
-          (from === 'server' && job.remoteID.startsWith('iprscan5')),
+          (from === 'server' && (job.remoteID || '').startsWith('iprscan5')),
       ),
     });
   };
 
   render() {
     const { jobs, search, defaultPageSize } = this.props;
-    const keys = ['localID', 'localTitle', 'times'];
+    const keys = ['localID', 'localTitle', 'times', 'entries'];
     let paginatedJobs = [...jobs];
-    sortSubsetBy(paginatedJobs, search, keys, {
-      localID: (localID, row) => row.remoteID || localID,
-      times: ({ created, importing, lastUpdate }) =>
-        new Date(created || importing || lastUpdate),
+    sortSubsetBy<IprscanMetaIDB>(paginatedJobs, search, keys, {
+      localID: (localID, row) => row!.remoteID || (localID as string),
+      localTitle: (localTitle, row) =>
+        (localTitle as string) || row?.remoteID || row?.localID || '',
+      times: (times) => {
+        const { created, importing, lastUpdate } = times as JobTimes;
+        return new Date(
+          (created || importing || lastUpdate) as number,
+        ).toISOString();
+      },
     });
     paginatedJobs = filterSubset(paginatedJobs, search, keys, {
-      localID: (localID, row) => row.remoteID || localID,
-      times: ({ created, importing, lastUpdate }) =>
-        formatTime(new Date(created || importing || lastUpdate)),
-    });
-    paginatedJobs.sort((a, b) => {
-      if (!a.group) return -1;
-      if (!b.group) return 1;
-      if (a.group === b.group) return 0;
-      return a.group > b.group ? 1 : -1;
+      localID: (localID, row) => row!.remoteID || (localID as string),
+      localTitle: (localTitle, row) =>
+        (localTitle as string) || row?.remoteID || row?.localID || '',
+      times: (times) => {
+        const { created, importing, lastUpdate } = times as JobTimes;
+        return formatTime(new Date(created || importing || lastUpdate));
+      },
     });
     const pageSize = search.page_size || defaultPageSize;
     paginatedJobs = paginatedJobs.splice(
-      ((search.page || 1) - 1) * pageSize,
-      pageSize,
+      ((Number(search.page) || 1) - 1) * Number(pageSize),
+      Number(pageSize),
     );
     return (
-      <div className={f('row', 'columns')}>
-        <Callout type="warning" icon={f('icon-bullhorn')}>
-          <h4>This page will be updated with release 102.0</h4>
-          <p>
-            We are working on a new version of this page: reorganising jobs with
-            multiple sequences and supporting search with nucleotide sequences
-            from the website.
-          </p>
-          <p>
-            Unfortunately the new version is incompatible with previously saved
-            jobs in the browser. If you have any jobs you want to keep, please
-            export them as JSON, and import them back once the new version is
-            released.
-          </p>
-        </Callout>
-        <h3 className={f('light')}>
+      <div className={css('vf-stack')}>
+        <h3 className={css('light')}>
           Your InterProScan Search Results{' '}
           <TooltipAndRTDLink rtdPage="searchways.html#sequence-search-results" />
         </h3>
-        <p className={f('info')}>
+        <p className={css('info')}>
           Your InterProScan search results are shown below. Searches may take
           varying times to complete. You can navigate to other pages and once
           the search is finished, you will receive a notification. The results
           will be available for 7 days.
         </p>
-        <p className={f('info')}>
+        <p className={css('info')}>
           Alternatively, you can import the results of an InterProScan run (in
           JSON format) into this page in order to view your search results
           interactively.
@@ -179,8 +160,8 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           }}
           processData={schemaProcessDataPageSection}
         />
-        <div className={f('button-bar')}>
-          <div className={f('button-group')}>
+        <div className={css('button-bar')}>
+          <div className={css('button-group')}>
             <GoToNewSearch />
             <RefreshButton />
           </div>
@@ -193,9 +174,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           actualSize={jobs.length}
           query={search}
           showTableIcon={false}
-          shouldGroup={true}
-          // eslint-disable-next-line react/display-name
-          groupActions={GroupActions}
+          // groupActions={GroupActions}
         >
           <ExtraOptions>
             <DropDownButton label="Clear All" icon="icon-trash">
@@ -220,7 +199,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
             dataKey="localTitle"
             isSearchable={true}
             isSortable={true}
-            renderer={(localTitle /*: string */, row /*: Object */) => (
+            renderer={(localTitle: string, row: IprscanMetaIDB) => (
               <>
                 <span style={{ marginRight: '1em' }}>
                   <Link
@@ -229,7 +208,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                         main: { key: 'result' },
                         result: {
                           type: 'InterProScan',
-                          accession: row.remoteID || row.localID,
+                          job: row.remoteID || row.localID,
                         },
                       },
                     }}
@@ -250,17 +229,14 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           >
             Results
           </Column>
+          <Column dataKey="entries" isSearchable={true} isSortable={true}>
+            Sequences
+          </Column>
           <Column
             dataKey="times"
             isSearchable={true}
             isSortable={true}
-            renderer={(
-              {
-                created,
-                importing,
-                lastUpdate,
-              } /*: {created: string, importing: string, lastUpdate: string} */,
-            ) => {
+            renderer={({ created, importing, lastUpdate }: JobTimes) => {
               const parsed = new Date(created || importing || lastUpdate);
               return (
                 <Tooltip
@@ -277,9 +253,9 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           </Column>
           <Column
             dataKey="status"
-            headerClassName={f('table-header-center')}
-            cellClassName={f('table-center')}
-            renderer={(status /*: string */, row /*: Object */) => (
+            headerClassName={css('table-header-center')}
+            cellClassName={css('table-center')}
+            renderer={(status: string, row: IprscanMetaIDB) => (
               <Tooltip title={`Job ${status}`}>
                 {(status === 'running' ||
                   status === 'created' ||
@@ -297,7 +273,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                 status === 'error' ? (
                   <span
                     style={{ fontSize: '160%' }}
-                    className={f('icon', 'icon-common', 'ico-notfound')}
+                    className={css('icon', 'icon-common', 'ico-notfound')}
                     data-icon="&#x78;"
                     aria-label="Job failed or not found"
                   />
@@ -318,7 +294,7 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
                   >
                     <span
                       style={{ fontSize: '160%' }}
-                      className={f(
+                      className={css(
                         'icon',
                         'icon-common',
                         status === 'finished'
@@ -338,10 +314,10 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
           <Column
             dataKey="localID"
             defaultKey="actions"
-            headerClassName={f('table-header-center')}
-            cellClassName={f('table-center', 'font-ml')}
-            renderer={(localID /*: string */) => (
-              <Actions localID={localID} forStatus={true} />
+            headerClassName={css('table-header-center')}
+            cellClassName={css('table-center', 'font-ml')}
+            renderer={(localID: string, row: IprscanMetaIDB) => (
+              <Actions localID={localID} forStatus={true} status={row.status} />
             )}
           >
             Action
@@ -358,21 +334,18 @@ export class IPScanStatus extends PureComponent /*:: <Props> */ {
   }
 }
 
-const compare = (a, b) => {
-  if (b.remoteID) return b.remoteID > a.remoteID ? 1 : -1;
+const compare = (a: IprscanMetaIDB, b: IprscanMetaIDB) => {
+  if (b.remoteID && a.remoteID) return b.remoteID > a.remoteID ? 1 : -1;
   return 1;
 };
 
 const mapsStateToProps = createSelector(
-  (state) =>
+  (state: GlobalState) =>
     Object.values(state.jobs || {})
       .map((j) => j.metadata)
-      .sort(
-        compare,
-        // (b.remoteID || b.localID) > (a.remoteID || a.localID) ? 1 : -1,
-      ),
-  (state) => state.customLocation.search,
-  (state) => state.settings.navigation.pageSize,
+      .sort(compare),
+  (state: GlobalState) => state.customLocation.search,
+  (state: GlobalState) => state.settings.navigation.pageSize,
   (jobs, search, defaultPageSize) => ({
     jobs,
     search,

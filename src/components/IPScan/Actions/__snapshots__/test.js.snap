@@ -8,7 +8,7 @@ exports[`<Actions /> should render 1`] = `
     title={
       <div>
         <b>
-          Delete sequence
+          Delete job
         </b>
         : This will remove the stored data from your browser. Remember that search results are only retained on our servers for 7 days
       </div>
@@ -18,8 +18,12 @@ exports[`<Actions /> should render 1`] = `
       aria-label="Delete Results"
       icon="icon-trash"
       onClick={[Function]}
-      type="inline"
-    />
+      type="secondary"
+    >
+      <span>
+        Delete Results
+      </span>
+    </ForwardRef>
   </Tooltip>
   <Tooltip
     title={
@@ -35,8 +39,12 @@ exports[`<Actions /> should render 1`] = `
       aria-label="Save results in Browser"
       icon="icon-save"
       onClick={[Function]}
-      type="inline"
-    />
+      type="secondary"
+    >
+      <span>
+        Save results in Browser
+      </span>
+    </ForwardRef>
   </Tooltip>
 </nav>
 `;

@@ -4,6 +4,7 @@
 
 body nav.buttons {
   display: flex;
+  gap: 0.5rem;
   &.centered {
     justify-content: space-evenly;
   }
@@ -34,6 +35,9 @@ body nav.buttons {
   }
 }
 
+.download-option {
+  white-space: nowrap;
+}
 button.group::before,
 a.group::before {
   color: var(--colors-progress, #1f6ca2);

@@ -82,7 +82,7 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
   return (
     <div className={css('wiki-article')}>
       <div className={css('vf-grid', 'wiki-content')}>
-        <div className={css('vf-grid__col--span-3', 'columns')}>
+        <div className={css('vf-grid__col--span-3')}>
           <h5>
             <Link
               className={css('ext-link')}
@@ -94,7 +94,7 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
           </h5>
           {convertHtmlToReact(extract)}
         </div>
-        <div className={css('columns')}>
+        <div>
           <table className={css('infobox')}>
             <tbody>
               <tr>

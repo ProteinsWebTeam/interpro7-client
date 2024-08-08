@@ -219,6 +219,10 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
                 key === 'set' ? customLocation.description.set.db : 'InterPro',
             },
           },
+          search:
+            typeof customLocation.search.orf !== 'undefined'
+              ? { orf: String(customLocation.search.orf) }
+              : undefined,
         };
       },
       name: 'Entries',
@@ -359,6 +363,10 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
               detail: 'sequence',
             },
           },
+          search:
+            typeof customLocation.search.orf !== 'undefined'
+              ? { orf: String(customLocation.search.orf) }
+              : undefined,
         };
       },
       name: 'Sequence',

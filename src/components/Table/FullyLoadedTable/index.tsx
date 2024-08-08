@@ -10,7 +10,7 @@ export const sortSubsetBy = <RowData extends Record<string, unknown>>(
   subset: Array<RowData>,
   search: InterProLocationSearch | undefined,
   keys: Array<string>,
-  columnToString: Record<string, Column2StringFn<RowData>> = {},
+  columnToString: Record<string, Column2StringOrNumberFn<RowData>> = {},
 ) => {
   for (const key of keys) {
     const str = columnToString[key] || ((x) => `${x}`);
@@ -27,7 +27,7 @@ export const filterSubset = <RowData extends Record<string, unknown>>(
   subset: Array<RowData>,
   search: InterProLocationSearch | undefined,
   keys: Array<string>,
-  columnToString: Record<string, Column2StringFn<RowData>> = {},
+  columnToString: Record<string, Column2StringOrNumberFn<RowData>> = {},
 ) => {
   let filteredSubset = [...subset];
   for (const key of keys) {
@@ -36,8 +36,9 @@ export const filterSubset = <RowData extends Record<string, unknown>>(
         columnToString[key] || ((x) => JSON.stringify(x).toLowerCase());
       filteredSubset = filteredSubset.filter(
         (row) =>
-          str(row[key], row).indexOf((search[key] as string).toLowerCase()) !==
-          -1,
+          String(str(row[key], row))
+            .toLowerCase()
+            .indexOf((search[key] as string).toLowerCase()) !== -1,
       );
     }
   }
@@ -54,15 +55,15 @@ const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export type Column2StringFn<RowData = unknown> = (
+export type Column2StringOrNumberFn<RowData = unknown> = (
   cellValue: unknown,
   row?: RowData,
-) => string;
+) => string | number;
 
 type Props<RowData extends Record<string, unknown>> = {
   data: Array<RowData>;
   renderers?: Record<string, Renderer<unknown, RowData>>;
-  columnToString?: Record<string, Column2StringFn<RowData>>;
+  columnToString?: Record<string, Column2StringOrNumberFn<RowData>>;
   headerStyle?: Record<string, React.CSSProperties>;
   cellStyle?: Record<string, React.CSSProperties>;
   headerColumns?: Record<string, string>;

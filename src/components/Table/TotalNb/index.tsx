@@ -79,6 +79,7 @@ type Props<RowData extends object> = {
   currentAPICall?: string | null;
   nextAPICall?: string | null;
   previousAPICall?: string | null;
+  alwaysShowTotalNB?: boolean;
 };
 
 export const TotalNb = <RowData extends object>({
@@ -93,6 +94,7 @@ export const TotalNb = <RowData extends object>({
   currentAPICall,
   nextAPICall,
   previousAPICall,
+  alwaysShowTotalNB = false,
 }: Props<RowData>) => {
   if (!description) return null;
   const page =
@@ -112,7 +114,7 @@ export const TotalNb = <RowData extends object>({
   const index = (page - 1) * pageSize + 1;
 
   let textLabel: ReactNode = '';
-  if (actualSize) {
+  if (actualSize || alwaysShowTotalNB) {
     const db = description[description.main.key as Endpoint].db;
 
     const isSubPageButMainIsEntry =
@@ -151,7 +153,7 @@ export const TotalNb = <RowData extends object>({
             <strong>
               <NumberComponent abbr>{actualSize}</NumberComponent>
             </strong>{' '}
-            {entityText(contentType || description.main.key, actualSize)}
+            {entityText(contentType || description.main.key, actualSize || 0)}
             {dbText(
               description.entry.db as MemberDB | 'interpro',
               description.set.db,

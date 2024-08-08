@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -8,14 +7,7 @@ const renderer = new ShallowRenderer();
 
 describe('<BrowseTabsWithoutData />', () => {
   test('should render', () => {
-    renderer.render(
-      <BrowseTabsWithoutData
-        data={{
-          loading: false,
-          payload: null,
-        }}
-      />,
-    );
+    renderer.render(<BrowseTabsWithoutData metadata={{ metadata: null }} />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FullyLoadedTable, {
-  Column2StringFn,
+  Column2StringOrNumberFn,
 } from 'components/Table/FullyLoadedTable';
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
@@ -78,7 +78,9 @@ const Molecule: Renderer<unknown, Interaction> = (molecule: unknown) => {
     </span>
   );
 };
-const moleculeToString: Column2StringFn<Interaction> = (molecule: unknown) => {
+const moleculeToString: Column2StringOrNumberFn<Interaction> = (
+  molecule: unknown,
+) => {
   const { accession, identifier } = molecule as InteractionMolecule;
   return `${identifier}${accession}`;
 };

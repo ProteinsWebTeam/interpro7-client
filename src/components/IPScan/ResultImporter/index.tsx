@@ -1,32 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+
 import { importJob } from 'actions/creators';
-import loadData from 'higherOrder/loadData';
+import loadData from 'higherOrder/loadData/ts';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
-// $FlowFixMe
 import Callout from 'components/SimpleCommonComponents/Callout';
 import id from 'utils/cheap-unique-id';
 import { IPscanRegex } from 'utils/processDescription/handlers';
 
 const STATUS_OK = 200;
 
-const getBaseIPScanID = (accession) => {
+const getBaseIPScanID = (accession: string) => {
   const matches = accession.match(IPscanRegex);
-  const posfix = matches[2];
+  const posfix = matches?.[2];
   return posfix && posfix.startsWith('-')
     ? accession.slice(0, -posfix.length)
     : accession;
 };
+
+type Props = {
+  jobAccession?: string;
+  shouldImport: boolean;
+  importJob?: typeof importJob;
+  handleImported: () => void;
+};
+interface LoadedProps extends Props, LoadDataProps<string> {}
+
 const ResultImporter = ({
-  accession,
+  jobAccession,
   shouldImport,
   data,
   importJob,
   handleImported,
-}) => {
+}: LoadedProps) => {
+  if (!data || !jobAccession) return null;
   const [isBusy, setBusy] = useState(false);
   useEffect(() => {
     if (
@@ -36,11 +45,11 @@ const ResultImporter = ({
       shouldImport
     ) {
       setBusy(true);
-      importJob({
+      importJob?.({
         metadata: {
           localID: id(`internal-${Date.now()}`),
           type: 'InterProScan',
-          remoteID: getBaseIPScanID(accession),
+          remoteID: getBaseIPScanID(jobAccession),
         },
         data: {
           input: '',
@@ -54,7 +63,8 @@ const ResultImporter = ({
   if (data.status !== STATUS_OK || data.payload !== 'FINISHED') {
     return (
       <Callout type="alert">
-        There was an error retrieving the InterProScan Job with ID {accession}
+        There was an error retrieving the InterProScan Job with ID{' '}
+        {jobAccession}
         {data.status === STATUS_OK && (
           <div>
             Server response: <code>{data.payload}</code>
@@ -63,31 +73,24 @@ const ResultImporter = ({
       </Callout>
     );
   }
-  return null;
-};
-ResultImporter.propTypes = {
-  accession: T.string,
-  data: T.object,
-  importJob: T.func,
-  handleImported: T.func,
-  shouldImport: T.bool,
+  return <Loading />;
 };
 
 const mapStateToUrl = createSelector(
-  (state) => state.settings.ipScan,
-  (state) => state.customLocation.description.result.accession,
-  ({ protocol, hostname, port, root }, accession) => {
+  (state: GlobalState) => state.settings.ipScan,
+  (state: GlobalState) => state.customLocation.description.result.job || '',
+  ({ protocol, hostname, port, root }, jobAccession) => {
     return format({
       protocol,
       hostname,
       port,
-      pathname: `${root}/status/${getBaseIPScanID(accession)}`,
+      pathname: `${root}/status/${getBaseIPScanID(jobAccession)}`,
     });
   },
 );
 const mapStateToProps = createSelector(
-  (state) => state.customLocation.description.result.accession,
-  (accession) => ({ accession }),
+  (state: GlobalState) => state.customLocation.description.result.job,
+  (jobAccession) => ({ jobAccession }),
 );
 
 export default loadData({
@@ -95,4 +98,4 @@ export default loadData({
   mapStateToProps,
   mapDispatchToProps: { importJob },
   fetchOptions: { useCache: false, responseType: 'text' },
-})(ResultImporter);
+} as LoadDataParameters)(ResultImporter);

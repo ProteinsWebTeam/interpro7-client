@@ -139,7 +139,7 @@ const includeAccessionSearch = (
   accessionSearch: AccSearchData,
   primary: Endpoint,
   secondary: Endpoint,
-  mainData: MetadataWithLocations,
+  mainData: Metadata,
 ) => {
   const indexInPayload = dataTable.findIndex(
     ({ accession }) => accession === accessionSearch.metadata.accession,
@@ -180,7 +180,7 @@ type Props = {
   state?: GlobalState;
   databases: DBsInfo;
   dbCounters?: MetadataCounters;
-  mainData: MetadataWithLocations;
+  mainData: Metadata;
   accessionSearch?: AccSearchData;
   focusType?: string;
   currentAPICall?: string;
@@ -262,6 +262,7 @@ const Matches = ({
       currentAPICall={currentAPICall}
       status={status}
       onFocusChanged={setFocused}
+      alwaysShowTotalNB={true}
     >
       <PageSizeSelector />
       {!(

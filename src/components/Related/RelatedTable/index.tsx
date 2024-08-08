@@ -126,7 +126,7 @@ const primariesAndSecondaries: Record<
 
 type RelatedTableProps = {
   mainType: Endpoint;
-  mainData: MetadataWithLocations;
+  mainData: Metadata;
   secondaryData: Array<MetadataWithLocations>;
   isStale: boolean;
   focusType: Endpoint;
@@ -179,14 +179,7 @@ const RelatedTable = ({
             </div>
           </nav>
         )}
-        <section
-          className={f(
-            'columns',
-            'small-12',
-            hasFilters ? 'medium-9' : 'medium-12',
-            hasFilters ? 'large-10' : 'large-12'
-          )}
-        >
+        <section>
           <Matches
             {...otherProps}
             mainData={mainData}
@@ -200,7 +193,7 @@ const RelatedTable = ({
                   coordinates,
                 } as GenericMatch,
               ],
-              [] as Array<GenericMatch>
+              [] as Array<GenericMatch>,
             )}
             isStale={isStale}
             databases={databases}
