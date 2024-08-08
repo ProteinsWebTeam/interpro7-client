@@ -151,7 +151,7 @@ export const AdvancedOptions = ({
               size="small"
               offValue="protein (amino acids)"
               onValue="DNA/RNA (nucleotides)"
-              width="8rem"
+              width="11rem"
             />
           </label>
           <br />
