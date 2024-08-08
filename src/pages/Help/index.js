@@ -13,7 +13,9 @@ import ContentFromRTD from 'components/ContentFromRTD';
 import { schemaProcessDataWebPage } from 'schema_org/processors';
 
 const SchemaOrgData = loadable({
-  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loader: () =>
+    // $FlowFixMe
+    import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 
@@ -31,10 +33,11 @@ const Game = () => (
 );
 
 const Documentation = loadable({
+  // prettier-ignore
   loader: () =>
-    import(
-      /* webpackChunkName: "help-documentation" */ 'components/Help/Documentation'
-    ),
+    // $FlowFixMe
+    import(/* webpackChunkName: "help-documentation" */'components/Help/Documentation'),
+  loading: () => null,
 });
 
 const routes = new Map([
@@ -59,7 +62,6 @@ export default class Help extends PureComponent /*:: <{}> */ {
         <Helmet>
           <title>Help</title>
         </Helmet>
-
         <SchemaOrgData
           data={{
             name: 'InterPro Help Page',

@@ -1,14 +1,12 @@
 // @flow
 import React from 'react';
-import T from 'prop-types';
 
 import Link from 'components/generic/Link';
 
-import { foundationPartial } from 'styles/foundation';
-
 import local from './style.css';
 
-const f = foundationPartial(local);
+import cssBinder from 'styles/cssBinder';
+const css = cssBinder(local);
 
 const data4InterPro2022 = {
   url: 'https://doi.org/10.1093/nar/gkac993',
@@ -20,39 +18,33 @@ const data4InterPro2022 = {
   source: 'Nucleic Acids Research, Nov 2022, (doi: 10.1093/nar/gkac993)',
   imageClass: 'image-nar-default',
 };
-const pubTypes = {
-  url: T.string,
-  title: T.string,
-  authors: T.string,
-  source: T.oneOfType([
-    T.string,
-    T.shape({
-      journal: T.string,
-      details: T.string,
-    }),
-  ]),
-  imageClass: T.string,
-  dark: T.bool,
+
+type pubProps = {
+  url: string;
+  title: string;
+  authors: string;
+  source: string;
+  imageClass?: string;
+  dark?: boolean;
 };
 
-export const PrintedPublication = (
-  {
-    title,
-    authors,
-    source,
-    url,
-    dark = false,
-  } /*: { title: string, authors: string, source: string , url: string, dark?: boolean }*/,
-) => (
-  <blockquote className={f('quote', { dark })}>
-    {authors}{' '}
-    <Link href={url} target="_blank">
-      {title}
-    </Link>
-    . <i>{source}</i>
-  </blockquote>
-);
-PrintedPublication.propTypes = pubTypes;
+export const PrintedPublication = ({
+  url,
+  title,
+  authors,
+  source,
+  dark,
+}: pubProps) => {
+  return (
+    <blockquote className={css('vf-quote', { dark })}>
+      {authors}{' '}
+      <Link href={url} target="_blank">
+        {title}
+      </Link>
+      . <i>{source}</i>
+    </blockquote>
+  );
+};
 
 export const PrintedInterPro2022 = () => (
   <PrintedPublication {...data4InterPro2022} />
