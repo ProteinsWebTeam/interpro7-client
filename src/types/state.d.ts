@@ -11,8 +11,7 @@ type GlobalState = {
   };
   toasts: ToastsState;
   ui: UIState;
-  [other: string]: unknown;
-}; // TODO: replace for redux state type
+};
 
 type Endpoint =
   | 'entry'
