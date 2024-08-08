@@ -19,18 +19,18 @@ const loadInterProWebComponents = () => {
 
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then((m) => m.InterproHierarchy)
-      ).as('interpro-hierarchy')
+        interproComponents().then((m) => m.InterproHierarchy),
+      ).as('interpro-hierarchy'),
     );
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then((m) => m.InterproEntry)
-      ).as('interpro-entry')
+        interproComponents().then((m) => m.InterproEntry),
+      ).as('interpro-entry'),
     );
     webComponents.push(
       loadWebComponent(() =>
-        interproComponents().then((m) => m.InterproType)
-      ).as('interpro-type')
+        interproComponents().then((m) => m.InterproType),
+      ).as('interpro-type'),
     );
   }
   return Promise.all(webComponents);
@@ -65,9 +65,10 @@ class InterProHierarchy extends PureComponent<Props> {
         e.preventDefault();
         this.props.goToCustomLocation({
           description: pathToDescription(
-            target
-              ?.getAttribute('href')
-              ?.replace(new RegExp(`^${config.root.website.path}`), '')
+            (target?.getAttribute('href') || '')?.replace(
+              new RegExp(`^${config.root.website.path}`),
+              '',
+            ),
           ),
         });
       }

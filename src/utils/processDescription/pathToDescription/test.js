@@ -1,6 +1,4 @@
-// @flow
 import pathToDescription from '.';
-// $FlowFixMe
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 
 describe('pathToDescription()', () => {

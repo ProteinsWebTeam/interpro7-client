@@ -21,7 +21,7 @@ type Handler = {
   match: (value: string, description: InterProDescription) => boolean;
   handle: (
     description: InterProDescription,
-    current: string | null,
+    current?: string | null,
     next?: string | null,
     ...args: Array<string>
   ) => InterProDescription;
@@ -56,7 +56,7 @@ const templateHandler: Handler = {
   // value to the key in description
   handle(
     description: InterProDescription,
-    current: string | null,
+    current?: string | null,
     next?: string | null,
     ...rest: Array<string>
   ) {
