@@ -1,4 +1,3 @@
-// @flow
 import { rootHandler, otherHandler } from 'utils/processDescription/handlers';
 
 // $FlowFixMe
