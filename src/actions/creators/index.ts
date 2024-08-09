@@ -4,6 +4,7 @@ import {
   DataProgressAction,
   DownloadAction,
   FavouritesAction,
+  IPScanAction,
   IPScanMetadataAction,
   LocationAction,
   SettingsAction,
@@ -159,55 +160,63 @@ export const createJob = (job: {
 export const importJob = (job: {
   metadata: MinimalJobMetadata;
   data: InitialJobData;
-}) => ({
-  type: types.IMPORT_JOB,
-  job,
-});
+}) =>
+  ({
+    type: types.IMPORT_JOB,
+    job,
+  }) as IPScanMetadataAction;
 export const importJobFromData = (job: {
   metadata: MinimalJobMetadata;
   data: IprscanDataIDB;
-}) => ({
-  type: types.IMPORT_JOB_FROM_DATA,
-  job,
-});
+}) =>
+  ({
+    type: types.IMPORT_JOB_FROM_DATA,
+    job,
+  }) as IPScanMetadataAction;
 export const updateJob = (job: {
   metadata: MinimalJobMetadata;
   data?: IprscanDataIDB;
-}) => ({
-  type: types.UPDATE_JOB,
-  job,
-});
+}) =>
+  ({
+    type: types.UPDATE_JOB,
+    job,
+  }) as IPScanMetadataAction;
 
-export const deleteJob = (job: { metadata: unknown; data?: unknown }) => ({
-  type: types.DELETE_JOB,
-  job,
-});
+export const deleteJob = (job: { metadata: unknown; data?: unknown }) =>
+  ({
+    type: types.DELETE_JOB,
+    job,
+  }) as IPScanAction;
 
-export const updateJobStatus = () => ({
-  type: types.UPDATE_JOB_STATUS,
-});
+export const updateJobStatus = () =>
+  ({
+    type: types.UPDATE_JOB_STATUS,
+  }) as IPScanAction;
 
-export const keepJobAsLocal = (localID: string) => ({
-  type: types.KEEP_JOB_AS_LOCAL,
-  localID,
-});
+export const keepJobAsLocal = (localID: string) =>
+  ({
+    type: types.KEEP_JOB_AS_LOCAL,
+    localID,
+  }) as IPScanAction;
 
-export const updateJobTitle = (jobID: string, value: string) => ({
-  type: types.UPDATE_JOB_TITLE,
-  jobID,
-  value,
-});
-export const updateSequenceJobTitle = (jobID: string, value: string) => ({
-  type: types.UPDATE_SEQUENCE_JOB_TITLE,
-  jobID,
-  value,
-});
+export const updateJobTitle = (jobID: string, value: string) =>
+  ({
+    type: types.UPDATE_JOB_TITLE,
+    jobID,
+    value,
+  }) as IPScanAction;
+export const updateSequenceJobTitle = (jobID: string, value: string) =>
+  ({
+    type: types.UPDATE_SEQUENCE_JOB_TITLE,
+    jobID,
+    value,
+  }) as IPScanAction;
 
-// TODO: Update for correct types once the ipscan-results branch gets merged
-export const rehydrateJobs = (jobs: Record<string, unknown>) => ({
-  type: types.REHYDRATE_JOBS,
-  jobs,
-});
+export const rehydrateJobs = (jobs: JobsState) =>
+  ({
+    type: types.REHYDRATE_JOBS,
+    jobs,
+  }) as IPScanAction;
 
 // download
 export const downloadURL = (

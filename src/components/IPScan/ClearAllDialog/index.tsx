@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-// $FlowFixMe
 import { deleteJob } from 'actions/creators';
 
 import Modal from 'components/SimpleCommonComponents/Modal';

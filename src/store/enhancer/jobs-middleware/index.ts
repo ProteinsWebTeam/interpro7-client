@@ -21,6 +21,8 @@ import {
   IMPORT_JOB,
   IMPORT_JOB_FROM_DATA,
   UPDATE_SEQUENCE_JOB_TITLE,
+  IPScanAction,
+  IPScanMetadataAction,
 } from 'actions/types';
 import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
 
@@ -62,7 +64,7 @@ const deleteJobInDB = async (localID: string) => {
   }
 };
 
-const rehydrateStoredJobs = async (dispatch: Dispatch) => {
+const rehydrateStoredJobs = async (dispatch: Dispatch<IPScanAction>) => {
   await schedule(DEFAULT_SCHEDULE_DELAY);
   const metaT = await metaTA;
   const meta = (await metaT.getAll()) as Record<string, MinimalJobMetadata>;
@@ -188,7 +190,11 @@ const processImportedAttributes = (
   return { applications };
 };
 
-const middleware: Middleware<{}, GlobalState> = ({ dispatch, getState }) => {
+const middleware: Middleware<
+  {},
+  GlobalState,
+  Dispatch<IPScanMetadataAction | UnknownAction>
+> = ({ dispatch, getState }) => {
   // function definitions
 
   const processJob = async (localID: string, meta: MinimalJobMetadata) => {

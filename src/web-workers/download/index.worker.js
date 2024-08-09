@@ -8,7 +8,6 @@ import getTableAccess, { DownloadJobs } from 'storage/idb';
 import { object2TSV, columns } from './object2TSV';
 
 // $FlowFixMe
-// $FlowFixMe
 import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';
 
 import {

@@ -59,6 +59,8 @@ export interface IPScanAction
   > {
   job: { metadata: IprscanMetaIDB; data?: IprscanDataIDB };
   localID?: string;
+  jobID?: string;
+  value?: string;
   jobs?: JobsState;
 }
 

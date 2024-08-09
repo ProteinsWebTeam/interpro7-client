@@ -1,5 +1,3 @@
-// @flow
-// $FlowFixMe
 import { ADD_TOAST, REMOVE_TOAST, ToastAction } from 'actions/types';
 
 const extractAllBut = (key: string) => ({
