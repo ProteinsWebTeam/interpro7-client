@@ -153,7 +153,7 @@ const getProteinURL = createSelector(
   (state) => state.settings.api,
   (_, props) => props.protein,
   ({ protocol, hostname, port, root }, accession) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
     };
@@ -169,7 +169,7 @@ const getInterproRelatedEntriesURL = createSelector(
   (state) => state.settings.api,
   (_, props) => props.protein,
   ({ protocol, hostname, port, root }, protein) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'entry' },
       entry: { db: 'all' },
       protein: { isFilter: true, db: 'uniprot', accession: protein },

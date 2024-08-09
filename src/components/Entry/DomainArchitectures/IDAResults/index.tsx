@@ -31,7 +31,7 @@ const getUrlForIDASearch = createSelector(
   (state: GlobalState) => state.customLocation.search,
   ({ protocol, hostname, port, root }, search) => {
     // omit from search
-    const description = {
+    const description: InterProPartialDescription = {
       main: { key: 'entry' },
     };
     // build URL

@@ -3,6 +3,8 @@ import { format } from 'url';
 
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 // Too small to be split.
 import Proteome from './Proteome';

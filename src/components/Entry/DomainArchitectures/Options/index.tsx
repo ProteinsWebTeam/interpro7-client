@@ -91,7 +91,7 @@ const getAPIURL = (
   entryLocation?: EndpointLocation,
   search?: InterProLocationSearch,
 ) => {
-  const description = {
+  const description: InterProPartialDescription = {
     main: { key: 'entry' },
     entry: {
       ...(entryLocation || {}),

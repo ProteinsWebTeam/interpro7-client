@@ -7,6 +7,8 @@ import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
 import { format } from 'url';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Link from 'components/generic/Link';

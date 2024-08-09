@@ -25,6 +25,8 @@ import TextSearchBox, {
 } from 'components/SearchByText/TextSearchBox';
 
 import { sticky as supportsSticky } from 'utils/support';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { foundationPartial } from 'styles/foundation';

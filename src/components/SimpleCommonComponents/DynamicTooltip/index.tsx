@@ -48,11 +48,15 @@ const _DataProvider = ({ data, onLoad, databases, locations }: LoadedProps) => {
 const getUrlFor = createSelector(
   (state: GlobalState) => state.settings.api,
   (_: GlobalState, props: ProviderProps) => props,
+
   ({ protocol, hostname, port, root }, props) => {
     if (!props.shouldLoad) return null;
-    const description = {
-      main: { key: props.type },
-      [props.type]: { accession: props.accession, db: props.source },
+    const description: InterProPartialDescription = {
+      main: { key: props.type as Endpoint },
+      [props.type as Endpoint]: {
+        accession: props.accession,
+        db: props.source,
+      },
     };
     return format({
       protocol,

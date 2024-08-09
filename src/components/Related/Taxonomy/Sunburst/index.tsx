@@ -61,7 +61,7 @@ const LinkOrText = ({ id, name }: { id: string; name: string }) => (
             taxonomy: {
               db: 'uniprot',
               accession: id,
-            },
+            } as InterProPartialDescription,
           },
         }}
       >
@@ -246,7 +246,7 @@ const Sunburst = ({ data, description }: LoadedProps) => {
                               isFilter: true,
                               order: 1,
                             },
-                          },
+                          } as InterProPartialDescription,
                           search: { search: currentNode.id },
                           hash: 'tree',
                         }}
@@ -277,7 +277,7 @@ const Sunburst = ({ data, description }: LoadedProps) => {
                             isFilter: true,
                             order: 2,
                           },
-                        },
+                        } as InterProPartialDescription,
                       }}
                     >
                       {currentNode.proteins}
@@ -309,7 +309,7 @@ const getUrl = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description.entry,
   ({ protocol, hostname, port, root }, { db, accession }) => {
-    const desc = {
+    const desc: InterProPartialDescription = {
       main: { key: 'entry' },
       entry: { db, accession },
     };

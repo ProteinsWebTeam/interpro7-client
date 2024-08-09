@@ -54,7 +54,7 @@ export const ByLatestEntries = ({ data }: LoadedProps) => {
                 description: {
                   main: { key: 'entry' },
                   entry: { db: 'InterPro' },
-                },
+                } as InterProPartialDescription,
                 search: { latest_entries: '' },
               }}
               buttonType="primary"
@@ -71,7 +71,7 @@ export const ByLatestEntries = ({ data }: LoadedProps) => {
 const getAllLatestEntriesURL = createSelector(
   (state: GlobalState) => state.settings.api,
   ({ protocol, hostname, port, root }) => {
-    const desc = {
+    const desc: InterProPartialDescription = {
       main: { key: 'entry' },
       entry: { db: 'interpro' },
     };

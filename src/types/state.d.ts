@@ -67,7 +67,7 @@ type EndpointFilter = [endpoint: Endpoint, location: EndpointPartialLocation];
 type InterProPartialDescription<Location = EndpointPartialLocation> = {
   main?: {
     key: Endpoint | 'search' | 'result' | 'other' | null;
-    numberOfFilters?: 0;
+    numberOfFilters?: number;
   };
   entry?: Location & EntryLocation;
   protein?: Location;
