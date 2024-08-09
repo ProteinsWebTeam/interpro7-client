@@ -29,11 +29,14 @@ export default (state: JobsState = {}, action: IPScanAction) => {
           id = job.metadata.localID;
         }
       }
-      return id && job
+      return id
         ? {
             ...state,
             [id]: {
-              metadata: metadata(job.metadata, action as IPScanMetadataAction),
+              metadata: metadata(
+                job?.metadata || ({} as MinimalJobMetadata),
+                action as IPScanMetadataAction,
+              ),
             },
           }
         : state;
