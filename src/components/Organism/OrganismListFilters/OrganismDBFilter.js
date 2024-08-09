@@ -6,6 +6,8 @@ import { createSelector } from 'reselect';
 import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 // $FlowFixMe

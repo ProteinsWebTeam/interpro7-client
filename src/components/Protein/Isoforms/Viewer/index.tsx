@@ -139,7 +139,7 @@ const getIsoformURL = createSelector(
     { protein: { accession } },
     { isoform },
   ) => {
-    const description = {
+    const description: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
     };

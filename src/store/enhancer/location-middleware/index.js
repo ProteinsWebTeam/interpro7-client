@@ -6,6 +6,7 @@ import { format } from 'url';
 import { NEW_CUSTOM_LOCATION } from 'actions/types';
 import { customLocationChangeFromHistory } from 'actions/creators';
 
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import autoScroll from 'utils/auto-scroll';
 

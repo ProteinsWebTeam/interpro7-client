@@ -8,6 +8,8 @@ import NumberComponent from 'components/NumberComponent';
 // import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 // $FlowFixMe

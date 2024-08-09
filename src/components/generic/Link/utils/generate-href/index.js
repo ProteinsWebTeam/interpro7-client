@@ -1,6 +1,7 @@
 // @flow
 import { format } from 'url';
 
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import config from 'config';

@@ -76,7 +76,7 @@ const getIsoformURL = createSelector(
   (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.customLocation.description,
   ({ protocol, hostname, port, root }, { protein: { accession } }) => {
-    const description = {
+    const description: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
     };
