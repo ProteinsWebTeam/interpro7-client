@@ -16,7 +16,7 @@ import local from '../../style.css';
 const css = cssBinder(fonts, local);
 
 function generateSingleIPScanObject(
-  job: IprscanMetaIDB,
+  job: MinimalJobMetadata,
   jobsData: IprscanDataIDB[],
 ): Record<string, unknown> {
   const { results: _, ...moreMeta } = jobsData?.[0] || {};
@@ -47,7 +47,7 @@ const downloadFile = (jsonContent: Record<string, unknown>, name: string) => {
 };
 
 type Props = {
-  job: IprscanMetaIDB;
+  job: MinimalJobMetadata;
   jobsData?: Array<IprscanDataIDB>;
   dataURL?: string;
 };

@@ -82,20 +82,21 @@ export class FiltersPanel extends PureComponent<Props, State> {
     if (!this.props.customLocation) return;
     const { description, hash, search } = this.props.customLocation;
     const { key } = description.main;
-    let db =
-      key === 'protein' ? 'UniProt' : (description[key] as EndpointLocation).db;
+    let db = key === 'protein' ? 'UniProt' : description[key as Endpoint].db;
     if (key === 'taxonomy') db = 'uniprot';
     const newDescription = {
       ...description,
-      [key]: {
-        ...description[key],
+      [key!]: {
+        ...description[key as Endpoint],
         db,
       },
     };
     newDescription.taxonomy.isFilter = false;
     newDescription.entry.integration = null;
     if (newDescription.protein.isFilter) newDescription.protein.db = 'uniprot';
-    const newSearch = search.page_size ? { page_size: search.page_size } : {};
+    const newSearch: InterProLocationSearch = search.page_size
+      ? { page_size: search.page_size }
+      : {};
     this.props.goToCustomLocation?.({
       description: newDescription,
       search: newSearch,

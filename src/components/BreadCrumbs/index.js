@@ -1,5 +1,6 @@
 import React from 'react';
 import T from 'prop-types';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 
 import { connect } from 'react-redux';

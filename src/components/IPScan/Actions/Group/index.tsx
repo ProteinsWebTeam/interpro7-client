@@ -10,8 +10,6 @@ import Button from 'components/SimpleCommonComponents/Button';
 import { deleteJob, goToCustomLocation } from 'actions/creators';
 import getTableAccess, { IPScanJobsData } from 'storage/idb';
 
-// import DownloadAll from './DownloadAll';
-
 import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -19,23 +17,17 @@ import local from '../style.css';
 
 const css = cssBinder(fonts, local);
 
-export type Jobs = Record<
-  string,
-  {
-    metadata: IprscanMetaIDB;
-  }
->;
 type Props = {
   group: string;
   deleteJob: typeof deleteJob;
   goToCustomLocation: typeof goToCustomLocation;
-  jobs: Jobs;
+  jobs: JobsState;
 };
 
-const getJobsOfGroup = (jobs: Jobs, group: string) =>
+const getJobsOfGroup = (jobs: JobsState, group: string) =>
   Object.values(jobs).filter(({ metadata }) => metadata.group === group);
 
-export const getAllResults = async (jobs: Jobs, group: string) => {
+export const getAllResults = async (jobs: JobsState, group: string) => {
   const dataT = await getTableAccess(IPScanJobsData);
   const results = [];
   let output: Record<string, unknown> = {};
@@ -53,21 +45,7 @@ export const getAllResults = async (jobs: Jobs, group: string) => {
   return output;
 };
 
-// const getRemoteID = (jobs: Jobs, group: string) => {
-//   const jobWithRemoteID = Object.values(jobs).find(
-//     (job) => job.metadata.group === group && job.metadata.remoteID,
-//   );
-//   if (jobWithRemoteID) {
-//     return jobWithRemoteID.metadata.remoteID!.replace(/-\d+$/, '');
-//   }
-//   return;
-// };
-const GroupActions = ({
-  group,
-  jobs,
-  deleteJob,
-  // goToCustomLocation,
-}: Props) => {
+const GroupActions = ({ group, jobs, deleteJob }: Props) => {
   const handleDelete = () => {
     getJobsOfGroup(jobs, group).forEach((job) => deleteJob(job));
   };
@@ -97,12 +75,6 @@ const GroupActions = ({
               </Button>
             </Tooltip>
           </li>
-          {/* <DownloadAll
-            jobs={jobs}
-            group={group}
-            remoteID={getRemoteID(jobs, group)}
-          /> */}
-          <li></li>
         </ul>
       </DropDownButton>
     </nav>

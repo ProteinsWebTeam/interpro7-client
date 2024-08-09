@@ -14,11 +14,9 @@ import { DomainArchitecturesWithData } from '../';
 const mapStateToProps = createSelector(
   (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    (
-      state.customLocation.description[
-        state.customLocation.description.main.key
-      ] as EndpointLocation
-    ).accession,
+    state.customLocation.description[
+      state.customLocation.description.main.key as Endpoint
+    ].accession,
   (state: GlobalState) => state.customLocation.search,
   (state: GlobalState) => state.settings.ui,
   (mainAccession, search, { idaAccessionDB }) => ({

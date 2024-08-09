@@ -23,7 +23,7 @@ export const SOFT_LIMIT = 10000;
 
 type Props = {
   url: string;
-  fileType: string;
+  fileType: DownloadFileTypes;
   subset: boolean;
   entityType: string;
   download?: DownloadProgress;

@@ -4,7 +4,9 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import { goToCustomLocation } from 'actions/creators';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
@@ -83,10 +85,7 @@ class LengthFilter extends PureComponent /*:: <Props> */ {
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
-export default connect(
-  mapStateToProps,
-  { goToCustomLocation },
-)(LengthFilter);
+export default connect(mapStateToProps, { goToCustomLocation })(LengthFilter);

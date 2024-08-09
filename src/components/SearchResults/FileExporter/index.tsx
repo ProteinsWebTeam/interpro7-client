@@ -32,7 +32,7 @@ const FileExporter = ({
   download,
 }: Props) => {
   const _handleClick = blockEvent(() => {
-    downloadURL(url, fileType, null, 'ebisearch');
+    downloadURL(url, fileType, false, 'ebisearch');
   });
   const { progress = Infinity, successful, blobURL } = download;
   return (

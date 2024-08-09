@@ -76,7 +76,7 @@ const _IPScanResultSafeGuardIfNotRehydratedYet = ({
   jobs,
   ...props
 }: {
-  jobs: Record<string, { metadata: IprscanMetaIDB }>;
+  jobs: JobsState;
   [p: string]: unknown;
 }) => {
   if (!jobs) return <Loading />;

@@ -179,17 +179,13 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.description.main.key,
   (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    (
-      state.customLocation.description[
-        state.customLocation.description.main.key
-      ] as EndpointLocation
-    ).db,
+    state.customLocation.description[
+      state.customLocation.description.main.key as Endpoint
+    ].db,
   (state: GlobalState) =>
-    (
-      state.customLocation.description[
-        state.customLocation.description.main.key
-      ] as EndpointLocation
-    ).accession,
+    state.customLocation.description[
+      state.customLocation.description.main.key as Endpoint
+    ].accession,
   (state: GlobalState) =>
     Object.entries(state.customLocation.description)
       .filter(
@@ -217,17 +213,13 @@ const mapStateToUrl = createSelector(
   (state: GlobalState) => state.customLocation.description.main.key,
   (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    (
-      state.customLocation.description[
-        state.customLocation.description.main.key
-      ] as EndpointLocation
-    ).db,
+    state.customLocation.description[
+      state.customLocation.description.main.key as Endpoint
+    ].db,
   (state: GlobalState) =>
-    (
-      state.customLocation.description[
-        state.customLocation.description.main.key
-      ] as EndpointLocation
-    ).accession,
+    state.customLocation.description[
+      state.customLocation.description.main.key as Endpoint
+    ].accession,
   ({ protocol, hostname, port, root }, mainType, db, accession) => {
     if (!accession) return;
     return format({
@@ -238,7 +230,7 @@ const mapStateToUrl = createSelector(
         root +
         descriptionToPath({
           main: { key: mainType },
-          [mainType]: {
+          [mainType!]: {
             db,
             accession,
           },

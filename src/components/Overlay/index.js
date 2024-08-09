@@ -5,8 +5,11 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import classnames from 'classnames/bind';
 
+// $FlowFixMe
 import { closeEverything } from 'actions/creators';
+// $FlowFixMe
 import { emblMapNavSelector } from 'reducers/ui/emblMapNav';
+// $FlowFixMe
 import { sideNavSelector } from 'reducers/ui/sideNav';
 
 import styles from './style.css';

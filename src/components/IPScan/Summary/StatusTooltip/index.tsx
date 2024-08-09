@@ -9,7 +9,7 @@ import style from '../style.css';
 
 const css = cssBinder(fonts, style);
 
-type Props = { status: string };
+type Props = { status?: string };
 const _StatusTooltip = ({ status }: Props) => (
   <Tooltip title={`Job ${status}`}>
     {(status === 'running' ||
@@ -33,7 +33,9 @@ const _StatusTooltip = ({ status }: Props) => (
         {status}
       </>
     ) : null}
-    {['finished', 'imported file', 'saved in browser'].includes(status) && (
+    {['finished', 'imported file', 'saved in browser'].includes(
+      status || '',
+    ) && (
       <>
         <span
           className={css('icon', 'icon-common', 'ico-confirmed')}

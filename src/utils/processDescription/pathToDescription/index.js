@@ -1,6 +1,7 @@
 // @flow
 import { rootHandler, otherHandler } from 'utils/processDescription/handlers';
 
+// $FlowFixMe
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 
 import getNewPartsFromOldURL from 'utils/interpro6-url-pattern';

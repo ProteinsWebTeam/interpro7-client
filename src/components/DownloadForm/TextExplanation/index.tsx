@@ -13,8 +13,8 @@ const getMainFragment = (
   const main = description.main?.key;
   if (!main) return null;
   const { db, integration, accession } = description[
-    main
-  ] as EndpointPartialLocation;
+    main as Endpoint
+  ] as EntryLocation;
   if (accession) {
     return (
       <>
@@ -56,7 +56,7 @@ const getMainFragment = (
 
 const getFilterFragment = (type: string, location: EndpointPartialLocation) => {
   if (!location) return null;
-  const { db, integration, accession } = location;
+  const { db, integration, accession } = location as EntryLocation;
   if (accession) {
     return (
       <>

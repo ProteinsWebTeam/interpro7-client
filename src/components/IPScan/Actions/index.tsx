@@ -49,7 +49,7 @@ export const Actions = ({
   MoreActions,
 }: Props) => {
   const _handleReRun = () => {
-    const search: Record<string, unknown> = {};
+    const search: InterProLocationSearch = {};
     if (attributes?.applications) {
       search.applications =
         typeof attributes.applications === 'string'

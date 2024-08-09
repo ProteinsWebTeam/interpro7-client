@@ -17,10 +17,10 @@ type Props = {
   type: 'sequence' | 'job';
   accession: string;
   localTitle?: string;
-  payload: Iprscan5Result | IprscanMetaIDB;
+  payload: Iprscan5Result | MinimalJobMetadata;
   updateSequenceJobTitle?: typeof updateSequenceJobTitle;
   updateJobTitle?: typeof updateJobTitle;
-  status: string;
+  status?: string;
   editable?: boolean;
 };
 
@@ -83,7 +83,9 @@ const IPScanTitle = ({
           placeholder="ø"
         />
         {editable &&
-        ['finished', 'imported file', 'saved in browser'].includes(status) ? (
+        ['finished', 'imported file', 'saved in browser'].includes(
+          status || '',
+        ) ? (
           <Button
             type="inline"
             onClick={changeTitle}

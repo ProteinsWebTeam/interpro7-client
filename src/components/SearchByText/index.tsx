@@ -105,7 +105,7 @@ export const SearchByText = ({ main }: Props) => {
 };
 
 const mapStateToProps2 = createSelector(
-  (state: GlobalState) => state.customLocation.description.main.key,
+  (state: GlobalState) => state.customLocation.description.main.key!,
   (main) => ({ main }),
 );
 

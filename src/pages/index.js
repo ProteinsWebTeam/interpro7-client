@@ -12,6 +12,7 @@ import loadable from 'higherOrder/loadable';
 import BreadCrumbs from 'components/BreadCrumbs';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+// $FlowFixMe
 import { stuckSelector } from 'reducers/ui/stuck';
 
 import { foundationPartial } from 'styles/foundation';

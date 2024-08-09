@@ -20,7 +20,7 @@ const AllProteinDownload = ({
   <File
     fileType={fileType}
     name={`protein-similar-to-${
-      (description[description.main.key] as EndpointLocation).accession
+      description[description.main.key as Endpoint].accession
     }.${fileType}`}
     count={count}
     customLocationDescription={{

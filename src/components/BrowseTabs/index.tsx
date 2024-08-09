@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 const f = cssBinder(styles);
 
 type Props = PropsWithChildren<{
-  mainType?: string;
+  mainType?: string | null;
   mainDB?: string | null;
   mainAccession?: string | null;
   isSignature?: boolean;

@@ -3,7 +3,7 @@ import { DELETE_JOB, REHYDRATE_JOBS } from 'actions/types';
 
 describe('reducer for job', () => {
   test('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(null);
+    expect(reducer(undefined, {})).toEqual({});
   });
 
   test('should handle DELETE_JOB action', () => {

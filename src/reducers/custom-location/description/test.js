@@ -1,4 +1,3 @@
-// @flow
 import reducer, { descriptionSelector, mainDBLocationSelector } from '.';
 import rootReducer from 'reducers';
 
