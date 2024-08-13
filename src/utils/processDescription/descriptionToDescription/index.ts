@@ -55,52 +55,22 @@ export default (description: InterProPartialDescription | undefined) => {
     }
   }
 
-  type EndpointDescription<Key extends Endpoint> = {
-    [Property in keyof InterProDescription[Key]]: InterProDescription[Key][Property];
-  };
+  type EndpointDescription = InterProDescription[Endpoint];
+  type EndpointKeys = keyof EndpointDescription;
 
   Object.keys(_description).forEach((key) => {
     if (
       key !== 'main' &&
+      key !== null &&
       key !== _description.main.key &&
       !_description[key as Endpoint].isFilter
     ) {
-      let internalObject: any = null;
-      let internalKeys = [];
-
-      switch (key) {
-        case 'entry':
-          internalObject = _description[
-            'entry'
-          ] as EndpointDescription<'entry'>;
-        case 'protein':
-          internalObject = _description[
-            'protein'
-          ] as EndpointDescription<'protein'>;
-        case 'structure':
-          internalObject = _description[
-            'structure'
-          ] as EndpointDescription<'structure'>;
-        case 'taxonomy':
-          internalObject = _description[
-            'taxonomy'
-          ] as EndpointDescription<'taxonomy'>;
-        case 'proteome':
-          internalObject = _description[
-            'proteome'
-          ] as EndpointDescription<'proteome'>;
-        case 'set':
-          internalObject = _description['set'] as EndpointDescription<'set'>;
-      }
-
-      if (internalObject && internalObject !== undefined) {
-        internalKeys = Object.keys(
-          internalObject,
-        ) as (keyof typeof internalObject)[];
-        internalKeys.forEach((k) => {
-          internalObject[k] = null;
-        });
-      }
+      Object.keys(_description[key as Endpoint]).forEach(
+        (k) =>
+          ((_description[key as Endpoint] as EndpointDescription)[
+            k as EndpointKeys
+          ] = null),
+      );
     }
   });
 

@@ -27,7 +27,7 @@ export default (description: InterProPartialDescription | undefined) => {
   const main = _description.main.key;
   output += `${pathForPart(main, _description[main])}/`;
   const filters = Object.entries(_description)
-    .filter(([, entry]) => (entry as EndpointPartialLocation).isFilter == true)
+    .filter(([, entry]) => (entry as EndpointPartialLocation).isFilter)
     .sort(([, entryA], [, entryB]) => {
       let a = (entryA as EndpointPartialLocation).order;
       let b = (entryB as EndpointPartialLocation).order;
