@@ -98,14 +98,6 @@ export default (description: InterProPartialDescription | undefined) => {
           ] as EndpointDescription<'proteome'>;
         case 'set':
           internalObject = _description['set'] as EndpointDescription<'set'>;
-        case 'search':
-          internalObject = _description[
-            'search'
-          ] as EndpointDescription<'search'>;
-        case 'result':
-          internalObject = _description[
-            'result'
-          ] as EndpointDescription<'result'>;
       }
 
       if (internalObject && internalObject !== undefined) {
