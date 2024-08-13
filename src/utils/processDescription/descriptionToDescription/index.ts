@@ -61,7 +61,6 @@ export default (description: InterProPartialDescription | undefined) => {
   Object.keys(_description).forEach((key) => {
     if (
       key !== 'main' &&
-      key !== null &&
       key !== _description.main.key &&
       !_description[key as Endpoint].isFilter
     ) {
