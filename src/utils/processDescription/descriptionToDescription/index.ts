@@ -2,8 +2,6 @@ import { get, set } from 'lodash-es';
 
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 import descriptionItemToHandlers from 'utils/processDescription/descriptionItemToHandlers';
-import { InterpolationTypes } from 'molstar/lib/mol-geo/geometry/image/image';
-import emptyDescription from 'utils/processDescription/emptyDescription';
 
 export default (description: InterProPartialDescription | undefined) => {
   // new description to be populated
@@ -57,14 +55,9 @@ export default (description: InterProPartialDescription | undefined) => {
     }
   }
 
-  type SpecificDescription<OuterObj> = {
-    [Property in keyof OuterObj]: OuterObj[Property];
+  type EndpointDescription<Key extends Endpoint> = {
+    [Property in keyof InterProDescription[Key]]: InterProDescription[Key][Property];
   };
-
-  type PossibleOuterKeys = Endpoint | 'search' | 'result' | 'main';
-  type EndpointDescription<Key extends PossibleOuterKeys> = SpecificDescription<
-    InterProDescription[Key]
-  >;
 
   Object.keys(_description).forEach((key) => {
     if (
@@ -87,7 +80,7 @@ export default (description: InterProPartialDescription | undefined) => {
         case 'structure':
           internalObject = _description[
             'structure'
-          ] as EndpointDescription<'protein'>;
+          ] as EndpointDescription<'structure'>;
         case 'taxonomy':
           internalObject = _description[
             'taxonomy'
@@ -114,6 +107,5 @@ export default (description: InterProPartialDescription | undefined) => {
   // Specific logic for 'other'
   _description.other.push(...(description?.other || []));
   Object.seal(_description.other);
-
   return _description;
 };
