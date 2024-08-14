@@ -121,11 +121,41 @@ export const ProteinViewer = ({
   loading = false,
   children,
 }: LoadedProps) => {
+
   const [isPrinting, setPrinting] = useState(false);
+
+  // State variable to show/hide "secondary" tracks
+  const [showMore, setShowMore] = useState(false);
+
+  // List of "main" tracks to be displayed, the rest are hidden by default
+  const mainTracks = [
+    'AlphaFold confidence',
+    'representative domains',
+    'representative families', // coming soon
+    'variants',
+    'disordered regions', // data coming from (?)
+    'residues'
+  ];
+
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
+    'secondary structure': true,
+    'family': true,
+    'domain': true,
+    'homologous superfamily': true,
+    'repeat': true,
+    'conserved site': true,
+    'active site': true,
+    'binding site': true,
+    'ptm': true,
+    'unintegrated': true,
+    'other features': true,
     'other residues': true,
-    'external sources': true,
+    'features': true,
+    'predictions': true,
+    'match conservation': true,
+    'Clinical significance: pathogenic and likely pathogenic variants': true
   });
+
   const categoryRefs = useRef<ExpandedHandle[]>([]);
 
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
@@ -221,32 +251,48 @@ export const ProteinViewer = ({
               >
                 {children}
               </Options>
+
             </div>
           </div>
+
           <div ref={componentsRef} id={idRef.current}>
             <div
               className={css('protvista-grid', {
                 printing: isPrinting,
               })}
             >
+
               <Header
                 length={protein.length}
                 sequence={protein.sequence}
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
+
+[]
               {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
 
                 .map(([type, entries, component]) => {
                   entries.forEach((entry: ExtendedFeature) => {
                     entry.protein = protein.accession;
+
                   });
 
                   const LabelComponent = component?.component || 'span';
+
+
+                  // Show only the main tracks unless button "Show more" is clicked
+                  let hideDiv: string = ""
+                  if (!showMore && !mainTracks.includes(type)) {
+                    hideDiv = "none"
+                  }
+
                   return (
                     <div
                       key={type}
+                      // Conditioanally display the div containing the track
+                      style={{ display: hideDiv }}
                       className={css(
                         'tracks-container',
                         'track-sized',
@@ -256,7 +302,7 @@ export const ProteinViewer = ({
                         },
                       )}
                     >
-                      <header>
+                      <header >
                         <button
                           onClick={() =>
                             setHideCategory(
@@ -316,6 +362,14 @@ export const ProteinViewer = ({
                 conservationError={conservationError}
                 isPrinting={isPrinting}
               />
+
+              {/* Button to show/hide all secondary tracks (maintains internal view/show state of the specific track)*/}
+              <div className={css('showmore-btn')}>
+                <button className={css("vf-button vf-button--tertiary vf-button--sm")} onClick={() => { setShowMore(!showMore) }}>
+                  {showMore ? "Show Less" : "Show More "}
+                </button>
+              </div>
+
             </div>
           </div>
         </NightingaleManager>

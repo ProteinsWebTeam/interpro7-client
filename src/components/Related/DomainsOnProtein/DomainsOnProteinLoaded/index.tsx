@@ -16,6 +16,13 @@ const ProteinViewer = loadable({
 const UNDERSCORE = /_/g;
 const FIRST_IN_ORDER = [
   'representative_domains',
+  'representative_families', // coming soon
+  'variants',
+  'disordered_regions', // data coming from (?)
+  'residues'
+];
+
+const LASTS_IN_ORDER = [
   'secondary_structure',
   'family',
   'domain',
@@ -26,14 +33,13 @@ const FIRST_IN_ORDER = [
   'binding_site',
   'ptm',
   'unintegrated',
-];
-const LASTS_IN_ORDER = [
+  'other_features',
   'other_residues',
-  'residues',
   'features',
   'predictions',
   'match_conservation',
 ];
+
 export const byEntryType = (
   [a, _]: [string, unknown],
   [b, __]: [string, unknown],

@@ -12,6 +12,7 @@
   }
 }
 
+
 .track-row {
   display: flex;
 }
@@ -20,6 +21,11 @@
   max-height: 2rem;
   background: #fafafa;
   cursor: move;
+}
+
+.showmore-btn {
+  text-align: end;
+  margin-top: 20px;
 }
 
 .track-length {
