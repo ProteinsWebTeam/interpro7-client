@@ -1,25 +1,10 @@
-// @flow
 import {
   CREATE_JOB,
   UPDATE_JOB,
   IMPORT_JOB,
   IMPORT_JOB_FROM_DATA,
+  IPScanMetadataAction,
 } from 'actions/types';
-
-/*:: type JobStatus = 'created' | 'submitted' | 'failed' | 'importing' | 'imported file' | 'saved in browser' | 'running' | 'finished' | 'queued'; */
-
-/*:: export type JobMetadata = {|
-  localID: ?string,
-  type: 'InterProScan',
-  status: ?JobStatus,
-  remoteID: ?string,
-  hasResults?: boolean,
-  times: {|
-    created?: number,
-    submitted?: number,
-    lastUpdate: ?number,
-  |},
-|} */
 
 const createJobMetadata = () => ({
   localID: null,
@@ -32,7 +17,7 @@ const createJobMetadata = () => ({
   },
 });
 
-export const updateJob = (update /*: Object */) => {
+export const updateJob = (update: IprscanMetaIDB) => {
   const base = createJobMetadata();
   const now = Date.now();
   const times = { ...base.times, ...(update.times || {}) };
@@ -40,7 +25,7 @@ export const updateJob = (update /*: Object */) => {
   return { ...base, ...update, times };
 };
 
-export default (state /*: JobMetadata */, action /*: Object */) => {
+export default (state: MinimalJobMetadata, action: IPScanMetadataAction) => {
   switch (action.type) {
     case CREATE_JOB:
       return updateJob({ ...action.job.metadata, status: 'created' });

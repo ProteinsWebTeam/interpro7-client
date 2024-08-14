@@ -5,8 +5,8 @@ import { createSelector } from 'reselect';
 import DomainArchitectures from 'components/Entry/DomainArchitectures';
 
 type Props = {
-  mainType: string;
-  database: string | null;
+  mainType: string | null;
+  database?: string | null;
 };
 
 const DomainArchitectureSubPage = ({ mainType, database }: Props) => {
@@ -18,11 +18,9 @@ const DomainArchitectureSubPage = ({ mainType, database }: Props) => {
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.description.main.key,
   (state: GlobalState) =>
-    (
-      state.customLocation.description[
-        state.customLocation.description.main.key
-      ] as EndpointLocation
-    ).db,
+    state.customLocation.description[
+      state.customLocation.description.main.key as Endpoint
+    ].db,
   (mainType, database) => ({ mainType, database }),
 );
 

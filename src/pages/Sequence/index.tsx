@@ -72,7 +72,7 @@ type Props = {
   orf?: number;
   remoteID?: string;
   entryDB?: string;
-  localTitle?: string;
+  localTitle?: string | null;
   entries?: number;
   updateJobStatus: typeof updateJobStatus;
 };

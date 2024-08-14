@@ -66,7 +66,7 @@ const ConnectedSortButton = React.forwardRef<
     } else {
       delete search.sort_by;
     }
-    goToCustomLocation({ description: description, search: { ...search } });
+    goToCustomLocation({ description: description!, search: { ...search } });
   };
   useImperativeHandle(ref, () => ({
     toggleSort,

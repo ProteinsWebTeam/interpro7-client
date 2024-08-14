@@ -54,9 +54,7 @@ const SequenceSubPage = ({ data, localPayload, localTitle, orf }: Props) => {
       <Sequence accession={accession} sequence={sequence} name={name} />
       {hasORF && protein && (
         <section id="nucleotides">
-          <h5>
-            Nucleotide Sequence
-          </h5>
+          <h5>Nucleotide Sequence</h5>
           <InnerSequence
             sequence={local?.sequence}
             start={currentORF.start}

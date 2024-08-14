@@ -1,4 +1,3 @@
-// @flow
 import getReducerFor from '.';
 import { SERVER_STATUS, TEST } from 'actions/types';
 

@@ -20,7 +20,6 @@ import Length from 'components/Protein/Length';
 import DomainsOnProteinLoaded from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 import { Exporter } from 'components/Table';
 
-// import Actions from '../Actions';
 import { getIProScanURL } from '../Status';
 import IPScanVersionCheck from '../IPScanVersionCheck';
 import NucleotideSummary from '../NucleotideSummary';

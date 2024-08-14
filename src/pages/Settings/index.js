@@ -28,7 +28,9 @@ import {
   changeSettingsRaw,
   resetSettings,
   addToast,
+  // $FlowFixMe
 } from 'actions/creators';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 import { askNotificationPermission } from 'utils/browser-notifications';
 

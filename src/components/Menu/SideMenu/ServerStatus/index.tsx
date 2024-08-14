@@ -55,7 +55,7 @@ const ServerStatus = ({
           {`${mapEndpointToName.get(endpoint)} appears ${
             status ? 'on' : 'off'
           }line. Last checked `}
-          <TimeAgo date={new Date(lastCheck)} />
+          {lastCheck && <TimeAgo date={new Date(lastCheck)} />}
         </span>
       }
     >

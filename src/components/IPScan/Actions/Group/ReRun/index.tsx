@@ -24,7 +24,7 @@ type Props = {
 
 const ReRun = ({ jobsData, goToCustomLocation }: Props) => {
   const handleReRun = async () => {
-    const search: Record<string, unknown> = {};
+    const search: InterProLocationSearch = {};
     // All jobs should have the same applications so we can t=ake this from the first one.
     const apps = jobsData?.[0]?.applications;
     if (apps) {

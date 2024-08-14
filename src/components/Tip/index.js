@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import T from 'prop-types';
 
+// $FlowFixMe
 import { addToast, changeSettingsRaw } from 'actions/creators';
 import { connect } from 'react-redux';
 

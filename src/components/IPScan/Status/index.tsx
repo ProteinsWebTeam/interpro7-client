@@ -78,7 +78,7 @@ const GoToNewSearch = () => (
 );
 
 type Props = {
-  jobs: Array<IprscanMetaIDB>;
+  jobs: Array<MinimalJobMetadata>;
   search: InterProLocationSearch;
   defaultPageSize: number;
   updateJobStatus: typeof updateJobStatus;
@@ -86,7 +86,7 @@ type Props = {
 
 type State = {
   show: boolean;
-  jobsToRemove: Array<IprscanMetaIDB>;
+  jobsToRemove: Array<MinimalJobMetadata>;
   from: SourceToRemove;
 };
 
@@ -110,7 +110,7 @@ export class IPScanStatus extends PureComponent<Props, State> {
     const { jobs, search, defaultPageSize } = this.props;
     const keys = ['localID', 'localTitle', 'times', 'entries'];
     let paginatedJobs = [...jobs];
-    sortSubsetBy<IprscanMetaIDB>(paginatedJobs, search, keys, {
+    sortSubsetBy<MinimalJobMetadata>(paginatedJobs, search, keys, {
       localID: (localID, row) => row!.remoteID || (localID as string),
       localTitle: (localTitle, row) =>
         (localTitle as string) || row?.remoteID || row?.localID || '',
@@ -334,7 +334,7 @@ export class IPScanStatus extends PureComponent<Props, State> {
   }
 }
 
-const compare = (a: IprscanMetaIDB, b: IprscanMetaIDB) => {
+const compare = (a: MinimalJobMetadata, b: MinimalJobMetadata) => {
   if (b.remoteID && a.remoteID) return b.remoteID > a.remoteID ? 1 : -1;
   return 1;
 };
