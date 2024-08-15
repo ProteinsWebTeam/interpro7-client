@@ -33,6 +33,7 @@ import grid from './grid.css';
 import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
+import ShowMoreTracks from './ShowMoreTracks';
 
 TracksInCategory.displayName = 'TracksInCategory';
 Header.displayName = 'TracksHeader';
@@ -131,9 +132,9 @@ export const ProteinViewer = ({
   const mainTracks = [
     'AlphaFold confidence',
     'representative domains',
-    'representative families', // coming soon
+    'representative families', 
     'variants',
-    'disordered regions', // data coming from (?)
+    'disordered regions',
     'residues'
   ];
 
@@ -251,17 +252,19 @@ export const ProteinViewer = ({
               >
                 {children}
               </Options>
-
+            </div>
+            <div className={css('track-sized')}>
+              <ShowMoreTracks showMore={showMore} showMoreChanged={setShowMore} />
             </div>
           </div>
 
           <div ref={componentsRef} id={idRef.current}>
+
             <div
               className={css('protvista-grid', {
                 printing: isPrinting,
               })}
             >
-
               <Header
                 length={protein.length}
                 sequence={protein.sequence}
@@ -269,7 +272,7 @@ export const ProteinViewer = ({
                 ref={navigationRef}
               />
 
-[]
+              []
               {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
 
@@ -281,7 +284,6 @@ export const ProteinViewer = ({
 
                   const LabelComponent = component?.component || 'span';
 
-
                   // Show only the main tracks unless button "Show more" is clicked
                   let hideDiv: string = ""
                   if (!showMore && !mainTracks.includes(type)) {
@@ -289,71 +291,82 @@ export const ProteinViewer = ({
                   }
 
                   return (
-                    <div
-                      key={type}
-                      // Conditioanally display the div containing the track
-                      style={{ display: hideDiv }}
-                      className={css(
-                        'tracks-container',
-                        'track-sized',
-                        'protvista-grid',
-                        {
-                          printing: isPrinting,
-                        },
-                      )}
-                    >
-                      <header >
-                        <button
-                          onClick={() =>
-                            setHideCategory(
-                              switchCategoryVisibility(hideCategory, type),
-                            )
-                          }
-                          className={css('as-text')}
-                        >
-                          <span
-                            className={css(
-                              'icon',
-                              'icon-common',
-                              hideCategory[type]
-                                ? 'icon-caret-right'
-                                : 'icon-caret-down',
-                            )}
-                          />{' '}
-                          {type}
-                        </button>
-                      </header>
-                      {component && (
-                        <div className={css('track-accession')}>
-                          <LabelComponent {...(component?.attributes || {})} />
-                        </div>
-                      )}{' '}
-                      {type === 'representative domains' ? (
-                        <RepresentativeDomainsTrack
-                          hideCategory={hideCategory[type]}
-                          highlightColor={highlightColor}
-                          entries={entries}
-                          length={protein.sequence.length}
-                          openTooltip={openTooltip}
-                          closeTooltip={closeTooltip}
-                          isPrinting={isPrinting}
-                        />
-                      ) : (
-                        <TracksInCategory
-                          entries={entries}
-                          sequence={protein.sequence}
-                          hideCategory={hideCategory[type]}
-                          highlightColor={highlightColor}
-                          openTooltip={openTooltip}
-                          closeTooltip={closeTooltip}
-                          isPrinting={isPrinting}
-                          ref={(ref: ExpandedHandle) =>
-                            categoryRefs.current.push(ref)
-                          }
-                          databases={dataBase?.payload?.databases}
-                        />
-                      )}
-                    </div>
+                      <div
+                        key={type}
+                        // Conditioanally display the div containing the track
+                        style={{ display: hideDiv }}
+                        className={css(
+                          'tracks-container',
+                          'track-sized',
+                          'protvista-grid',
+                          {
+                            printing: isPrinting,
+                          },
+                        )}
+                      >
+                        <header >
+                          <button
+                            onClick={() =>
+                              setHideCategory(
+                                switchCategoryVisibility(hideCategory, type),
+                              )
+                            }
+                            className={css('as-text')}
+                          >
+                            <span
+                              className={css(
+                                'icon',
+                                'icon-common',
+                                hideCategory[type]
+                                  ? 'icon-caret-right'
+                                  : 'icon-caret-down',
+                              )}
+                            />{' '}
+                            {type}
+                          </button>
+                        </header>
+                        {component && (
+                          <div className={css('track-accession')}>
+                            <LabelComponent {...(component?.attributes || {})} />
+                          </div>
+                        )}{' '}
+                        {type === 'representative domains' ? (
+                          <RepresentativeDomainsTrack
+                            hideCategory={hideCategory[type]}
+                            highlightColor={highlightColor}
+                            entries={entries}
+                            length={protein.sequence.length}
+                            openTooltip={openTooltip}
+                            closeTooltip={closeTooltip}
+                            isPrinting={isPrinting}
+                          />
+                        ) : (type === 'representative families') ? (
+                          <RepresentativeDomainsTrack
+                            hideCategory={hideCategory[type]}
+                            highlightColor={highlightColor}
+                            entries={entries}
+                            length={protein.sequence.length}
+                            openTooltip={openTooltip}
+                            closeTooltip={closeTooltip}
+                            isPrinting={isPrinting}
+                          />
+                        ) :
+                          (
+                            <TracksInCategory
+                              entries={entries}
+                              sequence={protein.sequence}
+                              hideCategory={hideCategory[type]}
+                              highlightColor={highlightColor}
+                              openTooltip={openTooltip}
+                              closeTooltip={closeTooltip}
+                              isPrinting={isPrinting}
+                              ref={(ref: ExpandedHandle) =>
+                                categoryRefs.current.push(ref)
+                              }
+                              databases={dataBase?.payload?.databases}
+                            />
+                          )}
+                      </div>
                   );
                 })}
               <ConservationMockupTrack
@@ -363,14 +376,8 @@ export const ProteinViewer = ({
                 isPrinting={isPrinting}
               />
 
-              {/* Button to show/hide all secondary tracks (maintains internal view/show state of the specific track)*/}
-              <div className={css('showmore-btn')}>
-                <button className={css("vf-button vf-button--tertiary vf-button--sm")} onClick={() => { setShowMore(!showMore) }}>
-                  {showMore ? "Show Less" : "Show More "}
-                </button>
-              </div>
-
             </div>
+
           </div>
         </NightingaleManager>
       </div>

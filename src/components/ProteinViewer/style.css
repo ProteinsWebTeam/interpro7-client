@@ -23,11 +23,6 @@
   cursor: move;
 }
 
-.showmore-btn {
-  text-align: end;
-  margin-top: 20px;
-}
-
 .track-length {
   display: flex;
   justify-content: space-between;

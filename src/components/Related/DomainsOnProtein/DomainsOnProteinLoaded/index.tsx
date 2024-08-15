@@ -23,8 +23,8 @@ const FIRST_IN_ORDER = [
 ];
 
 const LASTS_IN_ORDER = [
+  'family', 
   'secondary_structure',
-  'family',
   'domain',
   'homologous_superfamily',
   'repeat',
@@ -49,8 +49,8 @@ export const byEntryType = (
     if (b.toLowerCase() === label) return 1;
   }
   for (const l of LASTS_IN_ORDER) {
-    if (a.toLowerCase() === l) return 1;
-    if (b.toLowerCase() === l) return -1;
+    if (a.toLowerCase() === l) return -1;
+    if (b.toLowerCase() === l) return 1;
   }
   return a > b ? 1 : 0;
 };
@@ -59,13 +59,18 @@ type tracksProps = {
   unintegrated: Array<MinimalFeature>;
   other?: Array<MinimalFeature>;
   representativeDomains?: Array<MinimalFeature>;
+  representativeFamilies?:  Array<MinimalFeature>;
+  disorderedRegions?:  Array<MinimalFeature>;
 };
 export const makeTracks = ({
   interpro,
   unintegrated,
   other,
   representativeDomains,
+  representativeFamilies,
+  disorderedRegions,
 }: tracksProps): ProteinViewerDataObject<MinimalFeature> => {
+  
   const groups = groupByEntryType(interpro);
   unintegrated.sort(orderByAccession);
   const mergedData: ProteinViewerDataObject<MinimalFeature> = {
@@ -75,7 +80,13 @@ export const makeTracks = ({
   if (other) mergedData.other_features = other;
   if (representativeDomains?.length)
     mergedData.representative_domains = representativeDomains;
+  if (representativeFamilies?.length)
+    mergedData.representative_families = representativeFamilies;
+  if (disorderedRegions?.length)
+    mergedData.disorderedRegions = disorderedRegions;
   return mergedData;
+
+  
 };
 
 export const flattenTracksObject = (
@@ -170,6 +181,8 @@ const DomainsOnProteinLoaded = ({
   children,
   title = 'Entry matches to this protein',
 }: Props) => {
+
+
   const sortedData = flattenTracksObject(dataMerged);
   const protein =
     (mainData as ProteinEntryPayload).metadata ||
@@ -199,7 +212,8 @@ const DomainsOnProteinLoaded = ({
       protein={protein}
       data={sortedData}
       title={title}
-      showConservationButton={showConservationButton}
+      show
+      ervationButton={showConservationButton}
       handleConservationLoad={handleConservationLoad}
       conservationError={conservationError}
       loading={loading}
