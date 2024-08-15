@@ -67,6 +67,7 @@ interface LoadedProps
     LoadDataProps<ResiduesPayload, 'Residues'>,
     LoadDataProps<ProteinsAPIVariation, 'Variation'>,
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
+    LoadDataProps<ProteinsAPIProteomics, "Proteomics">, 
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
     LoadDataProps<
       PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
@@ -79,6 +80,7 @@ const DomainOnProteinWithoutData = ({
   dataFeatures,
   dataConfidence,
   dataVariation,
+  dataProteomics,
   onMatchesLoaded,
   onFamiliesFound,
   children,
@@ -217,6 +219,7 @@ const DomainOnProteinWithoutData = ({
         dataMerged={mergedData}
         dataConfidence={dataConfidence}
         dataVariation={dataVariation}
+        dataProteomics={dataProteomics}
         loading={
           data?.loading ||
           dataFeatures?.loading ||
@@ -279,6 +282,7 @@ const getExtraURL = (query: string) =>
       return url;
     },
   );
+
 const getVariationURL = createSelector(
   (state: GlobalState) => state.settings.proteinsAPI,
   (state: GlobalState) =>
@@ -289,6 +293,21 @@ const getVariationURL = createSelector(
       hostname,
       port,
       pathname: root + 'variation/' + accession,
+    });
+    return url;
+  },
+);
+
+const getPTMPayload = createSelector(
+  (state: GlobalState) => state.settings.proteinsAPI,
+  (state: GlobalState) =>
+    state.customLocation.description.protein?.accession || '',
+  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+    const url = format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + 'proteomics-ptm/' + accession,
     });
     return url;
   },
@@ -315,8 +334,13 @@ export default loadExternalSources(
             getUrl: getVariationURL,
             propNamespace: 'Variation',
           } as LoadDataParameters)(
-            loadData(getRelatedEntriesURL as LoadDataParameters)(
-              DomainOnProteinWithoutData,
+            loadData<ProteinsAPIProteomics, 'Proteomics'>({
+              getUrl: getPTMPayload,
+              propNamespace: 'Proteomics',
+            } as LoadDataParameters)(
+              loadData(getRelatedEntriesURL as LoadDataParameters)(
+                DomainOnProteinWithoutData,
+              ),
             ),
           ),
         ),

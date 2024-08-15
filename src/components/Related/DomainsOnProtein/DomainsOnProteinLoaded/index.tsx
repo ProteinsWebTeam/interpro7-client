@@ -91,6 +91,7 @@ export const flattenTracksObject = (
       ])
   );
 };
+
 export const addVariationTrack = (
   variationPayload: ProteinsAPIVariation,
   protein: string,
@@ -113,6 +114,28 @@ export const addVariationTrack = (
   }
 };
 
+export const addPTMTrack = (
+  proteomicsPayload: ProteinsAPIProteomics,
+  protein: string,
+  tracks: ProteinViewerData,
+) => {
+  if (proteomicsPayload?.features?.length) {
+    const proteomicsTrack: [string, Array<unknown>] = [
+      'PTM Data',
+      [
+        {
+          accession: `ptm_${protein}`,
+          data: proteomicsPayload,
+          type: "ptm", 
+          protein,
+          source_database: 'proteinsAPI',
+        },
+      ],
+    ];
+    tracks.push(proteomicsTrack);
+  }
+};
+
 type Props = PropsWithChildren<{
   mainData:
     | {
@@ -126,6 +149,7 @@ type Props = PropsWithChildren<{
   dataMerged: ProteinViewerDataObject;
   dataConfidence?: RequestedData<AlphafoldConfidencePayload>;
   dataVariation?: RequestedData<ProteinsAPIVariation>;
+  dataProteomics?: RequestedData<ProteinsAPIProteomics>;
   conservationError?: string | null;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
@@ -138,6 +162,7 @@ const DomainsOnProteinLoaded = ({
   dataMerged,
   dataConfidence,
   dataVariation,
+  dataProteomics,
   conservationError,
   showConservationButton,
   handleConservationLoad,
@@ -161,6 +186,12 @@ const DomainsOnProteinLoaded = ({
         protein.accession,
         sortedData,
       );
+  }
+
+  if (dataProteomics?.ok && dataProteomics.payload){
+    if (dataProteomics.payload.features.length > 0){
+      /*addPTMTrack(dataProteomics.payload, protein.accession, sortedData);*/
+    }
   }
 
   return (
