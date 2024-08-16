@@ -8,6 +8,7 @@ import EntryTypeFilter from './EntryTypeFilter';
 import IntegratedFilter from './IntegratedFilter';
 import LatestFilter from './LatestFilter';
 import GOTermsFilter from './GOTermsFilter';
+import AIGeneratedFilter from './AIGeneratedFilter';
 
 type Props = { mainDB?: string };
 export const EntryListFilter = ({ mainDB }: Props) => (
@@ -20,6 +21,9 @@ export const EntryListFilter = ({ mainDB }: Props) => (
     {mainDB !== 'InterPro' && <IntegratedFilter label="InterPro State" />}
     {mainDB === 'InterPro' && <GOTermsFilter label="GO Terms" />}
     {mainDB === 'InterPro' && <LatestFilter label="New entries" />}
+    {mainDB === 'InterPro' && (
+      <AIGeneratedFilter label="AI-Generated entries" />
+    )}
   </FiltersPanel>
 );
 
