@@ -11,5 +11,8 @@ exports[`<EntryListFilter /> should render 1`] = `
   <Memo(Connect(loadData(LatestFilter)))
     label="New entries"
   />
+  <Memo(Connect(loadData(AIGeneratedFilter)))
+    label="AI-Generated entries"
+  />
 </Memo(Connect(FiltersPanel))>
 `;
