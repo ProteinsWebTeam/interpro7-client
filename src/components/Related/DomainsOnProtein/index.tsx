@@ -62,16 +62,16 @@ type Props = PropsWithChildren<{
 }>;
 interface LoadedProps
   extends Props,
-  ExtenalSourcesProps,
-  LoadDataProps<ExtraFeaturesPayload, 'Features'>,
-  LoadDataProps<ResiduesPayload, 'Residues'>,
-  LoadDataProps<ProteinsAPIVariation, 'Variation'>,
-  LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
-  LoadDataProps<ProteinsAPIProteomics, "Proteomics">,
-  LoadDataProps<AlphafoldPayload, 'Prediction'>,
-  LoadDataProps<
-    PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
-  > { }
+    ExtenalSourcesProps,
+    LoadDataProps<ExtraFeaturesPayload, 'Features'>,
+    LoadDataProps<ResiduesPayload, 'Residues'>,
+    LoadDataProps<ProteinsAPIVariation, 'Variation'>,
+    LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
+    LoadDataProps<ProteinsAPIProteomics, 'Proteomics'>,
+    LoadDataProps<AlphafoldPayload, 'Prediction'>,
+    LoadDataProps<
+      PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
+    > {}
 
 const DomainOnProteinWithoutData = ({
   data,
@@ -120,9 +120,13 @@ const DomainOnProteinWithoutData = ({
     if (data && !data.loading) {
       if (processData) {
         onMatchesLoaded?.(payload?.results || []);
-        const { interpro, unintegrated, representativeDomains,
-          representativeFamilies, other } =
-          processData;
+        const {
+          interpro,
+          unintegrated,
+          representativeDomains,
+          representativeFamilies,
+          other,
+        } = processData;
         setProcessedData({
           interpro,
           unintegrated,
@@ -145,14 +149,19 @@ const DomainOnProteinWithoutData = ({
       return <EdgeCase text={edgeCaseText || ''} status={STATUS_TIMEOUT} />;
   }
   if (!processedData) return null;
-  const { interpro, unintegrated, other, representativeDomains, representativeFamilies } =
-    processedData;
+  const {
+    interpro,
+    unintegrated,
+    other,
+    representativeDomains,
+    representativeFamilies,
+  } = processedData;
   const mergedData = makeTracks({
     interpro: interpro as Array<{ accession: string; type: string }>,
     unintegrated: unintegrated as Array<{ accession: string; type: string }>,
     other: other as Array<MinimalFeature>,
     representativeDomains: representativeDomains as Array<MinimalFeature>,
-    representativeFamilies: representativeFamilies as Array<MinimalFeature>
+    representativeFamilies: representativeFamilies as Array<MinimalFeature>,
   });
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;
@@ -162,17 +171,24 @@ const DomainOnProteinWithoutData = ({
     mergeResidues(mergedData, dataResidues.payload);
   }
 
-  const filterMobiDBLiteFeatures = (mergedData: ProteinViewerDataObject): MinimalFeature[] => {
-    const mobiDBLiteEntries: MinimalFeature[] = (mergedData["other_features"] as MinimalFeature[])
-      .filter(
-        (k) => (k as MinimalFeature).accession == "Mobidblt-Consensus Disorder Prediction"
-      )
-    return mobiDBLiteEntries
-  }
+  const filterMobiDBLiteFeatures = (
+    mergedData: ProteinViewerDataObject,
+  ): MinimalFeature[] => {
+    const mobiDBLiteEntries: MinimalFeature[] = (
+      mergedData['other_features'] as MinimalFeature[]
+    ).filter(
+      (k) =>
+        (k as MinimalFeature).accession ==
+        'Mobidblt-Consensus Disorder Prediction',
+    );
+    return mobiDBLiteEntries;
+  };
 
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
     mergeExtraFeatures(mergedData, dataFeatures?.payload);
-    mergedData["disordered_regions"] = filterMobiDBLiteFeatures(mergedData) as MinimalFeature[]
+    mergedData['disordered_regions'] = filterMobiDBLiteFeatures(
+      mergedData,
+    ) as MinimalFeature[];
   }
   // if (conservation.data) {
   //   mergeConservationData(mergedData, conservation.data);
@@ -240,10 +256,10 @@ const DomainOnProteinWithoutData = ({
           dataResidues?.loading ||
           false
         }
-      // Disabling Conservation until hmmer is working
-      // conservationError={conservation.error}
-      // showConservationButton={showConservationButton}
-      // handleConservationLoad={fetchConservationData}
+        // Disabling Conservation until hmmer is working
+        // conservationError={conservation.error}
+        // showConservationButton={showConservationButton}
+        // handleConservationLoad={fetchConservationData}
       >
         {children}
       </DomainsOnProteinLoaded>
@@ -327,6 +343,13 @@ const getPTMPayload = createSelector(
   },
 );
 
+/* To add then PTM data is complete
+* as LoadDataParameters)(
+loadData<ProteinsAPIProteomics, 'Proteomics'>({
+  getUrl: getPTMPayload,
+  propNamespace: 'Proteomics', 
+} */
+
 export default loadExternalSources(
   loadData<AlphafoldPayload, 'Prediction'>({
     getUrl: getAlphaFoldPredictionURL,
@@ -348,13 +371,8 @@ export default loadExternalSources(
             getUrl: getVariationURL,
             propNamespace: 'Variation',
           } as LoadDataParameters)(
-            loadData<ProteinsAPIProteomics, 'Proteomics'>({
-              getUrl: getPTMPayload,
-              propNamespace: 'Proteomics',
-            } as LoadDataParameters)(
-              loadData(getRelatedEntriesURL as LoadDataParameters)(
-                DomainOnProteinWithoutData,
-              ),
+            loadData(getRelatedEntriesURL as LoadDataParameters)(
+              DomainOnProteinWithoutData,
             ),
           ),
         ),

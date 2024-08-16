@@ -13,17 +13,18 @@ const ProteinViewer = loadable({
   loading: null,
 });
 
+// 0A017SEX7 is a good example
 const UNDERSCORE = /_/g;
 const FIRST_IN_ORDER = [
   'representative_domains',
   'representative_families', // coming soon
   'variants',
   'disordered_regions', // data coming from (?)
-  'residues'
+  'residues',
 ];
 
 const LASTS_IN_ORDER = [
-  'family', 
+  'family',
   'secondary_structure',
   'domain',
   'homologous_superfamily',
@@ -59,8 +60,8 @@ type tracksProps = {
   unintegrated: Array<MinimalFeature>;
   other?: Array<MinimalFeature>;
   representativeDomains?: Array<MinimalFeature>;
-  representativeFamilies?:  Array<MinimalFeature>;
-  disorderedRegions?:  Array<MinimalFeature>;
+  representativeFamilies?: Array<MinimalFeature>;
+  disorderedRegions?: Array<MinimalFeature>;
 };
 export const makeTracks = ({
   interpro,
@@ -70,7 +71,6 @@ export const makeTracks = ({
   representativeFamilies,
   disorderedRegions,
 }: tracksProps): ProteinViewerDataObject<MinimalFeature> => {
-  
   const groups = groupByEntryType(interpro);
   unintegrated.sort(orderByAccession);
   const mergedData: ProteinViewerDataObject<MinimalFeature> = {
@@ -85,8 +85,6 @@ export const makeTracks = ({
   if (disorderedRegions?.length)
     mergedData.disorderedRegions = disorderedRegions;
   return mergedData;
-
-  
 };
 
 export const flattenTracksObject = (
@@ -137,7 +135,7 @@ export const addPTMTrack = (
         {
           accession: `ptm_${protein}`,
           data: proteomicsPayload,
-          type: "ptm", 
+          type: 'ptm',
           protein,
           source_database: 'proteinsAPI',
         },
@@ -181,8 +179,6 @@ const DomainsOnProteinLoaded = ({
   children,
   title = 'Entry matches to this protein',
 }: Props) => {
-
-
   const sortedData = flattenTracksObject(dataMerged);
   const protein =
     (mainData as ProteinEntryPayload).metadata ||
@@ -201,8 +197,8 @@ const DomainsOnProteinLoaded = ({
       );
   }
 
-  if (dataProteomics?.ok && dataProteomics.payload){
-    if (dataProteomics.payload.features.length > 0){
+  if (dataProteomics?.ok && dataProteomics.payload) {
+    if (dataProteomics.payload.features.length > 0) {
       /*addPTMTrack(dataProteomics.payload, protein.accession, sortedData);*/
     }
   }
