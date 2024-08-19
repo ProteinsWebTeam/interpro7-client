@@ -34,6 +34,7 @@ import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
 import ShowMoreTracks from './ShowMoreTracks';
+import FeatureShape from '@nightingale-elements/nightingale-track/dist/FeatureShape';
 
 TracksInCategory.displayName = 'TracksInCategory';
 Header.displayName = 'TracksHeader';
@@ -122,7 +123,6 @@ export const ProteinViewer = ({
   loading = false,
   children,
 }: LoadedProps) => {
-
   const [isPrinting, setPrinting] = useState(false);
 
   // State variable to show/hide "secondary" tracks
@@ -132,29 +132,29 @@ export const ProteinViewer = ({
   const mainTracks = [
     'AlphaFold confidence',
     'representative domains',
-    'representative families', 
+    'representative families',
     'variants',
     'disordered regions',
-    'residues'
+    'residues',
   ];
 
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'secondary structure': true,
-    'family': true,
-    'domain': true,
+    family: true,
+    domain: true,
     'homologous superfamily': true,
-    'repeat': true,
+    repeat: true,
     'conserved site': true,
     'active site': true,
     'binding site': true,
-    'ptm': true,
-    'unintegrated': true,
+    ptm: true,
+    unintegrated: true,
     'other features': true,
     'other residues': true,
-    'features': true,
-    'predictions': true,
+    features: true,
+    predictions: true,
     'match conservation': true,
-    'Clinical significance: pathogenic and likely pathogenic variants': true
+    'Clinical significance: pathogenic and likely pathogenic variants': true,
   });
 
   const categoryRefs = useRef<ExpandedHandle[]>([]);
@@ -212,6 +212,20 @@ export const ProteinViewer = ({
     }
   };
 
+  const residuesToLocations = (
+    residues: Residue[] | undefined,
+  ): ExtendedFeatureLocation[] => {
+    const newLocations: ExtendedFeatureLocation[] = [];
+    if (residues) {
+      residues.map((residue) => {
+        residue.locations.map((location) => {
+          newLocations.push(location);
+        });
+      });
+    }
+    return newLocations;
+  };
+
   return (
     <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
       <div
@@ -254,12 +268,14 @@ export const ProteinViewer = ({
               </Options>
             </div>
             <div className={css('track-sized')}>
-              <ShowMoreTracks showMore={showMore} showMoreChanged={setShowMore} />
+              <ShowMoreTracks
+                showMore={showMore}
+                showMoreChanged={setShowMore}
+              />
             </div>
           </div>
 
           <div ref={componentsRef} id={idRef.current}>
-
             <div
               className={css('protvista-grid', {
                 printing: isPrinting,
@@ -271,7 +287,6 @@ export const ProteinViewer = ({
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
-
               []
               {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
@@ -279,94 +294,105 @@ export const ProteinViewer = ({
                 .map(([type, entries, component]) => {
                   entries.forEach((entry: ExtendedFeature) => {
                     entry.protein = protein.accession;
-
                   });
 
                   const LabelComponent = component?.component || 'span';
 
                   // Show only the main tracks unless button "Show more" is clicked
-                  let hideDiv: string = ""
+                  let hideDiv: string = '';
                   if (!showMore && !mainTracks.includes(type)) {
-                    hideDiv = "none"
+                    hideDiv = 'none';
+                  }
+
+                  if (type == 'residues') {
+                    let residuesEntries: ExtendedFeature[] = [];
+                    residuesEntries = [...entries];
+                    for (let i = 0; i < residuesEntries.length; i++) {
+                      delete residuesEntries[i].entry_protein_locations;
+                      residuesEntries[i].type = 'residue';
+                      residuesEntries[i].locations = residuesToLocations(
+                        residuesEntries[i].residues,
+                      );
+                    }
+                    entries = residuesEntries;
                   }
 
                   return (
-                      <div
-                        key={type}
-                        // Conditioanally display the div containing the track
-                        style={{ display: hideDiv }}
-                        className={css(
-                          'tracks-container',
-                          'track-sized',
-                          'protvista-grid',
-                          {
-                            printing: isPrinting,
-                          },
-                        )}
-                      >
-                        <header >
-                          <button
-                            onClick={() =>
-                              setHideCategory(
-                                switchCategoryVisibility(hideCategory, type),
-                              )
-                            }
-                            className={css('as-text')}
-                          >
-                            <span
-                              className={css(
-                                'icon',
-                                'icon-common',
-                                hideCategory[type]
-                                  ? 'icon-caret-right'
-                                  : 'icon-caret-down',
-                              )}
-                            />{' '}
-                            {type}
-                          </button>
-                        </header>
-                        {component && (
-                          <div className={css('track-accession')}>
-                            <LabelComponent {...(component?.attributes || {})} />
-                          </div>
-                        )}{' '}
-                        {type === 'representative domains' ? (
-                          <RepresentativeDomainsTrack
-                            hideCategory={hideCategory[type]}
-                            highlightColor={highlightColor}
-                            entries={entries}
-                            length={protein.sequence.length}
-                            openTooltip={openTooltip}
-                            closeTooltip={closeTooltip}
-                            isPrinting={isPrinting}
-                          />
-                        ) : (type === 'representative families') ? (
-                          <RepresentativeDomainsTrack
-                            hideCategory={hideCategory[type]}
-                            highlightColor={highlightColor}
-                            entries={entries}
-                            length={protein.sequence.length}
-                            openTooltip={openTooltip}
-                            closeTooltip={closeTooltip}
-                            isPrinting={isPrinting}
-                          />
-                        ) :
-                          (
-                            <TracksInCategory
-                              entries={entries}
-                              sequence={protein.sequence}
-                              hideCategory={hideCategory[type]}
-                              highlightColor={highlightColor}
-                              openTooltip={openTooltip}
-                              closeTooltip={closeTooltip}
-                              isPrinting={isPrinting}
-                              ref={(ref: ExpandedHandle) =>
-                                categoryRefs.current.push(ref)
-                              }
-                              databases={dataBase?.payload?.databases}
-                            />
-                          )}
-                      </div>
+                    <div
+                      key={type}
+                      // Conditioanally display the div containing the track
+                      style={{ display: hideDiv }}
+                      className={css(
+                        'tracks-container',
+                        'track-sized',
+                        'protvista-grid',
+                        {
+                          printing: isPrinting,
+                        },
+                      )}
+                    >
+                      <header>
+                        <button
+                          onClick={() =>
+                            setHideCategory(
+                              switchCategoryVisibility(hideCategory, type),
+                            )
+                          }
+                          className={css('as-text')}
+                        >
+                          <span
+                            className={css(
+                              'icon',
+                              'icon-common',
+                              hideCategory[type]
+                                ? 'icon-caret-right'
+                                : 'icon-caret-down',
+                            )}
+                          />{' '}
+                          {type}
+                        </button>
+                      </header>
+                      {component && (
+                        <div className={css('track-accession')}>
+                          <LabelComponent {...(component?.attributes || {})} />
+                        </div>
+                      )}{' '}
+                      {type === 'representative domains' ? (
+                        <RepresentativeDomainsTrack
+                          hideCategory={hideCategory[type]}
+                          highlightColor={highlightColor}
+                          entries={entries}
+                          length={protein.sequence.length}
+                          openTooltip={openTooltip}
+                          closeTooltip={closeTooltip}
+                          isPrinting={isPrinting}
+                        />
+                      ) : type === 'representative families' ? (
+                        <RepresentativeDomainsTrack
+                          hideCategory={hideCategory[type]}
+                          highlightColor={highlightColor}
+                          entries={entries}
+                          length={protein.sequence.length}
+                          openTooltip={openTooltip}
+                          closeTooltip={closeTooltip}
+                          isPrinting={isPrinting}
+                        />
+                      ) : (
+                        <TracksInCategory
+                          entries={entries}
+                          sequence={protein.sequence}
+                          hideCategory={hideCategory[type]}
+                          highlightColor={highlightColor}
+                          openTooltip={openTooltip}
+                          closeTooltip={closeTooltip}
+                          isPrinting={isPrinting}
+                          ref={(ref: ExpandedHandle) =>
+                            categoryRefs.current.push(ref)
+                          }
+                          databases={dataBase?.payload?.databases}
+                        />
+                      )}
+                    </div>
                   );
                 })}
               <ConservationMockupTrack
@@ -375,9 +401,7 @@ export const ProteinViewer = ({
                 conservationError={conservationError}
                 isPrinting={isPrinting}
               />
-
             </div>
-
           </div>
         </NightingaleManager>
       </div>
