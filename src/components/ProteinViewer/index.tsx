@@ -34,7 +34,6 @@ import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
 import ShowMoreTracks from './ShowMoreTracks';
-import FeatureShape from '@nightingale-elements/nightingale-track/dist/FeatureShape';
 
 TracksInCategory.displayName = 'TracksInCategory';
 Header.displayName = 'TracksHeader';
@@ -257,10 +256,10 @@ export const ProteinViewer = ({
     accession: string,
     ptmFeatures: PTMFeature[],
   ): ExtendedFeatureLocation[] => {
-    let newPTMLocations: ExtendedFeatureLocation[] = [];
+    const newPTMLocations: ExtendedFeatureLocation[] = [];
 
     ptmFeatures.map((feature) => {
-      let newPTMLocation: ExtendedFeatureLocation & {
+      const newPTMLocation: ExtendedFeatureLocation & {
         accession: string;
         description: string;
       } = {
@@ -368,9 +367,9 @@ export const ProteinViewer = ({
 
                   // Restructure residue data to unlink residues from domains
                   if (type == 'residues') {
-                    let residuesEntries: ExtendedFeature[] = [];
+                    const residuesEntries: ExtendedFeature[] = [];
                     entries.map((entry) => {
-                      let tempFeature: ExtendedFeature = {
+                      const tempFeature: ExtendedFeature = {
                         accession: entry.accession,
                         name: entry.name,
                         protein: entry.protein,
@@ -386,9 +385,9 @@ export const ProteinViewer = ({
 
                   // Transform PTM data to track-like data
                   if (type == 'PTMs') {
-                    let ptmEntries: ExtendedFeature[] = [];
+                    const ptmEntries: ExtendedFeature[] = [];
                     entries.map((entry) => {
-                      let tempFeature: ExtendedFeature = {
+                      const tempFeature: ExtendedFeature = {
                         accession: (entry.data as PTMData).accession,
                         protein: (entry.data as PTMData).accession,
                         type: 'ptm',
