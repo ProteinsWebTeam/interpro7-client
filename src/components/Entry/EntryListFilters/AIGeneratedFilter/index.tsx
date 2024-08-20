@@ -20,9 +20,9 @@ import stylego from 'pages/style.css';
 const css = cssBinder(stylego, style);
 
 const categories = {
-  'Manually Curated': 'MC',
-  'AI-Generated and Reviewed': 'AI-R',
-  'AI-Generated and Unreviewed': 'AI-U',
+  Curated: 'curated',
+  'AI-Generated (reviewed)': 'ai-reviewed',
+  'AI-Generated (unreviewed)': 'ai-unreviewed',
 };
 type Categories = keyof typeof categories;
 
@@ -48,8 +48,8 @@ const AIGeneratedFilter = ({
 
   const _handleSelection = ({ target }: FormEvent) => {
     const value = (target as HTMLInputElement).value;
-    const { page, ai_category: _, cursor: __, ...restOfsearch } = search;
-    if (value !== 'All') restOfsearch.ai_category = value;
+    const { page, curation_status: _, cursor: __, ...restOfsearch } = search;
+    if (value !== 'All') restOfsearch.curation_status = value;
     goToCustomLocation?.({ ...customLocation, search: restOfsearch });
   };
 
@@ -83,13 +83,13 @@ const AIGeneratedFilter = ({
           {terms.map(([t, count]) => {
             const term = t as Categories | 'All';
             const checked =
-              (term === 'All' && !search.ai_category) ||
-              search.ai_category === categories[term as Categories];
+              (term === 'All' && !search.curation_status) ||
+              search.curation_status === categories[term as Categories];
             return (
               <label key={term} className={css('radio-btn-label', { checked })}>
                 <input
                   type="radio"
-                  name="ai_category"
+                  name="curation_status"
                   className={css('radio-btn')}
                   value={categories[term as Categories] || 'All'}
                   disabled={isStale}
@@ -130,11 +130,11 @@ const getUrlFor = createSelector(
       search: _,
       cursor: __,
       // eslint-disable-next-line camelcase
-      ai_category,
+      curation_status,
       ..._search
     } = search;
     // add to search
-    _search.group_by = 'ai_categories';
+    _search.group_by = 'curation_statuses';
     // build URL
     return format({
       protocol,
