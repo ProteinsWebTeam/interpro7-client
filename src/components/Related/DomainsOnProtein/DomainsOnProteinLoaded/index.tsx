@@ -32,7 +32,7 @@ const LASTS_IN_ORDER = [
   'conserved_site',
   'active_site',
   'binding_site',
-  'ptm',
+  'PTMs',
   'unintegrated',
   'other_features',
   'other_residues',
@@ -95,7 +95,7 @@ export const flattenTracksObject = (
       .sort(byEntryType)
       // “Binding_site” -> “Binding site”
       .map(([key, value]) => [
-        key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
+        key === 'PTMs' ? 'ptm' : key.replace(UNDERSCORE, ' '),
         value,
       ])
   );
@@ -130,7 +130,7 @@ export const addPTMTrack = (
 ) => {
   if (proteomicsPayload?.features?.length) {
     const proteomicsTrack: [string, Array<unknown>] = [
-      'PTM Data',
+      'PTMs',
       [
         {
           accession: `ptm_${protein}`,
@@ -199,7 +199,7 @@ const DomainsOnProteinLoaded = ({
 
   if (dataProteomics?.ok && dataProteomics.payload) {
     if (dataProteomics.payload.features.length > 0) {
-      /*addPTMTrack(dataProteomics.payload, protein.accession, sortedData);*/
+      addPTMTrack(dataProteomics.payload, protein.accession, sortedData);
     }
   }
 

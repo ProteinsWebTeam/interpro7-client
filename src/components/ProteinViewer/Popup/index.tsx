@@ -8,11 +8,13 @@ import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import Genome3DPopup, { Genome3DDetail } from './Genome3D';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
 import DisProtPopup, { DisProtDetail } from './DisProt';
+import ProtVistaPTMPopup, { PTMDetail } from './PTM';
 
 export type PopupDetail = (
   | ConservationDetail
   | ResidueDetail
   | ConfidenceDetail
+  | PTMDetail
   | EntryDetail
 ) & {
   target?: HTMLElement;
@@ -25,11 +27,15 @@ type Props = {
 };
 
 const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
+  // comes from PTMTrack
+  if ((detail as PTMDetail)?.feature?.type == 'ptm') {
+    return <ProtVistaPTMPopup detail={detail as PTMDetail} />;
+  }
+
   // comes from the conservation track
   if (detail.type === 'conservation') {
     return <ProtVistaConservationPopup detail={detail as ConservationDetail} />;
   }
-
   // comes from a residue
   if (
     (detail?.target?.classList &&

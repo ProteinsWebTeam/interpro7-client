@@ -165,6 +165,7 @@ const memberDB = new Set([
   { name: 'mobidblt', re: /^(\w|-)+$/ },
   { name: 'elm', re: /^ELME[0-9]{6}$/ },
   { name: 'antifam', re: /^ANF[0-9]{5}$/ },
+  { name: 'ptm', re: /^P[0-9]{5}$/ },
 ]);
 const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
 

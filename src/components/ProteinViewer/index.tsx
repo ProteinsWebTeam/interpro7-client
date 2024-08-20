@@ -52,6 +52,7 @@ type Residue = {
     }
   >;
 };
+
 export type ExtendedFeatureLocation = {
   fragments: Array<{
     start: number;
@@ -147,8 +148,8 @@ export const ProteinViewer = ({
     'conserved site': true,
     'active site': true,
     'binding site': true,
-    ptm: true,
     unintegrated: true,
+    PTMs: true,
     'other features': true,
     'other residues': true,
     features: true,
@@ -216,14 +217,75 @@ export const ProteinViewer = ({
     residues: Residue[] | undefined,
   ): ExtendedFeatureLocation[] => {
     const newLocations: ExtendedFeatureLocation[] = [];
-    if (residues) {
-      residues.map((residue) => {
+    const tempResidues = residues?.slice(0);
+
+    if (tempResidues) {
+      tempResidues.map((residue) => {
         residue.locations.map((location) => {
           newLocations.push(location);
         });
       });
     }
     return newLocations;
+  };
+
+  type PTM = {
+    position: number;
+    name: string;
+    sources: string[];
+  };
+
+  type PTMFeature = {
+    begin: string;
+    end: string;
+    ptms: PTM[];
+    peptide: string;
+    evidences: [];
+    type: string;
+    description: string;
+    accession: string;
+  };
+
+  type PTMData = {
+    accession: string;
+    entryName: string;
+    protein: string;
+    features: [];
+  };
+
+  const ptmsFeaturesToLocations = (
+    accession: string,
+    ptmFeatures: PTMFeature[],
+  ): ExtendedFeatureLocation[] => {
+    let newPTMLocations: ExtendedFeatureLocation[] = [];
+
+    ptmFeatures.map((feature) => {
+      let newPTMLocation: ExtendedFeatureLocation & {
+        accession: string;
+        description: string;
+      } = {
+        accession: accession,
+        description: accession,
+        fragments: [],
+      };
+
+      feature.ptms.map((ptm) => {
+        newPTMLocation.fragments.push({
+          ptm: [feature.peptide[ptm.position - 1]],
+          ptm_type: ptm.name,
+          evidences: feature.evidences,
+          position: ptm.position,
+          peptide: feature.peptide,
+          source: ptm.sources.join(', '),
+          start: parseInt(feature.begin) + ptm.position - 1,
+          end: parseInt(feature.begin) + ptm.position - 1,
+        });
+      });
+
+      newPTMLocations.push(newPTMLocation);
+    });
+
+    return newPTMLocations;
   };
 
   return (
@@ -304,17 +366,41 @@ export const ProteinViewer = ({
                     hideDiv = 'none';
                   }
 
+                  // Restructure residue data to unlink residues from domains
                   if (type == 'residues') {
                     let residuesEntries: ExtendedFeature[] = [];
-                    residuesEntries = [...entries];
-                    for (let i = 0; i < residuesEntries.length; i++) {
-                      delete residuesEntries[i].entry_protein_locations;
-                      residuesEntries[i].type = 'residue';
-                      residuesEntries[i].locations = residuesToLocations(
-                        residuesEntries[i].residues,
-                      );
-                    }
+                    entries.map((entry) => {
+                      let tempFeature: ExtendedFeature = {
+                        accession: entry.accession,
+                        name: entry.name,
+                        protein: entry.protein,
+                        source_database: entry.source_database,
+                        type: 'residue',
+                        locations: residuesToLocations(entry.residues),
+                      };
+                      residuesEntries.push(tempFeature);
+                    });
+
                     entries = residuesEntries;
+                  }
+
+                  // Transform PTM data to track-like data
+                  if (type == 'PTMs') {
+                    let ptmEntries: ExtendedFeature[] = [];
+                    entries.map((entry) => {
+                      let tempFeature: ExtendedFeature = {
+                        accession: (entry.data as PTMData).accession,
+                        protein: (entry.data as PTMData).accession,
+                        type: 'ptm',
+                        source_database: 'ptm',
+                        locations: ptmsFeaturesToLocations(
+                          (entry.data as PTMData).accession,
+                          (entry.data as PTMData).features,
+                        ),
+                      };
+                      ptmEntries.push(tempFeature);
+                    });
+                    entries = ptmEntries;
                   }
 
                   return (

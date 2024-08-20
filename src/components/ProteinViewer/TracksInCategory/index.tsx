@@ -52,6 +52,7 @@ const OTHER_TRACK_TYPES = [
   'confidence',
   'residue',
   'Model',
+  'ptm',
   'Domain',
   'consensus majority',
   'variation',
@@ -323,23 +324,6 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           use-ctrl-to-zoom
                         />
                       )}
-                      {entry.type === 'ptm' && ( <></>
-                        /*<NightingaleColoredSequence
-                          id={getTrackAccession(entry.accession)}
-                          data={entry.data as string}
-                          length={sequence.length}
-                          scale="H:90,M:70,L:50,D:0"
-                          height={12}
-                          color-range="#ff7d45:0,#ffdb13:50,#65cbf3:70,#0053d6:90,#0053d6:100"
-                          margin-right={10}
-                          margin-left={20}
-                          margin-color="#fafafa"
-                          highlight-event="onmouseover"
-                          highlight-color={highlightColor}
-                          className="confidence"
-                          use-ctrl-to-zoom
-                        />*/
-                      )}
                       {entry.type === 'variation' && (
                         <NightingaleVariation
                           id={getTrackAccession(entry.accession)}
@@ -357,7 +341,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           protein-api
                         />
                       )}
-                      {(['secondary_structure', 'residue'].includes(
+                      {(['secondary_structure', 'residue', 'ptm'].includes(
                         entry.type || '',
                       ) ||
                         isExternalSource) && (

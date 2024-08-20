@@ -343,13 +343,6 @@ const getPTMPayload = createSelector(
   },
 );
 
-/* To add then PTM data is complete
-* as LoadDataParameters)(
-loadData<ProteinsAPIProteomics, 'Proteomics'>({
-  getUrl: getPTMPayload,
-  propNamespace: 'Proteomics', 
-} */
-
 export default loadExternalSources(
   loadData<AlphafoldPayload, 'Prediction'>({
     getUrl: getAlphaFoldPredictionURL,
@@ -371,8 +364,13 @@ export default loadExternalSources(
             getUrl: getVariationURL,
             propNamespace: 'Variation',
           } as LoadDataParameters)(
-            loadData(getRelatedEntriesURL as LoadDataParameters)(
-              DomainOnProteinWithoutData,
+            loadData<ProteinsAPIProteomics, 'Proteomics'>({
+              getUrl: getPTMPayload,
+              propNamespace: 'Proteomics',
+            } as LoadDataParameters)(
+              loadData(getRelatedEntriesURL as LoadDataParameters)(
+                DomainOnProteinWithoutData,
+              ),
             ),
           ),
         ),
