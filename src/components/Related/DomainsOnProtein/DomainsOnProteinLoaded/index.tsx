@@ -15,11 +15,13 @@ const ProteinViewer = loadable({
 
 // 0A017SEX7 is a good example
 const UNDERSCORE = /_/g;
+
 const FIRST_IN_ORDER = [
+  'alphafold_confidence',
   'representative_domains',
-  'representative_families', // coming soon
-  'variants',
-  'disordered_regions', // data coming from (?)
+  'representative_families',
+  'pathogenic_variants',
+  'disordered_regions',
   'residues',
 ];
 
@@ -101,25 +103,22 @@ export const flattenTracksObject = (
   );
 };
 
+/* Processing of the payload needs to be slightly different 
+to add tracks to the dataMerged object instead of the dataSorted object */
 export const addVariationTrack = (
   variationPayload: ProteinsAPIVariation,
   protein: string,
-  tracks: ProteinViewerData,
+  tracks: ProteinViewerDataObject,
 ) => {
   if (variationPayload?.features?.length) {
-    const variationTrack: [string, Array<unknown>] = [
-      'Clinical significance: pathogenic and likely pathogenic variants',
-      [
-        {
-          accession: `variation_${protein}`,
-          data: variationPayload,
-          type: 'variation',
-          protein,
-          source_database: 'proteinsAPI',
-        },
-      ],
-    ];
-    tracks.push(variationTrack);
+    tracks['pathogenic_variants'] = [];
+    tracks['pathogenic_variants'][0] = {
+      accession: `variation_${protein}`,
+      data: variationPayload,
+      type: 'variation',
+      protein,
+      source_database: 'proteinsAPI',
+    };
   }
 };
 
@@ -179,13 +178,16 @@ const DomainsOnProteinLoaded = ({
   children,
   title = 'Entry matches to this protein',
 }: Props) => {
-  const sortedData = flattenTracksObject(dataMerged);
   const protein =
     (mainData as ProteinEntryPayload).metadata ||
     (mainData as { payload: ProteinEntryPayload }).payload.metadata;
 
+  /* 
+  Special tracks are now added to the dataMerged object before being sorted based on FIRST_IN_ORDER. 
+  Adding the tracks to the dataSorted object, caused the Alphafold track and variants track to be displayed always at the first/last position.
+  */
   if (dataConfidence)
-    addConfidenceTrack(dataConfidence, protein.accession, sortedData);
+    addConfidenceTrack(dataConfidence, protein.accession, dataMerged);
 
   if (dataVariation?.ok && dataVariation.payload) {
     const filteredVariationPayload = filterVariation(dataVariation.payload);
@@ -193,7 +195,7 @@ const DomainsOnProteinLoaded = ({
       addVariationTrack(
         filteredVariationPayload,
         protein.accession,
-        sortedData,
+        dataMerged,
       );
   }
 
@@ -202,6 +204,9 @@ const DomainsOnProteinLoaded = ({
       /*addPTMTrack(dataProteomics.payload, protein.accession, sortedData);*/
     }
   }
+
+  // Sort all the tracks, including the special ones (eg. alphafold, variants)
+  const sortedData = flattenTracksObject(dataMerged);
 
   return (
     <ProteinViewer

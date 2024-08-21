@@ -8,6 +8,7 @@ import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import Genome3DPopup, { Genome3DDetail } from './Genome3D';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
 import DisProtPopup, { DisProtDetail } from './DisProt';
+import { ExtendedFeature } from '..';
 
 export type PopupDetail = (
   | ConservationDetail
@@ -31,11 +32,7 @@ const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
   }
 
   // comes from a residue
-  if (
-    (detail?.target?.classList &&
-      detail.target.classList.contains('residue')) ||
-    sourceDatabase === 'PIRSR'
-  ) {
+  if ((detail.feature as ExtendedFeature).type === 'residue') {
     return (
       <ProtVistaResiduePopup
         detail={detail as ResidueDetail}

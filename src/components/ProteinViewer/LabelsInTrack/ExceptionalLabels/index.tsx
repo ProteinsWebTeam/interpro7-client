@@ -2,6 +2,7 @@ import React from 'react';
 
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import Link from 'components/generic/Link';
+
 import {
   Genome3dLink,
   AlphafoldLink,
@@ -25,6 +26,7 @@ type PropsEL = {
 };
 
 const EXCEPTIONAL_TYPES = [
+  'disordered_regions',
   'residue',
   'sequence_conservation',
   'chain',
@@ -46,13 +48,24 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     entry.accession) as string;
 
   if (entry.source_database === 'mobidblt') {
-    const mobiLabel = `MobiDB-lite: ${label.replace('Mobidblt-', '')}`;
-    return isPrinting ? (
-      <span>{mobiLabel}</span>
-    ) : (
-      <Link href={`https://mobidb.org/${entry.protein}`}>{mobiLabel}</Link>
+    return (
+      <>
+        <Link target="_blank" href={`https://mobidb.org/${entry.protein}`}>
+          {entry.accession}
+        </Link>
+        {entry.children &&
+          entry.children.map((d) => (
+            <div
+              className={css('track-accession-child')}
+              key={`main_${d.accession}`}
+            >
+              {d.accession}
+            </div>
+          ))}
+      </>
     );
   }
+
   if (entry.source_database === 'funfam') {
     return isPrinting ? (
       <span>{label}</span>
@@ -103,8 +116,33 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
         Go to UniProt
       </Link>
     );
-  if (entry.type === 'residue')
-    return <span>{entry.locations?.[0]?.description || ''}</span>;
+
+  if (entry.type === 'residue') {
+    const processedAccession = entry.accession.replace('residue:', '');
+    return isPrinting ? (
+      <span>Residue: {processedAccession}</span>
+    ) : (
+      <>
+        {entry.source_database !== 'pirsr' && (
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: entry.source_database,
+                  accession: processedAccession,
+                },
+              },
+            }}
+          >
+            {processedAccession}
+          </Link>
+        )}
+        <div>{entry.locations?.[0].description}</div>
+      </>
+    );
+  }
+
   if (
     NOT_MEMBER_DBS.has(entry.source_database || '') ||
     entry.type === 'chain' ||
