@@ -25,6 +25,7 @@ import mergeResidues from './mergeResidues';
 import DomainsOnProteinLoaded, { makeTracks } from './DomainsOnProteinLoaded';
 import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
+import { ExtendedFeature } from 'src/components/ProteinViewer';
 
 export const orderByAccession = (
   a: { accession: string },
@@ -173,15 +174,27 @@ const DomainOnProteinWithoutData = ({
 
   const filterMobiDBLiteFeatures = (
     mergedData: ProteinViewerDataObject,
-  ): MinimalFeature[] => {
-    const mobiDBLiteEntries: MinimalFeature[] = (
-      mergedData['other_features'] as MinimalFeature[]
-    ).filter(
-      (k) =>
-        (k as MinimalFeature).accession ==
-        'Mobidblt-Consensus Disorder Prediction',
+  ): ExtendedFeature[] => {
+    const mobiDBLiteEntries: ExtendedFeature[] = (
+      mergedData['other_features'] as ExtendedFeature[]
+    ).filter((k) => (k as ExtendedFeature).accession.includes('Mobidblt'));
+
+    const mobiDBLiteConsensusWithChildren: ExtendedFeature[] =
+      mobiDBLiteEntries.filter((entry) =>
+        entry.accession.includes('Consensus'),
+      );
+    const mobiDBLiteChildren: ExtendedFeature[] = mobiDBLiteEntries.filter(
+      (entry) => !entry.accession.includes('Consensus'),
     );
-    return mobiDBLiteEntries;
+
+    if (mobiDBLiteConsensusWithChildren.length > 0) {
+      mobiDBLiteChildren.map((child) => {
+        child.protein = child.accession;
+      });
+      mobiDBLiteConsensusWithChildren[0].children = mobiDBLiteChildren;
+    }
+
+    return mobiDBLiteConsensusWithChildren;
   };
 
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
@@ -328,7 +341,7 @@ const getVariationURL = createSelector(
   },
 );
 
-const getPTMPayload = createSelector(
+/*const getPTMPayload = createSelector(
   (state: GlobalState) => state.settings.proteinsAPI,
   (state: GlobalState) =>
     state.customLocation.description.protein?.accession || '',
@@ -341,7 +354,7 @@ const getPTMPayload = createSelector(
     });
     return url;
   },
-);
+);*/
 
 export default loadExternalSources(
   loadData<AlphafoldPayload, 'Prediction'>({

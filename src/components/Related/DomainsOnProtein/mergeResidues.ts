@@ -1,4 +1,4 @@
-import { orderByAccession } from '.';
+import { ExtendedFeature } from 'src/components/ProteinViewer';
 
 const PIRSR_ACCESSION_LENGTH = 11;
 const PIRSF_PREFIX_LENGTH = 5;
@@ -32,7 +32,7 @@ const mergePIRSFRResidues = (residues: Record<string, ResidueMetadata>) => {
         };
       }
       residues[acc].locations?.forEach(
-        (location) => (location.accession = acc)
+        (location) => (location.accession = acc),
       );
       newResidues[newAcc].locations?.push(...(residues[acc].locations || []));
     } else {
@@ -44,7 +44,7 @@ const mergePIRSFRResidues = (residues: Record<string, ResidueMetadata>) => {
 
 const mergeResidues = (
   data: ProteinViewerDataObject<MinimalFeature>,
-  residuesPayload: ResiduesPayload
+  residuesPayload: ResiduesPayload,
 ) => {
   const residuesWithEntryDetails: Array<FeatureWithResidues> = [];
   const residues: Record<string, ResidueEntry> =
@@ -53,13 +53,13 @@ const mergeResidues = (
   const { representative_domains: _, ...otherGroups } = data;
   Object.values(otherGroups).forEach(
     (
-      group /*: Array<{accession:string, residues: Array<Object>, children: any}> */
+      group /*: Array<{accession:string, residues: Array<Object>, children: any}> */,
     ) =>
       group.forEach((entry) => {
         const resAccession = entry.accession.startsWith('PIRSF')
           ? `PIRSR${entry.accession.substring(
               PIRSF_PREFIX_LENGTH,
-              PIRSR_ACCESSION_LENGTH
+              PIRSR_ACCESSION_LENGTH,
             )}`
           : entry.accession;
         if (residues[resAccession]) {
@@ -75,7 +75,7 @@ const mergeResidues = (
             const childResAccession = child.accession.startsWith('PIRSF')
               ? `PIRSR${child.accession.substring(
                   PIRSF_PREFIX_LENGTH,
-                  PIRSR_ACCESSION_LENGTH
+                  PIRSR_ACCESSION_LENGTH,
                 )}`
               : child.accession;
             if (residues[childResAccession]) {
@@ -86,12 +86,11 @@ const mergeResidues = (
               residues[childResAccession].linked = true;
             }
           });
-      })
+      }),
   );
 
-  const unlinkedResidues: Array<ResidueEntry> = [];
-
-  Object.values(residues)
+  // Previous way of handling other residues. Now merging them into residues.
+  /*Object.values(residues)
     .filter(({ linked }) => !linked)
     .forEach((residue) => {
       residue.locations.forEach((location, i) => {
@@ -103,11 +102,31 @@ const mergeResidues = (
         residueEntry.locations = [location];
         unlinkedResidues.push(residueEntry);
       });
-    });
-  unlinkedResidues.sort(orderByAccession);
+    });*/
 
-  data.residues = residuesWithEntryDetails;
-  data.other_residues = unlinkedResidues;
+  // Showing residues coming from MemberDBs first, then PIRSR
+  function sortResidues(rA: FeatureWithResidues, rB: FeatureWithResidues) {
+    if (rA.accession.includes('PIRSR') && !rB.accession.includes('PIRSR'))
+      return 1;
+    else if (
+      !rA.accession.includes('PIRSR') &&
+      rB.accession.includes('PIRSR')
+    ) {
+      return -1;
+    } else return 0;
+  }
+
+  // MemberDBs + PIRSR residues
+  const combinedResidues: FeatureWithResidues[] = [];
+  Object.values(residues).forEach((residue) => {
+    combinedResidues.push({
+      accession: residue.accession,
+      source_database: residue.source_database,
+      residues: [residue],
+    });
+  });
+
+  data.residues = combinedResidues.sort(sortResidues);
 };
 
 export default mergeResidues;

@@ -12,6 +12,7 @@ export type ResidueDetail = {
       end: number;
     };
   };
+  highlight: string;
 };
 type Props = {
   detail: ResidueDetail;
@@ -20,22 +21,17 @@ type Props = {
 
 const ProtVistaResiduePopup = ({ detail, sourceDatabase }: Props) => {
   if (!detail?.feature) return null;
-  let { accession, currentResidue } = detail.feature;
+
+  let accession = detail.feature.accession;
 
   if (sourceDatabase === 'PIRSF') {
     accession = accession.replace('PIRSF', 'PIRSR');
-  }
-  if (sourceDatabase === 'PIRSR') {
     accession = accession.replace(/\.\d+/, '');
-
-    currentResidue = detail?.feature.locations[0].fragments[0];
-    currentResidue.description = detail?.feature.locations[0].description;
   }
-  const start = currentResidue?.start;
-  const end = currentResidue?.end;
-  const description = currentResidue?.description || '';
-  const residue = currentResidue?.residue || currentResidue?.residues || '';
-  const hasMultiple = end && end !== start;
+
+  const residueLocation: ProtVistaLocation = detail?.feature.locations[0];
+  const residueDescription: string = residueLocation.description || '';
+
   return (
     <section>
       <h6>
@@ -44,10 +40,10 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase }: Props) => {
           ? accession.split('residue:')[1]
           : accession}
       </h6>
-      {description && <p>[{description}]</p>}
+      {residueDescription && <p>{residueDescription}</p>}
       <div>
-        Residue{hasMultiple && 's'}: {start}
-        {hasMultiple && `-${end}`} ({residue})
+        // Display only the position of the currently highlighted residue
+        Residue({detail.highlight.split(':')[0]})
       </div>
     </section>
   );

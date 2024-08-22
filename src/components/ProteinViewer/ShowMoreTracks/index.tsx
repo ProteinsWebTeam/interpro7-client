@@ -17,15 +17,20 @@ type Props = {
 }
 const ShowMoreTracks = ({ showMore, showMoreChanged }: Props) => {
   return (
-    <div className={css('showmore-btn')}>
+    <div>
       <button
         style={{ boxShadow: 'none' }}
-        className={css('vf-button vf-button--link vf-button--sm')}
+        className={css(
+          'vf-button',
+          'vf-button--link',
+          'vf-button--sm',
+          'showmore-btn',
+        )}
         onClick={() => {
           showMoreChanged(!showMore);
         }}
       >
-        {showMore ? 'Show less tracks' : 'Show more tracks'}
+        {showMore ? 'Show less annotations' : 'Show more annotations'}
       </button>
     </div>
   );

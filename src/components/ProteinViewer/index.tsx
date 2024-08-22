@@ -130,10 +130,10 @@ export const ProteinViewer = ({
 
   // List of "main" tracks to be displayed, the rest are hidden by default
   const mainTracks = [
-    'AlphaFold confidence',
+    'alphafold confidence',
     'representative domains',
     'representative families',
-    'variants',
+    'pathogenic variants',
     'disordered regions',
     'residues',
   ];
@@ -154,7 +154,6 @@ export const ProteinViewer = ({
     features: true,
     predictions: true,
     'match conservation': true,
-    'Clinical significance: pathogenic and likely pathogenic variants': true,
   });
 
   const categoryRefs = useRef<ExpandedHandle[]>([]);
@@ -327,8 +326,6 @@ export const ProteinViewer = ({
               >
                 {children}
               </Options>
-            </div>
-            <div className={css('track-sized')}>
               <ShowMoreTracks
                 showMore={showMore}
                 showMoreChanged={setShowMore}
@@ -351,7 +348,6 @@ export const ProteinViewer = ({
               []
               {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
-
                 .map(([type, entries, component]) => {
                   entries.forEach((entry: ExtendedFeature) => {
                     entry.protein = protein.accession;
