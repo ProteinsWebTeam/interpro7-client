@@ -55,6 +55,7 @@ const OTHER_TRACK_TYPES = [
   'Domain',
   'consensus majority',
   'variation',
+  'ptm',
 ];
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
 
@@ -323,7 +324,8 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           use-ctrl-to-zoom
                         />
                       )}
-                      {entry.type === 'ptm' && ( <></>
+                      {entry.type === 'ptm' && (
+                        <></>
                         /*<NightingaleColoredSequence
                           id={getTrackAccession(entry.accession)}
                           data={entry.data as string}
@@ -357,7 +359,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           protein-api
                         />
                       )}
-                      {(['secondary_structure', 'residue'].includes(
+                      {(['secondary_structure', 'residue', 'ptm'].includes(
                         entry.type || '',
                       ) ||
                         isExternalSource) && (

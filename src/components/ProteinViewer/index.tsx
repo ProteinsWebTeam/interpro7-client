@@ -224,6 +224,65 @@ export const ProteinViewer = ({
     return newLocations;
   };
 
+  type PTM = {
+    position: number;
+    name: string;
+    sources: string[];
+  };
+
+  type PTMFeature = {
+    begin: string;
+    end: string;
+    ptms: PTM[];
+    peptide: string;
+    evidences: [];
+    type: string;
+    description: string;
+    accession: string;
+  };
+
+  type PTMData = {
+    accession: string;
+    entryName: string;
+    protein: string;
+    features: [];
+  };
+
+  const ptmsFeaturesToLocations = (
+    accession: string,
+    ptmFeatures: PTMFeature[],
+  ): ExtendedFeatureLocation[] => {
+    const newPTMLocations: ExtendedFeatureLocation[] = [];
+
+    ptmFeatures.map((feature) => {
+      const newPTMLocation: ExtendedFeatureLocation & {
+        accession: string;
+        description: string;
+      } = {
+        accession: accession,
+        description: accession,
+        fragments: [],
+      };
+
+      feature.ptms.map((ptm) => {
+        newPTMLocation.fragments.push({
+          ptm: [feature.peptide[ptm.position - 1]],
+          ptm_type: ptm.name,
+          evidences: feature.evidences,
+          position: ptm.position,
+          peptide: feature.peptide,
+          source: ptm.sources.join(', '),
+          start: parseInt(feature.begin) + ptm.position - 1,
+          end: parseInt(feature.begin) + ptm.position - 1,
+        });
+      });
+
+      newPTMLocations.push(newPTMLocation);
+    });
+
+    return newPTMLocations;
+  };
+
   return (
     <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
       <div
@@ -314,6 +373,25 @@ export const ProteinViewer = ({
                     });
 
                     entries = residuesEntries;
+                  }
+
+                  // Transform PTM data to track-like data
+                  if (type == 'PTM') {
+                    const ptmEntries: ExtendedFeature[] = [];
+                    entries.map((entry) => {
+                      const tempFeature: ExtendedFeature = {
+                        accession: (entry.data as PTMData).accession,
+                        protein: (entry.data as PTMData).accession,
+                        type: 'ptm',
+                        source_database: 'ptm',
+                        locations: ptmsFeaturesToLocations(
+                          (entry.data as PTMData).accession,
+                          (entry.data as PTMData).features,
+                        ),
+                      };
+                      ptmEntries.push(tempFeature);
+                    });
+                    entries = ptmEntries;
                   }
 
                   return (
