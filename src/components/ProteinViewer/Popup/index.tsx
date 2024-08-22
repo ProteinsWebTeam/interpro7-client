@@ -7,7 +7,7 @@ import ProtVistaEntryPopup, { EntryDetail } from './Entry';
 import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import Genome3DPopup, { Genome3DDetail } from './Genome3D';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
-import DisProtPopup, { DisProtDetail } from './DisProt';
+import ProtVistaPTMPopup, { PTMDetail } from './PTM';
 import DisProtPopup, { DisProtDetail } from './DisProt';
 import { ExtendedFeature } from '..';
 

@@ -1,3 +1,42 @@
+import React from 'react';
+
+type PTMEvidence = {
+  code: string;
+  source: {
+    name: string;
+  };
+  PEP: string;
+  url: string;
+};
+
+type PTMFragment = {
+  evidences: PTMEvidence[];
+  ptm: string;
+  peptide: string;
+  ptm_type: string;
+  source: string;
+  start: number;
+  position: number;
+};
+
+export type PTMDetail = {
+  target?: HTMLElement;
+  feature?: {
+    name?: string;
+    accession?: string;
+    type?: string;
+    sources?: string;
+    locations: {
+      accession: string;
+      description: string;
+      fragments: PTMFragment[];
+    }[];
+  };
+};
+type Props = {
+  detail: PTMDetail;
+};
+
 const ProtVistaPTMPopup = ({ detail }: Props) => {
   const ptmData: PTMFragment | undefined =
     detail.feature?.locations[0].fragments[0];
