@@ -6,6 +6,7 @@ import Link from 'components/generic/Link';
 import {
   Genome3dLink,
   AlphafoldLink,
+  PTMLink,
 } from 'components/ExtLink/patternLinkWrapper';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
@@ -32,6 +33,7 @@ const EXCEPTIONAL_TYPES = [
   'chain',
   'secondary_structure',
   'variation',
+  'ptm',
 ];
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
 
@@ -98,6 +100,17 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
       </AlphafoldLink>
     );
   }
+
+  if (entry.source_database === 'ptm') {
+    return isPrinting ? (
+      <span>UniProt</span>
+    ) : (
+      <PTMLink id={entry.protein || ''} className={css('ext')}>
+        PTM Data
+      </PTMLink>
+    );
+  }
+
   if (entry.source_database === 'elm')
     return isPrinting ? (
       <span>{label}</span>
