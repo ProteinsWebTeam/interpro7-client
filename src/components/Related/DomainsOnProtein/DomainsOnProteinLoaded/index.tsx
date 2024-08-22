@@ -96,10 +96,7 @@ export const flattenTracksObject = (
     Object.entries(tracksObject)
       .sort(byEntryType)
       // “Binding_site” -> “Binding site”
-      .map(([key, value]) => [
-        key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
-        value,
-      ])
+      .map(([key, value]) => [key.replace(UNDERSCORE, ' '), value])
   );
 };
 
@@ -125,22 +122,17 @@ export const addVariationTrack = (
 export const addPTMTrack = (
   proteomicsPayload: ProteinsAPIProteomics,
   protein: string,
-  tracks: ProteinViewerData,
+  tracks: ProteinViewerDataObject,
 ) => {
   if (proteomicsPayload?.features?.length) {
-    const proteomicsTrack: [string, Array<unknown>] = [
-      'PTM Data',
-      [
-        {
-          accession: `ptm_${protein}`,
-          data: proteomicsPayload,
-          type: 'ptm',
-          protein,
-          source_database: 'proteinsAPI',
-        },
-      ],
-    ];
-    tracks.push(proteomicsTrack);
+    tracks['PTM'] = [];
+    tracks['PTM'][0] = {
+      accession: `ptm_${protein}`,
+      data: proteomicsPayload,
+      type: 'ptm',
+      protein,
+      source_database: 'proteinsAPI',
+    };
   }
 };
 
@@ -201,7 +193,7 @@ const DomainsOnProteinLoaded = ({
 
   if (dataProteomics?.ok && dataProteomics.payload) {
     if (dataProteomics.payload.features.length > 0) {
-      /*addPTMTrack(dataProteomics.payload, protein.accession, sortedData);*/
+      addPTMTrack(dataProteomics.payload, protein.accession, dataMerged);
     }
   }
 
