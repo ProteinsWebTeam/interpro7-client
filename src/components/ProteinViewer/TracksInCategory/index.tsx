@@ -76,6 +76,7 @@ const mapToFeatures = (entry: ExtendedFeature, colorDomainsBy: string) =>
     accession: entry.accession,
     name: entry.name,
     short_name: entry.short_name,
+    integrated: entry.integrated,
     source_database: entry.source_database,
     locations: [loc],
     color: getTrackColor(entry, colorDomainsBy),
@@ -97,6 +98,7 @@ const mapToContributors = (entry: ExtendedFeature, colorDomainsBy: string) =>
     source_database: child.source_database,
     entry_type: child.entry_type,
     type: child.type,
+    integrated: child.integrated,
     locations: (child.entry_protein_locations || child.locations || []).map(
       (loc) => ({
         ...loc,
@@ -180,7 +182,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                 ?.name ||
               detail.feature?.source_database ||
               '';
-            if (customLocation)
+            if (customLocation) {
               openTooltip(
                 detail.target,
                 <ProtVistaPopup
@@ -189,6 +191,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                   currentLocation={customLocation}
                 />,
               );
+            }
             break;
           }
           default:
@@ -323,7 +326,8 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           use-ctrl-to-zoom
                         />
                       )}
-                      {entry.type === 'ptm' && ( <></>
+                      {entry.type === 'ptm' && (
+                        <></>
                         /*<NightingaleColoredSequence
                           id={getTrackAccession(entry.accession)}
                           data={entry.data as string}

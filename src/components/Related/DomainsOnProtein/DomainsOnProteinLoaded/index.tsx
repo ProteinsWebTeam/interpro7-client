@@ -1,11 +1,9 @@
 import React, { PropsWithChildren } from 'react';
 import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import loadable from 'higherOrder/loadable';
-import {
-  groupByEntryType,
-  orderByAccession,
-} from 'components/Related/DomainsOnProtein';
+import { groupByEntryType } from 'components/Related/DomainsOnProtein';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
+import { ExtendedFeature } from 'components/ProteinViewer';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -65,6 +63,39 @@ type tracksProps = {
   representativeFamilies?: Array<MinimalFeature>;
   disorderedRegions?: Array<MinimalFeature>;
 };
+
+function getMatchOrTrackStart(item: ExtendedFeature | ExtendedFeature[]) {
+  if (Array.isArray(item)) {
+    return item[0].entry_protein_locations?.[0].fragments?.[0].end;
+  }
+  return item.entry_protein_locations?.[0].fragments?.[0].end;
+}
+
+function sortTracksByMatchesPosition(
+  a: ExtendedFeature[] | ExtendedFeature,
+  b: ExtendedFeature[] | ExtendedFeature,
+) {
+  const aPos = getMatchOrTrackStart(a);
+  const bPos = getMatchOrTrackStart(b);
+
+  if (aPos && bPos) return aPos > bPos ? 1 : -1;
+  return 0;
+}
+
+const getMemberDBMatches = (
+  interpro: Array<MinimalFeature>,
+): Array<MinimalFeature> => {
+  const dbMatches: Array<MinimalFeature> = [];
+  interpro.forEach((entry) => {
+    if (entry.children) {
+      entry.children.forEach((memberDBMatch) => {
+        dbMatches.push(memberDBMatch);
+      });
+    }
+  });
+  return dbMatches;
+};
+
 export const makeTracks = ({
   interpro,
   unintegrated,
@@ -73,12 +104,56 @@ export const makeTracks = ({
   representativeFamilies,
   disorderedRegions,
 }: tracksProps): ProteinViewerDataObject<MinimalFeature> => {
-  const groups = groupByEntryType(interpro);
-  unintegrated.sort(orderByAccession);
-  const mergedData: ProteinViewerDataObject<MinimalFeature> = {
-    ...groups,
-    unintegrated: unintegrated,
-  };
+  /* Logic to highlight matches from member DBs, not InterPro entries
+      1. Remove Intepro entries as the "parent" of matches from member DBs.
+      2. Merge unintegrated with result from (1.);
+      3. Sort matches in tracks based on their position but, if integrated, 
+      maintaining grouping for the same InterPro entry.
+  */
+
+  // 1. and 2.
+  const integratedMatches = getMemberDBMatches(interpro);
+  const allMatches = integratedMatches.concat(unintegrated);
+
+  // this was const groups = groupByEntryType(interpro)
+  const groups = groupByEntryType(
+    allMatches as { accession: string; type: string }[],
+  );
+
+  /* 3. 
+        Group matches of the same type (e.g domain) by IntePro accession
+        sort matches by position within the same group, 
+        sort all the groups based on first fragment of group.
+
+        Note: Object.groupBy not available in this TypeScript version, implementing it. 
+  */
+
+  Object.keys(groups).map((key) => {
+    const uniqueInterproAccessions = [
+      ...new Set(groups[key].map((match: ExtendedFeature) => match.integrated)),
+    ];
+    const allMatchesGroupedByEntry = [];
+
+    for (let i = 0; i < uniqueInterproAccessions.length; i++) {
+      const groupedEntry = groups[key].filter(
+        (match: ExtendedFeature) =>
+          match.integrated == uniqueInterproAccessions[i],
+      );
+
+      // Sort non-integrated and those appearing just once for an Interpro accession, independently from the grouped ones
+      if (uniqueInterproAccessions[i] === null || groupedEntry.length == 1) {
+        groupedEntry.map((entry) => allMatchesGroupedByEntry.push(entry));
+      } else {
+        allMatchesGroupedByEntry.push(groupedEntry);
+      }
+    }
+    groups[key] = allMatchesGroupedByEntry
+      .sort(sortTracksByMatchesPosition)
+      .flat();
+  });
+
+  const mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
+
   if (other) mergedData.other_features = other;
   if (representativeDomains?.length)
     mergedData.representative_domains = representativeDomains;

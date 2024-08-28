@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Positions from '../Positions';
+import Link from 'components/generic/Link';
 
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
@@ -11,6 +12,7 @@ export type EntryDetail = {
   target?: HTMLElement;
   feature?: {
     accession: string;
+    integrated: string;
     description: string;
     name: string;
     type: string;
@@ -53,6 +55,9 @@ const ProtVistaEntryPopup = ({
     confidence,
   } = detail?.feature || {};
   const isInterPro = sourceDatabase.toLowerCase() === 'interpro';
+  const integrated = detail.feature?.integrated;
+
+  console.log(integrated);
 
   // To include the type of fragment of the secondary structure
   let type = originalType;
@@ -110,6 +115,29 @@ const ProtVistaEntryPopup = ({
           <small>({entry})</small>
         </p>
       )}
+
+      {integrated ? (
+        <p>
+          Integrated in &nbsp;
+          <span>
+            <Link
+              to={{
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: 'interpro',
+                    accession: integrated,
+                  },
+                },
+              }}
+            >
+              {integrated}
+            </Link>
+          </span>
+        </p>
+      ) : (
+        <p> Not integrated </p>
+      )}
       <ul>
         {(newLocations || locations || []).map(
           ({ fragments, model_acc: model, subfamily }, j) => (
@@ -130,7 +158,7 @@ const ProtVistaEntryPopup = ({
               )}
               <Positions fragments={fragments} protein={protein} />
             </li>
-          )
+          ),
         )}
       </ul>
       {confidence && <p>Confidence: {confidence}</p>}
