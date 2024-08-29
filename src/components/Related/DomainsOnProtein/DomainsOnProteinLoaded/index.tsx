@@ -64,21 +64,40 @@ type tracksProps = {
   disorderedRegions?: Array<MinimalFeature>;
 };
 
-function getMatchOrTrackStart(item: ExtendedFeature | ExtendedFeature[]) {
+function getBoundaries(item: ExtendedFeature | ExtendedFeature[]) {
+  let fragment = undefined;
+  let accession = undefined;
+
   if (Array.isArray(item)) {
-    return item[0].entry_protein_locations?.[0].fragments?.[0].end;
+    fragment = item[0].entry_protein_locations?.[0].fragments?.[0];
+    accession = item[0].accession;
+  } else {
+    fragment = item.entry_protein_locations?.[0].fragments?.[0];
+    accession = item.accession;
   }
-  return item.entry_protein_locations?.[0].fragments?.[0].end;
+  if (fragment && accession) {
+    return [accession, fragment.start, fragment.end];
+  }
+  return [0, 0];
 }
 
-function sortTracksByMatchesPosition(
-  a: ExtendedFeature[] | ExtendedFeature,
-  b: ExtendedFeature[] | ExtendedFeature,
+function sortTracks(
+  a: ExtendedFeature | ExtendedFeature[],
+  b: ExtendedFeature | ExtendedFeature[],
 ) {
-  const aPos = getMatchOrTrackStart(a);
-  const bPos = getMatchOrTrackStart(b);
+  const [aAccession, aStart, aEnd] = getBoundaries(a);
+  const [bAccession, bStart, bEnd] = getBoundaries(b);
 
-  if (aPos && bPos) return aPos > bPos ? 1 : -1;
+  if (aStart > bStart) return 1;
+  if (aStart < bStart) return -1;
+  if (aStart == bStart) {
+    if (aEnd < bEnd) return 1;
+    if (aEnd > bEnd) return -1;
+    if (aEnd == bEnd) {
+      if (aAccession > bAccession) return 1;
+      else return -1;
+    }
+  }
   return 0;
 }
 
@@ -124,8 +143,6 @@ export const makeTracks = ({
         Group matches of the same type (e.g domain) by IntePro accession
         sort matches by position within the same group, 
         sort all the groups based on first fragment of group.
-
-        Note: Object.groupBy not available in this TypeScript version, implementing it. 
   */
 
   Object.keys(groups).map((key) => {
@@ -139,17 +156,14 @@ export const makeTracks = ({
         (match: ExtendedFeature) =>
           match.integrated == uniqueInterproAccessions[i],
       );
-
       // Sort non-integrated and those appearing just once for an Interpro accession, independently from the grouped ones
       if (uniqueInterproAccessions[i] === null || groupedEntry.length == 1) {
         groupedEntry.map((entry) => allMatchesGroupedByEntry.push(entry));
       } else {
-        allMatchesGroupedByEntry.push(groupedEntry);
+        allMatchesGroupedByEntry.push(groupedEntry.sort(sortTracks));
       }
     }
-    groups[key] = allMatchesGroupedByEntry
-      .sort(sortTracksByMatchesPosition)
-      .flat();
+    groups[key] = allMatchesGroupedByEntry.sort(sortTracks).flat();
   });
 
   const mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
