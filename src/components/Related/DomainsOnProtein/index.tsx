@@ -174,11 +174,10 @@ const DomainOnProteinWithoutData = ({
 
   const getFeature = (
     filter: string | string[],
-    existingSection: string,
     mergedData: ProteinViewerDataObject,
   ): ExtendedFeature[] => {
-    if (mergedData[existingSection]) {
-      return (mergedData[existingSection] as ExtendedFeature[]).filter(
+    if (mergedData['other_features']) {
+      return (mergedData['other_features'] as ExtendedFeature[]).filter(
         (entry) => {
           const entryDB = entry.source_database;
           if (entryDB) {
@@ -230,15 +229,10 @@ const DomainOnProteinWithoutData = ({
 
     const CPST = ['coils', 'phobius', 'signalp', 'tmhmm'];
     mergedData['coiled-coils,_signal_peptides,_transmembrane_regions'] =
-      getFeature(CPST, 'other_features', mergedData) as MinimalFeature[];
-    mergedData['pfam-n'] = getFeature(
-      'pfam-n',
-      'other_features',
-      mergedData,
-    ) as MinimalFeature[];
+      getFeature(CPST, mergedData) as MinimalFeature[];
+    mergedData['pfam-n'] = getFeature('pfam-n', mergedData) as MinimalFeature[];
     mergedData['short_linear_motifs'] = getFeature(
       'elm',
-      'other_features',
       mergedData,
     ) as MinimalFeature[];
 
