@@ -321,10 +321,6 @@ export const ProteinViewer = ({
                     entries = residuesEntries;
                   }
 
-                  if (type == 'other features') {
-                    console.log(entries);
-                  }
-
                   return (
                     <div
                       key={type}

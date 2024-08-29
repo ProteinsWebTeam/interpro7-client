@@ -228,7 +228,6 @@ const DomainOnProteinWithoutData = ({
       Using this logic we can go back to having the grouped entire section
     */
 
-    console.log(mergedData);
     const CPST = ['coils', 'phobius', 'signalp', 'tmhmm'];
     mergedData['coiled-coils,_signal_peptides,_transmembrane_regions'] =
       getFeature(CPST, 'other_features', mergedData) as MinimalFeature[];
@@ -242,14 +241,13 @@ const DomainOnProteinWithoutData = ({
       'other_features',
       mergedData,
     ) as MinimalFeature[];
-    mergedData['spurious_proteins'] = getFeature(
-      'antifam',
-      'other_features',
-      mergedData,
-    ) as MinimalFeature[];
-    mergedData['funfam'] = [];
 
-    console.log(mergedData);
+    if (Object.keys(mergedData).includes('region')) {
+      mergedData['spurious_proteins'] = mergedData['region'];
+      delete mergedData['region'];
+    }
+
+    // mergedData['funfam'] = [];
   }
   // if (conservation.data) {
   //   mergeConservationData(mergedData, conservation.data);
