@@ -20,6 +20,7 @@ const FIRST_IN_ORDER = [
   'representative_families',
   'pathogenic_variants',
   'disordered_regions',
+  'spurious_proteins',
   'residues',
 ];
 
@@ -28,6 +29,9 @@ const LASTS_IN_ORDER = [
   'secondary_structure',
   'domain',
   'homologous_superfamily',
+  'coiled-coils,_signal_peptides,_transmembrane_regions',
+  'short_linear_motifs',
+  'pfam-n',
   'repeat',
   'conserved_site',
   'active_site',

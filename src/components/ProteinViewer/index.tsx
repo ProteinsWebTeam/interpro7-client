@@ -134,6 +134,7 @@ export const ProteinViewer = ({
     'representative families',
     'pathogenic variants',
     'disordered regions',
+    'spurious proteins',
     'residues',
   ];
 
@@ -153,6 +154,10 @@ export const ProteinViewer = ({
     features: true,
     predictions: true,
     'match conservation': true,
+    'coiled-coils, signal peptides, transmembrane regions': true,
+    'short linear motifs': true,
+    'pfam-n': true,
+    funfam: true,
   });
 
   const categoryRefs = useRef<ExpandedHandle[]>([]);
@@ -314,6 +319,10 @@ export const ProteinViewer = ({
                     });
 
                     entries = residuesEntries;
+                  }
+
+                  if (type == 'other features') {
+                    console.log(entries);
                   }
 
                   return (

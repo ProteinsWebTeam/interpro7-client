@@ -172,6 +172,26 @@ const DomainOnProteinWithoutData = ({
     mergeResidues(mergedData, dataResidues.payload);
   }
 
+  const getFeature = (
+    filter: string | string[],
+    existingSection: string,
+    mergedData: ProteinViewerDataObject,
+  ): ExtendedFeature[] => {
+    if (mergedData[existingSection]) {
+      return (mergedData[existingSection] as ExtendedFeature[]).filter(
+        (entry) => {
+          const entryDB = entry.source_database;
+          if (entryDB) {
+            if (Array.isArray(filter))
+              return filter.some((item) => entryDB.includes(item));
+            else return filter.includes(entryDB);
+          }
+        },
+      );
+    }
+    return [];
+  };
+
   const filterMobiDBLiteFeatures = (
     mergedData: ProteinViewerDataObject,
   ): ExtendedFeature[] => {
@@ -202,6 +222,34 @@ const DomainOnProteinWithoutData = ({
     mergedData['disordered_regions'] = filterMobiDBLiteFeatures(
       mergedData,
     ) as MinimalFeature[];
+
+    /* 
+      Splitting the "other features" section in mulitple subsets
+      Using this logic we can go back to having the grouped entire section
+    */
+
+    console.log(mergedData);
+    const CPST = ['coils', 'phobius', 'signalp', 'tmhmm'];
+    mergedData['coiled-coils,_signal_peptides,_transmembrane_regions'] =
+      getFeature(CPST, 'other_features', mergedData) as MinimalFeature[];
+    mergedData['pfam-n'] = getFeature(
+      'pfam-n',
+      'other_features',
+      mergedData,
+    ) as MinimalFeature[];
+    mergedData['short_linear_motifs'] = getFeature(
+      'elm',
+      'other_features',
+      mergedData,
+    ) as MinimalFeature[];
+    mergedData['spurious_proteins'] = getFeature(
+      'antifam',
+      'other_features',
+      mergedData,
+    ) as MinimalFeature[];
+    mergedData['funfam'] = [];
+
+    console.log(mergedData);
   }
   // if (conservation.data) {
   //   mergeConservationData(mergedData, conservation.data);
