@@ -12,8 +12,6 @@ import AIGeneratedFilter from './AIGeneratedFilter';
 
 type Props = { mainDB?: string };
 export const EntryListFilter = ({ mainDB }: Props) => {
-  const [AILabel, setAILabel] = useState('AI-Generated Entries');
-
   return (
     <FiltersPanel>
       <EntryTypeFilter
@@ -24,7 +22,7 @@ export const EntryListFilter = ({ mainDB }: Props) => {
       {mainDB !== 'InterPro' && <IntegratedFilter label="InterPro State" />}
       {mainDB === 'InterPro' && <GOTermsFilter label="GO Terms" />}
       {mainDB === 'InterPro' && <LatestFilter label="New entries" />}
-      <AIGeneratedFilter label={AILabel} changeLabel={setAILabel} />
+      <AIGeneratedFilter label="AI-Generated Entries" />
     </FiltersPanel>
   );
 };

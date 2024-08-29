@@ -28,7 +28,6 @@ type Categories = keyof typeof categories;
 
 type Props = {
   label?: string;
-  changeLabel: (s: string) => void;
   goToCustomLocation?: typeof goToCustomLocation;
   customLocation?: InterProLocation;
 };
@@ -36,7 +35,6 @@ type Props = {
 interface LoadedProps extends Props, LoadDataProps<GroupByPayload> {}
 
 const AIGeneratedFilter = ({
-  changeLabel,
   data,
   isStale,
   customLocation,
@@ -58,63 +56,46 @@ const AIGeneratedFilter = ({
   ).sort(([, a], [, b]) => b - a);
 
   if (!loading) {
-    terms.unshift(['All', NaN]);
+    terms.unshift(['All', terms.reduce((acc, [, count]) => acc + count, 0)]);
   }
 
-  const [showFilter, setShowFilter] = useState(true);
-
-  useEffect(() => {
-    if (terms.length > 0) {
-      // If loaded AI-generated reviewed and unreviewed counts will always be in position 2 and 3 of the terms obj
-      if (terms[2][1] == 0 && terms[3][1] == 0) {
-        setShowFilter(false);
-        changeLabel('');
-      } else {
-        setShowFilter(true);
-        changeLabel('AI-Generated Entries');
-      }
-    }
-  });
-
   return (
-    showFilter && (
-      <div className={css('list-go', { stale: isStale })}>
-        <div className={css('filter')}>
-          {terms.map(([t, count]) => {
-            const term = t as Categories | 'All';
-            const checked =
-              (term === 'All' && !search.curation_status) ||
-              search.curation_status === categories[term as Categories];
-            return (
-              <label key={term} className={css('radio-btn-label', { checked })}>
-                <input
-                  type="radio"
-                  name="curation_status"
-                  className={css('radio-btn')}
-                  value={categories[term as Categories] || 'All'}
-                  disabled={isStale}
-                  onChange={_handleSelection}
-                  checked={checked}
-                  style={{ margin: '0.25em' }}
-                />
-                <span>{term}</span>
+    <div className={css({ stale: isStale })}>
+      <div className={css('filter')}>
+        {terms.map(([t, count]) => {
+          const term = t as Categories | 'All';
+          const checked =
+            (term === 'All' && !search.curation_status) ||
+            search.curation_status === categories[term as Categories];
+          return term == 'All' || count > 0 ? (
+            <label key={term} className={css('radio-btn-label', { checked })}>
+              <input
+                type="radio"
+                name="curation_status"
+                className={css('radio-btn')}
+                value={categories[term as Categories] || 'All'}
+                disabled={isStale}
+                onChange={_handleSelection}
+                checked={checked}
+                style={{ margin: '0.25em' }}
+              />
+              <span>{term}</span>
 
-                {typeof count === 'undefined' || isNaN(count) ? null : (
-                  <NumberComponent
-                    label
-                    loading={loading}
-                    className={css('filter-label')}
-                    abbr
-                  >
-                    {count}
-                  </NumberComponent>
-                )}
-              </label>
-            );
-          })}
-        </div>
+              <NumberComponent
+                label
+                loading={loading}
+                className={css('filter-label')}
+                abbr
+              >
+                {count}
+              </NumberComponent>
+            </label>
+          ) : (
+            ''
+          );
+        })}
       </div>
-    )
+    </div>
   );
 };
 
