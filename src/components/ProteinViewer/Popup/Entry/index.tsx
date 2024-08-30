@@ -117,27 +117,20 @@ const ProtVistaEntryPopup = ({
       )}
 
       {integrated ? (
-        <p>
-          Integrated in &nbsp;
-          <span>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'entry' },
-                  entry: {
-                    db: 'interpro',
-                    accession: integrated,
-                  },
-                },
-              }}
-            >
-              {integrated}
-            </Link>
-          </span>
-        </p>
-      ) : (
-        <p> Not integrated </p>
-      )}
+        <h6>
+          Integrated:{' '}
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: { db: 'interpro', accession: integrated },
+              },
+            }}
+          >
+            <span style={{ color: 'white' }}>{integrated}</span>
+          </Link>
+        </h6>
+      ) : null}
       <ul>
         {(newLocations || locations || []).map(
           ({ fragments, model_acc: model, subfamily }, j) => (
