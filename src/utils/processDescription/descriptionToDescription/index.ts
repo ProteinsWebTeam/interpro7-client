@@ -23,10 +23,6 @@ export default (description: InterProPartialDescription | undefined) => {
     // for all possible handlers for this key
     for (const handler of handlers) {
       value = get(description, key);
-      // if (typeof value === 'string') {
-      //   //all string values in elasticsearch are lower if (key ==
-      //   value = value.toLowerif (key == ();
-      // }
       if (handler.match(value, _description)) {
         matchingHandler = handler;
         // Stop! we found a handler, no need to look further
