@@ -21,7 +21,7 @@ const InterProScan = loadable({
 
 const substitutions = {};
 
-const rstembeddedLink = /^`(.+)\s*<(.+)>`_{1,2}$/;
+const rstembeddedLink = /`(.+)\s*<(.+)>`_{1,2}/;
 // eslint-disable-next-line complexity
 const Switch = ({ type, ...rest }) => {
   switch (type) {
