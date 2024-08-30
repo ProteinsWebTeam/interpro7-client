@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 import { createSelector } from 'reselect';
 import { format } from 'url';
@@ -20,17 +20,11 @@ import stylego from 'pages/style.css';
 const css = cssBinder(stylego, style);
 
 const categories = {
-  'Biological Process': 'P',
-  'Cellular Component': 'C',
-  'Molecular Function': 'F',
+  Curated: 'curated',
+  'AI-Generated (reviewed)': 'ai-reviewed',
+  'AI-Generated (unreviewed)': 'ai-unreviewed',
 };
 type Categories = keyof typeof categories;
-
-const short = {
-  'Biological Process': 'BP',
-  'Cellular Component': 'CC',
-  'Molecular Function': 'MF',
-};
 
 type Props = {
   label?: string;
@@ -40,7 +34,7 @@ type Props = {
 
 interface LoadedProps extends Props, LoadDataProps<GroupByPayload> {}
 
-const GOTermsFilter = ({
+const AIGeneratedFilter = ({
   data,
   isStale,
   customLocation,
@@ -52,8 +46,8 @@ const GOTermsFilter = ({
 
   const _handleSelection = ({ target }: FormEvent) => {
     const value = (target as HTMLInputElement).value;
-    const { page, go_category: _, cursor: __, ...restOfsearch } = search;
-    if (value !== 'All') restOfsearch.go_category = value;
+    const { page, curation_status: _, cursor: __, ...restOfsearch } = search;
+    if (value !== 'All') restOfsearch.curation_status = value;
     goToCustomLocation?.({ ...customLocation, search: restOfsearch });
   };
 
@@ -62,21 +56,22 @@ const GOTermsFilter = ({
   ).sort(([, a], [, b]) => b - a);
 
   if (!loading) {
-    terms.unshift(['All', NaN]);
+    terms.unshift(['All', terms.reduce((acc, [, count]) => acc + count, 0)]);
   }
+
   return (
     <div className={css({ stale: isStale })}>
       <div className={css('filter')}>
         {terms.map(([t, count]) => {
           const term = t as Categories | 'All';
           const checked =
-            (term === 'All' && !search.go_category) ||
-            search.go_category === categories[term as Categories];
-          return (
+            (term === 'All' && !search.curation_status) ||
+            search.curation_status === categories[term as Categories];
+          return term == 'All' || count > 0 ? (
             <label key={term} className={css('radio-btn-label', { checked })}>
               <input
                 type="radio"
-                name="go_category"
+                name="curation_status"
                 className={css('radio-btn')}
                 value={categories[term as Categories] || 'All'}
                 disabled={isStale}
@@ -86,31 +81,17 @@ const GOTermsFilter = ({
               />
               <span>{term}</span>
 
-              {term in short && (
-                <Tooltip title={`${term} category`}>
-                  <small
-                    className={css(
-                      'go-short-label',
-                      'sign-label-head',
-                      short[term as Categories].toLowerCase(),
-                    )}
-                  >
-                    {short[term as Categories]}
-                  </small>
-                </Tooltip>
-              )}
-
-              {typeof count === 'undefined' || isNaN(count) ? null : (
-                <NumberComponent
-                  label
-                  loading={loading}
-                  className={css('filter-label')}
-                  abbr
-                >
-                  {count}
-                </NumberComponent>
-              )}
+              <NumberComponent
+                label
+                loading={loading}
+                className={css('filter-label')}
+                abbr
+              >
+                {count}
+              </NumberComponent>
             </label>
+          ) : (
+            ''
           );
         })}
       </div>
@@ -130,11 +111,11 @@ const getUrlFor = createSelector(
       search: _,
       cursor: __,
       // eslint-disable-next-line camelcase
-      go_category,
+      curation_status,
       ..._search
     } = search;
     // add to search
-    _search.group_by = 'go_categories';
+    _search.group_by = 'curation_statuses';
     // build URL
     return format({
       protocol,
@@ -155,4 +136,4 @@ export default loadData({
   getUrl: getUrlFor,
   mapStateToProps,
   mapDispatchToProps: { goToCustomLocation },
-} as LoadDataParameters)(GOTermsFilter);
+} as LoadDataParameters)(AIGeneratedFilter);
