@@ -222,11 +222,11 @@ const DomainOnProteinWithoutData = ({
       mergedData,
     ) as MinimalFeature[];
 
-    /* 
-      Splitting the "other features" section in mulitple subsets
-      Using this logic we can go back to having the grouped entire section
+    /* Splitting the "other features" section in mulitple subsets.
+       Using this logic we can go back to having the "other_features" section again.
     */
 
+    // Create a section for each of the following types
     const CPST = ['coils', 'phobius', 'signalp', 'tmhmm'];
     mergedData['coiled-coils,_signal_peptides,_transmembrane_regions'] =
       getFeature(CPST, mergedData) as MinimalFeature[];
@@ -242,6 +242,16 @@ const DomainOnProteinWithoutData = ({
     }
 
     // mergedData['funfam'] = [];
+
+    // Filter the types above out of the "other_features" section
+    const toRemove = CPST.concat(['pfam-n', 'short_linear_motifs', 'mobidblt']);
+    mergedData['other_features'] = mergedData['other_features'].filter(
+      (entry) => {
+        return !toRemove.some((item) => entry.source_database?.includes(item));
+      },
+    );
+
+    /* End of logic for splitting "other_features" */
   }
   // if (conservation.data) {
   //   mergeConservationData(mergedData, conservation.data);
