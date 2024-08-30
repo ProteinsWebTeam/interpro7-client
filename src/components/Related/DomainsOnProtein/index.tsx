@@ -218,7 +218,7 @@ const DomainOnProteinWithoutData = ({
 
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
     mergeExtraFeatures(mergedData, dataFeatures?.payload);
-    mergedData['disordered_regions'] = filterMobiDBLiteFeatures(
+    mergedData['intrinsically_disordered_regions'] = filterMobiDBLiteFeatures(
       mergedData,
     ) as MinimalFeature[];
 

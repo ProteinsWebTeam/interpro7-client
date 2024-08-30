@@ -19,7 +19,7 @@ const FIRST_IN_ORDER = [
   'representative_domains',
   'representative_families',
   'pathogenic_variants',
-  'disordered_regions',
+  'intrinsically_disordered_regions',
   'spurious_proteins',
   'residues',
 ];

@@ -133,7 +133,7 @@ export const ProteinViewer = ({
     'representative domains',
     'representative families',
     'pathogenic variants',
-    'disordered regions',
+    'intrinsically disordered regions',
     'spurious proteins',
     'residues',
   ];

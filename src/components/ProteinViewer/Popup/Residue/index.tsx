@@ -42,8 +42,8 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase }: Props) => {
       </h6>
       {residueDescription && <p>{residueDescription}</p>}
       <div>
-        // Display only the position of the currently highlighted residue
-        Residue({detail.highlight.split(':')[0]})
+        {/* Display only the position of the currently highlighted residue */}
+        Residue ({detail.highlight.split(':')[0]})
       </div>
     </section>
   );

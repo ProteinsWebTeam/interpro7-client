@@ -26,7 +26,7 @@ type PropsEL = {
 };
 
 const EXCEPTIONAL_TYPES = [
-  'disordered_regions',
+  'intrinsically_disordered_regions',
   'residue',
   'sequence_conservation',
   'chain',
