@@ -1,99 +1,38 @@
-// @flow
 import { get, set } from 'lodash-es';
 
-/*:: type PossibleMain = (
-  'entry' |
-  'protein' |
-  'structure' |
-  'taxonomy' |
-  'proteome' |
-  'set' |
-  'search' |
-  'result'
-); */
+type PossibleMain =
+  | 'entry'
+  | 'protein'
+  | 'structure'
+  | 'taxonomy'
+  | 'proteome'
+  | 'set'
+  | 'search'
+  | 'result';
 
-/*:: export type DescriptionMain = {|
-    key: ?PossibleMain,
-    numberOfFilters: number,
-|} */
-/*:: export type Description = {|
-  main: DescriptionMain,
-  entry: {|
-    isFilter: ?boolean,
-    integration: ?string,
-    db: ?string,
-    accession: ?string,
-    memberDB: ?string,
-    memberDBAccession: ?string,
-    detail: ?string,
-    order: ?number,
-  |},
-  protein: {|
-    isFilter: ?boolean,
-    db: ?string,
-    accession: ?string,
-    detail: ?string,
-    order: ?number,
-  |},
-  structure: {|
-    isFilter: ?boolean,
-    db: ?string,
-    accession: ?string,
-    chain: ?string,
-    detail: ?string,
-    order: ?number,
-  |},
-  taxonomy: {|
-    isFilter: ?boolean,
-    db: ?string,
-    accession: ?string,
-    detail: ?string,
-    order: ?number,
-  |},
-  proteome: {|
-    isFilter: ?boolean,
-    db: ?string,
-    accession: ?string,
-    detail: ?string,
-    order: ?number,
-  |},
-  set: {|
-    isFilter: ?boolean,
-    db: ?string,
-    accession: ?string,
-    detail: ?string,
-    order: ?number,
-  |},
-  search: {|
-    type: ?string,
-    value: ?string,
-  |},
-  result: {|
-    type: ?string,
-    accession: ?string,
-    detail: ?string,
-  |},
-  other: Array<string>,
-|}; */
+type Handler = {
+  name: string;
+  children: Set<Handler>;
+  key?: Array<string> | null;
+  getKey: (description: InterProDescription) => Array<string> | null;
+  cleanedUp?: string | null;
+  cleanUp: (value: string, description?: InterProDescription) => string;
+  regexp: RegExp;
+  match: (value: string, description: InterProDescription) => boolean;
+  handle: (
+    description: InterProDescription,
+    current?: string | null,
+    next?: string | null,
+    ...args: Array<string>
+  ) => InterProDescription;
+};
 
-/*:: export type Handler = {|
-  name: string,
-  children: Set<Handler>,
-  key: ?Array<string>,
-  getKey: Description => ?Array<string>,
-  cleanedUp: ?string,
-  cleanUp: (string, ?Description) => ?string,
-  regexp: RegExp,
-  match: (string, Description) => ?boolean,
-  handle: (Description, ?string, ?string, ...args: Array<string>) => Description,
-|}; */
-
-/*:: type PropertiesObject = {
-  [key: string]: PropertyDescriptor<any>,
-}; */
+type PropertiesObject = {
+  [key: string]: PropertyDescriptor;
+};
 
 // node templates
-const templateHandler /*: Handler */ = {
+const templateHandler: Handler = {
   // can be used for debugging
   name: 'templateHandler',
   // set of all possible chil handlers
@@ -111,12 +50,16 @@ const templateHandler /*: Handler */ = {
   // used after processing parent handler to choose which child
   // can handle the next value
   match(current, _description) {
-    // $FlowFixMe object-this-reference
     return this.regexp.test(current);
   },
   // main handle function, mutates description object, setting the cleaned up
   // value to the key in description
-  handle(description, current, next, ...rest) {
+  handle(
+    description: InterProDescription,
+    current?: string | null,
+    next?: string | null,
+    ...rest: Array<string>
+  ) {
     // $FlowFixMe object-this-reference
     const key = this.key || this.getKey(description);
     if (key && current) {
@@ -127,15 +70,16 @@ const templateHandler /*: Handler */ = {
         this.cleanedUp || this.cleanUp(current, description),
       );
       if (key[1] && key[1] === 'isFilter') {
-        description.main.numberOfFilters++;
-        description[key[0]].order = description.main.numberOfFilters;
+        description.main.numberOfFilters!++;
+        description[key[0] as Endpoint].order =
+          description.main.numberOfFilters;
       }
     }
     if (!next) return description;
     // $FlowFixMe object-this-reference
     for (const child of this.children) {
       if (child.match(next, description)) {
-        return child.handle(description, next, ...rest);
+        return child.handle(description, next, rest?.[0], ...rest.slice(1));
       }
     }
     throw new Error('404');
@@ -196,28 +140,31 @@ export const setDBs /*: Set<Object> */ = new Set([
   },
 ]);
 
-const isEmpty = (object) => !Object.values(object).some(Boolean);
+const isEmpty = (object: Record<string, unknown>) =>
+  !Object.values(object).some(Boolean);
 
 // Constructors
-// prettier-ignore
-const handlerConstructor = (
-  propertiesObject /*: PropertiesObject */,
-) /*: Handler */ => Object.create(templateHandler, propertiesObject);
+const handlerConstructor = (propertiesObject: PropertiesObject): Handler =>
+  Object.create(templateHandler, propertiesObject);
 
-// prettier-ignore
-const typeConstructor = (type /*: PossibleMain */) /*: Handler */ =>
+const typeConstructor = (type: PossibleMain): Handler =>
   handlerConstructor({
     name: {
       value: `${type}Handler`,
     },
     getKey: {
-      value: ({ main: { key } }) => (key ? [type, 'isFilter'] : ['main', 'key']),
+      value: ({ main: { key } }: InterProDescription) =>
+        key ? [type, 'isFilter'] : ['main', 'key'],
     },
     cleanUp: {
-      value: (_, description) => get(description, ['main', 'key']) ? true : type,
+      value: (_: string, description: InterProDescription) =>
+        get(description, ['main', 'key']) ? true : type,
     },
     match: {
-      value: (current, { main: { key }, [type]: typeObject }) => {
+      value: (
+        current: string,
+        { main: { key }, [type]: typeObject }: InterProDescription,
+      ) => {
         switch (typeof current) {
           case 'string':
             return current.toLowerCase() === type && isEmpty(typeObject);
@@ -231,9 +178,9 @@ const typeConstructor = (type /*: PossibleMain */) /*: Handler */ =>
   });
 
 // Entry handlers
-export const entryHandler /*: Handler */ = typeConstructor('entry');
+export const entryHandler: Handler = typeConstructor('entry');
 
-export const integrationHandler /*: Handler */ = handlerConstructor({
+export const integrationHandler: Handler = handlerConstructor({
   name: {
     value: 'integrationHandler',
   },
@@ -245,7 +192,7 @@ export const integrationHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-export const interProHandler /*: Handler */ = handlerConstructor({
+export const interProHandler: Handler = handlerConstructor({
   name: {
     value: 'interProHandler',
   },
@@ -260,20 +207,19 @@ export const interProHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-export const memberDBHandler /*: Handler */ = handlerConstructor({
+export const memberDBHandler: Handler = handlerConstructor({
   name: {
     value: 'memberDBHandler',
   },
   getKey: {
-    value: ({ entry: { db } }) => [
+    value: ({ entry: { db } }: InterProDescription) => [
       'entry',
       db === 'InterPro' ? 'memberDB' : 'db',
     ],
   },
   match: {
-    value(current) {
-      // $FlowFixMe object-this-reference
-      const _current = this.cleanUp(current);
+    value(current: string) {
+      const _current = (this as Handler).cleanUp(current);
       for (const { name } of memberDB) {
         if (name === _current) return true;
       }
@@ -281,7 +227,7 @@ export const memberDBHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-export const allEntriesHandler /*: Handler */ = handlerConstructor({
+export const allEntriesHandler: Handler = handlerConstructor({
   name: {
     value: 'allEntriesHandler',
   },
@@ -296,7 +242,7 @@ export const allEntriesHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-export const interProAccessionHandler /*: Handler */ = handlerConstructor({
+export const interProAccessionHandler: Handler = handlerConstructor({
   name: {
     value: 'interProAccessionHandler',
   },
@@ -304,31 +250,33 @@ export const interProAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['entry', 'accession'],
   },
   cleanUp: {
-    value: (value) => value.toUpperCase(),
+    value: (value: string) => value.toUpperCase(),
   },
   regexp: {
     value: interPro.re,
   },
 });
 
-export const memberDBAccessionHandler /*: Handler */ = handlerConstructor({
+export const memberDBAccessionHandler: Handler = handlerConstructor({
   name: {
     value: 'memberDBAccessionHandler',
   },
   getKey: {
-    value: ({ entry: { db } }) => [
+    value: ({ entry: { db } }: InterProDescription) => [
       'entry',
       db === 'InterPro' ? 'memberDBAccession' : 'accession',
     ],
   },
   cleanUp: {
-    value: (value) => value.toUpperCase(),
+    value: (value: string) => value.toUpperCase(),
   },
   match: {
-    value(current, { entry: { db, memberDB: mdb } }) {
+    value(
+      current: string,
+      { entry: { db, memberDB: mdb } }: InterProDescription,
+    ) {
       const _mdb = db === 'InterPro' ? mdb : db;
-      // $FlowFixMe object-this-reference
-      const _current = this.cleanUp(current);
+      const _current = (this as Handler).cleanUp(current);
       for (const { name, re } of memberDB) {
         if (name === _mdb && re.test(_current)) return true;
       }
@@ -337,9 +285,9 @@ export const memberDBAccessionHandler /*: Handler */ = handlerConstructor({
 });
 
 // Protein handlers
-export const proteinHandler /*: Handler */ = typeConstructor('protein');
+export const proteinHandler: Handler = typeConstructor('protein');
 
-export const proteinDBHandler /*: Handler */ = handlerConstructor({
+export const proteinDBHandler: Handler = handlerConstructor({
   name: {
     value: 'proteinDBHandler',
   },
@@ -347,14 +295,14 @@ export const proteinDBHandler /*: Handler */ = handlerConstructor({
     value: ['protein', 'db'],
   },
   cleanUp: {
-    value: (value) => value.toLowerCase().replace('uniprot', 'UniProt'),
+    value: (value: string) => value.toLowerCase().replace('uniprot', 'UniProt'),
   },
   regexp: {
     value: /^((un)?reviewed|uniprot)$/i,
   },
 });
 
-export const proteinAccessionHandler /*: Handler */ = handlerConstructor({
+export const proteinAccessionHandler: Handler = handlerConstructor({
   name: {
     value: 'proteinAccessionHandler',
   },
@@ -362,22 +310,23 @@ export const proteinAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['protein', 'accession'],
   },
   cleanUp: {
-    value: (value) => value.toUpperCase(),
+    value: (value: string) => value.toUpperCase(),
   },
   regexp: {
     value:
       /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
   },
 });
-export const orderHandler /*: Handler */ = handlerConstructor({
+export const orderHandler: Handler = handlerConstructor({
   name: {
     value: 'orderHandler',
   },
   getKey: {
-    value: ({ main: { key } }) => (key ? [key, 'order'] : null),
+    value: ({ main: { key } }: InterProDescription) =>
+      key ? [key, 'order'] : null,
   },
   cleanUp: {
-    value: (value, _description) => value,
+    value: (value: string, _description: InterProDescription) => value,
   },
   regexp: {
     value: /^(\d+)$/i,
@@ -385,9 +334,9 @@ export const orderHandler /*: Handler */ = handlerConstructor({
 });
 
 // Structure handlers
-export const structureHandler /*: Handler */ = typeConstructor('structure');
+export const structureHandler: Handler = typeConstructor('structure');
 
-export const structureDBHandler /*: Handler */ = handlerConstructor({
+export const structureDBHandler: Handler = handlerConstructor({
   name: {
     value: 'structureDBHandler',
   },
@@ -398,14 +347,13 @@ export const structureDBHandler /*: Handler */ = handlerConstructor({
     value: 'PDB',
   },
   match: {
-    value(current) {
-      // $FlowFixMe object-this-reference
-      return current.toUpperCase() === this.cleanedUp;
+    value(current: string) {
+      return current.toUpperCase() === (this as Handler).cleanedUp;
     },
   },
 });
 
-export const structureAccessionHandler /*: Handler */ = handlerConstructor({
+export const structureAccessionHandler: Handler = handlerConstructor({
   name: {
     value: 'structureAccessionHandler',
   },
@@ -417,7 +365,7 @@ export const structureAccessionHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-export const structureChainHandler /*: Handler */ = handlerConstructor({
+export const structureChainHandler: Handler = handlerConstructor({
   name: {
     value: 'structureChainHandler',
   },
@@ -425,7 +373,7 @@ export const structureChainHandler /*: Handler */ = handlerConstructor({
     value: ['structure', 'chain'],
   },
   cleanUp: {
-    value: (value) => value.toUpperCase(),
+    value: (value: string) => value.toUpperCase(),
   },
   regexp: {
     value: /^[A-Z0-9]+$/i,
@@ -433,9 +381,9 @@ export const structureChainHandler /*: Handler */ = handlerConstructor({
 });
 
 // taxonomy handlers
-export const taxonomyHandler /*: Handler */ = typeConstructor('taxonomy');
+export const taxonomyHandler: Handler = typeConstructor('taxonomy');
 
-export const taxonomyDBHandler /*: Handler */ = handlerConstructor({
+export const taxonomyDBHandler: Handler = handlerConstructor({
   name: {
     value: 'taxonomyDBHandler',
   },
@@ -446,14 +394,13 @@ export const taxonomyDBHandler /*: Handler */ = handlerConstructor({
     value: 'uniprot',
   },
   match: {
-    value(current) {
-      // $FlowFixMe object-this-reference
-      return current.toLowerCase() === this.cleanedUp;
+    value(current: string) {
+      return current.toLowerCase() === (this as Handler).cleanedUp;
     },
   },
 });
 
-export const taxonomyAccessionHandler /*: Handler */ = handlerConstructor({
+export const taxonomyAccessionHandler: Handler = handlerConstructor({
   name: {
     value: 'taxonomyAccessionHandler',
   },
@@ -461,7 +408,7 @@ export const taxonomyAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['taxonomy', 'accession'],
   },
   cleanUp: {
-    value: (value) => value,
+    value: (value: string) => value,
   },
   regexp: {
     value: /^[1-9]\d*$/,
@@ -469,9 +416,9 @@ export const taxonomyAccessionHandler /*: Handler */ = handlerConstructor({
 });
 
 // proteome handlers
-export const proteomeHandler /*: Handler */ = typeConstructor('proteome');
+export const proteomeHandler: Handler = typeConstructor('proteome');
 
-export const proteomeDBHandler /*: Handler */ = handlerConstructor({
+export const proteomeDBHandler: Handler = handlerConstructor({
   name: {
     value: 'proteomeDBHandler',
   },
@@ -482,14 +429,13 @@ export const proteomeDBHandler /*: Handler */ = handlerConstructor({
     value: 'uniprot',
   },
   match: {
-    value(current) {
-      // $FlowFixMe object-this-reference
-      return current.toLowerCase() === this.cleanedUp;
+    value(current: string) {
+      return current.toLowerCase() === (this as Handler).cleanedUp;
     },
   },
 });
 
-export const proteomeAccessionHandler /*: Handler */ = handlerConstructor({
+export const proteomeAccessionHandler: Handler = handlerConstructor({
   name: {
     value: 'proteomeAccessionHandler',
   },
@@ -497,7 +443,7 @@ export const proteomeAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['proteome', 'accession'],
   },
   cleanUp: {
-    value: (value) => value.toUpperCase(),
+    value: (value: string) => value.toUpperCase(),
   },
   regexp: {
     value: /^UP\d{9}$/i,
@@ -505,9 +451,9 @@ export const proteomeAccessionHandler /*: Handler */ = handlerConstructor({
 });
 
 // Set handlers
-export const setHandler /*: Handler */ = typeConstructor('set');
+export const setHandler: Handler = typeConstructor('set');
 
-export const setDBHandler /*: Handler */ = handlerConstructor({
+export const setDBHandler: Handler = handlerConstructor({
   name: {
     value: 'setDBHandler',
   },
@@ -515,12 +461,12 @@ export const setDBHandler /*: Handler */ = handlerConstructor({
     value: ['set', 'db'],
   },
   cleanUp: {
-    value: (value) => value.toLowerCase().replace('interpro', 'InterPro'),
+    value: (value: string) =>
+      value.toLowerCase().replace('interpro', 'InterPro'),
   },
   match: {
-    value(current) {
-      // $FlowFixMe object-this-reference
-      const _current = this.cleanUp(current);
+    value(current: string) {
+      const _current = (this as Handler).cleanUp(current);
       for (const { name } of setDBs) {
         if (name === _current) return true;
       }
@@ -529,7 +475,7 @@ export const setDBHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-export const setAccessionHandler /*: Handler */ = handlerConstructor({
+export const setAccessionHandler: Handler = handlerConstructor({
   name: {
     value: 'setAccessionHandler',
   },
@@ -537,12 +483,11 @@ export const setAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['set', 'accession'],
   },
   cleanUp: {
-    value: (value) => value,
+    value: (value: string) => value,
   },
   match: {
-    value(current) {
-      // $FlowFixMe object-this-reference
-      const _current = this.cleanUp(current);
+    value(current: string) {
+      const _current = (this as Handler).cleanUp(current);
       for (const { re } of setDBs) {
         if (re.test(_current)) return true;
       }
@@ -551,9 +496,9 @@ export const setAccessionHandler /*: Handler */ = handlerConstructor({
 });
 
 // Search handlers
-export const searchHandler /*: Handler */ = typeConstructor('search');
+export const searchHandler: Handler = typeConstructor('search');
 
-export const searchTypeHandler /*: Handler */ = handlerConstructor({
+export const searchTypeHandler: Handler = handlerConstructor({
   name: {
     value: 'searchTypeHandler',
   },
@@ -565,7 +510,7 @@ export const searchTypeHandler /*: Handler */ = handlerConstructor({
   },
 });
 
-export const searchValueHandler /*: Handler */ = handlerConstructor({
+export const searchValueHandler: Handler = handlerConstructor({
   name: {
     value: 'searchValueHandler',
   },
@@ -573,14 +518,14 @@ export const searchValueHandler /*: Handler */ = handlerConstructor({
     value: ['search', 'value'],
   },
   cleanUp: {
-    value: (value) => value,
+    value: (value: string) => value,
   },
 });
 
 // result handlers
-export const resultHandler /*: Handler */ = typeConstructor('result');
+export const resultHandler: Handler = typeConstructor('result');
 
-export const resultTypeHandler /*: Handler */ = handlerConstructor({
+export const resultTypeHandler: Handler = handlerConstructor({
   name: {
     value: 'resultTypeHandler',
   },
@@ -588,7 +533,7 @@ export const resultTypeHandler /*: Handler */ = handlerConstructor({
     value: ['result', 'type'],
   },
   cleanUp: {
-    value: (value) =>
+    value: (value: string) =>
       /^InterProScan$/i.test(value) ? 'InterProScan' : 'download',
   },
   regexp: {
@@ -597,7 +542,7 @@ export const resultTypeHandler /*: Handler */ = handlerConstructor({
 });
 export const IPscanRegex =
   /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}(-\d+)?|internal-[1-9]\d*-[1-9]\d*)|imported_file-.+(-\d+)?$/;
-export const resultIPScanJobHandler /*: Handler */ = handlerConstructor({
+export const resultIPScanJobHandler: Handler = handlerConstructor({
   name: {
     value: 'resultIPScanJobHandler',
   },
@@ -605,13 +550,13 @@ export const resultIPScanJobHandler /*: Handler */ = handlerConstructor({
     value: ['result', 'job'],
   },
   cleanUp: {
-    value: (value) => value,
+    value: (value: string) => value,
   },
   regexp: {
     value: IPscanRegex,
   },
 });
-export const resultIPScanAccessionHandler /*: Handler */ = handlerConstructor({
+export const resultIPScanAccessionHandler: Handler = handlerConstructor({
   name: {
     value: 'resultIPScanAccessionHandler',
   },
@@ -619,59 +564,57 @@ export const resultIPScanAccessionHandler /*: Handler */ = handlerConstructor({
     value: ['result', 'accession'],
   },
   cleanUp: {
-    value: (value) => value,
+    value: (value: string) => value,
   },
   regexp: {
     value: IPscanRegex,
   },
 });
 
-export const resultDownloadAccessionHandler /*: Handler */ = handlerConstructor(
-  {
-    name: {
-      value: 'resultDownloadAccessionHandler',
-    },
-    key: {
-      value: ['result', 'accession'],
-    },
-    cleanUp: {
-      value: (value) => value,
-    },
-    regexp: {
-      value: /^download-[1-9]\d*-\d+$/,
-    },
+export const resultDownloadAccessionHandler: Handler = handlerConstructor({
+  name: {
+    value: 'resultDownloadAccessionHandler',
   },
-);
+  key: {
+    value: ['result', 'accession'],
+  },
+  cleanUp: {
+    value: (value: string) => value,
+  },
+  regexp: {
+    value: /^download-[1-9]\d*-\d+$/,
+  },
+});
 
 // Common and other handlers
-export const detailHandler /*: Handler */ = handlerConstructor({
+export const detailHandler: Handler = handlerConstructor({
   name: {
     value: 'detailHandler',
   },
   getKey: {
-    value: ({ main: { key } }) => [key, 'detail'],
+    value: ({ main: { key } }: InterProDescription) => [key, 'detail'],
   },
 });
 
-export const otherHandler /*: Handler */ = handlerConstructor({
+export const otherHandler: Handler = handlerConstructor({
   name: {
     value: 'otherHandler',
   },
   getKey: {
-    value: ({ other }) => ['other', other.length],
+    value: ({ other }: InterProDescription) => ['other', other.length],
   },
   cleanUp: {
-    value: (value, { other }) =>
+    value: (value: string, { other }: InterProDescription) =>
       other?.[0] === 'potm' ? value : value.toLowerCase(),
   },
 });
 
-export const rootHandler /*: Handler */ = handlerConstructor({
+export const rootHandler: Handler = handlerConstructor({
   name: {
     value: 'rootHandler',
   },
   handle: {
-    value(description /*: Description */, ...rest /*: Array<string> */) {
+    value(description: InterProDescription, ...rest: Array<string>) {
       // $FlowFixMe object-this-reference
       return templateHandler.handle.call(this, description, null, ...rest);
     },

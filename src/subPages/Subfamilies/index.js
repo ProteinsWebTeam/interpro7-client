@@ -5,6 +5,8 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import { createSelector } from 'reselect';
 import { format } from 'url';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 

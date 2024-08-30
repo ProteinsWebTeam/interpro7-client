@@ -41,13 +41,13 @@ const getUniqueHierarchies = (hierarchies: Array<InterProHierarchyType>) =>
   Array.from(new Map(hierarchies.map((h) => [h.accession, h])).values());
 
 type HierarchyProps = {
-  hierarchy:InterProHierarchyType,
-accessions: Array<string>,
-hrefroot: string,
-goToCustomLocation?: typeof goToCustomLocation,
-ready: boolean,
-includeChildren?: boolean,
-}
+  hierarchy: InterProHierarchyType;
+  accessions: Array<string>;
+  hrefroot: string;
+  goToCustomLocation?: typeof goToCustomLocation;
+  ready: boolean;
+  includeChildren?: boolean;
+};
 const ProteinEntryHierarchy = ({
   hierarchy,
   accessions,
@@ -56,23 +56,30 @@ const ProteinEntryHierarchy = ({
   ready,
   includeChildren = false,
 }: HierarchyProps) => {
-  const componentRef = useRef<(HTMLElement&{hierarchy?:InterProHierarchyType,_hierarchy?:InterProHierarchyType})|null>(null);
+  const componentRef = useRef<
+    | (HTMLElement & {
+        hierarchy?: InterProHierarchyType;
+        _hierarchy?: InterProHierarchyType;
+      })
+    | null
+  >(null);
   useEffect(() => {
     if (componentRef.current && ready) {
       // Making sure the same hierarchy only appears once.
-      if (isEqual((componentRef.current)?._hierarchy, hierarchy)) return;
+      if (isEqual(componentRef.current?._hierarchy, hierarchy)) return;
       componentRef.current.hierarchy = hierarchy;
       // Adding the click event so it doesn't refresh the whole page,
       // but instead use the customLocation.
       componentRef.current.addEventListener('click', (e) => {
-        const target = (e.composedPath())[0] as HTMLElement;
+        const target = e.composedPath()[0] as HTMLElement;
         if (target.classList.contains('link')) {
           e.preventDefault();
           goToCustomLocation?.({
             description: pathToDescription(
-              target
-                ?.getAttribute('href')
-                ?.replace(new RegExp(`^${config.root.website.path}`), ''),
+              (target?.getAttribute('href') || '')?.replace(
+                new RegExp(`^${config.root.website.path}`),
+                '',
+              ),
             ),
           });
         }
@@ -90,11 +97,11 @@ const ProteinEntryHierarchy = ({
   );
 };
 
-type Props ={
-  entries: Array<EntryMetadata>,
-  goToCustomLocation?: typeof goToCustomLocation,
-  includeChildren?: boolean,
-}
+type Props = {
+  entries: Array<EntryMetadata>;
+  goToCustomLocation?: typeof goToCustomLocation;
+  includeChildren?: boolean;
+};
 
 const ProteinEntryHierarchies = ({
   entries,
@@ -113,7 +120,11 @@ const ProteinEntryHierarchies = ({
     });
   }, []);
 
-  const hierarchies = getUniqueHierarchies(entries.map((e) => e.hierarchy).filter(Boolean) as Array<InterProHierarchyType>);
+  const hierarchies = getUniqueHierarchies(
+    entries
+      .map((e) => e.hierarchy)
+      .filter(Boolean) as Array<InterProHierarchyType>,
+  );
   if (!ready) return null;
   return (
     <div>

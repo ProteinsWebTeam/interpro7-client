@@ -241,7 +241,7 @@ const getRelatedEntriesURL = createSelector(
     { protocol, hostname, port, root }: ParsedURLServer,
     accession: string | null,
   ) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'entry' },
       protein: { isFilter: true, db: 'uniprot', accession },
       entry: { db: 'all' },

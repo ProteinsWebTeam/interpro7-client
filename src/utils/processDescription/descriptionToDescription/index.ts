@@ -3,7 +3,7 @@ import { get, set } from 'lodash-es';
 import getEmptyDescription from 'utils/processDescription/emptyDescription';
 import descriptionItemToHandlers from 'utils/processDescription/descriptionItemToHandlers';
 
-export default (description /*: {[key: string]: string} */ = {}) => {
+export default (description: InterProPartialDescription | undefined) => {
   // new description to be populated
   const _description = getEmptyDescription();
   // for all possible keys in description, get potential handlers
@@ -23,10 +23,6 @@ export default (description /*: {[key: string]: string} */ = {}) => {
     // for all possible handlers for this key
     for (const handler of handlers) {
       value = get(description, key);
-      // if (typeof value === 'string') {
-      //   //all string values in elasticsearch are lower case
-      //   value = value.toLowerCase();
-      // }
       if (handler.match(value, _description)) {
         matchingHandler = handler;
         // Stop! we found a handler, no need to look further
@@ -43,29 +39,38 @@ export default (description /*: {[key: string]: string} */ = {}) => {
       key,
       matchingHandler.cleanedUp || matchingHandler.cleanUp(value, _description),
     );
-    if (key.indexOf('isFilter') >= 0) {
+    if (
+      _description.main.numberOfFilters !== undefined &&
+      key.indexOf('isFilter') >= 0
+    ) {
       _description.main.numberOfFilters++;
       const endpoint = key.split('.')[0];
-      _description[endpoint].order =
-        _description[endpoint].order || _description.main.numberOfFilters;
+      _description[endpoint as Endpoint].order =
+        _description[endpoint as Endpoint].order ||
+        _description.main.numberOfFilters;
     }
   }
 
-  // To clean any leftover from the previous description that should not be used
+  type EndpointDescription = InterProDescription[Endpoint];
+  type EndpointKeys = keyof EndpointDescription;
+
   Object.keys(_description).forEach((key) => {
     if (
-      key !== 'main' && // it's not the block defining the main
-      key !== _description.main.key && // it's not the main block
-      !_description[key].isFilter // it's not a filter
+      key !== 'main' &&
+      key !== _description.main.key &&
+      !_description[key as Endpoint].isFilter
     ) {
-      Object.keys(_description[key]).forEach(
-        (k) => (_description[key][k] = null),
+      Object.keys(_description[key as Endpoint]).forEach(
+        (k) =>
+          ((_description[key as Endpoint] as EndpointDescription)[
+            k as EndpointKeys
+          ] = null),
       );
     }
   });
-  // Specific logic for 'other'
-  _description.other.push(...(description.other || []));
-  Object.seal(_description.other);
 
+  // Specific logic for 'other'
+  _description.other.push(...(description?.other || []));
+  Object.seal(_description.other);
   return _description;
 };

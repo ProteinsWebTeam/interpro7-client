@@ -7,6 +7,7 @@ import loadable from 'higherOrder/loadable';
 
 import { getReadTheDocsURL } from 'higherOrder/loadData/defaults';
 
+// $FlowFixMe
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import Link from 'components/generic/Link';
 
