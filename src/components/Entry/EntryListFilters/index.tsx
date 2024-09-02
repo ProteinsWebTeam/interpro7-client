@@ -22,7 +22,7 @@ export const EntryListFilter = ({ mainDB }: Props) => {
       {mainDB !== 'InterPro' && <IntegratedFilter label="InterPro State" />}
       {mainDB === 'InterPro' && <GOTermsFilter label="GO Terms" />}
       {mainDB === 'InterPro' && <LatestFilter label="New entries" />}
-      <AIGeneratedFilter label="AI-Generated Entries" />
+      <AIGeneratedFilter label="Curation status" />
     </FiltersPanel>
   );
 };
