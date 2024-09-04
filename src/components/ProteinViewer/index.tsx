@@ -139,25 +139,25 @@ export const ProteinViewer = ({
   ];
 
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
-    'secondary structure': true,
-    family: true,
-    domain: true,
-    'homologous superfamily': true,
-    repeat: true,
-    'conserved site': true,
-    'active site': true,
-    'binding site': true,
-    ptm: true,
-    unintegrated: true,
-    'other features': true,
-    'other residues': true,
-    features: true,
-    predictions: true,
-    'match conservation': true,
-    'coiled-coils, signal peptides, transmembrane regions': true,
-    'short linear motifs': true,
-    'pfam-n': true,
-    funfam: true,
+    'secondary structure': false,
+    family: false,
+    domain: false,
+    'homologous superfamily': false,
+    repeat: false,
+    'conserved site': false,
+    'active site': false,
+    'binding site': false,
+    ptm: false,
+    unintegrated: false,
+    'other features': false,
+    'other residues': false,
+    features: false,
+    predictions: false,
+    'match conservation': false,
+    'coiled-coils, signal peptides, transmembrane regions': false,
+    'short linear motifs': false,
+    'pfam-n': false,
+    funfam: false,
   });
 
   const categoryRefs = useRef<ExpandedHandle[]>([]);
@@ -319,6 +319,10 @@ export const ProteinViewer = ({
                     });
 
                     entries = residuesEntries;
+                  }
+
+                  if (type == 'domain') {
+                    console.log(type, entries);
                   }
 
                   return (

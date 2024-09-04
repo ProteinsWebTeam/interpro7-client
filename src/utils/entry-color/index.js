@@ -58,6 +58,10 @@ export const getTrackColor = (
         acc = entry.parent.accession.split('').reverse().join('');
         return colorHash.hex(acc);
       }
+      if (entry.integrated) {
+        acc = entry.integrated.split('').reverse().join('');
+        return colorHash.hex(acc);
+      }
   }
   return config.colors.get();
 };

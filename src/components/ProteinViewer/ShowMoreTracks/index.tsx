@@ -19,10 +19,13 @@ const ShowMoreTracks = ({ showMore, showMoreChanged }: Props) => {
   return (
     <div>
       <button
-        style={{ boxShadow: 'none' }}
+        style={{
+          boxShadow: 'none',
+          transform: 'none',
+        }}
         className={css(
           'vf-button',
-          'vf-button--link',
+          'vf-button--secondary',
           'vf-button--sm',
           'showmore-btn',
         )}
