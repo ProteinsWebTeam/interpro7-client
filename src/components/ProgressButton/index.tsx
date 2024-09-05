@@ -2,15 +2,13 @@ import React from 'react';
 
 import cssBinder from 'styles/cssBinder';
 
-import style from './style.css';
+import local from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-import save from 'images/icons/ico-ebi-save.svg';
-import download from 'images/icons/ico-ebi-download.svg';
+const css = cssBinder(local, fonts);
 
-const css = cssBinder(style);
-
-const CENTER = 60;
-const RADIUS = 48;
+const CENTER = 90;
+const RADIUS = 70;
 const STROKE_WIDTH = CENTER - RADIUS;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
@@ -20,6 +18,7 @@ type Props = {
   failed: boolean;
   progress: number;
   showIcon?: boolean;
+  iconType?: string;
 };
 
 const ProgressButton = ({
@@ -27,61 +26,50 @@ const ProgressButton = ({
   success,
   progress,
   failed,
+  iconType,
   showIcon = true,
 }: Props) => {
-  return (
-    <span className={css('container', { failed })}>
-      <svg
-        width="3em"
-        height="3em"
-        viewBox={`0 0 ${2 * CENTER} ${2 * CENTER}`}
-        className={css('svg')}
-      >
-        <g className={css('group', { downloading })}>
-          <circle
-            cx={CENTER}
-            cy={CENTER}
-            transform={`rotate(-90 ${CENTER} ${CENTER})`}
-            r={RADIUS}
-            opacity={downloading ? 1 : 0}
-            fill="none"
-            className={css('progress')}
-            strokeWidth={STROKE_WIDTH}
-            strokeLinecap="round"
-            strokeDasharray={CIRCUMFERENCE}
-            strokeDashoffset={CIRCUMFERENCE * (1 - progress)}
-          />
-          <circle
-            cx={CENTER}
-            cy={CENTER}
-            // circle inside the progress circle (+1 to account for interpolat.)
-            r={RADIUS - STROKE_WIDTH / 2 + 1}
-            fill="none"
-          />
-        </g>
-        {showIcon && (
-          <g className={css('icon-flip', { flipped: success })}>
-            <image
-              x="30"
-              y="10"
-              width="60"
-              height="100"
-              className={css('back')}
-              xlinkHref={download}
-            />
+  const iconClass = success ? 'icon-save' : 'icon-download-alt';
 
-            <image
-              x="30"
-              y="10"
-              width="60"
-              height="100"
-              className={css('front')}
-              xlinkHref={save}
+  return (
+    <>
+      <span className={css('container', { failed })}>
+        <svg
+          width="2em"
+          height="2em"
+          viewBox={`0 0 ${2 * CENTER} ${2 * CENTER}`}
+          className={css('svg')}
+        >
+          <g className={css('group', { downloading })}>
+            <circle
+              cx={CENTER}
+              cy={CENTER}
+              transform={`rotate(-90 ${CENTER} ${CENTER})`}
+              r={RADIUS}
+              opacity={downloading ? 1 : 0}
+              fill="none"
+              className={css('progress')}
+              strokeWidth={STROKE_WIDTH}
+              strokeLinecap="round"
+              strokeDasharray={CIRCUMFERENCE}
+              strokeDashoffset={CIRCUMFERENCE * (1 - progress)}
+            />
+            <circle
+              cx={CENTER}
+              cy={CENTER}
+              // circle inside the progress circle (+1 to account for interpolat.)
+              r={RADIUS - STROKE_WIDTH / 2 + 1}
+              fill="none"
             />
           </g>
+        </svg>
+        {showIcon && (
+          <span
+            className={css('download-icon', 'icon', 'icon-common', iconClass)}
+          />
         )}
-      </svg>
-    </span>
+      </span>
+    </>
   );
 };
 

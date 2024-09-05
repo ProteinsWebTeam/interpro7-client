@@ -1,5 +1,5 @@
-@import '../../styles/timing.css';
-@import '../../styles/colors.css';
+@import "../../styles/timing.css";
+@import "../../styles/colors.css";
 
 .svg {
   margin: auto;
@@ -89,4 +89,10 @@
 .back {
   transform: rotateY(90deg);
   transition-delay: 0s;
+}
+
+.download-icon {
+  position: absolute;
+  left: 75%;
+  top: 50%;
 }

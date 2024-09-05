@@ -11,8 +11,9 @@ import cssBinder from 'styles/cssBinder';
 import local from './style.css';
 import ipro from 'styles/interpro-vf.css';
 import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const css = cssBinder(local, ipro, buttonCSS);
+const css = cssBinder(local, ipro, buttonCSS, fonts);
 
 const SMALL = 0.01;
 
@@ -43,6 +44,12 @@ export type FileButtonProps = {
   search?: InterProLocationSearch;
 } & ({ url: string } | { blobURL: string });
 
+const getSearchString = (search?: Record<string, string>): string => {
+  const entries = Object.entries(search || []);
+  if (entries.length === 0) return '';
+  return `?${entries.map(([k, v]) => `${k}=${v}`).join('&')}`;
+};
+
 const FileButton = ({
   fileType,
   url,
@@ -62,61 +69,87 @@ const FileButton = ({
 }: FileButtonProps) => {
   const downloading = Number.isFinite(progress) && !successful;
   const failed = successful === false;
-  let stateLabel = 'Generate';
+  let stateLabel = fileType.toUpperCase();
+
   let title = 'Click icon to generate';
   if (count > HARD_LIMIT) {
-    title = 'Direct download disabled for this';
-    stateLabel = 'Disabled';
-  } else if (downloading) {
-    title = 'Generating';
-    stateLabel = 'Generating';
-  } else if (failed) {
-    title = 'Failed generating';
-    stateLabel = 'Failed';
-  } else if (successful) {
-    title = 'Download';
-    stateLabel = 'Download';
+    title = 'Selected data is too large to download';
   }
+
   title += ` ${fileType} file`;
   const labelToShow = label || stateLabel;
 
   const filename =
     name || `${fileType}.${EXTENSIONS[fileType as SupportedExtensions]}`;
 
-  const buttonClass = showIcon
+  const buttonclassName = showIcon
     ? []
-    : ['vf-button', 'vf-button--secondary', 'vf-button--sm'];
-  return (
-    <Tooltip
-      interactive
-      useContext
-      html={
-        <TooltipContent
-          title={title}
-          count={count}
-          shouldLinkToResults={shouldLinkToResults}
-          subpath={subpath}
-          fileType={fileType}
-          search={search}
-        />
-      }
+    : ['vf-button', 'vf-button--link', 'vf-button--sm'];
+
+  const downloadButton = (
+    <Link
+      download={filename}
+      href={blobURL || url}
+      disabled={downloading || count > HARD_LIMIT || count === 0}
+      onClick={downloading || successful ? undefined : handleClick}
+      data-url={url}
+      data-type={fileType}
+      className={css('no-decoration')}
     >
-      <Link
-        download={filename}
-        href={blobURL || url}
-        disabled={downloading || count > HARD_LIMIT || count === 0}
-        onClick={downloading || successful ? undefined : handleClick}
-        data-url={url}
-        data-type={fileType}
-        className={css('no-decoration')}
+      <div
+        className={css('file-button', ...buttonclassName, className, {
+          downloading,
+          failed,
+        })}
+        style={{ minWidth }}
       >
-        <div
-          className={css('file-button', ...buttonClass, className, {
-            downloading,
-            failed,
-          })}
-          style={{ minWidth }}
+        {labelToShow && !showIcon && (
+          <span className={css('file-label')}>{labelToShow}</span>
+        )}
+        <ProgressButton
+          downloading={downloading}
+          success={successful}
+          failed={failed}
+          iconType={fileType}
+          progress={progress || SMALL}
+        />
+      </div>
+    </Link>
+  );
+
+  const codeGeneratorButton = (
+    <Link
+      to={{
+        description: {
+          main: { key: 'result' },
+          result: { type: 'download' },
+        },
+        hash: `${subpath || ''}${getSearchString(search)}|${fileType}`,
+      }}
+    >
+      <div
+        className={css('script-gen-icon', 'icon', 'icon-common', 'icon-code')}
+      />
+    </Link>
+  );
+
+  return (
+    <>
+      {count > HARD_LIMIT ? (
+        <Tooltip
+          interactive
+          useContext
+          html={
+            <TooltipContent
+              title={title}
+              count={count}
+              subpath={subpath}
+              fileType={fileType}
+              search={search}
+            />
+          }
         >
+<<<<<<< HEAD
           <ProgressButton
             downloading={downloading}
             success={!!successful}
@@ -126,9 +159,20 @@ const FileButton = ({
           {labelToShow && !showIcon && (
             <span className={css('file-label')}>{labelToShow}</span>
           )}
+=======
+          <div className={css('vf-grid', 'download-menu')}>
+            <div className={css('vf-box')}>{downloadButton}</div>
+            <div className={css('vf-box')}>{codeGeneratorButton}</div>
+          </div>
+        </Tooltip>
+      ) : (
+        <div className={css('vf-grid', 'download-menu')}>
+          <div className={css('vf-box')}>{downloadButton}</div>
+          <div className={css('vf-box')}>{codeGeneratorButton}</div>
+>>>>>>> f035289e1 (Updated export button, download menu, icons and tooltips)
         </div>
-      </Link>
-    </Tooltip>
+      )}
+    </>
   );
 };
 

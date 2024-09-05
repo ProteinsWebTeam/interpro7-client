@@ -74,6 +74,7 @@ const propTypes = {
 
 const AllProteinDownload = (
   {
+    label,
     description,
     count,
     fileType,
@@ -90,6 +91,7 @@ const AllProteinDownload = (
   />
 );
 AllProteinDownload.propTypes = {
+  label: T.string,
   description: T.object,
   search: T.object,
   count: T.number,
@@ -195,15 +197,16 @@ class List extends PureComponent /*:: <ListProps> */ {
           >
             <Exporter>
               <div className={f('menu-grid')}>
-                <label htmlFor="fasta">FASTA</label>
+                <label htmlFor="fasta"></label>
                 <AllProteinDownload
                   description={description}
+                  iconType="FASTA"
                   search={search}
                   count={_payload.count}
                   fileType="fasta"
                   name="fasta"
                 />
-                <label htmlFor="json">JSON</label>
+                <label htmlFor="json"></label>
                 <AllProteinDownload
                   name="json"
                   description={description}
@@ -211,7 +214,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   count={_payload.count}
                   fileType="json"
                 />
-                <label htmlFor="tsv">TSV</label>
+                <label htmlFor="tsv"></label>
                 <AllProteinDownload
                   name="tsv"
                   description={description}
@@ -219,7 +222,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   count={_payload.count}
                   fileType="tsv"
                 />
-                <label htmlFor="api">API</label>
+                <label htmlFor="api"></label>
                 <APIViewButton url={url} />
               </div>
             </Exporter>

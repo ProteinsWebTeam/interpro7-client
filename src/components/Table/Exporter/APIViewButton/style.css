@@ -1,8 +1,0 @@
-.vf-button {
-  white-space: nowrap;
-  & .icon {
-    font-size: 1.5rem;
-    color: #4b555b;
-    width: 48px;
-  }
-}

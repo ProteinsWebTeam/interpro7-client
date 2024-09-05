@@ -229,7 +229,7 @@ class List extends PureComponent /*:: <Props> */ {
           >
             <Exporter>
               <div className={f('menu-grid')}>
-                <label htmlFor="json">JSON</label>
+                <label htmlFor="json"></label>
                 <AllEntriesDownload
                   description={description}
                   search={search}
@@ -237,7 +237,7 @@ class List extends PureComponent /*:: <Props> */ {
                   fileType="json"
                   name="json"
                 />
-                <label htmlFor="tsv">TSV</label>
+                <label htmlFor="tsv"></label>
                 <AllEntriesDownload
                   description={description}
                   search={search}
@@ -245,7 +245,7 @@ class List extends PureComponent /*:: <Props> */ {
                   fileType="tsv"
                   name="tsv"
                 />
-                <label htmlFor="api">API</label>
+                <label htmlFor="api"></label>
                 <APIViewButton url={data.url} />
               </div>
             </Exporter>
