@@ -44,7 +44,7 @@ export type FileButtonProps = {
   search?: InterProLocationSearch;
 } & ({ url: string } | { blobURL: string });
 
-const getSearchString = (search?: Record<string, string>): string => {
+const getSearchString = (search?: InterProLocationSearch): string => {
   const entries = Object.entries(search || []);
   if (entries.length === 0) return '';
   return `?${entries.map(([k, v]) => `${k}=${v}`).join('&')}`;
@@ -62,7 +62,6 @@ const FileButton = ({
   handleClick,
   label,
   className,
-  shouldLinkToResults = true,
   showIcon,
   minWidth,
   search,
@@ -108,7 +107,7 @@ const FileButton = ({
         )}
         <ProgressButton
           downloading={downloading}
-          success={successful}
+          success={!!successful}
           failed={failed}
           iconType={fileType}
           progress={progress || SMALL}
@@ -145,21 +144,9 @@ const FileButton = ({
               count={count}
               subpath={subpath}
               fileType={fileType}
-              search={search}
             />
           }
         >
-<<<<<<< HEAD
-          <ProgressButton
-            downloading={downloading}
-            success={!!successful}
-            failed={failed}
-            progress={progress || SMALL}
-          />
-          {labelToShow && !showIcon && (
-            <span className={css('file-label')}>{labelToShow}</span>
-          )}
-=======
           <div className={css('vf-grid', 'download-menu')}>
             <div className={css('vf-box')}>{downloadButton}</div>
             <div className={css('vf-box')}>{codeGeneratorButton}</div>
@@ -169,7 +156,6 @@ const FileButton = ({
         <div className={css('vf-grid', 'download-menu')}>
           <div className={css('vf-box')}>{downloadButton}</div>
           <div className={css('vf-box')}>{codeGeneratorButton}</div>
->>>>>>> f035289e1 (Updated export button, download menu, icons and tooltips)
         </div>
       )}
     </>

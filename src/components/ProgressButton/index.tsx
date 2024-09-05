@@ -26,7 +26,6 @@ const ProgressButton = ({
   success,
   progress,
   failed,
-  iconType,
   showIcon = true,
 }: Props) => {
   const iconClass = success ? 'icon-save' : 'icon-download-alt';
