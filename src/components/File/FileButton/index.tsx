@@ -68,7 +68,7 @@ const FileButton = ({
 }: FileButtonProps) => {
   const downloading = Number.isFinite(progress) && !successful;
   const failed = successful === false;
-  let stateLabel = fileType.toUpperCase();
+  const stateLabel = fileType.toUpperCase();
 
   let title = 'Click icon to generate';
   if (count > HARD_LIMIT) {
