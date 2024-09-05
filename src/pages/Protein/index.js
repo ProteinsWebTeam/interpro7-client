@@ -74,7 +74,6 @@ const propTypes = {
 
 const AllProteinDownload = (
   {
-    label,
     description,
     count,
     fileType,
@@ -90,8 +89,8 @@ const AllProteinDownload = (
     search={search}
   />
 );
+
 AllProteinDownload.propTypes = {
-  label: T.string,
   description: T.object,
   search: T.object,
   count: T.number,
