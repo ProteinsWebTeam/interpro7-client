@@ -107,7 +107,7 @@ const SimilarProteinTable = ({
         <PageSizeSelector />
         <Exporter>
           <div className={css('menu-grid')}>
-            <label htmlFor="fasta">FASTA</label>
+            <label htmlFor="fasta"></label>
             <AllProteinDownload
               description={description}
               ida={ida}
@@ -115,7 +115,7 @@ const SimilarProteinTable = ({
               count={payload.count}
               fileType="fasta"
             />
-            <label htmlFor="json">JSON</label>
+            <label htmlFor="json"></label>
             <AllProteinDownload
               description={description}
               ida={ida}
@@ -123,7 +123,7 @@ const SimilarProteinTable = ({
               count={payload.count}
               fileType="json"
             />
-            <label htmlFor="tsv">TSV</label>
+            <label htmlFor="tsv"></label>
             <AllProteinDownload
               description={description}
               ida={ida}
@@ -131,7 +131,7 @@ const SimilarProteinTable = ({
               count={payload.count}
               fileType="tsv"
             />
-            <label htmlFor="api">API</label>
+            <label htmlFor="api"></label>
             <APIViewButton url={getAPIURLForSimilarProteins(api, ida, db)} />
           </div>
         </Exporter>

@@ -2,10 +2,11 @@
 
 .file-button {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  padding: 0.1rem;
+  width: 100px;
+  padding: 0;
+  margin: 0;
   &:hover {
     text-decoration: none;
   }
@@ -30,4 +31,15 @@
     border-color: white !important;
     color: white !important;
   }
+}
+
+.vf-box {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.download-menu {
+  column-gap: 0.5rem;
 }
