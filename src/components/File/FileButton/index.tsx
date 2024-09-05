@@ -27,22 +27,22 @@ const EXTENSIONS = {
 export type SupportedExtensions = keyof typeof EXTENSIONS;
 
 export type FileButtonProps = {
-  fileType: SupportedExtensions;
-  url: string;
+  fileType: DownloadFileTypes;
+  url?: string;
   subpath?: string;
   count: number;
   name: string;
   progress?: number;
   minWidth?: number | string;
-  successful?: boolean;
+  successful?: boolean | null;
   blobURL?: string;
   label?: string;
   className?: string;
   handleClick: (event: Event) => void;
   shouldLinkToResults?: boolean;
   showIcon?: boolean;
-  search?: Record<string, string>;
-};
+  search?: InterProLocationSearch;
+} & ({ url: string } | { blobURL: string });
 
 const getSearchString = (search?: Record<string, string>): string => {
   const entries = Object.entries(search || []);
@@ -79,7 +79,8 @@ const FileButton = ({
   title += ` ${fileType} file`;
   const labelToShow = label || stateLabel;
 
-  const filename = name || `${fileType}.${EXTENSIONS[fileType]}`;
+  const filename =
+    name || `${fileType}.${EXTENSIONS[fileType as SupportedExtensions]}`;
 
   const buttonclassName = showIcon
     ? []

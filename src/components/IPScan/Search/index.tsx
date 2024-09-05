@@ -379,7 +379,7 @@ const mapStateToProps = createSelector(
   (ipScan, desc, search) => ({
     ipScan,
     value: desc.search.value,
-    main: desc.main.key,
+    main: desc.main.key!,
     search,
   }),
 );

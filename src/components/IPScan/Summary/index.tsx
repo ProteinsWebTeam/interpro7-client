@@ -6,6 +6,8 @@ import { format } from 'url';
 
 import { goToCustomLocation } from 'actions/creators';
 import getFetch from 'higherOrder/loadData/getFetch';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
 
@@ -20,7 +22,6 @@ import Length from 'components/Protein/Length';
 import DomainsOnProteinLoaded from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 import { Exporter } from 'components/Table';
 
-// import Actions from '../Actions';
 import { getIProScanURL } from '../Status';
 import IPScanVersionCheck from '../IPScanVersionCheck';
 import NucleotideSummary from '../NucleotideSummary';
@@ -101,7 +102,7 @@ const getEntryURL = (
   { protocol, hostname, port, root }: ParsedURLServer,
   accession: string,
 ) => {
-  const description = {
+  const description: InterProPartialDescription = {
     main: { key: 'entry' },
     entry: { db: 'interpro', accession },
   };

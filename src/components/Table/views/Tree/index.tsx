@@ -68,8 +68,8 @@ const mapStateToUrlFor = (taxID: string) =>
           root +
           descriptionToPath({
             ...description,
-            [description.main.key]: {
-              ...description[description.main.key],
+            [description.main.key!]: {
+              ...description[description.main.key as Endpoint],
               isFilter: description.main.key !== 'taxonomy',
             },
             main: { key: 'taxonomy' },

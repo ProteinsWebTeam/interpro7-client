@@ -4,8 +4,11 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import { overallDataLoadingSelector } from 'reducers/data-progress';
+// $FlowFixMe
 import { stuckSelector } from 'reducers/ui/stuck';
+// $FlowFixMe
 import { browserStatusSelector } from 'reducers/status/browser';
 
 import Link from 'components/generic/Link';
@@ -74,14 +77,8 @@ export class Title extends PureComponent /*:: <Props> */ {
   };
 
   render() {
-    const {
-      loading,
-      mainType,
-      mainDB,
-      mainAccession,
-      stuck,
-      online,
-    } = this.props;
+    const { loading, mainType, mainDB, mainAccession, stuck, online } =
+      this.props;
     return (
       <div
         className={styles('columns', 'small-6', 'medium-8')}
@@ -119,12 +116,12 @@ export class Title extends PureComponent /*:: <Props> */ {
 
 const mapStateToProps = createSelector(
   overallDataLoadingSelector,
-  state => state.customLocation.description.main.key,
-  state =>
+  (state) => state.customLocation.description.main.key,
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .db,
-  state =>
+  (state) =>
     state.customLocation.description.main.key &&
     state.customLocation.description[state.customLocation.description.main.key]
       .accession,

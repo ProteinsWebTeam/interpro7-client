@@ -4,19 +4,20 @@ type IprscanMetaIDB = {
   saved: boolean;
   localID?: string;
   remoteID?: string;
-  localTitle?: string;
+  localTitle?: string | null;
   status: JobStatus;
   type: string;
   times: JobTimes;
   entries?: number;
   seqtype?: 'p' | 'n';
 };
+
 type JobTimes = {
-  created?: number;
-  submitted?: number;
-  importing?: number;
+  [status in JobStatus]?: number;
+} & {
   lastUpdate: number;
 };
+
 type JobStatus =
   | 'created'
   | 'submitted'
@@ -26,14 +27,15 @@ type JobStatus =
   | 'saved in browser'
   | 'running'
   | 'finished'
-  | 'queued';
+  | 'queued'
+  | 'error';
 
 type IprscanDataIDB = {
   localID: string;
-  applications: Array<string>;
+  applications: Array<string> | string;
   'interproscan-version': string;
-  input: string;
-  originalInput: string;
+  input?: string;
+  originalInput?: string;
   results: Array<Iprscan5Result>;
 };
 

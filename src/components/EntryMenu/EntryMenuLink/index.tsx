@@ -33,7 +33,7 @@ type Props = {
   isFirstLevel?: boolean;
   usedOnTheSide?: boolean;
   collapsed?: boolean;
-  mainKey?: string;
+  mainKey?: string | null;
   entryDB?: string | null;
 };
 

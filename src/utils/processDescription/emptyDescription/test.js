@@ -1,4 +1,3 @@
-// @flow
 import getEmptyDescription from '.';
 
 describe('getEmptyDescription', () => {
