@@ -235,16 +235,22 @@ const DomainOnProteinWithoutData = ({
       'elm',
       mergedData,
     ) as MinimalFeature[];
+    mergedData['funfam'] = getFeature('funfam', mergedData) as MinimalFeature[];
 
     if (Object.keys(mergedData).includes('region')) {
       mergedData['spurious_proteins'] = mergedData['region'];
       delete mergedData['region'];
     }
 
-    // mergedData['funfam'] = [];
+    //
 
     // Filter the types above out of the "other_features" section
-    const toRemove = CPST.concat(['pfam-n', 'short_linear_motifs', 'mobidblt']);
+    const toRemove = CPST.concat([
+      'pfam-n',
+      'short_linear_motifs',
+      'mobidblt',
+      'funfam',
+    ]);
     mergedData['other_features'] = mergedData['other_features'].filter(
       (entry) => {
         return !toRemove.some((item) => entry.source_database?.includes(item));

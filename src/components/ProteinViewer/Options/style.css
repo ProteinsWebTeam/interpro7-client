@@ -27,6 +27,7 @@
   align-items: center;
   justify-content: flex-end;
   font-size: 90%;
+  margin-left: auto;
 }
 
 .view-options select {

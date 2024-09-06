@@ -16,9 +16,10 @@ const UNDERSCORE = /_/g;
 
 const FIRST_IN_ORDER = [
   'alphafold_confidence',
+  'secondary_structure',
   'representative_domains',
   'representative_families',
-  'pathogenic_variants',
+  'pathogenic_and_likely_pathogenic_variants',
   'intrinsically_disordered_regions',
   'spurious_proteins',
   'residues',
@@ -26,7 +27,6 @@ const FIRST_IN_ORDER = [
 
 const LASTS_IN_ORDER = [
   'family',
-  'secondary_structure',
   'domain',
   'homologous_superfamily',
   'coiled-coils,_signal_peptides,_transmembrane_regions',
@@ -37,9 +37,6 @@ const LASTS_IN_ORDER = [
   'active_site',
   'binding_site',
   'ptm',
-  'unintegrated',
-  'other_features',
-  'other_residues',
   'features',
   'predictions',
   'match_conservation',
@@ -204,8 +201,8 @@ export const addVariationTrack = (
   tracks: ProteinViewerDataObject,
 ) => {
   if (variationPayload?.features?.length) {
-    tracks['pathogenic_variants'] = [];
-    tracks['pathogenic_variants'][0] = {
+    tracks['pathogenic_and_likely_pathogenic_variants'] = [];
+    tracks['pathogenic_and_likely_pathogenic_variants'][0] = {
       accession: `variation_${protein}`,
       data: variationPayload,
       type: 'variation',

@@ -132,7 +132,7 @@ export const ProteinViewer = ({
     'alphafold confidence',
     'representative domains',
     'representative families',
-    'pathogenic variants',
+    'pathogenic and likely pathogenic variants',
     'intrinsically disordered regions',
     'spurious proteins',
     'residues',
@@ -148,11 +148,6 @@ export const ProteinViewer = ({
     'active site': false,
     'binding site': false,
     ptm: false,
-    unintegrated: false,
-    'other features': false,
-    'other residues': false,
-    features: false,
-    predictions: false,
     'match conservation': false,
     'coiled-coils, signal peptides, transmembrane regions': false,
     'short linear motifs': false,
@@ -319,10 +314,6 @@ export const ProteinViewer = ({
                     });
 
                     entries = residuesEntries;
-                  }
-
-                  if (type == 'domain') {
-                    console.log(type, entries);
                   }
 
                   return (

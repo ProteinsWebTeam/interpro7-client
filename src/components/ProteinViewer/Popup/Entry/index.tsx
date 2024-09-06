@@ -57,8 +57,6 @@ const ProtVistaEntryPopup = ({
   const isInterPro = sourceDatabase.toLowerCase() === 'interpro';
   const integrated = detail.feature?.integrated;
 
-  console.log(integrated);
-
   // To include the type of fragment of the secondary structure
   let type = originalType;
   if (originalType === 'secondary_structure' && locations) {

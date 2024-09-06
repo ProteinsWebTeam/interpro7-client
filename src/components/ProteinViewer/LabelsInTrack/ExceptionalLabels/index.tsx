@@ -50,9 +50,13 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   if (entry.source_database === 'mobidblt') {
     return (
       <>
-        <Link target="_blank" href={`https://mobidb.org/${entry.protein}`}>
-          {entry.accession}
-        </Link>
+        {isPrinting ? (
+          <span>{entry.accession}</span>
+        ) : (
+          <Link target="_blank" href={`https://mobidb.org/${entry.protein}`}>
+            {entry.accession}
+          </Link>
+        )}
         {entry.children &&
           entry.children.map((d) => (
             <div

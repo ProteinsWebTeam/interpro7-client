@@ -12,10 +12,11 @@
   margin-top: 30px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding-bottom: 0.2rem;
   margin-bottom: 10px;
+  gap: 5px;
 }
+
 .protvista-grid > header {
   background: #fafafa;
   padding: 0.5rem 0.3rem;
