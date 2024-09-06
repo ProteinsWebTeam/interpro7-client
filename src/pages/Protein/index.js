@@ -196,7 +196,7 @@ class List extends PureComponent /*:: <ListProps> */ {
           >
             <Exporter>
               <div className={f('menu-grid')}>
-                <label htmlFor="fasta"></label>
+                <label htmlFor="fasta">FASTA</label>
                 <AllProteinDownload
                   description={description}
                   iconType="FASTA"
@@ -205,7 +205,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   fileType="fasta"
                   name="fasta"
                 />
-                <label htmlFor="json"></label>
+                <label htmlFor="json">JSON</label>
                 <AllProteinDownload
                   name="json"
                   description={description}
@@ -213,7 +213,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   count={_payload.count}
                   fileType="json"
                 />
-                <label htmlFor="tsv"></label>
+                <label htmlFor="tsv">TSV</label>
                 <AllProteinDownload
                   name="tsv"
                   description={description}
@@ -221,7 +221,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   count={_payload.count}
                   fileType="tsv"
                 />
-                <label htmlFor="api"></label>
+                <label htmlFor="api">API</label>
                 <APIViewButton url={url} />
               </div>
             </Exporter>

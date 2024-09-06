@@ -100,11 +100,8 @@ const FileButton = ({
           downloading,
           failed,
         })}
-        style={{ minWidth }}
+        style={{ width: 'fit-content' }}
       >
-        {labelToShow && !showIcon && (
-          <span className={css('file-label')}>{labelToShow}</span>
-        )}
         <ProgressButton
           downloading={downloading}
           success={!!successful}
@@ -118,6 +115,7 @@ const FileButton = ({
 
   const codeGeneratorButton = (
     <Link
+      target="_blank"
       to={{
         description: {
           main: { key: 'result' },
@@ -135,23 +133,24 @@ const FileButton = ({
   return (
     <>
       {count > HARD_LIMIT ? (
-        <Tooltip
-          interactive
-          useContext
-          html={
-            <TooltipContent
-              title={title}
-              count={count}
-              subpath={subpath}
-              fileType={fileType}
-            />
-          }
-        >
-          <div className={css('vf-grid', 'download-menu')}>
+        <div className={css('vf-grid', 'download-menu')}>
+          <Tooltip
+            interactive
+            useContext
+            style={{ width: '0px' }}
+            html={
+              <TooltipContent
+                title={title}
+                count={count}
+                subpath={subpath}
+                fileType={fileType}
+              />
+            }
+          >
             <div className={css('vf-box')}>{downloadButton}</div>
-            <div className={css('vf-box')}>{codeGeneratorButton}</div>
-          </div>
-        </Tooltip>
+          </Tooltip>
+          <div className={css('vf-box')}>{codeGeneratorButton}</div>
+        </div>
       ) : (
         <div className={css('vf-grid', 'download-menu')}>
           <div className={css('vf-box')}>{downloadButton}</div>

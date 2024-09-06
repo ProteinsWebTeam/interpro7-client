@@ -205,7 +205,7 @@ const List = ({
         >
           <Exporter>
             <div className={css('menu-grid')}>
-              <label htmlFor="json"></label>
+              <label htmlFor="json">JSON</label>
               <AllTaxDownload
                 description={description}
                 search={search}
@@ -214,7 +214,7 @@ const List = ({
                 fileType="json"
               />
 
-              <label htmlFor="tsv"></label>
+              <label htmlFor="tsv">TSV</label>
               <AllTaxDownload
                 description={description}
                 search={search}
@@ -223,7 +223,7 @@ const List = ({
                 fileType="tsv"
               />
 
-              <label htmlFor="api"></label>
+              <label htmlFor="api">API</label>
               <APIViewButton url={urlToExport} />
             </div>
           </Exporter>

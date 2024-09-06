@@ -230,7 +230,7 @@ const List = (
         >
           <Exporter>
             <div className={f('menu-grid')}>
-              <label htmlFor="json"></label>
+              <label htmlFor="json">JSON</label>
               <AllStructuresDownload
                 name="json"
                 description={description}
@@ -238,7 +238,7 @@ const List = (
                 count={_payload.count}
                 fileType="json"
               />
-              <label htmlFor="tsv"></label>
+              <label htmlFor="tsv">TSV</label>
               <AllStructuresDownload
                 name="tsv"
                 description={description}
@@ -246,7 +246,7 @@ const List = (
                 count={_payload.count}
                 fileType="tsv"
               />
-              <label htmlFor="api"></label>
+              <label htmlFor="api">API</label>
               <APIViewButton url={url} />
             </div>
           </Exporter>

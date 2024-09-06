@@ -101,13 +101,13 @@ export const SearchResults = ({
         <HighlightToggler />
         <Exporter>
           <div className={css('menu-grid')}>
-            <label htmlFor="json"></label>
+            <label htmlFor="json">JSON</label>
             <FileExporter
               fileType="json"
               name={`SearchResults-${searchValue}.json`}
               count={hitCount}
             />
-            <label htmlFor="tsv"></label>
+            <label htmlFor="tsv">TSV</label>
             <FileExporter
               fileType="tsv"
               name={`SearchResults-${searchValue}.tsv`}

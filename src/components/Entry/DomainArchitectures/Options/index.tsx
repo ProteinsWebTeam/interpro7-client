@@ -71,11 +71,11 @@ const IDAOptions = ({
       {showExporter && (
         <Exporter includeSettings={false}>
           <div className={css('menu-grid')}>
-            <label htmlFor="json"></label>
+            <label htmlFor="json">JSON</label>
             <AllIDADownload count={count} fileType="json" />
-            <label htmlFor="json"></label>
+            <label htmlFor="json">JSON</label>
             <AllIDADownload count={count} fileType="tsv" />
-            <label htmlFor="api"></label>
+            <label htmlFor="api">API</label>
             {api && (
               <APIViewButton url={getAPIURL(api, entryLocation, search)} />
             )}

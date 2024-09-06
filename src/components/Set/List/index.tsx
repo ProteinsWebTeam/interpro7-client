@@ -114,7 +114,7 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
         >
           <Exporter>
             <div className={css('menu-grid')}>
-              <label htmlFor="json"></label>
+              <label htmlFor="json">JSON</label>
               <AllSetDownload
                 name="json"
                 description={description}
@@ -122,7 +122,7 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
                 count={_payload!.count}
                 fileType="json"
               />
-              <label htmlFor="tsv"></label>
+              <label htmlFor="tsv">TSV</label>
               <AllSetDownload
                 name="tsv"
                 description={description}
@@ -130,7 +130,7 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
                 count={_payload!.count}
                 fileType="tsv"
               />
-              <label htmlFor="api"></label>
+              <label htmlFor="api">API</label>
               <APIViewButton url={url} />
             </div>
           </Exporter>

@@ -28,7 +28,6 @@ const APIViewButton = ({ url }: Props) => {
           )}
         >
           <div className={css('file-button')}>
-            <span>API</span>
             <span className={css('as-progress-button')}>
               <span className={css('icon', 'icon-common', 'icon-globe')} />
             </span>

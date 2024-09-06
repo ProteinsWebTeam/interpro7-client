@@ -279,7 +279,7 @@ const Matches = ({
                 <>
                   {primary === 'protein' && (
                     <>
-                      <label htmlFor="fasta"></label>
+                      <label htmlFor="fasta">FASTA</label>
                       <FileExporter
                         description={description}
                         count={actualSize}
@@ -291,7 +291,7 @@ const Matches = ({
                       />
                     </>
                   )}
-                  <label htmlFor="tsv"></label>
+                  <label htmlFor="tsv">TSV</label>
                   <FileExporter
                     description={description}
                     count={actualSize}
@@ -301,7 +301,7 @@ const Matches = ({
                     secondary={secondary}
                     focused={focused}
                   />
-                  <label htmlFor="json"></label>
+                  <label htmlFor="json">JSON</label>
                   <FileExporter
                     description={description}
                     count={actualSize}
@@ -313,7 +313,7 @@ const Matches = ({
                   />
                 </>
               )}
-              <label htmlFor="api"></label>
+              <label htmlFor="api">API</label>
               <APIViewButton
                 url={toPublicAPI(
                   includeTaxonFocusedOnURL(getReversedUrl(state), focused),
