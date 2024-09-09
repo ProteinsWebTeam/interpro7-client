@@ -15,7 +15,7 @@ import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import File from 'components/File';
 // $FlowFixMe
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 
 import Table, {
   Column,
@@ -46,6 +46,8 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 import EntryCard from 'components/Entry/Card';
+
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(
   pageStyle,
@@ -246,7 +248,14 @@ class List extends PureComponent /*:: <Props> */ {
                   name="tsv"
                 />
                 <label htmlFor="api">API</label>
-                <APIViewButton url={data.url} />
+                <ExternalExportButton type={'api'} url={data.url} />
+
+                <label htmlFor="code">CODE</label>
+                <ExternalExportButton
+                  search={search}
+                  type={'scriptgen'}
+                  subpath={descriptionToPath(description)}
+                />
               </div>
             </Exporter>
             <PageSizeSelector />

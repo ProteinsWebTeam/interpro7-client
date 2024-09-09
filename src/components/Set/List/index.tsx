@@ -13,7 +13,8 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import SetCard from 'components/Set/Card';
 import NumberComponent from 'components/NumberComponent';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 
 import AllSetDownload from './AllSetDownload';
 
@@ -32,6 +33,8 @@ import exporterStyle from 'components/Table/Exporter/style.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 
 const css = cssBinder(fonts, pageStyle, exporterStyle, filtersAndTable);
+
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -131,7 +134,13 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
                 fileType="tsv"
               />
               <label htmlFor="api">API</label>
-              <APIViewButton url={url} />
+              <ExternalExportButton type={'api'} url={url} />
+              <label htmlFor="code">CODE</label>
+              <ExternalExportButton
+                search={search}
+                type={'scriptgen'}
+                subpath={descriptionToPath(description)}
+              />
             </div>
           </Exporter>
           <PageSizeSelector />

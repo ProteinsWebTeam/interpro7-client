@@ -1,17 +1,9 @@
 import React from 'react';
 
-import Link from 'components/generic/Link';
-
 import cssBinder from 'styles/cssBinder';
 import local from './style.css';
 
 const css = cssBinder(local);
-
-const getSearchString = (search?: InterProLocationSearch): string => {
-  const entries = Object.entries(search || []);
-  if (entries.length === 0) return '';
-  return `?${entries.map(([k, v]) => `${k}=${v}`).join('&')}`;
-};
 
 type Props = {
   title: string;
@@ -21,7 +13,7 @@ type Props = {
   search?: InterProLocationSearch;
 };
 
-const TooltipContent = ({ title, count, subpath, fileType, search }: Props) => {
+const TooltipContent = ({ title, count }: Props) => {
   return count === 0 ? (
     <div>
       <p className={css('tooltip-paragraph')}>

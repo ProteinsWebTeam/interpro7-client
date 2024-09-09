@@ -25,7 +25,7 @@ import NumberComponent from 'components/NumberComponent';
 // $FlowFixMe
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 
 // $FlowFixMe
 import ProteomeCard from 'components/Proteome/Card';
@@ -49,6 +49,9 @@ import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
+
+// $FlowFixMe
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(
   ebiGlobalStyles,
@@ -242,7 +245,13 @@ class List extends PureComponent /*:: <Props> */ {
                   name="tsv"
                 />
                 <label htmlFor="api">API</label>
-                <APIViewButton url={url} />
+                <ExternalExportButton type={'api'} url={url} />
+                <label htmlFor="code">CODE</label>
+                <ExternalExportButton
+                  search={search}
+                  type={'scriptgen'}
+                  subpath={descriptionToPath(description)}
+                />
               </div>
             </Exporter>
             <PageSizeSelector />

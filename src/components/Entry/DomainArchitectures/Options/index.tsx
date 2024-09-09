@@ -9,7 +9,8 @@ import { changeSettingsRaw } from 'actions/creators';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ToggleSwitch from 'components/ToggleSwitch';
 import Exporter from 'components/Table/Exporter';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 import AllIDADownload from './AllIDADownload';
 
 import cssBinder from 'styles/cssBinder';
@@ -77,7 +78,10 @@ const IDAOptions = ({
             <AllIDADownload count={count} fileType="tsv" />
             <label htmlFor="api">API</label>
             {api && (
-              <APIViewButton url={getAPIURL(api, entryLocation, search)} />
+              <ExternalExportButton
+                type={'api'}
+                url={getAPIURL(api, entryLocation, search)}
+              />
             )}
           </div>
         </Exporter>

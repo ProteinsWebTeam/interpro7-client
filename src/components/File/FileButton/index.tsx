@@ -44,12 +44,6 @@ export type FileButtonProps = {
   search?: InterProLocationSearch;
 } & ({ url: string } | { blobURL: string });
 
-const getSearchString = (search?: InterProLocationSearch): string => {
-  const entries = Object.entries(search || []);
-  if (entries.length === 0) return '';
-  return `?${entries.map(([k, v]) => `${k}=${v}`).join('&')}`;
-};
-
 const FileButton = ({
   fileType,
   url,
@@ -68,7 +62,6 @@ const FileButton = ({
 }: FileButtonProps) => {
   const downloading = Number.isFinite(progress) && !successful;
   const failed = successful === false;
-  const stateLabel = fileType.toUpperCase();
 
   let title = 'Click icon to generate';
   if (count > HARD_LIMIT) {
@@ -76,7 +69,6 @@ const FileButton = ({
   }
 
   title += ` ${fileType} file`;
-  const labelToShow = label || stateLabel;
 
   const filename =
     name || `${fileType}.${EXTENSIONS[fileType as SupportedExtensions]}`;
@@ -100,7 +92,6 @@ const FileButton = ({
           downloading,
           failed,
         })}
-        style={{ width: 'fit-content' }}
       >
         <ProgressButton
           downloading={downloading}
@@ -112,50 +103,25 @@ const FileButton = ({
       </div>
     </Link>
   );
-
-  const codeGeneratorButton = (
-    <Link
-      target="_blank"
-      to={{
-        description: {
-          main: { key: 'result' },
-          result: { type: 'download' },
-        },
-        hash: `${subpath || ''}${getSearchString(search)}|${fileType}`,
-      }}
-    >
-      <div
-        className={css('script-gen-icon', 'icon', 'icon-common', 'icon-code')}
-      />
-    </Link>
-  );
-
   return (
     <>
       {count > HARD_LIMIT ? (
-        <div className={css('vf-grid', 'download-menu')}>
-          <Tooltip
-            interactive
-            useContext
-            style={{ width: '0px' }}
-            html={
-              <TooltipContent
-                title={title}
-                count={count}
-                subpath={subpath}
-                fileType={fileType}
-              />
-            }
-          >
-            <div className={css('vf-box')}>{downloadButton}</div>
-          </Tooltip>
-          <div className={css('vf-box')}>{codeGeneratorButton}</div>
-        </div>
+        <Tooltip
+          interactive
+          useContext
+          html={
+            <TooltipContent
+              title={title}
+              count={count}
+              subpath={subpath}
+              fileType={fileType}
+            />
+          }
+        >
+          {downloadButton}
+        </Tooltip>
       ) : (
-        <div className={css('vf-grid', 'download-menu')}>
-          <div className={css('vf-box')}>{downloadButton}</div>
-          <div className={css('vf-box')}>{codeGeneratorButton}</div>
-        </div>
+        downloadButton
       )}
     </>
   );

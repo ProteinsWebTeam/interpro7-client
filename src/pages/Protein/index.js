@@ -12,7 +12,7 @@ import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
 import ProteinCard from 'components/Protein/Card';
 // $FlowFixMe
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 
 // $FlowFixMe
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
@@ -46,6 +46,9 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
+
+// $FlowFixMe
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(
   fonts,
@@ -151,6 +154,7 @@ class List extends PureComponent /*:: <ListProps> */ {
         previous: null,
       };
     }
+
     return (
       <div className={f('row', 'filters-and-table')}>
         <nav>
@@ -222,7 +226,13 @@ class List extends PureComponent /*:: <ListProps> */ {
                   fileType="tsv"
                 />
                 <label htmlFor="api">API</label>
-                <APIViewButton url={url} />
+                <ExternalExportButton type={'api'} url={url} />
+                <label htmlFor="code">CODE</label>
+                <ExternalExportButton
+                  search={search}
+                  type={'scriptgen'}
+                  subpath={descriptionToPath(description)}
+                />
               </div>
             </Exporter>
             <Card>

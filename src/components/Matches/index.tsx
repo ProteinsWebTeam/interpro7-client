@@ -21,7 +21,7 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 import LazyImage from 'components/LazyImage';
 import Lazy from 'wrappers/Lazy';
 import loadWebComponent from 'utils/load-web-component';
@@ -314,7 +314,8 @@ const Matches = ({
                 </>
               )}
               <label htmlFor="api">API</label>
-              <APIViewButton
+              <ExternalExportButton
+                type={'api'}
                 url={toPublicAPI(
                   includeTaxonFocusedOnURL(getReversedUrl(state), focused),
                 )}

@@ -14,7 +14,7 @@ import Link from 'components/generic/Link';
 import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 
 import AllProteinDownload from './AllProteinDownload';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -133,8 +133,18 @@ const SimilarProteinTable = ({
               fileType="tsv"
             />
             <label htmlFor="api">API</label>
-            <APIViewButton url={getAPIURLForSimilarProteins(api, ida, db)} />
+            <ExternalExportButton
+              type={'api'}
+              url={getAPIURLForSimilarProteins(api, ida, db)}
+            />
           </div>
+
+          <label htmlFor="code">CODE</label>
+          <ExternalExportButton
+            search={search}
+            type={'scriptgen'}
+            subpath={descriptionToPath(description)}
+          />
         </Exporter>
 
         <Column

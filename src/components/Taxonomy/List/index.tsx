@@ -14,7 +14,8 @@ import Table, {
   HighlightToggler,
 } from 'components/Table';
 import File from 'components/File';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
@@ -35,6 +36,8 @@ import exporterStyle from 'components/Table/Exporter/style.css';
 import local from './style.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 import AllTaxDownload from './AllTaxDownload';
+
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const css = cssBinder(
   pageStyle,
@@ -224,7 +227,14 @@ const List = ({
               />
 
               <label htmlFor="api">API</label>
-              <APIViewButton url={urlToExport} />
+              <ExternalExportButton type={'api'} url={urlToExport} />
+
+              <label htmlFor="code">CODE</label>
+              <ExternalExportButton
+                search={search}
+                type={'scriptgen'}
+                subpath={descriptionToPath(description)}
+              />
             </div>
           </Exporter>
           <PageSizeSelector />

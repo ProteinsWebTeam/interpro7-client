@@ -26,7 +26,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 // $FlowFixMe
 import File from 'components/File';
 // $FlowFixMe
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 
 import loadable from 'higherOrder/loadable';
 
@@ -49,6 +49,9 @@ import { formatExperimentType } from 'components/Structure/utils';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import theme from 'styles/theme-interpro.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
+
+// $FlowFixMe
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(
   ebiGlobalStyles,
@@ -247,7 +250,14 @@ const List = (
                 fileType="tsv"
               />
               <label htmlFor="api">API</label>
-              <APIViewButton url={url} />
+              <ExternalExportButton type={'api'} url={url} />
+
+              <label htmlFor="code">CODE</label>
+              <ExternalExportButton
+                search={search}
+                type={'scriptgen'}
+                subpath={descriptionToPath(description)}
+              />
             </div>
           </Exporter>
           <PageSizeSelector />
