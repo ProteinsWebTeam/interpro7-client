@@ -17,28 +17,27 @@ const UNDERSCORE = /_/g;
 const FIRST_IN_ORDER = [
   'alphafold_confidence',
   'secondary_structure',
+  'spurious_proteins',
   'representative_domains',
   'representative_families',
   'pathogenic_and_likely_pathogenic_variants',
   'intrinsically_disordered_regions',
-  'spurious_proteins',
   'residues',
-];
-
-const LASTS_IN_ORDER = [
   'family',
   'domain',
   'homologous_superfamily',
-  'coiled-coils,_signal_peptides,_transmembrane_regions',
-  'short_linear_motifs',
-  'pfam-n',
   'repeat',
   'conserved_site',
   'active_site',
   'binding_site',
   'ptm',
-  'features',
-  'predictions',
+];
+
+const LASTS_IN_ORDER = [
+  'coiled-coils,_signal_peptides,_transmembrane_regions',
+  'short_linear_motifs',
+  'pfam-n',
+  'funfam',
   'match_conservation',
 ];
 
@@ -127,7 +126,7 @@ export const makeTracks = ({
   /* Logic to highlight matches from member DBs, not InterPro entries
       1. Remove Intepro entries as the "parent" of matches from member DBs.
       2. Merge unintegrated with result from (1.);
-      3. Sort matches in tracks based on their position but, if integrated, 
+      3. Sort matches in tracks based on their position but, if integrated,
       maintaining grouping for the same InterPro entry.
   */
 
@@ -140,9 +139,9 @@ export const makeTracks = ({
     allMatches as { accession: string; type: string }[],
   );
 
-  /* 3. 
+  /* 3.
         Group matches of the same type (e.g domain) by IntePro accession
-        sort matches by position within the same group, 
+        sort matches by position within the same group,
         sort all the groups based on first fragment of group.
   */
 
@@ -193,7 +192,7 @@ export const flattenTracksObject = (
   );
 };
 
-/* Processing of the payload needs to be slightly different 
+/* Processing of the payload needs to be slightly different
 to add tracks to the dataMerged object instead of the dataSorted object */
 export const addVariationTrack = (
   variationPayload: ProteinsAPIVariation,
@@ -272,8 +271,8 @@ const DomainsOnProteinLoaded = ({
     (mainData as ProteinEntryPayload).metadata ||
     (mainData as { payload: ProteinEntryPayload }).payload.metadata;
 
-  /* 
-  Special tracks are now added to the dataMerged object before being sorted based on FIRST_IN_ORDER. 
+  /*
+  Special tracks are now added to the dataMerged object before being sorted based on FIRST_IN_ORDER.
   Adding the tracks to the dataSorted object, caused the Alphafold track and variants track to be displayed always at the first/last position.
   */
   if (dataConfidence)
