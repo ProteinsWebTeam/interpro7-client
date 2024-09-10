@@ -210,20 +210,6 @@ export const ProteinViewer = ({
     }
   };
 
-  const residuesToLocations = (
-    residues: Residue[] | undefined,
-  ): ExtendedFeatureLocation[] => {
-    const newLocations: ExtendedFeatureLocation[] = [];
-    if (residues) {
-      residues.map((residue) => {
-        residue.locations.map((location) => {
-          newLocations.push(location);
-        });
-      });
-    }
-    return newLocations;
-  };
-
   return (
     <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
       <div
@@ -297,23 +283,6 @@ export const ProteinViewer = ({
                   let hideDiv: string = '';
                   if (!showMore && !mainTracks.includes(type)) {
                     hideDiv = 'none';
-                  }
-
-                  if (type == 'residues') {
-                    const residuesEntries: ExtendedFeature[] = [];
-                    entries.map((entry) => {
-                      const tempFeature: ExtendedFeature = {
-                        accession: entry.accession,
-                        name: entry.name,
-                        protein: entry.protein,
-                        source_database: entry.source_database,
-                        type: 'residue',
-                        locations: residuesToLocations(entry.residues),
-                      };
-                      residuesEntries.push(tempFeature);
-                    });
-
-                    entries = residuesEntries;
                   }
 
                   return (
