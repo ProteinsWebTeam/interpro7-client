@@ -54,7 +54,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
           <span>{entry.accession}</span>
         ) : (
           <Link target="_blank" href={`https://mobidb.org/${entry.protein}`}>
-            {entry.accession}
+            {entry.accession.replace('Mobidblt-', 'MobiDB-lite: ')}
           </Link>
         )}
         {entry.children &&
@@ -63,7 +63,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
               className={css('track-accession-child')}
               key={`main_${d.accession}`}
             >
-              {d.accession}
+              {d.accession.replace('Mobidblt-', '')}
             </div>
           ))}
       </>
