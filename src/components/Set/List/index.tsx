@@ -117,7 +117,6 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
         >
           <Exporter>
             <div className={css('menu-grid')}>
-              <label htmlFor="json">JSON</label>
               <AllSetDownload
                 name="json"
                 description={description}
@@ -125,7 +124,6 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
                 count={_payload!.count}
                 fileType="json"
               />
-              <label htmlFor="tsv">TSV</label>
               <AllSetDownload
                 name="tsv"
                 description={description}
@@ -133,9 +131,7 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
                 count={_payload!.count}
                 fileType="tsv"
               />
-              <label htmlFor="api">API</label>
               <ExternalExportButton type={'api'} url={url} />
-              <label htmlFor="code">CODE</label>
               <ExternalExportButton
                 search={search}
                 type={'scriptgen'}

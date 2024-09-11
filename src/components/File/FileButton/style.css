@@ -30,3 +30,14 @@
     color: white !important;
   }
 }
+
+.btn-testing {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 3px;
+}
+
+.file-btn-label {
+  margin-right: 0 auto;
+}

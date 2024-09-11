@@ -18,9 +18,7 @@
 
 .menu-grid {
   display: grid;
-  gap: 1px;
-  width: 100px;
-  grid-template-columns: 50% 50%;
+  gap: 2px;
   align-items: center;
   & label {
     text-align: center;

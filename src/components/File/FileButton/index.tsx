@@ -85,7 +85,7 @@ const FileButton = ({
       onClick={downloading || successful ? undefined : handleClick}
       data-url={url}
       data-type={fileType}
-      className={css('no-decoration')}
+      className={css('')}
     >
       <div
         className={css('file-button', ...buttonclassName, className, {
@@ -93,13 +93,16 @@ const FileButton = ({
           failed,
         })}
       >
-        <ProgressButton
-          downloading={downloading}
-          success={!!successful}
-          failed={failed}
-          iconType={fileType}
-          progress={progress || SMALL}
-        />
+        <div className={css('btn-testing')}>
+          <div>{fileType.replace('accession', 'TSV').toUpperCase()}</div>
+          <ProgressButton
+            downloading={downloading}
+            success={!!successful}
+            failed={failed}
+            iconType={fileType}
+            progress={progress || SMALL}
+          />
+        </div>
       </div>
     </Link>
   );

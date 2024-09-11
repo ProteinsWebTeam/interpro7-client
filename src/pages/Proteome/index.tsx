@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
-
-import { includeTaxonFocusedOnURL } from 'higherOrder/loadData/defaults';
+import React from 'react';
 
 import Link from 'components/generic/Link';
-import MemberDBSelector from 'components/MemberDBSelector';
-import TaxonomyCard from 'components/Taxonomy/Card';
+
 import Table, {
   Column,
-  Card,
   SearchBox,
   PageSizeSelector,
   Exporter,
+  Card,
   HighlightToggler,
 } from 'components/Table';
+
 import File from 'components/File';
 
-import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+
+import MemberDBSelector from 'components/MemberDBSelector';
+
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
+
+import ProteomeCard from 'components/Proteome/Card';
 
 import loadable from 'higherOrder/loadable';
 
@@ -27,101 +31,161 @@ import {
   schemaProcessDataTableRow,
 } from 'schema_org/processors';
 
-import cssBinder from 'styles/cssBinder';
+import EndPointPage from '../endpoint-page';
+import subPages from 'subPages';
+import config from 'config';
 
-import pageStyle from 'pages/style.css';
+import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import pageStyle from '../style.css';
 import styles from 'styles/blocks.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
-import local from './style.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
-import AllTaxDownload from './AllTaxDownload';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import cssBinder from 'styles/cssBinder';
 
 const css = cssBinder(
+  ebiGlobalStyles,
   pageStyle,
   styles,
   fonts,
   exporterStyle,
-  local,
   filtersAndTable,
 );
 
 type ExtraCounters = { counters?: TaxonomyCounters };
 
-const SchemaOrgData = loadable({
-  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
-
 const EntryAccessionsRenderer =
   (entryDB: MemberDB | 'interpro') =>
-  (taxId: string, _row: unknown, extra?: ExtraCounters) => (
+  (accession: string, _row: unknown, extra?: ExtraCounters) => (
     <File
       fileType="accession"
-      endpoint={'taxonomy'}
-      name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
+      endpoint={'proteome'}
+      name={`${entryDB || 'all'}-entry-accessions-for-${accession}.txt`}
       count={extra?.counters?.entries || 0}
       customLocationDescription={{
         main: { key: 'entry' },
         entry: { db: entryDB || 'all' },
-        taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
+        proteome: { isFilter: true, db: 'UniProt', accession },
       }}
     />
   );
 
 const ProteinFastasRenderer =
   (entryDB: MemberDB | 'interpro') =>
-  (taxId: string, _row: unknown, extra?: ExtraCounters) => (
+  (accession: string, _row: unknown, extra?: ExtraCounters) => (
     <File
       fileType="fasta"
-      endpoint={'taxonomy'}
+      endpoint={'proteome'}
       name={`protein-sequences${
         entryDB ? `-matching-${entryDB}` : ''
-      }-for-${taxId}.fasta`}
-      count={extra?.counters?.proteins || 0}
+      }-for-${accession}.fasta`}
+      count={extra?.counters?.entries || 0}
       customLocationDescription={{
         main: { key: 'protein' },
         protein: { db: 'UniProt' },
         entry: { isFilter: true, db: entryDB || 'all' },
-        taxonomy: { isFilter: true, db: 'UniProt', accession: `${taxId}` },
+        proteome: { isFilter: true, db: 'UniProt', accession },
       }}
     />
   );
 
-type Props = {
-  customLocation?: InterProLocation;
-  exactMatch?: TaxonommyTreePayload;
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+const SummaryAsync = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "proteome-summary" */ 'components/Proteome/Summary'
+    ),
+  loading: () => null,
+});
+
+const subPagesForProteome = new Map();
+for (const subPage of config.pages.proteome.subPages) {
+  subPagesForProteome.set(subPage, subPages.get(subPage));
+}
+
+type AllProteomesDownloadProps = {
+  description: object;
+  search: InterProLocationSearch;
+  count: number;
+  fileType: DownloadFileTypes;
+  name: string;
 };
 
-type TaxItem = {
-  metadata: TaxonomyMetadata;
+const AllProteomesDownload = ({
+  description,
+  search,
+  count,
+  fileType,
+  name,
+}: AllProteomesDownloadProps) => (
+  <File
+    fileType={fileType}
+    name={name || `proteomes.${fileType}`}
+    count={count}
+    customLocationDescription={description}
+    search={{ ...search, extra_fields: 'counters:entry-protein' }}
+    endpoint={'proteome'}
+  />
+);
+
+/*:: type Props = {
+  data: {
+   payload: Object,
+   loading: boolean,
+   ok: boolean,
+   url: string,
+   status: number
+  },
+  isStale: boolean,
+  customLocation: {
+    description: Object,
+    search: Object
+  },
+  dataBase: {
+   payload: Object,
+   loading: boolean
+  }
+};*/
+
+type ProteomeItem = {
+  metadata: ProteomeMetadata;
   extra_fields?: {
-    counters: TaxonomyCounters;
-    lineage?: string;
+    counters: MetadataCounters;
   };
-  className?: string;
+};
+
+/* const propTypes = {
+  data: dataPropType.isRequired,
+  isStale: T.bool.isRequired,
+  customLocation: T.shape({
+    description: T.object.isRequired,
+    search: T.object.isRequired,
+  }).isRequired,
+  match: T.string,
+  dataBase: dataPropType,
+}*/
+
+type Props = {
+  customLocation?: InterProLocation;
 };
 
 interface LoadedProps
   extends Props,
-    LoadDataProps<PayloadList<TaxItem>>,
+    LoadDataProps<PayloadList<ProteomeItem>>,
     LoadDataProps<RootAPIPayload, 'Base'> {}
 
-const List = ({
-  data,
-  isStale,
-  customLocation,
-  dataBase,
-  exactMatch,
-}: LoadedProps) => {
-  const [focused, setFocused] = useState<string | null>(null);
+const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
   if (!data || !customLocation) return null;
+
   const { payload, loading, ok, url, status } = data;
   const { description, search } = customLocation;
   let _payload = payload;
-  let _status = status;
   const entryDB = description.entry.db as MemberDB | 'interpro';
 
   const HTTP_OK = 200;
@@ -135,46 +199,16 @@ const List = ({
       previous: null,
     };
   }
-  const results = [...(_payload?.results || [])];
-  let size = _payload?.count || 0;
-  if (exactMatch) {
-    const indexInPayload = results.findIndex(
-      ({ metadata: { accession } }) =>
-        accession === exactMatch.metadata.accession,
-    );
-    if (indexInPayload >= 0) {
-      results.splice(indexInPayload, 1);
-      size--;
-    }
 
-    results.splice(0, 1, {
-      ...exactMatch,
-      extra_fields: {
-        counters: exactMatch.metadata.counters,
-      },
-      metadata: {
-        ...exactMatch.metadata,
-        name:
-          (exactMatch.metadata.name as NameObject).short ||
-          (exactMatch.metadata.name as NameObject).name ||
-          (exactMatch.metadata.name as string),
-        exact_match: true,
-      },
-      className: css(local.exactMatch),
-    });
-    size++;
-    notFound = false;
-    _status = HTTP_OK;
-  }
-  const urlToExport = includeTaxonFocusedOnURL(url);
+  let size = _payload?.count || 0;
 
   return (
-    <div className={css('filters-and-table')}>
+    <div className={css('row', 'filters-and-table')}>
       <nav>
         <div className={css('browse-side-panel')}>
           <div className={css('selector-container')}>
             <MemberDBSelector
-              contentType="taxonomy"
+              contentType="proteome"
               className="pp-left-side-db-selector"
             />
           </div>
@@ -192,40 +226,37 @@ const List = ({
           />
         )}
         <Table
-          dataTable={results}
-          contentType="taxonomy"
+          dataTable={_payload?.results}
+          contentType="proteome"
           loading={loading}
           ok={ok}
-          status={_status}
+          status={status}
           isStale={isStale}
           actualSize={size}
           query={search}
           notFound={notFound}
-          withTree={true}
-          withGrid={true}
           databases={databases}
           nextAPICall={_payload?.next}
           previousAPICall={_payload?.previous}
           currentAPICall={url}
-          onFocusChanged={setFocused}
         >
           <Exporter>
             <div className={css('menu-grid')}>
-              <AllTaxDownload
+              <AllProteomesDownload
                 description={description}
                 search={search}
                 count={size}
-                focused={focused}
                 fileType="json"
+                name="json"
               />
-              <AllTaxDownload
+              <AllProteomesDownload
                 description={description}
                 search={search}
                 count={size}
-                focused={focused}
                 fileType="tsv"
+                name="tsv"
               />
-              <ExternalExportButton type={'api'} url={urlToExport} />
+              <ExternalExportButton type={'api'} url={url} />
               <ExternalExportButton
                 search={search}
                 type={'scriptgen'}
@@ -235,15 +266,15 @@ const List = ({
           </Exporter>
           <PageSizeSelector />
           <Card>
-            {(data: TaxItem) => (
-              <TaxonomyCard
+            {(data: ProteomeItem) => (
+              <ProteomeCard
                 data={data}
                 search={search.search as string}
                 entryDB={entryDB}
               />
             )}
           </Card>
-          <SearchBox loading={isStale}>Search taxonomy</SearchBox>
+          <SearchBox loading={isStale}>Search organism</SearchBox>
           <HighlightToggler />
           <Column
             dataKey="accession"
@@ -251,17 +282,17 @@ const List = ({
               <Link
                 to={(customLocation) => ({
                   description: {
-                    main: { key: 'taxonomy' },
-                    taxonomy: {
-                      ...customLocation.description.taxonomy,
-                      accession,
+                    main: { key: 'proteome' },
+                    proteome: {
+                      ...customLocation.description.proteome,
+                      accession: accession,
                     },
                   },
                 })}
               >
                 <SchemaOrgData
                   data={{
-                    data: { row, endpoint: 'taxonomy' },
+                    data: { row, endpoint: 'proteome' },
                     location: window.location,
                   }}
                   processData={schemaProcessDataTableRow}
@@ -273,17 +304,17 @@ const List = ({
               </Link>
             )}
           >
-            Taxon ID
+            Accession
           </Column>
           <Column
             dataKey="name"
-            renderer={(name: string, { accession }: TaxonomyMetadata) => (
+            renderer={(name: string, { accession }: ProteomeMetadata) => (
               <Link
                 to={(customLocation) => ({
                   description: {
-                    main: { key: 'taxonomy' },
-                    taxonomy: {
-                      ...customLocation.description.taxonomy,
+                    main: { key: 'proteome' },
+                    proteome: {
+                      ...customLocation.description.proteome,
                       accession: accession,
                     },
                   },
@@ -308,14 +339,14 @@ const List = ({
               _row: unknown,
               extra?: ExtraCounters,
             ) => {
-              const count = extra?.counters?.entries || '-';
+              const count = extra?.counters?.proteins || '-';
               return (
                 <Link
                   className={css('no-decoration')}
                   to={{
                     description: {
-                      main: { key: 'taxonomy' },
-                      taxonomy: {
+                      main: { key: 'proteome' },
+                      proteome: {
                         db: 'uniprot',
                         accession: `${accession}`,
                       },
@@ -346,14 +377,18 @@ const List = ({
             headerClassName={css('table-center')}
             cellClassName={css('table-center')}
             defaultKey="protein-count"
-            renderer={(accession: string, _row, extra?: ExtraCounters) => {
+            renderer={(
+              accession: string,
+              _row: unknown,
+              extra?: ExtraCounters,
+            ) => {
               const count = extra?.counters?.proteins || '-';
               return (
                 <Link
                   to={{
                     description: {
-                      main: { key: 'taxonomy' },
-                      taxonomy: {
+                      main: { key: 'proteome' },
+                      proteome: {
                         db: 'uniprot',
                         accession: `${accession}`,
                       },
@@ -382,7 +417,7 @@ const List = ({
             cellClassName={css('table-center')}
             renderer={ProteinFastasRenderer(entryDB)}
           >
-            FASTA
+            Protein sequence
           </Column>
         </Table>
       </section>
@@ -390,4 +425,15 @@ const List = ({
   );
 };
 
-export default List;
+const subpagesRoutes = /(UP\d{9})|(all)/i;
+
+const Proteome = () => (
+  <EndPointPage
+    subpagesRoutes={subpagesRoutes}
+    listOfEndpointEntities={List}
+    SummaryAsync={SummaryAsync}
+    subPagesForEndpoint={subPagesForProteome}
+  />
+);
+
+export default Proteome;

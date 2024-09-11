@@ -233,7 +233,6 @@ const List = (
         >
           <Exporter>
             <div className={f('menu-grid')}>
-              <label htmlFor="json">JSON</label>
               <AllStructuresDownload
                 name="json"
                 description={description}
@@ -241,7 +240,6 @@ const List = (
                 count={_payload.count}
                 fileType="json"
               />
-              <label htmlFor="tsv">TSV</label>
               <AllStructuresDownload
                 name="tsv"
                 description={description}
@@ -249,10 +247,7 @@ const List = (
                 count={_payload.count}
                 fileType="tsv"
               />
-              <label htmlFor="api">API</label>
               <ExternalExportButton type={'api'} url={url} />
-
-              <label htmlFor="code">CODE</label>
               <ExternalExportButton
                 search={search}
                 type={'scriptgen'}

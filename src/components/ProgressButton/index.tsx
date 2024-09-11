@@ -62,18 +62,18 @@ const ProgressButton = ({
             />
           </g>
         </svg>
+        {showIcon && (
+          <span
+            className={css(
+              'svg-overlap',
+              'download-icon',
+              'icon',
+              'icon-common',
+              iconClass,
+            )}
+          />
+        )}
       </span>
-      {showIcon && (
-        <span
-          className={css(
-            'svg-overlap',
-            'download-icon',
-            'icon',
-            'icon-common',
-            iconClass,
-          )}
-        />
-      )}
     </>
   );
 };

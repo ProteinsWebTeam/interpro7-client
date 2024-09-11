@@ -28,7 +28,6 @@ const getSearchString = (search?: InterProLocationSearch): string => {
 const ExternalExportButton = ({ url, type, search, subpath }: Props) => {
   return (
     <Tooltip
-      className={css('browse-btn-api')}
       title={
         type == 'api'
           ? 'See the raw response from the InterPro API'
@@ -51,15 +50,23 @@ const ExternalExportButton = ({ url, type, search, subpath }: Props) => {
         }
         className={css('no-decoration')}
       >
-        <div className={css('vf-button', 'vf-button--link', 'vf-button--sm')}>
-          <div className={css('file-button')}>
-            <span
+        <div
+          className={css(
+            'file-button',
+            'vf-button',
+            'vf-button--link',
+            'vf-button--sm',
+          )}
+        >
+          <div className={css('btn-testing')}>
+            <div> {type == 'api' ? 'API' : 'CODE'} </div>
+            <div
               className={css(
                 'icon',
                 'icon-common',
                 `icon-${type == 'api' ? 'globe' : 'code'}`,
               )}
-            />
+            ></div>
           </div>
         </div>
       </Link>

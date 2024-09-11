@@ -91,10 +91,12 @@
   transition-delay: 0s;
 }
 
+.container {
+  position: relative;
+}
+
 .svg-overlap {
   position: absolute;
   top: 50%;
-  margin-top: -8px;
-  left: 50%;
-  margin-left: -8px;
+  left: 8px;
 }
