@@ -8,7 +8,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import NumberComponent from 'components/NumberComponent';
 import { groupByEntryType } from 'components/Related/DomainsOnProtein';
 import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
-import { selectRepresentativeDomains } from 'components/ProteinViewer/utils';
+import { selectRepresentativeData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -70,9 +70,10 @@ const features2protvista = (features: FeatureMap) => {
   ];
 
   const sortedCategories = categories.sort(byEntryType);
-  const representativeDomains = selectRepresentativeDomains(
+  const representativeDomains = selectRepresentativeData(
     featArray,
     'locations',
+    'domain'
   );
 
   if (representativeDomains?.length) {

@@ -186,3 +186,8 @@ body table.matches-in-table tr:first-of-type td {
 nightingale-manager {
   width: 100%;
 }
+
+g:global(.feature-group):has(g:global(.residues-group))
+  > g:global(.location-group) {
+  display: none;
+}

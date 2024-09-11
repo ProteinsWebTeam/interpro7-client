@@ -26,25 +26,22 @@ const ProteinViewer = loadable({
   loading: null,
 });
 
+/* Processing of the payload needs to be slightly different 
+to add tracks to the dataMerged object instead of the dataSorted object */
 export const addConfidenceTrack = (
   dataConfidence: RequestedData<AlphafoldConfidencePayload>,
   protein: string,
-  tracks: ProteinViewerData,
+  tracks: ProteinViewerDataObject,
 ) => {
   if (dataConfidence?.payload?.confidenceCategory?.length) {
-    const confidenceTrack: [string, Array<unknown>] = [
-      'AlphaFold confidence',
-      [
-        {
-          accession: `confidence_af_${protein}`,
-          data: dataConfidence.payload.confidenceCategory.join(''),
-          type: 'confidence',
-          protein,
-          source_database: 'alphafold',
-        },
-      ],
-    ];
-    tracks.splice(0, 0, confidenceTrack);
+    tracks['alphafold_confidence'] = [];
+    tracks['alphafold_confidence'][0] = {
+      accession: `confidence_af_${protein}`,
+      data: dataConfidence.payload.confidenceCategory.join(''),
+      type: 'confidence',
+      protein,
+      source_database: 'alphafold',
+    };
   }
 };
 
@@ -134,8 +131,8 @@ const ProteinViewerForAlphafold = ({
     unintegrated: unintegrated as Array<MinimalFeature>,
     representativeDomains: representativeDomains as Array<MinimalFeature>,
   });
+  if (dataConfidence) addConfidenceTrack(dataConfidence, protein, groups);
   const tracks = flattenTracksObject(groups);
-  if (dataConfidence) addConfidenceTrack(dataConfidence, protein, tracks);
   if (!dataProtein.payload?.metadata) return null;
   return (
     <div ref={containerRef}>

@@ -33,6 +33,7 @@ import grid from './grid.css';
 import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
+import ShowMoreTracks from './ShowMoreTracks';
 
 TracksInCategory.displayName = 'TracksInCategory';
 Header.displayName = 'TracksHeader';
@@ -122,10 +123,38 @@ export const ProteinViewer = ({
   children,
 }: LoadedProps) => {
   const [isPrinting, setPrinting] = useState(false);
+
+  // State variable to show/hide "secondary" tracks
+  const [showMore, setShowMore] = useState(false);
+
+  // List of "main" tracks to be displayed, the rest are hidden by default
+  const mainTracks = [
+    'alphafold confidence',
+    'representative domains',
+    'representative families',
+    'pathogenic and likely pathogenic variants',
+    'intrinsically disordered regions',
+    'spurious proteins',
+    'residues',
+  ];
+
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
-    'other residues': true,
-    'external sources': true,
+    'secondary structure': false,
+    family: false,
+    domain: false,
+    'homologous superfamily': false,
+    repeat: false,
+    'conserved site': false,
+    'active site': false,
+    'binding site': false,
+    ptm: false,
+    'match conservation': false,
+    'coiled-coils, signal peptides, transmembrane regions': false,
+    'short linear motifs': false,
+    'pfam-n': false,
+    funfam: false,
   });
+
   const categoryRefs = useRef<ExpandedHandle[]>([]);
 
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
@@ -221,8 +250,13 @@ export const ProteinViewer = ({
               >
                 {children}
               </Options>
+              <ShowMoreTracks
+                showMore={showMore}
+                showMoreChanged={setShowMore}
+              />
             </div>
           </div>
+
           <div ref={componentsRef} id={idRef.current}>
             <div
               className={css('protvista-grid', {
@@ -235,18 +269,27 @@ export const ProteinViewer = ({
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
+              []
               {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
-
                 .map(([type, entries, component]) => {
                   entries.forEach((entry: ExtendedFeature) => {
                     entry.protein = protein.accession;
                   });
 
                   const LabelComponent = component?.component || 'span';
+
+                  // Show only the main tracks unless button "Show more" is clicked
+                  let hideDiv: string = '';
+                  if (!showMore && !mainTracks.includes(type)) {
+                    hideDiv = 'none';
+                  }
+
                   return (
                     <div
                       key={type}
+                      // Conditioanally display the div containing the track
+                      style={{ display: hideDiv }}
                       className={css(
                         'tracks-container',
                         'track-sized',
@@ -283,6 +326,16 @@ export const ProteinViewer = ({
                         </div>
                       )}{' '}
                       {type === 'representative domains' ? (
+                        <RepresentativeDomainsTrack
+                          hideCategory={hideCategory[type]}
+                          highlightColor={highlightColor}
+                          entries={entries}
+                          length={protein.sequence.length}
+                          openTooltip={openTooltip}
+                          closeTooltip={closeTooltip}
+                          isPrinting={isPrinting}
+                        />
+                      ) : type === 'representative families' ? (
                         <RepresentativeDomainsTrack
                           hideCategory={hideCategory[type]}
                           highlightColor={highlightColor}

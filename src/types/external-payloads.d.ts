@@ -85,6 +85,13 @@ type Iprscan5Payload = {
   results: Array<Iprscan5Result>;
 };
 
+type ProteinsAPIProteomics = {
+  accession: string,
+  start: number,
+  end: number,
+  features: []
+}
+
 type IprscanParameterValue = {
   label: string;
   value: string;
