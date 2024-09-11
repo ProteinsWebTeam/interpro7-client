@@ -146,7 +146,7 @@ export const ProteinViewer = ({
     'conserved site': true,
     'active site': true,
     'binding site': true,
-    PTM: true,
+    PTM: false,
     unintegrated: true,
     'other features': true,
     'other residues': true,
