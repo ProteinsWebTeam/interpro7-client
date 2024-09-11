@@ -172,6 +172,25 @@ const DomainOnProteinWithoutData = ({
     mergeResidues(mergedData, dataResidues.payload);
   }
 
+  const getFeature = (
+    filter: string | string[],
+    mergedData: ProteinViewerDataObject,
+  ): ExtendedFeature[] => {
+    if (mergedData['other_features']) {
+      return (mergedData['other_features'] as ExtendedFeature[]).filter(
+        (entry) => {
+          const entryDB = entry.source_database;
+          if (entryDB) {
+            if (Array.isArray(filter))
+              return filter.some((item) => entryDB.includes(item));
+            else return filter.includes(entryDB);
+          }
+        },
+      );
+    }
+    return [];
+  };
+
   const filterMobiDBLiteFeatures = (
     mergedData: ProteinViewerDataObject,
   ): ExtendedFeature[] => {
@@ -199,9 +218,46 @@ const DomainOnProteinWithoutData = ({
 
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
     mergeExtraFeatures(mergedData, dataFeatures?.payload);
-    mergedData['disordered_regions'] = filterMobiDBLiteFeatures(
+    mergedData['intrinsically_disordered_regions'] = filterMobiDBLiteFeatures(
       mergedData,
     ) as MinimalFeature[];
+
+    /* Splitting the "other features" section in mulitple subsets.
+       Using this logic we can go back to having the "other_features" section again.
+    */
+
+    // Create a section for each of the following types
+    const CPST = ['coils', 'phobius', 'signalp', 'tmhmm'];
+    mergedData['coiled-coils,_signal_peptides,_transmembrane_regions'] =
+      getFeature(CPST, mergedData) as MinimalFeature[];
+    mergedData['pfam-n'] = getFeature('pfam-n', mergedData) as MinimalFeature[];
+    mergedData['short_linear_motifs'] = getFeature(
+      'elm',
+      mergedData,
+    ) as MinimalFeature[];
+    mergedData['funfam'] = getFeature('funfam', mergedData) as MinimalFeature[];
+
+    if (Object.keys(mergedData).includes('region')) {
+      mergedData['spurious_proteins'] = mergedData['region'];
+      delete mergedData['region'];
+    }
+
+    //
+
+    // Filter the types above out of the "other_features" section
+    const toRemove = CPST.concat([
+      'pfam-n',
+      'short_linear_motifs',
+      'mobidblt',
+      'funfam',
+    ]);
+    mergedData['other_features'] = mergedData['other_features'].filter(
+      (entry) => {
+        return !toRemove.some((item) => entry.source_database?.includes(item));
+      },
+    );
+
+    /* End of logic for splitting "other_features" */
   }
   // if (conservation.data) {
   //   mergeConservationData(mergedData, conservation.data);
@@ -287,7 +343,7 @@ const getRelatedEntriesURL = createSelector(
     { protocol, hostname, port, root }: ParsedURLServer,
     accession: string | null,
   ) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'entry' },
       protein: { isFilter: true, db: 'uniprot', accession },
       entry: { db: 'all' },

@@ -4,7 +4,6 @@ import React, { ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-// $FlowFixMe
 import MemberDBSelector from 'components/MemberDBSelector';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import NumberComponent from 'components/NumberComponent';
@@ -153,7 +152,7 @@ export const TotalNb = <RowData extends object>({
             <strong>
               <NumberComponent abbr>{actualSize}</NumberComponent>
             </strong>{' '}
-            {entityText(contentType || description.main.key, actualSize || 0)}
+            {entityText(contentType || description.main.key!, actualSize || 0)}
             {dbText(
               description.entry.db as MemberDB | 'interpro',
               description.set.db,

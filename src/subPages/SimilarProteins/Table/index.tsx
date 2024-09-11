@@ -3,6 +3,7 @@ import React from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData/ts';
@@ -148,7 +149,7 @@ const SimilarProteinTable = ({
                   description: {
                     main: { key: 'protein' },
                     protein: { db: sourceDatabase, accession: acc },
-                  },
+                  } as InterProPartialDescription,
                 }}
               >
                 {acc}
@@ -175,7 +176,7 @@ const SimilarProteinTable = ({
                 description: {
                   main: { key: 'protein' },
                   protein: { db: 'uniprot', accession },
-                },
+                } as InterProPartialDescription,
               }}
             >
               {name}
@@ -195,7 +196,7 @@ const SimilarProteinTable = ({
                     taxonomy: {
                       db: 'uniprot',
                       accession: `${sourceOrganism.taxId}`,
-                    },
+                    } as InterProPartialDescription,
                   },
                 }}
               >
@@ -219,7 +220,7 @@ const SimilarProteinTable = ({
                   description: {
                     main: { key: 'protein' },
                     protein: { db: 'uniprot', accession, detail: 'alphafold' },
-                  },
+                  } as InterProPartialDescription,
                 }}
               >
                 AlphaFold
@@ -246,7 +247,7 @@ const mapStateToPropsForIDA = createSelector(
     // modify search
     restOfSearch.ida = ida;
 
-    const description = {
+    const description: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: db },
     };

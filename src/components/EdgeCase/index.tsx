@@ -85,7 +85,7 @@ const mapStateToProps = createSelector(
   (description, secondsToRetry) => {
     const { key } = description.main;
     return {
-      accession: (description[key] as EndpointLocation).accession,
+      accession: description[key as Endpoint].accession || '',
       secondsToRetry,
     };
   },

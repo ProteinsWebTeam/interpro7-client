@@ -59,7 +59,7 @@ type Iprscan5Result = {
   crossReferences?: Array<{
     name: string;
     id: string;
-  }>;  
+  }>;
 };
 type Iprscan5NucleotideResult = {
   id: number;
@@ -86,11 +86,11 @@ type Iprscan5Payload = {
 };
 
 type ProteinsAPIProteomics = {
-  accession: string,
-  start: number,
-  end: number,
-  features: []
-}
+  accession: string;
+  start: number;
+  end: number;
+  features: [];
+};
 
 type IprscanParameterValue = {
   label: string;

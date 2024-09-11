@@ -132,27 +132,27 @@ export const ProteinViewer = ({
     'alphafold confidence',
     'representative domains',
     'representative families',
-    'pathogenic variants',
-    'disordered regions',
+    'pathogenic and likely pathogenic variants',
+    'intrinsically disordered regions',
+    'spurious proteins',
     'residues',
   ];
 
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
-    'secondary structure': true,
-    family: true,
-    domain: true,
-    'homologous superfamily': true,
-    repeat: true,
-    'conserved site': true,
-    'active site': true,
-    'binding site': true,
+    'secondary structure': false,
+    family: false,
+    domain: false,
+    'homologous superfamily': false,
+    repeat: false,
+    'conserved site': false,
+    'active site': false,
+    'binding site': false,
     PTM: false,
-    unintegrated: true,
-    'other features': true,
-    'other residues': true,
-    features: true,
-    predictions: true,
-    'match conservation': true,
+    'match conservation': false,
+    'coiled-coils, signal peptides, transmembrane regions': false,
+    'short linear motifs': false,
+    'pfam-n': false,
+    funfam: false,
   });
 
   const categoryRefs = useRef<ExpandedHandle[]>([]);
@@ -356,23 +356,6 @@ export const ProteinViewer = ({
                   let hideDiv: string = '';
                   if (!showMore && !mainTracks.includes(type)) {
                     hideDiv = 'none';
-                  }
-
-                  if (type == 'residues') {
-                    const residuesEntries: ExtendedFeature[] = [];
-                    entries.map((entry) => {
-                      const tempFeature: ExtendedFeature = {
-                        accession: entry.accession,
-                        name: entry.name,
-                        protein: entry.protein,
-                        source_database: entry.source_database,
-                        type: 'residue',
-                        locations: residuesToLocations(entry.residues),
-                      };
-                      residuesEntries.push(tempFeature);
-                    });
-
-                    entries = residuesEntries;
                   }
 
                   // Transform PTM data to track-like data

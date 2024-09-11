@@ -4,9 +4,12 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import descriptionToDescription from 'utils/processDescription/descriptionToDescription';
 
+// $FlowFixMe
 import { goToCustomLocation, closeEverything } from 'actions/creators';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 
 import generateHref from './utils/generate-href';

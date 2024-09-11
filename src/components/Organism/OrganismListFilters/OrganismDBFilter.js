@@ -6,9 +6,13 @@ import { createSelector } from 'reselect';
 import NumberComponent from 'components/NumberComponent';
 
 import loadData from 'higherOrder/loadData';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+// $FlowFixMe
 import { goToCustomLocation } from 'actions/creators';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
@@ -101,8 +105,8 @@ class OrganismDBFilter extends PureComponent /*:: <Props> */ {
 }
 
 const getUrlFor = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
   ({ protocol, hostname, port, root }, description) =>
     `${protocol}//${hostname}:${port}${root}${descriptionToPath({
       ...description,
@@ -113,7 +117,7 @@ const getUrlFor = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({

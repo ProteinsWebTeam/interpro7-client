@@ -40,12 +40,12 @@ const RelatedSimple = ({ mainData, mainType, focusType }: Props) => {
 };
 
 const mapStateToPropsSimple = createSelector(
-  (state: GlobalState) => state.customLocation.description.main.key,
+  (state: GlobalState) => state.customLocation.description.main.key!,
   (state: GlobalState) =>
     findIn(
       state.customLocation.description,
-      (value: EndpointPartialLocation) => !!value.isFilter
+      (value: EndpointPartialLocation) => !!value.isFilter,
     )?.[0] || '',
-  (mainType, focusType) => ({ mainType, focusType })
+  (mainType, focusType) => ({ mainType, focusType }),
 );
 export default connect(mapStateToPropsSimple)(RelatedSimple);

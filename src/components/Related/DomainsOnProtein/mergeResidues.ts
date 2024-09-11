@@ -89,8 +89,8 @@ const mergeResidues = (
       }),
   );
 
-  // Previous way of handling other residues. Now merging them into residues.
-  /*Object.values(residues)
+  const unlinkedResidues: ResidueEntry[] = [];
+  Object.values(residues)
     .filter(({ linked }) => !linked)
     .forEach((residue) => {
       residue.locations.forEach((location, i) => {
@@ -102,31 +102,11 @@ const mergeResidues = (
         residueEntry.locations = [location];
         unlinkedResidues.push(residueEntry);
       });
-    });*/
-
-  // Showing residues coming from MemberDBs first, then PIRSR
-  function sortResidues(rA: FeatureWithResidues, rB: FeatureWithResidues) {
-    if (rA.accession.includes('PIRSR') && !rB.accession.includes('PIRSR'))
-      return 1;
-    else if (
-      !rA.accession.includes('PIRSR') &&
-      rB.accession.includes('PIRSR')
-    ) {
-      return -1;
-    } else return 0;
-  }
-
-  // MemberDBs + PIRSR residues
-  const combinedResidues: FeatureWithResidues[] = [];
-  Object.values(residues).forEach((residue) => {
-    combinedResidues.push({
-      accession: residue.accession,
-      source_database: residue.source_database,
-      residues: [residue],
     });
-  });
 
-  data.residues = combinedResidues.sort(sortResidues);
+  data.residues = (residuesWithEntryDetails as ResidueEntry[]).concat(
+    unlinkedResidues,
+  );
 };
 
 export default mergeResidues;

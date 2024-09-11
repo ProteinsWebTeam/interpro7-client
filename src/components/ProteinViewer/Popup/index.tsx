@@ -38,7 +38,10 @@ const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
   }
 
   // comes from a residue
-  if ((detail.feature as ExtendedFeature).type === 'residue') {
+  if (
+    (detail.feature as ExtendedFeature).type === 'residue' ||
+    (detail.feature as ExtendedFeature).residues !== undefined
+  ) {
     return (
       <ProtVistaResiduePopup
         detail={detail as ResidueDetail}

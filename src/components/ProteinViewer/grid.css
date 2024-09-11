@@ -11,10 +11,12 @@
 .protvista-grid .view-options-wrap {
   margin-top: 30px;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
   padding-bottom: 0.2rem;
+  margin-bottom: 10px;
+  gap: 5px;
 }
+
 .protvista-grid > header {
   background: #fafafa;
   padding: 0.5rem 0.3rem;

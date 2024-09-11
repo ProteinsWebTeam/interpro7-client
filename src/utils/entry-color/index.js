@@ -25,6 +25,7 @@ export const EntryColorMode /*: ColorModeMap */ = {
   accession: string,
   source_database: string,
   parent?: Entry,
+  integrated?: string
 }; */
 
 export const getTrackColor = (
@@ -56,6 +57,11 @@ export const getTrackColor = (
       }
       if (entry.parent) {
         acc = entry.parent.accession.split('').reverse().join('');
+        return colorHash.hex(acc);
+      }
+
+      if (entry.integrated) {
+        acc = entry.integrated.split('').reverse().join('');
         return colorHash.hex(acc);
       }
   }

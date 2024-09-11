@@ -3,7 +3,6 @@ import { toPlural } from 'utils/pages/toPlural';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
-
 export const selectRepresentativeData = (
   entries: Record<string, unknown>[],
   locationKey: string,
@@ -14,7 +13,7 @@ export const selectRepresentativeData = (
   for (const entry of entries) {
     const { accession, short_name, name, source_database, integrated, chain } =
       entry;
-    if (entry[locationKey] === null || entry.type != type) {
+    if (entry[locationKey] === null || entry.type !== type) {
       continue;
     }
     for (const location of entry[locationKey] as Array<ProtVistaLocation>) {
@@ -76,14 +75,13 @@ const processData = <M = Metadata>(
       ? 'entry_structure_locations'
       : 'entry_protein_locations';
 
-
   const representativeData = {
-    "domains": selectRepresentativeData(results, locationKey, "domain"),
-    "families": selectRepresentativeData(results, locationKey, "family")
-  }
+    domains: selectRepresentativeData(results, locationKey, 'domain'),
+    families: selectRepresentativeData(results, locationKey, 'family'),
+  };
 
-  const representativeDomains = representativeData['domains']
-  const representativeFamilies = representativeData["families"]
+  const representativeDomains = representativeData['domains'];
+  const representativeFamilies = representativeData['families'];
 
   const interproMap = new Map(
     interpro.map((ipro) => [

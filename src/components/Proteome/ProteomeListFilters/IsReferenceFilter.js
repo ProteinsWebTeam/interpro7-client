@@ -8,9 +8,13 @@ import NumberComponent from 'components/NumberComponent';
 // import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadData from 'higherOrder/loadData';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
+// $FlowFixMe
 import { goToCustomLocation } from 'actions/creators';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 
 import { foundationPartial } from 'styles/foundation';
@@ -104,9 +108,9 @@ class IsReferenceFilter extends PureComponent /*:: <Props> */ {
 }
 
 const getUrl = createSelector(
-  state => state.settings.api,
-  state => state.customLocation.description,
-  state => state.customLocation.search,
+  (state) => state.settings.api,
+  (state) => state.customLocation.description,
+  (state) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description, search) => {
     // transform description
     const _description = {
@@ -130,7 +134,7 @@ const getUrl = createSelector(
 
 const mapStateToProps = createSelector(
   customLocationSelector,
-  customLocation => ({ customLocation }),
+  (customLocation) => ({ customLocation }),
 );
 
 export default loadData({

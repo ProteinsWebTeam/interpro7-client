@@ -7,6 +7,7 @@ import loadable from 'higherOrder/loadable';
 
 import { getReadTheDocsURL } from 'higherOrder/loadData/defaults';
 
+// $FlowFixMe
 import pathToDescription from 'utils/processDescription/pathToDescription';
 import Link from 'components/generic/Link';
 
@@ -20,7 +21,7 @@ const InterProScan = loadable({
 
 const substitutions = {};
 
-const rstembeddedLink = /^`(.+)\s*<(.+)>`_{1,2}$/;
+const rstembeddedLink = /`(.+)\s*<(.+)>`_{1,2}/;
 // eslint-disable-next-line complexity
 const Switch = ({ type, ...rest }) => {
   switch (type) {

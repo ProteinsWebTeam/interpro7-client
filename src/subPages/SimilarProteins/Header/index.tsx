@@ -134,7 +134,7 @@ const getUrlForDomains = createSelector(
   (state: GlobalState) => state.customLocation.description,
   (state: GlobalState) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description) => {
-    const newDescription = {
+    const newDescription: InterProPartialDescription = {
       main: { key: 'entry' },
       entry: { db: 'all' },
       protein: {

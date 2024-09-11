@@ -73,7 +73,7 @@ const features2protvista = (features: FeatureMap) => {
   const representativeDomains = selectRepresentativeData(
     featArray,
     'locations',
-    'domain'
+    'domain',
   );
 
   if (representativeDomains?.length) {
@@ -140,7 +140,7 @@ const getIsoformURL = createSelector(
     { protein: { accession } },
     { isoform },
   ) => {
-    const description = {
+    const description: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
     };

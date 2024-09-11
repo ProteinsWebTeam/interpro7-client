@@ -27,7 +27,7 @@ type PropsEL = {
 };
 
 const EXCEPTIONAL_TYPES = [
-  'disordered_regions',
+  'intrinsically_disordered_regions',
   'residue',
   'sequence_conservation',
   'chain',
@@ -52,16 +52,20 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   if (entry.source_database === 'mobidblt') {
     return (
       <>
-        <Link target="_blank" href={`https://mobidb.org/${entry.protein}`}>
-          {entry.accession}
-        </Link>
+        {isPrinting ? (
+          <span>{entry.accession}</span>
+        ) : (
+          <Link target="_blank" href={`https://mobidb.org/${entry.protein}`}>
+            {entry.accession.replace('Mobidblt-', 'MobiDB-lite: ')}
+          </Link>
+        )}
         {entry.children &&
           entry.children.map((d) => (
             <div
               className={css('track-accession-child')}
               key={`main_${d.accession}`}
             >
-              {d.accession}
+              {d.accession.replace('Mobidblt-', '')}
             </div>
           ))}
       </>
