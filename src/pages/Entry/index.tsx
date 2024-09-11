@@ -91,8 +91,6 @@ const ArchiveCallout = ({ name, page }: ArchiveProps) => (
   </div>
 );
 
-type ExtraCounters = { counters?: MetadataCounter };
-
 type AllEntriesDownloadProps = {
   description: object;
   search: InterProLocationSearch;
@@ -117,36 +115,6 @@ const AllEntriesDownload = ({
     endpoint={'entry'}
   />
 );
-
-/*:: type Props = {
-  data: {
-   payload: Object,
-   loading: boolean,
-   ok: boolean,
-   url: string,
-   status: number
-  },
-  isStale: boolean,
-  customLocation: {
-    description: Object,
-    search: Object
-  },
-  dataBase: {
-   payload: Object,
-   loading: boolean
-  }
-};*/
-
-/* const propTypes = {
-  data: dataPropType.isRequired,
-  isStale: T.bool.isRequired,
-  customLocation: T.shape({
-    description: T.object.isRequired,
-    search: T.object.isRequired,
-  }).isRequired,
-  match: T.string,
-  dataBase: dataPropType,
-}*/
 
 type EntryExtra = {
   short_name: string;
@@ -180,7 +148,7 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
 
   if (!data || !customLocation) return null;
 
-  const { payload, loading, ok, url, status } = data;
+  const { payload } = data;
   const { description, search } = customLocation;
   let _payload = payload;
   const db = description.entry.db as MemberDB | 'interpro' | 'InterPro';

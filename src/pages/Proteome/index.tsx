@@ -110,7 +110,7 @@ for (const subPage of config.pages.proteome.subPages) {
 }
 
 type AllProteomesDownloadProps = {
-  description: object;
+  description: InterProDescription;
   search: InterProLocationSearch;
   count: number;
   fileType: DownloadFileTypes;

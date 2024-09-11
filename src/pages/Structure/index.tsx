@@ -1,14 +1,12 @@
-// @flow
 import React from 'react';
-import T from 'prop-types';
 
 import Link from 'components/generic/Link';
-// $FlowFixMe
+
 import MemberDBSelector from 'components/MemberDBSelector';
 import LazyImage from 'components/LazyImage';
-// $FlowFixMe
+
 import StructureListFilters from 'components/Structure/StructureListFilters';
-// $FlowFixMe
+
 import StructureCard from 'components/Structure/Card';
 import Table, {
   Column,
@@ -17,15 +15,12 @@ import Table, {
   PageSizeSelector,
   Exporter,
   HighlightToggler,
-  // $FlowFixMe
 } from 'components/Table';
 
-// $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
-import Loading from 'components/SimpleCommonComponents/Loading';
-// $FlowFixMe
+
 import File from 'components/File';
-// $FlowFixMe
+
 import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 
 import loadable from 'higherOrder/loadable';
@@ -39,21 +34,19 @@ import EndPointPage from '../endpoint-page';
 import subPages from 'subPages';
 import config from 'config';
 
-import { foundationPartial } from 'styles/foundation';
-
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import pageStyle from '../style.css';
-// $FlowFixMe
+
 import { formatExperimentType } from 'components/Structure/utils';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import theme from 'styles/theme-interpro.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 
-// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import cssBinder from 'styles/cssBinder';
 
-const f = foundationPartial(
+const css = cssBinder(
   ebiGlobalStyles,
   pageStyle,
   fonts,
@@ -65,9 +58,9 @@ const f = foundationPartial(
 const SummaryAsync = loadable({
   loader: () =>
     import(
-      // $FlowFixMe
       /* webpackChunkName: "structure-summary" */ 'components/Structure/Summary'
     ),
+  loading: () => null,
 });
 
 const SchemaOrgData = loadable({
@@ -75,33 +68,20 @@ const SchemaOrgData = loadable({
   loading: () => null,
 });
 
-const propTypes = {
-  data: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-    ok: T.bool,
-    url: T.string,
-    status: T.number,
-  }).isRequired,
-  isStale: T.bool.isRequired,
-  customLocation: T.shape({
-    description: T.object.isRequired,
-    search: T.object.isRequired,
-  }).isRequired,
-  dataBase: T.shape({
-    payload: T.object,
-    loading: T.bool.isRequired,
-  }),
-};
+/*
+type OverviewProps = {
+  payload: EntryStructurePayload,
+  loading: boolean
+}
 
 const Overview = (
   {
-    data: { payload, loading },
-  } /*: {data: {payload: Object, loading: boolean}} */,
+    payload, loading
+  } : OverviewProps
 ) => {
   if (loading) return <Loading />;
   return (
-    <ul className={f('card')}>
+    <ul className={css('card')}>
       {Object.entries(payload.structures || {}).map(([name, count]) => (
         <li key={name}>
           <Link
@@ -118,69 +98,67 @@ const Overview = (
       ))}
     </ul>
   );
-};
-Overview.propTypes = propTypes;
+};*/
 
-const AllStructuresDownload = (
-  {
-    description,
-    search,
-    count,
-    fileType,
-  } /*: {description: Object, search: Object,count: number, fileType: string} */,
-) => (
+type AllProteomesDownloadProps = {
+  description: InterProDescription;
+  search: InterProLocationSearch;
+  count: number;
+  fileType: DownloadFileTypes;
+  name: string;
+};
+
+const AllStructuresDownload = ({
+  description,
+  search,
+  count,
+  fileType,
+  name,
+}: AllProteomesDownloadProps) => (
   <File
     fileType={fileType}
-    name={`structures.${fileType}`}
+    name={name || `structures.${fileType}`}
     count={count}
     customLocationDescription={description}
     search={search}
     endpoint={'structure'}
   />
 );
-AllStructuresDownload.propTypes = {
-  description: T.object,
-  search: T.object,
-  count: T.number,
-  fileType: T.string,
+
+type StructureItem = {
+  metadata: StructureMetadata;
+  extra_fields?: {
+    counters: MetadataCounters;
+  };
 };
 
-const List = (
-  {
-    data: { payload, loading, ok, url, status },
-    isStale,
-    customLocation: { description, search },
-    dataBase,
-  } /*: { data: {
-   payload: {
-      results: Array<Object>,
-      count: number,
-      next: ?string,
-      previous: ?string,
-   },
-   loading: boolean,
-   ok: boolean,
-   url: string,
-   status: number
-  },
-  isStale: boolean,
-  customLocation: {
-    description: Object,
-    search: Object
-  },
-  dataBase: {
-   payload: Object,
-   loading: boolean
-  }} */,
-) => {
-  let _payload = payload;
+type Props = {
+  customLocation?: InterProLocation;
+};
+
+interface LoadedProps
+  extends Props,
+    LoadDataProps<PayloadList<EntryStructurePayload>>,
+    LoadDataProps<RootAPIPayload, 'Base'> {}
+
+const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
+  if (!data || !customLocation) return null;
+
+  const { payload, loading, ok, url, status } = data;
+
+  const { description, search } = customLocation;
+
   const {
-    entry: { db: entryDB },
     structure: { db },
   } = description;
+
+  const entryDB = description.entry.db as MemberDB | 'interpro';
+
+  let _payload = payload;
+
   const HTTP_OK = 200;
   const notFound = !loading && status !== HTTP_OK;
-  const databases = dataBase && dataBase.payload && dataBase.payload.databases;
+  const databases = dataBase?.payload?.databases;
   if (loading || notFound) {
     _payload = {
       results: [],
@@ -189,12 +167,16 @@ const List = (
       previous: null,
     };
   }
+
+  const size = _payload?.count || 0;
+
   const includeGrid = url;
+
   return (
-    <div className={f('row', 'filters-and-table')}>
+    <div className={css('row', 'filters-and-table')}>
       <nav>
-        <div className={f('browse-side-panel')}>
-          <div className={f('selector-container')}>
+        <div className={css('browse-side-panel')}>
+          <div className={css('selector-container')}>
             <MemberDBSelector
               contentType="structure"
               className="pp-left-side-db-selector"
@@ -216,35 +198,35 @@ const List = (
           />
         )}
         <Table
-          dataTable={_payload.results}
+          dataTable={_payload?.results}
           contentType="structure"
           loading={loading}
           ok={ok}
           status={status}
           isStale={isStale}
-          actualSize={_payload.count}
+          actualSize={size}
           query={search}
           notFound={notFound}
           withGrid={!!includeGrid}
           databases={databases}
-          nextAPICall={_payload.next}
-          previousAPICall={_payload.previous}
+          nextAPICall={_payload?.next}
+          previousAPICall={_payload?.previous}
           currentAPICall={url}
         >
           <Exporter>
-            <div className={f('menu-grid')}>
+            <div className={css('menu-grid')}>
               <AllStructuresDownload
                 name="json"
                 description={description}
                 search={search}
-                count={_payload.count}
+                count={size}
                 fileType="json"
               />
               <AllStructuresDownload
                 name="tsv"
                 description={description}
                 search={search}
-                count={_payload.count}
+                count={size}
                 fileType="tsv"
               />
               <ExternalExportButton type={'api'} url={url} />
@@ -257,10 +239,10 @@ const List = (
           </Exporter>
           <PageSizeSelector />
           <Card>
-            {(data) => (
+            {(data: StructureItem) => (
               <StructureCard
                 data={data}
-                search={search.search}
+                search={search.search as string}
                 entryDB={entryDB}
               />
             )}
@@ -269,9 +251,9 @@ const List = (
           <HighlightToggler />
           <Column
             dataKey="accession"
-            headerClassName={f('table-center')}
-            cellClassName={f('table-center')}
-            renderer={(accession /*: string */, row) => (
+            headerClassName={css('table-center')}
+            cellClassName={css('table-center')}
+            renderer={(accession: string, row: unknown) => (
               <Link
                 to={(customLocation) => ({
                   ...customLocation,
@@ -294,7 +276,7 @@ const List = (
                 />
                 <HighlightedText
                   text={accession || ''}
-                  textToHighlight={search.search}
+                  textToHighlight={search.search as string}
                 />
               </Link>
             )}
@@ -303,10 +285,7 @@ const List = (
           </Column>
           <Column
             dataKey="name"
-            renderer={(
-              name /*: string */,
-              { accession } /*: {accession: string} */,
-            ) => (
+            renderer={(name: string, { accession }: StructureMetadata) => (
               <Link
                 to={(customLocation) => ({
                   ...customLocation,
@@ -314,7 +293,7 @@ const List = (
                     main: { key: 'structure' },
                     structure: {
                       db: customLocation.description.structure.db,
-                      accession,
+                      accession: accession,
                     },
                   },
                   search: {},
@@ -322,7 +301,7 @@ const List = (
               >
                 <HighlightedText
                   text={name.toUpperCase()}
-                  textToHighlight={search.search}
+                  textToHighlight={search.search as string}
                 />
               </Link>
             )}
@@ -331,16 +310,16 @@ const List = (
           </Column>
           <Column
             dataKey="experiment_type"
-            headerClassName={f('table-center')}
-            cellClassName={f('table-center')}
-            renderer={(type) => formatExperimentType(type)}
+            headerClassName={css('table-center')}
+            cellClassName={css('table-center')}
+            renderer={(type: string) => formatExperimentType(type)}
           >
             Experiment type
           </Column>
           <Column
             dataKey="resolution"
-            headerClassName={f('table-center')}
-            cellClassName={f('table-center')}
+            headerClassName={css('table-center')}
+            cellClassName={css('table-center')}
             renderer={
               (resolution /*: string | number */) =>
                 resolution
@@ -352,8 +331,8 @@ const List = (
           </Column>
           <Column
             dataKey="accession"
-            headerClassName={f('table-center')}
-            cellClassName={f('table-center')}
+            headerClassName={css('table-center')}
+            cellClassName={css('table-center')}
             defaultKey="structureAccession"
             renderer={(accession /*: string */) => (
               <Link
@@ -384,7 +363,6 @@ const List = (
     </div>
   );
 };
-List.propTypes = propTypes;
 
 const subPagesForStructure = new Map();
 for (const subPage of config.pages.structure.subPages) {
