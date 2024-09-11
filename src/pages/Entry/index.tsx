@@ -201,7 +201,7 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
   const includeGrid = data.url;
   const shouldShowMemberDBSelector = db?.toLowerCase() !== 'interpro';
 
-  let size = _payload?.count || 0;
+  const size = _payload?.count || 0;
 
   return (
     <div className={css('row', 'filters-and-table')}>

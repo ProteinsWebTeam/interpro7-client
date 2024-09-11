@@ -189,7 +189,7 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
   const entryDB = description.entry.db as MemberDB | 'interpro';
 
   const HTTP_OK = 200;
-  let notFound = !loading && status !== HTTP_OK;
+  const notFound = !loading && status !== HTTP_OK;
   const databases = dataBase?.payload?.databases;
   if (loading || notFound) {
     _payload = {
@@ -200,7 +200,7 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
     };
   }
 
-  let size = _payload?.count || 0;
+  const size = _payload?.count || 0;
 
   return (
     <div className={css('row', 'filters-and-table')}>
